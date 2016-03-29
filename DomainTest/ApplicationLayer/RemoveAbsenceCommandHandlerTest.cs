@@ -28,11 +28,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup()
 		{
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new SchedulingResultStateHolder());
+			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository,
+				new SchedulingResultStateHolder());
 			_scheduleStorage = new FakeScheduleStorage();
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository);
-			_personAbsenceRemover = new PersonAbsenceRemover (_scheduleStorage, _businessRulesForAccountUpdate, _saveSchedulePartService);
+
+			var personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
+			_personAbsenceRemover = new PersonAbsenceRemover(_scheduleStorage, _businessRulesForAccountUpdate,
+				_saveSchedulePartService, personAbsenceCreator);
 		}
 
 		[Test]

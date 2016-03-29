@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -155,21 +154,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void ShouldRaisePersonAbsenceRemovedEvent()
 		{
 			var scenario = new FakeCurrentScenario().Current();
-			var layer = MockRepository.GenerateMock<IAbsenceLayer>();
+			var period = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 01);
+			var layer = new AbsenceLayer(new Absence(), period);
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), scenario, layer);
 			personAbsence.SetId(Guid.Empty);
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence> {personAbsence};
 
-			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRepository, _scheduleStorage,
-				_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator);
+			var personAbsenceRemover = new PersonAbsenceRemover(_scheduleStorage, _businessRulesForAccountUpdate,
+				_saveSchedulePartService, _personAbsenceCreator);
+
+			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRepository, personAbsenceRemover);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();
 			var command = new RemovePartPersonAbsenceCommand
 			{
 				PersonAbsenceId = personAbsence.Id.Value,
-				PeriodToRemove = personAbsence.Period,
+				PeriodToRemove = period.ChangeEndTime(new TimeSpan(0, 0, 1)),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = operatedPersonId,
@@ -198,9 +200,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_scheduleStorage.Add(personAbsence);
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence> {personAbsence};
+			var personAbsenceRemover = new PersonAbsenceRemover(_scheduleStorage, _businessRulesForAccountUpdate,
+				_saveSchedulePartService, _personAbsenceCreator);
 
-			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRepository, _scheduleStorage,
-				_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator);
+			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRepository, personAbsenceRemover);
 
 			var command = new RemovePartPersonAbsenceCommand
 			{
