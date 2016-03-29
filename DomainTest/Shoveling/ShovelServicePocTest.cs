@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Shoveling
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
+	[Toggle(Toggles.ResourcePlanner_CascadingSkills_37679)]
 	public class ShovelServicePocTest
 	{
 		public ResourceCalculationContextFactory ResourceCalculationContextFactory;
@@ -450,68 +450,340 @@ namespace Teleopti.Ccc.DomainTest.Shoveling
 			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
 			skillDayC.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-1.5);
 		}
+
+		[Test]
+		public void ShouldShovelCorrectlyLeaveMoreOfExpensivePileIfMoreThanOnePile()
+		{
+			var target = new ShovelServicePoc(ResourceCalculationContextFactory);
+			var schedulerStateHolder = SchedulerStateHolderFrom();
+
+			//things that need to be there
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dateOnly = new DateOnly(2016, 3, 24);
+
+			var skillList = new List<ISkill>();
+			//Setup skills and demand
+			var skillA =
+				new Skill("A", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));  //+1
+			skillList.Add(skillA);
+
+			var skillB =
+				new Skill("B", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(30)); //+0.5
+			skillList.Add(skillB);
+
+			var skillC =
+				new Skill("C", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var skillDayC = skillC.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(120)); //-1
+			skillList.Add(skillC);
+
+			//Setup persons and their skills
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillA, skillB, skillC });
+			person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillC });
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person3 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillB, skillC });
+			person3.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillA, skillB, skillC });
+			person4.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var personList = new List<IPerson> { person1, person2, person3, person4 };
+
+			//Setup stateholder
+			schedulerStateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario,
+				new ScheduleDateTimePeriod(new DateTimePeriod(2016, 3, 24, 2016, 3, 24)));
+			schedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
+			{
+				{skillA, new List<ISkillDay> {skillDayA}},
+				{skillC, new List<ISkillDay> {skillDayC}},
+				{skillB, new List<ISkillDay> {skillDayB}}
+			};
+			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly, dateOnly), TimeZoneInfo.Utc);
+			foreach (var person in personList)
+			{
+				schedulerStateHolder.AllPermittedPersons.Add(person);
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(person);
+			}
+			schedulerStateHolder.SchedulingResultState.AddSkills(skillList.ToArray());
+
+			//Setup assignments
+			foreach (var person in personList)
+			{
+				var schedules = new List<IScheduleDay>();
+				var ass = new PersonAssignment(person1, scenario, dateOnly);
+				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 9, 0));
+				ass.SetShiftCategory(shiftCategory);
+				var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolder.SchedulingResultState.Schedules, person, dateOnly);
+				scheduleDay.AddMainShift(ass);
+				schedulerStateHolder.SchedulingResultState.Schedules.Modify(scheduleDay);
+				schedules.Add(scheduleDay);
+			}
+
+			//Recuce, this can be done once when loading scheduler before creating islands
+			var reducer = new SkillGroupReducerForCascadingSkills();
+			foreach (var person in personList)
+			{
+				reducer.ReduceToPrimarySkill(person.Period(dateOnly));
+			}
+
+			//RespurceCalculate
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			target.Execute(schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly, dateOnly), TimeZoneInfo.Utc),
+				schedulerStateHolder.SchedulingResultState.Skills.OrderBy(skill => skill.Name).ToList());
+
+			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0.5);
+			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
+			skillDayC.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldShovelCorrectlyMayNotTransferMoreThanAllovedForSkillGroup()
+		{
+			var target = new ShovelServicePoc(ResourceCalculationContextFactory);
+			var schedulerStateHolder = SchedulerStateHolderFrom();
+
+			//things that need to be there
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dateOnly = new DateOnly(2016, 3, 24);
+
+			var skillList = new List<ISkill>();
+			//Setup skills and demand
+			var skillA =
+				new Skill("A", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			skillList.Add(skillA);
+
+			var skillB =
+				new Skill("B", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(30)); 
+			skillList.Add(skillB);
+
+			var skillC =
+				new Skill("C", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var skillDayC = skillC.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)); 
+			skillList.Add(skillC);
+
+			var skillD =
+				new Skill("D", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillD, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var skillDayD = skillD.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)); 
+			skillList.Add(skillD);
+
+			//Setup persons and their skills
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillA, skillB, skillC, skillD });
+			person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillA });
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person3 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillA });
+			person3.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillC });
+			person4.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person5 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillC });
+			person5.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var personList = new List<IPerson> { person1, person2, person3, person4, person5 };
+
+			//Setup stateholder
+			schedulerStateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario,
+				new ScheduleDateTimePeriod(new DateTimePeriod(2016, 3, 24, 2016, 3, 24)));
+			schedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
+			{
+				{skillA, new List<ISkillDay> {skillDayA}},
+				{skillC, new List<ISkillDay> {skillDayC}},
+				{skillB, new List<ISkillDay> {skillDayB}},
+				{skillD, new List<ISkillDay> {skillDayD} }
+			};
+			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly, dateOnly), TimeZoneInfo.Utc);
+			foreach (var person in personList)
+			{
+				schedulerStateHolder.AllPermittedPersons.Add(person);
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(person);
+			}
+			schedulerStateHolder.SchedulingResultState.AddSkills(skillList.ToArray());
+
+			//Setup assignments
+			foreach (var person in personList)
+			{
+				var schedules = new List<IScheduleDay>();
+				var ass = new PersonAssignment(person1, scenario, dateOnly);
+				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 9, 0));
+				ass.SetShiftCategory(shiftCategory);
+				var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolder.SchedulingResultState.Schedules, person, dateOnly);
+				scheduleDay.AddMainShift(ass);
+				schedulerStateHolder.SchedulingResultState.Schedules.Modify(scheduleDay);
+				schedules.Add(scheduleDay);
+			}
+
+			//Recuce, this can be done once when loading scheduler before creating islands
+			var reducer = new SkillGroupReducerForCascadingSkills();
+			foreach (var person in personList)
+			{
+				reducer.ReduceToPrimarySkill(person.Period(dateOnly));
+			}
+
+			//RespurceCalculate
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			target.Execute(schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly, dateOnly), TimeZoneInfo.Utc),
+				schedulerStateHolder.SchedulingResultState.Skills.OrderBy(skill => skill.Name).ToList());
+
+			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(1);
+			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
+			skillDayC.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(1);
+			skillDayD.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-0.5);
+		}
+
+		[Test]
+		public void ShouldHandleMaxSeatSkills()
+		{
+			var target = new ShovelServicePoc(ResourceCalculationContextFactory);
+			var schedulerStateHolder = SchedulerStateHolderFrom();
+
+			//things that need to be there
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dateOnly = new DateOnly(2016, 3, 24);
+
+			var skillList = new List<ISkill>();
+			//Setup skills and demand
+			var skillA =
+				new Skill("A, open", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var openSkillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			skillList.Add(skillA);
+
+			var skillB =
+				new Skill("B open", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var openSkillDayB = skillB.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			skillList.Add(skillB);
+
+			var maxSeatSkill = 
+				new Skill("C max seat", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.MaxSeatSkill))
+				{
+					Activity = phoneActivity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(maxSeatSkill, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(9)));
+			var maxSeatSkillDay = maxSeatSkill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
+			skillList.Add(maxSeatSkill);
+
+			//Setup persons and their skills
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillA, skillB, maxSeatSkill });
+			person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { skillA, skillB });
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+
+			var personList = new List<IPerson> { person1, person2 };
+
+			//Setup stateholder
+			schedulerStateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario,
+				new ScheduleDateTimePeriod(new DateTimePeriod(2016, 3, 24, 2016, 3, 24)));
+			schedulerStateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
+			{
+				{skillA, new List<ISkillDay> {openSkillDayA}},
+				{skillB, new List<ISkillDay> {openSkillDayB}},
+				{maxSeatSkill, new List<ISkillDay> {maxSeatSkillDay}}
+			};
+			schedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly, dateOnly), TimeZoneInfo.Utc);
+			foreach (var person in personList)
+			{
+				schedulerStateHolder.AllPermittedPersons.Add(person);
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(person);
+			}
+			schedulerStateHolder.SchedulingResultState.AddSkills(skillList.ToArray());
+
+			//Setup assignments
+			foreach (var person in personList)
+			{
+				var schedules = new List<IScheduleDay>();
+				var ass = new PersonAssignment(person1, scenario, dateOnly);
+				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 9, 0));
+				ass.SetShiftCategory(shiftCategory);
+				var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedulerStateHolder.SchedulingResultState.Schedules, person, dateOnly);
+				scheduleDay.AddMainShift(ass);
+				schedulerStateHolder.SchedulingResultState.Schedules.Modify(scheduleDay);
+				schedules.Add(scheduleDay);
+			}
+
+			//Recuce, this can be done once when loading scheduler before creating islands
+			var reducer = new SkillGroupReducerForCascadingSkills();
+			foreach (var person in personList)
+			{
+				reducer.ReduceToPrimarySkill(person.Period(dateOnly));
+			}
+
+			//RespurceCalculate
+			ResourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+
+			var orderedSkillList =
+						schedulerStateHolder.SchedulingResultState.Skills.Where(
+							skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).OrderBy(skill => skill.Name).ToList();
+			Assert.DoesNotThrow(
+				() =>
+					target.Execute(schedulerStateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
+						new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(dateOnly, dateOnly), TimeZoneInfo.Utc), orderedSkillList));
+
+			openSkillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
+			openSkillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(0);
+			maxSeatSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference.Should().Be.EqualTo(-1);
+		}
 	}
 
 	[TestFixture]
 	public class ShovelTest
 	{		
-		[Test]
-		public void ShouldShovelFromNearestPile()
-		{
-			var target = new Shovel();
-			var skillA = SkillFactory.CreateSkill("levelA");
-			var periodA = createSkillStaffPeriod(skillA, 1);
-			var skillB = SkillFactory.CreateSkill("levelB");
-			var periodB = createSkillStaffPeriod(skillB, 1);
-			var skillC = SkillFactory.CreateSkill("levelC");
-			var periodC = createSkillStaffPeriod(skillC, -1);
-
-			var periodList = new List<ISkillStaffPeriod> { periodA, periodB, periodC };
-			target.Execute(periodList, double.MaxValue);
-
-			periodA.AbsoluteDifference.Should().Be.EqualTo(1);
-			periodB.AbsoluteDifference.Should().Be.EqualTo(0);
-			periodC.AbsoluteDifference.Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldShovelFromNextNearestPileIfNearestIsNotEnough()
-		{
-			var target = new Shovel();
-			var skillA = SkillFactory.CreateSkill("levelA");
-			var periodA = createSkillStaffPeriod(skillA, 1);
-			var skillB = SkillFactory.CreateSkill("levelB");
-			var periodB = createSkillStaffPeriod(skillB, 1);
-			var skillC = SkillFactory.CreateSkill("levelC");
-			var periodC = createSkillStaffPeriod(skillC, -1.5);
-
-			var periodList = new List<ISkillStaffPeriod> { periodA, periodB, periodC };
-			target.Execute(periodList, double.MaxValue);
-
-			periodA.AbsoluteDifference.Should().Be.EqualTo(0.5);
-			periodB.AbsoluteDifference.Should().Be.EqualTo(0);
-			periodC.AbsoluteDifference.Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldTryToCoverMostExpensivePotFirst()
-		{
-			var target = new Shovel();
-			var skillA = SkillFactory.CreateSkill("levelA");
-			var periodA = createSkillStaffPeriod(skillA, 1);
-			var skillB = SkillFactory.CreateSkill("levelB");
-			var periodB = createSkillStaffPeriod(skillB, -1);
-			var skillC = SkillFactory.CreateSkill("levelC");
-			var periodC = createSkillStaffPeriod(skillC, -1.5);
-
-			var periodList = new List<ISkillStaffPeriod> { periodA, periodB, periodC };
-			target.Execute(periodList, double.MaxValue);
-
-			periodA.AbsoluteDifference.Should().Be.EqualTo(0);
-			periodB.AbsoluteDifference.Should().Be.EqualTo(0);
-			periodC.AbsoluteDifference.Should().Be.EqualTo(-1.5);
-		}
-
 		[Test]
 		public void ShouldLeaveMoreOfExpensivePileIfMoreThanOnePile()
 		{
@@ -550,9 +822,9 @@ namespace Teleopti.Ccc.DomainTest.Shoveling
 			var periodList = new List<ISkillStaffPeriod> { periodA, periodB, periodC, periodD };
 			target.Execute(periodList, 2);
 
-			periodA.AbsoluteDifference.Should().Be.EqualTo(1);
+			periodA.AbsoluteDifference.Should().Be.EqualTo(0);
 			periodB.AbsoluteDifference.Should().Be.EqualTo(0);
-			periodC.AbsoluteDifference.Should().Be.EqualTo(0);
+			periodC.AbsoluteDifference.Should().Be.EqualTo(1);
 			periodD.AbsoluteDifference.Should().Be.EqualTo(-0.5);
 		}
 

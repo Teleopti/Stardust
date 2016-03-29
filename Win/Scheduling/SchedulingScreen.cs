@@ -793,8 +793,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
 				{
 					var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactory>());
+					var orderedSkillList =
+						_schedulerState.SchedulingResultState.Skills.Where(
+							skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).OrderBy(skill => skill.Name).ToList();
 					shovelService.Execute(_schedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
-						_schedulerState.RequestedPeriod, _schedulerState.SchedulingResultState.Skills.OrderBy(skill => skill.Name).ToList());
+						_schedulerState.RequestedPeriod, orderedSkillList);
 					drawSkillGrid();
 				}
 				statusStrip1.BackColor = Color.Salmon;
@@ -4332,11 +4335,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 			}
 
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
+			{
+				var skillGridMenuItemCascadingSkillAnalyzer = new ToolStripMenuItem("Cascading Skill Analyzer...");
+				skillGridMenuItemCascadingSkillAnalyzer.Click += skillGridMenuItemCascadingSkillAnalyzer_Click;
+				_contextMenuSkillGrid.Items.Add(skillGridMenuItemCascadingSkillAnalyzer);
+			}
+
 			_skillDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillIntradayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillMonthGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillFullPeriodGridControl.ContextMenuStrip = _contextMenuSkillGrid;
+		}
+
+		void skillGridMenuItemCascadingSkillAnalyzer_Click(object sender, EventArgs e)
+		{
+			using (var analyzerView = new CascadingSkillsAnalyzer(_container, _schedulerState, _currentIntraDayDate))
+			{
+				analyzerView.ShowDialog(this);
+			}
 		}
 
 		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)

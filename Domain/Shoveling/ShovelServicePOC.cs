@@ -24,8 +24,7 @@ namespace Teleopti.Ccc.Domain.Shoveling
 			{
 				var resources = ResourceCalculationContext.Fetch();
 
-				//TODO filter out max seat skills
-				var skillList = skillSkillStaffPeriodDictionary.Keys.ToList();
+				var skillList = skillSkillStaffPeriodDictionary.Keys.Where(skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToList();
 				if (!skillList.Any())
 					return;
 
@@ -42,14 +41,41 @@ namespace Teleopti.Ccc.Domain.Shoveling
 			}		
 		}
 
+		public IList<ShovelResult> Analyze(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, DateTimePeriod dateTimePeriodToCalculate, IList<ISkill> allOrderedSkillList)
+		{
+			var result = new List<ShovelResult>();
+			using (_resourceCalculationContext.CreateForShoveling(() => new PersonSkillProviderForShoveling()))
+			{
+				var resources = ResourceCalculationContext.Fetch();
+
+				var skillList =
+					skillSkillStaffPeriodDictionary.Keys.Where(skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
+						.ToList();
+				if (!skillList.Any())
+					return result;
+
+				var activityList = skillList.Select(s => s.Activity).Distinct().ToList();
+				foreach (var activity in activityList)
+				{
+					var defaultResoulution = skillList.First(skill => skill.Activity.Equals(activity)).DefaultResolution;
+					var activityResult = executeForActivity(activity, dateTimePeriodToCalculate, defaultResoulution,
+						skillSkillStaffPeriodDictionary, allOrderedSkillList, resources);
+					result.AddRange(activityResult);
+				}
+
+			}
+
+			return result;
+		}
+
 		// this one can be called in parallel for each activity
-		private void executeForActivity(IActivity activity, DateTimePeriod utcPeriodToCalculate, int minSkillResoulution,
+		private List<ShovelResult> executeForActivity(IActivity activity, DateTimePeriod utcPeriodToCalculate, int minSkillResoulution,
 			ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodDictionary, IList<ISkill> allOrderedSkillList, 
 			IResourceCalculationDataContainerWithSingleOperation resources)
 		{
 			var shovel = new Shovel();
 			var skillGroupSorter = new SkillGroupPriotizer();
-
+			var result = new List<ShovelResult>();
 			var periodSplit = utcPeriodToCalculate.Intervals(TimeSpan.FromMinutes(minSkillResoulution));
 			foreach (var dateTimePeriod in periodSplit)
 			{
@@ -59,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Shoveling
 
 				foreach (var skillGroup in skillGroupSorter.Sort(resourcesPerSkillGroup.Values.ToList(), allOrderedSkillList.ToList()))
 				{
-					var orderedSkills = skillGroup.Skills.OrderBy(skill => skill.Name);
+					var orderedSkills = skillGroup.Skills.Where(skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).OrderBy(skill => skill.Name);
 					var periodForSkillDic = new Dictionary<ISkill, ISkillStaffPeriod>();
 					foreach (var skill in orderedSkills)
 					{
@@ -74,9 +100,11 @@ namespace Teleopti.Ccc.Domain.Shoveling
 						periodForSkillDic.Add(skill, periodForSkill);
 					}
 
-					shovel.Execute(periodForSkillDic.Values.ToList(), skillGroup.Resource);
+					result.Add(shovel.Execute(periodForSkillDic.Values.ToList(), skillGroup.Resource));
 				}
 			}
+
+			return result;
 		}
 	}
 
@@ -105,9 +133,23 @@ namespace Teleopti.Ccc.Domain.Shoveling
 				ulong totalValue = 0;
 				foreach (var skill in skillGroup.Skills)
 				{
-					totalValue += skillValueDic[skill];
+					ulong value;
+					if (!skillValueDic.TryGetValue(skill, out value))
+						continue;
+
+					totalValue += value;
 				}
-				skillGroupValueDic.Add(totalValue, skillGroup);
+				if (!skillGroupValueDic.ContainsKey(totalValue))
+				{
+					skillGroupValueDic.Add(totalValue, skillGroup);
+				}
+				else
+				{					
+					var affected = skillGroupValueDic[totalValue];
+					affected.Count = affected.Count + skillGroup.Count;
+					affected.Resource = affected.Resource + skillGroup.Resource;
+				}
+				
 			}
 
 			return skillGroupValueDic.Values.ToList();
@@ -142,55 +184,70 @@ namespace Teleopti.Ccc.Domain.Shoveling
 		}
 	}
 
+	public class ShovelResult
+	{
+		public ISkill PrimarySkill { get; set; }
+		public double ResourcesOnSkillGroup { get; set; }
+		public IDictionary<ISkill, double> TransferDictionary { get; set; }
+
+		public ShovelResult()
+		{
+			TransferDictionary = new Dictionary<ISkill, double>();
+		}
+	}
+
 	public class Shovel
 	{
-		public void Execute(List<ISkillStaffPeriod> periodList, double resourcesOnSkillGroup)
+		public ShovelResult Execute(List<ISkillStaffPeriod> periodList, double resourcesOnSkillGroup)
 		{
-			if (periodList.Count() == 1)
-				return;
+			if (!periodList.Any())
+				return null;
 
+			var result = new ShovelResult{PrimarySkill = periodList.First().SkillDay.Skill, ResourcesOnSkillGroup = resourcesOnSkillGroup};
+
+			if (periodList.Count() < 2)
+				return result;
+
+			if (periodList.First().AbsoluteDifference <= 0)
+				return result;
+
+			var pile = periodList.First();
 			var totalTransferred = 0d;
 			for (int level = 1; level < periodList.Count(); level++)
 			{
-				if ((periodList[level].AbsoluteDifference >= 0)) 
+				result.TransferDictionary.Add(periodList[level].SkillDay.Skill, 0);
+				if ((periodList[level].AbsoluteDifference >= 0))
 					continue;
 
 				var pot = periodList[level];
-				for (int i = level - 1; i >= 0; i--)
+				double toTransfer;
+				var potFilled = false;
+				var maxTransferReached = false;
+				if (pile.AbsoluteDifference + pot.AbsoluteDifference >= 0)
 				{
-					if ((periodList[i].AbsoluteDifference <= 0)) 
-						continue;
-
-					var pile = periodList[i];
-					double toTransfer;
-					var potFilled = false;
-					var maxTransferReached = false;
-					if (pile.AbsoluteDifference + pot.AbsoluteDifference >= 0)
-					{
-						toTransfer = Math.Abs(pot.AbsoluteDifference);
-						potFilled = true;
-					}
-					else
-					{
-						toTransfer = pile.AbsoluteDifference;
-					}
-
-					if (totalTransferred + toTransfer > resourcesOnSkillGroup)
-					{
-						toTransfer = resourcesOnSkillGroup - totalTransferred;
-						maxTransferReached = true;
-					}
-
-					pile.SetCalculatedResource65(pile.CalculatedResource - toTransfer);
-					pot.SetCalculatedResource65(pot.CalculatedResource + toTransfer);
-					totalTransferred += toTransfer;
-					if (maxTransferReached)
-						return;
-
-					if (potFilled)
-						break;
+					toTransfer = Math.Abs(pot.AbsoluteDifference);
+					potFilled = true;
 				}
+				else
+				{
+					toTransfer = pile.AbsoluteDifference;
+				}
+
+				if (totalTransferred + toTransfer > resourcesOnSkillGroup)
+				{
+					toTransfer = resourcesOnSkillGroup - totalTransferred;
+					maxTransferReached = true;
+				}
+
+				pile.SetCalculatedResource65(pile.CalculatedResource - toTransfer);
+				pot.SetCalculatedResource65(pot.CalculatedResource + toTransfer);
+				totalTransferred += toTransfer;
+				result.TransferDictionary[pot.SkillDay.Skill] = toTransfer;
+				if (maxTransferReached || !potFilled)
+					return result;
 			}
+
+			return result;
 		}
 	}
 
@@ -232,6 +289,15 @@ namespace Teleopti.Ccc.Domain.Shoveling
 			foundCombinations.Add(combination);
 
 			return combination;
+		}
+	}
+
+	public static class StringExt
+	{
+		public static string Truncate(this string value, int maxLength)
+		{
+			if (string.IsNullOrEmpty(value)) return value;
+			return value.Length <= maxLength ? value : value.Substring(0, maxLength);
 		}
 	}
 }

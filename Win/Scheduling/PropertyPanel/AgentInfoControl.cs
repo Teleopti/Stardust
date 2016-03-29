@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -563,8 +565,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				if(personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
 					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
 
-				if (!personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
-					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, "Not Active", 3);
+				if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
+				{
+					if (!personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
+						createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, "Not Active", 3);
+				}
             }
 
             if (personPeriod.PersonMaxSeatSkillCollection.Count > 0)
