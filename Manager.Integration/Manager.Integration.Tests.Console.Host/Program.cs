@@ -704,7 +704,7 @@ namespace Manager.IntegrationTest.Console.Host
 
 			var copiedManagerConfigurationFile =
 				CopyManagerConfigurationFile(ManagerConfigurationFile,
-				                             NumberOfManagersToStart + 1,
+				                             NumberOfManagersToStart ,
 				                             portNumber,
 				                             allowedDowntimeSeconds,
 				                             out uri);
@@ -721,6 +721,8 @@ namespace Manager.IntegrationTest.Console.Host
 			AppDomainManagerTasks.AddOrUpdate(appDomainManagerTask.GetAppDomainUniqueId(),
 			                                  appDomainManagerTask,
 			                                  (s, task) => appDomainManagerTask);
+
+			RoundRobin.AddHost(uri);
 
 			Logger.DebugWithLineNumber("Start: AppDomainManagerTask.StartTask");
 

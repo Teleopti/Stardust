@@ -17,6 +17,16 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 
 		private static int _currentIndex;
 
+		public static void AddHost(Uri hostUri)
+		{
+			_hosts.Add(hostUri);
+		}
+
+		public static void DeleteHost(Uri hostUri)
+		{
+			_hosts.Remove(hostUri);
+		}
+
 		public static void Set(List<Uri> hosts)
 		{
 			Logger.DebugWithLineNumber("Start.");

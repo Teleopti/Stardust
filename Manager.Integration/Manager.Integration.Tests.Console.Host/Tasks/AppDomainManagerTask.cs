@@ -35,7 +35,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		public string GetAppDomainUniqueId()
 		{
-			if (MyAppDomain != null && ConfigurationFileInfo != null)
+			if (ConfigurationFileInfo != null)
 			{
 				return ConfigurationFileInfo.Name;
 			}
