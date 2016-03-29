@@ -254,7 +254,7 @@ namespace Stardust.Manager
 				var progress = new JobProgressModel
 				{
 					JobId = jobFailedModel.JobId,
-					Created = DateTime.Now,
+					Created = DateTime.UtcNow,
 					ProgressDetail = jobFailedModel.AggregateException.ToString()
 				};
 
