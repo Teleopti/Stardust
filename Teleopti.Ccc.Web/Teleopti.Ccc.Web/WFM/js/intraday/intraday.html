@@ -121,7 +121,7 @@
 									<i ng-show="showIncluded" class="mdi mdi-eye"></i>
 									included skills
 								</li>
-								<li ng-click='toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>Delete this area</li>
+								<li ng-click='toggleSkillAreaModal()'><i class="skill-area-delete mdi mdi-delete"></i>Delete this area</li>
 							</ul>
 						</span>
 					</div>
@@ -161,15 +161,23 @@
 		</div>
 	</div>
 
-	<modal-dialog show='modalShown' ng-cloak>
-		<div class="modal-inner-content">
-			Are you sure you want to delete {{selectedSkillArea.Name}}?
+
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-show="DeleteSkillAreaModal">
+			<div class="modalbg">
+				<div class="dialog-mini">
+					<div class="modal-inner-content">
+						Are you sure you want to permanently delete {{selectedSkillArea.Name}}?
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="toggleSkillAreaModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+							<button ng-click='toggleSkillAreaModal();deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
+						</aside>
+					</div>
+				</div>
+			</div>
 		</div>
-		<div class="modal-actions">
-			<aside>
-				<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">Yes, delete it</button>
-			</aside>
-		</div>
-	</modal-dialog>
+	</div>
 
 </div>

@@ -9,6 +9,7 @@
 				var autocompleteSkillArea;
 				var timeoutPromise;
 				var pollingTimeout = 5000;
+				$scope.DeleteSkillAreaModal = false;
 
 				var getAutoCompleteControls = function() {
 					var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
@@ -59,15 +60,13 @@
 						});
 				};
 				reloadSkillAreas();
-				
+
 				$scope.configMode = function () {
 					$state.go('intraday.config', { isNewSkillArea: false });
 				};
 
-				$scope.modalShown = false;
-
-				$scope.toggleModal = function() {
-					$scope.modalShown = !$scope.modalShown;
+				$scope.toggleSkillAreaModal = function() {
+					$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
 				};
 
 				$scope.deleteSkillArea = function(skillArea) {
@@ -117,7 +116,7 @@
 					pollSkillMonitorData();
 				};
 
-				
+
 				var pollSkillMonitorData = function () {
 					cancelTimeout();
 
@@ -185,14 +184,14 @@
 
 				function clearSkillSelection() {
 					if (!autocompleteSkill) return;
-					
+
 					autocompleteSkill.selectedSkill = null;
 					autocompleteSkill.searchSkillText = '';
 				};
 
 				function clearSkillAreaSelection() {
 					if (!autocompleteSkillArea) return;
-					
+
 					autocompleteSkillArea.selectedSkillArea = null;
 					autocompleteSkillArea.searchSkillAreaText = '';
 				};
