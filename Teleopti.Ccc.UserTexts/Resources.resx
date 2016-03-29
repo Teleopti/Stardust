@@ -13556,7 +13556,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>change shift bag</comment>
   </data>
   <data name="PickAShiftBag" xml:space="preserve">
-    <value>Pick a shift bag</value>
+    <value>Select a shift bag</value>
     <comment>state holder for changing shift bag panel select in web people</comment>
   </data>
   <data name="SeatHasNoBookings" xml:space="preserve">
@@ -13836,7 +13836,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Delete selected filter</comment>
   </data>
   <data name="PickAnAbsence" xml:space="preserve">
-    <value>Pick an absence</value>
+    <value>Select an absence</value>
     <comment>Pick an absence</comment>
   </data>
   <data name="ManageRules" xml:space="preserve">
@@ -14229,5 +14229,9 @@ Help us improve your experience by sending an error report</value>
   <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
     <value>Added activity for {0} selected agent(s), all successed!</value>
     <comment>Succeed message for adding activity in wfm/teamschedule</comment>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Select an activity</value>
+    <comment>Select an activity</comment>
   </data>
 </root>

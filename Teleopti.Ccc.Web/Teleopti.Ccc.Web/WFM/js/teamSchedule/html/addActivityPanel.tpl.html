@@ -5,7 +5,7 @@
 			<h3>{{'Activity'|translate}}: </h3>
 			<div class="con-row">
 				<select class="activity-selector" ng-model="vm.selectedActivityId" required>
-					<option value="" disabled selected="">{{'PickAnActivity'|translate}}</option>
+					<option value="" disabled selected="">{{'SelectAnActivity'|translate}}</option>
 					<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>

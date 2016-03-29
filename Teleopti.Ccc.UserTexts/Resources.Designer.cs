@@ -20284,7 +20284,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick an absence.
+        ///   Looks up a localized string similar to Select an absence.
         /// </summary>
         public static string PickAnAbsence {
             get {
@@ -20293,7 +20293,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Pick a shift bag.
+        ///   Looks up a localized string similar to Select a shift bag.
         /// </summary>
         public static string PickAShiftBag {
             get {
@@ -24700,6 +24700,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectAMultiplicator {
             get {
                 return ResourceManager.GetString("SelectAMultiplicator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select an activity.
+        /// </summary>
+        public static string SelectAnActivity {
+            get {
+                return ResourceManager.GetString("SelectAnActivity", resourceCulture);
             }
         }
         
