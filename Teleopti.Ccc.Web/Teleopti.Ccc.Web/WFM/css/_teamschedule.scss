@@ -12,10 +12,18 @@
 	.teamschedule-header{
 		width:100%!important;
 		display:flex;
-		flex-direction:row;
+		flex-direction:column;
 		flex-wrap:wrap;
 		justify-content:space-between;
-	
+
+		.leftside-part{
+			display:flex;
+			flex-direction:row;
+			flex-wrap:wrap;
+			justify-content:space-between;
+			padding-right:10px;
+		}
+
 		.people-search-container{
 			display: inline-block;
 			margin: 10px;
@@ -40,13 +48,17 @@
 
 		.wfm-switch{
 			display:inline-block;
-			margin: 0 10px;
-			padding-top: 8px;
+			margin: 10px;
+			padding:0;
 			min-width:200px;
 			.wfm-switch-toggle{
-				top: 8px;
 				left: 12rem;
 			}
+		}
+
+		.context-menu.card-context{
+			align-self: flex-end;
+			margin-top: -39px;
 		}
 
 		.context-menu .context-menu-left{
@@ -55,8 +67,10 @@
 		}
 	}
 
-	.teamschedule-body{
+	.con-row.teamschedule-body{
+		align-items:flex-start;
 		position:relative;
+		min-height:300px;
 	}
 
 	.big-table-wrapper {
@@ -141,6 +155,8 @@
 	}
 
 	.person-name-column {
+		cursor:pointer;
+
 		.wfm-checkbox-toggle:after {
 			width: 15px;
 			height: 15px;
@@ -150,6 +166,19 @@
 		.wfm-checkbox {
 			padding: 0;
 		}
+	}
+
+	th.person-name-column{
+		width: 15%;
+	}
+	
+	th.right-border-empty{
+		width: 2%;
+	}
+
+	.table thead tr>th.schedule-column{
+		padding-left:0;
+		padding-right:0;	
 	}
 
 	.timepicker {
@@ -187,6 +216,7 @@
 	
 	md-sidenav{
 		min-width:360px;
+		box-shadow:none;
 	}	
 
 	.absence-report{
@@ -210,6 +240,7 @@
 	
 		.absence-selector{
 			padding:0;
+			min-height:20px;
 		}
 
 		.con-row>.teamschedule-datepicker{
@@ -238,7 +269,12 @@
 
 		.activity-selector{
 			width:100%;
+			min-height:20px;
 		}
+	}
+
+	md-content>button.wfm-btn{
+		min-height:40px;
 	}
 
 	.modal-box .wfm-simple-list{

@@ -6,20 +6,22 @@
 
 <div class="team-schedule panel material-depth-1">
 	<div class="teamschedule-header">
-		<span class="people-search-container">
-			<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" />
-		</span>
+		<div class="leftside-part">
+			<span class="people-search-container">
+				<people-search-input search-options="vm.searchOptions" search-callback="vm.onKeyWordInSearchInputChanged" />
+			</span>
 
-		<span class="datepicker-container">
-			<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()" />
-		</span>
+			<span class="datepicker-container">
+				<team-schedule-datepicker selected-date="vm.scheduleDate" on-date-change="vm.onScheduleDateChanged()" />
+			</span>
 
-		<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
-			<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()"/>
-			<label for="switchAbsence">
-				<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
-				<span class="wfm-switch-toggle"></span>
-			</label>
+			<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
+				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
+				<label for="switchAbsence">
+					<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
+					<span class="wfm-switch-toggle"></span>
+				</label>
+			</div>
 		</div>
 		<div id="scheduleContextMenuButton" tabindex=0 class="context-menu card-context" ng-if="vm.isMenuVisible()">
 			<i class="mdi mdi-dots-vertical"></i>
@@ -55,7 +57,7 @@
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-activity">
 			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" selected-agents="vm.getSelectedPersonIdList()" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()" actions-after-activity-apply="vm.afterActionCallback(result, personIds, successMessageTemplate, failMessageTemplate)"></add-activity-panel>
 		</md-sidenav>
-		
+
 	</div>
 
 	<div class="con-footer" ng-if="vm.paginationOptions.totalPages > 0">
