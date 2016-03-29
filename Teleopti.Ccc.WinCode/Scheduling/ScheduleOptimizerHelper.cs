@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private void optimizeIntraday(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences,
 									DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{	
-			_optimizeIntradayDesktop.Optimize(scheduleDays, optimizerPreferences, selectedPeriod, dayOffOptimizationPreferenceProvider, _backgroundWorker);
+			_optimizeIntradayDesktop.Optimize(scheduleDays, optimizerPreferences, selectedPeriod, dayOffOptimizationPreferenceProvider, new IntradayOptimizationCallback(_backgroundWorker));
 		}
 
 		private void optimizeWorkShifts(

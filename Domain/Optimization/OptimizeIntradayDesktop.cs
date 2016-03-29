@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		//TODO - remove unneeded params when toggle is gone
 		void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences,
 			DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			ISchedulingProgress backgroundWorker);	
+			IIntradayOptimizationCallback intradayOptimizationCallback);	
 	}
 
 	public class OptimizeIntradayIslandsDesktop : IOptimizeIntradayDesktop
@@ -35,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress backgroundWorker)
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
 			using (_desktopOptimizationContext.Set(_currentSchedulerStateHolder(), optimizerPreferences))
 			{
@@ -69,44 +68,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences,
 							DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-							ISchedulingProgress backgroundWorker)
+							IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
 			var optimizers = _intradayOptimizer2Creator
 				.Create(selectedPeriod, scheduleDays, optimizerPreferences, dayOffOptimizationPreferenceProvider);
 
 			using (_intradayOptimizationContext.Create(selectedPeriod))
 			{
-				using (_intradayOptimizationCallbackContext.Create(new intradayOptimizationCallback(backgroundWorker)))
+				using (_intradayOptimizationCallbackContext.Create(intradayOptimizationCallback))
 				{
 					_intradayOptimizerContainer.Execute(optimizers);
 				}
-			}
-		}
-
-		private class intradayOptimizationCallback : IIntradayOptimizationCallback
-		{
-			private readonly ISchedulingProgress _backgroundWorker;
-			private int _counter;
-			private readonly string output = Resources.OptimizingIntraday + Resources.Colon + "({0}){1} {2} {3}";
-
-			public intradayOptimizationCallback(ISchedulingProgress backgroundWorker)
-			{
-				_backgroundWorker = backgroundWorker;
-			}
-
-			public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
-			{
-				var e = new ResourceOptimizerProgressEventArgs(0, 0,
-					string.Format(output, callbackInfo.NumberOfOptimizers, _counter++,
-						callbackInfo.Agent.Name.ToString(NameOrderOption.FirstNameLastName),
-						callbackInfo.WasSuccessful ? Resources.wasSuccessful : Resources.wasNotSuccessful));
-
-				_backgroundWorker.ReportProgress(1, e);
-			}
-
-			public bool IsCancelled()
-			{
-				return _backgroundWorker.CancellationPending;
 			}
 		}
 	}
