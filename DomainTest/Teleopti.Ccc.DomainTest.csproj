@@ -252,6 +252,7 @@
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\FillSchedulerStateHolderForTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\FullSchedulingTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCallbackDesktopTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCallbackIslandToggleOffTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCommandSpecificTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationDesktopTest.cs" />

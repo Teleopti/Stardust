@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizationCallbackContext
+	public class IntradayOptimizationCallbackContext : ICurrentIntradayOptimizationCallback
 	{
 		[ThreadStatic]
 		private static IIntradayOptimizationCallback _current;

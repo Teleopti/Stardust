@@ -12,17 +12,17 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public class IntradayOptimizerContainer : IIntradayOptimizerContainer
     {
-		private readonly IntradayOptimizationCallbackContext _intradayOptimizationCallbackContext;
+		private readonly ICurrentIntradayOptimizationCallback _currentIntradayOptimizationCallback;
 
-		public IntradayOptimizerContainer(IntradayOptimizationCallbackContext intradayOptimizationCallbackContext)
+		public IntradayOptimizerContainer(ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback)
 		{
-			_intradayOptimizationCallbackContext = intradayOptimizationCallbackContext;
+			_currentIntradayOptimizationCallback = currentIntradayOptimizationCallback;
 		}
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers)
 		{
 			var shuffledOptimizers = optimizers.GetRandom(optimizers.Count(), true);
-			var callback = _intradayOptimizationCallbackContext.Current();
+			var callback = _currentIntradayOptimizationCallback.Current();
 
 			foreach (var batchOptimizers in shuffledOptimizers.Batch(100))
 			{

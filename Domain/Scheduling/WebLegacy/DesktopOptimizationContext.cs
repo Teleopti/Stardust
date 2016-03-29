@@ -10,10 +10,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class DesktopOptimizationContext : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization
+	public class DesktopOptimizationContext : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback
 	{
 		private ISchedulerStateHolder _schedulerStateHolderFrom;
 		private IOptimizationPreferences _optimizationPreferences;
+		private IIntradayOptimizationCallback _intradayOptimizationCallback;
 
 		protected override IScenario FetchScenario()
 		{
@@ -60,14 +61,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, period);
 		}
 
-		public IDisposable Set(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences)
+		public IDisposable Set(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
 			_schedulerStateHolderFrom = schedulerStateHolderFrom;
 			_optimizationPreferences = optimizationPreferences;
+			_intradayOptimizationCallback = intradayOptimizationCallback;
 			return new GenericDisposable(() =>
 			{
 				_schedulerStateHolderFrom = null;
 				_optimizationPreferences = null;
+				_intradayOptimizationCallback = null;
 			});
 		}
 
@@ -100,6 +103,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public IEnumerable<IPerson> Agents(DateOnlyPeriod period)
 		{
 			return _schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization;
+		}
+
+		public IIntradayOptimizationCallback Current()
+		{
+			return _intradayOptimizationCallback;
 		}
 	}
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
-			using (_desktopOptimizationContext.Set(_currentSchedulerStateHolder(), optimizerPreferences))
+			using (_desktopOptimizationContext.Set(_currentSchedulerStateHolder(), optimizerPreferences, intradayOptimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
 				{

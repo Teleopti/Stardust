@@ -6,22 +6,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizerContainerConsiderLargeGroups : IIntradayOptimizerContainer
 	{
-		private readonly IntradayOptimizationCallbackContext _intradayOptimizationCallbackContext;
+		private readonly ICurrentIntradayOptimizationCallback _currentIntradayOptimizationCallback;
 		private readonly AgentsToSkillGroups _agentsToSkillGroups;
 		private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;
 
-		public IntradayOptimizerContainerConsiderLargeGroups(IntradayOptimizationCallbackContext intradayOptimizationCallbackContext,
+		public IntradayOptimizerContainerConsiderLargeGroups(ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback,
 																										AgentsToSkillGroups agentsToSkillGroups,
 																										IIntradayOptimizerLimiter intradayOptimizerLimiter)
 		{
-			_intradayOptimizationCallbackContext = intradayOptimizationCallbackContext;
+			_currentIntradayOptimizationCallback = currentIntradayOptimizationCallback;
 			_agentsToSkillGroups = agentsToSkillGroups;
 			_intradayOptimizerLimiter = intradayOptimizerLimiter;
 		}
 
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers)
 		{
-			var callback = _intradayOptimizationCallbackContext.Current();
+			var callback = _currentIntradayOptimizationCallback.Current();
 			foreach (var agents in _agentsToSkillGroups.ToSkillGroups())
 			{
 				var optimizersToLoop = optimizers.Where(x => agents.Contains(x.ContainerOwner)).ToList();
