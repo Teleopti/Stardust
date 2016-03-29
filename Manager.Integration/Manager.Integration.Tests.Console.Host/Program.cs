@@ -671,7 +671,9 @@ namespace Manager.IntegrationTest.Console.Host
 
 				Logger.DebugWithLineNumber("Finished : AppDomainNodeTask.StartTask");
 
-				AppDomainNodeTasks.AddOrUpdate(appDomainNodeTask.GetAppDomainUniqueId(),
+				var appDomainUniqueId = appDomainNodeTask.GetAppDomainUniqueId();
+
+				AppDomainNodeTasks.AddOrUpdate(appDomainUniqueId,
 				                               appDomainNodeTask,
 				                               (s, task) => appDomainNodeTask);
 

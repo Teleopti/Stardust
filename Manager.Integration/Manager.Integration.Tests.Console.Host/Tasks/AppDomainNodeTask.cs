@@ -39,8 +39,7 @@ namespace Manager.IntegrationTest.Console.Host.Tasks
 
 		public string GetAppDomainUniqueId()
 		{
-			if (MyAppDomain != null && 
-				NodeconfigurationFile != null)
+			if (NodeconfigurationFile != null)
 			{
 				return NodeconfigurationFile.Name;
 			}

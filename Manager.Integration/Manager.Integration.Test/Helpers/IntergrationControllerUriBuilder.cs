@@ -24,6 +24,23 @@ namespace Manager.Integration.Test.Helpers
 			return CreateUri(IntegrationControllerRouteConstants.Managers);
 		}
 
+
+		public Uri GetManagerUriByManagerName(string managerName)
+		{
+			var uri =
+				CreateUri(IntegrationControllerRouteConstants.ManagerById.Replace("{id}", managerName));
+
+			return uri;
+		}
+
+		public Uri GetNodeUriByNodeName(string nodeName)
+		{
+			var uri=
+				CreateUri(IntegrationControllerRouteConstants.NodeById.Replace("{id}",nodeName));
+
+			return uri;
+		}
+
 		public Uri GetAllNodesUri()
 		{
 			return CreateUri(IntegrationControllerRouteConstants.Nodes);
