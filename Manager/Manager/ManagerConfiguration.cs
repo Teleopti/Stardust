@@ -10,12 +10,13 @@ namespace Stardust.Manager
 
 		public int AllowedNodeDownTimeSeconds { get; set; }
 
+
 		public int CheckNewJobIntervalSeconds { get; set; }
 
-		public ManagerConfiguration(int allowedNodeDownTimeSeconds = 600, int checkNewJobIntervalSeconds = 10) //10 minutes
+		public ManagerConfiguration()
 		{
-			AllowedNodeDownTimeSeconds = allowedNodeDownTimeSeconds;
-			CheckNewJobIntervalSeconds = checkNewJobIntervalSeconds;
+			AllowedNodeDownTimeSeconds = 600;
+			CheckNewJobIntervalSeconds = 10;
 		}
 	
 	}
