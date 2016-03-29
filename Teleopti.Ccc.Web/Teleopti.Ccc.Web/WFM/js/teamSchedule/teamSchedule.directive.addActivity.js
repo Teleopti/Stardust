@@ -14,13 +14,13 @@
 				defaultStart: '&?'
 			},
 			templateUrl: 'js/teamSchedule/html/addActivityPanel.tpl.html',
-			controller: ['ActivityService', addActivityCtrl],
+			controller: ['ActivityService', 'guidgenerator', addActivityCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function addActivityCtrl(ActivityService) {
+	function addActivityCtrl(ActivityService, guidgenerator) {
 		var vm = this;
 		var startTimeMoment;
 
@@ -42,23 +42,34 @@
 			vm.activities = activities;
 		});
 
-		function addActivity() {			
+		function addActivity() {
+			var trackId = guidgenerator.newGuid();
 			ActivityService.addActivity({
 				PersonIds: vm.selectedAgents(),
 				BelongsToDate: vm.selectedDate(),
 				StartTime: moment(vm.timeRange.startTime).format("HH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("HH:mm"),
-				ActivityId: vm.selectedActivityId
-
-			}).then(function (data) {			
+				ActivityId: vm.selectedActivityId,
+				TrackedCommandInfo:{TrackId:trackId}
+			}).then(function (data) {
 				if (vm.actionsAfterActivityApply) {
-					//vm.actionsAfterActivityApply(data);
-					vm.actionsAfterActivityApply();
+					vm.actionsAfterActivityApply({
+						result: { TrackId: trackId},
+						personIds: vm.selectedAgents(),
+						successMessageTemplate: 'SuccessfulMessageForAddingActivity',
+						failMessageTemplate: ''
+					});
+				}
+			}, function (error) {
+				if (vm.actionsAfterActivityApply) {
+					vm.actionsAfterActivityApply({
+						result: { TrackId: trackId, Errors: error },
+						personIds: vm.selectedAgents(),
+						successMessageTemplate: '',
+						failMessageTemplate: 'FailedMessageForAddingActivity'
+					});
 				}
 			});
-		}	
-
-				
+		}
 	}
-
 })();

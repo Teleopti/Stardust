@@ -14222,4 +14222,12 @@ Help us improve your experience by sending an error report</value>
     <value>Same Day</value>
     <comment>The opposite to the NextDay</comment>
   </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>Added activity for {0} selected agent(s), all failed!</value>
+    <comment>Failed message for adding activity in wfm/teamschedule</comment>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>Added activity for {0} selected agent(s), all successed!</value>
+    <comment>Succeed message for adding activity in wfm/teamschedule</comment>
+  </data>
 </root>

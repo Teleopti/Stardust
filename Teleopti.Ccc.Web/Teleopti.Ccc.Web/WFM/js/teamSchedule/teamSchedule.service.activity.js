@@ -18,8 +18,10 @@
 
 		this.addActivity = function(activity) {
 			var deferred = $q.defer();
-			$http.post(addActivityUrl, normalizeActivity(activity)).success(function(data) {
+			$http.post(addActivityUrl, normalizeActivity(activity)).then(function(data) {
 				deferred.resolve(data);
+			}, function(error) {
+				deferred.reject(error);
 			});
 			return deferred.promise;
 		}

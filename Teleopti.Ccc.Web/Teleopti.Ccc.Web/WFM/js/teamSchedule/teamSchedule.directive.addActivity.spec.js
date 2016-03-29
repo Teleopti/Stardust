@@ -12,6 +12,13 @@
 			$provide.service('ActivityService', function() {
 				return fakeActivityService;
 			});
+			$provide.service('guidgenerator', function() {
+				return {
+					newGuid: function() {
+						return "B4A88909-A1A0-4672-A7A3-14909B2C7673";
+					}
+				}
+			});
 		});
 	});
 
@@ -30,9 +37,9 @@
 		this.addActivity = function(input) {
 			targetActivity = input;
 			return {
-				then: function (cb) {
+				then: (function (cb) {
 					cb(targetActivity);
-				}
+				})
 			};
 		};
 
@@ -148,7 +155,7 @@
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	fit('should call add activity when click apply with correct data', function () {
+	it('should call add activity when click apply with correct data', function () {
 		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()"></add-activity-panel>';
 		
 		var scope = $rootScope.$new();
@@ -211,6 +218,7 @@
 		expect(activityData.StartTime).toEqual('02:00');
 		expect(activityData.EndTime).toEqual('08:00');
 		expect(activityData.BelongsToDate).toEqual(scope.getSelectedDate());
+		expect(activityData.TrackedCommandInfo.TrackId).toEqual("B4A88909-A1A0-4672-A7A3-14909B2C7673");
 
 	});
 

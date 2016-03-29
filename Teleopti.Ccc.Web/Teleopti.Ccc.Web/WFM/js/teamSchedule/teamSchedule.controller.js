@@ -415,13 +415,16 @@
 			if (errors == undefined || errors.length === 0) {
 				message = replaceParameters($translate.instant(successMessageTemplate), [total]);
 				notificationService.notifySuccess(message);
-			} else {
+			} else if (errors.length != undefined) {
 				var successCount = total - errors.length;
 				message = replaceParameters($translate.instant(failMessageTemplate), [total, successCount, errors.length]);
 				notificationService.notifyFailure(message);
 				vm.errorTitle = message;
 				vm.errorDetails = errors;
 				vm.showErrorDetails = true;
+			} else {
+				message = replaceParameters($translate.instant(failMessageTemplate), [total]);
+				notificationService.notifyFailure(message);
 			}
 		}
 
@@ -434,10 +437,6 @@
 			vm.setCurrentCommand("");
 		};
 
-		vm.tempAfterAddActivityCallback = function() {
-			//temp test
-			vm.setCurrentCommand("");
-		};
 		function registerShortCuts() {
 			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
 				addActivity(); // Alt+A for add activity
