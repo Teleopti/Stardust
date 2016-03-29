@@ -784,28 +784,7 @@ namespace Teleopti.Ccc.DomainTest.Shoveling
 	[TestFixture]
 	public class ShovelTest
 	{		
-		[Test]
-		public void ShouldLeaveMoreOfExpensivePileIfMoreThanOnePile()
-		{
-			var target = new Shovel();
-			var skillA = SkillFactory.CreateSkill("levelA");
-			var periodA = createSkillStaffPeriod(skillA, 2);
-			var skillB = SkillFactory.CreateSkill("levelB");
-			var periodB = createSkillStaffPeriod(skillB, -1);
-			var skillC = SkillFactory.CreateSkill("levelC");
-			var periodC = createSkillStaffPeriod(skillC, 1);
-			var skillD = SkillFactory.CreateSkill("levelD");
-			var periodD = createSkillStaffPeriod(skillD, -1.5);
-
-			var periodList = new List<ISkillStaffPeriod> { periodA, periodB, periodC, periodD };
-			target.Execute(periodList, double.MaxValue);
-
-			periodA.AbsoluteDifference.Should().Be.EqualTo(0.5);
-			periodB.AbsoluteDifference.Should().Be.EqualTo(0);
-			periodC.AbsoluteDifference.Should().Be.EqualTo(0);
-			periodD.AbsoluteDifference.Should().Be.EqualTo(0);
-		}
-
+		
 		[Test]
 		public void MayNotTransferMoreThanAllovedForSkillGroup()
 		{
