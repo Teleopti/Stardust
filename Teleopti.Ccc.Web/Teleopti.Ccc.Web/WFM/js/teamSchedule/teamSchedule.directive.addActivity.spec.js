@@ -148,7 +148,7 @@
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	it('should call add activity when click apply with correct data', function () {
+	fit('should call add activity when click apply with correct data', function () {
 		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()"></add-activity-panel>';
 		
 		var scope = $rootScope.$new();
@@ -206,11 +206,11 @@
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 	
 		expect(activityData).not.toBeNull();
-		expect(activityData.agents.length).toEqual(2);
-		expect(activityData.activity).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
-		expect(moment(activityData.startTime).format('HH:mm')).toEqual('02:00');
-		expect(moment(activityData.endTime).format('HH:mm')).toEqual('08:00');
-		expect(moment(activityData.date).format('YYYY-MM-DD')).toEqual('2016-01-01');
+		expect(activityData.PersonIds.length).toEqual(2);
+		expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
+		expect(activityData.StartTime).toEqual('02:00');
+		expect(activityData.EndTime).toEqual('08:00');
+		expect(activityData.BelongsToDate).toEqual(scope.getSelectedDate());
 
 	});
 

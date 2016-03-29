@@ -44,11 +44,11 @@
 
 		function addActivity() {			
 			ActivityService.addActivity({
-				agents: vm.selectedAgents(),
-				date: vm.selectedDate(),
-				startTime: vm.timeRange.startTime,
-				endTime: vm.timeRange.endTime,
-				activity: vm.selectedActivityId
+				PersonIds: vm.selectedAgents(),
+				BelongsToDate: vm.selectedDate(),
+				StartTime: moment(vm.timeRange.startTime).format("HH:mm"),
+				EndTime: moment(vm.timeRange.endTime).format("HH:mm"),
+				ActivityId: vm.selectedActivityId
 
 			}).then(function (data) {			
 				if (vm.actionsAfterActivityApply) {
