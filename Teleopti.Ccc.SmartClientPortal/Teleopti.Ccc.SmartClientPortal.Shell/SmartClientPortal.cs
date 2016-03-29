@@ -344,6 +344,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		public void setWfmWebUrl(string module)
 		{
+			if (!wfmWebView.IsCreated)
+			{
+				wfmWebView = new WebView();
+				wfmWebControl.WebView = wfmWebView;
+			}
 			wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", webServer, _permissionModule));
 		}
 
@@ -718,8 +723,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			if (uc is ShiftsNavigationPanel)
 				((ShiftsNavigationPanel)uc).SetMainOwner(this);
-
-			
 		}
 
 		private void webView1LoadFailed(object sender, LoadFailedEventArgs e)
