@@ -65,7 +65,7 @@
 					$state.go('intraday.config', { isNewSkillArea: false });
 				};
 
-				$scope.toggleSkillAreaModal = function() {
+				$scope.toggleModal = function() {
 					$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
 				};
 

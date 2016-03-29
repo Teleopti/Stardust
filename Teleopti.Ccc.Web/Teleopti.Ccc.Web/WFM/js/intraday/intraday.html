@@ -121,7 +121,7 @@
 									<i ng-show="showIncluded" class="mdi mdi-eye"></i>
 									included skills
 								</li>
-								<li ng-click='toggleSkillAreaModal()'><i class="skill-area-delete mdi mdi-delete"></i>Delete this area</li>
+								<li ng-click='toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>Delete this area</li>
 							</ul>
 						</span>
 					</div>
@@ -171,8 +171,8 @@
 					</div>
 					<div class="modal-actions">
 						<aside>
-							<button ng-click="toggleSkillAreaModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-							<button ng-click='toggleSkillAreaModal();deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
+							<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+							<button ng-click='toggleModal();deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
 						</aside>
 					</div>
 				</div>
