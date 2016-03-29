@@ -8,7 +8,7 @@ using System.Threading;
 using Autofac;
 using log4net.Config;
 using Stardust.Node;
-using Stardust.Node.API;
+using Stardust.Node.Workers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
