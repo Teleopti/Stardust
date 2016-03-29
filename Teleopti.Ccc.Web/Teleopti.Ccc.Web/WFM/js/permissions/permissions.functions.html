@@ -39,8 +39,8 @@
 		</form>
 	</div>
 	<div class="con-flex">
-		<div ng-class="{myRoleLock: disablePermissionForMe()}" ng-click="toggleDangerModal=true && !selectedRole.BuiltIn">
-			<div class="wfm-switch panel-switch text-align-right" style="pointer-events:none;">
+		<div ng-class="{myRoleLock: disablePermissionForMe()}" class="line-right" ng-click="toggleDangerModal=true && !selectedRole.BuiltIn">
+			<div class="wfm-switch panel-switch" style="pointer-events:none;">
 				<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" ng-class="{'disabled-checkbox': selectedRole.BuiltIn}" id="switchAll" />
 				<label for="switchAll">
 					<span class="wfm-switch-label" translate>AccessAllFunctions</span>
