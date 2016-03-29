@@ -15,8 +15,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public SkillStaffPeriodHolder(IEnumerable<KeyValuePair<ISkill, IList<ISkillDay>>> skillDays)
         {
-            CreateInternalDictionary(skillDays);
-        }
+	        lock (Locker)
+	        {
+				CreateInternalDictionary(skillDays);
+			}
+		}
 
         public IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> SkillStaffDataPerActivity(DateTimePeriod onPeriod, IList<ISkill> onSkills)
         {
