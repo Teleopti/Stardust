@@ -133,6 +133,9 @@ namespace Stardust.Manager
 				}
 				catch (Exception exp)
 				{
+					if (exp.Message.Contains("UQ_WorkerNodes_Url"))
+						return;
+
 					this.Log().ErrorWithLineNumber(exp.Message, exp);
 				}
 				finally
@@ -222,7 +225,7 @@ namespace Stardust.Manager
 									var heartBeatDateTime =
 										(DateTime)objectse[ordinalPosForHeartBeat];
 									var url = objectse[ordinalPosForUrl];
-									var currentDateTime = DateTime.Now;
+									var currentDateTime = DateTime.UtcNow;
 									var dateDiff =
 										(currentDateTime - heartBeatDateTime).TotalSeconds;
 									if (dateDiff > timeSpan.TotalSeconds)
@@ -236,18 +239,14 @@ namespace Stardust.Manager
 							}
 							trans.Commit();
 						}
-						
 					}
-
 					connection.Close();
 				}
 			}
 
 			catch (Exception exp)
 			{
-				this.Log().ErrorWithLineNumber(exp.Message,
-															exp);
-				throw;
+				this.Log().ErrorWithLineNumber(exp.Message,exp);
 			}
 
 			return deadNodes;
@@ -276,7 +275,7 @@ namespace Stardust.Manager
 				{
 					using (var command = new SqlCommand(updateCommandText, connection,trans))
 					{
-						command.Parameters.Add("@Heartbeat", SqlDbType.DateTime).Value = DateTime.Now;
+						command.Parameters.Add("@Heartbeat", SqlDbType.DateTime).Value = DateTime.UtcNow;
 						command.Parameters.Add("@Alive", SqlDbType.Bit).Value = true;
 						command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = nodeUri;
 						try
