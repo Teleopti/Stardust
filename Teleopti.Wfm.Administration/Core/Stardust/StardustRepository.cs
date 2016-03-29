@@ -170,7 +170,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 						{
 							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
 							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+							Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
 							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat")),
 							Running = (bool)reader.GetValue(reader.GetOrdinal("Running"))
 						};
@@ -211,7 +211,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 						{
 							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
 							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (string)reader.GetValue(reader.GetOrdinal("Alive")),
+							Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
 							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat")),
 							Running = (bool)reader.GetValue(reader.GetOrdinal("Running"))
 						};
