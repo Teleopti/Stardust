@@ -784,7 +784,6 @@ namespace Teleopti.Ccc.DomainTest.Shoveling
 	[TestFixture]
 	public class ShovelTest
 	{		
-		
 		[Test]
 		public void MayNotTransferMoreThanAllovedForSkillGroup()
 		{
