@@ -126,14 +126,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					throw new InvalidUserCodeException(string.Format("No person found for SourceId {0} and UserCode {1}", input.SourceId, input.UserCode));
 			}
 		}
-
-		[InfoLog]
+		
 		protected virtual string FixUserCode(ExternalUserStateInputModel input)
 		{
 			return input.UserCode.Trim();
 		}
-
-		[InfoLog]
+		
 		protected virtual string FixStateCode(ExternalUserStateInputModel input)
 		{
 			if (!input.IsLoggedOn)
