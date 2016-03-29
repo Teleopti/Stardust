@@ -254,7 +254,7 @@ namespace Stardust.Node.Workers
 						if (faultedTimer != null)
 						{
 							faultedTimer.AggregateExceptionToSend = t.Exception;
-							faultedTimer.ErrorOccured = DateTime.Now;
+							faultedTimer.ErrorOccured = DateTime.UtcNow;
 						}
 
 						if (t.Exception != null)
