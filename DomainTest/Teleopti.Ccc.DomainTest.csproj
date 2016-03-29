@@ -250,6 +250,7 @@
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationContextHandleNestedResourcesTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\DayOffOptimizationLockDaysTest.cs" />
+    <Compile Include="Optimization\ScheduleOptimizationTests\FillSchedulerStateHolderForTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\FullSchedulingTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCallbackTest.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTests\IntradayOptimizationCommandSpecificTest.cs" />
