@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			Task.WaitAll((from @event in events
 				let handlerType = typeof (IHandleEvent<>).MakeGenericType(@event.GetType())
 				let registrationTypes = _resolve.ConcreteTypesFor(handlerType).Where(x => x.GetInterfaces().Contains(typeof (IRunInProcess)))
-				where registrationTypes.Count() == 1 //only supports one event handler impl currently - struggle to get correct handlertype if multiple
+				from registrationType in registrationTypes
 				select Task.Factory.StartNew(() =>
 				{
 					using (var scope = _resolve.NewScope())
 					{
-						var handler = scope.Resolve(handlerType);
+						var handler = scope.Resolve(registrationType);
 						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
 						method.Invoke(handler, new[] {@event});
 					}

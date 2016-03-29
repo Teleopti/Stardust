@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Autofac.Core;
+using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -29,7 +30,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public IEnumerable<Type> ConcreteTypesFor(Type componentType)
 		{
 			return _lifetimeScope.ComponentRegistry.RegistrationsFor(new TypedService(componentType))
-				.Select(componentRegistration => componentRegistration.Activator.LimitType);
+				.Select(componentRegistration =>
+				{
+					var handlerType = componentRegistration.Activator.LimitType;
+					return ProxyUtil.IsProxyType(handlerType) ? 
+						handlerType.BaseType : 
+						handlerType;
+				});
 		}
 
 		public void Dispose()
