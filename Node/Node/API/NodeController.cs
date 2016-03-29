@@ -36,8 +36,6 @@ namespace Stardust.Node.API
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)
 		{
-			Logger.InfoWithLineNumber("Received Start Job from Manager. JobId: " + jobToDo.Id);
-
 			var isJobToDoValidObject = ValidateObject(jobToDo,Request);
 
 			if (!(isJobToDoValidObject is OkResult))
@@ -52,6 +50,8 @@ namespace Stardust.Node.API
 			{
 				return isValidRequest;
 			}
+
+			Logger.InfoWithLineNumber("Received Start Job from Manager. JobId: " + jobToDo.Id);
 
 			Task.Factory.StartNew(() =>
 			{
