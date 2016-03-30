@@ -22,16 +22,6 @@ html, body{
 	height: 100%;
 }
 
-/*override bootstrap*/
-.col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
-	padding: 0;
-}
-
-.row {
-	margin-right: 0;
-	margin-left: 0;
-}
-
 .select-toggle {
 	opacity: 0;
 }
@@ -45,10 +35,6 @@ html, body{
 	//height: 92vh;
 	min-height: 92vh; //calc(-56vh);
 	//overflow: auto;
-}
-
-input::-ms-clear {
-	display: none;
 }
 
 /*Business unit change*/
@@ -70,89 +56,7 @@ input::-ms-clear {
 	}
 }
 
-.ui-select{
-	width: 100%;
-	position: relative;
-
-	.bu-caret{
-			position: absolute;
-			right: -8px;
-	    top: 4px;
-			pointer-events: none;
-	}
-
-	/* This is to remove the arrow of select element in IE */
-	select::-ms-expand {	display: none; }
-	select{
-    -webkit-appearance: none;
-    appearance: none;
-	}
-	@-moz-document url-prefix(){
-		.ui-select{
-			border: 1px solid #CCC;
-			border-radius: 4px;
-			box-sizing: border-box;
-			position: relative;
-			overflow: hidden;
-		}
-  	.ui-select select {
-			width: 110%;
-			background-position: right 30px center !important;
-			border: none !important;
-		}
-	}
-}
-
-/*start (main)*/
-	.start-wrapper {
-		width: 75%;
-		position:relative;
-		margin-left:auto;
-		margin-right:auto;
-		max-height: 50%;
-		z-index:2;
-	}
-
-	.start-links{
-		display: flex;
-		justify-content: space-around;
-		width:100%;
-
-		a{
-			width: 130px;
-			text-align: center;
-		}
-	}
-
-	.start-panel {
-		margin:0 5px;
-		display: inline-block;
-		background: $white;
-		margin-bottom: 15px;
-	}
-
-	.start-tutorial{
-		position:relative!important;
-		display: inline-flex;
-		width:100%;
-	}
-
-	.tour-btn{
-		position: absolute;
-		right:0;
-		top:-5px;
-	}
-
-	.social-footer {
-		padding: 5px 0;
-	}
-
-	.start-blog-btn {
-		margin-top: 3rem;
-	}
-
 /*nav-context-menu*/
-
 .nav-row{
 	padding-top:5px;
 
@@ -168,30 +72,10 @@ input::-ms-clear {
   right: 0;
 	transition:$transition-timing;
 
-	.card-context{
-		margin:5px 0;
-	}
-
 	.nav-tools{
 		position: fixed;
 		right: 0;
 		top: 0;
-	}
-
-	.navbar-search{
-		background: $white;
-		padding:10px;
-	}
-
-	.search-results{
-		position: relative;
-		width:auto;
-	}
-
-	.navbar-left{
-			float: none!important;
-			margin-left: $full-padding;
-			line-height: 25px;
 	}
 
 	.navbar-right{
@@ -199,15 +83,6 @@ input::-ms-clear {
 			margin:0;
 		}
 	}
-}
-
-/*Growl*/
-.growl-container > .growl-item.ng-enter,
-.growl-container > .growl-item.ng-leave {
-	-webkit-transition:0.5s all ease-in-out;
-	-moz-transition:0.5s all ease-in-out;
-	-o-transition:0.5s all ease-in-out;
-	transition:0.5s all ease-in-out;
 }
 
 /*Project specific*/
@@ -251,94 +126,65 @@ md-progress-circular .md-inner .md-half-circle {
 	background: $white;
 }
 
-.warm-overlay{
-	position:fixed;
-	top:0;
-	bottom:0;
-	left:0;
-	right:0;
-	z-index:99999;
-	background-color: rgba(229, 146, 81, 0.15);
-	pointer-events: none;
-}
-
-
-/*temp fixes*/
-
-#leftsidenav > div > section{
-	margin-top: -2px;
-}
-
-.ui-grid-menu .ui-grid-menu-inner ul li{
-	border:none;
-}
-.ui-grid-menu-button .ui-grid-menu .ui-grid-menu-mid{
-	overflow-x:auto;
-}
-
-.ui-grid-menu .ui-grid-menu-inner .ui-grid-menu-close-button{
-	display: none;
-}
-
-.ui-grid-menu .ui-grid-menu-inner ul li button:hover,
-.ui-grid-menu .ui-grid-menu-inner ul li button:focus,
-.ui-grid-menu .ui-grid-menu-inner ul li button.ui-grid-menu-item-active{
-	box-shadow: none!important;
-}
-
-md-autocomplete button md-icon {
-  transform: translate3d(-50%,-50%,0) scale(0.7);
-}
-
-.click-modal .dialog {
-	left:25%;
-}
-
 .sidenav.is-hidden{
 	flex-basis: 40px!important;
 }
 
-@media only screen and (max-width:769px){
-	.dialog {
-		left:5px!important;
-		right:1%;
-	}
+/*Slated for removal - growl and bootstrap*/
+.growl-container > .growl-item.ng-enter,
+.growl-container > .growl-item.ng-leave {
+	-webkit-transition:0.5s all ease-in-out;
+	-moz-transition:0.5s all ease-in-out;
+	-o-transition:0.5s all ease-in-out;
+	transition:0.5s all ease-in-out;
 }
 
-.wfm-form input, .wfm-form select {
+.col-md-4, .col-md-8, .col-md-12 { /* please bootstrap, don't make any assumption about padding' */
+	padding: 0;
+}
+
+.row {
 	margin-right: 0;
+	margin-left: 0;
 }
 
-@media screen and (max-width: 960px) {
-	.sidenav{
-	    text-overflow: hidden;
-	    flex-basis: 40px!important;
+/*start (main)*/
+	.start-wrapper {
+		width: 75%;
+		position:relative;
+		margin-left:auto;
+		margin-right:auto;
+		max-height: 50%;
+		z-index:2;
 	}
-	#lefttoogle{
-		display: none;
+	.start-links{
+		display: flex;
+		justify-content: space-around;
+		width:100%;
+		a{
+			width: 130px;
+			text-align: center;
+		}
 	}
-	.brand{
-		margin-left: 0!important;
+	.start-panel {
+		margin:0 5px;
+		display: inline-block;
+		background: $white;
+		margin-bottom: 15px;
 	}
-	.navbar-right {
-    margin-right: 10px;
+	.start-tutorial{
+		position:relative!important;
+		display: inline-flex;
+		width:100%;
 	}
-}
-
-.c3-selected-circle {
-    fill: $white;
-}
-
-md-slider.md-min .md-thumb:after{
-	background-color: $white!important;
-}
-/*remove after styleguide bump*/
-.layout-container .sidenav i {
-    margin-right: 0;
-    margin-left: 0;
-}
-
-.sidenav-icon {
-    margin-right: 10px!important;
-    margin-left: 5px!important;
-}
+	.tour-btn{
+		position: absolute;
+		right:0;
+		top:-5px;
+	}
+	.social-footer {
+		padding: 5px 0;
+	}
+	.start-blog-btn {
+		margin-top: 3rem;
+	}
