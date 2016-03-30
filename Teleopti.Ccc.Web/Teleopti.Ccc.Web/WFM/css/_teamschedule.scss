@@ -21,12 +21,12 @@
 			flex-direction:row;
 			flex-wrap:wrap;
 			justify-content:space-between;
-			padding-right:10px;
+			padding: 5px 45px 5px 5px;
 		}
 
 		.people-search-container{
 			display: inline-block;
-			margin: 10px;
+			margin: 10px 10px 10px 0;
 			#simple-people-search{
 				width: 316px;
 			}
@@ -34,7 +34,7 @@
 
 		.team-schedule-datepicker{
 			display: inline-block;
-			vertical-align:top;
+			vertical-align: top;
 			white-space: nowrap;
 		}
 
@@ -47,10 +47,10 @@
 		}
 
 		.wfm-switch{
-			display:inline-block;
+			display: inline-block;
 			margin: 10px;
-			padding:0;
-			min-width:200px;
+			padding: 0;
+			min-width: 200px;
 			.wfm-switch-toggle{
 				left: 12rem;
 			}
@@ -58,7 +58,7 @@
 
 		teamschedule-command{
 			align-self: flex-end;
-			margin-top: -39px;
+			margin-top: -50px;
 		}
 
 		.context-menu .context-menu-left{
