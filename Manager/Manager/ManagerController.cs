@@ -16,19 +16,10 @@ namespace Stardust.Manager
 {
 	public class ManagerController : ApiController
 	{
-		private const string JobToDoIsNull = "Job to do can not be null.";
-
 		private const string NodeUriIsInvalid = "Node Uri is invalid.";
 
 		private const string JobIdIsInvalid = "Job Id is invalid.";
 
-		private const string JobToDoNameIsInvalid = "Job to do property=NAME is invalid.";
-
-		private const string JobToDoUserNameIsInvalid = "Job to do property=USERNAME is invalid.";
-
-		private const string JobToDoSerializedIsInvalid = "Job to do property=SERIALIZED is invalid.";
-
-		private const string JobToDoTypeIsNullOrEmpty = "Job to do property=TYPE can not be null or empty string.";
 		private readonly JobManager _jobManager;
 
 		private readonly INodeManager _nodeManager;
@@ -213,32 +204,11 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		private IHttpActionResult ValidateJobFailedModel(JobFailedModel jobFailedModel,
-		                                                 HttpRequestMessage requestMessage)
-		{
-			if (jobFailedModel == null)
-			{
-				return new BadRequestWithReasonPhrase("Invalid job failed model.");
-			}
-
-			if (jobFailedModel.JobId == Guid.Empty)
-			{
-				return new BadRequestWithReasonPhrase("Invalid job id on job failed model.");
-			}
-
-			if (requestMessage == null)
-			{
-				requestMessage = new HttpRequestMessage();
-			}
-
-			return new OkResult(requestMessage);
-		}
-
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
 		{
 			// Validate.
-			var isValidRequest = ValidateJobFailedModel(jobFailedModel, Request);
+			var isValidRequest = ValidateObject(jobFailedModel, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
@@ -294,47 +264,23 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		private IHttpActionResult ValidateJobProgressModel(JobProgressModel model,
-		                                                   HttpRequestMessage requestMessage)
-		{
-			if (model == null)
-			{
-				return new BadRequestWithReasonPhrase("Job progress model can not be null.");
-			}
-
-			if (model.JobId == Guid.Empty)
-			{
-				return new BadRequestWithReasonPhrase("Job progress model ID can not be null.");
-			}
-
-			if (string.IsNullOrEmpty(model.ProgressDetail))
-			{
-				return new BadRequestWithReasonPhrase("Job progress model PROGRESSDETAIL can not be null.");
-			}
-
-			if (requestMessage == null)
-			{
-				requestMessage = new HttpRequestMessage();
-			}
-
-			return new OkResult(requestMessage);
-		}
-
 		private IHttpActionResult ValidateObject(IValidatableObject validatableObject,
 												 HttpRequestMessage requestMessage)
 		{
-			if (validatableObject != null)
+			if (validatableObject == null)
 			{
-				var validationResults =
-					validatableObject.Validate(new ValidationContext(this));
+				return new BadRequestWithReasonPhrase("Object can not be null.");
+			}
 
-				var enumerable =
-					validationResults as IList<ValidationResult> ?? validationResults.ToList();
+			var validationResults =
+				validatableObject.Validate(new ValidationContext(this));
 
-				if (enumerable.Any())
-				{
-					return new BadRequestWithReasonPhrase(enumerable.First().ErrorMessage);
-				}
+			var enumerable =
+				validationResults as IList<ValidationResult> ?? validationResults.ToList();
+
+			if (enumerable.Any())
+			{
+				return new BadRequestWithReasonPhrase(enumerable.First().ErrorMessage);
 			}
 
 			if (requestMessage == null)
@@ -349,7 +295,7 @@ namespace Stardust.Manager
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
 			// Validate.
-			var isValidRequest = ValidateJobProgressModel(model, Request);
+			var isValidRequest = ValidateObject(model, Request);
 
 			if (!(isValidRequest is OkResult))
 			{

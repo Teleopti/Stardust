@@ -158,6 +158,24 @@ namespace ManagerTest
 
 
 		[Test]
+		public void ShouldBeAbleToPersistBadRequestResonsToHistoryDetail()
+		{
+			var job = new JobRequestModel
+			{
+				Name = "ShouldBeAbleToPersistNewJob",
+				Serialized = "ngtbara",
+				Type = "typngtannat",
+				UserName = "ManagerTests"
+			};
+
+			Target.DoThisJob(job);
+
+			JobRepository.LoadAll()
+				.Count.Should()
+				.Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldBeAbleToPersistNewJob()
 		{
 			var job = new JobRequestModel
