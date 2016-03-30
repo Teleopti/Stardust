@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Core
         public IanaTimeZoneProvider()
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var tzdbStream = assembly.GetManifestResourceStream("Teleopti.Ccc.Web.tzdb2015e.nzd");
+            var tzdbStream = assembly.GetManifestResourceStream("Teleopti.Ccc.Web.tzdb2016c.nzd");
             _tzdbSource = tzdbStream == null ? TzdbDateTimeZoneSource.Default : TzdbDateTimeZoneSource.FromStream(tzdbStream);
         }
 
@@ -41,8 +41,7 @@ namespace Teleopti.Ccc.Web.Core
         {
             if (windowsZoneId.Equals("UTC", StringComparison.OrdinalIgnoreCase))
                 return "Etc/UTC";
-        
-            var tzi = TimeZoneInfo.FindSystemTimeZoneById(windowsZoneId);
+       var tzi = TimeZoneInfo.FindSystemTimeZoneById(windowsZoneId);
             var tzid = _tzdbSource.MapTimeZoneId(tzi);
             return _tzdbSource.CanonicalIdMap[tzid];
         }

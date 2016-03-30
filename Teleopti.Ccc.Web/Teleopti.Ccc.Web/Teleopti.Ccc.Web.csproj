@@ -1507,7 +1507,6 @@
     <Content Include="WFM\js\rta\_modules.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
-    <EmbeddedResource Include="tzdb2015e.nzd" />
     <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\Anywhere\Content\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
@@ -1601,6 +1600,7 @@
     <Content Include="WFM\css\_daterangepicker.scss" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <Content Include="Areas\MyTime\Views\CiscoWidget\Index.cshtml" />
+    <EmbeddedResource Include="tzdb2016c.nzd" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />

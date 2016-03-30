@@ -25,5 +25,14 @@ namespace Teleopti.Ccc.WebTest.Core
             var result = target.WindowsToIana("Paraguay Standard Time");
             result.Should().Be.EqualTo("America/Asuncion");
         }
+
+		  [Test]
+		  public void ShouldReturnIanaTimeZoneForEasternEuropian()
+		  {
+			  var target = new IanaTimeZoneProvider();
+
+			  var result = target.WindowsToIana("E. Europe Standard Time");
+			  result.Should().Be.EqualTo("Europe/Chisinau");
+		  }
     }
 }
