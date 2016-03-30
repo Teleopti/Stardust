@@ -5,7 +5,6 @@ using System.Threading;
 using System.Timers;
 using Stardust.Manager.Diagnostics;
 using Stardust.Manager.Extensions;
-using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 using Timer = System.Timers.Timer;
@@ -118,25 +117,25 @@ namespace Stardust.Manager
 		}
 
 
-		public IList<WorkerNode> UpNodes()
-		{
-			var upNodes = new List<WorkerNode>();
+		//public IList<WorkerNode> UpNodes()
+		//{
+		//	var upNodes = new List<WorkerNode>();
 
-			var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
+		//	var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
 
-			foreach (var availableNode in availableNodes)
-			{
-				var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
-				var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
-				var success = _httpSender.TryGetAsync(postUri);
-				if (success == null || success.Result)
-				{
-					upNodes.Add(availableNode);
-				}
-			}
+		//	foreach (var availableNode in availableNodes)
+		//	{
+		//		var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
+		//		var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
+		//		var success = _httpSender.TryGetAsync(postUri);
+		//		if (success == null || success.Result)
+		//		{
+		//			upNodes.Add(availableNode);
+		//		}
+		//	}
 
-			return upNodes;
-		}
+		//	return upNodes;
+		//}
 
 		public void RegisterHeartbeat(string nodeUri)
 		{
@@ -152,37 +151,14 @@ namespace Stardust.Manager
 		{
 			this.Log().DebugWithLineNumber("Start CheckAndAssignNextJob.");
 
-
-			this.Log().DebugWithLineNumber("CheckAndAssignNextJob: Start ManagerStopWatch.");
-
 			var managerStopWatch = new ManagerStopWatch();
 
 			try
 			{
-				var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
 
-				var upNodes = new List<WorkerNode>();
-
-				if (availableNodes != null && availableNodes.Any())
-				{
-					this.Log().DebugWithLineNumber("Found ( " + availableNodes.Count + " ) available nodes");
-				}
-
-				if (availableNodes != null)
-				{
-					foreach (var availableNode in availableNodes)
-					{
-						if (availableNode.Alive == true)
-						{
-							upNodes.Add(availableNode);
-						}
-					}
-
-					_jobRepository.CheckAndAssignNextJob(upNodes,
-					                                     _httpSender);
+					_jobRepository.CheckAndAssignNextJob(_httpSender);
 
 					this.Log().DebugWithLineNumber("Finished CheckAndAssignNextJob.");
-				}
 			}
 
 			catch (Exception exp)
@@ -197,7 +173,6 @@ namespace Stardust.Manager
 			{
 				var total =
 					managerStopWatch.GetTotalElapsedTimeInMilliseconds();
-
 				this.Log().DebugWithLineNumber("CheckAndAssignNextJob: Stop ManagerStopWatch. Took " + total + " milliseconds.");
 			}
 		}
