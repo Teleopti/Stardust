@@ -32,7 +32,7 @@
 	/>-->
 	
 	<Target Name="CompileWseFiles" DependsOnTargets="MountK"> 
-		<Exec Command='"$(WseCompiler)" /c "%(WseFiles.FullPath)"' />
+		<Exec Command='"$(WseCompiler)" /c /s "%(WseFiles.FullPath)"' />
 	</Target>
 	
 	<!--
