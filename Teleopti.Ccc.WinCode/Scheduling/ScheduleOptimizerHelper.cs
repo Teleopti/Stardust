@@ -369,8 +369,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IEnumerable<IScheduleMatrixPro> matrixListForIntradayOptimization)
 		{
 			bool runned = false;
-			if (!optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime ||
-				optimizerPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
+			if (!(optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime ||
+				optimizerPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime))
 				return false;
 
 			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForMoveMax =
