@@ -25,9 +25,9 @@
 			<i class="mdi mdi-dots-vertical"></i>
 			<span class="context-menu-left">
 				<ul class="wfm-list">
-					<li class="item" ng-if="cmd.visible()" ng-repeat="cmd in vm.commands" ng-disabled="!(cmd.clickable())"
+					<li ng-attr-id="menuItem{{cmd.label}}" class="item" ng-if="cmd.visible()" ng-repeat="cmd in vm.commands" ng-disabled="!(cmd.clickable())"
 						ng-click="cmd.action()">
-						<div ng-attr-id="menuItem{{cmd.label}}">
+						<div>
 							<span class="pull-left">{{cmd.label|translate}}</span>
 							<span class="pull-right">{{cmd.shortcut}}</span>
 						</div>
