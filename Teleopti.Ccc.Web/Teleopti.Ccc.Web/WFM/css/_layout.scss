@@ -2,6 +2,18 @@ html, body{
 	color:$gray087
 }
 
+@media screen and (max-width: 768px) {
+  .con-row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .con-flex {
+    flex: 1;
+  }
+}
+
+
 .flex-element-fill {
 	flex: 1 1 auto;
 	align-self:stretch;
@@ -26,9 +38,15 @@ html, body{
 	opacity: 0;
 }
 
+.layout-container{
+	max-height: 100%;
+	overflow: hidden;
+}
+
 #materialcontainer{
 	position:relative;
 	padding: 0;
+	overflow: auto;
 }
 
 .container.content{
