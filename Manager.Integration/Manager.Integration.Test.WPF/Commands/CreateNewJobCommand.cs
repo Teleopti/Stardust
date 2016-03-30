@@ -45,5 +45,15 @@ namespace Manager.Integration.Test.WPF.Commands
 		}
 
 		public event EventHandler CanExecuteChanged;
+
+		protected virtual void OnCanExecuteChanged()
+		{
+			var handler = CanExecuteChanged;
+
+			if (handler != null)
+			{
+				handler(this, System.EventArgs.Empty);
+			}
+		}
 	}
 }
