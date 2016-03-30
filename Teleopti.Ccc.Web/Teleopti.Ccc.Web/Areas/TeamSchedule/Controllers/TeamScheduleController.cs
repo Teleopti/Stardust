@@ -178,29 +178,24 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 
 			if (command.RemoveEntireCrossDayAbsence)
 			{
-				foreach (var personAbsenceId in personAbsenceIdsForRemove)
+				_removePersonAbsenceCommandHandler.Handle(new RemovePersonAbsenceCommand
 				{
-					_removePersonAbsenceCommandHandler.Handle(new RemovePersonAbsenceCommand
-					{
-						PersonAbsenceId = personAbsenceId,
-						TrackedCommandInfo = command.TrackedCommandInfo
-					});
-				}
+					PersonAbsenceIds = personAbsenceIdsForRemove,
+					TrackedCommandInfo = command.TrackedCommandInfo
+				});
 			}
 			else
 			{
 				var scheduleDateInUtc = TimeZoneInfo.ConvertTimeToUtc(command.ScheduleDate,
 					_loggonUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 				var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
-				foreach (var personAbsenceId in personAbsenceIdsForRemove)
+				
+				_removePartPersonAbsenceCommandHandler.Handle(new RemovePartPersonAbsenceCommand
 				{
-					_removePartPersonAbsenceCommandHandler.Handle(new RemovePartPersonAbsenceCommand
-					{
-						PersonAbsenceId = personAbsenceId,
-						PeriodToRemove = periodToRemove,
-						TrackedCommandInfo = command.TrackedCommandInfo
-					});
-				}
+					PersonAbsenceIds = personAbsenceIdsForRemove,
+					PeriodToRemove = periodToRemove,
+					TrackedCommandInfo = command.TrackedCommandInfo
+				});
 			}
 			return Ok();
 		}

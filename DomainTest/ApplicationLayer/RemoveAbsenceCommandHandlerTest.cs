@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new RemovePersonAbsenceCommand
 			{
-				PersonAbsenceId = personAbsence.Id.Value
+				PersonAbsenceIds = new[] {personAbsence.Id.Value}
 			};
 
 			target.Handle(command);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var trackId = Guid.NewGuid();
 			var command = new RemovePersonAbsenceCommand
 			{
-				PersonAbsenceId = personAbsence.Id.Value,
+				PersonAbsenceIds = new[] {personAbsence.Id.Value},
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = operatedPersonId,
