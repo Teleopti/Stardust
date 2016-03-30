@@ -51,6 +51,8 @@ namespace Stardust.Node.API
 				return isValidRequest;
 			}
 
+			Logger.InfoWithLineNumber("Received Start Job from Manager. JobId: " + jobToDo.Id);
+
 			Task.Factory.StartNew(() =>
 			{
 				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",

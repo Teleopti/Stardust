@@ -249,7 +249,7 @@ namespace Stardust.Node.Timers
 			{
 				JobId = jobid,
 				ProgressDetail = progressMessage,
-				Created = DateTime.Now
+				Created = DateTime.UtcNow
 			};
 
 			JobProgressModels.AddOrUpdate(Guid.NewGuid(), 

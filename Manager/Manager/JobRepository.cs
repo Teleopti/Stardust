@@ -316,66 +316,61 @@ namespace Stardust.Manager
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					connection.OpenWithRetry(_retryPolicy);
-					var tran = connection.BeginTransaction(IsolationLevel.Serializable);
-
-					using (var da =
-						new SqlDataAdapter(string.Format("SELECT * From [Stardust].JobDefinitions WITH (TABLOCKX) WHERE Id = '{0}'",
-						                                 jobId),
-						                   connection)
-						{
-							SelectCommand =
-							{
-								Transaction = tran
-							}
-						})
+					connection.OpenWithRetry(_retryPolicyTimeout);
+					using (var tran = connection.BeginTransaction(IsolationLevel.Serializable))
 					{
-						var jobs = new DataTable();
-						da.Fill(jobs);
-						if (jobs.Rows.Count > 0)
+						var command = connection.CreateCommand();
+						command.CommandText = string.Format("SELECT * From [Stardust].JobDefinitions WITH (TABLOCKX) WHERE Id = '{0}'", jobId);
+						command.Transaction = tran;
+
+						using (var reader = command.ExecuteReaderWithRetry(_retryPolicyTimeout))
 						{
-							var jobRow = jobs.Rows[0];
-							var node = GetValue<string>(jobRow["AssignedNode"]);
-
-							if (string.IsNullOrEmpty(node))
+							if (reader.HasRows)
 							{
-								da.DeleteCommand = new SqlCommand("DELETE FROM [Stardust].JobDefinitions WHERE Id = @Id", connection);
-								da.DeleteCommand.Parameters.AddWithValue("@Id", jobId);
-								da.DeleteCommand.Transaction = tran;
-								da.DeleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+								reader.Read();
+								var node = GetValue<string>(reader["AssignedNode"]);
+								reader.Close();
 
-								//update history
-								da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobHistory SET Result = @Result WHERE JobId = @Id", connection);
-								da.UpdateCommand.Parameters.AddWithValue("@Id", jobId);
-								da.UpdateCommand.Parameters.AddWithValue("@Result", "Deleted");
-								da.UpdateCommand.Transaction = tran;
-								da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+								if (string.IsNullOrEmpty(node))
+								{
+									var deleteCommand = connection.CreateCommand();
+									deleteCommand.CommandText = "DELETE FROM [Stardust].JobDefinitions WHERE Id = @Id";
+									deleteCommand.Parameters.AddWithValue("@Id", jobId);
+									deleteCommand.Transaction = tran;
+									deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+
+									var updateCommand = connection.CreateCommand();
+									updateCommand.CommandText = "UPDATE [Stardust].JobHistory SET Result = @Result WHERE JobId = @Id";
+									updateCommand.Parameters.AddWithValue("@Id", jobId);
+									updateCommand.Parameters.AddWithValue("@Result", "Deleted");
+									updateCommand.Transaction = tran;
+									updateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+								}
+								else
+								{
+									var builderHelper = new NodeUriBuilderHelper(node);
+									var uriCancel = builderHelper.GetCancelJobUri(jobId);
+
+									var response = await httpSender.DeleteAsync(uriCancel);
+									if (response != null && response.IsSuccessStatusCode)
+									{
+										var updateCommand = connection.CreateCommand();
+										updateCommand.CommandText = "UPDATE [Stardust].JobDefinitions SET Status = 'Canceling' WHERE Id = @Id";
+										updateCommand.Parameters.AddWithValue("@Id", jobId);
+										updateCommand.Transaction = tran;
+										updateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+
+										ReportProgress(jobId, "Canceling", DateTime.UtcNow);
+									}
+								}
 							}
 							else
 							{
-								var builderHelper = new NodeUriBuilderHelper(node);
-								var uriCancel = builderHelper.GetCancelJobUri(jobId);
-
-								var response = await httpSender.DeleteAsync(uriCancel);
-
-								if (response != null && response.IsSuccessStatusCode)
-								{
-									da.UpdateCommand = new SqlCommand("UPDATE [Stardust].JobDefinitions SET Status = 'Canceling' WHERE Id = @Id",
-									                                  connection);
-									da.UpdateCommand.Parameters.AddWithValue("@Id", jobId);
-									da.UpdateCommand.Transaction = tran;
-									da.UpdateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-
-									ReportProgress(jobId, "Canceling", DateTime.UtcNow);
-								}
+								this.Log().WarningWithLineNumber("[MANAGER, " + Environment.MachineName + "] : Could not find job defintion for id : " + jobId);
 							}
 						}
-						else
-						{
-							this.Log().WarningWithLineNumber("[MANAGER, " + Environment.MachineName + "] : Could not find job defintion for id : " + jobId);
-						}
+						tran.Commit();
 					}
-					tran.Commit();
 					connection.Close();
 				}
 			}
@@ -383,10 +378,10 @@ namespace Stardust.Manager
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
-
 		}
 
-		public void SetEndResultOnJob(Guid jobId, string result)
+		public
+			void SetEndResultOnJob(Guid jobId, string result)
 		{
 			using (var connection = new SqlConnection(_connectionString))
 			{
