@@ -22,7 +22,8 @@ CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteria]
 @end_row int,
 @order_by nvarchar(30),
 @culture int,
-@business_unit_id uniqueidentifier
+@business_unit_id uniqueidentifier,
+@belongs_to_date datetime
 AS
 SET NOCOUNT ON
 
@@ -33,6 +34,7 @@ SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' val
 
 --declare
 DECLARE @leave_after_ISO nvarchar(10)
+DECLARE @belongs_to_date_ISO nvarchar(10)
 DECLARE @dynamicSQL nvarchar(max)
 DECLARE @cursorString nvarchar(50)
 DECLARE @cursorCount int
@@ -161,6 +163,10 @@ FROM #SearchStringsInAll
 --convert @leave_after to ISO-format string
 SELECT @leave_after_ISO = CONVERT(NVARCHAR(10), @leave_after,120)
 
+--convert @belongs_to_date to ISO-format string
+SELECT @belongs_to_date_ISO = CONVERT(NVARCHAR(10), @belongs_to_date,120)
+
+
 ------------
 --search in specific one or sevaral types
 --cursor for adding "AND" or "OR" conditions for each search criteria
@@ -216,7 +222,9 @@ BEGIN
 	IF @valueClause <> '()'
 	BEGIN
 		SELECT @dynamicSQL = @dynamicSQL + 'SELECT PersonId FROM ReadModel.FindPerson WHERE '
-			+ 'ISNULL(TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' AND ' + @valueClause
+			+ 'ISNULL(TerminalDate, ''2100-01-01'') >= ''' + @leave_after_ISO + ''' ' 
+			+ ' AND ( (StartDateTime IS NULL OR StartDateTime <=  ''' + @belongs_to_date_ISO + ''' ) AND ( EndDateTime IS NULL OR EndDateTime >= ''' + @belongs_to_date_ISO + ''' ))'
+			+ ' AND ' + @valueClause
 
 		--If 'All' set searchtype as a separate AND condition
 		IF @searchType <> 'All'

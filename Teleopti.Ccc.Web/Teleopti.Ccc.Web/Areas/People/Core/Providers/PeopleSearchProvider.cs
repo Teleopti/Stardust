@@ -88,10 +88,11 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
 		{
-			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns)
+			var search = new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns, currentDate)
 			{
 				CurrentPage = currentPageIndex
 			};
+									
 			_searchRepository.Find(search);
 			return search;
 		}

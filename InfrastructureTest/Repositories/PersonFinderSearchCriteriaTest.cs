@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private int _currentPage;
 		private int _totalRows;
 		private DateOnly _terminalDate;
+		private DateOnly _belongsToDate;
 
 		[SetUp]
 		public void Setup()
@@ -25,8 +26,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_currentPage = 2;
 			_totalRows = 11;
 			_terminalDate = new DateOnly(2011, 2, 2);
+			_belongsToDate = new DateOnly(2011, 1, 1);
 			_target = new PersonFinderSearchCriteria(_field, _searchValue, _pageSize, _terminalDate,
-				new Dictionary<string, bool>())
+				new Dictionary<string, bool>(), _belongsToDate)
 			{
 				TotalRows = _totalRows
 			};

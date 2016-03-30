@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Search
 			IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize,
 			int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
 		{
-			return new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns);
+			return new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns, currentDate);
 		}
 
 		public void Add(IPerson person)

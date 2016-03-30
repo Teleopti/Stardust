@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldMatchAllValuesInAllCriteria()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "Ashley Agent", 10,
-				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldLoadPersonsWithOneCriteria()
         {
 	        var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "agent", 10,
-				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
             _target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             _target.Find(crit);
             Assert.That(crit.TotalRows, Is.EqualTo(2));
@@ -50,28 +50,49 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			criterias.Add(PersonFinderField.FirstName,"Ashley");
 			criterias.Add(PersonFinderField.Role,"Agent");
 			var crit = new PersonFinderSearchCriteria(criterias, 10,
-				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
 		}
 
 		[Test]
+		public void ShouldLoadPersonsCorrectBelongsToDate()
+		{
+			var criterias = new Dictionary<PersonFinderField, string>();
+			criterias.Add(PersonFinderField.Skill, "OldSkill");			
+			var crit = new PersonFinderSearchCriteria(criterias, 10,
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 6, 1));
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.Find(crit);
+			Assert.That(crit.TotalRows, Is.EqualTo(0));
+
+			crit = new PersonFinderSearchCriteria(criterias, 10,
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2010, 6, 1));
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.Find(crit);
+			Assert.That(crit.TotalRows, Is.EqualTo(1));
+		}
+
+
+		[Test]
 		public void ShouldLoadPersonsWithOneWordQuotation()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "\"Team Preference\" \"London\"", 10,
-				new DateOnly(2016, 1, 1), new Dictionary<string, bool>());
+				new DateOnly(2016, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(2));
 		}
 
 
+
+
 		[Test]
 		public void ShouldLoadPersonsWithQuotationForOneWord()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "\"Ashley\"\"Agent\"", 10,
-				new DateOnly(2012, 1, 1), new Dictionary<string, bool>());
+				new DateOnly(2012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(1));
@@ -95,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldHandleTooSmallDate()
 		{
 			var crit = new PersonFinderSearchCriteria(PersonFinderField.All, "hejhej", 10,
-				new DateOnly(1012, 1, 1), new Dictionary<string, bool>());
+				new DateOnly(1012, 1, 1), new Dictionary<string, bool>(), new DateOnly(2011, 12, 1));
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			_target.Find(crit);
 			Assert.That(crit.TotalRows, Is.EqualTo(0));
@@ -105,63 +126,94 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	    {
 		    var buid = CurrentBusinessUnit.Make().Current().Id.GetValueOrDefault();
 		    Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-			    " Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Pierre','FirstName',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+			    " Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Pierre','FirstName',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId",buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Baldi','LastName',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Baldi','LastName',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetGuid("businessUnitId", buid)
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+			    .ExecuteUpdate();
+		    Session.CreateSQLQuery(
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Team Preferences London','Organization',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetGuid("businessUnitId", buid)
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+			    .ExecuteUpdate();
+		    Session.CreateSQLQuery(
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Agent','Role',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Team Preferences London','Organization',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Email','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Agent','Role',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'137545','EmploymentNumber',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('B0E35119-4661-4A1B-8772-9B5E015B2564','Pierre','Baldi','137567','',NULL,'Email','Skill',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Ashley','FirstName',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'137545','EmploymentNumber',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Andeen','LastName',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Ashley','FirstName',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Team Preferences London','Organization',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Andeen','LastName',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Agent','Role',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Team Preferences London','Organization',:businessUnitId);")
-				.SetGuid("businessUnitId", buid)
-			    .ExecuteUpdate();
-		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Agent','Role',:businessUnitId);")
-				.SetGuid("businessUnitId", buid)
-			    .ExecuteUpdate();
-		    Session.CreateSQLQuery(
-			    "Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
 				.SetGuid("businessUnitId", buid)
 			    .ExecuteUpdate();
 			Session.CreateSQLQuery(
-				"Insert into [ReadModel].[FindPerson](PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId)" +
-				" Values ('11610FE4-0130-4568-97DE-9B5E05412741','Ashley Pierre','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId);")
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E05412741','Ashley Pierre','Andeen','137545','',NULL,'Direct Sales','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2011, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2045, 1, 1))
+				.SetGuid("businessUnitId", buid)
+				.ExecuteUpdate();
+			Session.CreateSQLQuery(
+				"Insert into [ReadModel].[FindPerson] (PersonId,FirstName,LastName,EmploymentNumber,Note,TerminalDate,SearchValue,SearchType,BusinessUnitId, StartDateTime, EndDateTime)" +
+				" Values ('11610FE4-0130-4568-97DE-9B5E015B2564','Ashley','Andeen','137545','',NULL,'OldSkill','Skill',:businessUnitId, :startDateTime, :endDateTime)")
+				.SetDateTime("startDateTime", new DateTime(2010, 1, 1))
+				.SetDateTime("endDateTime", new DateTime(2010, 12, 31))
 				.SetGuid("businessUnitId", buid)
 				.ExecuteUpdate();
 

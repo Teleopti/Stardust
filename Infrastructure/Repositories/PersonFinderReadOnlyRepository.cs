@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"exec [ReadModel].PersonFinderWithCriteria @search_criterias=:searchCriterias_string, "
-				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id")
+				+ "@leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @culture=:culture, @business_unit_id=:business_unit_id, @belongs_to_date=:belongs_to_date")
 				.SetString("searchCriterias_string", createSearchString(personFinderSearchCriteria.SearchCriterias))
 				.SetDateOnly("leave_after", personFinderSearchCriteria.TerminalDate)
 				.SetInt32("start_row", personFinderSearchCriteria.StartRow)
@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetString("order_by", generateOrderByString(personFinderSearchCriteria.SortColumns))
 				.SetInt32("culture", cultureId)
 				.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetDateOnly("belongs_to_date", personFinderSearchCriteria.BelongsToDate)				
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonFinderDisplayRow)))
 				.SetReadOnly(true)
 				.List<IPersonFinderDisplayRow>();
@@ -160,7 +161,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetInt32("end_row", personFinderSearchCriteria.EndRow)
 				.SetInt32("order_by", personFinderSearchCriteria.SortColumn)
 				.SetInt32("sort_direction", personFinderSearchCriteria.SortDirection)
-				.SetInt32("culture", cultureId)
+				.SetInt32("culture", cultureId)				
 				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonFinderDisplayRow)))
 				.SetReadOnly(true)
 				.List<IPersonFinderDisplayRow>();
@@ -292,7 +293,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly IList<IPersonFinderDisplayRow> _displayRows;
 		private DateOnly _terminalDate;
 
-		public PersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, IDictionary<string, bool> sortColumns)
+		public PersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, IDictionary<string, bool> sortColumns, DateOnly belongsToDate)
 		{
 			_searchCriterias = new Dictionary<PersonFinderField, string>();
 			_searchCriterias.Add(field, searchValue);
@@ -306,10 +307,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				_displayRows.Add(new PersonFinderDisplayRow());
 			}
+
+			BelongsToDate = belongsToDate;
 		}
 
 		public PersonFinderSearchCriteria(IDictionary<PersonFinderField, string> searchCriterias, int pageSize,
-			DateOnly terminalDate, IDictionary<string, bool> sortColumns)
+			DateOnly terminalDate, IDictionary<string, bool> sortColumns, DateOnly belongsToDate)
 		{
 			_searchCriterias = searchCriterias;
 			_pageSize = pageSize;
@@ -322,6 +325,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				_displayRows.Add(new PersonFinderDisplayRow());
 			}
+
+			BelongsToDate = belongsToDate;
 		}
 
 		public IDictionary<PersonFinderField, string> SearchCriterias
@@ -372,6 +377,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			get { return StartRow + _pageSize; }
 		}
+
+		public DateOnly BelongsToDate { get; set; }
+
 
 		public void SetRow(int rowNumber, IPersonFinderDisplayRow theRow)
 		{

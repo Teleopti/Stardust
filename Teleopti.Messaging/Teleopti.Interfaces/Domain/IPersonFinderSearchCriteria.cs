@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -144,6 +145,8 @@ namespace Teleopti.Interfaces.Domain
 		/// End row
 		/// </summary>
 		int EndRow { get; }
+
+		DateOnly BelongsToDate { get; set; }
 
 		///<summary>
 		/// Set row
