@@ -1,7 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
+using Manager.Integration.Test.Tasks;
+using Manager.Integration.Test.Timers;
+using Manager.IntegrationTest.Console.Host.Diagnostics;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
 using Newtonsoft.Json;
@@ -9,8 +14,8 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test.IntegrationControllerTests
 {
-	[TestFixture,Ignore]
-	public class IntegrationControllerOneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
+	[TestFixture]
+	public class IntegrationControllerOneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNode
 	{
 		private async Task<List<string>> GetAllManagers(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
 		                                                IHttpSender httpSender)
@@ -114,7 +119,82 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			                                     typeof (List<string>)) as List<string>;
 		}
 
+		private void GenerateJobs()
+		{
+			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(10);
+
+			var timeout =
+				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+				                                       2);
+			//--------------------------------------------
+			// Start actual test.
+			//--------------------------------------------
+			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			                                                                StatusConstants.SuccessStatus,
+			                                                                StatusConstants.DeletedStatus,
+			                                                                StatusConstants.FailedStatus,
+			                                                                StatusConstants.CanceledStatus);
+			foreach (var jobRequestModel in createNewJobRequests)
+			{
+				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+				jobManagerTaskCreators.Add(jobManagerTaskCreator);
+			}
+
+			var startJobTaskHelper = new StartJobTaskHelper();
+			var managerIntegrationStopwatch = new ManagerIntegrationStopwatch();
+
+			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+			                                                          CancellationTokenSource,
+			                                                          timeout);
+
+			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+			var elapsedTime =
+				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
+
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count,
+			              "Number of requests must be equal.");
+
+			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
+
+			CancellationTokenSource.Cancel();
+			taskHlp.Dispose();
+
+			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			{
+				jobManagerTaskCreator.Dispose();
+			}
+		}
+
 		[Test]
+		public void ShouldBeAbleToCreateASuccessJobRequestTest()
+		{
+			var tasks = new List<Task>();
+
+			for (var i = 0; i < 6; i++)
+			{
+				ShouldBeAbleToStartNewManager();
+				ShouldBeAbleToStartNewNode();
+			}
+
+			Parallel.For(1, 10, i => { tasks.Add(Task.Factory.StartNew(GenerateJobs)); });
+
+			tasks.Add(Task.Factory.StartNew(async () =>
+			{
+				await ShutDownNode(new IntergrationControllerUriBuilder(), new HttpSender(), "Node1.config");
+				await ShutDownManager(new IntergrationControllerUriBuilder(), new HttpSender(), "Manager1.config");
+			}));
+
+			Parallel.For(1, 10, i => { tasks.Add(Task.Factory.StartNew(GenerateJobs)); });
+
+			tasks.Add(Task.Factory.StartNew(() => StartNewManager(new IntergrationControllerUriBuilder(), new HttpSender())));
+			tasks.Add(Task.Factory.StartNew(() => StartNewManager(new IntergrationControllerUriBuilder(), new HttpSender())));
+
+			Task.WaitAll(tasks.ToArray());
+		}
+
+		[Test, Ignore]
 		public void ShouldBeAbleToShutDownManager()
 		{
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
@@ -127,7 +207,7 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			Assert.IsNotNull(nodeName, "Should shut down manager.");
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldBeAbleToShutDownNode()
 		{
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
@@ -176,6 +256,7 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 
 			Assert.IsTrue(allManagers.Result.Count == 1, "Should return one manager.");
 		}
+
 
 		[Test]
 		public void ShouldHaveStartedOneNode()

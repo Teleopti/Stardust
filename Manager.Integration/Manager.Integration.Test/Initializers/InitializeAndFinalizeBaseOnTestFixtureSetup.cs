@@ -16,9 +16,9 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test.Initializers
 {
-	public abstract class InitializeAndFinalizeBase
+	public abstract class InitializeAndFinalizeBaseOnTestFixtureSetup
 	{
-		protected InitializeAndFinalizeBase(int numberOfNodes,
+		protected InitializeAndFinalizeBaseOnTestFixtureSetup(int numberOfNodes,
 		                                    int numberOfManagers,
 											bool useLoadBalancerIfJustOneManager,
 											bool waitToStartUp)

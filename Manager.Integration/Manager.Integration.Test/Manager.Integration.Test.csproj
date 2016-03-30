@@ -91,7 +91,8 @@
     <Compile Include="Constants\StatusConstants.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
     <Compile Include="Helpers\IntergrationControllerUriBuilder.cs" />
-    <Compile Include="Initializers\InitializeAndFinalizeBase.cs" />
+    <Compile Include="Initializers\InitializeAndFinalizeBaseOnSetup.cs" />
+    <Compile Include="Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />
     <Compile Include="Helpers\AppDomainHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Helpers\ProcessHelper.cs" />
     <Compile Include="Helpers\SecurityHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeSetup.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeWait.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer.cs" />

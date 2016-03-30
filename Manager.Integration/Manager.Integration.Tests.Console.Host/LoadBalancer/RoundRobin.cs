@@ -50,7 +50,7 @@ namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 
 			Interlocked.Increment(ref _currentIndex);
 
-			var host = _hosts[_currentIndex%_hosts.Count];
+			var host = _hosts[_currentIndex % _hosts.Count];
 
 			Logger.DebugWithLineNumber("Load balancer will use manager url : ( " + host + " ) for request : ( " + request.RequestUri + " )");
 

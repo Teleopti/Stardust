@@ -604,7 +604,6 @@ namespace Manager.IntegrationTest.Console.Host
 
 					managerToDispose.Dispose();
 
-
 					Logger.DebugWithLineNumber("Finished to dispose manager (appdomain) with friendly name :" + friendlyName);
 				}
 			}
