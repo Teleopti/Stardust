@@ -58,7 +58,6 @@
 	</div>
 </div>
 
-<<<<<<< dest
 <div ng-cloak class="modal-box">
 	<div ng-cloak ng-show="multiDeselectDataModal">
 		<div class="modalbg">
@@ -79,12 +78,6 @@
 
 		<!-- Nested node template for data -->
 		<script type="text/ng-template" id="nodes_bu_renderer.html">
-=======
-		<!-- Nested node template for data -->
-		<script type="text/ng-template" id="nodes_bu_renderer.html">
->>>>>>> source
-
-<<<<<<< dest
   <ul class="wfm-list">
     <li ng-click="launchDeselectConfirmModal(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
       <span class="list-item-container">
@@ -93,16 +86,6 @@
       <span ng-cloak ng-show="node.selected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
     </li>
   </ul>
-=======
-			<ul class="wfm-list">
-				<li ng-click="toggleOrganizationSelection(this)" ng-class="{dataHeader: node.ChildNodes.length > 0}">
-					<span class="list-item-container">
-						{{node.Name}}
-					</span>
-					<span ng-cloak ng-show="node.selected" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
-				</li>
-			</ul>
->>>>>>> source
 
 			<div ui-tree-nodes="" ng-model="node.ChildNodes" class="padding-reset permissions-teams">
 				<div ng-repeat="node in node.ChildNodes | nameFilter: searchData | selectedData:selectedDataToggle | unselectedData:unselectedDataToggle"
