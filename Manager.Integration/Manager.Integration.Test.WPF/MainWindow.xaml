@@ -30,7 +30,9 @@
     </Window.DataContext>
     <Grid Margin="10,5,10,10">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="22*" />
+            <ColumnDefinition Width="15*" />
+            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="120" />
             <ColumnDefinition />
             <ColumnDefinition Width="120" />
             <ColumnDefinition Width="20" />
@@ -43,7 +45,7 @@
         </Grid.RowDefinitions>
         <TabControl x:Name="TabControl"
                     Grid.Row="1"
-                    Grid.ColumnSpan="6"
+                    Grid.ColumnSpan="8"
                     Grid.Column="0"
                     d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin">
             <TabControl.Effect>
@@ -67,7 +69,7 @@
                                     </MultiBinding>
                                 </DataGridTextColumn.Binding>
                             </DataGridTextColumn>
-                            
+
                             <DataGridTextColumn Binding="{Binding Id}"
                                                 ClipboardContentBinding="{Binding Id}"
                                                 Header="Id" />
@@ -147,7 +149,7 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            
+
                             <DataGridTextColumn Header="Row">
                                 <DataGridTextColumn.Binding>
                                     <MultiBinding Converter="{StaticResource RowNumberConverter}">
@@ -190,18 +192,18 @@
 
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="100"/>
-                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="100" />
+                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="5" />
                                     </Grid.ColumnDefinitions>
 
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="5" />
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
                                         <RowDefinition Height="5" />
                                     </Grid.RowDefinitions>
 
@@ -210,13 +212,13 @@
 
                                     <TextBlock Grid.Column="2"
                                                Grid.Row="1"
-                                               Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"/>
+                                               Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}" />
 
                                     <TextBlock Grid.Column="1"
                                                Grid.Row="2">Message</TextBlock>
 
                                     <TextBlock Grid.Column="2"
-                                               Grid.Row="2" 
+                                               Grid.Row="2"
                                                TextWrapping="Wrap"
                                                Text="{Binding Message}" />
 
@@ -256,7 +258,7 @@
                             VerticalAlignment="Center" />
                 </Grid>
             </TabItem>
-            
+
             <TabItem Header="{Binding JobHistoryHeader, FallbackValue='Job History'}">
                 <Grid Background="#FFE5E5E5">
                     <DataGrid ItemsSource="{Binding JobHistoryData}"
@@ -414,11 +416,11 @@
                         <DataGrid.GroupStyle>
                             <GroupStyle>
                                 <GroupStyle.HeaderTemplate>
-                                <DataTemplate>
-                                    <StackPanel>
-                                        <TextBlock Text="{Binding SentTo}" />
-                                    </StackPanel>
-                                </DataTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding SentTo}" />
+                                        </StackPanel>
+                                    </DataTemplate>
                                 </GroupStyle.HeaderTemplate>
 
                                 <GroupStyle.ContainerStyle>
@@ -553,13 +555,13 @@
         <Button x:Name="Button"
                 Content="Clear Logging Table"
                 Grid.Row="0"
-                Grid.Column="4"
+                Grid.Column="6"
                 Command="{Binding ClearDatabaseCommand}"
                 d:LayoutOverrides="LeftMargin, RightMargin, TopMargin, BottomMargin" />
         <ToggleButton x:Name="ToggleButton"
                       Content="{Binding ToggleRefreshStatus}"
                       Grid.Row="0"
-                      Grid.Column="2"
+                      Grid.Column="4"
                       Command="{Binding ToggleRefreshCommand}"
                       IsChecked="{Binding RefreshEnabled, Mode=OneWay}"
                       IsThreeState="True" />
@@ -570,6 +572,11 @@
                      BorderThickness="0"
                      Margin="0,5"
                      Background="{x:Null}" />
+        <Button x:Name="button"
+                Content="Create New Job"
+                Grid.Column="2"
+                d:LayoutOverrides="Height"
+                Command="{Binding CreateNewJobCommand}" />
 
 
     </Grid>

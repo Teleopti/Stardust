@@ -46,6 +46,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			ClearDatabaseCommand = new ClearDatabaseCommand(this);
 			ToggleRefreshCommand = new ToggleRefreshCommand(this);
 
+			CreateNewJobCommand = new CreateNewJobCommand();			
+
 			RefreshTimer = new Timer(5000);
 
 			RefreshTimer.Elapsed += RefreshTimerOnElapsed;
@@ -54,6 +56,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			RefreshEnabled = true;
 		}
+
+		public CreateNewJobCommand CreateNewJobCommand { get; set; }
 
 		public string WorkerNodeHeader
 		{
