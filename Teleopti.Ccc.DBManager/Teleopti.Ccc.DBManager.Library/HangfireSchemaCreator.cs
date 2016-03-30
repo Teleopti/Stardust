@@ -1,4 +1,6 @@
+using System;
 using System.Data.SqlClient;
+using System.Reflection;
 
 namespace Teleopti.Ccc.DBManager.Library
 {
@@ -8,7 +10,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			var assembly = typeof (Hangfire.SqlServer.SqlServerStorage).Assembly;
 			var installerType = assembly.GetType("Hangfire.SqlServer.SqlServerObjectsInstaller");
-			var method = installerType.GetMethod("Install");
+			var method = installerType.GetMethod("Install", BindingFlags.Public | BindingFlags.Static, null, new Type[] {typeof (SqlConnection)}, null);
 			method.Invoke(null, new object[] { sqlConnection });
 		}
 	}
