@@ -75,39 +75,7 @@ namespace ManagerTest
 			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Canceling");
 		}
-
-		[Test]
-		public void ShouldCheckIfNodeIsUpAndRunningBeforeTryAssignJob()
-		{
-			var jobId = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition
-			{
-				Id = jobId,
-				Name = "For test",
-				UserName = "JobManagerTests",
-				Serialized = "",
-				Type = ""
-			});
-			WorkerNodeRepository.Add(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri1});
-			WorkerNodeRepository.Add(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri2});
-			WorkerNodeRepository.Add(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri3});
-
-			var builderHelper1 = new NodeUriBuilderHelper(_nodeUri1);
-			var builderHelper2 = new NodeUriBuilderHelper(_nodeUri2);
-			var builderHelper3 = new NodeUriBuilderHelper(_nodeUri3);
-
-			var urijob1 = builderHelper1.GetJobTemplateUri();
-			var urijob2 = builderHelper2.GetJobTemplateUri();
-			var urijob3 = builderHelper3.GetJobTemplateUri();
-
-			FakeHttpSender.BusyNodesUrl.Add(_nodeUri1.ToString());
-			FakeHttpSender.BusyNodesUrl.Add(_nodeUri3.ToString());
-			JobManager.CheckAndAssignNextJob();
-
-			FakeHttpSender.CalledNodes[urijob2.ToString()].Should().Not.Be.Null();
-			FakeHttpSender.CalledNodes.Keys.Should().Not.Contain(urijob1.ToString());
-			FakeHttpSender.CalledNodes.Keys.Should().Not.Contain(urijob3.ToString());
-		}
+		
 
 		[Test]
 		public void ShouldContainJobManager()
