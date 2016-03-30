@@ -16,27 +16,14 @@
 			</span>
 
 			<div class="wfm-switch" ng-if="vm.toggles.RemoveAbsenceEnabled">
-				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
+				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()"/>
 				<label for="switchAbsence">
 					<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
 					<span class="wfm-switch-toggle"></span>
 				</label>
 			</div>
 		</div>
-		<div id="scheduleContextMenuButton" tabindex=0 class="context-menu card-context" ng-if="vm.isMenuVisible()">
-			<i class="mdi mdi-dots-vertical"></i>
-			<span class="context-menu-left">
-				<ul class="wfm-list">
-					<li ng-attr-id="menuItem{{cmd.label}}" class="item" ng-if="cmd.visible()" ng-repeat="cmd in vm.commands" ng-disabled="!(cmd.clickable())"
-						ng-click="cmd.action()">
-						<div>
-							<span class="pull-left">{{cmd.label|translate}}</span>
-							<span class="pull-right">{{cmd.shortcut}}</span>
-						</div>
-					</li>
-				</ul>
-			</span>
-		</div>
+		<teamschedule-command ng-if="vm.permissionsAndTogglesLoaded" configurations="vm.cmdConfigurations"></teamschedule-command>
 	</div>
 	<input class="scenario-test-trick" ng-show="false" value="vm.isScenarioTest">
 	<div class="con-row teamschedule-body">
@@ -53,7 +40,6 @@
 			<add-absence ng-if="vm.toggleCurrentSidenav()" default-date-time="vm.earliestStartTime" permissions="vm.permissions" actions-after-absence-apply="vm.afterActionCallback(result,personIds,successMessageTemplate,failMessageTemplate)"
 						 agent-id-list="vm.getSelectedPersonIdList()"></add-absence>
 		</md-sidenav>
-
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-activity">
 			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" selected-agents="vm.getSelectedPersonIdList()" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()" actions-after-activity-apply="vm.afterActionCallback(result, personIds, successMessageTemplate, failMessageTemplate)"></add-activity-panel>
 		</md-sidenav>

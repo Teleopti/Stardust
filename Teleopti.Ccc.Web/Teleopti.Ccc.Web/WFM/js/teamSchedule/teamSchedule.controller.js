@@ -22,6 +22,8 @@
 		vm.lastCommandTrackId = "";
 		vm.selectedPersonAbsences = [];
 		vm.isScenarioTest = false;
+		vm.permissionsAndTogglesLoaded = false;
+
 		vm.searchOptions = {
 			keyword: '',
 			isAdvancedSearchEnabled: false,
@@ -118,7 +120,7 @@
 			}
 		}
 
-		function getTotalSelectedPersonAndAbsenceCount() {
+		vm.getTotalSelectedPersonAndAbsenceCount = function(){
 			var absenceCount = 0;
 			var personIds = [];
 
@@ -210,31 +212,20 @@
 			}
 		};
 
-		function addActivity() {
-			vm.setCurrentCommand('addActivity');
+		vm.addActivity = function() {
 		}
 
-		function addAbsence() {
-			if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddAbsence()) return;
+		vm.addAbsence = function() {
 			vm.setEarliestStartOfSelectedSchedule();
-			vm.setCurrentCommand("addAbsence");
 		};
 
-		function swapShifts() {
-			if (!personSelectionSvc.canSwapShifts()) return;
-			vm.setCurrentCommand('SwapShifts');
-
+		vm.swapShifts = function() {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
 			var personIdFrom = selectedPersonIds[0];
 			var personIdTo = selectedPersonIds[1];
 			swapShiftsSvc.PromiseForSwapShifts(personIdFrom, personIdTo, vm.scheduleDateMoment(), function(result) {
 				vm.afterActionCallback(result, personSelectionSvc.getSelectedPersonIdList(), "FinishedSwapShifts", "FailedToSwapShifts");
 			});
-		}
-
-		function canRemoveAbsence() {
-			var selectedPersonAndAbsenceCount = getTotalSelectedPersonAndAbsenceCount();
-			return vm.toggles.RemoveAbsenceEnabled && selectedPersonAndAbsenceCount.AbsenceCount > 0;
 		}
 		
 		function removeAbsence(removeEntireCrossDayAbsence) {
@@ -259,10 +250,8 @@
 			);
 		}
 
-		function confirmRemoveAbsence() {
-			if (!canRemoveAbsence()) return;
-			vm.setCurrentCommand('RemoveAbsence');
-			var selectedPersonAndAbsenceCount = getTotalSelectedPersonAndAbsenceCount();
+		vm.confirmRemoveAbsence = function() {
+			var selectedPersonAndAbsenceCount = vm.getTotalSelectedPersonAndAbsenceCount();
 
 			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
 			[selectedPersonAndAbsenceCount.AbsenceCount, selectedPersonAndAbsenceCount.PersonCount]);
@@ -276,121 +265,15 @@
 			}, function() {
 				return;
 			});
-		}
-			
-		vm.commands = [
-			{
-				label: "AddActivity",
-				shortcut: "Alt+A",
-				panelName: "add-activity", 
-				action: addActivity,
-				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
-				visible: function() { return vm.canActiveAddActivity(); }
-			},
-			{
-				label: "AddAbsence",
-				shortcut: "Alt+B",
-				panelName: 'report-absence',
-				action: addAbsence,
-				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
-				visible: function () { return vm.canActiveAddAbsence(); }
-			},
-			{
-				label: "SwapShifts",
-				shortcut: "Alt+S",
-				panelName: "", // Leave empty if not creating a right panel
-				action: swapShifts,
-				clickable: function () { return personSelectionSvc.canSwapShifts(); },
-				visible: function () { return vm.canActiveSwapShifts(); }
-			},
-			{
-				label: "RemoveAbsence",
-				shortcut: "Alt+R",
-				panelName: "", // Leave empty if not creating a right panel
-				action: confirmRemoveAbsence,
-				clickable: function() { return vm.canRemoveAbsence(); },
-				visible: function() { return vm.canActiveRemoveAbsence(); }
-			}
-		];
-
-		vm.canActiveAddActivity = function() {
-			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
 		};
 
-		vm.canActiveAddAbsence = function () {
-			return vm.toggles.AbsenceReportingEnabled
-				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable)
-				&& vm.permissions.IsModifyScheduleAvailable;
-		}
-
-		vm.canActiveRemoveAbsence = function () {
-			return vm.toggles.RemoveAbsenceEnabled
-				&& vm.permissions.IsRemoveAbsenceAvailable
-				&& vm.permissions.IsModifyScheduleAvailable;
-		}
-
-		vm.canActiveSwapShifts = function () {
-			return vm.toggles.SwapShiftEnabled
-				&& vm.permissions.IsSwapShiftsAvailable
-				&& vm.permissions.IsModifyScheduleAvailable;
-		}
-
-		vm.canRemoveAbsence = function () {
-			return vm.toggles.RemoveAbsenceEnabled && getTotalSelectedPersonAndAbsenceCount().AbsenceCount > 0;
-		};
-
-
-		vm.toggleCommandState = function (menuName) {
-			if (menuName !== undefined) {
-				$mdSidenav(menuName).toggle();
-			}
-		};
-
-		vm.getCurrentCommand = function (currentCmdName) {
-			if (currentCmdName != undefined) {
-				for (var i = 0; i < vm.commands.length; i++) {
-					var cmd = vm.commands[i];
-					if (cmd.label.toLowerCase() === currentCmdName.toLowerCase()) {
-						return cmd;
-					}
-				};
-			}
-			return undefined;
-		};
-
-		vm.toggleCurrentSidenav = function () { return false; };
-
-		vm.setCurrentCommand = function (currentCmdName) {
-			var currentCmd = vm.getCurrentCommand(currentCmdName);
-			if (currentCmd !== undefined) {
-				vm.commands.forEach(function(cmd) {
-					if (cmd.panelName.length > 0 && cmd.panelName !== currentCmd.panelName && $mdSidenav(cmd.panelName).isOpen()) {
-						$mdSidenav(cmd.panelName).close();
-					}
-				});
-			} else {
-				vm.commands.forEach(function (cmd) {
-					if (cmd.panelName.length > 0 && $mdSidenav(cmd.panelName).isOpen()) {
-						$mdSidenav(cmd.panelName).close();
-					}
-				});
-			}
-
-			if (currentCmd != undefined && currentCmd.panelName != undefined && currentCmd.panelName.length > 0) {
-				$mdComponentRegistry.when(currentCmd.panelName).then(function (sideNav) {
-					vm.toggleCurrentSidenav = angular.bind(sideNav, sideNav.isOpen);
-				});
-				vm.toggleCommandState(currentCmd.panelName);
-			}
-		};
-
-		vm.selectedPersonInfo = function () {
+		vm.selectedPersonInfo = function() {
 			return personSelectionSvc.personInfo;
-		}
+		};
 
 		vm.getSelectedPersonIdList = function() {
 			return personSelectionSvc.getSelectedPersonIdList();
-		}
+		};
 
 		function replaceParameters(text, params) {
 			params.forEach(function (element, index) {
@@ -401,7 +284,7 @@
 
 		vm.toggleErrorDetails = function() {
 			vm.showErrorDetails = !vm.showErrorDetails;
-		}
+		};
 
 		var handleActionResult = function (errors, successMessageTemplate, failMessageTemplate) {
 			var selectedPersonList = personSelectionSvc.getSelectedPersonIdList();
@@ -428,30 +311,14 @@
 			}
 		}
 
-		vm.afterActionCallback = function(result, personIds, successMessageTemplate, failMessageTemplate) {
+		vm.afterActionCallback = function (result, personIds, successMessageTemplate, failMessageTemplate) {
+			vm.cmdConfigurations.currentCommandName = null;
 			vm.lastCommandTrackId = result.TrackId;
 			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
 
 			vm.updateSchedules(personIds);
 			personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			vm.setCurrentCommand("");
 		};
-
-		function registerShortCuts() {
-			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
-				addActivity(); // Alt+A for add activity
-			});
-			shortCuts.registerKeySequence([keyCodes.B], [keyCodes.ALT], function () {
-				addAbsence(); // Alt+B for add absence
-			});
-			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
-				swapShifts(); // Alt+S for swap shifts
-			});
-			shortCuts.registerKeySequence([keyCodes.R], [keyCodes.ALT], function () {
-				confirmRemoveAbsence(); // Alt+R for remove absence
-			});
-			
-		}
 
 		function isMessageNeedToBeHandled() {
 			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
@@ -502,13 +369,14 @@
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 			vm.resetSchedulePage();
-			registerShortCuts();
 
-			vm.isMenuVisible = function () {
-				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence();
-			};
+			vm.cmdConfigurations = {
+				toggles: vm.toggles,
+				permissions: vm.permissions,
+				currentCommandName: null
+			}
+			vm.permissionsAndTogglesLoaded = true;
 		};
-
 		$q.all([
 			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
 				vm.permissions = result;
