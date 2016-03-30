@@ -12,8 +12,6 @@ namespace Stardust.Manager.Interfaces
 
         void DeleteNode(Guid nodeId);
 
-		List<WorkerNode> LoadAllFreeNodes();
-
 		WorkerNode LoadWorkerNode(Uri nodeUri);
 		void RegisterHeartbeat(string nodeUri, bool updateStatus);
 

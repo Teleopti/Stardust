@@ -69,11 +69,7 @@ namespace ManagerTest
 
 			JobRepository.Add(job);
 
-			JobRepository.CheckAndAssignNextJob(new List<WorkerNode>
-			{
-				new WorkerNode {Url = _nodeUri1}
-			},
-			 HttpSender);
+			JobRepository.CheckAndAssignNextJob(HttpSender);
 
 			Target.Heartbeat(_nodeUri1);
 			HttpSender.CalledNodes.First()
@@ -104,9 +100,7 @@ namespace ManagerTest
 
 			var jobId = Guid.NewGuid();
 			JobRepository.Add(new JobDefinition {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
-			JobRepository.CheckAndAssignNextJob(
-				new List<WorkerNode> {new WorkerNode {Url = _nodeUri1}, new WorkerNode {Url = _nodeUri2}},
-				HttpSender);
+			JobRepository.CheckAndAssignNextJob(HttpSender);
 			HttpSender.CalledNodes.Clear();
 			Target.CancelThisJob(jobId);
 			HttpSender.CalledNodes.Count()
@@ -204,8 +198,7 @@ namespace ManagerTest
 			var jobId = Guid.NewGuid();
 			var job = new JobDefinition {Name = " ", Serialized = " ", Type = " ", UserName = "ManagerTests", Id = jobId};
 			JobRepository.Add(job);
-			JobRepository.CheckAndAssignNextJob(new List<WorkerNode> {new WorkerNode {Url = _nodeUri1}},
-			                                    HttpSender);
+			JobRepository.CheckAndAssignNextJob(HttpSender);
 			ThisNodeIsBusy(_nodeUri1.ToString());
 			Target.CancelThisJob(jobId);
 			JobRepository.LoadAll()

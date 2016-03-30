@@ -35,7 +35,7 @@ namespace ManagerTest.Fakes
 			}
 		}
 
-		public void CheckAndAssignNextJob(List<WorkerNode> availableNodes, IHttpSender httpSender)
+		public void CheckAndAssignNextJob(IHttpSender httpSender)
 		{
 			throw new NotImplementedException();
 		}

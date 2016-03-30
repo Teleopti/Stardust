@@ -59,57 +59,6 @@ namespace Stardust.Manager
 			return listToReturn;
 		}
 
-		public List<WorkerNode> LoadAllFreeNodes()
-		{
-			lock (_lockLoadAllFreeNodes)
-			{
-				const string selectCommand =
-					@"SELECT * FROM [Stardust].WorkerNodes WHERE Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
-
-				var listToReturn = new List<WorkerNode>();
-				try
-				{
-					using (var connection = new SqlConnection(_connectionString))
-					{
-						var command = new SqlCommand
-						{
-							Connection = connection,
-							CommandText = selectCommand,
-							CommandType = CommandType.Text
-						};
-						connection.OpenWithRetry(_retryPolicy);
-						var reader = command.ExecuteReaderWithRetry(_retryPolicy);
-						if (reader.HasRows)
-						{
-							while (reader.Read())
-							{
-								var jobDefinition = new WorkerNode
-								{
-									Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
-									Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-									Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
-									Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
-								};
-								listToReturn.Add(jobDefinition);
-							}
-						}
-						reader.Close();
-						connection.Close();
-					}
-				}
-				catch (TimeoutException exception)
-				{
-					this.Log().ErrorWithLineNumber("Can not get WorkerNodes, maybe there is a lock in Stardust.JobDefinitions table",
-													 exception);
-				}
-				catch (Exception exception)
-				{
-					this.Log().ErrorWithLineNumber("Can not get WorkerNodes", exception);
-				}
-				return listToReturn;
-			}
-		}
-
 		public void Add(WorkerNode job)
 		{
 

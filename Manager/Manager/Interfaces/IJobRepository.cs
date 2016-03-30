@@ -10,7 +10,7 @@ namespace Stardust.Manager.Interfaces
 		List<JobDefinition> LoadAll();
 		void DeleteJob(Guid jobId);
 		void FreeJobIfNodeIsAssigned(string url);
-		void CheckAndAssignNextJob(List<WorkerNode> availableNodes, IHttpSender httpSender);
+		void CheckAndAssignNextJob(IHttpSender httpSender);
 		void CancelThisJob(Guid jobId, IHttpSender httpSender);
 
 		void SetEndResultOnJob(Guid jobId, string result);
