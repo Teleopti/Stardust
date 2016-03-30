@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web.Http;
 using System.Web.Http.Results;
 using log4net.Config;
 using ManagerTest.Database;
@@ -11,6 +12,7 @@ using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
+using Stardust.Manager.ActionResults;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -216,6 +218,201 @@ namespace ManagerTest
 			JobRepository.LoadAll()
 				.Count.Should()
 				.Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelNameIsNull()
+		{
+			var job = new JobRequestModel
+			{
+				Name = null,
+				Serialized = "Serialized",
+				Type = "Type",
+				UserName = "UserName"
+			};
+
+			IHttpActionResult response=Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase),response);
+
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfHeartbeatGetsAnInvalidUri()
+		{
+			var response = Target.Heartbeat(null);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobFailedGetsInvalidJobFailedMode()
+		{
+			JobFailedModel jobFailedModel=new JobFailedModel();
+
+			var response = Target.JobFailed(jobFailedModel);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobFailedGetsANull()
+		{
+			var response = Target.JobFailed(null);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+		}
+
+
+		[Test]
+		public void ShouldReturnBadRequestIJobDoneGetsAnInvalidUri()
+		{
+			var response = Target.JobDone(Guid.Empty);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobHistoryDetailsGetsAnInvalidGuid()
+		{
+			var response = Target.JobHistoryDetails(Guid.Empty);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobHistoryGetsAnInvalidGuid()
+		{
+			var response = Target.JobHistory(Guid.Empty);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfCancelThisJobGetsAnInvalidGuid()
+		{
+			var response=Target.CancelThisJob(Guid.Empty);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelNameIsEmptyString()
+		{
+			var job = new JobRequestModel
+			{
+				Name = string.Empty,
+				Serialized = "Serialized",
+				Type = "Type",
+				UserName = "UserName"
+			};
+
+			IHttpActionResult response = Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelSerializedIsNull()
+		{
+			var job = new JobRequestModel
+			{
+				Name = "Name",
+				Serialized = null,
+				Type = "Type",
+				UserName = "UserName"
+			};
+
+			IHttpActionResult response = Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelSerializedIsEmptyString()
+		{
+			var job = new JobRequestModel
+			{
+				Name = "Name",
+				Serialized = string.Empty,
+				Type = "Type",
+				UserName = "UserName"
+			};
+
+			IHttpActionResult response = Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelTypeIsNull()
+		{
+			var job = new JobRequestModel
+			{
+				Name = "Name",
+				Serialized = "Serialized",
+				Type = null,
+				UserName = "UserName"
+			};
+
+			IHttpActionResult response = Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelTypeIsEmptyString()
+		{
+			var job = new JobRequestModel
+			{
+				Name = "Name",
+				Serialized = "Serialized",
+				Type = string.Empty,
+				UserName = "UserName"
+			};
+
+			IHttpActionResult response = Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelUserNameIsNull()
+		{
+			var job = new JobRequestModel
+			{
+				Name = "Name",
+				Serialized = "Serialized",
+				Type = "Type",
+				UserName = null
+			};
+
+			IHttpActionResult response = Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+
+		}
+
+		[Test]
+		public void ShouldReturnBadRequestIfJobRequestModelUserNameIsEmtpyString()
+		{
+			var job = new JobRequestModel
+			{
+				Name = "Name",
+				Serialized = "Serialized",
+				Type = "Type",
+				UserName = string.Empty
+			};
+
+			IHttpActionResult response = Target.DoThisJob(job);
+
+			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+
 		}
 
 		[Test]
