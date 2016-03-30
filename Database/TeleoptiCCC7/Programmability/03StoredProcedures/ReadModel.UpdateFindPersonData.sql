@@ -29,44 +29,50 @@ CREATE TABLE #ids(id uniqueidentifier)
 INSERT INTO #ids SELECT * FROM SplitStringString(@ids)
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] 
-INNER JOIN PartTimePercentage ON PartTimePercentage.Id = SearchValueId 
+SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
+FROM [ReadModel].[FindPerson] fp
+INNER JOIN PartTimePercentage ON PartTimePercentage.Id = SearchValueId
 INNER JOIN #ids on #ids.id = SearchValueId
+INNER JOIN PersonPeriod pp ON fp.PersonId = pp.Parent AND pp.PartTimePercentage = SearchValueId 
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] 
+SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
+FROM [ReadModel].[FindPerson] fp
 INNER JOIN RuleSetBag ON RuleSetBag.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
+INNER JOIN PersonPeriod pp ON fp.PersonId = pp.Parent AND pp.RuleSetBag = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] 
-INNER JOIN Contract ON Contract.Id = SearchValueId 
+SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
+FROM [ReadModel].[FindPerson] fp 
+INNER JOIN [Contract] ON [Contract].Id = SearchValueId
 INNER JOIN #ids on #ids.id = SearchValueId
+INNER JOIN PersonPeriod pp ON fp.PersonId = pp.Parent AND pp.[Contract] = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] 
+SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
+FROM [ReadModel].[FindPerson] fp
 INNER JOIN ContractSchedule ON ContractSchedule.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
+INNER JOIN PersonPeriod pp ON fp.PersonId = pp.Parent AND pp.[ContractSchedule] = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] 
+SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
+FROM [ReadModel].[FindPerson] fp
 INNER JOIN BudgetGroup ON BudgetGroup.Id = SearchValueId 
 INNER JOIN #ids on #ids.id = SearchValueId
+INNER JOIN PersonPeriod pp ON fp.PersonId = pp.Parent AND pp.[BudgetGroup] = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue = Name
-FROM [ReadModel].[FindPerson] 
+SET SearchValue = Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
+FROM [ReadModel].[FindPerson] fp
 INNER JOIN Skill ON Skill.Id = SearchValueId 
+INNER JOIN PersonPeriod pp ON fp.PersonId = pp.Parent 
 INNER JOIN #ids on #ids.id = SearchValueId
-
+INNER JOIN PersonSkill ps ON pp.Id = ps.Parent AND ps.Skill = SearchValueId
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  s.Name + ' ' + t.Name 
+SET SearchValue =  s.Name + ' ' + t.Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate  
 FROM [ReadModel].[FindPerson] 
 INNER JOIN PersonPeriod pp ON pp.Id = SearchValueId
 INNER JOIN Team t ON pp.Team = t.Id
@@ -76,7 +82,7 @@ WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
 
 UPDATE [ReadModel].[FindPerson]
-SET SearchValue =  s.Name + ' ' + t.Name 
+SET SearchValue =  s.Name + ' ' + t.Name, StartDateTime = pp.StartDate, EndDateTime = pp.EndDate
 FROM [ReadModel].[FindPerson] 
 INNER JOIN PersonPeriod pp ON pp.Id = SearchValueId
 INNER JOIN Team t ON pp.Team = t.Id
