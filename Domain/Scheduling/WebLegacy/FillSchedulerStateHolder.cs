@@ -51,11 +51,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static void removeUnwantedSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<ISkill> skillsToKeep)
 		{
-			var skillsToRemove = schedulerStateHolderTo.SchedulingResultState.Skills.Except(skillsToKeep);
-			foreach (var skill in skillsToRemove)
+			foreach (var skill in schedulerStateHolderTo.SchedulingResultState.Skills.ToList().Where(skill => !skillsToKeep.Contains(skill)))
 			{
-				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skill);
 				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(skill);
+			}
+			foreach (var skillDay in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillsToKeep.Contains(skillDay.Key)))
+			{
+				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skillDay.Key);
 			}
 		}
 
