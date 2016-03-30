@@ -214,15 +214,23 @@ namespace ManagerTest
 		public void ShouldSetEndResultInHistoryAndRemoveTheJobWhenJobIsDone()
 		{
 			var jobId = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition
+
+			var jobDefinition = new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
 				UserName = "JobManagerTests",
 				Serialized = "",
 				Type = ""
+			};
+
+			JobRepository.Add(jobDefinition);
+
+			WorkerNodeRepository.Add(new WorkerNode
+			{
+				Id = Guid.NewGuid(),
+				Url = _nodeUri1
 			});
-			WorkerNodeRepository.Add(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri1});
 
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));

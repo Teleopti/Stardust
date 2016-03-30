@@ -152,6 +152,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WorkerNode.cs" />
     <Compile Include="RetryPolicyProvider.cs" />
+    <Compile Include="Validations\Validator.cs" />
     <Compile Include="WorkerNodeRepository.cs" />
   </ItemGroup>
   <ItemGroup>

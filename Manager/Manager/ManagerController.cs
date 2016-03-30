@@ -35,7 +35,8 @@ namespace Stardust.Manager
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
 		{
 			// Validate.
-			var isValidRequest = ValidateObject(job, Request);
+			var isValidRequest = 
+				new Validations.Validator().ValidateObject(job, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
@@ -208,7 +209,8 @@ namespace Stardust.Manager
 		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
 		{
 			// Validate.
-			var isValidRequest = ValidateObject(jobFailedModel, Request);
+			var isValidRequest = 
+				new Validations.Validator().ValidateObject(jobFailedModel, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
@@ -264,38 +266,13 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		private IHttpActionResult ValidateObject(IValidatableObject validatableObject,
-												 HttpRequestMessage requestMessage)
-		{
-			if (validatableObject == null)
-			{
-				return new BadRequestWithReasonPhrase("Object can not be null.");
-			}
-
-			var validationResults =
-				validatableObject.Validate(new ValidationContext(this));
-
-			var enumerable =
-				validationResults as IList<ValidationResult> ?? validationResults.ToList();
-
-			if (enumerable.Any())
-			{
-				return new BadRequestWithReasonPhrase(enumerable.First().ErrorMessage);
-			}
-
-			if (requestMessage == null)
-			{
-				requestMessage = new HttpRequestMessage();
-			}
-
-			return new OkResult(requestMessage);
-		}
 
 		[HttpPost, Route(ManagerRouteConstants.JobProgress)]
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
 			// Validate.
-			var isValidRequest = ValidateObject(model, Request);
+			var isValidRequest = 
+				new Validations.Validator().ValidateObject(model, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
