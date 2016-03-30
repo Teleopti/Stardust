@@ -4,9 +4,13 @@ using System.Globalization;
 using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 {
@@ -47,6 +51,56 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.Click(".schedule div.personAbsence");
 		}
+
+		[When(@"I selected agent '(.*)'")]
+		public void WhenISelectedAgent(string agentName)
+		{
+			Browser.Interactions.ClickContaining(".person-name", agentName);
+		}
+		
+		[When(@"I open '(.*)' panel")]
+		public void WhenIOpenPanel(string panelName)
+		{
+			Browser.Interactions.Click("#scheduleContextMenuButton");
+			Browser.Interactions.Click("#menuItem" + panelName);
+		}
+
+		[When(@"I set new activity as")]
+		public void WhenISetNewActivityAs(Table table)
+		{
+			var values = table.CreateInstance<AddActivityFormInfo>();
+
+			Browser.Interactions.ClickContaining(".activity-selector option", values.Activity);
+			var startTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')",
+				values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			var endTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')",
+				values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
+			var timeRange = new Dictionary<string, string>
+			{
+				{"vm.timeRange", timeRangeStr}
+			};
+			Browser.Interactions.SetScopeValues(".activity-time-range", timeRange);
+		}
+
+		[Then(@"I should be able to apply my new activity")]
+		public void ThenIShouldBeAbleToApplyMyNewActivity()
+		{
+			Browser.Interactions.AssertScopeValue("#applyActivity", "newActivityForm.$valid", true);
+			Browser.Interactions.AssertExists("#applyActivity.wfm-btn-primary");
+		}
+
+		[When(@"I apply my new activity")]
+		public void WhenIApplyMyNewActivity()
+		{
+			Browser.Interactions.Click("#applyActivity");
+		}
+
+		[Then(@"I should see a successful notice")]
+		public void ThenIShouldSeeASuccessfulNotice()
+		{
+			Browser.Interactions.AssertExists(".mdi-thumb-up");
+		}
 		
 		[When(@"I try to delete selected absence")]
 		public void WhenITryToDeleteSelectedAbsence()
@@ -73,5 +127,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.ClickContaining(".modal-dialog button", buttonText);
 		}
+
+	}
+
+	public class AddActivityFormInfo
+	{
+		public string Activity { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
+		public Boolean IsNextDay { get; set; }
 	}
 }
