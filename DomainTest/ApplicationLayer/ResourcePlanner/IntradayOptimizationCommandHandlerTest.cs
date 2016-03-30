@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -180,6 +181,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentsToOptimize
 				.Should().Have.SameValuesAs(agent1.Id.Value);
+		}
+
+		[Test]
+		public void ShouldSetRandomCommandIdOnCommand()
+		{
+			var command1 = new IntradayOptimizationCommand();
+			var command2 = new IntradayOptimizationCommand();
+			command1.TrackId.Should().Not.Be.EqualTo(Guid.Empty);
+			command1.TrackId.Should().Not.Be.EqualTo(command2.TrackId);
+		}
+
+		[Test]
+		public void ShouldSetCommandIdOnEvent()
+		{
+			var agent = new Person().WithId();
+			agent.AddPeriodWithSkill(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), new Skill().WithId());
+			var period = new DateOnlyPeriod(2015, 10, 12, 2016, 1, 1);
+			PersonRepository.Has(agent);
+			var command = new IntradayOptimizationCommand { Period = period };
+
+			Target.Execute(command);
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().TrackId
+				.Should().Be.EqualTo(command.TrackId);
 		}
 	}
 }

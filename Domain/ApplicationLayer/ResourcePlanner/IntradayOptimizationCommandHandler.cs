@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -19,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		public void Execute(IntradayOptimizationCommand command)
 		{
-			var islands = CreateIslands(command.Period);
+			var islands = CreateIslands(command.Period, command);
 			var events = new List<OptimizationWasOrdered>();
 
 			foreach (var island in islands)
@@ -36,7 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 						Period = command.Period,
 						RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
 						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
-						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value)
+						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
+						TrackId = command.TrackId
 					});
 				}
 			}
@@ -44,9 +48,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		}
 
 		[UnitOfWork]
-		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period)
+		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, IntradayOptimizationCommand command)
 		{
-			return _createIslands.Create(period);
+			using (TrackIdentifierScope.Create(command))
+			{
+				return _createIslands.Create(period);
+			}
 		}
 	}
 
@@ -77,7 +84,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				Period = command.Period,
 				AgentsInIsland = LoadPeopleInOrganization(command.Period).Select(x => x.Id.Value),
 				AgentsToOptimize = agentsToOptimize,
-				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule
+				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
+				TrackId = command.TrackId
 			});
 		}
 

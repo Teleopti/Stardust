@@ -35,13 +35,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Optimize(IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
-			using (_desktopOptimizationContext.Set(_currentSchedulerStateHolder(), optimizerPreferences, intradayOptimizationCallback))
+			var command = new IntradayOptimizationCommand
 			{
-				_intradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand
-				{
-					Period = selectedPeriod,
-					AgentsToOptimize = scheduleDays.Select(x=> x.Person).Distinct()
-				});
+				Period = selectedPeriod,
+				AgentsToOptimize = scheduleDays.Select(x => x.Person).Distinct()
+			};
+
+			using (_desktopOptimizationContext.Set(command, _currentSchedulerStateHolder(), optimizerPreferences, intradayOptimizationCallback))
+			{
+				_intradayOptimizationCommandHandler.Execute(command);
 			}
 		}	
 	}

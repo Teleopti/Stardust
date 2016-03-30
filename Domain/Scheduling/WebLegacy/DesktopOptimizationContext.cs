@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
@@ -12,35 +15,54 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class DesktopOptimizationContext : FillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback
 	{
-		private ISchedulerStateHolder _schedulerStateHolderFrom;
-		private IOptimizationPreferences _optimizationPreferences;
-		private IIntradayOptimizationCallback _intradayOptimizationCallback;
+		private class desktopOptimizationContextData
+		{
+			public desktopOptimizationContextData(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
+			{
+				SchedulerStateHolderFrom = schedulerStateHolderFrom;
+				OptimizationPreferences = optimizationPreferences;
+				IntradayOptimizationCallback = intradayOptimizationCallback;
+			}
+
+			public ISchedulerStateHolder SchedulerStateHolderFrom { get; private set; }
+			public IOptimizationPreferences OptimizationPreferences { get; private set; }
+			public IIntradayOptimizationCallback IntradayOptimizationCallback { get; private set; }
+		}
+		private readonly ConcurrentDictionary<Guid, desktopOptimizationContextData> _contextPerCommand = new ConcurrentDictionary<Guid, desktopOptimizationContextData>();
+
+		private ISchedulerStateHolder schedulerStateHolderFrom()
+		{
+			return _contextPerCommand[TrackIdentifierScope.Current().TrackId].SchedulerStateHolderFrom;
+		}
 
 		protected override IScenario FetchScenario()
 		{
-			return _schedulerStateHolderFrom.Schedules.Scenario;
+			return schedulerStateHolderFrom().Schedules.Scenario;
 		}
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			_schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value))
+			var stateHolderFrom = schedulerStateHolderFrom();
+			stateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value))
 							.ForEach(x => schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Add(x));
-			_schedulerStateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value)).ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
+			stateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value)).ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>(_schedulerStateHolderFrom.SchedulingResultState.SkillDays);
+			var stateHolderFrom = schedulerStateHolderFrom();
+			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>(stateHolderFrom.SchedulingResultState.SkillDays);
 			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			var scheduleDictionary = new ScheduleDictionary(scenario, _schedulerStateHolderFrom.Schedules.Period);
+			var stateHolderFrom = schedulerStateHolderFrom();
+			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period);
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
-				moveSchedules(_schedulerStateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons,
-					_schedulerStateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(_schedulerStateHolderFrom.TimeZoneInfo));
+				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons,
+					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo));
 			}
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
 		}
@@ -52,25 +74,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			schedulerStateHolderTo.RequestedPeriod = _schedulerStateHolderFrom.RequestedPeriod;
+			schedulerStateHolderTo.RequestedPeriod = schedulerStateHolderFrom().RequestedPeriod;
 		}
 
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var agentsToMove = modifiedScheduleDictionary.Keys;
-			moveSchedules(modifiedScheduleDictionary, _schedulerStateHolderFrom.Schedules, agentsToMove, period);
+			moveSchedules(modifiedScheduleDictionary, schedulerStateHolderFrom().Schedules, agentsToMove, period);
 		}
 
-		public IDisposable Set(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
+		public IDisposable Set(ITrackInfo trackInfo, ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
-			_schedulerStateHolderFrom = schedulerStateHolderFrom;
-			_optimizationPreferences = optimizationPreferences;
-			_intradayOptimizationCallback = intradayOptimizationCallback;
+			_contextPerCommand[trackInfo.TrackId] = new desktopOptimizationContextData(schedulerStateHolderFrom, optimizationPreferences, intradayOptimizationCallback);
 			return new GenericDisposable(() =>
 			{
-				_schedulerStateHolderFrom = null;
-				_optimizationPreferences = null;
-				_intradayOptimizationCallback = null;
+				desktopOptimizationContextData foo;
+				_contextPerCommand.TryRemove(trackInfo.TrackId, out foo);
 			});
 		}
 
@@ -97,17 +116,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public IOptimizationPreferences Fetch()
 		{
-			return _optimizationPreferences;
+			return _contextPerCommand[TrackIdentifierScope.Current().TrackId].OptimizationPreferences;
 		}
 
 		public IEnumerable<IPerson> Agents(DateOnlyPeriod period)
 		{
-			return _schedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization;
+			return schedulerStateHolderFrom().SchedulingResultState.PersonsInOrganization;
 		}
 
 		public IIntradayOptimizationCallback Current()
 		{
-			return _intradayOptimizationCallback;
+			return _contextPerCommand[TrackIdentifierScope.Current().TrackId].IntradayOptimizationCallback;
 		}
 	}
 }

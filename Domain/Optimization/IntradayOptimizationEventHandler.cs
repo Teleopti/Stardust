@@ -34,8 +34,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[LogTime]
 		public virtual void Handle(OptimizationWasOrdered @event)
 		{
-			DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.RunResolveWeeklyRestRule);
-			_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, @event.Period);
+			using (TrackIdentifierScope.Create(@event))
+			{
+				DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.RunResolveWeeklyRestRule);
+				_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, @event.Period);
+			}
 		}
 
 		[UnitOfWork]
