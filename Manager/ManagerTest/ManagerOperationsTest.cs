@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -15,6 +16,7 @@ using Stardust.Manager;
 using Stardust.Manager.ActionResults;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
+using Stardust.Manager.Validations;
 
 namespace ManagerTest
 {
@@ -116,19 +118,19 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToPersistManyJobs()
 		{
-			var stopwatch = new Stopwatch();
-
 			var jobRequestModels = new List<JobRequestModel>();
 
-			for (var i = 0; i < 500; i++)
+			for (var i = 0; i < 50; i++)
 			{
-				jobRequestModels.Add(new JobRequestModel
+				var jobRequestModel = new JobRequestModel
 				{
 					Name = "Name data " + i,
-					Serialized = "ngtbara",
-					Type = "typngtannat",
-					UserName = "ManagerTests"
-				});
+					Serialized = "Serialized",
+					Type = "Type",
+					UserName = "User name"
+				};
+
+				jobRequestModels.Add(jobRequestModel);
 			}
 
 			var tasks = new List<Task>();
@@ -137,23 +139,22 @@ namespace ManagerTest
 			{
 				var model = jobRequestModel;
 
-				tasks.Add(new Task(() => { Target.DoThisJob(model); }));
-			}
 
-			stopwatch.Start();
+				tasks.Add(new Task(() =>
+				{
+					var response=Target.DoThisJob(model);
+
+				}));
+			}
 
 			Parallel.ForEach(tasks,
 			                 task => { task.Start(); });
 
 			Task.WaitAll(tasks.ToArray());
 
-			stopwatch.Stop();
+			var faultedExists = tasks.Exists(task => task.IsFaulted);
 
-			var elapsed = stopwatch.Elapsed;
-
-			var sec = elapsed.Seconds;
-
-			Assert.IsTrue(true);
+			Assert.IsFalse(faultedExists);
 		}
 
 
@@ -168,7 +169,7 @@ namespace ManagerTest
 				UserName = "ManagerTests"
 			};
 
-			Target.DoThisJob(job);
+			var response=Target.DoThisJob(job);
 
 			JobRepository.LoadAll()
 				.Count.Should()
@@ -185,24 +186,26 @@ namespace ManagerTest
 				Type = "typngtannat",
 				UserName = "ManagerTests"
 			};
-			Target.DoThisJob(job);
-			JobRepository.LoadAll()
-				.Count.Should()
-				.Be.EqualTo(1);
+
+			var response=Target.DoThisJob(job);
+
+			if (response is BadRequestWithReasonPhrase)
+			{
+				Assert.Fail("Invalid job request model.");
+			}
+			else
+			{
+				JobRepository.LoadAll()
+					.Count.Should()
+					.Be.EqualTo(1);
+			}
 		}
 
 
 		[Test]
 		public void ShouldGetUniqueJobIdWhilePersistingJob()
 		{
-			Target.DoThisJob(new JobRequestModel
-			{
-				Name = "ShouldGetUniqueJobIdWhilePersistingJob",
-				Serialized = "ngt",
-				Type = "bra",
-				UserName = "ManagerTests"
-			});
-			Target.DoThisJob(new JobRequestModel
+			var response=Target.DoThisJob(new JobRequestModel
 			{
 				Name = "ShouldGetUniqueJobIdWhilePersistingJob",
 				Serialized = "ngt",
@@ -210,36 +213,102 @@ namespace ManagerTest
 				UserName = "ManagerTests"
 			});
 
-			JobRepository.LoadAll()
-				.Count.Should()
-				.Be.EqualTo(2);
+			if (response is BadRequestWithReasonPhrase)
+			{
+				Assert.Fail("Invalid job request model 1.");	
+			}
+
+			response = Target.DoThisJob(new JobRequestModel
+			{
+				Name = "ShouldGetUniqueJobIdWhilePersistingJob",
+				Serialized = "ngt",
+				Type = "bra",
+				UserName = "ManagerTests"
+			});
+
+			if (response is BadRequestWithReasonPhrase)
+			{
+				Assert.Fail("Invalid job request model 2.");
+			}
+			else
+			{
+				JobRepository.LoadAll()
+					.Count.Should()
+					.Be.EqualTo(2);
+
+			}
 		}
 
 		[Test]
 		public void ShouldNotRemoveARunningJobFromRepo()
 		{
 			var jobId = Guid.NewGuid();
-			var job = new JobDefinition {Name = " ", Serialized = " ", Type = " ", UserName = "ManagerTests", Id = jobId};
-			JobRepository.Add(job);
-			NodeRepository.Add(new WorkerNode { Url = _nodeUri1 });
-			JobRepository.CheckAndAssignNextJob(HttpSender);
-			ThisNodeIsBusy(_nodeUri1.ToString());
-			Target.CancelThisJob(jobId);
-			JobRepository.LoadAll()
-				.Count.Should()
-				.Be.EqualTo(1);
+
+			var job = new JobDefinition
+			{
+				Name = "Name",
+				Serialized = "Serialized",
+				Type = "Type",
+				UserName = "ManagerTests",
+				Id = jobId
+			};
+
+			var validator = new Validator();
+
+			var response =
+				validator.ValidateObject(job, new HttpRequestMessage());
+
+			if (response is BadRequestWithReasonPhrase)
+			{
+				Assert.Fail("Job defintion object is invalid.");
+			}
+			else
+			{
+				JobRepository.Add(job);
+				NodeRepository.Add(new WorkerNode
+				{
+					Url = _nodeUri1
+				});
+				JobRepository.CheckAndAssignNextJob(HttpSender);
+				ThisNodeIsBusy(_nodeUri1.ToString());
+				Target.CancelThisJob(jobId);
+				JobRepository.LoadAll()
+					.Count.Should()
+					.Be.EqualTo(1);
+			}
 		}
 
 		[Test]
 		public void ShouldRemoveAQueuedJob()
 		{
 			var jobId = Guid.NewGuid();
-			var job = new JobDefinition {Name = "", Serialized = "", Type = "", UserName = "ManagerTests", Id = jobId};
-			JobRepository.Add(job);
-			Target.CancelThisJob(jobId);
-			JobRepository.LoadAll()
-				.Count.Should()
-				.Be.EqualTo(0);
+
+			var job = new JobDefinition
+			{
+				Name = "Name",
+				Serialized = "Serialized",
+				Type = "Type",
+				UserName = "ManagerTests",
+				Id = jobId
+			};
+
+			var validator = new Validator();
+
+			var response =
+				validator.ValidateObject(job, new HttpRequestMessage());
+
+			if (response is BadRequestWithReasonPhrase)
+			{
+				Assert.Fail("Job defintion object is invalid.");
+			}
+			else
+			{
+				JobRepository.Add(job);
+				Target.CancelThisJob(jobId);
+				JobRepository.LoadAll()
+					.Count.Should()
+					.Be.EqualTo(0);
+			}
 		}
 
 		[Test]

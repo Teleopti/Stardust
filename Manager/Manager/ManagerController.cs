@@ -31,6 +31,8 @@ namespace Stardust.Manager
 			_jobManager = jobManager;
 		}
 
+		private readonly object _lockCreateNewGuid=new object();
+
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
 		{
@@ -42,7 +44,7 @@ namespace Stardust.Manager
 			{
 				return isValidRequest;
 			}
-
+			
 			// Start.
 			var jobReceived = new JobDefinition
 			{
@@ -52,6 +54,7 @@ namespace Stardust.Manager
 				UserName = job.UserName,
 				Id = Guid.NewGuid()
 			};
+
 			_jobManager.Add(jobReceived);
 
 			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
