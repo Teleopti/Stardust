@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
-	public class IntradayOptimizationCommand : ICommandIdentifier //should maybe not be here...
+	public class IntradayOptimizationCommand : ICommandIdentifier //should normally be placed on events only but special case here with "RAM dbs"...
 	{
 		public IntradayOptimizationCommand()
 		{

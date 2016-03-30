@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingProgress _backgroundWorker;
 		private int _counter;
 		private readonly string output = Resources.OptimizingIntraday + Resources.Colon + "({0}){1} {2} {3}";
+		private static readonly long waitBetweenCallbacks = TimeSpan.FromSeconds(0.5).Ticks;
 
 		public IntradayOptimizationCallback(ISchedulingProgress backgroundWorker)
 		{
@@ -17,12 +18,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
 		{
+			if (preventCallbackDueToTooMany())
+				return;
+
 			var e = new ResourceOptimizerProgressEventArgs(0, 0,
 				string.Format(output, callbackInfo.NumberOfOptimizers, _counter++,
 					callbackInfo.Agent.Name.ToString(NameOrderOption.FirstNameLastName),
 					callbackInfo.WasSuccessful ? Resources.wasSuccessful : Resources.wasNotSuccessful));
 
 			_backgroundWorker.ReportProgress(1, e);
+		}
+
+		private long _lastUpdated = DateTime.UtcNow.Ticks;
+		private bool preventCallbackDueToTooMany()
+		{
+			var ticksNow = DateTime.UtcNow.Ticks;
+			return ticksNow - waitBetweenCallbacks < Interlocked.Exchange(ref _lastUpdated, ticksNow);
 		}
 
 		public bool IsCancelled()
