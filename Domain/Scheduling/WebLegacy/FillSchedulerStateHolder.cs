@@ -34,15 +34,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return agentSkills;
 		}
 
-		private static void removeUnwantedAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds)
+		private static void removeUnwantedAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIdsToKeep)
 		{
-			if (agentIds != null) //remove this when also scheduling is converted to "events"
+			if (agentIdsToKeep != null) //remove this when also scheduling is converted to "events"
 			{
-				foreach (var agent in schedulerStateHolderTo.AllPermittedPersons.ToList().Where(agent => !agentIds.Contains(agent.Id.Value)))
+				foreach (var agent in schedulerStateHolderTo.AllPermittedPersons.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
 				{
 					schedulerStateHolderTo.AllPermittedPersons.Remove(agent);
 				}
-				foreach (var agent in schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.ToList().Where(agent => !agentIds.Contains(agent.Id.Value)))
+				foreach (var agent in schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.ToList().Where(agent => !agentIdsToKeep.Contains(agent.Id.Value)))
 				{
 					schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Remove(agent);
 				}
