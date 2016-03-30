@@ -215,8 +215,8 @@
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonIds.length).toEqual(2);
 		expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
-		expect(activityData.StartTime).toEqual('02:00');
-		expect(activityData.EndTime).toEqual('08:00');
+		expect(activityData.StartTime).toEqual('2015-01-01 02:00');
+		expect(activityData.EndTime).toEqual('2015-01-01 08:00');
 		expect(activityData.BelongsToDate).toEqual(scope.getSelectedDate());
 		expect(activityData.TrackedCommandInfo.TrackId).toEqual("B4A88909-A1A0-4672-A7A3-14909B2C7673");
 

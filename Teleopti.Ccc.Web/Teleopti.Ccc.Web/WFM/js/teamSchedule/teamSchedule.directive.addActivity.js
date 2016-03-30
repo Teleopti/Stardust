@@ -47,8 +47,8 @@
 			ActivityService.addActivity({
 				PersonIds: vm.selectedAgents(),
 				BelongsToDate: vm.selectedDate(),
-				StartTime: moment(vm.timeRange.startTime).format("HH:mm"),
-				EndTime: moment(vm.timeRange.endTime).format("HH:mm"),
+				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
+				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DD HH:mm"),
 				ActivityId: vm.selectedActivityId,
 				TrackedCommandInfo:{TrackId:trackId}
 			}).then(function (data) {

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
@@ -25,8 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					PersonId = person,
 					ActivityId = formData.ActivityId,
 					Date = formData.BelongsToDate,
-					StartTime = formData.BelongsToDate.Date.Add(formData.StartTime),
-					EndTime = formData.BelongsToDate.Date.Add(formData.EndTime),
+					StartTime = formData.StartTime,
+					EndTime = formData.EndTime,
 					TrackedCommandInfo = formData.TrackedCommandInfo != null ? formData.TrackedCommandInfo : new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 				};
 				_commandDispatcher.Execute(command);

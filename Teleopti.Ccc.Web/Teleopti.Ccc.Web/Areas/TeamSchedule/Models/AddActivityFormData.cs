@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public Guid[] PersonIds;
 		public Guid ActivityId { get; set; }
 		public DateOnly BelongsToDate { get; set; }
-		public TimeSpan StartTime { get; set; }
-		public TimeSpan EndTime { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}
 }

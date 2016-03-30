@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			{
 				ActivityId = Guid.NewGuid(),
 				BelongsToDate = DateOnly.Today,
-				StartTime = new TimeSpan(8, 0, 0),
-				EndTime = new TimeSpan(17, 0, 0),
+				StartTime = new DateTime(2016,3,28, 8, 0, 0),
+				EndTime = new DateTime(2016, 3, 28, 17, 0, 0),
 				PersonIds = new [] { Guid.NewGuid(),Guid.NewGuid() },
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
