@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-class="{'greenNode': vm.Node.Alive === 'true', 'redNode':vm.Node.Alive === 'false'}">
+                        <tr ng-class="{'greenNode': vm.Node.Alive === true, 'redNode':vm.Node.Alive === false}">
                             <td>{{vm.Node.Url}}</td>
                             <td>{{vm.Node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
                             <td>{{vm.Node.Running}}</td>

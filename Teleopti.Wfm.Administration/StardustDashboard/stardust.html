@@ -18,7 +18,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-class="{'greenNode': node.Alive === 'true', 'redNode':node.Alive === 'false'}" ng-repeat="node in vm.WorkerNodes">
+                        <tr ng-class="{'greenNode': node.Alive === true, 'redNode': node.Alive === false}" ng-repeat="node in vm.WorkerNodes">
 
                             <td><a href="#nodedetails\{{node.Id}}">{{node.Url}}</a></td>
                             <td>{{node.Heartbeat | date : 'yyyy-MM-dd HH:mm:ss'}}</td>
