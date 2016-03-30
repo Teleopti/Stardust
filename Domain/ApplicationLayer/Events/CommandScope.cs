@@ -2,18 +2,18 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public static class TrackIdentifierScope
+	public static class CommandScope
 	{
 		[ThreadStatic]
-		private static ITrackInfo _commandIdentifier;
+		private static ICommandIdentifier _commandIdentifier;
 
-		public static IDisposable Create(ITrackInfo commandIdentifier)
+		public static IDisposable Create(ICommandIdentifier commandIdentifier)
 		{
 			_commandIdentifier = commandIdentifier;
 			return new GenericDisposable(() => _commandIdentifier = null);
 		}
 
-		public static ITrackInfo Current()
+		public static ICommandIdentifier Current()
 		{
 			return _commandIdentifier;
 		}

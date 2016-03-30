@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			theEvent.EndDateTime.Should().Be(affectedPeriod.EndDateTime);
 			theEvent.ScenarioId.Should().Be(assignment.Scenario.Id.Value);
 			theEvent.InitiatorId.Should().Be(operatedPersonId);
-			theEvent.TrackId.Should().Be(trackId);
+			theEvent.CommandId.Should().Be(trackId);
 		}
 
 		[Test]

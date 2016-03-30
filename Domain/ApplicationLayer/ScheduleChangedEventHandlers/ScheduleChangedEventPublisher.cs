@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					StartDateTime = @event.StartDateTime,
 					EndDateTime = @event.EndDateTime,
 					InitiatorId = @event.InitiatorId,
-					TrackId = @event.TrackId
+					CommandId = @event.CommandId
 				});
 		}
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					StartDateTime = @event.StartDateTime,
 					EndDateTime = @event.EndDateTime,
 					InitiatorId = @event.InitiatorId,
-					TrackId = @event.TrackId
+					CommandId = @event.CommandId
 				});
 		}
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					StartDateTime = @event.StartDateTime,
 					EndDateTime = @event.EndDateTime,
 					InitiatorId = @event.InitiatorId,
-					TrackId = @event.TrackId
+					CommandId = @event.CommandId
 				});
 		}
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					StartDateTime = @event.StartDateTime,
 					EndDateTime = @event.EndDateTime,
 					InitiatorId = @event.InitiatorId,
-					TrackId = @event.TrackId
+					CommandId = @event.CommandId
 				});
 		}
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				StartDateTime = @event.StartDateTime,
 				EndDateTime = @event.EndDateTime,
 				InitiatorId = @event.InitiatorId,
-				TrackId = @event.TrackId
+				CommandId = @event.CommandId
 			});
 		}
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				StartDateTime = @event.StartDateTime,
 				EndDateTime = @event.EndDateTime,
 				InitiatorId = @event.InitiatorId,
-				TrackId = @event.TrackId
+				CommandId = @event.CommandId
 			});
 		}
 

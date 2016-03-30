@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		public void Handle(ProjectionChangedEvent @event)
 		{
 			createReadModel(@event);
-			if (_trackingMessageSender != null && @event.TrackId != Guid.Empty)
+			if (_trackingMessageSender != null && @event.CommandId != Guid.Empty)
 				_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
 				{
-					TrackId = @event.TrackId,
+					TrackId = @event.CommandId,
 					Status = TrackingMessageStatus.Success
 				});
 		}

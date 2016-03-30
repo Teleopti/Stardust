@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			var logOnInfo = @event as ILogOnContext;
 			var initiatorInfo = @event as IInitiatorContext;
-			var trackInfo = @event as ITrackInfo;
+			var commandIdentifier = @event as ICommandIdentifier;
 
 			try
 			{
@@ -65,12 +65,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			catch (Exception)
 			{
 				if (_trackingMessageSender == null) throw;
-				if (trackInfo == null) throw;
-				if (trackInfo.TrackId != Guid.Empty)
+				if (commandIdentifier == null) throw;
+				if (commandIdentifier.CommandId != Guid.Empty)
 					_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
 					{
 						Status = TrackingMessageStatus.Failed,
-						TrackId = trackInfo.TrackId
+						TrackId = commandIdentifier.CommandId
 					});
 				throw;
 			}

@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.StartDateTime.Should().Be(expectedStartInUtc);
 			@event.ScenarioId.Should().Be(personAssignmentRepository.Single().Scenario.Id.Value);
 			@event.InitiatorId.Should().Be(operatedPersonId);
-			@event.TrackId.Should().Be(trackId);
+			@event.CommandId.Should().Be(trackId);
 			@event.LogOnBusinessUnitId.Should().Be(scenario.Current().BusinessUnit.Id.GetValueOrDefault());
 		}
 

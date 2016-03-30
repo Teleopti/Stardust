@@ -3,12 +3,12 @@
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	//todo: what to include?
-	public class ActivityMovedEvent : EventWithInfrastructureContext, ITrackInfo
+	public class ActivityMovedEvent : EventWithInfrastructureContext, ICommandIdentifier
 	{
 		public Guid PersonId { get; set; }
 		public Guid ScenarioId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
-		public Guid TrackId { get; set; }
+		public Guid CommandId { get; set; }
 	}
 }

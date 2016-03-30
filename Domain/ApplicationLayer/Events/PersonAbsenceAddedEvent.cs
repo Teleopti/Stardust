@@ -2,13 +2,13 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class PersonAbsenceAddedEvent : EventWithInfrastructureContext, ITrackInfo
+	public class PersonAbsenceAddedEvent : EventWithInfrastructureContext, ICommandIdentifier
 	{
 		public Guid AbsenceId { get; set; }
 		public Guid PersonId { get; set; }
 		public Guid ScenarioId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
-		public Guid TrackId { get; set; }
+		public Guid CommandId { get; set; }
 	}
 }

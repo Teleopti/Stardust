@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private ISchedulerStateHolder schedulerStateHolderFrom()
 		{
-			return _contextPerCommand[TrackIdentifierScope.Current().TrackId].SchedulerStateHolderFrom;
+			return _contextPerCommand[CommandScope.Current().CommandId].SchedulerStateHolderFrom;
 		}
 
 		protected override IScenario FetchScenario()
@@ -83,13 +83,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			moveSchedules(modifiedScheduleDictionary, schedulerStateHolderFrom().Schedules, agentsToMove, period);
 		}
 
-		public IDisposable Set(ITrackInfo trackInfo, ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
+		public IDisposable Set(ICommandIdentifier commandIdentifier, ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
-			_contextPerCommand[trackInfo.TrackId] = new desktopOptimizationContextData(schedulerStateHolderFrom, optimizationPreferences, intradayOptimizationCallback);
+			_contextPerCommand[commandIdentifier.CommandId] = new desktopOptimizationContextData(schedulerStateHolderFrom, optimizationPreferences, intradayOptimizationCallback);
 			return new GenericDisposable(() =>
 			{
 				desktopOptimizationContextData foo;
-				_contextPerCommand.TryRemove(trackInfo.TrackId, out foo);
+				_contextPerCommand.TryRemove(commandIdentifier.CommandId, out foo);
 			});
 		}
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public IOptimizationPreferences Fetch()
 		{
-			return _contextPerCommand[TrackIdentifierScope.Current().TrackId].OptimizationPreferences;
+			return _contextPerCommand[CommandScope.Current().CommandId].OptimizationPreferences;
 		}
 
 		public IEnumerable<IPerson> Agents(DateOnlyPeriod period)
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public IIntradayOptimizationCallback Current()
 		{
-			return _contextPerCommand[TrackIdentifierScope.Current().TrackId].IntradayOptimizationCallback;
+			return _contextPerCommand[CommandScope.Current().CommandId].IntradayOptimizationCallback;
 		}
 	}
 }

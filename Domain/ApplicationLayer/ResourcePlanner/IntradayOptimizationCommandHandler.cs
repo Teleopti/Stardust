@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 						RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
 						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
 						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
-						TrackId = command.TrackId
+						CommandId = command.CommandId
 					});
 				}
 			}
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		[UnitOfWork]
 		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, IntradayOptimizationCommand command)
 		{
-			using (TrackIdentifierScope.Create(command))
+			using (CommandScope.Create(command))
 			{
 				return _createIslands.Create(period);
 			}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				AgentsInIsland = LoadPeopleInOrganization(command.Period).Select(x => x.Id.Value),
 				AgentsToOptimize = agentsToOptimize,
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
-				TrackId = command.TrackId
+				CommandId = command.CommandId
 			});
 		}
 

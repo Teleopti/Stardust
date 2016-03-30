@@ -172,7 +172,7 @@
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\TrackIdentifierScope.cs" />
+    <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
     <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsGroupPage.cs" />
@@ -237,7 +237,7 @@
     <Compile Include="ApplicationLayer\Events\StardustHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantHourTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\IRunOnHangfire.cs" />
-    <Compile Include="ApplicationLayer\Events\ITrackInfo.cs" />
+    <Compile Include="ApplicationLayer\Events\ICommandIdentifier.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceModifiedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonActivityActualStartEvent.cs" />

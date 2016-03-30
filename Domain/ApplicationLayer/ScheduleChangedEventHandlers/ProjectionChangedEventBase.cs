@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	/// <summary>
 	/// Denormalized schedule message
 	/// </summary>
-	public class ProjectionChangedEventBase : EventWithInfrastructureContext, ITrackInfo
+	public class ProjectionChangedEventBase : EventWithInfrastructureContext, ICommandIdentifier
 	{
 		/// <summary>
 		/// creates a thingy
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		/// </summary>
 		public bool IsInitialLoad { get; set; }
 
-		public Guid TrackId { get; set; }
+		public Guid CommandId { get; set; }
 
 		public int RetriesCount { get; set; }
 

@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (trackedCommandInfo != null)
 				{
 					activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-					activityAddedEvent.TrackId = trackedCommandInfo.TrackId;
+					activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
 				}
 				return activityAddedEvent;
 			});
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				if (trackedCommandInfo != null)
 				{
 					activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-					activityMovedEvent.TrackId = trackedCommandInfo.TrackId;
+					activityMovedEvent.CommandId = trackedCommandInfo.TrackId;
 				}
 				return activityMovedEvent;
 			});

@@ -188,8 +188,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		{
 			var command1 = new IntradayOptimizationCommand();
 			var command2 = new IntradayOptimizationCommand();
-			command1.TrackId.Should().Not.Be.EqualTo(Guid.Empty);
-			command1.TrackId.Should().Not.Be.EqualTo(command2.TrackId);
+			command1.CommandId.Should().Not.Be.EqualTo(Guid.Empty);
+			command1.CommandId.Should().Not.Be.EqualTo(command2.CommandId);
 		}
 
 		[Test]
@@ -203,8 +203,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 
 			Target.Execute(command);
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().TrackId
-				.Should().Be.EqualTo(command.TrackId);
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().CommandId
+				.Should().Be.EqualTo(command.CommandId);
 		}
 	}
 }

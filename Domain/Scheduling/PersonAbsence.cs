@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (trackedCommandInfo != null)
 			{
 				fullDayAbsenceAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-				fullDayAbsenceAddedEvent.TrackId = trackedCommandInfo.TrackId;
+				fullDayAbsenceAddedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
 			AddEvent(fullDayAbsenceAddedEvent);
 		}
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (trackedCommandInfo != null)
 			{
 				personAbsenceAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-				personAbsenceAddedEvent.TrackId = trackedCommandInfo.TrackId;
+				personAbsenceAddedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
 			AddEvent(personAbsenceAddedEvent);
 		}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (trackedCommandInfo != null)
 			{
 				personAbsenceRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-				personAbsenceRemovedEvent.TrackId = trackedCommandInfo.TrackId;
+				personAbsenceRemovedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
 			AddEvent(personAbsenceRemovedEvent);
 		}
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (trackedCommandInfo != null)
 			{
 				personAbsenceModifiedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-				personAbsenceModifiedEvent.TrackId = trackedCommandInfo.TrackId;
+				personAbsenceModifiedEvent.CommandId = trackedCommandInfo.TrackId;
 			}
 
 			AddEvent(personAbsenceModifiedEvent);

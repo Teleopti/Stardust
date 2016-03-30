@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						IsInitialLoad = @event.IsInitialLoad,
 						PersonId = @event.PersonId,
 						Timestamp = DateTime.UtcNow,
-						TrackId = @event.TrackId,
+						CommandId = @event.CommandId,
 						RetriesCount = numOfRetry
 					};
 					_serviceBus.DelaySend(processTime, @newEvent);

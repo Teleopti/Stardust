@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			{
 				InitiatorId = initiatorId,
 				LogOnBusinessUnitId = businessUnitId,
-				TrackId = trackId
+				CommandId = trackId
 			};
 			target.Handle(@event);
 

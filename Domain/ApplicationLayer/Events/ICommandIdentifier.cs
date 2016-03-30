@@ -2,8 +2,8 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public interface ITrackInfo
+	public interface ICommandIdentifier
 	{
-		Guid TrackId { get; set; }
+		Guid CommandId { get; set; }
 	}
 }
