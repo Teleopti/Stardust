@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 {
 	public class TrackOptimizeDaysForAgents : IIntradayOptimizeOneDayCallback
 	{
-		private readonly IList<trackedDayAndAgent> _tracked = new List<trackedDayAndAgent>();
+		private ConcurrentBag<trackedDayAndAgent> _tracked = new ConcurrentBag<trackedDayAndAgent>();
 
 		public void Optimizing(IPerson person, DateOnly dateOnly)
 		{
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 		public void Clear()
 		{
-			_tracked.Clear();
+			_tracked = new ConcurrentBag<trackedDayAndAgent>();
 		}
 	}
 }
