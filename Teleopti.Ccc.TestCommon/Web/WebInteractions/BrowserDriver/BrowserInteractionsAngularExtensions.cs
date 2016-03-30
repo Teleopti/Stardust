@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{		
 			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
 			var readerName = getTmpName(name);
+		
 			interactions.Javascript(waitForAngular(selector, script, readerName, useIsolateScope));
 			
 			if (typeof (T) == typeof (bool))
@@ -57,7 +58,21 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 				interactions.AssertJavascriptResultContains(query, constraint.ToString());				
 			}		
 		}
-		
+
+		public static void AngularSelectOptionByText(this IBrowserInteractions interactions, string selector, string text, bool useIsolateScope = false)
+		{
+			var selectSelector = selector + ":enabled";
+			var optionSelector = string.Format(selectSelector + " option:contains('{0}')", text);
+			interactions.AssertExists(selectSelector);
+			interactions.AssertExistsUsingJQuery(optionSelector);
+			var selectAction = string.Format("$(\"{0}\").val($(\"{1}\").val());" ,
+									   selectSelector.JSEncode(), optionSelector.JSEncode());
+			var triggerChange = string.Format("{0}.triggerHandler(\"change\")", elementByQuerySelector(selector));
+
+			var script = runScript(selector, selectAction + triggerChange, useIsolateScope);
+			interactions.Javascript(script);
+		}
+
 
 		private static string elementByQuerySelector(string selector)
 		{
@@ -73,7 +88,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 			return string.Format("var runner = {0}.injector().get('$timeout'); ", elementByQuerySelector(selector));
 		}
-	
+
+		private static string runScript(string selector, string script, bool useIsolateScope)
+		{
+			return scopeByQuerySelector(selector, useIsolateScope)
+				   + runnerByQuerySelector(selector)
+				   + string.Format("runner(function() {{ {0} }}, 200); ", script);			
+
+		}
 
 		private static string waitForAngular(string selector, string next, string readerName, bool useIsolateScope)
 		{
