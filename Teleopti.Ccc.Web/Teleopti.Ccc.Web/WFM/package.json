@@ -5,8 +5,7 @@
   "scripts": {
     "dev": "grunt",
     "test": "grunt test",
-    "continuous": "grunt test:continuous",
-    "copySourceMaps": "copy vendor/c3/c3-angular.min.js.map dist"
+    "continuous": "grunt test:continuous"
   },
   "author": "Teleopti",
   "license": "ISC",
