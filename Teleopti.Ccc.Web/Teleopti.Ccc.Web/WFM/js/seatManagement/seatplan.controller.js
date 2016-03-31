@@ -175,8 +175,8 @@
 
 		vm.printReport = function (event) {
 			var seatBookingReportParams = {
-				startDate: moment(vm.reportPeriod.StartDate).format('YYYY-MM-DD'),
-				endDate: moment(vm.reportPeriod.EndDate).format('YYYY-MM-DD'),
+				startDate: moment(vm.reportPeriod.startDate).format('YYYY-MM-DD'),
+				endDate: moment(vm.reportPeriod.endDate).format('YYYY-MM-DD'),
 				teams: vm.reportSelectedTeams,
 				locations: vm.reportSelectedLocations
 			};
