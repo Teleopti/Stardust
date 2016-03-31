@@ -6,7 +6,7 @@ namespace Stardust.Manager.Interfaces
 {
 	public interface IJobRepository
 	{
-		void Add(JobDefinition job);
+		void Add(JobDefinition jobDefinition);
 		List<JobDefinition> LoadAll();
 		void DeleteJob(Guid jobId);
 		void FreeJobIfNodeIsAssigned(string url);

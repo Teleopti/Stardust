@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace ManagerTest.Database
 {
@@ -29,8 +30,9 @@ namespace ManagerTest.Database
 				script = ReplaceScriptTags(script, databaseName);
 				_executeMaster.ExecuteTransactionlessNonQuery(script, 10800);
 			}
-			catch
+			catch (Exception exception)
 			{
+				string msg = exception.StackTrace;
 			}
 		}
 

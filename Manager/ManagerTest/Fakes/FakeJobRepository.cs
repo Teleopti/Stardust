@@ -10,9 +10,9 @@ namespace ManagerTest.Fakes
 	{
 		private readonly List<JobDefinition> _jobs = new List<JobDefinition>();
 
-		public void Add(JobDefinition job)
+		public void Add(JobDefinition jobDefinition)
 		{
-			_jobs.Add(job);
+			_jobs.Add(jobDefinition);
 		}
 
 		public List<JobDefinition> LoadAll()
