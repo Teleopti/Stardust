@@ -406,16 +406,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private void moveToDenied(bool autoDenied = false)
 		{
+			
+			if (waitlistingIsEnabled())
+			{
+				RequestState = new waitListedPersonRequest(this);
+				return;
+			}
+			
 			if (autoDenied)
 			{
-				if (waitlistingIsEnabled())
-				{
-					RequestState = new waitListedPersonRequest(this);
-				}
-				else
-				{
+				
 					RequestState = new autoDeniedPersonRequest(this);
-				}
 			}
 			else
 			{
