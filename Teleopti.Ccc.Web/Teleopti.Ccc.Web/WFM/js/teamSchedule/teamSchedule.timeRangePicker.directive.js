@@ -14,7 +14,9 @@
 				return attrs.templateUrl || defaultTemplate;
 			},
 			scope: {
-				disableNextDay: '=?'
+				disableNextDay: '=?',
+				referenceDay: '=?',
+				isNextDay: '=?'
 			},
 			controller: ['$scope', '$element', timeRangePickerCtrl],
 			require: ['ngModel', 'tmpTimeRangePicker'],
@@ -109,10 +111,22 @@
 			}
 
 			function makeViewValue(startTime, endTime, nextDay) {
-				var viewValue = {
-					startTime: moment(),
-					endTime: moment()
-				};
+				var viewValue = null;
+				if (angular.isDefined(scope.referenceDay)) {
+					viewValue = {
+						startTime: moment(scope.referenceDay),
+						endTime: moment(scope.referenceDay)
+					}; 
+				} else {
+					viewValue = {
+						startTime: moment(),
+						endTime: moment()
+					};
+				}
+
+				if (angular.isDefined(scope.isNextDay)) {
+					scope.isNextDay = nextDay;
+				}
 
 				timeRangeCtrl.mutateMoment(viewValue.startTime, startTime);
 				timeRangeCtrl.mutateMoment(viewValue.endTime, endTime);
