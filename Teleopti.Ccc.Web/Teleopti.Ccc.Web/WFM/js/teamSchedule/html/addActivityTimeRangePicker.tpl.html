@@ -11,12 +11,13 @@
 		<div>
 			<tmp-timepicker-wrap ng-model="endTime"></tmp-timepicker-wrap>
 		</div>
-		<div class="next-day-toggle" ng-show="!disableNextDay || nextDay">
-			<button class="wfm-btn wfm-btn-invis-default"
-					ng-class="{'wfm-btn-invis-disabled': disableNextDay }"
-					ng-click="toggleNextDay()">
-				{{ nextDay ? "NextDay" : "SameDay" | translate}}
-			</button>
+
+		<div class="wfm-switch" ng-show="!disableNextDay || nextDay">
+			<input type="checkbox" id="switch1" />
+			<label for="switch1">
+				<span class="wfm-switch-label">{{"NextDay" | translate}}</span>
+				<span class="wfm-switch-toggle" ng-click="toggleNextDay()"></span>
+			</label>
 		</div>
 	</div>
 </div>

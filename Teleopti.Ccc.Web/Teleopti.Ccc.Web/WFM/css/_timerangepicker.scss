@@ -30,13 +30,6 @@
         }    		
     }        
 
-	.next-day-toggle .wfm-btn {
-		margin-top: 0;
-		margin-bottom: 0;
-		padding-top: 0;
-		padding-bottom: 0;
-	}
-
     .has-error > input {
         border:2px solid #F44336;
     }
@@ -53,6 +46,13 @@
         &.ng-invalid-empty ~ .error-msg-container.ng-invalid-empty {
             display: block;
         }
-    }	
+    }
+
+	.con-row{
+		.wfm-switch{
+			margin-left:10px;
+			min-width:150px;
+		}
+	}	
 }
 
