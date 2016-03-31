@@ -22,21 +22,18 @@
 
 	function addActivityCtrl(ActivityService, guidgenerator) {
 		var vm = this;
-		var startTimeMoment;
+		vm.selectedActivityId = null;
+		vm.disableNextDay = false;
+		vm.isNextDay = false;
+		vm.addActivity = addActivity;
 
-		if (vm.defaultStart) {
-			startTimeMoment = moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart());
-		} else {
-			startTimeMoment = moment();
-		}
+		var startTimeMoment = vm.defaultStart !== undefined ? moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart()) : moment();
 		var endTimeMoment = moment(startTimeMoment).add(1, 'hour');
+
 		vm.timeRange = {
 			startTime: startTimeMoment.toDate(),
 			endTime: endTimeMoment.toDate()
 		};
-		vm.selectedActivityId = null;
-		vm.disableNextDay = false;
-		vm.addActivity = addActivity;
 
 		ActivityService.fetchAvailableActivities().then(function (activities) {
 			vm.activities = activities;
