@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		IHandleEvent<PersonDeletedEvent>,
 		IRunOnServiceBus
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (PersonPeriodAnalyticsUpdater));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(PersonPeriodAnalyticsUpdater));
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
@@ -63,13 +64,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				{
 					// Check if person period already exists in database
 					var existingPeriod = personPeriodsInAnalytics.FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
+					List<AnalyticsSkill> analyticsSkills;
 
 					if (existingPeriod != null)
 					{
 						Logger.DebugFormat("Update person period for {0}", person.Name);
 
 						// Update
-						var updatedAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
+						var updatedAnalyticsPersonPeriod = transformer.Transform(person, personPeriod, out analyticsSkills);
 
 						// Keep windows domain and username until external login information is availble from service bus
 						updatedAnalyticsPersonPeriod.WindowsUsername = existingPeriod.WindowsUsername;
@@ -82,13 +84,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 						Logger.DebugFormat("Insert new person period for {0}", person.Name);
 
 						// Insert
-						var newAnalyticsPersonPeriod = transformer.Transform(person, personPeriod);
+						var newAnalyticsPersonPeriod = transformer.Transform(person, personPeriod, out analyticsSkills);
 						_analyticsPersonPeriodRepository.AddPersonPeriod(newAnalyticsPersonPeriod);
 					}
 
+					var newOrUpdatedPersonPeriod = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid).FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
+					if ((existingPeriod == null && newOrUpdatedPersonPeriod.SkillsetId != null) ||
+						(existingPeriod != null && newOrUpdatedPersonPeriod.SkillsetId != existingPeriod.SkillsetId))
+					{
+						publishSkillChangeEvent(@event, personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
+					}
+
 					// Update/Add/Delete from Bridge Acd Login Person table
-					var existingPersonPeriod = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid).FirstOrDefault(a => a.PersonPeriodCode.Equals(personPeriod.Id.Value));
-					var bridgeListForPersonPeriod = _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(existingPersonPeriod.PersonId);
+					var bridgeListForPersonPeriod = _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(newOrUpdatedPersonPeriod.PersonId);
 					foreach (var externalLogOn in personPeriod.ExternalLogOnCollection)
 					{
 						if (bridgeListForPersonPeriod.All(a => a.AcdLoginId != externalLogOn.AcdLogOnMartId))
@@ -97,11 +105,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 							_analyticsAcdLoginPerson.AddAcdLoginPerson(new AnalyticsBridgeAcdLoginPerson
 							{
 								AcdLoginId = externalLogOn.AcdLogOnMartId,
-								PersonId = existingPersonPeriod.PersonId,
-								TeamId = existingPersonPeriod.TeamId,
-								BusinessUnitId = existingPersonPeriod.BusinessUnitId,
-								DatasourceId = existingPersonPeriod.DatasourceId,
-								DatasourceUpdateDate = existingPersonPeriod.DatasourceUpdateDate
+								PersonId = newOrUpdatedPersonPeriod.PersonId,
+								TeamId = newOrUpdatedPersonPeriod.TeamId,
+								BusinessUnitId = newOrUpdatedPersonPeriod.BusinessUnitId,
+								DatasourceId = newOrUpdatedPersonPeriod.DatasourceId,
+								DatasourceUpdateDate = newOrUpdatedPersonPeriod.DatasourceUpdateDate
 							});
 						}
 					}
@@ -138,6 +146,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
 				LogOnDatasource = @event.LogOnDatasource,
 				SerializedPeople = @event.SerializedPeople,
+				Timestamp = @event.Timestamp
+			});
+		}
+
+		private void publishSkillChangeEvent(PersonCollectionChangedEvent @event, Interfaces.Domain.IPersonPeriod personPeriod, List<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
+		{
+			var activeSkills = personPeriod.PersonSkillCollection.Where(a => a.Active)
+					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId).ToList();
+			var inactiveSkills = personPeriod.PersonSkillCollection.Where(a => !a.Active)
+					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId).ToList();
+
+			_eventPublisher.Publish(new AnalyticsPersonPeriodSkillsChangedEvent
+			{
+				AnalyticsPersonPeriodId = updatedAnalyticsPersonPeriod.PersonId,
+				AnalyticsBusinessUnitId = updatedAnalyticsPersonPeriod.BusinessUnitId,
+				AnalyticsActiveSkillsId = activeSkills,
+				AnalyticsInactiveSkillsId = inactiveSkills,
+				InitiatorId = @event.InitiatorId,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+				LogOnDatasource = @event.LogOnDatasource,
 				Timestamp = @event.Timestamp
 			});
 		}
