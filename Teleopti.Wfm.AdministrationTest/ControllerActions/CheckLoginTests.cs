@@ -35,7 +35,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var model = new CreateTenantModel
 			{
 				AppUser = "alogin",
-				AppPassword = "password",
+				AppPassword = "Passw0rd",
 				CreateDbUser = "dbcreatorperson",
 				CreateDbPassword = "password"
 			};
@@ -46,21 +46,19 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 
 		[Test]
-		public void ShouldReturnFalseIfBadPassword()
+		public void ShouldReturnFalseIfPasswordNotStrong()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
-			TestPollutionCleaner.Clean("tenant", "appuser");
-			
 			var model = new CreateTenantModel
 			{
-				AppUser = RandomName.Make(),
-				AppPassword = "p",
+				AppUser = "alogin",
+				AppPassword = "password",
 				CreateDbUser = "dbcreatorperson",
-				CreateDbPassword = "password"
+				CreateDbPassword = "Passw0rd"
 			};
 
 			var result = Target.CheckLogin(model).Content;
 			result.Success.Should().Be.False();
+			result.Message.Should().StartWith("Make sure you have entered a strong Password.");
 		}
 
 		[Test]

@@ -95,29 +95,31 @@ namespace Teleopti.Ccc.DBManager.Library
 			return loginHandler;
 		}
 
-		public void AddPermissions(string login, SqlVersion sqlVersion)
+		public void AddPermissions(string login, string pwd, SqlVersion sqlVersion)
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
 			var permissionsHandler = new PermissionsHelper(Logger, databaseFolder, _usingDatabase);
-			permissionsHandler.CreatePermissions(login,sqlVersion);
+			permissionsHandler.CreatePermissions(login, pwd, sqlVersion);
 		}
 
 		public bool HasCreateDbPermission(SqlVersion sqlVersion)
 		{
 			if (sqlVersion.IsAzure)
 			{
-				var dbName = Guid.NewGuid().ToString();
-				try
-				{
-					var tasks = new DatabaseTasks(_usingMaster);
-					tasks.Create(dbName);
-					tasks.Drop(dbName);
-					return true;
-				}
-				catch (Exception)
-				{
-					return false;
-				}
+				// for now until we find a better (fast) way of checking in azure
+				return true;
+				//var dbName = Guid.NewGuid().ToString();
+				//try
+				//{
+				//	var tasks = new DatabaseTasks(_usingMaster);
+				//	tasks.Create(dbName);
+				//	tasks.Drop(dbName);
+				//	return true;
+				//}
+				//catch (Exception)
+				//{
+				//	return false;
+				//}
 			}
 
 			return Convert.ToBoolean(_usingDatabase.ExecuteScalar("SELECT IS_SRVROLEMEMBER( 'dbcreator')"));

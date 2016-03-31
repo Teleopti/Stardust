@@ -7,7 +7,7 @@ namespace Teleopti.Wfm.Administration.Core
 	public interface IDatabaseHelperWrapper
 	{
 		DbCheckResultModel Exists(string databaseConnectionString, DatabaseType databaseType);
-		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion, string tenant, int tenantId);
+		void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion, string tenant, int tenantId);
 		void AddSystemUser(string connectionToNewDb, Guid personId, string firstName, string lastName);
 		void AddBusinessUnit(string connectionToNewDb, string name);
 		bool LoginExists(string connectionToNewDb, string login, SqlVersion sqlVersion);
@@ -15,7 +15,7 @@ namespace Teleopti.Wfm.Administration.Core
 		bool HasCreateDbPermission(string connectionString, SqlVersion sqlVersion);
 		bool HasCreateViewAndLoginPermission(string connectionString, SqlVersion sqlVersion);
 		bool LoginCanBeCreated(string connectionString, string login, string password, SqlVersion sqlVersion, out string message);
-		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion);
+		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion);
 		SqlVersion Version(string connectionToNewDb);
 	}
 }

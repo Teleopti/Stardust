@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					if (commandLineArgument.PermissionMode && safeMode)
 					{
 						var permissionsHelper = new PermissionsHelper(_logger, databaseFolder, executeSql);
-						permissionsHelper.CreatePermissions(commandLineArgument.appUserName, sqlVersion);
+						permissionsHelper.CreatePermissions(commandLineArgument.appUserName, commandLineArgument.appUserPwd, sqlVersion);
 					}
 
 					//Patch database

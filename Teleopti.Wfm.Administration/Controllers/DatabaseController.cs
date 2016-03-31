@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.DBManager.Library;
@@ -80,10 +81,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var version = _databaseHelperWrapper.Version(connectionToNewDb);
 			_databaseHelperWrapper.CreateLogin(connectionToNewDb, model.AppUser, model.AppPassword, version);
-			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, version, model.Tenant, newTenant.Id);
+			_databaseHelperWrapper.CreateDatabase(appDbConnectionString, DatabaseType.TeleoptiCCC7, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 			_databaseHelperWrapper.AddBusinessUnit(appDbConnectionString, model.BusinessUnit);
-			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, version, model.Tenant, newTenant.Id);
-			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, model.AppUser, version, model.Tenant, newTenant.Id);
+			_databaseHelperWrapper.CreateDatabase(analyticsDbConnectionString, DatabaseType.TeleoptiAnalytics, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
+			_databaseHelperWrapper.CreateDatabase(createAggDbConnectionString(model), DatabaseType.TeleoptiCCCAgg, model.AppUser, model.AppPassword, version, model.Tenant, newTenant.Id);
 
 			if (version.IsAzure)
 				_updateCrossDatabaseView.Execute(analyticsDbConnectionString, model.Tenant + "_TeleoptiWfmAnalytics");
@@ -217,6 +218,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (string.IsNullOrEmpty(model.AppUser) || string.IsNullOrEmpty(model.AppPassword))
 				return new TenantResultModel { Message = "Both name and password for the login must be filled in.", Success = false };
 
+			var regex = new Regex(@"^(?!.{31})(?=.{8})(?=.*[^A-Za-z])(?=.*[A-Z])(?=.*[a-z]).*$");
+			if (!regex.IsMatch(model.AppPassword))
+			{
+				return new TenantResultModel
+				{
+					Success = false,
+					Message = "Make sure you have entered a strong Password. Between 8 and 31 characters, at least one uppercase, one lowercase and one digit"
+				};
+			}
+
 			var builder = new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)
 			{
 				IntegratedSecurity = false,
@@ -226,6 +237,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			try
 			{
 				var version = _databaseHelperWrapper.Version(builder.ConnectionString);
+
 				if (_databaseHelperWrapper.LoginExists(builder.ConnectionString, model.AppUser, version))
 				{
 					return

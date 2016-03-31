@@ -35,7 +35,7 @@
 		vm.Success = false;
 		vm.Message = '';
 		vm.Creating = '';
-		
+
 		vm.BuAndUserOk = function () {
 			return vm.FirstUserOk === true && vm.BusinessUnitOk === true;
 		}
@@ -138,6 +138,9 @@
 
 			}).error(function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
+				vm.Creating = '';
+				vm.Success = false;
 				$("#loading").hide();
 			});
 		}

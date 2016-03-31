@@ -12,7 +12,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			return new DbCheckResultModel {Exists = true};
 		}
 
-		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion, string tenant, int tenantId)
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion, string tenant, int tenantId)
 		{
 		}
 
@@ -49,7 +49,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			return true;
 		}
 
-		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion)
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion)
 		{
 		}
 

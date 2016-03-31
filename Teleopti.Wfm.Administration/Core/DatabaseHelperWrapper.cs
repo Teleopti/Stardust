@@ -68,8 +68,7 @@ namespace Teleopti.Wfm.Administration.Core
 
 		}
 
-		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login,
-			SqlVersion sqlVersion, string tenant, int tenantId)
+		public void CreateDatabase(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion, string tenant, int tenantId)
 		{
 
 			if (sqlVersion.IsAzure && databaseType.Equals(DatabaseType.TeleoptiCCCAgg))
@@ -94,13 +93,13 @@ namespace Teleopti.Wfm.Administration.Core
 				helper.CreateByDbManager();
 
 			helper.CreateSchemaByDbManager();
-			helper.AddPermissions(login, sqlVersion);
+			helper.AddPermissions(login, pwd, sqlVersion);
 		}
 
-		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, SqlVersion sqlVersion)
+		public void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion)
 		{
 			var helper = new DatabaseHelper(connectionToNewDb, databaseType) {DbManagerFolderPath = _dbPathProvider.GetDbPath()};
-			helper.AddPermissions(login, sqlVersion);
+			helper.AddPermissions(login, pwd, sqlVersion);
 		}
 
 		public void AddSystemUser(string connectionToNewDb, Guid personId, string firstName, string lastName)

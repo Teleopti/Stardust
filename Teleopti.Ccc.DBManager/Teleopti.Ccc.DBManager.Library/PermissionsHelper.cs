@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using Teleopti.Interfaces.Infrastructure;
@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.DBManager.Library
 			_executeSql = executeSql;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public void CreatePermissions(string user, SqlVersion sqlVersion)
+		[SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
+		public void CreatePermissions(string user, string pwd, SqlVersion sqlVersion)
 		{
-			//if appication login = sa then don't bother to do anything
+			//if application login = sa then don't bother to do anything
 			if (compareStringLowerCase(user, @"sa"))
 				return;
 
@@ -51,7 +51,16 @@ namespace Teleopti.Ccc.DBManager.Library
 					_executeSql.ExecuteTransactionlessNonQuery(createDBUser);
 				}
 			}
-
+			else
+			{
+				var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] WITH PASSWORD='{1}'", user, pwd);
+				_logger.Write("DB user is missing. Creating contained DB user ...");
+				_executeSql.ExecuteTransactionlessNonQuery(createDBUser);
+				var permSql = string.Format(CultureInfo.CurrentCulture, "ALTER AUTHORIZATION ON SCHEMA::[db_owner] TO[{0}]", user);
+				_executeSql.ExecuteTransactionlessNonQuery(permSql);
+				permSql = string.Format(CultureInfo.CurrentCulture, "ALTER ROLE[db_owner] ADD MEMBER[{0}]", user);
+				_executeSql.ExecuteTransactionlessNonQuery(permSql);
+			}
 			//Add permission
 			var fileName = string.Format(CultureInfo.CurrentCulture, @"{0}\Create\permissions - add.sql", _folder.Path());
 
@@ -75,7 +84,7 @@ namespace Teleopti.Ccc.DBManager.Library
 			return string.Compare(stringA, stringB, true, CultureInfo.CurrentCulture) == 0;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
+		[SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		private bool sqlVersionGreaterThen(Version checkVersion)
 		{
 			var serverVersion = new Version();

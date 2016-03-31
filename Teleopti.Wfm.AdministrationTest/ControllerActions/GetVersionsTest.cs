@@ -27,7 +27,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var sqlVersion = new SqlVersion(12,false);
 			helper.LoginTasks().CreateLogin("appuser", "SomeG00dpw", false, sqlVersion);
-			helper.AddPermissions("appuser", sqlVersion);
+			helper.AddPermissions("appuser", "SomeG00dpw", sqlVersion);
 			var result =
 				Target.GetVersions(new VersionCheckModel
 				{

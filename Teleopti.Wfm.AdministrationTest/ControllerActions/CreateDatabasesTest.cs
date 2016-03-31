@@ -24,10 +24,12 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnSuccessFalseIfFirstUserIsEmpty()
 		{
+			TestPollutionCleaner.Clean("tenant", "appuser");
 			var model = new CreateTenantModelForTest
 			{
 				BusinessUnit = "BU",
 				AppUser = "somenewnotthere",
+				AppPassword = "Passw0rd",
 				FirstUser = ""
 			};
 			var result = Target.CreateDatabases(model).Content;
@@ -43,6 +45,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				BusinessUnit = "",
 				AppUser = "somenewnotthere",
+				AppPassword = "Passw0rd",
 				FirstUser = "somenewnotthere"
 			};
          
@@ -90,9 +93,9 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var connStringBuilder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 
-            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "password", new SqlVersion(12,false));
+            DatabaseHelperWrapper.CreateLogin(connStringBuilder.ConnectionString,"nodbcreator", "Password", new SqlVersion(12,false));
 
-			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", AppUser = "user", AppPassword = "password", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
+			var model = new CreateTenantModel { Tenant = "New Tenant", CreateDbUser = "nodbcreator", CreateDbPassword = "password", AppUser = "user", AppPassword = "Passw0rd", FirstUser = "user", FirstUserPassword = "password", BusinessUnit = "BU"};
 
 			var result = Target.CreateDatabases(model).Content;
 			result.Success.Should().Be.False();
@@ -109,6 +112,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				Tenant = "New Tenant",
 				AppUser = "new TenantAppUser",
+				AppPassword = "Passw0rd"
 			});
 
 			result.Content.Success.Should().Be.True();

@@ -52,8 +52,9 @@ namespace Teleopti.Ccc.DBManager.Library
 			{
 				if (sqlVersion.ProductVersion < 12)
 					return azureLoginExist(login);
-
-				return azureDatabaseUserExist(login);
+				//should test contained but we can't test that before we create the database
+				//return azureDatabaseUserExist(login);
+				return false;
 			}
 			return sqlLoginExists(login);
 		}
@@ -67,12 +68,7 @@ namespace Teleopti.Ccc.DBManager.Library
 
 		public void DropLogin(string user, SqlVersion sqlVersion)
 		{
-			if (sqlVersion.IsAzure && sqlVersion.ProductVersion >= 12)
-			{
-				var sql = string.Format("DROP USER [{0}]", user);
-				_executeSql.ExecuteTransactionlessNonQuery(sql);
-			}
-			else
+			if (!sqlVersion.IsAzure || (sqlVersion.IsAzure && sqlVersion.ProductVersion < 12))
 			{
 				var sql = string.Format("DROP LOGIN [{0}]", user);
 				_masterExecuteSql.ExecuteTransactionlessNonQuery(sql);	
@@ -89,21 +85,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					_masterExecuteSql.ExecuteNonQuery("PRINT 'Windows Logins cannot be added to Windows Azure for the momement'");
 				else
 				{
-					if (sqlVersion.ProductVersion >= 12)
-					{
-						if (azureLoginExist(user))
-						{
-							_masterExecuteSql.ExecuteTransactionlessNonQuery(string.Format("DROP LOGIN [{0}]", user));
-						}
-						if (azureDatabaseUserExist(user))
-						{
-							_executeSql.ExecuteTransactionlessNonQuery(string.Format("DROP USER [{0}]", user));
-						}
-						var operation = azureContainedDatabaseUserExist(user) ? "ALTER" : "CREATE";
-						sql = string.Format("{0} USER [{1}] WITH PASSWORD=N'{2}'", operation, user, pwd);
-						_executeSql.ExecuteNonQuery(sql);
-					}
-					else
+					if (sqlVersion.ProductVersion < 12)
 					{
 						var operation = azureLoginExist(user) ? "ALTER" : "CREATE";
 						sql = string.Format("{0} LOGIN [{1}] WITH PASSWORD=N'{2}'", operation, user, pwd);

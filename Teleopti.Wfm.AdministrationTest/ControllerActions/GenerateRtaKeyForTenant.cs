@@ -41,6 +41,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			var result = Database.CreateDatabases(new CreateTenantModelForTest
 			{
 				Tenant = "tenant",
+				AppPassword = "Passw0rd"
 			});
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
@@ -58,11 +59,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				Tenant = "tenant1",
 				AppUser = "appuser1",
+				AppPassword = "Passw0rd"
 			});
 			Database.CreateDatabases(new CreateTenantModelForTest
 			{
 				Tenant = "tenant2",
 				AppUser = "appuser2",
+				AppPassword = "Passw0rd",
 				FirstUser = "seconduser"
 			});
 

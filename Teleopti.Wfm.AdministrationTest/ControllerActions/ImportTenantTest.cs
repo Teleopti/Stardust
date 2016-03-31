@@ -84,7 +84,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 			var sqlVersion = new SqlVersion(12, false);
 			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
-			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", sqlVersion,
+			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "password", sqlVersion,
 				"NewFineTenant", 1);
 
 			var builderAnal = TestPollutionCleaner.TestTenantAnalyticsConnection();
@@ -92,7 +92,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			builderAnal.UserID = "dbcreatorperson";
 			builderAnal.Password = "password";
 
-			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, "appuser", sqlVersion, "NewFineTenant", 1);
+			DatabaseHelperWrapper.CreateDatabase(builderAnal.ConnectionString, DatabaseType.TeleoptiAnalytics, "appuser", "password", sqlVersion, "NewFineTenant", 1);
 
 			var tempModel = new CreateTenantModelForTest();
 			var connStringBuilder =

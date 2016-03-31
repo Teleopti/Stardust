@@ -90,7 +90,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if (!result.Exists)
 				return Json(result);
 
-			_databaseHelperWrapper.AddDatabaseUser(appBuilder.ConnectionString, type, model.UserName,
+			_databaseHelperWrapper.AddDatabaseUser(appBuilder.ConnectionString, type, model.UserName, model.Password,
 				_databaseHelperWrapper.Version(appBuilder.ConnectionString));
 			//check so it works now
 			appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.Database, UserID = model.UserName, Password = model.Password };
