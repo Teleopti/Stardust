@@ -1,7 +1,4 @@
-﻿
-
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -40,15 +37,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, IOptimizationPreferences optimizationPreferences, bool firstNudge)
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
-			var projectionPeriod = personAssignment.ProjectionService().CreateProjection().Period().Value;
-			var shiftStartDate = projectionPeriod.StartDateTime.Date;
-			var shiftStart = projectionPeriod.StartDateTime;
-			var adjustedStart = shiftStart.Add(TimeSpan.FromMinutes(15)); //allways adjust 15 minutes regardless of interval length
-			var dateOffset = (int)adjustedStart.Date.Subtract(shiftStartDate).TotalDays;
-			var shiftStartUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedStart, scheduleDay.TimeZone);
-			var earliestStartTime = shiftStartUserLocalDateTime.TimeOfDay.Add(TimeSpan.FromDays(dateOffset));
+			var projectionPeriodUtc = personAssignment.ProjectionService().CreateProjection().Period().Value;
+			var shiftStartUserLocalDateTime = projectionPeriodUtc.StartDateTimeLocal(scheduleDay.TimeZone);
+			var earliestStartDateTime = shiftStartUserLocalDateTime.AddMinutes(15); //allways adjust 15 minutes regardless of interval length
 			var shiftDate = personAssignment.Date;
+			if (shiftDate.Date != earliestStartDateTime.Date)
+				return false;
 
+			var earliestStartTime = earliestStartDateTime.TimeOfDay;
 			if (optimizationPreferences != null)
 			{
 				_mainShiftOptimizeActivitySpecificationSetter.SetMainShiftOptimizeActivitySpecification(schedulingOptions, optimizationPreferences, scheduleDay.GetEditorShift(), shiftDate);
@@ -61,16 +57,13 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			{
 				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo);
 			}
-
-			
+		
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person, teamBlockInfo,
 				schedulingOptions);
-
 			if (effectiveRestriction.StartTimeLimitation.EndTime.HasValue && effectiveRestriction.StartTimeLimitation.EndTime.Value < earliestStartTime)
 				return false;
 
 			var matrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(shiftDate);
-
 			foreach (var scheduleMatrixPro in matrixes)
 			{
 				var isLocked = scheduleMatrixPro.UnlockedDays.All(scheduleDayPro => !scheduleDayPro.Day.Equals(shiftDate));

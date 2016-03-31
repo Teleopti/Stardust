@@ -74,5 +74,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	    {
 		    return TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
 	    }
-    }
+
+	    public static TimeZoneInfo RussiaTz7ZoneInfo()
+	    {
+			return TimeZoneInfo.FindSystemTimeZoneById("North Asia East Standard Time");
+		}
+
+	}
 }
