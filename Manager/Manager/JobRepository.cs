@@ -904,15 +904,15 @@ namespace Stardust.Manager
 		private static SqlCommand CreateSelectAllJobHistoryCommand()
 		{
 			var commandText = @"SELECT 
-                                             JobId    
-                                            ,Name
-                                            ,CreatedBy
-                                            ,Created
-                                            ,Started
-                                            ,Ended
-                                            ,SentTo
-											,Result
-                                        FROM [Stardust].JobHistory";
+                                 JobId    
+                                ,Name
+                                ,CreatedBy
+                                ,Created
+                                ,Started
+                                ,Ended
+                                ,SentTo
+								,Result
+                            FROM [Stardust].JobHistory";
 
 			return new SqlCommand(commandText);
 		}

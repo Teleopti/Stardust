@@ -194,7 +194,7 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			Task.WaitAll(tasks.ToArray());
 		}
 
-		[Test]
+		[Test,Ignore]
 		public void ShouldBeAbleToShutDownManager()
 		{
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
@@ -207,7 +207,7 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			Assert.IsNotNull(nodeName, "Should shut down manager.");
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldBeAbleToShutDownNode()
 		{
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
