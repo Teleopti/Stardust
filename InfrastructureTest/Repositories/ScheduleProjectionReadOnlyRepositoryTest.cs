@@ -149,6 +149,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldNotCrashWithInvalidTimeStamp()
+		{
+			target.ClearDayForPerson(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), new DateTime())
+				.Should().Be.EqualTo(1);
+
+			var period =
+				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+			var layer = new ProjectionChangedEventLayer
+			{
+				ContractTime = TimeSpan.FromHours(8),
+				WorkTime = TimeSpan.FromHours(8),
+				DisplayColor = Color.Bisque.ToArgb(),
+				Name = "holiday",
+				ShortName = "ho",
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+				PayloadId = absence.Id.GetValueOrDefault()
+			};
+			target.AddProjectedLayer(DateOnly.Today, scenarioId, person.Id.GetValueOrDefault(), layer, new DateTime());
+		}
+
+		[Test]
 		public void ShouldNotClearAnyRecordWithOutOfDateTimeStamp()
 		{
 			var period =
