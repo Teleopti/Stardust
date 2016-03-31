@@ -142,6 +142,8 @@
 
 		innerScope.timeRange.startTime = new Date('2015-01-01 08:00:00');
 		innerScope.timeRange.endTime = new Date('2015-01-01 02:00:00');
+		scope.$apply();
+
 
 		var applyButton;
 		angular.forEach(element.find('button'), function (e) {
@@ -196,6 +198,7 @@
 		innerScope.timeRange.startTime = new Date('2015-01-01 02:00:00');
 		innerScope.timeRange.endTime = new Date('2015-01-01 08:00:00');
 		innerScope.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+		scope.$apply();
 
 		var applyButton;
 		angular.forEach(element.find('button'), function (e) {
@@ -204,6 +207,8 @@
 		});
 		
 		applyButton.triggerHandler('click');
+
+		scope.$apply();
 
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 	
@@ -214,6 +219,7 @@
 		expect(activityData.EndTime).toEqual('2015-01-01 08:00');
 		expect(activityData.BelongsToDate).toEqual(scope.getSelectedDate());
 		expect(activityData.TrackedCommandInfo.TrackId).toEqual("B4A88909-A1A0-4672-A7A3-14909B2C7673");
+
 	});
 
 	it('should invoke afterAddActivity function after adding activity', function () {
@@ -265,6 +271,7 @@
 		innerScope.timeRange.startTime = new Date('2015-01-01 02:00:00');
 		innerScope.timeRange.endTime = new Date('2015-01-01 08:00:00');
 		innerScope.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+		scope.$apply();
 
 		var applyButton;
 		angular.forEach(element.find('button'), function (e) {
@@ -274,6 +281,9 @@
 
 		applyButton.triggerHandler('click');
 
+		scope.$apply();
+
 		expect(callbackCalled).toBeTruthy();
+
 	});
 });
