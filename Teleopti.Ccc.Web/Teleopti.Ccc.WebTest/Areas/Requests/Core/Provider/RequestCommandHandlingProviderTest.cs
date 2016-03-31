@@ -140,14 +140,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			affectedIds.ToList().Count.Should().Be.EqualTo(2);
 		}
+		
+		[Test]
+		public void WhenWaitlistingDisabledDenyShouldNotWaitlistPendingRequest()
+		{
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var person = PersonFactory.CreatePerson("tester");
 
+			person.WorkflowControlSet = createWorkFlowControlSet
+				(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, false);
+			var pendingAbsenceRequest = createPendingAbsenceRequest(person, absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			Target.DenyRequests(new List<Guid> { pendingAbsenceRequest.Id.Value });
+			pendingAbsenceRequest.IsWaitlisted.Should().Be.False();
+			pendingAbsenceRequest.IsDenied.Should().Be.True();
+		}
+
+		[Test]
+		public void WhenWaitlistingEnabledDenyShouldWaitlistPendingRequest()
+		{
+			var absence = AbsenceFactory.CreateAbsence("absence");
+			var person = PersonFactory.CreatePerson("tester");
+
+			person.WorkflowControlSet = createWorkFlowControlSet
+				(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
+			var pendingAbsenceRequest = createPendingAbsenceRequest(person, absence,
+				new DateTimePeriod(
+					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
+					new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc)));
+
+			Target.DenyRequests(new List<Guid> { pendingAbsenceRequest.Id.Value });
+			pendingAbsenceRequest.IsWaitlisted.Should().Be.True();
+		}
+		
 		[Test]
 		public void ShouldManuallyDenyWaitlistRequest()
 		{
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
-			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence);
+			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
 			var waitlistedPersonRequest = createWaitlistedAbsenceRequest(person, absence,
 				new DateTimePeriod(
 					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
@@ -166,7 +201,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence);
+			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
 			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, Scenario.Current(), person);
 			
 			var dateTimePeriod = new DateTimePeriod(
@@ -200,7 +235,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			if (isAutoDenied)
 			{
-
 				personRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 			}
 
@@ -209,9 +243,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			return personRequest;
 		}
 
-		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence)
+		private IPersonRequest createPendingAbsenceRequest (IPerson person, IAbsence absence,DateTimePeriod requestDateTimePeriod)
 		{
-			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = true };
+			var personRequest = createAbsenceRequest (person, absence, requestDateTimePeriod, false);
+			personRequest.Pending();
+			return personRequest;
+		}
+		
+		private static WorkflowControlSet createWorkFlowControlSet
+			(DateTime startDate, DateTime endDate, IAbsence absence, bool absenceWaitlistingEnabled)
+		{
+			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = absenceWaitlistingEnabled };
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
