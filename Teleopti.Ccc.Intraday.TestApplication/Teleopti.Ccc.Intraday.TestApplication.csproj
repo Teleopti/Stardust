@@ -44,13 +44,20 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="ForecastData.cs" />
+    <Compile Include="ForecastProviderFake.cs" />
+    <Compile Include="Infrastructure\CloudSafeSqlExecute.cs" />
+    <Compile Include="Infrastructure\DatabaseCommand.cs" />
     <Compile Include="ForecastInterval.cs" />
     <Compile Include="IForecastProvider.cs" />
-    <Compile Include="IQueueInfoProvider.cs" />
+    <Compile Include="IQueueDataPersister.cs" />
+    <Compile Include="IWorkloadQueuesProvider.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="QueueData.cs" />
+    <Compile Include="QueueDataPersisterFake.cs" />
     <Compile Include="QueueInfo.cs" />
-    <Compile Include="QueueInfoProviderFake.cs" />
+    <Compile Include="WorkloadInfo.cs" />
+    <Compile Include="WorkloadQueuesProviderFake.cs" />
+    <Compile Include="Infrastructure\SqlTransientErrorChecker.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

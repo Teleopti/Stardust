@@ -4,5 +4,6 @@
 	{
 		public int QueueId { get; set; }
 		public bool HasDataToday { get; set; }
+		public int DatasourceId { get; set; }
 	}
 }

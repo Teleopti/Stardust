@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 {
 	public interface IForecastProvider
 	{
-		IDictionary<int, ForecastData> Provide();
+		IList<ForecastInterval> Provide(int workloadId);
 	}
 }

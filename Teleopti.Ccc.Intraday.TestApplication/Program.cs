@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Teleopti.Ccc.Intraday.TestApplication
 {
@@ -10,46 +9,53 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 		static void Main(string[] args)
 		{
 			IForecastProvider forecastProvider = new ForecastProviderFake();
-			IQueueInfoProvider queueInfoProvider = new QueueInfoProviderFake();
+			IWorkloadQueuesProvider workloadQueuesProvider = new WorkloadQueuesProviderFake();
 			IDictionary<int, IList<QueueData>> queueDataDictionary = new Dictionary<int, IList<QueueData>>();
 			IQueueDataPersister queueDataPersister = new QueueDataPersisterFake();
 
-			var forecastData = forecastProvider.Provide();
 			
-			var queues = queueInfoProvider.Provide();
+			var workloads = workloadQueuesProvider.Provide();
 
-			foreach (var dataDictionary in forecastData)
+			foreach (var workloadInfo in workloads)
 			{
-				var workloadData = dataDictionary.Value;
-				foreach (int queue in workloadData.Queues)
+				var targetQueue = getTargetQueue(workloadInfo.Queues);
+
+				if (!targetQueue.HasValue)
+					continue;
+
+				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId);
+				var queueDataList = new List<QueueData>();
+
+				foreach (var interval in forecastIntervals)
 				{
-					if (queues.Any(x => x.QueueId == queue && x.HasDataToday)) continue;
-					var queueDataList = new List<QueueData>();
-
-					var algorithmProperties = getAlgorithmProperties(workloadData.ForecastIntervals);
-
-					foreach (var intervalData in workloadData.ForecastIntervals)
+					var algorithmProperties = getAlgorithmProperties(forecastIntervals);
+					
+					var index = forecastIntervals.IndexOf(interval);
+					var queueData = new QueueData()
 					{
-						var index = workloadData.ForecastIntervals.IndexOf(intervalData);
-						var queueData = new QueueData()
-						{
-							DateId = intervalData.DateId,
-							IntervalId = intervalData.IntervalId,
-							QueueId = queue,
-							OfferedCalls = Math.Round(intervalData.Calls + algorithmProperties.CallsConstant * index * (1 - ((double)index / algorithmProperties.IntervalCount)),1),
-							HandleTime = Math.Round(intervalData.HandleTime + algorithmProperties.HandleTimeConstant * index)
-						};
-						queueDataList.Add(queueData);
-
-					}
-					queueDataDictionary.Add(queue, queueDataList);
-					break;
+						DateId = interval.DateId,
+						IntervalId = interval.IntervalId,
+						QueueId = targetQueue.Value,
+						OfferedCalls = Math.Round(interval.Calls + algorithmProperties.CallsConstant * index * (1 - ((double)index / algorithmProperties.IntervalCount)), 1),
+						HandleTime = Math.Round(interval.HandleTime + algorithmProperties.HandleTimeConstant * index)
+					};
+					queueDataList.Add(queueData);
 				}
+				queueDataDictionary.Add(targetQueue.Value, queueDataList);
 			}
 
 			queueDataPersister.Persist(queueDataDictionary);
 
 			Console.ReadKey();
+		}
+
+		private static int? getTargetQueue(IEnumerable<QueueInfo> queues)
+		{
+			foreach (var queue in queues.Where(queue => !queue.HasDataToday))
+			{
+				return queue.QueueId;
+			}
+			return null;
 		}
 
 		private static AlgorithmProperties getAlgorithmProperties(IList<ForecastInterval> forecastIntervals)
@@ -72,118 +78,5 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 		public int IntervalCount { get; set; }
 		public double CallsConstant { get; set; }
 		public double HandleTimeConstant { get; set; }
-	}
-
-	internal interface IQueueDataPersister
-	{
-		void Persist(IDictionary<int, IList<QueueData>> queueData);
-	}
-
-	public class QueueDataPersisterFake : IQueueDataPersister
-	{
-		public void Persist(IDictionary<int, IList<QueueData>> queueData)
-		{
-			foreach (var data in queueData)
-			{
-				var queueTextCalls = new StringBuilder();
-				var queueTextHandleTime = new StringBuilder();
-				foreach (var queueStats in data.Value)
-				{
-					queueTextCalls.AppendLine(queueStats.OfferedCalls + ", ");
-					queueTextHandleTime.AppendLine(queueStats.HandleTime + ", ");
-				}
-				Console.WriteLine("Queue: " + data.Key);
-				Console.WriteLine(queueTextCalls);
-				Console.WriteLine(queueTextHandleTime);
-			}
-		}
-	}
-
-	public class QueueData
-	{
-		public int QueueId { get; set; }
-		public int DateId { get; set; }
-		public int IntervalId { get; set; }
-		public double OfferedCalls { get; set; }
-		public double HandleTime { get; set; }
-	}
-
-	public class ForecastProviderFake : IForecastProvider
-	{
-		public IDictionary<int, ForecastData> Provide()
-		{
-			var dic = new Dictionary<int, ForecastData>();
-			var forecastData = new ForecastData
-			{
-				ForecastIntervals = getForecastIntervals(),
-				Queues = new[] { 1, 2, 3 }
-			};
-			dic.Add(1, forecastData);
-			return dic;
-		}
-
-		private IList<ForecastInterval> getForecastIntervals()
-		{
-			return new ForecastInterval[]
-			{
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 32,
-					Calls = 8.2,
-					HandleTime = 1200
-				},
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 33,
-					Calls = 10,
-					HandleTime = 900
-				},
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 34,
-					Calls = 11.8,
-					HandleTime = 1100
-				},
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 35,
-					Calls = 13,
-					HandleTime = 1000
-				},
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 36,
-					Calls = 15.1,
-					HandleTime = 1100
-				},
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 37,
-					Calls = 17.2,
-					HandleTime = 1200
-					},
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 38,
-					Calls = 19.3,
-					HandleTime = 1200
-					},
-				new ForecastInterval
-				{
-					DateId = 1,
-					IntervalId = 39,
-					Calls = 20.6,
-					HandleTime = 1100
-				},
-
-			};
-		}
 	}
 }

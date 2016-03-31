@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Intraday.TestApplication
 {
-	public interface IQueueInfoProvider
+	public interface IWorkloadQueuesProvider
 	{
-		IList<QueueInfo> Provide();
+		IList<WorkloadInfo> Provide();
 	}
 }
