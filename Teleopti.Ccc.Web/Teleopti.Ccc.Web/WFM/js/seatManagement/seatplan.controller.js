@@ -14,11 +14,11 @@
 		vm.isLoadingPlanningPeriods = true;
 		vm.planningPeriods = [];
 
-	    vm.isLoadingStuff = function() {
-	        return vm.isLoadingCalendar || vm.isLoadingPlanningPeriods;
-	    };
+		vm.isLoadingStuff = function() {
+			return vm.isLoadingCalendar || vm.isLoadingPlanningPeriods;
+		};
 
-		vm.setupSeatPlanStatusStrings = function () {
+		vm.setupSeatPlanStatusStrings = function() {
 			vm.seatPlanStatus = {};
 			vm.seatPlanStatus[0] = 'SeatPlanStatusOK';
 			vm.seatPlanStatus[1] = 'SeatPlanStatusInProgress';
@@ -26,7 +26,7 @@
 			vm.seatPlanStatus[3] = 'SeatPlanStatusNoSeatPlanned';
 		};
 
-		vm.setupToggles = function () {
+		vm.setupToggles = function() {
 			vm.showOccupancyView = toggleService.Wfm_SeatPlan_SeatMapBookingView_32814;
 		};
 
@@ -35,18 +35,18 @@
 			return dateMoment.locale('en').format("YYYY-MM-DD");
 		};
 
-		vm.getPreviousMonthStart = function (dateMoment) {
+		vm.getPreviousMonthStart = function(dateMoment) {
 			return getServiceSafeDate(moment(dateMoment).subtract(1, 'months').startOf('month'));
 		};
 
-		vm.getNextMonthEnd = function (dateMoment) {
+		vm.getNextMonthEnd = function(dateMoment) {
 
 			return getServiceSafeDate(moment(dateMoment).add(1, 'months').endOf('month'));
 		};
 
 		vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
 
-		vm.loadMonthDetails = function (date) {
+		vm.loadMonthDetails = function(date) {
 			var dateMoment = moment(date);
 			vm.isLoadingPlanningPeriods = true;
 
@@ -56,7 +56,7 @@
 			vm.loadPlanningPeriods(dateMoment);
 		};
 
-		vm.loadCalendarDetails = function (dateMoment) {
+		vm.loadCalendarDetails = function(dateMoment) {
 
 			vm.isLoadingCalendar = true;
 			vm.seatPlanDateStatuses = [];
@@ -68,14 +68,14 @@
 
 			seatPlanService.seatPlans
 				.query(seatPlansParams)
-				.$promise.then(function (data) {
+				.$promise.then(function(data) {
 					vm.seatPlanDateStatuses = data;
 					vm.selectedDate = dateMoment.toDate();
 					vm.isLoadingCalendar = false;
 				});
 		};
 
-		vm.loadPlanningPeriods = function (dateMoment) {
+		vm.loadPlanningPeriods = function(dateMoment) {
 			vm.isLoadingPlanningPeriods = true;
 
 			var planningPeriodParams = {
@@ -84,24 +84,24 @@
 			};
 
 			resourcePlannerService.getPlanningPeriodsForRange
-			   .query(planningPeriodParams)
-			   .$promise.then(function (data) {
-			       vm.planningPeriods = data;
-			       vm.isLoadingPlanningPeriods = false;
+				.query(planningPeriodParams)
+				.$promise.then(function(data) {
+					vm.planningPeriods = data;
+					vm.isLoadingPlanningPeriods = false;
 				});
 		};
 
-		vm.getDateString = function (date) {
+		vm.getDateString = function(date) {
 			return moment(date).format('LL');
 		};
 
-		vm.onChangeOfDate = function () {
+		vm.onChangeOfDate = function() {
 			if (vm.currentMonth != moment(vm.selectedDate).month()) {
 				vm.loadMonthDetails(moment(vm.selectedDate));
 			}
 		};
 
-		vm.onChangeOfMonth = function (date) {
+		vm.onChangeOfMonth = function(date) {
 			if (vm.isLoadingCalendar) {
 				return;
 			}
@@ -110,15 +110,15 @@
 
 		};
 
-		vm.onSeatPlanStart = function () {
+		vm.onSeatPlanStart = function() {
 			vm.isLoadingPlanningPeriods = true;
 		};
 
-		vm.onSeatPlanComplete = function () {
+		vm.onSeatPlanComplete = function() {
 			vm.loadMonthDetails(moment(vm.selectedDate));
 		};
 
-		vm.showReport = function (period, teams, locations) {
+		vm.showReport = function(period, teams, locations) {
 
 			vm.isReportOpened = !vm.isReportOpened;
 			vm.reportPeriod = period;
@@ -127,7 +127,7 @@
 			vm.reportSelectedLocations = locations;
 		};
 
-		vm.showSeatmap = function () {
+		vm.showSeatmap = function() {
 			vm.isSeatMapBookingViewOpened = !vm.isSeatMapBookingViewOpened;
 			if (!vm.isSeatMapBookingViewOpened) {
 				vm.loadMonthDetails(moment(vm.selectedDate));
@@ -135,11 +135,11 @@
 		};
 
 
-		vm.getSelectedMonthName = function () {
+		vm.getSelectedMonthName = function() {
 			return moment(vm.selectedDate).format("MMMM");
 		};
 
-		vm.getToDayInfo = function () {
+		vm.getToDayInfo = function() {
 
 			if (vm.isLoadingCalendar) {
 				return 'LoadingSeatPlanStatus';
@@ -147,7 +147,7 @@
 
 			var dayInfoString = vm.seatPlanStatus[3];
 
-			vm.seatPlanDateStatuses.forEach(function (dateEvent) {
+			vm.seatPlanDateStatuses.forEach(function(dateEvent) {
 
 				if (moment(vm.selectedDate).isSame(dateEvent.Date, 'day')) {
 					dayInfoString = vm.seatPlanStatus[dateEvent.Status];
@@ -157,13 +157,13 @@
 			return dayInfoString;
 		};
 
-		vm.getDayClass = function (date, mode) {
+		vm.getDayClass = function(date, mode) {
 			if (mode === 'day') {
 
 				var dayClass = '';
 				var dayToCheck = moment(date);
 
-				vm.seatPlanDateStatuses.forEach(function (status) {
+				vm.seatPlanDateStatuses.forEach(function(status) {
 
 					if (dayToCheck.isSame(moment(status.Date), 'day')) {
 						dayClass = vm.seatPlanStatusClass[status.Status];
@@ -173,31 +173,38 @@
 			return dayClass;
 		};
 
-		vm.printReport = function (event) {
+		vm.printReport = function(event) {
 			var seatBookingReportParams = {
 				startDate: moment(vm.reportPeriod.startDate).format('YYYY-MM-DD'),
 				endDate: moment(vm.reportPeriod.endDate).format('YYYY-MM-DD'),
 				teams: vm.reportSelectedTeams,
 				locations: vm.reportSelectedLocations
 			};
-			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function (data) {
+			seatPlanService.seatBookingReport.get(seatBookingReportParams).$promise.then(function(data) {
 				vm.seatBookingsAll = data.SeatBookingsByDate;
-				angular.element(document).ready(function () {
-					
-					if (event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList[0] == undefined) {
-						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.add('container-to-print-report');
-						window.print();
-						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove('container-to-print-report');
+				angular.element(document).ready(function() {
+					//TODO: what the?!!
+					var targetElement = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+
+					if (targetElement.classList[0] == undefined) {
+						vm.printWindow(targetElement.parentElement);
 					} else {
-						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.add('container-to-print-report');
-						window.print();
-						event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.classList.remove('container-to-print-report');
+						vm.printWindow(targetElement);
 					}
 				});
 			});
 		};
 
-		vm.init = function () {
+		vm.printWindow = function(targetElement) {
+			
+			targetElement.classList.add('container-to-print-report');
+			window.print();
+			targetElement.classList.remove('container-to-print-report');
+
+		}
+	
+
+	vm.init = function () {
 			vm.setupSeatPlanStatusStrings();
 			vm.setupToggles();
 		};
