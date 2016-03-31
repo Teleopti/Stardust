@@ -199,6 +199,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.Library", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Rta.PerformanceTest", "Teleopti.Ccc.Rta.PerformanceTest\Teleopti.Ccc.Rta.PerformanceTest.csproj", "{A2409430-431B-4BAF-8DB2-9F922B75363A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Intraday.TestApplication", "Teleopti.Ccc.Intraday.TestApplication\Teleopti.Ccc.Intraday.TestApplication.csproj", "{3C8788D7-52FF-44FC-A2A2-4568CD75E461}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1113,13 +1115,25 @@ Global
 		{A2409430-431B-4BAF-8DB2-9F922B75363A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A2409430-431B-4BAF-8DB2-9F922B75363A}.Release|x86.ActiveCfg = Release|Any CPU
 		{A2409430-431B-4BAF-8DB2-9F922B75363A}.Release|x86.Build.0 = Release|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Release|.NET.ActiveCfg = Release|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3C8788D7-52FF-44FC-A2A2-4568CD75E461}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1
