@@ -101,7 +101,7 @@
   visibility: hidden;
   background:rgba(0,0,0,0.6);
   display: inline-block;
-  color:$white;
+  background-color: $white;
 	top: -1px;
 	width: 195px;
 	right: 0px;
@@ -116,7 +116,7 @@
 
 .resourceplanner-box:hover > .floater-box{
   visibility: visible;
-  color: $white;
+  color: $text-color-standard;
   opacity: 1;
 }
 

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		[Then(@"I should go back to seat plan")]
 		public void ThenIShouldGoBackToSeatPlan()
 		{
-			Browser.Interactions.AssertExists("#seatplan .planning-period-title");
+			Browser.Interactions.AssertExists(".planning-period-title");
 		}
 
 		[Then(@"the date of datepicker should be correct")]
