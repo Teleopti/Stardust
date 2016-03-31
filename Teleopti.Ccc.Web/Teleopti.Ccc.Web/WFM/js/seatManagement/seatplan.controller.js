@@ -119,8 +119,10 @@
 		};
 
 		vm.showReport = function (period, teams, locations) {
+
 			vm.isReportOpened = !vm.isReportOpened;
 			vm.reportPeriod = period;
+
 			vm.reportSelectedTeams = teams;
 			vm.reportSelectedLocations = locations;
 		};

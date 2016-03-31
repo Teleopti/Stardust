@@ -7,16 +7,15 @@
 
 	function seatPlanReportCtrl($scope, seatPlanService) {
 		var vm = this;
-
 		vm.temp = {};
 		
-		vm.paginationOptions = { pageNumber: 1, pageSize: 34, totalPages: 1 };
+	vm.paginationOptions = { pageNumber: 1, pageSize: 34, totalPages: 1 };
 
 		vm.getSeatBookings = function (options) {
 			vm.isLoadingReport = options.isLoadingReportToDisplay;
 			var seatBookingReportParams = {
-				startDate: moment(vm.selectedPeriod.StartDate).format('YYYY-MM-DD'),
-				endDate: moment(vm.selectedPeriod.EndDate).format('YYYY-MM-DD'),
+				startDate: moment(vm.selectedPeriod.startDate).format('YYYY-MM-DD'),
+				endDate: moment(vm.selectedPeriod.endDate).format('YYYY-MM-DD'),
 				teams: vm.selectedTeams,
 				locations: vm.selectedLocations,
 				skip: options.skip,
@@ -29,7 +28,7 @@
 		};
 
 		vm.dateFilterIsValid = function () {
-			return (vm.selectedPeriod && vm.selectedPeriod.StartDate <= vm.selectedPeriod.EndDate);
+			return (vm.selectedPeriod && vm.selectedPeriod.startDate <= vm.selectedPeriod.endDate);
 		};
 
 		vm.toggleFilterVisibility = function () {
@@ -75,7 +74,6 @@
 		};
 
 		vm.init = function () {
-			initialiseWatchForDatePickerChanges();
 			vm.getPageData();
 		};
 
@@ -95,17 +93,6 @@
 			vm.seatBookings = data.SeatBookingsByDate;
 			vm.isLoadingReport = false;
 			vm.paginationOptions.totalPages = Math.ceil(data.TotalRecordCount / vm.paginationOptions.pageSize);
-		};
-
-		function keepDatePickersInSync(value) {
-			vm.selectedPeriod.StartDate = angular.copy(value.startDate);
-			vm.selectedPeriod.EndDate = angular.copy(value.endDate);
-		};
-
-		function initialiseWatchForDatePickerChanges() {
-			$scope.$watch(function () {
-				return { startDate: vm.selectedPeriod.StartDate, endDate: vm.selectedPeriod.EndDate };
-			}, keepDatePickersInSync, true);
 		};
 
 	};
