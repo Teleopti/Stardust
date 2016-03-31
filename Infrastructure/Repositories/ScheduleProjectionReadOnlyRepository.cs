@@ -41,6 +41,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
         {
+	        if (scheduleLoadedTimeStamp.Equals(DateTime.MinValue))
+		        scheduleLoadedTimeStamp = DateTime.UtcNow;
 			var count = _currentUnitOfWork.Session().CreateSQLQuery(
 				"exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @ScheduleLoadedTime=:scheduleLoadedTime")
                                         .SetGuid("person", personId)
@@ -55,6 +57,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public int AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId,
 									  ProjectionChangedEventLayer layer, DateTime scheduleLoadedTimeStamp)
         {
+			if (scheduleLoadedTimeStamp.Equals(DateTime.MinValue))
+				scheduleLoadedTimeStamp = DateTime.UtcNow;
 			return _currentUnitOfWork.Session().CreateSQLQuery(
 				"exec ReadModel.UpdateScheduleProjectionReadOnly @PersonId=:PersonId, @ScenarioId=:ScenarioId, @BelongsToDate=:Date, @PayloadId=:PayloadId, @StartDateTime=:StartDateTime, @EndDateTime=:EndDateTime, @WorkTime=:WorkTime, @ContractTime=:ContractTime, @Name=:Name, @ShortName=:ShortName, @DisplayColor=:DisplayColor, @PayrollCode=:PayrollCode, @InsertedOn=:InsertedOn, @ScheduleLoadedTime=:ScheduleLoadedTime")
                                         .SetGuid("ScenarioId", scenarioId)
