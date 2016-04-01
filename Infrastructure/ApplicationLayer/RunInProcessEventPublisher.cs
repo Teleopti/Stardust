@@ -19,10 +19,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
-			Task.WaitAll((from @event in events
-				let handlerType = typeof (IHandleEvent<>).MakeGenericType(@event.GetType())
-				let registrationTypes = _resolve.ConcreteTypesFor(handlerType).Where(x => x.GetInterfaces().Contains(typeof (IRunInProcess)))
-				from registrationType in registrationTypes
+			Task.WaitAll((
+				from @event in events
+				from registrationType in _resolver.HandlerTypesFor<IRunInProcess>(@event)
 				select Task.Factory.StartNew(() =>
 				{
 					using (var scope = _resolve.NewScope())

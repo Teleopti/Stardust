@@ -1,45 +1,30 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class ResolveEventHandlers
 	{
-		private readonly IResolve _resolver;
+		private readonly IResolve _resolve;
 
-		public ResolveEventHandlers(IResolve resolver)
+		public ResolveEventHandlers(IResolve resolve)
 		{
-			_resolver = resolver;
+			_resolve = resolve;
 		}
 
-		private IEnumerable<object> resolveHandlersForEvent(IEvent @event)
+		public IEnumerable<Type> HandlerTypesFor<T>(IEvent @event)
 		{
-			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
-			var enumerableHandlerType = typeof(IEnumerable<>).MakeGenericType(handlerType);
-			return (_resolver.Resolve(enumerableHandlerType) as IEnumerable).Cast<object>();
+			var handlerType = typeof (IHandleEvent<>).MakeGenericType(@event.GetType());
+			return _resolve.ConcreteTypesFor(handlerType)
+				.Where(x => x.GetInterfaces().Contains(typeof (T)));
 		}
 
-		public IEnumerable<object> ResolveHangfireHandlersForEvent(IEvent @event)
+		public object HandlerFor(Type handlerType)
 		{
-			return resolveHandlersForEvent(@event)
-				.OfType<IRunOnHangfire>();
-		}
-
-		public IEnumerable<object> ResolveServiceBusHandlersForEvent(IEvent @event)
-		{
-			return resolveHandlersForEvent(@event)
-				.OfType<IRunOnServiceBus>();
-		}
-
-		public IEnumerable<object> ResolveStardustHandlersForEvent(IEvent @event)
-		{
-			return resolveHandlersForEvent(@event)
-				.OfType<IRunOnStardust>();
+			return _resolve.Resolve(handlerType);
 		}
 
 		public MethodInfo HandleMethodFor(Type handler, IEvent @event)

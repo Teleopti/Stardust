@@ -21,16 +21,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		}
 
 		[TenantScope]
-		public virtual void Process(string tenant, IEvent @event, object handler)
+		public virtual void Process(string tenant, IEvent @event, Type handlerType)
 		{
-			Process(@event, handler);
+			Process(@event, handlerType);
 		}
 
-		public virtual void Process(IEvent @event, object handler)
+		public virtual void Process(IEvent @event, Type handlerType)
 		{
 			var commandIdentifier = @event as ICommandIdentifier;
 			try
 			{
+				var handler = _resolver.HandlerFor(handlerType);
 				new SyncPublishTo(_resolver, handler).Publish(@event);
 			}
 			catch (Exception)

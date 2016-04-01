@@ -2,6 +2,7 @@
 using System.Reflection;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -19,12 +20,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			foreach (var @event in events)
 			{
-				var handlers = _resolver.ResolveServiceBusHandlersForEvent(@event)
-					.Concat(_resolver.ResolveHangfireHandlersForEvent(@event));
+				var handlerTypes = _resolver.HandlerTypesFor<IRunOnServiceBus>(@event)
+					.Concat(_resolver.HandlerTypesFor<IRunOnHangfire>(@event));
 
-				foreach (var handler in handlers)
+				foreach (var handlerType in handlerTypes)
 				{
-					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
+					var handler = _resolver.HandlerFor(handlerType);
+					var method = _resolver.HandleMethodFor(handlerType, @event);
 					try
 					{
 						method.Invoke(handler, new[] { @event });

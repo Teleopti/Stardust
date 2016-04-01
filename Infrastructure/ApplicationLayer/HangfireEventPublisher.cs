@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.DynamicProxy;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
@@ -96,11 +96,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var eventType = @event.GetType();
 			var serialized = _serializer.SerializeEvent(@event);
 			var eventTypeName = eventType.FullName + ", " + eventType.Assembly.GetName().Name;
-			var handlers = _resolver.ResolveHangfireHandlersForEvent(@event);
+			var handlerTypes = _resolver.HandlerTypesFor<IRunOnHangfire>(@event);
 
-			foreach (var handler in handlers)
+			foreach (var handlerType in handlerTypes)
 			{
-				var handlerType = ProxyUtil.GetUnproxiedType(handler);
 				var handlerTypeName = handlerType.FullName + ", " + handlerType.Assembly.GetName().Name;
 				string displayName = null;
 				if (_displayNames)

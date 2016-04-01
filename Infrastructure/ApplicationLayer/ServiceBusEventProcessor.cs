@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -33,14 +34,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			if (initiatorInfo == null)
 				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
-					foreach (var handler in _resolver.ResolveServiceBusHandlersForEvent(@event))
+					foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
 						_processor.Process(@event, handler);
 					unitOfWork.PersistAll();
 				}
 			else
 				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 				{
-					foreach (var handler in _resolver.ResolveServiceBusHandlersForEvent(@event))
+					foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
 						_processor.Process(@event, handler);
 					unitOfWork.PersistAll();
 				}

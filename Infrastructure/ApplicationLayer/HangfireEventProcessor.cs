@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -27,8 +28,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlerT = Type.GetType(handlerType, true);
 			var eventT = Type.GetType(eventType, true);
 			var @event = _deserializer.DeserializeEvent(serializedEvent, eventT) as IEvent;
-			var handlers = _resolver.ResolveHangfireHandlersForEvent(@event);
-			var publishTo = handlers.Single(o => ProxyUtil.GetUnproxiedType(o) == handlerT);
+			var handlers = _resolver.HandlerTypesFor<IRunOnHangfire>(@event);
+
+			var publishTo = handlers.Single(o => o == handlerT);
 
 			_processor.Process(tenant, @event, publishTo);
 		}
