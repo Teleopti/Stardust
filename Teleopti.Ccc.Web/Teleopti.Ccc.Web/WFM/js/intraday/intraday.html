@@ -57,14 +57,14 @@
 				<div class="line-right last-time">
 					<span ng-show="selectedSkill.Name">
 						<span class="cursor-pointer">
-							<i class="mdi mdi-clock"></i> {{latestStatsTime}}
+							{{latestStatsTime}} <i class="mdi mdi-clock"></i>
 							<md-tooltip>Last updated</md-tooltip>
 						</span>
 					</span>
 
 					<span ng-show="selectedSkillArea.Name">
 						<span class="cursor-pointer">
-							<i class="mdi mdi-clock"></i> {{latestStatsTime}}
+							{{latestStatsTime}} <i class="mdi mdi-clock"></i>
 							<md-tooltip>Last updated</md-tooltip>
 						</span>
 					</span>
@@ -108,7 +108,7 @@
 </div>
 
 <div class="con-row">
-	<div tabindex="0" class="con-flex panel material-depth-1 wfm-card filter-boxes" ng-class="{selectedCard: showIncoming}" ng-click="toggleOthers(0, 'incoming')">
+	<div tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{selectedCard: showIncoming}" ng-click="toggleOthers(0, 'incoming')">
 		<div class="sub-header">
 			<h2>Incoming traffic</h2>
 			<!--<div class="head-actions panel-menu">
