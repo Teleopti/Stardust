@@ -215,8 +215,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var personTwo = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
 			var existingDeniedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
-			existingDeniedRequest.Pending(); // auto deny is always from new...lets set this to pending, so is manual deny
-			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			existingDeniedRequest.Pending(); 
+			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());  // waitlist
+			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());	// deny
 
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
 			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
