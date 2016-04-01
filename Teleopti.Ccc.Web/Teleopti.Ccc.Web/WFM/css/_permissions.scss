@@ -53,6 +53,10 @@
 	}
 }
 
+.angular-ui-tree-node > .wfm-list > li{
+	border-left:3px solid transparent;
+}
+
 .permissions md-tab-content > div:first-child {
   height: 100% !important;
   max-height: 100%;
