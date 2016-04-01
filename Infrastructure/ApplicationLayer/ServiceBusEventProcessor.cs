@@ -1,49 +1,10 @@
-using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class CommonEventProcessor
-	{
-		private readonly ResolveEventHandlers _resolver;
-		private readonly ITrackingMessageSender _trackingMessageSender;
-
-		public CommonEventProcessor(
-			ResolveEventHandlers resolver,
-			ITrackingMessageSender trackingMessageSender)
-		{
-			_resolver = resolver;
-			_trackingMessageSender = trackingMessageSender;
-		}
-
-		public void Process(IEvent @event, object handler)
-		{
-			var commandIdentifier = @event as ICommandIdentifier;
-			try
-			{
-				new SyncPublishTo(_resolver, handler).Publish(@event);
-			}
-			catch (Exception)
-			{
-				if (_trackingMessageSender == null) throw;
-				if (commandIdentifier == null) throw;
-				if (commandIdentifier.CommandId != Guid.Empty)
-					_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
-					{
-						Status = TrackingMessageStatus.Failed,
-						TrackId = commandIdentifier.CommandId
-					});
-				throw;
-			}
-		}
-	}
-
 	public class ServiceBusEventProcessor
 	{
 		private readonly CommonEventProcessor _processor;

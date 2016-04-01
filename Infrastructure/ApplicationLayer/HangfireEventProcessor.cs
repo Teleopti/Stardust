@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -11,16 +10,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly IJsonEventDeserializer _deserializer;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IDataSourceScope _dataSourceScope;
+		private readonly CommonEventProcessor _processor;
 
 		public HangfireEventProcessor(
 			IJsonEventDeserializer deserializer,
 			ResolveEventHandlers resolver,
-			IDataSourceScope dataSourceScope)
+			CommonEventProcessor processor)
 		{
 			_deserializer = deserializer;
 			_resolver = resolver;
-			_dataSourceScope = dataSourceScope;
+			_processor = processor;
 		}
 
 		public void Process(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
@@ -31,8 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlers = _resolver.ResolveHangfireHandlersForEvent(@event);
 			var publishTo = handlers.Single(o => ProxyUtil.GetUnproxiedType(o) == handlerT);
 
-			using (_dataSourceScope.OnThisThreadUse(tenant))
-				new SyncPublishTo(_resolver, publishTo).Publish(@event);
+			_processor.Process(tenant, @event, publishTo);
 		}
 	}
 }
