@@ -181,8 +181,8 @@
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-	.permission-radio-buttons > .wfm-radio label .wfm-radio-label {
-	    width: 90px;
+	.permission-radio-buttons > .wfm-radio {
+	    width: auto!important;
 	    overflow: hidden;
 	    text-overflow: ellipsis;
 	}
