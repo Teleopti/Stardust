@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -39,18 +38,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
 			IOptimizationPreferences optimizationPreferences, bool firstNudge)
 		{
-			//var personAssignment = scheduleDay.PersonAssignment();
-			//var projection = personAssignment.ProjectionService().CreateProjection();
-			//var projectionPeriod = projection.Period().Value;
-			//var shiftStartDate = projectionPeriod.StartDateTime.Date;
-			//var shiftEnd = projectionPeriod.EndDateTime;
-			//var adjustedEnd = shiftEnd.Add(TimeSpan.FromMinutes(-15)); //allways adjust 15 minutes regardless of interval length
-			//var dateOffset = (int) adjustedEnd.Date.Subtract(shiftStartDate).TotalDays;
-			//var timeZone = scheduleDay.TimeZone;
-			//var shiftEndUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedEnd, timeZone);
-			//var latestEndTime = shiftEndUserLocalDateTime.TimeOfDay.Add(TimeSpan.FromDays(dateOffset));
-			//var shiftDate = personAssignment.Date;
-
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projectionPeriodUtc = personAssignment.ProjectionService().CreateProjection().Period().Value;
 			var shiftEndUserLocalDateTime = projectionPeriodUtc.EndDateTimeLocal(scheduleDay.TimeZone);
