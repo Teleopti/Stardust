@@ -57,6 +57,10 @@
     <Compile Include="LongRunningJobParams.cs" />
     <Compile Include="FastJobCode.cs" />
     <Compile Include="FastJobParams.cs" />
+    <Compile Include="TestReportProgressJobWorker.cs" />
+    <Compile Include="TestReportProgressJobProgress.cs" />
+    <Compile Include="TestReportProgressJobParams.cs" />
+    <Compile Include="TestReportProgressJobCode.cs" />
     <Compile Include="TestJobParams.cs" />
     <Compile Include="FastJobProgress.cs" />
     <Compile Include="TestJobProgress.cs" />

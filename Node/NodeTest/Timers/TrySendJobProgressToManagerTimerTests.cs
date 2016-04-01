@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Configuration;
 using System.Reflection;
-using System.Threading;
+using System.Threading.Tasks;
 using NodeTest.Fakes;
 using NUnit.Framework;
-using Stardust.Node.API;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
 
@@ -38,24 +37,6 @@ namespace NodeTest.Timers
 		}
 
 		[Test]
-		public void ShouldNotCrashWhenTimerStarts()
-		{
-			var timer =
-				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
-													 _httpSenderFake,
-													 1000);
-
-			timer.SendProgress(Guid.NewGuid(), "Progress message");
-			timer.SendProgress(Guid.NewGuid(), "Progress message");
-
-			timer.Start();
-
-			Thread.Sleep(TimeSpan.FromSeconds(10));	
-
-			timer.Dispose();
-		}
-
-		[Test]
 		public void ShouldBeAbleToClearAllJobProgresses()
 		{
 			var timer =
@@ -72,10 +53,9 @@ namespace NodeTest.Timers
 			timer.ClearAllJobProgresses();
 
 			Assert.IsTrue(timer.TotalNumberOfJobProgresses() == 0,
-						  "Should have 0 job progresses after clearing.");
+			              "Should have 0 job progresses after clearing.");
 
 			timer.Dispose();
-
 		}
 
 		[Test]
@@ -132,6 +112,47 @@ namespace NodeTest.Timers
 			Assert.IsTrue(timer.TotalNumberOfJobProgresses(newGuid) == 2,
 			              "Two job progresses with same GUID are expected.");
 
+			timer.Dispose();
+		}
+
+		[Test]
+		public void ShouldSendAllProgresses()
+		{
+			const int numberOfProgesses = 500;
+
+			var timer =
+				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+				                                     _httpSenderFake,
+				                                     1000);
+
+
+			var numberOfProgressesReceived = 0;
+			timer.SendJobProgressModelWithSuccessEventHandler += (sender, model) => { numberOfProgressesReceived++; };
+
+			for (var i = 0; i < numberOfProgesses; i++)
+			{
+				timer.SendProgress(Guid.NewGuid(), "Progress message nr : " + i);
+			}
+
+			var task = Task.Factory.StartNew(() =>
+			{
+				timer.Start();
+
+				while (!timer.HasAllProgressesBeenSent())
+				{
+				}
+			});
+
+			task.Wait(TimeSpan.FromMinutes(5));
+
+			Assert.IsTrue(numberOfProgesses == numberOfProgressesReceived,
+			              "Number of progresses sent must be equal to received.");
+
+			Assert.IsTrue(timer.HasAllProgressesBeenSent(),
+			              "All progresses must be sent.");
+
+
+			task.Dispose();
 			timer.Dispose();
 		}
 

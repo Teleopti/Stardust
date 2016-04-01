@@ -14,7 +14,6 @@ namespace Stardust.Node.Entities
 
 		public DateTime? Created { get; set; }
 
-		public HttpResponseMessage ResponseMessage { get; set; }
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{

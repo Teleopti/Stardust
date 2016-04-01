@@ -270,6 +270,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			                                                          timeout);
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+
 			var elapsedTime =
 				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
 
