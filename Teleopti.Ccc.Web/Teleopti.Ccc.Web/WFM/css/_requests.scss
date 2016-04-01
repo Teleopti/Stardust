@@ -106,4 +106,8 @@
 	requests-commands-pane .wfm-btn-primary-disabled {
 		background-color: transparent;
 	}
+
+	.wfm-date-range-picker-wrap .inline-datepicker-wrap .start-date-input+.dropdown-menu {
+		margin-left: -180px;
+	}
 }
