@@ -208,7 +208,7 @@ namespace NodeTest
 							  .Result.StatusCode ==
 						  HttpStatusCode.OK);
 
-			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(3)); // let job finish
+			_sendJobDoneTimer.Wait.Wait(TimeSpan.FromSeconds(15)); // let job finish
 		}
 
 		[Test]
