@@ -18,12 +18,12 @@ describe('seatplan report controller tests', function () {
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 		controller = setUpController(_$controller_);
-		controller.selectedPeriod = { StartDate: '2015-01-01', EndDate: '2015-02-01' };
+		controller.selectedPeriod = { startDate: '2015-01-01', endDate: '2015-02-01' };
 	}));
 
 	it('should filter seat bookings by selected period', inject(function () {
 
-		controller.selectedPeriod = { StartDate: '2015-03-01', EndDate: '2015-04-01' };
+		controller.selectedPeriod = { startDate: '2015-03-01', endDate: '2015-04-01' };
 		controller.applyFilter();
 
 		expect(seatBookingsReportRequestParams.startDate).toEqual('2015-03-01');
