@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			}
 			catch (Exception)
 			{
-				if (_trackingMessageSender == null) throw;
 				if (commandIdentifier == null) throw;
 				if (commandIdentifier.CommandId != Guid.Empty)
 					_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage

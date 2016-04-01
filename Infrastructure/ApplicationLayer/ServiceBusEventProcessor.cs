@@ -31,23 +31,19 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var initiatorInfo = @event as IInitiatorContext;
 
 			if (initiatorInfo == null)
-			{
 				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
 					foreach (var handler in _resolver.ResolveServiceBusHandlersForEvent(@event))
 						_processor.Process(@event, handler);
 					unitOfWork.PersistAll();
 				}
-			}
 			else
-			{
 				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 				{
 					foreach (var handler in _resolver.ResolveServiceBusHandlersForEvent(@event))
 						_processor.Process(@event, handler);
 					unitOfWork.PersistAll();
 				}
-			}
 		}
 
 	}
