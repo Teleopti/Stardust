@@ -65,44 +65,28 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Process(IEvent @event)
 		{
-			var logOnInfo = @event as ILogOnContext;
+			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
+
 			var initiatorInfo = @event as IInitiatorContext;
 
-			if (logOnInfo == null)
+			if (initiatorInfo == null)
 			{
-				process(@event);
+				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					foreach (var handler in _resolver.ResolveServiceBusHandlersForEvent(@event))
+						_processor.Process(@event, handler);
+					unitOfWork.PersistAll();
+				}
 			}
 			else
 			{
-				if (initiatorInfo == null)
+				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 				{
-					using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-					{
-						process(@event);
-						unitOfWork.PersistAll();
-					}
-				}
-				else
-				{
-					using (var unitOfWork =_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
-					{
-						process(@event);
-						unitOfWork.PersistAll();
-					}
+					foreach (var handler in _resolver.ResolveServiceBusHandlersForEvent(@event))
+						_processor.Process(@event, handler);
+					unitOfWork.PersistAll();
 				}
 			}
-
-		}
-
-		private void process(IEvent @event)
-		{
-			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
-
-			var handlers = _resolver.ResolveServiceBusHandlersForEvent(@event);
-
-			foreach (var handler in handlers)
-				_processor.Process(@event, handler);
-
 		}
 
 	}

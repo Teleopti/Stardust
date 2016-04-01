@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -52,6 +53,32 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					.Concat(Resolver.ResolveHangfireHandlersForEvent(x))
 					.FirstOrDefault();
 				instance1.Should().Be.SameInstanceAs(instance2);
+			});
+		}
+
+		[Test]
+		[AllTogglesOn]
+		public void ShouldHaveNoHandlersOnBusWithoutLogOnContextTogglesEnabled()
+		{
+			var eventsWithoutLogOnContext = allEvents()
+				.Where(e => !(e is ILogOnContext));
+			eventsWithoutLogOnContext.ForEach(x =>
+			{
+				Resolver.ResolveServiceBusHandlersForEvent(x)
+					.Should().Be.Empty();
+			});
+		}
+
+		[Test]
+		[AllTogglesOff]
+		public void ShouldHaveNoHandlersOnBusWithoutLogOnContextTogglesDisabled()
+		{
+			var eventsWithoutLogOnContext = allEvents()
+				.Where(e => !(e is ILogOnContext));
+			eventsWithoutLogOnContext.ForEach(x =>
+			{
+				Resolver.ResolveServiceBusHandlersForEvent(x)
+					.Should().Be.Empty();
 			});
 		}
 
