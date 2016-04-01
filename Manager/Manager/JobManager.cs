@@ -83,7 +83,7 @@ namespace Stardust.Manager
 		{
 			var deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
 
-			var jobs = _jobRepository.LoadAll();
+			var jobs = _jobRepository.GetAllJobDefinitions();
 
 			if (deadNodes != null && jobs != null)
 			{
@@ -179,12 +179,12 @@ namespace Stardust.Manager
 
 		public void Add(JobDefinition job)
 		{
-			_jobRepository.Add(job);
+			_jobRepository.AddJobDefinition(job);
 		}
 
 		public void CancelThisJob(Guid id)
 		{
-			_jobRepository.CancelThisJob(id,
+			_jobRepository.CancelJobByJobId(id,
 			                             _httpSender);
 		}
 
@@ -194,7 +194,7 @@ namespace Stardust.Manager
 			_jobRepository.SetEndResultOnJob(jobId,
 			                                 result);
 
-			_jobRepository.DeleteJob(jobId);
+			_jobRepository.DeleteJobByJobId(jobId);
 		}
 
 		public void ReportProgress(JobProgressModel model)
@@ -206,17 +206,17 @@ namespace Stardust.Manager
 
 		public JobHistory GetJobHistory(Guid jobId)
 		{
-			return _jobRepository.History(jobId);
+			return _jobRepository.GetJobHistoryByJobId(jobId);
 		}
 
 		public IList<JobHistory> GetJobHistoryList()
 		{
-			return _jobRepository.HistoryList();
+			return _jobRepository.GetAllJobHistories();
 		}
 
 		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
 		{
-			return _jobRepository.JobHistoryDetails(jobId);
+			return _jobRepository.GetJobHistoryDetailsByJobId(jobId);
 		}
 	}
 }

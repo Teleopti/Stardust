@@ -10,17 +10,17 @@ namespace ManagerTest.Fakes
 	{
 		private readonly List<JobDefinition> _jobs = new List<JobDefinition>();
 
-		public void Add(JobDefinition jobDefinition)
+		public void AddJobDefinition(JobDefinition jobDefinition)
 		{
 			_jobs.Add(jobDefinition);
 		}
 
-		public List<JobDefinition> LoadAll()
+		public List<JobDefinition> GetAllJobDefinitions()
 		{
 			return _jobs;
 		}
 
-		public void DeleteJob(Guid jobId)
+		public void DeleteJobByJobId(Guid jobId)
 		{
 			var j = _jobs.FirstOrDefault(x => x.Id.Equals(jobId));
 			_jobs.Remove(j);
@@ -40,7 +40,7 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public void CancelThisJob(Guid jobId, IHttpSender httpSender)
+		public void CancelJobByJobId(Guid jobId, IHttpSender httpSender)
 		{
 			throw new NotImplementedException();
 		}
@@ -55,17 +55,17 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public JobHistory History(Guid jobId)
+		public JobHistory GetJobHistoryByJobId(Guid jobId)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<JobHistory> HistoryList()
+		public IList<JobHistory> GetAllJobHistories()
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
+		public IList<JobHistoryDetail> GetJobHistoryDetailsByJobId(Guid jobId)
 		{
 			throw new NotImplementedException();
 		}

@@ -57,7 +57,7 @@ namespace ManagerTest
 		{
 			var jobId = Guid.NewGuid();
 
-			JobRepository.Add(new JobDefinition
+			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
@@ -73,12 +73,12 @@ namespace ManagerTest
 			});
 
 			JobManager.CheckAndAssignNextJob();
-			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Started");
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 			JobManager.CancelThisJob(jobId);
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
-			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Canceling");
 		}
 		
@@ -100,7 +100,7 @@ namespace ManagerTest
 		public void ShouldJumpOutIfNoNode()
 		{
 			var id = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition
+			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = id,
 				Name = "For test",
@@ -116,7 +116,7 @@ namespace ManagerTest
 		public void ShouldJustDeleteJobIfNotStarted()
 		{
 			var jobId = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition
+			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
@@ -128,11 +128,11 @@ namespace ManagerTest
 				Type = ""
 			});
 
-			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Should().Not.Be.Null();
 			JobManager.CancelThisJob(jobId);
 			FakeHttpSender.CalledNodes.Should().Be.Empty();
-			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Should().Be.Null();
 		}
 
@@ -140,7 +140,7 @@ namespace ManagerTest
 		public void ShouldRemoveJobOnBadRequest()
 		{
 			var jobId = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition
+			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
@@ -163,17 +163,17 @@ namespace ManagerTest
 			};
 
 			JobManager.CheckAndAssignNextJob();
-			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Should().Be.Null();
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
-			JobRepository.History(jobId).Result.Should().Contain("Removed");
+			JobRepository.GetJobHistoryByJobId(jobId).Result.Should().Contain("Removed");
 		}
 
 		[Test]
 		public void ShouldResetAssignedNodeOnInitIfItIsAssigned()
 		{
 			var jobId = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition
+			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
@@ -183,11 +183,11 @@ namespace ManagerTest
 			});
 			WorkerNodeRepository.Add(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri1});
 			JobManager.CheckAndAssignNextJob();
-			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
 
 			NodeManager.FreeJobIfAssingedToNode(_nodeUri1);
-			job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.AssignedNode.Should().Be.Null();
 		}
 
@@ -196,7 +196,7 @@ namespace ManagerTest
 		{
 			var jobId = Guid.NewGuid();
 			var nodeId = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition
+			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
@@ -212,7 +212,7 @@ namespace ManagerTest
 			JobManager.CheckAndAssignNextJob();
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 
-			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
 		}
 
@@ -230,7 +230,7 @@ namespace ManagerTest
 				Type = ""
 			};
 
-			JobRepository.Add(jobDefinition);
+			JobRepository.AddJobDefinition(jobDefinition);
 
 			WorkerNodeRepository.Add(new WorkerNode
 			{
@@ -239,7 +239,7 @@ namespace ManagerTest
 			});
 
 			JobManager.CheckAndAssignNextJob();
-			var job = JobRepository.LoadAll().FirstOrDefault(j => j.Id.Equals(jobId));
+			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Started");
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 			JobManager.SetEndResultOnJobAndRemoveIt(jobId, "Success");

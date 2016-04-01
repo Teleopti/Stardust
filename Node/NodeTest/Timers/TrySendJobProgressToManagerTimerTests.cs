@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using NodeTest.Fakes;
@@ -116,9 +118,10 @@ namespace NodeTest.Timers
 		}
 
 		[Test]
-		public void ShouldSendAllProgresses()
+		public void ShouldBeAbleToSend200ProgressesWith10ConcurrentProcesses()
 		{
-			const int numberOfProgesses = 500;
+			const int numberOfProgesses = 200;
+			const int numberOfConcurrentProcesses = 10;
 
 			var timer =
 				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
@@ -127,32 +130,56 @@ namespace NodeTest.Timers
 
 
 			var numberOfProgressesReceived = 0;
-			timer.SendJobProgressModelWithSuccessEventHandler += (sender, model) => { numberOfProgressesReceived++; };
 
-			for (var i = 0; i < numberOfProgesses; i++)
+			timer.SendJobProgressModelWithSuccessEventHandler += 
+				(sender, model) => { numberOfProgressesReceived++; };
+
+
+			List<Task<int>> tasks=new List<Task<int>>();
+
+			for (var i = 0; i < numberOfConcurrentProcesses; i++)
 			{
-				timer.SendProgress(Guid.NewGuid(), "Progress message nr : " + i);
+				tasks.Add(new Task<int>(() =>
+				{
+					var newGuid = Guid.NewGuid();
+
+					for (var progressLoop = 0; progressLoop < numberOfProgesses; progressLoop++)
+					{
+						timer.SendProgress(newGuid, "Progress message nr : " + progressLoop);
+					}
+
+					return numberOfProgesses;
+				}));
 			}
 
-			var task = Task.Factory.StartNew(() =>
+			tasks.Add(new Task<int>(() =>
 			{
 				timer.Start();
 
 				while (!timer.HasAllProgressesBeenSent())
 				{
+
 				}
-			});
 
-			task.Wait(TimeSpan.FromMinutes(5));
+				return 0;
+			}));
 
-			Assert.IsTrue(numberOfProgesses == numberOfProgressesReceived,
+
+			foreach (var task in tasks)
+			{
+				task.Start();
+			}
+
+			Task.WaitAll(tasks.ToArray());
+
+			int totalNumberOfProgressesSent = tasks.Sum(task => task.Result);
+
+			Assert.IsTrue(numberOfProgressesReceived == totalNumberOfProgressesSent,
 			              "Number of progresses sent must be equal to received.");
 
 			Assert.IsTrue(timer.HasAllProgressesBeenSent(),
 			              "All progresses must be sent.");
 
-
-			task.Dispose();
 			timer.Dispose();
 		}
 

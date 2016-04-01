@@ -2,16 +2,10 @@
 using System.Configuration;
 using System.IO;
 using System.Reflection;
-using System.Threading;
 using log4net;
 using log4net.Config;
-using NodeTest.Fakes;
 using NUnit.Framework;
-using Stardust.Node.API;
-using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
@@ -62,8 +56,8 @@ namespace NodeTest.Timers
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
 			                                                                         null,
-																					 null,
-																					 null);
+			                                                                         null,
+			                                                                         null);
 		}
 
 		[Test]
@@ -72,18 +66,18 @@ namespace NodeTest.Timers
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(null,
 			                                                                         _fakeUrl,
-																					 null,
-																					 null);
+			                                                                         null,
+			                                                                         null);
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
+		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenSendJobProgressToManagerTimerArgumentIsNull()
 		{
 			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
-																					 _fakeUrl,
-																					 null,
-																					 null);
+			                                                                         _fakeUrl,
+			                                                                         null,
+			                                                                         null);
 		}
 	}
 }

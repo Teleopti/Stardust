@@ -73,7 +73,7 @@ namespace ManagerTest
 				Type = "Fake Type"
 			};
 
-			JobRepository.Add(job);
+			JobRepository.AddJobDefinition(job);
 			NodeRepository.Add(new WorkerNode { Url = _nodeUri1 });
 
 			JobRepository.CheckAndAssignNextJob(HttpSender);
@@ -108,7 +108,7 @@ namespace ManagerTest
 			Target.Heartbeat(_nodeUri2);
 
 			var jobId = Guid.NewGuid();
-			JobRepository.Add(new JobDefinition {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
+			JobRepository.AddJobDefinition(new JobDefinition {Id = jobId, Serialized = "", Name = "", Type = "", UserName = "ManagerTests"});
 			JobRepository.CheckAndAssignNextJob(HttpSender);
 			HttpSender.CalledNodes.Clear();
 			Target.CancelThisJob(jobId);
@@ -173,7 +173,7 @@ namespace ManagerTest
 
 			var response=Target.DoThisJob(job);
 
-			JobRepository.LoadAll()
+			JobRepository.GetAllJobDefinitions()
 				.Count.Should()
 				.Be.EqualTo(1);
 		}
@@ -197,7 +197,7 @@ namespace ManagerTest
 			}
 			else
 			{
-				JobRepository.LoadAll()
+				JobRepository.GetAllJobDefinitions()
 					.Count.Should()
 					.Be.EqualTo(1);
 			}
@@ -234,7 +234,7 @@ namespace ManagerTest
 			}
 			else
 			{
-				JobRepository.LoadAll()
+				JobRepository.GetAllJobDefinitions()
 					.Count.Should()
 					.Be.EqualTo(2);
 
@@ -266,7 +266,7 @@ namespace ManagerTest
 			}
 			else
 			{
-				JobRepository.Add(job);
+				JobRepository.AddJobDefinition(job);
 				NodeRepository.Add(new WorkerNode
 				{
 					Url = _nodeUri1
@@ -274,7 +274,7 @@ namespace ManagerTest
 				JobRepository.CheckAndAssignNextJob(HttpSender);
 				ThisNodeIsBusy(_nodeUri1.ToString());
 				Target.CancelThisJob(jobId);
-				JobRepository.LoadAll()
+				JobRepository.GetAllJobDefinitions()
 					.Count.Should()
 					.Be.EqualTo(1);
 			}
@@ -305,9 +305,9 @@ namespace ManagerTest
 			}
 			else
 			{
-				JobRepository.Add(job);
+				JobRepository.AddJobDefinition(job);
 				Target.CancelThisJob(jobId);
-				JobRepository.LoadAll()
+				JobRepository.GetAllJobDefinitions()
 					.Count.Should()
 					.Be.EqualTo(0);
 			}
@@ -574,7 +574,7 @@ namespace ManagerTest
 				Type = "",
 				UserName = "ShouldSendOkWhenJobDoneSignalReceived"
 			};
-			JobRepository.Add(job);
+			JobRepository.AddJobDefinition(job);
 			var result = Target.JobDone(job.Id);
 			result.Should()
 				.Not.Be.Null();
