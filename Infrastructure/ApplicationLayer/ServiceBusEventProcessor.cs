@@ -9,58 +9,25 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class ServiceBusEventProcessor
+	public class CommonEventProcessor
 	{
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
-		public ServiceBusEventProcessor(
+		public CommonEventProcessor(
 			ResolveEventHandlers resolver,
-			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator,
-			ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			ITrackingMessageSender trackingMessageSender)
 		{
 			_resolver = resolver;
-			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_trackingMessageSender = trackingMessageSender;
 		}
 
-		public void Process(IEvent @event)
+		public void Process(IEvent @event, object handler)
 		{
-			var logOnInfo = @event as ILogOnContext;
-			var initiatorInfo = @event as IInitiatorContext;
 			var commandIdentifier = @event as ICommandIdentifier;
-
 			try
 			{
-				if (logOnInfo == null)
-				{
-					process(@event);
-				}
-				else
-				{
-					if (initiatorInfo == null)
-					{
-						using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-						{
-							process(@event);
-							unitOfWork.PersistAll();
-						}
-					}
-					else
-					{
-						using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
-						{
-							process(@event);
-							unitOfWork.PersistAll();
-						}
-					}
-
-				}
-
+				new SyncPublishTo(_resolver, handler).Publish(@event);
 			}
 			catch (Exception)
 			{
@@ -75,6 +42,57 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				throw;
 			}
 		}
+	}
+
+	public class ServiceBusEventProcessor
+	{
+		private readonly CommonEventProcessor _processor;
+		private readonly ResolveEventHandlers _resolver;
+		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+
+		public ServiceBusEventProcessor(
+			CommonEventProcessor processor,
+			ResolveEventHandlers resolver,
+			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator,
+			ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		{
+			_processor = processor;
+			_resolver = resolver;
+			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
+			_unitOfWorkFactory = unitOfWorkFactory;
+		}
+
+		public void Process(IEvent @event)
+		{
+			var logOnInfo = @event as ILogOnContext;
+			var initiatorInfo = @event as IInitiatorContext;
+
+			if (logOnInfo == null)
+			{
+				process(@event);
+			}
+			else
+			{
+				if (initiatorInfo == null)
+				{
+					using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+					{
+						process(@event);
+						unitOfWork.PersistAll();
+					}
+				}
+				else
+				{
+					using (var unitOfWork =_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
+					{
+						process(@event);
+						unitOfWork.PersistAll();
+					}
+				}
+			}
+
+		}
 
 		private void process(IEvent @event)
 		{
@@ -83,9 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlers = _resolver.ResolveServiceBusHandlersForEvent(@event);
 
 			foreach (var handler in handlers)
-			{
-				new SyncPublishTo(_resolver, handler).Publish(@event);
-			}
+				_processor.Process(@event, handler);
 
 		}
 

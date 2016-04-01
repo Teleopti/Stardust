@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CannotSendDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 
 			builder.RegisterType<HangfireEventProcessor>().SingleInstance();
+			builder.RegisterType<CommonEventProcessor>().SingleInstance();
 			builder.RegisterType<ServiceBusEventProcessor>().SingleInstance();
 
 
