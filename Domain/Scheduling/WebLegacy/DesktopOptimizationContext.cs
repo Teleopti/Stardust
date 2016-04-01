@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
 				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons,
-					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo));
+					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo), true);
 			}
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
 		}
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
 			var agentsToMove = modifiedScheduleDictionary.Keys;
-			moveSchedules(modifiedScheduleDictionary, schedulerStateHolderFrom().Schedules, agentsToMove, period);
+			moveSchedules(modifiedScheduleDictionary, schedulerStateHolderFrom().Schedules, agentsToMove, period, false);
 		}
 
 		public IDisposable Set(ICommandIdentifier commandIdentifier, ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
@@ -93,7 +93,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			});
 		}
 
-		private static void moveSchedules(IScheduleDictionary fromDic, IScheduleDictionary toDic, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		private static void moveSchedules(IScheduleDictionary fromDic, 
+														IScheduleDictionary toDic, 
+														IEnumerable<IPerson> agents, 
+														DateOnlyPeriod period,
+														bool includeNonAssignments)
 		{
 			foreach (var agent in agents)
 			{
@@ -104,10 +108,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(fromScheduleDay.PersonAssignment(true));
 
-					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
-					fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
-					fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange) toDic[agent]).Add(x));
-					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
+					if (includeNonAssignments)
+					{
+						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
+						fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
+						fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
+						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
+					}
 
 					toDic.Modify(toScheduleDay);
 				}

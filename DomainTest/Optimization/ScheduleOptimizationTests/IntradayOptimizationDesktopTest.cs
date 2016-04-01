@@ -137,6 +137,37 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		}
 
 		[Test]
+		public void ShouldNotDuplicateScheduleData()
+		{
+			var scenario = new Scenario("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = new Activity("_"), TimeZone = TimeZoneInfo.Utc }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
+			var agent = new Person().WithId();
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+			var meetingPerson = new MeetingPerson(agent, false);
+			var meeting = new Meeting(agent, new List<IMeetingPerson> { meetingPerson }, "subject", "location", "description", new Activity("_"), scenario);
+			var personMeeting = new PersonMeeting(meeting, meetingPerson, new DateTimePeriod(2010, 1, 1, 2010, 1, 2));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent }, 
+				new IScheduleData[]
+				{
+					new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2010, 1, 1, 8, 2010, 1, 1, 9))),
+					personMeeting,
+					new PreferenceDay(agent, dateOnly, new PreferenceRestriction()), 
+				}, skillDay);
+		
+			Target.Optimize(new[] { ExtractedSchedule.CreateScheduleDay(stateHolder.SchedulingResultState.Schedules, agent, dateOnly) }, new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), null);
+
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAbsenceCollection().Count.Should().Be.EqualTo(1);
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonRestrictionCollection().Count.Should().Be.EqualTo(1);
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonMeetingCollection().Count.Should().Be.EqualTo(1);
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersistableScheduleDataCollection().OfType<IPreferenceDay>().Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldConsiderAbsences()
 		{
 			var scenario = new Scenario("_");
@@ -166,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 
 			Target.Optimize(new[] { ExtractedSchedule.CreateScheduleDay(stateHolder.SchedulingResultState.Schedules, agent, dateOnly) }, new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), null);
 
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute.Should().Be.EqualTo(0);	
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute.Should().Be.EqualTo(0);
 		}
 
 		[Test]
