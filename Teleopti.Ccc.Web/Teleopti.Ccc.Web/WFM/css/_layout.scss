@@ -50,6 +50,11 @@ html, body{
 
 .container.content{
 	min-height: 92vh; 
+	padding: 0;
+}
+
+.fab-wrapper .wfm-fab {
+    margin-top: 0;
 }
 
 /*Business unit change*/
