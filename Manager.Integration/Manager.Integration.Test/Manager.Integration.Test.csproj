@@ -51,6 +51,14 @@
       <HintPath>..\packages\Castle.Core.3.2.2\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
       <Private>True</Private>
@@ -64,6 +72,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
@@ -71,10 +80,13 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -89,6 +101,36 @@
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\StatusConstants.cs" />
+    <Compile Include="Data\JobDefinition.cs">
+      <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\JobHistory.cs">
+      <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\JobHistoryDetail.cs">
+      <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Logging.cs">
+      <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ManagerDBEntityModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ManagerDBEntityModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ManagerDBEntityModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Data\ManagerDBEntityModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ManagerDBEntityModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\WorkerNode.cs">
+      <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
     <Compile Include="Helpers\IntergrationControllerUriBuilder.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnSetup.cs" />
@@ -136,11 +178,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Timers\CheckJobHistoryStatusTimer.cs" />
+    <Compile Include="Timers\CheckTablesInManagerDbTimer.cs" />
     <Compile Include="Validators\IntegerValidators.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
       <SubType>Designer</SubType>
+    </None>
+    <EntityDeploy Include="Data\ManagerDBEntityModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ManagerDBEntityModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Data\ManagerDBEntityModel.edmx.diagram">
+      <DependentUpon>ManagerDBEntityModel.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -152,6 +202,16 @@
     <Folder Include="EventHandlers\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Data\ManagerDBEntityModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ManagerDBEntityModel.edmx</DependentUpon>
+      <LastGenOutput>ManagerDBEntityModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Data\ManagerDBEntityModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ManagerDBEntityModel.edmx</DependentUpon>
+      <LastGenOutput>ManagerDBEntityModel.cs</LastGenOutput>
+    </Content>
     <Content Include="Scripts\CreateLoggingTable.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -161,6 +221,9 @@
       <Project>{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}</Project>
       <Name>Manager.IntegrationTest.Console.Host</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

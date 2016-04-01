@@ -760,6 +760,13 @@ namespace Stardust.Manager
 			return sqlCommand;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="assignedNode"></param>
+		/// <param name="status"></param>
+		/// <returns></returns>
 		private SqlCommand CreateUpdateJobDefinitionsCommand(Guid id,
 		                                                     string assignedNode,
 		                                                     string status)
