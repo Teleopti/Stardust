@@ -45,14 +45,11 @@ html, body{
 
 #materialcontainer{
 	position:relative;
-	padding: 0;
 	overflow: auto;
 }
 
 .container.content{
-	//height: 92vh;
-	min-height: 92vh; //calc(-56vh);
-	//overflow: auto;
+	min-height: 92vh; 
 }
 
 /*Business unit change*/
