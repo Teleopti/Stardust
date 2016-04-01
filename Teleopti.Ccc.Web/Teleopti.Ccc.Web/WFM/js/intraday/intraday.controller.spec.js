@@ -45,7 +45,7 @@ describe('IntradayCtrl', function () {
 			ForecastedActualHandleTimeDiff: '50.0'
 		};
 	});
-	
+
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_) {
 		$controller = _$controller_;
 		$httpBackend = _$httpBackend_;
@@ -104,7 +104,7 @@ describe('IntradayCtrl', function () {
 		scope.deleteSkillArea(scope.skillAreas[1]);
 
 		expect(scope.skillAreas.length).toEqual(2);
-		
+
 		$httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(null);
@@ -157,5 +157,13 @@ describe('IntradayCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.HasMonitorData).toEqual(false);
+	});
+
+	it('should switch active chart tab', function () {
+		createController();
+		scope.toggleOthers(1,'staffing');
+
+		expect(scope.showStaffing).toEqual(true);
+		expect(scope.showIncoming).toEqual(false);
 	});
 });

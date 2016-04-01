@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
@@ -10,6 +10,11 @@
 				var timeoutPromise;
 				var pollingTimeout = 5000;
 				$scope.DeleteSkillAreaModal = false;
+				$scope.showIncoming = true;
+				$scope.showStaffing = false;
+				$scope.showProductivity = false;
+				$scope.showSummary = false;
+				$scope.selectedIndex = 0;
 
 				var getAutoCompleteControls = function() {
 					var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
@@ -208,6 +213,25 @@
 					if (timeoutPromise)
 						$timeout.cancel(timeoutPromise);
 				};
+
+				var deselectAll = function(){
+					$scope.showIncoming = false;
+					$scope.showStaffing = false
+					$scope.showProductivity = false;
+				}
+				$scope.toggleOthers = function(index, intraCard){
+					deselectAll();
+					$scope.selectedIndex = index;
+					if (intraCard === 'incoming') {
+						$scope.showIncoming = true;
+					}else if (intraCard === 'staffing' ) {
+						$scope.showStaffing = true;
+					}
+					else if (intraCard === 'productivity') {
+						$scope.showProductivity = true;
+					}
+				}
+
 			}
 		]);
 })();

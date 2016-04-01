@@ -9,5 +9,19 @@
 }
 
 .last-time{
-	margin-left: 15px;
+	margin-top: 10px;
+}
+
+.skill-list-header{
+	padding-bottom: $full-padding*2;
+}
+
+.selectedCard{
+	background: #99d6ff;
+}
+
+.slide-panel md-tabs-wrapper{
+	opacity: 0;
+	max-height: 0px !important;
+	overflow: hidden;
 }
