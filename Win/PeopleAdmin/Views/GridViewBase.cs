@@ -1,4 +1,4 @@
-﻿using System;   
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using Syncfusion.Windows.Forms.Grid;
@@ -51,16 +51,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			Grid.Dock = DockStyle.Fill;
 			Grid.Location = new Point(0, 0);
 			Grid.Visible = true;
-
 			if (!Grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell))
-				Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell, new TimeSpanTimeOfDayCellModel(Grid.Model){AllowEmptyCell = true});
+				Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanHourMinutesOrEmptyCell, new TimeSpanTimeOfDayCellModel(Grid.Model) { AllowEmptyCell = true });
 			if (!Grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell))
-				Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanDurationCellModel(Grid.Model){AllowEmptyCell = true});
+				Grid.CellModels.Add(GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell, new TimeSpanDurationCellModel(Grid.Model) { AllowEmptyCell = true });
 			if (!Grid.CellModels.ContainsKey("NumericCell"))
 				Grid.CellModels.Add("NumericCell", new NumericCellModel(Grid.Model));
-
 			Grid.ReadOnly = !PrincipalAuthorization.Instance().IsPermitted(
-					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications); 
+					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
+			Grid.KeyDown += (sender, args) =>
+			{
+				// pbi 37809 allow ż (AltGr+z) and not do Ctrl-z instead when having polish keyboard
+				if (args.Alt && args.Control)
+				{
+					args.Handled = true;
+				}
+			};
 		}
 
 		public bool ReadOnly
@@ -334,7 +340,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		public void Dispose()
 		{
 			Dispose(true);
-
 			GC.SuppressFinalize(this);
 		}
 
