@@ -132,8 +132,11 @@
 	});
 
 	it('should see a diabled button when time range is invalid', function () {
-		var html = '<add-activity-panel selected-agents="" selected-date=""></add-activity-panel>';
+		var html = '<add-activity-panel selected-agents="" selected-date="getSelectedDate()"></add-activity-panel>';
 		var scope = $rootScope.$new();
+		scope.getSelectedDate = function () {		
+			return new Date('2016-01-01');
+		};
 
 		var element = $compile(html)(scope);
 		scope.$apply();

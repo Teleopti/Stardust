@@ -114,8 +114,8 @@
 				var viewValue = null;
 				if (angular.isDefined(scope.referenceDay)) {
 					viewValue = {
-						startTime: moment(scope.referenceDay),
-						endTime: moment(scope.referenceDay)
+						startTime: moment(scope.referenceDay()),
+						endTime: moment(scope.referenceDay())
 					}; 
 				} else {
 					viewValue = {
