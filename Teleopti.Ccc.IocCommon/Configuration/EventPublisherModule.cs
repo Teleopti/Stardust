@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>().SingleInstance();
 			builder.RegisterType<CannotSendDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 
-			builder.RegisterType<CommonEventProcessor>().SingleInstance();
+			builder.RegisterType<CommonEventProcessor>().ApplyAspects().SingleInstance();
 			builder.RegisterType<HangfireEventProcessor>().SingleInstance();
 			builder.RegisterType<ServiceBusEventProcessor>().SingleInstance();
 
