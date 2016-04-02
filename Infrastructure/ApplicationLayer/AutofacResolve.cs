@@ -32,7 +32,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			return _lifetimeScope
 				.ComponentRegistry
 				.RegistrationsFor(new TypedService(type))
-				.Select(r => ProxyUtil.GetUnproxiedType(r.Activator.LimitType));
+				.Select(r =>
+				{
+					var handlerType = r.Activator.LimitType;
+					return ProxyUtil.IsProxyType(handlerType)
+						? handlerType.BaseType
+						: handlerType;
+				});
 		}
 
 		public void Dispose()
