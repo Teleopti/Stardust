@@ -9,33 +9,21 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class StardustEventPublisher : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
+		private readonly CommonEventProcessor _processor;
 
-		public StardustEventPublisher(ResolveEventHandlers resolver)
+		public StardustEventPublisher(
+			ResolveEventHandlers resolver,
+			CommonEventProcessor processor)
 		{
 			_resolver = resolver;
+			_processor = processor;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
 			foreach (var @event in events)
-			{
-				var handlerTypes = _resolver.HandlerTypesFor<IRunOnStardust>(@event);
-
-				foreach (var handlerType in handlerTypes)
-				{
-					var handler = _resolver.HandlerFor(handlerType);
-					var method = _resolver.HandleMethodFor(handlerType, @event);
-					try
-					{
-						method.Invoke(handler, new[] {@event});
-					}
-					catch (TargetInvocationException e)
-					{
-						PreserveStack.ForInnerOf(e);
-						throw e;
-					}
-				}
-			}
+				foreach (var handlerType in _resolver.HandlerTypesFor<IRunOnStardust>(@event))
+					_processor.Process(@event, handlerType);
 		}
 	}
 }

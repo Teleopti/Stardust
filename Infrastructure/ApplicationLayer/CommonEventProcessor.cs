@@ -38,11 +38,13 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				if (commandIdentifier == null) throw;
 				if (commandIdentifier.CommandId != Guid.Empty)
-					_trackingMessageSender.SendTrackingMessage(@event, new TrackingMessage
-					{
-						Status = TrackingMessageStatus.Failed,
-						TrackId = commandIdentifier.CommandId
-					});
+					_trackingMessageSender.SendTrackingMessage(
+						@event,
+						new TrackingMessage
+						{
+							Status = TrackingMessageStatus.Failed,
+							TrackId = commandIdentifier.CommandId
+						});
 				throw;
 			}
 		}
