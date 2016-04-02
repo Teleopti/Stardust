@@ -22,7 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Shoveling
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_CascadingSkills_37679)]
+	[Toggle(Toggles.ResourcePlanner_CascadingSkillsPOC_37679)]
 	public class ShovelServicePocTest
 	{
 		public ResourceCalculationContextFactory ResourceCalculationContextFactory;

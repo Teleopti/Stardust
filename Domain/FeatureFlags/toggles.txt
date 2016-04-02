@@ -102,4 +102,4 @@ WfmGlobalLayout_personalOptions_37114 = RC
 
 ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = true
 ResourcePlanner_IntradayIslands_36939 = RC
-ResourcePlanner_CascadingSkills_37679 = DEV
+ResourcePlanner_CascadingSkillsPOC_37679 = false

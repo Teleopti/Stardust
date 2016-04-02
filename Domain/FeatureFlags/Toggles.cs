@@ -92,7 +92,7 @@
 		WfmGlobalLayout_personalOptions_37114,
 
 		ResourcePlanner_IntradayIslands_36939,
-		ResourcePlanner_CascadingSkills_37679
+		ResourcePlanner_CascadingSkillsPOC_37679
 		// ReSharper restore InconsistentNaming
 	}
 }

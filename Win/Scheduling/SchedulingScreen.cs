@@ -790,7 +790,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonCalculation.Checked = !_schedulerState.SchedulingResultState.SkipResourceCalculation;
 			if (_schedulerState.SchedulingResultState.SkipResourceCalculation)
 			{
-				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
+				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
 				{
 					var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactory>());
 					var orderedSkillList =
@@ -3778,7 +3778,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var skills = stateHolder.SchedulingResultState.Skills;
 				int orgSkills = skills.Length;
 				int removedSkills = result.FilterSkills(skills,stateHolder.SchedulingResultState.RemoveSkill,s => stateHolder.SchedulingResultState.AddSkills(s));
-				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
+				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
 				{
 					var cascadingSkillReducer = new SkillGroupReducerForCascadingSkills();
 					foreach (var person in peopleInOrg)
@@ -4335,7 +4335,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 			}
 
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_37679))
+			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
 			{
 				var skillGridMenuItemCascadingSkillAnalyzer = new ToolStripMenuItem("Cascading Skill Analyzer...");
 				skillGridMenuItemCascadingSkillAnalyzer.Click += skillGridMenuItemCascadingSkillAnalyzer_Click;
