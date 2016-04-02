@@ -27,16 +27,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			return new AutofacResolve(_lifetimeScope.BeginLifetimeScope());
 		}
 
-		public IEnumerable<Type> ConcreteTypesFor(Type componentType)
+		public IEnumerable<Type> ConcreteTypesFor(Type type)
 		{
-			return _lifetimeScope.ComponentRegistry.RegistrationsFor(new TypedService(componentType))
-				.Select(componentRegistration =>
-				{
-					var handlerType = componentRegistration.Activator.LimitType;
-					return ProxyUtil.IsProxyType(handlerType) ? 
-						handlerType.BaseType : 
-						handlerType;
-				});
+			return _lifetimeScope
+				.ComponentRegistry
+				.RegistrationsFor(new TypedService(type))
+				.Select(r => ProxyUtil.GetUnproxiedType(r.Activator.LimitType));
 		}
 
 		public void Dispose()

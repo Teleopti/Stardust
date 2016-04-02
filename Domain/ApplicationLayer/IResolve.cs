@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		object Resolve(Type type);
 		IResolve NewScope();
-		IEnumerable<Type> ConcreteTypesFor(Type componentType);
+		IEnumerable<Type> ConcreteTypesFor(Type type);
 	}
 }
