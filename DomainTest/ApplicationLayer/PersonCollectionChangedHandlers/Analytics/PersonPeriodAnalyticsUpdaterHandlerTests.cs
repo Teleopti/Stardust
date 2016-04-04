@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then there should be one person period for that person
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
 		}
 
 		[Test]
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then there should be one person period for that person
 			Assert.AreEqual(2, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
 		}
 
 		[Test]
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
 		}
 
 		[Test]
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
 		}
 
 		[Test]
