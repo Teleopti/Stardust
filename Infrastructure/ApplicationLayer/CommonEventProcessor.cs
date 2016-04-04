@@ -10,13 +10,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class CommonEventProcessor
 	{
 		private readonly ResolveEventHandlers _resolver;
+		private readonly IResolve _resolve;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		public CommonEventProcessor(
 			ResolveEventHandlers resolver,
+			IResolve resolve,
 			ITrackingMessageSender trackingMessageSender)
 		{
 			_resolver = resolver;
+			_resolve = resolve;
 			_trackingMessageSender = trackingMessageSender;
 		}
 
@@ -28,14 +31,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public virtual void Process(IEvent @event, Type handlerType)
 		{
-			var commandIdentifier = @event as ICommandIdentifier;
 			try
 			{
-				var handler = _resolver.HandlerFor(handlerType);
-				new SyncPublishTo(_resolver, handler).Publish(@event);
+				using (var scope = _resolve.NewScope())
+				{
+					new SyncPublishTo(_resolver, scope.Resolve(handlerType))
+						.Publish(@event);
+				}
 			}
 			catch (Exception)
 			{
+				var commandIdentifier = @event as ICommandIdentifier;
 				if (commandIdentifier == null) throw;
 				if (commandIdentifier.CommandId != Guid.Empty)
 					_trackingMessageSender.SendTrackingMessage(

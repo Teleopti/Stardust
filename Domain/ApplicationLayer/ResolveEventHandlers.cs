@@ -21,12 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			return _resolve.ConcreteTypesFor(handlerType)
 				.Where(x => x.GetInterfaces().Contains(typeof (T)));
 		}
-
-		public object HandlerFor(Type handlerType)
-		{
-			return _resolve.Resolve(handlerType);
-		}
-
+		
 		public MethodInfo HandleMethodFor(Type handler, IEvent @event)
 		{
 			return handler

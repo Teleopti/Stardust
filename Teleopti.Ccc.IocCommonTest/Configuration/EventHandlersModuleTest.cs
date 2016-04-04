@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -18,6 +17,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class EventHandlersModuleTest
 	{
 		public ResolveEventHandlers Resolver;
+		public IResolve Resolve;
 
 		[AllTogglesOff]
 		[Test]
@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					;
 				handlerTypes.ForEach(t =>
 				{
-					var instance1 = Resolver.HandlerFor(t);
-					var instance2 = Resolver.HandlerFor(t);
+					var instance1 = Resolve.Resolve(t);
+					var instance2 = Resolve.Resolve(t);
 					instance1.Should().Be.SameInstanceAs(instance2);
 				});
 			});
