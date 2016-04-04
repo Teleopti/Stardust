@@ -19,5 +19,8 @@ namespace Teleopti.Ccc.Domain.Repositories
     	IList<IGroupPage> LoadAllGroupPageWhenPersonCollectionReAssociated();
 
 	    IList<IGroupPage> LoadGroupPagesByIds(IEnumerable<Guid> groupPageIds);
+
+	    IList<IGroupPage> GetGroupPagesForPerson(Guid personId);
+
     }
 }

@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 		private IPersonRepository _personRepository;
+		private IGroupPageRepository _groupPageRepository;
 
 		[SetUp]
 		public void Setup()
@@ -29,8 +30,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			_analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
-
-			_target = new UpdatePersonGroupsAnalyticsHandler(_personRepository, _analyticsBridgeGroupPagePersonRepository, _analyticsGroupPageRepository);
+			_groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
+			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(Arg<Guid>.Is.Anything)).Return(new IGroupPage[] { });
+			_target = new UpdatePersonGroupsAnalyticsHandler(_personRepository, _analyticsBridgeGroupPagePersonRepository, _analyticsGroupPageRepository, _groupPageRepository);
 		}
 
 		[Test]
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] {new AnalyticsGroupPage {GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Skill, GroupPageNameResourceKey = "Skill" } });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] {});
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault()))
 				.Return(new AnalyticsGroup());
@@ -87,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault()));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { skill.Id.GetValueOrDefault()}));
@@ -109,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Skill, GroupPageNameResourceKey = "Skill"};
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { analyticsGroupPage });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault()))
 				.Return(null);
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -145,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new AnalyticsGroupPage[] { });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault()))
 				.Return(null);
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(skill.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -182,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Skill, GroupPageNameResourceKey = "Skill" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { analyticsGroupPage });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new[] { skill.Id.GetValueOrDefault() });
 
 
@@ -190,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
@@ -211,19 +213,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Contracts, GroupPageNameResourceKey = "Contracts" } });
 			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault()))
 				.Return(new AnalyticsGroup());
 
-
 			_target.Handle(@event);
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault()));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { contract.Id.GetValueOrDefault() }));
@@ -245,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new[] { contract.Id.GetValueOrDefault() });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Contracts, GroupPageNameResourceKey = "Contracts" } });
@@ -254,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
@@ -275,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Contracts, GroupPageNameResourceKey = "Contracts" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -288,7 +289,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -316,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new AnalyticsGroupPage[] { });
@@ -328,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(contract.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -356,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.ContractSchedule, GroupPageNameResourceKey = "ContractSchedule" } });
@@ -367,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(contractSchedule.Id.GetValueOrDefault()));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { contractSchedule.Id.GetValueOrDefault() }));
@@ -390,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new[] { contractSchedule.Id.GetValueOrDefault() });
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.ContractSchedule, GroupPageNameResourceKey = "ContractSchedule" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -400,7 +401,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
@@ -422,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.ContractSchedule, GroupPageNameResourceKey = "ContractSchedule" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -434,7 +435,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(contractSchedule.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -463,7 +464,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new AnalyticsGroupPage[] { });
@@ -474,7 +475,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(contractSchedule.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -503,7 +504,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.PartTimepercentages, GroupPageNameResourceKey = "PartTimepercentages" } });
@@ -514,7 +515,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(partTimePercentage.Id.GetValueOrDefault()));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { partTimePercentage.Id.GetValueOrDefault() }));
@@ -537,7 +538,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new[] { partTimePercentage.Id.GetValueOrDefault() });
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.PartTimepercentages, GroupPageNameResourceKey = "PartTimepercentages" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -547,7 +548,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
@@ -569,7 +570,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.PartTimepercentages, GroupPageNameResourceKey = "PartTimepercentages" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -581,7 +582,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(partTimePercentage.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -610,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new AnalyticsGroupPage[] { });
@@ -621,7 +622,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(partTimePercentage.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -648,7 +649,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.RuleSetBag, GroupPageNameResourceKey = "RuleSetBag" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -660,7 +661,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(ruleSetBag.Id.GetValueOrDefault()));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { ruleSetBag.Id.GetValueOrDefault() }));
@@ -684,14 +685,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.RuleSetBag, GroupPageNameResourceKey = "RuleSetBag" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { analyticsGroupPage });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new [] { ruleSetBag.Id.GetValueOrDefault() });
 
 			_target.Handle(@event);
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
@@ -711,7 +712,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.RuleSetBag, GroupPageNameResourceKey = "RuleSetBag" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -723,7 +724,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(ruleSetBag.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -750,7 +751,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new AnalyticsGroupPage[] { });
@@ -761,7 +762,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(ruleSetBag.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -787,7 +788,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Note, GroupPageNameResourceKey = "Note" };
@@ -800,7 +801,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(person.Note.GenerateGuid()));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { person.Note.GenerateGuid() }));
@@ -823,14 +824,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Note, GroupPageNameResourceKey = "Note" };
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new[] { analyticsGroupPage });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new[] { person.Note.GenerateGuid() });
 
 			_target.Handle(@event);
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
@@ -849,7 +850,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 
 			var analyticsGroupPage = new AnalyticsGroupPage { GroupPageCode = Guid.NewGuid(), GroupPageName = Resources.Note, GroupPageNameResourceKey = "Note" };
@@ -863,7 +864,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(person.Note.GenerateGuid()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -889,7 +890,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
 
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new Guid[] { });
 
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
@@ -902,7 +903,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(person.Note.GenerateGuid()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
@@ -912,6 +913,123 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 						g.GroupPageName == Resources.Note && g.GroupPageCode != Guid.Empty &&
 						g.GroupPageNameResourceKey == "Note")));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { person.Note.GenerateGuid() }));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
+		}
+
+		[Test]
+		public void ShouldAddCustomGroup()
+		{
+			var personPeriodId = Guid.NewGuid();
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
+			person.SetId(Guid.NewGuid());
+			person.PersonPeriodCollection.First().SetId(personPeriodId);
+			var @event = new AnalyticsPersonCollectionChangedEvent();
+			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
+
+			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
+			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
+				.Return(new AnalyticsGroupPage[] { });
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
+				.Return(new Guid[] { });
+			var groupPage = new GroupPage("CustomGroup");
+			groupPage.SetId(Guid.NewGuid());
+			var rootPersonGroup = new RootPersonGroup("CustomRootGroup");
+			rootPersonGroup.SetId(Guid.NewGuid());
+			groupPage.AddRootPersonGroup(rootPersonGroup);
+			
+			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(person.Id.GetValueOrDefault()))
+				.Return(new IGroupPage[] {groupPage}).Repeat.Any();
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault()))
+				.Return(new AnalyticsGroup());
+
+			_target.Handle(@event);
+
+			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault()));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { rootPersonGroup.Id.GetValueOrDefault() }));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
+		}
+
+		[Test]
+		public void ShouldAddCustomGroupAndCreateGroup()
+		{
+			var personPeriodId = Guid.NewGuid();
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
+			person.SetId(Guid.NewGuid());
+			person.PersonPeriodCollection.First().SetId(personPeriodId);
+			var @event = new AnalyticsPersonCollectionChangedEvent();
+			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
+			var groupPage = new GroupPage("CustomGroup");
+			groupPage.SetId(Guid.NewGuid());
+			var rootPersonGroup = new RootPersonGroup("CustomRootGroup");
+			rootPersonGroup.SetId(Guid.NewGuid());
+
+			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
+			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
+				.Return(new AnalyticsGroupPage[] { });
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
+				.Return(new Guid[] { });
+			groupPage.AddRootPersonGroup(rootPersonGroup);
+
+			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(person.Id.GetValueOrDefault()))
+				.Return(new IGroupPage[] { groupPage }).Repeat.Any();
+			_analyticsGroupPageRepository.Stub(r => r.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault()))
+				.Return(null);
+
+			_target.Handle(@event);
+
+			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetGroupPageByGroupCode(rootPersonGroup.Id.GetValueOrDefault()));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.AddGroupPage(
+					Arg<AnalyticsGroup>.Matches(
+						g =>
+							g.GroupCode == rootPersonGroup.Id.GetValueOrDefault() && g.GroupName == rootPersonGroup.Description.Name &&
+							g.GroupPageName == groupPage.Description.Name && g.GroupPageCode == groupPage.Id.GetValueOrDefault() &&
+							g.GroupPageNameResourceKey == groupPage.DescriptionKey)));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { rootPersonGroup.Id.GetValueOrDefault() }));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
+		}
+
+
+
+		[Test]
+		public void ShouldNotAddCustomGroupIfAlreadyExisting()
+		{
+			var personPeriodId = Guid.NewGuid();
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
+			person.SetId(Guid.NewGuid());
+			person.PersonPeriodCollection.First().SetId(personPeriodId);
+			var @event = new AnalyticsPersonCollectionChangedEvent();
+			@event.SetPersonIdCollection(new[] { person.Id.GetValueOrDefault() });
+
+			var groupPage = new GroupPage("CustomGroup");
+			groupPage.SetId(Guid.NewGuid());
+			var rootPersonGroup = new RootPersonGroup("CustomRootGroup");
+			rootPersonGroup.SetId(Guid.NewGuid());
+			groupPage.AddRootPersonGroup(rootPersonGroup);
+
+			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
+			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
+				.Return(new AnalyticsGroupPage[] { });
+			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(person.Id.GetValueOrDefault()))
+				.Return(new IGroupPage[] { groupPage }).Repeat.Any();
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
+				.Return(new[] { rootPersonGroup.Id.GetValueOrDefault() });
+
+
+			_target.Handle(@event);
+
+			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
+			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonExcludingPersonPeriods(person.Id.GetValueOrDefault(), new[] { personPeriodId }));
 		}
 
@@ -929,7 +1047,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				.Return(new AnalyticsGroupPage[] { });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new[] { existingGrouping });
 			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBridgeGroupPagePerson(existingGrouping))
 				.Return(new[] { Guid.NewGuid() });
@@ -939,7 +1057,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { existingGrouping }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 
@@ -963,7 +1081,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Stub(r => r.Get(person.Id.GetValueOrDefault())).Return(person);
 			_analyticsGroupPageRepository.Stub(r => r.GetBuildInGroupPageBase())
 				 .Return(new AnalyticsGroupPage[] { });
-			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId))
+			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetGroupPagesForPersonPeriod(personPeriodId))
 				.Return(new[] { existingGrouping });
 			_analyticsBridgeGroupPagePersonRepository.Stub(r => r.GetBridgeGroupPagePerson(existingGrouping))
 				.Return(new Guid[] { });
@@ -973,7 +1091,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_personRepository.AssertWasCalled(r => r.Get(person.Id.GetValueOrDefault()));
 			_analyticsGroupPageRepository.AssertWasCalled(r => r.GetBuildInGroupPageBase());
-			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetBuiltInGroupPagesForPersonPeriod(personPeriodId));
+			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.GetGroupPagesForPersonPeriod(personPeriodId));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, new[] { existingGrouping }));
 			_analyticsBridgeGroupPagePersonRepository.AssertWasCalled(r => r.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, new Guid[] { }));
 

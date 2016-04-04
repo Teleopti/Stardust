@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -45,6 +47,153 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         #endregion
 
 	    [Test]
+	    public void ShouldLoadRootGroupsForPersonOnTopLevel()
+	    {
+			IPerson person1 = PersonFactory.CreatePerson("Person1");
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			IGroupPage sortOrder2 = new GroupPage("Contract Basis Page");
+
+			IRootPersonGroup root = new RootPersonGroup("unit1");
+			IChildPersonGroup child1 = new ChildPersonGroup("subUnit1");
+			IChildPersonGroup child2 = new ChildPersonGroup("subSubUnit1");
+
+			sortOrder2.AddRootPersonGroup(root);
+			root.AddChildGroup(child1);
+			child1.AddChildGroup(child2);
+
+			root.AddPerson(person1);
+
+			PersistAndRemoveFromUnitOfWork(sortOrder2);
+
+			IGroupPage sortOrder1 = new GroupPage("AAA");
+			IRootPersonGroup root2 = new RootPersonGroup("unit2");
+			sortOrder1.AddRootPersonGroup(root2);
+			PersistAndRemoveFromUnitOfWork(sortOrder1);
+
+		    var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+
+		    result.Should().Not.Be.Empty();
+			var groupPage = result.SingleOrDefault();
+			groupPage.RootGroupCollection.Should().Not.Be.Empty();
+			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
+			rootGroup.Should().Not.Be.Null();
+			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+
+	    }
+
+		[Test]
+		public void ShouldLoadRootGroupsForPersonInSubGroup()
+		{
+			IPerson person1 = PersonFactory.CreatePerson("Person1");
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			IGroupPage sortOrder2 = new GroupPage("Contract Basis Page");
+
+			IRootPersonGroup root = new RootPersonGroup("unit1");
+			IChildPersonGroup child1 = new ChildPersonGroup("subUnit1");
+			IChildPersonGroup child2 = new ChildPersonGroup("subSubUnit1");
+
+			sortOrder2.AddRootPersonGroup(root);
+			root.AddChildGroup(child1);
+			child1.AddChildGroup(child2);
+
+			child1.AddPerson(person1);
+
+			PersistAndRemoveFromUnitOfWork(sortOrder2);
+
+			IGroupPage sortOrder1 = new GroupPage("AAA");
+			IRootPersonGroup root2 = new RootPersonGroup("unit2");
+			sortOrder1.AddRootPersonGroup(root2);
+			PersistAndRemoveFromUnitOfWork(sortOrder1);
+
+			var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+
+			result.Should().Not.Be.Empty();
+			var groupPage = result.SingleOrDefault();
+			groupPage.RootGroupCollection.Should().Not.Be.Empty();
+			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
+			rootGroup.Should().Not.Be.Null();
+			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+
+		}
+
+		[Test]
+		public void ShouldLoadRootGroupsForPersonInSecondLevelSubGroup()
+		{
+			IPerson person1 = PersonFactory.CreatePerson("Person1");
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			IGroupPage sortOrder2 = new GroupPage("Contract Basis Page");
+
+			IRootPersonGroup root = new RootPersonGroup("unit1");
+			IChildPersonGroup child1 = new ChildPersonGroup("subUnit1");
+			IChildPersonGroup child2 = new ChildPersonGroup("subSubUnit1");
+
+			sortOrder2.AddRootPersonGroup(root);
+			root.AddChildGroup(child1);
+			child1.AddChildGroup(child2);
+
+			child2.AddPerson(person1);
+
+			PersistAndRemoveFromUnitOfWork(sortOrder2);
+
+			IGroupPage sortOrder1 = new GroupPage("AAA");
+			IRootPersonGroup root2 = new RootPersonGroup("unit2");
+			sortOrder1.AddRootPersonGroup(root2);
+			PersistAndRemoveFromUnitOfWork(sortOrder1);
+
+			var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+
+			result.Should().Not.Be.Empty();
+			var groupPage = result.SingleOrDefault();
+			groupPage.RootGroupCollection.Should().Not.Be.Empty();
+			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
+			rootGroup.Should().Not.Be.Null();
+			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+
+		}
+
+		[Test]
+		public void ShouldLoadRootGroupsForPersonInThirdLevelSubGroup()
+		{
+			IPerson person1 = PersonFactory.CreatePerson("Person1");
+			PersistAndRemoveFromUnitOfWork(person1);
+
+			IGroupPage sortOrder2 = new GroupPage("Contract Basis Page");
+
+			IRootPersonGroup root = new RootPersonGroup("unit1");
+			IChildPersonGroup child1 = new ChildPersonGroup("subUnit1");
+			IChildPersonGroup child2 = new ChildPersonGroup("subSubUnit1");
+			IChildPersonGroup child3 = new ChildPersonGroup("subSubSubUnit1");
+
+			sortOrder2.AddRootPersonGroup(root);
+			root.AddChildGroup(child1);
+			child1.AddChildGroup(child2);
+
+			child2.AddChildGroup(child3);
+
+			child3.AddPerson(person1);
+
+			PersistAndRemoveFromUnitOfWork(sortOrder2);
+
+			IGroupPage sortOrder1 = new GroupPage("AAA");
+			IRootPersonGroup root2 = new RootPersonGroup("unit2");
+			sortOrder1.AddRootPersonGroup(root2);
+			PersistAndRemoveFromUnitOfWork(sortOrder1);
+
+			var result = _groupPageRepository.GetGroupPagesForPerson(person1.Id.GetValueOrDefault());
+
+			result.Should().Not.Be.Empty();
+			var groupPage = result.SingleOrDefault();
+			groupPage.RootGroupCollection.Should().Not.Be.Empty();
+			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
+			rootGroup.Should().Not.Be.Null();
+			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+
+		}
+
+		[Test]
 	    public void VerifyLoadGroupPagesByIds()
 	    {
 			IPerson person1 = PersonFactory.CreatePerson("Person1");

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public IEnumerable<Guid> GetBuiltInGroupPagesForPersonPeriod(Guid personPeriodId)
+		public IEnumerable<Guid> GetGroupPagesForPersonPeriod(Guid personPeriodId)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -86,8 +86,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						join [mart].[dim_group_page] gp 
 						WITH (NOLOCK) 
 						on bgpp.group_page_id = gp.group_page_id 
-						where p.person_period_code = :PersonPeriodId
-						and gp.group_is_custom=0")
+						where p.person_period_code = :PersonPeriodId")
 					.SetGuid("PersonPeriodId", personPeriodId)
 					.List<Guid>();
 			}

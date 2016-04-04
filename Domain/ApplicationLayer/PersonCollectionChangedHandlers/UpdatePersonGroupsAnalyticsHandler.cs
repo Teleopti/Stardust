@@ -23,12 +23,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IPersonRepository _personRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
+		private readonly IGroupPageRepository _groupPageRepository;
 
-		public UpdatePersonGroupsAnalyticsHandler(IPersonRepository personRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository)
+		public UpdatePersonGroupsAnalyticsHandler(IPersonRepository personRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsBridgeGroupPagePersonRepository = analyticsBridgeGroupPagePersonRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
+			_groupPageRepository = groupPageRepository;
 		}
 		
 		public void Handle(AnalyticsPersonCollectionChangedEvent @event)
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					handlePartTimePercentage(personPeriod, groupIds, groupPages);
 					handleRuleSetBag(personPeriod, groupIds, groupPages);
 					handleNotes(person.Note, groupIds, groupPages);
+					handleCustomGroups(personId, groupIds);
 
 					var deletedGroupIds = updatePersonGroups(personPeriod.Id.GetValueOrDefault(), groupIds, @event.LogOnBusinessUnitId);
 
@@ -60,17 +63,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			}
 		}
 
+		private void handleCustomGroups(Guid personId, ICollection<analyticsGroupForPerson> groupIds)
+		{
+			var groupPages = _groupPageRepository.GetGroupPagesForPerson(personId);
+			foreach (var groupPage in groupPages)
+			{
+				foreach (var rootGroup in groupPage.RootGroupCollection)
+				{
+					groupIds.Add(new analyticsGroupForPerson(rootGroup.Id.GetValueOrDefault(), rootGroup.Description.Name, new AnalyticsGroupPage
+					{
+						GroupPageCode = groupPage.Id.GetValueOrDefault(),
+						GroupPageNameResourceKey = groupPage.DescriptionKey,
+						GroupPageName = groupPage.Description.Name
+					}));
+				}
+				
+			}
+		}
+
 		// Add/Remove groups for a person period
 		private IEnumerable<Guid> updatePersonGroups(Guid personPeriodId, ICollection<analyticsGroupForPerson> groups, Guid businessUnitId)
 		{
-			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetBuiltInGroupPagesForPersonPeriod(personPeriodId).ToList();
+			var currentGroups = _analyticsBridgeGroupPagePersonRepository.GetGroupPagesForPersonPeriod(personPeriodId).ToList();
 
 			var toBeDeleted = currentGroups.Where(g => groups.All(t => t.GroupCode != g)).ToList();
 			var toBeAdded = groups.Where(t => currentGroups.All(g => g != t.GroupCode)).ToList();
 			
 			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeDeleted);
 			logger.DebugFormat("deleting groups {0} for period {1}", string.Join(",", toBeDeleted), personPeriodId);
-			foreach (var groupInfo in groups)
+			foreach (var groupInfo in toBeAdded)
 			{
 				var @group = _analyticsGroupPageRepository.GetGroupPageByGroupCode(groupInfo.GroupCode);
 				if (@group != null) continue;
