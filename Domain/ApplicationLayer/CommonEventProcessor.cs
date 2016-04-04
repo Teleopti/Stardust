@@ -1,11 +1,11 @@
 using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+using System.Reflection;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class CommonEventProcessor
 	{
@@ -35,8 +35,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				using (var scope = _resolve.NewScope())
 				{
-					new SyncPublishTo(_resolver, scope.Resolve(handlerType))
-						.Publish(@event);
+					var handler = scope.Resolve(handlerType);
+					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
+					try
+					{
+						method.Invoke(handler, new[] { @event });
+					}
+					catch (TargetInvocationException e)
+					{
+						PreserveStack.ForInnerOf(e);
+						throw e;
+					}
 				}
 			}
 			catch (Exception)
