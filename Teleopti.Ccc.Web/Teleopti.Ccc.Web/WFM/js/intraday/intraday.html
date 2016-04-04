@@ -79,7 +79,7 @@
 	<div class="con-flex">
 		<div class="panel material-depth-1">
 			<div class="sub-header">
-				<h2 class="skill-list-header">{{ selectedSkillArea.Name }} contains {{selectedSkillArea.Skills.length}} skills</h2>
+				<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b> contains <b>{{selectedSkillArea.Skills.length}}</b> skills</h2>
 				<div class="head-actions panel-menu">
 					<div tabindex=0 class="context-menu card-context">
 						<i class="skill-area-options mdi mdi-dots-vertical"></i>
@@ -109,7 +109,13 @@
 </div>
 
 <div class="con-row">
-	<div tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{selectedCard: showIncoming}" ng-click="toggleOthers(0, 'incoming')">
+	<div class="con-flex">
+		<div class="panel full-padding material-depth-1 " ng-show="!HasMonitorData" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
+			<i class="mdi mdi-alert"></i> <span class="text-warning">No data is available</span>
+		</div>
+	</div>
+
+	<div ng-show="HasMonitorData" tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{selectedCard: showIncoming}" ng-click="toggleOthers(0, 'incoming')">
 		<div class="sub-header">
 			<h2>Incoming traffic</h2>
 			<!--<div class="head-actions panel-menu">
