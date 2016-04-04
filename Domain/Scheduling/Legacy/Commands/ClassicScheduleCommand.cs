@@ -60,35 +60,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
-			var allMatrixesOfSelectedPersons = _matrixListFactory.CreateMatrixListForSelectionPerPerson(allScheduleDays);
-
 			if (daysOnlyHelper.DaysOnly)
 			{
 				if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, backgroundWorker,
+						backgroundWorker,
 						daysOnlyHelper.PreferenceOnlyOptions);
 
 				if (schedulingOptions.RotationDaysOnly)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, backgroundWorker,
+						backgroundWorker,
 						daysOnlyHelper.RotationOnlyOptions);
 
 				if (schedulingOptions.AvailabilityDaysOnly)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, backgroundWorker,
+						backgroundWorker,
 						daysOnlyHelper.AvailabilityOnlyOptions);
 
 				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly ||
 					daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
 					requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-						allMatrixesOfSelectedPersons, backgroundWorker,
+						backgroundWorker,
 						daysOnlyHelper.NoOnlyOptions);
 
 			}
 			else
 				requiredScheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
-					allMatrixesOfSelectedPersons, backgroundWorker,
+					backgroundWorker,
 					schedulingOptions);
 
 			if(runWeeklyRestSolver && selectedPeriod.HasValue)

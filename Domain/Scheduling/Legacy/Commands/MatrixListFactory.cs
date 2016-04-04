@@ -87,38 +87,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return matrixes;
 		}
 
-		public IList<IScheduleMatrixPro> CreateMatrixListForSelectionPerPerson(IEnumerable<IScheduleDay> scheduleDays)
-		{
-			var matrixes = new List<IScheduleMatrixPro>();
-			var selectedPersons = _personExtractor.ExtractPersons(scheduleDays);
-			var scheduleDaysLookup = scheduleDays.ToLookup(s => s.Person);
-
-			foreach (var person in selectedPersons)
-			{
-				var daysForPerson = scheduleDaysLookup[person].ToList();
-				var selectedPeriod = _periodExtractor.ExtractPeriod(daysForPerson);
-				if (!selectedPeriod.HasValue) continue;
-				var startDate = selectedPeriod.Value.StartDate;
-				var date = startDate;
-				while (date <= selectedPeriod.Value.EndDate)
-				{
-					var matrix = createMatrixForPersonAndDate(person, date);
-					if (matrix == null)
-					{
-						date = date.AddDays(1);
-						continue;
-					}
-					matrixes.Add(matrix);
-					date = matrix.SchedulePeriod.DateOnlyPeriod.EndDate.AddDays(1);
-					_matrixUserLockLocker.Execute(new List<IScheduleMatrixPro> { matrix }, selectedPeriod.Value);
-				}
-			}
-
-			_matrixNotPermittedLocker.Execute(matrixes);
-
-			return matrixes;
-		}
-
 		private IScheduleMatrixPro createMatrixForPersonAndDate(IPerson person, DateOnly date)
 		{
 			var virtualSchedulePeriod = person.VirtualSchedulePeriod(date);

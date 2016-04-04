@@ -133,14 +133,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
 			var scheduleDay1 = scheduleDictionary[agent1].ScheduledDay(new DateOnly(2016, 1, 4));
-			var scheduleDay2 = scheduleDictionary[agent1].ScheduledDay(new DateOnly(2016, 1, 4));
-			var scheduleDay3 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 3, 6));
-			var scheduleDay4 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 3, 23));
-			var matrixList = Target.CreateMatrixListForSelectionPerPerson(new List<IScheduleDay> { scheduleDay1, scheduleDay2, scheduleDay3, scheduleDay4});
+			var scheduleDay2 = scheduleDictionary[agent1].ScheduledDay(new DateOnly(2016, 2, 28));
+			var scheduleDay3 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 1, 4));
+			var scheduleDay4 = scheduleDictionary[agent2].ScheduledDay(new DateOnly(2016, 2, 28));
+			var matrixList = Target.CreateMatrixListForSelection(new List<IScheduleDay> { scheduleDay1, scheduleDay2, scheduleDay3, scheduleDay4});
 
-			matrixList.Count.Should().Be.EqualTo(2);
+			matrixList.Count.Should().Be.EqualTo(3);
 			matrixList[0].Person.Should().Be.EqualTo(agent1);
 			matrixList[1].Person.Should().Be.EqualTo(agent2);
+			matrixList[2].Person.Should().Be.EqualTo(agent2);
 		}
 	}
 }

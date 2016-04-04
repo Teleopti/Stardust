@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
 
 				Expect.Call(() => _dayOffScheduler.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _dayOffScheduler.DayOffScheduling(_matrixList, _matrixList, _rollbackService, _schedulingOptions, _scheduleTagSetter));
+				Expect.Call(() => _dayOffScheduler.DayOffScheduling(_matrixList, _rollbackService, _schedulingOptions, _scheduleTagSetter));
 				Expect.Call(() => _dayOffScheduler.DayScheduled -= null).IgnoreArguments();
 
 				Expect.Call(() => _missingDaysOffScheduler.DayScheduled += null).IgnoreArguments();
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			using (_mocks.Playback())
 			{
 				_target.DayScheduled += targetDayScheduled;
-				_target.Execute(_matrixList, _matrixList, _rollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.Execute(_matrixList, _rollbackService, _schedulingOptions, _scheduleTagSetter);
 				_target.DayScheduled -= targetDayScheduled;
 			}
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(_matrixList, _matrixList, _rollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.Execute(_matrixList, _rollbackService, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 

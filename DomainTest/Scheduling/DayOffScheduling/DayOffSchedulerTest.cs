@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			using (_mocks.Playback())
 			{
 				_target.DayScheduled += _target_DayScheduled;
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				_target.DayScheduled -= _target_DayScheduled;
 			}
 		}
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixProList, matrixProList, null, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, null, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 
@@ -228,6 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
+				Expect.Call(_scheduleDayPro2.Day).Return(_date1).Repeat.Any();
 				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods).Repeat.AtLeastOnce();
@@ -235,8 +236,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(null);
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.FunctionPath).Return("functionPath");
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(true);
 			}
@@ -245,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			{
 				using (new CustomAuthorizationContext(_principalAuthorization))
 				{
-					_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}
 			}	
 		}
@@ -272,6 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
+				Expect.Call(_scheduleDayPro2.Day).Return(_date1).Repeat.Any();
 				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay)).Throw(new DayOffOutsideScheduleException());
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Rollback());
@@ -279,8 +281,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.FunctionPath).Return("functionPath");
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(true);
 			
@@ -290,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			{
 				using (new CustomAuthorizationContext(_principalAuthorization))
 				{
-					_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}
 			}
 		}
@@ -312,20 +314,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
-				
+
 				int x;
 				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
+				Expect.Call(_scheduleDayPro2.Day).Return(_date1).Repeat.Any();
 				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
 				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods);
 				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.FunctionPath).Return("functionPath");
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(true);
 			}
@@ -335,7 +338,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				using (new CustomAuthorizationContext(_principalAuthorization))
 				{
 					_target.DayScheduled += _target_DayScheduled;
-					_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 					_target.DayScheduled -= _target_DayScheduled;
 				}
 			}
@@ -364,13 +367,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period).Repeat.Any();
 				Expect.Call(_scheduleDayPro.Day).Return(_date1).Repeat.Any();
+				Expect.Call(_scheduleDayPro2.Day).Return(_date1).Repeat.Any();
 				Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
 				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods);
 				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
 				Expect.Call(_personAssignment.FunctionPath).Return("functionPath");
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
-				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(false);
 			}
@@ -379,7 +383,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			{
 				using (new CustomAuthorizationContext(_principalAuthorization))
 				{
-					_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}
 			}
 		}
@@ -402,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 
@@ -420,6 +424,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
+				Expect.Call(_scheduleDayPro.Day).Return(_date1);
 				int x;
 				IList<IScheduleDay> y = new List<IScheduleDay>{_scheduleDay};
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
@@ -427,7 +432,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 
@@ -445,6 +450,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.Any();
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.IsScheduled()).Return(true).Repeat.Any();
+				Expect.Call(_scheduleDayPro.Day).Return(_date1);
 				int x;
 				IList<IScheduleDay> y = new List<IScheduleDay>();
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(0, y);
@@ -452,7 +458,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
+				_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 			}
 		}
 
