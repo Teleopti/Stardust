@@ -249,6 +249,7 @@
                             </DataTemplate>
                         </DataGrid.RowDetailsTemplate>
                     </DataGrid>
+                    
                     <Slider Grid.Row="0"
                             x:Name="UiScaleSlider"
                             Value="1"
