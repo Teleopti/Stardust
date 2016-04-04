@@ -43,10 +43,10 @@ namespace Stardust.Manager
 					{
 						var jobDefinition = new WorkerNode
 						{
-							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
-							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
-							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
+							Id = reader.GetGuid(reader.GetOrdinal("Id")),
+							Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
+							Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
+							Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat"))
 						};
 						listToReturn.Add(jobDefinition);
 					}
