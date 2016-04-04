@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-03-31
 -- Description:	Load forecast data for given workload. Used by  for web intraday
 -- =============================================
--- EXEC [mart].[web_intraday_simulator_get_forecast] 8, 'W. Europe Standard Time', '2016-03-30'
+-- EXEC [mart].[web_intraday_simulator_get_forecast] 8, 'W. Europe Standard Time', '2016-04-01'
 CREATE PROCEDURE [mart].[web_intraday_simulator_get_forecast]
 @workload_id int,
 @time_zone_code nvarchar(100),

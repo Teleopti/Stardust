@@ -44,6 +44,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="ForecastProvider.cs" />
     <Compile Include="ForecastProviderFake.cs" />
     <Compile Include="Infrastructure\CloudSafeSqlExecute.cs" />
     <Compile Include="Infrastructure\DatabaseCommand.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="QueueDataPersisterFake.cs" />
     <Compile Include="QueueInfo.cs" />
     <Compile Include="WorkloadInfo.cs" />
+    <Compile Include="WorkloadQueuesProvider.cs" />
     <Compile Include="WorkloadQueuesProviderFake.cs" />
     <Compile Include="Infrastructure\SqlTransientErrorChecker.cs" />
   </ItemGroup>

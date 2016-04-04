@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-03-31
 -- Description:	Load workloads and its queues. Used by web intraday queue stats simulator.
 -- =============================================
--- EXEC mart.web_intraday_simulator_get_workloads '2016-03-30', 'W. Europe Standard Time'
+-- EXEC mart.web_intraday_simulator_get_workloads '2016-04-01', 'W. Europe Standard Time'
 CREATE PROCEDURE [mart].[web_intraday_simulator_get_workloads]
 	@today smalldatetime,
 	@time_zone_code nvarchar(100)
@@ -52,6 +52,7 @@ BEGIN
 		AND bz.time_zone_id = @time_zone_id
 
 	SELECT * FROM #result
+	ORDER BY WorkloadId, QueueId
 END
 
 GO
