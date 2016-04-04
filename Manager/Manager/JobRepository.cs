@@ -174,21 +174,12 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
-					using (var sqlTransaction = sqlConnection.BeginTransaction())
-					{
-						//-----------------------------------------------
-						// Delete job definition.
-						//-----------------------------------------------
-						var deleteFromJobDefinitionsCommand =
-							CreateDeleteFromJobDefinitionsCommand(jobId);
+					var deleteFromJobDefinitionsCommand =
+						CreateDeleteFromJobDefinitionsCommand(jobId);
 
-						deleteFromJobDefinitionsCommand.Connection = sqlConnection;
-						deleteFromJobDefinitionsCommand.Transaction = sqlTransaction;
+					deleteFromJobDefinitionsCommand.Connection = sqlConnection;
 
-						deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-
-						sqlTransaction.Commit();
-					}
+					deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
 				catch (Exception exp)
 				{
@@ -213,16 +204,12 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
-					using (var sqlTransaction = sqlConnection.BeginTransaction())
-					{
-						var sqlCommand =
-							CreateUpdateJobDefinitionsClearAssignedNodeValueCommand(url);
+					var sqlCommand =
+						CreateUpdateJobDefinitionsClearAssignedNodeValueCommand(url);
 
-						sqlCommand.Connection = sqlConnection;
-						sqlCommand.Transaction = sqlTransaction;
-						sqlCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-						sqlTransaction.Commit();
-					}
+					sqlCommand.Connection = sqlConnection;
+
+					sqlCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
 
 				catch (Exception exp)
@@ -563,21 +550,13 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
-					using (var sqlTransaction = sqlConnection.BeginTransaction())
-					{
-						//------------------------------------------
-						// Insert into job history detail.
-						//------------------------------------------
-						var insertIntoJobHistoryDetailCommand =
-							CreateInsertIntoJobHistoryDetailCommand(jobId, detail, created);
+					var insertIntoJobHistoryDetailCommand =
+						CreateInsertIntoJobHistoryDetailCommand(jobId, detail, created);
 
-						insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
-						insertIntoJobHistoryDetailCommand.Transaction = sqlTransaction;
+					insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 
-						insertIntoJobHistoryDetailCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+					insertIntoJobHistoryDetailCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 
-						sqlTransaction.Commit();
-					}
 				}
 				catch (Exception exp)
 				{
