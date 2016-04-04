@@ -1530,9 +1530,33 @@ END
 
 IF (@start_date < '1970-01-01') AND (@end_date < '1970-01-01')
 BEGIN
-	SELECT @maxdate = MAX(date_from) FROM #tmp_alogg
-	SELECT @maxinterval = MAX(interval) FROM #tmp_alogg
-	WHERE date_from = @maxdate
+
+	--2016-04-04, removed:
+	--SELECT @maxdate = MAX(date_from) FROM #tmp_alogg
+	--SELECT @maxinterval = MAX(interval) FROM #tmp_alogg
+	--WHERE date_from = @maxdate
+
+	--2016-04-04, added:
+	IF @CTI_interval_per_hour > @interval_per_hour
+	BEGIN
+		IF @CTI_interval_per_hour/2=@interval_per_hour
+		BEGIN
+			SELECT @maxdate = MAX(date_from) FROM #tmp_alogg
+			SELECT @maxinterval = MAX(interval)/2 FROM #tmp_alogg
+			WHERE date_from = @maxdate
+		END
+		ELSE
+		BEGIN
+			SELECT 'OBSERVE! You need to make sure the new merge updates log_object_detail correctly!'
+		END
+	END
+		ELSE
+	BEGIN
+		SELECT @maxdate = MAX(date_from) FROM #tmp_alogg
+		SELECT @maxinterval = MAX(interval) FROM #tmp_alogg
+		WHERE date_from = @maxdate
+	END
+	
 	IF  @maxdate IS not NULL
 	BEGIN
    		UPDATE log_object_detail
@@ -1545,9 +1569,23 @@ BEGIN
 END
 ELSE
 BEGIN
-	SELECT @maxdate = MAX(date_from) FROM agent_logg
-	SELECT @maxinterval = MAX(interval) FROM agent_logg
+	
+	--2016-04-04, removed:
+	--SELECT @maxdate = MAX(date_from) FROM agent_logg
+	--SELECT @maxinterval = MAX(interval) FROM agent_logg
+	--WHERE date_from = @maxdate
+	
+	--2016-04-04 added, not an issue now but might be
+	SELECT @maxdate = MAX(date_from) 
+	FROM agent_logg AS al 
+	INNER JOIN queues q ON al.queue = q.queue 
+	WHERE q.log_object_id = @log_object_id
+	
+	SELECT @maxinterval = MAX(interval) 
+	FROM agent_logg AS al 
+	INNER JOIN queues q ON al.queue = q.queue
 	WHERE date_from = @maxdate
+		AND q.log_object_id = @log_object_id
 
 	IF  @maxdate IS not NULL
 	BEGIN
