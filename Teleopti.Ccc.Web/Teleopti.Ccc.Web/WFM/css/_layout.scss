@@ -41,6 +41,11 @@ html, body{
 	opacity: 0;
 }
 
+.wfm-table td, .wfm-table th {
+  color: $text-color-standard;
+  //this will be removed
+}
+
 .layout-container{
 	max-height: 100%;
 	overflow: hidden;
