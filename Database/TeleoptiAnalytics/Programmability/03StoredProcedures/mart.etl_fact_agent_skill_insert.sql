@@ -8,7 +8,7 @@ CREATE PROCEDURE [mart].[etl_fact_agent_skill_insert]
 @person_id int,
 @skill_id int,
 @active bit,
-@business_unit int
+@business_unit_id int
 AS
 
 INSERT INTO mart.fact_agent_skill
@@ -23,7 +23,7 @@ INSERT INTO mart.fact_agent_skill
 	@skill_id,
 	1,
 	@active,
-	@business_unit,
+	@business_unit_id,
 	1)
 
 GO

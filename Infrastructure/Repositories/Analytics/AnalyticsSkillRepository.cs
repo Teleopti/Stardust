@@ -123,9 +123,62 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public void AddAgentSkill(int personId, int skillId, bool active, int businessUnitId)
+		{
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var query = uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_fact_agent_skill_insert]
+					@person_id=:PersonId
+					,@skill_id=:SkillId
+					,@active=:Active
+                    ,@business_unit_id=:BusinessUnitId")
+					.SetInt32("PersonId", personId)
+					.SetInt32("SkillId", skillId)
+					.SetBoolean("Active", active)
+					.SetInt32("BusinessUnitId", businessUnitId);
+
+				query.ExecuteUpdate();
+			}
+		}
+
+		public void DeleteAgentSkillForPersonId(int personId)
+		{
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				var query = uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_fact_agent_skill_delete]
+					@person_id=:PersonId")
+					.SetInt32("PersonId", personId);
+
+				query.ExecuteUpdate();
+			}
+		}
+
+		public IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId)
+		{
+			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"SELECT 
+						person_id PersonId,
+						skill_id SkillId,
+						has_skill HasSkill,
+						active Active,
+						business_unit_id BusinessUnitId,
+						datasource_id DatasourceId
+                    FROM mart.fact_agent_skill WITH (NOLOCK)
+					WHERE person_id=:PersonId")
+					.SetInt32("PersonId", personId)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsFactAgentSkill)))
+					.SetReadOnly(true)
+					.List<AnalyticsFactAgentSkill>();
+			}
+		}
+
 		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
 		{
-			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity;
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
 			return identity.DataSource.Analytics;
 		}
 	}

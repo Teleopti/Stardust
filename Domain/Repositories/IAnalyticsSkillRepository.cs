@@ -10,5 +10,10 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<AnalyticsSkill> Skills(int businessUnitId);
 		int AddSkillSet(AnalyticsSkillSet analyticsSkillSet);
 		void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill);
+
+		// Fact agent skill
+		void AddAgentSkill(int personId, int skillId, bool active, int businessUnitId);
+		void DeleteAgentSkillForPersonId(int personId);
+		IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId);
 	}
 }
