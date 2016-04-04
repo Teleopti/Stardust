@@ -121,7 +121,9 @@
     <Compile Include="ScriptPathExtensions.cs" />
     <Compile Include="ServerVersionHelper.cs" />
     <Compile Include="SignalRSqlBackplaneSchemaCreator.cs" />
+    <Compile Include="SqlAzureTransientErrorDetectionStrategyWithTimeouts.cs" />
     <Compile Include="SqlTransientErrorChecker.cs" />
+    <Compile Include="SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
     <Compile Include="SqlVersion.cs" />
     <Compile Include="Timeouts.cs" />
   </ItemGroup>

@@ -13,15 +13,14 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		private readonly Func<SqlConnection> _openConnection;
 		private readonly IUpgradeLog _upgradeLog;
-		private readonly RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> _retryPolicy;
+		private readonly RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts> _retryPolicy;
 
 		public ExecuteSql(Func<SqlConnection> openConnection, IUpgradeLog upgradeLog)
 		{
 			_openConnection = openConnection;
 			_upgradeLog = upgradeLog;
 			var retryStrategy = new Incremental(5, TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(10));
-			_retryPolicy =
-			  new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(retryStrategy);
+			_retryPolicy = new RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts>(retryStrategy);
 			_retryPolicy.Retrying += (sender, args) =>
 			{
 				var msg = string.Format("Retrying - Count: {0}, Delay: {1}, Exception: {2}", args.CurrentRetryCount, args.Delay, args.LastException);
