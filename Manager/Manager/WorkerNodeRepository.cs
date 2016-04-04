@@ -13,7 +13,6 @@ namespace Stardust.Manager
 	public class WorkerNodeRepository : IWorkerNodeRepository
 	{
 		private readonly string _connectionString;
-		private readonly object _lockLoadAllFreeNodes = new object();
 		private readonly RetryPolicy _retryPolicy;
 
 		public WorkerNodeRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
@@ -61,7 +60,6 @@ namespace Stardust.Manager
 
 		public void Add(WorkerNode job)
 		{
-
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.OpenWithRetry(_retryPolicy);
@@ -121,10 +119,8 @@ namespace Stardust.Manager
 					connection.Close();
 				}
 			}
-			
 		}
 
-		
 		public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
 		{
 			var selectCommand = @"SELECT Id, Url, Heartbeat, Alive FROM Stardust.WorkerNodes";

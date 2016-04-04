@@ -9,9 +9,7 @@ namespace Stardust.Manager.Extensions
 	{
 		public static ILog Log<T>(this T thing)
 		{
-			var log = LogManager.GetLogger(typeof(T));
-
-			return log;
+			return LogManager.GetLogger(typeof(T));
 		}
 
 		private static void ValidateArgument(this ILog logger)

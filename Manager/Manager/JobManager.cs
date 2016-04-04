@@ -116,27 +116,6 @@ namespace Stardust.Manager
 			return _workerNodeRepository.LoadAll();
 		}
 
-
-		//public IList<WorkerNode> UpNodes()
-		//{
-		//	var upNodes = new List<WorkerNode>();
-
-		//	var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
-
-		//	foreach (var availableNode in availableNodes)
-		//	{
-		//		var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
-		//		var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
-		//		var success = _httpSender.TryGetAsync(postUri);
-		//		if (success == null || success.Result)
-		//		{
-		//			upNodes.Add(availableNode);
-		//		}
-		//	}
-
-		//	return upNodes;
-		//}
-
 		public void RegisterHeartbeat(string nodeUri)
 		{
 			this.Log().DebugWithLineNumber("Start RegisterHeartbeat.");
@@ -155,7 +134,6 @@ namespace Stardust.Manager
 
 			try
 			{
-
 					_jobRepository.CheckAndAssignNextJob(_httpSender);
 
 					this.Log().DebugWithLineNumber("Finished CheckAndAssignNextJob.");
