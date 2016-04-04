@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			private set
 			{
 				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive("Resource", roundedValue);
+				InParameter.ValueMustBePositive("Count", roundedValue);
 				_count = roundedValue;
 			}
 		}
