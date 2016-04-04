@@ -46,9 +46,9 @@ namespace Stardust.Manager
 		/// <param name="jobDefinition"></param>
 		public void AddJobDefinition(JobDefinition jobDefinition)
 		{
-			using (var sqlConnection = new SqlConnection(_connectionString))
+			try
 			{
-				try
+				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
@@ -90,14 +90,11 @@ namespace Stardust.Manager
 						sqlTransaction.Commit();
 					}
 				}
-				catch (Exception exp)
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-				finally
-				{
-					sqlConnection.Close();
-				}
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 
@@ -168,9 +165,9 @@ namespace Stardust.Manager
 		/// <param name="jobId"></param>
 		public void DeleteJobByJobId(Guid jobId)
 		{
-			using (var sqlConnection = new SqlConnection(_connectionString))
+			try
 			{
-				try
+				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
@@ -181,14 +178,11 @@ namespace Stardust.Manager
 
 					deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
-				catch (Exception exp)
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-				finally
-				{
-					sqlConnection.Close();
-				}
+
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
@@ -198,9 +192,9 @@ namespace Stardust.Manager
 		/// <param name="url"></param>
 		public void FreeJobIfNodeIsAssigned(string url)
 		{
-			using (var sqlConnection = new SqlConnection(_connectionString))
+			try
 			{
-				try
+				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
@@ -212,14 +206,10 @@ namespace Stardust.Manager
 					sqlCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
 
-				catch (Exception exp)
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-				finally
-				{
-					sqlConnection.Close();
-				}
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
@@ -491,9 +481,9 @@ namespace Stardust.Manager
 
 		public void SetEndResultOnJob(Guid jobId, string result)
 		{
-			using (var sqlConnection = new SqlConnection(_connectionString))
+			try
 			{
-				try
+				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
@@ -523,14 +513,11 @@ namespace Stardust.Manager
 						sqlTransaction.Commit();
 					}
 				}
-				catch (Exception exp)
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-				finally
-				{
-					sqlConnection.Close();
-				}
+
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
@@ -544,9 +531,9 @@ namespace Stardust.Manager
 		                           string detail,
 		                           DateTime created)
 		{
-			using (var sqlConnection = new SqlConnection(_connectionString))
+			try
 			{
-				try
+				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
@@ -556,16 +543,12 @@ namespace Stardust.Manager
 					insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 
 					insertIntoJobHistoryDetailCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+				}
 
-				}
-				catch (Exception exp)
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-				finally
-				{
-					sqlConnection.Close();
-				}
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
 
@@ -821,9 +804,16 @@ namespace Stardust.Manager
 
 		private SqlCommand CreateSelectFromJobDefinitionsWithTabLockCommand(Guid id)
 		{
-			const string commandText =
-				"SELECT * From [Stardust].JobDefinitions " +
-				"WHERE Id = @Id";
+			const string commandText = @"SELECT  
+											Id    
+                                            ,Name
+                                            ,Serialized
+                                            ,Type
+                                            ,UserName
+                                            ,AssignedNode
+                                            ,Status
+                                        FROM [Stardust].JobDefinitions 
+										WHERE Id = @Id";
 
 			var command = new SqlCommand(commandText);
 

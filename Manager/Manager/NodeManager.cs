@@ -24,12 +24,15 @@ namespace Stardust.Manager
 				{
 					Url = nodeUrl
 				};
-				_nodeRepository.Add(node);
+				_nodeRepository.AddWorkerNode(node);
 			}
 			catch (SqlException exception)
 			{
 				if (exception.Message.Contains("UQ_WorkerNodes_Url"))
+				{
 					return;
+				}
+					
 				throw;
 			}
 		}
@@ -38,6 +41,5 @@ namespace Stardust.Manager
 		{
 			_jobRepository.FreeJobIfNodeIsAssigned(url.ToString());
 		}
-
 	}
 }

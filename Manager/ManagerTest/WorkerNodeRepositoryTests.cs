@@ -32,9 +32,9 @@ namespace ManagerTest
 				Heartbeat = DateTime.UtcNow,
 				Alive = true
 			};
-			WorkerNodeRepository.Add(node);
+			WorkerNodeRepository.AddWorkerNode(node);
 
-			node = WorkerNodeRepository.LoadWorkerNode(_nodeUri1);
+			node = WorkerNodeRepository.GetWorkerNodeByNodeId(_nodeUri1);
 			var beforeHeartbeat = node.Heartbeat;
 
 			Thread.Sleep(TimeSpan.FromSeconds(1)); // to create a difference between heartbeats
@@ -43,7 +43,7 @@ namespace ManagerTest
 
 			Thread.Sleep(TimeSpan.FromSeconds(1));  // to let the task that writes heartbeat finish
 
-			node = WorkerNodeRepository.LoadWorkerNode(_nodeUri1);
+			node = WorkerNodeRepository.GetWorkerNodeByNodeId(_nodeUri1);
 			var afterHeartbeat = node.Heartbeat;
 
 			Assert.IsTrue(beforeHeartbeat < afterHeartbeat);

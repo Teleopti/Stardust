@@ -74,7 +74,7 @@ namespace ManagerTest
 			};
 
 			JobRepository.AddJobDefinition(job);
-			NodeRepository.Add(new WorkerNode { Url = _nodeUri1 });
+			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri1 });
 
 			JobRepository.CheckAndAssignNextJob(HttpSender);
 
@@ -102,8 +102,8 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToCancelJobOnNode()
 		{
-			NodeRepository.Add(new WorkerNode { Url = _nodeUri1 });
-			NodeRepository.Add(new WorkerNode { Url = _nodeUri2 });
+			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri1 });
+			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri2 });
 			Target.Heartbeat(_nodeUri1);
 			Target.Heartbeat(_nodeUri2);
 
@@ -267,7 +267,7 @@ namespace ManagerTest
 			else
 			{
 				JobRepository.AddJobDefinition(job);
-				NodeRepository.Add(new WorkerNode
+				NodeRepository.AddWorkerNode(new WorkerNode
 				{
 					Url = _nodeUri1
 				});

@@ -152,6 +152,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\WorkerNode.cs" />
     <Compile Include="RetryPolicyProvider.cs" />
+    <Compile Include="SqlAzureTransientErrorDetectionStrategy.cs" />
+    <Compile Include="SqlAzureTransientErrorDetectionStrategyWithTimeouts.cs" />
     <Compile Include="Validations\Validator.cs" />
     <Compile Include="WorkerNodeRepository.cs" />
   </ItemGroup>

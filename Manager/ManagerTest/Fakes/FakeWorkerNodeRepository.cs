@@ -9,22 +9,22 @@ namespace ManagerTest.Fakes
 	{
 		private readonly List<WorkerNode> _workerNodes = new List<WorkerNode>();
 
-		public List<WorkerNode> LoadAll()
+		public List<WorkerNode> GetAllWorkerNodes()
 		{
 			return _workerNodes;
 		}
 
-		public void Add(WorkerNode workerNode)
+		public void AddWorkerNode(WorkerNode workerNode)
 		{
 			_workerNodes.Add(workerNode);
 		}
 
-		public void DeleteNode(Guid nodeId)
+		public void DeleteNodeByNodeId(Guid nodeId)
 		{
 			throw new NotImplementedException();
 		}
 
-		public WorkerNode LoadWorkerNode(Uri nodeUri)
+		public WorkerNode GetWorkerNodeByNodeId(Uri nodeUri)
 		{
 			throw new NotImplementedException();
 		}

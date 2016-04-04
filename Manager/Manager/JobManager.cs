@@ -28,7 +28,7 @@ namespace Stardust.Manager
 		{
 			if (managerConfiguration.AllowedNodeDownTimeSeconds <= 0)
 			{
-				this.Log().ErrorWithLineNumber("AllowedNodeDownTimeSeconds is not greater than zero!");
+				this.Log().ErrorWithLineNumber("AllowedNodeDownTimeSeconds must be greater than zero!");
 
 				throw new ArgumentOutOfRangeException();
 			}
@@ -46,8 +46,9 @@ namespace Stardust.Manager
 			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*200;
 			_checkHeartbeatsTimer.Start();
 
-			var workerNodes = _workerNodeRepository.LoadAll();
-			if (workerNodes.Any())
+			var workerNodes = _workerNodeRepository.GetAllWorkerNodes();
+
+			if (workerNodes != null && workerNodes.Any())
 			{
 				foreach (var workerNode in workerNodes)
 				{
@@ -85,7 +86,8 @@ namespace Stardust.Manager
 
 			var jobs = _jobRepository.GetAllJobDefinitions();
 
-			if (deadNodes != null && jobs != null)
+			if (deadNodes != null && deadNodes.Any()  
+				&& jobs != null && jobs.Any())
 			{
 				foreach (var node in deadNodes)
 				{
@@ -94,7 +96,7 @@ namespace Stardust.Manager
 						if (job.AssignedNode == node)
 						{
 							this.Log().ErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.Id +
-							                              " , " + job.Name + " )");
+							                               " , " + job.Name + " )");
 
 							SetEndResultOnJobAndRemoveIt(job.Id, "Fatal Node Failure");
 						}
@@ -113,29 +115,8 @@ namespace Stardust.Manager
 
 		public IList<WorkerNode> Nodes()
 		{
-			return _workerNodeRepository.LoadAll();
+			return _workerNodeRepository.GetAllWorkerNodes();
 		}
-
-
-		//public IList<WorkerNode> UpNodes()
-		//{
-		//	var upNodes = new List<WorkerNode>();
-
-		//	var availableNodes = _workerNodeRepository.LoadAllFreeNodes();
-
-		//	foreach (var availableNode in availableNodes)
-		//	{
-		//		var nodeUriBuilder = new NodeUriBuilderHelper(availableNode.Url);
-		//		var postUri = nodeUriBuilder.GetIsAliveTemplateUri();
-		//		var success = _httpSender.TryGetAsync(postUri);
-		//		if (success == null || success.Result)
-		//		{
-		//			upNodes.Add(availableNode);
-		//		}
-		//	}
-
-		//	return upNodes;
-		//}
 
 		public void RegisterHeartbeat(string nodeUri)
 		{
@@ -146,7 +127,6 @@ namespace Stardust.Manager
 			this.Log().DebugWithLineNumber("Finished RegisterHeartbeat.");
 		}
 
-
 		public void CheckAndAssignNextJob()
 		{
 			this.Log().DebugWithLineNumber("Start CheckAndAssignNextJob.");
@@ -155,16 +135,15 @@ namespace Stardust.Manager
 
 			try
 			{
+				_jobRepository.CheckAndAssignNextJob(_httpSender);
 
-					_jobRepository.CheckAndAssignNextJob(_httpSender);
-
-					this.Log().DebugWithLineNumber("Finished CheckAndAssignNextJob.");
+				this.Log().DebugWithLineNumber("Finished CheckAndAssignNextJob.");
 			}
 
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
-				                              exp);
+				                               exp);
 
 				throw;
 			}
@@ -173,6 +152,7 @@ namespace Stardust.Manager
 			{
 				var total =
 					managerStopWatch.GetTotalElapsedTimeInMilliseconds();
+
 				this.Log().DebugWithLineNumber("CheckAndAssignNextJob: Stop ManagerStopWatch. Took " + total + " milliseconds.");
 			}
 		}
@@ -185,7 +165,7 @@ namespace Stardust.Manager
 		public void CancelThisJob(Guid id)
 		{
 			_jobRepository.CancelJobByJobId(id,
-			                             _httpSender);
+			                                _httpSender);
 		}
 
 		public void SetEndResultOnJobAndRemoveIt(Guid jobId,

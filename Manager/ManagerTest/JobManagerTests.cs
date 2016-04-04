@@ -5,14 +5,12 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using log4net.Config;
 using ManagerTest.Database;
 using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
-using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
@@ -21,6 +19,12 @@ namespace ManagerTest
 	[TestFixture, JobTests]
 	public class JobManagerTests : DatabaseTest
 	{
+		[TearDown]
+		public void TearDown()
+		{
+			JobManager.Dispose();
+		}
+
 		public JobManager JobManager;
 		public NodeManager NodeManager;
 		public IHttpSender HttpSender;
@@ -39,18 +43,21 @@ namespace ManagerTest
 		[TestFixtureSetUp]
 		public void TextFixtureSetUp()
 		{
-			
 #if DEBUG
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 #endif
-
 		}
 
-		[TearDown]
-		public void TearDown()
+		[Test]
+		public void ShouldAddANodeOnInit()
 		{
-			JobManager.Dispose();
+			NodeManager.AddIfNeeded(_nodeUri1);
+
+			WorkerNodeRepository.GetAllWorkerNodes()
+				.First()
+				.Url.Should()
+				.Be.EqualTo(_nodeUri1.ToString());
 		}
 
 		[Test]
@@ -67,7 +74,7 @@ namespace ManagerTest
 				Type = "Type"
 			});
 
-			WorkerNodeRepository.Add(new WorkerNode
+			WorkerNodeRepository.AddWorkerNode(new WorkerNode
 			{
 				Id = Guid.NewGuid(),
 				Url = _nodeUri1
@@ -82,7 +89,7 @@ namespace ManagerTest
 			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Canceling");
 		}
-		
+
 
 		[Test]
 		public void ShouldContainJobManager()
@@ -138,6 +145,16 @@ namespace ManagerTest
 		}
 
 		[Test]
+		public void ShouldNotAddSameNodeTwiceInInit()
+		{
+			NodeManager.AddIfNeeded(_nodeUri1);
+			NodeManager.AddIfNeeded(_nodeUri1);
+			WorkerNodeRepository.GetAllWorkerNodes()
+				.Count.Should()
+				.Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldRemoveJobOnBadRequest()
 		{
 			var jobId = Guid.NewGuid();
@@ -149,8 +166,8 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			
-			WorkerNodeRepository.Add(new WorkerNode
+
+			WorkerNodeRepository.AddWorkerNode(new WorkerNode
 			{
 				Id = Guid.NewGuid(), Url = _nodeUri1
 			});
@@ -182,7 +199,7 @@ namespace ManagerTest
 				Serialized = "",
 				Type = ""
 			});
-			WorkerNodeRepository.Add(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri1});
+			WorkerNodeRepository.AddWorkerNode(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri1});
 			JobManager.CheckAndAssignNextJob();
 			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
@@ -190,46 +207,6 @@ namespace ManagerTest
 			NodeManager.FreeJobIfAssingedToNode(_nodeUri1);
 			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.AssignedNode.Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldSendJobToNodeLoadTest()
-		{
-			int numberOfJobs = 100;
-
-			List<Task> tasks=new List<Task>();
-
-			for (int i = 0; i < numberOfJobs; i++)
-			{
-				tasks.Add(new Task(() =>
-				{
-					JobRepository.AddJobDefinition(new JobDefinition
-					{
-						Id = Guid.NewGuid(),
-						Name = "For test",
-						UserName = "JobManagerTests",
-						JobProgress = "Waiting",
-						Serialized = "Serialized",
-						AssignedNode = "",
-						Status = "Added",
-						Type = "Type"
-					});
-
-				}));				
-			}
-
-			Parallel.ForEach(tasks, task =>
-			{
-				task.Start();
-			});
-
-
-			Task.WaitAll(tasks.ToArray());
-
-			var all=JobRepository.GetAllJobDefinitions().Count;
-
-			Assert.IsTrue(numberOfJobs == all,"Should be equal");
-
 		}
 
 		[Test]
@@ -250,7 +227,7 @@ namespace ManagerTest
 				Type = "Type"
 			});
 
-			WorkerNodeRepository.Add(new WorkerNode
+			WorkerNodeRepository.AddWorkerNode(new WorkerNode
 			{
 				Id = nodeId, Url = _nodeUri1
 			});
@@ -258,10 +235,45 @@ namespace ManagerTest
 			JobManager.CheckAndAssignNextJob();
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 
-			var job = 
+			var job =
 				JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 
 			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
+		}
+
+		[Test]
+		public void ShouldSendJobToNodeLoadTest()
+		{
+			var numberOfJobs = 100;
+
+			var tasks = new List<Task>();
+
+			for (var i = 0; i < numberOfJobs; i++)
+			{
+				tasks.Add(new Task(() =>
+				{
+					JobRepository.AddJobDefinition(new JobDefinition
+					{
+						Id = Guid.NewGuid(),
+						Name = "For test",
+						UserName = "JobManagerTests",
+						JobProgress = "Waiting",
+						Serialized = "Serialized",
+						AssignedNode = "",
+						Status = "Added",
+						Type = "Type"
+					});
+				}));
+			}
+
+			Parallel.ForEach(tasks, task => { task.Start(); });
+
+
+			Task.WaitAll(tasks.ToArray());
+
+			var all = JobRepository.GetAllJobDefinitions().Count;
+
+			Assert.IsTrue(numberOfJobs == all, "Should be equal");
 		}
 
 		[Test]
@@ -280,7 +292,7 @@ namespace ManagerTest
 
 			JobRepository.AddJobDefinition(jobDefinition);
 
-			WorkerNodeRepository.Add(new WorkerNode
+			WorkerNodeRepository.AddWorkerNode(new WorkerNode
 			{
 				Id = Guid.NewGuid(),
 				Url = _nodeUri1
@@ -293,26 +305,6 @@ namespace ManagerTest
 			JobManager.SetEndResultOnJobAndRemoveIt(jobId, "Success");
 			JobManager.GetJobHistoryList().Should().Not.Be.Empty();
 			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
-		}
-
-		[Test]
-		public void ShouldAddANodeOnInit()
-		{
-			NodeManager.AddIfNeeded(_nodeUri1);
-			WorkerNodeRepository.LoadAll()
-				.First()
-				.Url.Should()
-				.Be.EqualTo(_nodeUri1.ToString());
-		}
-
-		[Test]
-		public void ShouldNotAddSameNodeTwiceInInit()
-		{
-			NodeManager.AddIfNeeded(_nodeUri1);
-			NodeManager.AddIfNeeded(_nodeUri1);
-			WorkerNodeRepository.LoadAll()
-				.Count.Should()
-				.Be.EqualTo(1);
 		}
 	}
 }

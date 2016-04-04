@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -11,6 +8,7 @@ using Stardust.Manager.Constants;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
+using Stardust.Manager.Validations;
 
 namespace Stardust.Manager
 {
@@ -31,20 +29,18 @@ namespace Stardust.Manager
 			_jobManager = jobManager;
 		}
 
-		private readonly object _lockCreateNewGuid=new object();
-
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
 		{
 			// Validate.
-			var isValidRequest = 
-				new Validations.Validator().ValidateObject(job, Request);
+			var isValidRequest =
+				new Validator().ValidateObject(job, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
 				return isValidRequest;
 			}
-			
+
 			// Start.
 			var jobReceived = new JobDefinition
 			{
@@ -212,8 +208,8 @@ namespace Stardust.Manager
 		public IHttpActionResult JobFailed([FromBody] JobFailedModel jobFailedModel)
 		{
 			// Validate.
-			var isValidRequest = 
-				new Validations.Validator().ValidateObject(jobFailedModel, Request);
+			var isValidRequest =
+				new Validator().ValidateObject(jobFailedModel, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
@@ -274,8 +270,8 @@ namespace Stardust.Manager
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
 			// Validate.
-			var isValidRequest = 
-				new Validations.Validator().ValidateObject(model, Request);
+			var isValidRequest =
+				new Validator().ValidateObject(model, Request);
 
 			if (!(isValidRequest is OkResult))
 			{

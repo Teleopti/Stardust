@@ -13,7 +13,6 @@ namespace Stardust.Manager
 	public class WorkerNodeRepository : IWorkerNodeRepository
 	{
 		private readonly string _connectionString;
-		private readonly object _lockLoadAllFreeNodes = new object();
 		private readonly RetryPolicy _retryPolicy;
 
 		public WorkerNodeRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
@@ -22,133 +21,196 @@ namespace Stardust.Manager
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
 
-		public List<WorkerNode> LoadAll()
+		public List<WorkerNode> GetAllWorkerNodes()
 		{
-			const string selectCommand = @"SELECT * FROM [Stardust].WorkerNodes";
-			var listToReturn = new List<WorkerNode>();
-			using (var connection = new SqlConnection(_connectionString))
+			List<WorkerNode> listToReturn = new List<WorkerNode>();
+
+			try
 			{
-				var command = new SqlCommand
-				{
-					Connection = connection,
-					CommandText = selectCommand,
-					CommandType = CommandType.Text
-				};
-				connection.OpenWithRetry(_retryPolicy);
-
-				var reader = command.ExecuteReaderWithRetry(_retryPolicy);
-
-				if (reader.HasRows)
-				{
-					while (reader.Read())
+				using (var connection = new SqlConnection(_connectionString))
+				{					
+					var command = new SqlCommand
 					{
-						var jobDefinition = new WorkerNode
+						Connection = connection,
+						CommandText = "SELECT Id, Url, Heartbeat, Alive FROM [Stardust].WorkerNodes",
+						CommandType = CommandType.Text
+					};
+
+					connection.OpenWithRetry(_retryPolicy);
+
+					var reader = command.ExecuteReaderWithRetry(_retryPolicy);
+
+					if (reader.HasRows)
+					{
+						var ordinalPositionForIdField = reader.GetOrdinal("Id");
+						var ordinalPositionForUrlField = reader.GetOrdinal("Url");
+						var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
+						var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
+
+						while (reader.Read())
 						{
-							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
-							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
-							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat"))
-						};
-						listToReturn.Add(jobDefinition);
-					}
-				}
+							var jobDefinition = new WorkerNode
+							{
+								Id = (Guid) reader.GetValue(ordinalPositionForIdField),
+								Url = new Uri((string) reader.GetValue(ordinalPositionForUrlField)),
+								Alive = (bool) reader.GetValue(ordinalPositionForAliveField),
+								Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField)
+							};
 
-				reader.Close();
-				connection.Close();
+							listToReturn.Add(jobDefinition);
+						}
+					}
+
+					reader.Close();
+
+					return listToReturn;
+				}
 			}
-			return listToReturn;
-		}
 
-		public void Add(WorkerNode job)
-		{
-
-			using (var connection = new SqlConnection(_connectionString))
+			catch (Exception exp)
 			{
-				connection.OpenWithRetry(_retryPolicy);
-				SqlCommand workerNodeCommand = connection.CreateCommand();
-				workerNodeCommand.CommandText = "INSERT INTO [Stardust].WorkerNodes (Id, Url, Heartbeat, Alive) VALUES(@Id, @Url, @Heartbeat, @Alive)";
-				workerNodeCommand.Parameters.AddWithValue("@Id", job.Id);
-				workerNodeCommand.Parameters.AddWithValue("@Url", job.Url.ToString());
-				workerNodeCommand.Parameters.AddWithValue("@Heartbeat", job.Heartbeat);
-				workerNodeCommand.Parameters.AddWithValue("@Alive", job.Alive);
-				try
-				{
-					using (var tran = connection.BeginTransaction())
-					{
-						workerNodeCommand.Transaction = tran;
-						workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-						tran.Commit();
-					}
-				}
-				catch (Exception exp)
-				{
-					if (exp.Message.Contains("UQ_WorkerNodes_Url"))
-						return;
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-				finally
-				{
-					connection.Close();
-				}
+				throw;
 			}
 		}
 
-		public void DeleteNode(Guid nodeId)
+		public WorkerNode GetWorkerNodeByNodeId(Uri nodeUri)
 		{
-			using (var connection = new SqlConnection(_connectionString))
+			try
 			{
-				SqlCommand deleteCommand = connection.CreateCommand();
-				deleteCommand.CommandText = "DELETE FROM[Stardust].WorkerNodes WHERE Id = @ID";
-				deleteCommand.Parameters.AddWithValue("@ID", nodeId);
-
-				try
+				using (var connection = new SqlConnection(_connectionString))
 				{
 					connection.OpenWithRetry(_retryPolicy);
-					using (var tran = connection.BeginTransaction())
+
+					var command = new SqlCommand
 					{
-						deleteCommand.Transaction = tran;
-						deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-						tran.Commit();
+						Connection = connection,
+						CommandText = "SELECT Id, Url, Heartbeat, Alive " +
+						              "FROM [Stardust].WorkerNodes WHERE Url=@Url",
+						CommandType = CommandType.Text
+					};
+
+					command.Parameters.AddWithValue("@Url", nodeUri.ToString());
+
+					var reader = command.ExecuteReaderWithRetry(_retryPolicy);
+
+					WorkerNode workerNode = null;
+
+					if (reader.HasRows)
+					{
+						var ordinalPositionForIdField = reader.GetOrdinal("Id");
+						var ordinalPositionForUrlField = reader.GetOrdinal("Url");
+						var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
+						var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
+
+						reader.Read();
+
+						workerNode = new WorkerNode
+						{
+							Id = (Guid) reader.GetValue(ordinalPositionForIdField),
+							Url = new Uri((string) reader.GetValue(ordinalPositionForUrlField)),
+							Alive = (bool) reader.GetValue(ordinalPositionForAliveField),
+							Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField)
+						};
 					}
-				}
-				catch (Exception exp)
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-				finally
-				{
-					connection.Close();
+
+					reader.Close();
+
+					return workerNode;
 				}
 			}
-			
+
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+
+				throw;
+			}
 		}
 
-		
+		public void AddWorkerNode(WorkerNode workerNode)
+		{
+			try
+			{
+				using (var connection = new SqlConnection(_connectionString))
+				{
+					connection.OpenWithRetry(_retryPolicy);
+
+					var workerNodeCommand = connection.CreateCommand();
+
+					workerNodeCommand.CommandText = "INSERT INTO [Stardust].WorkerNodes " +
+					                                "(Id, Url, Heartbeat, Alive) " +
+					                                "VALUES(@Id, @Url, @Heartbeat, @Alive)";
+
+					workerNodeCommand.Parameters.AddWithValue("@Id", workerNode.Id);
+					workerNodeCommand.Parameters.AddWithValue("@Url", workerNode.Url.ToString());
+					workerNodeCommand.Parameters.AddWithValue("@Heartbeat", workerNode.Heartbeat);
+					workerNodeCommand.Parameters.AddWithValue("@Alive", workerNode.Alive);
+
+					workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+				}
+			}
+
+			catch (Exception exp)
+			{
+				if (exp.Message.Contains("UQ_WorkerNodes_Url"))
+					return;
+
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+			}
+		}
+
+		public void DeleteNodeByNodeId(Guid nodeId)
+		{
+			try
+			{
+				using (var connection = new SqlConnection(_connectionString))
+				{
+					var deleteCommand = connection.CreateCommand();
+					deleteCommand.CommandText = "DELETE FROM[Stardust].WorkerNodes WHERE Id = @ID";
+					deleteCommand.Parameters.AddWithValue("@ID", nodeId);
+
+					connection.OpenWithRetry(_retryPolicy);
+
+					deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+				}
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+			}
+		}
+
 		public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
 		{
 			var selectCommand = @"SELECT Id, Url, Heartbeat, Alive FROM Stardust.WorkerNodes";
+
 			var updateCommandText = @"UPDATE Stardust.WorkerNodes 
 											SET Alive = @Alive
 										WHERE Url = @Url";
+
 			var deadNodes = new List<string>();
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
 					connection.OpenWithRetry(_retryPolicy);
-					int ordinalPosForHeartBeat = 0;
-					int ordinalPosForUrl = 0;
+
+					var ordinalPosForHeartBeat = 0;
+					var ordinalPosForUrl = 0;
 
 					var listOfObjectArray = new List<object[]>();
+
 					using (var commandSelectAll = new SqlCommand(selectCommand, connection))
 					{
-						using (SqlDataReader readAllWorkerNodes = commandSelectAll.ExecuteReaderWithRetry(_retryPolicy))
+						using (var readAllWorkerNodes = commandSelectAll.ExecuteReaderWithRetry(_retryPolicy))
 						{
 							if (readAllWorkerNodes.HasRows)
 							{
 								ordinalPosForHeartBeat = readAllWorkerNodes.GetOrdinal("Heartbeat");
 								ordinalPosForUrl = readAllWorkerNodes.GetOrdinal("Url");
+
 								while (readAllWorkerNodes.Read())
 								{
 									var temp = new object[readAllWorkerNodes.FieldCount];
@@ -164,7 +226,7 @@ namespace Stardust.Manager
 					{
 						using (var trans = connection.BeginTransaction())
 						{
-							using (var commandUpdate = new SqlCommand(updateCommandText, connection,trans))
+							using (var commandUpdate = new SqlCommand(updateCommandText, connection, trans))
 							{
 								commandUpdate.Parameters.Add("@Alive", SqlDbType.Bit);
 								commandUpdate.Parameters.Add("@Url", SqlDbType.NVarChar);
@@ -172,7 +234,7 @@ namespace Stardust.Manager
 								foreach (var objectse in listOfObjectArray)
 								{
 									var heartBeatDateTime =
-										(DateTime)objectse[ordinalPosForHeartBeat];
+										(DateTime) objectse[ordinalPosForHeartBeat];
 									var url = objectse[ordinalPosForUrl];
 									var currentDateTime = DateTime.UtcNow;
 									var dateDiff =
@@ -195,7 +257,7 @@ namespace Stardust.Manager
 
 			catch (Exception exp)
 			{
-				this.Log().ErrorWithLineNumber(exp.Message,exp);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 
 			return deadNodes;
@@ -208,45 +270,37 @@ namespace Stardust.Manager
 				return;
 			}
 
-			var updateCommandText = @"UPDATE Stardust.WorkerNodes SET Heartbeat = @Heartbeat,
-											Alive = @Alive
-										WHERE Url = @Url";
-			if (!updateStatus)
+			try
 			{
-				updateCommandText = @"UPDATE Stardust.WorkerNodes SET Heartbeat = @Heartbeat
-										WHERE Url = @Url";
-			}
-
-			using (var connection = new SqlConnection(_connectionString))
-			{
-				connection.OpenWithRetry(_retryPolicy);
-				using (var trans = connection.BeginTransaction())
+				using (var connection = new SqlConnection(_connectionString))
 				{
-					using (var command = new SqlCommand(updateCommandText, connection,trans))
+					connection.OpenWithRetry(_retryPolicy);
+
+					var updateCommandText = @"UPDATE Stardust.WorkerNodes SET Heartbeat = @Heartbeat,
+											Alive = @Alive
+											WHERE Url = @Url";
+
+					if (!updateStatus)
+					{
+						updateCommandText = @"UPDATE Stardust.WorkerNodes SET Heartbeat = @Heartbeat
+											WHERE Url = @Url";
+					}
+
+					using (var command = new SqlCommand(updateCommandText, connection))
 					{
 						command.Parameters.Add("@Heartbeat", SqlDbType.DateTime).Value = DateTime.UtcNow;
 						command.Parameters.Add("@Alive", SqlDbType.Bit).Value = true;
 						command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = nodeUri;
-						try
-						{
-							command.ExecuteNonQueryWithRetry(_retryPolicy);
-							trans.Commit();
-						}
-						catch (Exception exp)
-						{
-							this.Log().ErrorWithLineNumber("Could not update heartbeat", exp);
-						}
+
+						command.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
 				}
-				
-				connection.Close();
 			}
-		}
 
-		public WorkerNode LoadWorkerNode(Uri nodeUri)
-		{
-			var workerNodes = LoadAll();
-			return workerNodes.FirstOrDefault(node => node.Url == nodeUri);
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+			}
 		}
 	}
 }

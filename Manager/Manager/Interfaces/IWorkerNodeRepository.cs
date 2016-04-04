@@ -6,13 +6,14 @@ namespace Stardust.Manager.Interfaces
 {
 	public interface IWorkerNodeRepository
 	{
-		List<WorkerNode> LoadAll();
+		List<WorkerNode> GetAllWorkerNodes();
 
-		void Add(WorkerNode workerNode);
+		void AddWorkerNode(WorkerNode workerNode);
 
-        void DeleteNode(Guid nodeId);
+		void DeleteNodeByNodeId(Guid nodeId);
 
-		WorkerNode LoadWorkerNode(Uri nodeUri);
+		WorkerNode GetWorkerNodeByNodeId(Uri nodeUri);
+
 		void RegisterHeartbeat(string nodeUri, bool updateStatus);
 
 		List<string> CheckNodesAreAlive(TimeSpan timeSpan);
