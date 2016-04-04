@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				var interval = new ForecastInterval
 				{
 					DateId = (int) row["date_id"],
-					IntervalId = (int) row["interval_id"],
-					Calls = (double) row["forecasted_calls"] ,
-					HandleTime = (double) row["forecasted_handling_time_s"]
+					IntervalId = Convert.ToInt16(row["interval_id"]),
+					Calls = Convert.ToDouble(row["forecasted_calls"]),
+					HandleTime = Convert.ToDouble(row["forecasted_handling_time_s"])
 				};
 
 				forecastIntervals.Add(interval);

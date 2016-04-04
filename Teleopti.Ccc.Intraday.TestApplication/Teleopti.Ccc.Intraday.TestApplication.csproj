@@ -32,6 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling">
+      <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data">
+      <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.Data.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -46,14 +55,17 @@
     </Compile>
     <Compile Include="ForecastProvider.cs" />
     <Compile Include="ForecastProviderFake.cs" />
+    <Compile Include="Infrastructure\BulkWriter.cs" />
     <Compile Include="Infrastructure\CloudSafeSqlExecute.cs" />
     <Compile Include="Infrastructure\DatabaseCommand.cs" />
     <Compile Include="ForecastInterval.cs" />
     <Compile Include="IForecastProvider.cs" />
+    <Compile Include="Infrastructure\fact_queue.cs" />
     <Compile Include="IQueueDataPersister.cs" />
     <Compile Include="IWorkloadQueuesProvider.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="QueueData.cs" />
+    <Compile Include="QueueDataPersister.cs" />
+    <Compile Include="QueueInterval.cs" />
     <Compile Include="QueueDataPersisterFake.cs" />
     <Compile Include="QueueInfo.cs" />
     <Compile Include="WorkloadInfo.cs" />

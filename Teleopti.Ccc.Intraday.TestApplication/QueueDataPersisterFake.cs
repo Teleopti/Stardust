@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 {
 	public class QueueDataPersisterFake : IQueueDataPersister
 	{
-		public void Persist(IDictionary<int, IList<QueueData>> queueData)
+		public void Persist(IDictionary<int, IList<QueueInterval>> queueData, bool doReplace)
 		{
 			foreach (var data in queueData)
 			{
@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				var queueTextHandleTime = new StringBuilder();
 				foreach (var queueStats in data.Value)
 				{
-					queueTextCalls.AppendLine(queueStats.OfferedCalls + ", ");
-					queueTextHandleTime.AppendLine(queueStats.HandleTime + ", ");
+					queueTextCalls.Append(queueStats.OfferedCalls + ", ");
+					queueTextHandleTime.Append(queueStats.HandleTime + ", ");
 				}
 				Console.WriteLine("Queue: " + data.Key);
 				Console.WriteLine(queueTextCalls);
