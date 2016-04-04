@@ -167,5 +167,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var result2 = target.GetFactAgentSkillsForPerson(2);
 			result2.Count.Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldAddBridgeSkillsetSkill()
+		{
+			var target = new AnalyticsSkillRepository();
+			target.AddBridgeSkillsetSkill(new AnalyticsBridgeSkillsetSkill
+			{
+				BusinessUnitId = businessUnit.BusinessUnitId,
+				DatasourceId = 1,
+				DatasourceUpdateDate = DateTime.Now,
+				SkillsetId = skillSetId,
+				SkillId = 1
+			});
+		}
 	}
 }
