@@ -9,28 +9,23 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class RunInProcessEventPublisher : IEventPublisher
 	{
 		private readonly ResolveEventHandlers _resolver;
-		private readonly IResolve _resolve;
+		private readonly CommonEventProcessor _processor;
 
-		public RunInProcessEventPublisher(ResolveEventHandlers resolver, IResolve resolve)
+		public RunInProcessEventPublisher(ResolveEventHandlers resolver, CommonEventProcessor processor)
 		{
 			_resolver = resolver;
-			_resolve = resolve;
+			_processor = processor;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
 			Task.WaitAll((
 				from @event in events
-				from registrationType in _resolver.HandlerTypesFor<IRunInProcess>(@event)
+				from handlerType in _resolver.HandlerTypesFor<IRunInProcess>(@event)
 				select Task.Factory.StartNew(() =>
-				{
-					using (var scope = _resolve.NewScope())
-					{
-						var handler = scope.Resolve(registrationType);
-						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-						method.Invoke(handler, new[] {@event});
-					}
-				})).ToArray());
+					_processor.Process(@event, handlerType)
+					))
+				.ToArray());
 		}
 	}
 }
