@@ -4,8 +4,6 @@
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
-/// <reference path="jquery.ui.connector.js"/>
-/// <reference path="jquery.ui.connector.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js" />
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
