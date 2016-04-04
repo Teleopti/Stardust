@@ -23,7 +23,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, TimeSpan.FromMilliseconds(delayMs));
 		}
 		
-
 		public IList<JobHistory> HistoryList(Guid nodeId)
 		{
 			var selectCommand = @"SELECT * FROM [Stardust].JobHistory
@@ -127,8 +126,8 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 						{
 							var detail = new JobHistoryDetail
 							{
-								Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
-								Detail = (string)(reader.GetValue(reader.GetOrdinal("Detail"))),
+								Created = reader.GetDateTime(reader.GetOrdinal("Created")),
+								Detail = reader.GetString(reader.GetOrdinal("Detail")),
 							};
 							returnList.Add(detail);
 						}
@@ -168,11 +167,11 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					{
 						node = new WorkerNode
 						{
-							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
-							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
-							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat")),
-							Running = (bool)reader.GetValue(reader.GetOrdinal("Running"))
+							Id = reader.GetGuid(reader.GetOrdinal("Id")),
+							Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
+							Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
+							Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat")),
+							Running = reader.GetBoolean(reader.GetOrdinal("Running"))
 						};
 					}
 				}
@@ -209,11 +208,11 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 					{
 						var node = new WorkerNode
 						{
-							Id = (Guid)reader.GetValue(reader.GetOrdinal("Id")),
-							Url = new Uri((string)reader.GetValue(reader.GetOrdinal("Url"))),
-							Alive = (bool)reader.GetValue(reader.GetOrdinal("Alive")),
-							Heartbeat = (DateTime)reader.GetValue(reader.GetOrdinal("Heartbeat")),
-							Running = (bool)reader.GetValue(reader.GetOrdinal("Running"))
+							Id = reader.GetGuid(reader.GetOrdinal("Id")),
+							Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
+							Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
+							Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat")),
+							Running = reader.GetBoolean(reader.GetOrdinal("Running"))
 						};
 
 						listToReturn.Add(node);
@@ -232,14 +231,14 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			{
 				var jobHist = new JobHistory
 				{
-					Id = (Guid)reader.GetValue(reader.GetOrdinal("JobId")),
-					Name = (string)reader.GetValue(reader.GetOrdinal("Name")),
-					CreatedBy = (string)reader.GetValue(reader.GetOrdinal("CreatedBy")),
-					SentTo = getValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
-					Result = getValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
-					Created = (DateTime)(reader.GetValue(reader.GetOrdinal("Created"))),
-					Started = getDateTime(reader.GetValue(reader.GetOrdinal("Started"))),
-					Ended = getDateTime(reader.GetValue(reader.GetOrdinal("Ended")))
+					Id = reader.GetGuid(reader.GetOrdinal("JobId")),
+					Name = reader.GetString(reader.GetOrdinal("Name")),
+					CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
+					SentTo = getDBNullSafeValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
+					Result = getDBNullSafeValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
+					Created = reader.GetDateTime(reader.GetOrdinal("Created")),
+					Started = getValue<DateTime>(reader.GetValue(reader.GetOrdinal("Started"))),
+					Ended = getValue<DateTime>(reader.GetValue(reader.GetOrdinal("Ended")))
 				};
 				return jobHist;
 			}
@@ -249,23 +248,16 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			}
 			return null;
 		}
-		
 
-		private DateTime? getDateTime(object databaseValue)
+		private T getDBNullSafeValue<T>(object value) where T : class
 		{
-			if (databaseValue.Equals(DBNull.Value))
-			{
-				return null;
-			}
-			return (DateTime)databaseValue;
-		}
-		private string getValue<T>(object value)
-		{
-			return value == DBNull.Value
-				? null
-				: (string)value;
+			return value == DBNull.Value ? null : (T)value;
 		}
 
+		private T? getValue<T>(object value) where T : struct
+		{
+			return value == DBNull.Value ? (T?)null : (T)value;
+		}
 	}
 } 
 	
