@@ -86,6 +86,21 @@
 
 
                         </DataGrid.Columns>
+
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Alive}"
+                                                 Value="False">
+                                        <Setter Property="Background"
+                                                Value="Red" />
+                                        <Setter Property="Foreground"
+                                                Value="White" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+
                     </DataGrid>
                 </Grid>
             </TabItem>
@@ -277,6 +292,7 @@
                               RowDetailsVisibilityMode="VisibleWhenSelected"
                               CanUserDeleteRows="False"
                               Grid.Row="1">
+
 
                         <DataGrid.LayoutTransform>
                             <ScaleTransform CenterX="0"
