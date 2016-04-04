@@ -38,6 +38,5 @@ namespace Stardust.Manager
 		{
 			_jobRepository.FreeJobIfNodeIsAssigned(url.ToString());
 		}
-
 	}
 }

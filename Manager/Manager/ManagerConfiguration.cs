@@ -18,6 +18,5 @@ namespace Stardust.Manager
 			AllowedNodeDownTimeSeconds = 600;
 			CheckNewJobIntervalSeconds = 10;
 		}
-	
 	}
 }

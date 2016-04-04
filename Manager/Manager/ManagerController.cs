@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -30,8 +27,6 @@ namespace Stardust.Manager
 			_nodeManager = nodeManager;
 			_jobManager = jobManager;
 		}
-
-		private readonly object _lockCreateNewGuid=new object();
 
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
