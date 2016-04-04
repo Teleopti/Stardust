@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
@@ -23,6 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingOptions schedulingOptions,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 
-		void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+		void ReOptimize(ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, Action runLast);
 	}
 }
