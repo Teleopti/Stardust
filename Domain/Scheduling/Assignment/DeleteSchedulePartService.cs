@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IList<IScheduleDay> Delete(IList<IScheduleDay> list, DeleteOption options, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingProgress backgroundWorker, INewBusinessRuleCollection newBusinessRuleCollection)
 		{
+
 			InParameter.ListCannotBeEmpty("list", list);
 			if (backgroundWorker == null)
 				throw new ArgumentNullException("backgroundWorker");
