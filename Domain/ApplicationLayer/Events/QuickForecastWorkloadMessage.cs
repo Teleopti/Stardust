@@ -1,30 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	/// <summary>
 	/// Message with details to perform an quick forecast on a workload.
 	/// </summary>
-	public class QuickForecastWorkloadsMessage : MessageWithLogOnContext
+	public class QuickForecastWorkloadMessage : EventWithInfrastructureContext
 	{
 		/// <summary>
-		/// The Job ID
+		/// Same as the JobId
 		/// </summary>
-		public override Guid Identity
+		public Guid Identity
 		{
 			get { return JobId; }
 		}
 
 		/// <summary>
-		/// The workloads to recalculate
+		/// The Id of the workload
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-		public ICollection<Guid> WorkloadIds { get; set; }
+		public Guid WorkloadId { get; set; }
 
 		/// <summary>
-		/// An id identifying this job
+		/// A id identifying this job
 		/// </summary>
 		public Guid JobId { get; set; }
 
@@ -49,7 +48,7 @@ namespace Teleopti.Interfaces.Messages.General
 		public int SmoothingStyle { get; set; }
 
 		/// <summary>
-		/// The period to get the templates from
+		/// The period to get the temlplates from
 		/// </summary>
 		public DateOnlyPeriod TemplatePeriod { get; set; }
 

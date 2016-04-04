@@ -173,8 +173,12 @@
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\CommonEventProcessor.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsPersonPeriodSkillsChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadMessage.cs" />
+    <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadsMessage.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
+    <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadMessageConsumer.cs" />
+    <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsMessageConsumer.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsFactAgentSkill.cs" />

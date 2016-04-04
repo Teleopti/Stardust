@@ -5,6 +5,8 @@ using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;

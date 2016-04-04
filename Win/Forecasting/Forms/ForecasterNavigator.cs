@@ -1263,7 +1263,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var jobId = jobResult.Id.GetValueOrDefault();
 							uow.PersistAll();
 							message.JobId = jobId;
+							message.LogOnBusinessUnitId = skills.FirstOrDefault().Id.GetValueOrDefault();
+							message.LogOnDatasource = _unitOfWorkFactory.Name;
 							_messageSender.Send(message,true);
+
 							using (
 								var statusDialog =
 									new JobStatusView(new JobStatusModel {JobStatusId = jobId, ProgressMax = everyStep*message.WorkloadIds.Count*3}))
