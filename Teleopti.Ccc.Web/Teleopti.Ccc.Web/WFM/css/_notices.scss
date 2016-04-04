@@ -1,0 +1,50 @@
+﻿.growl-container > .growl-item {
+	padding: $full-padding;
+	margin-bottom: 0;
+	padding: 10px;
+	padding-right: 35px;
+	cursor: pointer;
+	vertical-align: middle;
+	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2);
+  .mdi{
+    vertical-align: middle;
+		color:$gray054;
+  }
+}
+
+.growl-item .close {
+	text-shadow: none;
+	opacity: 1;
+  position: relative;
+  float: right;
+  background: 0 0;
+  border: 0;
+  color: $text-color-standard;
+  padding: 0;
+
+}
+
+.growl-container > button {
+	border: none;
+	outline:none;
+}
+.growl-container > .growl-item.ng-enter,
+.growl-container > .growl-item.ng-leave {
+	-webkit-transition:0.5s all ease-in-out;
+	-moz-transition:0.5s all ease-in-out;
+	-o-transition:0.5s all ease-in-out;
+	transition:0.5s all ease-in-out;
+}
+
+.growl-container > .growl-item.ng-enter,
+.growl-container > .growl-item.ng-leave.ng-leave-active {
+	opacity:0;
+}
+.growl-container > .growl-item.ng-leave,
+.growl-container > .growl-item.ng-enter.ng-enter-active {
+	opacity:1;
+}
+
+.growl-container > div.growl-item {
+	background-repeat: no-repeat;
+}

@@ -1647,6 +1647,7 @@
     <Content Include="WFM\vendor\d3\nv.d3.js" />
     <Content Include="WFM\css\_intraday.scss" />
     <None Include="WFM\css\_layout.scss" />
+    <Content Include="WFM\css\_notices.scss" />
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
