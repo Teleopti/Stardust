@@ -12,7 +12,10 @@ html, body{
     flex: 1;
   }
 }
-
+.growl-message{
+	color:$text-color-standard;
+	//tempFix
+}
 
 .flex-element-fill {
 	flex: 1 1 auto;
