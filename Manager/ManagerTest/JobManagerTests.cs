@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http.Results;
 using log4net.Config;
 using ManagerTest.Database;
@@ -192,27 +193,74 @@ namespace ManagerTest
 		}
 
 		[Test]
+		public void ShouldSendJobToNodeLoadTest()
+		{
+			int numberOfJobs = 100;
+
+			List<Task> tasks=new List<Task>();
+
+			for (int i = 0; i < numberOfJobs; i++)
+			{
+				tasks.Add(new Task(() =>
+				{
+					JobRepository.AddJobDefinition(new JobDefinition
+					{
+						Id = Guid.NewGuid(),
+						Name = "For test",
+						UserName = "JobManagerTests",
+						JobProgress = "Waiting",
+						Serialized = "Serialized",
+						AssignedNode = "",
+						Status = "Added",
+						Type = "Type"
+					});
+
+				}));				
+			}
+
+			Parallel.ForEach(tasks, task =>
+			{
+				task.Start();
+			});
+
+
+			Task.WaitAll(tasks.ToArray());
+
+			var all=JobRepository.GetAllJobDefinitions().Count;
+
+			Assert.IsTrue(numberOfJobs == all,"Should be equal");
+
+		}
+
+		[Test]
 		public void ShouldSendJobToNode()
 		{
 			var jobId = Guid.NewGuid();
 			var nodeId = Guid.NewGuid();
+
 			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
 				UserName = "JobManagerTests",
 				JobProgress = "Waiting",
-				Serialized = "",
+				Serialized = "Serialized",
 				AssignedNode = "",
 				Status = "Added",
-				Type = ""
+				Type = "Type"
 			});
 
-			WorkerNodeRepository.Add(new WorkerNode {Id = nodeId, Url = _nodeUri1});
+			WorkerNodeRepository.Add(new WorkerNode
+			{
+				Id = nodeId, Url = _nodeUri1
+			});
+
 			JobManager.CheckAndAssignNextJob();
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 
-			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
+			var job = 
+				JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
+
 			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
 		}
 

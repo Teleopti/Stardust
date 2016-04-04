@@ -822,7 +822,7 @@ namespace Stardust.Manager
 		private SqlCommand CreateSelectFromJobDefinitionsWithTabLockCommand(Guid id)
 		{
 			const string commandText =
-				"SELECT * From [Stardust].JobDefinitions WITH (TABLOCKX) " +
+				"SELECT * From [Stardust].JobDefinitions " +
 				"WHERE Id = @Id";
 
 			var command = new SqlCommand(commandText);

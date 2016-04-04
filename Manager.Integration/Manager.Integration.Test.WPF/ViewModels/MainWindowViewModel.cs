@@ -12,11 +12,14 @@ namespace Manager.Integration.Test.WPF.ViewModels
 	public class MainWindowViewModel : INotifyPropertyChanged
 	{
 		private const string WorkerNodeHeaderConstant = "Worker Node";
+
+		private const string ErrorLoggingHeaderConstant = "Logging errors";
 		private const string LoggingHeaderConstant = "Logging";
 		private const string JobHistoryHeaderConstant = "Job History";
 		private const string JobHistoryGroupBySentToHeaderConstant = "Job History Group By Sent To";
 		private const string JobHistoryDetailHeaderConstant = "Job History Detail";
 		private const string JobDefinitionHeaderConstant = "Job Definition";
+
 		private ClearDatabaseCommand _clearDatabaseCommand;
 		private List<JobDefinition> _jobDefinitionData;
 		private string _jobDefinitionDataHeader;
@@ -37,7 +40,9 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private string _toggleRefreshStatus;
 		private string _workerNodeHeader;
 		private List<WorkerNode> _workerNodesData;
+		private List<Logging> _errorLoggingData;
 
+		private string _errorLoggingHeader;
 
 		public MainWindowViewModel()
 		{
@@ -56,6 +61,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			RefreshEnabled = true;
 		}
+
 
 		public CreateNewJobCommand CreateNewJobCommand { get; set; }
 
@@ -306,6 +312,17 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
+		public string ErrorLoggingHeader
+		{
+			get { return _errorLoggingHeader; }
+			set
+			{
+				_errorLoggingHeader = value;
+
+				OnPropertyChanged();
+			}
+		}
+
 		private void GetData()
 		{
 			RefreshProgressValue = 0;
@@ -317,6 +334,11 @@ namespace Manager.Integration.Test.WPF.ViewModels
 				LoggingData =
 					managerDbEntities.Loggings.OrderByDescending(logging => logging.Id)
 						.ToList();
+
+				ErrorLoggingData = 
+					managerDbEntities.Loggings.Where(logging => !string.IsNullOrEmpty(logging.Exception)).ToList();
+
+				ErrorLoggingHeader = ErrorLoggingHeaderConstant + " ( " + ErrorLoggingData.Count + " )";
 
 				++RefreshProgressValue;
 
@@ -370,6 +392,18 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 
 			Status = "Refresh finished.";
+		}
+
+
+		public List<Logging> ErrorLoggingData
+		{
+			get { return _errorLoggingData; }
+			set
+			{
+				_errorLoggingData = value;
+
+				OnPropertyChanged();
+			}
 		}
 
 		public bool DatabaseContainsInformation()
