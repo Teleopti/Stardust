@@ -2,17 +2,16 @@
 	'use strict';
 	angular.module('wfm.rta')
 		.controller('RtaCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'growl',
-			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, growl) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService',
+			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService) {
 
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
 				var selectedSiteIds = [];
-				growl.info("RTA has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>\
-				Old <a href='../Anywhere#realtimeadherencesites'>RTA</a> can be accessed for a limited time.", {
-								ttl: 0,
-								disableCountDown: true
-				});
+				var message = "RTA has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>\
+				Old <a href='../Anywhere#realtimeadherencesites'>RTA</a> can be accessed for a limited time.";
+
+				NoticeService.info(message, null, true);
 
 				var polling = $interval(function() {
 					RtaService.getAdherenceForAllSites().then(updateAdherence);
