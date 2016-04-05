@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		private IAnalyticsSkillRepository _analyticsSkillRepository;
 		private IPersonRepository _personRepository;
-		private IEventPublisher _eventPublisher;
+		private FakeEventPublisher _eventPublisher;
 
 		private Guid testPerson1Id;
 
@@ -35,9 +34,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				new DateTime(2017, 12, 31));
 
 			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
-
 			_personRepository = new FakePersonRepository();
-			_eventPublisher = MockRepository.GenerateMock<IEventPublisher>();
+			_eventPublisher = new FakeEventPublisher();
+
 			var p1 = new Person
 			{
 				Name = new Name("Test1", "Testsson"),
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				EmploymentNumber = "E321"
 			}.WithId();
 
-			testPerson1Id = p1.Id.Value;
+			testPerson1Id = p1.Id.GetValueOrDefault();
 
 			_personRepository.Add(p1);
 			_personRepository.Add(p2);
@@ -76,7 +75,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			});
 			
 			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -93,7 +93,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then there should be one person period for that person
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
+
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -112,7 +114,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then there should be one person period for that person
 			Assert.AreEqual(2, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -130,7 +133,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -148,7 +152,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -166,7 +171,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -184,7 +190,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything), options => options.Repeat.AtLeastOnce());
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -202,7 +209,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -220,7 +228,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-			_eventPublisher.AssertWasCalled(p => p.Publish(Arg<AnalyticsPersonCollectionChangedEvent>.Is.Anything));
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
 		}
 
 		private static PersonPeriod newTestPersonPeriod(DateTime startDate, Guid? id = null)
