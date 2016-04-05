@@ -21,20 +21,20 @@
 
 		vm.commands = [
 			{
-				label: "AddActivity",
-				shortcut: "Alt+A",
-				panelName: "add-activity",
-				action: function() {vm.setCurrentCommand('AddActivity');parentVm.addActivity();},
-				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
-				visible: function () { return vm.canActiveAddActivity(); }
-			},
-			{
 				label: "AddAbsence",
-				shortcut: "Alt+B",
+				shortcut: "Alt+A",
 				panelName: 'report-absence',
 				action: function () {vm.setCurrentCommand('AddAbsence');parentVm.addAbsence();},
 				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
 				visible: function () { return vm.canActiveAddAbsence(); }
+			},
+			{
+				label: "AddActivity",
+				shortcut: "Alt+T",
+				panelName: "add-activity",
+				action: function () { vm.setCurrentCommand('AddActivity'); parentVm.addActivity(); },
+				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
+				visible: function () { return vm.canActiveAddActivity(); }
 			},
 			{
 				label: "SwapShifts",
@@ -132,10 +132,10 @@
 
 		function registerShortCuts() {
 			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
-				vm.commands[0].action(); // Alt+A for add activity
+				vm.commands[0].action(); // Alt+A for add absence
 			});
-			shortCuts.registerKeySequence([keyCodes.B], [keyCodes.ALT], function () {
-				vm.commands[1].action(); // Alt+B for add absence
+			shortCuts.registerKeySequence([keyCodes.T], [keyCodes.ALT], function () {
+				vm.commands[1].action(); // Alt+T for add activity
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
 				vm.commands[2].action();; // Alt+S for swap shifts
