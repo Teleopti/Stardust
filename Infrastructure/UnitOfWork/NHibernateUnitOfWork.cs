@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentPersistCallbacks persistCallbacks, 
 			NHibernateFilterManager filterManager, 
 			ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, 
-			Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, 
+			Action<ISession> unbind, 
+			Action<ISession, IInitiatorIdentifier> bindInitiator, 
 			TransactionIsolationLevel isolationLevel, 
 			IInitiatorIdentifier initiator)
 		{
