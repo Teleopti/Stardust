@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NPOI.SS.Formula.Functions;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IShiftTradeTimeLineHoursViewModelMapper _shiftTradeTimeLineHoursViewModelMapper;
 		private readonly IShiftTradePersonScheduleProvider _personScheduleProvider;
 		private readonly IShiftTradePersonScheduleViewModelMapper _personScheduleViewModelMapper;
-		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 
 
 		public RequestsShiftTradeScheduleViewModelFactory(ITeamScheduleProjectionProvider projectionProvider, 
@@ -30,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 														IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider,
 														IShiftTradeTimeLineHoursViewModelMapper shiftTradeTimeLineHoursViewModelMapper, 
 														IShiftTradePersonScheduleProvider personScheduleProvider, 
-														IShiftTradePersonScheduleViewModelMapper personScheduleViewModelMapper, ICommonAgentNameProvider commonAgentNameProvider)
+														IShiftTradePersonScheduleViewModelMapper personScheduleViewModelMapper)
 		{
 			_projectionProvider = projectionProvider;
 			_permissionProvider = permissionProvider;
@@ -38,7 +36,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeTimeLineHoursViewModelMapper = shiftTradeTimeLineHoursViewModelMapper;
 			_personScheduleProvider = personScheduleProvider;
 			_personScheduleViewModelMapper = personScheduleViewModelMapper;
-			_commonAgentNameProvider = commonAgentNameProvider;
 		}
 
 		public ShiftTradeScheduleViewModel CreateViewModel(ShiftTradeScheduleViewModelData inputData)
@@ -74,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						var canViewConfidential =
 							_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewConfidential);
 
-						return new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, canViewConfidential, _commonAgentNameProvider.CommonAgentNameSettings));
+						return new ShiftTradeAddPersonScheduleViewModel(_projectionProvider.MakeScheduleReadModel(person, scheduleDay, canViewConfidential));
 					}).ToList();
 				ret.PageCount = (int)Math.Ceiling((double)allSortedPossibleSchedules.Count() / inputData.Paging.Take);
 				ret.PossibleTradeSchedules = allSortedPossibleSchedules.Skip(inputData.Paging.Skip).Take(inputData.Paging.Take);
