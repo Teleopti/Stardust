@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Drawing;
 using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -72,6 +73,40 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 				uniqueSchedulePeriods.Add(schedulerStateHolderFrom.Schedules[oldSchedule.Person].ScheduledDay(dateOnly).PersonAssignment().Period);
 			}
 			uniqueSchedulePeriods.Count.Should().Be.EqualTo(2); 
+		}
+
+		[Test]
+		public void ShouldConsiderAgentsNotPartOfAllPermittedPersons()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(15, TimeSpan.FromMinutes(65)));
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 10; i++)
+			{
+				var agent = new Person().WithId();
+				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
+				agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+				var ass = new PersonAssignment(agent, scenario, dateOnly);
+				ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 16, 0));
+				ass.SetShiftCategory(new ShiftCategory("_").WithId());
+				asses.Add(ass);
+			}
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, skillDay);
+			var oneAgent = asses.First().Person;
+			asses.Select(x => x.Person).Where(x => x != oneAgent).ForEach(x => schedulerStateHolderFrom.AllPermittedPersons.Remove(x));
+
+			Target.Optimize(new[] { schedulerStateHolderFrom.Schedules[oneAgent].ScheduledDay(dateOnly)}, new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), null);
+
+			schedulerStateHolderFrom.Schedules[oneAgent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour
+				.Should().Be.EqualTo(7);
 		}
 
 		[Test]

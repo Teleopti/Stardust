@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var scenario = FetchScenario();
 			FillAgents(schedulerStateHolderTo, scenario, agentsInIsland, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
-			var skills = skillsToUse(schedulerStateHolderTo.AllPermittedPersons, period);
+			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
 			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
 			removeUnwantedSkillDays(schedulerStateHolderTo, skills);
-			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.AllPermittedPersons, period);
+			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
 		}
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private static void removeUnwantedScheduleRanges(ISchedulerStateHolder schedulerStateHolderTo)
 		{
-			foreach (var person in schedulerStateHolderTo.Schedules.Keys.Where(person => !schedulerStateHolderTo.AllPermittedPersons.Contains(person)).ToList())
+			foreach (var person in schedulerStateHolderTo.Schedules.Keys.Where(person => !schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization.Contains(person)).ToList())
 			{
 				schedulerStateHolderTo.Schedules.Remove(person);
 			}

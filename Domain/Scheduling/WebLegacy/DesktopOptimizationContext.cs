@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period);
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
-				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.AllPermittedPersons,
+				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization,
 					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo), true);
 			}
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
