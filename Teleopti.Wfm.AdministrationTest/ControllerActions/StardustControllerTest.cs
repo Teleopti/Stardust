@@ -10,15 +10,13 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	class StardustControllerTest
 	{
 		public StardustController Target;
-		public StardustHelper StardustHelper;
 		public StardustRepository StardustRepository;
 
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			StardustHelper = new StardustHelper(StardustRepository);
-			Target = new StardustController(StardustHelper);
+			Target = new StardustController(StardustRepository);
 		}
 
 		[Test]
