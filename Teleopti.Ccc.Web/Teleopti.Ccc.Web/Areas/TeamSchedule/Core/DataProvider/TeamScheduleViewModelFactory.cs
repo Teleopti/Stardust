@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly ITeamScheduleProjectionProvider _projectionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IPersonNameProvider _commonAgentNameProvider;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IPeopleSearchProvider _searchProvider;
 		private readonly IPersonRepository _personRepository;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider, 
 			ITeamScheduleProjectionProvider projectionProvider, ILoggedOnUser loggedOnUser,
-			IPersonNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
+			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository)
 		{
 			_permissionProvider = permissionProvider;
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				schedules.AddRange(lookupSchedule[person].Where(s => s.DateOnlyAsPeriod.DateOnly != dateInUserTimeZone));
 				return new {Person = person, Schedules = schedules};
 			});
-
+			var nameDescriptionSetting = _commonAgentNameProvider.CommonAgentNameSettings;
 			var list = new List<GroupScheduleShiftViewModel>();
 			foreach (var personScheduleDay in requestedPersonScheduleDays)
 			{
@@ -173,21 +173,21 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					list.Add(new GroupScheduleShiftViewModel
 					{
 						PersonId = person.Id.GetValueOrDefault().ToString(),
-						Name = _commonAgentNameProvider.BuildNameFromSetting(person.Name),
+						Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 						Date = dateInUserTimeZone.Date.ToFixedDateFormat(),
 						Projection = new List<GroupScheduleProjectionViewModel>()
 					});
 				}
-
+				
 				foreach (var scheduleDay in schedules)
 				{
 					var isPublished = isSchedulePublished(scheduleDay.DateOnlyAsPeriod.DateOnly, person);
 					list.Add(isPublished || canSeeUnpublishedSchedules
-						? _projectionProvider.Projection(scheduleDay, canViewConfidential)
+						? _projectionProvider.Projection(scheduleDay, canViewConfidential, nameDescriptionSetting)
 						: new GroupScheduleShiftViewModel
 						{
 							PersonId = person.Id.GetValueOrDefault().ToString(),
-							Name = _commonAgentNameProvider.BuildNameFromSetting(person.Name),
+							Name = nameDescriptionSetting.BuildCommonNameDescription(person),
 							Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 							Projection = new List<GroupScheduleProjectionViewModel>()
 						});

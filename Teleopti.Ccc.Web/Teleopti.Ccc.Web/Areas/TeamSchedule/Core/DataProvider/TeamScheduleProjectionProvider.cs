@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personNameProvider = personNameProvider;
 		}
 
-		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential)
+		public GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting)
 		{
 			var projections = new List<GroupScheduleProjectionViewModel>();
 			var userTimeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var scheduleVm = new GroupScheduleShiftViewModel
 			{
 				PersonId = scheduleDay.Person.Id.GetValueOrDefault().ToString(),
-				Name = _personNameProvider.BuildNameFromSetting(scheduleDay.Person.Name),
+				Name = agentNameSetting.BuildCommonNameDescription(scheduleDay.Person),
 				Date = scheduleDay.DateOnlyAsPeriod.DateOnly.Date.ToFixedDateFormat(),
 				IsFullDayAbsence = IsFullDayAbsence(scheduleDay)
 			};
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 	public interface ITeamScheduleProjectionProvider
 	{
-		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential);
+		GroupScheduleShiftViewModel Projection(IScheduleDay scheduleDay, bool canViewConfidential, ICommonNameDescriptionSetting agentNameSetting);
 		AgentInTeamScheduleViewModel MakeScheduleReadModel(IPerson person, IScheduleDay scheduleDay, bool isPermittedToViewConfidential);
 
 		bool IsFullDayAbsence(IScheduleDay scheduleDay);

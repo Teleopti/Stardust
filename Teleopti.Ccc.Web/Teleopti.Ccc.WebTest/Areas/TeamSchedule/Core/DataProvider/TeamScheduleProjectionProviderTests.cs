@@ -24,12 +24,16 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 	{
 		private TeamScheduleProjectionProvider target;
 		private readonly Scenario scenario = new Scenario("d");
+		private CommonAgentNameProvider _commonAgentNameProvider;
 
 		[SetUp]
 		public void SetupTeamScheduleProjectionProvider()
 		{
 			var loggonUser = new FakeLoggedOnUser();
 			var projectionProvider = new ProjectionProvider();
+			var fakeGlobalSettingRepo = new FakeGlobalSettingDataRepository();
+			fakeGlobalSettingRepo.PersistSettingValue("CommonNameDescription", new CommonNameDescriptionSetting("{FirstName}{LastName}"));
+			_commonAgentNameProvider = new CommonAgentNameProvider(fakeGlobalSettingRepo);
 
 			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, new FakePersonNameProvider());
 		}
@@ -61,10 +65,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var personAbsence = scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
 			personAbsence.SetId(Guid.NewGuid());
 
-			var vm = target.Projection(scheduleDayOnePerson1, true);
+			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
 
 			vm.DayOff.Should().Be(null);
-			vm.Name.Should().Be("1 agent");
+			vm.Name.Should().Be("agent1");
 			vm.Projection.Count().Should().Be(4);
 			vm.IsFullDayAbsence.Should().Be(false);
 			vm.Date.Should().Be(date.ToFixedDateFormat());
@@ -115,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			scheduleDayOnePerson1.Add(assignment1Person1);
 
 
-			var vm = target.Projection(scheduleDayOnePerson1, true);
+			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
 
 			vm.PersonId.Should().Be(person1.Id.ToString());
 			vm.Projection.Count().Should().Be(2);
