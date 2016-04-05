@@ -237,16 +237,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Assert.That(creator.CreateStatisticHelper(_unitOfWork),Is.Not.Null);
 		}
 
-		//[Test]
-		//public void ShouldSendMessageForEachWorkload()
-		//{
-		//	FakeQuickWorkloadProcessor processor = new FakeQuickWorkloadProcessor();
-		//	var consumer = new QuickForecastWorkloadsEventHandler(processor);
-		//	var mess = new QuickForecastWorkloadsEvent {WorkloadIds = new Collection<Guid> {Guid.NewGuid(), Guid.NewGuid()}};
-			
-		//	consumer.Handle(mess);
-		//	Assert.IsTrue(processor.IAmCalled == 2);
-		//}
+		[Test]
+		public void ShouldSendMessageForEachWorkload()
+		{
+			FakeQuickWorkloadProcessor processor = new FakeQuickWorkloadProcessor();
+			var consumer = new QuickForecastWorkloadsEventHandlerBase(processor);
+			var mess = new QuickForecastWorkloadsEvent { WorkloadIds = new Collection<Guid> { Guid.NewGuid(), Guid.NewGuid() } };
+
+			consumer.Handle(mess);
+			Assert.IsTrue(processor.IAmCalled == 2);
+		}
 	}
 
 	public class FakeQuickWorkloadProcessor : IQuickForecastWorkloadProcessor

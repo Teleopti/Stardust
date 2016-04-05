@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			new GracefulDataSourceExceptionHandler();
 
 		private Form _mainWindow;
+		private IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 
 		public ForecasterNavigator()
 		{
@@ -103,7 +104,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			IJobHistoryViewFactory jobHistoryViewFactory,
 			IImportForecastViewFactory importForecastViewFactory,
 			IToggleManager toggleManager,
-			IMessagePopulatingServiceBusSender messageSender)
+			IMessagePopulatingServiceBusSender messageSender,
+			IEventPublisher publisher,
+			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
 			: this()
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
@@ -112,6 +115,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_messageSender = messageSender;
 			_repositoryFactory = repositoryFactory;
 			_unitOfWorkFactory = unitOfWorkFactory;
+			_publisher = publisher;
+			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 
 			setVisibility();
 		}
@@ -1265,8 +1270,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var jobId = jobResult.Id.GetValueOrDefault();
 							uow.PersistAll();
 							message.JobId = jobId;
-							//_publisher.Publish(message);
-							_messageSender.Send(message,true);
+							_eventInfrastructureInfoPopulator.PopulateEventContext(message);
+							_publisher.Publish(message);
 
 							using (
 								var statusDialog =
