@@ -141,6 +141,46 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
 		}
 
 		[Test]
+		public void ShouldNotTouchAssignmentsForAgentsNotOptimized()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
+				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
+			var agent = new Person().WithId();
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var agent2 = new Person().WithId();
+			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			agent2.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent2.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
+			agent2.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
+			ass.SetShiftCategory(new ShiftCategory("_").WithId());
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
+			ass.AddActivity(phoneActivity, new TimePeriod(8, 0, 17, 0));
+			ass.SetShiftCategory(new ShiftCategory("_").WithId());
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent, agent2 }, new[] { ass, ass2 }, skillDay);
+			schedulerStateHolderFrom.Schedules.TakeSnapshot();
+
+			Target.Optimize(new[] { ExtractedSchedule.CreateScheduleDay(schedulerStateHolderFrom.SchedulingResultState.Schedules, agent, dateOnly) }, new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), null);
+
+			schedulerStateHolderFrom.Schedules.DifferenceSinceSnapshot().Count()
+				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldWorkWhenScenarioIsDefault()
 		{
 			var scenario = new Scenario("_") {DefaultScenario = true};

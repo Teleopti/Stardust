@@ -62,9 +62,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
 				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, agents,
-					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo), true);
+					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo));
 			}
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
+			scheduleDictionary.TakeSnapshot();
 		}
 
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
@@ -79,8 +80,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
-			var agentsToMove = modifiedScheduleDictionary.Keys;
-			moveSchedules(modifiedScheduleDictionary, schedulerStateHolderFrom().Schedules, agentsToMove, period, false);
+			var schedulerScheduleDictionary = schedulerStateHolderFrom().Schedules;
+			foreach (var diff in modifiedScheduleDictionary.DifferenceSinceSnapshot())
+			{
+				var modifiedAssignment = diff.CurrentItem as IPersonAssignment;
+				if (modifiedAssignment != null)
+				{
+					var toScheduleDay = schedulerScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
+					var toAssignment = toScheduleDay.PersonAssignment(true);
+					toAssignment.FillWithDataFrom(modifiedAssignment);
+					schedulerScheduleDictionary.Modify(toScheduleDay);
+				}
+			}
 		}
 
 		public IDisposable Set(ICommandIdentifier commandIdentifier, ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
@@ -96,8 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private static void moveSchedules(IScheduleDictionary fromDic, 
 														IScheduleDictionary toDic, 
 														IEnumerable<IPerson> agents, 
-														DateOnlyPeriod period,
-														bool includeNonAssignments)
+														DateOnlyPeriod period)
 		{
 			foreach (var agent in agents)
 			{
@@ -108,13 +118,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(fromScheduleDay.PersonAssignment(true));
 
-					if (includeNonAssignments)
-					{
-						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
-						fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
-						fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
-						fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
-					}
+					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
+					fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
+					fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
+					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
 
 					toDic.Modify(toScheduleDay);
 				}
