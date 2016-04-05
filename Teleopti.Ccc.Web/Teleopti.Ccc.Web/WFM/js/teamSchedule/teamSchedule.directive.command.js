@@ -149,7 +149,7 @@
 			vm.toggles = vm.configurations.toggles;
 			vm.permissions = vm.configurations.permissions;
 			vm.isMenuVisible = function () {
-				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence()||vm.canActiveAddActivity();
+				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence() || vm.canActiveAddActivity();
 			};
 			registerShortCuts();
 		};

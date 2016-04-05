@@ -36,7 +36,7 @@
 		scope.vm = { toggleCurrentSidenav: function () { } };
 		var config = {
 			toggles: {AddActivityEnabled: true},
-			permissions: {HasAddingActivityPermission: true}
+			permissions: { HasAddingActivityPermission: true, HasModifyAssignmentPermission:true}
 		};
 		scope.getConfigurations = function() {
 			return config;
