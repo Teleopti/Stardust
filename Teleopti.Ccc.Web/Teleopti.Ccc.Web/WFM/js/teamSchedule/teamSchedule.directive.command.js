@@ -55,13 +55,13 @@
 		];
 
 		vm.canActiveAddActivity = function () {
-			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
+			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission && vm.permissions.HasModifyAssignmentPermission;
 		};
 
 		vm.canActiveAddAbsence = function () {
 			return vm.toggles.AbsenceReportingEnabled
 				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable)
-				&& vm.permissions.IsModifyScheduleAvailable;
+				&& vm.permissions.IsModifyScheduleAvailable && vm.permissions.HasModifyPersonAbsencePermission;
 		}
 
 		vm.canActiveRemoveAbsence = function () {

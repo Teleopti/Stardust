@@ -57,6 +57,20 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldGetModifyPersonAbsencePermission()
+		{
+			const bool expectedResult = true;
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
+				.Return(expectedResult);
+
+			var target = new TeamScheduleController(null, null, principalAuthorization, null, null, null, null, null);
+			var result = target.GetPermissions();
+
+			result.Content.HasModifyPersonAbsencePermission.Should().Be.EqualTo(expectedResult);
+		}
+
+		[Test]
 		public void ShouldGetSwapShiftsPermission()
 		{
 			const bool expectedResult = true;
@@ -82,6 +96,20 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var result = target.GetPermissions();
 
 			result.Content.HasAddingActivityPermission.Should().Be.EqualTo(expectedResult);
+		}
+
+		[Test]
+		public void ShouldGetModifyPersonAssignmentPermission()
+		{
+			const bool expectedResult = true;
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
+				.Return(expectedResult);
+
+			var target = new TeamScheduleController(null, null, principalAuthorization, null, null, null, null, null);
+			var result = target.GetPermissions();
+
+			result.Content.HasModifyAssignmentPermission.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
