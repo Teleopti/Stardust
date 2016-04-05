@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			{
                 var minutesToAdd = intervalLength - (intervalStart.Minute % intervalLength);
                 var intervalLayers = scheduleDay.Shift.FilterLayers(new DateTimePeriod(intervalStart, intervalStart.AddMinutes(minutesToAdd)));
-               // var intervalLayers = scheduleDay.Shift.FilterLayers(new DateTimePeriod(intervalStart, intervalStart.AddMinutes(intervalLength)));
                 foreach (var layer in intervalLayers)
 				{
 					var datePart = _dateHandler.Handle(shiftStart, shiftEnd, localStartDate, layer, scheduleChangeTime, intervalLength);
@@ -60,9 +59,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					scheduleRows.Add(factScheduleRow);
 				}
                intervalStart = intervalStart.AddMinutes(minutesToAdd);
-               //intervalStart = intervalStart.AddMinutes(intervalLength);
-			    //var diff =  intervalStart.Minute%intervalLength;
-
             }
             return scheduleRows;
 		}
