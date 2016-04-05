@@ -138,10 +138,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "kratz rog");
 			result.ToArray().Length.Should().Be.EqualTo(0);
 
-            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "白小红");
+            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "红小白");
             result.ToArray().Length.Should().Be.EqualTo(1);
 
-            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "白 小红");
+            result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "小红 白");
             result.ToArray().Length.Should().Be.EqualTo(0);
 
             result = target.GetPersonFor(new DateOnly(2012, 2, 2), new List<Guid> { team.Id.Value }, "rogerk");

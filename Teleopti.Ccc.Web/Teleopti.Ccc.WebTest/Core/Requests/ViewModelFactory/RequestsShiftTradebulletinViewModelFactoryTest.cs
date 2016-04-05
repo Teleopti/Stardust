@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.MySchedule.ScheduleLayers.Count().Should().Be(1);
-			result.MySchedule.Name.Should().Be.EqualTo("me@me");
+			result.MySchedule.Name.Should().Be.EqualTo("me me");
 			result.MySchedule.ScheduleLayers[0].Start.Should().Be.EqualTo(new DateTime(2016, 1, 13, 8, 0, 0));
 			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2016, 1, 13, 8, 0, 0));
 		}
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.MySchedule.ScheduleLayers.Count().Should().Be(2);
-			result.MySchedule.Name.Should().Be.EqualTo("me@me");
+			result.MySchedule.Name.Should().Be.EqualTo("me me");
 			result.MySchedule.ScheduleLayers[0].IsOvertime.Should().Be.EqualTo(true);
 			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2016, 1, 13, 6, 0, 0));
 		}
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(1);
-			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("person@empty");
+			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("empty person");
 		}
 
 		[Test]
@@ -418,9 +418,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(3);
-			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("person3@mainshift");
-			result.PossibleTradeSchedules.Second().Name.Should().Be.EqualTo("person2@mainshift");
-			result.PossibleTradeSchedules.Last().Name.Should().Be.EqualTo("person1@mainshift");
+			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("mainshift person3");
+			result.PossibleTradeSchedules.Second().Name.Should().Be.EqualTo("mainshift person2");
+			result.PossibleTradeSchedules.Last().Name.Should().Be.EqualTo("mainshift person1");
 		}
 
 		[Test]
@@ -470,7 +470,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(1);
-			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("person2@mainshift");
+			result.PossibleTradeSchedules.First().Name.Should().Be.EqualTo("mainshift person2");
 			result.PageCount.Should().Be.EqualTo(3);
 		}
 
