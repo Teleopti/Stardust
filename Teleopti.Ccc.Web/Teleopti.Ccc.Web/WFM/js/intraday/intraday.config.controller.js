@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayConfigCtrl', [
-			'$scope', '$state', 'intradayService', '$filter', 'growl',
-			function ($scope, $state, intradayService, $filter, growl) {
+			'$scope', '$state', 'intradayService', '$filter', 'NoticeService',
+			function ($scope, $state, intradayService, $filter, NoticeService) {
 
 				$scope.skills = [];
 				$scope.skillAreaName = '';
@@ -43,10 +43,7 @@
 				};
 
 				var notifySkillAreaCreation = function () {
-				   growl.success("<i class='mdi mdi-thumb-up'></i> Created Area " + $scope.skillAreaName, {
-				        ttl: 5000,
-                        disableCountDown: true,
-                   });
+											 NoticeService.success("Created Area " + $scope.skillAreaName, 5000, false);
 			    };
 			}
 		]);

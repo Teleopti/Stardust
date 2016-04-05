@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
-			'$scope', '$state', 'intradayService', '$filter', 'growl', '$timeout',
-			function ($scope, $state, intradayService, $filter, growl, $timeout) {
+			'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout',
+			function ($scope, $state, intradayService, $filter, NoticeService, $timeout) {
 
 				var autocompleteSkill;
 				var autocompleteSkillArea;
@@ -90,10 +90,7 @@
 				};
 
 				var notifySkillAreaDeletion = function () {
-				    growl.success("<i class='mdi mdi-thumb-up'></i> Deleted Area", {
-				        ttl: 5000,
-				        disableCountDown: true
-				    });
+					NoticeService.success("Deleted Area ", 5000, true);
 				};
 
 				$scope.querySearch = function(query, myArray) {
