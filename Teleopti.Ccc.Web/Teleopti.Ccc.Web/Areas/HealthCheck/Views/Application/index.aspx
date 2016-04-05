@@ -100,7 +100,7 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 					<h3>Configured URL:s</h3>
 					<ul class="list-group" data-bind="foreach: configuredUrls">
 						<li class="list-group-item configured-url" data-bind="css: { 'list-group-item-success': Reachable == true }">
-							<span data-bind="text: Url + (Message ? ' (' + Message + ')' : '')"></span>
+							<span data-bind="text: Url"></span>
 							<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Reachable"></i>
 						</li>
 					</ul>
