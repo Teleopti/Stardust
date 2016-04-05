@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular
-		.module('wfm.http', ['currentUserInfoService', 'angular-growl', 'pascalprecht.translate'])
+		.module('wfm.http', ['currentUserInfoService', 'wfm.notice', 'pascalprecht.translate'])
 		.factory('httpInterceptor', [
-			'$q', 'growl', '$injector', '$timeout', '$translate', function($q, growl, $injector, $timeout, $translate) {
+			'$q', 'NoticeService', '$injector', '$timeout', '$translate', function($q, NoticeService, $injector, $timeout, $translate) {
 				var connected = true;
 
 				function request(config) {
@@ -22,10 +22,7 @@
 					switch (true) {
 						case (rejection.status === 0):
 							//don't remove class test-alert - used in perf tests
-							growl.error("<i class='mdi mdi-alert test-alert'></i>" + $translate.instant('ConnectionErrorMessage'), {
-								ttl: 0,
-								disableCountDown: true
-							});
+							NoticeService.error("<span class='test-alert'></span>" + $translate.instant('ConnectionErrorMessage'), null, false);
 							break;
 
 						case (rejection.status === 401):
@@ -36,13 +33,10 @@
 
 						case (rejection.status > 401 && rejection.status < 600):
 							//don't remove class test-alert - used in perf tests
-							growl.error("<i class='mdi mdi-alert test-alert'></i>" + $translate.instant('InternalErrorMessage'), {
-								ttl: 0,
-								disableCountDown: true
-							});
+							NoticeService.error("<span class='test-alert'></span>" + $translate.instant('InternalErrorMessage'), null, false);
 							break;
 					}
-					
+
 					return $q.reject(rejection);
 				}
 
