@@ -40,7 +40,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 		private IInitiatorIdentifier _initiator;
 
-		protected internal NHibernateUnitOfWork(ISession session, IMessageBrokerComposite messageBroker, ICurrentPersistCallbacks persistCallbacks, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
+		protected internal NHibernateUnitOfWork(
+			ISession session, 
+			IMessageBrokerComposite messageBroker, 
+			ICurrentPersistCallbacks persistCallbacks, 
+			NHibernateFilterManager filterManager, 
+			ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, 
+			Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, 
+			TransactionIsolationLevel isolationLevel, 
+			IInitiatorIdentifier initiator)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;
