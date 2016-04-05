@@ -14,7 +14,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class QuickForecastWorkloadMessageConsumer : IHandleEvent<QuickForecastWorkloadMessage>, IRunOnServiceBus
+	public interface IQuickForecastWorkloadProcessor
+	{
+		void Handle(QuickForecastWorkloadEvent @event);
+	}
+
+	public class QuickForecastWorkloadProcessor : IQuickForecastWorkloadProcessor
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IMultisiteDayRepository _multisiteDayRepository;
@@ -30,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IWorkloadDayHelper _workloadDayHelper;
 		private readonly IForecastClassesCreator _forecastClassesCreator;
 
-		public QuickForecastWorkloadMessageConsumer(ISkillDayRepository skillDayRepository,
+		public QuickForecastWorkloadProcessor(ISkillDayRepository skillDayRepository,
 		                                            IMultisiteDayRepository multisiteDayRepository,
 		                                            IOutlierRepository outlierRepository,
 		                                            IWorkloadRepository workloadRepository,
@@ -58,13 +63,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_workloadDayHelper = workloadDayHelper;
 			_forecastClassesCreator = forecastClassesCreator;
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Common.JobResultDetail.#ctor(Teleopti.Interfaces.Domain.DetailLevel,System.String,System.DateTime,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void Handle(QuickForecastWorkloadMessage message)
+		
+		public void Handle(QuickForecastWorkloadEvent @event)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var jobResult = _jobResultRepository.Get(message.JobId);
+				var jobResult = _jobResultRepository.Get(@event.JobId);
 				if (jobResult == null) return;
 				// more work not finished yet
 				jobResult.FinishedOk = false;
@@ -73,33 +77,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var jobResult = _jobResultRepository.Get(message.JobId);
+				var jobResult = _jobResultRepository.Get(@event.JobId);
 				_feedback.SetJobResult(jobResult, _messageBroker);
-				var remainingProgress = message.IncreaseWith*3;
+				var remainingProgress = @event.IncreaseWith*3;
 				try
 				{
-					var workload = _workloadRepository.Get(message.WorkloadId);
+					var workload = _workloadRepository.Get(@event.WorkloadId);
 					if (workload == null) return;
 					
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded workload " + workload.Name, DateTime.UtcNow, null));
 
-					_feedback.ReportProgress(message.IncreaseWith, "Loaded workload " + workload.Name);
-					remainingProgress -= message.IncreaseWith;
+					_feedback.ReportProgress(@event.IncreaseWith, "Loaded workload " + workload.Name);
+					remainingProgress -= @event.IncreaseWith;
 
 					var skill = workload.Skill;
 
-					var scenario = _scenarioRepository.Get(message.ScenarioId);
+					var scenario = _scenarioRepository.Get(@event.ScenarioId);
 					//Load statistic data
 					var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(unitOfWork);
-					var stat = statisticHelper.LoadStatisticData(message.StatisticPeriod, workload);
+					var stat = statisticHelper.LoadStatisticData(@event.StatisticPeriod, workload);
 					
 					var validated = new List<IValidatedVolumeDay>(0);
 
 					var rep = _repositoryFactory.CreateValidatedVolumeDayRepository(unitOfWork);
-					var validatedVolumeDays = rep.FindRange(message.StatisticPeriod, workload);
+					var validatedVolumeDays = rep.FindRange(@event.StatisticPeriod, workload);
 					if (validatedVolumeDays != null && stat != null)
 					{
-						_feedback.ReportProgress(message.IncreaseWith, "Found " + validatedVolumeDays.Count() + " validated days.");
+						_feedback.ReportProgress(@event.IncreaseWith, "Found " + validatedVolumeDays.Count() + " validated days.");
 						var daysResult = rep.MatchDays(workload, stat, validatedVolumeDays);
 
 						if (daysResult != null)
@@ -107,34 +111,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					}
 
 					var daysWithValidatedStatistics =
-						statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
+						statisticHelper.GetWorkloadDaysWithValidatedStatistics(@event.StatisticPeriod,
 						                                                       workload,
 						                                                       validated);
 					if (!daysWithValidatedStatistics.Any())
 					{
 						// this never happens because we always get empty days back if we don't have statistcs, how should we check that?
 						jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
-															"No statistics found for workload on " + message.StatisticPeriod,
+															"No statistics found for workload on " + @event.StatisticPeriod,
 															DateTime.UtcNow, null));
 
 						_feedback.ReportProgress(remainingProgress,
 						                         "No statistics found for workload on " +
-						                         message.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
+						                         @event.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
 						return;
 					}
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
-															daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " + message.StatisticPeriod,
+															daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " + @event.StatisticPeriod,
 					                                        DateTime.UtcNow, null));
 
-					_feedback.ReportProgress(message.IncreaseWith,
+					_feedback.ReportProgress(@event.IncreaseWith,
 					                         daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " +
-					                         message.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
-					remainingProgress -= message.IncreaseWith;
+					                         @event.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
+					remainingProgress -= @event.IncreaseWith;
 
 					var outlierWorkloadDayFilter = new OutlierWorkloadDayFilter<ITaskOwner>(workload, _outlierRepository);
 					var taskOwnerDaysWithoutOutliers =
 						outlierWorkloadDayFilter.FilterStatistics(daysWithValidatedStatistics,
-						                                          new[] {message.StatisticPeriod});
+						                                          new[] {@event.StatisticPeriod});
 
 					var taskOwnerPeriod = _forecastClassesCreator.GetNewTaskOwnerPeriod(taskOwnerDaysWithoutOutliers);
 
@@ -144,42 +148,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					var multisiteSkill = _skillRepository.Get(skill.Id.GetValueOrDefault());
 					if (multisiteSkill!=null)
 					{
-						var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-						skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario,
+						var skillDays = _skillDayRepository.FindRange(@event.TargetPeriod, skill, scenario);
+						skillDays = _skillDayRepository.GetAllSkillDays(@event.TargetPeriod, skillDays, skill, scenario,
 																		_skillDayRepository.AddRange);
 
 						var allChildSkillDays = new Dictionary<IChildSkill, ICollection<ISkillDay>>();
 						foreach (var childSkill in multisiteSkill.ChildSkills)
 						{
-							var childSkillDays = _skillDayRepository.FindRange(message.TargetPeriod, childSkill, scenario);
-							childSkillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, childSkillDays, childSkill, scenario,
+							var childSkillDays = _skillDayRepository.FindRange(@event.TargetPeriod, childSkill, scenario);
+							childSkillDays = _skillDayRepository.GetAllSkillDays(@event.TargetPeriod, childSkillDays, childSkill, scenario,
 																			_skillDayRepository.AddRange);
 							allChildSkillDays.Add(childSkill,childSkillDays);
 						}
 
-						var multisiteDays = _multisiteDayRepository.FindRange(message.TargetPeriod, multisiteSkill, scenario);
-						multisiteDays = _multisiteDayRepository.GetAllMultisiteDays(message.TargetPeriod, multisiteDays, multisiteSkill,
+						var multisiteDays = _multisiteDayRepository.FindRange(@event.TargetPeriod, multisiteSkill, scenario);
+						multisiteDays = _multisiteDayRepository.GetAllMultisiteDays(@event.TargetPeriod, multisiteDays, multisiteSkill,
 						                                                            scenario, true);
 
-						calculator = _forecastClassesCreator.CreateSkillDayCalculator(multisiteSkill, skillDays.ToList(), multisiteDays.ToList(), allChildSkillDays, message.TargetPeriod);
+						calculator = _forecastClassesCreator.CreateSkillDayCalculator(multisiteSkill, skillDays.ToList(), multisiteDays.ToList(), allChildSkillDays, @event.TargetPeriod);
 					}
 					else
 					{
-						var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-						skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario,
+						var skillDays = _skillDayRepository.FindRange(@event.TargetPeriod, skill, scenario);
+						skillDays = _skillDayRepository.GetAllSkillDays(@event.TargetPeriod, skillDays, skill, scenario,
 																		_skillDayRepository.AddRange);
 
-						calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
+						calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), @event.TargetPeriod);
 					}
 					
 					var workloadDays =
 						_workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
-					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days on " + message.TargetPeriod,
+					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days on " + @event.TargetPeriod,
 					                                        DateTime.UtcNow, null));
-                    applyVolumes(workload, taskOwnerPeriod, workloadDays, message.UseDayOfMonth);
+                    applyVolumes(workload, taskOwnerPeriod, workloadDays, @event.UseDayOfMonth);
 
 					//(Update templates for workload)
-					updateStandardTemplates(workload, statisticHelper, message.TemplatePeriod, message.SmoothingStyle);
+					updateStandardTemplates(workload, statisticHelper, @event.TemplatePeriod, @event.SmoothingStyle);
 
 					//Create budget forecast (apply standard templates for all days in target)
 				    var helper = new TaskOwnerHelper(workloadDays);
@@ -188,7 +192,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                     helper.EndUpdate();
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Updated forecast for " + workload.Name, DateTime.UtcNow,
 					                                        null));
-					_feedback.ReportProgress(message.IncreaseWith, "Updated forecast for " + workload.Name);
+					_feedback.ReportProgress(@event.IncreaseWith, "Updated forecast for " + workload.Name);
 					if (!jobResult.HasError())
 						jobResult.FinishedOk = true;
 				}

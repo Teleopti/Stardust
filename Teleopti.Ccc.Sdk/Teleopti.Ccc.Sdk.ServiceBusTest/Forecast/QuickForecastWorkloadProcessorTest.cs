@@ -4,27 +4,23 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 {
 	[TestFixture]
-	public class QuickForecastWorkloadMessageConsumerTest
+	public class QuickForecastWorkloadProcessorTest
 	{
 		private ISkillDayRepository _skillDayRep;
-		private QuickForecastWorkloadMessageConsumer _target;
+		private QuickForecastWorkloadProcessor _target;
 		private IOutlierRepository _outlierRep;
 		private IWorkloadRepository _workloadRep;
 		private IScenarioRepository _scenarioRep;
@@ -37,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		private IWorkloadDayHelper _workloadDayHelper;
 		private IUnitOfWork _unitOfWork;
 		private Guid _jobId;
-		private QuickForecastWorkloadMessage _mess;
+		private QuickForecastWorkloadEvent _mess;
 		private IStatisticHelper _statisticHelper;
 		private DateOnlyPeriod _statPeriod;
 		private IForecastClassesCreator _forecastClassesCreator;
@@ -62,14 +58,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_workloadDayHelper = MockRepository.GenerateMock<IWorkloadDayHelper>();
 			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
 			_forecastClassesCreator = MockRepository.GenerateMock<IForecastClassesCreator>();
-			_target = new QuickForecastWorkloadMessageConsumer(_skillDayRep, _multisiteDayRep, _outlierRep, _workloadRep, _skillRep, _scenarioRep, _repFactory,
+			_target = new QuickForecastWorkloadProcessor(_skillDayRep, _multisiteDayRep, _outlierRep, _workloadRep, _skillRep, _scenarioRep, _repFactory,
 															   _currentunitOfWorkFactory, _jobResultRep, _jobResultFeedback, _messBroker,
 															   _workloadDayHelper, _forecastClassesCreator);
 			_unitOfWork =  MockRepository.GenerateMock<IUnitOfWork>();
 
 			_jobId = Guid.NewGuid();
 			_statPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 31);
-			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3,UseDayOfMonth = true};
+			_mess = new QuickForecastWorkloadEvent {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3,UseDayOfMonth = true};
 		}
 
 		[Test]
@@ -79,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(null);
 			
-			_target.Consume(_mess);
+			_target.Handle(_mess);
 			
 			_workloadRep.AssertWasNotCalled(x => x.Get(Guid.Empty),o => o.IgnoreArguments());
 		}
@@ -93,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(null);
 			
-			_target.Consume(_mess);
+			_target.Handle(_mess);
 
 			_scenarioRep.AssertWasNotCalled(x => x.Get(Guid.Empty), o => o.IgnoreArguments());
 		}
@@ -137,7 +133,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
 			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(null);
 			
-			_target.Consume(_mess);
+			_target.Handle(_mess);
 
 			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
 			                                              o => o.IgnoreArguments());
@@ -183,7 +179,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
 			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(SkillFactory.CreateMultisiteSkill("Multi sales"));
 
-			_target.Consume(_mess);
+			_target.Handle(_mess);
 
 			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
 														  o => o.IgnoreArguments());
@@ -204,7 +200,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_forecastClassesCreator.Stub(x=> x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			_statisticHelper.Stub(x=> x.LoadStatisticData(_statPeriod,workload)).Return(new List<IWorkloadDayBase>());
 
-			_target.Consume(_mess);
+			_target.Handle(_mess);
 
 			_statisticHelper.AssertWasNotCalled(
 				x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, new List<IValidatedVolumeDay>()),
@@ -221,7 +217,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_jobResultRep.Stub(x=> x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Throw(new ArgumentOutOfRangeException());
 			
-			_target.Consume(_mess);
+			_target.Handle(_mess);
 
 			_jobResultFeedback.AssertWasCalled(x=>x.ReportProgress(0, "Error"),o => o.IgnoreArguments());
 		}
@@ -241,16 +237,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Assert.That(creator.CreateStatisticHelper(_unitOfWork),Is.Not.Null);
 		}
 
-		[Test]
-		public void ShouldSendMessageForEachWorkload()
-		{
-			var bus = MockRepository.GenerateMock<IServiceBus>();
-			var consumer = new QuickForecastWorkloadsMessageConsumer(bus);
-			var mess = new QuickForecastWorkloadsMessage {WorkloadIds = new Collection<Guid> {Guid.NewGuid(), Guid.NewGuid()}};
+		//[Test]
+		//public void ShouldSendMessageForEachWorkload()
+		//{
+		//	FakeQuickWorkloadProcessor processor = new FakeQuickWorkloadProcessor();
+		//	var consumer = new QuickForecastWorkloadsEventHandler(processor);
+		//	var mess = new QuickForecastWorkloadsEvent {WorkloadIds = new Collection<Guid> {Guid.NewGuid(), Guid.NewGuid()}};
 			
-			consumer.Consume(mess);
+		//	consumer.Handle(mess);
+		//	Assert.IsTrue(processor.IAmCalled == 2);
+		//}
+	}
 
-			bus.AssertWasCalled(x => x.Send(new QuickForecastWorkloadMessage()), o => o.IgnoreArguments().Repeat.Twice());
+	public class FakeQuickWorkloadProcessor : IQuickForecastWorkloadProcessor
+	{
+		public int IAmCalled { get; set; }
+
+		public FakeQuickWorkloadProcessor()
+		{
+			IAmCalled = 0;
+		}
+		public void Handle(QuickForecastWorkloadEvent @event)
+		{
+			IAmCalled++;
 		}
 	}
 }

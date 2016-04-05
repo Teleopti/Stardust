@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
@@ -7,10 +8,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	/// <summary>
 	/// Message with details to perform an quick forecast on a workload.
 	/// </summary>
-	public class QuickForecastWorkloadMessage : EventWithInfrastructureContext
+	public class QuickForecastWorkloadsEvent : IEvent, ILogOnContext
 	{
 		/// <summary>
-		/// Same as the JobId
+		/// The Job ID
 		/// </summary>
 		public Guid Identity
 		{
@@ -18,12 +19,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		}
 
 		/// <summary>
-		/// The Id of the workload
+		/// The workloads to recalculate
 		/// </summary>
-		public Guid WorkloadId { get; set; }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public ICollection<Guid> WorkloadIds { get; set; }
 
 		/// <summary>
-		/// A id identifying this job
+		/// An id identifying this job
 		/// </summary>
 		public Guid JobId { get; set; }
 
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public int SmoothingStyle { get; set; }
 
 		/// <summary>
-		/// The period to get the temlplates from
+		/// The period to get the templates from
 		/// </summary>
 		public DateOnlyPeriod TemplatePeriod { get; set; }
 
@@ -61,5 +63,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
         /// If the Index of the day of month should be used when forecasting
         /// </summary>
         public bool UseDayOfMonth { get; set; }
+
+		public string LogOnDatasource { get; set; }
+		public Guid LogOnBusinessUnitId { get; set; }
 	}
 }

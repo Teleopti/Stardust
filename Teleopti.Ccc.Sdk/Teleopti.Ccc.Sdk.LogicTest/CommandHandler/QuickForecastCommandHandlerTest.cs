@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
-			Expect.Call(() => _busSender.Send(new QuickForecastWorkloadsMessage(), true)).IgnoreArguments();
+			Expect.Call(() => _busSender.Send(new QuickForecastWorkloadsEvent(), true)).IgnoreArguments();
 			_mocks.ReplayAll();
 			var period = new DateOnlyPeriodDto
 				{

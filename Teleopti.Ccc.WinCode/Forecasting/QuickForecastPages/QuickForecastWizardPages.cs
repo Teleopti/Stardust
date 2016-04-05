@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 			return _stateObj;
 		}
 
-		public QuickForecastWorkloadsMessage CreateServiceBusMessage()
+		public QuickForecastWorkloadsEvent CreateServiceBusMessage()
 		{
-			return new QuickForecastWorkloadsMessage
+			return new QuickForecastWorkloadsEvent
 		{
 			StatisticPeriod = _stateObj.StatisticPeriod,
 			TargetPeriod = _stateObj.TargetPeriod,

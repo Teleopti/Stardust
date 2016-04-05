@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				unitOfWork.PersistAll();
 
-				var message = new QuickForecastWorkloadsMessage
+				var message = new QuickForecastWorkloadsEvent
 					{
 						StatisticPeriod = command.StatisticPeriod.ToDateOnlyPeriod(),
 						TargetPeriod = command.TargetPeriod.ToDateOnlyPeriod(),

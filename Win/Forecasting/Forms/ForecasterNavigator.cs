@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IImportForecastViewFactory _importForecastViewFactory;
 		private readonly IToggleManager _toggleManager;
 		private readonly IMessagePopulatingServiceBusSender _messageSender;
+		private readonly IEventPublisher _publisher;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private const string assembly = "Teleopti.Ccc.Win";
@@ -1263,8 +1265,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var jobId = jobResult.Id.GetValueOrDefault();
 							uow.PersistAll();
 							message.JobId = jobId;
-							message.LogOnBusinessUnitId = skills.FirstOrDefault().Id.GetValueOrDefault();
-							message.LogOnDatasource = _unitOfWorkFactory.Name;
+							//_publisher.Publish(message);
 							_messageSender.Send(message,true);
 
 							using (
