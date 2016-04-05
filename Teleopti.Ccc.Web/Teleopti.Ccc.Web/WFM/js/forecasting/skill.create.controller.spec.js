@@ -28,7 +28,7 @@ describe('ForecastingSkillCreateCtrl', function () {
 		}
 	};
 
-	var mockGrowl = {};
+	var mockNoticeService = {};
 
 	beforeEach(function () {
 		module('wfm.forecasting');
@@ -44,7 +44,7 @@ describe('ForecastingSkillCreateCtrl', function () {
 	it("should have correct default values", inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		$controller('ForecastingSkillCreateCtrl', { $scope: scope, growl: mockGrowl, SkillService: mockSkillService });
+		$controller('ForecastingSkillCreateCtrl', { $scope: scope, NoticeService: mockNoticeService, SkillService: mockSkillService });
 
 		scope.$digest();
 		expect(scope.model.serviceLevelPercent).toBe(80);
@@ -59,7 +59,7 @@ describe('ForecastingSkillCreateCtrl', function () {
 	it("should display queues", inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		$controller('ForecastingSkillCreateCtrl', { $scope: scope, growl: mockGrowl, SkillService: mockSkillService });
+		$controller('ForecastingSkillCreateCtrl', { $scope: scope, NoticeService: mockNoticeService, SkillService: mockSkillService });
 
 		scope.$digest();
 		expect(scope.gridOptions.data.length).toBe(1);

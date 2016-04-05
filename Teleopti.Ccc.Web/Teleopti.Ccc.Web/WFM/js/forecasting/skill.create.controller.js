@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.forecasting')
 		.controller('ForecastingSkillCreateCtrl', [
-			'SkillService', '$scope', '$filter', '$state', 'growl', 'workingHoursService',
-			function (skillService, $scope, $filter, $state, growl, workingHoursService) {
+			'SkillService', '$scope', '$filter', '$state', 'NoticeService', 'workingHoursService',
+			function (skillService, $scope, $filter, $state, NoticeService, workingHoursService) {
 				var open24Hours = workingHoursService.createEmptyWorkingPeriod(new Date(2000, 1, 1, 0, 0, 0, 0), new Date(2000, 1, 2, 0, 0, 0, 0));
 				angular.forEach(open24Hours.WeekDaySelections, function (weekDay) {
 					weekDay.Checked = true;
@@ -77,11 +77,8 @@
 					if (!isFormValid || !$scope.queueSelected || $scope.hideQueueInvalidMessage) {
 						if ($scope.hideQueueInvalidMessage)
 							$scope.queueSelected = false;
-						growl.warning("<i class='mdi mdi-alert'></i> {{'CouldNotApply'|translate}}", {
-							ttl: 5000,
-							disableCountDown: true
-						});
-						return;
+						 NoticeService.warning("CouldNotApply", 5000, true);
+							return;
 					}
 					var selectedRows = $scope.gridApi.selection.getSelectedRows();
 					var queues = [];
