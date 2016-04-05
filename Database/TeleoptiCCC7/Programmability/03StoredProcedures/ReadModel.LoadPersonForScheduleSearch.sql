@@ -52,8 +52,8 @@ BEGIN
 		AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
 		AND p.WorkflowControlSet IS NOT NULL
 		AND ((@namesearch is null or @namesearch = '')
-			OR (@noSpaceInName = 1 AND @firstNameFirst = 1 AND ((p.LastName + p.FirstName) like @namesearch))
---			OR (@noSpaceInName = 1 AND @firstNameFirst = 0 AND ((p.FirstName + p.LastName) like @namesearch)) : Not needed in Chinese context
+			OR (@noSpaceInName = 1 AND @firstNameFirst = 0 AND ((p.LastName + p.FirstName) like @namesearch))
+			OR (@noSpaceInName = 1 AND @firstNameFirst = 1 AND ((p.FirstName + p.LastName) like @namesearch)) 
 			OR (@noSpaceInName = 0 AND @firstNameFirst = 0 AND ((p.LastName + ' ' + p.FirstName) like @namesearch))
 			OR (@noSpaceInName = 0 AND @firstNameFirst = 1 AND ((p.FirstName + ' ' + p.LastName) like @namesearch)))
 	OPTION	(FORCE ORDER)
