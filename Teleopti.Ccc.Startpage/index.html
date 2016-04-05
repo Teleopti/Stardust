@@ -42,6 +42,7 @@
 					}
 				};
 				xmlhttp.open("GET", "Web/ToggleHandler/IsEnabled?toggle=" + toggle, true);
+				xmlhttp.setRequestHeader("Accept", "application/json");
 				xmlhttp.send();
 
 				callback(true);
