@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			Task.WaitAll((
 				from @event in events
 				from handlerType in _resolver.HandlerTypesFor<IRunInProcess>(@event)
-				select Task.Factory.StartNew(() =>
+				select Task.Run(() =>
 					_processor.Process(@event, handlerType)
 					))
 				.ToArray());
