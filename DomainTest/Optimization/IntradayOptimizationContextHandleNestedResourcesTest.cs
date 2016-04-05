@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldReuseOldContextInNewContext()
 		{
 			SchedulerStateHolder().SchedulingResultState.Schedules = new FakeScheduleDictionary();
-			using (new ResourceCalculationContext(new ResourceCalculationDataContainer(null, 1)))
+			using (new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainer(null, 1))))
 			{
 				var contextBefore = ResourceCalculationContext.Fetch();
 				using (Target.Create(new DateOnlyPeriod()))
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldKeepOldContextAfterInnerDispose()
 		{
 			SchedulerStateHolder().SchedulingResultState.Schedules = new FakeScheduleDictionary();
-			using (new ResourceCalculationContext(new ResourceCalculationDataContainer(null, 1)))
+			using (new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataContainer(null, 1))))
 			{
 				var contextBefore = ResourceCalculationContext.Fetch();
 				using (Target.Create(new DateOnlyPeriod()))

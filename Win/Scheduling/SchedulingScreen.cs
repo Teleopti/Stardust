@@ -2183,13 +2183,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IDisposable disposableContext = null;
 			if (!ResourceCalculationContext.InContext)
 			{
-				var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1),
-					_schedulerState.DaysToRecalculate.Max());
-				var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(),
-					_schedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-				var resources = extractor.CreateRelevantProjectionList(_schedulerState.Schedules,
-					period.ToDateTimePeriod(_schedulerState.TimeZoneInfo));
-				disposableContext = new ResourceCalculationContext(resources);
+				disposableContext = new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(
+					() =>
+					{
+						var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1),
+							_schedulerState.DaysToRecalculate.Max());
+						var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(),
+							_schedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
+						return extractor.CreateRelevantProjectionList(_schedulerState.Schedules,
+							period.ToDateTimePeriod(_schedulerState.TimeZoneInfo));
+					}));
 			}
 			_optimizationHelperExtended.ResourceCalculateMarkedDays(
 				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);

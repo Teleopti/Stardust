@@ -5,17 +5,17 @@ namespace Teleopti.Interfaces.Domain
 	public class ResourceCalculationContext : IDisposable
 	{
 		[ThreadStatic]
-		private static IResourceCalculationDataContainerWithSingleOperation _container;
+		private static Lazy<IResourceCalculationDataContainerWithSingleOperation> _container;
 		
-		public ResourceCalculationContext(IResourceCalculationDataContainerWithSingleOperation resources)
+		public ResourceCalculationContext(Lazy<IResourceCalculationDataContainerWithSingleOperation> resources)
 		{
 			_container = resources;
 		}
 
 		public static IResourceCalculationDataContainerWithSingleOperation Fetch()
 		{
-			return _container;
-        }
+			return _container.Value;
+		}
 
 		public static bool InContext
 		{

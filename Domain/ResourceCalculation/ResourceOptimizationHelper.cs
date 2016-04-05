@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					relevantProjections = extractor.CreateRelevantProjectionList(stateHolder.Schedules,
 						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
 							localDate.AddDays(-1).Date, localDate.AddDays(1).Date, stateHolder.TimeZoneInfo));
-					context = new ResourceCalculationContext(relevantProjections);
+					context =new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => relevantProjections));
 				}
 
 				ResourceCalculateDate(relevantProjections, localDate, considerShortBreaks);
