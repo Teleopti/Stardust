@@ -88,15 +88,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
 
 			var maxDate = MapMaxDate();
+		    var minDate = _analyticsPersonPeriodRepository.MinDate().DateDate;
 
-			var validFromDate = ValidFromDate(personPeriodStartDate, timeZoneInfo);
+            var validFromDate = ValidFromDate(personPeriodStartDate, timeZoneInfo, minDate);
 			var validToDate = ValidToDate(personPeriodEndDate, timeZoneInfo, maxDate.DateDate);
 
 			var validFromDateId = MapDateId(validFromDate);
 			var validToDateId = MapDateId(validToDate);
 			var validToDateIdMaxDate = GetValidToDateIdMaxDate(validToDate, maxDate, validToDateId);
 
-			var validFromDateLocal = personPeriodStartDate;
+			var validFromDateLocal = personPeriodStartDate < minDate ? minDate : personPeriodStartDate;
 			var validToDateLocal = ValidToDateLocal(personPeriodEndDate, maxDate);
 
 			var validFromDateIdLocal = MapDateId(validFromDateLocal);
@@ -191,9 +192,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 			return validToDate;
 		}
 
-		public static DateTime ValidFromDate(DateTime personPeriodStartDate, TimeZoneInfo timeZoneInfo)
+		public static DateTime ValidFromDate(DateTime personPeriodStartDate, TimeZoneInfo timeZoneInfo, DateTime minDate)
 		{
-			var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriodStartDate);
+		    if (personPeriodStartDate < minDate)
+		        return minDate;
+            var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriodStartDate);
 			if (validFromDate >= Eternity)
 				validFromDate = Eternity;
 			return validFromDate;

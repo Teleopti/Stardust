@@ -20,11 +20,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 		{
 			foreach (var personPeriod in list)
 			{
-				// If start date is eternity or later then max date in analytics it should filtered out
-				// or if start date is before min date it should also be filtered out
 				if (personPeriod.StartDate.Date < Eternity &&
 					personPeriod.StartDate.Date <= maxDate &&
-					personPeriod.StartDate.Date >= minDate)
+					personPeriod.EndDate().Date >= minDate)
 				{
 					yield return personPeriod;
 				}

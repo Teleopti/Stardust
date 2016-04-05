@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			var validFromDate = PersonPeriodTransformer.ValidFromDate(
 				new DateTime(2067, 03, 06),
-				TimeZoneInfo.Utc);
+				TimeZoneInfo.Utc, new DateTime(2000,1,1));
 
 			Assert.AreEqual(new DateTime(2059, 12, 31), validFromDate);
 		}
@@ -23,17 +23,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			var validFromDate = PersonPeriodTransformer.ValidFromDate(
 				new DateTime(2059, 12, 31),
-				TimeZoneInfo.Utc);
+				TimeZoneInfo.Utc,new DateTime(2000,4,4));
 
 			Assert.AreEqual(new DateTime(2059, 12, 31), validFromDate);
 		}
 
-		[Test]
+        [Test]
+        public void PersonPeriodStartDateBeforeMinDate_Transform_MinDate()
+        {
+            var validFromDate = PersonPeriodTransformer.ValidFromDate(
+                new DateTime(1999, 12, 31),
+                TimeZoneInfo.Utc, new DateTime(2000, 1, 1));
+
+            Assert.AreEqual(new DateTime(2000, 1, 1), validFromDate);
+        }
+
+        [Test]
 		public void PersonPeriodStartDate_Transform_SameStart()
 		{
 			var validFromDate = PersonPeriodTransformer.ValidFromDate(
 				new DateTime(2020, 01, 01),
-				TimeZoneInfo.Utc);
+				TimeZoneInfo.Utc,new DateTime(2019,1,1));
 
 			Assert.AreEqual(new DateTime(2020, 01, 01), validFromDate);
 		}
