@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			});
 
 			result.MySchedule.ScheduleLayers.Count().Should().Be(1);
-			result.MySchedule.Name.Should().Be.EqualTo("me@me");
+			result.MySchedule.Name.Should().Be.EqualTo("me me");
 			result.MySchedule.ScheduleLayers[0].Start.Should().Be.EqualTo(new DateTime(2016, 1, 13, 8, 0, 0));
 			result.MySchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2016, 1, 13, 8, 0, 0));
 		}
@@ -586,12 +586,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(6);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
-			possibleSchedules[0].Name.Should().Be.EqualTo("person@overtime");
-			possibleSchedules[1].Name.Should().Be.EqualTo("person2@published");
-			possibleSchedules[2].Name.Should().Be.EqualTo("person1@published");
-			possibleSchedules[3].Name.Should().Be.EqualTo("person3@dayoff");
-			possibleSchedules[4].Name.Should().Be.EqualTo("person5@anotherEmpty");
-			possibleSchedules[5].Name.Should().Be.EqualTo("person4@empty");
+			possibleSchedules[0].Name.Should().Be.EqualTo("overtime person");
+			possibleSchedules[1].Name.Should().Be.EqualTo("published person2");
+			possibleSchedules[2].Name.Should().Be.EqualTo("published person1");
+			possibleSchedules[3].Name.Should().Be.EqualTo("dayoff person3");
+			possibleSchedules[4].Name.Should().Be.EqualTo("anotherEmpty person5");
+			possibleSchedules[5].Name.Should().Be.EqualTo("empty person4");
 		}
 
 		[Test]
@@ -665,12 +665,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(6);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
-			possibleSchedules[0].Name.Should().Be.EqualTo("person@overtime");
-			possibleSchedules[1].Name.Should().Be.EqualTo("person2@published");
-			possibleSchedules[2].Name.Should().Be.EqualTo("person1@published");
-			possibleSchedules[3].Name.Should().Be.EqualTo("person3@dayoff");
-			possibleSchedules[4].Name.Should().Be.EqualTo("person5@anotherEmpty");
-			possibleSchedules[5].Name.Should().Be.EqualTo("person4@empty");
+			possibleSchedules[0].Name.Should().Be.EqualTo("overtime person");
+			possibleSchedules[1].Name.Should().Be.EqualTo("published person2");
+			possibleSchedules[2].Name.Should().Be.EqualTo("published person1");
+			possibleSchedules[3].Name.Should().Be.EqualTo("dayoff person3");
+			possibleSchedules[4].Name.Should().Be.EqualTo("anotherEmpty person5");
+			possibleSchedules[5].Name.Should().Be.EqualTo("empty person4");
 		}
 
 		[Test]
@@ -765,9 +765,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			result.PageCount.Should().Be.EqualTo(2);
 			result.PossibleTradeSchedules.Count().Should().Be.EqualTo(2);
 			var possibleSchedules = result.PossibleTradeSchedules.ToList();
-			
-			possibleSchedules[0].Name.Should().Be.EqualTo("person3@dayoff");
-			possibleSchedules[1].Name.Should().Be.EqualTo("person4@empty");
+
+			possibleSchedules[0].Name.Should().Be.EqualTo("dayoff person3");
+			possibleSchedules[1].Name.Should().Be.EqualTo("empty person4");
 		}
 
 		[Test]
