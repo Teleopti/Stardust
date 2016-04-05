@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return schedulerStateHolderFrom().Schedules.Scenario;
 		}
 
-		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = schedulerStateHolderFrom();
 			stateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value))
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period);
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
-				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization,
+				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, agents,
 					stateHolderFrom.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(stateHolderFrom.TimeZoneInfo), true);
 			}
 			schedulerStateHolderTo.SchedulingResultState.Schedules = scheduleDictionary;
