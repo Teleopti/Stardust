@@ -61,6 +61,8 @@ namespace Stardust.Manager
 						var insertIntoJobDefinitionsCommand =
 							CreateInsertIntoJobDefinitionsCommand(jobDefinition);
 
+						insertIntoJobDefinitionsCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 						insertIntoJobDefinitionsCommand.Connection = sqlConnection;
 						insertIntoJobDefinitionsCommand.Transaction = sqlTransaction;
 						insertIntoJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -71,6 +73,8 @@ namespace Stardust.Manager
 						var insertIntoJobHistoryCommand =
 							CreateInsertIntoJobHistoryCommand(jobDefinition);
 
+						insertIntoJobHistoryCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 						insertIntoJobHistoryCommand.Connection = sqlConnection;
 						insertIntoJobHistoryCommand.Transaction = sqlTransaction;
 						insertIntoJobHistoryCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -80,6 +84,8 @@ namespace Stardust.Manager
 						//-------------------------------------------------------------
 						var insertIntoJobHistoryDetailCommand =
 							CreateInsertIntoJobHistoryDetailCommand(jobDefinition.Id, Added, DateTime.UtcNow);
+
+						insertIntoJobHistoryDetailCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 						insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 						insertIntoJobHistoryDetailCommand.Transaction = sqlTransaction;
@@ -114,6 +120,9 @@ namespace Stardust.Manager
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
 					var selectAllFromJobDefinitionsCommand = CreateSelectAllFromJobDefinitionsCommand();
+
+					selectAllFromJobDefinitionsCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 					selectAllFromJobDefinitionsCommand.Connection = sqlConnection;
 
 					var sqlDataReader =
@@ -175,6 +184,8 @@ namespace Stardust.Manager
 					var deleteFromJobDefinitionsCommand =
 						CreateDeleteFromJobDefinitionsCommand(jobId);
 
+					deleteFromJobDefinitionsCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 					deleteFromJobDefinitionsCommand.Connection = sqlConnection;
 
 					deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -202,6 +213,8 @@ namespace Stardust.Manager
 					var sqlCommand =
 						CreateUpdateJobDefinitionsClearAssignedNodeValueCommand(url);
 
+					sqlCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 					sqlCommand.Connection = sqlConnection;
 
 					sqlCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -227,6 +240,8 @@ namespace Stardust.Manager
 					{
 						var checkAndAssignNextJobCommand =
 							CreateCheckAndAssignNextJobCommand();
+
+						checkAndAssignNextJobCommand.CommandTimeout= sqlConnection.ConnectionTimeout;
 
 						checkAndAssignNextJobCommand.Connection = sqlConnection;
 						checkAndAssignNextJobCommand.Transaction = sqlTransaction;
@@ -283,6 +298,8 @@ namespace Stardust.Manager
 							var definitionsUpdateCommand =
 								CreateUpdateJobDefinitionsCommand(job.Id, nodeUrl, Started);
 
+							definitionsUpdateCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 							definitionsUpdateCommand.Connection = sqlConnection;
 							definitionsUpdateCommand.Transaction = sqlTransaction;
 							definitionsUpdateCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
@@ -292,6 +309,8 @@ namespace Stardust.Manager
 							//-------------------------------------------------------------
 							var updateJobHistoryCommand =
 								CreateUpdateJobHistoryCommand(job.Id, DateTime.UtcNow, nodeUrl);
+
+							updateJobHistoryCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 							updateJobHistoryCommand.Connection = sqlConnection;
 							updateJobHistoryCommand.Transaction = sqlTransaction;
@@ -304,6 +323,8 @@ namespace Stardust.Manager
 							var insertIntoJobHistoryDetailCommand =
 								CreateInsertIntoJobHistoryDetailCommand(job.Id, Started, DateTime.UtcNow);
 
+							insertIntoJobHistoryDetailCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 							insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 							insertIntoJobHistoryDetailCommand.Transaction = sqlTransaction;
 						}
@@ -315,6 +336,8 @@ namespace Stardust.Manager
 							//-------------------------------------------------------------
 							var deleteFromJobDefinitionsCommand =
 								CreateDeleteFromJobDefinitionsCommand(job.Id);
+
+							deleteFromJobDefinitionsCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 							deleteFromJobDefinitionsCommand.Connection = sqlConnection;
 							deleteFromJobDefinitionsCommand.Transaction = sqlTransaction;
@@ -329,6 +352,8 @@ namespace Stardust.Manager
 							                            "SentTo = @Node " +
 							                            "WHERE JobId = @Id";
 
+							updateCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 							updateCommand.Transaction = sqlTransaction;
 							updateCommand.Parameters.AddWithValue("@Id", job.Id);
 							updateCommand.Parameters.AddWithValue("@Result", "Removed because of bad request.");
@@ -342,6 +367,8 @@ namespace Stardust.Manager
 							{
 								var insertIntoJobHistoryDetailCommand =
 									CreateInsertIntoJobHistoryDetailCommand(job.Id, response.ReasonPhrase, DateTime.UtcNow);
+
+								insertIntoJobHistoryDetailCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 								insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 								insertIntoJobHistoryDetailCommand.Transaction = sqlTransaction;
@@ -389,6 +416,8 @@ namespace Stardust.Manager
 						var selectFromJobDefinitionsWithTabLockCommand =
 							CreateSelectFromJobDefinitionsWithTabLockCommand(jobId);
 
+						selectFromJobDefinitionsWithTabLockCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 						selectFromJobDefinitionsWithTabLockCommand.Connection = sqlConnection;
 						selectFromJobDefinitionsWithTabLockCommand.Transaction = sqlTransaction;
 
@@ -411,6 +440,8 @@ namespace Stardust.Manager
 									var deleteFromJobDefinitionsCommand =
 										CreateDeleteFromJobDefinitionsCommand(jobId);
 
+									deleteFromJobDefinitionsCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 									deleteFromJobDefinitionsCommand.Connection = sqlConnection;
 									deleteFromJobDefinitionsCommand.Transaction = sqlTransaction;
 									deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -423,6 +454,8 @@ namespace Stardust.Manager
 										"UPDATE [Stardust].JobHistory " +
 										"SET Result = @Result " +
 										"WHERE JobId = @Id";
+
+									updateCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 									updateCommand.Parameters.AddWithValue("@Id", jobId);
 									updateCommand.Parameters.AddWithValue("@Result", Deleted);
@@ -447,6 +480,8 @@ namespace Stardust.Manager
 											"SET Status = 'Canceling' " +
 											"WHERE Id = @Id";
 
+										updateCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 										updateCommand.Parameters.AddWithValue("@Id", jobId);
 										updateCommand.Transaction = sqlTransaction;
 										updateCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -456,6 +491,8 @@ namespace Stardust.Manager
 										//---------------------------------------------------
 										var insertIntoJobHistoryDetailCommand =
 											CreateInsertIntoJobHistoryDetailCommand(jobId, Canceling, DateTime.UtcNow);
+
+										insertIntoJobHistoryDetailCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 										insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 										insertIntoJobHistoryDetailCommand.Transaction = sqlTransaction;
@@ -496,6 +533,8 @@ namespace Stardust.Manager
 						var setEndResultOnJobCommand =
 							CreateSetEndResultOnJobCommand(jobId, result, DateTime.UtcNow);
 
+						setEndResultOnJobCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 						setEndResultOnJobCommand.Connection = sqlConnection;
 						setEndResultOnJobCommand.Transaction = sqlTransaction;
 						setEndResultOnJobCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -505,6 +544,8 @@ namespace Stardust.Manager
 						//-------------------------------------------------------------
 						var insertIntoJobHistoryDetailCommand =
 							CreateInsertIntoJobHistoryDetailCommand(jobId, result, DateTime.UtcNow);
+
+						insertIntoJobHistoryDetailCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 						insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 						insertIntoJobHistoryDetailCommand.Transaction = sqlTransaction;
@@ -541,6 +582,8 @@ namespace Stardust.Manager
 					var insertIntoJobHistoryDetailCommand =
 						CreateInsertIntoJobHistoryDetailCommand(jobId, detail, created);
 
+					insertIntoJobHistoryDetailCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 					insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 
 					insertIntoJobHistoryDetailCommand.ExecuteNonQueryWithRetry(_retryPolicy);
@@ -564,6 +607,8 @@ namespace Stardust.Manager
 
 					var selectJobHistoryByJobIdCommand =
 						CreateSelectJobHistoryByJobIdCommand(jobId);
+
+					selectJobHistoryByJobIdCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
 
 					selectJobHistoryByJobIdCommand.Connection = sqlConnection;
 
@@ -613,6 +658,9 @@ namespace Stardust.Manager
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
 					var selectCommand = CreateSelectAllJobHistoryCommand();
+
+					selectCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 					selectCommand.Connection = sqlConnection;
 
 					using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -669,6 +717,9 @@ namespace Stardust.Manager
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
 					var jobHistoryDetailsByIdCommand = CreateJobHistoryDetailsByIdCommand(jobId);
+
+					jobHistoryDetailsByIdCommand.CommandTimeout = sqlConnection.ConnectionTimeout;
+
 					jobHistoryDetailsByIdCommand.Connection = sqlConnection;
 
 					using (var sqlDataReader =
@@ -845,7 +896,7 @@ namespace Stardust.Manager
 		private SqlCommand CreateCheckAndAssignNextJobCommand()
 		{
 			const string commandText =
-				"SELECT Top 1 j.*, n.Url AS nodeUrl FROM [Stardust].JobDefinitions j WITH (TABLOCKX), [Stardust].WorkerNodes n " +
+				"SELECT Top 1 j.*, n.Url AS nodeUrl FROM [Stardust].JobDefinitions j , [Stardust].WorkerNodes n " +
 				"WHERE j.AssignedNode IS NULL AND n.Alive = 1 AND n.Url NOT IN (SELECT ISNULL(AssignedNode,'') FROM [Stardust].JobDefinitions)";
 
 			var command = new SqlCommand(commandText);

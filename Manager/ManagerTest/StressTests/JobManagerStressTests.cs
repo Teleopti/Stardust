@@ -85,9 +85,9 @@ namespace ManagerTest.StressTests
 
 			var random = new Random();
 
-			for (var i = 0; i < 200; i++)
+			for (var i = 0; i < 500; i++)
 			{
-				var rnd = random.Next(1, 3);
+				var rnd = random.Next(1, 6);
 
 				switch (rnd)
 				{
@@ -111,7 +111,6 @@ namespace ManagerTest.StressTests
 						}));
 						break;
 
-
 					case 2:
 						tasks.Add(new Task<Guid>(() =>
 						{
@@ -130,6 +129,37 @@ namespace ManagerTest.StressTests
 						}));
 
 						break;
+
+					case 4:
+						tasks.Add(new Task<Guid>(() =>
+						{
+							JobManager.CancelJobByJobId(Guid.NewGuid());
+
+							return Guid.Empty;
+						}));
+
+						break;
+
+					case 5:
+						tasks.Add(new Task<Guid>(() =>
+						{
+							JobManager.GetJobHistoryDetailsByJobId(Guid.NewGuid());
+
+							return Guid.Empty;
+						}));
+
+						break;
+
+					case 6:
+						tasks.Add(new Task<Guid>(() =>
+						{
+							JobManager.CheckIfNodesAreAlive(TimeSpan.FromSeconds(5));
+
+							return Guid.Empty;
+						}));
+
+						break;
+
 				}
 			}
 
