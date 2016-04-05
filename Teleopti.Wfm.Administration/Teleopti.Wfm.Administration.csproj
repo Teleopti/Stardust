@@ -225,7 +225,6 @@
     <Compile Include="Core\DbPathProviderFake.cs" />
     <Compile Include="Core\IDatabaseHelperWrapper.cs" />
     <Compile Include="Core\LogHelper.cs" />
-    <Compile Include="Core\Stardust\StardustHelper.cs" />
     <Compile Include="Core\Stardust\StardustRepository.cs" />
     <Compile Include="Core\TenantLogger.cs" />
     <Compile Include="Core\TenantUpgrader.cs" />
