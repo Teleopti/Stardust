@@ -23,9 +23,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new StagePersonJobStep(jobParameters));
+				Add(new StageAgentSkillJobStep(jobParameters));
 			}
 
-			Add(new StageAgentSkillJobStep(jobParameters));
 			Add(new StageActivityJobStep(jobParameters));
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
@@ -132,7 +132,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
 			Add(new FactRequestJobStep(jobParameters, true));
 			Add(new FactRequestedDaysJobStep(jobParameters, true));
-			Add(new FactAgentSkillJobStep(jobParameters));
+
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
+			{
+				Add(new FactAgentSkillJobStep(jobParameters));
+			}
 
 		}
 	}
