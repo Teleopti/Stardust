@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var trackId = Guid.NewGuid();
 			var command = new RemovePartPersonAbsenceCommand
 			{
-				PersonAbsenceIds = new[] {personAbsence.Id.Value},
+				PersonAbsenceId = personAbsence.Id.Value,
 				PeriodToRemove = period.ChangeEndTime(new TimeSpan(0, 0, 1)),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new RemovePartPersonAbsenceCommand
 			{
-				PersonAbsenceIds = new []{personAbsence.Id.Value},
+				PersonAbsenceId = personAbsence.Id.Value,
 				PeriodToRemove = periodToRemove
 			};
 

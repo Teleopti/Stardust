@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -345,11 +344,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			target.RemoveAbsence(form);
 
 			removePersonAbsenceCommandHandler.AssertWasCalled(
-				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(
-					s => s.PersonAbsenceIds.Contains(personAbsenceIdStandalone))));
+				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceIdStandalone)));
 			removePersonAbsenceCommandHandler.AssertWasCalled(
-				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(
-					s => s.PersonAbsenceIds.Contains(personAbsenceId))));
+				x => x.Handle(Arg<RemovePersonAbsenceCommand>.Matches(s => s.PersonAbsenceId == personAbsenceId)));
 		}
 
 		[Test]
@@ -369,18 +366,18 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				ScheduleDate = scheduleDate,
 				PersonIds = new List<Guid> {personId},
 				RemoveEntireCrossDayAbsence = false,
-				PersonAbsenceIds = new List<Guid> { personAbsenceIdStandalone }
+				PersonAbsenceIds = new List<Guid> {personAbsenceIdStandalone}
 			};
 			target.RemoveAbsence(form);
 
 			removePartPersonAbsenceCommandHandler.AssertWasCalled(
 				x => x.Handle(Arg<RemovePartPersonAbsenceCommand>.Matches(
-					s => s.PersonAbsenceIds.Contains(personAbsenceIdStandalone)
+					s => (s.PersonAbsenceId == personAbsenceIdStandalone)
 						 && s.PeriodToRemove.StartDateTime == scheduleDate.Date &&
 						 s.PeriodToRemove.EndDateTime == scheduleDate.Date.AddDays(1))));
 			removePartPersonAbsenceCommandHandler.AssertWasCalled(
 				x => x.Handle(Arg<RemovePartPersonAbsenceCommand>.Matches(
-					s => s.PersonAbsenceIds.Contains(personAbsenceId)
+					s => s.PersonAbsenceId == personAbsenceId
 						 && s.PeriodToRemove.StartDateTime == scheduleDate.Date &&
 						 s.PeriodToRemove.EndDateTime == scheduleDate.Date.AddDays(1))));
 		}
