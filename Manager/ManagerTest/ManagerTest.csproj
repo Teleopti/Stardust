@@ -103,6 +103,7 @@
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="ManagerOperationTestsAttribute.cs" />
     <Compile Include="ManagerTestsAttribute.cs" />
+    <Compile Include="StressTests\JobManagerStressTests.cs" />
     <Compile Include="WorkerNodeRepositoryTests.cs" />
     <Compile Include="NodeUriBuilderHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

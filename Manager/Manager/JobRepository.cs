@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Net;
+using System.Threading;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -132,13 +133,13 @@ namespace Stardust.Manager
 						{
 							var jobDefinition = new JobDefinition
 							{
-								Id = (Guid) sqlDataReader.GetValue(ordinalPositionForIdField),
-								Name = (string) sqlDataReader.GetValue(ordinalPositionForNameField),
-								Serialized = (string) sqlDataReader.GetValue(ordinalPositionForSerializedField),
-								Type = (string) sqlDataReader.GetValue(ordinalPositionForTypeField),
-								UserName = (string) sqlDataReader.GetValue(ordinalPositionForUserNameField),
-								AssignedNode = GetValue(sqlDataReader.GetValue(ordinalPositionForAssignedNodeField)),
-								Status = GetValue(sqlDataReader.GetValue(ordinalPositionForStatusField))
+								Id = sqlDataReader.GetGuid(ordinalPositionForIdField),
+								Name = sqlDataReader.GetString(ordinalPositionForNameField),
+								Serialized = sqlDataReader.GetString(ordinalPositionForSerializedField),
+								Type = sqlDataReader.GetString(ordinalPositionForTypeField),
+								UserName = sqlDataReader.GetString(ordinalPositionForUserNameField),
+								AssignedNode = sqlDataReader.GetString(ordinalPositionForAssignedNodeField),
+								Status = sqlDataReader.GetString(ordinalPositionForStatusField)
 							};
 
 							listToReturn.Add(jobDefinition);
@@ -252,11 +253,11 @@ namespace Stardust.Manager
 
 								job = new JobToDo
 								{
-									Id = (Guid) sqlDataReader.GetValue(ordinalPositionForIdField),
-									Name = (string) sqlDataReader.GetValue(ordinalPositionForNameField),
-									Serialized = ((string) sqlDataReader.GetValue(ordinalPositionForSerializedField)).Replace(@"\", @""),
-									Type = (string) sqlDataReader.GetValue(ordinalPositionForTypeField),
-									CreatedBy = (string) sqlDataReader.GetValue(ordinalPositionForUserNameField)
+									Id = sqlDataReader.GetGuid(ordinalPositionForIdField),
+									Name = sqlDataReader.GetString(ordinalPositionForNameField),
+									Serialized = sqlDataReader.GetString(ordinalPositionForSerializedField).Replace(@"\", @""),
+									Type = sqlDataReader.GetString(ordinalPositionForTypeField),
+									CreatedBy = sqlDataReader.GetString(ordinalPositionForUserNameField)
 								};
 
 								sqlDataReader.Close();
@@ -575,14 +576,14 @@ namespace Stardust.Manager
 
 							var jobHistory = new JobHistory
 							{
-								Id = (Guid) sqlDataReader.GetValue(sqlDataReader.GetOrdinal("JobId")),
-								Name = (string) sqlDataReader.GetValue(sqlDataReader.GetOrdinal("Name")),
-								CreatedBy = (string) sqlDataReader.GetValue(sqlDataReader.GetOrdinal("CreatedBy")),
-								SentTo = GetValue(sqlDataReader.GetValue(sqlDataReader.GetOrdinal("SentTo"))),
-								Result = GetValue(sqlDataReader.GetValue(sqlDataReader.GetOrdinal("Result"))),
-								Created = (DateTime) sqlDataReader.GetValue(sqlDataReader.GetOrdinal("Created")),
-								Started = GetDateTime(sqlDataReader.GetValue(sqlDataReader.GetOrdinal("Started"))),
-								Ended = GetDateTime(sqlDataReader.GetValue(sqlDataReader.GetOrdinal("Ended")))
+								Id = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
+								Name = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Name")),
+								CreatedBy = sqlDataReader.GetString(sqlDataReader.GetOrdinal("CreatedBy")),
+								SentTo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("SentTo")),
+								Result = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Result")),
+								Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
+								Started = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Started")),
+								Ended = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Ended"))
 							};
 
 							return jobHistory;
@@ -631,14 +632,14 @@ namespace Stardust.Manager
 							{
 								var jobHistory = new JobHistory
 								{
-									Id = (Guid) sqlDataReader.GetValue(ordinalPositionForJobIdField),
-									Name = (string) sqlDataReader.GetValue(ordinalPositionForNameField),
-									CreatedBy = (string) sqlDataReader.GetValue(ordinalPositionForCreatedByField),
-									SentTo = GetValue(sqlDataReader.GetValue(ordinalPositionForSentToField)),
-									Result = GetValue(sqlDataReader.GetValue(ordinalPositionForResultField)),
-									Created = (DateTime) sqlDataReader.GetValue(ordinalPositionForCreatedField),
-									Started = GetDateTime(sqlDataReader.GetValue(ordinalPositionForStartedField)),
-									Ended = GetDateTime(sqlDataReader.GetValue(ordinalPositionForEndedField))
+									Id = sqlDataReader.GetGuid(ordinalPositionForJobIdField),
+									Name = sqlDataReader.GetString(ordinalPositionForNameField),
+									CreatedBy = sqlDataReader.GetString(ordinalPositionForCreatedByField),
+									SentTo = sqlDataReader.GetString(ordinalPositionForSentToField),
+									Result = sqlDataReader.GetString(ordinalPositionForResultField),
+									Created = sqlDataReader.GetDateTime(ordinalPositionForCreatedField),
+									Started = sqlDataReader.GetDateTime(ordinalPositionForStartedField),
+									Ended = sqlDataReader.GetDateTime(ordinalPositionForEndedField)
 								};
 
 								returnList.Add(jobHistory);
@@ -682,8 +683,8 @@ namespace Stardust.Manager
 							{
 								var detail = new JobHistoryDetail
 								{
-									Created = (DateTime) sqlDataReader.GetValue(ordinalPositionForCreatedField),
-									Detail = (string) sqlDataReader.GetValue(ordinalPostionForDetailField)
+									Created = sqlDataReader.GetDateTime(ordinalPositionForCreatedField),
+									Detail = sqlDataReader.GetString(ordinalPostionForDetailField)
 								};
 
 								returnList.Add(detail);
@@ -953,14 +954,6 @@ namespace Stardust.Manager
                             FROM [Stardust].JobHistory";
 
 			return new SqlCommand(commandText);
-		}
-
-		private DateTime? GetDateTime(object databaseValue)
-		{
-			if (databaseValue.Equals(DBNull.Value))
-				return null;
-
-			return (DateTime) databaseValue;
 		}
 	}
 }
