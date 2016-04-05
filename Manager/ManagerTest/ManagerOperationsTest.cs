@@ -547,7 +547,13 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnJobHistoryFromJobId()
 		{
-			var job = new JobRequestModel {Name = "Name", Serialized = "Ser", Type = "Type", UserName = "ManagerTests"};
+			var job = new JobRequestModel
+			{
+				Name = "Name",
+				Serialized = "Ser",
+				Type = "Type",
+				UserName = "ManagerTests"
+			};
 
 			var doJobResult = Target.DoThisJob(job);
 

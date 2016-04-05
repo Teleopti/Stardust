@@ -84,7 +84,7 @@ namespace ManagerTest
 			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Started");
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
-			JobManager.CancelThisJob(jobId);
+			JobManager.CancelJobByJobId(jobId);
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
 			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Status.Should().Be.EqualTo("Canceling");
@@ -124,21 +124,22 @@ namespace ManagerTest
 		public void ShouldJustDeleteJobIfNotStarted()
 		{
 			var jobId = Guid.NewGuid();
+
 			JobRepository.AddJobDefinition(new JobDefinition
 			{
 				Id = jobId,
 				Name = "For test",
 				UserName = "JobManagerTests",
 				JobProgress = "Waiting",
-				Serialized = "",
+				Serialized = "Serialized",
 				AssignedNode = "",
 				Status = "Added",
-				Type = ""
+				Type = "Type"
 			});
 
 			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Should().Not.Be.Null();
-			JobManager.CancelThisJob(jobId);
+			JobManager.CancelJobByJobId(jobId);
 			FakeHttpSender.CalledNodes.Should().Be.Empty();
 			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.Id.Equals(jobId));
 			job.Should().Be.Null();
@@ -303,8 +304,8 @@ namespace ManagerTest
 			job.Status.Should().Be.EqualTo("Started");
 			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
 			JobManager.SetEndResultOnJobAndRemoveIt(jobId, "Success");
-			JobManager.GetJobHistoryList().Should().Not.Be.Empty();
-			JobManager.JobHistoryDetails(jobId).Should().Not.Be.Empty();
+			JobManager.GetAllJobHistories().Should().Not.Be.Empty();
+			JobManager.GetJobHistoryDetailsByJobId(jobId).Should().Not.Be.Empty();
 		}
 	}
 }

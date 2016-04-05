@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Timers;
@@ -21,6 +22,9 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private const string JobDefinitionHeaderConstant = "Job Definition";
 
 		private ClearDatabaseCommand _clearDatabaseCommand;
+		private List<Logging> _errorLoggingData;
+
+		private string _errorLoggingHeader;
 		private List<JobDefinition> _jobDefinitionData;
 		private string _jobDefinitionDataHeader;
 
@@ -40,9 +44,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private string _toggleRefreshStatus;
 		private string _workerNodeHeader;
 		private List<WorkerNode> _workerNodesData;
-		private List<Logging> _errorLoggingData;
-
-		private string _errorLoggingHeader;
 
 		public MainWindowViewModel()
 		{
@@ -51,7 +52,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			ClearDatabaseCommand = new ClearDatabaseCommand(this);
 			ToggleRefreshCommand = new ToggleRefreshCommand(this);
 
-			CreateNewJobCommand = new CreateNewJobCommand();			
+			CreateNewJobCommand = new CreateNewJobCommand();
 
 			RefreshTimer = new Timer(5000);
 
@@ -61,7 +62,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			RefreshEnabled = true;
 		}
-
 
 		public CreateNewJobCommand CreateNewJobCommand { get; set; }
 
@@ -284,6 +284,29 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
+		public string ErrorLoggingHeader
+		{
+			get { return _errorLoggingHeader; }
+			set
+			{
+				_errorLoggingHeader = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+
+		public List<Logging> ErrorLoggingData
+		{
+			get { return _errorLoggingData; }
+			set
+			{
+				_errorLoggingData = value;
+
+				OnPropertyChanged();
+			}
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private void RefreshTimerOnElapsed(object sender,
@@ -312,17 +335,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public string ErrorLoggingHeader
-		{
-			get { return _errorLoggingHeader; }
-			set
-			{
-				_errorLoggingHeader = value;
-
-				OnPropertyChanged();
-			}
-		}
-
 		private void GetData()
 		{
 			RefreshProgressValue = 0;
@@ -335,7 +347,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 					managerDbEntities.Loggings.OrderByDescending(logging => logging.Id)
 						.ToList();
 
-				ErrorLoggingData = 
+				ErrorLoggingData =
 					managerDbEntities.Loggings.Where(logging => !string.IsNullOrEmpty(logging.Exception)).ToList();
 
 				ErrorLoggingHeader = ErrorLoggingHeaderConstant + " ( " + ErrorLoggingData.Count + " )";
@@ -392,18 +404,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 
 			Status = "Refresh finished.";
-		}
-
-
-		public List<Logging> ErrorLoggingData
-		{
-			get { return _errorLoggingData; }
-			set
-			{
-				_errorLoggingData = value;
-
-				OnPropertyChanged();
-			}
 		}
 
 		public bool DatabaseContainsInformation()

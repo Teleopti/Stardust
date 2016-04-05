@@ -13,7 +13,7 @@ using Stardust.Manager.Models;
 
 namespace ManagerTest.StressTests
 {
-	[TestFixture, JobTests,Ignore]
+	[TestFixture, JobTests, Ignore]
 	public class JobManagerStressTests : DatabaseTest
 	{
 		[TearDown]
@@ -36,7 +36,7 @@ namespace ManagerTest.StressTests
 
 		private FakeHttpSender FakeHttpSender
 		{
-			get { return (FakeHttpSender)HttpSender; }
+			get { return (FakeHttpSender) HttpSender; }
 		}
 
 		[TestFixtureSetUp]
@@ -81,11 +81,11 @@ namespace ManagerTest.StressTests
 				Url = _nodeUri5
 			});
 
-			List<Task<Guid>> tasks=new List<Task<Guid>>();
+			var tasks = new List<Task<Guid>>();
 
-			Random random=new Random();
+			var random = new Random();
 
-			for (int i = 0; i < 200; i++)
+			for (var i = 0; i < 200; i++)
 			{
 				var rnd = random.Next(1, 3);
 
@@ -94,9 +94,9 @@ namespace ManagerTest.StressTests
 					case 1:
 						tasks.Add(new Task<Guid>(() =>
 						{
-							Guid jobId = Guid.NewGuid();
+							var jobId = Guid.NewGuid();
 
-							JobManager.Add(new JobDefinition
+							JobManager.AddJobDefinition(new JobDefinition
 							{
 								Id = jobId,
 								Name = "Job Name Stress",
@@ -108,9 +108,8 @@ namespace ManagerTest.StressTests
 							});
 
 							return jobId;
-
 						}));
-					break;
+						break;
 
 
 					case 2:
@@ -125,7 +124,7 @@ namespace ManagerTest.StressTests
 					case 3:
 						tasks.Add(new Task<Guid>(() =>
 						{
-							JobManager.GetJobHistoryList();
+							JobManager.GetAllJobHistories();
 
 							return Guid.Empty;
 						}));
@@ -135,16 +134,14 @@ namespace ManagerTest.StressTests
 			}
 
 
-			Parallel.ForEach(tasks, new ParallelOptions()
+			Parallel.ForEach(tasks, new ParallelOptions
 			{
 				MaxDegreeOfParallelism = 100
-
-			},task => task.Start());
+			}, task => task.Start());
 
 			Task.WaitAll(tasks.ToArray());
 
 			Assert.IsTrue(tasks.All(task => task.IsCompleted));
-
 		}
 	}
 }

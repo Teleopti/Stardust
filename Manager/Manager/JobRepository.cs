@@ -134,12 +134,12 @@ namespace Stardust.Manager
 							var jobDefinition = new JobDefinition
 							{
 								Id = sqlDataReader.GetGuid(ordinalPositionForIdField),
-								Name = sqlDataReader.GetString(ordinalPositionForNameField),
-								Serialized = sqlDataReader.GetString(ordinalPositionForSerializedField),
-								Type = sqlDataReader.GetString(ordinalPositionForTypeField),
-								UserName = sqlDataReader.GetString(ordinalPositionForUserNameField),
-								AssignedNode = sqlDataReader.GetString(ordinalPositionForAssignedNodeField),
-								Status = sqlDataReader.GetString(ordinalPositionForStatusField)
+								Name = sqlDataReader.GetNullableString(ordinalPositionForNameField),
+								Serialized = sqlDataReader.GetNullableString(ordinalPositionForSerializedField),
+								Type = sqlDataReader.GetNullableString(ordinalPositionForTypeField),
+								UserName = sqlDataReader.GetNullableString(ordinalPositionForUserNameField),
+								AssignedNode = sqlDataReader.GetNullableString(ordinalPositionForAssignedNodeField),
+								Status = sqlDataReader.GetNullableString(ordinalPositionForStatusField)
 							};
 
 							listToReturn.Add(jobDefinition);
@@ -254,10 +254,10 @@ namespace Stardust.Manager
 								job = new JobToDo
 								{
 									Id = sqlDataReader.GetGuid(ordinalPositionForIdField),
-									Name = sqlDataReader.GetString(ordinalPositionForNameField),
-									Serialized = sqlDataReader.GetString(ordinalPositionForSerializedField).Replace(@"\", @""),
-									Type = sqlDataReader.GetString(ordinalPositionForTypeField),
-									CreatedBy = sqlDataReader.GetString(ordinalPositionForUserNameField)
+									Name = sqlDataReader.GetNullableString(ordinalPositionForNameField),
+									Serialized = sqlDataReader.GetNullableString(ordinalPositionForSerializedField).Replace(@"\", @""),
+									Type = sqlDataReader.GetNullableString(ordinalPositionForTypeField),
+									CreatedBy = sqlDataReader.GetNullableString(ordinalPositionForUserNameField)
 								};
 
 								sqlDataReader.Close();
@@ -577,13 +577,13 @@ namespace Stardust.Manager
 							var jobHistory = new JobHistory
 							{
 								Id = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
-								Name = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Name")),
-								CreatedBy = sqlDataReader.GetString(sqlDataReader.GetOrdinal("CreatedBy")),
-								SentTo = sqlDataReader.GetString(sqlDataReader.GetOrdinal("SentTo")),
-								Result = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Result")),
+								Name = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Name")),
+								CreatedBy = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("CreatedBy")),
+								SentTo = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("SentTo")),
+								Result = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Result")),
 								Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
-								Started = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Started")),
-								Ended = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Ended"))
+								Started = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Started")),
+								Ended = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Ended"))
 							};
 
 							return jobHistory;
@@ -633,13 +633,13 @@ namespace Stardust.Manager
 								var jobHistory = new JobHistory
 								{
 									Id = sqlDataReader.GetGuid(ordinalPositionForJobIdField),
-									Name = sqlDataReader.GetString(ordinalPositionForNameField),
-									CreatedBy = sqlDataReader.GetString(ordinalPositionForCreatedByField),
-									SentTo = sqlDataReader.GetString(ordinalPositionForSentToField),
-									Result = sqlDataReader.GetString(ordinalPositionForResultField),
+									Name = sqlDataReader.GetNullableString(ordinalPositionForNameField),
+									CreatedBy = sqlDataReader.GetNullableString(ordinalPositionForCreatedByField),
+									SentTo = sqlDataReader.GetNullableString(ordinalPositionForSentToField),
+									Result = sqlDataReader.GetNullableString(ordinalPositionForResultField),
 									Created = sqlDataReader.GetDateTime(ordinalPositionForCreatedField),
-									Started = sqlDataReader.GetDateTime(ordinalPositionForStartedField),
-									Ended = sqlDataReader.GetDateTime(ordinalPositionForEndedField)
+									Started = sqlDataReader.GetNullableDateTime(ordinalPositionForStartedField),
+									Ended = sqlDataReader.GetNullableDateTime(ordinalPositionForEndedField)
 								};
 
 								returnList.Add(jobHistory);
@@ -684,7 +684,7 @@ namespace Stardust.Manager
 								var detail = new JobHistoryDetail
 								{
 									Created = sqlDataReader.GetDateTime(ordinalPositionForCreatedField),
-									Detail = sqlDataReader.GetString(ordinalPostionForDetailField)
+									Detail = sqlDataReader.GetNullableString(ordinalPostionForDetailField)
 								};
 
 								returnList.Add(detail);

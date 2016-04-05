@@ -51,7 +51,7 @@ namespace Stardust.Manager
 				Id = Guid.NewGuid()
 			};
 
-			_jobManager.Add(jobReceived);
+			_jobManager.AddJobDefinition(jobReceived);
 
 			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
 			                        WhoAmI(Request),
@@ -94,7 +94,7 @@ namespace Stardust.Manager
 			// Start.
 			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
 
-			_jobManager.CancelThisJob(jobId);
+			_jobManager.CancelJobByJobId(jobId);
 
 			return Ok();
 		}
@@ -102,7 +102,7 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
 		public IHttpActionResult JobHistoryList()
 		{
-			var jobHistory = _jobManager.GetJobHistoryList();
+			var jobHistory = _jobManager.GetAllJobHistories();
 
 			return Ok(jobHistory);
 		}
@@ -119,7 +119,7 @@ namespace Stardust.Manager
 			}
 
 			// Start.
-			var jobHistory = _jobManager.GetJobHistory(jobId);
+			var jobHistory = _jobManager.GetJobHistoryByJobId(jobId);
 
 			return Ok(jobHistory);
 		}
@@ -136,7 +136,7 @@ namespace Stardust.Manager
 			}
 
 			// Start.
-			var jobHistoryDetail = _jobManager.JobHistoryDetails(jobId);
+			var jobHistoryDetail = _jobManager.GetJobHistoryDetailsByJobId(jobId);
 
 			return Ok(jobHistoryDetail);
 		}

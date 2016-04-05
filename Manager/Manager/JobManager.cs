@@ -80,7 +80,7 @@ namespace Stardust.Manager
 		}
 
 
-		public void CheckNodesAreAlive(TimeSpan timeSpan)
+		public void CheckIfNodesAreAlive(TimeSpan timeSpan)
 		{
 			var deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
 
@@ -108,7 +108,7 @@ namespace Stardust.Manager
 		private void CheckHeartbeatsOnTimedEvent(object sender,
 		                                         ElapsedEventArgs e)
 		{
-			CheckNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
+			CheckIfNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
 
 			this.Log().DebugWithLineNumber("Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
 		}
@@ -157,14 +157,14 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void Add(JobDefinition job)
+		public void AddJobDefinition(JobDefinition job)
 		{
 			_jobRepository.AddJobDefinition(job);
 		}
 
-		public void CancelThisJob(Guid id)
+		public void CancelJobByJobId(Guid jobId)
 		{
-			_jobRepository.CancelJobByJobId(id,
+			_jobRepository.CancelJobByJobId(jobId,
 			                                _httpSender);
 		}
 
@@ -184,17 +184,17 @@ namespace Stardust.Manager
 			                              model.Created);
 		}
 
-		public JobHistory GetJobHistory(Guid jobId)
+		public JobHistory GetJobHistoryByJobId(Guid jobId)
 		{
 			return _jobRepository.GetJobHistoryByJobId(jobId);
 		}
 
-		public IList<JobHistory> GetJobHistoryList()
+		public IList<JobHistory> GetAllJobHistories()
 		{
 			return _jobRepository.GetAllJobHistories();
 		}
 
-		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
+		public IList<JobHistoryDetail> GetJobHistoryDetailsByJobId(Guid jobId)
 		{
 			return _jobRepository.GetJobHistoryDetailsByJobId(jobId);
 		}
