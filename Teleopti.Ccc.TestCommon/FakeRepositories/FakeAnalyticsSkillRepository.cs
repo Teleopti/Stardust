@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer;
@@ -11,12 +10,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private List<AnalyticsSkill> fakeSkills;
 		private List<AnalyticsSkillSet> fakeSkillSets;
-		public List<AnalyticsBridgeSkillsetSkill> fakeBridgeSkillsetSkills; 
+		public List<AnalyticsBridgeSkillsetSkill> fakeBridgeSkillsetSkills;
+		public List<AnalyticsFactAgentSkill> fakeFactAgentSkills; 
 
 		public FakeAnalyticsSkillRepository()
 		{
 			fakeSkillSets = new List<AnalyticsSkillSet>();
 			fakeBridgeSkillsetSkills = new List<AnalyticsBridgeSkillsetSkill>();
+			fakeFactAgentSkills = new List<AnalyticsFactAgentSkill>();
 		}
 
 		public IList<AnalyticsSkill> Skills(int businessUnitId)
@@ -69,17 +70,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddAgentSkill(int personId, int skillId, bool active, int businessUnitId)
 		{
-			throw new NotImplementedException();
+			fakeFactAgentSkills.Add(new AnalyticsFactAgentSkill
+			{
+				Active = active,
+				BusinessUnitId = businessUnitId,
+				DatasourceId = 1,
+				PersonId = personId,
+				HasSkill = 1,
+				SkillId = skillId
+			});
 		}
 
 		public void DeleteAgentSkillForPersonId(int personId)
 		{
-			throw new NotImplementedException();
+			fakeFactAgentSkills.RemoveAll(a => a.PersonId == personId);
 		}
 
 		public IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId)
 		{
-			throw new NotImplementedException();
+			return fakeFactAgentSkills.Where(a => a.PersonId == personId).ToList();
 		}
 	}
 }
