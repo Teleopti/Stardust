@@ -3,8 +3,8 @@
 	'use strict';
 	angular.module('wfm.resourceplanner')
 		.controller('ResourceplannerReportCtrl', [
-			'$scope', '$state', '$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'growl', 'Toggle', '$interval',
-			function($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, growl, toggleService, $interval) {
+			'$scope', '$state', '$translate', '$stateParams', 'ResourcePlannerReportSrvc', 'PlanningPeriodSvrc', 'NoticeService', 'Toggle', '$interval',
+			function($scope, $state, $translate, $stateParams, ResourcePlannerReportSrvc, PlanningPeriodSvrc, NoticeService, toggleService, $interval) {
 				var toggledOptimization = false;
 				var scheduleResult = $stateParams.interResult.SkillResultList ? $stateParams.interResult.SkillResultList : [];
 				$scope.issues = $stateParams.result.BusinessRulesValidationResults ? $stateParams.result.BusinessRulesValidationResults : [];
@@ -58,10 +58,7 @@
 				}, tenMinutes);
 
 				var notifyOptimizationDone = function() {
-					growl.success("<i class='mdi mdi-thumb-up'></i>" + $translate.instant('Done'), {
-						ttl: 0,
-						disableCountDown: true
-					});
+					NoticeService.success($translate.instant('Done'), null, true);
 				};
 				var parseRelativeDifference = function(period) {
 					ResourcePlannerReportSrvc.parseRelDif(period);
@@ -91,20 +88,14 @@
 				$scope.publishSchedule = function() {
 					//Translate me better
 					if ($scope.publishedClicked === true) {
-						growl.warning("<i class='mdi mdi-warning'></i>" + $translate.instant('Error'), {
-							ttl: 5000,
-							disableCountDown: true
-						});
+						NoticeService.warning($translate.instant('Error'), null, true);
 						return;
 					}
 					$scope.publishedClicked = true;
 					PlanningPeriodSvrc.publishPeriod.query({
 						id: $stateParams.id
 					}).$promise.then(function() {
-						growl.success("<i class='mdi mdi-thumb-up'></i>" + $translate.instant('Done'), {
-							ttl: 5000,
-							disableCountDown: true
-						});
+						NoticeService.success( $translate.instant('Done'), null, true);
 					});
 				};
 				$scope.$on('$destroy', function() {
