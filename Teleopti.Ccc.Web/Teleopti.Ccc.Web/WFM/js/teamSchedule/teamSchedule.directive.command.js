@@ -8,7 +8,7 @@
 			scope: {
 				configurations: '='
 			},
-			controller: ['$scope', '$mdSidenav', '$mdComponentRegistry', 'PersonSelection', 'TeamSchedule', 'ShortCuts', 'keyCodes', 'Toggle', teamscheduleCommandCtrl],
+			controller: ['$scope', '$mdSidenav', '$mdComponentRegistry', 'PersonSelection', 'TeamSchedule', 'ShortCuts', 'keyCodes', teamscheduleCommandCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/teamscheduleCommand.html'
@@ -149,7 +149,7 @@
 			vm.toggles = vm.configurations.toggles;
 			vm.permissions = vm.configurations.permissions;
 			vm.isMenuVisible = function () {
-				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence();
+				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence()||vm.canActiveAddActivity();
 			};
 			registerShortCuts();
 		};

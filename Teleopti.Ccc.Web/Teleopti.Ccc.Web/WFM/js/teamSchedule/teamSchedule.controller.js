@@ -375,6 +375,7 @@
 				permissions: vm.permissions,
 				currentCommandName: null
 			}
+			console.log("vm.permissionsAndTogglesLoaded");
 			vm.permissionsAndTogglesLoaded = true;
 		};
 		$q.all([

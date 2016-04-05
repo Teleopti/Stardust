@@ -1417,6 +1417,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
