@@ -560,6 +560,7 @@
     <Compile Include="Analytics\AnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
+    <Compile Include="UnitOfWork\IInitiatorIdentifierScope.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />
@@ -698,7 +699,6 @@
     <Compile Include="UnitOfWork\IPersistCallback.cs" />
     <Compile Include="UnitOfWork\NHibernateFilterManager.cs" />
     <Compile Include="UnitOfWork\IDataSourcesFactory.cs" />
-    <Compile Include="UnitOfWork\NHibernateSessionRelatedData.cs" />
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWork.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWork.cs" />

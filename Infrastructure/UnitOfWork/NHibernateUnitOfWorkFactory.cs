@@ -84,25 +84,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
 		{
-			return createAndOpenUnitOfWork(_messageBroker(), isolationLevel, null, QueryFilter.BusinessUnit);
+			return createAndOpenUnitOfWork(_messageBroker(), isolationLevel, QueryFilter.BusinessUnit);
 		}
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
-		{
-			return createAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, initiator, QueryFilter.BusinessUnit);
-		}
-
+		
 		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBrokerComposite messageBroker)
 		{
-			return createAndOpenUnitOfWork(messageBroker, TransactionIsolationLevel.Default, null, QueryFilter.BusinessUnit);
+			return createAndOpenUnitOfWork(messageBroker, TransactionIsolationLevel.Default, QueryFilter.BusinessUnit);
 		}
 
 		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
 		{
-			return createAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, null, businessUnitFilter);
+			return createAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, businessUnitFilter);
 		}
 
-		private IUnitOfWork createAndOpenUnitOfWork(IMessageBrokerComposite messaging, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator, IQueryFilter businessUnitFilter)
+		private IUnitOfWork createAndOpenUnitOfWork(IMessageBrokerComposite messaging, TransactionIsolationLevel isolationLevel, IQueryFilter businessUnitFilter)
 		{
 			var businessUnitId = getBusinessUnitId();
 			var session = _factory.OpenSession(new AggregateRootInterceptor());
@@ -118,8 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_persistCallbacks,
 				new NHibernateFilterManager(session),
 				new SendPushMessageWhenRootAlteredService(),
-				isolationLevel,
-				initiator
+				isolationLevel
 				);
 
 			return CurrentUnitOfWork();

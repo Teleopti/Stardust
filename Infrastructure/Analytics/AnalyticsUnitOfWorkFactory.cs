@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 				null,
 				null,
 				null,
-				TransactionIsolationLevel.Default,
-				null
+				TransactionIsolationLevel.Default
 				);
 			return CurrentUnitOfWork();
 		}

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return new EventInfrastructureInfoPopulator(
 				CurrentBusinessUnit.Make(),
 				new CurrentDataSource(identity, new DataSourceState()),
-				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()),
+				new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make(), CurrentUnitOfWorkFactory.Make()),
 				new Now()
 				);
 		}

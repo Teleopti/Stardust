@@ -34,7 +34,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance();
 			builder.RegisterType<NoBusinessUnitForRequest>().As<IBusinessUnitForRequest>().SingleInstance();
 
-			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();
+			builder.RegisterType<CurrentInitiatorIdentifier>()
+				.As<ICurrentInitiatorIdentifier>()
+				.As<IInitiatorIdentifierScope>()
+				.SingleInstance();
 			builder.RegisterType<BusinessUnitFilterOverrider>().As<IBusinessUnitFilterOverrider>().SingleInstance();
 			builder.RegisterType<DisableBusinessUnitFilter>().As<IDisableBusinessUnitFilter>().SingleInstance();
 

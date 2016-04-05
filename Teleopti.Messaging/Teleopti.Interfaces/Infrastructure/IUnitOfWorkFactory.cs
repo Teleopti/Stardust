@@ -19,7 +19,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		string ConnectionString { get; }
 
 		IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default);
-		IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator);
 		IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter);
 
 		IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork();

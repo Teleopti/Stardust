@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		protected internal NHibernateUnitOfWork(
 			UnitOfWorkContext context,
-			ISession session, 
-			IMessageBrokerComposite messageBroker, 
-			ICurrentPersistCallbacks persistCallbacks, 
-			NHibernateFilterManager filterManager, 
-			ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, 
-			TransactionIsolationLevel isolationLevel, 
-			IInitiatorIdentifier initiator)
+			ISession session,
+			IMessageBrokerComposite messageBroker,
+			ICurrentPersistCallbacks persistCallbacks,
+			NHibernateFilterManager filterManager,
+			ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
+			TransactionIsolationLevel isolationLevel
+			)
 		{
 			InParameter.NotNull("session", session);
 			_context = context;
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_isolationLevel = isolationLevel;
-			setInitiator(initiator);
 			_persistCallbacks = persistCallbacks;
 			_interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
@@ -89,12 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
 			}
 		}
-
-		private void setInitiator(IInitiatorIdentifier initiator)
-		{
-			_initiator = initiator;
-		}
-
+		
 		public IInitiatorIdentifier Initiator()
 		{
 			return _initiator;
@@ -136,8 +130,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public virtual IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
 		{
-			// next step: move to only use constructor injection.
-			setInitiator(initiator);
+			_initiator = initiator;
 
 			//man borde nog styra upp denna genom att använda ISynchronization istället,
 			//när tran startas, lägg pĺ en sync callback via tran.RegisterSynchronization(callback);
