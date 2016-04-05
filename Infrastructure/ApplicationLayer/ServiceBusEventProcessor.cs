@@ -27,13 +27,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Process(IEvent @event)
 		{
-			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
-
 			var initiatorInfo = @event as IInitiatorContext;
 
 			if (initiatorInfo == null)
 				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 				{
+					_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 					foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
 						_processor.Process(@event, handler);
 					unitOfWork.PersistAll();
@@ -41,6 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			else
 				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(initiatorInfo)))
 				{
+					_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 					foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
 						_processor.Process(@event, handler);
 					unitOfWork.PersistAll();
