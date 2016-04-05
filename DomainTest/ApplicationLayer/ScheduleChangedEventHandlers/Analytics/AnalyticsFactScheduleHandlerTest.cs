@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
@@ -50,6 +52,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_intervalLengthFetcher.AssertWasCalled(x => x.IntervalLength);
 		}
+
+	    [Test]
+	    public void ShouldReturnCorrectSchemaWithBrokenInterval() // PBI 37562
+	    {
+            var shiftStart = new DateTime(2015, 1, 1, 8, 10, 0, DateTimeKind.Utc);
+            var scheduleDay = new ProjectionChangedEventScheduleDay
+            {
+                Shift = new ProjectionChangedEventShift
+                {
+                    StartDateTime = shiftStart,
+                    EndDateTime = shiftStart.AddHours(1)
+                }
+            };
+            scheduleDay.Shift.Layers = createLayers(shiftStart, new[] { 60 });
+
+            _intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
+
+            _dateHandler.Stub(x => x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+                Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(new AnalyticsFactScheduleDate());
+
+            var repoMock = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
+            _timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock);
+	        repoMock.Stub(x => x.Overtimes()).Return(new List<IAnalyticsGeneric>());
+            repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
+	        repoMock.Stub(x => x.Absences()).Return(new List<IAnalyticsAbsence>());
+	        repoMock.Stub(x => x.Activities()).Return(new List<IAnalyticsActivity>());
+
+            _target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler);
+
+            var result = _target.AgentDaySchedule(scheduleDay, null, DateTime.Now, 1, 1);
+
+	        result.First().TimePart.ScheduledMinutes.Should().Be.EqualTo(5);
+            result.Last().TimePart.ScheduledMinutes.Should().Be.EqualTo(10);
+            result.Sum(a => a.TimePart.ScheduledMinutes).Should().Be.EqualTo(60);
+	        result.Count.Should().Be.EqualTo(5);
+	    }
 
 		[Test]
 		public void ShouldReturnNullWhenDateCouldNotBeHandled()
