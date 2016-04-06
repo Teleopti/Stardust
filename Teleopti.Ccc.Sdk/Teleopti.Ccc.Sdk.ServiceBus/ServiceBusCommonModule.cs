@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Sdk.ServiceBus.HealthCheck;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
 			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>().SingleInstance();
+			builder.RegisterType<DeviceInfoProvider>().As<IDeviceInfoProvider>().SingleInstance();
 			registerDataSourcesFactoryDependencies(builder);
 		}
 

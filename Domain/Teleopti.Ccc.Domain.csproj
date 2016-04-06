@@ -176,6 +176,7 @@
     <Compile Include="ApplicationLayer\Events\AnalyticsPersonPeriodSkillsChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadEvent.cs" />
     <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadsEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\ServiceBusHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadProcessor.cs" />
@@ -183,6 +184,7 @@
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsFactAgentSkill.cs" />
+    <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />
     <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdatePersonGroupsAnalyticsHandler.cs" />

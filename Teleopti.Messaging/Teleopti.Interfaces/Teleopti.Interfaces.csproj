@@ -844,7 +844,6 @@
     <Compile Include="Messages\General\CalculateBadgeMessage.cs" />
     <Compile Include="Messages\General\CalculateTimeZoneMessage.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
-    <Compile Include="Messages\General\DiagnosticsMessage.cs" />
     <Compile Include="Messages\General\RecalculateForecastOnSkillMessage.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
-using System.Web.Http.Results;
 using Microsoft.VisualBasic.Devices;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -17,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 {
@@ -30,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IStardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
 
-		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
+	    public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
 												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
 												  IStardustSender stardustSender, IToggleManager toggleManager)
 		{
@@ -44,9 +42,10 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckBus")]
 		public virtual IHttpActionResult CheckBus()
 		{
-			var diagnosticsMessage = new DiagnosticsMessage();
-			_populatingPublisher.Send(diagnosticsMessage, false);
-			return Ok(new {diagnosticsMessage.InitiatorId});
+			var diagnosticEvent = new ServiceBusHealthCheckEvent();
+			_populatingPublisher.Send(diagnosticEvent, false);
+
+			return Ok(new {diagnosticEvent.InitiatorId});
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/LoadEtlJobHistory")]
