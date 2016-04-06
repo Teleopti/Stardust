@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Diagnostics
 			throw new NotImplementedException();
 		}
 
-		public bool IsAlive { get; }
-		public bool IsPollingAlive { get; }
+		public bool IsAlive { get; set; }
+		public bool IsPollingAlive { get; set; }
 		public string ServerUrl { get; set; }
 		public void StartBrokerService(bool useLongPolling = false)
 		{
