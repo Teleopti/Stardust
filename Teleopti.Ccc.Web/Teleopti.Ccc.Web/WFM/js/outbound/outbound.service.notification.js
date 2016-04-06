@@ -2,9 +2,9 @@
 	'use strict';
 
 	angular.module('outboundServiceModule')
-		.service('outboundNotificationService', ['growl', '$translate', outboundNotificationService]);
+		.service('outboundNotificationService', ['NoticeService', '$translate', outboundNotificationService]);
 
-	function outboundNotificationService($growl, $translate) {
+	function outboundNotificationService(NoticeService, $translate) {
 
 		this.notifySuccess = notifySuccess;
 		this.notifyFailure = notifyFailure;
@@ -48,31 +48,19 @@
 
 		function notifySuccess(message, params) {
 			$translate(message).then(function(text) {
-				$growl.success("<i class='mdi mdi-thumb-up'></i> "
-					+ text.replace('{0}', params[0]), {
-						ttl: 5000,
-						disableCountDown: true
-					});
+				NoticeService.success(text.replace('{0}', params[0]), 5000, false);
 			});
 		}
 
 		function notifyFailure(message, params) {
 			$translate(message).then(function(text) {
-				$growl.error("<i class='mdi  mdi-alert-octagon'></i> "
-					+ text.replace('{0}', params[0]), {
-						ttl: 5000,
-						disableCountDown: true
-					});
+				NoticeService.error(text.replace('{0}', params[0]), 5000, false);
 			});
 		}
 
 		function notifyWarning(message, params) {
 			$translate(message).then(function(text) {
-				$growl.warning("<i class='mdi  mdi-alert'></i> "
-					+ text.replace('{0}', params[0]), {
-						ttl: 5000,
-						disableCountDown: true
-					});
+				NoticeService.warning(text.replace('{0}', params[0]), 5000, false);
 			});
 		}
 	}

@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
-	
+
 	angular.module('outboundServiceModule', [ 'ngResource', 'pascalprecht.translate']);
 
 	var outbound = angular.module('wfm.outbound', [
@@ -16,7 +16,7 @@
 			'gantt',
 			'gantt.table',
 			'gantt.tooltips',
-			'angular-growl',
+			'wfm.notice',
 			'wfm.numericValue',
 			'ngStorage'
 		]
