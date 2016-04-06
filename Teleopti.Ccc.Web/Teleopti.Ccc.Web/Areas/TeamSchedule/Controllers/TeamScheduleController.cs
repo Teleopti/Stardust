@@ -30,15 +30,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
-		private readonly IHandleCommand<RemovePersonAbsenceCommand> _removePersonAbsenceCommandHandler;
-		private readonly IHandleCommand<RemovePartPersonAbsenceCommand> _removePartPersonAbsenceCommandHandler;
+		private readonly ICommandDispatcher _commandDispatcher;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
-			IHandleCommand<RemovePersonAbsenceCommand> removePersonAbsenceCommandHandler,
-			IHandleCommand<RemovePartPersonAbsenceCommand> removePartPersonAbsenceCommandHandler)
+			ICommandDispatcher commandDispatcher)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -46,8 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
-			_removePersonAbsenceCommandHandler = removePersonAbsenceCommandHandler;
-			_removePartPersonAbsenceCommandHandler = removePartPersonAbsenceCommandHandler;
+			_commandDispatcher = commandDispatcher;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
@@ -166,23 +163,19 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			setTrackedCommandInfo(command.TrackedCommandInfo);
 
-			var personAbsenceIdsForRemove = new HashSet<Guid>(command.PersonAbsenceIds);
-
 			// Get all person absence id for selected person
 			var schedules = getSchedulesForPeople(command.PersonIds.ToArray(), command.ScheduleDate);
-			foreach (var schedule in schedules.Schedules)
-			{
-				foreach (var projection in schedule.Projection.Where(projection => projection.ParentPersonAbsence != null))
-				{
-					personAbsenceIdsForRemove.Add(projection.ParentPersonAbsence.Value);
-				}
-			}
+			var personAbsenceIds = schedules.Schedules
+				.SelectMany(schedule => schedule.Projection.Where(projection => projection.ParentPersonAbsence != null))
+				.Select(projection => projection.ParentPersonAbsence.GetValueOrDefault());
 
+			var personAbsenceIdsForRemove = new HashSet<Guid>(command.PersonAbsenceIds.Concat(personAbsenceIds));
+			
 			if (command.RemoveEntireCrossDayAbsence)
 			{
 				foreach (var personAbsenceId in personAbsenceIdsForRemove)
 				{
-					_removePersonAbsenceCommandHandler.Handle(new RemovePersonAbsenceCommand
+					_commandDispatcher.Execute(new RemovePersonAbsenceCommand
 					{
 						PersonAbsenceId = personAbsenceId,
 						TrackedCommandInfo = command.TrackedCommandInfo
@@ -196,7 +189,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
 				foreach (var personAbsenceId in personAbsenceIdsForRemove)
 				{
-					_removePartPersonAbsenceCommandHandler.Handle(new RemovePartPersonAbsenceCommand
+					_commandDispatcher.Execute(new RemovePartPersonAbsenceCommand
 					{
 						PersonAbsenceId = personAbsenceId,
 						PeriodToRemove = periodToRemove,
