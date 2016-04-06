@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using NHibernate;
-using NHibernate.Context;
 using NHibernate.Engine;
 using NHibernate.Stat;
 using Teleopti.Ccc.Domain.Common.Messaging;
@@ -16,8 +15,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
+		private readonly TeleoptiUnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
-
 		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
 
@@ -29,14 +28,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			Func<IMessageBrokerComposite> messageBroker)
 		{
 			ConnectionString = connectionString;
-			SessionContextBinder = new StaticSessionContextBinder();
+			_context = new TeleoptiUnitOfWorkContext(sessionFactory);
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
 			_persistCallbacks = persistCallbacks;
 			_messageBroker = messageBroker;
 		}
-
-		protected ISessionContextBinder SessionContextBinder { get; set; }
 
 		public string Name
 		{
@@ -61,25 +58,22 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
 		{
-			var nhibSession = _factory.OpenStatelessSession();
-			return new NHibernateStatelessUnitOfWork(nhibSession);
+			return new NHibernateStatelessUnitOfWork(_factory.OpenStatelessSession());
 		}
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			var session = _factory.GetCurrentSession();
-			return MakeUnitOfWork(
-				session,
-				_messageBroker(),
-				SessionContextBinder.FilterManager(session),
-				SessionContextBinder.IsolationLevel(session),
-				SessionContextBinder.Initiator(session)
-				);
+			var unitOfWork = _context.UnitOfWork;
+			// maybe better to return null..
+			// but mimic nhibernate session context for now
+			if (unitOfWork == null)
+				throw new HibernateException("No session bound to the current context");
+			return unitOfWork;
 		}
 
 		public bool HasCurrentUnitOfWork()
 		{
-			return CurrentSessionContext.HasBind(_factory);
+			return _context.UnitOfWork != null;
 		}
 
 		public IAuditSetter AuditSetting
@@ -109,16 +103,27 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return createAndOpenUnitOfWork(_messageBroker(), TransactionIsolationLevel.Default, null, businessUnitFilter);
 		}
 
-		private IUnitOfWork createAndOpenUnitOfWork(IMessageBrokerComposite messageBroker, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator, IQueryFilter businessUnitFilter)
+		private IUnitOfWork createAndOpenUnitOfWork(IMessageBrokerComposite messaging, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator, IQueryFilter businessUnitFilter)
 		{
 			var businessUnitId = getBusinessUnitId();
-			var session = createNhibSession(isolationLevel);
+			var session = _factory.OpenSession(new AggregateRootInterceptor());
+			session.FlushMode = FlushMode.Never;
 
 			businessUnitFilter.Enable(session, businessUnitId);
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
-			return MakeUnitOfWork(session, messageBroker, SessionContextBinder.FilterManager(session), isolationLevel, initiator);
+			new NHibernateUnitOfWork(_context,
+				session,
+				messaging,
+				_persistCallbacks,
+				new NHibernateFilterManager(session),
+				new SendPushMessageWhenRootAlteredService(),
+				isolationLevel,
+				initiator
+				);
+
+			return CurrentUnitOfWork();
 		}
 
 		private static Guid getBusinessUnitId()
@@ -129,29 +134,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				: Guid.Empty;
 			return buId;
 		}
-
-		private ISession createNhibSession(TransactionIsolationLevel isolationLevel)
-		{
-			var session = _factory.OpenSession(new AggregateRootInterceptor());
-			session.FlushMode = FlushMode.Never;
-			SessionContextBinder.Bind(session, isolationLevel);
-			return session;
-		}
-
-		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBrokerComposite messaging, NHibernateFilterManager filterManager, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
-		{
-			return new NHibernateUnitOfWork(session,
-											messaging,
-											_persistCallbacks,
-											filterManager,
-											new SendPushMessageWhenRootAlteredService(),
-											SessionContextBinder.Unbind,
-											SessionContextBinder.BindInitiator,
-											isolationLevel,
-											initiator
-											);
-		}
-
+		
 		public void Dispose()
 		{
 			_factory.Dispose();

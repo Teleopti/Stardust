@@ -535,7 +535,6 @@
     <Compile Include="UnitOfWork\PersistCallbacks\PersistCallbackInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersistTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkCommitCallbackTest.cs" />
-    <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryUnitTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkRealTest.cs" />
     <Compile Include="UnitOfWork\OptimisticLockTest.cs" />
     <Compile Include="Repositories\QueueSourceRepositoryTest.cs" />

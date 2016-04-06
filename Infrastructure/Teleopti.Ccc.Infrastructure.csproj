@@ -390,6 +390,7 @@
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="NHibernateConfiguration\SqlAzureClientDriverWithLogRetries.cs" />
     <Compile Include="NHibernateConfiguration\SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
+    <Compile Include="NHibernateConfiguration\TeleoptiUnitOfWorkContext.cs" />
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
@@ -574,9 +575,7 @@
     <Compile Include="UnitOfWork\IEventInfrastructureInfoPopulator.cs" />
     <Compile Include="UnitOfWork\IMessageSendersScope.cs" />
     <Compile Include="UnitOfWork\InitiatorIdentifierFromMessage.cs" />
-    <Compile Include="UnitOfWork\ISessionContextBinder.cs" />
     <Compile Include="UnitOfWork\NoPersistCallbacks.cs" />
-    <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisherForTeamOrSite.cs" />
     <Compile Include="UnitOfWork\ReadOnlyUnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />

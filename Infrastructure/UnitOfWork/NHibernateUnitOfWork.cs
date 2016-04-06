@@ -20,13 +20,10 @@ using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	/// <summary>
-	/// An UnitOfWork implementation built as
-	/// a wrapper around nhibernate's session
-	/// </summary>
 	public class NHibernateUnitOfWork : IUnitOfWork
 	{
 		private Lazy<AggregateRootInterceptor> _interceptor;
+		private readonly TeleoptiUnitOfWorkContext _context;
 		private ISession _session;
 		private IMessageBrokerComposite _messageBroker;
 		private bool disposed;
@@ -34,35 +31,32 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 		private NHibernateFilterManager _filterManager;
 		private ICurrentPersistCallbacks _persistCallbacks;
-		private readonly Action<ISession> _unbind;
-		private readonly Action<ISession, IInitiatorIdentifier> _bindInitiator;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 		private IInitiatorIdentifier _initiator;
 
 		protected internal NHibernateUnitOfWork(
+			TeleoptiUnitOfWorkContext context,
 			ISession session, 
 			IMessageBrokerComposite messageBroker, 
 			ICurrentPersistCallbacks persistCallbacks, 
 			NHibernateFilterManager filterManager, 
 			ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, 
-			Action<ISession> unbind, 
-			Action<ISession, IInitiatorIdentifier> bindInitiator, 
 			TransactionIsolationLevel isolationLevel, 
 			IInitiatorIdentifier initiator)
 		{
 			InParameter.NotNull("session", session);
+			_context = context;
+			if (_context != null)
+				_context.UnitOfWork = this;
 			_session = session;
 			_messageBroker = messageBroker;
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
-			_unbind = unbind;
-			_bindInitiator = bindInitiator;
 			_isolationLevel = isolationLevel;
 			setInitiator(initiator);
 			_persistCallbacks = persistCallbacks;
-			_interceptor =
-				new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
+			_interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -100,8 +94,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void setInitiator(IInitiatorIdentifier initiator)
 		{
 			_initiator = initiator;
-			if (_initiator != null)
-				_bindInitiator(_session, _initiator);
 		}
 
 		public IInitiatorIdentifier Initiator()
@@ -371,10 +363,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		/// </summary>
 		protected virtual void ReleaseManagedResources()
 		{
+			if (_context != null)
+				_context.UnitOfWork = null;
+
 			if (_session != null)
 			{
 				safeRollback();
-				_unbind.Invoke(_session);
 
 				_session.Dispose();
 				_session = null;

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		protected override ISession Session
 		{
-			get { return (ISession)sessions()[_factory]; }
+			get { return (ISession) sessions()[_factory]; }
 			set { sessions()[_factory] = value; }
 		}
 
@@ -48,5 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			items[itemsKey] = sessions;
 			return sessions;
 		}
+
 	}
 }

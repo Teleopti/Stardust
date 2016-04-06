@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 	public class AnalyticsUnitOfWorkFactory : IAnalyticsUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
-		private readonly StaticSessionContextBinder _sessionContextBinder;
+		private readonly TeleoptiUnitOfWorkContext _context;
 
 		protected internal AnalyticsUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			string connectionString)
 		{
 			ConnectionString = connectionString;
-			_sessionContextBinder = new StaticSessionContextBinder();
+			_context = new TeleoptiUnitOfWorkContext(sessionFactory);
 			_factory = sessionFactory;
 		}
 		
@@ -27,41 +27,31 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			var session = _factory.GetCurrentSession();
-			return makeUnitOfWork(
-				session,
-				_sessionContextBinder.IsolationLevel(session)
-				);
+			var unitOfWork = _context.UnitOfWork;
+			// maybe better to return null..
+			// but mimic nhibernate session context for now
+			if (unitOfWork == null)
+				throw new HibernateException("No session bound to the current context");
+			return unitOfWork;
 		}
-		
+
 		public string ConnectionString { get; private set; }
 		
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
-			var session = createNhibSession(TransactionIsolationLevel.Default);
-			return makeUnitOfWork(session, TransactionIsolationLevel.Default);
-		}
-
-		private ISession createNhibSession(TransactionIsolationLevel isolationLevel)
-		{
 			var session = _factory.OpenSession(new AggregateRootInterceptor());
 			session.FlushMode = FlushMode.Never;
-			_sessionContextBinder.Bind(session, isolationLevel);
-			return session;
-		}
-
-		private IUnitOfWork makeUnitOfWork(ISession session, TransactionIsolationLevel isolationLevel)
-		{
-			return new NHibernateUnitOfWork(session,
+			new NHibernateUnitOfWork(
+				_context,
+				session,
 				null,
 				null,
 				null,
 				null,
-				_sessionContextBinder.Unbind,
-				_sessionContextBinder.BindInitiator,
-				isolationLevel,
+				TransactionIsolationLevel.Default,
 				null
 				);
+			return CurrentUnitOfWork();
 		}
 
 		public void Dispose()

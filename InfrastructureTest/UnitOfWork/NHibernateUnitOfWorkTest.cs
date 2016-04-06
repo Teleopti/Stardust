@@ -175,12 +175,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var sessionImpl = mocks.DynamicMock<ISessionImplementor>();
 			var sessionFactory = mocks.StrictMock<ISessionFactoryImplementor>();
 			Expect.Call(session.SessionFactory)
-				 .Return(sessionFactory);
+				 .Return(sessionFactory)
+				 .Repeat.Any();
 			Expect.Call(sessionFactory.CurrentSessionContext)
 				 .Return(new ThreadStaticSessionContext(sessionFactory))
 				 .Repeat.Any();
 			Expect.Call(session.GetSessionImplementation())
-				.Return(sessionImpl);
+				.Return(sessionImpl)
+				.Repeat.Any();
 			session.Dispose();
 			mocks.ReplayAll();
 			uow.Dispose();
@@ -457,8 +459,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		private class testUnitOfWork : NHibernateUnitOfWork
 		{
-			public testUnitOfWork(ISession mock, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, ICurrentPersistCallbacks persistCallbacks)
-				: base(mock, messageBroker, persistCallbacks ?? new NoPersistCallbacks(), null, pushMessageService, StaticSessionContextBinder.UnbindStatic, (s, i) => { }, TransactionIsolationLevel.Default, null)
+			public testUnitOfWork(ISession session, IMessageBrokerComposite messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, ICurrentPersistCallbacks persistCallbacks)
+				: base(null,  session, messageBroker, persistCallbacks ?? new NoPersistCallbacks(), null, pushMessageService, TransactionIsolationLevel.Default, null)
 			{
 			}
 
