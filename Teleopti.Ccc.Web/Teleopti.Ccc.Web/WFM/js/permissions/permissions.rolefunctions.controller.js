@@ -1,9 +1,9 @@
-﻿(function () {
+(function () {
 	'use strict';
 
 	angular.module('wfm.permissions').controller('RoleFunctionsController', [
-		'$scope', '$filter', 'RolesFunctionsService', 'Roles', 'growl',
-		function ($scope, $filter, RolesFunctionsService, Roles, growl) {
+		'$scope', '$filter', 'RolesFunctionsService', 'Roles', 'NoticeService', '$translate',
+		function ($scope, $filter, RolesFunctionsService, Roles, NoticeService, $translate) {
 			$scope.unselectedFunctionsToggle = false;
 			$scope.selectedFunctionsToggle = false;
 			$scope.rolesService = Roles;
@@ -17,27 +17,18 @@
 			$scope.multiDeselectModal = false;
 			$scope.tempActiveNode = {};
 
-			var message;
 			$scope.$watch(function () { return Roles.selectedRole; },
-				function (newSelectedRole) {
+				function (newSelectedRole, oldSelectedRole) {
+
 					if (!newSelectedRole.Id) return;
 					$scope.selectedRole = newSelectedRole;
-					if ($scope.selectedRole.BuiltIn) {
-						message = growl.warning("<i class='mdi mdi-alert' ></i><span>{{'ChangesAreDisabled'|translate}}</span>", {
-							ttl: 5000,
-							disableCountDown: true
-						});
+
+					if ($scope.selectedRole.BuiltIn && newSelectedRole !== oldSelectedRole) {
+						NoticeService.warning($translate.instant('ChangesAreDisabled'), 5000, true);
 					}
 
-					else if ($scope.selectedRole.IsMyRole) {
-						message = growl.warning("<i class='mdi mdi-alert' ></i><span>{{'CanNotModifyMyRole'|translate}}</span>", {
-							ttl: 5000,
-							disableCountDown: true
-						});
-					}
-
-					else if (message) {
-						message.destroy();
+					else if ($scope.selectedRole.IsMyRole && newSelectedRole !== oldSelectedRole) {
+						NoticeService.warning($translate.instant('CanNotModifyMyRole'), 5000, true);
 					}
 
 					RolesFunctionsService.refreshFunctions(newSelectedRole.Id).then(function () {
@@ -134,19 +125,13 @@
 				if (state.is) {
 					$scope.allToggleElement.is = !state.is;
 					RolesFunctionsService.unselectAllFunctions($scope.selectedRole);
-					growl.warning("<i class='mdi mdi-alert'></i> All functions are disabled.", {
-						ttl: 5000,
-						disableCountDown: true
-					});
+					NoticeService.warning("All functions are disabled.", 5000, true);
 					return;
 				}
 					$scope.allToggleElement.is = !state.is;
 					RolesFunctionsService.selectAllFunctions($scope.selectedRole);
 
-					growl.info("<i class='mdi mdi-thumb-up'></i> All functions are enabled.", {
-						ttl: 5000,
-						disableCountDown: true
-					});
+					NoticeService.info("All functions are enabled.", 5000, true);
 			};
 
 		    $scope.isAllNode = function(node) {

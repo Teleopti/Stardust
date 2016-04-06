@@ -3,6 +3,7 @@ describe('FunctionController', function() {
 
     var $q,
         $rootScope,
+        $translate,
 		$filter;
 
     var mockRoleFunctionService = {
@@ -37,7 +38,7 @@ describe('FunctionController', function() {
         }
 };
 
-    var mockGrowl = {};
+    var mockNoticeService = {};
 
     beforeEach(function () {
         module('wfm.permissions');
@@ -52,7 +53,7 @@ describe('FunctionController', function() {
     it('should toggle the selected property of node from false to true', inject(function ($controller) {
         var scope = $rootScope.$new();
         scope.functionsDisplayed = [{},{}];
-        $controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, growl: mockGrowl });
+        $controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, noticeService: mockNoticeService, $translate: $translate });
         var node = {
         	$modelValue: { selected: false, Type: 'Team', ChildNodes: [] }, $nodeScope: { $parentNodeScope: null }
         };
@@ -66,7 +67,7 @@ describe('FunctionController', function() {
 
     it('should deselect the parent and its children', inject(function ($controller) {
     	var scope = $rootScope.$new();
-    	$controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, growl: mockGrowl });
+    	$controller('RoleFunctionsController', { $scope: scope, $filter: $filter, RolesFunctionsService: mockRoleFunctionService, Roles: mockRoles, noticeService: mockNoticeService, $translate: $translate });
     	var node = {
     		$modelValue:
 			   { selected: true, ChildFunctions: [{ selected: true, ChildFunctions: [{ selected: true, ChildFunctions: [] }] }] }
