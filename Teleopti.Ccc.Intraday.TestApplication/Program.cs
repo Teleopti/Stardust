@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 
 namespace Teleopti.Ccc.Intraday.TestApplication
@@ -11,15 +12,26 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 		    var doReplace = false;
             Console.WriteLine("This tool will generate queue statistics for today for forecasted skills.");
             Console.WriteLine("");
-            Console.WriteLine("Would you like to replace potential existing queue statistics? (Y/N)");
+            Console.WriteLine("");
+            Console.WriteLine("CHECKLIST:");
+            Console.WriteLine("1. Make sure you have forecast data for today for the skills you want to monitor in Intraday.");
+            Console.WriteLine("");
+            Console.WriteLine("2. Run ETL Nightly job for today.");
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("When the above checklist is fulfilled, press any key to continue.");
+            Console.ReadKey();
+            Console.WriteLine("");
+            Console.WriteLine("");
+            Console.WriteLine("Would you like to replace potential existing queue statistics for today? (Y/N)");
             var replace = Console.ReadLine();
             if (replace.ToUpper().Equals("Y"))
             {
                 doReplace = true;
             }
 
-            const string connectionString = "Data Source=.;Integrated Security=SSPI;Initial Catalog=main_DemoSales_TeleoptiAnalytics;Application Name=Teleopti.Ccc.Intraday.TestApplication";
-			IForecastProvider forecastProvider = new ForecastProvider(connectionString);
+		    string connectionString = ConfigurationManager.AppSettings["analyticsConnectionString"];
+            IForecastProvider forecastProvider = new ForecastProvider(connectionString);
 			IWorkloadQueuesProvider workloadQueuesProvider = new WorkloadQueuesProvider(connectionString);
 			IDictionary<int, IList<QueueInterval>> queueDataDictionary = new Dictionary<int, IList<QueueInterval>>();
 			IQueueDataPersister queueDataPersister = new QueueDataPersister(connectionString);

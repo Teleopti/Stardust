@@ -9,6 +9,7 @@
 ..\TeleoptiCCC\ETL\Tools\Teleopti.Analytics.Etl.ConfigTool.exe.config,BuildArtifacts\AppETLTool.config
 ..\TeleoptiCCC\PMService\web.config,BuildArtifacts\PMWeb.config
 ..\TeleoptiCCC\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config,BuildArtifacts\AppRTATestApplication.config
+..\TeleoptiCCC\IntradayTools\Testapplication\Teleopti.Ccc.Intraday.TestApplication.exe.config,BuildArtifacts\AppIntradayTestApplication.config
 ..\TeleoptiCCC\SDK\LegalNotice.txt,BuildArtifacts\LegalNotice.txt
 ..\TeleoptiCCC\SDK\web.config,BuildArtifacts\SDKWeb.config
 ..\TeleoptiCCC\ServiceBus\log4net.config,BuildArtifacts\ServiceBuslog4net.config

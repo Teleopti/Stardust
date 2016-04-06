@@ -19,3 +19,4 @@
 ..\..\Services\ServiceBus\log4net.config,BuildArtifacts\ServiceBuslog4net.config
 ..\..\Services\ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.Host.exe.config,BuildArtifacts\ServiceBusHost.config
 ..\..\Tools\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config,BuildArtifacts\AppRTATestApplication.config
+..\..\Tools\IntradayTools\Testapplication\Teleopti.Ccc.Intraday.TestApplication.exe.config,BuildArtifacts\AppIntradayTestApplication.config

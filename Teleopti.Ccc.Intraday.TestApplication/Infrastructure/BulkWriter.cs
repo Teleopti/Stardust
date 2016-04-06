@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -62,10 +63,9 @@ namespace Teleopti.Ccc.Intraday.TestApplication.Infrastructure
                 {
                     DateTime startTime = DateTime.Now;
                     sqlBulkCopy.DestinationTableName = tableName;
-                    //_sqlBulkCopy.NotifyAfter = 10000;
                     var timeout = 60;
-                    //if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
-                    //    timeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
+                    if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
+                        timeout = int.Parse(ConfigurationManager.AppSettings["databaseTimeout"], CultureInfo.InvariantCulture);
                     sqlBulkCopy.BulkCopyTimeout = timeout;
                     // Write from the source to the destination.
                     sqlBulkCopy.WriteToServer(dataTable);

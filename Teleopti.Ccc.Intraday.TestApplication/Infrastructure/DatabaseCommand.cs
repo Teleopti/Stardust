@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -118,9 +119,9 @@ namespace Teleopti.Ccc.Intraday.TestApplication.Infrastructure
 		protected virtual SqlCommand SetCommand(SqlTransaction transaction)
 		{
 			var timeout = "60";
-			//if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
-			//	timeout = ConfigurationManager.AppSettings["databaseTimeout"];
-			return new SqlCommand
+            if (ConfigurationManager.AppSettings["databaseTimeout"] != null)
+                timeout = ConfigurationManager.AppSettings["databaseTimeout"];
+            return new SqlCommand
 				{
 					CommandText = _commandText,
 					Transaction = transaction,

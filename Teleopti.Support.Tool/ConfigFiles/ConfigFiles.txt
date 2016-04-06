@@ -4,6 +4,7 @@
 ..\..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\web.config,..\..\..\BuildArtifacts\AnalyticsWeb.config
 ..\..\..\Teleopti.Ccc.ApplicationConfig\App.config,..\..\..\BuildArtifacts\CccAppConfig.config
 ..\..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.TestApplication\app.config,..\..\..\BuildArtifacts\AppRTATestApplication.config
+..\..\..\Teleopti.Ccc.Intraday.TestApplication\app.config,..\..\..\BuildArtifacts\AppIntradayTestApplication.config
 ..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\web.config,..\..\..\BuildArtifacts\SDKWeb.config
 ..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config,..\..\..\BuildArtifacts\ServiceBusHost.config
 ..\..\..\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\app.config,..\..\..\BuildArtifacts\AppRaptor.config
