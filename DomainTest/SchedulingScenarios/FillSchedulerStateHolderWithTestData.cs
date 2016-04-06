@@ -7,9 +7,9 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
-	public static class FillSchedulerStateHolderForTest
+	public static class FillSchedulerStateHolderWithTestData
 	{
 		public static ISchedulerStateHolder Fill(this Func<ISchedulerStateHolder> stateHolderFunc,
 				IScenario scenario,

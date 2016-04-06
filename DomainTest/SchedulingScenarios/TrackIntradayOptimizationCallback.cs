@@ -2,7 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 
-namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public class TrackIntradayOptimizationCallback : IIntradayOptimizationCallback
 	{

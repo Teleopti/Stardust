@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
 	public class TrackOptimizeDaysForAgents : IIntradayOptimizeOneDayCallback
 	{

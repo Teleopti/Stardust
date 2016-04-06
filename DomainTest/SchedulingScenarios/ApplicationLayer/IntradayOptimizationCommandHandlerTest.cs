@@ -12,7 +12,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]

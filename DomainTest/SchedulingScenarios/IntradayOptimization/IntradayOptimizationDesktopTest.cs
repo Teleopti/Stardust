@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Drawing;
 using System.Linq;
+using System.Threading;
 using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -28,7 +28,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]

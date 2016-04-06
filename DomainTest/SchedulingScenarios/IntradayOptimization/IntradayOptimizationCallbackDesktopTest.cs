@@ -23,7 +23,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
 	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]

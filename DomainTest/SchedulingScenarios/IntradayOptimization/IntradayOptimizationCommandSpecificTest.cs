@@ -20,7 +20,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization.ScheduleOptimizationTests
+namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048)]
