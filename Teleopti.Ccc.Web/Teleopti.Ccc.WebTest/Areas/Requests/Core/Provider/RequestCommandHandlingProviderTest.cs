@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence);
+			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), DateTime.Today, absence);
 			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, Scenario.Current(), person);
 			
 			var dateTimePeriod = new DateTimePeriod(
