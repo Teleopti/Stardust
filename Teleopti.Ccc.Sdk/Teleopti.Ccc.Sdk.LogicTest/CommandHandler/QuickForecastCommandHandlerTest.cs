@@ -11,6 +11,7 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
@@ -25,15 +26,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private  IJobResultRepository _jobResultRepository;
 		private QuickForecastCommandHandler _target;
 		private IUnitOfWork _unitOfWork;
+	    private FakeEventPublisher _publisher;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_busSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
 			_unitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = _mocks.DynamicMock<IJobResultRepository>();
-			_target = new QuickForecastCommandHandler(_busSender, _unitOfWorkFactory, _jobResultRepository);
+		    _publisher = new FakeEventPublisher();
+            _target = new QuickForecastCommandHandler(_busSender, _unitOfWorkFactory, _jobResultRepository, _publisher, new DummyInfrastructureInfoPopulator());
 			_unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
 		}
 
@@ -72,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
-			Expect.Call(() => _busSender.Send(new QuickForecastWorkloadsEvent(), true)).IgnoreArguments();
+			Expect.Call(() => _publisher.Publish(new QuickForecastWorkloadsEvent())).IgnoreArguments();
 			_mocks.ReplayAll();
 			var period = new DateOnlyPeriodDto
 				{

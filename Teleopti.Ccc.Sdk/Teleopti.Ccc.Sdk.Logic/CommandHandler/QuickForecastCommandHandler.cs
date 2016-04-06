@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,15 +17,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
 	public class QuickForecastCommandHandler : IHandleCommand<QuickForecastCommandDto>
     {
-		private readonly IMessagePopulatingServiceBusSender _busSender;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
+	    private readonly IEventPublisher _publisher;
+	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 
-		public QuickForecastCommandHandler(IMessagePopulatingServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+	    public QuickForecastCommandHandler(IMessagePopulatingServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventPublisher publisher, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
 		{
-			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
+	        _publisher = publisher;
+	        _eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 		}
 
 		public void Handle(QuickForecastCommandDto command)
@@ -57,8 +60,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         UseDayOfMonth = command.UseDayOfMonth
 					};
 
-				_busSender.Send(message, true);
-			}
+                _eventInfrastructureInfoPopulator.PopulateEventContext(message);
+                _publisher.Publish(message);
+            }
 
 			command.Result = new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
 		}
