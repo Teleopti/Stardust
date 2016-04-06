@@ -182,7 +182,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
-			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
+			person.WorkflowControlSet = createWorkFlowControlSet
+				(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
 			var waitlistedPersonRequest = createWaitlistedAbsenceRequest(person, absence,
 				new DateTimePeriod(
 					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
@@ -201,7 +202,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
+			person.WorkflowControlSet = createWorkFlowControlSet
+				(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
 			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, Scenario.Current(), person);
 			
 			var dateTimePeriod = new DateTimePeriod(
@@ -210,10 +212,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			
 			var waitlistedPersonRequest = createWaitlistedAbsenceRequest(person, absence, dateTimePeriod);
 			
-			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person)).Return(new List<IBusinessRuleResponse>());
+			requestApprovalService.Stub(x => x.ApproveAbsence(absence, dateTimePeriod, person)).IgnoreArguments().Return(new List<IBusinessRuleResponse>());
 			Target.ApproveRequests(new List<Guid> { waitlistedPersonRequest.Id.Value });
 
+			waitlistedPersonRequest.IsWaitlisted.Should().Be.False();
+			waitlistedPersonRequest.IsDenied.Should().Be.False();
 			waitlistedPersonRequest.IsApproved.Should().Be.True();
+			
 		}
 
 		private IPersonRequest createWaitlistedAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
