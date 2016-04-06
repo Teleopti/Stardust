@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			var absence = AbsenceFactory.CreateAbsence("Holiday");
 
-			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new GrantAbsenceRequest(), true);
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), DateTime.Today, absence, new GrantAbsenceRequest(), true);
 			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
 			var existingDeniedRequest = createAbsenceRequest(person, absence, requestDateTimePeriod);
