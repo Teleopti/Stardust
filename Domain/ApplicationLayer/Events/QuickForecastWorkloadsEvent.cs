@@ -34,30 +34,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		/// </summary>
 		public Guid ScenarioId { get; set; }
 
-		/// <summary>
-		/// The period to base the forecast on
-		/// </summary>
-		public DateOnlyPeriod StatisticPeriod { get; set; }
+        /// <summary>
+        /// The period to base the forecast on, divided due to JSon on Hangfire
+        /// </summary>
+        public DateOnly StatisticsPeriodStart { get; set; }
+        public DateOnly StatisticsPeriodEnd { get; set; }
 
-		/// <summary>
-		/// The period to forecast
-		/// </summary>
-		public DateOnlyPeriod TargetPeriod { get; set; }
 
-		/// <summary>
-		/// The smoothing style of the templates
-		/// </summary>
-		public int SmoothingStyle { get; set; }
+        /// <summary>
+        /// The period to forecast,  divided due to JSon on Hangfire
+        /// </summary>
+        public DateOnly TargetPeriodStart { get; set; }
+        public DateOnly TargetPeriodEnd { get; set; }
 
-		/// <summary>
-		/// The period to get the templates from
-		/// </summary>
-		public DateOnlyPeriod TemplatePeriod { get; set; }
 
-		/// <summary>
-		/// How much the progress bar should increase for every step
-		/// </summary>
-		public int IncreaseWith { get; set; }
+        /// <summary>
+        /// The smoothing style of the templates
+        /// </summary>
+        public int SmoothingStyle { get; set; }
+
+        /// <summary>
+        /// The period to get the templates from,  divided due to JSon on Hangfire
+        /// </summary>
+        public DateOnly TemplatePeriodStart { get; set; }
+        public DateOnly TemplatePeriodEnd { get; set; }
+
+        /// <summary>
+        /// How much the progress bar should increase for every step
+        /// </summary>
+        public int IncreaseWith { get; set; }
 
         /// <summary>
         /// If the Index of the day of month should be used when forecasting

@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
@@ -24,8 +25,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		public QuickForecastWorkloadsEventHandlerHangfire(IQuickForecastWorkloadProcessor quickForecastWorkloadProcessor) : base(quickForecastWorkloadProcessor)
 		{
 		}
-
-		public new void Handle(QuickForecastWorkloadsEvent @event)
+        
+        [AsSystem]
+		public virtual void Handle(QuickForecastWorkloadsEvent @event)
 		{
 			base.Handle(@event);
 		}
@@ -46,10 +48,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 				LogOnDatasource = @event.LogOnDatasource,
 				JobId = @event.JobId,
 				ScenarioId = @event.ScenarioId,
-				StatisticPeriod = @event.StatisticPeriod,
-				TargetPeriod = @event.TargetPeriod,
+				StatisticPeriod = new DateOnlyPeriod(@event.StatisticsPeriodStart, @event.StatisticsPeriodEnd), 
+				TargetPeriod = new DateOnlyPeriod(@event.TargetPeriodStart, @event.TargetPeriodEnd),
 				WorkloadId = workloadId,
-				TemplatePeriod = @event.TemplatePeriod,
+				TemplatePeriod = new DateOnlyPeriod(@event.TemplatePeriodStart, @event.TemplatePeriodEnd),
 				SmoothingStyle = @event.SmoothingStyle,
 				IncreaseWith = @event.IncreaseWith,
 				UseDayOfMonth = @event.UseDayOfMonth

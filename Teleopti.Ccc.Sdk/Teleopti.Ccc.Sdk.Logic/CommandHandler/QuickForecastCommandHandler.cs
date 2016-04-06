@@ -49,15 +49,18 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				var message = new QuickForecastWorkloadsEvent
 					{
-						StatisticPeriod = command.StatisticPeriod.ToDateOnlyPeriod(),
-						TargetPeriod = command.TargetPeriod.ToDateOnlyPeriod(),
+						TargetPeriodStart = command.TargetPeriod.StartDate.ToDateOnly(),
+                        TargetPeriodEnd = command.TargetPeriod.EndDate.ToDateOnly(),
 						ScenarioId = command.ScenarioId,
 						JobId = jobId,
 						SmoothingStyle = command.SmoothingStyle,
-						TemplatePeriod = command.TemplatePeriod.ToDateOnlyPeriod(),
+						TemplatePeriodStart = command.TemplatePeriod.StartDate.ToDateOnly(),
+                        TemplatePeriodEnd = command.TemplatePeriod.EndDate.ToDateOnly(),
 						WorkloadIds = command.WorkloadIds,
 						IncreaseWith = command.IncreaseWith,
-                        UseDayOfMonth = command.UseDayOfMonth
+                        UseDayOfMonth = command.UseDayOfMonth,
+                        StatisticsPeriodStart = command.StatisticPeriod.StartDate.ToDateOnly(),
+                        StatisticsPeriodEnd = command.StatisticPeriod.EndDate.ToDateOnly()
 					};
 
                 _eventInfrastructureInfoPopulator.PopulateEventContext(message);
