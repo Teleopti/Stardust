@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using NHibernate;
 using NHibernate.Engine;
-using NHibernate.Stat;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
-		private readonly TeleoptiUnitOfWorkContext _context;
+		private readonly UnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			Func<IMessageBrokerComposite> messageBroker)
 		{
 			ConnectionString = connectionString;
-			_context = new TeleoptiUnitOfWorkContext(sessionFactory);
+			_context = new UnitOfWorkContext(sessionFactory);
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
 			_persistCallbacks = persistCallbacks;
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			get
 			{
-				IStatistics statistics = _factory.Statistics;
+				var statistics = _factory.Statistics;
 				if(statistics.IsStatisticsEnabled)
 					return statistics.SessionOpenCount - statistics.SessionCloseCount;
 				return null;
@@ -63,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			var unitOfWork = _context.UnitOfWork;
+			var unitOfWork = _context.Get();
 			// maybe better to return null..
 			// but mimic nhibernate session context for now
 			if (unitOfWork == null)
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public bool HasCurrentUnitOfWork()
 		{
-			return _context.UnitOfWork != null;
+			return _context.Get() != null;
 		}
 
 		public IAuditSetter AuditSetting

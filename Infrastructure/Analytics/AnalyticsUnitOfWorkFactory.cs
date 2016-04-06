@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 	public class AnalyticsUnitOfWorkFactory : IAnalyticsUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
-		private readonly TeleoptiUnitOfWorkContext _context;
+		private readonly UnitOfWorkContext _context;
 
 		protected internal AnalyticsUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			string connectionString)
 		{
 			ConnectionString = connectionString;
-			_context = new TeleoptiUnitOfWorkContext(sessionFactory);
+			_context = new UnitOfWorkContext(sessionFactory);
 			_factory = sessionFactory;
 		}
 		
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 
 		public IUnitOfWork CurrentUnitOfWork()
 		{
-			var unitOfWork = _context.UnitOfWork;
+			var unitOfWork = _context.Get();
 			// maybe better to return null..
 			// but mimic nhibernate session context for now
 			if (unitOfWork == null)

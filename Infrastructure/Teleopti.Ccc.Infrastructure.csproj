@@ -390,7 +390,7 @@
     <Compile Include="NHibernateConfiguration\SecondLevelCache.cs" />
     <Compile Include="NHibernateConfiguration\SqlAzureClientDriverWithLogRetries.cs" />
     <Compile Include="NHibernateConfiguration\SqlTransientErrorDetectionStrategyWithTimeouts.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiUnitOfWorkContext.cs" />
+    <Compile Include="NHibernateConfiguration\UnitOfWorkContext.cs" />
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />

@@ -6,21 +6,30 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	public class TeleoptiUnitOfWorkContext
+	public class UnitOfWorkContext
 	{
-		private const string itemsKey = "TeleoptiUnitOfWorkContext";
+		private const string itemsKey = "UnitOfWorkContext";
 		private static readonly ThreadLocal<Hashtable> threadSessions = new ThreadLocal<Hashtable>(() => new Hashtable());
 		private readonly ISessionFactory _factory;
 
-		public TeleoptiUnitOfWorkContext(ISessionFactory factory)
+		public UnitOfWorkContext(ISessionFactory factory)
 		{
 			_factory = factory;
 		}
 
-		public IUnitOfWork UnitOfWork
+		public void Set(IUnitOfWork unitOfWork)
 		{
-			get { return (IUnitOfWork) sessions()[_factory]; }
-			set { sessions()[_factory] = value; }
+			sessions()[_factory] = unitOfWork;
+		}
+
+		public IUnitOfWork Get()
+		{
+			return (IUnitOfWork) sessions()[_factory];
+		}
+
+		public void Clear()
+		{
+			Set(null);
 		}
 
 		private static Hashtable sessions()

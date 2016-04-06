@@ -22,21 +22,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class NHibernateUnitOfWork : IUnitOfWork
 	{
-		private Lazy<AggregateRootInterceptor> _interceptor;
-		private readonly TeleoptiUnitOfWorkContext _context;
-		private ISession _session;
-		private IMessageBrokerComposite _messageBroker;
-		private bool disposed;
-		private ITransaction _transaction;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
-		private NHibernateFilterManager _filterManager;
-		private ICurrentPersistCallbacks _persistCallbacks;
+
+		private readonly Lazy<AggregateRootInterceptor> _interceptor;
+		private readonly UnitOfWorkContext _context;
+		private readonly ISession _session;
+		private readonly IMessageBrokerComposite _messageBroker;
+		private readonly NHibernateFilterManager _filterManager;
+		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly TransactionIsolationLevel _isolationLevel;
-		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
+		private readonly ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
+		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 
 		protected internal NHibernateUnitOfWork(
-			TeleoptiUnitOfWorkContext context,
+			UnitOfWorkContext context,
 			ISession session, 
 			IMessageBrokerComposite messageBroker, 
 			ICurrentPersistCallbacks persistCallbacks, 
@@ -47,8 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			InParameter.NotNull("session", session);
 			_context = context;
-			if (_context != null)
-				_context.UnitOfWork = this;
+			_context.Set(this);
 			_session = session;
 			_messageBroker = messageBroker;
 			_filterManager = filterManager;
@@ -135,7 +134,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return PersistAll(null);
 		}
 
-
 		public virtual IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
 		{
 			// next step: move to only use constructor injection.
@@ -202,7 +200,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			Guid moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
+			var moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
 			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
 		}
 
@@ -218,7 +216,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			Session.Lock(root, LockMode.None);
 		}
-
 
 		public void Reassociate<T>(params IEnumerable<T>[] rootCollectionsCollection) where T : IAggregateRoot
 		{
@@ -315,80 +312,22 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			throw new ArgumentException("Cannot find " + root + " in db");
 		}
-
-		#region IDispose
-
-		///<summary>
-		///Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		///</summary>
-		/// <remarks>
-		/// So far only managed code. No need implementing destructor.
-		/// </remarks>
+		
 		public void Dispose()
 		{
-			Dispose(true);
-			//Don't know how to test next row. Impossible?
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary>
-		/// Virtual dispose method
-		/// </summary>
-		/// <param name="disposing">
-		/// If set to <c>true</c>, explicitly called.
-		/// If set to <c>false</c>, implicitly called from finalizer.
-		/// </param>
-		private void Dispose(bool disposing)
-		{
-			if (!disposed)
-			{
-				if (disposing)
-				{
-					ReleaseManagedResources();
-				}
-				ReleaseUnmanagedResources();
-				disposed = true;
-			}
-		}
-
-		/// <summary>
-		/// Releases the unmanaged resources.
-		/// </summary>
-		protected virtual void ReleaseUnmanagedResources()
-		{
-		}
-
-		/// <summary>
-		/// Releases the managed resources.
-		/// </summary>
-		protected virtual void ReleaseManagedResources()
-		{
 			if (_context != null)
-				_context.UnitOfWork = null;
+				_context.Clear();
 
 			if (_session != null)
 			{
 				safeRollback();
-
 				_session.Dispose();
-				_session = null;
-
-				_filterManager = null;
-
-				_persistCallbacks = null;
-				_messageBroker = null;
-				_sendPushMessageWhenRootAlteredService = null;
 			}
 
 			if (_interceptor.IsValueCreated)
-			{
 				_interceptor.Value.Clear();
-				_interceptor = null;
-			}
 		}
-
-		#endregion
-
+		
 		public override bool Equals(object obj)
 		{
 			var uow = obj as NHibernateUnitOfWork;

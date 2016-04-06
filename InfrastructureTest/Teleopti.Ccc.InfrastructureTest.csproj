@@ -549,9 +549,6 @@
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryFake.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryTest.cs" />
-    <Compile Include="UnitOfWork\NHibernateUnitOfWorkTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="UnitOfWork\DataSourcesFactoryTest.cs" />
     <Compile Include="UnitOfWork\PersistCallbacks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
