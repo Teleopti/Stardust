@@ -389,9 +389,9 @@ Try
     $ClickOnceTool = $ClickOnceSignPath + "\ClickOnceSign.exe"
 
     $ClientPath="$directory\..\..\sitesroot\4"
-    $pwd ="`"`""
+    $pwd ="Teleopti2015"
 	log-info "Running ClickOnceSign.exe..."
-    $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application", "-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $ClientPath","-p $pwd")
+    $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application", "-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $scriptPath\teleopti.pfx","-dir $ClientPath","-p $pwd")
     Remove-Item "$ClickOnceSignPath\SignAdminClient.bat"
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "E:"
 	Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "CD $ClickOnceSignPath"
