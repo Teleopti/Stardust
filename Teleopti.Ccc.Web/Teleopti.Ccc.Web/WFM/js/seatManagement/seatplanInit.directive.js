@@ -1,9 +1,9 @@
 ﻿(function () {
 
 	angular.module('wfm.seatPlan').controller('SeatPlanInitCtrl', seatPlanInitDirectiveController);
-	seatPlanInitDirectiveController.$inject = ['seatPlanService', 'growl', '$translate'];
+	seatPlanInitDirectiveController.$inject = ['seatPlanService', 'NoticeService', '$translate'];
 
-	function seatPlanInitDirectiveController(seatPlanService, growl, $translate) {
+	function seatPlanInitDirectiveController(seatPlanService, NoticeService, $translate) {
 
 		var vm = this;
 
@@ -51,7 +51,7 @@
 
 			}
 		};
-		
+
 		function onAddSeatPlanCompleted(seatPlanResultMessage) {
 
 			var seatPlanResultDetailMessage = $translate.instant('SeatPlanResultDetailMessage')
@@ -72,24 +72,15 @@
 		};
 
 		function onSuccessAddSeatPlan(message) {
-			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.success(message + ".", 5000, true);
 		};
 
 		function onWarningAddSeatPlan(message) {
-			growl.warning("<i class='mdi mdi-alert'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.warning(message + ".", 5000, true);
 		};
 
 		function onSelectedTeamsLocationsEmpty(message) {
-			growl.error("<i class='mdi  mdi-alert-octagon'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.error(message + ".", 5000, true);
 		};
 
 	};
