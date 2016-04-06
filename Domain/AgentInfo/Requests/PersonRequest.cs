@@ -406,41 +406,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private void moveToDenied(bool autoDenied = false)
 		{
+			
 			if (waitlistingIsEnabled())
 			{
-				handleWaitlisting(autoDenied);
+				RequestState = new waitListedPersonRequest(this);
 				return;
 			}
-
+			
 			if (autoDenied)
 			{
-				RequestState = new autoDeniedPersonRequest(this);
+				
+					RequestState = new autoDeniedPersonRequest(this);
 			}
 			else
 			{
 				RequestState = new deniedPersonRequest(this);
-			}
-		}
-
-		private void handleWaitlisting (bool autoDenied)
-		{
-			if (autoDenied)
-			{
-				if (!IsWaitlisted)
-				{
-					RequestState = new waitListedPersonRequest(this);
-				}
-			}
-			else
-			{
-				if (IsWaitlisted)
-				{
-					RequestState = new deniedPersonRequest(this);
-				}
-				else
-				{
-					RequestState = new waitListedPersonRequest(this);
-				}
 			}
 		}
 
@@ -538,7 +518,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			protected readonly PersonRequest PersonRequest;
 			private readonly int _requestStatusId;
-
+			
 			protected personRequestState(PersonRequest personRequest, int requestStatusId)
 			{
 				PersonRequest = personRequest;
@@ -715,7 +695,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					return true;
 				}
 			}
-
+			
 			protected internal override string StatusText
 			{
 				get
@@ -738,7 +718,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					return true;
 				}
 			}
-
+			
 			protected internal override bool IsWaitlisted
 			{
 				get { return true; }
