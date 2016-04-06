@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
 
 			var bestShiftProjectionCache = roleModelShift;
-			var selectedTeamMembers = teamInfo.UnLockedMembers().ToList();
+			var selectedTeamMembers = teamInfo.UnLockedMembers(day).ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
 			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
 				return true;

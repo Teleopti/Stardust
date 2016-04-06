@@ -59,44 +59,48 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             {
                 Assert.AreEqual(0, _target.GetRuleSetBag(_teamBlockInfo).Count());
             }
-
         }
 
         [Test]
         public void ShouldReturnRuleSetBagForSigleAgentSingleDay()
         {
             var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 10);
-            using (_mock.Record())
+			var persons = new List<IPerson> { _person1 };
+
+			using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1 });
+                Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
                 Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-            }
+				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons);
+			}
             using (_mock.Playback())
             {
                 Assert.AreEqual(1, _target.GetRuleSetBag(_teamBlockInfo).Count());
             }
-
         }
 
         [Test]
         public void ShouldReturnRuleSetBagForSigleAgentMultipleDays()
         {
             var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
+			var persons = new List<IPerson> {_person1};
             using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1 });
+                Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
                 Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod2);
                 Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-            }
+	            Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons);
+				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 11))).Return(persons);
+			}
             using (_mock.Playback())
             {
                 Assert.AreEqual(2, _target.GetRuleSetBag(_teamBlockInfo).Count());
@@ -107,17 +111,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
         public void ShouldReturnRuleSetBagForTeamSingleDay()
         {
             var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 10);
-            using (_mock.Record())
+			var persons = new List<IPerson> { _person1, _person2 };
+			using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1, _person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
                 Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
                 Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2);
                 Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-            }
+				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons).Repeat.Twice();
+			}
             using (_mock.Playback())
             {
                 Assert.AreEqual(2, _target.GetRuleSetBag(_teamBlockInfo).Count());
@@ -128,10 +134,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
         public void ShouldReturnRuleSetBagForTeamMultipleDays()
         {
             var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
+			var persons = new List<IPerson> {_person1, _person2};
             using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1, _person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
@@ -142,7 +149,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                 Expect.Call(_personPeriod3.RuleSetBag).Return(_ruleSetBag3);
                 Expect.Call(_person2.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod4);
                 Expect.Call(_personPeriod4.RuleSetBag).Return(_ruleSetBag4);
-            }
+				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons).Repeat.Twice();
+				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 11))).Return(persons).Repeat.Twice();
+			}
             using (_mock.Playback())
             {
                 Assert.AreEqual(4, _target.GetRuleSetBag(_teamBlockInfo).Count());
@@ -162,8 +171,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Assert.AreEqual(1, _target.GetRuleSetBagForTeamMember(_person1, new DateOnly(2014, 03, 10)).Count());
             }
         }
-
     }
-
-
 }

@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 
 		IEnumerable<IPerson> GroupMembers { get; }
-		IEnumerable<IPerson> UnLockedMembers();
-		void LockMember(IPerson member);
+		IEnumerable<IPerson> UnLockedMembers(DateOnly dateOnly);
+		void LockMember(DateOnlyPeriod period, IPerson member);
 		string Name { get; }
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroup();
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index);
@@ -20,15 +20,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		IScheduleMatrixPro MatrixForMemberAndDate(IPerson groupMember, DateOnly dateOnly);
 		IEnumerable<IScheduleMatrixPro> MatrixesForMemberAndPeriod(IPerson groupMember, DateOnlyPeriod period);
 		void ClearLocks();
-		IEnumerable<IScheduleMatrixPro> MatrixesForUnlockedMembersAndPeriod(DateOnlyPeriod dateOnlyPeriod);
 	}
 
 	public class TeamInfo : ITeamInfo
 	{
 		private readonly IList<IList<IScheduleMatrixPro>> _matrixesForMembers;
 		private readonly List<IPerson> _groupMembers= new List<IPerson>();
-		private readonly IList<IPerson> _lockedMembers = new List<IPerson>();
 		private readonly string _name;
+		private readonly Dictionary<DateOnly, IList<IPerson>> _lockedMemberDictionary = new Dictionary<DateOnly, IList<IPerson>>();
 			 
 		public TeamInfo(Group group, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
 		{
@@ -45,21 +44,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-		public void LockMember(IPerson member)
+		public void LockMember(DateOnlyPeriod period, IPerson member)
 		{
 			if(!GroupMembers.Contains(member))
 				throw new ArgumentOutOfRangeException("member", "Must be within group members");
 
-			_lockedMembers.Add(member);
+
+			foreach (var dateOnly in period.DayCollection())
+			{
+				if (_lockedMemberDictionary.ContainsKey(dateOnly))
+				{
+					if(!_lockedMemberDictionary[dateOnly].Contains(member))
+						_lockedMemberDictionary[dateOnly].Add(member);
+				}
+
+				else
+				{
+					_lockedMemberDictionary.Add(dateOnly, new List<IPerson>() {member});
+				}
+			}
 		}
 
-		public IEnumerable<IPerson> UnLockedMembers()
+		public IEnumerable<IPerson> UnLockedMembers(DateOnly dateOnly)
 		{
-			var ret = new List<IPerson>();
+			IList<IPerson> ret = new List<IPerson>();
 			foreach (var groupMember in GroupMembers)
 			{
-				if (!_lockedMembers.Contains(groupMember))
+				if (!_lockedMemberDictionary.ContainsKey(dateOnly))
+				{
 					ret.Add(groupMember);
+				}
+				else if (!_lockedMemberDictionary[dateOnly].Contains(groupMember))
+				{
+					ret.Add(groupMember);
+				}
 			}
 
 			return ret;
@@ -135,20 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public void ClearLocks()
 		{
-			_lockedMembers.Clear();
-		}
-
-		public IEnumerable<IScheduleMatrixPro> MatrixesForUnlockedMembersAndPeriod(DateOnlyPeriod dateOnlyPeriod)
-		{
-			IList<IScheduleMatrixPro> ret = new List<IScheduleMatrixPro>();
-			foreach (var scheduleMatrixPro in MatrixesForGroup())
-			{
-				if ((UnLockedMembers().Contains( scheduleMatrixPro.Person) )
-						&&  ( scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(dateOnlyPeriod) != null))
-					ret.Add(scheduleMatrixPro);
-			}
-
-			return ret;
+			_lockedMemberDictionary.Clear();
 		}
 
 		public override int GetHashCode()

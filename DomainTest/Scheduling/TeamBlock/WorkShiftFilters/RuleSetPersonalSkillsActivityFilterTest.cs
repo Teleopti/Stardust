@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamInfo.GroupMembers).Return(_groupMemebers);
+				Expect.Call(_teamInfo.UnLockedMembers(DateOnly.MinValue)).Return(_groupMemebers);
 				//model list
 				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet1, new List<ISkill> { _skill1, _skill2 })).Return(true);
 				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_ruleSet2, new List<ISkill> { _skill1, _skill2 })).Return(true);
@@ -86,6 +87,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Assert.AreSame(_ruleSet1, result[0]);
 			}
 		}
-
 	}
 }

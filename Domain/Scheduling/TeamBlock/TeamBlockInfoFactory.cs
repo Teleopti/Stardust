@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (blockInfo == null)
 				return null;
 
-			if (!_teamMemberTerminationOnBlockSpecification.IsSatisfy(teamInfo, blockInfo))
-				return null;
+			_teamMemberTerminationOnBlockSpecification.LockTerminatedMembers(teamInfo, blockInfo);
 
 			return new TeamBlockInfo(teamInfo, blockInfo);
 		}

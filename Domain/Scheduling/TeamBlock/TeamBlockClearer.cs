@@ -33,12 +33,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 
-			var selectedTeamMembers = teamBlock.TeamInfo.UnLockedMembers();
 			var unlockedDates = teamBlock.BlockInfo.UnLockedDates();
-
-			foreach (var person in selectedTeamMembers)
+			
+			foreach (var unlockedDate in unlockedDates)
 			{
-				addDaysToRemove(teamBlock, unlockedDates, person, toRemove);
+				addDaysToRemove(teamBlock, unlockedDate, toRemove);
 			}
 
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(toRemove,
@@ -50,31 +49,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ITeamBlockInfo teamBlock)
 		{
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
-
-			var selectedTeamMembers = teamBlock.TeamInfo.UnLockedMembers();
 			var unlockedDates = teamBlock.BlockInfo.UnLockedDates();
-			foreach (var person in selectedTeamMembers)
+
+			foreach (var unlockedDate in unlockedDates)
 			{
-				addDaysToRemove(teamBlock, unlockedDates, person, toRemove);
+				addDaysToRemove(teamBlock, unlockedDate, toRemove);
 			}
+
 			_deleteSchedulePartService.Delete(toRemove, schedulePartModifyAndRollbackService);
 		}
 
-		private static void addDaysToRemove(ITeamBlockInfo teamBlock, IList<DateOnly> unlockedDates , IPerson person, IList<IScheduleDay> toRemove)
+		private static void addDaysToRemove(ITeamBlockInfo teamBlock, DateOnly dateOnly, IList<IScheduleDay> toRemove)
 		{
-			foreach (var dateOnly in unlockedDates)
+			var unlockedPersons = teamBlock.TeamInfo.UnLockedMembers(dateOnly);
+
+			foreach (var person in unlockedPersons)
 			{
 				IScheduleMatrixPro matrix = teamBlock.TeamInfo.MatrixForMemberAndDate(person, dateOnly);
-				if (matrix == null)
+				if (matrix == null)	
 					continue;
 
 				IScheduleDayPro scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
-				if (!matrix.UnlockedDays.Contains(scheduleDayPro))
+				if (!matrix.UnlockedDays.Contains(scheduleDayPro))	
 					continue;
 
 				IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
 				SchedulePartView significant = scheduleDay.SignificantPart();
-				if(significant == SchedulePartView.MainShift)
+				if (significant == SchedulePartView.MainShift)
 					toRemove.Add(scheduleDay);
 			}
 		}

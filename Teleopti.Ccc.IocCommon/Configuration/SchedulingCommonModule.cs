@@ -378,7 +378,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysService>().As<ITeamBlockMoveTimeBetweenDaysService>();
 			builder.RegisterType<TeamBlockMoveTimeOptimizer>().As<ITeamBlockMoveTimeOptimizer>();
-			builder.RegisterType<LockUnSelectedInTeamBlock>().As<ILockUnSelectedInTeamBlock>().InstancePerLifetimeScope();
 		}
 
 		private static void registerDayOffFairnessOptimizationService(ContainerBuilder builder)

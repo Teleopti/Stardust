@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();
 			var teamInfo = teamBlockInfo.TeamInfo;
-			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
+			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers(datePointer)).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return resultList;
 			
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		{
 			var teamInfo = teamBlockInfo.TeamInfo;
-			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers()).ToList();
+			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers(datePointer)).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
 			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),

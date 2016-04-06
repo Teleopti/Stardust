@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -14,10 +15,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
         public IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo)
         {
             var possibleWorkShiftRuleSetBagList = new List<IRuleSetBag>();
-            foreach (var person in teamBlockInfo.TeamInfo.GroupMembers)
+	        var teamInfo = teamBlockInfo.TeamInfo;
+
+			foreach (var person in teamInfo.GroupMembers)
             {
                 foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
                 {
+					if(!teamInfo.UnLockedMembers(dateOnly).Contains(person))
+						continue;
                     var tempWorkShiftRuleSetBag = person.Period(dateOnly).RuleSetBag;
                     if (tempWorkShiftRuleSetBag == null) 
 						continue;

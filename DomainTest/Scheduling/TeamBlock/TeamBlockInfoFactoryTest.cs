@@ -53,37 +53,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnNewTeamBlockInfoIfBlockFound()
 		{
+			var dateOnly = new DateOnly(2013, 2, 27);
 			using (_mocks.Record())
 			{
                 Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, BlockFinderType.SchedulePeriod, false))
 					  .Return(_blockInfo);
-                Expect.Call(_teamMemberTerminationOnBlockSpecification.IsSatisfy(_teamInfo, _blockInfo)).Return(true);
+                Expect.Call(()=>_teamMemberTerminationOnBlockSpecification.LockTerminatedMembers(_teamInfo, _blockInfo));
 			}
 
 			using (_mocks.Playback())
 			{
-				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, new DateOnly(2013, 2, 27), BlockFinderType.SchedulePeriod, false);
+				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, dateOnly, BlockFinderType.SchedulePeriod, false);
 				Assert.AreSame(_teamInfo, result.TeamInfo);
 				Assert.AreSame(_blockInfo, result.BlockInfo);
 			}
 		}
-
-        [Test]
-        public void ReturnNullIfAnyMemberOfTeamIsTerminated()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, BlockFinderType.SchedulePeriod, false))
-                      .Return(_blockInfo);
-                Expect.Call(_teamMemberTerminationOnBlockSpecification.IsSatisfy(_teamInfo, _blockInfo)).Return(false);
-            }
-
-            using (_mocks.Playback())
-            {
-                ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, new DateOnly(2013, 2, 27), BlockFinderType.SchedulePeriod, false);
-                Assert.IsNull( result );
-            }
-        }
-
 	}
 }

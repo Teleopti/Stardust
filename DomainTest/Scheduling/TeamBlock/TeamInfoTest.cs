@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			Group group1 = new Group(new List<IPerson> { _person1 }, "Hej");
 			var teamInfo1 = new TeamInfo(group1, _groupMatrixes);
-			teamInfo1.LockMember(_person2);
+			teamInfo1.LockMember(new DateOnlyPeriod(_date, _date),  _person2);
 		}
 
 		[Test]
@@ -184,8 +184,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			Group groupPerson4 = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
 			var teamInfo4 = new TeamInfo(groupPerson4, _groupMatrixes);
-			teamInfo4.LockMember(_person1);
-			var result = teamInfo4.UnLockedMembers();
+			teamInfo4.LockMember(new DateOnlyPeriod(_date, _date), _person1);
+			var result = teamInfo4.UnLockedMembers(_date);
 			Assert.AreEqual(_person2, result.First());
 			Assert.AreEqual(1, result.Count());
 		}
@@ -195,35 +195,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			Group groupPerson4 = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
 			var teamInfo4 = new TeamInfo(groupPerson4, _groupMatrixes);
-			teamInfo4.LockMember(_person1);
-			Assert.AreEqual(1, teamInfo4.UnLockedMembers().Count());
+			teamInfo4.LockMember(new DateOnlyPeriod(_date, _date), _person1);
+			Assert.AreEqual(1, teamInfo4.UnLockedMembers(_date).Count());
 
 			teamInfo4.ClearLocks();
-			Assert.AreEqual(2, teamInfo4.UnLockedMembers().Count());
-		}
-
-		[Test]
-		public void ShouldReturnMatrixesForUnlocedMembers()
-		{
-			var groupPerson = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
-			var teamInfo = new TeamInfo(groupPerson, _groupMatrixes);
-			teamInfo.LockMember(_person2);
-			var tempDatePeriod = new DateOnlyPeriod(_date, _date);
-			using (_mocks.Record())
-			{
-				Expect.Call(_matrix.Person).Return(_person1);
-				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(tempDatePeriod);
-
-				Expect.Call(_matrix2.Person).Return(_person2);
-
-			}
-			using (_mocks.Playback())
-			{
-				var result = teamInfo.MatrixesForUnlockedMembersAndPeriod(tempDatePeriod);
-				Assert.AreEqual(1, result.Count());
-				Assert.AreEqual(_matrix,result.First());
-			}
+			Assert.AreEqual(2, teamInfo4.UnLockedMembers(_date).Count());
 		}
 	}
 }

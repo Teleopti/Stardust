@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -30,24 +27,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
         }
 
         [Test]
-        public void ShouldReturnTrueIfNoMemberIsTerminatedForSingleAgentTeam()
-        {
-            var blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 03, 30, 2014, 04, 01));
-            var terminationDate = new DateOnly(2014, 04, 02);
-            using (_mock.Record())
-            {
-                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1 });
-                Expect.Call(_person1.TerminalDate).Return(terminationDate).Repeat.Times(3);
-            }
-            using (_mock.Playback())
-            {
-                Assert.IsTrue(_target.IsSatisfy(_teamInfo, blockInfo));    
-            }
-            
-        }
-
-        [Test]
-        public void ShouldReturnTrueIfNoMemberIsTerminated()
+		public void ShouldNotLockIfNoMemberIsTerminatedForSingleAgentTeam()
+		{
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 03, 30, 2014, 04, 01));
+			var terminationDate = new DateOnly(2014, 04, 02);
+			using (_mock.Record())
+			{
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1 });
+				Expect.Call(_person1.TerminalDate).Return(terminationDate).Repeat.Times(3);
+			}
+			using (_mock.Playback())
+			{
+				_target.LockTerminatedMembers(_teamInfo, blockInfo);
+			}
+		}
+		
+		[Test]
+        public void ShouldNotLockIfNoMemberIsTerminated()
         {
             var blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 03, 30, 2014, 04, 01));
             var terminationDate = new DateOnly(2014, 04, 02);
@@ -59,13 +55,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsSatisfy(_teamInfo, blockInfo));
+                _target.LockTerminatedMembers(_teamInfo, blockInfo);
             }
-
         }
 
         [Test]
-        public void ShouldReturnFalseIfOneOfTheMemberIsTerminated()
+        public void ShouldLockIfMemberIsTerminated()
         {
             var blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 03, 30, 2014, 04, 01));
             var terminationDateForPerson1 = new DateOnly(2014, 04, 02);
@@ -74,17 +69,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             {
                 Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
                 Expect.Call(_person1.TerminalDate).Return(terminationDateForPerson1).Repeat.Times(3);
-                Expect.Call(_person2.TerminalDate).Return(terminationDateForPerson2).Repeat.Times(2);
-            }
+                Expect.Call(_person2.TerminalDate).Return(terminationDateForPerson2).Repeat.Times(3);
+				Expect.Call(() => _teamInfo.LockMember(new DateOnlyPeriod(terminationDateForPerson2.AddDays(1), terminationDateForPerson2.AddDays(1)), _person2));
+				Expect.Call(() => _teamInfo.LockMember(new DateOnlyPeriod(terminationDateForPerson2.AddDays(2), terminationDateForPerson2.AddDays(2)), _person2));
+			}
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfy(_teamInfo, blockInfo));
+                _target.LockTerminatedMembers(_teamInfo, blockInfo);
             }
-
         }
 
         [Test]
-        public void ShouldReturnTrueOnASingleDayBlockWithTwoTeamMembers()
+        public void ShouldNotLockOnASingleDayBlockWithTwoNotTerminatedTeamMembers()
         {
             var blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 03, 30, 2014, 03, 30));
             var terminationDateForPerson1 = new DateOnly(2014, 04, 02);
@@ -97,29 +93,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsSatisfy(_teamInfo, blockInfo));
+                _target.LockTerminatedMembers(_teamInfo, blockInfo);
             }
-
         }
 
         [Test]
-        public void ReturnFalseOnASingleDayBlockWithTwoTeamMembersTerminated()
+        public void ShouldLockOnASingleDayBlockWithTerminatedTeamMembers()
         {
-            var blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 03, 30, 2014, 03, 30));
+	        var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 30, 2014, 03, 30);
+
+			var blockInfo = new BlockInfo(dateOnlyPeriod);
             var terminationDateForPerson1 = new DateOnly(2014, 03, 28);
-            using (_mock.Record())
+			var terminationDateForPerson2 = new DateOnly(2014, 03, 28);
+			using (_mock.Record())
             {
                 Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
                 Expect.Call(_person1.TerminalDate).Return(terminationDateForPerson1);
-            }
+				Expect.Call(_person2.TerminalDate).Return(terminationDateForPerson2);
+				Expect.Call(() => _teamInfo.LockMember(dateOnlyPeriod, _person1));
+				Expect.Call(() => _teamInfo.LockMember(dateOnlyPeriod, _person2));
+			}
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsSatisfy(_teamInfo, blockInfo));
+                _target.LockTerminatedMembers(_teamInfo, blockInfo);
             }
-
-        }
-        
-    }
-
-    
+        }      
+    }   
 }

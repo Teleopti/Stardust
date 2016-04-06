@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				foreach (var groupMember in teamInfo.GroupMembers)
 				{
 					if(!selectedPersons.Contains(groupMember))
-						teamInfo.LockMember(groupMember);
+						teamInfo.LockMember(selectedPeriod, groupMember);
 				}
 			}
 

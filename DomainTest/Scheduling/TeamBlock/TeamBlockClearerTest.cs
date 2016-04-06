@@ -28,10 +28,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleMatrixPro _matrix;
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private IScheduleDayPro _scheduleDayPro;
+		private DateOnlyPeriod _dateOnlyPeriod;
+		private DateOnly _dateOnly;
 
 		[SetUp]
 		public void Setup()
 		{
+			_dateOnly = new DateOnly(2015, 1, 1);
+			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_mocks = new MockRepository();
 			_deleteAndResourceCalculateService = _mocks.StrictMock<IDeleteAndResourceCalculateService>();
 			_target = new TeamBlockClearer(_deleteAndResourceCalculateService, null);
@@ -44,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>>();
 			groupMatrixes.Add(matrixes);
 			ITeamInfo teamInfo = new TeamInfo(_group, groupMatrixes);
-			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_dateOnlyPeriod));
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_toRemoveList = new List<IScheduleDay> { _scheduleDay };
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
@@ -57,9 +61,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_matrix.Person).Return(_person1);
-				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+				Expect.Call(_matrix.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
 				Expect.Call(_matrix.UnlockedDays)
 				      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
@@ -85,7 +89,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				_teamBlockInfo.TeamInfo.LockMember(_person1);
+				
+				_teamBlockInfo.TeamInfo.LockMember(_dateOnlyPeriod, _person1);
 				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo);
 			}
 		}
@@ -96,9 +101,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_matrix.Person).Return(_person1);
-				Expect.Call(_matrix.GetScheduleDayByKey(DateOnly.MinValue)).Return(_scheduleDayPro);
+				Expect.Call(_matrix.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro);
 				Expect.Call(_matrix.UnlockedDays)
 					  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>()));
 				Expect.Call(() => _deleteAndResourceCalculateService.DeleteWithResourceCalculation(new List<IScheduleDay>(),
@@ -116,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldHandleNullMatrix()
 		{
 			ITeamInfo teamInfo = new TeamInfo(_group, new List<IList<IScheduleMatrixPro>>());
-			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_dateOnlyPeriod));
 
 			using (_mocks.Record())
 			{
@@ -130,6 +135,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo);
 			}
 		}
-
 	}
 }

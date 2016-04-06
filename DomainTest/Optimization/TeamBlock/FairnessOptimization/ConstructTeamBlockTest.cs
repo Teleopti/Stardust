@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo );
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() {_person2});
-				Expect.Call(()=>_teamInfo.LockMember(_person2));
+				Expect.Call(()=>_teamInfo.LockMember(_dateOnlyPeriod, _person2));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, BlockFinderType.BetweenDayOff,
 					false)).Return(null);
 			}
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
-				Expect.Call(() => _teamInfo.LockMember(_person2));
+				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, BlockFinderType.BetweenDayOff,
 					false)).Return(_teamBlockInfo);
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
-				Expect.Call(() => _teamInfo.LockMember(_person2));
+				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, BlockFinderType.BetweenDayOff,
 					true)).Return(_teamBlockInfo);
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 	                foreach (var groupMember in teamInfo.GroupMembers)
 	                {
 		                if(!selectedPersons.Contains(groupMember))
-							teamInfo.LockMember(groupMember);
+							teamInfo.LockMember(selectedPeriod , groupMember);
 	                }
 
 	                bool singleAgentTeam = groupOnGroupPageForTeamBlockPer.Type == GroupPageType.SingleAgent;
