@@ -6301,6 +6301,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not remove absence from protected schedule..
+        /// </summary>
+        public static string CouldNotRemoveAbsenceFromProtectedSchedule {
+            get {
+                return ResourceManager.GetString("CouldNotRemoveAbsenceFromProtectedSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Count.
         /// </summary>
         public static string Count {

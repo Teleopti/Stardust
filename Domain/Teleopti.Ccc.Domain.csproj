@@ -169,6 +169,7 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\CommonEventProcessor.cs" />

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -21,7 +22,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				return;
 			}
-			_personAbsenceRemover.RemovePersonAbsence (personAbsence, command.TrackedCommandInfo);
+
+			var errors = _personAbsenceRemover.RemovePersonAbsence (personAbsence, command.TrackedCommandInfo).ToList();
+			if (!errors.Any())
+			{
+				return;
+			}
+
+			command.Errors = new ActionErrorMessage
+			{
+				PersonId = personAbsence.Person.Id.GetValueOrDefault(),
+				PersonName = personAbsence.Person.Name,
+				ErrorMessages = errors
+			};
 		}
 	}
 }

@@ -17,6 +17,7 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.AbsenceHandler;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
@@ -30,12 +31,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
+		private readonly IPersonNameProvider _personNameProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory, ILoggedOnUser loggonUser,
 			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
+			IPersonNameProvider personNameProvider,
 			ICommandDispatcher commandDispatcher)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
@@ -44,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
+			_personNameProvider = personNameProvider;
 			_commandDispatcher = commandDispatcher;
 		}
 
@@ -163,41 +167,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			setTrackedCommandInfo(command.TrackedCommandInfo);
 
-			// Get all person absence id for selected person
-			var schedules = getSchedulesForPeople(command.PersonIds.ToArray(), command.ScheduleDate);
-			var personAbsenceIds = schedules.Schedules
-				.SelectMany(schedule => schedule.Projection.Where(projection => projection.ParentPersonAbsence != null))
-				.Select(projection => projection.ParentPersonAbsence.GetValueOrDefault());
-
-			var personAbsenceIdsForRemove = new HashSet<Guid>(command.PersonAbsenceIds.Concat(personAbsenceIds));
+			var personAbsences = getPersonAbsencesForPeople(command.PersonIds, command.ScheduleDate);
+			var personAbsenceIdsForRemove = new HashSet<Guid>(command.PersonAbsenceIds.Concat(personAbsences));
 			
-			if (command.RemoveEntireCrossDayAbsence)
-			{
-				foreach (var personAbsenceId in personAbsenceIdsForRemove)
-				{
-					_commandDispatcher.Execute(new RemovePersonAbsenceCommand
-					{
-						PersonAbsenceId = personAbsenceId,
-						TrackedCommandInfo = command.TrackedCommandInfo
-					});
-				}
-			}
-			else
-			{
-				var scheduleDateInUtc = TimeZoneInfo.ConvertTimeToUtc(command.ScheduleDate,
-					_loggonUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-				var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
-				foreach (var personAbsenceId in personAbsenceIdsForRemove)
-				{
-					_commandDispatcher.Execute(new RemovePartPersonAbsenceCommand
-					{
-						PersonAbsenceId = personAbsenceId,
-						PeriodToRemove = periodToRemove,
-						TrackedCommandInfo = command.TrackedCommandInfo
-					});
-				}
-			}
-			return Ok();
+			var errors = command.RemoveEntireCrossDayAbsence
+				? removeEntirePersonAbsence(personAbsenceIdsForRemove, command.TrackedCommandInfo)
+				: removePartPersonAbsence(personAbsenceIdsForRemove, command.ScheduleDate, command.TrackedCommandInfo);
+			return Ok(errors);
 		}
 
 		[HttpPost, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
@@ -238,10 +214,84 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			}
 		}
 
-		private GroupScheduleViewModel getSchedulesForPeople(Guid[] personIds, DateTime date)
+		private GroupScheduleViewModel getSchedulesForPeople(IEnumerable<Guid> personIds, DateTime date)
 		{
 			var scheduleDateOnly = new DateOnly(date);
-			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds, scheduleDateOnly);
+			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds.ToArray(), scheduleDateOnly);
+		}
+
+		private IEnumerable<Guid> getPersonAbsencesForPeople(IEnumerable<Guid> personIds, DateTime scheduleDate)
+		{
+			var schedules = getSchedulesForPeople(personIds, scheduleDate);
+
+			var personAbsenceIds = schedules.Schedules
+				.SelectMany(schedule => schedule.Projection.Where(projection => projection.ParentPersonAbsence.HasValue))
+				.Select(p => p.ParentPersonAbsence.GetValueOrDefault());
+
+			return personAbsenceIds;
+		}
+
+		private IEnumerable<FailActionResult> removeEntirePersonAbsence(IEnumerable<Guid> personAbsenceIdsForRemove,
+			TrackedCommandInfo trackInfo)
+		{
+			var failResults = new List<FailActionResult>();
+			foreach (var personAbsenceId in personAbsenceIdsForRemove)
+			{
+				var cmd = new RemovePersonAbsenceCommand
+				{
+					PersonAbsenceId = personAbsenceId,
+					TrackedCommandInfo = trackInfo
+				};
+				_commandDispatcher.Execute(cmd);
+
+				if (cmd.Errors == null) continue;
+
+				appendErrorMessage(failResults, cmd.Errors);
+			}
+			return failResults;
+		}
+
+		private IEnumerable<FailActionResult> removePartPersonAbsence(IEnumerable<Guid> personAbsenceIdsForRemove,
+			DateTime dateToRemove, TrackedCommandInfo trackInfo)
+		{
+			var scheduleDateInUtc = TimeZoneInfo.ConvertTimeToUtc(dateToRemove,
+				_loggonUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			var periodToRemove = new DateTimePeriod(scheduleDateInUtc, scheduleDateInUtc.AddDays(1));
+
+			var failResults = new List<FailActionResult>();
+			foreach (var personAbsenceId in personAbsenceIdsForRemove)
+			{
+				var cmd = new RemovePartPersonAbsenceCommand
+				{
+					PersonAbsenceId = personAbsenceId,
+					PeriodToRemove = periodToRemove,
+					TrackedCommandInfo = trackInfo
+				};
+				_commandDispatcher.Execute(cmd);
+
+				if (cmd.Errors == null) continue;
+
+				appendErrorMessage(failResults, cmd.Errors);
+			}
+			return failResults;
+		}
+
+		private void appendErrorMessage(ICollection<FailActionResult> failResults, ActionErrorMessage error)
+		{
+			var personName = _personNameProvider.BuildNameFromSetting(error.PersonName);
+			var existingFailResult = failResults.SingleOrDefault(r => r.PersonName == personName);
+			if (existingFailResult == null)
+			{
+				failResults.Add(new FailActionResult
+				{
+					PersonName = personName,
+					Message = error.ErrorMessages.ToList()
+				});
+			}
+			else
+			{
+				existingFailResult.Message = existingFailResult.Message.Concat(error.ErrorMessages).ToList();
+			}
 		}
 	}
 }

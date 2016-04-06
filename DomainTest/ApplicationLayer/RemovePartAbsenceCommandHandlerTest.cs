@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -161,8 +162,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence> {personAbsence};
 
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
 			var personAbsenceRemover = new PersonAbsenceRemover(_scheduleStorage, _businessRulesForAccountUpdate,
-				_saveSchedulePartService, _personAbsenceCreator);
+				_saveSchedulePartService, _personAbsenceCreator, loggedOnUser);
 
 			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRepository, personAbsenceRemover);
 
@@ -190,6 +195,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
 		}
 
+		[Test]
+		public void ShouldReturnErrorMessages()
+		{
+			var scenario = new FakeCurrentScenario().Current();
+			var period = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 01);
+			var layer = new AbsenceLayer(new Absence(), period);
+			var person = PersonFactory.CreatePersonWithId();
+			var personAbsence = new PersonAbsence(person, scenario, layer);
+			personAbsence.SetId(Guid.Empty);
+
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence> { personAbsence };
+
+			var periodToRemove = period.ChangeEndTime(new TimeSpan(0, 0, 1));
+
+			var personAbsenceRemover = MockRepository.GenerateMock<IPersonAbsenceRemover>();
+			var errorMessages = new List<string>
+			{
+				string.Format("Error message {0}", Guid.NewGuid()),
+				string.Format("Error message {0}", Guid.NewGuid())
+			};
+			personAbsenceRemover.Stub(x => x.RemovePartPersonAbsence(personAbsence, periodToRemove)).IgnoreArguments()
+				.Return(errorMessages);
+
+			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRepository, personAbsenceRemover);
+
+			var command = new RemovePartPersonAbsenceCommand
+			{
+				PersonAbsenceId = personAbsence.Id.Value,
+				PeriodToRemove = periodToRemove
+			};
+
+			target.Handle(command);
+
+			var error = command.Errors;
+			Assert.That(error != null);
+			Assert.That(error.PersonId == person.Id.Value);
+			Assert.That(error.PersonName == person.Name);
+			Assert.That(error.ErrorMessages.Count() == errorMessages.Count);
+			foreach (var message in errorMessages)
+			{
+				Assert.That(error.ErrorMessages.Contains(message));
+			}
+		}
+
 		private IEnumerable<IPersistableScheduleData> removePartPersonAbsence(DateTimePeriod periodForAbsence,
 			DateTimePeriod periodToRemove)
 		{
@@ -199,9 +248,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAbsence.SetId(Guid.Empty);
 			_scheduleStorage.Add(personAbsence);
 
-			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence> {personAbsence};
+			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence> { personAbsence };
+
+			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+
 			var personAbsenceRemover = new PersonAbsenceRemover(_scheduleStorage, _businessRulesForAccountUpdate,
-				_saveSchedulePartService, _personAbsenceCreator);
+				_saveSchedulePartService, _personAbsenceCreator, loggedOnUser);
 
 			var target = new RemovePartPersonAbsenceCommandHandler(personAbsenceRepository, personAbsenceRemover);
 

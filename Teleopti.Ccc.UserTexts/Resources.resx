@@ -14234,4 +14234,8 @@ Help us improve your experience by sending an error report</value>
     <value>Select an activity</value>
     <comment>Select an activity</comment>
   </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>Could not remove absence from protected schedule.</value>
+    <comment>Error message in team schedule</comment>
+  </data>
 </root>
