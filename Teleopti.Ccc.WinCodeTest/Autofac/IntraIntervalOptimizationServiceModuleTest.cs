@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WinCodeTest.Autofac
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterModule(new CommonModule(configuration));
-			containerBuilder.RegisterModule(new SchedulingCommonModule(configuration));
 			containerBuilder.RegisterModule(new RuleSetModule(configuration, true));
 			containerBuilder.RegisterModule(new IntraIntervalOptimizationServiceModule(configuration));
 			using (var container = containerBuilder.Build())

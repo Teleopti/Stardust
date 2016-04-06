@@ -4,7 +4,7 @@ using log4net;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
+namespace Teleopti.Ccc.Domain.Budgeting
 {
 	public class AbsenceRequestBudgetGroupValidationHelper
 	{

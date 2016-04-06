@@ -1,12 +1,12 @@
 using System;
 using AutoMapper;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IMappingEngine _mapper;
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPublisher _publisher;
+		
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
 											IMappingEngine mapper,
-											IMessagePopulatingServiceBusSender serviceBusSender,
+											IEventPublisher publisher,
 											ICurrentBusinessUnit businessUnitProvider,
 											ICurrentDataSource currentDataSource,
 											INow now,
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
-			_serviceBusSender = serviceBusSender;
+			_publisher = publisher;
 			_businessUnitProvider = businessUnitProvider;
 			_currentDataSource = currentDataSource;
 			_now = now;
@@ -68,14 +69,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			if (_currentUnitOfWork != null)
 			{
-				var message = new NewAbsenceRequestCreated
+				var message = new NewAbsenceRequestCreatedEvent
 				{
 					LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
 					LogOnDatasource = _currentDataSource.Current().DataSourceName,
 					PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 					Timestamp = _now.UtcDateTime()
 				};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message, false));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _publisher.Publish(message));
 			}
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);

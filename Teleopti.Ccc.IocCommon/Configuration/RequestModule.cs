@@ -1,13 +1,16 @@
 ﻿using Autofac;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
+using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus
+namespace Teleopti.Ccc.IocCommon.Configuration
 {
-    public class RequestContainerInstaller : Module
+    public class RequestModule : Module
     {
 		protected override void Load(ContainerBuilder builder)
 		{

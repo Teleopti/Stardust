@@ -202,6 +202,7 @@
     <Compile Include="Configuration\OutboundScheduledResourcesProviderModule.cs" />
     <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="Configuration\EventPublisherModule.cs" />
+    <Compile Include="Configuration\RequestModule.cs" />
     <Compile Include="Configuration\RtaModule.cs" />
     <Compile Include="Configuration\ScheduleOvertimeModule.cs" />
     <Compile Include="Configuration\SchedulingCommonModule.cs" />

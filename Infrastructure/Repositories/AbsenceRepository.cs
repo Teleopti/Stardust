@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    /// </remarks>
 	    public IEnumerable<IAbsence> LoadAllSortByName()
         {
-            IList<IAbsence> retList = Session.CreateCriteria(typeof(Absence))
+            IList<IAbsence> retList = Session.CreateCriteria(typeof(Domain.Scheduling.Absence))
                         .AddOrder(Order.Asc("Description.Name"))
                         .List<IAbsence>();
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </remarks>
         public IList<IAbsence> LoadRequestableAbsence()
         {
-            IList<IAbsence> retList = Session.CreateCriteria(typeof(Absence))
+            IList<IAbsence> retList = Session.CreateCriteria(typeof(Domain.Scheduling.Absence))
                         .Add(Restrictions.Eq("Requestable", true))
                         .AddOrder(Order.Asc("Description.Name"))
                         .List<IAbsence>();

@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Interfaces.Domain;
-using log4net;
-using Teleopti.Ccc.Domain.Collection;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus
+namespace Teleopti.Ccc.Domain.Budgeting
 {
 	public class BudgetGroupAllowanceSpecification : PersonRequestSpecification<IAbsenceRequest>, IBudgetGroupAllowanceSpecification
 	{

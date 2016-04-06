@@ -6,10 +6,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus
+namespace Teleopti.Ccc.Domain.Budgeting
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
 	public class BudgetGroupHeadCountSpecification : PersonRequestSpecification<IAbsenceRequest>, IBudgetGroupHeadCountSpecification

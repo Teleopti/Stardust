@@ -1,14 +1,15 @@
 using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
+namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestProcessor : IAbsenceRequestProcessor
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 		private readonly IAbsenceRequestUpdater _absenceRequestUpdater;
 		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;

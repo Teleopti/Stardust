@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class PersonAccountModule : Module
+	internal class PersonAccountModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{

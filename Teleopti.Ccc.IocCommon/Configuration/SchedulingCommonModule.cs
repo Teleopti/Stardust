@@ -2,8 +2,10 @@
 using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Backlog;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -21,6 +23,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
 using Teleopti.Ccc.Domain.Outbound;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -55,7 +58,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class SchedulingCommonModule : Module
+	internal class SchedulingCommonModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
 
@@ -368,6 +371,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().ApplyAspects().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<PersistIntradayOptimizationResult>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
+			registerForJobs(builder);
 		}
 
 		private static void registerMoveTimeOptimizationClasses(ContainerBuilder builder)
@@ -582,6 +586,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		
 		    builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
 		 			
+		}
+
+		private static void registerForJobs(ContainerBuilder builder)
+		{
+			builder.RegisterType<PersonAbsenceAccountProvider>().As<IPersonAbsenceAccountProvider>();
+			builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>();
+			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>();
+			builder.RegisterType<LoadSchedulesForRequestWithoutResourceCalculation>().As<ILoadSchedulesForRequestWithoutResourceCalculation>();
+			builder.RegisterType<ScheduleIsInvalidSpecification>().As<IScheduleIsInvalidSpecification>();
+			builder.RegisterType<BudgetGroupHeadCountSpecification>().As<IBudgetGroupHeadCountSpecification>();
+			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>();
+			builder.RegisterType<SwapService>().As<ISwapService>();
 		}
 	}
 }

@@ -5,7 +5,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
+namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestWaitlistProcessor : IAbsenceRequestWaitlistProcessor
 	{

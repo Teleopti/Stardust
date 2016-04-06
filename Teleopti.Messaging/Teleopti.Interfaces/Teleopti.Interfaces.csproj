@@ -169,6 +169,7 @@
     <Compile Include="Domain\INotificationMessage.cs" />
     <Compile Include="Domain\INotificationSender.cs" />
     <Compile Include="Domain\IOutboundCampaign.cs" />
+    <Compile Include="Domain\IScheduleIsInvalidSpecification.cs" />
     <Compile Include="Domain\ISeatBookingRequestAssembler.cs" />
     <Compile Include="Domain\ISaveSchedulePartService.cs" />
     <Compile Include="Domain\ISeatFrequencyCalculator.cs" />
@@ -850,12 +851,12 @@
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\BadgeCalculationInitMessage.cs" />
     <Compile Include="Messages\ILogOnContext.cs" />
+    <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
     <Compile Include="Messages\Rta\FactQueueUpdatedMessage.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewAbsenceReportCreated.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
-    <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
     <Compile Include="Messages\MessageWithLogOnContext.cs" />
     <Compile Include="Messages\Rta\AgentAdherenceStateInfo.cs" />
     <Compile Include="Domain\UnderstaffingDetails.cs" />

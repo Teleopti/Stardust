@@ -224,11 +224,6 @@
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
     <Compile Include="AbsenceReport\NewAbsenceReportConsumer.cs" />
-    <Compile Include="AbsenceRequest\AbsenceRequestBudgetGroupValidationHelper.cs" />
-    <Compile Include="AbsenceRequest\AbsenceRequestProcessor.cs" />
-    <Compile Include="AbsenceRequest\AbsenceRequestUpdater.cs" />
-    <Compile Include="AbsenceRequest\AbsenceRequestWaitlistProcessor.cs" />
-    <Compile Include="AbsenceRequest\NewAbsenceRequestConsumer.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculator.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculator.cs" />
     <Compile Include="AgentBadge\BadgeCalculationInitConsumer.cs" />
@@ -241,6 +236,7 @@
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="HealthCheck\DeviceInfoProvider.cs" />
     <Compile Include="InternalServiceBusSender.cs" />
+    <Compile Include="Legacy\LegacyAbsenceRequestConsumer.cs" />
     <Compile Include="NodeHandlers\RunSchedulingHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />
@@ -252,8 +248,6 @@
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
-    <Compile Include="BudgetGroupAllowanceSpecification.cs" />
-    <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
     <Compile Include="Container\ContainerConfiguration.cs" />
@@ -278,9 +272,6 @@
     <Compile Include="Forecast\ExportMultisiteSkillToSkillConsumer.cs" />
     <Compile Include="Forecast\LargeForecastsRowCollectionSerializer.cs" />
     <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />
-    <Compile Include="IPersonAbsenceAccountProvider.cs" />
-    <Compile Include="IRequestFactory.cs" />
-    <Compile Include="IScheduleIsInvalidSpecification.cs" />
     <Compile Include="LargeGuidCollectionSerializer.cs" />
     <Compile Include="PayrollContainerInstaller.cs" />
     <Compile Include="PayrollDllCopy.cs" />
@@ -304,13 +295,9 @@
     <Compile Include="Payroll\PayrollExportFeedback.cs" />
     <Compile Include="Payroll\PayrollPeopleLoader.cs" />
     <Compile Include="Payroll\PersonBusAssembler.cs" />
-    <Compile Include="PersonAbsenceAccountProvider.cs" />
-    <Compile Include="RequestContainerInstaller.cs" />
-    <Compile Include="RequestFactory.cs" />
     <Compile Include="BusBootStrapper.cs" />
     <Compile Include="ApplicationLogOnMessageModule.cs" />
     <Compile Include="BusinessUnitStarter.cs" />
-    <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
     <Compile Include="ServiceBusRunner.cs" />

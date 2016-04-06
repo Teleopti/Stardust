@@ -4,8 +4,12 @@ using System.Diagnostics;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -15,21 +19,19 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Requests;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 {
 	[TestFixture]
-	public class NewAbsenceRequestConsumerNoMocksTest
+	public class NewAbsenceRequestHandlerNoMocksTest
 	{
 		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
 		private IPersonRepository _personRepository;
@@ -127,8 +129,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 
 			var newRequest = createAbsenceRequest(person, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingDeniedRequest.IsApproved);
 			Assert.IsNullOrEmpty (existingDeniedRequest.DenyReason);
@@ -153,9 +155,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingDeniedRequest.IsApproved);
 			Assert.IsTrue(newRequest.IsApproved);
@@ -184,11 +186,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var personOne = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
 			var newRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
 			var stopwatch = Stopwatch.StartNew();
 			
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 			
 			stopwatch.Stop();
 			Console.WriteLine(stopwatch.Elapsed);
@@ -220,9 +222,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());	// deny
 
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingDeniedRequest.IsDenied);
 			Assert.IsFalse(existingDeniedRequest.IsAutoDenied);
@@ -244,8 +246,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 
 			var newRequest = createAbsenceRequest(person, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(false, false);
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(false, false);
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(newRequest.IsApproved);
 			Assert.IsTrue(existingDeniedRequest.IsAutoDenied);
@@ -268,9 +270,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var existingDeniedRequest = createAbsenceRequest(person, absence, existingWaitlistedRequestDateTimePeriod);
 			existingDeniedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 			var newRequest = createAbsenceRequest(person, absence, newRequestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(newRequest.IsApproved);
 			Assert.IsTrue(existingDeniedRequest.IsWaitlisted);
@@ -292,8 +294,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var existingRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
 
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingRequest.IsNew);
 			Assert.IsTrue(newRequest.IsPending);
@@ -316,9 +318,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			existingWaitlistedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
 
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
 
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingWaitlistedRequest.IsWaitlisted);
 			Assert.IsTrue(newRequest.IsApproved);
@@ -368,8 +370,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var existingRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
 			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
 
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+			var newAbsenceRequestHandler = createNewAbsenceRequestHandler(true, false);
+			newAbsenceRequestHandler.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
 			Assert.IsTrue(existingRequest.IsNew); // should not touch this as should not be waitlisting!
 			Assert.IsTrue(newRequest.IsDenied);
@@ -403,7 +405,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
-			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, requestDateTimePeriod));
+			var personRequest = new PersonRequest(person, new Domain.AgentInfo.Requests.AbsenceRequest(absence, requestDateTimePeriod));
 
 			personRequest.SetId(Guid.NewGuid());
 			_personRequestRepository.Add(personRequest);
@@ -420,10 +422,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, processAbsenceRequest, enableWaitlisting);
 			var person = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
 
-			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(false, forcePersonalAccountUpdate);
+			var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(false, forcePersonalAccountUpdate);
 			var request = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
 
-			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = request.Id.Value });
+			newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = request.Id.Value });
 
 			return request;
 		}
@@ -462,7 +464,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 		}
 
-		private NewAbsenceRequestConsumer createNewAbsenceRequestConsumer(bool enableWaitlisting, bool forceAccountRecalcBeforeProcessingRequest)
+		private NewAbsenceRequestHandler createNewAbsenceRequestHandler(bool enableWaitlisting, bool forceAccountRecalcBeforeProcessingRequest)
 		{
 			var resourceCalculator = new ResourceCalculationPrerequisitesLoader(_unitOfWorkFactory,
 				new FakeContractScheduleRepository(),
@@ -502,7 +504,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, _scheduleProjectionReadModel, _schedulingResultStateHolder);
 			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, _schedulingResultStateHolder, _scheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
 			
-			var newAbsenceRequestConsumer = new NewAbsenceRequestConsumer(
+			var newAbsenceRequestConsumer = new NewAbsenceRequestHandler(
 				_unitOfWorkFactory, _currentScenario,_personRequestRepository, absenceRequestWaitlistProcessor,absenceProcessor);
 			return newAbsenceRequestConsumer;
 		}

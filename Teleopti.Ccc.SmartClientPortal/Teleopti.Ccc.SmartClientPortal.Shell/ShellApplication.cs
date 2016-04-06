@@ -223,7 +223,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule<BudgetModule>();
 				builder.RegisterModule<IntradayModule>();
 				builder.RegisterModule<ForecasterModule>();
-				builder.RegisterModule<PersonAccountModule>();
 				builder.RegisterModule(new ScheduleScreenRefresherModule(configuration));
 				builder.RegisterModule<MeetingOverviewModule>();
 				builder.RegisterModule<SchedulingServiceModule>();
@@ -233,7 +232,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule<PermissionsModule>();
 				builder.RegisterModule<RequestHistoryModule>();
 				builder.RegisterModule<MainModule>();
-				builder.RegisterModule(new SchedulingCommonModule(configuration));
+				
 				builder.RegisterModule(new OutboundScheduledResourcesProviderModule());
 				//hack to get old behavior work
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();

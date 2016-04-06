@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;

@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Sdk.ServiceBus
+﻿namespace Teleopti.Interfaces.Domain
 {
     public interface IScheduleIsInvalidSpecification : ISpecification<ISchedulingResultStateHolder>
     {

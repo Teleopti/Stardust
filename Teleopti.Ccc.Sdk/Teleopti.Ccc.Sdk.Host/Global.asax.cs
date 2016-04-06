@@ -132,7 +132,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new RuleSetModule(configuration, true));
 			builder.RegisterModule<EncryptionModule>();
-			builder.RegisterModule<PersonAccountModule>();
 			builder.RegisterModule<AssemblerModule>();
 			builder.RegisterModule<RequestFactoryModule>();
 			builder.RegisterModule<QueryHandlerModule>();

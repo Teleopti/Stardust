@@ -209,6 +209,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Absence\AbsenceRequestProcessor.cs" />
+    <Compile Include="Absence\AbsenceRequestUpdater.cs" />
+    <Compile Include="Absence\AbsenceRequestWaitlistProcessor.cs" />
     <Compile Include="Analytics\Tables\fact_schedule.cs" />
     <Compile Include="Aop\AspectInterceptor.cs" />
     <Compile Include="Aop\FixForEnableClassInterceptorsDoesNotThrowOnMissingDepedencies.cs" />
@@ -550,7 +553,6 @@
     <Compile Include="Persisters\WriteProtection\WriteProtectionPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\PersonForScheduleFinder.cs" />
-    <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />

@@ -183,6 +183,8 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOfferTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Aop\InfoLogAspectTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceRequestHandlerNoMocksTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />

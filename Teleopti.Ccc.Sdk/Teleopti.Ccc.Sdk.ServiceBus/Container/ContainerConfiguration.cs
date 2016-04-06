@@ -51,7 +51,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<SerializationContainerInstaller>();
 			build.RegisterModule<ServiceBusCommonModule>();
 			build.RegisterModule<PayrollContainerInstaller>();
-			build.RegisterModule<RequestContainerInstaller>();
 			build.RegisterModule<SchedulingContainerInstaller>();
 			build.RegisterModule<ForecastContainerInstaller>();
 			build.RegisterModule<CommandDispatcherModule>();
@@ -59,7 +58,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterModule<IntraIntervalSolverServiceModule>();
-			build.RegisterModule<PersonAccountModule>();
 			
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();

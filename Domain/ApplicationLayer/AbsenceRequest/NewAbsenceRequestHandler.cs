@@ -1,20 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
-using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
+namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public class NewAbsenceRequestConsumer : ConsumerOf<NewAbsenceRequestCreated>
+	public class NewAbsenceRequestHandler : IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnServiceBus
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ICurrentScenario _scenarioRepository;
@@ -30,7 +28,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 
 		private readonly IList<LoadDataAction> _loadDataActions;
 
-		public NewAbsenceRequestConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor, IAbsenceRequestProcessor absenceRequestProcessor)
+		public NewAbsenceRequestHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
+												  IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
+												  IAbsenceRequestProcessor absenceRequestProcessor)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
@@ -39,29 +39,28 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			_absenceRequestProcessor = absenceRequestProcessor;
 
 			_loadDataActions = new List<LoadDataAction>
-                                   {
-                                       checkPersonRequest,
-                                       checkAbsenceRequest,
-                                       loadDefaultScenario
-                                   };
+			{
+				checkPersonRequest,
+				checkAbsenceRequest,
+				loadDefaultScenario
+			};
 			if (logger.IsInfoEnabled)
 			{
-				logger.Info("New instance of consumer was created");
+				logger.Info("New instance of handler was created");
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void Consume(NewAbsenceRequestCreated message)
+		public void Handle(NewAbsenceRequestCreatedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.DebugFormat("Consuming message for person request with Id = {0}. (Message timestamp = {1})",
-								   message.PersonRequestId, message.Timestamp);
+				logger.DebugFormat("Consuming event for person request with Id = {0}. (Message timestamp = {1})",
+								   @event.PersonRequestId, @event.Timestamp);
 			}
 
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				if (_loadDataActions.Any(action => !action.Invoke(message)))
+				if (_loadDataActions.Any(action => !action.Invoke(@event)))
 				{
 					return;
 				}
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			return workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(_absenceRequest);
 		}
 		
-		private bool loadDefaultScenario(NewAbsenceRequestCreated message)
+		private bool loadDefaultScenario(NewAbsenceRequestCreatedEvent message)
 		{
 			var defaultScenario = _scenarioRepository.Current();
 			if (logger.IsDebugEnabled)
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			return true;
 		}
 
-		private bool checkAbsenceRequest(NewAbsenceRequestCreated message)
+		private bool checkAbsenceRequest(NewAbsenceRequestCreatedEvent @event)
 		{
 			_absenceRequest = _personRequest.Request as IAbsenceRequest;
 			if (absenceRequestSpecification.IsSatisfiedBy(_absenceRequest))
@@ -102,24 +101,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 				if (logger.IsWarnEnabled)
 				{
 					logger.WarnFormat("The found person request is not of type absence request. (Id = {0})",
-									  message.PersonRequestId);
+									  @event.PersonRequestId);
 				}
 				return false;
 			}
 			return true;
 		}
 
-		private bool checkPersonRequest(NewAbsenceRequestCreated message)
+		private bool checkPersonRequest(NewAbsenceRequestCreatedEvent @event)
 		{
 
-			_personRequest = _personRequestRepository.Get(message.PersonRequestId);
+			_personRequest = _personRequestRepository.Get(@event.PersonRequestId);
 			if (personRequestSpecification.IsSatisfiedBy(_personRequest))
 			{
 				if (logger.IsWarnEnabled)
 				{
 					logger.WarnFormat(
 						"No person request found with the supplied Id, or the request is not in New status mode. (Id = {0})",
-						message.PersonRequestId);
+						@event.PersonRequestId);
 				}
 				return false;
 			}
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
 			}
 		}
 
-		private delegate bool LoadDataAction(NewAbsenceRequestCreated message);
+		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 	}
 
 }

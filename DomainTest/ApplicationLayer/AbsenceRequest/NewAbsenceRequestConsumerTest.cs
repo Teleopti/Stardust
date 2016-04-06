@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -13,21 +16,18 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 {
 	[TestFixture]
-	public class NewAbsenceRequestConsumerTest
+	public class NewAbsenceRequestHandlerTest
 	{
-		private NewAbsenceRequestConsumer _target;
+		private NewAbsenceRequestHandler _target;
 		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private IUnitOfWork _unitOfWork;
 		private IPersonRequestRepository _personRequestRepository;
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _updateScheduleProjectionReadModel, _schedulingResultStateHolder);
 			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater, _schedulingResultStateHolder, _updateScheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
 
-			_target = new NewAbsenceRequestConsumer( 
+			_target = new NewAbsenceRequestHandler( 
 				_unitOfWorkFactory, _scenarioRepository, _personRequestRepository, absenceRequestWaitlistProcessor, absenceProcessor);
 
 			PrepareUnitOfWork();
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personRequest.Stub(x => x.Request).Return(_absenceRequest).Repeat.Any();
 			_personRequest.Stub(x => x.IsNew).Return(false);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasNotCalled(x => x.PersistAll());
 		}
 
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personRequest.Stub(x => x.IsNew).Return(true);
 			_personRequest.Stub(x => x.Request).Return(shiftTradeRequest);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasNotCalled(x => x.PersistAll());
 		}
 
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personRequest.Stub(x => x.IsNew).Return(true);
 			_personRequest.Stub(x => x.Request).Return(null);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasNotCalled(x => x.PersistAll());
 		}
 
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_scheduleIsInvalidSpecification.Stub(x => x.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 			_loaderWithoutResourceCalculation.AssertWasCalled(
 				x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_scheduleIsInvalidSpecification.Stub(x => x.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 
 			_loaderWithoutResourceCalculation.AssertWasNotCalled(
 				x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_scheduleIsInvalidSpecification.Stub(x => x.IsSatisfiedBy(_schedulingResultStateHolder)).Return(true);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 			_personRequest.AssertWasCalled(x => x.Pending());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_alreadyAbsentSpecification.Stub(x => x.IsSatisfiedBy(_absenceRequest)).Return(true);
 			ExpectLoadOfSchedules();
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
 		}
@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			ExpectLoadOfSchedules();
 			ExpectPersistOfDictionary();
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Twice());
 			_updateScheduleProjectionReadModel.AssertWasCalled(x => x.Execute(_scheduleRange, _dateOnlyPeriod));
 			processAbsenceRequest.AssertWasCalled(x => x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
@@ -410,7 +410,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_alreadyAbsentSpecification.Stub(x => x.IsSatisfiedBy(_absenceRequest)).Return(true);
 			ExpectLoadOfSchedules();
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
 		}
@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 									.Throw(new ValidationException());
 			_personRequest.Stub(x => x.IsApproved).Return(true);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			
 			_unitOfWork.AssertWasNotCalled(x => x.PersistAll());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
@@ -498,7 +498,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personRequest.Stub(x => x.IsApproved).Return(true);
 			_scheduleIsInvalidSpecification.Stub(x => x.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Times(2));
 			_loaderWithoutResourceCalculation.Stub(
 				x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
@@ -552,7 +552,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(_requestApprovalService);
 			_scheduleIsInvalidSpecification.Stub(x => x.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 			processAbsenceRequest.AssertWasCalled(x => x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			PrepareAbsenceRequest();
 			ExpectLoadOfSchedules();
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 		}
 

@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -15,46 +16,41 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
+using Teleopti.Ccc.Sdk.ServiceBus.Legacy;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
-    [TestFixture]
-    public class ContainerTest
-    {
-        [Test]
-        public void ShouldResolveNewAbsenceRequestConsumer()
-        {
+	[TestFixture]
+	public class ContainerTest
+	{
+
+		[Test]
+		public void ShouldResolveNewAbsenceRequestConsumer()
+		{
+			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
 
 			var builder = new ContainerBuilder();
-			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
-			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterModule<ServiceBusCommonModule>();
-			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<RequestContainerInstaller>();
-			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule<IntraIntervalSolverServiceModule>();
-			builder.RegisterModule<PersonAccountModule>();
+			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager);
+			builder.RegisterModule(new CommonModule(configuration));
+			builder.RegisterType<LegacyAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
 			using (var container = builder.Build())
 			{
 				container.Resolve<ConsumerOf<NewAbsenceRequestCreated>>().Should().Not.Be.Null();
 			}
-        }
+		}
 
 		[Test]
 		public void ShouldResolveScheduleStateHolder()
 		{
-
 			var builder = new ContainerBuilder();
-			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<RequestContainerInstaller>();
+			builder.RegisterModule<RequestModule>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 
@@ -69,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			var appData = MockRepository.GenerateMock<IApplicationData>();
 			appData.Expect(c => c.LoadPasswordPolicyService).Return(MockRepository.GenerateMock<ILoadPasswordPolicyService>());
-			
+
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterType<DataSourceForTenantWrapper>().SingleInstance();
@@ -87,23 +83,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			}
 		}
 
-	    private class fakeTenantUnitOfWork : ITenantUnitOfWork
-	    {
-		    public IDisposable EnsureUnitOfWorkIsStarted()
-		    {
-			    throw new NotImplementedException();
-		    }
+		private class fakeTenantUnitOfWork : ITenantUnitOfWork
+		{
+			public IDisposable EnsureUnitOfWorkIsStarted()
+			{
+				throw new NotImplementedException();
+			}
 
-		    public void CancelAndDisposeCurrent()
-		    {
-			    throw new NotImplementedException();
-		    }
+			public void CancelAndDisposeCurrent()
+			{
+				throw new NotImplementedException();
+			}
 
-		    public void CommitAndDisposeCurrent()
-		    {
-			    throw new NotImplementedException();
-		    }
-	    }
+			public void CommitAndDisposeCurrent()
+			{
+				throw new NotImplementedException();
+			}
+		}
 
 		private class fakeLoadAllTenants : ILoadAllTenants
 		{

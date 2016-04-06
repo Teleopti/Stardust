@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Infrastructure.Repositories
+namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IResourceCalculationPrerequisitesLoader
 	{

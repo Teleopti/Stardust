@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule(new SchedulingCommonModule(_configuration));
 			builder.RegisterModule(new RuleSetModule(_configuration, true));
 
 			builder.RegisterType<StardustHealthCheckHandler>().As<IHandle<StardustHealthCheckEvent>>().SingleInstance();

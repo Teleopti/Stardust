@@ -2,11 +2,10 @@
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -24,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IPersistPersonRequest _persistPersonRequest;
         private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IPersonRequestRepository _personRequestRepository;
-        private IMessagePopulatingServiceBusSender _serviceBusSender;
+        private IEventPublisher _eventPublisher;
         private MockRepository _mock;
         private SavePersonAbsenceRequestCommandHandler _target;
         private readonly DateTimePeriodDto _periodDto = new DateTimePeriodDto()
@@ -46,8 +44,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _persistPersonRequest = _mock.StrictMock<IPersistPersonRequest>();
             _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
-			_serviceBusSender = _mock.StrictMock<IMessagePopulatingServiceBusSender>();
-            _target = new SavePersonAbsenceRequestCommandHandler(_persistPersonRequest,_unitOfWorkFactory,_personRequestRepository,_serviceBusSender);
+			_eventPublisher = _mock.StrictMock<IEventPublisher>();
+            _target = new SavePersonAbsenceRequestCommandHandler(_persistPersonRequest,_unitOfWorkFactory,_personRequestRepository,_eventPublisher);
             _requestDto = new AbsenceRequestDto { Id = Guid.NewGuid(), Period = _periodDto };
 
             _personRequestDto = new PersonRequestDto
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(_unitOfWorkFactory.Current().CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_persistPersonRequest.Persist(_savePersonAbsenceRequestCommandDto.PersonRequestDto,
                                                           unitOfWork, null)).IgnoreArguments().Return(_personRequest);
-                Expect.Call(()=>_serviceBusSender.Send(new NewAbsenceRequestCreated(), true)).IgnoreArguments();
+                Expect.Call(()=>_eventPublisher.Publish(new NewAbsenceRequestCreatedEvent())).IgnoreArguments();
                 Expect.Call(unitOfWork.Dispose);
             }
             using (_mock.Playback())

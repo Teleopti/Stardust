@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AbsenceRequest
+namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestUpdater : IAbsenceRequestUpdater
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 
 		private readonly DenyAbsenceRequest _denyAbsenceRequest = new DenyAbsenceRequest();
 		private readonly PendingAbsenceRequest _pendingAbsenceRequest = new PendingAbsenceRequest();

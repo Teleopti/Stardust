@@ -1,15 +1,12 @@
 ﻿using System;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -18,14 +15,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IPersistPersonRequest _persistPersonRequest;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPublisher _publisher;
 
-		public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IMessagePopulatingServiceBusSender serviceBusSender)
+		public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest,
+																	 ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository,
+																	 IEventPublisher publisher)
 		{
 			_persistPersonRequest = persistPersonRequest;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRequestRepository = personRequestRepository;
-			_serviceBusSender = serviceBusSender;
+			_publisher = publisher;
 		}
 
 		public void Handle(SavePersonAbsenceRequestCommandDto command)
@@ -42,11 +41,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				Action<IPersonRequest> requestCallback = setPendingPersonRequestToNew;
 				result = _persistPersonRequest.Persist(command.PersonRequestDto, unitOfWork, requestCallback);
 				//Call RSB!
-				var message = new NewAbsenceRequestCreated
+				var message = new NewAbsenceRequestCreatedEvent
 					{
 						PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
 					};
-				_serviceBusSender.Send(message, true);
+				_publisher.Publish(message);
 			}
 			command.Result = new CommandResultDto { AffectedId = result.Id, AffectedItems = 1 };
 		}

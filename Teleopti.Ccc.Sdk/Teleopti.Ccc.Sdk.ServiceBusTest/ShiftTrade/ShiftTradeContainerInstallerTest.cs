@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<RequestContainerInstaller>();
+			builder.RegisterModule<RequestModule>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule(new SchedulingCommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 
 			using (var container = builder.Build())
 			{
@@ -61,9 +61,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<RequestContainerInstaller>();
+			builder.RegisterModule<RequestModule>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
-			builder.RegisterModule(new SchedulingCommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 
 			using (var container = builder.Build())
 			{
