@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.UnitOfWork
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface ICurrentInitiatorIdentifier
 	{

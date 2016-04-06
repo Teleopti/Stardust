@@ -173,6 +173,7 @@
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\CommonEventProcessor.cs" />
+    <Compile Include="ApplicationLayer\CurrentInitiatorIdentifier.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsPersonPeriodSkillsChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAssignmentLayerRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadEvent.cs" />
@@ -183,6 +184,9 @@
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadProcessor.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsEventHandler.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
+    <Compile Include="ApplicationLayer\ICurrentInitiatorIdentifier.cs" />
+    <Compile Include="ApplicationLayer\IInitiatorIdentifierScope.cs" />
+    <Compile Include="ApplicationLayer\InitiatorIdentifier.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsFactAgentSkill.cs" />
     <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />

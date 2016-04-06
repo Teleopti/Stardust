@@ -12,45 +12,30 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly ResolveEventHandlers _resolver;
 		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IInitiatorIdentifierScope _initiatorIdentifierScope;
 
 		public ServiceBusEventProcessor(
 			CommonEventProcessor processor,
 			ResolveEventHandlers resolver,
 			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator,
-			ICurrentUnitOfWorkFactory unitOfWorkFactory,
-			IInitiatorIdentifierScope initiatorIdentifierScope)
+			ICurrentUnitOfWorkFactory unitOfWorkFactory
+			)
 		{
 			_processor = processor;
 			_resolver = resolver;
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_initiatorIdentifierScope = initiatorIdentifierScope;
 		}
 
 		public void Process(IEvent @event)
 		{
-			var initiatorInfo = @event as IInitiatorContext;
+			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 
-			if (initiatorInfo == null)
-				using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-				{
-					_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
-					foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
-						_processor.Process(@event, handler);
-					unitOfWork.PersistAll();
-				}
-			else
-				using (_initiatorIdentifierScope.OnThisThreadUse(new InitiatorIdentifierFromMessage(initiatorInfo)))
-				{
-					using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-					{
-						_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
-						foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
-							_processor.Process(@event, handler);
-						unitOfWork.PersistAll();
-					}
-				}
+			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
+					_processor.Process(@event, handler);
+				unitOfWork.PersistAll(InitiatorIdentifier.FromMessage(@event));
+			}
 		}
 
 	}

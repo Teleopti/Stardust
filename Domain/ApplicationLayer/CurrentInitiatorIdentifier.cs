@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Threading;
-using Teleopti.Ccc.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.UnitOfWork
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class CurrentInitiatorIdentifier : ICurrentInitiatorIdentifier, IInitiatorIdentifierScope
 	{

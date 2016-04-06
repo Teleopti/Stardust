@@ -11,15 +11,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly IResolve _resolve;
+		private readonly IInitiatorIdentifierScope _initiatorIdentifierScope;
 		private readonly ITrackingMessageSender _trackingMessageSender;
 
 		public CommonEventProcessor(
 			ResolveEventHandlers resolver,
 			IResolve resolve,
+			IInitiatorIdentifierScope initiatorIdentifierScope,
 			ITrackingMessageSender trackingMessageSender)
 		{
 			_resolver = resolver;
 			_resolve = resolve;
+			_initiatorIdentifierScope = initiatorIdentifierScope;
 			_trackingMessageSender = trackingMessageSender;
 		}
 
@@ -31,36 +34,39 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public virtual void Process(IEvent @event, Type handlerType)
 		{
-			try
+			using (_initiatorIdentifierScope.OnThisThreadUse(InitiatorIdentifier.FromMessage(@event)))
 			{
-				using (var scope = _resolve.NewScope())
+				try
 				{
-					var handler = scope.Resolve(handlerType);
-					var method = _resolver.HandleMethodFor(handler.GetType(), @event);
-					try
+					using (var scope = _resolve.NewScope())
 					{
-						method.Invoke(handler, new[] { @event });
-					}
-					catch (TargetInvocationException e)
-					{
-						PreserveStack.ForInnerOf(e);
-						throw e;
+						var handler = scope.Resolve(handlerType);
+						var method = _resolver.HandleMethodFor(handler.GetType(), @event);
+						try
+						{
+							method.Invoke(handler, new[] { @event });
+						}
+						catch (TargetInvocationException e)
+						{
+							PreserveStack.ForInnerOf(e);
+							throw e;
+						}
 					}
 				}
-			}
-			catch (Exception)
-			{
-				var commandIdentifier = @event as ICommandIdentifier;
-				if (commandIdentifier == null) throw;
-				if (commandIdentifier.CommandId != Guid.Empty)
-					_trackingMessageSender.SendTrackingMessage(
-						@event,
-						new TrackingMessage
-						{
-							Status = TrackingMessageStatus.Failed,
-							TrackId = commandIdentifier.CommandId
-						});
-				throw;
+				catch (Exception)
+				{
+					var commandIdentifier = @event as ICommandIdentifier;
+					if (commandIdentifier == null) throw;
+					if (commandIdentifier.CommandId != Guid.Empty)
+						_trackingMessageSender.SendTrackingMessage(
+							@event,
+							new TrackingMessage
+							{
+								Status = TrackingMessageStatus.Failed,
+								TrackId = commandIdentifier.CommandId
+							});
+					throw;
+				}
 			}
 		}
 
