@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
@@ -18,8 +17,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			base.Handle(@event);
 		}
 	}
-
-	[UseOnToggle(Toggles.Wfm_QuickForecastOnHangfire_35845), AsSystem]
+    
+	[UseOnToggle(Toggles.Wfm_QuickForecastOnHangfire_35845)]
 	public class QuickForecastWorkloadsEventHandlerHangfire : QuickForecastWorkloadsEventHandlerBase, IHandleEvent<QuickForecastWorkloadsEvent>, IRunOnHangfire
 	{
 		public QuickForecastWorkloadsEventHandlerHangfire(IQuickForecastWorkloadProcessor quickForecastWorkloadProcessor) : base(quickForecastWorkloadProcessor)
@@ -31,8 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			base.Handle(@event);
 		}
 	}
-
-	[AsSystem]
+    
 	public class QuickForecastWorkloadsEventHandlerBase
 	{
 		private readonly IQuickForecastWorkloadProcessor _quickForecastWorkloadProcessor;

@@ -188,6 +188,10 @@
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ApproveRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ImportForecastsFileToSkillTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ImportForecastsToSkillTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PeriodChangesTest.cs" />

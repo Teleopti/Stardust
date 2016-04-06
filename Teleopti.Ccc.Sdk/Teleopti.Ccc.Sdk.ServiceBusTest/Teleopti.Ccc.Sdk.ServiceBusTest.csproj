@@ -153,16 +153,12 @@
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionResolveTest.cs" />
     <Compile Include="Denormalizer\GroupPageChangedMessageLegacyHandlerTest.cs" />
     <Compile Include="Diagnostics\DiagnosticsConsumerTest.cs" />
-    <Compile Include="Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryResultTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
-    <Compile Include="Forecast\ImportForecastsToSkillTest.cs" />
     <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
-    <Compile Include="Forecast\QuickForecastWorkloadProcessorTest.cs" />
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumerTest.cs" />
-    <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceReportConsumerNoMocksTest.cs" />

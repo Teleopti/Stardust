@@ -104,4 +104,4 @@ ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = true
 ResourcePlanner_IntradayIslands_36939 = RC
 ResourcePlanner_CascadingSkillsPOC_37679 = false
 
-Wfm_QuickForecastOnHangfire_35845 = true
+Wfm_QuickForecastOnHangfire_35845 = false

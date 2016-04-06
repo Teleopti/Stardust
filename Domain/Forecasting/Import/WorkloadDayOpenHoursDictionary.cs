@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
     public interface IWorkloadDayOpenHoursContainer
     {
