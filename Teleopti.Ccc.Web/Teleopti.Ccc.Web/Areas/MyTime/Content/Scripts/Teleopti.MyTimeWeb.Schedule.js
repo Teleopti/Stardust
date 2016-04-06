@@ -89,17 +89,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		userTime.zone(-baseUtcOffsetInMinutes);
 	}
 
-	function getTeleoptiUtcMomentTimeForScenarioTest() {
-		var teleoptiTimeString = moment(Date.prototype.getTeleoptiTime());
-		var utcToken = '.196Z';
-		return moment(teleoptiTimeString.format('YYYY-MM-DD') + 'T' + teleoptiTimeString.format('HH:mm:SS') + utcToken);
+	function stripTeleoptiTimeToUTCForScenarioTest() {
+		var timeWithTimezone = moment(Date.prototype.getTeleoptiTime()).format();
+		var timeWithoutTimezone = timeWithTimezone.substr(0,19);// btw, timezone info is wrong
+		return moment(timeWithoutTimezone + "+00:00");
 	}
 
 	function _startUpTimeIndicator() {
 		setInterval(function () {
 
 			var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
-								? getTeleoptiUtcMomentTimeForScenarioTest().utc().add(baseUtcOffsetInMinutes, 'minutes')
+								? stripTeleoptiTimeToUTCForScenarioTest().zone(-baseUtcOffsetInMinutes)
 								: moment().zone(-baseUtcOffsetInMinutes);//work in user timezone, just make life easier
 
 
