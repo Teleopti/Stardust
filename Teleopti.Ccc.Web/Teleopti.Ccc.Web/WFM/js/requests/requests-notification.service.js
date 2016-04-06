@@ -2,10 +2,10 @@
 	'use strict';
 
 	angular.module('wfm.requests')
-		.service('requestsNotificationService', ['growl', '$translate', '$q',  requestsNotificationService]);
+		.service('requestsNotificationService', ['NoticeService', '$translate', '$q',  requestsNotificationService]);
 
-	function requestsNotificationService($growl, $translate, $q) {
-		
+	function requestsNotificationService(NoticeService, $translate, $q) {
+
 		this.notifyApproveRequestsSuccess = function (changedRequestsCount, requestsCount) {
 
 			$q.all([$translate('RequestsHaveBeenApproved'), $translate('RequestsHaveNotBeenApproved')]).then(function(texts) {
@@ -13,33 +13,13 @@
 				var notChangedRequestsText = texts[1];
 
 				if (changedRequestsCount == 0) {
-					$growl.error(
-						"<i class='mdi  mdi-alert-octagon'></i> "
-						+ notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount)
-						, {
-							ttl: 5000,
-							disableCountDown: true
-						});
+				NoticeService.error(notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount), 5000, true);
 				} else if (changedRequestsCount < requestsCount) {
-					$growl.warning(
-						"<i class='mdi  mdi-alert-octagon'></i> "
-						+ changedRequestsText.replace('{0}', changedRequestsCount)
-						+ " "
-						+ notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount), {
-							ttl: 5000,
-							disableCountDown: true
-						});
-
+					NoticeService.warning(changedRequestsText.replace('{0}', changedRequestsCount) + " " + notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount), 5000, true);
 				} else {
-					$growl.success(
-						"<i class='mdi mdi-thumb-up'></i> "
-						+ changedRequestsText.replace('{0}', changedRequestsCount)
-						, {
-							ttl: 5000,
-							disableCountDown: true
-						});
+					NoticeService.success(changedRequestsText.replace('{0}', changedRequestsCount), 5000, true);
 				}
-			});			
+			});
 		}
 
 		this.notifyDenyRequestsSuccess = function (changedRequestsCount, requestsCount) {
@@ -49,42 +29,19 @@
 				var notChangedRequestsText = texts[1];
 
 				if (changedRequestsCount == 0) {
-					$growl.error(
-						"<i class='mdi  mdi-alert-octagon'></i> "
-						+ notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount)
-						, {
-							ttl: 5000,
-							disableCountDown: true
-						});
+					NoticeService.error(notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount), 5000, true);
 				} else if (changedRequestsCount < requestsCount) {
-					$growl.warning(
-						"<i class='mdi  mdi-alert-octagon'></i> "
-						+ changedRequestsText.replace('{0}', changedRequestsCount)
-						+ " "
-						+ notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount), {
-							ttl: 5000,
-							disableCountDown: true
-						});
+					NoticeService.warning(changedRequestsText.replace('{0}', changedRequestsCount) + " " + notChangedRequestsText.replace('{0}', requestsCount - changedRequestsCount),5000, true);
 
 				} else {
-					$growl.success(
-						"<i class='mdi mdi-thumb-up'></i> "
-						+ changedRequestsText.replace('{0}', changedRequestsCount)
-						, {
-							ttl: 5000,
-							disableCountDown: true
-						});
+					NoticeService.success(changedRequestsText.replace('{0}', changedRequestsCount), 5000, true);
 				}
 			});
 		}
 
 		this.notifyCommandError = function (error) {
 			$translate("CommandFailed").then(function (text) {
-				$growl.error("<i class='mdi  mdi-alert-octagon'></i> "
-					+ text.replace('{0}', error), {
-						ttl: 5000,
-						disableCountDown: true
-					});
+				NoticeService.error(text.replace('{0}', error), 5000, true);
 			});
 		}
 
