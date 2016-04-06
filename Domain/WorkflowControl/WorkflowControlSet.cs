@@ -343,7 +343,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public virtual bool WaitlistingIsEnabled(IAbsenceRequest absenceRequest)
 		{
-			return AbsenceRequestWaitlistEnabled;
+			if (AbsenceRequestWaitlistEnabled)
+			{
+				return GetMergedAbsenceRequestOpenPeriod(absenceRequest).AbsenceRequestProcess is GrantAbsenceRequest;
+			}
+
+			return false;
 		}
 
 		public virtual IAbsenceRequestOpenPeriod GetMergedAbsenceRequestOpenPeriod(IAbsenceRequest absenceRequest)

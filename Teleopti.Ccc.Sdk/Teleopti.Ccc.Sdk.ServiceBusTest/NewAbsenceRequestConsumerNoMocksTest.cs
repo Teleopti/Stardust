@@ -277,6 +277,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		}
 
 		[Test]
+		public void ShouldNotUseWaitlistingWhenWorkflowControlSetIsNotAutoAcceptType()
+		{
+
+			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+			var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+
+			var workflowControlSet = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new PendingAbsenceRequest(), true);
+			var personOne = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
+			var personTwo = createAndSetupPerson(startDateTime, endDateTime, workflowControlSet);
+
+			var existingRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
+
+			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
+			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+
+			Assert.IsTrue(existingRequest.IsNew);
+			Assert.IsTrue(newRequest.IsPending);
+		}
+
+		[Test]
 		public void ShouldNotUpdateWaitlistedRequestsFromDifferentWorkflowControlSets()
 		{
 			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -300,6 +323,83 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			Assert.IsTrue(existingWaitlistedRequest.IsWaitlisted);
 			Assert.IsTrue(newRequest.IsApproved);
 		}
+
+		[Test]
+		public void ShouldNotUseWaitlistingWhenWorkflowControlSetHasMultiOpenPeriodsForAbsenceAndOneIsNotAutoAcceptType()
+		{
+			var startDateTime = new DateTime(2016, 3, 2, 0, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2016, 3, 6, 23, 59, 00, DateTimeKind.Utc);
+			var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = true };
+
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2016, 02, 01), new DateOnly(2016, 03, 3));
+			var dateOnlyPeriod2 = new DateOnlyPeriod(new DateOnly(2016, 02, 01), new DateOnly(2016, 03, 10));
+
+			var absenceRequestOpenPeriod1 = new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = dateOnlyPeriod,
+				OpenForRequestsPeriod = dateOnlyPeriod
+			};
+
+			var absenceRequestOpenPeriod2 = new AbsenceRequestOpenDatePeriod()
+			{
+				Absence = absence,
+				AbsenceRequestProcess = new DenyAbsenceRequest(),
+				Period = dateOnlyPeriod2,
+				OpenForRequestsPeriod = dateOnlyPeriod2
+			};
+
+			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod2, 0);
+			workflowControlSet.InsertPeriod(absenceRequestOpenPeriod1, 1);
+
+			var personOne = PersonFactory.CreatePersonWithGuid("1", "1");
+			_personRepository.Add(personOne);
+			personOne.WorkflowControlSet = workflowControlSet;
+
+			var personTwo = PersonFactory.CreatePersonWithGuid("2", "2");
+			_personRepository.Add(personTwo);
+			personTwo.WorkflowControlSet = workflowControlSet;
+
+			createEightHourShiftForDaysInDateCollection(requestDateTimePeriod, personTwo);
+
+			var existingRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+			var newRequest = createAbsenceRequest(personTwo, absence, requestDateTimePeriod);
+
+			var newAbsenceRequestConsumer = createNewAbsenceRequestConsumer(true, false);
+			newAbsenceRequestConsumer.Consume(new NewAbsenceRequestCreated() { PersonRequestId = newRequest.Id.Value });
+
+			Assert.IsTrue(existingRequest.IsNew); // should not touch this as should not be waitlisting!
+			Assert.IsTrue(newRequest.IsDenied);
+		}
+
+
+		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, IAccount accountDay)
+		{
+			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
+			personAbsenceAccount.Add(accountDay);
+
+			var personAccountCollection = new PersonAccountCollection(person) {personAbsenceAccount};
+			_schedulingResultStateHolder.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>
+			{
+				{person, personAccountCollection}
+			};
+
+			_personAbsenceAccountRepository.Add(personAbsenceAccount);
+		}
+
+		private void createEightHourShiftForDaysInDateCollection(DateTimePeriod requestDateTimePeriod, IPerson personOne)
+		{
+			foreach (var day in requestDateTimePeriod.ToDateOnlyPeriod(personOne.PermissionInformation.DefaultTimeZone()).DayCollection())
+			{
+				var assignment = createAssignment(personOne, DateTime.SpecifyKind(day.Date.AddHours(8),DateTimeKind.Utc), DateTime.SpecifyKind(day.Date.AddHours(17),DateTimeKind.Utc), _currentScenario);
+				_scheduleRepository.Set(new[] { assignment });
+			}
+		}
+
 
 		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod requestDateTimePeriod)
 		{
