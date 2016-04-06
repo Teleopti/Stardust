@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
@@ -89,7 +91,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					var toScheduleDay = schedulerScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(modifiedAssignment);
-					schedulerScheduleDictionary.Modify(toScheduleDay);
+					schedulerScheduleDictionary.Modify(ScheduleModifier.Scheduler, toScheduleDay, NewBusinessRuleCollection.Minimum(),
+						new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(Fetch().General.ScheduleTag));
 				}
 			}
 		}
