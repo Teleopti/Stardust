@@ -1444,7 +1444,6 @@
     <Content Include="WFM\js\outbound\html\campaign-create.html" />
     <Content Include="WFM\js\outbound\html\campaign-edit.html" />
     <Content Include="WFM\js\outbound\html\campaign-list-gantt.html" />
-    <Content Include="WFM\js\outbound\html\campaign-production-plan.html" />
     <Content Include="WFM\js\outbound\html\campaign-sheet.tpl.html" />
     <Content Include="WFM\js\outbound\html\outbound-overview.html" />
     <Content Include="WFM\js\outbound\html\outbound.html" />
@@ -1599,6 +1598,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <Content Include="Areas\MyTime\Views\CiscoWidget\Index.cshtml" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
+    <Content Include="WFM\css\_businessunits.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />
@@ -2296,6 +2296,7 @@
     <Content Include="WFM\css\_wfmrightpanel.scss" />
     <Content Include="WFM\css\_requests.scss" />
     <Content Include="WFM\css\_workinghourspicker.scss" />
+    <Content Include="WFM\css\_start.scss" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

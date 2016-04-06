@@ -1,34 +1,6 @@
-html, body{
-	color:$gray087;
-}
-
-@media screen and (max-width: 768px) {
-  .con-row {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-  }
-  .con-flex {
-    flex: 1 1 auto;
-  }
-}
 .growl-message{
 	color:$text-color-standard;
 	//tempFix
-}
-
-.flex-element-fill {
-	flex: 1 1 auto;
-	align-self:stretch;
-}
-
-.flex-element {
-	flex: 0 0 auto;
-}
-
-.flex-column {
-	display: flex;
-	flex-direction: column;
 }
 
 .layout-fill {
@@ -65,25 +37,6 @@ html, body{
     margin-top: 0;
 }
 
-/*Business unit change*/
-.bu-change{
-	width:auto!important;
-	background:transparent;
-	border-bottom: 0 solid transparent!important;
-	color:$white!important;
-	background: transparent;
-	-webkit-appearance: none!important;
-	-moz-appearance: none!important;
-	appearance: none!important;
-	font-weight:normal!important;
-
-	option{
-		cursor: pointer!important;
-		color:black!important;
-		background: $white!important;
-	}
-}
-
 /*nav-context-menu*/
 .nav-row{
 	padding-top:5px;
@@ -94,10 +47,10 @@ html, body{
 }
 
 .navbar{
-  position:fixed;
-  top: 0;
-  left: 0;
-  right: 0;
+	position:fixed;
+	top: 0;
+	left: 0;
+	right: 0;
 	transition:$transition-timing;
 
 	.nav-tools{
@@ -105,17 +58,9 @@ html, body{
 		right: 0;
 		top: 0;
 	}
-	.brand{
-		color: $white!important;
-	}
-	i{
-		color:$white;
-	}
 
-	.navbar-right{
-		.card-context{
-			margin:0;
-		}
+	.navbar-right .card-context{
+		margin:0;
 	}
 }
 
@@ -181,48 +126,6 @@ md-progress-circular .md-inner .md-half-circle {
 	margin-right: 0;
 	margin-left: 0;
 }
-
 .click-modal .dialog {
     margin: 10%;
 }
-
-/*start (main)*/
-	.start-wrapper {
-		width: 75%;
-		position:relative;
-		margin-left:auto;
-		margin-right:auto;
-		max-height: 50%;
-		z-index:2;
-	}
-	.start-links{
-		display: flex;
-		justify-content: space-around;
-		width:100%;
-		a{
-			width: 130px;
-			text-align: center;
-		}
-	}
-	.start-panel {
-		margin:0 5px;
-		display: inline-block;
-		background: $white;
-		margin-bottom: 15px;
-	}
-	.start-tutorial{
-		position:relative!important;
-		display: inline-flex;
-		width:100%;
-	}
-	.tour-btn{
-		position: absolute;
-		right:0;
-		top:-5px;
-	}
-	.social-footer {
-		padding: 5px 0;
-	}
-	.start-blog-btn {
-		margin-top: 3rem;
-	}
