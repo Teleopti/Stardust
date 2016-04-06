@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(modifiedAssignment);
 					schedulerScheduleDictionary.Modify(ScheduleModifier.Scheduler, toScheduleDay, NewBusinessRuleCollection.Minimum(),
-						new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(Fetch().General.ScheduleTag));
+						new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(Fetch().General.ScheduleTag));
 				}
 			}
 		}
