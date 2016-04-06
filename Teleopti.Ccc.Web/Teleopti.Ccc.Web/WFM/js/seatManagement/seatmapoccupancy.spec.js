@@ -8,7 +8,7 @@ describe('seatmap booking view tests', function () {
 		controller,
 		seatMapCanvasUtilsService,
 		seatMapService,
-		growl,
+		NoticeService,
 		seatMapTranslator,
 		deleteResponse;
 
@@ -19,7 +19,7 @@ describe('seatmap booking view tests', function () {
 		module('ui.router');
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapService_, _growl_, _seatMapTranslatorFactory_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$controller_, _seatMapCanvasUtilsService_, _seatMapService_, _NoticeService_, _seatMapTranslatorFactory_) {
 
 		$q = _$q_;
 		$rootScope = _$rootScope_;
@@ -28,7 +28,7 @@ describe('seatmap booking view tests', function () {
 		seatMapCanvasUtilsService = _seatMapCanvasUtilsService_;
 		seatMapService = _seatMapService_;
 		seatMapTranslator = _seatMapTranslatorFactory_;
-		growl = _growl_;
+		NoticeService = _NoticeService_;
 	}));
 
 	it('should get correct display time', function () {
@@ -39,7 +39,7 @@ describe('seatmap booking view tests', function () {
 
 	it('should delete seat booking successfully', function () {
 		controller.deleteSeatBooking(fakeBooking());
-		
+
 		expect(deleteResponse.Id).toEqual(fakeBooking().BookingId);
 	});
 

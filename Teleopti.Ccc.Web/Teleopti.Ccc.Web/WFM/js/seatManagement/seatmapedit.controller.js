@@ -6,10 +6,10 @@
 		.controller('SeatMapEditCtrl', seatMapEditDirectiveController);
 
 	seatMapEditDirectiveController.$inject = [
-		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'growl', '$translate'
+		'$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'NoticeService', '$translate'
 	];
 
-	function seatMapEditDirectiveController($scope, $document, $window, utils, editor, growl, $translate) {
+	function seatMapEditDirectiveController($scope, $document, $window, utils, editor, NoticeService, $translate) {
 
 		var vm = this;
 		vm.newLocationName = '';
@@ -17,7 +17,7 @@
 		vm.showFileDialog = false;
 		vm.fileCallbackFunction = null;
 		vm.hasCopiedObjectBool = false;
-		
+
 		vm.init = function () {
 			canvas().on('object:selected', function (e) {
 				vm.parentVm.getActiveObjects();
@@ -295,13 +295,9 @@
 
 		function onSaveSuccess() {
 
-			growl.success("<i class='mdi mdi-thumb-up'></i> Seat map saved successfully.", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.success("Seat map saved successfully.", 5000, false);
 
 			vm.refreshSeatMap();
 		};
 	};
 }());
-

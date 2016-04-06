@@ -3,9 +3,9 @@
 (function () {
 
 	angular.module('wfm.seatPlan').controller('SeatMapOccupancyCtrl', seatMapOccupancyDirectiveController);
-	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatPlanService', 'seatMapService', 'growl', 'seatMapTranslatorFactory'];
+	seatMapOccupancyDirectiveController.$inject = ['seatMapCanvasUtilsService', 'seatPlanService', 'seatMapService', 'NoticeService', 'seatMapTranslatorFactory'];
 
-	function seatMapOccupancyDirectiveController(utils, seatPlanService, seatMapService, growl, seatmapTranslator) {
+	function seatMapOccupancyDirectiveController(utils, seatPlanService, seatMapService, NoticeService, seatmapTranslator) {
 		var vm = this;
 
 		vm.selectedPeople = [];
@@ -206,7 +206,7 @@
 
 				var seat = utils.getSeatObject(canvas(), true);
 
-				if (seat != null) {	
+				if (seat != null) {
 					canvas().setActiveObject(seat);
 				} else {
 					vm.occupancyDetails = undefined;
@@ -215,17 +215,11 @@
 		}
 
 		function onSuccessShowMessage(message) {
-			growl.success("<i class='mdi mdi-thumb-up'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.success(message + ".", 5000, false);
 		};
 
 		function onWarningShowMessage(message) {
-			growl.warning("<i class='mdi mdi-alert'></i> " + message + ".", {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.warning(message + ".", 5000, false);
 		};
 
 		vm.init = function () {
@@ -250,7 +244,7 @@
 		var vm = controllers[0];
 		vm.parentVm = controllers[1];
 		vm.rightPanelVm = controllers[2];
-		
+
 		vm.parentVm.rightPanelOptions.panelTitle = "SeatBookingsList";
 
 		vm.init();
