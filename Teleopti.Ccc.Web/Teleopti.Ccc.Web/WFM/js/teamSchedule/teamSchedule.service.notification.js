@@ -2,28 +2,19 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule')
-		.service('teamScheduleNotificationService', ['growl', teamScheduleNotificationService]);
+		.service('teamScheduleNotificationService', ['NoticeService', teamScheduleNotificationService]);
 
-	function teamScheduleNotificationService($growl) {
+	function teamScheduleNotificationService(NoticeService) {
 		function notifySuccess(message) {
-			$growl.success("<i class='mdi mdi-thumb-up'></i> " + message, {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.success(message, 5000, true);
 		}
 
 		function notifyFailure(message) {
-			$growl.error("<i class='mdi  mdi-alert-octagon'></i> " + message, {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.error(message, 5000, true);
 		}
 
 		function notifyWarning(message) {
-			$growl.warning("<i class='mdi  mdi-alert'></i> " + message, {
-				ttl: 5000,
-				disableCountDown: true
-			});
+			NoticeService.warning(message, 5000, true);
 		}
 
 		this.notifySuccess = notifySuccess;
