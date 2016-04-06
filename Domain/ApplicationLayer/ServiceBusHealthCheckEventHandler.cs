@@ -50,6 +50,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		DeviceInfo GetDeviceInfo();
 	}
 
+	public class DeviceInfoProvider : IDeviceInfoProvider
+	{
+		public DeviceInfo GetDeviceInfo()
+		{
+			throw new NotImplementedException();
+		}
+	}
+
 	public class DeviceInfo
 	{
 		public string MachineName { get; set; }

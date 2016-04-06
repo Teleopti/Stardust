@@ -10,9 +10,9 @@ using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Sdk.ServiceBus.HealthCheck;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using DeviceInfoProvider = Teleopti.Ccc.Sdk.ServiceBus.HealthCheck.DeviceInfoProvider;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

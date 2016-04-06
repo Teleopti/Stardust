@@ -144,6 +144,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<PerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<DeviceInfoProvider>().As<IDeviceInfoProvider>().SingleInstance();
 		}
 	}
 }
