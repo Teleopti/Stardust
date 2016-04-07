@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -22,11 +21,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
-	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
+	public class IntradayOptimizationStopWhenLargeGroupTest : IntradayOptimizationScenario, ISetup
 	{
 		public IntradayOptimizationFromWeb Target;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
@@ -38,6 +39,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+
+		public IntradayOptimizationStopWhenLargeGroupTest(bool skillGroupDeleteAfterCalculation, bool intradayIslands) 
+			: base(skillGroupDeleteAfterCalculation, intradayIslands, true)
+		{
+		}
 
 		[Test]
 		public void ShouldOptimizeNoneIf0PercentShouldBeOptimized()

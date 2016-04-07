@@ -22,10 +22,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048)]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationCommandSpecificTest : ISetup
+	public class IntradayOptimizationCommandSpecificTest : IntradayOptimizationScenario, ISetup
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -36,6 +39,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public IScheduleStorage ScheduleStorage;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
+
+		public IntradayOptimizationCommandSpecificTest(bool skillGroupDeleteAfterCalculation, bool jumpOutWhenLargeGroupIsHalfOptimized) 
+			: base(skillGroupDeleteAfterCalculation, true, jumpOutWhenLargeGroupIsHalfOptimized)
+		{
+		}
 
 		[Test]
 		public void ShouldNotResolveWeeklyRestIfCommandSaysItShouldNotRun()

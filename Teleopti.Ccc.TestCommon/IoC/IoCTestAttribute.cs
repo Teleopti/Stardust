@@ -127,6 +127,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			var configReader = Config();
 			var toggleManager = Toggles();
+			var fixtureAsConfigureToggleManager = _fixture as IConfigureToggleManager;
+			if (fixtureAsConfigureToggleManager != null)
+			{
+				fixtureAsConfigureToggleManager.Configure(toggleManager);
+			}
 			var args = new IocArgs(configReader)
 			{
 				ThrottleMessages = false // the throttler shouldnt be started in ioc common at all, but...
@@ -230,5 +235,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			{
 			}
 		}
+	}
+
+	public interface IConfigureToggleManager
+	{
+		void Configure(FakeToggleManager toggleManager);
 	}
 }

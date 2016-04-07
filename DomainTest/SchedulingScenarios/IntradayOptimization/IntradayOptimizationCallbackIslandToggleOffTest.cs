@@ -17,11 +17,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
-	[ToggleOff(Toggles.ResourcePlanner_IntradayIslands_36939)] //not needed but to be explicit so we remove this test fixture when toggle is gone
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationCallbackIslandToggleOffTest
+	public class IntradayOptimizationCallbackIslandToggleOffTest : IntradayOptimizationScenario //remove me when island toggle is gone
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -31,6 +33,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IntradayOptimizationEventHandler Target;
 		public IntradayOptimizationCallbackContext CallbackContext;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+
+		public IntradayOptimizationCallbackIslandToggleOffTest(bool skillGroupDeleteAfterCalculation, bool jumpOutWhenLargeGroupIsHalfOptimized)
+			: base(skillGroupDeleteAfterCalculation, false, jumpOutWhenLargeGroupIsHalfOptimized)
+		{
+		}
 
 		[Test]
 		public void ShouldDoSuccesfulCallbacks()

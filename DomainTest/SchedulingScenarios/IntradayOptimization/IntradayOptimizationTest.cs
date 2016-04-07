@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,11 +24,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
+	[TestFixture(false, false, false)]
+	[TestFixture(false, false, true)]
+	[TestFixture(false, true, false)]
+	[TestFixture(false, true, true)]
+	[TestFixture(true, false, false)]
+	[TestFixture(true, false, true)]
+	[TestFixture(true, true, false)]
+	[TestFixture(true, true, true)]
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048)]
-	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationTest : ISetup
+	public class IntradayOptimizationTest : IntradayOptimizationScenario, ISetup
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -38,6 +45,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public IScheduleStorage ScheduleStorage;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
+
+		public IntradayOptimizationTest(bool skillGroupDeleteAfterCalculation, bool intradayIslands, bool jumpOutWhenLargeGroupIsHalfOptimized) 
+			: base(skillGroupDeleteAfterCalculation, intradayIslands, jumpOutWhenLargeGroupIsHalfOptimized)
+		{
+		}
 
 		[Test]
 		public void ShouldUseShiftThatCoverHigherDemand()

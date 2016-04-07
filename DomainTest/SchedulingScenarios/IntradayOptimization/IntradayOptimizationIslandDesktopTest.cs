@@ -31,14 +31,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
-	[Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049)]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationDesktopTest : ISetup
+	public class IntradayOptimizationIslandDesktopTest : IntradayOptimizationScenario, ISetup
 	{
 		public IOptimizeIntradayDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+
+		public IntradayOptimizationIslandDesktopTest(bool skillGroupDeleteAfterCalculation, bool jumpOutWhenLargeGroupIsHalfOptimized) 
+			: base(skillGroupDeleteAfterCalculation, true, jumpOutWhenLargeGroupIsHalfOptimized)
+		{
+		}
 
 		[Test]
 		public void ShouldNotPlaceSameShiftForAllAgentsInIsland()

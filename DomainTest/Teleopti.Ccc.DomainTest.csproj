@@ -258,11 +258,12 @@
     <Compile Include="Optimization\IntradayOptimizationContextHandleNestedResourcesTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="SchedulingScenarios\FillSchedulerStateHolderWithTestData.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenario.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackIslandToggleOffTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandTests.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStopWhenLargeGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTest.cs" />
