@@ -71,8 +71,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				new EnversConfiguration(),
 				new NoPersistCallbacks(),
 				DataSourceConfigurationSetter.ForApplicationConfig(),
-				new CurrentHttpContext(),
-				() => null
+				new CurrentHttpContext()
 				);
 			var dataSource = dataSourcesFactory.Create(DatabaseHandler.DataSourceSettings(argument.DestinationConnectionString), "");
 			

@@ -1,13 +1,10 @@
-using System;
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Analytics;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -22,7 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
-		private readonly Func<IMessageBrokerComposite> _messageBroker;
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
@@ -30,14 +26,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnversConfiguration enversConfiguration,
 			ICurrentPersistCallbacks persistCallbacks,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
-			ICurrentHttpContext httpContext, 
-			Func<IMessageBrokerComposite> messageBroker)
+			ICurrentHttpContext httpContext)
 		{
 			_enversConfiguration = enversConfiguration;
 			_persistCallbacks = persistCallbacks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
-			_messageBroker = messageBroker ?? (() => MessageBrokerInStateHolder.Instance);
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -73,8 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				sessionFactory,
 				_enversConfiguration.AuditSettingProvider, 
 				applicationConnectionString,
-				_persistCallbacks, 
-				_messageBroker);
+				_persistCallbacks);
 
 			AnalyticsUnitOfWorkFactory statFactory = null;
 			if (!string.IsNullOrEmpty(statisticConnectionString))

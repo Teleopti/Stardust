@@ -563,6 +563,7 @@
     <Compile Include="UnitOfWork\CurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
+    <Compile Include="UnitOfWork\MessageBrokerSender.cs" />
     <Compile Include="UnitOfWork\PushMessageSender.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />

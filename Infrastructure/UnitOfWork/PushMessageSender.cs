@@ -24,5 +24,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 		}
+
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+		}
 	}
 }

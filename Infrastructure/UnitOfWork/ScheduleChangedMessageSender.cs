@@ -43,6 +43,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			send(_initiatorIdentifier.Current, modifiedRoots);
 		}
 
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+		}
+
 		public void Send(IInitiatorIdentifier initiatorIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			send(() => initiatorIdentifier, modifiedRoots);

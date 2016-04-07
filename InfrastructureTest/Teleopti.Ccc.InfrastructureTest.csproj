@@ -400,7 +400,6 @@
     <Compile Include="Foundation\MatrixRaptorQueueSynchronizationTest.cs" />
     <Compile Include="Foundation\MatrixSyncTest.cs" />
     <Compile Include="Foundation\NonVersionedRootTest.cs" />
-    <Compile Include="Foundation\NotifyMessageBrokerTest.cs" />
     <Compile Include="Foundation\OptimisticLockExceptionTest.cs" />
     <Compile Include="Foundation\MessageFilterManagerTests.cs" />
     <Compile Include="Foundation\RootChangeInfoTest.cs">

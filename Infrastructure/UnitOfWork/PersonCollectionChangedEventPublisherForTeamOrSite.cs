@@ -46,5 +46,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var message = new PersonCollectionChangedEvent{SerializedPeople = Guid.Empty.ToString()};
 			_eventsPublisher.Publish(message);
 		}
+
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+		}
 	}
 }

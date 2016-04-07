@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = new DataSourcesFactory(enversConfiguration, new NoPersistCallbacks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), null);
+			target = new DataSourcesFactory(enversConfiguration, new NoPersistCallbacks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
 		}
 
 		[Test]

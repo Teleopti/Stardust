@@ -30,5 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_publisher.Publish(events);
 		}
 
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+		}
 	}
 }

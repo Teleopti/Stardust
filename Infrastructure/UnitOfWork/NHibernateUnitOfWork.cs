@@ -6,7 +6,6 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Proxy;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Secrets.Licensing;
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly Lazy<AggregateRootInterceptor> _interceptor;
 		private readonly UnitOfWorkContext _context;
 		private readonly ISession _session;
-		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly NHibernateFilterManager _filterManager;
 		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly TransactionIsolationLevel _isolationLevel;
@@ -34,7 +32,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		protected internal NHibernateUnitOfWork(
 			UnitOfWorkContext context,
 			ISession session,
-			IMessageBrokerComposite messageBroker,
 			ICurrentPersistCallbacks persistCallbacks,
 			NHibernateFilterManager filterManager,
 			TransactionIsolationLevel isolationLevel
@@ -44,7 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_context = context;
 			_context.Set(this);
 			_session = session;
-			_messageBroker = messageBroker;
 			_filterManager = filterManager;
 			_isolationLevel = isolationLevel;
 			_persistCallbacks = persistCallbacks ?? new NoPersistCallbacks();
@@ -158,7 +154,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Interceptor.Clear();
 			}
-			notifyBroker(initiator, modifiedRoots);
+			_persistCallbacks.Current().ForEach(d => d.AfterCommit(modifiedRoots));
 			return modifiedRoots;
 		}
 
@@ -169,12 +165,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_transaction = null;
 		}
 		
-		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-			var moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
-			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
-		}
-
 		private void persistExceptionHandler(Exception ex)
 		{
 			_logger.Error("An error occurred when trying to save.", ex);

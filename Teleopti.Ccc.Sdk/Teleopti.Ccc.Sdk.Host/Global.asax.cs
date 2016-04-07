@@ -164,8 +164,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				new EnversConfiguration(),
 				c.Resolve<ICurrentPersistCallbacks>(),
 				DataSourceConfigurationSetter.ForSdk(),
-				new CurrentHttpContext(),
-				() => MessageBrokerInStateHolder.Instance
+				new CurrentHttpContext()
 				)).As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 		}
