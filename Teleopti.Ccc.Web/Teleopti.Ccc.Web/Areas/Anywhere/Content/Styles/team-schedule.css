@@ -144,6 +144,7 @@ sh
 .team-schedule .dayoff .layer-description {
 	margin: 9px;
 	text-shadow: none;
+	display: inline-block;
 }
 .team-schedule .shift .layer .drop {
     top: 21px;

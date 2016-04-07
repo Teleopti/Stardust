@@ -29,5 +29,10 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _person;
 		}
+
+		public void SetDefaultTimeZone(TimeZoneInfo timezone)
+		{
+			_person.PermissionInformation.SetDefaultTimeZone(timezone);
+		}
 	}
 }

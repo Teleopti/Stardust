@@ -47,23 +47,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var userTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var dateTimeInUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone, userTimeZone, TimeZoneInfo.Utc);
-
-			var yesterdayIsDaylightSavingTime = userTimeZone.IsDaylightSavingTime(dateTimeInUtc.AddDays(-1));
-			var todayIsDaylightSavingTime = userTimeZone.IsDaylightSavingTime(dateTimeInUtc);
-
-			var periodLengthInHour = 24;
-			// First day of day light saving time period
-			if (!yesterdayIsDaylightSavingTime && todayIsDaylightSavingTime)
-			{
-				periodLengthInHour = 23;
-			}
-			// First day after day light saving time period
-			else if (yesterdayIsDaylightSavingTime && !todayIsDaylightSavingTime)
-			{
-				periodLengthInHour = 25;
-			}
-
-			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, dateTimeInUtc.AddHours(periodLengthInHour));
+			var nextDateTimeUtc = TimeZoneInfo.ConvertTime(dateInUserTimeZone.AddDays(1), userTimeZone, TimeZoneInfo.Utc);
+			
+			var dateTimePeriod = new DateTimePeriod(dateTimeInUtc, nextDateTimeUtc);
 
 			var allPeople = people.ToList();
 			var emptyReadModel = new PersonScheduleDayReadModel[] {};
