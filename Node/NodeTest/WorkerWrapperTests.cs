@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
-using System.Net;
-using System.Net.Http;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using log4net;
 using log4net.Config;
 using Newtonsoft.Json;
@@ -14,12 +11,8 @@ using NodeTest.Fakes.InvokeHandlers;
 using NodeTest.Fakes.Timers;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
-using Stardust.Node.ActionResults;
 using Stardust.Node.Entities;
-using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
@@ -136,16 +129,9 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-											   _trySendJobProgressToManagerTimerFake,
-											   new FakeHttpSender());
+											   _trySendJobProgressToManagerTimerFake);
 
-			var httpRequestMessage = new HttpRequestMessage();
-			// Start job.
-			var actionResult = _workerWrapper.StartJob(_jobDefinition,
-			                                           httpRequestMessage);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-				              .Result.StatusCode == HttpStatusCode.OK);
+			_workerWrapper.StartJob(_jobDefinition);
 		}
 
 		[Test]
@@ -160,16 +146,9 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-											   _trySendJobProgressToManagerTimerFake,
-											   new FakeHttpSender());
+											   _trySendJobProgressToManagerTimerFake);
 
-			var httpRequestMessage = new HttpRequestMessage();
-
-			var actionResult = _workerWrapper.StartJob(_jobDefinition,
-			                                           httpRequestMessage);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-				              .Result.StatusCode == HttpStatusCode.OK);
+			_workerWrapper.StartJob(_jobDefinition);
 		}
 
 		[Test]
@@ -184,23 +163,11 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-											   _trySendJobProgressToManagerTimerFake,
-			                                   new FakeHttpSender());
+											   _trySendJobProgressToManagerTimerFake);
 
-			var httpRequestMessage = new HttpRequestMessage();
-
-			//-------------------------------------------
-			// Start a job.
-			//-------------------------------------------
-			var actionResult = _workerWrapper.StartJob(_jobDefinition,
-			                                           httpRequestMessage);
-			//-------------------------------------------
-			// Try cancel job.
-			//-------------------------------------------
+			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.Id);
 
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-				              .Result.StatusCode == HttpStatusCode.OK);
 			Assert.IsTrue(_workerWrapper.IsCancellationRequested);
 		}
 
@@ -216,26 +183,11 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-											   _trySendJobProgressToManagerTimerFake,
-			                                   new FakeHttpSender());
+											   _trySendJobProgressToManagerTimerFake);
 
-			var httpRequestMessage = new HttpRequestMessage();
-
-			//-------------------------------------------
-			// Start a job.
-			//-------------------------------------------
-			var actionResult = _workerWrapper.StartJob(_jobDefinition,
-			                                           httpRequestMessage);
-			//-------------------------------------------
-			// Try cancel job.
-			//-------------------------------------------
+			_workerWrapper.StartJob(_jobDefinition);
 			_workerWrapper.CancelJob(_jobDefinition.Id);
 
-			actionResult.ExecuteAsync(new CancellationToken());
-
-			//-------------------------------------------
-			// Try cancel job.
-			//-------------------------------------------
 			_workerWrapper.CancelJob(_jobDefinition.Id);
 
 			Assert.IsTrue(_workerWrapper.IsCancellationRequested);
@@ -254,8 +206,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 			                                                 null,
-															 null,
-			                                                 null);
+															 null);
 		}
 
 		[Test]
@@ -271,8 +222,7 @@ namespace NodeTest
 			                                                 _sendJobDoneTimer,
 			                                                 null,
 			                                                 null,
-															 null,
-			                                                 new FakeHttpSender());
+															 null);
 		}
 
 		[Test]
@@ -288,8 +238,7 @@ namespace NodeTest
 			                                                 _sendJobDoneTimer,
 			                                                 _sendJobCanceledTimer,
 			                                                 null,
-															 null,
-			                                                 new FakeHttpSender());
+															 null);
 		}
 
 		[Test]
@@ -305,8 +254,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 			                                                 null,
-															 null,
-			                                                 new FakeHttpSender());
+															 null);
 		}
 
 		[Test]
@@ -322,8 +270,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 			                                                 null,
-															 null,
-			                                                 new FakeHttpSender());
+															 null);
 		}
 
 
@@ -340,8 +287,7 @@ namespace NodeTest
 			                                                 null,
 			                                                 null,
 			                                                 null,
-															 null,
-			                                                 new FakeHttpSender());
+															 null);
 		}
 
 		[Test]
@@ -361,8 +307,7 @@ namespace NodeTest
 			                                                 null,
 															 new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
 																									   postHttpRequestFake,
-																									   5000), 
-			                                                 postHttpRequestFake);
+																									   5000));
 		}
 
 		[Test]
@@ -377,15 +322,11 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-											   _trySendJobProgressToManagerTimerFake,
-											   new FakeHttpSender());
+											   _trySendJobProgressToManagerTimerFake);
 
-			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo(),
-																new HttpRequestMessage());
+			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo());
 
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-				              .Result.StatusCode ==
-			              HttpStatusCode.BadRequest);
+			Assert.IsTrue(actionResult.IsBadRequest);
 		}
 
 		[Test]
@@ -400,15 +341,11 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-											   _trySendJobProgressToManagerTimerFake,
-											   new FakeHttpSender());
+											   _trySendJobProgressToManagerTimerFake);
 
-			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo(),
-			                                           new HttpRequestMessage());
+			var actionResult = _workerWrapper.ValidateStartJob(new JobToDo());
 
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-				              .Result.StatusCode ==
-			              HttpStatusCode.BadRequest);
+			Assert.IsTrue(actionResult.IsBadRequest);
 		}
 
 		[Test]
@@ -423,14 +360,11 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-											   _trySendJobProgressToManagerTimerFake,
-			                                   new FakeHttpSender());
+											   _trySendJobProgressToManagerTimerFake);
 
-			var actionResult = _workerWrapper.ValidateStartJob(null,
-																new HttpRequestMessage());
+			var actionResult = _workerWrapper.ValidateStartJob(null);
 
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-				              .Result.StatusCode == HttpStatusCode.BadRequest);
+			Assert.IsTrue(actionResult.IsBadRequest);
 		}
 	}
 }

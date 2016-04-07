@@ -93,8 +93,7 @@ namespace Stardust.Node
 						                                                                     (nodeConfiguration,
 						                                                                      c.Resolve<TrySendJobProgressToManagerTimer>(),
 						                                                                      c.Resolve<IHttpSender>()),
-					                                                                     c.Resolve<TrySendJobProgressToManagerTimer>(),
-					                                                                     c.Resolve<IHttpSender>()))
+					                                                                     c.Resolve<TrySendJobProgressToManagerTimer>()))
 					                    .SingleInstance();
 
 

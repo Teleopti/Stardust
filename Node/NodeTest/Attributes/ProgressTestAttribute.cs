@@ -90,8 +90,7 @@ namespace NodeTest.Attributes
 			                                                        c.Resolve<SendJobDoneTimerFake>(),
 			                                                        c.Resolve<SendJobCanceledTimerFake>(),
 			                                                        c.Resolve<SendJobFaultedTimerFake>(),
-																	c.Resolve<TrySendJobProgressToManagerTimerFake>(),
-																	c.Resolve<FakeHttpSender>()))
+																	c.Resolve<TrySendJobProgressToManagerTimerFake>()))
 				.SingleInstance();
 		}
 

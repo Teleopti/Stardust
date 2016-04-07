@@ -100,9 +100,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionResults\BadRequestWithReasonPhrase.cs" />
-    <Compile Include="ActionResults\NotFoundResultWithReasonPhrase.cs" />
-    <Compile Include="ActionResults\ConflictResultWithReasonPhrase.cs" />
     <Compile Include="Workers\NodeConfiguration.cs" />
     <Compile Include="API\NodeController.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
@@ -166,6 +163,7 @@
     <Compile Include="Interfaces\ISendJobProgressModel.cs" />
     <Compile Include="Workers\InvokeHandler.cs" />
     <Compile Include="Entities\SendJobProgressModel.cs" />
+    <Compile Include="Workers\ObjectValidationResult.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

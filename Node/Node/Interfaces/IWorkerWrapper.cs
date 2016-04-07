@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
 using Stardust.Node.Entities;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Interfaces
 {
@@ -18,11 +17,9 @@ namespace Stardust.Node.Interfaces
 		JobToDo GetCurrentMessageToProcess();
 		void CancelJob(Guid id);
 
-		IHttpActionResult StartJob(JobToDo jobToDo,
-		                           HttpRequestMessage requestMessage);
+		void StartJob(JobToDo jobToDo);
 
-		IHttpActionResult ValidateStartJob(JobToDo jobToDo,
-											HttpRequestMessage requestMessage);
+		ObjectValidationResult ValidateStartJob(JobToDo jobToDo);
 
 	}
 }

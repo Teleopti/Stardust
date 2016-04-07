@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Autofac.Extras.DynamicProxy2;
 using log4net;
-using Stardust.Node.ActionResults;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Log4Net.Extensions;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.API
 {
@@ -36,19 +34,21 @@ namespace Stardust.Node.API
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)
 		{
-			var isJobToDoValidObject = ValidateObject(jobToDo,Request);
-
-			if (!(isJobToDoValidObject is OkResult))
+			var isJobToDoValidObject = ValidateObject(jobToDo);
+			if (isJobToDoValidObject.IsBadRequest)
 			{
-				return isJobToDoValidObject;
+				return BadRequest(isJobToDoValidObject.Message);
+			}
+			
+			var isValidRequest = _workerWrapper.ValidateStartJob(jobToDo);
+			if (isValidRequest.IsBadRequest)
+			{
+				return BadRequest(isValidRequest.Message);
 			}
 
-			var isValidRequest = _workerWrapper.ValidateStartJob(jobToDo,
-			                                                     Request);
-
-			if (!(isValidRequest is OkResult))
+			if (isValidRequest.IsConflict)
 			{
-				return isValidRequest;
+				return Conflict();
 			}
 
 			Logger.InfoWithLineNumber("Received Start Job from Manager. JobId: " + jobToDo.Id);
@@ -62,15 +62,13 @@ namespace Stardust.Node.API
 
 				Logger.DebugWithLineNumber(startJobMessage);
 
-				isValidRequest = _workerWrapper.StartJob(jobToDo,
-				                                         Request);
+				_workerWrapper.StartJob(jobToDo);
 			});
 
 			return Ok();
 		}
 
-		private IHttpActionResult ValidateObject(IValidatableObject validatableObject, 
-												 HttpRequestMessage requestMessage)
+		private ObjectValidationResult ValidateObject(IValidatableObject validatableObject)
 		{
 			if (validatableObject != null)
 			{
@@ -82,45 +80,32 @@ namespace Stardust.Node.API
 
 				if (enumerable.Any())
 				{
-					return new BadRequestWithReasonPhrase(enumerable.First().ErrorMessage);
+					return new ObjectValidationResult {IsBadRequest = true, Message = enumerable.First().ErrorMessage};
 				}				
 			}
 
-			if (requestMessage == null)
-			{
-				requestMessage = new HttpRequestMessage();
-			}
-
-			return new OkResult(requestMessage);
+			return new ObjectValidationResult();
 		}
 
-		private IHttpActionResult ValidateJobId(Guid jobId, HttpRequestMessage requestMessage)
+		private ObjectValidationResult ValidateJobId(Guid jobId)
 		{
 			if (jobId == Guid.Empty)
 			{
-				return new BadRequestWithReasonPhrase(JobIdIsInvalid);
+				return new ObjectValidationResult {IsBadRequest = true, Message = JobIdIsInvalid};
 			}
 
-			if (requestMessage == null)
-			{
-				requestMessage = new HttpRequestMessage();
-			}
-
-			return new OkResult(requestMessage);
+			return new ObjectValidationResult();
 		}
 
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			// Validate request.
-			var isValidRequest = ValidateJobId(jobId, Request);
-
-			if (!(isValidRequest is OkResult))
+			var isValidRequest = ValidateJobId(jobId);
+			if (isValidRequest.IsBadRequest)
 			{
-				return isValidRequest;
+				return BadRequest(isValidRequest.Message);
 			}
 
-			// Start.
 			Logger.InfoWithLineNumber(_workerWrapper.WhoamI +
 			                          " : Received TryCancel request. jobId: " +
 			                          jobId);
@@ -131,12 +116,12 @@ namespace Stardust.Node.API
 
 			if (currentJob == null || currentJob.Id != jobId)
 			{
-				return new NotFoundResultWithReasonPhrase("Job not found here.");
+				return NotFound();
 			}
 
 			if (_workerWrapper.IsCancellationRequested)
 			{
-				return new ConflictResultWithReasonPhrase("Cancellation is already requested.");
+				return Conflict();
 			}
 
 			_workerWrapper.CancelJob(jobId);
