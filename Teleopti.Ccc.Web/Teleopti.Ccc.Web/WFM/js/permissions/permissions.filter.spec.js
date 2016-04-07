@@ -79,37 +79,37 @@ describe('PermissionsFilters', function() {
 	    expect(filteredArray.length).toEqual(1);
 	}));
 
-	it('shold find matched parent nodes', inject(function($filter) {
+	it('should find matched parent', inject(function($filter) {
 		var nodes = [
 			{
-				Name: "test",
+				SearchableName: "test",
 				ChildNodes: [
-					{ Name: "confirmed" }
+					{ SearchableName: "test confirmed" }
 				]
 			},
 			{
-				Name: "thing"
+				SearchableName: "thing"
 			}
 		];
 
 		var filter =  $filter('nameFilter');
 
 		var filteredNodes = filter(nodes, "test");
+		console.log("Array ", filteredNodes);
 
 		expect(filteredNodes.length).toEqual(1);
 	}));
 
-
 	it('should find matched child nodes', inject(function($filter) {
 		var nodes = [
 			{
-				Name: "test",
+				SearchableName: "test",
 				ChildNodes: [
-					{ Name: "confirmed" }
+					{ SearchableName: "test confirmed" }
 				]
 			},
 			{
-				Name: "thing"
+				SearchableName: "thing"
 			}
 		];
 	var filter = $filter('nameFilter');
@@ -121,7 +121,7 @@ describe('PermissionsFilters', function() {
 	}));
 
 
-	it('shold find matched parent nodes', inject(function ($filter) {
+	it('should find matched parent nodes', inject(function ($filter) {
 	    var nodes = [
 			{
 			    LocalizedFunctionDescription: "test",

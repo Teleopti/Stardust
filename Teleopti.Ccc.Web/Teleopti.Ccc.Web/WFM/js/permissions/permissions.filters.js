@@ -14,7 +14,8 @@
         if (filterType === 'descriptionFilter') {
             return node.LocalizedFunctionDescription.match(reg);
         } else {
-            return node.Name.match(reg);
+            return node.SearchableName.match(reg);
+           
         }
     }
 

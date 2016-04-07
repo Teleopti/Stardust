@@ -7,10 +7,16 @@
 			var dataFlat = [];
 			
 			var flatData = function (dataTab) {
-				dataTab.forEach(function (item) {
-					dataFlat.push(item);
-					if (item.ChildNodes && item.ChildNodes.length !== 0) {
-						flatData(item.ChildNodes);
+			    dataTab.forEach(function (item) {
+			        if (item.Type === "BusinessUnit") {
+			            item.SearchableName = item.Name;
+			        }
+			        dataFlat.push(item);
+			        if (item.ChildNodes && item.ChildNodes.length !== 0) {
+			            item.ChildNodes.forEach(function (child) {
+				            child.SearchableName = item.SearchableName + " " + child.Name;            
+				        })
+				        flatData(item.ChildNodes);
 					} else {
 						item.ChildNodes = [];
 						item.selected = false;
