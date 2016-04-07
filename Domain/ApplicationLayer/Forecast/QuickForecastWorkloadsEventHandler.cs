@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
         
         [AsSystem]
-		public virtual void Handle(QuickForecastWorkloadsEvent @event)
+		public new virtual void Handle(QuickForecastWorkloadsEvent @event)
 		{
 			base.Handle(@event);
 		}
