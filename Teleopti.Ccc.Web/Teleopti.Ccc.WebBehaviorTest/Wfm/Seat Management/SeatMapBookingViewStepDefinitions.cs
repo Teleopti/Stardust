@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Seat_Management
 		public void WhenISelectAgentFromSearchList(string agent)
 		{
 			Browser.Interactions.AssertAnyContains("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child",agent);
-			Browser.Interactions.Click("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child");
+			Browser.Interactions.ClickUsingJQuery("people-selection-list .ui-grid-canvas>.ui-grid-row:first-child");
 		}
 
 		[When(@"I click assign button")]
