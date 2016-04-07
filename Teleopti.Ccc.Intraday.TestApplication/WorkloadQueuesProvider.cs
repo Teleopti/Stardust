@@ -35,11 +35,13 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 			var table = resultSet.Tables[0];
 			var previousWorkloadId = -2;
+			var previousSkillName = String.Empty;
 			WorkloadInfo workloadInfo = null;
 
 			foreach (DataRow row in table.Rows)
 			{
 				var workloadId = (int) row["WorkloadId"];
+				var skillName = (string)row["SkillName"];
 				if (workloadId != previousWorkloadId)
 				{
 					if (workloadInfo != null)
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					workloadInfo = new WorkloadInfo
 					{
 						WorkloadId = workloadId, 
+						SkillName = skillName,
 						Queues = new List<QueueInfo>()
 					};
 				}
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				});
 
 				previousWorkloadId = workloadId;
+				previousSkillName = skillName;
 			}
 
 			if (workloadInfo != null)
@@ -67,7 +71,8 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				workloadList.Add(workloadInfo);
 				workloadInfo = new WorkloadInfo
 				{
-					WorkloadId = previousWorkloadId, 
+					WorkloadId = previousWorkloadId,
+					SkillName = previousSkillName,
 					Queues = new List<QueueInfo>()
 				};
 			}

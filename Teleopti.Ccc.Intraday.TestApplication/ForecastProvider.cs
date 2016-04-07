@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 {
 	public class ForecastProvider : IForecastProvider
 	{
-		private string _connectionString;
+		private readonly string _connectionString;
 
 		public ForecastProvider(string connectionString)
 		{
