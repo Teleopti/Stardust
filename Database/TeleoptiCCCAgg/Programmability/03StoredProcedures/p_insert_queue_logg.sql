@@ -283,7 +283,15 @@ BEGIN
 END
 
 /*Hantera konverteringar mellan olika intervall*/
-SELECT @maxinterval = @maxinterval + (@interval_per_hour / @CTI_interval_per_hour ) - 1
+IF @CTI_interval_per_hour/2=@interval_per_hour
+BEGIN
+	SET @mininterval = @mininterval/2
+	SET @maxinterval = @maxinterval/2
+END
+ELSE
+BEGIN
+	SELECT @maxinterval = @maxinterval + (@interval_per_hour / @CTI_interval_per_hour ) - 1
+END
 
 --090416
 --Fix problem when add_hours gives us data for the day after @stop_date
