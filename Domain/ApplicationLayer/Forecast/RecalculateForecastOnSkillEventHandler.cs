@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class RecalculateForecastOnSkillHandler : IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnServiceBus
+	public class RecalculateForecastOnSkillEventHandler : IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnServiceBus
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IStatisticLoader _statisticLoader;
 		private readonly IReforecastPercentCalculator _reforecastPercentCalculator;
 		
-		public RecalculateForecastOnSkillHandler(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
+		public RecalculateForecastOnSkillEventHandler(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
 			ISkillRepository skillRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IStatisticLoader statisticLoader, IReforecastPercentCalculator reforecastPercentCalculator)
 		{
 			_scenarioRepository = scenarioRepository;

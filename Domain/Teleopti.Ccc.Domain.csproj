@@ -185,7 +185,7 @@
     <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadProcessor.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsEventHandler.cs" />
-    <Compile Include="ApplicationLayer\Forecast\RecalculateForecastOnSkillHandler.cs" />
+    <Compile Include="ApplicationLayer\Forecast\RecalculateForecastOnSkillEventHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\StatisticLoader.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
     <Compile Include="ApplicationLayer\ICurrentInitiatorIdentifier.cs" />
