@@ -193,6 +193,7 @@
     <Compile Include="ApplicationLayer\ICurrentInitiatorIdentifier.cs" />
     <Compile Include="ApplicationLayer\IInitiatorIdentifierScope.cs" />
     <Compile Include="ApplicationLayer\InitiatorIdentifier.cs" />
+    <Compile Include="ApplicationLayer\PersonAbsenceAccountProvider.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsFactAgentSkill.cs" />
     <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />
