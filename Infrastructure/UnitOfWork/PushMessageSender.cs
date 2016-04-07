@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -19,6 +20,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void AdditionalFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
+
+			// this is only because there are nested uows somewhere
+			// and the outer persist will not be able to get current uow
+			// but in those cases this is always empty
+			if (!modifiedRoots.Any())
+				return;
+
 			_sendPushMessageWhenRootAlteredService.SendPushMessages(
 				modifiedRoots,
 				new PushMessagePersister(
