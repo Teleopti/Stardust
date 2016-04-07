@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.SetProperty(Environment.Dialect, typeof (MsSql2008Dialect).AssemblyQualifiedName)
 				.SetProperty(Environment.SessionFactoryName, AnalyticsDataSourceName)
 				.SetProperty(Environment.SqlExceptionConverter, typeof (SqlServerExceptionConverter).AssemblyQualifiedName)
+				;
 			_dataSourceConfigurationSetter.AddApplicationNameToConnectionString(statCfg);
 			return statCfg;
 		}
