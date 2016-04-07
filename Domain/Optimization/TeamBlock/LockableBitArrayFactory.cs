@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				ret.Set(index, ((significant == SchedulePartView.DayOff) || (significant == SchedulePartView.ContractDayOff)));
 				if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 					ret.Lock(index, true);
-				if (significant == SchedulePartView.FullDayAbsence)
-					ret.Lock(index, true);
+
 				index++;
 			}
 

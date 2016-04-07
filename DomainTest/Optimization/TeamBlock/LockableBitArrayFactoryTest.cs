@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         }
 
         [Test]
-        public void VerifyFullDayAbsencesAreLockedByConverter()
+        public void VerifyFullDayAbsencesAreNotLockedByConverter()
         {
             using (_mocks.Record())
             {
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				ret = _target.ConvertFromMatrix(false, false, _matrix);
             }
 
-            Assert.IsTrue(ret.IsLocked(4, true));
+            Assert.IsFalse(ret.IsLocked(4, true));
         }
 
         private void mockExpectations()
