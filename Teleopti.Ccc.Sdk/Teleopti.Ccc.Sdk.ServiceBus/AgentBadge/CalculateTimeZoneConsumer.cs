@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly INow _now;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(CalculateTimeZoneConsumer));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(CalculateTimeZoneConsumer));
 
 		public CalculateTimeZoneConsumer(IServiceBus serviceBus, INow now)
 		{
@@ -26,30 +26,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		/// <param name="message"></param>
 		public void Consume(CalculateTimeZoneMessage message)
 		{
-			if (Logger.IsDebugEnabled)
+			const int badgeCalculationDelayDays = -2;
+
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat("Consume CalculateTimeZoneMessage with BusinessUnit {0}, DataSource {1} and timezone {2}",
+				logger.DebugFormat("Consume CalculateTimeZoneMessage with BusinessUnit {0}, DataSource {1} and timezone {2}",
 					message.LogOnBusinessUnitId, message.LogOnDatasource, message.TimeZoneCode);
 			}
 			var today = _now.LocalDateTime();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
 			var todayForGivenTimeZone = TimeZoneInfo.ConvertTime(today, TimeZoneInfo.Local, timeZone);
-			var yesterdayForGivenTimeZone = todayForGivenTimeZone.AddDays(-1).Date;
+			var calculationDateForGivenTimeZone = todayForGivenTimeZone.AddDays(badgeCalculationDelayDays).Date;
 
 			_serviceBus.Send(new CalculateBadgeMessage
 			{
 				LogOnDatasource = message.LogOnDatasource,
 				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 				Timestamp = DateTime.UtcNow,
-				CalculationDate = yesterdayForGivenTimeZone,
+				CalculationDate = calculationDateForGivenTimeZone,
 				TimeZoneCode = message.TimeZoneCode 
 			});
 
-			if (Logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled)
 			{
-				Logger.DebugFormat(
+				logger.DebugFormat(
 					"Sending CalculateBadgeMessage to Service Bus for Timezone={0} on calculation date={1:yyyy-MM-dd HH:mm:ss}",
-					message.TimeZoneCode, yesterdayForGivenTimeZone.Date);
+					message.TimeZoneCode, calculationDateForGivenTimeZone.Date);
 			}
 		}
 	}
