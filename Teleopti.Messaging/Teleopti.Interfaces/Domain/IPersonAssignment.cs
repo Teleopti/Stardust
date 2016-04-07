@@ -23,15 +23,15 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Clears the personal shift.
         /// </summary>
-        void ClearPersonalActivities();
+        void ClearPersonalActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 
         /// <summary>
         /// Clears the main shift.
         /// </summary>
-        void ClearMainActivities();
+        void ClearMainActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
-	    void ClearOvertimeActivities();
+	    void ClearOvertimeActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 	    void Clear();
 
@@ -46,7 +46,7 @@ namespace Teleopti.Interfaces.Domain
 	    IEnumerable<IOvertimeShiftLayer> OvertimeActivities();
 	    IEnumerable<IShiftLayer> ShiftLayers { get; }
 
-	    bool RemoveActivity(IShiftLayer layer);
+	    bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 	    void AddPersonalActivity(IActivity activity, DateTimePeriod period);
 	    void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 	    IDayOff DayOff();

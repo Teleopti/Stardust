@@ -139,24 +139,48 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _scenario; }
 		}
 
-		public virtual bool RemoveActivity(IShiftLayer layer)
+		public virtual bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			return _shiftLayers.Remove(layer);
+			var removed = _shiftLayers.Remove(layer);
+
+			if ( !muteEvent )
+			{
+				AddEvent ( () =>
+				{
+					var activityAddedEvent = new PersonAssignmentLayerRemovedEvent
+					{
+						Date = Date,
+						PersonId = Person.Id.Value,						
+						StartDateTime = layer.Period.StartDateTime,
+						EndDateTime = layer.Period.EndDateTime,
+						ScenarioId = Scenario.Id.Value,
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if ( trackedCommandInfo != null )
+					{
+						activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
+					}
+					return activityAddedEvent;
+				} );
+			}
+
+			return removed;
+		}
+		
+		public virtual void ClearPersonalActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
+		{
+			PersonalActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo));
 		}
 
-		public virtual void ClearPersonalActivities()
+		public virtual void ClearMainActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			PersonalActivities().ToArray().ForEach(l => RemoveActivity(l));
+			MainActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo ) );
 		}
 
-		public virtual void ClearMainActivities()
+		public virtual void ClearOvertimeActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			MainActivities().ToArray().ForEach(l => RemoveActivity(l));
-		}
-
-		public virtual void ClearOvertimeActivities()
-		{
-			OvertimeActivities().ToArray().ForEach(l => RemoveActivity(l));
+			OvertimeActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo ) );
 		}
 
 		public virtual void CheckRestrictions()

@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private static void movePersonAssignment(IPersonAssignment sourceAssignment, IPersonAssignment targetAssignment, TrackedCommandInfo trackedCommandInfo)
 		{
-			targetAssignment.ClearMainActivities();
-			targetAssignment.ClearOvertimeActivities();
+			targetAssignment.ClearMainActivities(false, trackedCommandInfo);
+			targetAssignment.ClearOvertimeActivities(false, trackedCommandInfo);
 
 			foreach (var layer in sourceAssignment.MainActivities())
 			{
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			targetAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
 
-			sourceAssignment.ClearMainActivities();
-			sourceAssignment.ClearOvertimeActivities();
+			sourceAssignment.ClearMainActivities( false, trackedCommandInfo );
+			sourceAssignment.ClearOvertimeActivities( false, trackedCommandInfo );
 			sourceAssignment.SetDayOff(null);
 		}
 

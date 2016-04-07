@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<PersonAbsenceModifiedEvent>,
 		IHandleEvent<DayOffAddedEvent>,
 		IHandleEvent<DayUnscheduledEvent>,
+		IHandleEvent<PersonAssignmentLayerRemovedEvent>,
 		IRunOnServiceBus
 	{
 		private readonly IEventPublisher _publisher;
@@ -158,5 +159,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				dateTime.AddHours(48));
 		}
 
+		public void Handle(PersonAssignmentLayerRemovedEvent @event)
+		{
+			_publisher.Publish ( new ScheduleChangedEvent
+			{
+				Timestamp = @event.Timestamp,
+				LogOnDatasource = @event.LogOnDatasource,
+				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime,
+				InitiatorId = @event.InitiatorId,
+				CommandId = @event.CommandId
+			} );
+		}
 	}
 }
