@@ -70,6 +70,7 @@
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_RemoveAbsence_36705,
 		WfmTeamSchedule_AddActivity_37541,
+		WfmTeamSchedule_RemoveActivity_37743,
 
 		ResourcePlanner_WeeklyRestSolver_35043,
 

@@ -78,6 +78,7 @@ WfmTeamSchedule_SwapShifts_36231 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
 WfmTeamSchedule_RemoveAbsence_36705 = RC
 WfmTeamSchedule_AddActivity_37541 = RC
+WfmTeamSchedule_RemoveActivity_37743 = DEV
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Basic_35986 = true
