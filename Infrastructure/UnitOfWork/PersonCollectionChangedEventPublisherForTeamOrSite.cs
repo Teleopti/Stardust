@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -23,6 +22,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_eventsPublisher = eventsPublisher;
 			_businessUnit = businessUnit;
+		}
+
+		public void AdditionalFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
 		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)

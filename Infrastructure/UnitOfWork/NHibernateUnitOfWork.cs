@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Common.Messaging;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using log4net;
 using NHibernate;
 using NHibernate.Criterion;
@@ -31,7 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly NHibernateFilterManager _filterManager;
 		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly TransactionIsolationLevel _isolationLevel;
-		private readonly ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 
@@ -41,7 +37,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IMessageBrokerComposite messageBroker,
 			ICurrentPersistCallbacks persistCallbacks,
 			NHibernateFilterManager filterManager,
-			ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
 			TransactionIsolationLevel isolationLevel
 			)
 		{
@@ -51,18 +46,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_session = session;
 			_messageBroker = messageBroker;
 			_filterManager = filterManager;
-			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_isolationLevel = isolationLevel;
-			_persistCallbacks = persistCallbacks;
+			_persistCallbacks = persistCallbacks ?? new NoPersistCallbacks();
 			_interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
 		{
-			get
-			{
-				return _interceptor.Value;
-			}
+			get { return _interceptor.Value; }
 		}
 
 		protected internal virtual ISession Session
@@ -144,7 +135,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				commitInnerTransaction();
 				
 				mightStartTransaction();
-				invokeCallbacks(modifiedRoots);
+				_persistCallbacks.Current().ForEach(d => d.AfterFlush(modifiedRoots));
 				commitInnerTransaction();
 			}
 			catch (TooManyActiveAgentsException exception)
@@ -177,20 +168,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_transaction.Dispose();
 			_transaction = null;
 		}
-
-		private void invokeCallbacks(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-			if (_persistCallbacks == null) return;
-
-			_persistCallbacks.Current().ForEach(d =>
-				{
-					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
-					{
-						d.AfterFlush(modifiedRoots);
-					}
-				});
-		}
-
+		
 		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
@@ -266,10 +244,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Interceptor.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				Interceptor.Iteration = InterceptorIteration.UpdateRoots;
-				if (_sendPushMessageWhenRootAlteredService != null)
-					_sendPushMessageWhenRootAlteredService.SendPushMessages(Interceptor.ModifiedRoots,
-						new PushMessagePersister(new PushMessageRepository(this), new PushMessageDialogueRepository(this),
-							new CreatePushMessageDialoguesService()));
+				_persistCallbacks.Current().ForEach(d => d.AdditionalFlush(Interceptor.ModifiedRoots));
 				Session.Flush();
 			}
 			catch (StaleStateException ex)

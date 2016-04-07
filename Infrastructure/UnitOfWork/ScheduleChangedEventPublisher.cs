@@ -5,7 +5,6 @@ using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -18,6 +17,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_eventPublisher = eventPublisher;
 			_now = now;
+		}
+
+		public void AdditionalFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
 		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)

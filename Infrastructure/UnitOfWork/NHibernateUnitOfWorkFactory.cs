@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				messaging,
 				_persistCallbacks,
 				new NHibernateFilterManager(session),
-				new SendPushMessageWhenRootAlteredService(),
 				isolationLevel
 				);
 

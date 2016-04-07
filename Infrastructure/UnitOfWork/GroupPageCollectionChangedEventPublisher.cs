@@ -22,6 +22,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventsPublisher = eventsPublisher;
 		}
 
+		public void AdditionalFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+		}
+
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var allRoots = modifiedRoots.ToList();

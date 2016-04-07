@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using log4net.Repository.Hierarchy;
 using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;

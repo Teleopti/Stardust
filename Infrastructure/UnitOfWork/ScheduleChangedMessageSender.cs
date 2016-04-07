@@ -34,6 +34,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
+		public void AdditionalFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		{
+		}
+
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			send(_initiatorIdentifier.Current, modifiedRoots);
