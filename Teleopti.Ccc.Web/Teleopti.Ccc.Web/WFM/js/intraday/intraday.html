@@ -99,8 +99,10 @@
 			<div ng-hide="showIncluded" class="animate-show con-row">
 				<div class="con-flex">
 					<div class="unrelated-filters" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name">
+						<span class="pointer" ng-click="openSkillFromArea(skill)">
 						<span class="filter-handle"></span>
 						<span class="filter-chip">{{skill.Name}}</span>
+						<span>
 					</div>
 				</div>
 			</div>
@@ -111,7 +113,7 @@
 <div class="con-row">
 	<div class="con-flex">
 		<div class="panel full-padding material-depth-1 " ng-show="!HasMonitorData" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
-			<i class="mdi mdi-alert"></i> <span class="text-warning">No data is available</span>
+			<i class="mdi mdi-alert"></i> <span class="text-warning">No data available for {{selectedItem.Name}}</span>
 		</div>
 	</div>
 

@@ -121,6 +121,11 @@
 					pollSkillMonitorData();
 				};
 
+				$scope.openSkillFromArea = function (item) {
+					autocompleteSkill.selectedSkill = item;
+					$scope.skillSelected(item);
+				};
+
 
 				var pollSkillMonitorData = function () {
 					cancelTimeout();
