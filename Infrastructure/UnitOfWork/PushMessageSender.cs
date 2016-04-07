@@ -10,23 +10,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class PushMessageSender : IPersistCallback
 	{
 		private readonly ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
-		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public PushMessageSender(ICurrentUnitOfWork unitOfWork)
+		public PushMessageSender()
 		{
 			_sendPushMessageWhenRootAlteredService = new SendPushMessageWhenRootAlteredService();
-			_unitOfWork = unitOfWork;
 		}
 
 		public void AdditionalFlush(IUnitOfWork unitOfWork, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-
-			// this is only because there are nested uows somewhere
-			// and the outer persist will not be able to get current uow
-			// but in those cases this is always empty
-			if (!modifiedRoots.Any())
-				return;
-
 			_sendPushMessageWhenRootAlteredService.SendPushMessages(
 				modifiedRoots,
 				new PushMessagePersister(
