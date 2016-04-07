@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[TestFixture]
 	public class RecalculateForecastOnSkillHandlerTest
 	{
-		private RecalculateForecastOnSkillEventHandler _target;
+		private RecalculateForecastOnSkillEventHandlerBase _target;
 		private IScenarioRepository _scenarioRepository;
 		private ISkillDayRepository _skillDayRepository;
 		private ISkillRepository _skillRepository;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_statisticLoader = MockRepository.GenerateMock<IStatisticLoader>();
 			_reforecastPercentCalculator = MockRepository.GenerateMock<IReforecastPercentCalculator>();
-			_target = new RecalculateForecastOnSkillEventHandler(_scenarioRepository, _skillDayRepository, _skillRepository,
+			_target = new RecalculateForecastOnSkillEventHandlerBase(_scenarioRepository, _skillDayRepository, _skillRepository,
 				_currentunitOfWorkFactory, _statisticLoader, _reforecastPercentCalculator);
 			_uow = MockRepository.GenerateMock<IUnitOfWork>();
 		}

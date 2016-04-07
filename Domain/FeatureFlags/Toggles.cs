@@ -96,7 +96,8 @@
 		ResourcePlanner_CascadingSkillsPOC_37679,
 
 		Wfm_QuickForecastOnHangfire_35845,
-		ETL_SpeedUpPermissionReport_33584
+		ETL_SpeedUpPermissionReport_33584,
+                Wfm_RecalculateForecastOnHangfire_37971
 		// ReSharper restore InconsistentNaming
 	}
 }

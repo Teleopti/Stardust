@@ -663,7 +663,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
 					var principal = TeleoptiPrincipal.CurrentPrincipal;
 					var person = ((IUnsafePerson)principal).Person;
-					var message = new RecalculateForecastOnSkillCollectionEvent
+					var @event = new RecalculateForecastOnSkillCollectionEvent
 					{
 						SkillCollection = new Collection<RecalculateForecastOnSkill>(),
 						ScenarioId = Presenter.RequestedScenario.Id.GetValueOrDefault(),
@@ -671,7 +671,7 @@ namespace Teleopti.Ccc.Win.Intraday
 					};
 					foreach (var model in models.ReforecastModels)
 					{
-						message.SkillCollection.Add(
+                        @event.SkillCollection.Add(
 							new RecalculateForecastOnSkill
 							{
 								SkillId = model.Skill.Id.GetValueOrDefault(),
@@ -679,8 +679,8 @@ namespace Teleopti.Ccc.Win.Intraday
 							});
 
 					}
-                    _eventInfrastructureInfoPopulator.PopulateEventContext(message);
-                    _publisher.Publish(message);
+                    _eventInfrastructureInfoPopulator.PopulateEventContext(@event);
+                    _publisher.Publish(@event);
                 }
 			}
 		}
