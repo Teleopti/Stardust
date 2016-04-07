@@ -21651,6 +21651,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove Absence.
+        /// </summary>
+        public static string RemoveAbsence {
+            get {
+                return ResourceManager.GetString("RemoveAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove Campaign.
         /// </summary>
         public static string RemoveCampaign {

@@ -13962,6 +13962,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Swap shifts finished successfully.</value>
     <comment>Tips after swap shifts in WFM team schedule</comment>
   </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>Remove Absence</value>
+    <comment>Menu item in WFM team schedule</comment>
+  </data>
   <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
     <value>Do you want to remove {0} absences from {1} agents?</value>
     <comment>Message to confirm person absence removing</comment>
