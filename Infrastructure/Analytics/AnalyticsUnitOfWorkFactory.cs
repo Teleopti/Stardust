@@ -44,10 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 			new NHibernateUnitOfWork(
 				_context,
 				session,
-				null,
-				null,
-				TransactionIsolationLevel.Default
-				);
+				TransactionIsolationLevel.Default, null);
 			return CurrentUnitOfWork();
 		}
 

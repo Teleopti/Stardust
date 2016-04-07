@@ -99,10 +99,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			new NHibernateUnitOfWork(_context,
 				session,
-				_persistCallbacks,
-				new NHibernateFilterManager(session),
-				isolationLevel
-				);
+				isolationLevel, _persistCallbacks);
 
 			return CurrentUnitOfWork();
 		}

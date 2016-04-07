@@ -20,38 +20,31 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 
-		private readonly Lazy<AggregateRootInterceptor> _interceptor;
 		private readonly UnitOfWorkContext _context;
 		private readonly ISession _session;
-		private readonly NHibernateFilterManager _filterManager;
-		private readonly ICurrentPersistCallbacks _persistCallbacks;
 		private readonly TransactionIsolationLevel _isolationLevel;
+		private readonly ICurrentPersistCallbacks _persistCallbacks;
+		private readonly NHibernateFilterManager _filterManager;
+		private readonly Lazy<AggregateRootInterceptor> _interceptor;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 
 		protected internal NHibernateUnitOfWork(
-			UnitOfWorkContext context,
-			ISession session,
-			ICurrentPersistCallbacks persistCallbacks,
-			NHibernateFilterManager filterManager,
-			TransactionIsolationLevel isolationLevel
-			)
+			UnitOfWorkContext context, 
+			ISession session, 
+			TransactionIsolationLevel isolationLevel, 
+			ICurrentPersistCallbacks persistCallbacks)
 		{
 			InParameter.NotNull("session", session);
 			_context = context;
 			_context.Set(this);
 			_session = session;
-			_filterManager = filterManager;
 			_isolationLevel = isolationLevel;
 			_persistCallbacks = persistCallbacks ?? new NoPersistCallbacks();
+			_filterManager = new NHibernateFilterManager(session);
 			_interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
-
-		protected internal AggregateRootInterceptor Interceptor
-		{
-			get { return _interceptor.Value; }
-		}
-
+		
 		protected internal virtual ISession Session
 		{
 			get
@@ -126,7 +119,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Flush();
 
-				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
+				modifiedRoots = new List<IRootChangeInfo>(_interceptor.Value.ModifiedRoots);
 				
 				commitInnerTransaction();
 				
@@ -152,7 +145,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			finally
 			{
-				Interceptor.Clear();
+				_interceptor.Value.Clear();
 			}
 			_persistCallbacks.Current().ForEach(d => d.AfterCommit(modifiedRoots));
 			return modifiedRoots;
@@ -231,10 +224,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			try
 			{
-				Interceptor.Iteration = InterceptorIteration.Normal;
+				_interceptor.Value.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
-				Interceptor.Iteration = InterceptorIteration.UpdateRoots;
-				_persistCallbacks.Current().ForEach(d => d.AdditionalFlush(this, Interceptor.ModifiedRoots));
+				_interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
+				_persistCallbacks.Current().ForEach(d => d.AdditionalFlush(this, _interceptor.Value.ModifiedRoots));
 				Session.Flush();
 			}
 			catch (StaleStateException ex)
