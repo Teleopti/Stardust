@@ -206,7 +206,6 @@ namespace Teleopti.Ccc.TestCommon
 			dictionary[Environment.Dialect] = typeof(MsSql2008Dialect).AssemblyQualifiedName;
 			dictionary[Environment.ConnectionString] = connectionString;
 			dictionary[Environment.SqlExceptionConverter] = typeof(SqlServerExceptionConverter).AssemblyQualifiedName;
-			dictionary[Environment.CurrentSessionContextClass] = "call";
 			if (timeout.HasValue)
 				dictionary[Environment.CommandTimeout] = timeout.Value.ToString(CultureInfo.CurrentCulture);
 			return dictionary;

@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			cfg.GetProperty(Environment.SessionFactoryName).Should().Be.EqualTo("[not set]");
 			cfg.GetProperty(Environment.SqlExceptionConverter).Should().Be.EqualTo(typeof(SqlServerExceptionConverter).AssemblyQualifiedName);
 			cfg.GetProperty(Environment.ConnectionDriver).Should().Be.EqualTo(typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
-			cfg.GetProperty(Environment.CurrentSessionContextClass).Should().Be.EqualTo(typeof(TeleoptiSessionContext).AssemblyQualifiedName);
 			cfg.GetProperty(Environment.TransactionStrategy)
 				.Should()
 				.Be.EqualTo(typeof (ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
@@ -112,7 +111,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 			           		Environment.UseSecondLevelCache,
 			           		Environment.UseQueryCache,
 			           		Environment.TransactionStrategy,
-			           		Environment.CurrentSessionContextClass,
 			           		Environment.SessionFactoryName
 			           	};
 			foreach (var key in keys)

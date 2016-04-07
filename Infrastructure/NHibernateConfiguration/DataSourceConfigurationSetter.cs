@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
 			}
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy, typeof(ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
-			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.CurrentSessionContextClass, typeof(TeleoptiSessionContext).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, NoDataSourceName);
 
 			AddApplicationNameToConnectionString(nhConfiguration);
