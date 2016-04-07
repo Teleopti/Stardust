@@ -8,18 +8,12 @@ namespace NodeTest
 	[TestFixture]
 	public class NodeUriBuilderTests
 	{
-		private string UriToTest { get; set; }
-
-		[TestFixtureSetUp]
-		public void TestFixtureSetup()
-		{
-			UriToTest = "http://localhost:9000/jobmanager/";
-		}
+		private string uriToTest = "http://localhost:9000/jobmanager/";
 
 		[Test]
 		public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
 		{
-			var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(uriToTest);
 
 			Assert.IsNotNull(nodeUriBuilderToTest);
 		}
@@ -29,16 +23,16 @@ namespace NodeTest
 		{
 			var path = NodeRouteConstants.IsAlive;
 
-			var uriBuilder = new UriBuilder(UriToTest)
+			var uriBuilder = new UriBuilder(uriToTest)
 			{
 				Path = path
 			};
 
-			var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(uriToTest);
 
-			var uriToTest = nodeUriBuilderToTest.CreateUri(path);
+			var uri = nodeUriBuilderToTest.CreateUri(path);
 
-			Assert.IsTrue(uriBuilder.Uri == uriToTest);
+			Assert.IsTrue(uriBuilder.Uri == uri);
 		}
 
 		[Test]
@@ -50,38 +44,38 @@ namespace NodeTest
 				NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
 				                                     guid.ToString());
 
-			var uriBuilder = new UriBuilder(UriToTest)
+			var uriBuilder = new UriBuilder(uriToTest)
 			{
 				Path = path
 			};
 
-			var nodeUriBuilderToTest = new NodeUriBuilderHelper(UriToTest);
+			var nodeUriBuilderToTest = new NodeUriBuilderHelper(uriToTest);
 
-			var uriToTest = nodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
+			var uri = nodeUriBuilderToTest.CreateUri(NodeRouteConstants.CancelJob,
 			                                               guid);
 
-			Assert.IsTrue(uriBuilder.Uri == uriToTest);
+			Assert.IsTrue(uriBuilder.Uri == uri);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
 		{
-			var nodeUriBuilderToTest = new NodeUriBuilderHelper(string.Empty);
+			new NodeUriBuilderHelper(string.Empty);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentIsStringNull()
 		{
-			var nodeUriBuilderToTest = new NodeUriBuilderHelper(location: null);
+			new NodeUriBuilderHelper(location: null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (UriFormatException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
 		{
-			var nodeUriBuilderToTest = new NodeUriBuilderHelper("invalid uri");
+			new NodeUriBuilderHelper("invalid uri");
 		}
 	}
 }

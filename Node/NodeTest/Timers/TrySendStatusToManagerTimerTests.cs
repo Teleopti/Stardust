@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Reflection;
-using log4net;
-using log4net.Config;
 using NUnit.Framework;
-using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
 
@@ -17,7 +12,7 @@ namespace NodeTest.Timers
 	{
 		private readonly Uri _fakeUrl = new Uri("http://localhost:9000/jobmanager/");
 
-		private INodeConfiguration _nodeConfiguration;
+		private NodeConfiguration _nodeConfiguration;
 
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
@@ -35,49 +30,36 @@ namespace NodeTest.Timers
 			                                           handlerAssembly,
 			                                           nodeName,
 			                                           pingToManagerSeconds: 10);
-
-#if DEBUG
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-#endif
 		}
-
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			Logger.DebugWithLineNumber("Closing TrySendStatusToManagerTimerTests...");
-		}
-
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendStatusToManagerTimerTests));
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenCallBackTemplateUriArgumentIsNull()
 		{
-			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
-			                                                                         null,
-			                                                                         null,
-			                                                                         null);
+			new TrySendStatusToManagerTimer(_nodeConfiguration,
+				null,
+				null,
+				null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenNodeConfigurationArgumentIsNull()
 		{
-			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(null,
-			                                                                         _fakeUrl,
-			                                                                         null,
-			                                                                         null);
+			new TrySendStatusToManagerTimer(null,
+				_fakeUrl,
+				null,
+				null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenSendJobProgressToManagerTimerArgumentIsNull()
 		{
-			var trySendJobDoneStatusToManagerTimer = new TrySendStatusToManagerTimer(_nodeConfiguration,
-			                                                                         _fakeUrl,
-			                                                                         null,
-			                                                                         null);
+			new TrySendStatusToManagerTimer(_nodeConfiguration,
+				_fakeUrl,
+				null,
+				null);
 		}
 	}
 }

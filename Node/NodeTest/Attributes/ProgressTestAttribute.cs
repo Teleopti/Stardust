@@ -2,11 +2,13 @@
 using System.Configuration;
 using System.Linq;
 using System.Reflection;
+using System.Timers;
 using Autofac;
 using NodeTest.Fakes;
 using NodeTest.Fakes.Timers;
 using Stardust.Node.API;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Timers;
 using Stardust.Node.Workers;
 
 namespace NodeTest.Attributes
@@ -40,58 +42,26 @@ namespace NodeTest.Attributes
 
 			builder.RegisterType<InvokeHandler>();
 
-			builder.RegisterType<SendJobFaultedTimerFake>()
-				.SingleInstance();
+			builder.RegisterType<SendJobFaultedTimerFake>().SingleInstance();
 
-			builder.RegisterType<SendJobCanceledTimerFake>()
-				.SingleInstance();
+			builder.RegisterType<SendJobCanceledTimerFake>().SingleInstance();
 
-			builder.RegisterType<SendJobDoneTimerFake>()
-				.SingleInstance();
+			builder.RegisterType<SendJobDoneTimerFake>().SingleInstance();
 
 			builder.RegisterType<NodeController>();
 
-			builder.RegisterType<FakeHttpSender>()
-				.SingleInstance();
+			builder.RegisterType<FakeHttpSender>().As<HttpSender>().SingleInstance();
 
 			builder.RegisterInstance(nodeConfiguration);
 
-			var trySendJobProgressToManagerTimerFake = new TrySendJobProgressToManagerTimerFake(nodeConfiguration,
-																								new FakeHttpSender(),
-																								1000);
+			builder.RegisterType<TrySendJobProgressToManagerTimerFake>().WithParameter("interval", 1000d).As<TrySendJobProgressToManagerTimer>();
+			builder.RegisterType<SendJobDoneTimerFake>().As<TrySendStatusToManagerTimer>();
+			builder.RegisterType<SendJobCanceledTimerFake>().As<TrySendJobCanceledToManagerTimer>();
+			builder.RegisterType<SendJobFaultedTimerFake>().As<TrySendJobFaultedToManagerTimer>();
+			builder.RegisterType<NodeStartupNotificationToManagerFake>().As<TrySendNodeStartUpNotificationToManagerTimer>();
+			builder.RegisterType<PingToManagerFake>().As<Timer>();
 
-			builder.RegisterInstance(trySendJobProgressToManagerTimerFake);
-
-			builder.RegisterInstance(new SendJobDoneTimerFake(nodeConfiguration,
-			                                                  CallBackUriTemplateFake,
-															  trySendJobProgressToManagerTimerFake,
-															  new FakeHttpSender()));
-
-			builder.RegisterInstance(new SendJobCanceledTimerFake(nodeConfiguration,
-			                                                      CallBackUriTemplateFake,
-																  trySendJobProgressToManagerTimerFake,
-																  new FakeHttpSender()));
-
-			builder.RegisterInstance(new SendJobFaultedTimerFake(nodeConfiguration,
-			                                                     CallBackUriTemplateFake,
-																 trySendJobProgressToManagerTimerFake,
-																 new FakeHttpSender()));
-
-			builder.Register(context => new NodeStartupNotificationToManagerFake(nodeConfiguration,
-																			  CallBackUriTemplateFake,
-																			  new FakeHttpSender()));
-
-
-			// Register IWorkerWrapper.
-			builder.Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
-			                                                        nodeConfiguration,
-			                                                        c.Resolve<NodeStartupNotificationToManagerFake>(),
-			                                                        new PingToManagerFake(),
-			                                                        c.Resolve<SendJobDoneTimerFake>(),
-			                                                        c.Resolve<SendJobCanceledTimerFake>(),
-			                                                        c.Resolve<SendJobFaultedTimerFake>(),
-																	c.Resolve<TrySendJobProgressToManagerTimerFake>()))
-				.SingleInstance();
+			builder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().SingleInstance();
 		}
 
 		private bool IsHandler(Type arg)

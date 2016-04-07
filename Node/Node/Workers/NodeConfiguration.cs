@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Workers
 {
-	public class NodeConfiguration : INodeConfiguration
+	public class NodeConfiguration
 	{
 		public NodeConfiguration(Uri baseAddress,
 		                         Uri managerLocation,

@@ -1,29 +1,24 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
+using Stardust.Node.Workers;
 
 namespace NodeTest.Fakes.Timers
 {
-	public class SendJobDoneTimerFake : TrySendStatusToManagerTimer
+	public class SendJobDoneTimerFake : TrySendJobDoneStatusToManagerTimer
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobDoneTimerFake));
-
 		public int NumberOfTimeCalled;
 
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-		public SendJobDoneTimerFake(INodeConfiguration nodeConfiguration,
-		                            Uri callbackTemplateUri,
+		public SendJobDoneTimerFake(NodeConfiguration nodeConfiguration,
 									TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
 									IHttpSender httpSender,
 									double interval = 1000) : base(nodeConfiguration,
-		                                                           callbackTemplateUri,
 																   sendJobProgressToManagerTimer,
 																   httpSender,
 																   interval)

@@ -1,12 +1,13 @@
 ﻿using System;
 using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Extensions
 {
 	public static class NodeConfigurationExtensions
 	{
-		public static void ThrowArgumentNullException(this INodeConfiguration nodeConfiguration)
+		public static void ThrowArgumentNullException(this NodeConfiguration nodeConfiguration)
 		{
 			if (nodeConfiguration == null)
 			{
@@ -14,7 +15,7 @@ namespace Stardust.Node.Extensions
 			}
 		}
 
-		public static string CreateWhoIAm(this INodeConfiguration nodeConfiguration,
+		public static string CreateWhoIAm(this NodeConfiguration nodeConfiguration,
 		                                  string machineName)
 		{
 			var nodeName = "Missing Node Name";
@@ -33,7 +34,7 @@ namespace Stardust.Node.Extensions
 			return "[" + nodeName.ToUpper() + ", " + machine.ToUpper() + "]";
 		}
 
-		public static Uri GetManagerJobDoneUri(this INodeConfiguration nodeConfiguration,
+		public static Uri GetManagerJobDoneUri(this NodeConfiguration nodeConfiguration,
 		                                       Guid guid)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
@@ -43,7 +44,7 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneUri(guid);
 		}
 
-		public static Uri GetManagerNodeHasBeenInitializedUri(this INodeConfiguration nodeConfiguration)
+		public static Uri GetManagerNodeHasBeenInitializedUri(this NodeConfiguration nodeConfiguration)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 
@@ -55,7 +56,7 @@ namespace Stardust.Node.Extensions
 			return ret;
 		}
 
-		public static Uri GetManagerNodeHeartbeatUri(this INodeConfiguration nodeConfiguration)
+		public static Uri GetManagerNodeHeartbeatUri(this NodeConfiguration nodeConfiguration)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 
@@ -64,7 +65,7 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetHeartbeatTemplateUri();
 		}
 
-		public static Uri GetManagerJobHasBeenCanceledTemplateUri(this INodeConfiguration nodeConfiguration)
+		public static Uri GetManagerJobHasBeenCanceledTemplateUri(this NodeConfiguration nodeConfiguration)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 
@@ -73,7 +74,7 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledTemplateUri();
 		}
 
-		public static Uri GetManagerJobHasBeenCanceledUri(this INodeConfiguration nodeConfiguration,
+		public static Uri GetManagerJobHasBeenCanceledUri(this NodeConfiguration nodeConfiguration,
 		                                                  Guid guid)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
@@ -83,7 +84,7 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri(guid);
 		}
 
-		public static Uri GetManagerJobHasFaileTemplatedUri(this INodeConfiguration nodeConfiguration)
+		public static Uri GetManagerJobHasFaileTemplatedUri(this NodeConfiguration nodeConfiguration)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 
@@ -92,7 +93,7 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasFailedTemplateUri();
 		}
 
-		public static Uri GetManagerJobDoneTemplateUri(this INodeConfiguration nodeConfiguration)
+		public static Uri GetManagerJobDoneTemplateUri(this NodeConfiguration nodeConfiguration)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 
@@ -101,7 +102,7 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneTemplateUri();
 		}
 
-		public static Uri GetManagerLocationUri(this INodeConfiguration nodeConfiguration)
+		public static Uri GetManagerLocationUri(this NodeConfiguration nodeConfiguration)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
 

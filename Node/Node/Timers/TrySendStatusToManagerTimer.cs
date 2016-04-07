@@ -8,6 +8,7 @@ using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Log4Net.Extensions;
+using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -17,7 +18,7 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (TrySendStatusToManagerTimer));
 
-		public TrySendStatusToManagerTimer(INodeConfiguration nodeConfiguration,
+		public TrySendStatusToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
 		                                   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
 		                                   IHttpSender httpSender,
@@ -33,8 +34,6 @@ namespace Stardust.Node.Timers
 				throw new ArgumentNullException("httpSender");
 			}
 
-
-			// Assign values.
 			CancellationTokenSource = new CancellationTokenSource();
 
 			NodeConfiguration = nodeConfiguration;
@@ -57,7 +56,7 @@ namespace Stardust.Node.Timers
 
 		public JobToDo JobToDo { get; set; }
 
-		public INodeConfiguration NodeConfiguration { get; private set; }
+		public NodeConfiguration NodeConfiguration { get; private set; }
 
 		public Uri CallbackTemplateUri { get; set; }
 		public TrySendJobProgressToManagerTimer SendJobProgressToManagerTimer { get; set; }

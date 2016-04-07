@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Stardust.Node.API;
 using Stardust.Node.Workers;
 
 namespace NodeTest
@@ -11,11 +10,11 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentIsNull()
 		{
-			var nodeConfiguration = new NodeConfiguration(null,
-			                                              null,
-			                                              null,
-			                                              null,
-			                                              pingToManagerSeconds: 10);
+			new NodeConfiguration(null,
+				null,
+				null,
+				null,
+				pingToManagerSeconds: 10);
 		}
 	}
 }

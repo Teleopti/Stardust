@@ -10,6 +10,7 @@ using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Log4Net.Extensions;
+using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -30,7 +31,7 @@ namespace Stardust.Node.Timers
 			}
 		}
 
-		public TrySendJobProgressToManagerTimer(INodeConfiguration nodeConfiguration,
+		public TrySendJobProgressToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                        IHttpSender httpSender,
 		                                        double interval) : base(interval)
 		{
@@ -71,7 +72,7 @@ namespace Stardust.Node.Timers
 
 		public Guid JobId { get; set; }
 
-		private INodeConfiguration NodeConfiguration { get; set; }
+		private NodeConfiguration NodeConfiguration { get; set; }
 
 		private IHttpSender HttpSender { get; set; }
 
@@ -97,9 +98,7 @@ namespace Stardust.Node.Timers
 				{
 					ISendJobProgressModel model;
 
-					var tryRemove =
-						JobProgressModels.TryRemove(progress.Key,
-						                            out model);
+					JobProgressModels.TryRemove(progress.Key, out model);
 				}
 			}
 

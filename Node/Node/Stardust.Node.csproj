@@ -126,7 +126,6 @@
     <Compile Include="Interfaces\IInvokeHandler.cs" />
     <Compile Include="Interfaces\IJobProgress.cs" />
     <Compile Include="Interfaces\IJobToDo.cs" />
-    <Compile Include="Interfaces\INodeConfiguration.cs" />
     <Compile Include="Interfaces\INodeStarter.cs" />
     <Compile Include="Interfaces\IWorkerWrapper.cs" />
     <Compile Include="Entities\JobToDo.cs" />

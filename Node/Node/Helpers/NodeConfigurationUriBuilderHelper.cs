@@ -1,11 +1,11 @@
 ﻿using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Helpers
 {
 	public class NodeConfigurationUriBuilderHelper
 	{
-		public NodeConfigurationUriBuilderHelper(INodeConfiguration configuration)
+		public NodeConfigurationUriBuilderHelper(NodeConfiguration configuration)
 		{
 			configuration.ThrowArgumentNullException();
 

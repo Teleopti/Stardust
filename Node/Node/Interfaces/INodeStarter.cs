@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Stardust.Node.Workers;
 
 namespace Stardust.Node.Interfaces
 {
@@ -6,6 +7,6 @@ namespace Stardust.Node.Interfaces
 	{
 		void Stop();
 
-		void Start(INodeConfiguration nodeConfiguration, IContainer container);
+		void Start(NodeConfiguration nodeConfiguration, IContainer container);
 	}
 }

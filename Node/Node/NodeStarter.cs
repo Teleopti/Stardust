@@ -32,14 +32,13 @@ namespace Stardust.Node
 			QuitEvent.Set();
 		}
 
-		public void Start(INodeConfiguration nodeConfiguration,
+		public void Start(NodeConfiguration nodeConfiguration,
 		                  IContainer container)
 		{
 			var nodeAddress = nodeConfiguration.BaseAddress.Scheme +
 			                  "://+:" +
 			                  nodeConfiguration.BaseAddress.Port + "/";
 
-			// Start OWIN host 
 			using (WebApp.Start(nodeAddress,
 			                    appBuilder =>
 			                    {
@@ -47,55 +46,22 @@ namespace Stardust.Node
 
 				                    containerBuilder.RegisterType<Log4NetInterceptor>().Named<IInterceptor>("log-calls");
 
-				                    containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
+				                    containerBuilder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 
-				                    containerBuilder.RegisterType<InvokeHandler>()
-					                    .SingleInstance().EnableClassInterceptors();
-
-				                    containerBuilder.RegisterType<NodeController>()
-					                    .SingleInstance();
+				                    containerBuilder.RegisterType<InvokeHandler>().SingleInstance().EnableClassInterceptors();
+				                    containerBuilder.RegisterType<NodeController>().SingleInstance();
 
 				                    containerBuilder.RegisterApiControllers(typeof (NodeController).Assembly)
 					                    .EnableClassInterceptors();
 
 				                    containerBuilder.RegisterInstance(nodeConfiguration);
 
-				                    containerBuilder
-					                    .Register(context => new TrySendJobProgressToManagerTimer(nodeConfiguration,
-					                                                                              context.Resolve<IHttpSender>(),
-					                                                                              5000))
-					                    .SingleInstance();
-
-
-				                    // Register IWorkerWrapper.
-				                    containerBuilder
-					                    .Register<IWorkerWrapper>(c => new WorkerWrapper(c.Resolve<InvokeHandler>(),
-					                                                                     nodeConfiguration,
-					                                                                     new TrySendNodeStartUpNotificationToManagerTimer
-						                                                                     (nodeConfiguration,
-						                                                                      nodeConfiguration
-							                                                                      .GetManagerNodeHasBeenInitializedUri(),
-						                                                                      c.Resolve<IHttpSender>()),
-					                                                                     new PingToManagerTimer(nodeConfiguration,
-					                                                                                            nodeConfiguration
-						                                                                                            .GetManagerNodeHeartbeatUri
-						                                                                                            (),
-					                                                                                            c.Resolve<IHttpSender>()),
-					                                                                     new TrySendJobDoneStatusToManagerTimer
-						                                                                     (nodeConfiguration,
-						                                                                      c.Resolve<TrySendJobProgressToManagerTimer>(),
-						                                                                      c.Resolve<IHttpSender>()),
-					                                                                     new TrySendJobCanceledToManagerTimer
-						                                                                     (nodeConfiguration,
-						                                                                      c.Resolve<TrySendJobProgressToManagerTimer>(),
-						                                                                      c.Resolve<IHttpSender>()),
-					                                                                     new TrySendJobFaultedToManagerTimer
-						                                                                     (nodeConfiguration,
-						                                                                      c.Resolve<TrySendJobProgressToManagerTimer>(),
-						                                                                      c.Resolve<IHttpSender>()),
-					                                                                     c.Resolve<TrySendJobProgressToManagerTimer>()))
-					                    .SingleInstance();
-
+									containerBuilder.RegisterType<TrySendJobProgressToManagerTimer>().WithParameter("interval", 5000d).SingleInstance();
+									containerBuilder.RegisterType<TrySendNodeStartUpNotificationToManagerTimer>().SingleInstance();
+									containerBuilder.RegisterType<TrySendJobDoneStatusToManagerTimer>().SingleInstance();
+									containerBuilder.RegisterType<PingToManagerTimer>().As<Timer>().SingleInstance();
+									containerBuilder.RegisterType<TrySendJobFaultedToManagerTimer>().SingleInstance();
+				                    containerBuilder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().SingleInstance();
 
 				                    containerBuilder.Update(container);
 

@@ -3,20 +3,18 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
+using Stardust.Node.Workers;
 
 namespace NodeTest.Fakes.Timers
 {
 	public class SendJobDoneWithEventTriggerTimerFake : TrySendStatusToManagerTimer
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (SendJobDoneWithEventTriggerTimerFake));
-
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-		public SendJobDoneWithEventTriggerTimerFake(INodeConfiguration nodeConfiguration,
+		public SendJobDoneWithEventTriggerTimerFake(NodeConfiguration nodeConfiguration,
 		                                            Uri callbackTemplateUri,
 		                                            TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
 		                                            IHttpSender httpSender) : base(nodeConfiguration,

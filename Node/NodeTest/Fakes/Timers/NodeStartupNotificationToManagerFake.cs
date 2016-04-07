@@ -3,24 +3,20 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
+using Stardust.Node.Workers;
 
 namespace NodeTest.Fakes.Timers
 {
 	public class NodeStartupNotificationToManagerFake : TrySendNodeStartUpNotificationToManagerTimer
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStartupNotificationToManagerFake));
-
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-		public NodeStartupNotificationToManagerFake(INodeConfiguration nodeConfiguration,
-		                                            Uri callbackToManagerTemplateUri,
+		public NodeStartupNotificationToManagerFake(NodeConfiguration nodeConfiguration,
 													IHttpSender httpSender,
 		                                            double interval = 1000,
 		                                            bool autoReset = false) : base(nodeConfiguration,
-		                                                                           callbackToManagerTemplateUri,
 																				   httpSender,
 																				   interval,
 		                                                                           autoReset)

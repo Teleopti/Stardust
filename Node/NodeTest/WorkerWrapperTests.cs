@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Configuration;
-using System.IO;
 using System.Reflection;
-using System.Threading;
-using log4net;
-using log4net.Config;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
 using NodeTest.Fakes.InvokeHandlers;
@@ -13,7 +9,6 @@ using NodeTest.JobHandlers;
 using NUnit.Framework;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
 namespace NodeTest
@@ -46,7 +41,6 @@ namespace NodeTest
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
 			_nodeStartupNotification = new NodeStartupNotificationToManagerFake(_nodeConfigurationFake,
-			                                                                    CallBackUriTemplateFake,
 																				new FakeHttpSender());
 
 			_trySendJobProgressToManagerTimerFake =
@@ -57,17 +51,14 @@ namespace NodeTest
 			_pingToManagerFake = new PingToManagerFake();
 
 			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
-			                                             CallBackUriTemplateFake,
 														 _trySendJobProgressToManagerTimerFake,
 														 new FakeHttpSender());
 
 			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
-			                                                     CallBackUriTemplateFake,
 																 _trySendJobProgressToManagerTimerFake,
 																 new FakeHttpSender());
 
 			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
-			                                                   CallBackUriTemplateFake,
 															   _trySendJobProgressToManagerTimerFake,
 															   new FakeHttpSender());
 
@@ -86,30 +77,17 @@ namespace NodeTest
 
 			CallBackUriTemplateFake = managerLocation;
 
-			_nodeConfigurationFake = new NodeConfigurationFake(baseAddress,
+			_nodeConfigurationFake = new NodeConfiguration(baseAddress,
 			                                                   managerLocation,
 			                                                   handlerAssembly,
 			                                                   nodeName,
 															   pingToManagerSeconds);
-
-#if DEBUG
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-#endif
-		}
-
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			Thread.Sleep(TimeSpan.FromSeconds(5));
-			Logger.DebugWithLineNumber("Start TestFixtureTearDown.");
 		}
 
 		private Uri CallBackUriTemplateFake { get; set; }
-		private NodeConfigurationFake _nodeConfigurationFake;
+		private NodeConfiguration _nodeConfigurationFake;
 		private IWorkerWrapper _workerWrapper;
 		private JobToDo _jobDefinition;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapperTests));
 		private PingToManagerFake _pingToManagerFake;
 		private NodeStartupNotificationToManagerFake _nodeStartupNotification;
 		private SendJobDoneTimerFake _sendJobDoneTimer;
@@ -120,8 +98,6 @@ namespace NodeTest
 		[Test]
 		public void ShouldBeAbleToCatchExceptionsFromJob() //faulting job
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			_workerWrapper = new WorkerWrapper(new ThrowExceptionInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
@@ -137,8 +113,6 @@ namespace NodeTest
 		[Test]
 		public void ShouldBeAbleToStartJob()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
@@ -154,8 +128,6 @@ namespace NodeTest
 		[Test]
 		public void ShouldBeAbleToTryCancelJob()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
@@ -174,8 +146,6 @@ namespace NodeTest
 		[Test]
 		public void ShouldNotThrowWhenCancellingAlreadyCancelledJob()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			_workerWrapper = new WorkerWrapper(new LongRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
@@ -197,80 +167,36 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenInvokeHandlerIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
-			IWorkerWrapper workerWrapper = new WorkerWrapper(null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-															 null);
+			new WorkerWrapper(null, null, null, null, null, null, null, null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenJobCanceledTimerIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
-			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-			                                                 _nodeConfigurationFake,
-			                                                 _nodeStartupNotification,
-			                                                 _pingToManagerFake,
-			                                                 _sendJobDoneTimer,
-			                                                 null,
-			                                                 null,
-															 null);
+			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, _nodeStartupNotification,  _pingToManagerFake, _sendJobDoneTimer, null, null, null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenJobFaultedTimerIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
-			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-			                                                 _nodeConfigurationFake,
-			                                                 _nodeStartupNotification,
-			                                                 _pingToManagerFake,
-			                                                 _sendJobDoneTimer,
-			                                                 _sendJobCanceledTimer,
-			                                                 null,
-															 null);
+			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, _nodeStartupNotification, _pingToManagerFake,
+				_sendJobDoneTimer, _sendJobCanceledTimer, null, null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenJodDoneTimerIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
-			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-			                                                 _nodeConfigurationFake,
-			                                                 _nodeStartupNotification,
-			                                                 _pingToManagerFake,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-															 null);
+			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, _nodeStartupNotification, _pingToManagerFake, null, null, null, null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenNodeConfigurationIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
-			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-															 null);
+			new WorkerWrapper(new InvokeHandlerFake(), null, null, null,  null, null, null, null);
 		}
 
 
@@ -278,43 +204,30 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenNodeStartupNotificationToManaagerTimerIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
-			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-			                                                 _nodeConfigurationFake,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-															 null);
+			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, null, null, null, null, null, null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowArgumentNullExceptionWhenPingToManagerTimerIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			var postHttpRequestFake = new FakeHttpSender();
 
-			IWorkerWrapper workerWrapper = new WorkerWrapper(new InvokeHandlerFake(),
-			                                                 _nodeConfigurationFake,
-			                                                 _nodeStartupNotification,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-			                                                 null,
-															 new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
-																									   postHttpRequestFake,
-																									   5000));
+			new WorkerWrapper(new InvokeHandlerFake(),
+				_nodeConfigurationFake,
+				_nodeStartupNotification,
+				null,
+				null,
+				null,
+				null,
+				new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
+					postHttpRequestFake,
+					5000));
 		}
 
 		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIdIsEmptyGuid()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
@@ -332,8 +245,6 @@ namespace NodeTest
 		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIsEmpty()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,
@@ -351,8 +262,6 @@ namespace NodeTest
 		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIsNull()
 		{
-			Logger.DebugWithLineNumber("Starting test...");
-
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
 			                                   _nodeStartupNotification,

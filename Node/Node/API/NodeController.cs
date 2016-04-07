@@ -23,13 +23,13 @@ namespace Stardust.Node.API
 		private readonly IWorkerWrapper _workerWrapper;
 
 		public NodeController(IWorkerWrapper workerWrapper,
-		                      INodeConfiguration nodeConfiguration)
+		                      NodeConfiguration nodeConfiguration)
 		{
 			_workerWrapper = workerWrapper;
 			NodeConfiguration = nodeConfiguration;
 		}
 
-		private INodeConfiguration NodeConfiguration { get; set; }
+		private NodeConfiguration NodeConfiguration { get; set; }
 
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult StartJob(JobToDo jobToDo)

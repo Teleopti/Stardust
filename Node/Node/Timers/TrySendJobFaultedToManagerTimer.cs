@@ -5,9 +5,7 @@ using System.Threading.Tasks;
 using log4net;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
@@ -17,7 +15,7 @@ namespace Stardust.Node.Timers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobFaultedToManagerTimer));
 
-		public TrySendJobFaultedToManagerTimer(INodeConfiguration nodeConfiguration,
+		public TrySendJobFaultedToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                       TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
 											   IHttpSender httpSender,
 		                                       double interval = 500) : base(nodeConfiguration,

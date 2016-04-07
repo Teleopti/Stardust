@@ -12,7 +12,7 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenNodeConfigurationIsNull()
 		{
-			var nodeConfigurationUriBuilderHelper = new NodeConfigurationUriBuilderHelper(null);
+			new NodeConfigurationUriBuilderHelper(null);
 		}
 	}
 }

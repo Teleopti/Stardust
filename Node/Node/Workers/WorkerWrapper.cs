@@ -34,7 +34,7 @@ namespace Stardust.Node.Workers
 		private readonly object _startJobLock = new object();
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
-		                     INodeConfiguration nodeConfiguration,
+		                     NodeConfiguration nodeConfiguration,
 		                     TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
 		                     Timer pingToManagerTimer,
 		                     TrySendStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
@@ -81,7 +81,7 @@ namespace Stardust.Node.Workers
 		private TrySendJobProgressToManagerTimer TrySendJobProgressToManagerTimer { get; set; }
 
 		private TrySendStatusToManagerTimer TrySendStatusToManagerTimer { get; set; }
-		private INodeConfiguration NodeConfiguration { get; set; }
+		private NodeConfiguration NodeConfiguration { get; set; }
 		private JobToDo CurrentMessageToProcess { get; set; }
 		private TrySendNodeStartUpNotificationToManagerTimer NodeStartUpNotificationToManagerTimer { get; set; }
 
@@ -275,12 +275,16 @@ namespace Stardust.Node.Workers
 				Logger.DebugWithLineNumber(WhoamI +
 				                           " : Cancel job method called. Will call cancel on canellation token source.");
 
-				CancellationTokenSource.Cancel();
-
-				if (CancellationTokenSource.IsCancellationRequested)
+				var token = CancellationTokenSource;
+				if (token != null)
 				{
-					Logger.DebugWithLineNumber(WhoamI +
-					                           " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+					token.Cancel();
+
+					if (token.IsCancellationRequested)
+					{
+						Logger.DebugWithLineNumber(WhoamI +
+												   " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+					}
 				}
 			}
 			else
