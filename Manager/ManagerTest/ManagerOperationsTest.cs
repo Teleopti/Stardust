@@ -29,6 +29,8 @@ namespace ManagerTest
 		public INodeManager NodeManager;
 		public ManagerConfiguration ManagerConfiguration;
 		public FakeHttpSender HttpSender;
+		public Validator Validator;
+
 		private DatabaseHelper _databaseHelper;
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
@@ -250,10 +252,7 @@ namespace ManagerTest
 				Id = jobId
 			};
 
-			var validator = new Validator();
-
-			var response =
-				validator.ValidateObject(job, new HttpRequestMessage());
+			var response = Validator.ValidateObject(job, new HttpRequestMessage());
 
 			if (response is BadRequestWithReasonPhrase)
 			{
@@ -289,10 +288,7 @@ namespace ManagerTest
 				Id = jobId
 			};
 
-			var validator = new Validator();
-
-			var response =
-				validator.ValidateObject(job, new HttpRequestMessage());
+			var response = Validator.ValidateObject(job, new HttpRequestMessage());
 
 			if (response is BadRequestWithReasonPhrase)
 			{

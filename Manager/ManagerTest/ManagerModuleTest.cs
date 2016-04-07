@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Validations;
 
 namespace ManagerTest
 {
@@ -20,6 +21,7 @@ namespace ManagerTest
 
 			_containerBuilder.RegisterType<NodeManager>().As<INodeManager>();
 			_containerBuilder.RegisterType<JobManager>().SingleInstance();
+			_containerBuilder.RegisterType<Validator>().SingleInstance();
 			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
 			_containerBuilder.RegisterType<ManagerController>();
 

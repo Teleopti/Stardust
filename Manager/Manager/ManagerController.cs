@@ -19,22 +19,22 @@ namespace Stardust.Manager
 		private const string JobIdIsInvalid = "Job Id is invalid.";
 
 		private readonly JobManager _jobManager;
+		private readonly Validator _validator;
 
 		private readonly INodeManager _nodeManager;
 
-		public ManagerController(INodeManager nodeManager,
-		                         JobManager jobManager)
+		public ManagerController(INodeManager nodeManager, JobManager jobManager, Validator validator)
 		{
 			_nodeManager = nodeManager;
 			_jobManager = jobManager;
+			_validator = validator;
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
 		{
 			// Validate.
-			var isValidRequest =
-				new Validator().ValidateObject(job, Request);
+			var isValidRequest = _validator.ValidateObject(job, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
@@ -209,7 +209,7 @@ namespace Stardust.Manager
 		{
 			// Validate.
 			var isValidRequest =
-				new Validator().ValidateObject(jobFailedModel, Request);
+				_validator.ValidateObject(jobFailedModel, Request);
 
 			if (!(isValidRequest is OkResult))
 			{
@@ -270,8 +270,7 @@ namespace Stardust.Manager
 		public IHttpActionResult JobProgress([FromBody] JobProgressModel model)
 		{
 			// Validate.
-			var isValidRequest =
-				new Validator().ValidateObject(model, Request);
+			var isValidRequest = _validator.ValidateObject(model, Request);
 
 			if (!(isValidRequest is OkResult))
 			{

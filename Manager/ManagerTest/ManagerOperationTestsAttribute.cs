@@ -4,6 +4,7 @@ using Autofac;
 using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Validations;
 
 namespace ManagerTest
 {
@@ -12,6 +13,7 @@ namespace ManagerTest
 		protected override void SetUp(ContainerBuilder builder)
 		{
 			builder.RegisterType<ManagerConfiguration>().SingleInstance();
+			builder.RegisterType<Validator>().SingleInstance();
 
 			builder.RegisterType<NodeManager>().As<INodeManager>().SingleInstance().AsSelf();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
@@ -26,6 +28,5 @@ namespace ManagerTest
 
 			builder.RegisterType<JobManager>().SingleInstance();
 		}
-		
 	}
 }

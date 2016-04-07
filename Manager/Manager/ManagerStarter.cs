@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Validations;
 
 namespace Stardust.Manager
 {
@@ -16,6 +17,7 @@ namespace Stardust.Manager
 				.As<INodeManager>();
 
 			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<Validator>().SingleInstance();
 
 			builder.RegisterType<HttpSender>().As<IHttpSender>();
 
