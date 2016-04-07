@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_now = now;
 		}
 
-		public void AdditionalFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AdditionalFlush(IUnitOfWork unitOfWork, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 		}
 

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_unitOfWork = unitOfWork;
 		}
 
-		public void AdditionalFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AdditionalFlush(IUnitOfWork unitOfWork, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 
 			// this is only because there are nested uows somewhere
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_sendPushMessageWhenRootAlteredService.SendPushMessages(
 				modifiedRoots,
 				new PushMessagePersister(
-					new PushMessageRepository(_unitOfWork.Current()),
-					new PushMessageDialogueRepository(_unitOfWork.Current()),
+					new PushMessageRepository(unitOfWork),
+					new PushMessageDialogueRepository(unitOfWork),
 					new CreatePushMessageDialoguesService()
 					));
 		}

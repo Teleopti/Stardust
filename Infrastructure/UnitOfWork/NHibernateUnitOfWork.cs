@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Interceptor.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				Interceptor.Iteration = InterceptorIteration.UpdateRoots;
-				_persistCallbacks.Current().ForEach(d => d.AdditionalFlush(Interceptor.ModifiedRoots));
+				_persistCallbacks.Current().ForEach(d => d.AdditionalFlush(this, Interceptor.ModifiedRoots));
 				Session.Flush();
 			}
 			catch (StaleStateException ex)
