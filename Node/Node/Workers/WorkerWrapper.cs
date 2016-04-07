@@ -37,9 +37,9 @@ namespace Stardust.Node.Workers
 		                     NodeConfiguration nodeConfiguration,
 		                     TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
 		                     Timer pingToManagerTimer,
-		                     TrySendStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
-		                     TrySendStatusToManagerTimer trySendJobCanceledStatusToManagerTimer,
-		                     TrySendStatusToManagerTimer trySendJobFaultedStatusToManagerTimer,
+		                     TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
+		                     TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
+		                     TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
 		                     TrySendJobProgressToManagerTimer trySendJobProgressToManagerTimer)
 		{
 			invokeHandler.ThrowArgumentNullExceptionWhenNull();

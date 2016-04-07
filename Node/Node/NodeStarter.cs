@@ -48,7 +48,7 @@ namespace Stardust.Node
 
 				                    containerBuilder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 
-				                    containerBuilder.RegisterType<InvokeHandler>().SingleInstance().EnableClassInterceptors();
+				                    containerBuilder.RegisterType<InvokeHandler>().As<IInvokeHandler>().SingleInstance().EnableClassInterceptors();
 				                    containerBuilder.RegisterType<NodeController>().SingleInstance();
 
 				                    containerBuilder.RegisterApiControllers(typeof (NodeController).Assembly)
@@ -59,8 +59,9 @@ namespace Stardust.Node
 									containerBuilder.RegisterType<TrySendJobProgressToManagerTimer>().WithParameter("interval", 5000d).SingleInstance();
 									containerBuilder.RegisterType<TrySendNodeStartUpNotificationToManagerTimer>().SingleInstance();
 									containerBuilder.RegisterType<TrySendJobDoneStatusToManagerTimer>().SingleInstance();
-									containerBuilder.RegisterType<PingToManagerTimer>().As<Timer>().SingleInstance();
+									containerBuilder.RegisterType<PingToManagerTimer>().As<System.Timers.Timer>().SingleInstance();
 									containerBuilder.RegisterType<TrySendJobFaultedToManagerTimer>().SingleInstance();
+									containerBuilder.RegisterType<TrySendJobCanceledToManagerTimer>().SingleInstance();
 				                    containerBuilder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().SingleInstance();
 
 				                    containerBuilder.Update(container);
