@@ -89,10 +89,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				if (modifiedAssignment != null)
 				{
 					var toScheduleDay = schedulerScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
+					var fromScheduleDay = modifiedScheduleDictionary[modifiedAssignment.Person].ScheduledDay(modifiedAssignment.Date);
 					var toAssignment = toScheduleDay.PersonAssignment(true);
 					toAssignment.FillWithDataFrom(modifiedAssignment);
 					schedulerScheduleDictionary.Modify(ScheduleModifier.Scheduler, toScheduleDay, NewBusinessRuleCollection.Minimum(),
-						new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(Fetch().General.ScheduleTag));
+						new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(fromScheduleDay.ScheduleTag()));
 				}
 			}
 		}
@@ -126,7 +127,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
 					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
 
-					toDic.Modify(toScheduleDay);
+					toDic.Modify(ScheduleModifier.Scheduler, toScheduleDay, NewBusinessRuleCollection.Minimum(),
+							new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(fromScheduleDay.ScheduleTag()));
 				}
 			}
 		}
