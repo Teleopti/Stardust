@@ -176,11 +176,6 @@
 		width: 2%;
 	}
 
-	.table thead tr>th.schedule-column{
-		padding-left:0;
-		padding-right:0;	
-	}
-
 	.timepicker {
 		height: 48px;
 
@@ -202,9 +197,12 @@
 	.table {
 		thead, tbody, tfoot {
 			tr > th, td {
-				padding: 5px 8px 5px 3px;
+				padding: 5px 0 5px 0;
 				border-bottom: rgba(204, 204, 204, 0.99) 1px solid;
 			}
+            .person-name{
+                padding-left:5px;
+            }
 		}
 	}
 
