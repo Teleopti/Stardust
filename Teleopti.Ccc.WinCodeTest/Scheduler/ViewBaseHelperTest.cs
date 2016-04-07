@@ -195,7 +195,48 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             StringAssert.Contains("Morgon", ViewBaseHelper.GetToolTipAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001,1,1))));
         }
 
-        [Test]
+		[Test]
+	    public void ShouldNotIncludePersonalActivityOutsideProjectionInToolTipAssignment()
+		{
+			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0));
+			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0));
+			_param = new ScheduleParameters(_scenario, _agent, new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
+			_scheduleRange = new ScheduleRange(_dic, _param);
+
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdfsdf"),_agent, dateTimePeriod, ShiftCategoryFactory.CreateShiftCategory("SC"), _scenario);
+			ass.AddPersonalActivity(ActivityFactory.CreateActivity("personal"), dateTimePeriodPersonal);
+			_scheduleRange.Add(ass);
+			_underlyingDictionary.Clear();
+			_underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
+
+			var result =  ViewBaseHelper.GetToolTipAssignments(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)));
+			var expectedStart = "SC  " + dateTimePeriod.StartDateTime.ToShortTimeString() + " - " + dateTimePeriod.EndDateTime.ToShortTimeString();
+			Assert.IsTrue(result.StartsWith(expectedStart));
+		}
+
+		[Test]
+		public void ShouldNotIncludePersonalActivityOutsideProjectionInPeriodTextWeekView()
+		{
+			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0));
+			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0));
+			_param = new ScheduleParameters(_scenario, _agent, new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
+			_scheduleRange = new ScheduleRange(_dic, _param);
+
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdfsdf"), _agent, dateTimePeriod, ShiftCategoryFactory.CreateShiftCategory("SC"), _scenario);
+			ass.AddPersonalActivity(ActivityFactory.CreateActivity("personal"), dateTimePeriodPersonal);
+			_scheduleRange.Add(ass);
+			_underlyingDictionary.Clear();
+			_underlyingDictionary.Add(_scheduleRange.Person, _scheduleRange);
+
+
+			var infoText = ViewBaseHelper.GetInfoTextWeekView(_scheduleRange.ScheduledDay(new DateOnly(2001, 1, 1)), SchedulePartView.MainShift);
+			var periodText = infoText[1];
+			var expectedStart = dateTimePeriod.StartDateTime.ToShortTimeString() + " - " + dateTimePeriod.EndDateTime.ToShortTimeString();
+
+			Assert.IsTrue(periodText.StartsWith(expectedStart));
+		}
+
+		[Test]
         public void VerifyToolTipAbsences()
         {
             IPersonAbsence abs3 = new PersonAbsence(_agent, _scenario, new AbsenceLayer(_absence, new DateTimePeriod(2006, 1, 1, 2006, 1, 3)));

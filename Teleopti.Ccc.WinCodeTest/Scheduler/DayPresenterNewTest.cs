@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -94,6 +95,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ISchedulerStateHolder schedulerState1 = mocks.StrictMock<ISchedulerStateHolder>();
             DateTimePeriod assPeriod2 = new DateTimePeriod(new DateTime(2011, 1, 1, 8, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 1, 1, 16, 0, 0, 0, DateTimeKind.Utc));
             IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, assPeriod2);
+	        IProjectionService projectionService = mocks.StrictMock<IProjectionService>();
+			IVisualLayerCollection visualLayerCollection = new VisualLayerCollection(person, new List<IVisualLayer>(), null);
 
             using (mocks.Record())
             {
@@ -117,6 +120,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(scheduleDay1.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(scheduleDay1.BusinessRuleResponseCollection).Return(new List<IBusinessRuleResponse>());
                 Expect.Call(scheduleDay1.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
+	            Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService);
+	            Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
             }
 
             using (mocks.Playback())

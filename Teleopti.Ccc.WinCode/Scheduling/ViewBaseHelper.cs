@@ -139,8 +139,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public static string GetToolTipAssignments(IScheduleDay scheduleDay)
 		{
 			var sb = new StringBuilder();
-
-			IPersonAssignment pa = scheduleDay.PersonAssignment();
+			var pa = scheduleDay.PersonAssignment();
+				
 			if (pa != null)
 			{
 				if (sb.Length > 0)
@@ -148,7 +148,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (pa.ShiftCategory != null)
 					sb.Append(pa.ShiftCategory.Description.Name); //name
 				sb.Append("  ");
-				sb.Append(ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone)); //time
+
+				var projectionPeriod = scheduleDay.ProjectionService().CreateProjection().Period();
+
+				if (projectionPeriod.HasValue)
+				{
+					sb.Append(ToLocalStartEndTimeString(projectionPeriod.Value, TimeZoneGuard.Instance.TimeZone)); //time
+				}
 
 				foreach (var layer in pa.PersonalActivities())
 				{
@@ -591,8 +597,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			if (significantPart == SchedulePartView.MainShift)
 			{
+				var period = schedulePart.ProjectionService().CreateProjection().Period();
 				infoText = pa.ShiftCategory.Description.Name;
-				periodText = ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone);
+				if (period.HasValue)
+				{
+					periodText = ToLocalStartEndTimeString(period.Value, TimeZoneGuard.Instance.TimeZone);
+				}
 			}
 
 			if (!string.IsNullOrEmpty(infoText))
