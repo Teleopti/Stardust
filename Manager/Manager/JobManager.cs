@@ -18,19 +18,19 @@ namespace Stardust.Manager
 
 		private readonly IHttpSender _httpSender;
 		private readonly IJobRepository _jobRepository;
-		private readonly IManagerConfiguration _managerConfiguration;
+		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  IHttpSender httpSender,
-		                  IManagerConfiguration managerConfiguration)
+		                  ManagerConfiguration managerConfiguration)
 		{
 			if (managerConfiguration.AllowedNodeDownTimeSeconds <= 0)
 			{
 				this.Log().ErrorWithLineNumber("AllowedNodeDownTimeSeconds must be greater than zero!");
 
-				throw new ArgumentOutOfRangeException();
+				throw new ArgumentOutOfRangeException("AllowedNodeDownTimeSeconds");
 			}
 
 			_jobRepository = jobRepository;

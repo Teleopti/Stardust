@@ -11,8 +11,7 @@ namespace ManagerTest
 	{
 		protected override void SetUp(ContainerBuilder builder)
 		{
-			FakeManagerConfiguration fakeManagerConfiguration = new FakeManagerConfiguration();
-			builder.RegisterInstance(fakeManagerConfiguration).As<IManagerConfiguration>();
+			builder.RegisterType<ManagerConfiguration>().SingleInstance();
 
 			builder.RegisterType<NodeManager>().As<INodeManager>().SingleInstance().AsSelf();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();

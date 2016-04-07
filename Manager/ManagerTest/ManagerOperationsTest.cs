@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -30,7 +27,7 @@ namespace ManagerTest
 		public IJobRepository JobRepository;
 		public IWorkerNodeRepository NodeRepository;
 		public INodeManager NodeManager;
-		public IManagerConfiguration ManagerConfiguration;
+		public ManagerConfiguration ManagerConfiguration;
 		public FakeHttpSender HttpSender;
 		private DatabaseHelper _databaseHelper;
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
@@ -141,11 +138,9 @@ namespace ManagerTest
 			{
 				var model = jobRequestModel;
 
-
 				tasks.Add(new Task(() =>
 				{
-					var response=Target.DoThisJob(model);
-
+					Target.DoThisJob(model);
 				}));
 			}
 
@@ -171,7 +166,7 @@ namespace ManagerTest
 				UserName = "ManagerTests"
 			};
 
-			var response=Target.DoThisJob(job);
+			Target.DoThisJob(job);
 
 			JobRepository.GetAllJobDefinitions()
 				.Count.Should()

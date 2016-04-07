@@ -1,8 +1,6 @@
-﻿using Stardust.Manager.Interfaces;
-
-namespace Stardust.Manager
+﻿namespace Stardust.Manager
 {
-	public class ManagerConfiguration : IManagerConfiguration
+	public class ManagerConfiguration
 	{
 		public string ConnectionString { get; set; }
 
@@ -18,6 +16,5 @@ namespace Stardust.Manager
 			AllowedNodeDownTimeSeconds = 600;
 			CheckNewJobIntervalSeconds = 10;
 		}
-	
 	}
 }

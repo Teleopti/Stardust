@@ -6,12 +6,11 @@ namespace Stardust.Manager
 {
 	public class ManagerStarter
 	{
-		public void Start(IManagerConfiguration managerConfiguration, IComponentContext componentContext)
+		public void Start(ManagerConfiguration managerConfiguration, IComponentContext componentContext)
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterInstance(managerConfiguration)
-				.As<IManagerConfiguration>();
+			builder.RegisterInstance(managerConfiguration);
 
 			builder.RegisterType<NodeManager>()
 				.As<INodeManager>();

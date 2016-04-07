@@ -95,7 +95,6 @@
     <Compile Include="Database\SchemaVersionInformation.cs" />
     <Compile Include="Fakes\FakeHttpSender.cs" />
     <Compile Include="Fakes\FakeJobRepository.cs" />
-    <Compile Include="Fakes\FakeManagerConfiguration.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
     <Compile Include="JobManagerTests.cs" />
     <Compile Include="JobTestsAttribute.cs" />
