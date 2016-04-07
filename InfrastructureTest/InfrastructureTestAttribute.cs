@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		// Should fake:
 		// Config
 		// Http
+		// Message broker
 		//
 		// Should NOT fake:
 		// Database
@@ -60,10 +61,12 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
 			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
 
+			// message broker
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
+			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
+
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
-			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>(); // Does not fake all message senders, just adds one to the list
 			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 		}
 
