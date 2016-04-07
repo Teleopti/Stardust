@@ -18,23 +18,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 	[Binding]
 	public class ForecasterSteps
 	{
-		// I wont change this now.. but this is wrong. dont do it like this.
-		// there is already a current unit of work for the duration of the scenario. use that!
-		private static void unitOfWorkAction(Action<ICurrentUnitOfWork> action)
-		{
-			using (var unitOfWork = SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
-				action.Invoke(new ThisUnitOfWork(unitOfWork));
-				unitOfWork.PersistAll();
-			}
-		}
-
+		
 		[Then(@"there is a SkillDay for '(.*)'")]
 		public void ThenThereIsASkillDayFor(string date)
 		{
 			var theDate = new DateOnly(DateTime.Parse(date));
-			unitOfWorkAction(uow =>
-				new SkillDayRepository(uow).LoadAll().Any(x => x.CurrentDate == theDate).Should().Be.True());
+			new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll().Any(x => x.CurrentDate == theDate).Should().Be.True();
 		}
 
 		[Given(@"Forecast has succeeded")]
@@ -48,8 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[Given(@"there is no forecast data")]
 		public void GivenThereIsNoForecastData()
 		{
-			unitOfWorkAction(uow =>
-				new SkillDayRepository(uow).LoadAll().Any().Should().Be.False());
+			new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll().Any().Should().Be.False();
 		}
 		
 		[When(@"I select skill '(.*)'")]
@@ -145,42 +133,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
 				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
-			unitOfWorkAction(uow =>
+
+			var workloadId = new WorkloadRepository(SystemSetup.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
+			var allSkillDays = new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll();
+
+			allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
+
+			foreach (var dateOnly in choosenPeriod.DayCollection())
 			{
-				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
-				var allSkillDays = new SkillDayRepository(uow).LoadAll();
-
-				allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
-
-				foreach (var dateOnly in choosenPeriod.DayCollection())
-				{
-					var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
-					skillDay.Should().Not.Be.Null();
-					var taskPeriods = skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList;
-					taskPeriods.Count.Should().Be.EqualTo(96);
-				}
-			});
+				var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
+				skillDay.Should().Not.Be.Null();
+				var taskPeriods = skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList;
+				taskPeriods.Count.Should().Be.EqualTo(96);
+			}
 		}
 
 		private static void checkNoForecastResult(string workload, string scenario)
 		{
-			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"],
-				((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
-			unitOfWorkAction(uow =>
+			var choosenPeriod = new DateOnlyPeriod((DateOnly) ScenarioContext.Current["startdate"],
+				((DateOnly) ScenarioContext.Current["enddate"]).AddDays(-1));
+
+			var workloadId = new WorkloadRepository(SystemSetup.UnitOfWork).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
+			var allSkillDays = new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll();
+
+			allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
+
+			foreach (var dateOnly in choosenPeriod.DayCollection())
 			{
-				var workloadId = new WorkloadRepository(uow).LoadAll().SingleOrDefault(x => x.Name == workload).Id;
-				var allSkillDays = new SkillDayRepository(uow).LoadAll();
-
-				allSkillDays = allSkillDays.Where(x => x.Scenario.Description.Name == scenario).ToList();
-
-				foreach (var dateOnly in choosenPeriod.DayCollection())
-				{
-					var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
-					skillDay.Should().Not.Be.Null();
-					skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList.Single().Task.Tasks
-						.Should().Be.EqualTo(0);
-				}
-			});
+				var skillDay = allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly);
+				skillDay.Should().Not.Be.Null();
+				skillDay.WorkloadDayCollection.SingleOrDefault(x => x.Workload.Id == workloadId).TaskPeriodList.Single().Task.Tasks
+					.Should().Be.EqualTo(0);
+			}
 		}
 
 		[Then(@"there is no forecast data for default period for '(.*)'")]
@@ -200,16 +184,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		public void ThenThereAreSkillDaysForDefaultPeriod()
 		{
 			var choosenPeriod = new DateOnlyPeriod((DateOnly)ScenarioContext.Current["startdate"], ((DateOnly)ScenarioContext.Current["enddate"]).AddDays(-1));
-			unitOfWorkAction(uow =>
-			{
-				var allSkillDays = new SkillDayRepository(uow).LoadAll();
+			var allSkillDays = new SkillDayRepository(SystemSetup.UnitOfWork).LoadAll();
 
-				foreach (var dateOnly in choosenPeriod.DayCollection())
-				{
-					allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly)
-						.Should().Not.Be.Null();
-				}
-			});
+			foreach (var dateOnly in choosenPeriod.DayCollection())
+			{
+				allSkillDays.SingleOrDefault(x => x.CurrentDate == dateOnly)
+					.Should().Not.Be.Null();
+			}
 		}
 
 		[When(@"I select the first day in the forecast chart")]
