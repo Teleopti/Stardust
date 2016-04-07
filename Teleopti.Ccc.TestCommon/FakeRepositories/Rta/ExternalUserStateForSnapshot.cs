@@ -1,7 +1,6 @@
 using System;
-using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
+namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class ExternalUserStateForSnapshot : ExternalUserStateForTest
 	{

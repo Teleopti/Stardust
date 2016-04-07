@@ -157,6 +157,7 @@
     <Compile Include="FakeRepositories\FakeAvailableDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepositorySimulateNewUnitOfWork.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
+    <Compile Include="FakeRepositories\Rta\ExternalUserStateForSnapshot.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="EncryptPassword.cs" />
     <Compile Include="Exceptions.cs" />

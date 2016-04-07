@@ -325,7 +325,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventsOrderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventsStreamTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ExternalUserStateForSnapshot.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationExtension.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonActivityStartEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonAdherenceEventsTest.cs" />

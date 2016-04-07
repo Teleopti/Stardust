@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
 		{
-			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
+			var missingAgents = _unitOfWork.Get(() => _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId));
 			var agentsNotAlreadyLoggedOut =
 				from a in missingAgents
 				let state = _stateMapper.StateFor(

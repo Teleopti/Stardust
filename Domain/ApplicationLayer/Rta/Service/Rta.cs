@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class Rta
 	{
 		public static string LogOutStateCode = "LOGGED-OFF";
+		public static string LogOutBySnapshot = "CCC Logged out";
 
 		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[InfoLog]
 		protected virtual void CloseSnapshot(ExternalUserStateInputModel input)
 		{
-			input.StateCode = "CCC Logged out";
+			input.StateCode = LogOutBySnapshot;
 			input.PlatformTypeId = Guid.Empty.ToString();
 
 			_contextLoader.ForClosingSnapshot(input, agent =>
