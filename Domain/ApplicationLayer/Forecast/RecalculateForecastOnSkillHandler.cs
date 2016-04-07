@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class RecalculateForecastOnSkillConsumer : ConsumerOf<RecalculateForecastOnSkillMessageCollection>
+	public class RecalculateForecastOnSkillHandler : IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnServiceBus
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
@@ -17,9 +16,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IStatisticLoader _statisticLoader;
 		private readonly IReforecastPercentCalculator _reforecastPercentCalculator;
-		//private readonly static ILog Logger = LogManager.GetLogger(typeof(RecalculateForecastOnSkillConsumer));
-
-		public RecalculateForecastOnSkillConsumer(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
+		
+		public RecalculateForecastOnSkillHandler(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
 			ISkillRepository skillRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IStatisticLoader statisticLoader, IReforecastPercentCalculator reforecastPercentCalculator)
 		{
 			_scenarioRepository = scenarioRepository;
@@ -31,14 +29,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(RecalculateForecastOnSkillMessageCollection message)
+		public void Handle(RecalculateForecastOnSkillCollectionEvent message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				var scenario = _scenarioRepository.Get(message.ScenarioId);
 				if (!scenario.DefaultScenario) return;
 
-				foreach (var skillMessage in message.MessageCollection)
+				foreach (var skillMessage in message.SkillCollection)
 				{
 					var dateOnly = DateOnly.Today;
 					var skill = _skillRepository.Get(skillMessage.SkillId);

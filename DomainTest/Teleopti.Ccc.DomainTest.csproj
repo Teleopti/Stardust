@@ -191,7 +191,9 @@
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\RecalculateForecastOnSkillHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\SendImportForecastBusMessageTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\StatisticLoaderTest.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PeriodChangesTest.cs" />

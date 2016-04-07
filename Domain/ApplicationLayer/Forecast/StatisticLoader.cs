@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
 	public interface IStatisticLoader
 	{

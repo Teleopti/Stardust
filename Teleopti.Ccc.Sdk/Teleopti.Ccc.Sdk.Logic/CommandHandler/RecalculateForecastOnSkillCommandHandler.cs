@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -21,16 +21,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		{
 			var principal = TeleoptiPrincipal.CurrentPrincipal;
 			var person = ((IUnsafePerson)principal).Person;
-			var message = new RecalculateForecastOnSkillMessageCollection
+			var message = new RecalculateForecastOnSkillCollectionEvent
 				{
-					MessageCollection = new Collection<RecalculateForecastOnSkillMessage>(),
+					SkillCollection = new Collection<RecalculateForecastOnSkill>(),
 					ScenarioId = command.ScenarioId,
 					OwnerPersonId = person.Id.GetValueOrDefault()
 				};
 			foreach (var model in command.WorkloadOnSkillSelectionDtos)
 			{
-				message.MessageCollection.Add(
-					new RecalculateForecastOnSkillMessage
+				message.SkillCollection.Add(
+					new RecalculateForecastOnSkill
 						{
 							SkillId = model.SkillId,
 							WorkloadIds = new Collection<Guid>(model.WorkloadId)

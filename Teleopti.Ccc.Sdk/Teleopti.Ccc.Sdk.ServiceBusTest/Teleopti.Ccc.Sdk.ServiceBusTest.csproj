@@ -158,8 +158,6 @@
     <Compile Include="Forecast\ForecastsAnalyzeQueryResultTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
     <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
-    <Compile Include="Forecast\RecalculateForecastOnSkillConsumerTest.cs" />
-    <Compile Include="Forecast\StatisticLoaderTest.cs" />
     <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceReportConsumerNoMocksTest.cs" />
     <Compile Include="NewAbsenceReportConsumerTest.cs" />

@@ -4,6 +4,7 @@ using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			               		ScenarioId = scenarioId,
 			               		WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> {command}
 			               	};
-			var message = new RecalculateForecastOnSkillMessageCollection();
+			var message = new RecalculateForecastOnSkillCollectionEvent();
 			Expect.Call(() =>_busSender.Send(message, false)).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.Handle(commands);

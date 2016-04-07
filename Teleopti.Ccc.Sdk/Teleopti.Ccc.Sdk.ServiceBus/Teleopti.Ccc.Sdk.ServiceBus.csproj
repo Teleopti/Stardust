@@ -265,8 +265,6 @@
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="QueueClearMessages.cs" />
     <Compile Include="Denormalizer\LegacyMessagesConsumer.cs" />
-    <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />
-    <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
     <Compile Include="Denormalizer\PublishPersonPeriodCollectionChangedFromLegacyPersonPeriodChangedMessage.cs" />
