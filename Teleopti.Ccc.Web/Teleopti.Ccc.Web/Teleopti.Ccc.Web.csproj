@@ -1645,7 +1645,6 @@
     <Content Include="WFM\vendor\d3\nv.d3.js" />
     <Content Include="WFM\css\_intraday.scss" />
     <None Include="WFM\css\_layout.scss" />
-    <Content Include="WFM\css\_notices.scss" />
     <None Include="WFM\css\_outbound.scss" />
     <Content Include="WFM\Gruntfile.js" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.js" />
@@ -1653,7 +1652,6 @@
     <Content Include="WFM\js\global\areas.controller.js" />
     <Content Include="WFM\js\global\areas.service.js" />
     <Content Include="WFM\js\global\wfm-themes\themes-menu.html" />
-    <Content Include="WFM\js\notifications\notice.controller.js" />
     <Content Include="WFM\js\notifications\notifications.controller.js" />
     <Content Include="WFM\js\notifications\notifications.service.js" />
     <Content Include="WFM\js\outbound\outbound.filter.js" />
@@ -2003,7 +2001,6 @@
     <Content Include="WFM\html\nav.html" />
     <Content Include="WFM\js\permissions\permissions.html" />
     <Content Include="WFM\js\app.js" />
-    <Content Include="WFM\vendor\angular-growl.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.min.js" />
     <Content Include="WFM\vendor\fabricjs\fabricjs_viewport.js" />

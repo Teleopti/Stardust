@@ -135,7 +135,6 @@ module.exports = function(grunt) {
 					'vendor/hammerjs/hammer.min.js',
 					'node_modules/angular-material/angular-material.min.js',
 					'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
-					'vendor/angular-growl.js',
 					'vendor/fabricjs/fabric.min.js',
 					'vendor/fabricjs/fabricjs_viewport.js',
 					'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
