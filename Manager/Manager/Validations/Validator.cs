@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
-using Stardust.Manager.ActionResults;
 
 namespace Stardust.Manager.Validations
 {
 	public class Validator
 	{
-		public IHttpActionResult ValidateObject(IValidatableObject validatableObject,
-												 HttpRequestMessage requestMessage)
+		private const string JobIdIsInvalid = "Job Id is invalid.";
+		private const string NodeUriIsInvalid = "Node Uri is invalid.";
+
+		public ObjectValidationResult ValidateObject(IValidatableObject validatableObject)
 		{
 			if (validatableObject == null)
 			{
-				return new BadRequestWithReasonPhrase("Object can not be null.");
+				return new ObjectValidationResult{Message = "Object can not be null."};
 			}
 
 			var validationResults =
@@ -29,16 +25,30 @@ namespace Stardust.Manager.Validations
 
 			if (enumerable.Any())
 			{
-				return new BadRequestWithReasonPhrase(enumerable.First().ErrorMessage);
+				return new ObjectValidationResult{Message = enumerable.First().ErrorMessage};
 			}
 
-			if (requestMessage == null)
-			{
-				requestMessage = new HttpRequestMessage();
-			}
-
-			return new OkResult(requestMessage);
+			return new ObjectValidationResult{Success = true};
 		}
 
+		public ObjectValidationResult ValidateJobId(Guid jobId)
+		{
+			if (jobId == Guid.Empty)
+			{
+				return new ObjectValidationResult { Message = JobIdIsInvalid };
+			}
+
+			return new ObjectValidationResult { Success = true };
+		}
+
+		public ObjectValidationResult ValidateUri(Uri uri)
+		{
+			if (uri == null)
+			{
+				return new ObjectValidationResult{Message = NodeUriIsInvalid};
+			}
+
+			return new ObjectValidationResult{Success = true};
+		}
 	}
 }

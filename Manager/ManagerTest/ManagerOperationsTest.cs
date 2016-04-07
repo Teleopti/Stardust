@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -12,10 +11,8 @@ using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
-using Stardust.Manager.ActionResults;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using Stardust.Manager.Validations;
 
 namespace ManagerTest
 {
@@ -29,7 +26,6 @@ namespace ManagerTest
 		public INodeManager NodeManager;
 		public ManagerConfiguration ManagerConfiguration;
 		public FakeHttpSender HttpSender;
-		public Validator Validator;
 
 		private DatabaseHelper _databaseHelper;
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
@@ -188,7 +184,7 @@ namespace ManagerTest
 
 			var response=Target.DoThisJob(job);
 
-			if (response is BadRequestWithReasonPhrase)
+			if (response is BadRequestErrorMessageResult)
 			{
 				Assert.Fail("Invalid job request model.");
 			}
@@ -212,7 +208,7 @@ namespace ManagerTest
 				UserName = "ManagerTests"
 			});
 
-			if (response is BadRequestWithReasonPhrase)
+			if (response is BadRequestErrorMessageResult)
 			{
 				Assert.Fail("Invalid job request model 1.");	
 			}
@@ -225,7 +221,7 @@ namespace ManagerTest
 				UserName = "ManagerTests"
 			});
 
-			if (response is BadRequestWithReasonPhrase)
+			if (response is BadRequestErrorMessageResult)
 			{
 				Assert.Fail("Invalid job request model 2.");
 			}
@@ -252,26 +248,17 @@ namespace ManagerTest
 				Id = jobId
 			};
 
-			var response = Validator.ValidateObject(job, new HttpRequestMessage());
-
-			if (response is BadRequestWithReasonPhrase)
+			JobRepository.AddJobDefinition(job);
+			NodeRepository.AddWorkerNode(new WorkerNode
 			{
-				Assert.Fail("Job defintion object is invalid.");
-			}
-			else
-			{
-				JobRepository.AddJobDefinition(job);
-				NodeRepository.AddWorkerNode(new WorkerNode
-				{
-					Url = _nodeUri1
-				});
-				JobRepository.CheckAndAssignNextJob(HttpSender);
-				ThisNodeIsBusy(_nodeUri1.ToString());
-				Target.CancelThisJob(jobId);
-				JobRepository.GetAllJobDefinitions()
-					.Count.Should()
-					.Be.EqualTo(1);
-			}
+				Url = _nodeUri1
+			});
+			JobRepository.CheckAndAssignNextJob(HttpSender);
+			ThisNodeIsBusy(_nodeUri1.ToString());
+			Target.CancelThisJob(jobId);
+			JobRepository.GetAllJobDefinitions()
+				.Count.Should()
+				.Be.EqualTo(1);
 		}
 
 		[Test]
@@ -288,20 +275,11 @@ namespace ManagerTest
 				Id = jobId
 			};
 
-			var response = Validator.ValidateObject(job, new HttpRequestMessage());
-
-			if (response is BadRequestWithReasonPhrase)
-			{
-				Assert.Fail("Job defintion object is invalid.");
-			}
-			else
-			{
-				JobRepository.AddJobDefinition(job);
-				Target.CancelThisJob(jobId);
-				JobRepository.GetAllJobDefinitions()
-					.Count.Should()
-					.Be.EqualTo(0);
-			}
+			JobRepository.AddJobDefinition(job);
+			Target.CancelThisJob(jobId);
+			JobRepository.GetAllJobDefinitions()
+				.Count.Should()
+				.Be.EqualTo(0);
 		}
 
 		[Test]
@@ -317,7 +295,7 @@ namespace ManagerTest
 
 			IHttpActionResult response=Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase),response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult),response);
 
 		}
 
@@ -326,7 +304,7 @@ namespace ManagerTest
 		{
 			var response = Target.Heartbeat(null);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
 
 		[Test]
@@ -336,7 +314,7 @@ namespace ManagerTest
 
 			var response = Target.JobFailed(jobFailedModel);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
 
 		[Test]
@@ -344,7 +322,7 @@ namespace ManagerTest
 		{
 			var response = Target.JobFailed(null);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
 
 
@@ -353,7 +331,7 @@ namespace ManagerTest
 		{
 			var response = Target.JobDone(Guid.Empty);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
 
 		[Test]
@@ -361,7 +339,7 @@ namespace ManagerTest
 		{
 			var response = Target.JobHistoryDetails(Guid.Empty);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
 
 		[Test]
@@ -369,7 +347,7 @@ namespace ManagerTest
 		{
 			var response = Target.JobHistory(Guid.Empty);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
 
 		[Test]
@@ -377,7 +355,7 @@ namespace ManagerTest
 		{
 			var response=Target.CancelThisJob(Guid.Empty);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
 
 		[Test]
@@ -393,7 +371,7 @@ namespace ManagerTest
 
 			IHttpActionResult response = Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
 		}
 
@@ -410,7 +388,7 @@ namespace ManagerTest
 
 			IHttpActionResult response = Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
 		}
 
@@ -427,7 +405,7 @@ namespace ManagerTest
 
 			IHttpActionResult response = Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
 		}
 
@@ -444,7 +422,7 @@ namespace ManagerTest
 
 			IHttpActionResult response = Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
 		}
 
@@ -461,7 +439,7 @@ namespace ManagerTest
 
 			IHttpActionResult response = Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
 		}
 
@@ -478,7 +456,7 @@ namespace ManagerTest
 
 			IHttpActionResult response = Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
 		}
 
@@ -495,7 +473,7 @@ namespace ManagerTest
 
 			IHttpActionResult response = Target.DoThisJob(job);
 
-			Assert.IsInstanceOf(typeof(BadRequestWithReasonPhrase), response);
+			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
 		}
 
