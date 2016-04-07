@@ -16,9 +16,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<WorkloadDayHelper>();
 			builder.RegisterType<WorkloadDayHelper>().As<IWorkloadDayHelper>();
 			builder.Register(c => StatisticRepositoryFactory.Create()).As<IStatisticRepository>();
-			builder.RegisterType<StatisticLoader>().As<IStatisticLoader>();
-			builder.RegisterType<ReforecastPercentCalculator>().As<IReforecastPercentCalculator>();
-			builder.RegisterType<Statistic>().As<IStatistic>();
 			builder.RegisterType<ForecastClassesCreator>().As<IForecastClassesCreator>();
 		    builder.RegisterType<BudgetGroupHeadCountSpecification>().As<IBudgetGroupHeadCountSpecification>();
         }
