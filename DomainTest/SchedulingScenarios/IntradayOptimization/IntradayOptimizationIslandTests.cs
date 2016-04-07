@@ -58,6 +58,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				() => skill1.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(10), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360))),
 				() => skill2.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(10), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
 			});
+
+			PersonAssignmentRepository.Clear();
+
 			PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 			PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
