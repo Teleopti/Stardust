@@ -11,12 +11,7 @@
     }
 
     var matchChild = function (node, reg, filterType) {
-        if (filterType === 'descriptionFilter') {
-            return node.LocalizedFunctionDescription.match(reg);
-        } else {
-            return node.SearchableName.match(reg);
-           
-        }
+        return node.searchableName.match(reg);
     }
 
     var checkName = function (child, name, filterType) {

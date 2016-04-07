@@ -82,20 +82,19 @@ describe('PermissionsFilters', function() {
 	it('should find matched parent', inject(function($filter) {
 		var nodes = [
 			{
-				SearchableName: "test",
+				searchableName: "test",
 				ChildNodes: [
-					{ SearchableName: "test confirmed" }
+					{ searchableName: "test confirmed" }
 				]
 			},
 			{
-				SearchableName: "thing"
+				searchableName: "thing"
 			}
 		];
 
 		var filter =  $filter('nameFilter');
 
 		var filteredNodes = filter(nodes, "test");
-		console.log("Array ", filteredNodes);
 
 		expect(filteredNodes.length).toEqual(1);
 	}));
@@ -103,13 +102,13 @@ describe('PermissionsFilters', function() {
 	it('should find matched child nodes', inject(function($filter) {
 		var nodes = [
 			{
-				SearchableName: "test",
+				searchableName: "test",
 				ChildNodes: [
-					{ SearchableName: "test confirmed" }
+					{ searchableName: "test confirmed" }
 				]
 			},
 			{
-				SearchableName: "thing"
+				searchableName: "thing"
 			}
 		];
 	var filter = $filter('nameFilter');
@@ -120,17 +119,16 @@ describe('PermissionsFilters', function() {
 
 	}));
 
-
 	it('should find matched parent nodes', inject(function ($filter) {
 	    var nodes = [
 			{
-			    LocalizedFunctionDescription: "test",
+			    searchableName: "test",
 			    ChildFunctions: [
-					{ LocalizedFunctionDescription: "confirmed" }
+					{ searchableName: "test confirmed" }
 			    ]
 			},
 			{
-			    LocalizedFunctionDescription: "thing"
+			    searchableName: "thing"
 			}
 	    ];
 
@@ -145,13 +143,13 @@ describe('PermissionsFilters', function() {
 	it('should find matched child nodes', inject(function ($filter) {
 	    var nodes = [
 			{
-			    LocalizedFunctionDescription: "test",
+			    searchableName: "test",
 			    ChildFunctions: [
-					{ LocalizedFunctionDescription: "confirmed" }
+					{ searchableName: "test confirmed" }
 			    ]
 			},
 			{
-			    LocalizedFunctionDescription: "thing"
+			    searchableName: "thing"
 			}
 	    ];
 	    var filter = $filter('descriptionFilter');

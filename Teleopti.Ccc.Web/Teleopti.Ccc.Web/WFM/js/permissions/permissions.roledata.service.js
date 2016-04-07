@@ -6,17 +6,13 @@
 		'$q', 'PermissionsService', '$filter', function($q, PermissionsService, $filter) {
 			var dataFlat = [];
 			
-			var flatData = function (dataTab) {
+			var flatData = function (dataTab, parentNode) {
 			    dataTab.forEach(function (item) {
-			        if (item.Type === "BusinessUnit") {
-			            item.SearchableName = item.Name;
-			        }
+			        parentNode = parentNode ? parentNode : { searchableName: ''};
+			        item.searchableName = parentNode.searchableName + ' ' + item.Name;
 			        dataFlat.push(item);
 			        if (item.ChildNodes && item.ChildNodes.length !== 0) {
-			            item.ChildNodes.forEach(function (child) {
-				            child.SearchableName = item.SearchableName + " " + child.Name;            
-				        })
-				        flatData(item.ChildNodes);
+				        flatData(item.ChildNodes, item);
 					} else {
 						item.ChildNodes = [];
 						item.selected = false;

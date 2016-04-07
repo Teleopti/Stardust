@@ -12,7 +12,7 @@
 			rolesFunctionsService.init = function () {
 				var deferred = $q.defer();
 				PermissionsService.applicationFunctions.query().$promise.then(function (result) {
-					rolesFunctionsService.functionsDisplayed = result;
+				    rolesFunctionsService.functionsDisplayed = result;
 					deferred.resolve();
 				});
 				return deferred.promise;
@@ -40,7 +40,7 @@
 				var deferred = $q.defer();
 				var refreshCallback = function () {
 					PermissionsService.rolesPermissions.query({ Id: newSelectedRoleId }).$promise.then(function (result) {
-						var permsFunc = result.AvailableFunctions;
+					    var permsFunc = result.AvailableFunctions;
 						rolesFunctionsService.allFunctions = ($filter('filter')(permsFunc, { FunctionCode: 'All' }, true)).length !== 0;
 						rolesFunctionsService.parseFunctions(rolesFunctionsService.functionsDisplayed, permsFunc, {}, rolesFunctionsService.allFunctions);
 						deferred.resolve();
@@ -63,6 +63,7 @@
 				functionTab.forEach(function (item) {
 					var availableFunctions = $filter('filter')(selectedFunctions, { Id: item.FunctionId });
 					item.selected = false;
+					item.searchableName = parentNode.searchableName + ' ' + item.LocalizedFunctionDescription;
 					if (availableFunctions.length !== 0 || allSelected) {
 						item.selected = true;
 						selectedChildren++;
