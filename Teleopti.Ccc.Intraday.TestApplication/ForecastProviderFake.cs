@@ -4,7 +4,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 {
 	public class ForecastProviderFake : IForecastProvider
 	{
-		public IList<ForecastInterval> Provide(int workloadId)
+		public IList<ForecastInterval> Provide(int workloadId, int intervalId)
 		{
 			return getForecastIntervals();
 		}

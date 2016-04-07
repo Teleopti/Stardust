@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace Teleopti.Ccc.Intraday.TestApplication
 {
@@ -10,7 +12,15 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 	{
 		static void Main(string[] args)
 		{
+			string connectionString = ConfigurationManager.AppSettings["analyticsConnectionString"];
+			IForecastProvider forecastProvider = new ForecastProvider(connectionString);
+			IWorkloadQueuesProvider workloadQueuesProvider = new WorkloadQueuesProvider(connectionString);
+			IDictionary<int, IList<QueueInterval>> queueDataDictionary = new Dictionary<int, IList<QueueInterval>>();
+			IQueueDataPersister queueDataPersister = new QueueDataPersister(connectionString);
+			TimeZoneprovider timeZoneprovider = new TimeZoneprovider(connectionString);
+			var timeZoneIntervalLength = timeZoneprovider.Provide();
 			var doReplace = false;
+
 			Console.WriteLine("This tool will generate queue statistics for today for forecasted skills.");
 			Console.WriteLine("");
 			Console.WriteLine("");
@@ -25,18 +35,31 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("");
 			Console.WriteLine("");
 			Console.WriteLine("Replace queue statistics for today? (Y/N)");
-			var replace = Console.ReadLine();
-			if (replace.ToUpper().Equals("Y"))
+			ConsoleKeyInfo replace = Console.ReadKey();
+			if (replace.KeyChar.ToString().ToUpper().Equals("Y"))
 			{
 				doReplace = true;
 			}
-			
 
-			string connectionString = ConfigurationManager.AppSettings["analyticsConnectionString"];
-			IForecastProvider forecastProvider = new ForecastProvider(connectionString);
-			IWorkloadQueuesProvider workloadQueuesProvider = new WorkloadQueuesProvider(connectionString);
-			IDictionary<int, IList<QueueInterval>> queueDataDictionary = new Dictionary<int, IList<QueueInterval>>();
-			IQueueDataPersister queueDataPersister = new QueueDataPersister(connectionString);
+			var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, DateTime.Now);
+			Console.WriteLine("");
+			Console.WriteLine("");
+			Console.WriteLine("Stats will be generated up until {0}. Enter other time if needed.", time.ToShortTimeString());
+			var timeText = Console.ReadLine();
+			if (!string.IsNullOrEmpty(timeText))
+			{
+				if (!DateTime.TryParse(timeText, Thread.CurrentThread.CurrentCulture, DateTimeStyles.None, out time))
+				{
+					Console.WriteLine("{0} is not a valid time. Press any key to exit.", timeText);
+					Console.ReadKey();
+					return;
+				}
+				
+				time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
+			}
+
+			var currentInterval = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, time);
+
 
 			var workloads = workloadQueuesProvider.Provide();
 
@@ -49,7 +72,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				if (queueDataDictionary.ContainsKey(targetQueue.QueueId))
 					continue;
 
-				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId);
+				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentInterval);
 
 				if (forecastIntervals.Count == 0)
 					continue;

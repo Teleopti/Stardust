@@ -6,7 +6,7 @@ GO
 -- Author:		Jonas & maria
 -- Create date: 2016-04-07
 -- Description:	Inject a time zone and return the same if it exists, else return the default time zone. 
--- Used by Intraday Test tool.
+-- Also get interval length. Used by Intraday Test tool.
 -- =============================================
 -- EXEC [mart].[web_intraday_simulator_get_timezone] 'W. Europe Standard Time'
 CREATE PROCEDURE [mart].[web_intraday_simulator_get_timezone]
@@ -29,7 +29,11 @@ BEGIN
 		WHERE default_zone = 1
 	END
 
-	SELECT @time_zone
+	SELECT 
+		@time_zone as TimeZoneId,
+		value as IntervalLength
+	FROM mart.sys_configuration 
+	WHERE [key]='IntervalLengthMinutes'
 END
 
 GO

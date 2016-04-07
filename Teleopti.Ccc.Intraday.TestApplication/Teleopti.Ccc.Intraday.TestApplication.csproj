@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
-	<RestorePackages>true</RestorePackages>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -65,6 +65,7 @@
     <Compile Include="ForecastInterval.cs" />
     <Compile Include="IForecastProvider.cs" />
     <Compile Include="Infrastructure\fact_queue.cs" />
+    <Compile Include="IntervalHelper.cs" />
     <Compile Include="IQueueDataPersister.cs" />
     <Compile Include="IWorkloadQueuesProvider.cs" />
     <Compile Include="Program.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="QueueInterval.cs" />
     <Compile Include="QueueDataPersisterFake.cs" />
     <Compile Include="QueueInfo.cs" />
+    <Compile Include="TimeZoneInterval.cs" />
+    <Compile Include="TimeZoneprovider.cs" />
     <Compile Include="WorkloadInfo.cs" />
     <Compile Include="WorkloadQueuesProvider.cs" />
     <Compile Include="WorkloadQueuesProviderFake.cs" />

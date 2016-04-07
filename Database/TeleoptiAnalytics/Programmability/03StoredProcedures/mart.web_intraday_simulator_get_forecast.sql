@@ -3,15 +3,16 @@ DROP PROCEDURE [mart].[web_intraday_simulator_get_forecast]
 GO
 
 -- =============================================
--- Author:		Jonas
+-- Author:		Jonas & Maria
 -- Create date: 2016-03-31
 -- Description:	Load forecast data for given workload. Used by  for web intraday
 -- =============================================
--- EXEC [mart].[web_intraday_simulator_get_forecast] 8, 'W. Europe Standard Time', '2016-04-01'
+-- EXEC [mart].[web_intraday_simulator_get_forecast] 8, 'W. Europe Standard Time', '2016-04-07', 48
 CREATE PROCEDURE [mart].[web_intraday_simulator_get_forecast]
 @workload_id int,
 @time_zone_code nvarchar(100),
-@today smalldatetime
+@today smalldatetime,
+@interval_id int
 
 AS
 BEGIN
@@ -38,6 +39,7 @@ BEGIN
 		AND fw.scenario_id = @default_scenario_id
 		AND bz.time_zone_id = @time_zone_id
 		AND d.date_date = @today
+		AND i.interval_id < @interval_id
 	ORDER BY
 		fw.date_id, fw.interval_id
 END
