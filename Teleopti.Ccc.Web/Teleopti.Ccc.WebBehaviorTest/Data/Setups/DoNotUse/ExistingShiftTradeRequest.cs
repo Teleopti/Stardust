@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 		public bool AutoDenied { get; set; }
 		public bool HasBeenReferred { get; set; }
 
-		public void Apply(IPerson user, ICurrentUnitOfWork iDontUse)
+		public void Apply(IPerson user, ICurrentUnitOfWork uow)
 		{
-			using (var uow = SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
+			//using (var uow = SystemSetup.UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			//{
 				var dateTimefrom = DateFrom ?? DateTime.UtcNow.Date;
 				var dateTimeTo = DateTo ?? dateTimefrom.AddDays(1);
 				var sender = String.IsNullOrEmpty(From) ? user : getOrCreatePerson(From, uow);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 				PersonRequest.TrySetMessage(message);
 				PersonRequest.Request = shiftTradeRequest;
-				var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory()));
+				var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleStorage(uow, new RepositoryFactory()));
 
 				setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest);
 				var requestRepository = new PersonRequestRepository(uow);
@@ -75,15 +75,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				requestRepository.Add(PersonRequest);
 
 
-				uow.PersistAll();
-			}
+			//	uow.PersistAll();
+			//}
 
 		}
 
-		private static IPerson getOrCreatePerson(string name, IUnitOfWork uow)
+		private static IPerson getOrCreatePerson(string name, ICurrentUnitOfWork uow)
 		{
 			var personName = new CreateName().FromString(name);
-			var personRepository = new PersonRepository(new ThisUnitOfWork(uow));
+			var personRepository = new PersonRepository(uow);
 			var people = personRepository.LoadAll();
 			var person = people.FirstOrDefault(p => p.Name == personName);
 			if (person == null)
