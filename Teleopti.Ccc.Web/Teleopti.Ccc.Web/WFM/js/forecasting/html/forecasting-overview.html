@@ -50,10 +50,10 @@
 			</div>
 			<div class="con-row">
 				<div class="con-flex">
-					<div class=" forecast-campaign">
-						<label style="margin:0;">	{{'Scenario' | translate}}:</label>
+					<form class="forecast-campaign">
+						<label>{{'Scenario' | translate}}: </label>
 						<select class="scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
-					</div>
+					</form>
 				</div>
 				<div class="con-flex split-3-1"></div>
 				<div class="con-flex"></div>

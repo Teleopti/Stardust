@@ -4,11 +4,10 @@
 
 .forecast-campaign{
 	display: flex;
-	line-height:2;
-}
 
-.scenario-label{
-	display:inline-flex;
+	select{
+		margin-left: $full-padding;
+	}
 }
 
 .forecast-campaign-input{
