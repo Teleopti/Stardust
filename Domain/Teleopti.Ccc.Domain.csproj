@@ -196,6 +196,7 @@
     <Compile Include="ApplicationLayer\PersonAbsenceAccountProvider.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsFactAgentSkill.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\TestingPermissionUpdater.cs" />
     <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />
     <Compile Include="ApplicationLayer\RequestFactory.cs" />
     <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
@@ -214,6 +215,7 @@
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
+    <Compile Include="Repositories\IAnalyticsPermissionRepository.cs" />
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
     <Compile Include="Security\Principal\CurrentProcess.cs" />
