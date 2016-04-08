@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
         [Test]
         public async void ShouldNotDeadlockWhenInsertingAndClearingExpired()
         {
+            var random = new Random();
             var timestamp = DateTime.Today;
             const string context = "context";
             const string nonce = "nonce";
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
                     {
                         Context = context,
                         Nonce = Guid.NewGuid().ToString().Substring(0,8),
-                        Timestamp = expired
+                        Timestamp = expired.Subtract(TimeSpan.FromTicks(random.Next(100)))
                     });
                 }
             }
@@ -122,20 +123,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Authentication
             {
                 tasks.Add(new Task(() =>
                 {
-                    var n = Guid.NewGuid().ToString();
+                    var n = Guid.NewGuid().ToString().Substring(0, 8);
                     using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
                     {
-                        
                         var nonceInfo = Target.Find(context, n, nonExpired);
                         if (nonceInfo == null)
                         {
-
 	                        Target.Add(new NonceInfo
 	                        {
 		                        Context = context,
-		                        Nonce = n.Substring(0, 8),
-		                        Timestamp = nonExpired
-	                        });
+		                        Nonce = n,
+		                        Timestamp = nonExpired.Add(TimeSpan.FromTicks(random.Next(100)))
+                            });
 
                             Target.ClearExpired(timestamp);
                         }                       
