@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
+using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {

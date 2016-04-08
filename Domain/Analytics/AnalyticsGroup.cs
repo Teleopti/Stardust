@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
+namespace Teleopti.Ccc.Domain.Analytics
 {
 	public class AnalyticsGroup : AnalyticsGroupPage
 	{
@@ -14,13 +14,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.A
 		public int DatasourceId { get; set; }
 		public DateTime InsertDate { get; set; }
 		public DateTime DatasourceUpdateDate { get; set; }
-	}
-
-	public class AnalyticsGroupPage
-	{
-		public int GroupPageId { get; set; }
-		public Guid GroupPageCode { get; set; }
-		public string GroupPageName { get; set; }
-		public string GroupPageNameResourceKey { get; set; }
 	}
 }

@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer
+namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
 	public class PersonPeriodTransformer
 	{

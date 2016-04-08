@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer
+namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
     public class IntervalBase
     {

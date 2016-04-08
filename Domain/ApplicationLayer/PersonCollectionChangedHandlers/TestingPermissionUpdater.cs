@@ -43,6 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				var functionResolver = new ApplicationFunctionResolver(new ApplicationFunctionsForRole(new LicensedFunctionsProvider(new DefinedRaptorApplicationFunctionFactory()), _applicationFunctionRepository));
 				var personRoleResolver = new PersonRoleResolver(person, teamResolver, functionResolver);
 				var result = personRoleResolver.Resolve(new DateOnly(_now.UtcDateTime()), _currentDataSource.Current().Application);
+
+				var currentPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId);
 				_analyticsPermissionRepository.DeletePermissionsForPerson(personId);
 				_analyticsPermissionRepository.InsertPermissions(result, @event.LogOnBusinessUnitId);
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 

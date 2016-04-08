@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Matrix;
@@ -45,6 +46,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						.ExecuteUpdate();
 				}
 			}
+		}
+
+		public IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

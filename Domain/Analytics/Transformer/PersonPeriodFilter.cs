@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers.Analytics.Transformer
+namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
 	public class PersonPeriodFilter
 	{

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Security.Matrix;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -8,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		void DeletePermissionsForPerson(Guid personId);
 		void InsertPermissions(ICollection<MatrixPermissionHolder> result, Guid businessUnitId);
+		IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId);
 	}
 }
