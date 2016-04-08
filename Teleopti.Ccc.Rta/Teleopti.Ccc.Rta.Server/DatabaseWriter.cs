@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Rta.Server
         private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(DatabaseWriter));
 
 		const string getDefaultStateGroupQuery = @"SELECT Name, Id, BusinessUnit FROM RtaStateGroup WHERE DefaultStateGroup = 1 AND BusinessUnit = @BusinessUnitId";
-		const string insert = @"INSERT INTO RtaState VALUES (@StateId, @StateCode, @PlatformTypeId, @DefaultStateGroupId)";
+		const string insert = @"INSERT INTO RtaState VALUES (@StateId, @StateCode, @StateCode, @PlatformTypeId, @DefaultStateGroupId)";
             
         public DatabaseWriter(IDatabaseConnectionFactory databaseConnectionFactory,
                               IDatabaseConnectionStringHandler databaseConnectionStringHandler)
