@@ -153,7 +153,9 @@
     <Compile Include="FakeData\PrincipalAuthorizationWithConfigurablePermission.cs" />
     <Compile Include="FakeEventPublisherWithOverwritingHandlers.cs" />
     <Compile Include="FakeHttpServer.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsBusinessUnitRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSkillRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeApplicationFunctionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAvailableDataRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepositorySimulateNewUnitOfWork.cs" />

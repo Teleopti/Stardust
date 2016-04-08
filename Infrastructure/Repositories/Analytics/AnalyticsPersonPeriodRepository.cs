@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Transform;
@@ -10,18 +10,8 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
-	public class AnalyticsPersonRepository : IAnalyticsPersonPeriodRepository
+	public class AnalyticsPersonPeriodRepository : IAnalyticsPersonPeriodRepository
 	{
-		public int BusinessUnitId(Guid businessUnitCode)
-		{
-			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return uow.Session().CreateSQLQuery(@"select business_unit_id from mart.dim_business_unit WITH (NOLOCK) WHERE business_unit_code=:businessUnitCode")
-					.SetGuid("businessUnitCode", businessUnitCode)
-					.UniqueResult<int>();
-			}
-		}
-
 		public IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
@@ -88,18 +78,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
-		{
-			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-			{
-				return uow.Session().CreateSQLQuery(@"mart.etl_dim_team_id_get @team_code=:teamCode,@team_name=:teamName, @site_id=:siteId , @business_unit_id=:businessUnitId")
-					.SetGuid("teamCode", teamCode)
-					.SetString("teamName", teamName)
-					.SetInt32("siteId", siteId)
-					.SetInt32("businessUnitId", businessUnitId)
-					.UniqueResult<int>();
-			}
-		}
 		public int? TimeZone(string timeZoneCode)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
@@ -203,51 +181,51 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
                     ,@valid_to_date_id_local=:ValidToDateIdLocal
                     ,@valid_from_date_local=:ValidFromDateLocal
                     ,@valid_to_date_local=:ValidToDateLocal")
-			.SetGuid("PersonCode", personPeriod.PersonCode)
-			.SetDateTime("ValidFromDate", personPeriod.ValidFromDate)
-			.SetDateTime("ValidToDate", personPeriod.ValidToDate)
-			.SetInt32("ValidFromDateId", personPeriod.ValidFromDateId)
-			.SetInt32("ValidFromIntervalId", personPeriod.ValidFromIntervalId)
-			.SetInt32("ValidToDateId", personPeriod.ValidToDateId)
-			.SetInt32("ValidToIntervalId", personPeriod.ValidToIntervalId)
-			.SetGuid("PersonPeriodCode", personPeriod.PersonPeriodCode)
-			.SetString("PersonName", personPeriod.PersonName)
-			.SetString("FirstName", personPeriod.FirstName)
-			.SetString("LastName", personPeriod.LastName)
-			.SetString("EmploymentNumber", personPeriod.EmploymentNumber)
-			.SetString("EmploymentTypeName", personPeriod.EmploymentTypeName)
-			.SetGuid("ContractCode", personPeriod.ContractCode)
-			.SetString("ContractName", personPeriod.ContractName)
-			.SetGuid("ParttimeCode", personPeriod.ParttimeCode)
-			.SetString("ParttimePercentage", personPeriod.ParttimePercentage)
-			.SetInt32("TeamId", personPeriod.TeamId)
-			.SetGuid("TeamCode", personPeriod.TeamCode)
-			.SetString("TeamName", personPeriod.TeamName)
-			.SetInt32("SiteId", personPeriod.SiteId)
-			.SetGuid("SiteCode", personPeriod.SiteCode)
-			.SetString("SiteName", personPeriod.SiteName)
-			.SetInt32("BusinessUnitId", personPeriod.BusinessUnitId)
-			.SetGuid("BusinessUnitCode", personPeriod.BusinessUnitCode)
-			.SetString("BusinessUnitName", personPeriod.BusinessUnitName)
-			.SetString("Email", personPeriod.Email)
-			.SetString("Note", personPeriod.Note)
-			.SetDateTime("EmploymentStartDate", personPeriod.EmploymentStartDate)
-			.SetDateTime("EmploymentEndDate", personPeriod.EmploymentEndDate)
-			.SetBoolean("IsAgent", personPeriod.IsAgent)
-			.SetBoolean("IsUser", personPeriod.IsUser)
-			.SetInt32("DatasourceId", personPeriod.DatasourceId)
-			.SetDateTime("InsertDate", insertAndUpdateDateTime)
-			.SetDateTime("UpdateDate", insertAndUpdateDateTime)
-			.SetDateTime("DatasourceUpdateDate", personPeriod.DatasourceUpdateDate)
-			.SetBoolean("ToBeDeleted", personPeriod.ToBeDeleted)
-			.SetString("WindowsDomain", personPeriod.WindowsDomain)
-			.SetString("WindowsUsername", personPeriod.WindowsUsername)
-			.SetInt32("ValidToDateIdMaxDate", personPeriod.ValidToDateIdMaxDate)
-			.SetInt32("ValidToIntervalIdMaxDate", personPeriod.ValidToIntervalIdMaxDate)
-			.SetInt32("ValidFromDateIdLocal", personPeriod.ValidFromDateIdLocal)
-			.SetInt32("ValidToDateIdLocal", personPeriod.ValidToDateIdLocal)
-			.SetDateTime("ValidFromDateLocal", personPeriod.ValidFromDateLocal)
-			.SetDateTime("ValidToDateLocal", personPeriod.ValidToDateLocal);
+					.SetGuid("PersonCode", personPeriod.PersonCode)
+					.SetDateTime("ValidFromDate", personPeriod.ValidFromDate)
+					.SetDateTime("ValidToDate", personPeriod.ValidToDate)
+					.SetInt32("ValidFromDateId", personPeriod.ValidFromDateId)
+					.SetInt32("ValidFromIntervalId", personPeriod.ValidFromIntervalId)
+					.SetInt32("ValidToDateId", personPeriod.ValidToDateId)
+					.SetInt32("ValidToIntervalId", personPeriod.ValidToIntervalId)
+					.SetGuid("PersonPeriodCode", personPeriod.PersonPeriodCode)
+					.SetString("PersonName", personPeriod.PersonName)
+					.SetString("FirstName", personPeriod.FirstName)
+					.SetString("LastName", personPeriod.LastName)
+					.SetString("EmploymentNumber", personPeriod.EmploymentNumber)
+					.SetString("EmploymentTypeName", personPeriod.EmploymentTypeName)
+					.SetGuid("ContractCode", personPeriod.ContractCode)
+					.SetString("ContractName", personPeriod.ContractName)
+					.SetGuid("ParttimeCode", personPeriod.ParttimeCode)
+					.SetString("ParttimePercentage", personPeriod.ParttimePercentage)
+					.SetInt32("TeamId", personPeriod.TeamId)
+					.SetGuid("TeamCode", personPeriod.TeamCode)
+					.SetString("TeamName", personPeriod.TeamName)
+					.SetInt32("SiteId", personPeriod.SiteId)
+					.SetGuid("SiteCode", personPeriod.SiteCode)
+					.SetString("SiteName", personPeriod.SiteName)
+					.SetInt32("BusinessUnitId", personPeriod.BusinessUnitId)
+					.SetGuid("BusinessUnitCode", personPeriod.BusinessUnitCode)
+					.SetString("BusinessUnitName", personPeriod.BusinessUnitName)
+					.SetString("Email", personPeriod.Email)
+					.SetString("Note", personPeriod.Note)
+					.SetDateTime("EmploymentStartDate", personPeriod.EmploymentStartDate)
+					.SetDateTime("EmploymentEndDate", personPeriod.EmploymentEndDate)
+					.SetBoolean("IsAgent", personPeriod.IsAgent)
+					.SetBoolean("IsUser", personPeriod.IsUser)
+					.SetInt32("DatasourceId", personPeriod.DatasourceId)
+					.SetDateTime("InsertDate", insertAndUpdateDateTime)
+					.SetDateTime("UpdateDate", insertAndUpdateDateTime)
+					.SetDateTime("DatasourceUpdateDate", personPeriod.DatasourceUpdateDate)
+					.SetBoolean("ToBeDeleted", personPeriod.ToBeDeleted)
+					.SetString("WindowsDomain", personPeriod.WindowsDomain)
+					.SetString("WindowsUsername", personPeriod.WindowsUsername)
+					.SetInt32("ValidToDateIdMaxDate", personPeriod.ValidToDateIdMaxDate)
+					.SetInt32("ValidToIntervalIdMaxDate", personPeriod.ValidToIntervalIdMaxDate)
+					.SetInt32("ValidFromDateIdLocal", personPeriod.ValidFromDateIdLocal)
+					.SetInt32("ValidToDateIdLocal", personPeriod.ValidToDateIdLocal)
+					.SetDateTime("ValidFromDateLocal", personPeriod.ValidFromDateLocal)
+					.SetDateTime("ValidToDateLocal", personPeriod.ValidToDateLocal);
 
 				if (personPeriod.SkillsetId.HasValue)
 				{
@@ -520,11 +498,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				query.ExecuteUpdate();
 			}
 		}
-	}
-
-	public class AnalyticsDate : IAnalyticsDate
-	{
-		public int DateId { get; set; }
-		public DateTime DateDate { get; set; }
 	}
 }

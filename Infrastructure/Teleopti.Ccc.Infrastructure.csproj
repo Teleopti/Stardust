@@ -399,11 +399,13 @@
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsTeamRepository.cs" />
     <Compile Include="Repositories\Analytics\IntradayMonitorDataLoader.cs" />
-    <Compile Include="Repositories\Analytics\AnalyticsPersonRepository.cs" />
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IQueryExtensions.cs" />
     <Compile Include="Repositories\IOutboundCampaignRepository.cs" />

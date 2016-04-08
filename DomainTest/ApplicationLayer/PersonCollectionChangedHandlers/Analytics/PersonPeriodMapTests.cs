@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	{
 		private FakeAnalyticsPersonPeriodRepository fakeAnalyticsPersonPeriodRepository;
 		private FakeAnalyticsSkillRepository fakeAnalyticsSkillRepository;
+		private FakeAnalyticsBusinessUnitRepository fakeAnalyticsBusinessUnitRepository;
+		private FakeAnalyticsTeamRepository fakeAnalyticsTeamRepository;
 		private PersonPeriodTransformer personPeriodTransformer;
 
 		private AnalyticsSkill fakeSkill1 = new AnalyticsSkill
@@ -77,11 +79,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			{
 				fakeAnalyticsSkillRepository.AddBridgeSkillsetSkill(newBridges);
 			}
-
-
 			fakeAnalyticsSkillRepository.SetSkillSets(fakeSkillSets);
+
+			fakeAnalyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
+			fakeAnalyticsTeamRepository = new FakeAnalyticsTeamRepository();
+
 			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository);
+				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository);
 		}
 
 

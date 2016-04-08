@@ -13,11 +13,15 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private static readonly DateTime Eternity = new DateTime(2059, 12, 31);
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
+		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
+		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 
-		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository)
+		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
+			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
+			_analyticsTeamRepository = analyticsTeamRepository;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
@@ -222,12 +226,13 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public int MapTeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
 		{
-			return _analyticsPersonPeriodRepository.TeamId(teamCode, siteId, teamName, businessUnitId);
+			return _analyticsTeamRepository.GetOrCreate(teamCode, siteId, teamName, businessUnitId);
 		}
 
 		public int MapBusinessId(Guid businessUnitCode)
 		{
-			return _analyticsPersonPeriodRepository.BusinessUnitId(businessUnitCode);
+			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitCode);
+			return businessUnit.BusinessUnitId;
 		}
 
 		public int MapSiteId(int businessUnitId, Guid siteCode, string siteName)

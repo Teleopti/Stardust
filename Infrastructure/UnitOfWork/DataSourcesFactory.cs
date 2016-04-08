@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Dialect;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Analytics;
@@ -73,6 +74,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				var statConfiguration = createStatisticConfiguration(statisticConnectionString);
+				statConfiguration.AddResources(new []
+				{
+					"Teleopti.Ccc.Domain.Analytics.AnalyticsPermission.analytics.xml"
+				}, typeof(AnalyticsPermission).Assembly);
 				statFactory = new AnalyticsUnitOfWorkFactory(
 					buildSessionFactory(statConfiguration),
 					statConfiguration.Properties[Environment.ConnectionString]

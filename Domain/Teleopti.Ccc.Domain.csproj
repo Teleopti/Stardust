@@ -153,9 +153,12 @@
     <Compile Include="AgentInfo\Requests\ShiftExchangeOffer.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
+    <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsGroup.cs" />
     <Compile Include="Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="Analytics\AnalyticsPermission.cs" />
+    <Compile Include="Analytics\AnalyticsPersonRepository.cs" />
+    <Compile Include="Analytics\AnalyticTeam.cs" />
     <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\Core\AspectAttribute.cs" />
     <Compile Include="Aop\Core\IInvocationInfo.cs" />
@@ -217,8 +220,10 @@
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
+    <Compile Include="Repositories\IAnalyticsBusinessUnitRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionRepository.cs" />
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
+    <Compile Include="Repositories\IAnalyticsTeamRepository.cs" />
     <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
     <Compile Include="Security\Principal\CurrentProcess.cs" />
     <Compile Include="Security\Principal\ThreadPrincipalContext.cs" />
@@ -2766,6 +2771,9 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\TeamGamificationSetting.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Analytics\AnalyticsPermission.analytics.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <Content Include="FeatureFlags\toggles.txt" />

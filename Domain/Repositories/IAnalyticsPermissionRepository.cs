@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Security.Matrix;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsPermissionRepository
 	{
-		void DeletePermissionsForPerson(Guid personId);
-		void InsertPermissions(ICollection<MatrixPermissionHolder> result, Guid businessUnitId);
+		void DeletePermissions(IEnumerable<AnalyticsPermission> permissions);
+		void InsertPermissions(IEnumerable<AnalyticsPermission> permissions);
 		IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId);
 	}
 }

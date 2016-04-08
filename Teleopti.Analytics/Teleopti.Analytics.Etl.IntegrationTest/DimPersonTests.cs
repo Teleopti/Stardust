@@ -91,7 +91,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             StepRunner.RunIntraday(jobParameters);
 
             // Question which other tables should have been affected as well. Skills? Teams? Sites? bridge_group_page_person?
-            var repo = new AnalyticsPersonRepository();
+            var repo = new AnalyticsPersonPeriodRepository();
             
             var analyticsPersonPeriods =
                 repo.GetPersonPeriods(personApp.Id.GetValueOrDefault());
@@ -180,7 +180,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             StepRunner.RunIntraday(jobParameters);
 
             // Question which other tables should have been affected as well. Skills? Teams? Sites? bridge_group_page_person?
-            var repo = new AnalyticsPersonRepository();
+            var repo = new AnalyticsPersonPeriodRepository();
 
             var analyticsPersonPeriods =
                 repo.GetPersonPeriods(personApp.Id.GetValueOrDefault());

@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		private void SetUpPerson()
 		{
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
-			var analyticsPersonRepository = new AnalyticsPersonRepository();
+			var analyticsPersonRepository = new AnalyticsPersonPeriodRepository();
 			var personPeriodCode1 = Guid.NewGuid();
 			var personPeriod1 = new AnalyticsPersonPeriod
 			{

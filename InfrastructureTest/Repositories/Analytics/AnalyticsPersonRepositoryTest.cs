@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		Guid personId2;
 		ExistingDatasources datasource;
 		BusinessUnit businessUnit;
-		private int siteId;
 		private Guid personPeriodCode1;
 
 		[SetUp]
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			analyticsDataFactory.Persist();
 
-			var analyticsPersonRepository = new AnalyticsPersonRepository();
+			var analyticsPersonRepository = new AnalyticsPersonPeriodRepository();
 			personPeriodCode1 = Guid.NewGuid();
 			personPeriod1 = new AnalyticsPersonPeriod
 			{
@@ -102,13 +101,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			};
 
 			analyticsPersonRepository.AddPersonPeriod(personPeriod1);
-			siteId = analyticsPersonRepository.SiteId(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId);
+			//analyticsPersonRepository.SiteId(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId);
 		}
 
 		[Test]
 		public void ShouldReturnOnePersonPeriods()
 		{
-			var target = new AnalyticsPersonRepository();
+			var target = new AnalyticsPersonPeriodRepository();
 			var result = target.GetPersonPeriods(personId2);
 			result.Count.Should().Be.EqualTo(1);
 		}
@@ -116,31 +115,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldReturnTwoPersonPeriods()
 		{
-			var target = new AnalyticsPersonRepository();
+			var target = new AnalyticsPersonPeriodRepository();
 			var result = target.GetPersonPeriods(personId);
 			result.Count.Should().Be.EqualTo(2);
 		}
 
 		[Test]
-		public void GetTeam_ShouldReturnTeam()
-		{
-			var target = new AnalyticsPersonRepository();
-			var team = target.TeamId(Guid.NewGuid(), siteId, "Team Name", businessUnit.BusinessUnitId);
-			team.Should().Be.GreaterThan(0);
-		}
-
-		[Test]
-		public void ShouldReturnBusinessUnit()
-		{
-			var target = new AnalyticsPersonRepository();
-			var response = target.BusinessUnitId(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
-			response.Should().Be.EqualTo(businessUnit.BusinessUnitId);
-		}
-
-		[Test]
 		public void DeleteOnePersionPeriod_ShouldReturnPersonPeriodDeleted()
 		{
-			var target = new AnalyticsPersonRepository();
+			var target = new AnalyticsPersonPeriodRepository();
 			target.DeletePersonPeriod(new AnalyticsPersonPeriod
 			{
 				PersonPeriodCode = personPeriodCode1

@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		private IAnalyticsSkillRepository _analyticsSkillRepository;
 		private IPersonRepository _personRepository;
+		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
+		private IAnalyticsTeamRepository _analyticsTeamRepository;
 		private FakeEventPublisher _eventPublisher;
 
 		private Guid testPerson1Id;
@@ -35,6 +37,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
 			_personRepository = new FakePersonRepository();
+			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
+			_analyticsTeamRepository = new FakeAnalyticsTeamRepository();
 			_eventPublisher = new FakeEventPublisher();
 
 			var p1 = new Person
@@ -62,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Add(p2);
 			_personRepository.Add(p3);
 
-			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher);
+			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository);
 		}
 
 		[Test]

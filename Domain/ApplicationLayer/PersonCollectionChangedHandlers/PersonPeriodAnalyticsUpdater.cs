@@ -21,15 +21,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IEventPublisher _eventPublisher;
+		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
+		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 
 		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-			IAnalyticsSkillRepository analyticsSkillRepository, IEventPublisher eventPublisher)
+			IAnalyticsSkillRepository analyticsSkillRepository, 
+			IEventPublisher eventPublisher, 
+			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
 			_eventPublisher = eventPublisher;
+			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
+			_analyticsTeamRepository = analyticsTeamRepository;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -42,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
 
-			var transformer = new PersonPeriodTransformer(_analyticsPersonPeriodRepository, _analyticsSkillRepository);
+			var transformer = new PersonPeriodTransformer(_analyticsPersonPeriodRepository, _analyticsSkillRepository, _analyticsBusinessUnitRepository, _analyticsTeamRepository);
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{

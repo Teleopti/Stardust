@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -62,10 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakePersonPeriods.Add(personPeriod);
 		}
 
-		public int BusinessUnitId(Guid businessUnitCode)
-		{
-			return 1;
-		}
+		
 
 		public IAnalyticsDate Date(DateTime date)
 		{
@@ -115,11 +111,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public int SiteId(Guid siteCode, string siteName, int businessUnitId)
 		{
 			return 123;
-		}
-
-		public int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
-		{
-			return 456;
 		}
 
 		public int? TimeZone(string timeZoneCode)

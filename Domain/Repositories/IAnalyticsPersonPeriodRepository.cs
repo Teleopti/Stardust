@@ -8,12 +8,10 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IAnalyticsPersonPeriodRepository
 	{
 		int SiteId(Guid siteCode, string siteName, int businessUnitId);
-		int BusinessUnitId(Guid businessUnitCode);
 
 		IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode);
 		void AddPersonPeriod(AnalyticsPersonPeriod personPeriod);
 		void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
-		int TeamId(Guid teamCode, int siteId, string teamName, int businessUnitId);
 		
 		int? TimeZone(string timeZoneCode);
 		IAnalyticsDate MaxDate();

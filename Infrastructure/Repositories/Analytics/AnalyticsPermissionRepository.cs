@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Matrix;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
@@ -16,41 +16,46 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			_currentDataSource = currentDataSource;
 		}
 
-		public void DeletePermissionsForPerson(Guid personId)
+		public void DeletePermissions(IEnumerable<AnalyticsPermission> permissions)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
-				uow.Session().CreateSQLQuery(@"delete from mart.permission_report where person_code=:PersonCode")
-					.SetGuid("PersonCode", personId)
-					.ExecuteUpdate();
+				using (var transaction = uow.Session().BeginTransaction())
+				{
+					foreach (var permission in permissions)
+					{
+						uow.Session().Delete(permission);
+					}
+					transaction.Commit();
+				}
 			}
 		}
 
-		public void InsertPermissions(ICollection<MatrixPermissionHolder> permissions, Guid businessUnitId)
+		public void InsertPermissions(IEnumerable<AnalyticsPermission> permissions)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
-				foreach (var permission in permissions)
+				using (var transaction = uow.Session().BeginTransaction())
 				{
-					uow.Session().CreateSQLQuery(@"exec mart.etl_permission_report_insert
-						 @person_code=:PersonCode
-						,@team_code=:TeamCode
-						,@my_own=:MyOwn
-						,@business_unit_code=:BusinessUnitCode
-						,@report_id=:ReportId")
-						.SetGuid("PersonCode", permission.Person.Id.GetValueOrDefault())
-						.SetGuid("TeamCode", permission.Team.Id.GetValueOrDefault())
-						.SetBoolean("MyOwn", permission.IsMy)
-						.SetGuid("BusinessUnitCode", businessUnitId)
-						.SetGuid("ReportId", new Guid(permission.ApplicationFunction.ForeignId))
-						.ExecuteUpdate();
+					foreach (var permission in permissions)
+					{
+						uow.Session().Insert(permission);
+					}
+					transaction.Commit();
 				}
 			}
 		}
 
 		public IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId)
 		{
-			throw new NotImplementedException();
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				var query = uow.Session().CreateCriteria<AnalyticsPermission>()
+					.Add(Restrictions.Eq("PersonCode", personId));
+
+				var result = query.List<AnalyticsPermission>();
+				return result;
+			}
 		}
 	}
 }
