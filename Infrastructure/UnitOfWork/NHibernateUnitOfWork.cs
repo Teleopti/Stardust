@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_interceptor.Value.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				_interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
-				blackSheep();
+				blackSheep();	// <-----
 				Session.Flush();
 			}
 			catch (StaleStateException ex)
@@ -129,6 +129,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			// this is a very bad idea
 			// the reason there is 2 flushes is because the first one catches any child, and the second one updates the roots version number
 			// changes here will just be included in the second flush, and therefor that behavior will not work for aggregates modified here!
+			// ---> this behavior belongs in the domain!
 			new SendPushMessageWhenRootAlteredService()
 				.SendPushMessages(
 					_interceptor.Value.ModifiedRoots,
