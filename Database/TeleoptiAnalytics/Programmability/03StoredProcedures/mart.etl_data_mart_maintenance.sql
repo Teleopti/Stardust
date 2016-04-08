@@ -23,6 +23,7 @@ BEGIN
 	DECLARE @daysToKeepETLError INT
 	DECLARE @daysToKeepETLExecution INT
 	DECLARE @daysToKeepRTAEvents INT
+	DECLARE @permissionReportMinDate smalldatetime
 	
 	--Add new things to purge here instead of from db migration scripts
 	 if not exists (select 1 from mart.etl_maintenance_configuration where configuration_id = 16)
@@ -242,6 +243,13 @@ BEGIN
 	delete top(10000) from Queue.MessagesPurged
 	where PurgedAt < @confMinDate
 	
+	--Permission Report, delete unchanged old report permissions
+	SET @permissionReportMinDate = dateadd(day,-1*(select isnull(configuration_value,90) from [mart].[etl_maintenance_configuration] where configuration_id = 17 
+		AND configuration_name = 'DaysToKeepUnchangedPermissionReport'),getdate())
+
+	delete from mart.permission_report
+	where datasource_update_date < @permissionReportMinDate
+
 END
 
 GO
