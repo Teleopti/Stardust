@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeScheduleDictionaryPersister : IScheduleDictionaryPersister
 	{
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
+		private readonly object lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository = new object();
 
 		public FakeScheduleDictionaryPersister(IPersonAssignmentRepository personAssignmentRepository)
 		{
@@ -24,22 +27,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			foreach (var scheduleRange in scheduleDictionary.Values)
 			{
         var diff = scheduleRange.DifferenceSinceSnapshot(diffSvc);
-				foreach (var scheduleChange in diff)
+				lock (lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository)
 				{
-					var currAss = (IPersonAssignment)scheduleChange.CurrentItem;
-					var orgAss = (IPersonAssignment)scheduleChange.OriginalItem;
-					switch (scheduleChange.Status)
+					foreach (var scheduleChange in diff)
 					{
-						case DifferenceStatus.Added:
-							_personAssignmentRepository.Add(currAss);
-							break;
-						case DifferenceStatus.Deleted:
-							_personAssignmentRepository.Remove(orgAss);
-							break;
-						case DifferenceStatus.Modified:
-							_personAssignmentRepository.Remove(orgAss);
-							_personAssignmentRepository.Add(currAss);
-							break;
+						var currAss = (IPersonAssignment)scheduleChange.CurrentItem;
+						var orgAss = (IPersonAssignment)scheduleChange.OriginalItem;
+						switch (scheduleChange.Status)
+						{
+							case DifferenceStatus.Added:
+								_personAssignmentRepository.Add(currAss);
+								break;
+							case DifferenceStatus.Deleted:
+								_personAssignmentRepository.Remove(orgAss);
+								break;
+							case DifferenceStatus.Modified:
+								_personAssignmentRepository.Remove(orgAss);
+								_personAssignmentRepository.Add(currAss);
+								break;
+						}
 					}
 				}
 			}
