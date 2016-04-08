@@ -166,7 +166,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		}
 
 		[Test]
-		public void ShouldGetCorrectScheduleOnDaylightSavingDay()
+		public void ShouldGetCorrectScheduleTimePeriodOnTheDayWhenDaylightSavingTimeStarts()
+		{
+			var date = new DateTime(2016, 3, 27);
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(date));
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+
+			var loggedOnUser = new FakeLoggedOnUser();
+			var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			loggedOnUser.SetDefaultTimeZone(userTimeZone);
+
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), loggedOnUser, personScheduleDayReadModelRepository,
+				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
+
+			var result = target.CreateViewModel(Guid.Empty, date);
+
+			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 27), userTimeZone, TimeZoneInfo.Utc);
+			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 28), userTimeZone, TimeZoneInfo.Utc);
+
+			personScheduleDayReadModelRepository.AssertWasCalled(x => x.ForPeople(
+				Arg<DateTimePeriod>.Matches(period => period == new DateTimePeriod(startTime, endTime)),
+				Arg<IEnumerable<Guid>>.Is.Anything
+			));
+		}
+
+		[Test]
+		public void ShouldGetCorrectScheduleTimePeriodOnTheDayWhenDaylightSavingTimeStartsMinusUtc()
 		{			
 			var date = new DateTime(2016, 3, 13);
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(date));
@@ -183,6 +208,56 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 
 			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 13), userTimeZone, TimeZoneInfo.Utc);
 			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 3, 14), userTimeZone, TimeZoneInfo.Utc);
+
+			personScheduleDayReadModelRepository.AssertWasCalled(x => x.ForPeople(
+				Arg<DateTimePeriod>.Matches(period => period == new DateTimePeriod(startTime, endTime)),
+				Arg<IEnumerable<Guid>>.Is.Anything
+			));
+		}
+
+		[Test]
+		public void ShouldGetCorrectScheduleTimePeriodOnTheDayWhenDaylightSavingTimeEnds()
+		{
+			var date = new DateTime(2016, 10, 30);
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(date));
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+
+			var loggedOnUser = new FakeLoggedOnUser();
+			var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			loggedOnUser.SetDefaultTimeZone(userTimeZone);
+
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), loggedOnUser, personScheduleDayReadModelRepository,
+				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
+
+			var result = target.CreateViewModel(Guid.Empty, date);
+
+			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 10, 30), userTimeZone, TimeZoneInfo.Utc);
+			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 10, 31), userTimeZone, TimeZoneInfo.Utc);
+
+			personScheduleDayReadModelRepository.AssertWasCalled(x => x.ForPeople(
+				Arg<DateTimePeriod>.Matches(period => period == new DateTimePeriod(startTime, endTime)),
+				Arg<IEnumerable<Guid>>.Is.Anything
+			));
+		}
+
+		[Test]
+		public void ShouldGetCorrectScheduleTimePeriodOnTheDayWhenDaylightSavingTimeEndsMinusUtc()
+		{
+			var date = new DateTime(2016, 11, 6);
+			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(date));
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+
+			var loggedOnUser = new FakeLoggedOnUser();
+			var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
+			loggedOnUser.SetDefaultTimeZone(userTimeZone);
+
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), loggedOnUser, personScheduleDayReadModelRepository,
+				new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }), _commonAgentNameProvider);
+
+			var result = target.CreateViewModel(Guid.Empty, date);
+
+			var startTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 11, 6), userTimeZone, TimeZoneInfo.Utc);
+			var endTime = TimeZoneInfo.ConvertTime(new DateTime(2016, 11, 7), userTimeZone, TimeZoneInfo.Utc);
 
 			personScheduleDayReadModelRepository.AssertWasCalled(x => x.ForPeople(
 				Arg<DateTimePeriod>.Matches(period => period == new DateTimePeriod(startTime, endTime)),
