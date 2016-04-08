@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_context = context;
 			_context.Set(this);
 			_session = session;
+			_session.FlushMode = FlushMode.Never;
 			_isolationLevel = isolationLevel;
 			_persistCallbacks = persistCallbacks ?? new NoPersistCallbacks();
 			_filterManager = new NHibernateFilterManager(session);

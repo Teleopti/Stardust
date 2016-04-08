@@ -91,15 +91,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			var businessUnitId = getBusinessUnitId();
 			var session = _factory.OpenSession(new AggregateRootInterceptor());
-			session.FlushMode = FlushMode.Never;
 
 			businessUnitFilter.Enable(session, businessUnitId);
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
-			new NHibernateUnitOfWork(_context,
+			new NHibernateUnitOfWork(
+				_context,
 				session,
-				isolationLevel, _persistCallbacks);
+				isolationLevel,
+				_persistCallbacks);
 
 			return CurrentUnitOfWork();
 		}
