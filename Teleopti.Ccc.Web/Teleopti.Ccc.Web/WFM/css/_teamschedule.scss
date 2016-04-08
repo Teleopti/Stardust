@@ -93,7 +93,7 @@
 		.ruler {
 			height: 100%;
 			width: 1px;
-			background-color: rgba(0,0,0,0.2);
+			background-color: $gray012;
 			z-index: 10;
 		}
 
@@ -171,7 +171,7 @@
 	th.person-name-column{
 		width: 15%;
 	}
-	
+
 	th.right-border-empty{
 		width: 2%;
 	}
@@ -203,6 +203,10 @@
             .person-name{
                 padding-left:5px;
             }
+
+						tr:hover{
+							background: $gray012;
+						}
 		}
 	}
 
@@ -211,11 +215,11 @@
 		margin-left: 0;
 		margin-right: 0;
 	}
-	
+
 	md-sidenav{
 		min-width:360px;
 		box-shadow:none;
-	}	
+	}
 
 	.absence-report{
 		height: 100%;
@@ -235,23 +239,23 @@
 			flex-direction:column;
 			justify-content:flex-start;
 		}
-	
+
 		.absence-selector{
 			padding:0;
 			min-height:20px;
 		}
 
 		.con-row>.teamschedule-datepicker{
-			padding-right: 0; 
+			padding-right: 0;
 			height: 48px;
 		}
-		
+
 		.con-row>.uib-timepicker{
-			padding-left: 0; 
+			padding-left: 0;
 			margin-top: -4px;
-		}		
+		}
 	}
-	
+
 	.add-activity{
 		height: 100%;
 		display: flex;
@@ -294,5 +298,5 @@
 		.wfm-time-range-picker-wrap button {
 			line-height: 25px;
 		}
-	}	
+	}
 }
