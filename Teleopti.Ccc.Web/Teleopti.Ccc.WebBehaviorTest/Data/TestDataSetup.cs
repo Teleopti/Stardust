@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				);
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 
+			SystemSetup.Start();
 			SystemSetup.DefaultDataCreator.Create();
 
 			DataSourceHelper.BackupApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);
