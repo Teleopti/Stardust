@@ -2,6 +2,7 @@
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
@@ -86,6 +87,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.Except<IntradayOptimizationEventHandler>(ct =>
 				{
 					ct.As<IHandleEvent<OptimizationWasOrdered>>()
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
+				}).Except<NewAbsenceRequestHandler>(ct =>
+				{
+					ct.As<IHandleEvent<NewAbsenceRequestCreatedEvent>>()
 						.AsSelf()
 						.InstancePerLifetimeScope()
 						.ApplyAspects();

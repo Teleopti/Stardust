@@ -4,6 +4,6 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IAbsenceRequestProcessor
 	{
-		void ProcessAbsenceRequest( IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest, IPersonRequest personRequest);
+		void ProcessAbsenceRequest(IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest, IPersonRequest personRequest);
 	}
 }

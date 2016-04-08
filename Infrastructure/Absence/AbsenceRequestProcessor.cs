@@ -12,9 +12,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 		private readonly IAbsenceRequestUpdater _absenceRequestUpdater;
 		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
-		public AbsenceRequestProcessor(IAbsenceRequestUpdater absenceRequestUpdater, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public AbsenceRequestProcessor(IAbsenceRequestUpdater absenceRequestUpdater,
+												 IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel,
+												 ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_absenceRequestUpdater = absenceRequestUpdater;
 			_updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
@@ -25,7 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			if (!_absenceRequestUpdater.UpdateAbsenceRequest(personRequest, absenceRequest, unitOfWork, _schedulingResultStateHolder))
 			{
-				clearStateHolder();
 				return;
 			}
 
@@ -36,13 +37,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			catch (OptimisticLockException ex)
 			{
 				logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
-				clearStateHolder();
 				return;
 			}
-
+	
 			updateScheduleReadModelsIfRequestWasApproved(unitOfWork, absenceRequest, personRequest);
-
-			clearStateHolder();
 		}
 	
 		private void updateScheduleReadModelsIfRequestWasApproved(IUnitOfWork unitOfWork, IRequest absenceRequest, IPersonRequest personRequest)
@@ -57,12 +55,5 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				unitOfWork.PersistAll();
 			}
 		}
-
-		private void clearStateHolder()
-		{
-			_schedulingResultStateHolder.Dispose();
-			_schedulingResultStateHolder = null;
-		}
-		
 	}
 }

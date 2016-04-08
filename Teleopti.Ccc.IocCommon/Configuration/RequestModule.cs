@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<AbsenceRequestOpenPeriodMerger>().As<IAbsenceRequestOpenPeriodMerger>().SingleInstance();
-			builder.RegisterType<RequestFactory>().As<IRequestFactory>().InstancePerDependency();
+			builder.RegisterType<RequestFactory>().As<IRequestFactory>();
 			builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
 			builder.RegisterType<AbsenceRequestUpdater>().As<IAbsenceRequestUpdater>();
 			builder.RegisterType<AbsenceRequestWaitlistProvider>().As<IAbsenceRequestWaitlistProvider>();
-			builder.RegisterType<AbsenceRequestWaitlistProcessor>().As<IAbsenceRequestWaitlistProcessor>();
-			builder.RegisterType<AbsenceRequestProcessor>().As<IAbsenceRequestProcessor>();
+			builder.RegisterType<AbsenceRequestWaitlistProcessor>().As<IAbsenceRequestWaitlistProcessor>().InstancePerLifetimeScope();
+			builder.RegisterType<AbsenceRequestProcessor>().As<IAbsenceRequestProcessor>().InstancePerLifetimeScope();
 		}
     }
 }

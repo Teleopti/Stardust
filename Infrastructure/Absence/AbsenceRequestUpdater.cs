@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_toggleManager = toggleManager;
 		}
 
-		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public bool UpdateAbsenceRequest(IPersonRequest personRequest, IAbsenceRequest absenceRequest, IUnitOfWork unitOfWork,
+													ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
@@ -100,16 +101,18 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				_process = mergedPeriod.AbsenceRequestProcess;
 
 				loadDataForResourceCalculation(absenceRequest, validatorList);
-				
-				personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest, personRequest, dateOnlyPeriod);
+
+				personAccountBalanceCalculator = getPersonAccountBalanceCalculator(affectedPersonAbsenceAccount, absenceRequest,
+																										 personRequest, dateOnlyPeriod);
 
 				setupUndoContainersAndTakeSnapshot(undoRedoContainer, allAccounts);
-				
+
 				checkIfPersonIsAlreadyAbsentDuringRequestPeriod(absenceRequest, personRequest);
 
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
-				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules, _scenarioRepository.Current());
+				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules,
+																													 _scenarioRepository.Current());
 				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
 				//Will issue a rollback for simulated schedule data
@@ -121,7 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				requestApprovalServiceScheduler,
 				_authorization,
 				()
-							=>
+					=>
 				{
 					if (affectedPersonAbsenceAccount != null)
 						trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
@@ -135,22 +138,23 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				_budgetGroupHeadCountSpecification);
 
 
-			var returnValue = processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest, requiredForHandlingAbsenceRequest, validatorList);
+			var returnValue = processRequest(personRequest, absenceRequest, requiredForProcessingAbsenceRequest,
+														requiredForHandlingAbsenceRequest, validatorList);
 
 			//Ugly fix to get the number updated for person account. Don't try this at home!
 			if (personRequest.IsApproved)
 			{
 				if (affectedPersonAbsenceAccount != null)
 				{
-					trackAccounts (affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
-					unitOfWork.Merge (affectedPersonAbsenceAccount);
+					trackAccounts(affectedPersonAbsenceAccount, dateOnlyPeriod, absenceRequest);
+					unitOfWork.Merge(affectedPersonAbsenceAccount);
 				}
 			}
 
 			return returnValue;
 
 		}
-		
+
 		private void trackAccounts(IPersonAbsenceAccount personAbsenceAccount, DateOnlyPeriod period, IAbsenceRequest absenceRequest)
 		{
 			var scheduleRange = _schedulingResultStateHolder.Schedules[absenceRequest.Person];
