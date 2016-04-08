@@ -263,43 +263,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
 
-			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
-				= new SmartDayOffBackToLegalStateService(
-					_dayOffBackToLegalStateFunctions,
-					100,
-					_dayOffDecisionMaker);
-
-			IScheduleResultDataExtractor allSkillsDataExtractor =
-				_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
-					_schedulerStateHolder().SchedulingResultState);
-			IPeriodValueCalculator periodValueCalculatorForAllSkills =
-				_optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
-					allSkillsDataExtractor);
-			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder =
-				new TeamBlockDaysOffMoveFinder(_scheduleResultDataExtractorProvider,
-					dayOffBackToLegalStateService,
-					_dayOffOptimizationDecisionMakerFactory);
-
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService =
 				new TeamBlockDayOffOptimizerService(
-					teamInfoFactory,
 					_lockableBitArrayFactory,
 					_lockableBitArrayChangesTracker,
 					_teamBlockScheduler,
 					_teamBlockInfoFactory,
-					periodValueCalculatorForAllSkills,
 					_safeRollbackAndResourceCalculation,
 					_teamDayOffModifier,
 					_teamBlockSteadyStateValidator,
 					_teamBlockCleaner,
 					_teamBlockOptimizationLimits,
 					_teamBlockMaxSeatChecker,
-					teamBlockDaysOffMoveFinder,
 					_teamBlockScheudlingOptions, 
 					_allTeamMembersInSelectionSpecification,
 					_teamBlockShiftCategoryLimitationValidator,
 					_teamBlockDayOffsInPeriodValidator,
-					_teamBlockDaysOffSameDaysOffLockSyncronizer
+					_teamBlockDaysOffSameDaysOffLockSyncronizer,
+					_dayOffBackToLegalStateFunctions,
+					_scheduleResultDataExtractorProvider,
+					_dayOffOptimizationDecisionMakerFactory,
+					_schedulerStateHolder,
+					_optimizerHelper,
+					_dayOffDecisionMaker
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder().CommonStateHolder.DayOffs
@@ -319,7 +305,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulingOptions,
 				resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState,
-				dayOffOptimizationPreferenceProvider);
+				dayOffOptimizationPreferenceProvider,
+				teamInfoFactory);
 			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
