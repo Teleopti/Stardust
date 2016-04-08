@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventsPublisher = eventsPublisher;
 		}
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()
@@ -47,9 +47,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				}
             }
         }
-
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-		}
     }
 }

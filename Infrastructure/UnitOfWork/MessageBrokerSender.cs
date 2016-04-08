@@ -17,11 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_messageBroker = messageBroker;
 			_initiatorIdentifier = initiatorIdentifier;
 		}
-
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-		}
-
+		
 		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var identifier = _initiatorIdentifier.Current();

@@ -10,16 +10,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public IEnumerable<IRootChangeInfo> AfterFlushInvokedWith;
 		public IEnumerable<object> ModifiedRoots;
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			AfterFlushInvokedWith = modifiedRoots;
 			ModifiedRoots = AfterFlushInvokedWith.Select(x => x.Root);
 		}
-
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-		}
-
+		
 		public void Clear()
 		{
 			AfterFlushInvokedWith = null;

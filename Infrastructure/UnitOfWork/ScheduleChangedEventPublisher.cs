@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_now = now;
 		}
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var roots = modifiedRoots.Select(r => r.Root);
 			var personAssignments = roots.OfType<IPersonAssignment>().Cast<IPersistableScheduleData>();
@@ -72,10 +72,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					LogManager.GetLogger(typeof(ScheduleChangedEventPublisher)).Error(ex);
 				}
 			}
-		}
-
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
 		}
 	}
 }

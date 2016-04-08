@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (mocks.Playback())
 			{
-				target.AfterFlush(new[] { rootChangeInfo });
+				target.AfterCommit(new[] { rootChangeInfo });
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (mocks.Playback())
 			{
-				target.AfterFlush(new[] { rootChangeInfo });
+				target.AfterCommit(new[] { rootChangeInfo });
 			}
 		}
 	}

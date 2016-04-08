@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_now = now;
 		}
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
 			if (!withEvents.Any()) return;
@@ -24,9 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var events = withEvents.SelectMany(e => e.PopAllEvents(_now)).ToArray();
 			_publisher.Publish(events);
 		}
-
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-		}
+		
 	}
 }

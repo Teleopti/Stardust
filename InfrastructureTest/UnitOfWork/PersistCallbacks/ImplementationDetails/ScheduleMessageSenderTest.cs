@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			var publisher = new eventPopulatingPublisherProbe();
 			var target = new ScheduleChangedEventPublisher(publisher, new Now());
-			target.AfterFlush(new[] { rootChangeInfo });
+			target.AfterCommit(new[] { rootChangeInfo });
 
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(personAssignment.Period.StartDateTime));
 		}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			var target = new ScheduleChangedEventPublisher(publisher, new Now());
 			try
 			{
-				target.AfterFlush(new[] { rootChangeInfo });
+				target.AfterCommit(new[] { rootChangeInfo });
 			}
 			catch (Exception)
 			{

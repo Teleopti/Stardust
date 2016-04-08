@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_businessUnit = businessUnit;
 		}
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			// we are signed in with a transient BU and cant publish events
 			var bu = _businessUnit.Current();
@@ -41,9 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var message = new PersonCollectionChangedEvent{SerializedPeople = Guid.Empty.ToString()};
 			_eventsPublisher.Publish(message);
 		}
-
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-		}
+		
 	}
 }

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
             }
             using (_mocks.Playback())
             {
-				_target.AfterFlush(roots);
+				_target.AfterCommit(roots);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (_mocks.Playback())
 			{
-				_target.AfterFlush(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
+				_target.AfterCommit(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
 			}
 		}
 	}

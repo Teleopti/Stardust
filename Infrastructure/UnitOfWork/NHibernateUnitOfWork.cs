@@ -150,20 +150,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_initiator = initiator;
 
-			//man borde nog styra upp denna genom att använda ISynchronization istället,
-			//när tran startas, lägg pĺ en sync callback via tran.RegisterSynchronization(callback);
 			ICollection<IRootChangeInfo> modifiedRoots;
 			try
 			{
 				Flush();
-
 				modifiedRoots = new List<IRootChangeInfo>(_interceptor.Value.ModifiedRoots);
-				
-				commitInnerTransaction();
-				
-				mightStartTransaction();
-				_persistCallbacks.Current().ForEach(d => d.AfterFlush(modifiedRoots));
-				commitInnerTransaction();
+				_transaction.Commit();
+				_transaction.Dispose();
+				_transaction = null;
+				_transactionSynchronization = null;
 			}
 			catch (TooManyActiveAgentsException exception)
 			{
@@ -186,14 +181,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_interceptor.Value.Clear();
 			}
 			return modifiedRoots;
-		}
-
-		private void commitInnerTransaction()
-		{
-			_transaction.Commit();
-			_transaction.Dispose();
-			_transaction = null;
-			_transactionSynchronization = null;
 		}
 		
 		private void persistExceptionHandler(Exception ex)

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventPublisher = eventPublisher;
 		}
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var meetings =
 				modifiedRoots.Select(r => new { ProvideCustomChangeInfo = r.Root as IProvideCustomChangeInfo, UpdateType = r.Status });
@@ -57,10 +57,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					_eventPublisher.Publish(message);
 				}
 			}
-		}
-
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
 		}
 	}
 }

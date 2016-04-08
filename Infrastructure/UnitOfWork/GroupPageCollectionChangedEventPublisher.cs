@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventsPublisher = eventsPublisher;
 		}
 
-		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var allRoots = modifiedRoots.ToList();
 
@@ -41,9 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_eventsPublisher.Publish(message);
 			}
 		}
-
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-		}
+		
 	}
 }
