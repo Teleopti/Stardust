@@ -119,6 +119,7 @@
 		public const string AddActivity = "0099";
 		public const string MoveActivity = "0100";
 		public const string SwapShifts = "0108";
+		public const string RemoveActivity = "0109";
 		public const string RealTimeAdherenceOverview = "0092";
 		public const string WebForecasts = "0121";
 		public const string WebPermissions = "0122";
