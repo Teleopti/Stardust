@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -16,10 +15,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public ScheduleChangedEventFromMeetingPublisher(IEventPopulatingPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
-		}
-
-		public void AdditionalFlush(IUnitOfWork unitOfWork, IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
 		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)

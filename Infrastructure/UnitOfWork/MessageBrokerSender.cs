@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -17,10 +16,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_messageBroker = messageBroker;
 			_initiatorIdentifier = initiatorIdentifier;
-		}
-
-		public void AdditionalFlush(IUnitOfWork unitOfWork, IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
 		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)

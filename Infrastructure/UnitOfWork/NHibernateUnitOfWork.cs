@@ -6,8 +6,10 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Proxy;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -101,6 +103,34 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public bool IsDirty()
 		{
 			return Session.IsDirty();
+		}
+
+		public void Flush()
+		{
+			try
+			{
+				_interceptor.Value.Iteration = InterceptorIteration.Normal;
+				Session.Flush();
+				_interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
+				blackSheep();
+				Session.Flush();
+			}
+			catch (StaleStateException ex)
+			{
+				throw new OptimisticLockException("Optimistic lock", ex);
+			}
+		}
+
+		private void blackSheep()
+		{
+			new SendPushMessageWhenRootAlteredService()
+				.SendPushMessages(
+					_interceptor.Value.ModifiedRoots,
+					new PushMessagePersister(
+						new PushMessageRepository(this),
+						new PushMessageDialogueRepository(this),
+						new CreatePushMessageDialoguesService()
+						));
 		}
 
 		public IEnumerable<IRootChangeInfo> PersistAll()
@@ -218,22 +248,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public IDisposable DisableFilter(IQueryFilter filter)
 		{
 			return _filterManager.Disable(filter);
-		}
-
-		public void Flush()
-		{
-			try
-			{
-				_interceptor.Value.Iteration = InterceptorIteration.Normal;
-				Session.Flush();
-				_interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
-				_persistCallbacks.Current().ForEach(d => d.AdditionalFlush(this, _interceptor.Value.ModifiedRoots));
-				Session.Flush();
-			}
-			catch (StaleStateException ex)
-			{
-				throw new OptimisticLockException("Optimistic lock", ex);
-			}
 		}
 
 		//right now only supporting one callback. if you call this twice - the latter will overwrite the first one

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
@@ -10,10 +9,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		public IEnumerable<IRootChangeInfo> AfterFlushInvokedWith;
 		public IEnumerable<object> ModifiedRoots;
-
-		public void AdditionalFlush(IUnitOfWork unitOfWork, IEnumerable<IRootChangeInfo> modifiedRoots)
-		{
-		}
 
 		public void AfterFlush(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
