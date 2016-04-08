@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 		public IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(IEnumerable<IWorkShiftRuleSet> ruleSetList, ITeamInfo team, DateOnly dateOnly)
 		{
-			var groupMembers = team.GroupMembers.Intersect(team.UnLockedMembers(dateOnly));
+			//var groupMembers = team.GroupMembers.Intersect(team.UnLockedMembers(dateOnly));
+			var groupMembers = team.GroupMembers.Where(x => x.Period(dateOnly) != null);
 			var workShiftRuleSets = ruleSetList as IList<IWorkShiftRuleSet> ?? ruleSetList.ToList();
 			var memberList = groupMembers as IList<IPerson> ?? groupMembers.ToList();
 			var commonList = Filter(workShiftRuleSets, memberList.First(), dateOnly).ToList();

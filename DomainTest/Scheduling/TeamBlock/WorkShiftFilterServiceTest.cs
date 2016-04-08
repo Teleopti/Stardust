@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_activity = ActivityFactory.CreateActivity("sd");
 			
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), _dateOnly);
+			_person.AddPersonPeriod(new PersonPeriod(new DateOnly(2012, 12, 12), PersonContractFactory.CreatePersonContract(), new Team()));
 			_matrix = ScheduleMatrixProFactory.Create(new DateOnlyPeriod(_dateOnly, _dateOnly),
 				new SchedulingResultStateHolder {Schedules = new ScheduleDictionaryForTest(new Scenario("Default"), _dateOnly.Date)}, _person,
 				new VirtualSchedulePeriod(_person, _dateOnly, new VirtualSchedulePeriodSplitChecker(_person)));

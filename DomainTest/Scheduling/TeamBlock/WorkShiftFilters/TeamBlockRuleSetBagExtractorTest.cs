@@ -73,9 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                 Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
+                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1).Repeat.Twice();
                 Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons);
 			}
             using (_mock.Playback())
             {
@@ -94,12 +93,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                 Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
+                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1).Repeat.Twice();
                 Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod2);
+                Expect.Call(_person1.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod2).Repeat.Twice();
                 Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-	            Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons);
-				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 11))).Return(persons);
 			}
             using (_mock.Playback())
             {
@@ -118,11 +115,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                 Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
+                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1).Repeat.Twice();
                 Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-                Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2);
+                Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2).Repeat.Twice();
                 Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons).Repeat.Twice();
 			}
             using (_mock.Playback())
             {
@@ -141,16 +137,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                 Expect.Call(_teamInfo.GroupMembers).Return(persons);
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
+                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1).Repeat.Twice();
                 Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
-                Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2);
+                Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2).Repeat.Twice();
                 Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
-                Expect.Call(_person1.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod3);
+                Expect.Call(_person1.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod3).Repeat.Twice();
                 Expect.Call(_personPeriod3.RuleSetBag).Return(_ruleSetBag3);
-                Expect.Call(_person2.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod4);
+                Expect.Call(_person2.Period(new DateOnly(2014, 03, 11))).Return(_personPeriod4).Repeat.Twice();
                 Expect.Call(_personPeriod4.RuleSetBag).Return(_ruleSetBag4);
-				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 10))).Return(persons).Repeat.Twice();
-				Expect.Call(_teamInfo.UnLockedMembers(new DateOnly(2014, 03, 11))).Return(persons).Repeat.Twice();
 			}
             using (_mock.Playback())
             {

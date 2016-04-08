@@ -21,8 +21,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
             {
                 foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
                 {
-					if(!teamInfo.UnLockedMembers(dateOnly).Contains(person))
-						continue;
+					//if(!teamInfo.UnLockedMembers(dateOnly).Contains(person))
+					//	continue;
+
+					if(person.Period(dateOnly) == null) continue;
+	                
                     var tempWorkShiftRuleSetBag = person.Period(dateOnly).RuleSetBag;
                     if (tempWorkShiftRuleSetBag == null) 
 						continue;

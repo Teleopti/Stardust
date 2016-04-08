@@ -92,12 +92,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 			if (teamBlockInfo == null)
 				return null;
-			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
+			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.Where(x => x.Period(dateOnly) != null);
 			var person = groupMembers.First();
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).ToList();
 			if (matrixList.Count == 0) return null;
-			var firstMember = teamBlockInfo.TeamInfo.GroupMembers.First();
-			var currentSchedulePeriod = firstMember.VirtualSchedulePeriod(dateOnly);
+			//var firstMember = teamBlockInfo.TeamInfo.GroupMembers.First();
+			var currentSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
 			if (!currentSchedulePeriod.IsValid)
 				return null;
 			if (schedulingOptions == null)
