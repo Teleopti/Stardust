@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
@@ -49,26 +48,28 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly HangfireUtilties _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private readonly ITriggerHangfireRecurringJobs _hangfireRecurringJobs;
 
 		public TestController(
-			IMutateNow mutateNow, 
+			IMutateNow mutateNow,
 			INow now,
-			ICacheInvalidator cacheInvalidator, 
-			ISessionSpecificDataProvider sessionSpecificDataProvider, 
-			ISsoAuthenticator authenticator, 
-			IWebLogOn logon, 
-			IBusinessUnitProvider businessUnitProvider, 
-			ICurrentHttpContext httpContext, 
-			IFormsAuthentication formsAuthentication, 
-			IIdentityProviderProvider identityProviderProvider, 
-			ILoadPasswordPolicyService loadPasswordPolicyService, 
-			ISettings settings, 
-			IPhysicalApplicationPath physicalApplicationPath, 
+			ICacheInvalidator cacheInvalidator,
+			ISessionSpecificDataProvider sessionSpecificDataProvider,
+			ISsoAuthenticator authenticator,
+			IWebLogOn logon,
+			IBusinessUnitProvider businessUnitProvider,
+			ICurrentHttpContext httpContext,
+			IFormsAuthentication formsAuthentication,
+			IIdentityProviderProvider identityProviderProvider,
+			ILoadPasswordPolicyService loadPasswordPolicyService,
+			ISettings settings,
+			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
 			ActivityChangesChecker activityChangesChecker,
 			HangfireUtilties hangfire,
 			TenantTickEventPublisher tenantTickEventPublisher,
-			Domain.ApplicationLayer.Rta.Service.Rta rta)
+			Domain.ApplicationLayer.Rta.Service.Rta rta,
+			ITriggerHangfireRecurringJobs hangfireRecurringJobs)
 		{
 			_mutateNow = mutateNow;
 			_now = now;
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_hangfire = hangfire;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_rta = rta;
+			_hangfireRecurringJobs = hangfireRecurringJobs;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var result = _authenticator.AuthenticateApplicationUser(userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = businessUnits.Single(b => b.Name == businessUnitName);
-			string tenantPassword=null;
+			string tenantPassword = null;
 
 			if (result.Successful)
 			{
@@ -218,7 +220,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_mutateNow.Is(new DateTime(ticks));
 
 			_activityChangesChecker.ExecuteForTest();
-			_hangfire.TriggerAllRecurringJobs();
+			_hangfireRecurringJobs.Trigger();
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -249,6 +251,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			if (_cacheInvalidator != null)
 				_cacheInvalidator.InvalidateAll();
 		}
-		
+
 	}
 }
