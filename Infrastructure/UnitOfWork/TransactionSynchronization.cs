@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterCompletion(bool success)
 		{
 			if (!success) return;
-			_callbacks.Current().ForEach(d => d.AfterFlush(_interceptor.Value.ModifiedRoots));
+			_callbacks.Current().ForEach(d => d.AfterCommit(_interceptor.Value.ModifiedRoots));
 			_afterCompletion.ForEach(f => f.Invoke());
 		}
 
