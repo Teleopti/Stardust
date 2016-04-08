@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				return uow.Session().CreateSQLQuery(@"select 
 						team_id TeamId
 						,team_code TeamCode
-						from mart.dim_team")
+						from mart.dim_team WITH (NOLOCK)")
 					.SetResultTransformer(Transformers.AliasToBean<AnalyticTeam>())
 					.List<AnalyticTeam>();
 			}
