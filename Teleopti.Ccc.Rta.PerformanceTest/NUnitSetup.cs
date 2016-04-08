@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 	[SetUpFixture]
 	public class NUnitSetup
 	{
-		private ICurrentPersistCallbacks persistCallbacks;
+		private ICurrentTransactionHooks transactionHooks;
 		private DefaultDataCreator defaultDataCreator;
 		private DataCreator dataCreator;
 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
 
-			persistCallbacks = container.Resolve<ICurrentPersistCallbacks>();
+			transactionHooks = container.Resolve<ICurrentTransactionHooks>();
 			defaultDataCreator = container.Resolve<DefaultDataCreator>();
 			dataCreator = container.Resolve<DataCreator>();
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			DataSourceHelper.CreateDatabases();
 
 			StateHolderProxyHelper.SetupFakeState(
-				DataSourceHelper.CreateDataSource(persistCallbacks),
+				DataSourceHelper.CreateDataSource(transactionHooks),
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnit,
 				new ThreadPrincipalContext()

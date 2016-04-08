@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class TransactionSynchronization : ISynchronization
 	{
-		private readonly ICurrentPersistCallbacks _callbacks;
+		private readonly ICurrentTransactionHooks _callbacks;
 		private readonly Lazy<AggregateRootInterceptor> _interceptor;
 		private readonly List<Action> _afterCompletion = new List<Action>();
 		 
-		public TransactionSynchronization(ICurrentPersistCallbacks callbacks, Lazy<AggregateRootInterceptor> interceptor)
+		public TransactionSynchronization(ICurrentTransactionHooks callbacks, Lazy<AggregateRootInterceptor> interceptor)
 		{
 			_callbacks = callbacks;
 			_interceptor = interceptor;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterCompletion(bool success)
 		{
 			if (!success) return;
-			_callbacks.Current().ForEach(d => d.AfterCommit(_interceptor.Value.ModifiedRoots));
+			_callbacks.Current().ForEach(d => d.AfterCompletion(_interceptor.Value.ModifiedRoots));
 			_afterCompletion.ForEach(f => f.Invoke());
 		}
 

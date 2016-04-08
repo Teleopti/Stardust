@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 	[TestFixture]
 	public class TeamOrSiteChangedMessageSenderTest
 	{
-		private IPersistCallback _target;
+		private ITransactionHook _target;
 		private MockRepository _mocks;
 		private IEventPopulatingPublisher _serviceBusSender;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (_mocks.Playback())
 			{
-				_target.AfterCommit(roots);
+				_target.AfterCompletion(roots);
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (_mocks.Playback())
 			{
-				_target.AfterCommit(roots);
+				_target.AfterCompletion(roots);
 			}
 		}
 	}

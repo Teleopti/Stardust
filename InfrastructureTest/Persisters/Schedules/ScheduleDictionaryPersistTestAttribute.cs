@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public IScheduleStorage ScheduleStorage;
 		public IPersonRepository PersonRepository;
 		public ICurrentScenario Scenario;
-		public FakePersistCallback MessageSender2;
+		public FakeTransactionHook MessageSender2;
 
 		protected override void BeforeTest()
 		{
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-			system.UseTestDouble<FakePersistCallback>().For<IPersistCallback>();
+			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>();
 			system.AddService(this);
 		}
 

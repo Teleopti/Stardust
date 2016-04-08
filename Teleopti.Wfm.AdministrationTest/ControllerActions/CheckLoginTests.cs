@@ -25,7 +25,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnFalseIfLoginExist()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			TestPollutionCleaner.Clean("tenant", "appuser");
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
@@ -64,7 +64,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldReturnTrueIfCorrectNewLogin()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			TestPollutionCleaner.Clean("tenant", "appuser");
 			var builder =
 				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);

@@ -2,9 +2,9 @@
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class NoPersistCallbacks : ICurrentPersistCallbacks
+	public class NoTransactionHooks : ICurrentTransactionHooks
 	{
-		public IEnumerable<IPersistCallback> Current()
+		public IEnumerable<ITransactionHook> Current()
 		{
 			yield break;
 		}

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 		{
 			var dataSourcesFactory = new DataSourcesFactory(
 				new EnversConfiguration(),
-				new NoPersistCallbacks(),
+				new NoTransactionHooks(),
 				DataSourceConfigurationSetter.ForApplicationConfig(),
 				new CurrentHttpContext()
 				);

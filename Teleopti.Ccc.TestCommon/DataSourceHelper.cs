@@ -17,15 +17,15 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		public const string TestTenantName = "TestData";
 
-		public static IDataSource CreateDatabasesAndDataSource(ICurrentPersistCallbacks persistCallbacks)
+		public static IDataSource CreateDatabasesAndDataSource(ICurrentTransactionHooks transactionHooks)
 		{
-			return CreateDatabasesAndDataSource(persistCallbacks, TestTenantName);
+			return CreateDatabasesAndDataSource(transactionHooks, TestTenantName);
 		}
 
-		public static IDataSource CreateDatabasesAndDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
+		public static IDataSource CreateDatabasesAndDataSource(ICurrentTransactionHooks transactionHooks, string name)
 		{
 			CreateDatabases(name);
-			return makeDataSource(persistCallbacks, name);
+			return makeDataSource(transactionHooks, name);
 		}
 		
 		public static void CreateDatabases()
@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.TestCommon
 			createOrRestoreAnalytics();
 		}
 
-		public static IDataSource CreateDataSource(ICurrentPersistCallbacks persistCallbacks)
+		public static IDataSource CreateDataSource(ICurrentTransactionHooks transactionHooks)
 		{
-			return makeDataSource(persistCallbacks, TestTenantName);
+			return makeDataSource(transactionHooks, TestTenantName);
 		}
 
-		public static IDataSource CreateDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
+		public static IDataSource CreateDataSource(ICurrentTransactionHooks transactionHooks, string name)
 		{
-			return makeDataSource(persistCallbacks, name);
+			return makeDataSource(transactionHooks, name);
 		}
 
 
@@ -190,9 +190,9 @@ namespace Teleopti.Ccc.TestCommon
 
 
 
-		private static IDataSource makeDataSource(ICurrentPersistCallbacks persistCallbacks, string name)
+		private static IDataSource makeDataSource(ICurrentTransactionHooks transactionHooks, string name)
 		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), persistCallbacks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), transactionHooks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
 			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
 			return dataSourceFactory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
 		}

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			SystemSetup.Setup();
 
-			datasource = DataSourceHelper.CreateDataSource(SystemSetup.PersistCallbacks);
+			datasource = DataSourceHelper.CreateDataSource(SystemSetup.TransactionHooks);
 
 			StateHolderProxyHelper.SetupFakeState(
 				datasource,

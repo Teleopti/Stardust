@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class PersonCollectionChangedEventPublisher : IPersistCallback
+	public class PersonCollectionChangedEventPublisher : ITransactionHook
 	{
 		private readonly IEventPopulatingPublisher _eventsPublisher;
 		private readonly ICurrentBusinessUnit _businessUnit;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_businessUnit = businessUnit;
 		}
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			// we are signed in with a transient BU and cant publish events
 			var bu = _businessUnit.Current();

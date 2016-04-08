@@ -5,12 +5,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class FakePersistCallback : IPersistCallback
+	public class FakeTransactionHook : ITransactionHook
 	{
 		public IEnumerable<IRootChangeInfo> AfterFlushInvokedWith;
 		public IEnumerable<object> ModifiedRoots;
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			AfterFlushInvokedWith = modifiedRoots;
 			ModifiedRoots = AfterFlushInvokedWith.Select(x => x.Root);

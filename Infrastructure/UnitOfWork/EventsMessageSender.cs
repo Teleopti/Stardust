@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class EventsMessageSender : IPersistCallback
+	public class EventsMessageSender : ITransactionHook
 	{
 		private readonly IEventPopulatingPublisher _publisher;
 		private readonly INow _now;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_now = now;
 		}
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
 			if (!withEvents.Any()) return;

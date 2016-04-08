@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnFalseIfNameAlreadyExists()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");
@@ -33,7 +33,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldReturnTrueIfNameNotExists()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Old One");

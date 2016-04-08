@@ -2,8 +2,8 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface ICurrentPersistCallbacks
+	public interface ICurrentTransactionHooks
 	{
-		IEnumerable<IPersistCallback> Current();
+		IEnumerable<ITransactionHook> Current();
 	}
 }

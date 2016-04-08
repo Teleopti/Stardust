@@ -23,14 +23,14 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShouldNotAllowDeleteOnUnknowTenant()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			Target.DeleteTenant("SomeUnknownOne").Content.Success.Should().Be.False();
 		}
 
 		[Test]
 		public void ShouldNotAllowDeleteOnBaseTenant()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 
          using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -44,7 +44,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		[Test]
 		public void ShoulAllowDeleteOnNotBaseTenant()
 		{
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{

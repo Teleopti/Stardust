@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class MessageBrokerSender : IPersistCallback
+	public class MessageBrokerSender : ITransactionHook
 	{
 		private readonly Func<IMessageBrokerComposite> _messageBroker;
 		private readonly ICurrentInitiatorIdentifier _initiatorIdentifier;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 		
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var identifier = _initiatorIdentifier.Current();
 			var moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;

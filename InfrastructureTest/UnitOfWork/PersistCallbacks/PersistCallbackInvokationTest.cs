@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 	[ScheduleDictionaryPersistTest]
 	public class PersistCallbackInvokationTest
 	{
-		public FakePersistCallback MessageSender;
+		public FakeTransactionHook MessageSender;
 		public IScheduleDictionaryPersister Target;
 		public IScheduleDictionaryPersistTestHelper Helper;
 

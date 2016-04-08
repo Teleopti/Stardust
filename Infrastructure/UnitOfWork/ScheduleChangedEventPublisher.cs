@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class ScheduleChangedEventPublisher : IPersistCallback
+	public class ScheduleChangedEventPublisher : ITransactionHook
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly INow _now;
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_now = now;
 		}
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var roots = modifiedRoots.Select(r => r.Root);
 			var personAssignments = roots.OfType<IPersonAssignment>().Cast<IPersistableScheduleData>();

@@ -239,7 +239,7 @@
     <Compile Include="MultiTenancy\SessionExtension.cs" />
     <Compile Include="NHibernateConfiguration\SqlServerTransientErrorTest.cs" />
     <Compile Include="Persisters\Schedules\CurrentUnitOfWorkModifyNoConflictShouldEmptyEventsCollectionTest.cs" />
-    <Compile Include="Persisters\Schedules\FakePersistCallback.cs" />
+    <Compile Include="Persisters\Schedules\FakeTransactionHook.cs" />
     <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeReassociateTest.cs" />

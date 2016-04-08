@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		{
 			builder.Register(c => new DataSourcesFactory(
 				new EnversConfiguration(),
-				c.Resolve<ICurrentPersistCallbacks>(),
+				c.Resolve<ICurrentTransactionHooks>(),
 				DataSourceConfigurationSetter.ForSdk(),
 				new CurrentHttpContext()
 				)).As<IDataSourcesFactory>().SingleInstance();

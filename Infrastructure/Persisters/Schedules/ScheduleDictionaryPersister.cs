@@ -10,17 +10,17 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 	public class ScheduleDictionaryPersister : IScheduleDictionaryPersister
 	{
 		private readonly IScheduleRangePersister _scheduleRangePersister;
-		private readonly IMessageSendersScope _messageSendersScope;
-		private readonly ICurrentPersistCallbacks _persistCallbacks;
+		private readonly ITransactionHooksScope _transactionHooksScope;
+		private readonly ICurrentTransactionHooks _transactionHooks;
 
 		public ScheduleDictionaryPersister(
 			IScheduleRangePersister scheduleRangePersister, 
-			IMessageSendersScope messageSendersScope,
-			ICurrentPersistCallbacks persistCallbacks)
+			ITransactionHooksScope transactionHooksScope,
+			ICurrentTransactionHooks transactionHooks)
 		{
 			_scheduleRangePersister = scheduleRangePersister;
-			_messageSendersScope = messageSendersScope;
-			_persistCallbacks = persistCallbacks;
+			_transactionHooksScope = transactionHooksScope;
+			_transactionHooks = transactionHooks;
 		}
 
 		[LogTime]
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			var completeResult = new SchedulePersistResult();
             foreach (var scheduleRange in scheduleDictionary.Values)
 			{
-				using (_messageSendersScope.OnThisThreadExclude<ScheduleChangedMessageSender>())
+				using (_transactionHooksScope.OnThisThreadExclude<ScheduleChangedMessageSender>())
 				{
 					var result = _scheduleRangePersister.Persist(scheduleRange);
 			
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 					completeResult.InitiatorIdentifier = result.InitiatorIdentifier;	
 				}				
 			}
-			var aggregatedScheduleChangeMessageSender = _persistCallbacks.Current().OfType<ScheduleChangedMessageSender>().SingleOrDefault();
+			var aggregatedScheduleChangeMessageSender = _transactionHooks.Current().OfType<ScheduleChangedMessageSender>().SingleOrDefault();
 			if (aggregatedScheduleChangeMessageSender != null)
 				aggregatedScheduleChangeMessageSender.Send(completeResult.InitiatorIdentifier, completeResult.ModifiedRoots);
             

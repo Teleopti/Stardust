@@ -50,24 +50,24 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		private void persistCallbacks(ContainerBuilder builder)
 		{
-			builder.RegisterType<CurrentPersistCallbacks>().As<ICurrentPersistCallbacks>().As<IMessageSendersScope>();
+			builder.RegisterType<CurrentTransactionHooks>().As<ICurrentTransactionHooks>().As<ITransactionHooksScope>();
 
 			/**************************************/
 			/*         Order dependant            */
-			builder.RegisterType<EventsMessageSender>().As<IPersistCallback>();
+			builder.RegisterType<EventsMessageSender>().As<ITransactionHook>();
 			if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb)
-				builder.RegisterType<ScheduleChangedEventPublisher>().As<IPersistCallback>();
+				builder.RegisterType<ScheduleChangedEventPublisher>().As<ITransactionHook>();
 			/*           End                      */
 			/**************************************/
 
-			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<IPersistCallback>();
-			builder.RegisterType<GroupPageCollectionChangedEventPublisher>().As<IPersistCallback>();
-			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<IPersistCallback>();
-			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<IPersistCallback>();
-			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<IPersistCallback>();
-			builder.RegisterType<MessageBrokerSender>().As<IPersistCallback>().SingleInstance();
+			builder.RegisterType<ScheduleChangedEventFromMeetingPublisher>().As<ITransactionHook>();
+			builder.RegisterType<GroupPageCollectionChangedEventPublisher>().As<ITransactionHook>();
+			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<ITransactionHook>();
+			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<ITransactionHook>();
+			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<ITransactionHook>();
+			builder.RegisterType<MessageBrokerSender>().As<ITransactionHook>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<ScheduleChangedMessageSender>().As<IPersistCallback>();
+				builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();
 
 		}
 	}

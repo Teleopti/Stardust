@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class ScheduleChangedEventFromMeetingPublisher : IPersistCallback
+	public class ScheduleChangedEventFromMeetingPublisher : ITransactionHook
 	{
 		private readonly IEventPopulatingPublisher _eventPublisher;
 
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventPublisher = eventPublisher;
 		}
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var meetings =
 				modifiedRoots.Select(r => new { ProvideCustomChangeInfo = r.Root as IProvideCustomChangeInfo, UpdateType = r.Status });

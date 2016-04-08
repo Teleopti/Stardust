@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly UnitOfWorkContext _context;
 		private readonly ISession _session;
 		private readonly TransactionIsolationLevel _isolationLevel;
-		private readonly ICurrentPersistCallbacks _persistCallbacks;
+		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly NHibernateFilterManager _filterManager;
 		private readonly Lazy<AggregateRootInterceptor> _interceptor;
 		private ITransaction _transaction;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			UnitOfWorkContext context, 
 			ISession session, 
 			TransactionIsolationLevel isolationLevel, 
-			ICurrentPersistCallbacks persistCallbacks)
+			ICurrentTransactionHooks transactionHooks)
 		{
 			InParameter.NotNull("session", session);
 			_context = context;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_session = session;
 			_session.FlushMode = FlushMode.Never;
 			_isolationLevel = isolationLevel;
-			_persistCallbacks = persistCallbacks ?? new NoPersistCallbacks();
+			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
 			_interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
 					_session.BeginTransaction() :
 					_session.BeginTransaction(IsolationLevel.Serializable);
-				_transactionSynchronization = new TransactionSynchronization(_persistCallbacks, _interceptor);
+				_transactionSynchronization = new TransactionSynchronization(_transactionHooks, _interceptor);
 				_transaction.RegisterSynchronization(_transactionSynchronization);
 			}
 			catch (TransactionException transactionException)

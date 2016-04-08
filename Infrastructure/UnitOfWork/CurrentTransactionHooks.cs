@@ -5,24 +5,24 @@ using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class CurrentPersistCallbacks : ICurrentPersistCallbacks, IMessageSendersScope
+	public class CurrentTransactionHooks : ICurrentTransactionHooks, ITransactionHooksScope
 	{
-		private static IEnumerable<IPersistCallback> _globalMessageSenders;
+		private static IEnumerable<ITransactionHook> _globalMessageSenders;
 		[ThreadStatic]
-		private static IEnumerable<IPersistCallback> _threadMessageSenders;
-		private readonly IEnumerable<IPersistCallback> _messageSenders;
+		private static IEnumerable<ITransactionHook> _threadMessageSenders;
+		private readonly IEnumerable<ITransactionHook> _messageSenders;
 
-		public CurrentPersistCallbacks(IEnumerable<IPersistCallback> messageSenders)
+		public CurrentTransactionHooks(IEnumerable<ITransactionHook> messageSenders)
 		{
 			_messageSenders = messageSenders;
 		}
 
-		public IEnumerable<IPersistCallback> Current()
+		public IEnumerable<ITransactionHook> Current()
 		{
 			return _threadMessageSenders ?? _globalMessageSenders ?? _messageSenders;
 		}
 
-		public IDisposable GloballyUse(IEnumerable<IPersistCallback> messageSenders)
+		public IDisposable GloballyUse(IEnumerable<ITransactionHook> messageSenders)
 		{
 			_globalMessageSenders = messageSenders;
 			return new GenericDisposable(() =>
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			});
 		}
 
-		public IDisposable OnThisThreadUse(IEnumerable<IPersistCallback> messageSenders)
+		public IDisposable OnThisThreadUse(IEnumerable<ITransactionHook> messageSenders)
 		{
 			_threadMessageSenders = messageSenders;
 			return new GenericDisposable(() =>

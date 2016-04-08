@@ -3,8 +3,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public interface IPersistCallback
+	public interface ITransactionHook
 	{
-		void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots);
+		void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots);
 	}
 }

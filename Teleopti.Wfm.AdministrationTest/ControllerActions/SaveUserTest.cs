@@ -19,7 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldUpdate()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -45,7 +45,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldNotAllowEmptyEmail()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
@@ -68,7 +68,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void ShouldNotAllowEmptyName()
 		{
 			//new fresh
-			DataSourceHelper.CreateDatabasesAndDataSource(new NoPersistCallbacks(), "TestData");
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{

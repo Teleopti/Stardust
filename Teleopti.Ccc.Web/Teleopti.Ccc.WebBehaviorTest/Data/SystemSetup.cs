@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static IContainer _container;
 
 		public static IToggleManager Toggles;
-		public static ICurrentPersistCallbacks PersistCallbacks;
+		public static ICurrentTransactionHooks TransactionHooks;
 		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static ICurrentUnitOfWork UnitOfWork;
 		public static DefaultDataCreator DefaultDataCreator;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			Toggles = _container.Resolve<IToggleManager>();
 			Now = _container.Resolve<INow>() as MutableNow;
-			PersistCallbacks = _container.Resolve<ICurrentPersistCallbacks>();
+			TransactionHooks = _container.Resolve<ICurrentTransactionHooks>();
 			UnitOfWorkFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
 			UnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
 			DefaultDataCreator = _container.Resolve<DefaultDataCreator>();

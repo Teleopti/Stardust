@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 	[TestFixture]
 	public class GroupPageCollectionChangedEventPublisherTest
 	{
-		private IPersistCallback _target;
+		private ITransactionHook _target;
 		private MockRepository _mocks;
 		private IEventPopulatingPublisher _eventPopulatingPublisher;
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
             }
             using (_mocks.Playback())
             {
-				_target.AfterCommit(roots);
+				_target.AfterCompletion(roots);
             }
         }
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (_mocks.Playback())
 			{
-				_target.AfterCommit(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
+				_target.AfterCompletion(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
 			}
 		}
 	}

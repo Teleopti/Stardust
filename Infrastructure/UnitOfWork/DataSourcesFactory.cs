@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly ICurrentPersistCallbacks _persistCallbacks;
+		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
 
@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public DataSourcesFactory(
 			IEnversConfiguration enversConfiguration,
-			ICurrentPersistCallbacks persistCallbacks,
+			ICurrentTransactionHooks transactionHooks,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
 			ICurrentHttpContext httpContext)
 		{
 			_enversConfiguration = enversConfiguration;
-			_persistCallbacks = persistCallbacks;
+			_transactionHooks = transactionHooks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				sessionFactory,
 				_enversConfiguration.AuditSettingProvider, 
 				applicationConnectionString,
-				_persistCallbacks);
+				_transactionHooks);
 
 			AnalyticsUnitOfWorkFactory statFactory = null;
 			if (!string.IsNullOrEmpty(statisticConnectionString))

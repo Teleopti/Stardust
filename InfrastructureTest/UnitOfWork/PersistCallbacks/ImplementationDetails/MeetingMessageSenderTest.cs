@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 	[TestFixture]
 	public class MeetingMessageSenderTest
 	{
-		private IPersistCallback target;
+		private ITransactionHook target;
 		private MockRepository mocks;
 		private IEventPopulatingPublisher serviceBusSender;
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (mocks.Playback())
 			{
-				target.AfterCommit(new[] { rootChangeInfo });
+				target.AfterCompletion(new[] { rootChangeInfo });
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks.Implementa
 			}
 			using (mocks.Playback())
 			{
-				target.AfterCommit(new[] { rootChangeInfo });
+				target.AfterCompletion(new[] { rootChangeInfo });
 			}
 		}
 	}

@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class GroupPageCollectionChangedEventPublisher : IPersistCallback
+	public class GroupPageCollectionChangedEventPublisher : ITransactionHook
 	{
 		private readonly IEventPopulatingPublisher _eventsPublisher;
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventsPublisher = eventsPublisher;
 		}
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var allRoots = modifiedRoots.ToList();
 

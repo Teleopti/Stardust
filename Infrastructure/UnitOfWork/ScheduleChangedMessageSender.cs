@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class ScheduleChangedMessageSender : IPersistCallback
+	public class ScheduleChangedMessageSender : ITransactionHook
 	{
 		private readonly IMessageSender _messageSender;
 		private readonly ICurrentDataSource _dataSource;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			send(_initiatorIdentifier.Current, modifiedRoots);
 		}

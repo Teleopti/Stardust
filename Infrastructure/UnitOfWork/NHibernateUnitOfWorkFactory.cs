@@ -14,19 +14,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ISessionFactory _factory;
 		private readonly UnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
-		private readonly ICurrentPersistCallbacks _persistCallbacks;
+		private readonly ICurrentTransactionHooks _transactionHooks;
 
 		protected internal NHibernateUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			IAuditSetter auditSettingProvider,
 			string connectionString,
-			ICurrentPersistCallbacks persistCallbacks)
+			ICurrentTransactionHooks transactionHooks)
 		{
 			ConnectionString = connectionString;
 			_context = new UnitOfWorkContext(sessionFactory);
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
-			_persistCallbacks = persistCallbacks;
+			_transactionHooks = transactionHooks;
 		}
 
 		public string Name
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_context,
 				session,
 				isolationLevel,
-				_persistCallbacks);
+				_transactionHooks);
 
 			return CurrentUnitOfWork();
 		}

@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class SettingsForPersonPeriodChangedEventPublisher : IPersistCallback
+	public class SettingsForPersonPeriodChangedEventPublisher : ITransactionHook
     {
 		private readonly IEventPopulatingPublisher _eventsPublisher;
 
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_eventsPublisher = eventsPublisher;
 		}
 
-		public void AfterCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
             var affectedInterfaces = from r in modifiedRoots
                                      from i in r.Root.GetType().GetInterfaces()
