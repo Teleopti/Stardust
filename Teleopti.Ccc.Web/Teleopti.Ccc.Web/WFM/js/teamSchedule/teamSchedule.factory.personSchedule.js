@@ -51,6 +51,16 @@
 						}
 					});
 					return start;
+				},
+				ScheduleEndTime: function () {
+					var start = schedule.Date;
+					var end = moment(schedule.Date).endOf('day');
+					angular.forEach(this.Shifts, function (shift) {
+						if (start === shift.Date && shift.Projections.length > 0) {
+							end = moment(shift.Projections[shift.Projections.length - 1].Start).add(shift.Projections[shift.Projections.length - 1].Minutes,'minutes');
+						}
+					});
+					return end.format("YYYY-MM-DD HH:mm");
 				}
 			}
 
@@ -132,7 +142,8 @@
 					// Only person absence will be selected
 					this.Selected = (this.ParentPersonAbsence != undefined && this.ParentPersonAbsence != null)
 						? !this.Selected : false;
-				}
+				},
+				Minutes: projection.Minutes
 			};
 
 			return shiftProjectionVm;

@@ -274,6 +274,9 @@
 		vm.getSelectedPersonIdList = function() {
 			return personSelectionSvc.getSelectedPersonIdList();
 		};
+		vm.getSelectedPersonInfoList = function () {
+			return personSelectionSvc.getSelectedPersonInfoList();
+		};
 
 		function replaceParameters(text, params) {
 			params.forEach(function (element, index) {

@@ -18,7 +18,10 @@ describe("PersonSelection", function() {
 	var schedule1 = {
 		PersonId: personId1,
 		Shifts: [],
-		AllowSwap: function() { return false }
+		AllowSwap: function () { return false; },
+		ScheduleEndTime: function () {
+			return "2016-03-20 18:00";
+		}
 	};
 
 	var newSchedule1 = {
@@ -31,13 +34,19 @@ describe("PersonSelection", function() {
 				}
 			}
 		],
-		AllowSwap: function () { return false }
+		AllowSwap: function () { return false; },
+		ScheduleEndTime: function() {
+			return "2016-03-20 18:00";
+		}
 	};
 
 	var schedule2 = {
 		PersonId: personId2,
 		Shifts: [],
-		AllowSwap: function () { return true }
+		AllowSwap: function () { return true; },
+		ScheduleEndTime: function () {
+			return "2016-03-20 18:00";
+		}
 	};
 
 	it("Can update correct person info", inject(function () {
@@ -106,7 +115,7 @@ describe("PersonSelection", function() {
 
 	it("Should get selected person info", inject(function () {
 		target.setScheduleDate(scheduleDate);
-		target.updatePersonInfo([newSchedule1, schedule2]);
+		target.resetPersonInfo([newSchedule1, schedule2]);
 		target.personInfo[personId1].isSelected = true;
 		expect(target.isAnyAgentSelected()).toEqual(true);
 

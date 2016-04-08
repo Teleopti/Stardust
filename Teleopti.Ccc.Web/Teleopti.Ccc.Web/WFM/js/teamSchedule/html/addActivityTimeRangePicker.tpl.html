@@ -1,29 +1,24 @@
 ﻿<div>
-	<h3>{{'From'|translate}}: </h3>
+	<h3>{{'Time'|translate}}: </h3>
 	<div class="con-row">
 		<div>
 			<tmp-timepicker-wrap ng-model="startTime"></tmp-timepicker-wrap>
 		</div>
-	</div>
-
-	<h3>{{'To'|translate}}: </h3>
-	<div class="con-row">
+		<div>—</div>
 		<div>
 			<tmp-timepicker-wrap ng-model="endTime"></tmp-timepicker-wrap>
 		</div>
+	</div>
 
-		<div class="wfm-switch" ng-show="!disableNextDay || nextDay">
-			<input type="checkbox" id="switch1" />
+	<div class="con-row">
+		<div class="wfm-switch">
+			<input type="checkbox" id="switch1" ng-model="isNextDay" ng-disabled="disableNextDay" />
 			<label for="switch1">
 				<span class="wfm-switch-label">{{"NextDay" | translate}}</span>
-				<span class="wfm-switch-toggle" ng-click="toggleNextDay()"></span>
+				<span class="wfm-switch-toggle"></span>
 			</label>
 		</div>
 	</div>
-</div>
-<div class="error-msg-container ng-invalid-order alert-error notice-spacer">
-	<i class="mdi mdi-alert-octagon"></i>
-	<span translate>EndTimeMustBeGreaterOrEqualToStartTime</span>
 </div>
 <div class="error-msg-container ng-invalid-parse alert-error notice-spacer">
 	<i class="mdi mdi-alert-octagon"></i>

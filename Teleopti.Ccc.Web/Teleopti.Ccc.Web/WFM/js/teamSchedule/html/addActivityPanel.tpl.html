@@ -9,13 +9,16 @@
 					<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>
-			<tmp-time-range-picker class="activity-time-range" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" disable-next-day="vm.disableNextDay" reference-day="vm.selectedDate">
+			<tmp-time-range-picker class="activity-time-range" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" is-next-day="vm.isNextDay">
 			</tmp-time-range-picker>
 		</form>
-
+		<div class="alert-error notice-spacer" ng-if="!vm.isInputValid()">
+			<i class="mdi mdi-alert-octagon"></i>
+			<span>{{'NewActivityIsNotAllowedFor'|translate}} {{vm.peopleNotAllowed()}}.</span>
+		</div>
 		<button id="applyActivity" class="wfm-btn form-submit"
-				ng-class="{'wfm-btn-primary': newActivityForm.$valid, 'wfm-btn-primary-disabled': !newActivityForm.$valid}"
-				ng-disabled="newActivityForm.$valid?'':'disabled'"
+				ng-class="{'wfm-btn-primary': newActivityForm.$valid && vm.isInputValid(), 'wfm-btn-primary-disabled': !(newActivityForm.$valid && vm.isInputValid())}"
+				ng-disabled="newActivityForm.$valid && vm.isInputValid()?'':'disabled'"
 				ng-click="vm.addActivity()">
 			{{'Apply' | translate}}
 		</button>

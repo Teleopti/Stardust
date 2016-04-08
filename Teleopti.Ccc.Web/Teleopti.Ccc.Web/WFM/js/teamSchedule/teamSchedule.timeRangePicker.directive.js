@@ -31,16 +31,8 @@
 			var vm = this;
 			$element.addClass('wfm-time-range-picker-wrap');
 
-			$scope.toggleNextDay = toggleNextDay;
-
 			vm.mutateMoment = mutateMoment;
 			vm.sameDate = sameDate;
-
-			function toggleNextDay() {
-				if (!$scope.disableNextDay) {
-					$scope.nextDay = !$scope.nextDay;
-				}
-			}
 
 			function mutateMoment(mDate, date) {
 				var hour = date.getHours(),
@@ -63,18 +55,16 @@
 			ngModel.$parsers.push(parseView);
 			ngModel.$formatters.push(formatModel);
 			ngModel.$render = render;
-			ngModel.$validators.order = validateCorrectOrder;
 
 			function formatModel(modelValue) {
 				if (!modelValue) {
 					return undefined;
 				}
-
-				var nextDay =
+				scope.disableNextDay =
                     !timeRangeCtrl.sameDate(modelValue.startTime, modelValue.endTime);
 
 				var viewModel = makeViewValue(
-                    modelValue.startTime, modelValue.endTime, nextDay);
+                    modelValue.startTime, modelValue.endTime, scope.isNextDay);
 
 				return viewModel;
 			}
@@ -83,7 +73,6 @@
 				if (!viewValue) {
 					return undefined;
 				}
-
 				return {
 					startTime: viewValue.startTime.toDate(),
 					endTime: viewValue.endTime.toDate()
@@ -100,14 +89,8 @@
 
 				scope.startTime = mStartTime.toDate();
 				scope.endTime = mEndTime.toDate();
-				scope.nextDay = !mStartTime.isSame(mEndTime, 'day');
-			}
-
-			function validateCorrectOrder(modelValue, viewValue) {
-				if (modelValue === undefined) {
-					return true;
-				}
-				return modelValue.startTime <= modelValue.endTime;
+				scope.disableNextDay =
+                    !!mStartTime.isSame(mEndTime, 'day');
 			}
 
 			function makeViewValue(startTime, endTime, nextDay) {
@@ -130,9 +113,12 @@
 
 				timeRangeCtrl.mutateMoment(viewValue.startTime, startTime);
 				timeRangeCtrl.mutateMoment(viewValue.endTime, endTime);
-
+				if (viewValue.startTime > viewValue.endTime) {
+					viewValue.endTime = viewValue.endTime.add(1, 'day');
+				}
 				if (nextDay) {
-					viewValue.endTime.add(1, 'day');
+					viewValue.startTime = viewValue.startTime.add(1, 'days');
+					viewValue.endTime = viewValue.endTime.add(1, 'days');
 				}
 
 				return viewValue;
@@ -144,19 +130,22 @@
 					return;
 				}
 
-				if (scope.disableNextDay) {
-					scope.nextDay = change.strEndTime === '00:00';
-				}
+				if (change.boolDisableNextDay && change.boolNextDay) {
+					scope.isNextDay = false;
 
+				}
+				
+				scope.disableNextDay = scope.startTime > scope.endTime;
 				ngModel.$setViewValue(
-                    makeViewValue(scope.startTime, scope.endTime, scope.nextDay));
+                    makeViewValue(scope.startTime, scope.endTime, scope.isNextDay));
 			}
 
 			function watchUIChange() {
 				return {
 					strStartTime: scope.startTime ? $filter('date')(scope.startTime, 'HH:mm') : '',
 					strEndTime: scope.endTime ? $filter('date')(scope.endTime, 'HH:mm') : '',
-					boolNextDay: scope.nextDay
+					boolNextDay: scope.isNextDay,
+					boolDisableNextDay: scope.disableNextDay
 				};
 			}
 		}

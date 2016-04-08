@@ -158,12 +158,57 @@
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
+	it('should see a diabled button when anyone in selected is not allowed to add current activity', function () {
+		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()"></add-activity-panel>';
+		var scope = $rootScope.$new();
+		var selectedDate = new Date('2016-01-01');
+		scope.getSelectedDate = function () {
+			return selectedDate;
+		};
+
+		scope.getSelectedAgents = function () {
+			return [
+			{
+				personId: 'agent1',
+				name: 'agent1',
+				scheduleEndTime: moment('2016-01-01').endOf('day'),
+			}, {
+				personId: 'agent2',
+				name: 'agent2',
+				scheduleEndTime: '2016-01-02 05:00'
+			}];
+		};
+
+		var element = $compile(html)(scope);
+		scope.$apply();
+
+		var innerScope = element.isolateScope().vm;
+
+		innerScope.timeRange.startTime = new Date('2016-01-02 01:00');
+		innerScope.timeRange.endTime = new Date('2016-01-02 02:00');
+		innerScope.isNextDay = true;
+		innerScope.selectedActivityId = "activity";
+
+
+		var applyButton;
+		angular.forEach(element.find('button'), function (e) {
+			var element = angular.element(e);
+			if (element.hasClass('form-submit')) applyButton = element;
+		});
+
+		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
+		expect(applyButton.attr('disabled')).toBe('disabled');
+		expect(innerScope.isInputValid()).toBe(false);
+		expect(innerScope.peopleNotAllowed()).toBe("agent1");
+
+	});
+
 	it('should call add activity when click apply with correct data', function () {
 		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()"></add-activity-panel>';
 		
 		var scope = $rootScope.$new();
 		scope.getSelectedAgents = function() {
-			return ['agent1', 'agent2'];
+			return [{personId: 'agent1' }, {personId: 'agent2' }];
 		};
 		scope.getSelectedDate = function () {		
 			return new Date('2016-01-01');
