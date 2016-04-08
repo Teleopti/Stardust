@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				IsModifyScheduleAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifySchedule),
 				HasModifyPersonAbsencePermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence),
 				HasModifyAssignmentPermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment),
-				HasAddingActivityPermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity)
+				HasAddingActivityPermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
+				HasRemoveActivityPermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity)
 			};
 
 			return Json(permissions);
