@@ -705,7 +705,7 @@
     <Compile Include="UnitOfWork\PersonPeriodChangedBusMessagePublisher.cs" />
     <Compile Include="UnitOfWork\QueryFilter.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedEventPublisher.cs" />
-    <Compile Include="UnitOfWork\TransactionCallback.cs" />
+    <Compile Include="UnitOfWork\TransactionSynchronization.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
     <Compile Include="Util\MemoryCounter.cs" />

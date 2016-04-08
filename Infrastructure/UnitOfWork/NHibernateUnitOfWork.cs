@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly Lazy<AggregateRootInterceptor> _interceptor;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
+		private TransactionSynchronization _transactionSynchronization;
 
 		protected internal NHibernateUnitOfWork(
 			UnitOfWorkContext context, 
@@ -64,6 +65,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
 					_session.BeginTransaction() :
 					_session.BeginTransaction(IsolationLevel.Serializable);
+				_transactionSynchronization = new TransactionSynchronization(_persistCallbacks, _interceptor);
+				_transaction.RegisterSynchronization(_transactionSynchronization);
 			}
 			catch (TransactionException transactionException)
 			{
@@ -177,7 +180,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				_interceptor.Value.Clear();
 			}
-			_persistCallbacks.Current().ForEach(d => d.AfterCommit(modifiedRoots));
 			return modifiedRoots;
 		}
 
@@ -186,6 +188,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_transaction.Commit();
 			_transaction.Dispose();
 			_transaction = null;
+			_transactionSynchronization = null;
 		}
 		
 		private void persistExceptionHandler(Exception ex)
@@ -250,10 +253,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return _filterManager.Disable(filter);
 		}
 
-		//right now only supporting one callback. if you call this twice - the latter will overwrite the first one
 		public void AfterSuccessfulTx(Action func)
 		{
-			Session.Transaction.RegisterSynchronization(new TransactionCallback(func));
+			mightStartTransaction();
+			_transactionSynchronization.RegisterForAfterCompletion(func);
 		}
 
 		private void safeRollback()

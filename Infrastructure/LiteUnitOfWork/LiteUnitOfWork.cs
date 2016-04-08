@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork
 
 		public void OnSuccessfulTransaction(Action action)
 		{
-			_transaction.RegisterSynchronization(new TransactionCallback(action));
+			_transaction.RegisterSynchronization(new TransactionSynchronization(action));
 		}
 
 		public void Commit()
