@@ -208,6 +208,7 @@
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\RemovePartAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ResourceCalculation\SwapAndModifyServiceNewByFakeTest.cs" />
     <Compile Include="SchedulingScenarios\ApplicationLayer\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodMapTests.cs" />
