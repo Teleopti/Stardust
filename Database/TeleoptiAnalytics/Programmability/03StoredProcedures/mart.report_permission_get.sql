@@ -24,7 +24,7 @@ DECLARE @HasPermission int
 
 --Visable reports that do have permissions in domain
 SELECT @HasPermission=COUNT(ReportId)
-FROM mart.permission_report
+FROM mart.permission_report WITH (NOLOCK)
 WHERE person_code=@person_code
 AND ReportId=@report_id
 

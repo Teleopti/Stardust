@@ -21,9 +21,9 @@ BEGIN
 /*RETURN ALL TEAMS PERMITTED TO ME, EXCEPT MYSELF PERMISSION*/
 INSERT INTO @teams(id)
 SELECT DISTINCT dt.team_id 
-FROM mart.permission_report perm
-INNER JOIN mart.dim_team dt ON
-	dt.team_id=perm.team_id
+FROM mart.permission_report perm WITH (NOLOCK)
+INNER JOIN mart.dim_team dt WITH (NOLOCK) 
+	ON dt.team_id=perm.team_id
 WHERE person_code=@person_code
 AND perm.ReportId=@report_id
 AND perm.my_own=0 --not myown
@@ -33,9 +33,12 @@ AND perm.my_own=0 --not myown
 /*RETURN ALL TEAMS I HAVE BELONGED TO, LOOKING AT MYSELF PERMISSIONS*/
 INSERT INTO @teams(id)
 SELECT DISTINCT dt.team_id
-FROM mart.permission_report perm
-INNER JOIN mart.dim_person dp ON dp.person_code=perm.person_code AND dp.to_be_deleted = 0 --Only valid PersonPeriods
-INNER JOIN mart.dim_team dt ON dt.team_id=dp.team_id
+FROM mart.permission_report perm WITH (NOLOCK)
+INNER JOIN mart.dim_person dp WITH (NOLOCK)
+	ON dp.person_code=perm.person_code 
+	AND dp.to_be_deleted = 0 --Only valid PersonPeriods
+INNER JOIN mart.dim_team dt WITH (NOLOCK)
+	ON dt.team_id=dp.team_id
 WHERE perm.my_own=1 --only myself permissions
 AND perm.person_code=@person_code
 AND perm.ReportId=@report_id
