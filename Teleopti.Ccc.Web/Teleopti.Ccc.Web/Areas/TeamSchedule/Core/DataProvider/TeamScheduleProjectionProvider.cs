@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				foreach (var layer in visualLayerCollection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
+					var isPayLoadActivity = layer.Payload is IActivity;
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
@@ -75,10 +76,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
-
+					
 					projections.Add(new GroupScheduleProjectionViewModel
 					{
 						ParentPersonAbsence = isPayloadAbsence ? layer.PersonAbsenceId : null,
+						ActivityId = isPayLoadActivity ? layer.Payload.Id : null,
 						Description = description.Name,
 						Color = isPayloadAbsence
 							? (isAbsenceConfidential && !canViewConfidential
