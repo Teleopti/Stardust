@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transaction;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -8,13 +9,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class TransactionSynchronization : ISynchronization
 	{
-		private readonly ICurrentTransactionHooks _callbacks;
+		private readonly ICurrentTransactionHooks _hooks;
 		private readonly Lazy<AggregateRootInterceptor> _interceptor;
 		private readonly List<Action> _afterCompletion = new List<Action>();
 		 
-		public TransactionSynchronization(ICurrentTransactionHooks callbacks, Lazy<AggregateRootInterceptor> interceptor)
+		public TransactionSynchronization(ICurrentTransactionHooks hooks, Lazy<AggregateRootInterceptor> interceptor)
 		{
-			_callbacks = callbacks;
+			_hooks = hooks;
 			_interceptor = interceptor;
 		}
 
@@ -25,13 +26,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterCompletion(bool success)
 		{
 			if (!success) return;
-			_callbacks.Current().ForEach(d => d.AfterCompletion(_interceptor.Value.ModifiedRoots));
+			var modifiedRoots = _interceptor.Value.ModifiedRoots.ToArray();
+			_hooks.Current().ForEach(d => d.AfterCompletion(modifiedRoots));
 			_afterCompletion.ForEach(f => f.Invoke());
 		}
 
-		public void RegisterForAfterCompletion(Action func)
+		public void RegisterForAfterCompletion(Action action)
 		{
-			_afterCompletion.Add(func);
+			_afterCompletion.Add(action);
 		}
 	}
 }

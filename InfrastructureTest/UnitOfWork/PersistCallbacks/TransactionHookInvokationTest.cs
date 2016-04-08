@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 	[TestFixture]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]
 	[ScheduleDictionaryPersistTest]
-	public class PersistCallbackInvokationTest
+	public class TransactionHookInvokationTest
 	{
-		public FakeTransactionHook MessageSender;
+		public FakeTransactionHook TransactionHook;
 		public IScheduleDictionaryPersister Target;
 		public IScheduleDictionaryPersistTestHelper Helper;
 
 		[Test]
-		public void ShouldExecuteMessageSenders()
+		public void ShouldInvoke()
 		{
 			var person = Helper.NewPerson();
 			var schedules = Helper.MakeDictionary();
@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
 					Helper.Activity(),
 					"2015-10-19 08:00 - 2015-10-19 17:00".Period())
 				.ModifyDictionary();
-			MessageSender.Clear();
+			TransactionHook.Clear();
 
 			Target.Persist(schedules);
 
-			MessageSender.ModifiedRoots.OfType<IPersonAssignment>().Should().Not.Be.Empty();
+			TransactionHook.ModifiedRoots.OfType<IPersonAssignment>().Should().Not.Be.Empty();
 		}
 
 	}

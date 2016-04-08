@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain;
 using log4net;
 using NHibernate;
@@ -150,11 +151,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_initiator = initiator;
 
-			ICollection<IRootChangeInfo> modifiedRoots;
+			IEnumerable<IRootChangeInfo> modifiedRoots;
 			try
 			{
 				Flush();
-				modifiedRoots = new List<IRootChangeInfo>(_interceptor.Value.ModifiedRoots);
+				modifiedRoots = _interceptor.Value.ModifiedRoots.ToList();
 				_transaction.Commit();
 				_transaction.Dispose();
 				_transaction = null;

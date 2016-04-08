@@ -7,36 +7,36 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class CurrentTransactionHooks : ICurrentTransactionHooks, ITransactionHooksScope
 	{
-		private static IEnumerable<ITransactionHook> _globalMessageSenders;
+		private static IEnumerable<ITransactionHook> _globalHooks;
 		[ThreadStatic]
-		private static IEnumerable<ITransactionHook> _threadMessageSenders;
-		private readonly IEnumerable<ITransactionHook> _messageSenders;
+		private static IEnumerable<ITransactionHook> _threadHooks;
+		private readonly IEnumerable<ITransactionHook> _hooks;
 
-		public CurrentTransactionHooks(IEnumerable<ITransactionHook> messageSenders)
+		public CurrentTransactionHooks(IEnumerable<ITransactionHook> hooks)
 		{
-			_messageSenders = messageSenders;
+			_hooks = hooks;
 		}
 
 		public IEnumerable<ITransactionHook> Current()
 		{
-			return _threadMessageSenders ?? _globalMessageSenders ?? _messageSenders;
+			return _threadHooks ?? _globalHooks ?? _hooks;
 		}
 
 		public IDisposable GloballyUse(IEnumerable<ITransactionHook> messageSenders)
 		{
-			_globalMessageSenders = messageSenders;
+			_globalHooks = messageSenders;
 			return new GenericDisposable(() =>
 			{
-				_globalMessageSenders = null;
+				_globalHooks = null;
 			});
 		}
 
 		public IDisposable OnThisThreadUse(IEnumerable<ITransactionHook> messageSenders)
 		{
-			_threadMessageSenders = messageSenders;
+			_threadHooks = messageSenders;
 			return new GenericDisposable(() =>
 			{
-				_threadMessageSenders = null;
+				_threadHooks = null;
 			});
 		}
 

@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		public IEnumerable<IRootChangeInfo> AfterFlushInvokedWith;
 		public IEnumerable<object> ModifiedRoots;
-
+		
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			AfterFlushInvokedWith = modifiedRoots;
-			ModifiedRoots = AfterFlushInvokedWith.Select(x => x.Root);
+			ModifiedRoots = AfterFlushInvokedWith.Select(x => x.Root).ToArray();
 		}
 		
 		public void Clear()

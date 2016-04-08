@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
 		public ITransactionHooksScope TransactionHooksScope;
-		public IEnumerable<ITransactionHook> MessageSenders;
-		private IDisposable _messageSenderScope;
+		public IEnumerable<ITransactionHook> TransactionHooks;
+		private IDisposable _transactionHookScope;
 		public FakeMessageSender MessageSender;
 		public IDataSourceForTenant DataSourceForTenant;
 
@@ -78,14 +78,14 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			MessageSender.AllNotifications.Clear();
 
-			_messageSenderScope = TransactionHooksScope.GloballyUse(MessageSenders);
+			_transactionHookScope = TransactionHooksScope.GloballyUse(TransactionHooks);
 		}
 
 		protected override void AfterTest()
 		{
 			base.AfterTest();
 
-			_messageSenderScope.Dispose();
+			_transactionHookScope.Dispose();
 		}
 	}
 }
