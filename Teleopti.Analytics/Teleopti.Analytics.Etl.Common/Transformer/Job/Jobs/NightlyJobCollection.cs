@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {
@@ -47,7 +48,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			Add(new StagePermissionJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584))
+			{
+				Add(new StagePermissionJobStep(jobParameters));
+			}
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
 			Add(new StageRequestJobStep(jobParameters));
@@ -94,8 +98,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactRequestJobStep(jobParameters));
 			Add(new FactRequestedDaysJobStep(jobParameters));
 			Add(new FactAgentSkillJobStep(jobParameters));
-			Add(new PermissionReportJobStep(jobParameters));
-
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584))
+			{
+				Add(new PermissionReportJobStep(jobParameters));
+			}
 			// If PM is installed then show PM job steps
 			if (jobParameters.IsPmInstalled)
 			{

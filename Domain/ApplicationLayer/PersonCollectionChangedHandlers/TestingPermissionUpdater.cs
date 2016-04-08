@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpPermissionReport_33584)]
 	// TODO This should definately not be used on this event
-	public class TestingPermissionUpdater :
+	public class TemporaryPlaceForPermissionUpdater :
 		IHandleEvent<PersonCollectionChangedEvent>,
 		IRunOnServiceBus
 	{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 
-		public TestingPermissionUpdater(IPersonRepository personRepository, 
+		public TemporaryPlaceForPermissionUpdater(IPersonRepository personRepository, 
 			ISiteRepository siteRepository, 
 			IApplicationFunctionRepository applicationFunctionRepository, 
 			INow now, 
