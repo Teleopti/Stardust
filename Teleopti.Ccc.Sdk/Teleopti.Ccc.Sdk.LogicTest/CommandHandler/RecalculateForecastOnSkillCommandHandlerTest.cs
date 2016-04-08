@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
-using Teleopti.Interfaces.Messages.General;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -17,16 +14,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	public class RecalculateForecastOnSkillCommandHandlerTest
 	{
 		private MockRepository _mocks;
-		private IMessagePopulatingServiceBusSender _busSender;
 		private RecalculateForecastOnSkillCommandHandler _target;
+	    private IEventPublisher _publisher;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_busSender = _mocks.DynamicMock<IMessagePopulatingServiceBusSender>();
-
-			_target = new RecalculateForecastOnSkillCommandHandler(_busSender);
+            _publisher = _mocks.DynamicMock<IEventPublisher>();
+           // _publisher = new FakeEventPublisher();
+			_target = new RecalculateForecastOnSkillCommandHandler(_publisher, new DummyInfrastructureInfoPopulator());
 		}
 
 		[Test]
@@ -41,8 +38,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 				ScenarioId = scenarioId,
 				WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> { command }
 			};
-			Expect.Call(() => _busSender.Send(Arg<object>.Is.Anything, Arg<bool>.Is.Equal(true)));
-			_mocks.ReplayAll();
+            //Expect.Call(() => _busSender.Send(Arg<object>.Is.Anything, Arg<bool>.Is.Equal(true)));
+            Expect.Call(() => _publisher.Publish(new RecalculateForecastOnSkillCollectionEvent())).IgnoreArguments();
+            _mocks.ReplayAll();
 			_target.Handle(commands);
 			_mocks.VerifyAll();
 		}
@@ -50,19 +48,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void ShouldSendMessageToBus()
 		{
-			var scenarioId = Guid.NewGuid();
-			var skillId = Guid.NewGuid();
-			var workloadId = Guid.NewGuid();
-			var command = new WorkloadOnSkillSelectionDto{SkillId = skillId, WorkloadId = new List<Guid>{workloadId}};
-			var commands = new RecalculateForecastOnSkillCollectionCommandDto
-			               	{
-			               		ScenarioId = scenarioId,
-			               		WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> {command}
-			               	};
-			var message = new RecalculateForecastOnSkillCollectionEvent();
-			Expect.Call(() =>_busSender.Send(message, false)).IgnoreArguments();
-			_mocks.ReplayAll();
-			_target.Handle(commands);
+			
+            //	Expect.Call(() =>_busSender.Send(message, false)).IgnoreArguments();
+            Expect.Call(() => _publisher.Publish(new RecalculateForecastOnSkillCollectionEvent())).IgnoreArguments();
+
+            _mocks.ReplayAll();
+
+            var scenarioId = Guid.NewGuid();
+            var skillId = Guid.NewGuid();
+            var workloadId = Guid.NewGuid();
+            var command = new WorkloadOnSkillSelectionDto { SkillId = skillId, WorkloadId = new List<Guid> { workloadId } };
+            var commands = new RecalculateForecastOnSkillCollectionCommandDto
+            {
+                ScenarioId = scenarioId,
+                WorkloadOnSkillSelectionDtos = new List<WorkloadOnSkillSelectionDto> { command }
+            };
+            _target.Handle(commands);
 			_mocks.VerifyAll();
 		}
 	}
