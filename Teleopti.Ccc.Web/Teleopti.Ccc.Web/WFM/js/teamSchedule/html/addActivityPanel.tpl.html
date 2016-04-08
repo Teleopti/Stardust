@@ -9,8 +9,8 @@
 					<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>
-			<tmp-time-range-picker class="activity-time-range" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" is-next-day="vm.isNextDay">
-			</tmp-time-range-picker>
+			<activity-time-range-picker class="activity-time-range" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
+			</activity-time-range-picker>
 		</form>
 		<div class="alert-error notice-spacer" ng-if="!vm.isInputValid()">
 			<i class="mdi mdi-alert-octagon"></i>

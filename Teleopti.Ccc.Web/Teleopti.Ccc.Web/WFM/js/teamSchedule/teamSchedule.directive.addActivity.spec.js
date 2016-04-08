@@ -69,7 +69,7 @@
 
 		var form = element.find('form');
 		var selectElements = element.find('select');
-		var timeRangePicker = element.find('tmp-time-range-picker');
+		var timeRangePicker = element.find('activity-time-range-picker');
 		var applyButton;
 		angular.forEach(element.find('button'), function (e) {
 			var ae = angular.element(e);

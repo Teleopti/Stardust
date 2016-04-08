@@ -4,9 +4,9 @@
 
 	angular.module('wfm.teamSchedule')
            .directive('tmpTimepickerWrap', ['$locale', timepickerWrap])
-           .directive('tmpTimeRangePicker', ['$filter', timeRangePicker]);
+           .directive('activityTimeRangePicker', ['$filter', timeRangePicker]);
 
-	var defaultTemplate = 'js/teamSchedule/html/time-range-picker.tpl.html';
+	var defaultTemplate = 'js/teamSchedule/html/addActivityTimeRangePicker.tpl.html';
 
 	function timeRangePicker($filter) {
 		return {
@@ -19,7 +19,7 @@
 				isNextDay: '=?'
 			},
 			controller: ['$scope', '$element', timeRangePickerCtrl],
-			require: ['ngModel', 'tmpTimeRangePicker'],
+			require: ['ngModel', 'activityTimeRangePicker'],
 			transclude: true,
 			link: postlink
 		};
@@ -33,6 +33,10 @@
 
 			vm.mutateMoment = mutateMoment;
 			vm.sameDate = sameDate;
+
+			if (!angular.isDefined(vm.disableNextDay)) {
+				vm.disableNextDay = false;
+			}
 
 			function mutateMoment(mDate, date) {
 				var hour = date.getHours(),
@@ -95,6 +99,7 @@
 
 			function makeViewValue(startTime, endTime, nextDay) {
 				var viewValue = null;
+				
 				if (angular.isDefined(scope.referenceDay)) {
 					viewValue = {
 						startTime: moment(scope.referenceDay()),
@@ -106,10 +111,10 @@
 						endTime: moment()
 					};
 				}
-
 				if (angular.isDefined(scope.isNextDay)) {
 					scope.isNextDay = nextDay;
 				}
+
 
 				timeRangeCtrl.mutateMoment(viewValue.startTime, startTime);
 				timeRangeCtrl.mutateMoment(viewValue.endTime, endTime);
@@ -120,7 +125,6 @@
 					viewValue.startTime = viewValue.startTime.add(1, 'days');
 					viewValue.endTime = viewValue.endTime.add(1, 'days');
 				}
-
 				return viewValue;
 			}
 
@@ -156,7 +160,7 @@
 		var meridianInfo = getMeridiemInfoFromMoment($locale);
 
 		return {
-			template: '<timepicker></timepicker>',
+			template: '<uib-timepicker></uib-timepicker>',
 			controller: ['$scope', timepickerWrapCtrl],
 			compile: compileFn
 		};
