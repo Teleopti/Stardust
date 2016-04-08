@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication.Infrastructure
 				{
 					Thread.Sleep(5);
 					handleWithRetry(connection, action, ++attempt);
+					return;
 				}
 
 				throw;
