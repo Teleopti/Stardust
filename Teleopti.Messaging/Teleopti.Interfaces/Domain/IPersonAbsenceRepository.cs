@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -41,6 +42,12 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario);
 
+		/// <summary>
+		/// Find by specific Id collection
+		/// </summary>
+		/// <param name="personAbsenceIds">Id collection</param>
+		/// <returns></returns>
+		ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds);
 
 		/// <summary>
 		/// </summary>

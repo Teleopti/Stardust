@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class PersonAbsenceRemover : IPersonAbsenceRemover
 	{
+		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
@@ -19,12 +22,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public PersonAbsenceRemover(
+			IScenarioRepository scenarioRepository,
 			IScheduleStorage scheduleStorage,
 			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
 			ILoggedOnUser loggedOnUser)
 		{
+			_scenarioRepository = scenarioRepository;
 			_scheduleStorage = scheduleStorage;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
@@ -32,18 +37,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public IEnumerable<string> RemovePersonAbsence(IPersonAbsence personAbsence, TrackedCommandInfo commandInfo = null)
+		public IEnumerable<string> RemovePersonAbsence(DateTime scheduleDate, IPerson person,
+			IEnumerable<IPersonAbsence> personAbsences, TrackedCommandInfo commandInfo = null)
 		{
-			personAbsence.RemovePersonAbsence(commandInfo);
-			var errorMessages = removePersonAbsenceFromScheduleDay(personAbsence);
+			var errorMessages = removePersonAbsenceFromScheduleDay(scheduleDate, person,
+				personAbsences.ToList(), commandInfo);
 			return errorMessages ?? new List<string>();
 		}
 
-		public IEnumerable<string> RemovePartPersonAbsence(IPersonAbsence personAbsence, DateTimePeriod periodToRemove,
+		public IEnumerable<string> RemovePartPersonAbsence(DateTime scheduleDate, IPerson person,
+			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove,
 			TrackedCommandInfo commandInfo = null)
 		{
-			personAbsence.RemovePersonAbsence(commandInfo);
-			var errorMessages = removePartPersonAbsenceFromScheduleDay(personAbsence, periodToRemove, commandInfo);
+			var errorMessages = removePartPersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(),
+				periodToRemove, commandInfo);
 			return errorMessages ?? new List<string>();
 		}
 
@@ -86,17 +93,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return periods;
 		}
 
-		private IEnumerable<string> removePersonAbsenceFromScheduleDay(IPersonAbsence personAbsence)
+		private IEnumerable<string> removePersonAbsenceFromScheduleDay(DateTime scheduleDate,
+			IPerson person, IList<IPersonAbsence> personAbsences, TrackedCommandInfo commandInfo)
 		{
-			var person = personAbsence.Person;
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var startDate = new DateOnly(personAbsence.Period.StartDateTimeLocal(timeZone));
+			foreach (var personAbsence in personAbsences)
+			{
+				personAbsence.RemovePersonAbsence(commandInfo);
+			}
+
+			var startDate = new DateOnly(scheduleDate);
 			var endDate = startDate.AddDays(1);
 
 			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-					person, new ScheduleDictionaryLoadOptions(false, false),
-					new DateOnlyPeriod(startDate, endDate), personAbsence.Scenario);
+				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false),
+					new DateOnlyPeriod(startDate, endDate),
+					_scenarioRepository.LoadDefaultScenario());
 
 			var scheduleRange = scheduleDictionary[person];
 			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
@@ -110,25 +122,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (scheduleDay != null)
 			{
-				scheduleDay.Remove(personAbsence);
+				foreach (var personAbsence in personAbsences)
+				{
+					scheduleDay.Remove(personAbsence);
+				}
 			}
 
 			return _saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
 		}
 
-		private IEnumerable<string> removePartPersonAbsenceFromScheduleDay(IPersonAbsence personAbsence,
+		private IEnumerable<string> removePartPersonAbsenceFromScheduleDay(DateTime scheduleDate,
+			IPerson person,
+			IList<IPersonAbsence> personAbsences,
 			DateTimePeriod periodToRemove,
-			TrackedCommandInfo trackedCommandInfo)
+			TrackedCommandInfo commandInfo)
 		{
-			var person = personAbsence.Person;
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var startDate = new DateOnly(personAbsence.Period.StartDateTimeLocal(timeZone));
+			foreach (var personAbsence in personAbsences)
+			{
+				personAbsence.RemovePersonAbsence(commandInfo);
+			}
+
+			var startDate = new DateOnly(scheduleDate);
 			var endDate = startDate.AddDays(1);
 
 			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-					person, new ScheduleDictionaryLoadOptions(false, false),
-					new DateOnlyPeriod(startDate, endDate), personAbsence.Scenario);
+				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false),
+					new DateOnlyPeriod(startDate, endDate),
+					_scenarioRepository.LoadDefaultScenario());
 
 			var scheduleRange = scheduleDictionary[person];
 			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
@@ -142,7 +163,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (scheduleDay != null)
 			{
-				scheduleDay.Remove(personAbsence);
+				foreach (var personAbsence in personAbsences)
+				{
+					scheduleDay.Remove(personAbsence);
+				}
 			}
 
 			var errorMessages = _saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
@@ -152,26 +176,29 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			errorMessages = new List<string>();
-			var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove);
-			if (!newAbsencePeriods.Any()) return errorMessages;
-
-			foreach (var period in newAbsencePeriods)
+			foreach (var personAbsence in personAbsences)
 			{
-				// xinfli: The second parameter "isFullDayAbsence" doesn't matter, since it just raise different event
-				// and all the events will be converted to "ScheduleChangedEvent" (Refer to ScheduleChangedEventPublisher class)
-				var errors = _personAbsenceCreator.Create(new AbsenceCreatorInfo
+				var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove);
+				if (!newAbsencePeriods.Any()) return errorMessages;
+
+				foreach (var period in newAbsencePeriods)
 				{
-					Person = person,
-					Absence = personAbsence.Layer.Payload,
-					ScheduleDay = scheduleDay,
-					ScheduleRange = scheduleRange,
-					AbsenceTimePeriod = period,
-					TrackedCommandInfo = trackedCommandInfo
-				}, false);
+					// xinfli: The second parameter "isFullDayAbsence" doesn't matter, since it just raise different event
+					// and all the events will be converted to "ScheduleChangedEvent" (Refer to ScheduleChangedEventPublisher class)
+					var errors = _personAbsenceCreator.Create(new AbsenceCreatorInfo
+					{
+						Person = person,
+						Absence = personAbsence.Layer.Payload,
+						ScheduleDay = scheduleDay,
+						ScheduleRange = scheduleRange,
+						AbsenceTimePeriod = period,
+						TrackedCommandInfo = commandInfo
+					}, false);
 
-				if (errors == null || !errors.Any()) continue;
+					if (errors == null || !errors.Any()) continue;
 
-				errorMessages = errorMessages.Concat(errors).ToList();
+					errorMessages = errorMessages.Concat(errors).ToList();
+				}
 			}
 
 			return errorMessages;

@@ -79,6 +79,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _personAbsences.Where(x => x.BelongsToScenario(scenario) && x.Period.Intersect(period)).ToArray();
 		}
 
+		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds)
+		{
+			var idList = personAbsenceIds.ToList();
+			return _personAbsences.Where(x => idList.Contains(x.Id.GetValueOrDefault())).ToArray();
+		}
+
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
 		{
 			throw new NotImplementedException();

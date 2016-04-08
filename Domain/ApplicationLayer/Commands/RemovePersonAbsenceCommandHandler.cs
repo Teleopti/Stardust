@@ -1,29 +1,28 @@
 ﻿using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class RemovePersonAbsenceCommandHandler : IHandleCommand<RemovePersonAbsenceCommand>
 	{
-		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 		private readonly IPersonAbsenceRemover _personAbsenceRemover;
 
-		public RemovePersonAbsenceCommandHandler(IWriteSideRepository<IPersonAbsence> personAbsenceRepository, IPersonAbsenceRemover personAbsenceRemover)
+		public RemovePersonAbsenceCommandHandler(IPersonAbsenceRemover personAbsenceRemover)
 		{
-			_personAbsenceRepository = personAbsenceRepository;
 			_personAbsenceRemover = personAbsenceRemover;
 		}
 
 		public void Handle(RemovePersonAbsenceCommand command)
 		{
-			var personAbsence = (PersonAbsence) _personAbsenceRepository.LoadAggregate(command.PersonAbsenceId);
-			if (personAbsence == null)
+			var personAbsences = command.PersonAbsences;
+			if (personAbsences == null || !personAbsences.Any())
 			{
 				return;
 			}
 
-			var errors = _personAbsenceRemover.RemovePersonAbsence (personAbsence, command.TrackedCommandInfo).ToList();
+			var person = command.Person;
+			var errors =
+				_personAbsenceRemover.RemovePersonAbsence(command.ScheduleDate, person, command.PersonAbsences,
+				command.TrackedCommandInfo).ToList();
 			if (!errors.Any())
 			{
 				return;
@@ -31,8 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			command.Errors = new ActionErrorMessage
 			{
-				PersonId = personAbsence.Person.Id.GetValueOrDefault(),
-				PersonName = personAbsence.Person.Name,
+				PersonId = person.Id.GetValueOrDefault(),
+				PersonName = person.Name,
 				ErrorMessages = errors
 			};
 		}

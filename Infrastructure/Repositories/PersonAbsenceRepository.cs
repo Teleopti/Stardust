@@ -85,6 +85,24 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
+		public ICollection<IPersonAbsence> Find(IEnumerable<Guid> personAbsenceIds)
+		{
+			InParameter.NotNull("personAbsenceIds", personAbsenceIds);
+
+			var retList = new List<IPersonAbsence>();
+
+			foreach (var personAbsenceIdList in personAbsenceIds.Batch(400))
+			{
+				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
+					.Add(Restrictions.InG("Id", personAbsenceIdList))
+					.SetResultTransformer(Transformers.DistinctRootEntity)
+					.List<IPersonAbsence>());
+			}
+
+			initializeAbsences(retList);
+			return retList;
+		}
+
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence = null)
 		{
 			var criteria = Session.CreateCriteria(typeof (PersonAbsence))
