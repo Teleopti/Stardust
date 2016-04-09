@@ -14,7 +14,7 @@ using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.PersistCallbacks
+namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork.TransactionHooks
 {
 	[TestFixture]
 	[Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733)]

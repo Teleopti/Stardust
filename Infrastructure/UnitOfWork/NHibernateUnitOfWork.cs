@@ -54,28 +54,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			get
 			{
-				mightStartTransaction();
+				transactionEnsure();
 				return _session;
 			}
 		}
 
-		private void mightStartTransaction()
+		public IDisposable DisableFilter(IQueryFilter filter)
 		{
-			if (_transaction != null) return;
-			try
-			{
-				_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
-					_session.BeginTransaction() :
-					_session.BeginTransaction(IsolationLevel.Serializable);
-				_transactionSynchronization = new TransactionSynchronization(_transactionHooks, _interceptor);
-				_transaction.RegisterSynchronization(_transactionSynchronization);
-			}
-			catch (TransactionException transactionException)
-			{
-				throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
-			}
+			return _filterManager.Disable(filter);
 		}
-		
+
 		public IInitiatorIdentifier Initiator()
 		{
 			return _initiator;
@@ -98,16 +86,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				throw new OptimisticLockException("Optimistic lock", staleStateEx);
 			}
-		}
-
-		public bool Contains(IEntity entity)
-		{
-			return Session.Contains(entity);
-		}
-
-		public bool IsDirty()
-		{
-			return Session.IsDirty();
 		}
 
 		public void Flush()
@@ -142,6 +120,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 						));
 		}
 
+		public void AfterSuccessfulTx(Action func)
+		{
+			transactionEnsure();
+			_transactionSynchronization.RegisterForAfterCompletion(func);
+		}
+
 		public IEnumerable<IRootChangeInfo> PersistAll()
 		{
 			return PersistAll(null);
@@ -156,10 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Flush();
 				modifiedRoots = _interceptor.Value.ModifiedRoots.ToList();
-				_transaction.Commit();
-				_transaction.Dispose();
-				_transaction = null;
-				_transactionSynchronization = null;
+				transactionCommit();
 			}
 			catch (TooManyActiveAgentsException exception)
 			{
@@ -183,13 +164,71 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			return modifiedRoots;
 		}
-		
+
 		private void persistExceptionHandler(Exception ex)
 		{
 			_logger.Error("An error occurred when trying to save.", ex);
-			safeRollback();
+			transactionRollback();
 			if (_session.IsOpen)
 				_session.Close();
+		}
+
+		private void transactionEnsure()
+		{
+			if (_transaction != null) return;
+
+			try
+			{
+				_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
+					_session.BeginTransaction() :
+					_session.BeginTransaction(IsolationLevel.Serializable);
+			}
+			catch (TransactionException transactionException)
+			{
+				throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
+			}
+
+			_transactionSynchronization = new TransactionSynchronization(_transactionHooks, _interceptor);
+			_transaction.RegisterSynchronization(_transactionSynchronization);
+		}
+
+		private void transactionCommit()
+		{
+			_transaction.Commit();
+			var exception = _transactionSynchronization.Exception;
+			_transaction.Dispose();
+			_transaction = null;
+			_transactionSynchronization = null;
+			if (exception != null)
+				throw exception;
+		}
+
+		private void transactionRollback()
+		{
+			if (_transaction == null || !_transaction.IsActive) return;
+
+			try
+			{
+				_transaction.Rollback();
+				_transaction.Dispose();
+				_transaction = null;
+				_transactionSynchronization = null;
+			}
+			catch (Exception ex)
+			{
+				_logger.Error("Cannot rollback transaction! " + ex);
+				//don't do anything - should be handled higher up the chain
+			}
+		}
+
+		public bool Contains(IEntity entity)
+		{
+			return Session.Contains(entity);
+		}
+
+		public bool IsDirty()
+		{
+			return Session.IsDirty();
 		}
 
 		public void Reassociate(IAggregateRoot root)
@@ -215,7 +254,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public int? DatabaseVersion(IAggregateRoot root, bool usePessimisticLock=false)
 		{
 			if (!root.Id.HasValue)
-				throwIncorrectDbVersionParameter(root);
+				throw new ArgumentException("Cannot find " + root + " in db");
 			int result;
 			
 			var proxy = root as INHibernateProxy;
@@ -241,39 +280,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return result;
 		}
 
-		public IDisposable DisableFilter(IQueryFilter filter)
-		{
-			return _filterManager.Disable(filter);
-		}
-
-		public void AfterSuccessfulTx(Action func)
-		{
-			mightStartTransaction();
-			_transactionSynchronization.RegisterForAfterCompletion(func);
-		}
-
-		private void safeRollback()
-		{
-			if (_transaction != null && _transaction.IsActive)
-			{
-				try
-				{
-					_transaction.Rollback();
-					_transaction.Dispose();
-				}
-				catch (Exception ex)
-				{
-					_logger.Error("Cannot rollback transaction! " + ex);
-					//don't do anything - should be handled higher up the chain
-				}
-			}
-		}
-
-		private static void throwIncorrectDbVersionParameter(IAggregateRoot root)
-		{
-			throw new ArgumentException("Cannot find " + root + " in db");
-		}
-		
 		public void Dispose()
 		{
 			if (_context != null)
@@ -281,7 +287,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 			if (_session != null)
 			{
-				safeRollback();
+				transactionRollback();
 				_session.Dispose();
 			}
 

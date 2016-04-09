@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		public IScheduleStorage ScheduleStorage;
 		public IPersonRepository PersonRepository;
 		public ICurrentScenario Scenario;
-		public FakeTransactionHook TransactionHook;
 
 		protected override void BeforeTest()
 		{
@@ -48,14 +47,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				MultiplicatorDefinitionSetRepository.Add(new MultiplicatorDefinitionSet("persist test", MultiplicatorType.Overtime));
 				DayOffTemplateRepository.Add(new DayOffTemplate(new Description("persist test")));
 			});
-
-			TransactionHook.Clear();
 		}
 
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			base.Setup(system, configuration);
-			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>();
 			system.AddService(this);
 		}
 
