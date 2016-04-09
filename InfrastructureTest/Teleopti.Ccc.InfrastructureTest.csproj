@@ -460,7 +460,6 @@
     <Compile Include="Repositories\MasterActivityRepositoryTest.cs" />
     <Compile Include="Repositories\ExtendedPreferenceTemplateRepositoryTest.cs" />
     <Compile Include="Repositories\ScheduleDayReadModelRepositoryTest.cs" />
-    <Compile Include="Repositories\ScheduleProjectionReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\ScheduleTagRepositoryTest.cs" />
     <Compile Include="Repositories\NoteRepositoryTest.cs" />
     <Compile Include="Repositories\PersonAbsenceAccountRepositoryTest.cs" />
