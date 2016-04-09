@@ -77,7 +77,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public string ConnectionString { get; private set; }
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
+		public IUnitOfWork CreateAndOpenUnitOfWork()
+		{
+			return createAndOpenUnitOfWork(TransactionIsolationLevel.Default, QueryFilter.BusinessUnit);
+		}
+
+		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel)
 		{
 			return createAndOpenUnitOfWork(isolationLevel, QueryFilter.BusinessUnit);
 		}
@@ -96,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
-			new NHibernateUnitOfWork(
+			new ApplicationUnitOfWork(
 				_context,
 				session,
 				isolationLevel,

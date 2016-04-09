@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldBeResetAfterExplcitlySetInEarlierTransaction()
 		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
+			using (var uow = ((NHibernateUnitOfWorkFactory) UnitOfWorkFactory.Current).CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
 			{
 				startTransactionByMakingDummyCall(uow);
 			}

@@ -18,7 +18,7 @@ namespace Teleopti.Interfaces.Infrastructure
 		IAuditSetter AuditSetting { get; }
 		string ConnectionString { get; }
 
-		IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default);
+		IUnitOfWork CreateAndOpenUnitOfWork();
 		IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter);
 
 		IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork();

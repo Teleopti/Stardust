@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
-			new NHibernateUnitOfWork(
+			new AnalyticsUnitOfWork(
 				_context,
-				_factory.OpenSession(new AggregateRootInterceptor()),
-				TransactionIsolationLevel.Default, 
-				null);
+				_factory.OpenSession(new AggregateRootInterceptor())
+				);
+
 			return CurrentUnitOfWork();
 		}
 

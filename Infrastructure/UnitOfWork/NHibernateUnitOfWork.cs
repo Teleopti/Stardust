@@ -7,10 +7,8 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Proxy;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -19,7 +17,7 @@ using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class NHibernateUnitOfWork : IUnitOfWork
+	public abstract class NHibernateUnitOfWork : IUnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 
@@ -28,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly NHibernateFilterManager _filterManager;
-		private readonly Lazy<AggregateRootInterceptor> _interceptor;
+		protected readonly Lazy<AggregateRootInterceptor> Interceptor;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 		private TransactionSynchronization _transactionSynchronization;
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_isolationLevel = isolationLevel;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
-			_interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
+			Interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
 		}
 		
 		protected internal virtual ISession Session
@@ -92,10 +90,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			try
 			{
-				_interceptor.Value.Iteration = InterceptorIteration.Normal;
+				Interceptor.Value.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
-				_interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
-				blackSheep();	// <-----
+				Interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
+				BlackSheep();	// <-----
 				Session.Flush();
 			}
 			catch (StaleStateException ex)
@@ -104,20 +102,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private void blackSheep()
+		protected virtual void BlackSheep()
 		{
-			// this is a very bad idea
-			// the reason there is 2 flushes is because the first one catches any child, and the second one updates the roots version number
-			// changes here will just be included in the second flush, and therefor that behavior will not work for aggregates modified here!
-			// ---> this behavior belongs in the domain!
-			new SendPushMessageWhenRootAlteredService()
-				.SendPushMessages(
-					_interceptor.Value.ModifiedRoots,
-					new PushMessagePersister(
-						new PushMessageRepository(this),
-						new PushMessageDialogueRepository(this),
-						new CreatePushMessageDialoguesService()
-						));
 		}
 
 		public void AfterSuccessfulTx(Action func)
@@ -139,7 +125,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			try
 			{
 				Flush();
-				modifiedRoots = _interceptor.Value.ModifiedRoots.ToList();
+				modifiedRoots = Interceptor.Value.ModifiedRoots.ToList();
 				transactionCommit();
 			}
 			catch (TooManyActiveAgentsException exception)
@@ -160,7 +146,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			finally
 			{
-				_interceptor.Value.Clear();
+				Interceptor.Value.Clear();
 			}
 			return modifiedRoots;
 		}
@@ -188,7 +174,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
 			}
 
-			_transactionSynchronization = new TransactionSynchronization(_transactionHooks, _interceptor);
+			_transactionSynchronization = new TransactionSynchronization(_transactionHooks, Interceptor);
 			_transaction.RegisterSynchronization(_transactionSynchronization);
 		}
 
@@ -291,8 +277,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_session.Dispose();
 			}
 
-			if (_interceptor.IsValueCreated)
-				_interceptor.Value.Clear();
+			if (Interceptor.IsValueCreated)
+				Interceptor.Value.Clear();
 		}
 		
 		public override bool Equals(object obj)
