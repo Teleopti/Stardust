@@ -220,6 +220,7 @@
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizer.cs" />
     <Compile Include="Repositories\IAnalyticsBusinessUnitRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionRepository.cs" />
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />

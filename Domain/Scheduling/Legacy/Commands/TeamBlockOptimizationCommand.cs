@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
+		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
@@ -85,7 +86,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
+			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -119,6 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
+			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -292,9 +295,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockOptimizationLimits,
 					_teamBlockMaxSeatChecker,
 					teamBlockDaysOffMoveFinder,
-					_teamBlockScheudlingOptions, _allTeamMembersInSelectionSpecification,
+					_teamBlockScheudlingOptions, 
+					_allTeamMembersInSelectionSpecification,
 					_teamBlockShiftCategoryLimitationValidator,
-					_teamBlockDayOffsInPeriodValidator
+					_teamBlockDayOffsInPeriodValidator,
+					_teamBlockDaysOffSameDaysOffLockSyncronizer
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder().CommonStateHolder.DayOffs

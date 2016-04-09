@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
+		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
 
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory,
@@ -61,7 +62,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator)
+			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
+			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
@@ -80,6 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
+			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -118,6 +121,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 
+			//_teamBlockDaysOffSameDaysOffLockSyncronizer.SyncLocks(selectedPeriod, optimizationPreferences, allTeamInfoListOnStartDate);
+
 			var remainingInfoList = new List<ITeamInfo>(allTeamInfoListOnStartDate);
 
 			var cancelMe = false;
@@ -155,6 +160,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 			}
 		}
+
+		
 
 		public CancelSignal OnReportProgress(ResourceOptimizerProgressEventArgs args)
 		{

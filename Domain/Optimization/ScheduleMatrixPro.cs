@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly IDictionary<DateOnly, IScheduleDayPro> _fullWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
 	    private readonly IDictionary<DateOnly, IScheduleDayPro> _outerWeeksPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
 	    private readonly IDictionary<DateOnly, IScheduleDayPro> _weekBeforeOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
-        private readonly IDictionary<DateOnly,IScheduleDayPro> _weekAfterOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
+        private readonly IDictionary<DateOnly, IScheduleDayPro> _weekAfterOuterPeriodDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IDictionary<DateOnly, IScheduleDayPro> _unLockedDays = new Dictionary<DateOnly, IScheduleDayPro>();
         private readonly IScheduleRange _activeScheduleRange;
 
@@ -41,6 +41,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_activeScheduleRange = activeScheduleRange;
 			createScheduleDays(periodCreator);
 		}
+
+	    public bool IsDayLocked(DateOnly date)
+	    {
+		    return !_unLockedDays.ContainsKey(date);
+	    }
 
 	    [Obsolete("Will be removed, do NOT use", true)]
         public ISchedulingResultStateHolder SchedulingStateHolder

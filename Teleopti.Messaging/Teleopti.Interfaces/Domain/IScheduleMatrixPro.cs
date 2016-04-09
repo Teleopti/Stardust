@@ -10,6 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IScheduleMatrixPro
     {
+	    bool IsDayLocked(DateOnly date);
 
         /// <summary>
         /// Gets or sets the state holder.

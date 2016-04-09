@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public Group BuildGroup(IPerson person, DateOnly dateOnly)
 		{
-			var pageOnDate = _groupPagePerDateHolder().GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
+			var groupPagePerDateHolder = _groupPagePerDateHolder();
+			var pageOnDate = groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
 			var allPermittedPersons = _resultStateHolder().PersonsInOrganization;
 			var group = _groupCreator.CreateGroupForPerson(person, pageOnDate, allPermittedPersons.ToList());
 
