@@ -10,20 +10,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public long? NumberOfLiveUnitOfWorks { get; set; }
 		public IAuditSetter AuditSetting { get; set; }
 		public string ConnectionString { get; set; }
-
-		public IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
+		
+		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
 			return new FakeUnitOfWork();
 		}
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IUnitOfWork CreateAndOpenUnitOfWork(IQueryFilter businessUnitFilter)
 		{
-			throw new NotImplementedException();
+			return new FakeUnitOfWork();
 		}
 
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
