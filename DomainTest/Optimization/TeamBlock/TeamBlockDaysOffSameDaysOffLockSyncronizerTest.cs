@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		public void ShouldNotLockAllIfOneIsLockedAndNotUseSameDaysOff()
 		{
 			var dateOnly = new DateOnly(2015, 10, 12);
-			var scenario = new Scenario("scenario");
+			var scenario = new Scenario("scenario1");
 			var schedulePeriod1 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var schedulePeriod2 = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
 			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
