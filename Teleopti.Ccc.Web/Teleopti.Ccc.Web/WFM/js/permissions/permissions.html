@@ -70,16 +70,14 @@
 		<div class="con-flex split-3-1 flex-element-fill flex-column" >
 			<div class="panel material-depth-1 flex-element-fill flex-column">
 				<div class="wfm-slide-tabs tabbed-panel  flex-element-fill flex-column">
-					<md-content class="md-padding  flex-element-fill flex-column">
-						<md-tabs class="flex-element-fill flex-column" md-border-bottom>
-							<md-tab label="{{'Functions' | translate}}" ng-show="roleDetails=='functionsAvailable'">
-								<div class="functions-container full-padding flex-element-fill flex-column" ng-include="'js/permissions/permissions.functions.html'" ng-controller="RoleFunctionsController"></div>
-							</md-tab>
-							<md-tab label="{{'Data' | translate}}" ng-show="roleDetails=='dataAvailable'">
-								<div class="data-container full-padding flex-element-fill flex-column" ng-include="'js/permissions/permissions.data.html'" ng-controller="RoleDataController"></div>
-							</md-tab>
-						</md-tabs>
-					</md-content>
+					<md-tabs class="flex-element-fill flex-column" md-border-bottom>
+						<md-tab label="{{'Functions' | translate}}" ng-show="roleDetails=='functionsAvailable'">
+							<div class="functions-container full-padding flex-element-fill flex-column" ng-include="'js/permissions/permissions.functions.html'" ng-controller="RoleFunctionsController"></div>
+						</md-tab>
+						<md-tab label="{{'Data' | translate}}" ng-show="roleDetails=='dataAvailable'">
+							<div class="data-container full-padding flex-element-fill flex-column" ng-include="'js/permissions/permissions.data.html'" ng-controller="RoleDataController"></div>
+						</md-tab>
+					</md-tabs>
 				</div>
 			</div>
 			</div>
