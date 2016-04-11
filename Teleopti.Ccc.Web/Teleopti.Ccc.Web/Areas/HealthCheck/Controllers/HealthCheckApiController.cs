@@ -137,8 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		{
 			var id = Guid.Empty;
 			if(_toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
-				id = _stardustSender.Send(new StardustHealthCheckEvent(), "Stardust healthcheck", "HealthCheck",
-													typeof (StardustHealthCheckEvent).ToString());
+				id = _stardustSender.Send(new StardustHealthCheckEvent {JobName = "Stardust healthcheck" ,Type = typeof(StardustHealthCheckEvent).ToString() });
 			return Ok(id);
 		}
 	}
