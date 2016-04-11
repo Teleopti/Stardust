@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Teleopti.Ccc.Domain.Common;
+﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			personAbsence.RemovePersonAbsence(command.TrackedCommandInfo);
 
-
 			var person = personAbsence.Person;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var startDate = new DateOnly(personAbsence.Period.StartDateTimeLocal(timeZone));
@@ -51,24 +49,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 
 			var scheduleDay = scheduleRange.ScheduledDay(startDate) as ExtractedSchedule;
+			scheduleDay?.Remove(personAbsence);
 
-			if (scheduleDay != null)
-			{
-				scheduleDay.Remove(personAbsence);
-			}
-
-			var errors = _saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
-			if (errors == null || !errors.Any())
-			{
-				return;
-			}
-
-			command.Errors = new ActionErrorMessage
-			{
-				PersonId = personAbsence.Person.Id.GetValueOrDefault(),
-				PersonName = personAbsence.Person.Name,
-				ErrorMessages = errors
-			};
+			_saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
 		}
 	}
 }
