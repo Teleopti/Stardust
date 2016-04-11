@@ -27,15 +27,18 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IToggleManager _toggleManager;
+		private readonly IAnalyticsPermissionsUpdater _analyticsPermissionsUpdater;
 
 		public ReportController(IReportsNavigationProvider reportsNavigationProvider, IPersonNameProvider personNameProvider,
-			ILoggedOnUser loggedOnUser, ICurrentBusinessUnit currentBusinessUnit, IToggleManager toggleManager)
+			ILoggedOnUser loggedOnUser, ICurrentBusinessUnit currentBusinessUnit, IToggleManager toggleManager, 
+			IAnalyticsPermissionsUpdater analyticsPermissionsUpdater)
 		{
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_personNameProvider = personNameProvider;
 			_loggedOnUser = loggedOnUser;
 			_currentBusinessUnit = currentBusinessUnit;
 			_toggleManager = toggleManager;
+			_analyticsPermissionsUpdater = analyticsPermissionsUpdater;
 		}
 
 		[UnitOfWork]
@@ -50,7 +53,10 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 				return View("NoPermission");
 			var agentName = _personNameProvider.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name);
 			var buName = _currentBusinessUnit.Current().Name;
-			
+
+			if (_toggleManager.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584))
+				_analyticsPermissionsUpdater.Handle(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
+
 			using (var commonReports = new CommonReports(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Analytics.ConnectionString, id.Value))
 			{
 				commonReports.LoadReportInfo();

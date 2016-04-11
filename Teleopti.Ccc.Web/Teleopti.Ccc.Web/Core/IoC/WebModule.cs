@@ -29,6 +29,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
+using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Areas.Rta;
@@ -106,6 +107,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
 			builder.RegisterType<PersonToRoleAssociation>().SingleInstance();
+			builder.RegisterType<AnalyticsPermissionsUpdater>().As<IAnalyticsPermissionsUpdater>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 			builder.RegisterModule(new TenantServerModule(_configuration));

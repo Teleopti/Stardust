@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -12,13 +10,9 @@ using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
+namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpPermissionReport_33584)]
-	// TODO This should definately not be used on this event
-	public class TemporaryPlaceForPermissionUpdater //:
-		//IHandleEvent<PersonCollectionChangedEvent>,
-		//IRunOnServiceBus
+	public class AnalyticsPermissionsUpdater : IAnalyticsPermissionsUpdater
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly ISiteRepository _siteRepository;
@@ -30,14 +24,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsPermissionExecutionRepository _analyticsPermissionExecutionRepository;
 
-		public TemporaryPlaceForPermissionUpdater(IPersonRepository personRepository, 
-			ISiteRepository siteRepository, 
-			IApplicationFunctionRepository applicationFunctionRepository, 
-			INow now, 
-			ICurrentDataSource currentDataSource, 
-			IAnalyticsPermissionRepository analyticsPermissionRepository, 
-			IAnalyticsTeamRepository analyticsTeamRepository, 
-			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, 
+		public AnalyticsPermissionsUpdater(IPersonRepository personRepository,
+			ISiteRepository siteRepository,
+			IApplicationFunctionRepository applicationFunctionRepository,
+			INow now,
+			ICurrentDataSource currentDataSource,
+			IAnalyticsPermissionRepository analyticsPermissionRepository,
+			IAnalyticsTeamRepository analyticsTeamRepository,
+			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsPermissionExecutionRepository analyticsPermissionExecutionRepository)
 		{
 			_personRepository = personRepository;
@@ -51,27 +45,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsPermissionExecutionRepository = analyticsPermissionExecutionRepository;
 		}
 
-		public void Handle(PersonCollectionChangedEvent @event)
+		public void Handle(Guid personId, Guid businessUnitId)
 		{
-			
+			var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId);
+			if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))
+				return;
+
 			var sites = _siteRepository.LoadAll();
 			var analyticTeams = _analyticsTeamRepository.GetTeams();
-			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
-			foreach (var personId in @event.PersonIdCollection)
-			{
-				var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId);
-				if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))
-					continue;
-				var currentPermissions = getPermissionsFromAppDatabase(personId, sites, analyticTeams, businessUnit);
-				var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId);
+			var businessUnit = _analyticsBusinessUnitRepository.Get(businessUnitId);
+			var currentPermissions = getPermissionsFromAppDatabase(personId, sites, analyticTeams, businessUnit);
+			var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId);
 
-				var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Any(x => x.Equals(p)));
-				var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Any(x => x.Equals(p)));
-				_analyticsPermissionRepository.InsertPermissions(toBeAdded);
-				_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
+			var toBeAdded = currentPermissions.Where(p => !currentAnalyticsPermissions.Any(x => x.Equals(p)));
+			var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Any(x => x.Equals(p)));
+			_analyticsPermissionRepository.InsertPermissions(toBeAdded);
+			_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
 
-				_analyticsPermissionExecutionRepository.Set(personId);
-			}
+			_analyticsPermissionExecutionRepository.Set(personId);
 		}
 
 		private IList<AnalyticsPermission> getPermissionsFromAppDatabase(Guid personId, IList<ISite> sites, IList<AnalyticTeam> analyticTeams, AnalyticBusinessUnit businessUnit)
@@ -91,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			var analyticsTeam = analyticTeams.First(t => t.TeamCode == arg.Team.Id); // TODO: What about a new team that is not in analytics yet?
 			return new AnalyticsPermission
 			{
-				PersonCode = arg.Person.Id.GetValueOrDefault(),	
+				PersonCode = arg.Person.Id.GetValueOrDefault(),
 				DatasourceId = 1,
 				ReportId = new Guid(arg.ApplicationFunction.ForeignId),
 				BusinessUnitId = businessUnit.BusinessUnitId,
@@ -100,5 +91,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				DatasourceUpdateDate = updateDate
 			};
 		}
+	}
+
+	public interface IAnalyticsPermissionsUpdater
+	{
+		void Handle(Guid personId, Guid businessUnitId);
 	}
 }
