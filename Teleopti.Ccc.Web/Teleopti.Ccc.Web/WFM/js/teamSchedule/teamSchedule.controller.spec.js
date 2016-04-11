@@ -132,6 +132,25 @@ describe("[Test for TeamScheduleController]:", function() {
 		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 08:00:00").format('LT'));
 	});
 
+	it("should keep the activity selection when schedule reloaded", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+		rootScope.$digest();
+
+		controller.selectedPersonProjections = [
+			{
+				PersonId: "221B-Baker-SomeoneElse",
+				SelectedPersonActivities: ["activity1"],
+				SelectedPersonAbsences:[]
+			}
+		];
+
+		controller.loadSchedules();
+		rootScope.$digest();
+		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
+		expect(personSchedule1.Shifts[0].Projections[0].Selected).toEqual(true);
+
+	});
+
 	function setUpController($controller) {
 		return $controller("TeamScheduleCtrl", {
 			$scope: rootScope
@@ -172,10 +191,18 @@ describe("[Test for TeamScheduleController]:", function() {
 							"Date": today,
 							"Projection": [
 								{
+									"ActivityId":"activity1",
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 07:00",
 									"Minutes": 480
+								},
+								{
+									"ActivityId":"activity2",
+									"Color": "#80FF80",
+									"Description": "Email",
+									"Start": today + " 15:00",
+									"Minutes": 120
 								}
 							],
 							"IsFullDayAbsence": false,
@@ -187,6 +214,7 @@ describe("[Test for TeamScheduleController]:", function() {
 							"Date": today,
 							"Projection": [
 								{
+									"ActivityId": "activity1",
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 08:00",

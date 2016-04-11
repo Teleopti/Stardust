@@ -53,6 +53,14 @@
 				action: function() {vm.setCurrentCommand('RemoveAbsence');parentVm.confirmRemoveAbsence();},
 				clickable: function () { return vm.canRemoveAbsence(); },
 				visible: function () { return vm.canActiveRemoveAbsence(); }
+			},
+			{
+				label: "RemoveActivity",
+				shortcut: "Alt+X",
+				panelName: "", // Leave empty if not creating a mdSidenav panel
+				action: function() {vm.setCurrentCommand('RemoveActivity');parentVm.removeActivity();},
+				clickable: function () { return vm.canRemoveActivity(); },
+				visible: function () { return vm.canActiveRemoveActivity(); }
 			}
 		];
 	
@@ -60,17 +68,21 @@
 			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission && vm.permissions.HasModifyAssignmentPermission;
 		};
 
-		vm.canActiveAddAbsence = function () {
+		vm.canActiveAddAbsence = function() {
 			return vm.toggles.AbsenceReportingEnabled
 				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable)
 				&& vm.permissions.IsModifyScheduleAvailable && vm.permissions.HasModifyPersonAbsencePermission;
-		}
+		};
 
-		vm.canActiveRemoveAbsence = function () {
+		vm.canActiveRemoveAbsence = function() {
 			return vm.toggles.RemoveAbsenceEnabled
 				&& vm.permissions.IsRemoveAbsenceAvailable
 				&& vm.permissions.IsModifyScheduleAvailable;
-		}
+		};
+
+		vm.canActiveRemoveActivity = function() {
+			return vm.toggles.RemoveActivityEnabled && vm.permissions.HasRemoveActivityPermission;
+		};
 
 		vm.canActiveSwapShifts = function () {
 			return vm.toggles.SwapShiftEnabled
@@ -79,7 +91,11 @@
 		}
 
 		vm.canRemoveAbsence = function () {
-			return vm.toggles.RemoveAbsenceEnabled && parentVm.getTotalSelectedPersonAndAbsenceCount().AbsenceCount > 0;
+			return parentVm.getTotalSelectedPersonAndProjectionCount().AbsenceCount > 0;
+		};
+
+		vm.canRemoveActivity = function () {
+			return parentVm.getTotalSelectedPersonAndProjectionCount().ActivityCount > 0;
 		};
 
 		vm.toggleCommandState = function (menuName) {
@@ -134,16 +150,24 @@
 
 		function registerShortCuts() {
 			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
+				if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddAbsence()) return;
 				vm.commands[0].action(); // Alt+A for add absence
 			});
 			shortCuts.registerKeySequence([keyCodes.T], [keyCodes.ALT], function () {
+				if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddActivity()) return;
 				vm.commands[1].action(); // Alt+T for add activity
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
+				if (!personSelectionSvc.canSwapShifts() || !vm.canActiveSwapShifts()) return;
 				vm.commands[2].action();; // Alt+S for swap shifts
 			});
 			shortCuts.registerKeySequence([keyCodes.R], [keyCodes.ALT], function () {
+				if (!vm.canRemoveAbsence() || !vm.canActiveRemoveAbsence()) return;
 				vm.commands[3].action();; // Alt+R for remove absence
+			});
+			shortCuts.registerKeySequence([keyCodes.X], [keyCodes.ALT], function () {
+				if (!vm.canRemoveActivity() || !vm.canActiveRemoveActivity()) return;
+				vm.commands[4].action();; // Alt+X for remove activity
 			});
 		}
 

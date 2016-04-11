@@ -20,7 +20,7 @@
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.lastCommandTrackId = "";
-		vm.selectedPersonAbsences = [];
+		vm.selectedPersonProjections = [];
 		vm.isScenarioTest = false;
 		vm.permissionsAndTogglesLoaded = false;
 
@@ -80,7 +80,8 @@
 
 		vm.resetSchedulePage = function () {
 			vm.paginationOptions.pageNumber = 1;
-			vm.selectedPersonAbsences = [];
+			vm.selectedPersonProjections = [];
+			vm.selectedPersonActivities = [];
 			vm.loadSchedules();
 		};
 
@@ -96,15 +97,15 @@
 			return params;
 		}
 
-		function setPersonAbsenceSelection() {
-			var selectedAbsences = [];
-			for (var i = 0; i < vm.selectedPersonAbsences.length; i++) {
-				var personAndAbsencePair = vm.selectedPersonAbsences[i];
+		function setPersonAbsenceAndActivitySelection() {
+			var selectedAbsences = [], selectedPersonActivities = {};
+			for (var i = 0; i < vm.selectedPersonProjections.length; i++) {
+				var personAndAbsencePair = vm.selectedPersonProjections[i];
 				for (var j = 0; j < personAndAbsencePair.SelectedPersonAbsences.length; j++) {
 					selectedAbsences.push(personAndAbsencePair.SelectedPersonAbsences[j]);
 				};
+				selectedPersonActivities[vm.selectedPersonProjections[i].PersonId] = vm.selectedPersonProjections[i].SelectedPersonActivities;
 			}
-
 			var schedules = vm.groupScheduleVm().Schedules;
 			for (var i = 0; i < schedules.length; i++) {
 				var schedule = schedules[i];
@@ -115,20 +116,25 @@
 						if (projection.ParentPersonAbsence != null && selectedAbsences.indexOf(projection.ParentPersonAbsence) > -1) {
 							projection.Selected = true;
 						}
+						if (projection.ActivityId != null && selectedPersonActivities[schedule.PersonId] != undefined &&
+							selectedPersonActivities[schedule.PersonId].indexOf(projection.ActivityId) > -1) {
+							projection.Selected = true;
+						}
 					}
 				}
 			}
 		}
 
-		vm.getTotalSelectedPersonAndAbsenceCount = function(){
-			var absenceCount = 0;
-			var personIds = [];
+		vm.getTotalSelectedPersonAndProjectionCount = function() {
+			var absenceCount = 0,
+				activityCount = 0,
+				personIds = [];
 
-			for (var i = 0; i < vm.selectedPersonAbsences.length; i++) {
-				var personAbsencePair = vm.selectedPersonAbsences[i];
-				personIds.push(personAbsencePair.personId);
-				absenceCount += personAbsencePair.SelectedPersonAbsences.length;
-			}
+			vm.selectedPersonProjections.forEach(function(projection) {
+				absenceCount += projection.SelectedPersonAbsences.length;
+				activityCount += projection.SelectedPersonActivities.length;
+				personIds.push(projection.PersonId);
+			});
 
 			var selectedPersonInfo = personSelectionSvc.getSelectedPersonInfoList();
 			for (var j = 0; j < selectedPersonInfo.length; j++) {
@@ -136,14 +142,15 @@
 				if (personIds.indexOf(selectedPerson.personId) === -1) {
 					personIds.push(selectedPerson.personId);
 					absenceCount += selectedPerson.personAbsenceCount;
+					activityCount += selectedPerson.personActivityCount;
 				}
 			}
-
 			return {
 				PersonCount: personIds.length,
-				AbsenceCount: absenceCount
+				AbsenceCount: absenceCount,
+				ActivityCount: activityCount
 			};
-		}
+		};
 
 		function afterSchedulesLoaded(result) {
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
@@ -153,7 +160,7 @@
 			vm.searchOptions.keyword = result.Keyword;
 			personSelectionSvc.setScheduleDate(vm.scheduleDateMoment().format('YYYY-MM-DD'));
 			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-			setPersonAbsenceSelection();
+			setPersonAbsenceAndActivitySelection();
 		};
 
 		vm.loadSchedules = function() {
@@ -233,28 +240,28 @@
 
 			var personWithSelectedAbsences = [];
 			var selectedAbsences = [];
-			for (var i = 0; i < vm.selectedPersonAbsences.length; i++) {
-				var personAndAbsencePair = vm.selectedPersonAbsences[i];
-				personWithSelectedAbsences.push(personAndAbsencePair.PersonId);
-				for (var j = 0; j < personAndAbsencePair.SelectedPersonAbsences.length; j++) {
-					selectedAbsences.push(personAndAbsencePair.SelectedPersonAbsences[j]);
-				};
+			for (var i = 0; i < vm.selectedPersonProjections.length; i++) {
+				if (vm.selectedPersonProjections[i].SelectedPersonAbsences.length > 0) {
+					var personAndAbsencePair = vm.selectedPersonProjections[i];
+					personWithSelectedAbsences.push(personAndAbsencePair.PersonId);
+					for (var j = 0; j < personAndAbsencePair.SelectedPersonAbsences.length; j++) {
+						selectedAbsences.push(personAndAbsencePair.SelectedPersonAbsences[j]);
+					};
+				}
 			}
 
 			var allPersonWithAbsenceRemoved = selectedPersonIdList.concat(personWithSelectedAbsences);
 			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), selectedPersonIdList, selectedAbsences,
 				removeEntireCrossDayAbsence, function(result) {
-					vm.selectedPersonAbsences = [];
+					vm.selectedPersonProjections = [];
 					vm.afterActionCallback(result, allPersonWithAbsenceRemoved, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
 				}
 			);
 		}
 
 		vm.confirmRemoveAbsence = function() {
-			var selectedPersonAndAbsenceCount = vm.getTotalSelectedPersonAndAbsenceCount();
-
 			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
-			[selectedPersonAndAbsenceCount.AbsenceCount, selectedPersonAndAbsenceCount.PersonCount]);
+			[vm.getTotalSelectedPersonAndProjectionCount().AbsenceCount, vm.getTotalSelectedPersonAndProjectionCount().PersonCount]);
 			dialogSvc.create("js/teamSchedule/html/removeAbsenceConfirmDialog.html", 'RemoveAbsenceConfirmDialogController',
 			{
 				header: $translate.instant("Warning"),
@@ -265,6 +272,10 @@
 			}, function() {
 				return;
 			});
+		};
+
+		vm.removeActivity = function() {
+			//do something
 		};
 
 		vm.selectedPersonInfo = function() {
@@ -362,6 +373,7 @@
 		vm.init = function () {
 			vm.toggles = {
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
+				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
 				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
 				AdvancedSearchEnabled: toggleSvc.WfmPeople_AdvancedSearch_32973,
 				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
@@ -379,6 +391,8 @@
 				currentCommandName: null
 			}
 			vm.permissionsAndTogglesLoaded = true;
+
+			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled;
 		};
 		$q.all([
 			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
