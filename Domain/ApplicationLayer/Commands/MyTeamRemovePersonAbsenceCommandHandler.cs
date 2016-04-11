@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 
 			var scheduleDay = scheduleRange.ScheduledDay(startDate) as ExtractedSchedule;
-			scheduleDay?.Remove(personAbsence);
+			if (scheduleDay != null) scheduleDay.Remove(personAbsence);
 
 			_saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
 		}
