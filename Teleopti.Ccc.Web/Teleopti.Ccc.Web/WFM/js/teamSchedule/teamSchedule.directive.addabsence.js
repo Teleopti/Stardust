@@ -12,7 +12,7 @@
 				agentIdList: '&',
 				actionsAfterAbsenceApply: '&'
 			},
-			controller: ['$translate', 'PersonAbsence', 'guidgenerator', addAbsenceCtrl],
+			controller: ['$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
@@ -21,7 +21,7 @@
 		};
 	};
 
-	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator) {
+	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator, CommandCommon) {
 		var vm = this;
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
@@ -45,7 +45,9 @@
 			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
 		}
 
-		vm.applyAbsence = function () {
+		vm.applyAbsence = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddAbsence', applyAbsence);
+
+		function applyAbsence() {
 			var trackId = guidgenerator.newGuid();
 			var personIds = vm.agentIdList();
 			var afterAppliedAbsence = function(result) {

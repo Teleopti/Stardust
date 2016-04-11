@@ -3,26 +3,29 @@
 		<md-toolbar>
 			<div class="md-toolbar-tools">
 				<h2 translate>{{commandTitle}}</h2>
-				<span flex></span>				
+				<span flex></span>
 			</div>
 		</md-toolbar>
 		<md-dialog-content>
 			<div class="md-dialog-content">
-				<p>{{ translatedMessage }}</p>
+				<p ng-if="!hasError">{{ translatedMessage }}</p>
 				<p ng-if="needFix" class="text-warning">
 					<span>{{ translatedWarningMessage }}</span>&nbsp;
-					<button ng-if="needFix" ng-click="fix()" class="wfm-btn wfm-btn-default">
+					<button ng-click="fix()" class="wfm-btn wfm-btn-default">
 						unselect
 					</button>
-				</p>				
+				</p>
+				<p ng-if="hasError" class="text-danger">
+					<span>{{ translatedErrorMessage }}</span>
+				</p>
 			</div>
 		</md-dialog-content>
 		<md-dialog-actions layout="row">
-			<span flex></span>			
+			<span flex></span>
 			<button ng-click="apply()"
 					class="wfm-btn"
-					ng-class="{'wfm-btn-primary': !needFix, 'wfm-btn-primary-disabled': needFix}"
-					ng-disabled="needFix?'disabled':''">
+					ng-class="{'wfm-btn-primary': !(needFix || hasError) , 'wfm-btn-primary-disabled': needFix || hasError}"
+					ng-disabled="(needFix || hasError) ?'disabled':''">
 				Apply
 			</button>
 			<button ng-click="cancel()" style="margin-right:20px;" class="wfm-btn wfm-btn-default">

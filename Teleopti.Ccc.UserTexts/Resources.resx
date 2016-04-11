@@ -14254,4 +14254,12 @@ Help us improve your experience by sending an error report</value>
     <value>Found schedule write protection for {0} agents.</value>
     <comment>Notification message showing the number of agents who have schedule write protection.</comment>
   </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>You must select at least one agent.</value>
+    <comment>Error message alerting the user that he must at least select one agent to perform the action.</comment>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Must select two agents to swap.</value>
+    <comment>Error message alerting the user that the current agent selection is not appropriate for swapping schedule.</comment>
+  </data>
 </root>

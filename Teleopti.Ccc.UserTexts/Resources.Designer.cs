@@ -16074,6 +16074,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You must select at least one agent..
+        /// </summary>
+        public static string MustSelectAtLeastOneAgent {
+            get {
+                return ResourceManager.GetString("MustSelectAtLeastOneAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Must select two agents to swap..
+        /// </summary>
+        public static string MustSelectTwoAgentsToSwap {
+            get {
+                return ResourceManager.GetString("MustSelectTwoAgentsToSwap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must specify a valid time.
         /// </summary>
         public static string MustSpecifyValidTime {
@@ -16403,15 +16421,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewActivity {
             get {
                 return ResourceManager.GetString("NewActivity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New activity is not allowed for.
-        /// </summary>
-        public static string NewActivityIsNotAllowedFor {
-            get {
-                return ResourceManager.GetString("NewActivityIsNotAllowedFor", resourceCulture);
             }
         }
         

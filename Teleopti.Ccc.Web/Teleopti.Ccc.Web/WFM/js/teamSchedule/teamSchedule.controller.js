@@ -5,12 +5,12 @@
 			'$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
 			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence',
 			'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes',
-			'dialogs', 'WFMDate', TeamScheduleController
+			'dialogs', 'WFMDate', 'CommandCommon', TeamScheduleController
 		]);
 
 	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
 		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc,
-		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc, WFMDateSvc) {
+		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc, WFMDateSvc, CommandCommonSvc) {
 		
 		var vm = this;
 
@@ -226,7 +226,13 @@
 			vm.setEarliestStartOfSelectedSchedule();
 		};
 
-		vm.swapShifts = function() {
+		vm.swapShifts = CommandCommonSvc.wrapPersonWriteProtectionCheck(true, 'SwapShift', swapShifts, {
+			check: function () { return personSelectionSvc.getSelectedPersonIdList().length == 2; },
+			message: 'MustSelectTwoAgentsToSwap'
+		}, vm.scheduleDate);
+
+
+		function swapShifts() {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
 			var personIdFrom = selectedPersonIds[0];
 			var personIdTo = selectedPersonIds[1];

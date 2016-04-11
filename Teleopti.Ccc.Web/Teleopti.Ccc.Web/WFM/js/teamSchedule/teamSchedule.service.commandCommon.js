@@ -28,10 +28,10 @@
 		}
 
 
-		function wrapPersonWriteProtectionCheck(skipDialogIfNormal, commandTitle, action) {
+		function wrapPersonWriteProtectionCheck(skipDialogIfNormal, commandTitle, action, requirement, selectedDate) {
 
 			var getPersons = PersonSelection.getSelectedPersonIdList;
-			var date = PersonSelection.scheduleDate;
+			var date = selectedDate? selectedDate: PersonSelection.scheduleDate;
 			
 			function getFix(writeProtectedPersons) {
 				if (writeProtectedPersons.length > 0)
@@ -43,8 +43,13 @@
 					return null;
 			}
 
+			function precheck() {
+				if (!requirement) return true;
+				return requirement.check();
+			}
+
 			function showDialog(fix) {
-				if (fix == null && skipDialogIfNormal) {
+				if (fix == null && skipDialogIfNormal && precheck()) {
 					return action();
 				}
 
@@ -58,7 +63,8 @@
 						commandTitle: commandTitle,
 						fix: fix,
 						getTargets: getPersons,
-						command: action
+						command: action,
+						require: requirement
 					}
 				});
 			}
