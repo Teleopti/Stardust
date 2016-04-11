@@ -401,6 +401,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsPermissionExecutionRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepository.cs" />

@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsPermissionRepository _analyticsPermissionRepository;
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
+		private readonly IAnalyticsPermissionExecutionRepository _analyticsPermissionExecutionRepository;
 
 		public TemporaryPlaceForPermissionUpdater(IPersonRepository personRepository, 
 			ISiteRepository siteRepository, 
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			ICurrentDataSource currentDataSource, 
 			IAnalyticsPermissionRepository analyticsPermissionRepository, 
 			IAnalyticsTeamRepository analyticsTeamRepository, 
-			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository)
+			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, 
+			IAnalyticsPermissionExecutionRepository analyticsPermissionExecutionRepository)
 		{
 			_personRepository = personRepository;
 			_siteRepository = siteRepository;
@@ -46,15 +48,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsPermissionRepository = analyticsPermissionRepository;
 			_analyticsTeamRepository = analyticsTeamRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
+			_analyticsPermissionExecutionRepository = analyticsPermissionExecutionRepository;
 		}
 
 		public void Handle(PersonCollectionChangedEvent @event)
 		{
+			
 			var sites = _siteRepository.LoadAll();
 			var analyticTeams = _analyticsTeamRepository.GetTeams();
 			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			foreach (var personId in @event.PersonIdCollection)
 			{
+				var lastUpdate = _analyticsPermissionExecutionRepository.Get(personId);
+				if (DateTime.UtcNow - lastUpdate < TimeSpan.FromMinutes(15))
+					continue;
 				var currentPermissions = getPermissionsFromAppDatabase(personId, sites, analyticTeams, businessUnit);
 				var currentAnalyticsPermissions = _analyticsPermissionRepository.GetPermissionsForPerson(personId);
 
@@ -62,6 +69,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				var toBeDeleted = currentAnalyticsPermissions.Where(p => !currentPermissions.Any(x => x.Equals(p)));
 				_analyticsPermissionRepository.InsertPermissions(toBeAdded);
 				_analyticsPermissionRepository.DeletePermissions(toBeDeleted);
+
+				_analyticsPermissionExecutionRepository.Set(personId);
 			}
 		}
 
