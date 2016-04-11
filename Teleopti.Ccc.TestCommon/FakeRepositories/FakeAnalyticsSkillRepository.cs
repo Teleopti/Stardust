@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			if (analyticsSkillSet.SkillsetId == 0)
 			{
-				analyticsSkillSet.SkillsetId = fakeSkillSets.Max(a => a.SkillsetId) + 1;
+				analyticsSkillSet.SkillsetId = (fakeSkillSets.Max(a => (int?) a.SkillsetId) ?? 0) + 1;
 			}
 			fakeSkillSets.Add(analyticsSkillSet);
 			return analyticsSkillSet.SkillsetId;

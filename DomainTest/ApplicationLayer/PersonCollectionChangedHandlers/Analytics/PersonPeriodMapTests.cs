@@ -19,17 +19,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private AnalyticsSkill fakeSkill1 = new AnalyticsSkill
 		{
 			SkillId = 1,
-			SkillCode = Guid.Parse("00000000-0000-0000-0000-000000000001")
+			SkillCode = Guid.NewGuid()
 		};
 		private AnalyticsSkill fakeSkill2 = new AnalyticsSkill
 		{
 			SkillId = 2,
-			SkillCode = Guid.Parse("00000000-0000-0000-0000-000000000002")
+			SkillCode = Guid.NewGuid()
 		};
 		private AnalyticsSkill fakeSkill3 = new AnalyticsSkill
 		{
 			SkillId = 3,
-			SkillCode = Guid.Parse("00000000-0000-0000-0000-000000000003")
+			SkillCode = Guid.NewGuid()
 		};
 
 		[SetUp]

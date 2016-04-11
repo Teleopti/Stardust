@@ -270,15 +270,14 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 				return -1;
 
 			var allAnalyticsSkills = _analyticsSkillRepository.Skills(businessUnitId);
+			listOfSkills = allAnalyticsSkills.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
 
-			if (allAnalyticsSkills.Count(a => skillCodes.Contains(a.SkillCode)) < skillCodes.Count)
+			if (allAnalyticsSkills.Count(a => skillCodes.Contains(a.SkillCode)) != skillCodes.Count)
 			{
 				// Skill exists in app but not yet in analytics
-				listOfSkills = new List<AnalyticsSkill>();
 				return -1;
 			}
-
-			listOfSkills = allAnalyticsSkills.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
+			
 			var skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
 
 			if (skillSetId.HasValue)
