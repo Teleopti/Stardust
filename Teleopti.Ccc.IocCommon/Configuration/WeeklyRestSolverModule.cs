@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
 			builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
 			builder.RegisterType<ScheduleDayIsLockedSpecification>().As<IScheduleDayIsLockedSpecification>();
-			builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>();
+			builder.RegisterType<AllTeamMembersInSelectionSpecification>().As<IAllTeamMembersInSelectionSpecification>().SingleInstance();
 			builder.RegisterType<PersonWeekViolatingWeeklyRestSpecification>().As<IPersonWeekViolatingWeeklyRestSpecification>();
 			builder.RegisterType<BrokenWeekCounterForAPerson>().As<IBrokenWeekCounterForAPerson>();
 			builder.RegisterType<WeeklyRestSolverExecuter>().InstancePerLifetimeScope();
