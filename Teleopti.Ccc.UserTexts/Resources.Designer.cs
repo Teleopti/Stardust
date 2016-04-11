@@ -5101,6 +5101,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Change will affect {0} agents..
+        /// </summary>
+        public static string ChangeWillAffectAgents {
+            get {
+                return ResourceManager.GetString("ChangeWillAffectAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change your availabilities.
         /// </summary>
         public static string ChangeYourAvailabilities {
@@ -20262,6 +20271,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Persons {
             get {
                 return ResourceManager.GetString("Persons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found schedule write protection for {0} agents..
+        /// </summary>
+        public static string PersonsAreWriteProtected {
+            get {
+                return ResourceManager.GetString("PersonsAreWriteProtected", resourceCulture);
             }
         }
         

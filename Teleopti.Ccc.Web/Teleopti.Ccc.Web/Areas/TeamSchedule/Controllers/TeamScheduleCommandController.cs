@@ -5,7 +5,6 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
@@ -25,9 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/PersonWriteProtectionCheck")]
-		public virtual IList<Guid> CheckPersonWriteProtection(DateOnly date, IEnumerable<Guid> agentIds)
+		public virtual IList<Guid> CheckPersonWriteProtection(CheckPersonWriteProtectionFormData input)
 		{
-			return _commandHandlingProvider.CheckWriteProtectedAgents(date, agentIds).ToList();
+			return _commandHandlingProvider.CheckWriteProtectedAgents(input.Date, input.AgentIds).ToList();
 		}
 	}
 }

@@ -1,0 +1,33 @@
+﻿<md-dialog aria-label="{{commandTitle}}" ng-cloak class="team-schedule-command-confirm-dialog">
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2 translate>{{commandTitle}}</h2>
+				<span flex></span>				
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<p>{{ translatedMessage }}</p>
+				<p ng-if="needFix" class="text-warning">
+					<span>{{ translatedWarningMessage }}</span>&nbsp;
+					<button ng-if="needFix" ng-click="fix()" class="wfm-btn wfm-btn-default">
+						unselect
+					</button>
+				</p>				
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>			
+			<button ng-click="apply()"
+					class="wfm-btn"
+					ng-class="{'wfm-btn-primary': !needFix, 'wfm-btn-primary-disabled': needFix}"
+					ng-disabled="needFix?'disabled':''">
+				Apply
+			</button>
+			<button ng-click="cancel()" style="margin-right:20px;" class="wfm-btn wfm-btn-default">
+				Cancel
+			</button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

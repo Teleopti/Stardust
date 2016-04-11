@@ -14242,4 +14242,12 @@ Help us improve your experience by sending an error report</value>
     <value>Could not remove absence from protected schedule.</value>
     <comment>Error message in team schedule</comment>
   </data>
+  <data name="ChangeWillAffectAgents" xml:space="preserve">
+    <value>Change will affect {0} agents.</value>
+    <comment>Notification message showing the number of agents to be affected by the command (change).</comment>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>Found schedule write protection for {0} agents.</value>
+    <comment>Notification message showing the number of agents who have schedule write protection.</comment>
+  </data>
 </root>

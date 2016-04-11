@@ -14,13 +14,13 @@
 				defaultStart: '&?'
 			},
 			templateUrl: 'js/teamSchedule/html/addActivityPanel.tpl.html',
-			controller: ['ActivityService', 'guidgenerator', addActivityCtrl],
+			controller: ['ActivityService', 'guidgenerator', 'CommandCommon', addActivityCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function addActivityCtrl(ActivityService, guidgenerator) {
+	function addActivityCtrl(ActivityService, guidgenerator, CommandCommon) {
 		var vm = this;
 		var startTimeMoment;
 		vm.selectedPersonIds = [];
@@ -44,8 +44,8 @@
 		};
 		vm.isNextDay = false;
 		vm.selectedActivityId = null;
-		vm.disableNextDay = false;
-		vm.addActivity = addActivity;
+		vm.disableNextDay = false;	
+		vm.addActivity = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddActivity', addActivity);
 
 		ActivityService.fetchAvailableActivities().then(function (activities) {
 			vm.activities = activities;
@@ -83,7 +83,7 @@
 			var mScheduleEnd = moment(scheduleEnd);
 			return!vm.isNextDay || (vm.isNextDay && mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart)));
 		}
-
+				
 		function addActivity() {
 			var trackId = guidgenerator.newGuid();
 			ActivityService.addActivity({

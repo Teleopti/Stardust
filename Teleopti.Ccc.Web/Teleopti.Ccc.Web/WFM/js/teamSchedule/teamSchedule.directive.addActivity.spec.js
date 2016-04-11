@@ -19,8 +19,17 @@
 					}
 				}
 			});
+			$provide.service('CommandCommon', function() {
+				return new FakeCommandCommonService();
+			})
 		});
 	});
+
+	function FakeCommandCommonService() {		
+		this.wrapPersonWriteProtectionCheck = function(skipDialogIfNormal, commandTitle, action) {
+			return action;
+		}
+	}
 
 	function FakeActivityService() {
 		var availableActivities = [];

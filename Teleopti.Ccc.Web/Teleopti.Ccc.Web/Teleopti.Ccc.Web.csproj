@@ -890,6 +890,7 @@
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleComparer.cs" />
     <Compile Include="Areas\TeamSchedule\IPermissionChecker.cs" />
     <Compile Include="Areas\TeamSchedule\Models\AddActivityFormData.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\CheckPersonWriteProtectionFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\TeamScheduleViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\TeamScheduleController.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\TeamScheduleProjectionProvider.cs" />
@@ -1402,6 +1403,7 @@
     <Content Include="WFM\js\teamSchedule\html\addabsencepanel.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityPanel.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\removeAbsenceConfirmDialog.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduleCommand.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
@@ -1416,6 +1418,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandConfirmDialog.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.timeline.js" />
@@ -1425,6 +1428,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.activity.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.commandCommon.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />

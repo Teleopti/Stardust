@@ -55,6 +55,18 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			}
 		}
 
+		svc.unselectPersonsWithIds = function (personIds) {
+			angular.forEach(personIds, function(id) {
+				svc.personInfo[id].isSelected = false;
+			});
+		}
+
+		svc.fetchPersonsWithIds = function(personIds) {
+			return personIds.map(function(id) {
+				return svc.personInfo[id];
+			});
+		};
+
 		svc.getSelectedPersonInfoList = function() {
 			var result = [];
 			for (var key in svc.personInfo) {

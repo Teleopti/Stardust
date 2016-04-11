@@ -32,7 +32,9 @@
 				label: "AddActivity",
 				shortcut: "Alt+T",
 				panelName: "add-activity",
-				action: function () { vm.setCurrentCommand('AddActivity'); parentVm.addActivity(); },
+				action: function () {
+					 vm.setCurrentCommand('AddActivity'); parentVm.addActivity();
+				},
 				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
 				visible: function () { return vm.canActiveAddActivity(); }
 			},
@@ -53,7 +55,7 @@
 				visible: function () { return vm.canActiveRemoveAbsence(); }
 			}
 		];
-
+	
 		vm.canActiveAddActivity = function () {
 			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission && vm.permissions.HasModifyAssignmentPermission;
 		};

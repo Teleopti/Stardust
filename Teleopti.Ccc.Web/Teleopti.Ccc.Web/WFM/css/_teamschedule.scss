@@ -8,7 +8,7 @@
 	.relative {
 		position: relative;
 	}
-
+	
 	.teamschedule-header{
 		width:100%!important;
 		display:flex;
@@ -299,4 +299,8 @@
 			line-height: 25px;
 		}
 	}
+}
+
+.team-schedule-command-confirm-dialog {
+	width: 100%;
 }
