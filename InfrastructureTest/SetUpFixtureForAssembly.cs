@@ -42,10 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public void BeforeTestSuite()
 		{
 			var builder = new ContainerBuilder();
-			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader())
-			{
-				FeatureToggle = "http://notinuse"
-			}, new TrueToggleManager())));
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()) { FeatureToggle = "http://notinuse" }, new FalseToggleManager())));
 			builder.RegisterType<FakeToggleManager>().As<IToggleManager>().SingleInstance();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			var container = builder.Build();
