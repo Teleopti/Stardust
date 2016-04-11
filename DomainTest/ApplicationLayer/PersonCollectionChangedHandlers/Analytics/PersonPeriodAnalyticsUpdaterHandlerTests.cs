@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -7,8 +8,11 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
@@ -156,10 +160,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-            _personPeriodRepository.GetPersonPeriods(testPerson1Id)
-                .First().ValidFromDate.Should()
-                .Be.EqualTo(new DateTime(2015, 1, 1));
-            _eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_personPeriodRepository.GetPersonPeriods(testPerson1Id)
+				.First().ValidFromDate.Should()
+				.Be.EqualTo(new DateTime(2015, 1, 1));
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
 			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
 		}
 
@@ -235,11 +239,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			// Then
 			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
-		    _personPeriodRepository.GetPersonPeriods(testPerson1Id)
-		        .First().ValidFromDate.Should()
-		        .Be.EqualTo(new DateTime(2015, 1, 1));
+			_personPeriodRepository.GetPersonPeriods(testPerson1Id)
+				.First().ValidFromDate.Should()
+				.Be.EqualTo(new DateTime(2015, 1, 1));
 
-            _eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void NewPersonPeriodWithSkillNotYetInAnalytics_HandleEvent_ShouldWorkAndPublishEvents()
+		{
+			// Given when adding person period
+			var person = _personRepository.FindPeople(new List<Guid> { testPerson1Id }).First();
+			var r = newTestPersonPeriod((new DateTime(2015, 1, 1)).AddDays(-1));
+
+			IActivity act = new Activity("for test");
+			ISkillType skType = SkillTypeFactory.CreateSkillType();
+			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
+			skill.Activity = act;
+			skill.TimeZone = (TimeZoneInfo.Local);
+
+			r.AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			person.AddPersonPeriod(r);
+
+			// When handling event
+			_target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id }
+			});
+
+			// Then
+			Assert.AreEqual(1, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
+			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
 			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
 		}
 

@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakeSkillSets = new List<AnalyticsSkillSet>();
 			fakeBridgeSkillsetSkills = new List<AnalyticsBridgeSkillsetSkill>();
 			fakeFactAgentSkills = new List<AnalyticsFactAgentSkill>();
+			fakeSkills = new List<AnalyticsSkill>();
 		}
 
 		public IList<AnalyticsSkill> Skills(int businessUnitId)
