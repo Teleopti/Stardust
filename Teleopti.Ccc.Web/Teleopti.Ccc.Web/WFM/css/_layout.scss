@@ -116,3 +116,9 @@ wfm-notice{
 	right:1%;
 	left:75%;
 }
+
+@media screen and (max-width: 960px) {
+	wfm-notice{
+		left:1%;
+	}
+}
