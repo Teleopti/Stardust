@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAbsence LoadAggregate(Guid id)
 		{
-			throw new NotImplementedException();
+			return _personAbsences.Single(pa => pa.Id == id);
 		}
 
 		public ICollection<IPersonAbsence> Find(IEnumerable<IPerson> persons, DateTimePeriod period)

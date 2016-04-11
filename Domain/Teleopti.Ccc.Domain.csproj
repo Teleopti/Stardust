@@ -178,6 +178,8 @@
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceRemover.cs" />
+    <Compile Include="ApplicationLayer\Commands\MyTeamRemovePersonAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\MyTeamRemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\CommonEventProcessor.cs" />
     <Compile Include="ApplicationLayer\CurrentInitiatorIdentifier.cs" />

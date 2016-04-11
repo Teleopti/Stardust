@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[HttpPost, Route("api/PersonScheduleCommand/RemovePersonAbsence")]
 		[UnitOfWork]
 		[RemoveAbsencePermission]
-		public virtual IHttpActionResult RemovePersonAbsence([FromBody]RemovePersonAbsenceCommand command)
+		public virtual IHttpActionResult RemovePersonAbsence([FromBody]MyTeamRemovePersonAbsenceCommand command)
 		{
 			if (command.TrackedCommandInfo != null)
 				command.TrackedCommandInfo.OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value;

@@ -14,9 +14,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -28,7 +26,6 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
@@ -620,10 +617,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			requestContainer.Resolve<IHandleCommand<AddFullDayAbsenceCommand>>()
 			                .Should().Not.Be.Null();
+			requestContainer.Resolve<IHandleCommand<MyTeamRemovePersonAbsenceCommand>>()
+							.Should().Not.Be.Null();
 			requestContainer.Resolve<IHandleCommand<RemovePersonAbsenceCommand>>()
 							.Should().Not.Be.Null();
-			
-
+			requestContainer.Resolve<IHandleCommand<RemovePartPersonAbsenceCommand>>()
+							.Should().Not.Be.Null();
 		}
 
 		[Test]

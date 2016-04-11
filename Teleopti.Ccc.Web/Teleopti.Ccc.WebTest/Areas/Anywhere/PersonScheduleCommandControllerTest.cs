@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
 			var target = new PersonScheduleCommandController(commandDispatcher, MockRepository.GenerateMock<ILoggedOnUser>(), null);
 
-			var command = new RemovePersonAbsenceCommand();
+			var command = new MyTeamRemovePersonAbsenceCommand();
 
 			target.RemovePersonAbsence(command);
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(personWithId);
 			var target = new PersonScheduleCommandController(commandDispatcher, loggedOnUser, null);
 
-			var command = new RemovePersonAbsenceCommand
+			var command = new MyTeamRemovePersonAbsenceCommand
 			{
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 
 			var arguments = commandDispatcher.GetArgumentsForCallsMadeOn(x => x.Execute(null), a => a.IgnoreArguments());
 			var firstCall = arguments.Single();
-			var calledCommand = (RemovePersonAbsenceCommand)firstCall.Single();
+			var calledCommand = (MyTeamRemovePersonAbsenceCommand)firstCall.Single();
 			calledCommand.TrackedCommandInfo.OperatedPersonId.Should().Be(personWithId.Id);
 		}
 
