@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRestrictionExtractor>().As<IScheduleRestrictionExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<SuggestedShiftRestrictionExtractor>().As<ISuggestedShiftRestrictionExtractor>().InstancePerLifetimeScope();
-			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().SingleInstance();
 
 			builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
 
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SwapServiceNew>().As<ISwapServiceNew>();
 			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
-			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>().InstancePerLifetimeScope();
+			builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>().SingleInstance();
 			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
 			builder.RegisterType<TeamBlockOptimizationLimits>().As<ITeamBlockOptimizationLimits>();
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
-			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>();
+			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSteadyStateValidator>().As<ITeamBlockSteadyStateValidator>();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
@@ -461,13 +461,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>();
 			builder.RegisterType<SameOpenHoursInTeamBlockSpecification>().As<ISameOpenHoursInTeamBlockSpecification>();
-			builder.RegisterType<SameEndTimeTeamSpecification>().As<ISameEndTimeTeamSpecification>();
-			builder.RegisterType<SameShiftCategoryBlockSpecification>().As<ISameShiftCategoryBlockSpecification>();
-			builder.RegisterType<SameShiftCategoryTeamSpecification>().As<ISameShiftCategoryTeamSpecification>();
-			builder.RegisterType<SameStartTimeBlockSpecification>().As<ISameStartTimeBlockSpecification>();
-			builder.RegisterType<SameStartTimeTeamSpecification>().As<ISameStartTimeTeamSpecification>();
-			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>().InstancePerLifetimeScope();
-			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>().InstancePerLifetimeScope();
+			builder.RegisterType<SameEndTimeTeamSpecification>().As<ISameEndTimeTeamSpecification>().SingleInstance();
+			builder.RegisterType<SameShiftCategoryBlockSpecification>().As<ISameShiftCategoryBlockSpecification>().SingleInstance();
+			builder.RegisterType<SameShiftCategoryTeamSpecification>().As<ISameShiftCategoryTeamSpecification>().SingleInstance();
+			builder.RegisterType<SameStartTimeBlockSpecification>().As<ISameStartTimeBlockSpecification>().SingleInstance();
+			builder.RegisterType<SameStartTimeTeamSpecification>().As<ISameStartTimeTeamSpecification>().SingleInstance();
+			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>().SingleInstance();
+			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>().SingleInstance();
 			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>().SingleInstance();
 			builder.RegisterType<TeamBlockRoleModelSelector>().As<ITeamBlockRoleModelSelector>();
 			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>().SingleInstance();
