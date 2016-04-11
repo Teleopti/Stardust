@@ -89,6 +89,8 @@
     </ApplicationDefinition>
     <Compile Include="Commands\ClearDatabaseCommand.cs" />
     <Compile Include="Commands\CreateNewJobCommand.cs" />
+    <Compile Include="Commands\StartUpNewManagerCommand.cs" />
+    <Compile Include="Commands\StartUpNewNodeCommand.cs" />
     <Compile Include="Commands\ToggleRefreshCommand.cs" />
     <Compile Include="Converters\RowNumberConverter.cs" />
     <Compile Include="JobDefinition.cs">

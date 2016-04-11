@@ -132,6 +132,7 @@
       <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
+    <Compile Include="Helpers\IntegrationControllerApiHelper.cs" />
     <Compile Include="Helpers\IntergrationControllerUriBuilder.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnSetup.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />

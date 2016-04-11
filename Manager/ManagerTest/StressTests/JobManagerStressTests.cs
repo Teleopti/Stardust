@@ -85,7 +85,7 @@ namespace ManagerTest.StressTests
 
 			var random = new Random();
 
-			for (var i = 0; i < 500; i++)
+			for (var i = 0; i < 10; i++)
 			{
 				var rnd = random.Next(1, 6);
 

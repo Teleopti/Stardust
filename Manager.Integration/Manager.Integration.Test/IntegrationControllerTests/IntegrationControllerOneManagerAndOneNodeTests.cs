@@ -8,117 +8,13 @@ using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Diagnostics;
 using Manager.IntegrationTest.Console.Host.Helpers;
-using Manager.IntegrationTest.Console.Host.Interfaces;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.IntegrationControllerTests
 {
-	[TestFixture,Ignore]
+	[TestFixture, Ignore]
 	public class IntegrationControllerOneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNode
 	{
-		private async Task<List<string>> GetAllManagers(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                                IHttpSender httpSender)
-		{
-			var managersUri =
-				intergrationControllerUriBuilder.GetAllManagersUri();
-
-			var httpResponseMessage =
-				await httpSender.GetAsync(managersUri);
-
-			var result =
-				httpResponseMessage.Content.ReadAsStringAsync().Result;
-
-			return JsonConvert.DeserializeObject(result,
-			                                     typeof (List<string>)) as List<string>;
-		}
-
-		private async Task<string> ShutDownManager(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                           IHttpSender httpSender,
-		                                           string managerName)
-		{
-			var deleteUri =
-				intergrationControllerUriBuilder.GetManagerUriByManagerName(managerName);
-
-			var httpResponseMessage = httpSender.DeleteAsync(deleteUri);
-
-			httpResponseMessage.Wait();
-
-			var res = httpResponseMessage.Result;
-
-			var content = await res.Content.ReadAsStringAsync();
-
-			return content;
-		}
-
-		private async Task<string> ShutDownNode(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                        IHttpSender httpSender,
-		                                        string nodeName)
-		{
-			var deleteUri =
-				intergrationControllerUriBuilder.GetNodeUriByNodeName(nodeName);
-
-			var httpResponseMessage = httpSender.DeleteAsync(deleteUri);
-
-			httpResponseMessage.Wait();
-
-			var res = httpResponseMessage.Result;
-
-			var content = await res.Content.ReadAsStringAsync();
-
-			return content;
-		}
-
-		private async Task<string> StartNewManager(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                           IHttpSender httpSender)
-		{
-			var allManagersUri =
-				intergrationControllerUriBuilder.GetAllManagersUri();
-
-			var httpResponseMessage = httpSender.PostAsync(allManagersUri);
-
-			httpResponseMessage.Wait();
-
-			var res = httpResponseMessage.Result;
-
-			var content = await res.Content.ReadAsStringAsync();
-
-			return content;
-		}
-
-		private async Task<string> StartNewNode(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                        IHttpSender httpSender)
-		{
-			var allNodesUri =
-				intergrationControllerUriBuilder.GetAllNodesUri();
-
-			var httpResponseMessage = httpSender.PostAsync(allNodesUri);
-
-			httpResponseMessage.Wait();
-
-			var res = httpResponseMessage.Result;
-
-			var content = await res.Content.ReadAsStringAsync();
-
-			return content;
-		}
-
-		private async Task<List<string>> GetAllNodes(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                             IHttpSender httpSender)
-		{
-			var allNodesUri =
-				intergrationControllerUriBuilder.GetAllNodesUri();
-
-			var httpResponseMessage =
-				await httpSender.GetAsync(allNodesUri);
-
-			var result =
-				httpResponseMessage.Content.ReadAsStringAsync().Result;
-
-			return JsonConvert.DeserializeObject(result,
-			                                     typeof (List<string>)) as List<string>;
-		}
-
 		private void GenerateJobs()
 		{
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(10);
@@ -150,6 +46,7 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			                                                          timeout);
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+
 			var elapsedTime =
 				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
 
@@ -167,7 +64,7 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			}
 		}
 
-		[Test,Ignore]
+		[Test, Ignore]
 		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
 			var tasks = new List<Task>();
@@ -182,27 +79,35 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 
 			tasks.Add(Task.Factory.StartNew(async () =>
 			{
-				await ShutDownNode(new IntergrationControllerUriBuilder(), new HttpSender(), "Node1.config");
-				await ShutDownManager(new IntergrationControllerUriBuilder(), new HttpSender(), "Manager1.config");
+				await IntegrationControllerApiHelper.ShutDownNode(new IntergrationControllerUriBuilder(), 
+																  new HttpSender(), 
+																  "Node1.config");
+
+				await IntegrationControllerApiHelper.ShutDownManager(new IntergrationControllerUriBuilder(), 
+																	 new HttpSender(), 
+																	 "Manager1.config");
 			}));
 
 			Parallel.For(1, 10, i => { tasks.Add(Task.Factory.StartNew(GenerateJobs)); });
 
-			tasks.Add(Task.Factory.StartNew(() => StartNewManager(new IntergrationControllerUriBuilder(), new HttpSender())));
-			tasks.Add(Task.Factory.StartNew(() => StartNewManager(new IntergrationControllerUriBuilder(), new HttpSender())));
+			tasks.Add(Task.Factory.StartNew(() => IntegrationControllerApiHelper.StartNewManager(new IntergrationControllerUriBuilder(), 
+																							     new HttpSender())));
+
+			tasks.Add(Task.Factory.StartNew(() => IntegrationControllerApiHelper.StartNewManager(new IntergrationControllerUriBuilder(), 
+																								 new HttpSender())));
 
 			Task.WaitAll(tasks.ToArray());
 		}
 
-		[Test,Ignore]
+		[Test, Ignore]
 		public void ShouldBeAbleToShutDownManager()
 		{
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
 			var httpSender = new HttpSender();
 
-			var nodeName = ShutDownManager(intergrationControllerUriBuilder,
-			                               httpSender,
-			                               "Manager1.config");
+			var nodeName = IntegrationControllerApiHelper.ShutDownManager(intergrationControllerUriBuilder,
+			                                                              httpSender,
+			                                                              "Manager1.config");
 
 			Assert.IsNotNull(nodeName, "Should shut down manager.");
 		}
@@ -213,9 +118,9 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
 			var httpSender = new HttpSender();
 
-			var nodeName = ShutDownNode(intergrationControllerUriBuilder,
-			                            httpSender,
-			                            "Node1.config");
+			var nodeName = IntegrationControllerApiHelper.ShutDownNode(intergrationControllerUriBuilder,
+			                                                           httpSender,
+			                                                           "Node1.config");
 
 			Assert.IsNotNull(nodeName, "Should shut down node.");
 		}
@@ -226,8 +131,8 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
 			var httpSender = new HttpSender();
 
-			var managerName = StartNewManager(intergrationControllerUriBuilder,
-			                                  httpSender);
+			var managerName = IntegrationControllerApiHelper.StartNewManager(intergrationControllerUriBuilder,
+			                                                                 httpSender);
 
 			Assert.IsNotNull(managerName, "Should start up a new manager.");
 		}
@@ -238,8 +143,8 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
 			var httpSender = new HttpSender();
 
-			var nodeName = StartNewNode(intergrationControllerUriBuilder,
-			                            httpSender);
+			var nodeName = IntegrationControllerApiHelper.StartNewNode(intergrationControllerUriBuilder,
+			                                                           httpSender);
 
 			Assert.IsNotNull(nodeName, "Should start up a new node.");
 		}
@@ -251,8 +156,8 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			var httpSender = new HttpSender();
 
 			// Get Managers.
-			Task<List<string>> allManagers = GetAllManagers(intergrationControllerUriBuilder,
-															httpSender);
+			var allManagers = IntegrationControllerApiHelper.GetAllManagers(intergrationControllerUriBuilder,
+			                                                                httpSender);
 
 			Assert.IsTrue(allManagers.Result != null);
 		}
@@ -265,8 +170,8 @@ namespace Manager.Integration.Test.IntegrationControllerTests
 			var httpSender = new HttpSender();
 
 			// Get Nodes.
-			var allNodes = GetAllNodes(intergrationControllerUriBuilder,
-			                           httpSender);
+			var allNodes = IntegrationControllerApiHelper.GetAllNodes(intergrationControllerUriBuilder,
+			                                                          httpSender);
 
 			Assert.IsTrue(allNodes.Result != null);
 		}
