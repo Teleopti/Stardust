@@ -275,6 +275,7 @@
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiControllerTest.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationFunctionsToggleFilter.cs" />
     <Compile Include="Areas\Permissions\FakeApplicationRolePersonRepository.cs" />
+    <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdaterTest.cs" />
     <Compile Include="Areas\Requests\Core\IOC\RequestsAreaModuleTest.cs" />
     <Compile Include="Areas\Requests\Core\IOC\RequestsTestAttribute.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProviderTest.cs" />
