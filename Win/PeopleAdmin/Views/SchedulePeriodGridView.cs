@@ -522,7 +522,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private void InitializeCellModels()
 		{
 			Grid.CellModels.Add(GridCellModelConstants.CellTypeGridInCell, new GridInCellModel(Grid.Model));
-			
+
 			PercentCellModel cellModel = new PercentCellModel(Grid.Model);
 			cellModel.MinMax = new MinMax<double>(-1, 1);
 			Grid.CellModels.Add(GridCellModelConstants.CellTypePercentCell, cellModel);
@@ -554,7 +554,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_childGridColumns.Add(_childGridNumberColumn);
 
 			_childGridScheduleTypeColumn = new DropDownColumnForSchedulePeriodGrids<SchedulePeriodChildModel,
-				KeyValuePair<SchedulePeriodType,string>>("PeriodType",
+				KeyValuePair<SchedulePeriodType, string>>("PeriodType",
 									 UserTexts.Resources.Type,
 									 LanguageResourceHelper.TranslateEnumToList<SchedulePeriodType>(),
 									"value", "key", typeof(SchedulePeriodType));
@@ -1026,7 +1026,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		}
 
 		private void SchedulePeriodChildDelete(int rowIndex, int childPersonPeriodIndex,
-											   CellEmbeddedGrid childGrid)
+												CellEmbeddedGrid childGrid)
 		{
 			GridRangeInfo gridInfo = GridRangeInfo.Cells(rowIndex, GridInCellColumnIndex, rowIndex,
 														 ParentGridLastColumnIndex);
@@ -1077,7 +1077,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private bool IsCurrentRowExpanded()
 		{
 			return IsValidRow()
-				   && CurrentPersonPeriodView.ExpandState;
+					&& CurrentPersonPeriodView.ExpandState;
 		}
 
 		private int CurrentRowIndex
@@ -1103,14 +1103,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			return columnIndex;
 		}
 
-	    private int gridColumnIndex()
-	    {
-            if (Grid.CurrentCell.ColIndex == -1) 
-                Grid.CurrentCell.MoveTo(0,0);
-	        return Grid.CurrentCell.ColIndex;
-	    }
+		private int gridColumnIndex()
+		{
+			if (Grid.CurrentCell.ColIndex == -1)
+				Grid.CurrentCell.MoveTo(0, 0);
+			return Grid.CurrentCell.ColIndex;
+		}
 
-	    private void SortSchedulePeriodData(bool isAscending)
+		private void SortSchedulePeriodData(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
 			List<SchedulePeriodModel> schedulePeriodcollection =
@@ -1369,7 +1369,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_copySpecialSchedulePeriodMenuItem.Click += CopySpecial;
 			Grid.ContextMenuStrip.Items.Add(_copySpecialSchedulePeriodMenuItem);
 
-            _pasteSpecialSchedulePeriodMenuItem = new ToolStripMenuItem(UserTexts.Resources.PasteNew);
+			_pasteSpecialSchedulePeriodMenuItem = new ToolStripMenuItem(UserTexts.Resources.PasteNew);
 			_pasteSpecialSchedulePeriodMenuItem.Click += PasteSpecial;
 			Grid.ContextMenuStrip.Items.Add(_pasteSpecialSchedulePeriodMenuItem);
 		}
@@ -1636,18 +1636,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			// Selection events will not be raised
 			Grid.Model.Selections.Clear(false);
 
-			var ranges = new List<GridRangeInfo>();
+			GridRangeInfo range = GridRangeInfo.Empty;
 			foreach (IPerson person in selectedPersons)
 			{
 				for (int i = 0; i < FilteredPeopleHolder.SchedulePeriodGridViewCollection.Count; i++)
 				{
 					if (FilteredPeopleHolder.SchedulePeriodGridViewCollection[i].Parent.Id == person.Id)
 					{
-						ranges.Add(GridRangeInfo.Row(i + 1));
+						range = range.UnionRange(GridRangeInfo.Row(i + 1));
 					}
 				}
 			}
-			ranges.ForEach(Grid.Selections.Add);
+			Grid.Selections.Add(range);
 		}
 
 		internal override IList<IPerson> GetSelectedPersons()
@@ -1671,8 +1671,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				{
 					if (gridRangeInfo.Height == 1)
 					{
-						selectedPersons.Add(
-							FilteredPeopleHolder.SchedulePeriodGridViewCollection[gridRangeInfo.Top - 1].Parent);
+						if (gridRangeInfo.Top > 0)
+							selectedPersons.Add(
+								FilteredPeopleHolder.SchedulePeriodGridViewCollection[gridRangeInfo.Top - 1].Parent);
 					}
 					else
 					{

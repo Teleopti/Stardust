@@ -1589,6 +1589,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 				GridRangeInfo gridRangeInfo = gridRangeInfoList[index - 1];
 				if (gridRangeInfo.Height == 1)
 				{
+					if(gridRangeInfo.Top > 0)
 					selectedPersons.Add(_parentAdapterCollection[gridRangeInfo.Top - 1].Person);
 				}
 				else
@@ -1611,19 +1612,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			// Selection events will not be raised
 			Grid.Model.Selections.Clear(false);
 
-			var ranges = new List<GridRangeInfo>();
+			GridRangeInfo range = GridRangeInfo.Empty;
 			foreach (var person in selectedPersons)
 			{
 				for (var i = 0; i < _parentAdapterCollection.Count; i++)
 				{
 					if (_parentAdapterCollection[i].Person.Id == person.Id)
 					{
-						ranges.Add(GridRangeInfo.Row(i + 1));
+						range = range.UnionRange(GridRangeInfo.Row(i + 1));
 					}
 				}
 			}
-
-            ranges.ForEach(Grid.Selections.Add);
+			Grid.Selections.Add(range);
 		}
 
 		private void ChildGridCopyHelper(int index, IList<TAdapterChild> adapterChildCollection)
