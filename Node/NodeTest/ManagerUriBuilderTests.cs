@@ -20,8 +20,6 @@ namespace NodeTest
 
 		private Uri JobHasBeenCanceledTemplateUri { get; set; }
 
-		private Uri JobHasBeenCanceledeUri { get; set; }
-
 		private Uri JobHasBeenCanceledUri { get; set; }
 
 		private Uri JobDoneUri { get; set; }
@@ -157,21 +155,21 @@ namespace NodeTest
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
 		{
-			var managerUriBuilderToTest = new ManagerUriBuilderHelper(string.Empty);
+			new ManagerUriBuilderHelper(string.Empty);
 		}
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentIsStringNull()
 		{
-			var managerUriBuilderToTest = new ManagerUriBuilderHelper(location: null);
+			new ManagerUriBuilderHelper(location: null);
 		}
 
 		[Test]
 		[ExpectedException(typeof (UriFormatException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
 		{
-			var managerUriBuilderToTest = new ManagerUriBuilderHelper("invalid uri");
+			new ManagerUriBuilderHelper("invalid uri");
 		}
 	}
 }

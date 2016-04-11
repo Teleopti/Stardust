@@ -1,26 +1,24 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Stardust.Node.Entities;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
+using Stardust.Node.Workers;
 
 namespace NodeTest.Fakes.Timers
 {
-	public class SendJobFaultedTimerFake : TrySendStatusToManagerTimer
+	public class SendJobFaultedTimerFake : TrySendJobFaultedToManagerTimer
 	{
 		public int NumberOfTimeCalled;
 
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
-		public SendJobFaultedTimerFake(INodeConfiguration nodeConfiguration,
-		                               Uri callbackTemplateUri,
+		public SendJobFaultedTimerFake(NodeConfiguration nodeConfiguration,
 									   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
 									   IHttpSender httpSender,
 									   double interval = 1000) : base(nodeConfiguration,
-		                                                              callbackTemplateUri,
 																	  sendJobProgressToManagerTimer,
 																	  httpSender,
 																	  interval)

@@ -1,16 +1,8 @@
-﻿using System;
-using System.IO;
-using System.Threading;
+﻿using System.Threading;
 using Autofac;
-using log4net;
-using log4net.Config;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
-using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
 namespace NodeTest
@@ -29,27 +21,10 @@ namespace NodeTest
 				.SingleInstance();
 
 			Container = builder.Build();
-
-#if DEBUG
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-#endif
-		}
-
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			Logger.DebugWithLineNumber("Closing JobHandlersTests...");
 		}
 
 		private IContainer Container { get; set; }
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (JobHandlersTests));
-
-		private void ProgressCallback(string message)
-		{
-			Logger.DebugWithLineNumber(message);
-		}
-
+		
 		[Test]
 		public void ShouldBeAbleToInvokeAHandler()
 		{
@@ -58,7 +33,7 @@ namespace NodeTest
 			invokehandler.Invoke(new TestJobParams("Dummy data",
 			                                       "Name data"),
 			                     new CancellationTokenSource(),
-			                     ProgressCallback);
+			                     _=>{});
 		}
 
 		[Test]

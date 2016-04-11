@@ -7,6 +7,7 @@ using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Log4Net.Extensions;
+using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -16,13 +17,14 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (TrySendNodeStartUpNotificationToManagerTimer));
 
-		public TrySendNodeStartUpNotificationToManagerTimer(INodeConfiguration nodeConfiguration,
-		                                                    Uri callbackToManagerTemplateUri,
+		public TrySendNodeStartUpNotificationToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                                    IHttpSender httpSender,
 		                                                    double interval = 5000,
 		                                                    bool autoReset = true) : base(interval)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
+
+			var callbackToManagerTemplateUri = nodeConfiguration.GetManagerNodeHasBeenInitializedUri();
 			callbackToManagerTemplateUri.ThrowArgumentNullExceptionWhenNull();
 
 			CancellationTokenSource = new CancellationTokenSource();
@@ -40,7 +42,7 @@ namespace Stardust.Node.Timers
 
 		public string WhoAmI { get; private set; }
 
-		public INodeConfiguration NodeConfiguration { get; private set; }
+		public NodeConfiguration NodeConfiguration { get; private set; }
 
 		public Uri CallbackToManagerTemplateUri { get; private set; }
 		public IHttpSender HttpSender { get; set; }

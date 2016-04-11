@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http;
-using System.Web.Http.Results;
 using log4net;
 using Newtonsoft.Json;
-using Stardust.Node.ActionResults;
 using Stardust.Node.Diagnostics;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
@@ -35,22 +31,17 @@ namespace Stardust.Node.Workers
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (WorkerWrapper));
 
-		private readonly IHttpSender _httpSender;
-
 		private readonly object _startJobLock = new object();
 
 		public WorkerWrapper(IInvokeHandler invokeHandler,
-		                     INodeConfiguration nodeConfiguration,
+		                     NodeConfiguration nodeConfiguration,
 		                     TrySendNodeStartUpNotificationToManagerTimer nodeStartUpNotificationToManagerTimer,
 		                     Timer pingToManagerTimer,
-		                     TrySendStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
-		                     TrySendStatusToManagerTimer trySendJobCanceledStatusToManagerTimer,
-		                     TrySendStatusToManagerTimer trySendJobFaultedStatusToManagerTimer,
-		                     TrySendJobProgressToManagerTimer trySendJobProgressToManagerTimer,
-		                     IHttpSender httpSender)
+		                     TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
+		                     TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
+		                     TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
+		                     TrySendJobProgressToManagerTimer trySendJobProgressToManagerTimer)
 		{
-			_httpSender = httpSender;
-
 			invokeHandler.ThrowArgumentNullExceptionWhenNull();
 			nodeConfiguration.ThrowArgumentNullException();
 
@@ -90,7 +81,7 @@ namespace Stardust.Node.Workers
 		private TrySendJobProgressToManagerTimer TrySendJobProgressToManagerTimer { get; set; }
 
 		private TrySendStatusToManagerTimer TrySendStatusToManagerTimer { get; set; }
-		private INodeConfiguration NodeConfiguration { get; set; }
+		private NodeConfiguration NodeConfiguration { get; set; }
 		private JobToDo CurrentMessageToProcess { get; set; }
 		private TrySendNodeStartUpNotificationToManagerTimer NodeStartUpNotificationToManagerTimer { get; set; }
 
@@ -110,68 +101,65 @@ namespace Stardust.Node.Workers
 			}
 		}
 
-		public IHttpActionResult ValidateStartJob(JobToDo jobToDo,
-		                                          HttpRequestMessage requestMessage)
+		public ObjectValidationResult ValidateStartJob(JobToDo jobToDo)
 		{
 			lock (_startJobLock)
 			{
 				if (CurrentMessageToProcess != null)
 				{
-					return new ConflictResultWithReasonPhrase(WorkerIsAlreadyWorking);
+					return new ObjectValidationResult {IsConflict = true, Message = WorkerIsAlreadyWorking};
 				}
 
 				if (jobToDo == null)
 				{
-					return new BadRequestWithReasonPhrase(JobToDoIsNull);
+					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoIsNull };
 				}
 
 				if (jobToDo.Id == Guid.Empty)
 				{
-					return new BadRequestWithReasonPhrase(JobToDoIdIsInvalid);
+					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoIdIsInvalid };
 				}
 
 				if (string.IsNullOrEmpty(jobToDo.Name))
 				{
-					return new BadRequestWithReasonPhrase(JobToDoNameIsInvalid);
+					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoNameIsInvalid };
 				}
 
 				if (string.IsNullOrEmpty(jobToDo.Type))
 				{
-					return new BadRequestWithReasonPhrase(JobToDoTypeIsNullOrEmpty);
+					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoTypeIsNullOrEmpty };
 				}
 
-				var typ = 
+				var type = 
 					NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
 
-				if (typ == null)
+				if (type == null)
 				{
 					Logger.WarningWithLineNumber(string.Format(
 						WhoamI +
 						": The job type [{0}] could not be resolved. The job cannot be started.",
 						jobToDo.Type));
 
-					return new BadRequestWithReasonPhrase(string.Format(JobToDoTypeCanNotBeResolved, jobToDo.Type));
+					return new ObjectValidationResult { IsBadRequest = true, Message = string.Format(JobToDoTypeCanNotBeResolved, jobToDo.Type) };
 				}
 
 				try
 				{
-					object deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
-																typ);
+					JsonConvert.DeserializeObject(jobToDo.Serialized, type);
 
 				}
 				catch (Exception)
 				{
-					return new BadRequestWithReasonPhrase(JobToDoCanNotBeDeserialize);
+					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoCanNotBeDeserialize };
 				}
 
 				CurrentMessageToProcess = jobToDo;
 
-				return new OkResult(requestMessage);
+				return new ObjectValidationResult();
 			}
 		}
 
-		public IHttpActionResult StartJob(JobToDo jobToDo,
-		                                  HttpRequestMessage requestMessage)
+		public void StartJob(JobToDo jobToDo)
 		{
 			CancellationTokenSource = new CancellationTokenSource();
 
@@ -271,8 +259,6 @@ namespace Stardust.Node.Workers
 			}, TaskContinuationOptions.LongRunning);
 
 			Task.Start();
-
-			return new OkResult(requestMessage);
 		}
 
 		public JobToDo GetCurrentMessageToProcess()
@@ -289,12 +275,16 @@ namespace Stardust.Node.Workers
 				Logger.DebugWithLineNumber(WhoamI +
 				                           " : Cancel job method called. Will call cancel on canellation token source.");
 
-				CancellationTokenSource.Cancel();
-
-				if (CancellationTokenSource.IsCancellationRequested)
+				var token = CancellationTokenSource;
+				if (token != null)
 				{
-					Logger.DebugWithLineNumber(WhoamI +
-					                           " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+					token.Cancel();
+
+					if (token.IsCancellationRequested)
+					{
+						Logger.DebugWithLineNumber(WhoamI +
+												   " : Cancel job method called. CancellationTokenSource.IsCancellationRequested is now true.");
+					}
 				}
 			}
 			else

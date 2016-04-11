@@ -122,7 +122,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionResults\BadRequestWithReasonPhrase.cs" />
     <Compile Include="AppBuilderExtension.cs" />
     <Compile Include="Constants\ManagerRouteConstans.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
@@ -137,7 +136,6 @@
     <Compile Include="Interfaces\INodeManager.cs" />
     <Compile Include="Interfaces\IWorkerNodeRepository.cs" />
     <Compile Include="ManagerStarter.cs" />
-    <Compile Include="Interfaces\IManagerConfiguration.cs" />
     <Compile Include="Models\JobDefinition.cs" />
     <Compile Include="Models\JobFailedModel.cs" />
     <Compile Include="Models\JobHistory.cs" />
@@ -155,6 +153,7 @@
     <Compile Include="RetryPolicyProvider.cs" />
     <Compile Include="SqlAzureTransientErrorDetectionStrategy.cs" />
     <Compile Include="SqlAzureTransientErrorDetectionStrategyWithTimeouts.cs" />
+    <Compile Include="Validations\ObjectValidationResult.cs" />
     <Compile Include="Validations\Validator.cs" />
     <Compile Include="WorkerNodeRepository.cs" />
   </ItemGroup>

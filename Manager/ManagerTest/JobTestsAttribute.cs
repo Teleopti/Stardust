@@ -10,8 +10,7 @@ namespace ManagerTest
 	{
 		protected override void SetUp(ContainerBuilder builder)
 		{
-			FakeManagerConfiguration fakeManagerConfiguration = new FakeManagerConfiguration();
-			builder.RegisterInstance(fakeManagerConfiguration).As<IManagerConfiguration>();
+			builder.RegisterType<ManagerConfiguration>().SingleInstance();
 
 			// This MUST be singleton.
 			builder.RegisterType<JobManager>().SingleInstance();

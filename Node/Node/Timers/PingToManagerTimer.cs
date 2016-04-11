@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
 using Stardust.Node.Log4Net.Extensions;
+using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -17,17 +16,17 @@ namespace Stardust.Node.Timers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
-		public PingToManagerTimer(INodeConfiguration nodeConfiguration,
-		                          Uri callbackToManagerUri,
+		public PingToManagerTimer(NodeConfiguration nodeConfiguration,
 								  IHttpSender httpSender) : base(nodeConfiguration.PingToManagerSeconds*1000)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
-			callbackToManagerUri.ThrowArgumentNullExceptionWhenNull();
+
+			nodeConfiguration.GetManagerNodeHeartbeatUri().ThrowArgumentNullExceptionWhenNull();
 
 			CancellationTokenSource = new CancellationTokenSource();
 
 			NodeConfiguration = nodeConfiguration;
-			CallbackToManagerUri = callbackToManagerUri;
+			CallbackToManagerUri = nodeConfiguration.GetManagerNodeHeartbeatUri();
 			HttpSender = httpSender;
 
 			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
@@ -39,7 +38,7 @@ namespace Stardust.Node.Timers
 
 		public string WhoAmI { get; private set; }
 
-		public INodeConfiguration NodeConfiguration { get; private set; }
+		public NodeConfiguration NodeConfiguration { get; private set; }
 
 		public Uri CallbackToManagerUri { get; private set; }
 		public IHttpSender HttpSender { get; set; }
