@@ -1040,6 +1040,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			{
 				_gridConstructor.BuildGridView(ViewType.GeneralView);
 				if (KillMode) return;
+				_gridConstructor.View.Grid.Cursor = Cursors.WaitCursor;
 
 				_gridConstructor.View.RowCount = _filteredPeopleHolder.FilteredPeopleGridData.Count;
 				_gridConstructor.View.Grid.RowCount = _gridConstructor.View.RowCount;
@@ -1059,7 +1060,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					togglePanelContent(false);
 					splitContainerWorksheet.Panel2Collapsed = false;
 					splitContainerWorksheet.SplitterDistance = splitContainerWorksheet.Width - 300;
-
 					// Clears all tab pages and recreate.
 					tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdminSelectedIndexChanged;
 					tabControlPeopleAdmin.TabPages.Clear();
@@ -1075,6 +1075,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					rolesTabPage.Dock = DockStyle.Fill;
 					tabControlPeopleAdmin.TabPages.Add(rolesTabPage);
 					//tabControlPeopleAdmin.SelectedIndexChanged += tabControlPeopleAdmin_SelectedIndexChanged;
+					Cursor.Current = Cursors.WaitCursor;
 				}
 				else
 				{
@@ -1087,6 +1088,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 					tabControlPeopleAdmin.TabPages.Clear();
 				}
 				_gridConstructor.View.SetSelectedPersons(selectedPersons);
+				_gridConstructor.View.Grid.Cursor = Cursors.Default;
 				Cursor.Current = Cursors.Default;
 			}
 		}
@@ -1097,10 +1099,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			if (_gridConstructor.View.Type != mainView)
 			{
 				Cursor.Current = Cursors.WaitCursor;
-
+				_gridConstructor.View.Grid.Cursor = Cursors.WaitCursor;
 				IList<IPerson> selectedPersons = _gridConstructor.View.GetSelectedPersons();
 				_gridConstructor.View.Grid.CurrentCell.MoveTo(_gridConstructor.View.Grid.CurrentCell.RowIndex, 0);
 				_gridConstructor.BuildGridView(mainView);
+				_gridConstructor.View.Grid.Cursor = Cursors.WaitCursor;
 				_gridConstructor.View.SetView(shiftCategoryLimitationView);
 				setupHelpContext(_gridConstructor.View.Grid);
 				_findAndReplaceForm.ConfigureSearchFunctionality(_gridConstructor.View.Grid, _domainFinder);
@@ -1119,6 +1122,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				_gridConstructor.View.Grid.RowCount = _filteredPeopleHolder.FilteredPeopleGridData.Count;
 				_gridConstructor.View.SelectedDateChange(null, null);
 				_gridConstructor.View.SetSelectedPersons(selectedPersons);
+				_gridConstructor.View.Grid.Cursor = Cursors.Default;
 				Cursor.Current = Cursors.Default;
 			}
 
