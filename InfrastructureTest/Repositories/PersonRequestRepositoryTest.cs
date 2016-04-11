@@ -5,8 +5,10 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -19,59 +21,78 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-    ///<summary>
-    /// Tests PersonRequestRepository
-    ///</summary>
-    [TestFixture]
-    [Category("LongRunning")]
-    public class PersonRequestRepositoryTest : RepositoryTest<IPersonRequest>
-    {
-        private IPerson _person;
-        private IAbsence _absence;
-        private IScenario _defaultScenario;
+	///<summary>
+	/// Tests PersonRequestRepository
+	///</summary>
+	[TestFixture]
+	[Category("LongRunning")]
+	public class PersonRequestRepositoryTest : RepositoryTest<IPersonRequest>
+	{
+		private IPerson _person;
+		private IAbsence _absence;
+		private IScenario _defaultScenario;
+		private Team _team;
+		private Site _site;
+		private Contract _contract;
+		private PartTimePercentage _partTimePercentage;
+		private IContractSchedule _contractSchedule;
 
-        /// <summary>
-        /// Runs every test. Implemented by repository's concrete implementation.
-        /// </summary>
-        protected override void ConcreteSetup()
-        {
-            _defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
-            _person = PersonFactory.CreatePerson("sdfoj");
-            _absence = AbsenceFactory.CreateAbsence("Sick leave");
+		/// <summary>
+		/// Runs every test. Implemented by repository's concrete implementation.
+		/// </summary>
+		protected override void ConcreteSetup()
+		{
+			_defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
+			_person = PersonFactory.CreatePerson("sdfoj");
+			_absence = AbsenceFactory.CreateAbsence("Sick leave");
 
-            PersistAndRemoveFromUnitOfWork(_defaultScenario);
-            PersistAndRemoveFromUnitOfWork(_person);
-            PersistAndRemoveFromUnitOfWork(_absence);
-        }
-        
-        /// <summary>
-        /// Creates an aggregate using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
-        protected override IPersonRequest CreateAggregateWithCorrectBusinessUnit()
-        {
-	        return createAbsenceRequestAndBusinessUnit();
-        }
+			_team = TeamFactory.CreateSimpleTeam("team");
+			_site = SiteFactory.CreateSimpleSite("site");
+			_team.Site = _site;
+			_contract = new Contract("contract");
+			_partTimePercentage = new PartTimePercentage("partTimePercentage");
+			_contractSchedule = ContractScheduleFactory.CreateContractSchedule("contractSchedule");
 
-	    private IPersonRequest createAbsenceRequestAndBusinessUnit()
-	    {
-		    var period = new DateTimePeriod(
-			    new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
-			    new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc));
-		    IPersonRequest request = new PersonRequest(_person);
-		    IAbsenceRequest absenceRequest = new AbsenceRequest(_absence, period);
+			PersistAndRemoveFromUnitOfWork(_site);
+			PersistAndRemoveFromUnitOfWork(_team);
+			PersistAndRemoveFromUnitOfWork(_contract);
+			PersistAndRemoveFromUnitOfWork(_partTimePercentage);
+			PersistAndRemoveFromUnitOfWork(_contractSchedule);
 
-		    request.Request = absenceRequest;
-		    request.Pending();
 
-		    return request;
-	    }
-		
-		
+			PersistAndRemoveFromUnitOfWork(_defaultScenario);
+			PersistAndRemoveFromUnitOfWork(_person);
+			PersistAndRemoveFromUnitOfWork(_absence);
+		}
+
+		/// <summary>
+		/// Creates an aggregate using the Bu of logged in user.
+		/// Should be a "full detailed" aggregate
+		/// </summary>
+		/// <returns></returns>
+		protected override IPersonRequest CreateAggregateWithCorrectBusinessUnit()
+		{
+			return createAbsenceRequestAndBusinessUnit();
+		}
+
+		private IPersonRequest createAbsenceRequestAndBusinessUnit()
+		{
+			var period = new DateTimePeriod(
+				new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
+				new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc));
+			IPersonRequest request = new PersonRequest(_person);
+			IAbsenceRequest absenceRequest = new AbsenceRequest(_absence, period);
+
+			request.Request = absenceRequest;
+			request.Pending();
+
+			return request;
+		}
+
+
 		private IPersonRequest createShiftExchangeOffer(DateTime startDate)
-	    {
-		    IPersonRequest request = new PersonRequest(_person);
+		{
+			IPersonRequest request = new PersonRequest(_person);
 			var currentShift = ScheduleDayFactory.Create(new DateOnly(2008, 5, 1), _person);
 
 			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift,
@@ -80,69 +101,69 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new ShiftExchangeCriteria(new DateOnly(2008, 7, 9), dayFilterCriteria), ShiftExchangeOfferStatus.Pending);
 
 			request.Request = offer;
-		    request.Pending();
+			request.Pending();
 
-		    return request;
-	    }
-
-
-	    /// <summary>
-        /// Creates an aggregate using the Bu of logged in user.
-        /// Should be a "full detailed" aggregate
-        /// </summary>
-        /// <returns></returns>
-        protected IPersonRequest CreateShiftTradeRequest(string tradeWithName)
-        {
-            IPersonRequest request = new PersonRequest(_person);
-            IPerson tradeWithPerson = PersonFactory.CreatePerson(tradeWithName);
-            PersistAndRemoveFromUnitOfWork(tradeWithPerson);
-            IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-                new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 16),
-                                                 new DateOnly(2008, 7, 16)),
-                        new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 17),
-                                                 new DateOnly(2008, 7, 17)),
-                        new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 18),
-                                                 new DateOnly(2008, 7, 18)),
-                        new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 19),
-                                                 new DateOnly(2008, 7, 19))
-                    });
-            foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
-            {
-                shiftTradeSwapDetail.ChecksumFrom = 50;
-                shiftTradeSwapDetail.ChecksumTo = 57;
-            }
-            request.Request = shiftTradeRequest;
-            request.Pending();
-
-            return request;
-        }
-
-        /// <summary>
-        /// Verifies the aggregate graph properties.
-        /// </summary>
-        /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
-        protected override void VerifyAggregateGraphProperties(IPersonRequest loadedAggregateFromDatabase)
-        {
-            IPersonRequest org = CreateAggregateWithCorrectBusinessUnit();
-            Assert.AreEqual(org.Person, loadedAggregateFromDatabase.Person);
-            Assert.AreEqual(((IAbsenceRequest)org.Request).Absence,
-                            ((IAbsenceRequest)loadedAggregateFromDatabase.Request).Absence);
-            Assert.AreEqual((org.Request).Period,
-                            (loadedAggregateFromDatabase.Request).Period);
-        }
-
-        protected override Repository<IPersonRequest> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
-        {
-            return new PersonRequestRepository(currentUnitOfWork);
-        }
+			return request;
+		}
 
 
-	    private void setUpGetRequestsByTypeTests()
+		/// <summary>
+		/// Creates an aggregate using the Bu of logged in user.
+		/// Should be a "full detailed" aggregate
+		/// </summary>
+		/// <returns></returns>
+		protected IPersonRequest CreateShiftTradeRequest(string tradeWithName)
+		{
+			IPersonRequest request = new PersonRequest(_person);
+			IPerson tradeWithPerson = PersonFactory.CreatePerson(tradeWithName);
+			PersistAndRemoveFromUnitOfWork(tradeWithPerson);
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 16),
+												 new DateOnly(2008, 7, 16)),
+						new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 17),
+												 new DateOnly(2008, 7, 17)),
+						new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 18),
+												 new DateOnly(2008, 7, 18)),
+						new ShiftTradeSwapDetail(_person, tradeWithPerson, new DateOnly(2008, 7, 19),
+												 new DateOnly(2008, 7, 19))
+					});
+			foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
+			{
+				shiftTradeSwapDetail.ChecksumFrom = 50;
+				shiftTradeSwapDetail.ChecksumTo = 57;
+			}
+			request.Request = shiftTradeRequest;
+			request.Pending();
+
+			return request;
+		}
+
+		/// <summary>
+		/// Verifies the aggregate graph properties.
+		/// </summary>
+		/// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
+		protected override void VerifyAggregateGraphProperties(IPersonRequest loadedAggregateFromDatabase)
+		{
+			IPersonRequest org = CreateAggregateWithCorrectBusinessUnit();
+			Assert.AreEqual(org.Person, loadedAggregateFromDatabase.Person);
+			Assert.AreEqual(((IAbsenceRequest)org.Request).Absence,
+							((IAbsenceRequest)loadedAggregateFromDatabase.Request).Absence);
+			Assert.AreEqual((org.Request).Period,
+							(loadedAggregateFromDatabase.Request).Period);
+		}
+
+		protected override Repository<IPersonRequest> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		{
+			return new PersonRequestRepository(currentUnitOfWork);
+		}
+
+
+		private void setUpGetRequestsByTypeTests()
 		{
 			var personFrom = PersonFactory.CreatePerson("personFrom");
-			
+
 			PersistAndRemoveFromUnitOfWork(personFrom);
 			var absence = new Absence()
 			{
@@ -152,12 +173,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var requestDate = DateOnly.Today;
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
-		    {
+			{
 			   new ShiftTradeSwapDetail(personFrom, _person, requestDate,requestDate)
-		    });
+			});
 			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
-		    var absenceRequest = new PersonRequest(_person, new AbsenceRequest(absence, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var absenceRequest = new PersonRequest(_person, new AbsenceRequest(absence, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var offerRequest = createShiftExchangeOffer(new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc));
 
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
@@ -166,90 +187,90 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(offerRequest);
 		}
 
-	    [Test]
+		[Test]
 		public void FindNonExistingShouldReturnNull()
 		{
 			new PersonRequestRepository(UnitOfWork).Find(Guid.NewGuid())
 				.Should().Be.Null();
 		}
 
-	    [Test]
-	    public void CanCreateShiftExchangeOffer()
-	    {
+		[Test]
+		public void CanCreateShiftExchangeOffer()
+		{
 			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
 
 			IPersonRequest offerRequest = createShiftExchangeOffer(startDate);
-			PersistAndRemoveFromUnitOfWork (offerRequest);
+			PersistAndRemoveFromUnitOfWork(offerRequest);
 
 			DateTimePeriod period = new DateTimePeriod(2008, 04, 1, 2008, 07, 20);
 			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
 			Assert.IsTrue(foundRequests.Contains(offerRequest));
-	    }
+		}
 
-	    [Test]
-	    public void FindPersonRequestByRequestType()
-	    {
+		[Test]
+		public void FindPersonRequestByRequestType()
+		{
 			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
 
 			var shiftExchangeOfferPersonRequest = createShiftExchangeOffer(startDate);
-		    var shiftTradePersonRequest = CreateShiftTradeRequest ("Test");
+			var shiftTradePersonRequest = CreateShiftTradeRequest("Test");
 
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
-			PersistAndRemoveFromUnitOfWork (shiftTradePersonRequest);
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
 			var period = new DateTimePeriod(2000, 04, 1, 2014, 08, 20);
 			var foundShiftExchangeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftExchangeOffer>(_person, period);
 			var foundShiftTradeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftTradeRequest>(_person, period);
-			
+
 			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0].Request));
 			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferPersonRequest));
-			
+
 			Assert.AreEqual(1, foundShiftTradeRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftTradeRequests[0].Request));
 			Assert.IsTrue(foundShiftTradeRequests.Contains(shiftTradePersonRequest));
-			
-	    }	    	
-		
+
+		}
+
 		[Test]
 		public void FindPendingPersonRequestByRequestTypeAndStartDate()
 		{
-			var startDate = new DateTime (2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
-			var startDate2 = startDate.AddDays (1);
+			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+			var startDate2 = startDate.AddDays(1);
 
 			var shiftExchangeOfferPersonRequest = createShiftExchangeOffer(startDate);
 			var shiftExchangeOfferPersonRequest2 = createShiftExchangeOffer(startDate2);
 
-			shiftExchangeOfferPersonRequest2.Deny (null, "bla", new PersonRequestCheckAuthorization());
+			shiftExchangeOfferPersonRequest2.Deny(null, "bla", new PersonRequestCheckAuthorization());
 
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest2);
-			
+
 			var foundShiftExchangeRequests = new PersonRequestRepository(UnitOfWork).FindByStatus<ShiftExchangeOffer>(_person, startDate, 0);
 
 			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0].Request));
 			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferPersonRequest));
-	    }
+		}
 
 		[Test]
-        public void VerifyCanFindRequestsForPeriodForPerson()
-        {
-            IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
-            IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+		public void VerifyCanFindRequestsForPeriodForPerson()
+		{
+			IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
+			IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
 
-            PersistAndRemoveFromUnitOfWork(requestAccepted);
-            PersistAndRemoveFromUnitOfWork(requestAbsence);
+			PersistAndRemoveFromUnitOfWork(requestAccepted);
+			PersistAndRemoveFromUnitOfWork(requestAbsence);
 
-            DateTimePeriod period = new DateTimePeriod(2008, 07, 15, 2008, 07, 20);
-            IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person,period);
+			DateTimePeriod period = new DateTimePeriod(2008, 07, 15, 2008, 07, 20);
+			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
 
-            Assert.AreEqual(1, foundRequests.Count);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
-            Assert.IsTrue(foundRequests.Contains(requestAccepted));
-        }
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(requestAccepted));
+		}
 
 		[Test]
 		public void ShouldFindShiftTradeRequestUpdateAfter()
@@ -289,56 +310,56 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			foundRequest.Should().Be.Empty();
 		}
 
-        [Test]
-        public void VerifyCanFindRequestWithCertainGuid()
-        {
-            IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
-            IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+		[Test]
+		public void VerifyCanFindRequestWithCertainGuid()
+		{
+			IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
+			IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
 
-            PersistAndRemoveFromUnitOfWork(requestAccepted);
-            PersistAndRemoveFromUnitOfWork(requestAbsence);
+			PersistAndRemoveFromUnitOfWork(requestAccepted);
+			PersistAndRemoveFromUnitOfWork(requestAbsence);
 
-            Assert.IsNotNull(requestAccepted.Id);
-            Guid? savedGuid = requestAccepted.Id;
+			Assert.IsNotNull(requestAccepted.Id);
+			Guid? savedGuid = requestAccepted.Id;
 
-            IPersonRequest loadedPersonRequest = new PersonRequestRepository(UnitOfWork).Find((Guid) savedGuid);
+			IPersonRequest loadedPersonRequest = new PersonRequestRepository(UnitOfWork).Find((Guid)savedGuid);
 
-            Assert.IsNotNull(loadedPersonRequest);
-        }
+			Assert.IsNotNull(loadedPersonRequest);
+		}
 
-        [Test]
-        public void ShouldFindAllRequestsForAgent()
-        {
-            IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();
+		[Test]
+		public void ShouldFindAllRequestsForAgent()
+		{
+			IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();
 
-            IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
-            personFrom.Name = new Name("mala", "mala");
-            PersistAndRemoveFromUnitOfWork(personFrom);
+			IPerson personFrom = PersonFactory.CreatePerson("vjiosd");
+			personFrom.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personFrom);
 
-            IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-                new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
-                                                 new DateOnly(2008, 7, 16)),
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 17),
-                                                 new DateOnly(2008, 7, 17)),
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 18),
-                                                 new DateOnly(2008, 7, 18)),
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 19),
-                                                 new DateOnly(2008, 7, 19))
-                    });
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+												 new DateOnly(2008, 7, 16)),
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 17),
+												 new DateOnly(2008, 7, 17)),
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 18),
+												 new DateOnly(2008, 7, 18)),
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 19),
+												 new DateOnly(2008, 7, 19))
+					});
 
-            IPersonRequest personRequestWithShiftTrade = new PersonRequest(personFrom);
-            personRequestWithShiftTrade.Request = shiftTradeRequest;
+			IPersonRequest personRequestWithShiftTrade = new PersonRequest(personFrom);
+			personRequestWithShiftTrade.Request = shiftTradeRequest;
 
-            PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest);
-            PersistAndRemoveFromUnitOfWork(personRequestWithShiftTrade);
+			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest);
+			PersistAndRemoveFromUnitOfWork(personRequestWithShiftTrade);
 
-            var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person);
+			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person);
 
-            int actualValue = foundRequests.Count();
-            Assert.AreEqual(2, actualValue);
-        }
+			int actualValue = foundRequests.Count();
+			Assert.AreEqual(2, actualValue);
+		}
 
 		[Test]
 		public void VerifyFindAllRequestsForAgentShouldExcludeAutoDeniedForRecipient()
@@ -351,16 +372,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
 				new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
-                                                 new DateOnly(2008, 7, 16)),
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 17),
-                                                 new DateOnly(2008, 7, 17)),
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 18),
-                                                 new DateOnly(2008, 7, 18)),
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 19),
-                                                 new DateOnly(2008, 7, 19))
-                    });
+					{
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+												 new DateOnly(2008, 7, 16)),
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 17),
+												 new DateOnly(2008, 7, 17)),
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 18),
+												 new DateOnly(2008, 7, 18)),
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 19),
+												 new DateOnly(2008, 7, 19))
+					});
 
 			IPersonRequest personRequestWithShiftTrade = new PersonRequest(personFrom);
 			personRequestWithShiftTrade.Deny(personFrom, string.Empty, new PersonRequestAuthorizationCheckerForTest());
@@ -386,7 +407,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest1);
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest2);
 
-			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging {Take = 1});
+			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging { Take = 1 });
 
 			foundRequests.Should().Have.Count.EqualTo(1);
 		}
@@ -400,7 +421,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			// ouch! better way to modify updated on?
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest1);
-			SetUpdatedOnForRequest(personRequestWithAbsenceRequest1,-2);
+			SetUpdatedOnForRequest(personRequestWithAbsenceRequest1, -2);
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest2);
 			SetUpdatedOnForRequest(personRequestWithAbsenceRequest2, -1);
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest3);
@@ -411,25 +432,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			results.Single().Should().Be.EqualTo(personRequestWithAbsenceRequest2);
 		}
 
-    	private void SetUpdatedOnForRequest(IPersonRequest personRequest,int minutes)
-    	{
-    		const string sql = "UPDATE dbo.PersonRequest SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;";
-    		Session.CreateSQLQuery(sql)
-    			.SetGuid("Id", personRequest.Id.GetValueOrDefault())
-    			.SetInt32("Minutes", minutes)
-    			.ExecuteUpdate();
-    	}
+		private void SetUpdatedOnForRequest(IPersonRequest personRequest, int minutes)
+		{
+			const string sql = "UPDATE dbo.PersonRequest SET UpdatedOn = DATEADD(mi,:Minutes,UpdatedOn) WHERE Id=:Id;";
+			Session.CreateSQLQuery(sql)
+				.SetGuid("Id", personRequest.Id.GetValueOrDefault())
+				.SetInt32("Minutes", minutes)
+				.ExecuteUpdate();
+		}
 
-    	[Test]
+		[Test]
 		public void ShouldFindAllRequestsForAgentAndPeriod()
 		{
 			var personRequestInPeriod =
 				new PersonRequest(_person,
-				                  new AbsenceRequest(_absence, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(3)))
+								  new AbsenceRequest(_absence, new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(3)))
 					);
 			var personRequestNotInperiod =
 				new PersonRequest(_person,
-				                  new AbsenceRequest(_absence, new DateTimePeriod(DateTime.UtcNow.AddDays(-3), DateTime.UtcNow.AddDays(-2)))
+								  new AbsenceRequest(_absence, new DateTimePeriod(DateTime.UtcNow.AddDays(-3), DateTime.UtcNow.AddDays(-2)))
 					);
 
 			PersistAndRemoveFromUnitOfWork(personRequestInPeriod);
@@ -442,61 +463,61 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		[Test]
 		public void VerifyFindAllRequestModifiedWithinPeriodOrPending()
-        {
-            IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
-            IPersonRequest pendingPersonRequest = CreateAggregateWithCorrectBusinessUnit();
+		{
+			IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
+			IPersonRequest pendingPersonRequest = CreateAggregateWithCorrectBusinessUnit();
 
 			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-            personTo.Name = new Name("mala", "mala");
-            PersistAndRemoveFromUnitOfWork(personTo);
+			personTo.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personTo);
 
-            IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-                new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),
-                                                 new DateOnly(2008, 7, 16))
-                    });
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),
+												 new DateOnly(2008, 7, 16))
+					});
 
-            IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
-               new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),
-                                                 new DateOnly(2008, 7, 16))
-                    });
+			IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
+			   new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),
+												 new DateOnly(2008, 7, 16))
+					});
 
-            IPersonRequest pendingShiftTradePersonRequest = new PersonRequest(personTo);
-            IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
-            shiftTradePersonRequest.Request = shiftTradeRequest;
-            shiftTradePersonRequest.Pending();
-            pendingShiftTradePersonRequest.Request = shiftTradeRequest2;
-            pendingShiftTradePersonRequest.Pending();
-            pendingPersonRequest.Pending();
-            //Set the status:
-            shiftTradePersonRequest.Deny(personTo, null, new PersonRequestAuthorizationCheckerForTest());
-            personRequest.Deny(personTo, null, new PersonRequestAuthorizationCheckerForTest());
-            Assert.IsTrue(pendingPersonRequest.IsPending);
-            Assert.IsTrue(pendingShiftTradePersonRequest.IsPending);
+			IPersonRequest pendingShiftTradePersonRequest = new PersonRequest(personTo);
+			IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
+			shiftTradePersonRequest.Request = shiftTradeRequest;
+			shiftTradePersonRequest.Pending();
+			pendingShiftTradePersonRequest.Request = shiftTradeRequest2;
+			pendingShiftTradePersonRequest.Pending();
+			pendingPersonRequest.Pending();
+			//Set the status:
+			shiftTradePersonRequest.Deny(personTo, null, new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny(personTo, null, new PersonRequestAuthorizationCheckerForTest());
+			Assert.IsTrue(pendingPersonRequest.IsPending);
+			Assert.IsTrue(pendingShiftTradePersonRequest.IsPending);
 
-            PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
-            PersistAndRemoveFromUnitOfWork(personRequest);
-            PersistAndRemoveFromUnitOfWork(pendingPersonRequest);
-            PersistAndRemoveFromUnitOfWork(pendingShiftTradePersonRequest);
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			PersistAndRemoveFromUnitOfWork(personRequest);
+			PersistAndRemoveFromUnitOfWork(pendingPersonRequest);
+			PersistAndRemoveFromUnitOfWork(pendingShiftTradePersonRequest);
 
-            DateTime updatedOn = personRequest.UpdatedOn.GetValueOrDefault();
-            DateTimePeriod periodToLookFor = new DateTimePeriod(updatedOn.Subtract(TimeSpan.FromDays(1)),updatedOn.AddDays(1));
-            DateTimePeriod periodOutside = new DateTimePeriod(updatedOn.AddDays(2),updatedOn.AddDays(4));
-           
-            IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(_person,periodToLookFor);
-            IList<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(_person, periodOutside);
+			DateTime updatedOn = personRequest.UpdatedOn.GetValueOrDefault();
+			DateTimePeriod periodToLookFor = new DateTimePeriod(updatedOn.Subtract(TimeSpan.FromDays(1)), updatedOn.AddDays(1));
+			DateTimePeriod periodOutside = new DateTimePeriod(updatedOn.AddDays(2), updatedOn.AddDays(4));
 
-            int actualValue = foundRequests.Count;
-            Assert.AreEqual(4, actualValue);
-            Assert.AreEqual(2,requestWithinOutsidePeriod.Count(r=>r.IsPending));
-            Assert.AreEqual(2,requestWithinOutsidePeriod.Count);
+			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(_person, periodToLookFor);
+			IList<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(_person, periodOutside);
+
+			int actualValue = foundRequests.Count;
+			Assert.AreEqual(4, actualValue);
+			Assert.AreEqual(2, requestWithinOutsidePeriod.Count(r => r.IsPending));
+			Assert.AreEqual(2, requestWithinOutsidePeriod.Count);
 
 			foundRequests.All(r => LazyLoadingManager.IsInitialized(r.Request)).Should().Be.True();
 			requestWithinOutsidePeriod.All(r => LazyLoadingManager.IsInitialized(r.Request)).Should().Be.True();
-        }
+		}
 
 		[Test]
 		public void VerifyFindAllRequestModifiedWithinPeriodOrPendingShouldNotListAutoDeniedForPersonTo()
@@ -507,17 +528,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
 				new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
-                                                 new DateOnly(2008, 7, 16))
-                    });
+					{
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+												 new DateOnly(2008, 7, 16))
+					});
 
 			IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
 			   new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
-                                                 new DateOnly(2008, 7, 16))
-                    });
+					{
+						new ShiftTradeSwapDetail(personFrom, _person, new DateOnly(2008, 7, 16),
+												 new DateOnly(2008, 7, 16))
+					});
 
 			IPersonRequest deniedShiftTradePersonRequest = new PersonRequest(personFrom);
 			deniedShiftTradePersonRequest.Request = shiftTradeRequest2;
@@ -548,311 +569,311 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			foundRequests.All(r => LazyLoadingManager.IsInitialized(r.Request)).Should().Be.True();
 		}
 
-        [Test]
-        public void VerifyPersonRequestForDateTimePeriod()
-        {
-            IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(personRequest);
-          
-            IEnumerable<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(personRequest.Request.Period);
-            var firstResult = requestWithinOutsidePeriod.First();
-            LazyLoadingManager.IsInitialized(firstResult.Person).Should().Be.True();
-        }
+		[Test]
+		public void VerifyPersonRequestForDateTimePeriod()
+		{
+			IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(personRequest);
 
-        [Test]
-        public void VerifyPersonRequestShouldLiesWithinPeriod()
-        {
-            IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(personRequest);
+			IEnumerable<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(personRequest.Request.Period);
+			var firstResult = requestWithinOutsidePeriod.First();
+			LazyLoadingManager.IsInitialized(firstResult.Person).Should().Be.True();
+		}
 
-            var absenceRequest = CreateAggregateWithCorrectBusinessUnit();
-            var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
-            var textRequest2 = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+		[Test]
+		public void VerifyPersonRequestShouldLiesWithinPeriod()
+		{
+			IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(personRequest);
 
-            PersistAndRemoveFromUnitOfWork(absenceRequest);
-            PersistAndRemoveFromUnitOfWork(textRequest);
-            PersistAndRemoveFromUnitOfWork(textRequest2);
+			var absenceRequest = CreateAggregateWithCorrectBusinessUnit();
+			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
+			var textRequest2 = new PersonRequest(_person, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 
-            IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-            personTo.Name = new Name("mala", "mala");
-            PersistAndRemoveFromUnitOfWork(personTo);
+			PersistAndRemoveFromUnitOfWork(absenceRequest);
+			PersistAndRemoveFromUnitOfWork(textRequest);
+			PersistAndRemoveFromUnitOfWork(textRequest2);
 
-            IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-               new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16)),
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 18),new DateOnly(2008, 7, 18))
-                    });
+			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
+			personTo.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personTo);
 
-            IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
-            shiftTradePersonRequest.Request = shiftTradeRequest;
-            shiftTradePersonRequest.Pending();
-            PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+			   new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16)),
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 18),new DateOnly(2008, 7, 18))
+					});
 
-
-            IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
-               new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 20),new DateOnly(2008, 7, 20)),
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 21),new DateOnly(2008, 7, 21))
-                    });
-
-            IPersonRequest shiftTradePersonRequest2 = new PersonRequest(personTo);
-            shiftTradePersonRequest2.Request = shiftTradeRequest2;
-            shiftTradePersonRequest2.Pending();
-            PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest2);
-
-            IEnumerable<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(shiftTradeRequest2.Period);
-            Assert.AreEqual(1, requestWithinOutsidePeriod.Count());
-        }
+			IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
+			shiftTradePersonRequest.Request = shiftTradeRequest;
+			shiftTradePersonRequest.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
 
-        [Test]
-        public void VerifyRequestStatusIsNotNew()
-        {
-            IPersonRequest request = new PersonRequest(_person);
-            IAbsenceRequest absenceRequest = new AbsenceRequest(_absence,
-                                                               new DateTimePeriod(
-                                                                   new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
-                                                                   new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc)));
+			IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
+			   new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 20),new DateOnly(2008, 7, 20)),
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 21),new DateOnly(2008, 7, 21))
+					});
 
-            request.Request = absenceRequest;
-            
-            PersistAndRemoveFromUnitOfWork(request);
-            var requestWithStatusNew = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(request.Request.Period);
-            Assert.IsTrue(requestWithStatusNew.IsEmpty());
+			IPersonRequest shiftTradePersonRequest2 = new PersonRequest(personTo);
+			shiftTradePersonRequest2.Request = shiftTradeRequest2;
+			shiftTradePersonRequest2.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest2);
 
-        }
-
-        [Test]
-        public void VerifyShiftTradeRequestForDateTimePeriod()
-        {
-
-            IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-            personTo.Name = new Name("mala", "mala");
-            PersistAndRemoveFromUnitOfWork(personTo);
-
-            IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-                new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16)),
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 18),new DateOnly(2008, 7, 18))
-                    });
+			IEnumerable<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(shiftTradeRequest2.Period);
+			Assert.AreEqual(1, requestWithinOutsidePeriod.Count());
+		}
 
 
-            IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
-            shiftTradePersonRequest.Request = shiftTradeRequest;
-            shiftTradePersonRequest.Pending();
-            PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+		[Test]
+		public void VerifyRequestStatusIsNotNew()
+		{
+			IPersonRequest request = new PersonRequest(_person);
+			IAbsenceRequest absenceRequest = new AbsenceRequest(_absence,
+															   new DateTimePeriod(
+																   new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
+																   new DateTime(2008, 7, 19, 0, 0, 0, DateTimeKind.Utc)));
 
-            IEnumerable<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(shiftTradePersonRequest.Request.Period);
-            var firstResult = requestWithinOutsidePeriod.Single();
-            LazyLoadingManager.IsInitialized(firstResult.Request).Should().Be.True();
-            LazyLoadingManager.IsInitialized(((IShiftTradeRequest)firstResult.Request).ShiftTradeSwapDetails).Should().Be.True();
-            LazyLoadingManager.IsInitialized(((IShiftTradeRequest)firstResult.Request).ShiftTradeSwapDetails[0]).Should().Be.True();
-        }
+			request.Request = absenceRequest;
+
+			PersistAndRemoveFromUnitOfWork(request);
+			var requestWithStatusNew = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(request.Request.Period);
+			Assert.IsTrue(requestWithStatusNew.IsEmpty());
+
+		}
+
+		[Test]
+		public void VerifyShiftTradeRequestForDateTimePeriod()
+		{
+
+			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
+			personTo.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personTo);
+
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16)),
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 18),new DateOnly(2008, 7, 18))
+					});
 
 
-        [Test]
-        public void VerifyFindAllRequestsForAgentsForAPeriod()
-        {
-            IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
-            IPersonRequest pendingPersonRequest = CreateAggregateWithCorrectBusinessUnit();
-            IPersonRequest shiftTradePersonRequest;
-            IPersonRequest pendingShiftTradePersonRequest;
+			IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
+			shiftTradePersonRequest.Request = shiftTradeRequest;
+			shiftTradePersonRequest.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
-            IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-            personTo.Name = new Name("mala", "mala");
-            PersistAndRemoveFromUnitOfWork(personTo);
+			IEnumerable<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(shiftTradePersonRequest.Request.Period);
+			var firstResult = requestWithinOutsidePeriod.Single();
+			LazyLoadingManager.IsInitialized(firstResult.Request).Should().Be.True();
+			LazyLoadingManager.IsInitialized(((IShiftTradeRequest)firstResult.Request).ShiftTradeSwapDetails).Should().Be.True();
+			LazyLoadingManager.IsInitialized(((IShiftTradeRequest)firstResult.Request).ShiftTradeSwapDetails[0]).Should().Be.True();
+		}
 
-            IPerson anotherPerson = PersonFactory.CreatePerson("Smet");
-            anotherPerson.Name = new Name("Tom", "Jones");
-            PersistAndRemoveFromUnitOfWork(anotherPerson);
 
-            IPerson anotherPerson2 = PersonFactory.CreatePerson("Smet...");
-            anotherPerson2.Name = new Name("Kirk", "Douglas");
-            PersistAndRemoveFromUnitOfWork(anotherPerson2);
+		[Test]
+		public void VerifyFindAllRequestsForAgentsForAPeriod()
+		{
+			IPersonRequest personRequest = CreateAggregateWithCorrectBusinessUnit();
+			IPersonRequest pendingPersonRequest = CreateAggregateWithCorrectBusinessUnit();
+			IPersonRequest shiftTradePersonRequest;
+			IPersonRequest pendingShiftTradePersonRequest;
 
-            IList<IPerson> persons = new List<IPerson>{_person, anotherPerson, anotherPerson2};
-            
-            IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-                new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                    });
+			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
+			personTo.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personTo);
 
-            IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
-               new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16))
-                    });
+			IPerson anotherPerson = PersonFactory.CreatePerson("Smet");
+			anotherPerson.Name = new Name("Tom", "Jones");
+			PersistAndRemoveFromUnitOfWork(anotherPerson);
 
-            IPersonRequest textRequest = new PersonRequest(anotherPerson);
-            textRequest.Request = new TextRequest(new DateTimePeriod(new DateTime(2008, 7, 17,0,0,0,DateTimeKind.Utc), new DateTime(2008, 7, 18,0,0,0,DateTimeKind.Utc)));
-            textRequest.Pending();
+			IPerson anotherPerson2 = PersonFactory.CreatePerson("Smet...");
+			anotherPerson2.Name = new Name("Kirk", "Douglas");
+			PersistAndRemoveFromUnitOfWork(anotherPerson2);
 
-            IPersonRequest textRequestDenied = new PersonRequest(anotherPerson2);
-            textRequestDenied.Request = new TextRequest(new DateTimePeriod(new DateTime(2008, 7, 17, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 7, 18, 0, 0, 0, DateTimeKind.Utc)));
-            textRequestDenied.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			IList<IPerson> persons = new List<IPerson> { _person, anotherPerson, anotherPerson2 };
 
-            pendingShiftTradePersonRequest = new PersonRequest(personTo);
-            
-            shiftTradePersonRequest = new PersonRequest(personTo);
-            shiftTradePersonRequest.Request = shiftTradeRequest;
-            shiftTradePersonRequest.Pending();
-            
-            pendingShiftTradePersonRequest.Request = shiftTradeRequest2;
-            pendingShiftTradePersonRequest.Pending();
-            //Set the status:
-            shiftTradePersonRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
-            personRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
-            Assert.IsTrue(pendingPersonRequest.IsPending, "Must be pending");
-            Assert.IsTrue(pendingShiftTradePersonRequest.IsPending, "Must be pending");
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+					});
 
-            //Add 6 requests
-            PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest); //Denied
-            PersistAndRemoveFromUnitOfWork(personRequest); //Denied
-            PersistAndRemoveFromUnitOfWork(pendingPersonRequest);
-            PersistAndRemoveFromUnitOfWork(pendingShiftTradePersonRequest);
-            PersistAndRemoveFromUnitOfWork(textRequest);
-            PersistAndRemoveFromUnitOfWork(textRequestDenied); //Denied
+			IShiftTradeRequest shiftTradeRequest2 = new ShiftTradeRequest(
+			   new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16))
+					});
 
-            DateTime updatedOn = personRequest.UpdatedOn.GetValueOrDefault();
-            DateTimePeriod periodToLookFor = new DateTimePeriod(updatedOn.Subtract(TimeSpan.FromDays(1)), updatedOn.AddDays(1));
-            DateTimePeriod periodOutside = new DateTimePeriod(updatedOn.AddDays(2), updatedOn.AddDays(4));
+			IPersonRequest textRequest = new PersonRequest(anotherPerson);
+			textRequest.Request = new TextRequest(new DateTimePeriod(new DateTime(2008, 7, 17, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 7, 18, 0, 0, 0, DateTimeKind.Utc)));
+			textRequest.Pending();
 
-            IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, periodToLookFor);
-            IList<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, periodOutside);
+			IPersonRequest textRequestDenied = new PersonRequest(anotherPerson2);
+			textRequestDenied.Request = new TextRequest(new DateTimePeriod(new DateTime(2008, 7, 17, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 7, 18, 0, 0, 0, DateTimeKind.Utc)));
+			textRequestDenied.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
 
-            int actualValue = foundRequests.Count;
-            Assert.AreEqual(6, actualValue);
-            Assert.AreEqual(3, requestWithinOutsidePeriod.Count(r => r.IsPending));
-            Assert.AreEqual(3, requestWithinOutsidePeriod.Count);
-        }
+			pendingShiftTradePersonRequest = new PersonRequest(personTo);
 
-        [Test]
-        public void ShouldNotGetExceptionWhenCallingFindAllRequestsModifiedWithinPeriodOrPendingWithMoreThan2100InPersonList()
-        {
-            IPerson person = PersonFactory.CreatePerson("person");
-            PersistAndRemoveFromUnitOfWork(person);
-            
-            var personList = Enumerable.Range(1, 2200).Select(s => person).ToArray();
-            IList<IPersonRequest> personRequestList = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2010, 1, 1, 2010, 1, 1));
-        
-            Assert.IsNotNull(personRequestList);
-        }
+			shiftTradePersonRequest = new PersonRequest(personTo);
+			shiftTradePersonRequest.Request = shiftTradeRequest;
+			shiftTradePersonRequest.Pending();
 
-        [Test]
-        public void VerifyLazyLoadingOfShiftTradeDetails()
-        {
-            IPerson personTo = PersonFactory.CreatePerson("vjiosd");
-            personTo.Name = new Name("mala", "mala");
-            PersistAndRemoveFromUnitOfWork(personTo);
+			pendingShiftTradePersonRequest.Request = shiftTradeRequest2;
+			pendingShiftTradePersonRequest.Pending();
+			//Set the status:
+			shiftTradePersonRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny(null, null, new PersonRequestAuthorizationCheckerForTest());
+			Assert.IsTrue(pendingPersonRequest.IsPending, "Must be pending");
+			Assert.IsTrue(pendingShiftTradePersonRequest.IsPending, "Must be pending");
 
-            IList<IPerson> persons = new List<IPerson> { _person, personTo };
+			//Add 6 requests
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest); //Denied
+			PersistAndRemoveFromUnitOfWork(personRequest); //Denied
+			PersistAndRemoveFromUnitOfWork(pendingPersonRequest);
+			PersistAndRemoveFromUnitOfWork(pendingShiftTradePersonRequest);
+			PersistAndRemoveFromUnitOfWork(textRequest);
+			PersistAndRemoveFromUnitOfWork(textRequestDenied); //Denied
 
-            IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
-                new List<IShiftTradeSwapDetail>
-                    {
-                        new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                    });
-            IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
-            shiftTradePersonRequest.Request = shiftTradeRequest;
-            PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
-            DateTime updatedOn = shiftTradePersonRequest.UpdatedOn.GetValueOrDefault();
-            DateTimePeriod periodToLookFor = new DateTimePeriod(updatedOn.Subtract(TimeSpan.FromDays(1)), updatedOn.AddDays(1));
+			DateTime updatedOn = personRequest.UpdatedOn.GetValueOrDefault();
+			DateTimePeriod periodToLookFor = new DateTimePeriod(updatedOn.Subtract(TimeSpan.FromDays(1)), updatedOn.AddDays(1));
+			DateTimePeriod periodOutside = new DateTimePeriod(updatedOn.AddDays(2), updatedOn.AddDays(4));
 
-            IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, periodToLookFor);
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(((IShiftTradeRequest)foundRequests[0].Request).ShiftTradeSwapDetails));
-        }
+			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, periodToLookFor);
+			IList<IPersonRequest> requestWithinOutsidePeriod = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, periodOutside);
 
-        [Test]
-        public void VerifyCanModifyCollectionOfRequestsForAgent()
-        {
-            IPersonRequest request1 = CreateAggregateWithCorrectBusinessUnit();
-            
-            PersistAndRemoveFromUnitOfWork(request1);
+			int actualValue = foundRequests.Count;
+			Assert.AreEqual(6, actualValue);
+			Assert.AreEqual(3, requestWithinOutsidePeriod.Count(r => r.IsPending));
+			Assert.AreEqual(3, requestWithinOutsidePeriod.Count);
+		}
 
-            IAbsenceRequest newAbsenceRequest = new AbsenceRequest(_absence,new DateTimePeriod(
-                                                                   new DateTime(2008, 8, 16, 0, 0, 0, DateTimeKind.Utc),
-                                                                   new DateTime(2008, 8, 19, 0, 0, 0, DateTimeKind.Utc)));
+		[Test]
+		public void ShouldNotGetExceptionWhenCallingFindAllRequestsModifiedWithinPeriodOrPendingWithMoreThan2100InPersonList()
+		{
+			IPerson person = PersonFactory.CreatePerson("person");
+			PersistAndRemoveFromUnitOfWork(person);
 
-            request1.Request=newAbsenceRequest;
+			var personList = Enumerable.Range(1, 2200).Select(s => person).ToArray();
+			IList<IPersonRequest> personRequestList = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(personList, new DateTimePeriod(2010, 1, 1, 2010, 1, 1));
 
-            PersistAndRemoveFromUnitOfWork(request1);
+			Assert.IsNotNull(personRequestList);
+		}
 
-            Assert.IsNotNull(request1.Request);
-        }
+		[Test]
+		public void VerifyLazyLoadingOfShiftTradeDetails()
+		{
+			IPerson personTo = PersonFactory.CreatePerson("vjiosd");
+			personTo.Name = new Name("mala", "mala");
+			PersistAndRemoveFromUnitOfWork(personTo);
 
-        [Test]
-        public void VerifyChangingTheRequestObjectWorks()
-        {
-            PersonRequestRepository rep = new PersonRequestRepository(UnitOfWork);
+			IList<IPerson> persons = new List<IPerson> { _person, personTo };
 
-            IPersonRequest request1 = CreateAggregateWithCorrectBusinessUnit();
-            request1.Request = new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
+				new List<IShiftTradeSwapDetail>
+					{
+						new ShiftTradeSwapDetail(personTo, _person, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+					});
+			IPersonRequest shiftTradePersonRequest = new PersonRequest(personTo);
+			shiftTradePersonRequest.Request = shiftTradeRequest;
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+			DateTime updatedOn = shiftTradePersonRequest.UpdatedOn.GetValueOrDefault();
+			DateTimePeriod periodToLookFor = new DateTimePeriod(updatedOn.Subtract(TimeSpan.FromDays(1)), updatedOn.AddDays(1));
 
-            PersistAndRemoveFromUnitOfWork(_absence);
-            PersistAndRemoveFromUnitOfWork(request1);
+			IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, periodToLookFor);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(((IShiftTradeRequest)foundRequests[0].Request).ShiftTradeSwapDetails));
+		}
 
-            IPersonRequest loaded = rep.Get(request1.Id.GetValueOrDefault());
+		[Test]
+		public void VerifyCanModifyCollectionOfRequestsForAgent()
+		{
+			IPersonRequest request1 = CreateAggregateWithCorrectBusinessUnit();
 
-            loaded.Request = null;// new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)); //nytt request
-            PersistAndRemoveFromUnitOfWork(loaded);
+			PersistAndRemoveFromUnitOfWork(request1);
 
-            loaded = rep.Get(request1.Id.GetValueOrDefault());
-            Assert.IsNull(loaded.Request);
-        }
+			IAbsenceRequest newAbsenceRequest = new AbsenceRequest(_absence, new DateTimePeriod(
+																   new DateTime(2008, 8, 16, 0, 0, 0, DateTimeKind.Utc),
+																   new DateTime(2008, 8, 19, 0, 0, 0, DateTimeKind.Utc)));
 
-        [Test]
-        public void VerifyGeneratesPushMessage()
-        {
-            CleanUpAfterTest();
-            IPersonRequest request1 = CreateAggregateWithCorrectBusinessUnit();
-            request1.Request = new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-            PersistAndRemoveFromUnitOfWork(_absence);
-            PersistAndRemoveFromUnitOfWork(request1);
-            request1.Deny(null, "ResourceKey", new PersonRequestAuthorizationCheckerForTest());
-            UnitOfWork.PersistAll();
+			request1.Request = newAbsenceRequest;
 
-            IList list = Session.CreateCriteria(typeof(PushMessageDialogue)).List();
-            Assert.AreEqual(1, list.Count);
+			PersistAndRemoveFromUnitOfWork(request1);
 
-            Session.Delete("from PersonRequest");
-            Session.Delete("from AbsenceRequest");
-            Session.Delete("from Absence");
-            Session.Delete("from PushMessageDialogue");
-            Session.Delete("from PushMessage");
-					((IDeleteTag)_person).SetDeleted();
-					Session.Update(_person);
-					((IDeleteTag)_defaultScenario).SetDeleted();
-					Session.Update(_defaultScenario);
-            Session.Flush();
-        }
+			Assert.IsNotNull(request1.Request);
+		}
 
-		 [Test]
-		 public void ShouldThrowIfDeletingDeniedRequest()
-		 {
-			 var rep = new PersonRequestRepository(UnitOfWork);
-			 var request = CreateAggregateWithCorrectBusinessUnit();
-			 PersistAndRemoveFromUnitOfWork(request);
-			 request.Deny(_person, "something", new PersonRequestAuthorizationCheckerForTest());
+		[Test]
+		public void VerifyChangingTheRequestObjectWorks()
+		{
+			PersonRequestRepository rep = new PersonRequestRepository(UnitOfWork);
 
-		 	Assert.Throws<DataSourceException>(() =>
-		 	                                   rep.Remove(request));
-		 }
+			IPersonRequest request1 = CreateAggregateWithCorrectBusinessUnit();
+			request1.Request = new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 
-		 [Test]
-		 public void ShouldThrowIfDeletingApprovedRequest()
-		 {
-			 var rep = new PersonRequestRepository(UnitOfWork);
-			 var request = CreateAggregateWithCorrectBusinessUnit();
-			 PersistAndRemoveFromUnitOfWork(request);
-			 request.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+			PersistAndRemoveFromUnitOfWork(_absence);
+			PersistAndRemoveFromUnitOfWork(request1);
 
-			 Assert.Throws<DataSourceException>(() =>
-															rep.Remove(request));
-		 }
+			IPersonRequest loaded = rep.Get(request1.Id.GetValueOrDefault());
+
+			loaded.Request = null;// new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2)); //nytt request
+			PersistAndRemoveFromUnitOfWork(loaded);
+
+			loaded = rep.Get(request1.Id.GetValueOrDefault());
+			Assert.IsNull(loaded.Request);
+		}
+
+		[Test]
+		public void VerifyGeneratesPushMessage()
+		{
+			CleanUpAfterTest();
+			IPersonRequest request1 = CreateAggregateWithCorrectBusinessUnit();
+			request1.Request = new AbsenceRequest(_absence, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			PersistAndRemoveFromUnitOfWork(_absence);
+			PersistAndRemoveFromUnitOfWork(request1);
+			request1.Deny(null, "ResourceKey", new PersonRequestAuthorizationCheckerForTest());
+			UnitOfWork.PersistAll();
+
+			IList list = Session.CreateCriteria(typeof(PushMessageDialogue)).List();
+			Assert.AreEqual(1, list.Count);
+
+			Session.Delete("from PersonRequest");
+			Session.Delete("from AbsenceRequest");
+			Session.Delete("from Absence");
+			Session.Delete("from PushMessageDialogue");
+			Session.Delete("from PushMessage");
+			((IDeleteTag)_person).SetDeleted();
+			Session.Update(_person);
+			((IDeleteTag)_defaultScenario).SetDeleted();
+			Session.Update(_defaultScenario);
+			Session.Flush();
+		}
+
+		[Test]
+		public void ShouldThrowIfDeletingDeniedRequest()
+		{
+			var rep = new PersonRequestRepository(UnitOfWork);
+			var request = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(request);
+			request.Deny(_person, "something", new PersonRequestAuthorizationCheckerForTest());
+
+			Assert.Throws<DataSourceException>(() =>
+											   rep.Remove(request));
+		}
+
+		[Test]
+		public void ShouldThrowIfDeletingApprovedRequest()
+		{
+			var rep = new PersonRequestRepository(UnitOfWork);
+			var request = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(request);
+			request.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+
+			Assert.Throws<DataSourceException>(() =>
+														   rep.Remove(request));
+		}
 
 		[Test]
 		public void ShouldNotIncludeShiftTradeOfDeletedPersonTo()
@@ -867,22 +888,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var shiftTradeRequest = new ShiftTradeRequest(
 					new List<IShiftTradeSwapDetail>
-                {
-                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                });
-			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+				{
+					new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+				});
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
 			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
-				    .Should().Be.Empty();
+					.Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldNotIncludeShiftTradeOfTerminatedPersonTo()
 		{
 			var personTo = PersonFactory.CreatePerson("person to");
-			personTo.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			personTo.TerminatePerson(new DateOnly(1900, 1, 1), MockRepository.GenerateMock<IPersonAccountUpdater>());
 			var personFrom = PersonFactory.CreatePerson("person from");
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
@@ -891,9 +912,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var shiftTradeRequest = new ShiftTradeRequest(
 					new List<IShiftTradeSwapDetail>
-                {
-                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                });
+				{
+					new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+				});
 			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
@@ -915,9 +936,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var shiftTradeRequest = new ShiftTradeRequest(
 					new List<IShiftTradeSwapDetail>
-                {
-                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                });
+				{
+					new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+				});
 			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
@@ -931,7 +952,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personTo = PersonFactory.CreatePerson("person to");
 			var personFrom = PersonFactory.CreatePerson("person from");
-			personFrom.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
+			personFrom.TerminatePerson(new DateOnly(1900, 1, 1), MockRepository.GenerateMock<IPersonAccountUpdater>());
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
@@ -939,9 +960,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var shiftTradeRequest = new ShiftTradeRequest(
 					new List<IShiftTradeSwapDetail>
-                {
-                    new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
-                });
+				{
+					new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+				});
 			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
@@ -1025,45 +1046,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
-				RequestTypes = new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}
+				RequestTypes = new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest }
 			};
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 			result.Count().Should().Be(2);
 		}
 
-	    [Test]
-	    public void ShouldReturnRequestsFromTheSpecifiedPersons()
-	    {
-		    var person1 = PersonFactory.CreatePerson("person1");
+		[Test]
+		public void ShouldReturnRequestsFromTheSpecifiedPersons()
+		{
+			var person1 = PersonFactory.CreatePerson("person1");
 			var person2 = PersonFactory.CreatePerson("person2");
 
 			PersistAndRemoveFromUnitOfWork(person1);
-		    PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(person2);
 
-			var absence = new Absence()
-			{
-				Description = new Description("test absence")
-			};
-			PersistAndRemoveFromUnitOfWork(absence);
-		
 			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 
 			PersistAndRemoveFromUnitOfWork(textRequest1);
 			PersistAndRemoveFromUnitOfWork(textRequest2);
 
-		    var filter = new RequestFilter()
-		    {
+			var filter = new RequestFilter()
+			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
 				Persons = new List<IPerson> { person1 },
-				RequestTypes = new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest } 
-		    };
+				RequestTypes = new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest }
+			};
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 			result.Count().Should().Be(1);
 
-	    }
+		}
 
 		[Test]
 		public void ShouldReturnRequestsWithSorting()
@@ -1075,13 +1090,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
 			PersistAndRemoveFromUnitOfWork(person3);
-
-			var absence = new Absence()
-			{
-				Description = new Description("test absence")
-			};
-			PersistAndRemoveFromUnitOfWork(absence);
-
+			
 			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var textRequest3 = new PersonRequest(person3, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
@@ -1097,7 +1106,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			var resultDesc = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
-				
+
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
 
 			filter.SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc };
@@ -1118,13 +1127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
 			PersistAndRemoveFromUnitOfWork(person3);
-
-			var absence = new Absence()
-			{
-				Description = new Description("test absence")
-			};
-			PersistAndRemoveFromUnitOfWork(absence);
-
+			
 			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1))));
 			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow.AddDays(2), DateTime.UtcNow.AddDays(3))));
 			var textRequest3 = new PersonRequest(person3, new TextRequest(new DateTimePeriod(DateTime.UtcNow.AddDays(4), DateTime.UtcNow.AddDays(5))));
@@ -1145,6 +1148,189 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
 		}
 
+
+
+		[Test]
+		public void ShouldReturnRequestsInAgentNameOrderAsc()
+		{
+			var people = new[]
+			{
+				PersonFactory.CreatePerson("Ab", "A"),
+				PersonFactory.CreatePerson("Aa","A"),
+			};
+
+			var resultDesc = testPeopleNameOrder(people, RequestsSortingOrder.AgentNameAsc);
+
+			resultDesc[0].Person.Should().Be(people[1]);
+			resultDesc[1].Person.Should().Be(people[0]);
+
+		}
+
+		[Test]
+		public void ShouldReturnRequestsInAgentNameOrderDesc()
+		{
+			var people = new[]
+			{
+				PersonFactory.CreatePerson("Aa","A"),
+				PersonFactory.CreatePerson("Ab", "A"),
+				
+			};
+
+			var resultDesc = testPeopleNameOrder(people, RequestsSortingOrder.AgentNameDesc);
+
+			resultDesc[0].Person.Should().Be(people[1]);
+			resultDesc[1].Person.Should().Be(people[0]);
+
+		}
+
+		private IPersonRequest[] testPeopleNameOrder (IReadOnlyList<IPerson> people, RequestsSortingOrder order)
+		{
+			people.ForEach (PersistAndRemoveFromUnitOfWork);
+
+			var textRequests = new List<IPersonRequest>()
+			{
+				new PersonRequest (people[0], new TextRequest (new DateTimePeriod (DateTime.UtcNow, DateTime.UtcNow.AddDays (1)))),
+				new PersonRequest (people[1], new TextRequest (new DateTimePeriod (DateTime.UtcNow, DateTime.UtcNow.AddDays (1)))),
+			};
+
+			textRequests.ForEach (PersistAndRemoveFromUnitOfWork);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod (DateTime.UtcNow.AddDays (-1), DateTime.UtcNow.AddDays (6)),
+				SortingOrders = new List<RequestsSortingOrder> {order}
+			};
+
+			var resultDesc = new PersonRequestRepository (UnitOfWork)
+				.FindAllRequests (filter).ToArray();
+			return resultDesc;
+		}
+
+
+		[Test]
+		public void ShouldReturnRequestsWithSortingBySubject()
+		{
+			var person1 = PersonFactory.CreatePerson("A");
+			var person2 = PersonFactory.CreatePerson("B");
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+			
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1))));
+			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow.AddDays(2), DateTime.UtcNow.AddDays(3))));
+
+			textRequest1.Subject = "Aardvark";
+			textRequest2.Subject = "Zebra";
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+			PersistAndRemoveFromUnitOfWork(textRequest2);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.SubjectDesc }
+			};
+
+			var resultDesc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter).ToArray();
+
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest2, textRequest1 });
+		}
+
+		[Test]
+		public void ShouldReturnRequestsWithSortingBySeniorityDesc()
+		{
+			var resultDesc = runSeniorityTest(RequestsSortingOrder.SeniorityDesc);
+			resultDesc[0].Person.Name.FirstName.Should().Be("3");
+			resultDesc[1].Person.Name.FirstName.Should().Be("1");
+			resultDesc[2].Person.Name.FirstName.Should().Be("2");
+		}
+
+		[Test]
+		public void ShouldReturnRequestsWithSortingBySeniorityAsc()
+		{
+			var resultDesc = runSeniorityTest(RequestsSortingOrder.SeniorityAsc);
+			resultDesc[0].Person.Name.FirstName.Should().Be("2");
+			resultDesc[1].Person.Name.FirstName.Should().Be("1");
+			resultDesc[2].Person.Name.FirstName.Should().Be("3");
+		}
+
+		private IPersonRequest[] runSeniorityTest(params RequestsSortingOrder[] sortOrder)
+		{
+
+			var person1 = createAndPersistPerson("1", DateOnly.Today.AddDays(-180));
+			var person2 = createAndPersistPerson("2", DateOnly.Today.AddDays(-90));
+			var person3 = createAndPersistPerson("3", DateOnly.Today.AddDays(-181));
+
+			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1));
+
+			createAndPersistRequest(person1, period);
+			createAndPersistRequest(person2, period);
+			createAndPersistRequest(person3, period);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
+				SortingOrders = sortOrder.ToList() 
+			};
+
+			return new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter).ToArray();
+		}
+
+
+		[Test]
+		public void ShouldReturnRequestsWithSortingByTeam()
+		{
+			var team1 = TeamFactory.CreateSimpleTeam("team1");
+			team1.Site = _site;
+			var team2 = TeamFactory.CreateSimpleTeam("team2");
+			team2.Site = _site;
+			var team3 = TeamFactory.CreateSimpleTeam("team3");
+			team3.Site = _site;
+
+			PersistAndRemoveFromUnitOfWork (team1);
+			PersistAndRemoveFromUnitOfWork(team2);
+			PersistAndRemoveFromUnitOfWork(team3);
+
+			var personPeriodStartDate = DateOnly.Today.AddDays (-1);
+
+
+			var person1 = PersonFactory.CreatePerson("1");
+			var person2 = PersonFactory.CreatePerson("2");
+
+			person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod( personPeriodStartDate,
+				PersonContractFactory.CreatePersonContract(_contract, _partTimePercentage, _contractSchedule), team2));
+
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(personPeriodStartDate.AddDays (-100),
+				PersonContractFactory.CreatePersonContract(_contract, _partTimePercentage, _contractSchedule), team1));
+
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(personPeriodStartDate,
+				PersonContractFactory.CreatePersonContract(_contract, _partTimePercentage, _contractSchedule), team3));
+			
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+
+			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1))));
+			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1))));
+
+			PersistAndRemoveFromUnitOfWork(textRequest1);
+			PersistAndRemoveFromUnitOfWork(textRequest2);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.TeamDesc }
+			};
+
+			var resultDesc = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter).ToArray();
+
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest2, textRequest1 });
+		}
+
+
+
 		[Test]
 		public void ShouldReturnRequestsWithMultisorting()
 		{
@@ -1155,12 +1341,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
 			PersistAndRemoveFromUnitOfWork(person3);
-
-			var absence = new Absence()
-			{
-				Description = new Description("test absence")
-			};
-			PersistAndRemoveFromUnitOfWork(absence);
 
 			var textRequest1 = new PersonRequest(person1, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
 			var textRequest2 = new PersonRequest(person2, new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)));
@@ -1185,7 +1365,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest1, textRequest2 });
 
-			
+
 		}
 
 		[Test]
@@ -1196,12 +1376,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
-
-			var absence = new Absence()
-			{
-				Description = new Description("test absence")
-			};
-			PersistAndRemoveFromUnitOfWork(absence);
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -1225,20 +1399,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		}
 
-	    [Test]
-	    public void ShouldReturnCorrectRequestsTotalCountWithPaging()
-	    {
+		[Test]
+		public void ShouldReturnCorrectRequestsTotalCountWithPaging()
+		{
 			var person1 = PersonFactory.CreatePerson("A");
 			var person2 = PersonFactory.CreatePerson("B");
 
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
-
-			var absence = new Absence()
-			{
-				Description = new Description("test absence")
-			};
-			PersistAndRemoveFromUnitOfWork(absence);
 
 			for (int i = 0; i < 10; i++)
 			{
@@ -1255,13 +1423,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Paging = new Paging { Skip = 10, Take = 5 }
 			};
 
-		    int count;
+			int count;
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count).ToArray();
 
 			result.Count().Should().Be.EqualTo(5);
-		    count.Should().Be.EqualTo(20);
+			count.Should().Be.EqualTo(20);
 
-	    }
+		}
 
 		[Test]
 		public void ShouldReturnRequestsOverlapOnEndDate()
@@ -1286,7 +1454,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
-			var resultDesc = setupOverlapTest (new DateTimePeriod (DateTime.UtcNow.AddDays (-1), DateTime.UtcNow), filter);
+			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(1);
 		}
@@ -1321,8 +1489,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			resultDesc.Should().Have.Count.EqualTo(0);
 		}
 
-	    private IEnumerable<IPersonRequest> setupOverlapTest(DateTimePeriod existingRequestPeriod,RequestFilter filter)
-	    {
+		private IPersonRequest createAndPersistRequest(IPerson person, DateTimePeriod period)
+		{
+			var textRequest = new PersonRequest(person, new TextRequest(period));
+			PersistAndRemoveFromUnitOfWork(textRequest);
+			return textRequest;
+		}
+
+		private IPerson createAndPersistPerson(string name, DateOnly personPeriodStartDate)
+		{
+
+			var person = PersonFactory.CreatePerson(name);
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(personPeriodStartDate,
+				PersonContractFactory.CreatePersonContract(_contract, _partTimePercentage, _contractSchedule), _team));
+			PersistAndRemoveFromUnitOfWork(person);
+
+			return person;
+		}
+
+		private IEnumerable<IPersonRequest> setupOverlapTest(DateTimePeriod existingRequestPeriod, RequestFilter filter)
+		{
 			var person1 = PersonFactory.CreatePerson("A");
 
 			PersistAndRemoveFromUnitOfWork(person1);
@@ -1332,7 +1518,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest1);
 
 			return new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
-			
-	    } 
+
+		}
 	}
 }

@@ -8042,6 +8042,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Deny Reason.
+        /// </summary>
+        public static string DenyReason {
+            get {
+                return ResourceManager.GetString("DenyReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

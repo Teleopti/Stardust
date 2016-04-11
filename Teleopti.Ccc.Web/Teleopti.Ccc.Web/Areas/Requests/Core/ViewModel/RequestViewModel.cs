@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public Description Payload { get; set; }
 		public string Team { get; set; }
 		public bool IsFullDay { get; set; }
+		public string DenyReason { get; set; }
 	}
 
 	public class RequestListViewModel

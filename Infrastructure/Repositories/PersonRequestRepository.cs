@@ -10,6 +10,8 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Collection;
 using NHibernate;
 using System.Linq;
+using NHibernate.Dialect.Function;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -124,7 +126,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return personRequests.List<IPersonRequest>();
 		}
-	
+
 
 		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter)
 		{
@@ -152,9 +154,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				var criteriaCount = (ICriteria)criteria.Clone();
 				criteriaCount.SetProjection(Projections.RowCount());
-				count = Convert.ToInt32(criteriaCount.UniqueResult());				
+				count = Convert.ToInt32(criteriaCount.UniqueResult());
 			}
-			
+
 			sortPersonRequests(criteria, filter.SortingOrders);
 			pagePersonRequests(criteria, filter.Paging);
 
@@ -166,7 +168,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var period = filter.Period;
 
 			var requestForPeriod = DetachedCriteria.For<Request>()
-				.SetProjection (Projections.Property ("Parent"));
+				.SetProjection(Projections.Property("Parent"));
 
 			if (filter.ExcludeRequestsOnFilterPeriodEdge)
 			{
@@ -177,10 +179,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			else
 			{
 				requestForPeriod
-					.Add (Restrictions.Ge ("Period.period.Maximum", period.StartDateTime))
-					.Add (Restrictions.Le ("Period.period.Minimum", period.EndDateTime));
+					.Add(Restrictions.Ge("Period.period.Maximum", period.StartDateTime))
+					.Add(Restrictions.Le("Period.period.Minimum", period.EndDateTime));
 			}
-				
+
 
 			criteria.Add(Subqueries.PropertyIn("Id", requestForPeriod));
 		}
@@ -215,13 +217,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 			return Restrictions.Eq("req.class", type);
 		}
-		
+
 		private void pagePersonRequests(ICriteria query, IPaging paging)
 		{
-			if (paging == null || (paging as Paging).Equals(Paging.Nothing)) return;		
+			if (paging == null || (paging as Paging).Equals(Paging.Nothing)) return;
 			query.SetFirstResult(paging.Skip).SetMaxResults(paging.Take);
 		}
-		
+
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgentByType(IPerson person, Paging paging, params RequestType[] requestTypes)
 		{
 			var allRequests = FindAllRequestsForAgent(person);
@@ -582,26 +584,46 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<ShiftExchangeOffer>();
 		}
 
-		private void sortPersonRequests(ICriteria criteria, IList<RequestsSortingOrder> sortingOrders)
+		private static void sortPersonRequests(ICriteria criteria, IList<RequestsSortingOrder> sortingOrders)
 		{
 			if (sortingOrders == null) return;
+
 			var orderMapping = new Dictionary<RequestsSortingOrder, Action<ICriteria>>
 				{
-					{RequestsSortingOrder.AgentNameAsc, c => c.AddOrder(Order.Asc("p.Name.LastName"))},
-					{RequestsSortingOrder.AgentNameDesc, c => c.AddOrder(Order.Desc("p.Name.LastName"))},				
+					{RequestsSortingOrder.AgentNameAsc, c =>
+					{
+						c.AddOrder (Order.Asc ("p.Name.LastName"));
+						c.AddOrder (Order.Asc ("p.Name.FirstName"));
+					}},
+					{RequestsSortingOrder.AgentNameDesc, c =>
+					{
+						c.AddOrder (Order.Desc ("p.Name.LastName"));
+						c.AddOrder (Order.Desc ("p.Name.FirstName"));
+					}},
 					{RequestsSortingOrder.SubjectAsc, c => c.AddOrder(Order.Asc("personRequests.Subject"))},
-					{RequestsSortingOrder.SubjectDesc, c => c.AddOrder(Order.Desc("personRequests.Subject"))},				
+					{RequestsSortingOrder.SubjectDesc, c => c.AddOrder(Order.Desc("personRequests.Subject"))},
 					{RequestsSortingOrder.CreatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.CreatedOn"))},
 					{RequestsSortingOrder.CreatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.CreatedOn"))},
+					{RequestsSortingOrder.DenyReasonAsc, c => c.AddOrder(Order.Asc("personRequests.DenyReason"))},
+					{RequestsSortingOrder.DenyReasonDesc, c => c.AddOrder(Order.Desc("personRequests.DenyReason"))},
+					{RequestsSortingOrder.MessageAsc, c => c.AddOrder(Order.Asc("personRequests.Message"))},
+					{RequestsSortingOrder.MessageDesc, c => c.AddOrder(Order.Desc("personRequests.Message"))},
+					
 					{RequestsSortingOrder.UpdatedOnAsc, c => c.AddOrder(Order.Asc("personRequests.UpdatedOn"))},
-					{RequestsSortingOrder.UpdatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.UpdatedOn"))},				
+					{RequestsSortingOrder.UpdatedOnDesc, c => c.AddOrder(Order.Desc("personRequests.UpdatedOn"))},
 					{RequestsSortingOrder.PeriodStartAsc, c => c.AddOrder(Order.Asc("req.Period.period.Minimum"))},
 					{RequestsSortingOrder.PeriodStartDesc, c => c.AddOrder(Order.Desc("req.Period.period.Minimum"))},
 					{RequestsSortingOrder.PeriodEndAsc, c => c.AddOrder(Order.Asc("req.Period.period.Maximum"))},
-					{RequestsSortingOrder.PeriodEndDesc, c => c.AddOrder(Order.Desc("req.Period.period.Maximum"))}					
+					{RequestsSortingOrder.PeriodEndDesc, c => c.AddOrder(Order.Desc("req.Period.period.Maximum"))},
+
+					{RequestsSortingOrder.SeniorityAsc, c => c.AddOrder(Order.Asc (getSeniorityProjection()))},
+					{RequestsSortingOrder.SeniorityDesc, c => c.AddOrder(Order.Desc (getSeniorityProjection()))},
+
+					{RequestsSortingOrder.TeamAsc, c => c.AddOrder(Order.Asc (getTeamProjection()))},
+					{RequestsSortingOrder.TeamDesc, c => c.AddOrder(Order.Desc (getTeamProjection()))},
+					
 				};
 
-			
 			foreach (var order in sortingOrders)
 			{
 				Action<ICriteria> orderAction;
@@ -611,5 +633,41 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				}
 			}
 		}
+		
+		private static IProjection getSeniorityProjection()
+		{
+			var dateDiffFunction = Projections.SqlFunction(
+			new VarArgsSQLFunction("DateDiff(DAY,", ",", ")+1"),
+			NHibernateUtil.Int32,
+			Projections.Property<PersonPeriod>(val => val.StartDate),
+			Projections.Conditional(
+				Restrictions.Where<PersonPeriod>(period => period.internalEndDate >= DateOnly.Today),
+					Projections.Constant(DateTime.Today, NHibernateUtil.DateTime),
+					Projections.Cast(NHibernateUtil.DateTime, Projections.Property<PersonPeriod>(val => val.internalEndDate))));
+
+			var senioritySubquery = DetachedCriteria.For<PersonPeriod>("pp")
+				.Add(Restrictions.EqProperty("pp.Parent", "p.Id"))
+				.Add(Restrictions.Le("StartDate", DateOnly.Today))
+				.SetProjection(Projections.Sum(dateDiffFunction));
+
+			return Projections.SubQuery (senioritySubquery);
+		}
+
+		private static IProjection getTeamProjection()
+		{
+			var team = DetachedCriteria.For <Team>("team")
+				.Add(Restrictions.EqProperty("team.Id", "pp.Team"))
+				.SetProjection(Projections.Property("Description.Name"));
+
+			var personPeriodSubquery = DetachedCriteria.For<PersonPeriod> ("pp")
+				.Add (Restrictions.EqProperty ("pp.Parent", "p.Id"))
+				.Add (Restrictions.LeProperty ("StartDate", "req.Period.period.Minimum"))
+				.Add (Restrictions.GeProperty ("internalEndDate", "req.Period.period.Minimum"))
+				.SetProjection (Projections.SubQuery (team));
+			
+			return Projections.SubQuery(personPeriodSubquery);
+
+		}
+
 	}
 }

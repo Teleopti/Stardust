@@ -2,20 +2,29 @@
 
 namespace Teleopti.Interfaces.Domain
 {
+
 	public enum RequestsSortingOrder
 	{
 		AgentNameAsc,
 		AgentNameDesc,
-		UpdatedOnAsc,
-		UpdatedOnDesc,
 		CreatedOnAsc,
 		CreatedOnDesc,
-		SubjectAsc,
-		SubjectDesc,
+		DenyReasonAsc,
+		DenyReasonDesc,
+		MessageAsc,
+		MessageDesc,
 		PeriodStartAsc,
 		PeriodStartDesc,
 		PeriodEndAsc,
-		PeriodEndDesc
+		PeriodEndDesc,
+		SeniorityAsc,
+		SeniorityDesc,
+		SubjectAsc,
+		SubjectDesc,
+		TeamAsc,
+		TeamDesc,
+		UpdatedOnAsc,
+		UpdatedOnDesc		
 	}
 
 	public class RequestFilter

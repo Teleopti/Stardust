@@ -14242,6 +14242,10 @@ Help us improve your experience by sending an error report</value>
     <value>Could not remove absence from protected schedule.</value>
     <comment>Error message in team schedule</comment>
   </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Deny Reason</value>
+    <comment>Used in WFM as a header in the requests table.</comment>
+  </data>
   <data name="ChangeWillAffectAgents" xml:space="preserve">
     <value>Change will affect {0} agents.</value>
     <comment>Notification message showing the number of agents to be affected by the command (change).</comment>
@@ -14262,4 +14266,10 @@ Help us improve your experience by sending an error report</value>
     <value>Must select two agents to swap.</value>
     <comment>Error message alerting the user that the current agent selection is not appropriate for swapping schedule.</comment>
   </data>
+=======
+  <data name="DenyReason" xml:space="preserve">
+    <value>Deny Reason</value>
+    <comment>Used in WFM as a header in the requests table.</comment>
+  </data>
+>>>>>>> source
 </root>

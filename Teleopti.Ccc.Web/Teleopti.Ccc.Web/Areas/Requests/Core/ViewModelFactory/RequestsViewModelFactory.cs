@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				Id = request.Id.GetValueOrDefault(),
 				Subject = request.GetSubject(new NoFormatting()),
 				Message = request.GetMessage(new NoFormatting()),
+				DenyReason = request.DenyReason,
 				TimeZone =  _ianaTimeZoneProvider.WindowsToIana(request.Person.PermissionInformation.DefaultTimeZone().Id),
 				PeriodStartTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime, request.Person.PermissionInformation.DefaultTimeZone()),
 				PeriodEndTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime, request.Person.PermissionInformation.DefaultTimeZone()),
