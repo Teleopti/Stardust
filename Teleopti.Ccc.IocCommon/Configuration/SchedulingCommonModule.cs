@@ -453,7 +453,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 
-			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>();
+			builder.RegisterType<TeamBlockMaxSeatChecker>().As<ITeamBlockMaxSeatChecker>().InstancePerLifetimeScope();
 			builder.RegisterType<DailyTargetValueCalculatorForTeamBlock>().As<IDailyTargetValueCalculatorForTeamBlock>();
 			builder.RegisterType<NightlyRestRestrictionForTeamBlock>().As<INightlyRestRestrictionForTeamBlock>();
 			builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>().InstancePerLifetimeScope();
