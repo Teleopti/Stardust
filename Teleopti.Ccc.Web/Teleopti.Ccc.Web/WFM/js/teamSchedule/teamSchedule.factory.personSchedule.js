@@ -8,16 +8,25 @@
 			Create: create
 		};
 
-		var getPersonAbsences = function() {
+		var getPersonAbsencesCount = function() {
 			var personAbsences = [];
-			angular.forEach(this.Projections, function (projection) {
-				var pAbsenceId = projection.ParentPersonAbsence;
-				if (pAbsenceId != null && personAbsences.indexOf(pAbsenceId) === -1) {
-					personAbsences.push(pAbsenceId);
+			angular.forEach(this.Projections, function(projection) {
+				if (projection.ParentPersonAbsence != null && personAbsences.indexOf(projection.ParentPersonAbsence) === -1) {
+					personAbsences.push(projection.ParentPersonAbsence);
 				}
 			});
 			return personAbsences.length;
-		}
+		};
+
+		var getPersonActivitiesCount = function() {
+			var personActivities =[];
+			angular.forEach(this.Projections, function(projection) {
+				if (projection.ActivityId != null && personActivities.indexOf(projection.ParentPersonAbsence) === -1) {
+					personActivities.push(projection.ActivityId);
+				}
+			});
+			return personActivities.length;
+		};
 
 		function create(schedule, timeLine) {
 			if (!schedule) schedule = {};
@@ -33,7 +42,8 @@
 					{
 						Date: schedule.Date,
 						Projections: projectionVms,
-						AbsenceCount: getPersonAbsences
+						AbsenceCount: getPersonAbsencesCount,
+						ActivityCount: getPersonActivitiesCount
 					}
 				],
 				IsFullDayAbsence: schedule.IsFullDayAbsence,
@@ -131,6 +141,7 @@
 
 			var shiftProjectionVm = {
 				ParentPersonAbsence: projection.ParentPersonAbsence,
+				ActivityId: projection.ActivityId,
 				StartPosition: startPosition,
 				Length: length,
 				IsOvertime: projection.IsOvertime,
@@ -139,9 +150,8 @@
 				Start: projection.Start,
 				Selected: false,
 				ToggleSelection: function () {
-					// Only person absence will be selected
-					this.Selected = (this.ParentPersonAbsence != undefined && this.ParentPersonAbsence != null)
-						? !this.Selected : false;
+					// Select peerson absence and activity
+					this.Selected = !this.Selected;
 				},
 				Minutes: projection.Minutes
 			};
@@ -155,7 +165,8 @@
 				this.Shifts.push({
 					Date: otherSchedule.Date,
 					Projections: otherProjections,
-					AbsenceCount: getPersonAbsences
+					AbsenceCount: getPersonAbsencesCount,
+					ActivityCount: getPersonActivitiesCount
 				});
 			}
 
