@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
-			IWorkShiftSelector workShiftSelector,
+			IWorkShiftSelector workShiftSelector, 
 			ITeamScheduling teamScheduling,
 			IActivityIntervalDataCreator activityIntervalDataCreator,
 			IMaxSeatInformationGeneratorBasedOnIntervals maxSeatInformationGeneratorBasedOnIntervals,
@@ -130,17 +130,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
 				return true;
 
-			EventHandler<SchedulingServiceBaseEventArgs> onDayScheduled = (sender, e) =>
-			{
-				EventHandler<SchedulingServiceBaseEventArgs> handler = DayScheduled;
-				if (handler != null)
-				{
-					e.AppendCancelAction(()=>cancelMe=true);
-					handler(this, e);
-					if (e.Cancel) cancelMe = true;
-				}
-			};
-
 			foreach (var person in selectedTeamMembers)
 			{
 				if (cancelMe) return false;
@@ -182,10 +171,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (bestShiftProjectionCache == null) continue;
 				}
 
-				_teamScheduling.DayScheduled += onDayScheduled;
 				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
-					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false);
-				_teamScheduling.DayScheduled -= onDayScheduled;
+					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, (e) =>
+					{
+						if (DayScheduled != null)
+						{
+							e.AppendCancelAction(() => cancelMe = true);
+							DayScheduled(this, e);
+							if (e.Cancel) cancelMe = true;
+						}
+					});
 			}
 
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);

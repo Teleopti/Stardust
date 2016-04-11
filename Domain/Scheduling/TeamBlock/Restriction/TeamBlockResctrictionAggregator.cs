@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 
 		public TeamBlockRestrictionAggregator(
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
+			ISchedulingResultStateHolder schedulingResultStateHolder, //TODO: Why not Func here?
 			IScheduleDayEquator scheduleDayEquator,
 			IAssignmentPeriodRule nightlyRestRule,
 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions)

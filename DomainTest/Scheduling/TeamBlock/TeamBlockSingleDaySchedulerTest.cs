@@ -134,12 +134,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  new List<IPerson> { _person2 }))
 					  .Return(false);
-				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false));
-				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false));
-				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
+				
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, null)).IgnoreArguments();
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, null)).IgnoreArguments();
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
 																											  _selectedPersons))
@@ -191,12 +188,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false));
-				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false));
-				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
+				
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, null)).IgnoreArguments();
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, null)).IgnoreArguments();
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
 																											  _selectedPersons))
@@ -252,9 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false));
-				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, null)).IgnoreArguments();
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
 																											  _selectedPersons))
@@ -312,12 +304,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _periodValueCalculationParameters, TimeZoneGuard.Instance.TimeZone)).IgnoreArguments().Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false));
-				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false));
-				Expect.Call(() => _teamScheduling.DayScheduled -= null).IgnoreArguments();
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, null)).IgnoreArguments();
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, null)).IgnoreArguments();
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
 																											  _selectedPersons))

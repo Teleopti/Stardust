@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
-			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
+			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
 
 			builder.RegisterType<ScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
@@ -468,13 +468,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SameStartTimeTeamSpecification>().As<ISameStartTimeTeamSpecification>();
 			builder.RegisterType<SameShiftBlockSpecification>().As<ISameShiftBlockSpecification>().InstancePerLifetimeScope();
 			builder.RegisterType<ValidSampleDayPickerFromTeamBlock>().As<IValidSampleDayPickerFromTeamBlock>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>();
+			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>().SingleInstance();
 			builder.RegisterType<TeamBlockRoleModelSelector>().As<ITeamBlockRoleModelSelector>();
-			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>();
-			builder.RegisterType<ProposedRestrictionAggregator>().As<IProposedRestrictionAggregator>();
-			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>();
-			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
-			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
+			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>().SingleInstance();
+			builder.RegisterType<ProposedRestrictionAggregator>().As<IProposedRestrictionAggregator>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>().InstancePerLifetimeScope();
+			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
 			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>().InstancePerLifetimeScope();
 			//ITeamMatrixChecker
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
 			builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().InstancePerLifetimeScope();
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>();
+			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>();
 			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>();
 			builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>();
@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>().InstancePerLifetimeScope();
 			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>();
 			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerLifetimeScope();
-			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>();
+			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().InstancePerLifetimeScope();
 			builder.RegisterType<VisualLayerToBaseDateMapper>().As<IVisualLayerToBaseDateMapper>().InstancePerLifetimeScope();
 			builder.RegisterType<MaxSeatsCalculationForTeamBlock>().As<IMaxSeatsCalculationForTeamBlock>().InstancePerLifetimeScope();
 			builder.RegisterType<MaxSeatInformationGeneratorBasedOnIntervals>().As<IMaxSeatInformationGeneratorBasedOnIntervals>();

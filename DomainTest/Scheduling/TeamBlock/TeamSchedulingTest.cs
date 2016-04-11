@@ -92,11 +92,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-				//_target.DayScheduled += targetDayScheduledCanceled;
 	            _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache,
 		            _schedulePartModifyAndRollbackService,
-		            _resourceCalculateDelayer, false);
-	            //_target.DayScheduled += targetDayScheduledCanceled;
+		            _resourceCalculateDelayer, false, null);   
             }
 
         }
@@ -120,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
 	            _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache,
 		            _schedulePartModifyAndRollbackService,
-		            _resourceCalculateDelayer, false);
+		            _resourceCalculateDelayer, false, null);
             }
 
         }
@@ -154,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		    using (_mock.Playback())
 		    {
-			    _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false);
+			    _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, null);
 		    }
 	    }
 
@@ -186,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
-				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false);
+				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, null);
 			}
 		}
     }

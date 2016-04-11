@@ -6,22 +6,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface ITeamScheduling
     {
-		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
 	    void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    IShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation);
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, Action<SchedulingServiceBaseEventArgs> dayScheduled);
     }
 
-    public  class TeamScheduling : ITeamScheduling
+    public class TeamScheduling : ITeamScheduling
     {
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
 	    public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    IShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation)
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, Action<SchedulingServiceBaseEventArgs> dayScheduled)
 	    {
 		    var tempMatrixList =
 			    teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly)
@@ -42,19 +38,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
 		    assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly,
 			    schedulePartModifyAndRollbackService);
-		    onDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
-		    resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+
+		    if (dayScheduled != null)
+		    {
+				dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
+			}
+			resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 			    shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
 	    }
-
-	    private void onDayScheduled(SchedulingServiceBaseEventArgs args)
-		{
-			var handler = DayScheduled;
-			if (handler != null)
-			{
-				handler(this, args);
-			}
-		}
 
 		private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
