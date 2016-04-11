@@ -247,6 +247,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsPermissionExecutionRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionsRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\IntradayMonitorDataLoaderTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPersonRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepositoryTest.cs" />

@@ -8,37 +8,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeIntradayMonitorDataLoader : IIntradayMonitorDataLoader
 	{
-		public MonitorDataViewModel Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
+		public IList<IncomingIntervalModel> Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
-			return new MonitorDataViewModel
-			{
-				ForecastedCalls = ForecastedCalls,
-				ForecastedAverageHandleTime = ForecastedAverageHandleTime,
-				OfferedCalls = OfferedCalls,
-				AverageHandleTime = AverageHandleTime,
-				LatestStatsTime = LatestStatsTime,
-				ForecastedActualCallsDiff = ForecastedActualCallsDiff,
-				ForecastedActualHandleTimeDiff = ForecastedActualHandleTimeDiff
-			};
+			return Intervals;
 		}
+		
+		private IList<IncomingIntervalModel> Intervals { get; set; }
 
-		public void Has(double forecastedCalls, double forecastedAverageHandleTime, double offeredCalls, double averageHandleTime, DateTime latestStatsTime, double forecastedActualCallsDiff, double forecastedActualHandleTimeDiff)
+		public void AddInterval(IncomingIntervalModel interval)
 		{
-			ForecastedCalls = forecastedCalls;
-			ForecastedAverageHandleTime = forecastedAverageHandleTime;
-			OfferedCalls = offeredCalls;
-			AverageHandleTime = averageHandleTime;
-			LatestStatsTime = latestStatsTime;
-			ForecastedActualCallsDiff = forecastedActualCallsDiff;
-			ForecastedActualHandleTimeDiff = forecastedActualHandleTimeDiff;
+			if (Intervals == null)
+				Intervals = new List<IncomingIntervalModel>();
+			Intervals.Add(interval);
 		}
-
-		public double ForecastedCalls { get; set; }
-		public double ForecastedAverageHandleTime { get; set; }
-		public double OfferedCalls { get; set; }
-		public double AverageHandleTime { get; set; }
-		public DateTime LatestStatsTime { get; set; }
-		public double ForecastedActualCallsDiff { get; set; }
-		public double ForecastedActualHandleTimeDiff { get; set; }
 	}
 }

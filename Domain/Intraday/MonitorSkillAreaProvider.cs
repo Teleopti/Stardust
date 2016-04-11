@@ -1,8 +1,10 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
@@ -10,18 +12,45 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly IIntradayMonitorDataLoader _intradayMonitorDataLoader;
+		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 
-		public MonitorSkillAreaProvider(ISkillAreaRepository skillAreaRepository, IIntradayMonitorDataLoader intradayMonitorDataLoader)
+		public MonitorSkillAreaProvider(ISkillAreaRepository skillAreaRepository, IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher)
 		{
 			_skillAreaRepository = skillAreaRepository;
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
+			_intervalLengthFetcher = intervalLengthFetcher;
 		}
 
 		public MonitorDataViewModel Load(Guid skillAreaId)
 		{
 			var skillArea = _skillAreaRepository.Get(skillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return _intradayMonitorDataLoader.Load(skillIdList, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, DateOnly.Today);
+			var intervals = _intradayMonitorDataLoader.Load(skillIdList, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, DateOnly.Today);
+			var intervalLength = _intervalLengthFetcher.IntervalLength;
+
+			var summary = new MonitorIntradaySummary();
+			var timeSeries = new List<string>();
+			foreach (var interval in intervals)
+			{
+				summary.ForecastedCalls += interval.ForecastedCalls;
+				summary.ForecastedHandleTime += interval.ForecastedHandleTime;
+				summary.OfferedCalls += interval.OfferedCalls;
+				summary.HandleTime += interval.HandleTime;
+				
+				timeSeries.Add(DateTime.Today.Date.AddMinutes(interval.IntervalId * intervalLength).ToShortTimeString());
+			}
+
+			summary.ForecastedAverageHandleTime = summary.ForecastedHandleTime / summary.ForecastedCalls;
+			summary.AverageHandleTime = summary.HandleTime / summary.OfferedCalls;
+
+			return new MonitorDataViewModel()
+			{
+				Summary = summary,
+				DataSeries = new MonitorIntradayDataSeries
+				{
+					TimeSeries = timeSeries.ToArray()
+				}
+			};
 		}
 	}
 }

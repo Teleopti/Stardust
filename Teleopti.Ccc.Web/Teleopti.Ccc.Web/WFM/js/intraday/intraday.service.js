@@ -3,13 +3,6 @@
 	angular.module('wfm.intraday')
 		.service('intradayService', [
 			'$resource', function ($resource) {
-				this.skillList = $resource('../api/intraday/skillstatus', {}, {
-					query: {
-						method: 'GET',
-						params: {},
-						isArray: true
-					}
-				});
 
 				this.getSkills = $resource('../api/intraday/skills', {}, {
 					query: {

@@ -216,6 +216,7 @@
     <Compile Include="DayOffPlanning\IPeopleInOrganization.cs" />
     <Compile Include="DayOffPlanning\PeopleInOrganization.cs" />
     <Compile Include="ExceptionExtensions.cs" />
+    <Compile Include="Intraday\IncomingIntervalModel.cs" />
     <Compile Include="Optimization\ICurrentIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\IntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />

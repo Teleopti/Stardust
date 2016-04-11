@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class IntradayMonitorDataLoader : IIntradayMonitorDataLoader
 	{
-		public MonitorDataViewModel Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
+		public IList<IncomingIntervalModel> Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
@@ -22,20 +22,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				return
 					uow.Session()
 						.CreateSQLQuery("exec mart.web_intraday @time_zone_code=:TimeZone, @today=:Today, @skill_list=:SkillList")
-						.AddScalar("ForecastedCalls", NHibernateUtil.Double)
-						.AddScalar("ForecastedAverageHandleTime", NHibernateUtil.Double)
-						.AddScalar("OfferedCalls", NHibernateUtil.Double)
-						.AddScalar("AverageHandleTime", NHibernateUtil.Double)
-						.AddScalar("LatestStatsTime", NHibernateUtil.DateTime)
-						.AddScalar("ForecastedActualCallsDiff", NHibernateUtil.Double)
-						.AddScalar("ForecastedActualHandleTimeDiff", NHibernateUtil.Double)
+						.AddScalar("interval_id", NHibernateUtil.Int16)
+						.AddScalar("forecasted_calls", NHibernateUtil.Double)
+						.AddScalar("forecasted_handle_time_s", NHibernateUtil.Double)
+						.AddScalar("forecasted_average_handle_time", NHibernateUtil.Double)
+						.AddScalar("offered_calls", NHibernateUtil.Double)
+						.AddScalar("handle_time_s", NHibernateUtil.Double)
+						.AddScalar("average_handle_time", NHibernateUtil.Double)
 						.SetReadOnly(true)
 						.SetString("TimeZone", timeZone.Id)
 						.SetString("Today", DateOnly.Today.ToShortDateString(CultureInfo.InvariantCulture))
 						.SetString("SkillList", skillListString)
-						.SetResultTransformer(Transformers.AliasToBean(typeof(MonitorDataViewModel)))
+						.SetResultTransformer(Transformers.AliasToBean(typeof(IncomingIntervalModel)))
 						.SetReadOnly(true)
-						.UniqueResult<MonitorDataViewModel>();
+						.List<IncomingIntervalModel>();
 			}
 		}
 

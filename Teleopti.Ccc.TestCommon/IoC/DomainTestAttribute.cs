@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 			system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
 			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
+			system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();
 
 			fakePrincipal(system);
 		}

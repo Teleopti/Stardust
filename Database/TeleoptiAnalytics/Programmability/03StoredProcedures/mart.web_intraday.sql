@@ -5,9 +5,9 @@ GO
 -- =============================================
 -- Author:		Jonas & Maria S
 -- Create date: 2016-02-24
--- Description:	Load queue statistics for web intraday
+-- Description:	Load queue statistics and forecast data both by interval and by day. Used by web intraday.
 -- =============================================
--- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-03-21', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-04-07', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
 CREATE PROCEDURE [mart].[web_intraday]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -25,11 +25,11 @@ BEGIN
 	CREATE TABLE #skills(id uniqueidentifier)
 	CREATE TABLE #queues(queue_id int)
 	CREATE TABLE #result(
+	interval_id smallint,
 	forecasted_calls decimal(28,4), 
 	forecasted_handle_time_s decimal(28,4), 
 	offered_calls decimal(19,0), 
-	handle_time_s decimal(19,0),
-	latest_stats_time smalldatetime)
+	handle_time_s decimal(19,0))
 
 	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code
 
@@ -42,25 +42,12 @@ BEGIN
 	INNER JOIN mart.dim_skill ds ON qw.skill_id = ds.skill_id
 	INNER JOIN #skills s ON ds.skill_code = s.id
 
-	INSERT INTO #result(offered_calls, handle_time_s, latest_stats_time)
+	-- Forecast
+	INSERT INTO #result(interval_id, forecasted_calls, forecasted_handle_time_s)
 	SELECT 
-		SUM(ISNULL(fq.offered_calls, 0)), 
-		SUM(ISNULL(fq.handle_time_s, 0)), 
-		MAX(i.interval_end)
-	FROM
-		mart.fact_queue fq
-		INNER JOIN #queues q ON fq.queue_id = q.queue_id
-		INNER JOIN mart.bridge_time_zone bz ON fq.date_id = bz.date_id AND fq.interval_id = bz.interval_id
-		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
-		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
-	WHERE
-		bz.time_zone_id = @time_zone_id AND d.date_date = @today
-
-                         
-	INSERT INTO #result(forecasted_calls, forecasted_handle_time_s)
-	SELECT 
-		SUM(ISNULL(fw.forecasted_calls, 0)),
-		SUM(ISNULL(fw.forecasted_handling_time_s, 0))
+		i.interval_id,
+		fw.forecasted_calls,
+		fw.forecasted_handling_time_s
 	FROM
 		mart.fact_forecast_workload fw
 		INNER JOIN mart.dim_skill ds ON fw.skill_id = ds.skill_id
@@ -72,9 +59,52 @@ BEGIN
 		fw.scenario_id = @default_scenario_id
 		AND bz.time_zone_id = @time_zone_id
 		AND d.date_date = @today
-		AND i.interval_end <= (SELECT latest_stats_time FROM #result) 
-		
 
+	-- Queue stats - update result
+	UPDATE r
+	SET 
+		offered_calls = fq.offered_calls,
+		handle_time_s = fq.handle_time_s
+	FROM 
+		mart.fact_queue fq
+		INNER JOIN #queues q ON fq.queue_id = q.queue_id
+		INNER JOIN mart.bridge_time_zone bz ON fq.date_id = bz.date_id AND fq.interval_id = bz.interval_id
+		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
+		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
+		INNER JOIN #result r ON i.interval_id = r.interval_id
+	WHERE
+		bz.time_zone_id = @time_zone_id 
+		AND d.date_date = @today
+
+	-- Return data by interval
+	SELECT
+		interval_id,
+		forecasted_calls,
+		forecasted_handle_time_s,
+		CASE ISNULL(forecasted_calls,0)
+			WHEN 0 THEN 0
+			ELSE 
+				ISNULL(forecasted_handle_time_s,0) / ISNULL(forecasted_calls,0)
+		END AS forecasted_average_handle_time,
+		offered_calls,
+		handle_time_s,
+		CASE ISNULL(offered_calls,0)
+			WHEN 0 THEN 0
+			ELSE 
+						ISNULL(handle_time_s,0) / ISNULL(offered_calls,0)
+		END AS average_handle_time
+	FROM #result 
+	ORDER BY interval_id
+
+	return
+	
+	DECLARE @queue_stats_max_interval_id smallint
+	DECLARE @queue_stats_max_datetime smalldatetime
+
+	SELECT @queue_stats_max_interval_id = MAX(interval_id) FROM #result WHERE offered_calls IS NOT NULL
+	SELECT @queue_stats_max_datetime = interval_end FROM mart.dim_interval WHERE interval_id = @queue_stats_max_interval_id
+
+	-- Return data summed up by day
 	SELECT 
 	SUM(ISNULL(forecasted_calls,0)) AS ForecastedCalls,
 	CASE SUM(ISNULL(forecasted_calls,0))
@@ -88,7 +118,7 @@ BEGIN
 		ELSE 
 					SUM(ISNULL(handle_time_s,0)) / SUM(ISNULL(offered_calls,0))
 	END AS AverageHandleTime,
-	MAX(latest_stats_time) AS LatestStatsTime,
+	@queue_stats_max_datetime AS LatestStatsTime,
 	CASE SUM(ISNULL(forecasted_calls,0))
 		WHEN 0 THEN -99
 		ELSE
@@ -100,7 +130,11 @@ BEGIN
 			ABS(SUM(ISNULL(handle_time_s,0)) / SUM(ISNULL(offered_calls,0)) - SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0))) * 100
 			/ (SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0)))
 	END AS ForecastedActualHandleTimeDiff
-	FROM #result
+	FROM 
+		#result r
+	WHERE
+		r.interval_id <= @queue_stats_max_interval_id
+
 END
 
 GO

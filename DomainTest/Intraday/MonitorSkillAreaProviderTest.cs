@@ -1,12 +1,14 @@
 using System;
 using System.Collections.ObjectModel;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
@@ -16,37 +18,82 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public MonitorSkillAreaProvider Target;
 		public FakeSkillAreaRepository SkillAreaRepository;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
+		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 
-		[Test]
-		public void ShouldProvideMonitorData()
+		private IncomingIntervalModel firstInterval;
+		private IncomingIntervalModel secondInterval;
+		private SkillArea _existingSkillArea;
+		
+
+		[SetUp]
+		public void Setup()
 		{
-			var skillAreaId = Guid.NewGuid();
-			var today = DateOnly.Today;
 			var skills = new Collection<SkillInIntraday>
-			{
-				new SkillInIntraday
 				{
-					Id = Guid.NewGuid()
-				}
-			};
-			var existingSkillArea = new SkillArea
+					new SkillInIntraday
+					{
+						Id = Guid.NewGuid()
+					}
+				};
+			
+			_existingSkillArea = new SkillArea
 			{
 				Skills = skills
 			};
-			existingSkillArea.SetId(skillAreaId);
+			_existingSkillArea.WithId();
 
-			SkillAreaRepository.Has(existingSkillArea);
-			IntradayMonitorDataLoader.Has(10, 60, 25, 30, new DateTime(today.Year, today.Month, today.Day, 8, 0, 0), 150, 50);
+			firstInterval = new IncomingIntervalModel()
+			{
+				IntervalId = 32,
+				ForecastedCalls = 10,
+				ForecastedHandleTime = 120,
+				OfferedCalls = 12,
+				HandleTime = 200
+			};
+			secondInterval = new IncomingIntervalModel()
+			{
+				IntervalId = 33,
+				ForecastedCalls = 15,
+				ForecastedHandleTime = 150,
+				OfferedCalls = 16,
+				HandleTime = 180
+			};
+			
 
-			var result = Target.Load(skillAreaId);
+		}
 
-			result.ForecastedCalls.Should().Be.EqualTo(10);
-			result.OfferedCalls.Should().Be.EqualTo(25);
-			result.LatestStatsTime.Should().Be.EqualTo(new DateTime(today.Year, today.Month, today.Day, 8, 0, 0));
-			result.ForecastedActualCallsDiff.Should().Be.EqualTo(150);
-			result.ForecastedAverageHandleTime.Should().Be.EqualTo(60);
-			result.AverageHandleTime.Should().Be.EqualTo(30);
+		[Test]
+		public void ShouldSummarise()
+		{
+			IntradayMonitorDataLoader.AddInterval(firstInterval);
+			IntradayMonitorDataLoader.AddInterval(secondInterval);
+			SkillAreaRepository.Has(_existingSkillArea);
+			IntervalLengthFetcher.Has(15);
 
+			var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+			viewModel.Summary.ForecastedCalls.Should().Be.EqualTo(25);
+			viewModel.Summary.ForecastedHandleTime.Should().Be.EqualTo(270);
+			viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(270d / 25d);
+			viewModel.Summary.OfferedCalls.Should().Be.EqualTo(28);
+			viewModel.Summary.HandleTime.Should().Be.EqualTo(380);
+			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(380d / 28d);
+
+		}
+
+		[Test]
+		public void ShouldReturnTimeSeries()
+		{
+			IntradayMonitorDataLoader.AddInterval(firstInterval);
+			IntradayMonitorDataLoader.AddInterval(secondInterval);
+			SkillAreaRepository.Has(_existingSkillArea);
+			IntervalLengthFetcher.Has(15);
+
+			var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+			viewModel.DataSeries.TimeSeries.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.TimeSeries.First().Should().Be.EqualTo("08:00");
+			viewModel.DataSeries.TimeSeries.Second().Should().Be.EqualTo("08:15");
 		}
 	}
 }

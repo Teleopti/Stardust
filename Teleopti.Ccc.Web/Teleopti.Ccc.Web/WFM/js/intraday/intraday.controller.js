@@ -15,6 +15,7 @@
 				$scope.showProductivity = false;
 				$scope.showSummary = false;
 				$scope.selectedIndex = 0;
+				$scope.dataSet = "200,200,200,200,200";
 
 				var getAutoCompleteControls = function() {
 					var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
@@ -126,7 +127,8 @@
 
 				var pollSkillMonitorData = function () {
 					cancelTimeout();
-
+					$scope.HasMonitorData = true;
+					return;
 					intradayService.getSkillMonitorData.query(
 						{
 							id: $scope.selectedItem.Id
@@ -148,6 +150,7 @@
 						},
 						function(error) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
+							$scope.HasMonitorData = true;
 						});
 				};
 
