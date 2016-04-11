@@ -150,7 +150,7 @@
 				Start: projection.Start,
 				Selected: false,
 				ToggleSelection: function () {
-					// Select peerson absence and activity
+					// Select person absence and activity
 					this.Selected = !this.Selected;
 				},
 				Minutes: projection.Minutes

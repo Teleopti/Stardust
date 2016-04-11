@@ -31,6 +31,9 @@ describe("PersonSelection", function() {
 				Date: scheduleDate,
 				AbsenceCount: function () {
 					return 1;
+				},
+				ActivityCount: function() {
+					return 1;
 				}
 			}
 		],

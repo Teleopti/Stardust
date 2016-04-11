@@ -10,7 +10,7 @@
 			scope: {
 				scheduleVm: '=',
 				personSelection: '=',
-				selectedPersonAbsences: '=',
+				selectedPersonProjections: '=',
 				selectMode: '='
 			},
 			restrict: 'E',
@@ -36,54 +36,59 @@
 			vm.personSelection[person.PersonId].isSelected = !vm.personSelection[person.PersonId].isSelected;
 		};
 
-		var getSelectedPersonAbsences = function(personId) {
-			for(var i = 0; i < vm.selectedPersonAbsences.length; i++) {
-				var personAndAbsencePair = vm.selectedPersonAbsences[i];
-				if (personAndAbsencePair.PersonId === personId) {
+		var getSelectedPersonIndex = function(personId) {
+			for (var i = 0; i < vm.selectedPersonProjections.length; i++) {
+				if (vm.selectedPersonProjections[i].PersonId === personId) {
 					return i;
 				}
 			};
 			return -1;
-		}
+		};
 
-		vm.ToggleProjectionSelection = function (currentProjection, personSchedule) {
-			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705
-				|| currentProjection.ParentPersonAbsence == undefined || currentProjection.ParentPersonAbsence == null) {
+		vm.ToggleProjectionSelection = function(currentProjection, personSchedule) {
+			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
 				return;
-			}
 
 			currentProjection.ToggleSelection();
+
 			var selected = currentProjection.Selected;
-			var allSelectedProjections = [];
-			angular.forEach(personSchedule.Shifts, function (shift) {
-				angular.forEach(shift.Projections, function(projection) {
-					if (projection.ParentPersonAbsence === currentProjection.ParentPersonAbsence) {
+			var selectedPersonAbsencesLocal = [],
+				selectedPersonActivitiesLocal = [];
+			angular.forEach(personSchedule.Shifts, function(shift) {
+				angular.forEach(shift.Projections, function (projection) {
+					
+					var isPersonAbsenceValid = projection.ParentPersonAbsence != undefined && currentProjection.ParentPersonAbsence != undefined;
+					var isPersonActivityValid = projection.ActivityId != undefined && currentProjection.ActivityId != undefined;
+					if ((isPersonAbsenceValid && projection.ParentPersonAbsence === currentProjection.ParentPersonAbsence) || (isPersonActivityValid && projection.ActivityId === currentProjection.ActivityId)) {
 						projection.Selected = selected;
 					}
-					if (projection.Selected && allSelectedProjections.indexOf(projection.ParentPersonAbsence) === -1) {
-						allSelectedProjections.push(projection.ParentPersonAbsence);
-					}
+					if (projection.Selected && projection.ParentPersonAbsence != undefined && selectedPersonAbsencesLocal.indexOf(projection.ParentPersonAbsence) === -1)
+						selectedPersonAbsencesLocal.push(projection.ParentPersonAbsence);
+
+					if (projection.Selected && projection.ActivityId != undefined && selectedPersonActivitiesLocal.indexOf(projection.ActivityId) === -1)
+						selectedPersonActivitiesLocal.push(projection.ActivityId);
 				});
 			});
 
 			var personId = personSchedule.PersonId;
-			var personAbsenceIndex = getSelectedPersonAbsences(personId);
-			if (allSelectedProjections.length === 0) {
-				if (personAbsenceIndex > -1) {
-					vm.selectedPersonAbsences.splice(personAbsenceIndex, 1);
-				}
-			} else {
-				var data = {
+			var personIndex = getSelectedPersonIndex(personId);
+			var data;
+			if (selectedPersonAbsencesLocal.length === 0 && selectedPersonActivitiesLocal.length === 0) {
+					vm.selectedPersonProjections.splice(personIndex, 1);
+			}
+			else {
+				data = {
 					PersonId: personId,
-					SelectedPersonAbsences: allSelectedProjections
+					SelectedPersonAbsences: selectedPersonAbsencesLocal,
+					SelectedPersonActivities: selectedPersonActivitiesLocal
 				};
-				if (personAbsenceIndex > -1) {
-					vm.selectedPersonAbsences[personAbsenceIndex] = data;
+				if (personIndex > -1) {
+					vm.selectedPersonProjections[personIndex] = data;
 				} else {
-					vm.selectedPersonAbsences.push(data);
+					vm.selectedPersonProjections.push(data);
 				}
 			}
-		}
+		};
 
 		vm.isAllInCurrentPageSelected = function() {
 			return vm.scheduleVm.Schedules.every(function(personSchedule) {
