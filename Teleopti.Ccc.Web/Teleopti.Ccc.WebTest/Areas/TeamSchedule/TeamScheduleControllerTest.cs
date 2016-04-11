@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity))
 				.Return(expectedResult);
 
-			var target = new TeamScheduleController(null, null, principalAuthorization, null, null, null, null, null);
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null, null, null, null);
 			var result = target.GetPermissions();
 
 			result.Content.HasRemoveActivityPermission.Should().Be.EqualTo(expectedResult);
