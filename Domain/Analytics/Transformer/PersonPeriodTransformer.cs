@@ -92,9 +92,9 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
 
 			var maxDate = MapMaxDate();
-		    var minDate = _analyticsPersonPeriodRepository.MinDate().DateDate;
+			var minDate = _analyticsPersonPeriodRepository.MinDate().DateDate;
 
-            var validFromDate = ValidFromDate(personPeriodStartDate, timeZoneInfo, minDate);
+			var validFromDate = ValidFromDate(personPeriodStartDate, timeZoneInfo, minDate);
 			var validToDate = ValidToDate(personPeriodEndDate, timeZoneInfo, maxDate.DateDate);
 
 			var validFromDateId = MapDateId(validFromDate);
@@ -198,9 +198,9 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public static DateTime ValidFromDate(DateTime personPeriodStartDate, TimeZoneInfo timeZoneInfo, DateTime minDate)
 		{
-		    if (personPeriodStartDate < minDate)
-		        return minDate;
-            var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriodStartDate);
+			if (personPeriodStartDate < minDate)
+				return minDate;
+			var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriodStartDate);
 			if (validFromDate >= Eternity)
 				validFromDate = Eternity;
 			return validFromDate;
@@ -274,6 +274,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			if (allAnalyticsSkills.Count(a => skillCodes.Contains(a.SkillCode)) < skillCodes.Count)
 			{
 				// Skill exists in app but not yet in analytics
+				listOfSkills = new List<AnalyticsSkill>();
 				return -1;
 			}
 
