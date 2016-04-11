@@ -12,7 +12,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class ImportForecastsToSkillBase 
+	public interface IImportForecastsToSkillHandler
+	{
+		void Handle(ImportForecastsToSkillEvent message);
+	}
+	public class ImportForecastsToSkillHandler : IImportForecastsToSkillHandler
 	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ISaveForecastToSkillCommand _saveForecastToSkillCommand;
@@ -22,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public ImportForecastsToSkillBase(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public ImportForecastsToSkillHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			  ISaveForecastToSkillCommand saveForecastToSkillCommand,
 			  ISkillRepository skillRepository,
 			  IJobResultRepository jobResultRepository,
@@ -39,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_disableBusinessUnitFilter = disableBusinessUnitFilter;
 		}
 
-		public void Handle(ImportForecastsToSkill message)
+		public void Handle(ImportForecastsToSkillEvent message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -94,37 +98,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
 	}
 
-	[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	public class ImportForecastsToSkillBusHander: ImportForecastsToSkillBase, IHandleEvent<ImportForecastsToSkill>, IRunOnServiceBus
-	{
-		public ImportForecastsToSkillBusHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
-			ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
-			IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
-			IDisableBusinessUnitFilter disableBusinessUnitFilter)
-			: base(
-				unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
-				disableBusinessUnitFilter)
-		{
-		}
+	//[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	//public class ImportForecastsToSkillBusHander: ImportForecastsToSkillHandler, IHandleEvent<ImportForecastsToSkillEvent>, IRunOnServiceBus
+	//{
+	//	public ImportForecastsToSkillBusHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+	//		ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
+	//		IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
+	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
+	//		: base(
+	//			unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
+	//			disableBusinessUnitFilter)
+	//	{
+	//	}
 
-		public new void Handle(ImportForecastsToSkill @event)
-		{ base.Handle(@event);}
-	}
+	//	public new void Handle(ImportForecastsToSkillEvent @event)
+	//	{ base.Handle(@event);}
+	//}
 
-	[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	public class ImportForecastsToSkillStardustHander : ImportForecastsToSkillBase, IHandleEvent<ImportForecastsToSkill>, IRunOnStardust
-	{
-		public ImportForecastsToSkillStardustHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
-			ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
-			IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
-			IDisableBusinessUnitFilter disableBusinessUnitFilter)
-			: base(
-				unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
-				disableBusinessUnitFilter)
-		{
-		}
+	//[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	//public class ImportForecastsToSkillStardustHander : ImportForecastsToSkillHandler, IHandleEvent<ImportForecastsToSkillEvent>, IRunOnStardust
+	//{
+	//	public ImportForecastsToSkillStardustHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+	//		ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
+	//		IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
+	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
+	//		: base(
+	//			unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
+	//			disableBusinessUnitFilter)
+	//	{
+	//	}
 
-		public new void Handle(ImportForecastsToSkill @event)
-		{ base.Handle(@event); }
-	}
+	//	public new void Handle(ImportForecastsToSkillEvent @event)
+	//	{ base.Handle(@event); }
+	//}
 }

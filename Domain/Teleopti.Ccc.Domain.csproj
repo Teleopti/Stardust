@@ -201,6 +201,7 @@
     <Compile Include="ApplicationLayer\ICurrentInitiatorIdentifier.cs" />
     <Compile Include="ApplicationLayer\IInitiatorIdentifierScope.cs" />
     <Compile Include="ApplicationLayer\InitiatorIdentifier.cs" />
+    <Compile Include="ApplicationLayer\IStardustJobInfo.cs" />
     <Compile Include="ApplicationLayer\PersonAbsenceAccountProvider.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="Analytics\AnalyticsFactAgentSkill.cs" />
@@ -299,8 +300,8 @@
     <Compile Include="ApplicationLayer\Forecast\IImportForecastsRepository.cs" />
     <Compile Include="ApplicationLayer\Events\ImportForecastsFileToSkill.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsFileToSkillHandler.cs" />
-    <Compile Include="ApplicationLayer\Events\ImportForecastsToSkill.cs" />
-    <Compile Include="ApplicationLayer\Events\OpenAndSplitTargetSkill.cs" />
+    <Compile Include="ApplicationLayer\Events\ImportForecastsToSkillEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\OpenAndSplitTargetSkillEvent.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsToSkillHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkillHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\SendImportForecastBusMessage.cs" />

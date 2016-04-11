@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -21,15 +22,13 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 		private readonly IValidateImportForecastFileCommand _validateImportForecastFileCommand;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
-		private readonly IMessagePopulatingServiceBusSender _messageSender;
-		private readonly IStardustSender _stardustSender;
-		private readonly IToggleManager _toggleManager;
+		private readonly IEventPublisher _eventPublisher;
 
 		public ImportForecastPresenter(IImportForecastView view, ImportForecastModel model,
 			ISaveImportForecastFileCommand saveImportForecastFileCommand,
 			IValidateImportForecastFileCommand validateImportForecastFileCommand, IUnitOfWorkFactory unitOfWorkFactory,
-			IJobResultRepository jobResultRepository, IMessagePopulatingServiceBusSender messageSender,
-			IStardustSender stardustSender, IToggleManager toggleManager)
+			IJobResultRepository jobResultRepository,
+			IEventPublisher eventPublisher)
 		{
 			_view = view;
 			_model = model;
@@ -37,9 +36,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 			_validateImportForecastFileCommand = validateImportForecastFileCommand;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
-			_messageSender = messageSender;
-			_stardustSender = stardustSender;
-			_toggleManager = toggleManager;
+			_eventPublisher = eventPublisher;
 		}
 
 		public void Initialize()
@@ -94,15 +91,12 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 					OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
 					ImportMode = _model.ImportMode,
 					LogOnDatasource = _unitOfWorkFactory.Name,
-					LogOnBusinessUnitId = _model.SelectedSkill.BusinessUnit.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = _model.SelectedSkill.BusinessUnit.Id.GetValueOrDefault(),
+					JobName = "Import forecast from file",
+					InitiatorId = person.Id.GetValueOrDefault(),
+					Type = typeof(ImportForecastsFileToSkill).ToString()
 				};
-				if (_toggleManager.IsEnabled(Toggles.Wfm_ForecastFileImportOnStardust_37047))
-				{
-					_stardustSender.Send(message, "Import forecast from file", person.Id.GetValueOrDefault().ToString(),
-												typeof (ImportForecastsFileToSkill).ToString());
-				}
-				else
-					_messageSender.Send(message, true);
+				_eventPublisher.Publish(message);
 			}
 
 			_view.ShowStatusDialog(jobResultId);

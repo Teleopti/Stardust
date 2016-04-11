@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             var listOfMessages =
                 generateMessages(
-                    new OpenAndSplitTargetSkill
+                    new OpenAndSplitTargetSkillEvent
                         {
                             ImportMode = ImportForecastsMode.ImportWorkloadAndStaffing,
                             LogOnBusinessUnitId = targetSkill.BusinessUnit.Id.GetValueOrDefault(),
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                             TargetSkillId = targetSkill.Id.GetValueOrDefault(),
                             JobId = _feedback.JobId()
                         }, result, period);
-            var currentSendingMsg = new OpenAndSplitTargetSkill { Date = new DateTime() };
+            var currentSendingMsg = new OpenAndSplitTargetSkillEvent { Date = new DateTime() };
             try
             {
                 listOfMessages.ForEach(m =>
@@ -64,14 +64,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
             }
         }
 
-        private static IEnumerable<OpenAndSplitTargetSkill> generateMessages(OpenAndSplitTargetSkill messageTemplate,
+        private static IEnumerable<OpenAndSplitTargetSkillEvent> generateMessages(OpenAndSplitTargetSkillEvent messageTemplate,
                                                                        IForecastsAnalyzeQueryResult queryResult, DateOnlyPeriod period)
         {
-            var listOfMessages = new List<OpenAndSplitTargetSkill>();
+            var listOfMessages = new List<OpenAndSplitTargetSkillEvent>();
             foreach (var date in period.DayCollection())
             {
                 var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
-                listOfMessages.Add(new OpenAndSplitTargetSkill
+                listOfMessages.Add(new OpenAndSplitTargetSkillEvent
                                        {
                                            LogOnBusinessUnitId = messageTemplate.LogOnBusinessUnitId,
                                            LogOnDatasource = messageTemplate.LogOnDatasource,

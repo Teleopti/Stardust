@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,7 +10,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class OpenAndSplitTargetSkillBase 
+	public interface IOpenAndSplitTargetSkillHandler
+	{
+		void Handle(OpenAndSplitTargetSkillEvent message);
+	}
+
+	public class OpenAndSplitTargetSkillHandler : IOpenAndSplitTargetSkillHandler
 	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IOpenAndSplitSkillCommand _command;
@@ -19,12 +23,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IImportForecastsToSkillHandler _importForecastsToSkillHandler;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public OpenAndSplitTargetSkillBase(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public OpenAndSplitTargetSkillHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository,
-			IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
+			IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IImportForecastsToSkillHandler importForecastsToSkillHandler,
 			IDisableBusinessUnitFilter disableBusinessUnitFilter)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -33,11 +37,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
-			_eventPublisher = eventPublisher;
+			_importForecastsToSkillHandler = importForecastsToSkillHandler;
 			_disableBusinessUnitFilter = disableBusinessUnitFilter;
 		}
 
-		public void Handle(OpenAndSplitTargetSkill message)
+		public void Handle(OpenAndSplitTargetSkillEvent message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -71,10 +75,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 																		targetSkill.Name, message.Date));
 					endProcessing(unitOfWork);
 				}
-				var currentSendingMsg = new ImportForecastsToSkill { Date = new DateTime() };
+				var currentSendingMsg = new ImportForecastsToSkillEvent { Date = new DateTime() };
 				try
 				{
-					currentSendingMsg = new ImportForecastsToSkill
+					currentSendingMsg = new ImportForecastsToSkillEvent
 					{
 						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 						LogOnDatasource = message.LogOnDatasource,
@@ -86,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 						Timestamp = message.Timestamp,
 						ImportMode = message.ImportMode
 					};
-					_eventPublisher.Publish(currentSendingMsg);
+					_importForecastsToSkillHandler.Handle(currentSendingMsg);
 				}
 				catch (Exception e)
 				{
@@ -95,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			}
 		}
 
-		private void notifyServiceBusErrors(ImportForecastsToSkill message, Exception e)
+		private void notifyServiceBusErrors(ImportForecastsToSkillEvent message, Exception e)
 		{
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -118,37 +122,37 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
 	}
 
-	[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	public class OpenAndSplitTargetSkillStardust : OpenAndSplitTargetSkillBase, IHandleEvent<OpenAndSplitTargetSkill>, IRunOnStardust
-	{
-		public OpenAndSplitTargetSkillStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
-			ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
-			IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
-			IDisableBusinessUnitFilter disableBusinessUnitFilter)
-			: base(
-				unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
-				disableBusinessUnitFilter)
-		{
-		}
+	//[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	//public class OpenAndSplitTargetSkillStardust : OpenAndSplitTargetSkillHandler, IHandleEvent<OpenAndSplitTargetSkillEvent>, IRunOnStardust
+	//{
+	//	public OpenAndSplitTargetSkillStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
+	//		ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
+	//		IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
+	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
+	//		: base(
+	//			unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
+	//			disableBusinessUnitFilter)
+	//	{
+	//	}
 
-		public new void Handle(OpenAndSplitTargetSkill  @event)
-		{ base.Handle(@event);}
-	}
+	//	public new void Handle(OpenAndSplitTargetSkillEvent  @event)
+	//	{ base.Handle(@event);}
+	//}
 
-	[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	public class OpenAndSplitTargetSkillBus : OpenAndSplitTargetSkillBase, IHandleEvent<OpenAndSplitTargetSkill>, IRunOnServiceBus
-	{
-		public OpenAndSplitTargetSkillBus(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
-			ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
-			IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
-			IDisableBusinessUnitFilter disableBusinessUnitFilter)
-			: base(
-				unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
-				disableBusinessUnitFilter)
-		{
-		}
+	//[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	//public class OpenAndSplitTargetSkillBus : OpenAndSplitTargetSkillHandler, IHandleEvent<OpenAndSplitTargetSkillEvent>, IRunOnServiceBus
+	//{
+	//	public OpenAndSplitTargetSkillBus(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
+	//		ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
+	//		IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
+	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
+	//		: base(
+	//			unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
+	//			disableBusinessUnitFilter)
+	//	{
+	//	}
 
-		public new void Handle(OpenAndSplitTargetSkill @event)
-		{ base.Handle(@event); }
-	}
+	//	public new void Handle(OpenAndSplitTargetSkillEvent @event)
+	//	{ base.Handle(@event); }
+	//}
 }

@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StatisticLoader>().As<IStatisticLoader>();
 			builder.RegisterType<ReforecastPercentCalculator>().As<IReforecastPercentCalculator>();
 			builder.RegisterType<Statistic>().As<IStatistic>();
+			builder.RegisterType<ImportForecastsToSkillHandler>().As<IImportForecastsToSkillHandler>();
+			builder.RegisterType<OpenAndSplitTargetSkillHandler>().As<IOpenAndSplitTargetSkillHandler>();
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

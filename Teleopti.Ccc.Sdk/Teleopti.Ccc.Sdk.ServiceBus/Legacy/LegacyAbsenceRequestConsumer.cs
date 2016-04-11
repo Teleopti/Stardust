@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 				LogOnDatasource = message.LogOnDatasource,
 				PersonRequestId = message.PersonRequestId,
-				Timestamp = message.Timestamp
+				Timestamp = message.Timestamp,
+				JobName = "Absence Request",
+				Type = typeof(NewAbsenceRequestCreatedEvent).ToString()
 			};
 			_eventPublisher.Publish(@event);
 		}

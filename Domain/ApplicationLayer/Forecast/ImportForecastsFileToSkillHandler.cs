@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IForecastsAnalyzeQuery _analyzeQuery;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IOpenAndSplitTargetSkillHandler _openAndSplitTargetSkillHandler;
 
 		public ImportForecastsFileToSkillBase(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			ISkillRepository skillRepository,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IForecastsAnalyzeQuery analyzeQuery,
 			IJobResultFeedback feedback,
 			IMessageBrokerComposite messageBroker,
-			IEventPublisher eventPublisher)
+			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_skillRepository = skillRepository;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_analyzeQuery = analyzeQuery;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
-			_eventPublisher = eventPublisher;
+			_openAndSplitTargetSkillHandler = openAndSplitTargetSkillHandler;
 		}
 
 		public void Handle(ImportForecastsFileToSkill @event)
@@ -96,13 +96,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 				var listOfMessages = generateMessages(@event, queryResult);
 				_feedback.ChangeTotalProgress(3 + listOfMessages.Count * 4);
 				endProcessing(unitOfWork);
-				var currentSendingMsg = new OpenAndSplitTargetSkill { Date = new DateTime() };
+				var currentSendingMsg = new OpenAndSplitTargetSkillEvent { Date = new DateTime() };
 				try
 				{
 					listOfMessages.ForEach(m =>
 					{
 						currentSendingMsg = m;
-						_eventPublisher.Publish(m);
+						_openAndSplitTargetSkillHandler.Handle(m);
 					});
 				}
 				catch (SerializationException e)
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			}
 		}
 
-		private void notifyServiceBusErrors(OpenAndSplitTargetSkill @event, Exception e)
+		private void notifyServiceBusErrors(OpenAndSplitTargetSkillEvent @event, Exception e)
 		{
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -143,14 +143,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			endProcessing(unitOfWork);
 		}
 
-		private static IList<OpenAndSplitTargetSkill> generateMessages(ImportForecastsFileToSkill message,
+		private static IList<OpenAndSplitTargetSkillEvent> generateMessages(ImportForecastsFileToSkill message,
 			IForecastsAnalyzeQueryResult queryResult)
 		{
-			var listOfMessages = new List<OpenAndSplitTargetSkill>();
+			var listOfMessages = new List<OpenAndSplitTargetSkillEvent>();
 			foreach (var date in queryResult.Period.DayCollection())
 			{
 				var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
-				listOfMessages.Add(new OpenAndSplitTargetSkill
+				listOfMessages.Add(new OpenAndSplitTargetSkillEvent
 				{
 					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					LogOnDatasource = message.LogOnDatasource,
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IForecastsAnalyzeQuery analyzeQuery,
 			IJobResultFeedback feedback,
 			IMessageBrokerComposite messageBroker,
-			IEventPublisher eventPublisher,
+			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler,
 			DataSourceState dataSourceState, 
 			IDataSourceScope dataSourceScope, 
 			IPersonRepository personRepository, 
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			)
 			: base(
 				unitOfWorkFactory, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
-				feedback, messageBroker, eventPublisher)
+				feedback, messageBroker, openAndSplitTargetSkillHandler)
 		{
 			_dataSourceState = dataSourceState;
 			_dataSourceScope = dataSourceScope;
@@ -236,10 +236,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IForecastsAnalyzeQuery analyzeQuery,
 			IJobResultFeedback feedback,
 			IMessageBrokerComposite messageBroker,
-			IEventPublisher eventPublisher)
+			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
 			: base(
 				unitOfWorkFactory, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
-				feedback, messageBroker, eventPublisher)
+				feedback, messageBroker, openAndSplitTargetSkillHandler)
 		{
 
 		}

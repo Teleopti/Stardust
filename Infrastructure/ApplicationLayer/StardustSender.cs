@@ -6,13 +6,14 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public interface IStardustSender
 	{
-		Guid Send(EventWithInfrastructureContext @event, string jobName, string userName, string type);
+		Guid Send(IEvent @event);
 	}
 
 	public class StardustSender : IStardustSender
@@ -27,9 +28,23 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 		}
 
-		public Guid Send(EventWithInfrastructureContext @event, string jobName, string userName, string type)
+		public Guid Send(IEvent @event)
 		{
 			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
+
+			var userName = "Stardust";
+			var init = @event as IInitiatorContext;
+			if (init != null)
+				userName = init.InitiatorId.ToString();
+			var jobName = @event.GetType().ToString();
+			var type = @event.GetType().ToString();
+			var job = @event as IStardustJobInfo;
+			if (job != null)
+			{
+				jobName = job.JobName;
+				type = job.Type;
+			}
+
 			var ser = JsonConvert.SerializeObject(@event);
 			var jobModel = new JobRequestModel
 			{

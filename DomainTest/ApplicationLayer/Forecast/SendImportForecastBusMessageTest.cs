@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
 				Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
 				Expect.Call(() => _serviceBus.Publish()).Constraints(
-					 Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkill)a[0]).Date == dateOnly.Date));
+					 Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkillEvent)a[0]).Date == dateOnly.Date));
 			}
 			using (_mocks.Playback())
 			{
