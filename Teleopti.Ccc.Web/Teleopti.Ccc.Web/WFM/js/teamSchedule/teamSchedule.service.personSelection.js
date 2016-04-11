@@ -34,14 +34,14 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 						name: personSchedule.Name,
 						isSelected: false,
 						allowSwap: allowSwap,
-						scheduleEndTime: personSchedule.ScheduleEndTime()
+						scheduleEndTime: personSchedule.ScheduleEndTime(),
 						personAbsenceCount: personAbsencesCount,
 						personActivityCount: personActivitiesCount
 					};
 				} else {
 					selectedPerson.allowSwap = allowSwap;
-					selectedPerson.personAbsenceCount = personAbsencesCount;
 					selectedPerson.scheduleEndTime = personSchedule.ScheduleEndTime();
+					selectedPerson.personAbsenceCount = personAbsencesCount;
 					selectedPerson.personActivityCount = personActivitiesCount;
 				}
 			});
@@ -80,8 +80,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 						personId: key,
 						name:schedule.name,
 						allowSwap: schedule.allowSwap,
+						scheduleEndTime: schedule.scheduleEndTime,
 						personAbsenceCount: schedule.personAbsenceCount,
-						scheduleEndTime: schedule.scheduleEndTime
 						personActivityCount: schedule.personActivityCount
 					});
 				}

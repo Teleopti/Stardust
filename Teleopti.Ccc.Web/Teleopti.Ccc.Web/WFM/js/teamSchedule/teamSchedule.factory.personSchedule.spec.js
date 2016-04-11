@@ -306,7 +306,7 @@ describe("PersonSchedule", function () {
 		expect(personSchedule.ScheduleEndTime()).toEqual(queryDate + " 15:00");
 	});
 
-it('Should get correct person activities count', function() {
+	it('Should get correct person activities count', function() {
 		var queryDate = "2015-10-30";
 		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
 		var timeLineStart = 0;
