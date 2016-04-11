@@ -14,13 +14,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
+	    private readonly IStatisticHelper _statHelper;
 
-        public ForecastWorkflowDataService(IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
+	    public ForecastWorkflowDataService(IUnitOfWorkFactory unitOfWorkFactory, IStatisticHelper statHelper)
+	    {
+		    _unitOfWorkFactory = unitOfWorkFactory;
+		    _statHelper = statHelper;
+	    }
 
-        public IList<IOutlier> InitializeOutliers(IWorkload workload)
+	    public IList<IOutlier> InitializeOutliers(IWorkload workload)
         {
             IList<IOutlier> outliers;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -46,8 +48,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var statHelper = new StatisticHelper(_repositoryFactory, uow);
-                var wr = new WorkloadDayTemplateCalculator(statHelper, new OutlierRepository(uow));
+                var wr = new WorkloadDayTemplateCalculator(_statHelper, new OutlierRepository(uow));
                 wr.LoadWorkloadDayTemplates(dates, workload);
             }
         }
@@ -87,8 +88,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var statHelper = new StatisticHelper(_repositoryFactory, uow);
-                var wr = new WorkloadDayTemplateCalculator(statHelper, new OutlierRepository(uow));
+                var wr = new WorkloadDayTemplateCalculator(_statHelper, new OutlierRepository(uow));
 				wr.LoadFilteredWorkloadDayTemplates(selectedDates, workload, filteredDates, templateIndex);
             }
         }
@@ -97,8 +97,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var statisticsHelper = new StatisticHelper(_repositoryFactory, uow);
-                return statisticsHelper.GetWorkloadDaysWithValidatedStatistics(period, workload, validatedVolumeDays);
+                return _statHelper.GetWorkloadDaysWithValidatedStatistics(period, workload, validatedVolumeDays);
             }
         }
 
@@ -115,8 +114,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var helper = new StatisticHelper(_repositoryFactory,uow);
-                return helper.LoadStatisticData(period, workload);
+                return _statHelper.LoadStatisticData(period, workload);
             }
         }
 

@@ -31,9 +31,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly ToolTip _toolTip = new ToolTip();
 		private readonly IWorkloadDay _workloadDay;
 		private ReadOnlyCollection<DateOnlyPeriod> _selectedDates;
+		private readonly IStatisticHelper _statisticsHelper;
 
-		public EditWorkloadDayTemplate()
+		public EditWorkloadDayTemplate(IStatisticHelper statisticsHelper)
 		{
+			_statisticsHelper = statisticsHelper;
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
 			_toolTip.IsBalloon = true;
@@ -41,8 +43,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_toolTip.ToolTipTitle = UserTexts.Resources.InvalidAgentName;
 		}
 
-		public EditWorkloadDayTemplate(IWorkloadDayTemplate workloadDayTemplate)
-			: this()
+		public EditWorkloadDayTemplate(IWorkloadDayTemplate workloadDayTemplate, IStatisticHelper statHelper)
+			: this(statHelper)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -72,8 +74,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_openHours = new TimePeriod(midnightBreakOffset, midnightBreakOffset);
 		}
 
-		public EditWorkloadDayTemplate(IWorkload workload, IList<TimePeriod> openHours)
-			: this()
+		public EditWorkloadDayTemplate(IWorkload workload, IList<TimePeriod> openHours, IStatisticHelper statHelper)
+			: this( statHelper)
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -92,8 +94,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_templateIndex = _workload.AddTemplate(_workloadDayTemplate);
 		}
 
-		public EditWorkloadDayTemplate(IWorkloadDay workloadDay, IList<TimePeriod> openHours)
-			: this()
+		public EditWorkloadDayTemplate(IWorkloadDay workloadDay, IList<TimePeriod> openHours, IStatisticHelper statHelper)
+			: this( statHelper)
 		{
 			_workloadDay = workloadDay;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -141,12 +143,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			List<IWorkloadDayBase> workloadDays;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var statisticHelper = new StatisticHelper(_repositoryFactory, uow);
-
-				var wr = new WorkloadDayTemplateCalculator(statisticHelper, new OutlierRepository(uow));
+				var wr = new WorkloadDayTemplateCalculator(_statisticsHelper, new OutlierRepository(uow));
 				wr.RecalculateWorkloadDayTemplate(_selectedDates, _workload, _templateIndex);
 
-				workloadDays = getWorkloadDaysForTemplatesWithStatistics(statisticHelper, _selectedDates);
+				workloadDays = getWorkloadDaysForTemplatesWithStatistics(_statisticsHelper, _selectedDates);
 			}
 			workloadDayTemplatesDetailView.RefreshWorkloadDaysForTemplatesWithStatistics(workloadDays);
 			workloadDayTemplatesDetailView.ReloadWorkloadDayTemplates();
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			Refresh();
 		}
 
-		private List<IWorkloadDayBase> getWorkloadDaysForTemplatesWithStatistics(StatisticHelper statisticHelper, IEnumerable<DateOnlyPeriod> selectedHistoricTemplatePeriod)
+		private List<IWorkloadDayBase> getWorkloadDaysForTemplatesWithStatistics(IStatisticHelper statisticHelper, IEnumerable<DateOnlyPeriod> selectedHistoricTemplatePeriod)
 		{
 			var workloadDays = new List<IWorkloadDayBase>();
 			foreach (var period in selectedHistoricTemplatePeriod)
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.TimePeriod.ToShortTimeString")]
 		private void editTemplateLoad(object sender, EventArgs e)
 		{
-			_workloadDayTemplatesDetailView = new WorkloadDayTemplatesDetailView(_workload, _templateIndex)
+			_workloadDayTemplatesDetailView = new WorkloadDayTemplatesDetailView(_workload, _templateIndex, _statisticsHelper)
 			{
 				Dock = DockStyle.Fill
 			};
@@ -210,8 +210,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var statHelper = new StatisticHelper(new RepositoryFactory(), uow);
-				var wr = new WorkloadDayTemplateCalculator(statHelper, new OutlierRepository(uow));
+				var wr = new WorkloadDayTemplateCalculator(_statisticsHelper, new OutlierRepository(uow));
 				wr.RecalculateWorkloadDayTemplate(_selectedDates, _workload, _templateIndex, filteredDates.FilteredDateList());
 			}
 		}

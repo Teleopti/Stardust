@@ -12,15 +12,18 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	public class ChildSkillDetailView : AbstractDetailView
 	{
 		private readonly IChildSkill _skill;
+		private IStatisticHelper _statisticsHelper;
 
-		public ChildSkillDetailView()
+		public ChildSkillDetailView(IStatisticHelper statisticsHelper)
 		{
+			_statisticsHelper = statisticsHelper;
 		}
 
-		internal ChildSkillDetailView(MultisiteSkillDayCalculator skillDayCalculator, IChildSkill skill, ForecasterChartSetting forecasterChartSetting)
+		internal ChildSkillDetailView(MultisiteSkillDayCalculator skillDayCalculator, IChildSkill skill, ForecasterChartSetting forecasterChartSetting, IStatisticHelper statisticsHelper)
 			: base(skillDayCalculator, forecasterChartSetting)
 		{
 			_skill = skill;
+			_statisticsHelper = statisticsHelper;
 
 			DetailViewLoad();
 		}
@@ -68,7 +71,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			TabControl.TabPages[1].Controls.Add(control);
 			GridCollection.Add(keyName + WorkingInterval.Week, (TeleoptiGridControl)control);
 
-			var taskOwnerDayGridControl = new TaskOwnerDayGridControl(taskOwnerDays, taskOwnerPeriodHelper, this, ForecasterChartSetting.GetChartSettings());
+			var taskOwnerDayGridControl = new TaskOwnerDayGridControl(taskOwnerDays, taskOwnerPeriodHelper, this, ForecasterChartSetting.GetChartSettings(),_statisticsHelper);
 			taskOwnerDayGridControl.Create();
 			taskOwnerDayGridControl.Dock = DockStyle.Fill;
 			taskOwnerDayGridControl.TemplateSelected += taskOwnerDayGridControlTemplateSelected;

@@ -29,8 +29,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private IWorkload _workload;
         private IScenario _scenario;
         private DateOnlyPeriod _period;
-        private IRepositoryFactory _factory;
-        private IUnitOfWork _unitOfWork;
 
         /// <summary>
         /// Setups this instance.
@@ -47,48 +45,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _skillDayRep = mocks.StrictMock<ISkillDayRepository>();
             _statisticTaskRep = mocks.StrictMock<IStatisticRepository>();
             _validatedVolumeDayRep = mocks.StrictMock<IValidatedVolumeDayRepository>();
-            _factory = mocks.StrictMock<IRepositoryFactory>();
-            _unitOfWork = mocks.StrictMock<IUnitOfWork>();
-
-            Expect.Call(_factory.CreateSkillDayRepository(_unitOfWork)).Return(_skillDayRep);
-            Expect.Call(_factory.CreateStatisticRepository()).Return(_statisticTaskRep);
-            Expect.Call(_factory.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(_validatedVolumeDayRep);
 
             _skill = SkillFactory.CreateSkill("TestSkill");
             _workload = WorkloadFactory.CreateWorkload(_skill);
             _scenario = mocks.StrictMock<IScenario>();
             _period = new DateOnlyPeriod(2008, 7, 16, 2008, 7, 19);
         }
-
-        /// <summary>
-        /// Verifies the skill day rep cannot be null.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-02
-        /// </remarks>
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyRepositoryFactoryCannotBeNull()
-        {
-            target = new StatisticHelper(null,_unitOfWork);
-        }
-
-        /// <summary>
-        /// Verifies the statistic task rep cannot be null.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-02
-        /// </remarks>
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void VerifyUnitOfWorkCannotBeNull()
-        {
-            mocks.ReplayAll();
-            target = new StatisticHelper(_factory,null);
-        }
-
+       
         /// <summary>
         /// Verifies the workload cannot be null.
         /// </summary>
@@ -101,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyWorkloadCannotBeNull()
         {
             mocks.ReplayAll();
-            target = new StatisticHelper(_factory, _unitOfWork);
+            target = new StatisticHelper(_skillDayRep,_statisticTaskRep,_validatedVolumeDayRep);
             target.GetWorkloadDaysWithValidatedStatistics(_period, null, new List<IValidatedVolumeDay>());
         }
 
@@ -117,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyExistingValidatedVolumeDaysCannotBeNull()
         {
             mocks.ReplayAll();
-            target = new StatisticHelper(_factory, _unitOfWork);
+            target = new StatisticHelper(_skillDayRep, _statisticTaskRep, _validatedVolumeDayRep);
             target.GetWorkloadDaysWithValidatedStatistics(_period, _workload, null);
         }
         /// <summary>
@@ -152,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             mocks.ReplayAll();
 
-            target = new StatisticHelper(_factory, _unitOfWork);
+            target = new StatisticHelper(_skillDayRep, _statisticTaskRep, _validatedVolumeDayRep);
 
             int statusChangedCount = 0;
             target.StatusChanged += (x, y) =>
@@ -197,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             mocks.ReplayAll();
 
-            target = new StatisticHelper(_factory, _unitOfWork);
+            target = new StatisticHelper(_skillDayRep, _statisticTaskRep, _validatedVolumeDayRep);
 
             int statusChangedCount = 0;
             target.StatusChanged += (x, y) =>
@@ -239,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             mocks.ReplayAll();
 
-            target = new StatisticHelper(_factory, _unitOfWork);
+            target = new StatisticHelper(_skillDayRep, _statisticTaskRep, _validatedVolumeDayRep);
 
             int statusChangedCount = 0;
             target.StatusChanged += (x, y) =>
@@ -270,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             mocks.ReplayAll();
 
-            target = new StatisticHelper(_factory, _unitOfWork);
+            target = new StatisticHelper(_skillDayRep, _statisticTaskRep, _validatedVolumeDayRep);
 
             int statusChangedCount = 0;
             target.StatusChanged += (x, y) =>

@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
     {
         private readonly ISkillType _skillType;
 
-        public WorkloadIntradayTemplateGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerHelper, TimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ISkillType skillType)
-            : base(taskOwner, taskOwnerHelper, timeZone, resolution, owner, new ChartSettings(),skillType)
+        public WorkloadIntradayTemplateGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerHelper, TimeZoneInfo timeZone, int resolution, AbstractDetailView owner, ISkillType skillType, IStatisticHelper statisticsHelper)
+            : base(taskOwner, taskOwnerHelper, timeZone, resolution, owner, new ChartSettings(),skillType,statisticsHelper)
         {
             _skillType = skillType;
         }

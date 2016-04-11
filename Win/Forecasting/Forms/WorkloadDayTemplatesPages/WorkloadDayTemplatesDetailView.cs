@@ -29,11 +29,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 
         private IList<IWorkloadDayBase> _workloadDaysForTemplatesWithStatistics;
 	    private FilterDataView _filterDataView;
-	    internal event EventHandler<FilterDataViewClosedEventArgs> FilterDataViewClosed;
+		private readonly IStatisticHelper _statisticsHelper;
+		internal event EventHandler<FilterDataViewClosedEventArgs> FilterDataViewClosed;
 
-	    public WorkloadDayTemplatesDetailView()
+	    public WorkloadDayTemplatesDetailView(IStatisticHelper statisticsHelper)
         {
-            InitializeComponent();
+		    _statisticsHelper = statisticsHelper;
+		    InitializeComponent();
             fillSmoothningBoxes();
             if(!DesignMode) 
                 SetTexts();
@@ -69,8 +71,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 			_filterDataView.Show(this);
 		}
 
-		public WorkloadDayTemplatesDetailView(IWorkload workload, int templateIndex)
-            : this()
+		public WorkloadDayTemplatesDetailView(IWorkload workload, int templateIndex, IStatisticHelper statisticsHelper)
+            : this(statisticsHelper)
         {
             _workload = workload;
             _templateIndex = templateIndex;
@@ -84,8 +86,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
 
         }
 
-        public WorkloadDayTemplatesDetailView(IWorkload workload, DayOfWeek dayOfWeek)
-            : this(workload, (int)dayOfWeek)
+        public WorkloadDayTemplatesDetailView(IWorkload workload, DayOfWeek dayOfWeek, IStatisticHelper statisticsHelper)
+            : this(workload, (int)dayOfWeek, statisticsHelper)
         {
         }
 
@@ -140,7 +142,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages
             IWorkloadDayTemplate workloadDayTemplate = (IWorkloadDayTemplate) _workload.GetTemplateAt(TemplateTarget.Workload, _templateIndex);
 
             _templateGridControl = new WorkloadIntradayTemplateGridControl(workloadDayTemplate,
-				new TaskOwnerHelper(new List<ITaskOwner> { workloadDayTemplate }), _workload.Skill.TimeZone, _workload.Skill.DefaultResolution, null, _workload.Skill.SkillType);
+				new TaskOwnerHelper(new List<ITaskOwner> { workloadDayTemplate }), _workload.Skill.TimeZone, _workload.Skill.DefaultResolution, null, _workload.Skill.SkillType, _statisticsHelper);
             _templateGridControl.Create();
 
             _templateGridControl.ModifyCells += templateGridControl_ModifyCells;

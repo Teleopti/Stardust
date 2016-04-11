@@ -27,13 +27,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IRepository<IMultisiteSkill> _skillRepository;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		//private readonly IRepositoryFactory _repositoryFactory;
+		//private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IWorkloadDayHelper _workloadDayHelper;
 		private readonly IForecastClassesCreator _forecastClassesCreator;
+		private readonly IStatisticHelper _statisticHelper;
+		private readonly IValidatedVolumeDayRepository _rep;
 
 		public QuickForecastWorkloadProcessor(ISkillDayRepository skillDayRepository,
 		                                            IMultisiteDayRepository multisiteDayRepository,
@@ -41,13 +43,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		                                            IWorkloadRepository workloadRepository,
 		                                            IRepository<IMultisiteSkill> skillRepository,
 		                                            IScenarioRepository scenarioRepository,
-		                                            IRepositoryFactory repositoryFactory,
-		                                            ICurrentUnitOfWorkFactory unitOfWorkFactory,
 		                                            IJobResultRepository jobResultRepository,
 		                                            IJobResultFeedback feedback,
 		                                            IMessageBrokerComposite messageBroker,
 		                                            IWorkloadDayHelper workloadDayHelper,
-		                                            IForecastClassesCreator forecastClassesCreator)
+		                                            IForecastClassesCreator forecastClassesCreator, IStatisticHelper statisticHelper, IValidatedVolumeDayRepository rep)
 		{
 			_skillDayRepository = skillDayRepository;
 			_multisiteDayRepository = multisiteDayRepository;
@@ -55,29 +55,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_workloadRepository = workloadRepository;
 			_skillRepository = skillRepository;
 			_scenarioRepository = scenarioRepository;
-			_repositoryFactory = repositoryFactory;
-			_unitOfWorkFactory = unitOfWorkFactory;
+			//_repositoryFactory = repositoryFactory;
+			//_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
 			_workloadDayHelper = workloadDayHelper;
 			_forecastClassesCreator = forecastClassesCreator;
+			_statisticHelper = statisticHelper;
+			_rep = rep;
 		}
 		
 		public void Handle(QuickForecastWorkloadEvent @event)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-			{
+			//using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			//{
 				var jobResult = _jobResultRepository.Get(@event.JobId);
 				if (jobResult == null) return;
 				// more work not finished yet
 				jobResult.FinishedOk = false;
-				unitOfWork.PersistAll();
-			}
+			//	unitOfWork.PersistAll();
+			//}
 
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			//using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var jobResult = _jobResultRepository.Get(@event.JobId);
+				//var jobResult = _jobResultRepository.Get(@event.JobId);
 				_feedback.SetJobResult(jobResult, _messageBroker);
 				var remainingProgress = @event.IncreaseWith*3;
 				try
@@ -94,24 +96,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 					var scenario = _scenarioRepository.Get(@event.ScenarioId);
 					//Load statistic data
-					var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(unitOfWork);
-					var stat = statisticHelper.LoadStatisticData(@event.StatisticPeriod, workload);
+					var stat = _statisticHelper.LoadStatisticData(@event.StatisticPeriod, workload);
 					
 					var validated = new List<IValidatedVolumeDay>(0);
 
-					var rep = _repositoryFactory.CreateValidatedVolumeDayRepository(unitOfWork);
-					var validatedVolumeDays = rep.FindRange(@event.StatisticPeriod, workload);
+					var validatedVolumeDays = _rep.FindRange(@event.StatisticPeriod, workload);
 					if (validatedVolumeDays != null && stat != null)
 					{
 						_feedback.ReportProgress(@event.IncreaseWith, "Found " + validatedVolumeDays.Count() + " validated days.");
-						var daysResult = rep.MatchDays(workload, stat, validatedVolumeDays);
+						var daysResult = _rep.MatchDays(workload, stat, validatedVolumeDays);
 
 						if (daysResult != null)
 							validated = daysResult.OfType<IValidatedVolumeDay>().ToList();
 					}
 
 					var daysWithValidatedStatistics =
-						statisticHelper.GetWorkloadDaysWithValidatedStatistics(@event.StatisticPeriod,
+						_statisticHelper.GetWorkloadDaysWithValidatedStatistics(@event.StatisticPeriod,
 						                                                       workload,
 						                                                       validated);
 					if (!daysWithValidatedStatistics.Any())
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                     applyVolumes(workload, taskOwnerPeriod, workloadDays, @event.UseDayOfMonth);
 
 					//(Update templates for workload)
-					updateStandardTemplates(workload, statisticHelper, @event.TemplatePeriod, @event.SmoothingStyle);
+					updateStandardTemplates(workload, _statisticHelper, @event.TemplatePeriod, @event.SmoothingStyle);
 
 					//Create budget forecast (apply standard templates for all days in target)
 				    var helper = new TaskOwnerHelper(workloadDays);
@@ -201,11 +201,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Error occurred!", DateTime.UtcNow, exception));
 					_feedback.ReportProgress(remainingProgress, "Error occurred! " + exception.Message);
 				}
-				finally
-				{
-					//Save!
-					unitOfWork.PersistAll();
-				}
+				//finally
+				//{
+				//	//Save!
+				//	//unitOfWork.PersistAll();
+				//}
 				
 			}
 		}
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 																	DateOnlyPeriod visiblePeriod);
 
 
-		IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork);
+		//IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork);
 
 
 		ITaskOwnerPeriod GetNewTaskOwnerPeriod(IList<ITaskOwner> taskOwnerDaysWithoutOutliers);
@@ -308,10 +308,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			return multisiteSkillDayCalculator;
 		}
 
-		public IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork)
-		{
-			return new StatisticHelper(_repositoryFactory,unitOfWork);
-		}
+		//public IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork)
+		//{
+		//	return new StatisticHelper(_repositoryFactory,unitOfWork);
+		//}
 
 		public ITaskOwnerPeriod GetNewTaskOwnerPeriod(IList<ITaskOwner> taskOwnerDaysWithoutOutliers)
 		{

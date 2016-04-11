@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Windows.Forms;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -20,20 +21,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private IList<WFBaseControl> _wfControls;
 		private readonly ForecastWorkflowPresenter _presenter;
 		private readonly IFinishWorkload finishWorkload;
+		private IStatisticHelper _statisticHelper;
 
 		#region Constructors
 
-		protected ForecastWorkflow()
+		protected ForecastWorkflow(IStatisticHelper statisticHelper)
 		{
+			_statisticHelper = statisticHelper;
 			InitializeComponent();
 		}
 
-		public ForecastWorkflow(IWorkload workload)
-			: this()
+		public ForecastWorkflow(IWorkload workload, IStatisticHelper statisticHelper)
+			: this(statisticHelper)
 		{
 			SetTexts();
 
-			_presenter = new ForecastWorkflowPresenter(this, new ForecastWorkflowModel(workload, new ForecastWorkflowDataService(UnitOfWorkFactory.Current)));
+			_presenter = new ForecastWorkflowPresenter(this, new ForecastWorkflowModel(workload, new ForecastWorkflowDataService(UnitOfWorkFactory.Current, _statisticHelper)));
 		}
 
 		public void OutlierChanged(IOutlier outlier)
@@ -41,8 +44,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			_wfControls.ForEach(w => w.OutlierRootChanged(outlier));
 		}
 
-		public ForecastWorkflow(IWorkload workload, IScenario workingScenario, DateOnlyPeriod period, IList<ISkillDay> skillDays, IFinishWorkload finishWorkload)
-			: this(workload)
+		public ForecastWorkflow(IWorkload workload, IScenario workingScenario, DateOnlyPeriod period, IList<ISkillDay> skillDays, IFinishWorkload finishWorkload, IStatisticHelper statisticHelper)
+			: this(workload, statisticHelper)
 		{
 			_presenter.Initialize(workingScenario, period, skillDays);
 			_presenter.Locked = true;

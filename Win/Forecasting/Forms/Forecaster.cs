@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private readonly IDirtyForecastDayContainer _dirtyForecastDayContainer = new DirtyForecastDayContainer();
 		private bool _forceClose;
 		private Form _mainWindow;
+		private readonly IStatisticHelper _statisticHelper;
 
 		#region Private
 
@@ -311,7 +312,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			if (e.Cancel) return;
 
-			StatisticHelper statHelper;
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 
@@ -334,11 +334,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				}
 
 				backgroundWorker1.ReportProgress(5, UserTexts.Resources.DataSourceInitialized);
-				statHelper = new StatisticHelper(
-					new RepositoryFactory(),
-					unitOfWork);
-				statHelper.StatusChanged += statHelperStatusChanged;
-				loadSkillDays(unitOfWork, statHelper);
+				_statisticHelper.StatusChanged += statHelperStatusChanged;
+				loadSkillDays(unitOfWork, _statisticHelper);
 
 				_skillChartSetting = new ForecasterChartSetting(TemplateTarget.Skill);
 				_skillChartSetting.Initialize();
@@ -349,10 +346,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 			backgroundWorker1.ReportProgress(1, UserTexts.Resources.Done);
 
-			statHelper.StatusChanged -= statHelperStatusChanged;
+			_statisticHelper.StatusChanged -= statHelperStatusChanged;
 		}
 
-		private void loadSkillDays(IUnitOfWork unitOfWork, StatisticHelper statHelper)
+		private void loadSkillDays(IUnitOfWork unitOfWork, IStatisticHelper statHelper)
 		{
 			var periodToLoad = SkillDayCalculator.GetPeriodToLoad(_dateTimePeriod);
 			IList<ISkillDay> skillDays = statHelper.LoadStatisticData(periodToLoad, _skill, _scenario,
@@ -909,8 +906,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (_gridChartManager != null) _gridChartManager.ReloadChart();
 		}
 
-		protected Forecaster()
+		protected Forecaster(IStatisticHelper statisticHelper)
 		{
+			_statisticHelper = statisticHelper;
 			InitializeComponent();
 			if (!DesignMode)
 			{
@@ -935,8 +933,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			setGridZoomLevel(TemplateTarget.Skill, _currentForecasterSettings.WorkingIntervalSkill);
 		}
 
-		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager, Form mainWindow)
-			: this()
+		public Forecaster(ISkill skill, DateOnlyPeriod dateTimePeriod, IScenario scenario, bool longterm, IToggleManager toggleManager, Form mainWindow, IStatisticHelper statisticHelper)
+			: this(  statisticHelper)
 		{
 			_toggleManager = toggleManager;
 			_dateTimePeriod = dateTimePeriod;
@@ -1171,7 +1169,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				TabPageAdv tabPage = ColorHelper.CreateTabPage(workload.Name, workload.Description);
 				var workloadDetailView = new WorkloadDetailView(
-						(SkillDayCalculator)_skillDayCalculator, workload, _workloadChartSetting) {Name = "Workload"};
+						(SkillDayCalculator)_skillDayCalculator, workload, _workloadChartSetting, _statisticHelper) {Name = "Workload"};
 				initializeDetailView(workloadDetailView);
 				tabControlWorkloads.TabPages.Add(tabPage);
 				tabPage.Controls.Add(workloadDetailView);
@@ -1189,7 +1187,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			var multisiteCalculator = _skillDayCalculator as MultisiteSkillDayCalculator;
 			tabControlAdvMultisiteSkill.TabPages.Clear();
 			TabPageAdv tabPage = ColorHelper.CreateTabPage(_multisiteSkill.Name, _multisiteSkill.Description);
-			var multisiteSkillDetailView = new MultisiteSkillDetailView(multisiteCalculator, _skillChartSetting)
+			var multisiteSkillDetailView = new MultisiteSkillDetailView(multisiteCalculator, _skillChartSetting, _statisticHelper)
 			{
 				Name = "MultiSkill"
 			};
@@ -1201,7 +1199,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				tabPage = ColorHelper.CreateTabPage(childSkill.Name, childSkill.Description);
 
-				var childSkillDetailView = new ChildSkillDetailView(multisiteCalculator, childSkill, _skillChartSetting)
+				var childSkillDetailView = new ChildSkillDetailView(multisiteCalculator, childSkill, _skillChartSetting, _statisticHelper)
 				{
 					Name = "MultiSkill"
 				};
@@ -1353,7 +1351,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			tabControlAdvMultisiteSkill.ItemSize = new Size(1, 0);
 			tabControlAdvMultisiteSkill.TabPages.Clear();
 			TabPageAdv tabPage = ColorHelper.CreateTabPage(_skill.Name, _skill.Description);
-			var skillDetailView = new SkillDetailView((SkillDayCalculator)_skillDayCalculator, _skill, _skillChartSetting)
+			var skillDetailView = new SkillDetailView((SkillDayCalculator)_skillDayCalculator, _skill, _skillChartSetting, _statisticHelper)
 			{
 				Name = "Skill"
 			};
@@ -1430,7 +1428,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			{
 				workload = getWorkload(workload);
 				using (var workflow = new ForecastWorkflow(workload, _scenario, _dateTimePeriod,
-																												 _skillDayCalculator.SkillDays.ToList(), this))
+																												 _skillDayCalculator.SkillDays.ToList(), this,_statisticHelper))
 				{
 					workflow.ShowDialog(this);
 				}
@@ -1882,7 +1880,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				attemptDatabaseConnectionDependentAction(() =>
 					editTemplate =
 						new EditWorkloadDayTemplate(
-							((WorkloadDetailView) getCurrentWorkloadDetailView()).Workload, openHours));
+							((WorkloadDetailView) getCurrentWorkloadDetailView()).Workload, openHours, _statisticHelper));
 
 			if (!success)
 				return;
@@ -2000,7 +1998,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					editMultisiteTemplate.Show(this);
 					break;
 				case TemplateTarget.Workload:
-					var editWorkloadTemplate = new EditWorkloadDayTemplate((WorkloadDayTemplate)template);
+					var editWorkloadTemplate = new EditWorkloadDayTemplate((WorkloadDayTemplate)template, _statisticHelper);
 					editWorkloadTemplate.Show(this);
 					break;
 				case TemplateTarget.Skill:

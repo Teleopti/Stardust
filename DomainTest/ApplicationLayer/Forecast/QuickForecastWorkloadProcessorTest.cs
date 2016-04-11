@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IForecastClassesCreator _forecastClassesCreator;
 		private IMultisiteDayRepository _multisiteDayRep;
 		private IRepository<IMultisiteSkill> _skillRep;
+		private IValidatedVolumeDayRepository _validatedVolumeDayRepo;
 
 		[SetUp]
 		public void Setup()
@@ -58,9 +59,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_workloadDayHelper = MockRepository.GenerateMock<IWorkloadDayHelper>();
 			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
 			_forecastClassesCreator = MockRepository.GenerateMock<IForecastClassesCreator>();
-			_target = new QuickForecastWorkloadProcessor(_skillDayRep, _multisiteDayRep, _outlierRep, _workloadRep, _skillRep, _scenarioRep, _repFactory,
-															   _currentunitOfWorkFactory, _jobResultRep, _jobResultFeedback, _messBroker,
-															   _workloadDayHelper, _forecastClassesCreator);
+			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
+			_validatedVolumeDayRepo = MockRepository.GenerateMock<IValidatedVolumeDayRepository>();
+
+			_target = new QuickForecastWorkloadProcessor(_skillDayRep, _multisiteDayRep, _outlierRep, _workloadRep, _skillRep, _scenarioRep, _jobResultRep, _jobResultFeedback, _messBroker,
+															   _workloadDayHelper, _forecastClassesCreator,_statisticHelper,_validatedVolumeDayRepo);
+			
 			_unitOfWork =  MockRepository.GenerateMock<IUnitOfWork>();
 
 			_jobId = Guid.NewGuid();
@@ -113,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
+			//_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
 			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
@@ -158,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
+			//_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
 			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
@@ -197,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x=> x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			_scenarioRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			_forecastClassesCreator.Stub(x=> x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
+			//_forecastClassesCreator.Stub(x=> x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			_statisticHelper.Stub(x=> x.LoadStatisticData(_statPeriod,workload)).Return(new List<IWorkloadDayBase>());
 
 			_target.Handle(_mess);
@@ -234,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			Assert.That(creator.GetNewTaskOwnerPeriod(new List<ITaskOwner>()),Is.Not.Null);
 
 			_repFactory.Stub(x => x.CreateStatisticRepository()).Return(statRep);		
-			Assert.That(creator.CreateStatisticHelper(_unitOfWork),Is.Not.Null);
+			//Assert.That(creator.CreateStatisticHelper(_unitOfWork),Is.Not.Null);
 		}
 
 		[Test]

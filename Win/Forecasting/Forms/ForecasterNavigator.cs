@@ -66,9 +66,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
 		private Form _mainWindow;
 		private IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
+		private readonly IStatisticHelper _statisticHelper;
 
-		public ForecasterNavigator()
+		public ForecasterNavigator(IStatisticHelper statisticHelper)
 		{
+			_statisticHelper = statisticHelper;
 			InitializeComponent();
 			var license = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name);
 			if (license.EnabledLicenseSchemaName == DefinedLicenseSchemaCodes.TeleoptiWFMForecastsSchema)
@@ -106,8 +108,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			IToggleManager toggleManager,
 			IMessagePopulatingServiceBusSender messageSender,
 			IEventPublisher publisher,
-			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
-			: this()
+			IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IStatisticHelper statisticHelper)
+			: this(statisticHelper)
 		{
 			_jobHistoryViewFactory = jobHistoryViewFactory;
 			_importForecastViewFactory = importForecastViewFactory;
@@ -1054,7 +1056,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private void startForecaster(DateOnlyPeriod selectedPeriod, IScenario scenario, ISkill skill)
 		{
 			Cursor = Cursors.WaitCursor;
-			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow);
+			var forecaster = new Forecaster(skill, selectedPeriod, scenario, true, _toggleManager, _mainWindow,_statisticHelper);
 			forecaster.Show();
 			Cursor = Cursors.Default;
 		}
@@ -1067,7 +1069,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (workloadModel != null)
 			{
 				var workload = getInitializedWorkload(workloadModel);
-				var forecastWorkflow = new ForecastWorkflow(workload);
+				var forecastWorkflow = new ForecastWorkflow(workload,_statisticHelper);
 				forecastWorkflow.Show();
 			}
 			Cursor = Cursors.Default;

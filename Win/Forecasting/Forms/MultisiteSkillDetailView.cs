@@ -11,18 +11,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
     public class MultisiteSkillDetailView : AbstractDetailView
     {
-        /// <summary>
+	    private IStatisticHelper _statisticsHelper;
+
+	    /// <summary>
         /// Initializes a new instance of the <see cref="MultisiteSkillDetailView"/> class.
         /// </summary>
         /// <remarks>
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public MultisiteSkillDetailView()
-        {
-        }
+        public MultisiteSkillDetailView(IStatisticHelper statisticsHelper)
+	    {
+		    _statisticsHelper = statisticsHelper;
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="MultisiteSkillDetailView"/> class.
         /// </summary>
         /// <param name="skillDayCalculator">The skill day calculator.</param>
@@ -31,13 +34,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// Created by: robink
         /// Created date: 2008-01-28
         /// </remarks>
-        internal MultisiteSkillDetailView(MultisiteSkillDayCalculator skillDayCalculator, ForecasterChartSetting forecasterChartSetting)
+        internal MultisiteSkillDetailView(MultisiteSkillDayCalculator skillDayCalculator, ForecasterChartSetting forecasterChartSetting, IStatisticHelper statisticsHelper)
             : base(skillDayCalculator, forecasterChartSetting)
-        {
-            DetailViewLoad();
-        }
+	    {
+		    _statisticsHelper = statisticsHelper;
+		    DetailViewLoad();
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Gets the type of the target.
         /// </summary>
         /// <value>The type of the target.</value>
@@ -106,7 +110,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             IList<IMultisiteDay> multisiteDays = new List<IMultisiteDay>(MultisiteSkillDayCalculator.VisibleMultisiteDays);
             TaskOwnerDayGridControl taskOwnerDayGridControl = new TaskOwnerDayGridControl(taskOwnerDays,multisiteDays,
-                taskOwnerPeriodHelper, this, ForecasterChartSetting.GetChartSettings());
+                taskOwnerPeriodHelper, this, ForecasterChartSetting.GetChartSettings(),_statisticsHelper);
             taskOwnerDayGridControl.Create();
             taskOwnerDayGridControl.Dock = DockStyle.Fill;
             taskOwnerDayGridControl.TemplateSelected += taskOwnerDayGridControl_TemplateSelected;

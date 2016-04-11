@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule<EncryptionModule>();
 				builder.RegisterModule<EventAggregatorModule>();
 				builder.RegisterModule(new StartupModule(configuration));
-				builder.RegisterModule(new NavigationModule(configuration));
+			
 				builder.RegisterModule<BudgetModule>();
 				builder.RegisterModule<IntradayModule>();
 				builder.RegisterModule<ForecasterModule>();
@@ -232,7 +232,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule<PermissionsModule>();
 				builder.RegisterModule<RequestHistoryModule>();
 				builder.RegisterModule<MainModule>();
-				
 				builder.RegisterModule(new OutboundScheduledResourcesProviderModule());
 				//hack to get old behavior work
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();
@@ -274,7 +273,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					};
 					return webSettings;
 				})).As<IConfigReader>().SingleInstance();
-
+				//------------------------------------------------------------------------------------------
+				builder.RegisterModule(new NavigationModule(configuration));
+				//------------------------------------------------------------------------------------------
 				return builder.Build();
 			}
 		}

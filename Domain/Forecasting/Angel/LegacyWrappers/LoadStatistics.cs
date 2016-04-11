@@ -5,16 +5,16 @@ namespace Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers
 {
 	public class LoadStatistics : ILoadStatistics
 	{
-		private readonly IStatisticHelperFactory _statisticHelperFactory;
+		private readonly IStatisticHelper _statisticHelper;
 
-		public LoadStatistics(IStatisticHelperFactory statisticHelperFactory)
+		public LoadStatistics( IStatisticHelper statisticHelper)
 		{
-			_statisticHelperFactory = statisticHelperFactory;
+			_statisticHelper = statisticHelper;
 		}
 
 		public IEnumerable<IWorkloadDayBase> LoadWorkloadDay(IWorkload workload, DateOnlyPeriod period)
 		{
-			return _statisticHelperFactory.Create().LoadStatisticData(period, workload);
+			return _statisticHelper.LoadStatisticData(period, workload);
 		}
 	}
 }

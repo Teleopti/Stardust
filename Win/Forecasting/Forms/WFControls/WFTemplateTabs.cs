@@ -5,6 +5,9 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadDayTemplatesPages;
@@ -16,8 +19,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 	{
 		private IList<WorkloadDayTemplatesDetailView> _detailViews;
 
+
 		public WFTemplateTabs()
 		{
+			
 			InitializeComponent();
 			if (!DesignMode) SetTexts();
 			_detailViews = new List<WorkloadDayTemplatesDetailView>();
@@ -45,11 +50,16 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 		{
 			IList<DayOfWeek> weekDays = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture);
 
+			var current = new FromFactory(() => UnitOfWorkFactory.Current);
+			IStatisticHelper statisticsHelper = new StatisticHelper(new SkillDayRepository(current), StatisticRepositoryFactory.Create(),
+				new ValidatedVolumeDayRepository(current));
+
 			for (int i = 0; i < weekDays.Count; i++)
 			{
 				TabPageAdv theTabPage = tabControlAdv1.TabPages[i];
 
-				var detailView = new WorkloadDayTemplatesDetailView(Presenter.Model.Workload, weekDays[i]);
+				
+				var detailView = new WorkloadDayTemplatesDetailView(Presenter.Model.Workload, weekDays[i], statisticsHelper);
 				detailView.DateRangeChanged += detailViewDateRangeChanged;
 				detailView.FilterDataViewClosed += detailView_FilterDataViewClosed;
 				_detailViews.Add(detailView);

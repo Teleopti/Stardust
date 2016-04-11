@@ -16,19 +16,21 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
     {
         private readonly IWorkload _workload;
         private TaskOwnerDayGridControl _taskOwnerDayGridControl;
-        
-        /// <summary>
+	    private IStatisticHelper _statisticsHelper;
+
+	    /// <summary>
         /// Initializes a new instance of the <see cref="WorkloadDetailView"/> class.
         /// </summary>
         /// <remarks>
         /// Created by: robink
         /// Created date: 2008-01-25
         /// </remarks>
-        public WorkloadDetailView()
-        {
-        }
+        public WorkloadDetailView(IStatisticHelper statisticsHelper)
+	    {
+		    _statisticsHelper = statisticsHelper;
+	    }
 
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="WorkloadDetailView"/> class.
         /// </summary>
         /// <param name="skillDayCalculator">The skill day calculator.</param>
@@ -39,12 +41,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         /// Created by: robink
         /// Created date: 2008-01-28
         /// </remarks>
-        public WorkloadDetailView(SkillDayCalculator skillDayCalculator, IWorkload workload, ForecasterChartSetting forecasterChartSetting)
+        public WorkloadDetailView(SkillDayCalculator skillDayCalculator, IWorkload workload, ForecasterChartSetting forecasterChartSetting, IStatisticHelper statisticsHelper)
             : base(skillDayCalculator, forecasterChartSetting)
         {
             _workload = workload;
+		    _statisticsHelper = statisticsHelper;
 
-            DetailViewLoad();
+		    DetailViewLoad();
         }
 
         /// <summary>
@@ -105,7 +108,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             GridCollection.Add(keyName + WorkingInterval.Week, (TeleoptiGridControl)control);
 
             _taskOwnerDayGridControl = new TaskOwnerDayGridControl(taskOwnerDays, taskOwnerPeriodHelper, this,
-                                                                   ForecasterChartSetting.GetChartSettings());
+                                                                   ForecasterChartSetting.GetChartSettings(), _statisticsHelper);
             _taskOwnerDayGridControl.Create();
             _taskOwnerDayGridControl.Dock = DockStyle.Fill;
             _taskOwnerDayGridControl.TemplateSelected += taskOwnerDayGridControl_TemplateSelected;
@@ -123,7 +126,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 taskOwnerPeriodHelper, 
                 _workload.Skill.TimeZone,
                 _workload.Skill.DefaultResolution,
-				this, ForecasterChartSetting.GetChartSettings(), _workload.Skill.SkillType);
+				this, ForecasterChartSetting.GetChartSettings(), _workload.Skill.SkillType, _statisticsHelper);
             workloadIntradayGridControl.Create(); //Inits the oject
             workloadIntradayGridControl.Dock = DockStyle.Fill;
             workloadIntradayGridControl.ModifyCells += workloadIntradayGridControl_ModifyCells;

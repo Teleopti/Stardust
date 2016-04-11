@@ -17,17 +17,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
     {
 	    private readonly ISkillType _skillType;
 	    private RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod> _rowManagerTemplateTaskPeriod;
+	    private IStatisticHelper _satisticHelper;
 
-        protected RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod> RowManagerTemplateTaskPeriod
+	    protected RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod> RowManagerTemplateTaskPeriod
         {
             get { return _rowManagerTemplateTaskPeriod; }
         }
 
         public WorkloadIntradayGridControl(ITaskOwner taskOwner, TaskOwnerHelper taskOwnerPeriodHelper, TimeZoneInfo timeZone, 
-			int resolution, AbstractDetailView owner, ChartSettings chartSettings, ISkillType skillType)
+			int resolution, AbstractDetailView owner, ChartSettings chartSettings, ISkillType skillType, IStatisticHelper satisticHelper)
             : base(taskOwner, taskOwnerPeriodHelper, timeZone, resolution, owner, ((IWorkloadDayBase)taskOwner).Workload.Skill.SkillType.DisplayTimeSpanAsMinutes, chartSettings)
         {
 	        _skillType = skillType;
+	        _satisticHelper = satisticHelper;
 	        _rowManagerTemplateTaskPeriod = new RowManager<TemplateTaskPeriodGridRow, ITemplateTaskPeriod>(this, Intervals, Resolution);
         }
 
@@ -316,7 +318,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			IWorkloadDay workloadDay = TaskOwnerDay as WorkloadDay;
 			if (workloadDay == null)
 				return;
-			using(var editWorkloadDayTemplate = new EditWorkloadDayTemplate(workloadDay, workloadDay.OpenHourList))
+			using(var editWorkloadDayTemplate = new EditWorkloadDayTemplate(workloadDay, workloadDay.OpenHourList, _satisticHelper))
 				editWorkloadDayTemplate.ShowDialog(this);
 		}
 

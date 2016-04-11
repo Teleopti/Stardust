@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ReforecastPercentCalculator>().As<IReforecastPercentCalculator>();
 			builder.RegisterType<Statistic>().As<IStatistic>();
 			builder.RegisterType<ImportForecastsToSkillHandler>().As<IImportForecastsToSkillHandler>();
+			builder.RegisterType<StatisticHelper>().As<IStatisticHelper>();
 			builder.RegisterType<OpenAndSplitTargetSkillHandler>().As<IOpenAndSplitTargetSkillHandler>();
 		}
 

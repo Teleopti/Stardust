@@ -41,14 +41,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private IList<double> _modifiedItems;
     	private IUnsavedDaysInfo _unsavedDays;
+	    private readonly IStatisticHelper _statisticsHelper;
 
 
-    	public TaskOwnerDayGridControl(IEnumerable<ITaskOwner> taskOwnerDays, TaskOwnerHelper taskOwnerPeriodHelper, AbstractDetailView owner, ChartSettings chartSettings)
-            : this(taskOwnerDays, null, taskOwnerPeriodHelper, owner, chartSettings)
+	    public TaskOwnerDayGridControl(IEnumerable<ITaskOwner> taskOwnerDays, TaskOwnerHelper taskOwnerPeriodHelper, AbstractDetailView owner, ChartSettings chartSettings, IStatisticHelper statisticsHelper)
+            : this(taskOwnerDays, null, taskOwnerPeriodHelper, owner, chartSettings, statisticsHelper)
         {
         }
 
-        public TaskOwnerDayGridControl(IEnumerable<ITaskOwner> taskOwnerDays, IEnumerable<IMultisiteDay> multisiteDays, TaskOwnerHelper taskOwnerPeriodHelper, AbstractDetailView owner, ChartSettings chartSettings)
+        public TaskOwnerDayGridControl(IEnumerable<ITaskOwner> taskOwnerDays, IEnumerable<IMultisiteDay> multisiteDays, TaskOwnerHelper taskOwnerPeriodHelper, AbstractDetailView owner, ChartSettings chartSettings, IStatisticHelper statisticsHelper)
         {
             _owner = owner;
             _taskOwnerPeriodHelper = taskOwnerPeriodHelper;
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _rowManagerMultisiteDay = new RowManager<MultisiteDayGridRow, IMultisiteDay>(this, null, -1);
             _rowManagerMultisiteDay.SetDataSource(multisiteDays);
             _chartSettings = chartSettings;
-			TeleoptiStyling = true;
+	        _statisticsHelper = statisticsHelper;
+	        TeleoptiStyling = true;
         }
 
         public void Create()
@@ -139,7 +141,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
     	{
     		if (workloadDay == null) throw new ArgumentNullException("workloadDay");
     		var openHours = workloadDay.OpenHourList;
-			using(var editWorkloadDayTemplate = new EditWorkloadDayTemplate(workloadDay, openHours))
+			using(var editWorkloadDayTemplate = new EditWorkloadDayTemplate(workloadDay, openHours,_statisticsHelper))
 				editWorkloadDayTemplate.ShowDialog(this);
     	}
 
