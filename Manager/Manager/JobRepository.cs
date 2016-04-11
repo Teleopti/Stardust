@@ -327,7 +327,9 @@ namespace Stardust.Manager
 
 							insertIntoJobHistoryDetailCommand.Connection = sqlConnection;
 							insertIntoJobHistoryDetailCommand.Transaction = sqlTransaction;
-						}
+                            insertIntoJobHistoryDetailCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+
+                        }
 
 						if (response.StatusCode.Equals(HttpStatusCode.BadRequest))
 						{
