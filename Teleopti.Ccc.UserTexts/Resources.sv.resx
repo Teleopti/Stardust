@@ -13114,4 +13114,46 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="ToggleAll" xml:space="preserve">
     <value>Bocka i/ur alla</value>
   </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>Ta bort frånvaro</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Position på väntelista:</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Laddat: </value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Slå av/på mörkt färgtema</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>Du kan inte ändra din egen roll</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>En produktaktiveringsnyckel för Teleopti WFM version 8 krävs för att kunna köra systemet. Var god kontakta service desk eller er Account Manager för att be om en ny produktaktiveringsnyckel. </value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Planera om</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>Det här kommer att slå av/på alla funktioner. Är du säker på att du vill fortsätta?</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>Det här kommer att ta bort den här funktioner och alla dess underliggande funktioner. Är du säker på att du vill fortsätta?</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Samma dag</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Välj en aktivitet</value>
+  </data>
+  <data name="ChangeWillAffectAgents" xml:space="preserve">
+    <value>Ändringen påverkar {0} agenter.</value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>Ta bort aktivitet</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>Du måste välja minst en agent.</value>
+  </data>
 </root>

@@ -9864,7 +9864,7 @@ Check venligst i egenskaber for Kompetancer for flere lokationer, Prognose modul
     <value>Vagter på en dag</value>
   </data>
   <data name="TimeBetweenDays" xml:space="preserve">
-    <value>Hviletid mellem to vagter</value>
+    <value>Tid mellem dager</value>
   </data>
   <data name="AreYouSureYouWantToDeleteItem" xml:space="preserve">
     <value>Er du sikker på du ønsker at slette post '{0}'?</value>
@@ -11141,5 +11141,8 @@ Der er ikke nok budgetteret kvote til denne forespørgelse.</value>
   </data>
   <data name="Miscellaneous" xml:space="preserve">
     <value>Diverse</value>
+  </data>
+  <data name="OpenShiftsTreeDots" xml:space="preserve">
+    <value>Åben vagter...</value>
   </data>
 </root>
