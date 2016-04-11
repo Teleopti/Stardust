@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ISameShiftCategoryTeamSpecification _sameShiftCategoryTeamSpecification;
 		private readonly ISameShiftBlockSpecification _sameShiftBlockSpecification;
 		private readonly ITeamBlockOpenHoursValidator _teamBlockOpenHoursValidator;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder; //TODO: behöver inte detta vara en func?
 
 		public TeamBlockSteadyStateValidator(ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 											 ISameStartTimeBlockSpecification sameStartTimeBlockSpecification,
