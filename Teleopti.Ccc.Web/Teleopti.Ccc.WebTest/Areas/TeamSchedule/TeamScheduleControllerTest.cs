@@ -360,7 +360,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				ScheduleDate = scheduleDate,
 				PersonIds = new List<Guid> {personId1},
 				RemoveEntireCrossDayAbsence = true,
-				PersonAbsenceIds = new List<Guid> {personAbsenceId2}
+				PersonAbsenceIds = new List<Guid>
+				{
+					personAbsenceId2
+				}
 			};
 			target.RemoveAbsence(form);
 
@@ -416,7 +419,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				ScheduleDate = scheduleDate,
 				PersonIds = new List<Guid> {personId1},
 				RemoveEntireCrossDayAbsence = false,
-				PersonAbsenceIds = new List<Guid> {personAbsenceId2}
+				PersonAbsenceIds = new List<Guid>
+				{
+					personAbsenceId2
+				}
 			};
 			target.RemoveAbsence(form);
 
@@ -445,8 +451,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 
+			var scenario = ScenarioFactory.CreateScenario("scenario", true, true);
 			var teamScheduleViewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			var personAbsenceRepository = new FakePersonAbsenceRepository();
+
+			var currentUser = PersonFactory.CreatePersonWithId();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(currentUser);
 
 			foreach (var personAbsencePairs in personAndAbsences)
 			{
@@ -454,7 +465,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 				var person = PersonFactory.CreatePerson();
 				person.SetId(personId);
-				var scenario = ScenarioFactory.CreateScenario("scenario", true, true);
 
 				var startDate = scheduleDate.ToUniversalTime();
 				var endDate = startDate.AddDays(1);
@@ -483,14 +493,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 						}
 					};
 					teamScheduleViewModelFactory.Stub(
-						x => x.CreateViewModelForPeople(new[] {personId}, new DateOnly(scheduleDate)))
+						x => x.CreateViewModelForPeople(new[]
+						{
+							personId
+						},
+						new DateOnly(scheduleDate)))
 						.Return(schedule);
 				}
 			}
-
-			var currentUser = PersonFactory.CreatePersonWithId();
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(currentUser);
 
 			return new TeamScheduleController(teamScheduleViewModelFactory, loggedOnUser, personAbsenceRepository,
 				pricipalAuthorization, null, null, null, null, commandDispatcher);
