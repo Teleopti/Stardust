@@ -19,6 +19,7 @@ IIS-ISAPIExtensions,ISAPI Extensions
 IIS-ISAPIFilter,ISAPI Filters
 IIS-ASPNET,ASP.NET 3.5
 IIS-ASPNET45,ASP.NET 4.5
+IIS-WebSockets,WebSocket Protocol
 	
 #Legacy III6 - needed for Analyzer install
 IIS-IIS6ManagementCompatibility,IIS 6 Management Compatibility
