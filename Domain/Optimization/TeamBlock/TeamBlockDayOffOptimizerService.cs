@@ -104,11 +104,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingProgress schedulingProgress
 			)
 		{
-			var schedulingResultStateHolder = _schedulerStateHolder().SchedulingResultState;
-			schedulingOptions.DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate;
+			var schedulerStateHolder = _schedulerStateHolder();
+			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
 
 			IScheduleResultDataExtractor allSkillsDataExtractor =
-	_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulingResultStateHolder);
+	_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulerStateHolder.SchedulingResultState);
 
 			IPeriodValueCalculator periodValueCalculatorForAllSkills =
 	_optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					teamInfosToRemove = runOneOptimizationRound(periodValueCalculatorForAllSkills, teamBlockDaysOffMoveFinder, optimizationPreferences, rollbackService,
 					                                            remainingInfoList, schedulingOptions,
-					                                            resourceCalculateDelayer, schedulingResultStateHolder, ()=>
+					                                            resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, ()=>
 					                                            {
 						                                            cancelMe = true;
 					                                            },
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					teamInfosToRemove = runOneOptimizationRoundWithFreeDaysOff(periodValueCalculatorForAllSkills, teamBlockDaysOffMoveFinder, optimizationPreferences, rollbackService,
 					                                                           remainingInfoList, schedulingOptions,
 					                                                           selectedPersons,
-																			   resourceCalculateDelayer, schedulingResultStateHolder, () =>
+																			   resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, () =>
 																			   {
 																				   cancelMe = true;
 																			   },
