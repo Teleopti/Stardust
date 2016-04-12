@@ -66,6 +66,10 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
 						? Selector.BusinessHierarchyCode
 						: new Guid(Request.Form.Get(groupPageComboBoxControlCollectionIdName));
+
+                     if (!string.IsNullOrEmpty(Request.Form.Get("lastGroupPage")))
+                        GroupPageCode = new Guid(Request.Form.Get("lastGroupPage"));
+
 					ParameterSelector.GroupPageCode = GroupPageCode;
 					commonReports.LoadReportInfo();
 					Page.Header.Title = commonReports.Name;
@@ -110,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			SetReportHeaderParmaterLabels();
 			SetReportHeaderParmaterTexts();
 			HideDynamicParameters();
-			
+		    lastGroupPage.Value = GroupPageCode.ToString();
 			if (GetReportData())
 			{
 				HideTimeZoneParameter(false);
@@ -370,7 +374,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 			// Team deviation total row
 			var tableCellListDeviation = new List<TableCell>
-			                             	{
+			                             {	
 			                             		MakeTableCell(Analytics.ReportTexts.Resources.ResDeviationPerIntervalMinute,
 			                             		              HorizontalAlign.Left, VerticalAlign.Middle, "ReportTotalDeviation"),
 			                             		MakeTableCell("&nbsp;", HorizontalAlign.Center, VerticalAlign.Middle,

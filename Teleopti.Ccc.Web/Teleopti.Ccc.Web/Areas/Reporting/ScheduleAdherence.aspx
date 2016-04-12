@@ -45,9 +45,11 @@
 					<asp:Label runat="server" ForeColor="red" ID="labelError"></asp:Label>
 				</div>
 			</div>
+           
 		</asp:Panel>
-
+         
 		<asp:Panel runat="server" ID="reportData" Visible="false">
+		    <input runat="server" ID="lastGroupPage" hidden="hidden" />
 			<table style="border: 0px">
 				<tr>
 					<td>
