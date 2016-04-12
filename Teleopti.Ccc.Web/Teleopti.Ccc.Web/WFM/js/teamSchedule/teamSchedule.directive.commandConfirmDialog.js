@@ -18,6 +18,14 @@
 			$scope.toggleFixDetail = toggleFixDetail;
 			$scope.translatedMessage = message(ctrl.getTargets().length);
 			$scope.hasError = false;
+			$scope.isRemoveAbsence = ctrl.getRemoveAbsenceMessage != null;
+			$scope.getRemoveAbsenceMessage = ctrl.getRemoveAbsenceMessage;
+			if ($scope.isRemoveAbsence) {
+				$scope.removeFullDayAbsence = false;
+				$scope.toggleRemoveFullDayAbsence = function () {					
+					$scope.removeFullDayAbsence = !$scope.removeFullDayAbsence;
+				};
+			}
 
 			if (ctrl.fix) {
 				$scope.needFix = true;
@@ -47,8 +55,8 @@
 		}
 
 		function getApply(action) {
-			return function() {
-				action();
+			return function () {
+				action($scope.removeFullDayAbsence);
 				$mdDialog.hide();
 			};
 		}
@@ -70,8 +78,8 @@
 		}
 
 		function getFix(action) {
-			return function() {
-				action();
+			return function () {
+				action($scope.removeFullDayAbsence);
 				$scope.needFix = false;
 				$scope.translatedMessage = message(ctrl.getTargets().length);
 				checkRequire(ctrl.getTargets().length);

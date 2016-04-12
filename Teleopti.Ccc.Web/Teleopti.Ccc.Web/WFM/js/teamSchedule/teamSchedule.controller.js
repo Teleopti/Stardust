@@ -176,7 +176,8 @@
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
-			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), function () {
+			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), function() {
+				personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 			});
 		};
@@ -261,20 +262,15 @@
 			);
 		}
 
-		vm.confirmRemoveAbsence = function() {
-			var message = replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
+		var getRemoveAbsenceMessage = function() {
+			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
 			[vm.getTotalSelectedPersonAndProjectionCount().AbsenceCount, vm.getTotalSelectedPersonAndProjectionCount().PersonCount]);
-			dialogSvc.create("js/teamSchedule/html/removeAbsenceConfirmDialog.html", 'RemoveAbsenceConfirmDialogController',
-			{
-				header: $translate.instant("Warning"),
-				message: message,
-				removeEntireCrossDayAbsence: false
-			}, { animation: !vm.isScenarioTest }).result.then(function(result) {
-				removeAbsence(result);
-			}, function() {
-				return;
-			});
 		};
+
+
+		vm.confirmRemoveAbsence = CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
+			'RemoveAbsence', removeAbsence, null, vm.scheduleDate, getRemoveAbsenceMessage);
+		
 
 		vm.removeActivity = function() {
 			//do something
@@ -333,7 +329,6 @@
 			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
 
 			vm.updateSchedules(personIds);
-			personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 		};
 
 		function isMessageNeedToBeHandled() {

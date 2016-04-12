@@ -23,15 +23,7 @@
 	function addActivityCtrl(ActivityService, guidgenerator, CommandCommon) {
 		var vm = this;
 		var startTimeMoment;
-		vm.selectedPersonIds = [];
-		if (vm.selectedAgents && vm.selectedAgents()) {
-			vm.selectedAgents().forEach(function (agentSchedule) {
-				if (vm.selectedPersonIds.indexOf(agentSchedule.personId) == -1)
-					vm.selectedPersonIds.push(agentSchedule.personId);
-			});
-		}
-		
-
+	
 		if (vm.defaultStart) {
 			startTimeMoment = moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart());
 		} else {
@@ -87,7 +79,7 @@
 		function addActivity() {
 			var trackId = guidgenerator.newGuid();
 			ActivityService.addActivity({
-				PersonIds: vm.selectedPersonIds,
+				PersonIds: vm.selectedAgents().map(function(agent) { return agent.personId; }),
 				BelongsToDate: vm.selectedDate(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DD HH:mm"),
@@ -97,7 +89,7 @@
 				if (vm.actionsAfterActivityApply) {
 					vm.actionsAfterActivityApply({
 						result: { TrackId: trackId},
-						personIds: vm.selectedPersonIds,
+						personIds: vm.selectedAgents().map(function (agent) { return agent.personId; }),
 						successMessageTemplate: 'SuccessfulMessageForAddingActivity',
 						failMessageTemplate: ''
 					});
@@ -106,7 +98,7 @@
 				if (vm.actionsAfterActivityApply) {
 					vm.actionsAfterActivityApply({
 						result: { TrackId: trackId, Errors: error },
-						personIds: vm.selectedPersonIds,
+						personIds: vm.selectedAgents().map(function (agent) { return agent.personId; }),
 						successMessageTemplate: '',
 						failMessageTemplate: 'FailedMessageForAddingActivity'
 					});

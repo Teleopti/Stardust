@@ -118,14 +118,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void ThenIShouldSeeDialogToConfirmAbsenceDeletion(int personCount, int personAbsenceCount)
 		{
 			Thread.CurrentThread.CurrentUICulture = CultureInfo.CurrentCulture;
-			Browser.Interactions.AssertAnyContains(".modal-dialog",
+			Browser.Interactions.AssertAnyContains(".team-schedule-command-confirm-dialog",
 				string.Format(Resources.AreYouSureToRemoveSelectedAbsence, personAbsenceCount, personCount));
 		}
 
-		[When(@"I answered '(.*)' to confirm message")]
-		public void WhenIAnsweredToConfirmDialog(string buttonText)
+		[When(@"I click apply button")]
+		public void WhenIClickApplyButton()
 		{
-			Browser.Interactions.ClickContaining(".modal-dialog button", buttonText);
+			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
 		}
 
 	}
