@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleService _scheduleService;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
-		private readonly IDayOffBackToLegalStateFunctions _dayOffBackToLegalStateFunctions;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
@@ -39,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IWorkShiftBackToLegalStateServiceFactory workShiftBackToLegalStateServiceFactory, IScheduleService scheduleService,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-			IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions, IDayOffDecisionMaker dayOffDecisionMaker,
+			IDayOffDecisionMaker dayOffDecisionMaker,
 			IResourceOptimizationHelper resourceOptimizationHelper, IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IMinWeekWorkTimeRule minWeekWorkTimeRule, IDayOffOptimizerValidator dayOffOptimizerValidator,
 			ISchedulingOptionsCreator schedulingOptionsCreator, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
@@ -51,7 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleService = scheduleService;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
-			_dayOffBackToLegalStateFunctions = dayOffBackToLegalStateFunctions;
 			_dayOffDecisionMaker = dayOffDecisionMaker;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
@@ -148,7 +145,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService =
 				new SmartDayOffBackToLegalStateService(
-					_dayOffBackToLegalStateFunctions,
 					25,
 					_dayOffDecisionMaker);
 

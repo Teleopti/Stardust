@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
 	{
-		private readonly IDayOffBackToLegalStateFunctions _dayOffBackToLegalStateFunctions;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
@@ -58,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
-			IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
 			IDayOffDecisionMaker dayOffDecisionMaker,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
@@ -91,7 +89,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
-			_dayOffBackToLegalStateFunctions = dayOffBackToLegalStateFunctions;
 			_dayOffDecisionMaker = dayOffDecisionMaker;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
@@ -280,7 +277,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockShiftCategoryLimitationValidator,
 					_teamBlockDayOffsInPeriodValidator,
 					_teamBlockDaysOffSameDaysOffLockSyncronizer,
-					_dayOffBackToLegalStateFunctions,
 					_scheduleResultDataExtractorProvider,
 					_dayOffOptimizationDecisionMakerFactory,
 					_schedulerStateHolder,

@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
-		private readonly IDayOffBackToLegalStateFunctions _dayOffBackToLegalStateFunctions;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -69,7 +68,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
 			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer,
-			IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
 			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -91,7 +89,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
 			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
-			_dayOffBackToLegalStateFunctions = dayOffBackToLegalStateFunctions;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -123,7 +120,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 	= new SmartDayOffBackToLegalStateService(
-		_dayOffBackToLegalStateFunctions,
 		100,
 		_dayOffDecisionMaker);
 

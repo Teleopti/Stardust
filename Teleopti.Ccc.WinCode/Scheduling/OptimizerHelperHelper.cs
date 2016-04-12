@@ -85,9 +85,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person,matrix.EffectivePeriodDays.First().Day);
 
 				ILockableBitArray bitArray = scheduleMatrixLockableBitArrayConverterEx.Convert(matrixOriginalStateContainer.ScheduleMatrix, dayOffOptimizationPreference.ConsiderWeekBefore, dayOffOptimizationPreference.ConsiderWeekAfter);
-				IDayOffBackToLegalStateFunctions functions = new DayOffBackToLegalStateFunctions(bitArray);
 				IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
-				ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(functions, 20, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
+				ISmartDayOffBackToLegalStateService solverService = new SmartDayOffBackToLegalStateService(20, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 				ISmartDayOffBackToLegalStateSolverContainer solverContainer = new SmartDayOffBackToLegalStateSolverContainer(matrixOriginalStateContainer, bitArray, solverService);
 				solverContainers.Add(solverContainer);
 			}
