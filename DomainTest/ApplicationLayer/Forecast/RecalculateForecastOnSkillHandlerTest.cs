@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
@@ -19,11 +18,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IScenarioRepository _scenarioRepository;
 		private ISkillDayRepository _skillDayRepository;
 		private ISkillRepository _skillRepository;
-		private IUnitOfWorkFactory _unitOfWorkFactory;
-		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
 		private IStatisticLoader _statisticLoader;
 		private IReforecastPercentCalculator _reforecastPercentCalculator;
-		private IUnitOfWork _uow;
 		private IScenario _scenario;
 
 		[SetUp]
@@ -32,13 +28,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			_skillDayRepository = MockRepository.GenerateMock<ISkillDayRepository>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
-			_currentunitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			_statisticLoader = MockRepository.GenerateMock<IStatisticLoader>();
 			_reforecastPercentCalculator = MockRepository.GenerateMock<IReforecastPercentCalculator>();
 			_target = new RecalculateForecastOnSkillEventHandlerBase(_scenarioRepository, _skillDayRepository, _skillRepository,
-				_currentunitOfWorkFactory, _statisticLoader, _reforecastPercentCalculator);
-			_uow = MockRepository.GenerateMock<IUnitOfWork>();
+				 _statisticLoader, _reforecastPercentCalculator);
 		}
 
 		[Test]
@@ -47,8 +40,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var scenarioId = Guid.NewGuid();
 			_scenario = MockRepository.GenerateStrictMock<IScenario>();
 			var message = new RecalculateForecastOnSkillCollectionEvent {ScenarioId = scenarioId};
-			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(false);
 			_target.Handle(message);
@@ -65,8 +56,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				ScenarioId = scenarioId,
 				SkillCollection = new Collection<RecalculateForecastOnSkill> {skillMessage}
 			};
-			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(true);
 			_skillRepository.Stub(x => x.Get(Guid.Empty)).Return(null);
@@ -97,8 +86,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var skillDay = MockRepository.GenerateMock<ISkillDay>();
 			var workloadDay = MockRepository.GenerateMock<IWorkloadDay>();
 			var workload = MockRepository.GenerateMock<IWorkload>();
-			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(true);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
@@ -135,8 +122,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var skillDay = MockRepository.GenerateMock<ISkillDay>();
 			var workloadDay = MockRepository.GenerateStrictMock<IWorkloadDay>();
 			var workload = MockRepository.GenerateMock<IWorkload>();
-			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_uow);
 			_scenarioRepository.Stub(x => x.Get(scenarioId)).Return(_scenario);
 			_scenario.Stub(x => x.DefaultScenario).Return(true);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);

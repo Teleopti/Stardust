@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
     public class RecalculateForecastOnSkillEventHandlerOnServiceBus : RecalculateForecastOnSkillEventHandlerBase, IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnServiceBus
     {
         public RecalculateForecastOnSkillEventHandlerOnServiceBus(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository, 
-                                                                ISkillRepository skillRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IStatisticLoader statisticLoader, 
+                                                                ISkillRepository skillRepository,  IStatisticLoader statisticLoader, 
                                                                 IReforecastPercentCalculator reforecastPercentCalculator) 
-                                                                : base(scenarioRepository, skillDayRepository, skillRepository, unitOfWorkFactory, statisticLoader, reforecastPercentCalculator)
+                                                                : base(scenarioRepository, skillDayRepository, skillRepository,  statisticLoader, reforecastPercentCalculator)
         {
         }
 
@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
     public class RecalculateForecastOnSkillEventHandlerOnHangfire : RecalculateForecastOnSkillEventHandlerBase, IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnHangfire
     {
         public RecalculateForecastOnSkillEventHandlerOnHangfire(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
-                                                                ISkillRepository skillRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IStatisticLoader statisticLoader,
+                                                                ISkillRepository skillRepository,IStatisticLoader statisticLoader,
                                                                 IReforecastPercentCalculator reforecastPercentCalculator)
-                                                                : base(scenarioRepository, skillDayRepository, skillRepository, unitOfWorkFactory, statisticLoader, reforecastPercentCalculator)
+                                                                : base(scenarioRepository, skillDayRepository, skillRepository,  statisticLoader, reforecastPercentCalculator)
         {
         }
-        [AsSystem]
+        [AsSystem, UnitOfWork]
         public new virtual void Handle(RecalculateForecastOnSkillCollectionEvent @event)
         {
             base.Handle(@event);
@@ -49,23 +49,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
         private readonly ISkillDayRepository _skillDayRepository;
         private readonly ISkillRepository _skillRepository;
         private readonly IStatisticLoader _statisticLoader;
-        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public RecalculateForecastOnSkillEventHandlerBase(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
-                                                      ISkillRepository skillRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IStatisticLoader statisticLoader, IReforecastPercentCalculator reforecastPercentCalculator)
+	    public RecalculateForecastOnSkillEventHandlerBase(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,
+                                                      ISkillRepository skillRepository, IStatisticLoader statisticLoader, IReforecastPercentCalculator reforecastPercentCalculator)
         {
             _scenarioRepository = scenarioRepository;
             _skillDayRepository = skillDayRepository;
             _skillRepository = skillRepository;
-            _unitOfWorkFactory = unitOfWorkFactory;
-            _statisticLoader = statisticLoader;
+	        _statisticLoader = statisticLoader;
             _reforecastPercentCalculator = reforecastPercentCalculator;
         }
         
         public void Handle(RecalculateForecastOnSkillCollectionEvent @event)
         {
-            using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
-            {
+
                 var scenario = _scenarioRepository.Get(@event.ScenarioId);
                 if (!scenario.DefaultScenario)
                 {
@@ -99,8 +96,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                             workloadDay.Tasks = workloadDay.Tasks*perc;
                         }
                     }
-                }
-                unitOfWork.PersistAll();
             }
         }
     }
