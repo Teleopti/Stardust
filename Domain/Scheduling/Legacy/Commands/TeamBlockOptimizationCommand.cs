@@ -119,9 +119,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_teamBlockScheudlingOptions);
 
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
+			{
 				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
 					allMatrixes, rollbackServiceWithResourceCalculation,
 					schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
+			}
 
 			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 			{
@@ -133,8 +135,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 
 			if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
+			{
 				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,
 					rollbackServiceWithResourceCalculation, resourceCalculateDelayer, teamBlockGenerator, dayOffOptimizationPreferenceProvider);
+			}
 
 			if (optimizationPreferences.General.OptimizationStepTimeBetweenDays && !(optimizationPreferences.Extra.UseBlockSameShift && optimizationPreferences.Extra.UseTeamBlockOption))
 			{
