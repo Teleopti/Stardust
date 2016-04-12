@@ -541,6 +541,11 @@
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
     <Compile Include="Areas\Reporting\Core\AnalyticsPermissionsUpdater.cs" />
+    <Compile Include="Areas\Reporting\Core\ApplicationPermissionProvider.cs" />
+    <Compile Include="Areas\Reporting\Core\IAnalyticsPermissionsUpdater.cs" />
+    <Compile Include="Areas\Reporting\Core\IApplicationPermissionProvider.cs" />
+    <Compile Include="Areas\Reporting\Core\IPermissionsConverter.cs" />
+    <Compile Include="Areas\Reporting\Core\PermissionsConverter.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProvider.cs" />
     <Compile Include="Areas\Requests\Core\Provider\IRequestCommandHandlingProvider.cs" />

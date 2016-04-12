@@ -5,6 +5,7 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -107,7 +108,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 			builder.RegisterType<PersonInRoleQuerier>().As<IPersonInRoleQuerier>().SingleInstance();
 			builder.RegisterType<PersonToRoleAssociation>().SingleInstance();
-			builder.RegisterType<AnalyticsPermissionsUpdater>().As<IAnalyticsPermissionsUpdater>().SingleInstance();
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 			builder.RegisterModule(new TenantServerModule(_configuration));
@@ -145,6 +145,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 			builder.RegisterType<BadgeProvider>().As<IBadgeProvider>();
 			builder.RegisterType<BusinessUnitForRequest>().As<IBusinessUnitForRequest>().SingleInstance();
+			builder.RegisterType<ApplicationPermissionProvider>().As<IApplicationPermissionProvider>().SingleInstance();
+			builder.RegisterType<AnalyticsPermissionsUpdater>().As<IAnalyticsPermissionsUpdater>().SingleInstance();
+			builder.RegisterType<PermissionsConverter>().As<IPermissionsConverter>().SingleInstance();
+			builder.RegisterType<ApplicationFunctionResolver>().As<IApplicationFunctionResolver>().SingleInstance();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

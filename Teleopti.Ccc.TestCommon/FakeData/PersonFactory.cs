@@ -214,17 +214,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <returns></returns>
         public static IPerson CreatePersonWithApplicationRolesAndFunctions()
         {
-            IPerson person = CreatePerson("FirstName", "LastName");
-            IList<IApplicationRole> roles = ApplicationRoleFactory.CreateApplicationRolesAndFunctionsStructure();
-            foreach (IApplicationRole role in roles)
-            {
-	            role.WithId();
-                person.PermissionInformation.AddApplicationRole(role);
-            }
-            return person;
+            return AddApplicationRolesAndFunctions(CreatePerson("FirstName", "LastName"));
         }
 
-        #endregion
+		/// <summary>
+		/// Adds application roles and functions to an existing person.
+		/// </summary>
+		/// <returns></returns>
+		public static IPerson AddApplicationRolesAndFunctions(IPerson person)
+		{
+			IList<IApplicationRole> roles = ApplicationRoleFactory.CreateApplicationRolesAndFunctionsStructure();
+			foreach (IApplicationRole role in roles)
+			{
+				role.WithId();
+				person.PermissionInformation.AddApplicationRole(role);
+			}
+			return person;
+		}
+
+		#endregion
 
 		public static void AddDefinitionSetToPerson(IPerson person, IMultiplicatorDefinitionSet definitionSet)
 		{

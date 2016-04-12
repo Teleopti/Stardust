@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Matrix
@@ -16,14 +14,12 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
 	{
 		private readonly IPerson _person;
 		private readonly IList<ISite> _sites;
-		// private readonly ISiteRepository _siteRepository;
 		private HashSet<MatrixPermissionHolder> _result;
 
 		public TeamResolver(IPerson person, IList<ISite> sites)
 		{
 			_person = person;
 			_sites = sites;
-			// _siteRepository = siteRepository;
 		}
 
 		private void add(MatrixPermissionHolder holder)
