@@ -16,18 +16,18 @@ using Teleopti.Interfaces.Messages.General;
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
 	public class QuickForecastCommandHandler : IHandleCommand<QuickForecastCommandDto>
-    {
+	{
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
-	    private readonly IEventPublisher _publisher;
-	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
+		private readonly IEventPublisher _publisher;
+		private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 
-	    public QuickForecastCommandHandler(IMessagePopulatingServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventPublisher publisher, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
+		public QuickForecastCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventPublisher publisher, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
-	        _publisher = publisher;
-	        _eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
+			_publisher = publisher;
+			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 		}
 
 		public void Handle(QuickForecastCommandDto command)
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				//Save start of processing to job history
 				var period = command.TargetPeriod.ToDateOnlyPeriod();
 				var jobResult = new JobResult(JobCategory.QuickForecast, period,
-				                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
+											  ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
 				_jobResultRepository.Add(jobResult);
 				jobId = jobResult.Id.GetValueOrDefault();
 
@@ -49,25 +49,22 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				var message = new QuickForecastWorkloadsEvent
 					{
-						TargetPeriodStart = command.TargetPeriod.StartDate.ToDateOnly(),
-                        TargetPeriodEnd = command.TargetPeriod.EndDate.ToDateOnly(),
+						TargetPeriod = command.TargetPeriod.ToDateOnlyPeriod(),
 						ScenarioId = command.ScenarioId,
 						JobId = jobId,
 						SmoothingStyle = command.SmoothingStyle,
-						TemplatePeriodStart = command.TemplatePeriod.StartDate.ToDateOnly(),
-                        TemplatePeriodEnd = command.TemplatePeriod.EndDate.ToDateOnly(),
+						TemplatePeriod = command.TemplatePeriod.ToDateOnlyPeriod(),
 						WorkloadIds = command.WorkloadIds,
 						IncreaseWith = command.IncreaseWith,
-                        UseDayOfMonth = command.UseDayOfMonth,
-                        StatisticsPeriodStart = command.StatisticPeriod.StartDate.ToDateOnly(),
-                        StatisticsPeriodEnd = command.StatisticPeriod.EndDate.ToDateOnly()
+						UseDayOfMonth = command.UseDayOfMonth,
+						StatisticPeriod = command.StatisticPeriod.ToDateOnlyPeriod()
 					};
 
-                _eventInfrastructureInfoPopulator.PopulateEventContext(message);
-                _publisher.Publish(message);
-            }
+				_eventInfrastructureInfoPopulator.PopulateEventContext(message);
+				_publisher.Publish(message);
+			}
 
 			command.Result = new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
 		}
-    }
+	}
 }

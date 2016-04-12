@@ -1264,7 +1264,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var message = wwp.CreateServiceBusMessage();
 							var everyStep = Convert.ToInt32((1000/message.WorkloadIds.Count)/3);
 							message.IncreaseWith = everyStep;
-							var period = new DateOnlyPeriod(message.TargetPeriodStart, message.TargetPeriodEnd);
+							var period = message.TargetPeriod;
 							var jobResultRep = new JobResultRepository(uow);
 							var jobResult = new JobResult(JobCategory.QuickForecast, period,
 				                              ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);

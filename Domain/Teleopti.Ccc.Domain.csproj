@@ -697,9 +697,7 @@
     <Compile Include="Forecasting\Angel\IQuickForecasterWorkload.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\IFillWithEmptySkillDays.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\ILoadStatistics.cs" />
-    <Compile Include="Forecasting\Angel\LegacyWrappers\IStatisticHelperFactory.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatistics.cs" />
-    <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactory.cs" />
     <Compile Include="Forecasting\Angel\Future\FetchAndFillSkillDays.cs" />
     <Compile Include="Forecasting\Angel\QuickForecaster.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\QuickForecastSkillEvaluator.cs" />

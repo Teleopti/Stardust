@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 {
@@ -28,17 +27,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 		{
 			return new QuickForecastWorkloadsEvent
 		{
-			TargetPeriodStart = _stateObj.TargetPeriod.StartDate,
-            TargetPeriodEnd = _stateObj.TargetPeriod.EndDate,
+			TargetPeriod = _stateObj.TargetPeriod,
 			ScenarioId = _stateObj.ScenarioId,
 			SmoothingStyle = _stateObj.SmoothingStyle,
-			TemplatePeriodEnd = _stateObj.TemplatePeriod.EndDate,
-            TemplatePeriodStart = _stateObj.TemplatePeriod.StartDate,
+			TemplatePeriod = _stateObj.TemplatePeriod,
 			WorkloadIds = _stateObj.WorkloadIds,
 			IncreaseWith = _stateObj.IncreaseWith,
 			UseDayOfMonth = _stateObj.UseDayOfMonth,
-            StatisticsPeriodEnd = _stateObj.StatisticPeriod.EndDate,
-            StatisticsPeriodStart = _stateObj.StatisticPeriod.StartDate
+			StatisticPeriod = _stateObj.StatisticPeriod
 		};
 		}
 

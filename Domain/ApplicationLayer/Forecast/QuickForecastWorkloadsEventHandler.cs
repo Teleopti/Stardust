@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 				LogOnDatasource = @event.LogOnDatasource,
 				JobId = @event.JobId,
 				ScenarioId = @event.ScenarioId,
-				StatisticPeriod = new DateOnlyPeriod(@event.StatisticsPeriodStart, @event.StatisticsPeriodEnd), 
-				TargetPeriod = new DateOnlyPeriod(@event.TargetPeriodStart, @event.TargetPeriodEnd),
+				StatisticPeriod =  @event.StatisticPeriod, 
+				TargetPeriod = @event.TargetPeriod,
 				WorkloadId = workloadId,
-				TemplatePeriod = new DateOnlyPeriod(@event.TemplatePeriodStart, @event.TemplatePeriodEnd),
+				TemplatePeriod = @event.TemplatePeriod,
 				SmoothingStyle = @event.SmoothingStyle,
 				IncreaseWith = @event.IncreaseWith,
 				UseDayOfMonth = @event.UseDayOfMonth

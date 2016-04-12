@@ -51,9 +51,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LoadStatistics>()
 				.SingleInstance()
 				.As<ILoadStatistics>();
-			//builder.RegisterType<StatisticHelperFactory>()
-			//	.SingleInstance()
-			//	.As<IStatisticHelperFactory>();
 			builder.RegisterType<FetchAndFillSkillDays>()
 				.SingleInstance()
 				.As<IFetchAndFillSkillDays>();

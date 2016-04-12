@@ -481,8 +481,6 @@
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksAndTimesTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\ProvideStatisticTasksWithQueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\Angel\LegacyWrappers\LoadStatisticsTest.cs" />
-    <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryForTest.cs" />
-    <Compile Include="Forecasting\Angel\LegacyWrappers\StatisticHelperFactoryTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MeasureForecastTest.cs" />
     <Compile Include="Forecasting\Angel\Accuracy\MeasurementShouldReturnCorrectlyTest.cs" />
     <Compile Include="Forecasting\Angel\QuickForecastSkillWithOneWorkload\NewSkillDaysShouldBeAddedToRepositoryTest.cs" />
