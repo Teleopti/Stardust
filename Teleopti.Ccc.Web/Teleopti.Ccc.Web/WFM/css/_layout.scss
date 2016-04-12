@@ -114,8 +114,6 @@ md-progress-circular .md-inner .md-half-circle {
     margin: 10%;
 }
 
-
-//Temp move us to styleguide
 wfm-notice{
 	position: fixed;
 	bottom:1%;
@@ -128,3 +126,9 @@ wfm-notice{
 		left:1%;
 	}
 }
+
+//Temp move us to styleguide 
+
+.dropdown-menu{
+	background-color: $white;
+}//bootstrap datepicker dropdown menu
