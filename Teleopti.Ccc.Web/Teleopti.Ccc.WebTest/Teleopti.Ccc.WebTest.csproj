@@ -243,6 +243,7 @@
     <Compile Include="Areas\Anywhere\ReportItemsProviderTest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Areas\Anywhere\Rta\ThemeSettingProviderTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\CampaignPersisterTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastMiscTest.cs" />
     <Compile Include="Areas\Forecasting\Controllers\OverridePersisterTest.cs" />

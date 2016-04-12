@@ -455,6 +455,7 @@
     <Compile Include="Areas\Forecasting\Core\IForecastMisc.cs" />
     <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
+    <Compile Include="Areas\Global\ThemeController.cs" />
     <Compile Include="Areas\Global\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\IGetBusinessUnitId.cs" />
@@ -673,6 +674,7 @@
     <Compile Include="Areas\Global\ThrottledAction.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
+    <Compile Include="Core\ThemeSettingProvider.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchTermParser.cs" />
@@ -1334,6 +1336,8 @@
     <Content Include="WFM\js\global\wfm-themes\wfm.themes.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
     <Content Include="WFM\js\global\shortcuts.service.spec.js" />
+    <Content Include="WFM\js\global\wfm-themes\wfm.themes.service.js" />
+    <Content Include="WFM\js\global\wfm-themes\wfm.themes.service.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.spec.js" />
     <Content Include="WFM\js\global\wfm.shortcuts.service.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />

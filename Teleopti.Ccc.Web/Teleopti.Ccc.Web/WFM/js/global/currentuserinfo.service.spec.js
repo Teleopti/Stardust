@@ -10,7 +10,7 @@
 
 		beforeEach(inject(function (_$httpBackend_) {
 			$httpBackend = _$httpBackend_;
-			
+
 
 		}));
 
@@ -32,7 +32,7 @@
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
 				var request = CurrentUserInfo.getCurrentUserFromServer();
-				
+
 				request.success(function (result) {
 					expect(result).not.toBe(null);
 					expect(result.UserName).toBe('Ashley');
@@ -46,7 +46,7 @@
 			inject(function (CurrentUserInfo) {
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(401);
 				var request = CurrentUserInfo.getCurrentUserFromServer();
-				
+
 				$httpBackend.flush();
 				expect(request.$$state.status).toBe(2);
 				done();
@@ -67,6 +67,5 @@
 
 			});
 		});
-		
 	});
 })();

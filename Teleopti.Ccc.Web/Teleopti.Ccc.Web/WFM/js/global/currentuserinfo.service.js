@@ -12,13 +12,14 @@
 
 			return service;
 		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService',
-			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService) {
+		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 'ThemeService',
+			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService) {
 				var userName;
 				var defaultTimeZone;
 				var language;
 				var dateFormatLocale;
 				var timeout;
+				var theme;
 				var service = {};
 
 				service.SetCurrentUserInfo = function (data) {
@@ -26,6 +27,7 @@
 					defaultTimeZone = data.DefaultTimeZone;
 					language = data.Language;
 					dateFormatLocale = data.DateFormatLocale;
+					theme = data.Theme;
 				}
 
 				service.CurrentUserInfo = function () {
@@ -33,7 +35,8 @@
 						UserName: userName,
 						DefaultTimeZone: defaultTimeZone,
 						Language: language,
-						DateFormatLocale: dateFormatLocale
+						DateFormatLocale: dateFormatLocale,
+						Theme: theme
 					}
 				};
 
@@ -50,6 +53,7 @@
 						wfmI18nService.setLocales(data);
 						service.SetCurrentUserInfo(data);
 						BusinessUnitsService.initBusinessUnit();
+						ThemeService.setTheme(ThemeService.getTheme());
 						deferred.resolve(data);
 					});
 					return deferred.promise;
