@@ -80,14 +80,17 @@
 				if (newValue.endDate === null || newValue.startDate === null) return;
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.$broadcast('reload.requests.without.selection');
+				listenToReload();
 			}, true);
 
 			scope.$watch(function() {
 				return scope.requestsOverview.sortingOrders;
 			}, reload());
 
-			scope.$on('reload.requests.with.selection', reload());
-			scope.$on('reload.requests.without.selection', reload());
+			function listenToReload() {
+				scope.$on('reload.requests.with.selection', reload());
+				scope.$on('reload.requests.without.selection', reload());
+			}
 
 			function reload(done) {
 				return function() {
