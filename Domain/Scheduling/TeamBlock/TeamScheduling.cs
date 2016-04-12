@@ -6,48 +6,45 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface ITeamScheduling
     {
-	    void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+	    bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    IShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, Action<SchedulingServiceBaseEventArgs> dayScheduled);
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
     }
 
     public class TeamScheduling : ITeamScheduling
     {
-	    public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+	    public bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    IShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, Action<SchedulingServiceBaseEventArgs> dayScheduled)
+		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 	    {
 		    var tempMatrixList =
 			    teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly)
 				    .Where(scheduleMatrixPro => scheduleMatrixPro.Person == person)
 				    .ToList();
 		    if (!tempMatrixList.Any())
-			    return;
+			    return false;
 
 		    var matrix = tempMatrixList.First();
 		    var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
 		    var scheduleDay = scheduleDayPro.DaySchedulePart();
 		    if (!matrix.UnlockedDays.Contains(scheduleDayPro))
-			    return;
+			    return false;
 
 		    if (scheduleDay.IsScheduled())
-			    return;
+			    return false;
 
 		    var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
 		    assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly,
 			    schedulePartModifyAndRollbackService);
 
-		    if (dayScheduled != null)
-		    {
-				dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
-			}
 			resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 			    shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
-	    }
+			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
+		}
 
-		private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		private static void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
 			shiftProjectionCache.SetDate(day, agentTimeZone);
 

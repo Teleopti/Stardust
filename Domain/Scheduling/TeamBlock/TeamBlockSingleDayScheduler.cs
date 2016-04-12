@@ -14,9 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEffectiveRestriction shiftNudgeRestriction);
-
-		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+			IEffectiveRestriction shiftNudgeRestriction, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
 
 		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
@@ -37,8 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private readonly IMaxSeatInformationGeneratorBasedOnIntervals _maxSeatInformationGeneratorBasedOnIntervals;
 		private readonly IMaxSeatSkillAggregator _maxSeatSkillAggregator;
-
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
@@ -117,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEffectiveRestriction shiftNudgeRestriction)
+			IEffectiveRestriction shiftNudgeRestriction, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 		{
 			var cancelMe = false;
 			if (roleModelShift == null) return false;
@@ -170,17 +166,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						parameters, TimeZoneGuard.Instance.TimeZone);
 					if (bestShiftProjectionCache == null) continue;
 				}
-
-				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
-					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, (e) =>
-					{
-						if (DayScheduled != null)
-						{
-							e.AppendCancelAction(() => cancelMe = true);
-							DayScheduled(this, e);
-							if (e.Cancel) cancelMe = true;
-						}
-					});
+				cancelMe = _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
+					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, dayScheduled);
 			}
 
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);

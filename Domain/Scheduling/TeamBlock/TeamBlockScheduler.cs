@@ -182,21 +182,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Left && dayIndex == lastIndex)
 					shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
 
-				EventHandler<SchedulingServiceBaseEventArgs> onDayScheduled = (sender, e) =>
-				{
-					var handler = DayScheduled;
-					if (handler != null)
-					{
-						e.AppendCancelAction(thisCancelAction);
-						handler(this, e);
-					}
-				};
-
-				_singleDayScheduler.DayScheduled += onDayScheduled;
-				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, day,
+				var successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, day,
 					roleModelShift, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction );
-				_singleDayScheduler.DayScheduled -= onDayScheduled;
+					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction, (e) =>
+					{
+						if (DayScheduled != null)
+						{
+							DayScheduled(this, e);
+							if (e.Cancel) return true;
+						}
+						return false;
+					});
 
 				if(shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right && dayIndex == 0)
 					shiftNudgeRestriction = new EffectiveRestriction();
