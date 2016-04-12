@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                     IOptimizationPreferences optimizationPreferences,
 		                     ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 		                     IResourceCalculateDelayer resourceCalculateDelayer,
-		                     ISchedulingResultStateHolder schedulingResultStateHolder,
 							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 							ITeamInfoFactory teamInfoFactory);
 
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 
@@ -70,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer,
 			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-			Func<ISchedulerStateHolder> schedulerStateHolder,
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
 			IDayOffDecisionMaker dayOffDecisionMaker)
 		{
@@ -91,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
-			_schedulerStateHolder = schedulerStateHolder;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_optimizerHelper = optimizerHelper;
 			_dayOffDecisionMaker = dayOffDecisionMaker;
 		}
@@ -105,14 +103,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,ISchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			ITeamInfoFactory teamInfoFactory
 			)
 		{
+			var schedulingResultStateHolder = _schedulingResultStateHolder();
 			IScheduleResultDataExtractor allSkillsDataExtractor =
-	_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
-		_schedulerStateHolder().SchedulingResultState);
+	_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulingResultStateHolder);
 
 			IPeriodValueCalculator periodValueCalculatorForAllSkills =
 	_optimizerHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -279,7 +277,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_teamBlockDaysOffSameDaysOffLockSyncronizer,
 					_scheduleResultDataExtractorProvider,
 					_dayOffOptimizationDecisionMakerFactory,
-					_schedulerStateHolder,
+					() => _schedulerStateHolder().SchedulingResultState,
 					_optimizerHelper,
 					_dayOffDecisionMaker
 					);
@@ -300,7 +298,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulePartModifyAndRollbackService,
 				schedulingOptions,
 				resourceCalculateDelayer,
-				_schedulerStateHolder().SchedulingResultState,
 				dayOffOptimizationPreferenceProvider,
 				teamInfoFactory);
 			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
