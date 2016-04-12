@@ -111,8 +111,8 @@
 </div>
 
 <div class="con-row">
-	<div class="con-flex">
-		<div class="panel full-padding material-depth-1 " ng-show="!HasMonitorData" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
+	<div class="con-flex" ng-show="!HasMonitorData">
+		<div class="panel full-padding material-depth-1" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
 			<i class="mdi mdi-alert"></i> <span class="text-warning">No data available for {{selectedItem.Name}}</span>
 		</div>
 	</div>
