@@ -30,9 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 			_createSkillIntervalDataPerDateAndActivity = _mock.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(2013, 12, 17, 2013, 12, 18));
-			_target = new SameOpenHoursInTeamBlockSpecification(_openHourForDate, _createSkillIntervalDataPerDateAndActivity,
-				_scheduleResultStartHolder);
-
+			_target = new SameOpenHoursInTeamBlockSpecification(_openHourForDate, _createSkillIntervalDataPerDateAndActivity, () => _scheduleResultStartHolder);
 		}
 
 		[Test]

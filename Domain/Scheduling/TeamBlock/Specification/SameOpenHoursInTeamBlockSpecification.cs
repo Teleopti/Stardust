@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
@@ -15,12 +15,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 	{
 		private readonly IOpenHourForDate _openHourForDate;
 		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
 		public SameOpenHoursInTeamBlockSpecification(IOpenHourForDate openHourForDate,
-			ICreateSkillIntervalDataPerDateAndActivity
-				createSkillIntervalDataPerDateAndActivity,
-			ISchedulingResultStateHolder schedulingResultStateHolder) //TODO: mustn't this be a func?
+			ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
+			Func<ISchedulingResultStateHolder> schedulingResultStateHolder) //TODO: mustn't this be a func?
 		{
 			_openHourForDate = openHourForDate;
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 		public override bool IsSatisfiedBy(ITeamBlockInfo teamBlockInfo)
 		{
 			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
-				_schedulingResultStateHolder);
+				_schedulingResultStateHolder());
 
 			var dates = skillIntervalDataPerDateAndActivity.Keys;
 			TimePeriod? sampleOpenHour = null;

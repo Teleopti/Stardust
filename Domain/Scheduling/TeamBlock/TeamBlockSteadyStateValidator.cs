@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
+﻿using System;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ISameShiftCategoryTeamSpecification _sameShiftCategoryTeamSpecification;
 		private readonly ISameShiftBlockSpecification _sameShiftBlockSpecification;
 		private readonly ITeamBlockOpenHoursValidator _teamBlockOpenHoursValidator;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder; //TODO: behöver inte detta vara en func?
+		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 
 		public TeamBlockSteadyStateValidator(ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 											 ISameStartTimeBlockSpecification sameStartTimeBlockSpecification,
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 											 ISameShiftCategoryTeamSpecification sameShiftCategoryTeamSpecification,
 											 ISameShiftBlockSpecification sameShiftBlockSpecification,
 											 ITeamBlockOpenHoursValidator teamBlockOpenHoursValidator,
-											 ISchedulingResultStateHolder schedulingResultStateHolder)
+											 Func<ISchedulingResultStateHolder> schedulingResultStateHolder)
 		{
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_sameStartTimeBlockSpecification = sameStartTimeBlockSpecification;
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    _teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
 			{
 				isSteadyState &= _sameShiftBlockSpecification.IsSatisfiedBy(teamBlockInfo);
-				isSteadyState &= _teamBlockOpenHoursValidator.Validate(teamBlockInfo, _schedulingResultStateHolder);
+				isSteadyState &= _teamBlockOpenHoursValidator.Validate(teamBlockInfo, _schedulingResultStateHolder());
 			}
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(schedulingOptions) ||
 			    _teamBlockSchedulingOptions.IsTeamSameEndTimeInTeamBlock(schedulingOptions))

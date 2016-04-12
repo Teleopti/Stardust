@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_scheduleDayEquator = _mocks.StrictMock<IScheduleDayEquator>();
 			_nightlyRestRule = _mocks.StrictMock<IAssignmentPeriodRule>();
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
-			_target = new TeamBlockRestrictionAggregator(_effectiveRestrictionCreator, _schedulingResultStateHolder,
+			_target = new TeamBlockRestrictionAggregator(_effectiveRestrictionCreator, () => _schedulingResultStateHolder,
 			                                             _scheduleDayEquator, _nightlyRestRule, _teamBlockSchedulingOptions);
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);

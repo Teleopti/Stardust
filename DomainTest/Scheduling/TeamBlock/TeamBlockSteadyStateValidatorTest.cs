@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		                                                _sameShiftCategoryBlockSpecification,
 		                                                _sameShiftCategoryTeamSpecification, _sameShiftBlockSpecification, 
 														_teamBlockOpenHoursValidator,
-														_schedulingResultStateHolder);
+														() => _schedulingResultStateHolder);
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 		    _schedulingOptions = new SchedulingOptions();
 			_today = new DateOnly();
