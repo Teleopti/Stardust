@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IContractSchedule Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _contractSchedules.FirstOrDefault(c => id == c.Id);
 		}
 
 		public IList<IContractSchedule> LoadAll()

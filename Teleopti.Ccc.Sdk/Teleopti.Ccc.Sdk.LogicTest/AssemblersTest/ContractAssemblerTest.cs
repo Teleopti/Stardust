@@ -1,11 +1,10 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -13,59 +12,43 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class ContractAssemblerTest
     {
-        private ContractAssembler _target;
-        private ContractDto _contractDto;
-        private MockRepository _mocks;
-        private IContractRepository _contractRep;
-        private IContract _contractDomain;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _contractRep = _mocks.StrictMock<IContractRepository>();
-            _target = new ContractAssembler(_contractRep);
-
-            // Create domain object
-            _contractDomain = new Contract("My contract")
-                                 {
-                                     EmploymentType = EmploymentType.HourlyStaff
-                                 };
-            _contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("My overtime",
-                                                                                                   MultiplicatorType.Overtime));
-			_contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("Shift Allowance", MultiplicatorType.OBTime));
-            _contractDomain.SetId(Guid.NewGuid());
-
-            // Create Dto object
-            _contractDto = new ContractDto { Id = _contractDomain.Id };
-        }
-
         [Test]
         public void VerifyDomainEntityToDto()
         {
-            ContractDto contractDto = _target.DomainEntityToDto(_contractDomain);
+			var contractDomain = new Contract("My contract") { EmploymentType = EmploymentType.HourlyStaff }.WithId();
+			contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("My overtime",
+																								   MultiplicatorType.Overtime));
+			contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("Shift Allowance", MultiplicatorType.OBTime));
+			var contractRep = new FakeContractRepository();
+			contractRep.Add(contractDomain);
+			var target = new ContractAssembler(contractRep);
+			
+			ContractDto contractDto = target.DomainEntityToDto(contractDomain);
 
-            Assert.AreEqual(_contractDomain.Id, contractDto.Id);
-            Assert.AreEqual(_contractDomain.Description.Name, contractDto.Description);
+            Assert.AreEqual(contractDomain.Id, contractDto.Id);
+            Assert.AreEqual(contractDomain.Description.Name, contractDto.Description);
 			Assert.AreEqual(EmploymentType.HourlyStaff, contractDto.EmploymentType);
             Assert.AreEqual(1,contractDto.AvailableOvertimeDefinitionSets.Count);
 			Assert.AreEqual(1, contractDto.AvailableShiftAllowanceDefinitionSets.Count);
             Assert.IsFalse(contractDto.IsDeleted);
         }
 
-        [Test]
-        public void VerifyDtoToDomainEntity()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_contractRep.Get(_contractDto.Id.Value)).Return(_contractDomain).Repeat.Once();
-            }
+	    [Test]
+	    public void VerifyDtoToDomainEntity()
+	    {
+		    var contractDomain = new Contract("My contract") {EmploymentType = EmploymentType.HourlyStaff}.WithId();
+		    contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("My overtime",
+			    MultiplicatorType.Overtime));
+		    contractDomain.AddMultiplicatorDefinitionSetCollection(new MultiplicatorDefinitionSet("Shift Allowance",
+			    MultiplicatorType.OBTime));
+		    var contractRep = new FakeContractRepository();
+		    contractRep.Add(contractDomain);
+		    var target = new ContractAssembler(contractRep);
 
-            using (_mocks.Playback())
-            {
-                IContract contract = _target.DtoToDomainEntity(_contractDto);
-                Assert.IsNotNull(contract);
-            }
-        }
+		    var contractDto = new ContractDto {Id = contractDomain.Id};
+
+		    IContract contract = target.DtoToDomainEntity(contractDto);
+		    Assert.IsNotNull(contract);
+	    }
     }
 }

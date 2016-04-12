@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAbsence Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _absences.FirstOrDefault(a => id == a.Id);
 		}
 
 		public IList<IAbsence> LoadAll()

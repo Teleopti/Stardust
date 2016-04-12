@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IContract Get(Guid id)
 		{
-			return _contracts.Single(x => x.Id.Equals(id));
+			return _contracts.FirstOrDefault(x => id == x.Id);
 		}
 
 		public IList<IContract> LoadAll()

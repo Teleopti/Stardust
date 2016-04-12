@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IActivity Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return withoutAdd ? activity : _activities.FirstOrDefault(a => id == a.Id);
 		}
 
 		public IList<IActivity> LoadAll()

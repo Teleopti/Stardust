@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -10,9 +11,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeDayOffTemplateRepository : IDayOffTemplateRepository
 	{
+		private readonly IList<IDayOffTemplate> _dayOffTemplates = new List<IDayOffTemplate>(); 
+
 		public void Add(IDayOffTemplate entity)
 		{
-			throw new NotImplementedException();
+			_dayOffTemplates.Add(entity);
 		}
 
 		public void Remove(IDayOffTemplate entity)
@@ -22,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IDayOffTemplate Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _dayOffTemplates.FirstOrDefault(d => id == d.Id);
 		}
 
 		public IList<IDayOffTemplate> LoadAll()
