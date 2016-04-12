@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpETL_30791)]
-	public class AnalyticsScheduleChangeUpdater : 
+	public class AnalyticsScheduleChangeUpdater :
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnServiceBus
 	{
@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsFactScheduleDayCountHandler _factScheduleDayCountHandler;
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private readonly IDelayedMessageSender _serviceBus;
+		private readonly IAnalyticsScheduleChangeUpdaterFilter _analyticsScheduleChangeUpdaterFilter;
 
 		public AnalyticsScheduleChangeUpdater(
 			IAnalyticsFactScheduleHandler factScheduleHandler,
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			IAnalyticsFactSchedulePersonHandler factSchedulePersonHandler,
 			IAnalyticsFactScheduleDayCountHandler factScheduleDayCountHandler,
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
-			IDelayedMessageSender serviceBus)
+			IDelayedMessageSender serviceBus, 
+			IAnalyticsScheduleChangeUpdaterFilter analyticsScheduleChangeUpdaterFilter)
 
 		{
 			_factScheduleHandler = factScheduleHandler;
@@ -38,11 +40,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_factScheduleDayCountHandler = factScheduleDayCountHandler;
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 			_serviceBus = serviceBus;
+			_analyticsScheduleChangeUpdaterFilter = analyticsScheduleChangeUpdaterFilter;
 		}
 
 		public void Handle(ProjectionChangedEvent @event)
 		{
-			if (!@event.IsDefaultScenario) return;
+			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(@event))
+				return;
+
 			var scenarioId = getScenario(@event.ScenarioId);
 
 			foreach (var scheduleDay in @event.ScheduleDays)
@@ -90,10 +95,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						_analyticsScheduleRepository.PersistFactScheduleBatch(agentDaySchedule);
 					}
 
-					if (scheduleDay.Date < DateTime.Now.AddDays(1))
+					if (@event.IsDefaultScenario)
 					{
-						_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
-						@event.ScenarioId, @event.LogOnBusinessUnitId, DateTime.Now);
+						if (scheduleDay.Date < DateTime.Now.AddDays(1))
+						{
+							_analyticsScheduleRepository.InsertStageScheduleChangedServicebus(new DateOnly(scheduleDay.Date), @event.PersonId,
+								@event.ScenarioId, @event.LogOnBusinessUnitId, DateTime.Now);
+						}
 					}
 				}
 				catch (SqlException ex)
@@ -103,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					if (ex.Number != -2)
 					{
 						Logger.Error(ex.Message);
-                  throw;
+						throw;
 					}
 					var numOfRetry = @event.RetriesCount += 1;
 					if (numOfRetry > 5)
@@ -111,8 +119,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						Logger.ErrorFormat("Timeout when handling ProjectionChangedEvent on day {0}. Maximim number of retries reached, giving up.", scheduleDay.Date);
 						return;
 					}
-               Logger.WarnFormat("Timeout when handling ProjectionChangedEvent on day {0}. Resending the event for processing later. Retry number {1}", scheduleDay.Date, numOfRetry);
-					var processTime = DateTime.Now.AddSeconds(30*numOfRetry);
+					Logger.WarnFormat("Timeout when handling ProjectionChangedEvent on day {0}. Resending the event for processing later. Retry number {1}", scheduleDay.Date, numOfRetry);
+					var processTime = DateTime.Now.AddSeconds(30 * numOfRetry);
 					var @newEvent = new ProjectionChangedEvent
 					{
 						ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
@@ -149,5 +157,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				return -1;
 			return cat.Id;
 		}
+	}
+
+	public interface IAnalyticsScheduleChangeUpdaterFilter
+	{
+		bool ContinueProcessingEvent(ProjectionChangedEvent @event);
 	}
 }

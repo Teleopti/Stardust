@@ -99,7 +99,8 @@
 
 		Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpPermissionReport_33584,
-		Wfm_RecalculateForecastOnHangfire_37971
+		Wfm_RecalculateForecastOnHangfire_37971,
+		ETL_SpeedUpFactScheduleNightly_38019
 		// ReSharper restore InconsistentNaming
 	}
 }
