@@ -26,9 +26,7 @@
 
 		function tryToSaveReturnHash(areaToGo) {
 			
-			if (areaToGo === 'WFM') { // wfm project is handled in app.js
-				return;
-			} else if (areaToGo !== undefined) {
+			if (areaToGo !== undefined) {
 				saveAreaToGoInCookie(areaToGo);
 			} else {
 				deleteCookie('returnHash');
