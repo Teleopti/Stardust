@@ -9,7 +9,7 @@ using System.Threading;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
-	public class CommonReports : IDisposable
+	public class CommonReports : ICommonReports
 	{
 		private readonly Guid _reportId;
 		private string _reportFileName;
@@ -175,5 +175,13 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 
 			return returnValue;
 		}
+	}
+
+	public interface ICommonReports: IDisposable
+	{
+		void LoadReportInfo();
+		string ResourceKey { get; }
+		string Name { get; }
+		string HelpKey { get; }
 	}
 }

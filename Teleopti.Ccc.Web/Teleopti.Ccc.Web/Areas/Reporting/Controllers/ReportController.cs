@@ -28,10 +28,15 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IToggleManager _toggleManager;
 		private readonly IAnalyticsPermissionsUpdater _analyticsPermissionsUpdater;
+		private readonly ICommonReportsFactory _commonReportsFactory;
 
-		public ReportController(IReportsNavigationProvider reportsNavigationProvider, IPersonNameProvider personNameProvider,
-			ILoggedOnUser loggedOnUser, ICurrentBusinessUnit currentBusinessUnit, IToggleManager toggleManager, 
-			IAnalyticsPermissionsUpdater analyticsPermissionsUpdater)
+		public ReportController(IReportsNavigationProvider reportsNavigationProvider,
+			IPersonNameProvider personNameProvider,
+			ILoggedOnUser loggedOnUser,
+			ICurrentBusinessUnit currentBusinessUnit,
+			IToggleManager toggleManager,
+			IAnalyticsPermissionsUpdater analyticsPermissionsUpdater,
+			ICommonReportsFactory commonReportsFactory)
 		{
 			_reportsNavigationProvider = reportsNavigationProvider;
 			_personNameProvider = personNameProvider;
@@ -39,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			_currentBusinessUnit = currentBusinessUnit;
 			_toggleManager = toggleManager;
 			_analyticsPermissionsUpdater = analyticsPermissionsUpdater;
+			_commonReportsFactory = commonReportsFactory;
 		}
 
 		[UnitOfWork]
@@ -57,9 +63,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			if (_toggleManager.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584))
 				_analyticsPermissionsUpdater.Handle(_loggedOnUser.CurrentUser().Id.GetValueOrDefault(), _currentBusinessUnit.Current().Id.GetValueOrDefault());
 
-			using (var commonReports = new CommonReports(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Analytics.ConnectionString, id.Value))
+			using (var commonReports = _commonReportsFactory.CreateAndLoad(((TeleoptiIdentity)Thread.CurrentPrincipal.Identity).DataSource.Analytics.ConnectionString, id.Value))
 			{
-				commonReports.LoadReportInfo();
 				var name = "";
 				if (!string.IsNullOrEmpty(commonReports.ResourceKey))
 					name = Resources.ResourceManager.GetString(commonReports.ResourceKey, CultureInfo.CurrentUICulture);

@@ -30,6 +30,7 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
+using Teleopti.Ccc.Web.Areas.Reporting.Controllers;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
@@ -149,6 +150,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<AnalyticsPermissionsUpdater>().As<IAnalyticsPermissionsUpdater>().SingleInstance();
 			builder.RegisterType<PermissionsConverter>().As<IPermissionsConverter>().SingleInstance();
 			builder.RegisterType<ApplicationFunctionResolver>().As<IApplicationFunctionResolver>().SingleInstance();
+			builder.RegisterType<CommonReportsFactory>().As<ICommonReportsFactory>().SingleInstance();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)
