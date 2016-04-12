@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				OfferedCalls = 16,
 				HandleTime = 180
 			};
+
 			
 
 		}
@@ -156,14 +157,40 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			viewModel.DataSeries.AverageHandleTime.Second().Should().Be.EqualTo(secondInterval.AverageHandleTime);
 		}
 
-		[Test, Ignore]
+        [Test]
+        public void ShouldFillWithNullValueIfNoOfferedCalls()
+        {
+            var thirdInterval = new IncomingIntervalModel()
+            {
+                IntervalId = 34,
+                ForecastedCalls = 12,
+                ForecastedHandleTime = 140,
+                OfferedCalls = 12,
+                HandleTime = 200
+            };         
+            secondInterval.OfferedCalls = null;
+            secondInterval.HandleTime = null;
+            secondInterval.AverageHandleTime = null;
+            IntradayMonitorDataLoader.AddInterval(firstInterval);
+            IntradayMonitorDataLoader.AddInterval(secondInterval);
+            IntradayMonitorDataLoader.AddInterval(thirdInterval);
+            SkillAreaRepository.Has(_existingSkillArea);
+            IntervalLengthFetcher.Has(15);
+
+            var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+            viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(3);
+            viewModel.DataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
+        }
+
+        [Test]
 		public void ShouldReturnLatestStatsTime()
-		{
-			IntradayMonitorDataLoader.AddInterval(firstInterval);
+		{	
 			secondInterval.OfferedCalls = null;
 			secondInterval.HandleTime = null;
 			secondInterval.AverageHandleTime = null;
-			IntradayMonitorDataLoader.AddInterval(secondInterval);
+            IntradayMonitorDataLoader.AddInterval(firstInterval);
+            IntradayMonitorDataLoader.AddInterval(secondInterval);
 			SkillAreaRepository.Has(_existingSkillArea);
 			IntervalLengthFetcher.Has(15);
 

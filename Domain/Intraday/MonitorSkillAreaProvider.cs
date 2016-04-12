@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var forecastedAverageHandleTimeSeries = new List<double>();
 			var offeredCallsSeries = new List<double?>();
 			var averageHandleTimeSeries = new List<double?>();
+		    var latestQueueStatsIntervalId = -1;
 
 			foreach (var interval in intervals)
 			{
@@ -47,6 +48,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
 				offeredCallsSeries.Add(interval.OfferedCalls);
 				averageHandleTimeSeries.Add(interval.AverageHandleTime);
+
+			    if (interval.OfferedCalls.HasValue)
+			        latestQueueStatsIntervalId = interval.IntervalId;
+
 			}
 
 			summary.ForecastedAverageHandleTime = summary.ForecastedHandleTime / summary.ForecastedCalls;
@@ -55,7 +60,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return new MonitorDataViewModel()
 			{
 				Summary = summary,
-				DataSeries = new MonitorIntradayDataSeries
+                LatestStatsTime = DateTime.Today.Date.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength).ToShortTimeString(),
+                DataSeries = new MonitorIntradayDataSeries
 				{
 					Time = timeSeries.ToArray(),
 					ForecastedCalls = forecastedCallsSeries.ToArray(),
