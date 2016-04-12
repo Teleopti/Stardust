@@ -8,14 +8,14 @@
 			scope: {
 				configurations: '='
 			},
-			controller: ['$scope', '$mdSidenav', '$mdComponentRegistry', 'PersonSelection', 'TeamSchedule', 'ShortCuts', 'keyCodes', teamscheduleCommandCtrl],
+			controller: ['$scope', '$mdSidenav', '$mdComponentRegistry', 'PersonSelection', 'ShortCuts', 'keyCodes', teamscheduleCommandCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/teamscheduleCommand.html'
 		};
 	}
 
-	function teamscheduleCommandCtrl($scope, $mdSidenav, $mdComponentRegistry, personSelectionSvc, teamScheduleSvc, shortCuts, keyCodes) {
+	function teamscheduleCommandCtrl($scope, $mdSidenav, $mdComponentRegistry, personSelectionSvc, shortCuts, keyCodes) {
 		var vm = this;
 		var parentVm = $scope.$parent.vm;
 

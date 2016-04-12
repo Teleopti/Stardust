@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$q', '$locale', '$translate', 'TeamSchedule',
+	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$q', '$translate', 'TeamSchedule',
 		'GroupScheduleFactory', 'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts',
 		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', TeamScheduleController
 		]);
