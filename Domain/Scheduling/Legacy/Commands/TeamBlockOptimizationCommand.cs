@@ -229,16 +229,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-
 			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
+			schedulingOptions.DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate;
 
-			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder().CommonStateHolder.DayOffs
-				where ((IDeleteTag)item).IsDeleted == false
-				select item).ToList();
-
-			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
-
-			schedulingOptions.DayOffTemplate = dayOffTemplates[0];
 			_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 				allMatrixes,
 				selectedPeriod,
