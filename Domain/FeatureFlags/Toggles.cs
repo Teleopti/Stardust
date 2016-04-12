@@ -79,6 +79,7 @@
 		Wfm_Requests_Performance_36295,
 		Wfm_Requests_ApproveDeny_36297,
 		Wfm_Requests_Waitlist_36232,
+		Wfm_Requests_Filtering_37748,
 
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
@@ -97,7 +98,7 @@
 
 		Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpPermissionReport_33584,
-                Wfm_RecalculateForecastOnHangfire_37971
+		Wfm_RecalculateForecastOnHangfire_37971
 		// ReSharper restore InconsistentNaming
 	}
 }
