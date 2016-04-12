@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 		public SameOpenHoursInTeamBlockSpecification(IOpenHourForDate openHourForDate,
 			ICreateSkillIntervalDataPerDateAndActivity
 				createSkillIntervalDataPerDateAndActivity,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder) //TODO: mustn't this be a func?
 		{
 			_openHourForDate = openHourForDate;
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
