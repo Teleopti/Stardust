@@ -21,6 +21,8 @@
 		<!-- NPM install command -->
 		<NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
 		<NpmSetServerCmd>"$(NpmCmd)" set registry http://hestia:4873</NpmSetServerCmd>
+		<NpmSetNoProgressCmd>"$(NpmCmd)" set progress=false</NpmSetNoProgressCmd> <!-- https://github.com/npm/npm/issues/11283 -->
+		<NpmRebuildNodeSassCmd>"$(NpmCmd)" rebuild node-sass</NpmRebuildNodeSassCmd>
 
 		<!-- NPM dedupe command -->
 		<NpmDedupeCmd>"$(NpmCmd)" dedupe</NpmDedupeCmd>
@@ -39,13 +41,15 @@
 	<Target Name="RestoreNodePackages">
     
     <Exec Command="$(NpmSetServerCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-    
+		<Exec Command="$(NpmSetNoProgressCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Exec Command="$(NpmInstallKarmaCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 		<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
 		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
+		<Exec Command="$(NpmRebuildNodeSassCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+	  
 		<Message Text="Deduplicate Node Packages Command: $(NpmDedupeCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec Command="$(NpmDedupeCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
       
