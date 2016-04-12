@@ -6,6 +6,7 @@
 Background:
 	Given there is a site named 'The site'
 	And there is a team named 'Team green' on site 'The site'
+	And there is a business unit in analytics
 	And there is a role with
 	| Field                    | Value               |
 	| Name                     | Anywhere Team Green |

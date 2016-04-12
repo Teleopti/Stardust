@@ -1,20 +1,23 @@
-﻿using System.Globalization;
-using System.Linq;
-using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.TestData.Core;
+﻿using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class ReportsSteps
 	{
+		[Given(@"there is a business unit in analytics")]
+		public void GivenThereIsABusinessUnitInAnalytics()
+		{
+			var timeZones = new UtcAndCetTimeZones();
+			var businessUnit = new BusinessUnit(DefaultBusinessUnit.BusinessUnit, new ExistingDatasources(timeZones));
+			DataMaker.Data().Analytics().Apply(businessUnit);
+		}
+
 		[When(@"I click reports menu")]
 		public void WhenIClickReportsMenu()
 		{

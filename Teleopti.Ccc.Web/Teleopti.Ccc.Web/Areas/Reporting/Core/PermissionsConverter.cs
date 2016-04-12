@@ -27,12 +27,19 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 			var analyticTeams = _analyticsTeamRepository.GetTeams();
 			var now = _now.UtcDateTime();
 
-			return applicationPermissions.Select(ap => convertToAnalyticsPermission(ap, analyticTeams, analyticsBusinessUnitId, now)).ToList();
+			return
+				applicationPermissions.Select(ap => convertToAnalyticsPermission(ap, analyticTeams, analyticsBusinessUnitId, now))
+					.Where(x => x != null)
+					.ToList();
 		}
 
 		private static AnalyticsPermission convertToAnalyticsPermission(MatrixPermissionHolder arg, IEnumerable<AnalyticTeam> analyticTeams, int analyticsBusinessUnitId, DateTime updateDate)
 		{
-			var analyticsTeam = analyticTeams.First(t => t.TeamCode == arg.Team.Id); // TODO: What about a new team that is not in analytics yet?
+			var analyticsTeam = analyticTeams.FirstOrDefault(t => t.TeamCode == arg.Team.Id);
+			if (analyticsTeam == null)
+			{
+				return null;
+			}
 			return new AnalyticsPermission
 			{
 				PersonCode = arg.Person.Id.GetValueOrDefault(),
