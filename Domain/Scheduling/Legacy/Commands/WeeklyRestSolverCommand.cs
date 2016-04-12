@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
-		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			Func<IPersonSkillProvider> personSkillProvider,
 			ResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -36,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_schedulerStateHolder = schedulerStateHolder;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
-			_personSkillProvider = personSkillProvider;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
