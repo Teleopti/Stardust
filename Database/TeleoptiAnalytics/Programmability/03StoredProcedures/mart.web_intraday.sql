@@ -91,7 +91,7 @@ BEGIN
 		CASE ISNULL(offered_calls,0)
 			WHEN 0 THEN 0
 			ELSE 
-						ISNULL(handle_time_s,0) / ISNULL(offered_calls,0)
+				ISNULL(handle_time_s,0) / ISNULL(offered_calls,0)
 		END AS average_handle_time
 	FROM #result 
 	ORDER BY interval_id

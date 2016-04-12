@@ -12,7 +12,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 	public class MonitorIntradayDataSeries
 	{
-		public string [] TimeSeries { get; set; }
+		public string [] Time { get; set; }
+		public double [] ForecastedCalls { get; set; }
+		public double [] ForecastedAverageHandleTime { get; set; }
+		public double?[] AverageHandleTime { get; set; }
+		public double?[] OfferedCalls { get; set; }
 	}
 
 	public class MonitorIntradaySummary

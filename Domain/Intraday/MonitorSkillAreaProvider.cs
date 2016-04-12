@@ -30,14 +30,23 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var summary = new MonitorIntradaySummary();
 			var timeSeries = new List<string>();
+			var forecastedCallsSeries = new List<double>();
+			var forecastedAverageHandleTimeSeries = new List<double>();
+			var offeredCallsSeries = new List<double?>();
+			var averageHandleTimeSeries = new List<double?>();
+
 			foreach (var interval in intervals)
 			{
 				summary.ForecastedCalls += interval.ForecastedCalls;
 				summary.ForecastedHandleTime += interval.ForecastedHandleTime;
-				summary.OfferedCalls += interval.OfferedCalls;
-				summary.HandleTime += interval.HandleTime;
+				summary.OfferedCalls += interval.OfferedCalls ?? 0;
+				summary.HandleTime += interval.HandleTime ?? 0;
 				
 				timeSeries.Add(DateTime.Today.Date.AddMinutes(interval.IntervalId * intervalLength).ToShortTimeString());
+				forecastedCallsSeries.Add(interval.ForecastedCalls);
+				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
+				offeredCallsSeries.Add(interval.OfferedCalls);
+				averageHandleTimeSeries.Add(interval.AverageHandleTime);
 			}
 
 			summary.ForecastedAverageHandleTime = summary.ForecastedHandleTime / summary.ForecastedCalls;
@@ -48,7 +57,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 				Summary = summary,
 				DataSeries = new MonitorIntradayDataSeries
 				{
-					TimeSeries = timeSeries.ToArray()
+					Time = timeSeries.ToArray(),
+					ForecastedCalls = forecastedCallsSeries.ToArray(),
+					ForecastedAverageHandleTime = forecastedAverageHandleTimeSeries.ToArray(),
+					OfferedCalls = offeredCallsSeries.ToArray(),
+					AverageHandleTime = averageHandleTimeSeries.ToArray()
 				}
 			};
 		}

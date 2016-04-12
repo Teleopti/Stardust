@@ -91,9 +91,86 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(_existingSkillArea.Id.Value);
 
-			viewModel.DataSeries.TimeSeries.Length.Should().Be.EqualTo(2);
-			viewModel.DataSeries.TimeSeries.First().Should().Be.EqualTo("08:00");
-			viewModel.DataSeries.TimeSeries.Second().Should().Be.EqualTo("08:15");
+			viewModel.DataSeries.Time.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.Time.First().Should().Be.EqualTo("08:00");
+			viewModel.DataSeries.Time.Second().Should().Be.EqualTo("08:15");
+		}
+
+		[Test]
+		public void ShouldReturnForecastedCallsSeries()
+		{
+			IntradayMonitorDataLoader.AddInterval(firstInterval);
+			IntradayMonitorDataLoader.AddInterval(secondInterval);
+			SkillAreaRepository.Has(_existingSkillArea);
+			IntervalLengthFetcher.Has(15);
+
+			var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+			viewModel.DataSeries.ForecastedCalls.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.ForecastedCalls.First().Should().Be.EqualTo(firstInterval.ForecastedCalls);
+			viewModel.DataSeries.ForecastedCalls.Second().Should().Be.EqualTo(secondInterval.ForecastedCalls);
+		}
+
+		[Test]
+		public void ShouldReturnForecastedAverageHandleTimeSeries()
+		{
+			IntradayMonitorDataLoader.AddInterval(firstInterval);
+			IntradayMonitorDataLoader.AddInterval(secondInterval);
+			SkillAreaRepository.Has(_existingSkillArea);
+			IntervalLengthFetcher.Has(15);
+
+			var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+			viewModel.DataSeries.ForecastedAverageHandleTime.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.ForecastedAverageHandleTime.First().Should().Be.EqualTo(firstInterval.ForecastedAverageHandleTime);
+			viewModel.DataSeries.ForecastedAverageHandleTime.Second().Should().Be.EqualTo(secondInterval.ForecastedAverageHandleTime);
+		}
+
+		[Test]
+		public void ShouldReturnOfferedCallsSeries()
+		{
+			IntradayMonitorDataLoader.AddInterval(firstInterval);
+			IntradayMonitorDataLoader.AddInterval(secondInterval);
+			SkillAreaRepository.Has(_existingSkillArea);
+			IntervalLengthFetcher.Has(15);
+
+			var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+			viewModel.DataSeries.OfferedCalls.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.OfferedCalls.First().Should().Be.EqualTo(firstInterval.OfferedCalls);
+			viewModel.DataSeries.OfferedCalls.Second().Should().Be.EqualTo(secondInterval.OfferedCalls);
+		}
+
+		[Test]
+		public void ShouldReturnAverageHandleTimeSeries()
+		{
+			IntradayMonitorDataLoader.AddInterval(firstInterval);
+			IntradayMonitorDataLoader.AddInterval(secondInterval);
+			SkillAreaRepository.Has(_existingSkillArea);
+			IntervalLengthFetcher.Has(15);
+
+			var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
+			viewModel.DataSeries.AverageHandleTime.First().Should().Be.EqualTo(firstInterval.AverageHandleTime);
+			viewModel.DataSeries.AverageHandleTime.Second().Should().Be.EqualTo(secondInterval.AverageHandleTime);
+		}
+
+		[Test, Ignore]
+		public void ShouldReturnLatestStatsTime()
+		{
+			IntradayMonitorDataLoader.AddInterval(firstInterval);
+			secondInterval.OfferedCalls = null;
+			secondInterval.HandleTime = null;
+			secondInterval.AverageHandleTime = null;
+			IntradayMonitorDataLoader.AddInterval(secondInterval);
+			SkillAreaRepository.Has(_existingSkillArea);
+			IntervalLengthFetcher.Has(15);
+
+			var viewModel = Target.Load(_existingSkillArea.Id.Value);
+
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
+			viewModel.LatestStatsTime.Should().Be.EqualTo("08:15");
 		}
 	}
 }
