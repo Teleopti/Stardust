@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(checkerRestriction, optimizerPreferences, originalStateListForScheduleTag[i], dayOffOptimizationPreferences);
 
-				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizationOverLimitDecider, _container.Resolve<IMinWeekWorkTimeRule>());
+				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizationOverLimitDecider);
 
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 

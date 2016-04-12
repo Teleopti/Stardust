@@ -5,11 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
 {
-	public interface IMinWeekWorkTimeRule : INewBusinessRule
-	{
-	}
-
-	public class MinWeekWorkTimeRule : IMinWeekWorkTimeRule
+	public class MinWeekWorkTimeRule : INewBusinessRule
     {
         private bool _haltModify = true;
         private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;

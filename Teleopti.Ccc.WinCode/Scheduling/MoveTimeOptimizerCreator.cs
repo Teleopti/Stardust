@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IMinWeekWorkTimeRule minWeekWorkTimeRule,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
@@ -45,7 +43,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_dayOffOptimizationPreferenceProvider = dayOffOptimizationPreferenceProvider;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
@@ -83,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var dayOffOptimizationPreference = _dayOffOptimizationPreferenceProvider.ForAgent(scheduleMatrixPro.Person, scheduleMatrixPro.EffectivePeriodDays.First().Day);
 
 				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, _optimizerPreferences, scheduleMatrixContainer, dayOffOptimizationPreference);
-				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
+				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
 				var schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();

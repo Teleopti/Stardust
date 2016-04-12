@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -15,12 +16,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class OptimizationLimits : IOptimizationLimits
 	{
 		private readonly IOptimizationOverLimitByRestrictionDecider _overLimitByRestrictionDecider;
-		private readonly INewBusinessRule _minWeekWorkTimeRule;
 
-		public OptimizationLimits(IOptimizationOverLimitByRestrictionDecider overLimitByRestrictionDecider, INewBusinessRule minWeekWorkTimeRule)
+		public OptimizationLimits(IOptimizationOverLimitByRestrictionDecider overLimitByRestrictionDecider)
 		{
 			_overLimitByRestrictionDecider = overLimitByRestrictionDecider;
-			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 		}
 
 		public OverLimitResults OverLimitsCounts(IScheduleMatrixPro matrix)
@@ -42,11 +41,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var minWorkTimeIsFulfilled = true;
 			var dictionary = new Dictionary<IPerson, IScheduleRange> { { scheduleMatrixPro.Person, scheduleMatrixPro.ActiveScheduleRange } };
-
+			var minWeekWorkTime = new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor());
 			foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays)
 			{
 				var scheduleDays = new List<IScheduleDay> { scheduleDayPro.DaySchedulePart() };
-				minWorkTimeIsFulfilled = _minWeekWorkTimeRule.Validate(dictionary, scheduleDays).IsEmpty();
+				minWorkTimeIsFulfilled = minWeekWorkTime.Validate(dictionary, scheduleDays).IsEmpty();
 				if (!minWorkTimeIsFulfilled) break;
 			}	
 			

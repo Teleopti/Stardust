@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IMinWeekWorkTimeRule minWeekWorkTimeRule,
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
@@ -54,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_skillIntervalDataDivider = skillIntervalDataDivider;
 			_skillIntervalDataAggregator = skillIntervalDataAggregator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
@@ -105,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateContainer, dayOffOptimizationPreference);
 
-				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
+				var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
 				ISchedulingOptionsCreator schedulingOptionsCreator = new SchedulingOptionsCreator();
 				IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();

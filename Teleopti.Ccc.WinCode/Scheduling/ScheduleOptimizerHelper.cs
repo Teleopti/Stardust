@@ -91,7 +91,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					rollbackService,
 					_stateHolder(),
 					_container.Resolve<IEffectiveRestrictionCreator>(),
-					_container.Resolve<IMinWeekWorkTimeRule>(),
 					_container.Resolve<IResourceOptimizationHelper>(),
 					dayOffOptimizationPreferenceProvider,
 					_container.Resolve<IDeleteAndResourceCalculateService>());
@@ -232,8 +231,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							var optimizationOverLimitByRestrictionDecider = new OptimizationOverLimitByRestrictionDecider(
 								restrictionChecker, optimizerPreferences, originalStateContainer, dayOffOptimizePrefrerence);
 
-							var optimizationLimits = new OptimizationLimits(optimizationOverLimitByRestrictionDecider,
-								_container.Resolve<IMinWeekWorkTimeRule>());
+							var optimizationLimits = new OptimizationLimits(optimizationOverLimitByRestrictionDecider);
 							var overLimitCounts = optimizationLimits.OverLimitsCounts(matrix);
 
 

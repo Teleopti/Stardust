@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mock = new MockRepository();
 			_overLimitByRestrictionDecider = _mock.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 			_minWeekWorkTimeRule = _mock.StrictMock<INewBusinessRule>();
-			_target = new OptimizationLimits(_overLimitByRestrictionDecider, _minWeekWorkTimeRule);
+			_target = new OptimizationLimits(_overLimitByRestrictionDecider);
 			_overLimitResults = new OverLimitResults(100, 100, 100, 100, 100);
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_person = _mock.StrictMock<IPerson>();
@@ -40,45 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_effectiveDays = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_businessRuleResponse = _mock.StrictMock<IBusinessRuleResponse>();
-		}
-
-		[Test]
-		public void ShouldValidateTrueWhenPerWeekIsOk()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_scheduleMatrixPro.ActiveScheduleRange).Return(_scheduleRange);
-				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(_effectiveDays);
-				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_minWeekWorkTimeRule.Validate(_dictionary, new List<IScheduleDay> { _scheduleDay })).Return(new HashSet<IBusinessRuleResponse>());
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.ValidateMinWorkTimePerWeek(_scheduleMatrixPro);
-				Assert.IsTrue(result);
-			}
-		}
-
-		[Test]
-		public void ShouldValidateFalseWhenMinPerWeekFalse()
-		{
-
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
-				Expect.Call(_scheduleMatrixPro.ActiveScheduleRange).Return(_scheduleRange);
-				Expect.Call(_scheduleMatrixPro.EffectivePeriodDays).Return(_effectiveDays);
-				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-				Expect.Call(_minWeekWorkTimeRule.Validate(_dictionary, new List<IScheduleDay> { _scheduleDay })).Return(new HashSet<IBusinessRuleResponse> { _businessRuleResponse });
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.ValidateMinWorkTimePerWeek(_scheduleMatrixPro);
-				Assert.IsFalse(result);
-			}
 		}
 
 		[Test]

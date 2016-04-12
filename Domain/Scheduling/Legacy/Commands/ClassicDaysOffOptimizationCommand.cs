@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 		private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			IDayOffDecisionMaker dayOffDecisionMaker,
 			IResourceOptimizationHelper resourceOptimizationHelper, IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IMinWeekWorkTimeRule minWeekWorkTimeRule, IDayOffOptimizerValidator dayOffOptimizerValidator,
+			IDayOffOptimizerValidator dayOffOptimizerValidator,
 			ISchedulingOptionsCreator schedulingOptionsCreator, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
 		{
@@ -52,7 +51,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_dayOffDecisionMaker = dayOffDecisionMaker;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
-			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 			_dayOffOptimizerValidator = dayOffOptimizerValidator;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
@@ -157,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var restrictionChecker = new RestrictionChecker();
 			var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(restrictionChecker, optimizerPreferences, originalStateContainer, daysOffPreferences);
-			var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider, _minWeekWorkTimeRule);
+			var optimizationLimits = new OptimizationLimits(optimizerOverLimitDecider);
 
 			INightRestWhiteSpotSolverService nightRestWhiteSpotSolverService =
 				new NightRestWhiteSpotSolverService(new NightRestWhiteSpotSolver(),

@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixPro _matrix2;
 		private IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
-		private IMinWeekWorkTimeRule _minWeekWorkTimeRule;
-
 		private IDayOffOptimizationPreferenceProvider _dayOffOptimizationPreferenceProvider;
 		private IPerson _person;
 		private IScheduleDayPro _scheduleDayPro1;
@@ -60,8 +58,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
 			_resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
-			_minWeekWorkTimeRule = _mocks.StrictMock<IMinWeekWorkTimeRule>();
-
 			_dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences());
 			_person = new Person();
 			_scheduleDayPro1 = new ScheduleDayPro(new DateOnly(2015, 1, 1), _matrix1);
@@ -75,7 +71,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   _rollbackService,
 												   _schedulingResultStateHolder,
 												   _effectiveRestrictionCreator,
-												   _minWeekWorkTimeRule,
 												   _resourceOptimizationHelper,
 												   _dayOffOptimizationPreferenceProvider,
 													 MockRepository.GenerateStub<IDeleteAndResourceCalculateService>());

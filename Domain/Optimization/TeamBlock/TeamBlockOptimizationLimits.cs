@@ -17,12 +17,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class TeamBlockOptimizationLimits : ITeamBlockOptimizationLimits
 	{
 		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
-		private readonly IMinWeekWorkTimeRule _minWeekWorkTimeRule;
 
-		public TeamBlockOptimizationLimits(ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, IMinWeekWorkTimeRule minWeekWorkTimeRule)
+		public TeamBlockOptimizationLimits(ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
-			_minWeekWorkTimeRule = minWeekWorkTimeRule;
 		}
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -45,8 +43,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return validateMatrixesMinWeekWorkTime(teamInfo.MatrixesForGroup());
 		}
 
-		private bool validateMatrixesMinWeekWorkTime(IEnumerable<IScheduleMatrixPro> matrixes)
+		private static bool validateMatrixesMinWeekWorkTime(IEnumerable<IScheduleMatrixPro> matrixes)
 		{
+			var minWeekWorkTimeRule = new MinWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor());
 			foreach (var matrix in matrixes)
 			{
 				var dictionary = new Dictionary<IPerson, IScheduleRange> { { matrix.Person, matrix.ActiveScheduleRange } };
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
 				{
 					var scheduleDays = new List<IScheduleDay> { scheduleDayPro.DaySchedulePart() };
-					 if(!_minWeekWorkTimeRule.Validate(dictionary, scheduleDays).IsEmpty()) return false;
+					 if(!minWeekWorkTimeRule.Validate(dictionary, scheduleDays).IsEmpty()) return false;
 				}	
 			}
 
