@@ -288,7 +288,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
 
-			teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
 			schedulingOptions.DayOffTemplate = dayOffTemplates[0];
 			teamBlockDayOffOptimizerService.OptimizeDaysOff(
 				allMatrixes,
@@ -299,8 +298,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulingOptions,
 				resourceCalculateDelayer,
 				dayOffOptimizationPreferenceProvider,
-				teamInfoFactory);
-			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
+				teamInfoFactory,
+				_backgroundWorker);
 		}
 
 		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
