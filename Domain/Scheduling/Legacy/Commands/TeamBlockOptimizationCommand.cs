@@ -234,7 +234,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
-			schedulingOptions.DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate;
 
 			_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 				allMatrixes,

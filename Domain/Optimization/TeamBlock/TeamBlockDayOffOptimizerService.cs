@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
-		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer,
 			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-			Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
 			IDayOffDecisionMaker dayOffDecisionMaker)
 		{
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_schedulerStateHolder = schedulerStateHolder;
 			_optimizerHelper = optimizerHelper;
 			_dayOffDecisionMaker = dayOffDecisionMaker;
 		}
@@ -104,7 +104,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulingProgress schedulingProgress
 			)
 		{
-			var schedulingResultStateHolder = _schedulingResultStateHolder();
+			var schedulingResultStateHolder = _schedulerStateHolder().SchedulingResultState;
+			schedulingOptions.DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate;
+
 			IScheduleResultDataExtractor allSkillsDataExtractor =
 	_optimizerHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, schedulingResultStateHolder);
 
