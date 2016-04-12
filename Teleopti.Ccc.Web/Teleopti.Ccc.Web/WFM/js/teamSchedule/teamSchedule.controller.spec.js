@@ -116,7 +116,7 @@ describe("[Test for TeamScheduleController]:", function() {
 		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
 		selectedPersons[personSchedule1.PersonId].isSelected = true;
 
-		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 12:30:00").format('LT'));
+		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 12:30:00").format('HH:mm'));
 	});
 
 	it("should get correct new activity start for selected date", function () {
@@ -129,7 +129,7 @@ describe("[Test for TeamScheduleController]:", function() {
 		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
 		selectedPersons[personSchedule1.PersonId].isSelected = true;
 
-		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 08:00:00").format('LT'));
+		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 08:00:00").format('HH:mm'));
 	});
 
 	it("should keep the activity selection when schedule reloaded", function () {

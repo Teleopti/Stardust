@@ -208,10 +208,10 @@
 			if (vm.scheduleDateMoment().format('YYYY-MM-DD') == nowInUserTimeZone.format('YYYY-MM-DD')) {
 				var minutes = Math.ceil(nowInUserTimeZone.minute() / 15) * 15;
 				var start = nowInUserTimeZone.startOf('hour').minutes(minutes);
-				return start.format('LT');
+				return start.format('HH:mm');
 			}else {
 				var latestStart = scheduleMgmtSvc.getLatestStartOfSelectedSchedule(vm.scheduleDateMoment(), personSelectionSvc.getSelectedPersonIdList());
-				return moment(latestStart).format('LT');
+				return moment(latestStart).format('HH:mm');
 			}
 		};
 
