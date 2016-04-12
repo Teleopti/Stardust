@@ -1,16 +1,13 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', [
-			'$scope', '$q', '$locale', '$translate', 'TeamSchedule', 'GroupScheduleFactory',
-			'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts', 'PersonAbsence',
-			'Toggle', 'SignalR', '$mdComponentRegistry', '$mdSidenav', '$mdUtil', 'guidgenerator', 'ShortCuts', 'keyCodes',
-			'dialogs', 'WFMDate', 'CommandCommon', TeamScheduleController
+	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$q', '$locale', '$translate', 'TeamSchedule',
+		'GroupScheduleFactory', 'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts',
+		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', TeamScheduleController
 		]);
 
-	function TeamScheduleController($scope, $q, $locale, $translate, teamScheduleSvc, groupScheduleFactory,
-		notificationService, personSelectionSvc, scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc,
-		$mdComponentRegistry, $mdSidenav, $mdUtil, guidgenerator, shortCuts, keyCodes, dialogSvc, WFMDateSvc, CommandCommonSvc) {
+	function TeamScheduleController($q, $translate, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
+		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc) {
 		
 		var vm = this;
 
