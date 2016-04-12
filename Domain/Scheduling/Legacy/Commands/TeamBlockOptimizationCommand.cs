@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,14 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
 	public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
 	{
-		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
-		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
-		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly IMatrixListFactory _matrixListFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ITeamBlockClearer _teamBlockCleaner;
@@ -34,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-		private readonly ITeamDayOffModifier _teamDayOffModifier;
 		private ISchedulingProgress _backgroundWorker;
 		private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
@@ -44,27 +36,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
-		private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 		private readonly ITeamBlockMoveTimeBetweenDaysCommand _teamBlockMoveTimeBetweenDaysCommand;
 		private readonly IIntraIntervalOptimizationCommand _intraIntervalOptimizationCommand;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
-		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
-		private readonly TeamBlockDaysOffSameDaysOffLockSyncronizer _teamBlockDaysOffSameDaysOffLockSyncronizer;
+		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 
 		public TeamBlockOptimizationCommand(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockClearer teamBlockCleaner,
-			IDayOffDecisionMaker dayOffDecisionMaker,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
-			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-			ILockableBitArrayFactory lockableBitArrayFactory,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
-			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			ITeamDayOffModifier teamDayOffModifier,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
@@ -76,27 +60,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
 			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand,
-			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
 			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
 			IIntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
 			IOptimizerHelperHelper optimizerHelper,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			TeamBlockDaysOffSameDaysOffLockSyncronizer teamBlockDaysOffSameDaysOffLockSyncronizer)
+			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
-			_dayOffDecisionMaker = dayOffDecisionMaker;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
-			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
-			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
-			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
-			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
-			_teamDayOffModifier = teamDayOffModifier;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
@@ -109,14 +85,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
 			_teamBlockScheduler = teamBlockScheduler;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;
-			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockMoveTimeBetweenDaysCommand = teamBlockMoveTimeBetweenDaysCommand;
 			_intraIntervalOptimizationCommand = intraIntervalOptimizationCommand;
 			_optimizerHelper = optimizerHelper;
 			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
-			_teamBlockDayOffsInPeriodValidator = teamBlockDayOffsInPeriodValidator;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
-			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
+			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -258,30 +232,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			_optimizerHelper.LockDaysForDayOffOptimization(allMatrixes, optimizationPreferences, selectedPeriod);
 
-			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService =
-				new TeamBlockDayOffOptimizerService(
-					_lockableBitArrayFactory,
-					_lockableBitArrayChangesTracker,
-					_teamBlockScheduler,
-					_teamBlockInfoFactory,
-					_safeRollbackAndResourceCalculation,
-					_teamDayOffModifier,
-					_teamBlockSteadyStateValidator,
-					_teamBlockCleaner,
-					_teamBlockOptimizationLimits,
-					_teamBlockMaxSeatChecker,
-					_teamBlockScheudlingOptions, 
-					_allTeamMembersInSelectionSpecification,
-					_teamBlockShiftCategoryLimitationValidator,
-					_teamBlockDayOffsInPeriodValidator,
-					_teamBlockDaysOffSameDaysOffLockSyncronizer,
-					_scheduleResultDataExtractorProvider,
-					_dayOffOptimizationDecisionMakerFactory,
-					() => _schedulerStateHolder().SchedulingResultState,
-					_optimizerHelper,
-					_dayOffDecisionMaker
-					);
-
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder().CommonStateHolder.DayOffs
 				where ((IDeleteTag)item).IsDeleted == false
 				select item).ToList();
@@ -289,7 +239,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
 
 			schedulingOptions.DayOffTemplate = dayOffTemplates[0];
-			teamBlockDayOffOptimizerService.OptimizeDaysOff(
+			_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 				allMatrixes,
 				selectedPeriod,
 				selectedPersons,
