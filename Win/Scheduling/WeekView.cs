@@ -88,8 +88,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             permissionState = restrictionChecker.CheckRotations(schedulePart);
             drawRestrictionIcon.DrawRotation(permissionState);
 
+	       
             permissionState = restrictionChecker.CheckPreference(schedulePart);
-            drawRestrictionIcon.DrawPreference(permissionState,restrictionChecker.MustHavePreference );
+
+			var mustHavePreference = false;
+	        if (permissionState != PermissionState.None)
+	        {
+		        mustHavePreference = restrictionChecker.HaveMustHavePreference(schedulePart);
+	        }
+
+			drawRestrictionIcon.DrawPreference(permissionState, mustHavePreference);
 
             permissionState = restrictionChecker.CheckStudentAvailability(schedulePart);
             drawRestrictionIcon.DrawStudentAvailability(permissionState);

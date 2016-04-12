@@ -9,11 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
     public class RestrictionChecker : ICheckerRestriction
     {
-    	public bool MustHavePreference
-    	{
-    		get; set; 
-		}
-
         public PermissionState CheckAvailability(IScheduleDay schedulePart)
         {
             if (schedulePart == null)
@@ -364,8 +359,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (preference == null)
                 return PermissionState.None;
 
-            MustHavePreference = preference.MustHave;
-
 			PermissionState permissionState = CheckPreferenceDayOff(schedulePart);
 
             if (permissionState != PermissionState.Broken)
@@ -384,6 +377,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             return permissionState;
         }
+
+	    public bool HaveMustHavePreference(IScheduleDay schedulePart)
+	    {
+			if (schedulePart == null)
+				return false;
+
+			var preference = RestrictionPreference(schedulePart);
+
+			if (preference == null)
+				return false;
+
+			return preference.MustHave;
+		}
 
 		public PermissionState CheckPreferenceMustHave(IScheduleDay schedulePart)
         {
