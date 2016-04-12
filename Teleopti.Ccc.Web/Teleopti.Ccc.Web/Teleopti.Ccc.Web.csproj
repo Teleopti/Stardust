@@ -1603,6 +1603,7 @@
     <Content Include="Areas\MyTime\Views\CiscoWidget\Index.cshtml" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
     <Content Include="WFM\css\_businessunits.scss" />
+    <Content Include="WFM\css\_main.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />
