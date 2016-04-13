@@ -12,8 +12,8 @@ namespace Stardust.Manager
 
 		public RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy> GetPolicy()
 		{
-			var fromMilliseconds = TimeSpan.FromSeconds(DelaysSeconds);
-			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(MaxRetry, fromMilliseconds);
+			var fromSeconds = TimeSpan.FromSeconds(DelaysSeconds);
+			var policy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(MaxRetry, fromSeconds);
 			return policy;
 		}
 
