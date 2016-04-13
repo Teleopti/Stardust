@@ -200,6 +200,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				if (!logonDataCanBeChanged())
 					return;
 				_tenantData.Identity = value;
+				if (_tenantData.Identity == "")
+					_tenantData.Identity = null;
 				_tenantData.Changed = true;
 			}
 		}
