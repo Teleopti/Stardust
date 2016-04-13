@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
 			builder.RegisterType<ImportForecastToSkillCommand>().As<IImportForecastToSkillCommand>();
 			builder.RegisterType<SendImportForecastBusMessage>().As<ISendBusMessage>();
-			builder.RegisterType<QuickForecastWorkloadProcessor>().As<IQuickForecastWorkloadProcessor>();
 			builder.RegisterType<ForecastClassesCreator>().As<IForecastClassesCreator>();
 			builder.RegisterType<StatisticLoader>().As<IStatisticLoader>();
 			builder.RegisterType<ReforecastPercentCalculator>().As<IReforecastPercentCalculator>();

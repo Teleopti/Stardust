@@ -186,14 +186,13 @@
     <Compile Include="ApplicationLayer\Events\AnalyticsPersonPeriodSkillsChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAssignmentLayerRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\NewAbsenceRequestCreatedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadEvent.cs" />
     <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadsEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkill.cs" />
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkillCollectionEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusHealthCheckEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
-    <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadProcessor.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ForecastClassesCreator.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsEventHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\RecalculateForecastOnSkillEventHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\StatisticLoader.cs" />

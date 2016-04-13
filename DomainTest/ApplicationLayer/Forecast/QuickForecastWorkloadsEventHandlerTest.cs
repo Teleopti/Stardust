@@ -17,10 +17,10 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
 	[TestFixture]
-	public class QuickForecastWorkloadProcessorTest
+	public class QuickForecastWorkloadEventHandlerTest
 	{
 		private ISkillDayRepository _skillDayRep;
-		private QuickForecastWorkloadProcessor _target;
+		private QuickForecastWorkloadsEventHandlerBase _target;
 		private IOutlierRepository _outlierRep;
 		private IWorkloadRepository _workloadRep;
 		private IScenarioRepository _scenarioRep;
@@ -33,7 +33,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IWorkloadDayHelper _workloadDayHelper;
 		private IUnitOfWork _unitOfWork;
 		private Guid _jobId;
-		private QuickForecastWorkloadEvent _mess;
+		private ICollection<Guid> _workloadIds;
+		private QuickForecastWorkloadsEvent _mess;
 		private IStatisticHelper _statisticHelper;
 		private DateOnlyPeriod _statPeriod;
 		private IForecastClassesCreator _forecastClassesCreator;
@@ -62,14 +63,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
 			_validatedVolumeDayRepo = MockRepository.GenerateMock<IValidatedVolumeDayRepository>();
 
-			_target = new QuickForecastWorkloadProcessor(_skillDayRep, _multisiteDayRep, _outlierRep, _workloadRep, _skillRep, _scenarioRep, _jobResultRep, _jobResultFeedback, _messBroker,
-															   _workloadDayHelper, _forecastClassesCreator,_statisticHelper,_validatedVolumeDayRepo, _currentunitOfWorkFactory);
+			_target = new QuickForecastWorkloadsEventHandlerBase(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback, 
+				_workloadDayHelper, _forecastClassesCreator, _statisticHelper, _validatedVolumeDayRepo, _messBroker, _skillRep);
 			
 			_unitOfWork =  MockRepository.GenerateMock<IUnitOfWork>();
 
 			_jobId = Guid.NewGuid();
+			_workloadIds = new Collection<Guid>() {Guid.NewGuid()};
+
 			_statPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 31);
-			_mess = new QuickForecastWorkloadEvent {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3,UseDayOfMonth = true};
+
+			_mess = new QuickForecastWorkloadsEvent()
+			{
+				JobId = _jobId,
+				SmoothingStyle = 3,
+				WorkloadIds = _workloadIds,
+				UseDayOfMonth = true,
+				StatisticPeriod = _statPeriod
+			};
 		}
 
 		[Test]
@@ -117,7 +128,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			//_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
 			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
@@ -162,7 +172,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			//_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
 			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
@@ -189,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 														  o => o.IgnoreArguments());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test, Ignore]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldNotForecastWhenNoStatistic()
 		{
 			var jobResult = MockRepository.GenerateMock<IJobResult>();
@@ -201,12 +210,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x=> x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			_scenarioRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			//_forecastClassesCreator.Stub(x=> x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			_statisticHelper.Stub(x=> x.LoadStatisticData(_statPeriod,workload)).Return(new List<IWorkloadDayBase>());
-
-			//this is a strange test but trying to replicate what was here before
-			var target = new QuickForecastWorkloadProcessor(_skillDayRep, _multisiteDayRep, _outlierRep, _workloadRep, _skillRep, _scenarioRep, _jobResultRep, _jobResultFeedback, _messBroker,
-															   _workloadDayHelper, _forecastClassesCreator, _statisticHelper, null, _currentunitOfWorkFactory);
+			
+			var target = new QuickForecastWorkloadsEventHandlerBase(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback,
+				_workloadDayHelper, _forecastClassesCreator, _statisticHelper, null, _messBroker, _skillRep);
 
 			target.Handle(_mess);
 
@@ -241,33 +248,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			Assert.That(creator.CreateWorkloadDayTemplateCalculator(_statisticHelper,_outlierRep),Is.Not.Null);
 			Assert.That(creator.GetNewTaskOwnerPeriod(new List<ITaskOwner>()),Is.Not.Null);
 
-			_repFactory.Stub(x => x.CreateStatisticRepository()).Return(statRep);		
-			//Assert.That(creator.CreateStatisticHelper(_unitOfWork),Is.Not.Null);
-		}
-
-		[Test]
-		public void ShouldSendMessageForEachWorkload()
-		{
-			FakeQuickWorkloadProcessor processor = new FakeQuickWorkloadProcessor();
-			var consumer = new QuickForecastWorkloadsEventHandlerBase(processor);
-			var mess = new QuickForecastWorkloadsEvent { WorkloadIds = new Collection<Guid> { Guid.NewGuid(), Guid.NewGuid() } };
-
-			consumer.Handle(mess);
-			Assert.IsTrue(processor.IAmCalled == 2);
+			_repFactory.Stub(x => x.CreateStatisticRepository()).Return(statRep);	
 		}
 	}
-
-	public class FakeQuickWorkloadProcessor : IQuickForecastWorkloadProcessor
-	{
-		public int IAmCalled { get; set; }
-
-		public FakeQuickWorkloadProcessor()
-		{
-			IAmCalled = 0;
-		}
-		public void Handle(QuickForecastWorkloadEvent @event)
-		{
-			IAmCalled++;
-		}
-	}
+	
 }
