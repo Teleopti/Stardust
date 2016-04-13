@@ -931,6 +931,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\Requests\Filtering.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Filtering.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\Requests\RequestsStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatMap.feature.cs">
       <AutoGen>True</AutoGen>
@@ -1380,6 +1385,10 @@
     <None Include="Wfm\Requests\Basic.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Basic.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Requests\Filtering.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Filtering.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Seat Management\SeatMap.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
