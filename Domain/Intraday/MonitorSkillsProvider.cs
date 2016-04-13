@@ -8,23 +8,19 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
-	public class MonitorSkillAreaProvider
+	public class MonitorSkillsProvider
 	{
-		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly IIntradayMonitorDataLoader _intradayMonitorDataLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 
-		public MonitorSkillAreaProvider(ISkillAreaRepository skillAreaRepository, IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher)
+		public MonitorSkillsProvider(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher)
 		{
-			_skillAreaRepository = skillAreaRepository;
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
 		}
 
-		public MonitorDataViewModel Load(Guid skillAreaId)
+		public MonitorDataViewModel Load(Guid [] skillIdList)
 		{
-			var skillArea = _skillAreaRepository.Get(skillAreaId);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
 			var intervals = _intradayMonitorDataLoader.Load(skillIdList, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, DateOnly.Today);
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 
@@ -57,10 +53,20 @@ namespace Teleopti.Ccc.Domain.Intraday
 			summary.ForecastedAverageHandleTime = summary.ForecastedHandleTime / summary.ForecastedCalls;
 			summary.AverageHandleTime = summary.HandleTime / summary.OfferedCalls;
 
-			return new MonitorDataViewModel()
+		    summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
+		        ? -99
+		        : Math.Round(Math.Abs(summary.ForecastedCalls - summary.OfferedCalls)*100/summary.ForecastedCalls, 1);
+
+		    summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedHandleTime) < 0.0001
+		        ? -99
+		        : Math.Round(Math.Abs(summary.ForecastedHandleTime - summary.HandleTime)*100/summary.ForecastedHandleTime, 1);
+
+		    return new MonitorDataViewModel()
 			{
 				Summary = summary,
-                LatestStatsTime = DateTime.Today.Date.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength).ToShortTimeString(),
+                LatestStatsTime = latestQueueStatsIntervalId == - 1 
+                ? String.Empty 
+                : DateTime.Today.Date.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength).ToShortTimeString(),
                 DataSeries = new MonitorIntradayDataSeries
 				{
 					Time = timeSeries.ToArray(),

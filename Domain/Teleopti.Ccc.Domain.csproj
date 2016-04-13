@@ -349,7 +349,7 @@
     <Compile Include="Common\ServiceLocatorForEntity.cs" />
     <Compile Include="DayOffPlanning\CreateIslands.cs" />
     <Compile Include="Intraday\MonitorDataViewModel.cs" />
-    <Compile Include="Intraday\MonitorSkillAreaProvider.cs" />
+    <Compile Include="Intraday\MonitorSkillsProvider.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarm.cs" />

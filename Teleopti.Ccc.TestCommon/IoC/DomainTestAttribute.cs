@@ -134,13 +134,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
 			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
-			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
-			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
 			system.UseTestDouble<FakeIntradayMonitorDataLoader>().For<IIntradayMonitorDataLoader>();
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 			system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
 			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
 			system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();
+			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
 
 			fakePrincipal(system);
 		}

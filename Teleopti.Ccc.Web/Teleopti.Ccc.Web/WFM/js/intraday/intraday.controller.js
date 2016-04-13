@@ -2,20 +2,20 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
-			'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout',
-			function ($scope, $state, intradayService, $filter, NoticeService, $timeout) {
+			'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout', '$compile',
+			function ($scope, $state, intradayService, $filter, NoticeService, $timeout, $compile) {
 
 				var autocompleteSkill;
 				var autocompleteSkillArea;
 				var timeoutPromise;
-				var pollingTimeout = 5000;
+				var pollingTimeout = 60000;
 				$scope.DeleteSkillAreaModal = false;
 				$scope.showIncoming = true;
 				$scope.showStaffing = false;
 				$scope.showProductivity = false;
 				$scope.showSummary = false;
 				$scope.selectedIndex = 0;
-				$scope.dataSet = "200,200,200,200,200";
+				$scope.dataSet = "08:00,08:15,08:30,08:45,09:00,09:15,09:30,09:45,10:00,10:15,10:30,10:45,11:00,11:15,11:30,11:45,12:00,12:15,12:30,12:45,13:00,13:15,13:30,13:45,14:00,14:15,14:30,14:45,15:00,15:15,15:30,15:45,16:00,16:15,16:30,16:45,17:00,17:15,17:30,17:45";
 
 				var getAutoCompleteControls = function() {
 					var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
@@ -124,29 +124,33 @@
 					$scope.skillSelected(item);
 				};
 
+			    var setResult = function(result) {
+			        if (result.LatestStatsTime === "") {
+			            $scope.HasMonitorData = false;
+			            return;
+			        }
+			        $scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
+			        $scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
+			        $scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
+			        $scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
+			        $scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
+			        $scope.timeSeries = result.DataSeries.Time.toString();
+			        $scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls.toString();
+			        $scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
+			        $scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
+
+			        $scope.HasMonitorData = true;
+			    };
 
 				var pollSkillMonitorData = function () {
 					cancelTimeout();
-					$scope.HasMonitorData = true;
-					return;
 					intradayService.getSkillMonitorData.query(
 						{
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
-							if (moment(result.LatestStatsTime).isSame(moment('0001-01-01'))) {
-								$scope.HasMonitorData = false;
-								return;
-							}
-							$scope.forecastedCalls = $filter('number')(result.ForecastedCalls, 1);
-							$scope.forecastedAverageHandleTime = $filter('number')(result.ForecastedAverageHandleTime, 1);
-							$scope.offeredCalls = $filter('number')(result.OfferedCalls, 1);
-							$scope.averageHandleTime = $filter('number')(result.AverageHandleTime, 1);
-							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-							$scope.forecastActualCallsDifference = $filter('number')(result.ForecastedActualCallsDiff, 1);
-							$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.ForecastedActualHandleTimeDiff, 1);
-							$scope.HasMonitorData = true;
+					        setResult(result);
 						},
 						function(error) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
@@ -174,18 +178,7 @@
 						})
 						.$promise.then(function (result) {
 							timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
-							if (moment(result.LatestStatsTime).isSame(moment('0001-01-01'))) {
-								$scope.HasMonitorData = false;
-								return;
-							}
-							$scope.forecastedCalls = $filter('number')(result.ForecastedCalls, 1);
-							$scope.forecastedAverageHandleTime = $filter('number')(result.ForecastedAverageHandleTime, 1);
-							$scope.offeredCalls = $filter('number')(result.OfferedCalls, 1);
-							$scope.averageHandleTime = $filter('number')(result.AverageHandleTime, 1);
-							$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-							$scope.forecastActualCallsDifference = $filter('number')(result.ForecastedActualCallsDiff, 1);
-							$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.ForecastedActualHandleTimeDiff, 1);
-							$scope.HasMonitorData = true;
+							setResult(result);
 						},
 						function(error) {
 							timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);

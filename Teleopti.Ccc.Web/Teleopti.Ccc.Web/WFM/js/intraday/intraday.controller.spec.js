@@ -35,15 +35,24 @@ describe('IntradayCtrl', function () {
 			SkillAreas: skillAreas
 		};
 
-		monitorData = {
-			ForecastedCalls: '100.0',
-			ForecastedAverageHandleTime: '60.0',
-			OfferedCalls: '50.0',
-			AverageHandleTime: '30.0',
-			LatestStatsTime: '1901-01-01 13:00',
-			ForecastedActualCallsDiff: '50.0',
-			ForecastedActualHandleTimeDiff: '50.0'
-		};
+	    monitorData = {
+	            Summary: {
+	                ForecastedCalls: "100.0",
+	                ForecastedAverageHandleTime: "60.0",
+	                OfferedCalls: "50.0",
+	                AverageHandleTime: "30.0",
+	                ForecastedActualCallsDiff: "50.0",
+	                ForecastedActualHandleTimeDiff: "55.0"
+	            },
+	            DataSeries: {
+	                Time: {},
+	                ForecastedCalls: {},
+	                ForecastedAverageHandleTime: {},
+	                OfferedCalls: {},
+	                AverageHandleTime: {}
+	            },
+	            LatestStatsTime: "13:00"
+	        };
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_) {
@@ -119,13 +128,13 @@ describe('IntradayCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
-		expect(scope.forecastedCalls).toEqual(monitorData.ForecastedCalls);
-		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.ForecastedAverageHandleTime);
-		expect(scope.offeredCalls).toEqual(monitorData.OfferedCalls);
-		expect(scope.averageHandleTime).toEqual(monitorData.AverageHandleTime);
+		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
+		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
+		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
+		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
 		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
-		expect(scope.forecastActualCallsDifference).toEqual(monitorData.ForecastedActualCallsDiff);
-		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.ForecastedActualHandleTimeDiff);
+		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
+		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
 	});
 
 	it('should monitor first skill area if there are any', function () {
@@ -135,13 +144,13 @@ describe('IntradayCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
-		expect(scope.forecastedCalls).toEqual(monitorData.ForecastedCalls);
-		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.ForecastedAverageHandleTime);
-		expect(scope.offeredCalls).toEqual(monitorData.OfferedCalls);
-		expect(scope.averageHandleTime).toEqual(monitorData.AverageHandleTime);
+		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
+		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
+		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
+		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
 		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
-		expect(scope.forecastActualCallsDifference).toEqual(monitorData.ForecastedActualCallsDiff);
-		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.ForecastedActualHandleTimeDiff);
+		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
+		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
 	});
 
 	it('should have permission to modify skill area', function() {
@@ -153,7 +162,7 @@ describe('IntradayCtrl', function () {
 	it('should show friendly message if no data for skill area', function () {
 		createController();
 		scope.skillAreaSelected(scope.skillAreas[0]);
-		monitorData.LatestStatsTime = '0001-01-01';
+		monitorData.LatestStatsTime = "";
 		$httpBackend.flush();
 
 		expect(scope.HasMonitorData).toEqual(false);

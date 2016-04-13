@@ -78,21 +78,21 @@ BEGIN
 
 	-- Return data by interval
 	SELECT
-		interval_id,
-		forecasted_calls,
-		forecasted_handle_time_s,
+		interval_id AS IntervalId,
+		forecasted_calls AS ForecastedCalls,
+		forecasted_handle_time_s AS ForecastedHandleTime,
 		CASE ISNULL(forecasted_calls,0)
 			WHEN 0 THEN 0
 			ELSE 
 				ISNULL(forecasted_handle_time_s,0) / ISNULL(forecasted_calls,0)
-		END AS forecasted_average_handle_time,
-		offered_calls,
-		handle_time_s,
+		END AS ForecastedAverageHandleTime,
+		offered_calls AS OfferedCalls,
+		handle_time_s AS HandleTime,
 		CASE ISNULL(offered_calls,0)
 			WHEN 0 THEN 0
 			ELSE 
 				ISNULL(handle_time_s,0) / ISNULL(offered_calls,0)
-		END AS average_handle_time
+		END AS AverageHandleTime
 	FROM #result 
 	ORDER BY interval_id
 

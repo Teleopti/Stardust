@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DeleteSkillArea>().SingleInstance();
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
-			builder.RegisterType<MonitorSkillAreaProvider>().SingleInstance();
+			builder.RegisterType<MonitorSkillsProvider>().SingleInstance();
 		}
 	}
 }
