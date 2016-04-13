@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		/// <summary>
 		/// Id of the person absence current projection mapped from, will be used in client side for remove absence.
 		/// </summary>
-		public Guid? ActivityId { get; set; }
+		public Guid? ShiftLayerId { get; set; }
 		public Guid? ParentPersonAbsence { get; set; }
 		public string Color { get; set; }
 		public string Description { get; set; }

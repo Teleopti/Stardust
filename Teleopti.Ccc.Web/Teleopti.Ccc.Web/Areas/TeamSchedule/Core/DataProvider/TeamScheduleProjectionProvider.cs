@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -39,7 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 
 			var personAssignment = scheduleDay.PersonAssignment();
-			var overtimeActivities = personAssignment != null
+			var shiftLayersList = personAssignment?.ShiftLayers?.ToList();
+
+            var overtimeActivities = personAssignment != null
 				? personAssignment.OvertimeActivities().ToArray()
 				: null;
 
@@ -67,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				foreach (var layer in ((VisualLayerCollection)visualLayerCollection).UnMergedCollection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
-					var isPayLoadActivity = layer.Payload is IActivity;
+					var isMainShiftLayer = layer.Payload is IActivity;
 					var isAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential;
 					var startDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.StartDateTime, userTimeZone);
 					var endDateTimeInUserTimeZone = TimeZoneInfo.ConvertTimeFromUtc(layer.Period.EndDateTime, userTimeZone);
@@ -77,11 +80,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
+
+				    Guid? shiftLayerId = null;
+                    if (isMainShiftLayer && shiftLayersList != null)
+				    {
+				        var matchedShiftLayers = shiftLayersList.Where(x => x.Period.Contains(layer.Period)).ToList();
+				        shiftLayerId = matchedShiftLayers.LastOrDefault()?.Id;
+				    }
 					
 					projections.Add(new GroupScheduleProjectionViewModel
 					{
 						ParentPersonAbsence = isPayloadAbsence ? layer.PersonAbsenceId : null,
-						ActivityId = isPayLoadActivity ? layer.Payload.Id : null,
+						ShiftLayerId = shiftLayerId,
 						Description = description.Name,
 						Color = isPayloadAbsence
 							? (isAbsenceConfidential && !canViewConfidential

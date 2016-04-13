@@ -65,7 +65,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 	it('can select and deselect person absence', inject(function() {
 		var personAbsence1 = {
 			ParentPersonAbsence: "PersonAbsenceId-111",
-			ActivityId: null,
+			ShiftLayerId: null,
 			Start: "2016-02-19 08:00",
 			Selected: false,
 			ToggleSelection: function() {
@@ -74,7 +74,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 		};
 		var personAbsence2 = {
 			ParentPersonAbsence: "PersonAbsenceId-222",
-			ActivityId: null,
+			ShiftLayerId: null,
 			Start: "2016-02-19 15:00",
 			Selected: false,
 			ToggleSelection: function() {
@@ -83,7 +83,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 		};
 		var personAbsence3 = {
 			ParentPersonAbsence: "PersonAbsenceId-111",
-			ActivityId: null,
+			ShiftLayerId: null,
 			Start: "2016-02-19 15:30",
 			Selected: false,
 			ToggleSelection: function() {
@@ -133,7 +133,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 
 	it('can select and deselect person activities', inject(function () {
 		var personActivity1 = {
-			ActivityId:'111',
+		    ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 08:00",
 			Selected: false,
@@ -142,7 +142,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			}
 		};
 		var personActivity2 = {
-			ActivityId:'222',
+		    ShiftLayerId: '222',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:00",
 			Selected: false,
@@ -151,7 +151,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			}
 		};
 		var personActivity3 = {
-			ActivityId:'333',
+		    ShiftLayerId: '333',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:30",
 			Selected: false,
@@ -207,7 +207,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 
 	it('can select and deselect same activities in different layers', inject(function () {
 		var personActivity1 = {
-			ActivityId:'111',
+		    ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 08:00",
 			Selected: false,
@@ -216,7 +216,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			}
 		};
 		var personActivity2 = {
-			ActivityId:'222',
+		    ShiftLayerId: '222',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:00",
 			Selected: false,
@@ -225,7 +225,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			}
 		};
 		var personActivity3 = {
-			ActivityId:'111',
+		    ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:30",
 			Selected: false,
@@ -308,7 +308,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 
 	it("cannot select overtime layer", function() {
 		var personActivity1 = {
-			ActivityId: '111',
+		    ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 08:00",
 			Selected: false,
@@ -317,7 +317,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			}
 		};
 		var overtimeActivity = {
-			ActivityId: '222',
+		    ShiftLayerId: '222',
 			ParentPersonAbsence: null,
 			IsOvertime: true,
 			Start: "2016-02-19 15:00",

@@ -63,15 +63,15 @@
 				angular.forEach(shift.Projections, function (projection) {
 					
 					var isPersonAbsenceValid = projection.ParentPersonAbsence != undefined && currentProjection.ParentPersonAbsence != undefined;
-					var isPersonActivityValid = projection.ActivityId != undefined && currentProjection.ActivityId != undefined;
-					if ((isPersonAbsenceValid && projection.ParentPersonAbsence === currentProjection.ParentPersonAbsence) || (isPersonActivityValid && projection.ActivityId === currentProjection.ActivityId)) {
+					var isPersonActivityValid = projection.ShiftLayerId != undefined && currentProjection.ShiftLayerId != undefined;
+					if ((isPersonAbsenceValid && projection.ParentPersonAbsence === currentProjection.ParentPersonAbsence) || (isPersonActivityValid && projection.ShiftLayerId === currentProjection.ShiftLayerId)) {
 						projection.Selected = selected;
 					}
 					if (projection.Selected && projection.ParentPersonAbsence != undefined && selectedPersonAbsencesLocal.indexOf(projection.ParentPersonAbsence) === -1)
 						selectedPersonAbsencesLocal.push(projection.ParentPersonAbsence);
 
-					if (projection.Selected && projection.ActivityId != undefined && selectedPersonActivitiesLocal.indexOf(projection.ActivityId) === -1)
-						selectedPersonActivitiesLocal.push(projection.ActivityId);
+					if (projection.Selected && projection.ShiftLayerId != undefined && selectedPersonActivitiesLocal.indexOf(projection.ShiftLayerId) === -1)
+					    selectedPersonActivitiesLocal.push(projection.ShiftLayerId);
 				});
 			});
 

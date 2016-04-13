@@ -324,7 +324,7 @@ describe("PersonSchedule", function () {
 			"Date": yesterday,
 			"Projection": [
 			{
-				"ActivityId": "111",
+			    "ShiftLayerId": "111",
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": yesterday + " 19:00",
@@ -339,14 +339,14 @@ describe("PersonSchedule", function () {
 			"Date": queryDate,
 			"Projection": [
 			{
-				"ActivityId": "222",
+			    "ShiftLayerId": "222",
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 07:00",
 				"Minutes": 240
 			},
 			{
-				"ActivityId": "333",
+			    "ShiftLayerId": "333",
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 11:00",

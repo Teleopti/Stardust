@@ -271,7 +271,7 @@
 	
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonIds.length).toEqual(2);
-		expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
+		expect(activityData.ShiftLayerId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
 		expect(activityData.StartTime).toEqual('2015-01-01 02:00');
 		expect(activityData.EndTime).toEqual('2015-01-01 08:00');
 		expect(activityData.BelongsToDate).toEqual(scope.getSelectedDate());

@@ -129,26 +129,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.Last().IsOvertime.Should().Be(false);
 		}
 
-		[Test]
-		public void ShouldGetProjectionWithActivityId()
-		{
-			var date = new DateTime(2016,04,08,0,0,0,DateTimeKind.Utc);
-			var person1 = PersonFactory.CreatePersonWithGuid("person", "1");
-			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1,scenario,new DateOnly(date));
-			var personScheduleDay = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
-			var personActivity = ActivityFactory.CreateActivity("Phone", Color.Black);
-			
-			personAssignment.AddActivity(personActivity, new DateTimePeriod(date.AddHours(8),date.AddHours(17)));
-			personScheduleDay.Add(personAssignment);
-
-			var vm = target.Projection(personScheduleDay, true, _commonAgentNameProvider.CommonAgentNameSettings);
-			vm.Projection.Count().Should().Be(1);
-			vm.Projection.First().Description.Should().Be(personActivity.Description.Name);
-			vm.Projection.First().ParentPersonAbsence.Should().Be(null);
-			vm.Projection.First().ActivityId.Should().Be(personActivity.Id);
-		}
-
-
 		private double getTimeSpanInMinutesFromPeriod(DateTimePeriod period)
 		{
 			return (period.EndDateTime - period.StartDateTime).TotalMinutes;

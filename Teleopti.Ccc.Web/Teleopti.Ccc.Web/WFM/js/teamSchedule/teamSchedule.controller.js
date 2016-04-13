@@ -112,8 +112,8 @@
 						if (projection.ParentPersonAbsence != null && selectedAbsences.indexOf(projection.ParentPersonAbsence) > -1) {
 							projection.Selected = true;
 						}
-						if (projection.ActivityId != null && selectedPersonActivities[schedule.PersonId] != undefined &&
-							selectedPersonActivities[schedule.PersonId].indexOf(projection.ActivityId) > -1) {
+						if (projection.ShiftLayerId != null && selectedPersonActivities[schedule.PersonId] != undefined &&
+							selectedPersonActivities[schedule.PersonId].indexOf(projection.ShiftLayerId) > -1) {
 							projection.Selected = true;
 						}
 					}

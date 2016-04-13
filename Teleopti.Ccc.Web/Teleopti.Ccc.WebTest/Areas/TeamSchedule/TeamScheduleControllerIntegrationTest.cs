@@ -156,6 +156,33 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldSetUniqueShiftLayerIdForLayersBelongingToOneShiftLayer()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(scheduleDate));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 14));
+
+			scheduleDay.Add(pa);
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var shiftLayers = pa.ShiftLayers.ToList();
+			var schedule = result.Single();
+			var projectionVm = schedule.Projection.ToList();
+			projectionVm.Count.Should().Be.EqualTo(3);
+			projectionVm[0].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
+			projectionVm[1].ShiftLayerId.Should().Be.EqualTo(shiftLayers[1].Id);
+			projectionVm[2].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
+		}
+
+		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);

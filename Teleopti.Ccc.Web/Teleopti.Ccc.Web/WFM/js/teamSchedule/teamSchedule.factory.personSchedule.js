@@ -21,8 +21,8 @@
 		var getPersonActivitiesCount = function() {
 			var personActivities =[];
 			angular.forEach(this.Projections, function(projection) {
-				if (projection.ActivityId != null && personActivities.indexOf(projection.ParentPersonAbsence) === -1) {
-					personActivities.push(projection.ActivityId);
+			    if (projection.ShiftLayerId != null && personActivities.indexOf(projection.ParentPersonAbsence) === -1) {
+			        personActivities.push(projection.ShiftLayerId);
 				}
 			});
 			return personActivities.length;
@@ -141,7 +141,7 @@
 
 			var shiftProjectionVm = {
 				ParentPersonAbsence: projection.ParentPersonAbsence,
-				ActivityId: projection.ActivityId,
+				ShiftLayerId: projection.ShiftLayerId,
 				StartPosition: startPosition,
 				Length: length,
 				IsOvertime: projection.IsOvertime,
