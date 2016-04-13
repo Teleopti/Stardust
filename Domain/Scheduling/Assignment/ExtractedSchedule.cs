@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public bool HasProjection()
 		{
 			var internalCollection = ScheduleDataInternalCollection();
-			return (internalCollection.OfType<IPersonAssignment>().Any() ||
+			return (internalCollection.OfType<IPersonAssignment>().Any(p => p.ShiftLayers.Any() || p.DayOff()!=null) ||
 					internalCollection.OfType<IPersonAbsence>().Any());
 		}
 
