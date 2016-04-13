@@ -95,6 +95,7 @@
 
 		ResourcePlanner_IntradayIslands_36939,
 		ResourcePlanner_CascadingSkillsPOC_37679,
+		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
 
 		Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpPermissionReport_33584,
