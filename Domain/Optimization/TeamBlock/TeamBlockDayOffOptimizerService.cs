@@ -6,7 +6,9 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
@@ -20,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                     DateOnlyPeriod selectedPeriod,
 		                     IList<IPerson> selectedPersons,
 		                     IOptimizationPreferences optimizationPreferences,
-		                     ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		                     ISchedulingOptions schedulingOptions,
 		                     IResourceCalculateDelayer resourceCalculateDelayer,
 							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 							ITeamInfoFactory teamInfoFactory, ISchedulingProgress schedulingProgress);
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
 		public TeamBlockDayOffOptimizerService(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -68,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
-			IDayOffDecisionMaker dayOffDecisionMaker)
+			IDayOffDecisionMaker dayOffDecisionMaker,
+			IScheduleDayChangeCallback scheduleDayChangeCallback)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
@@ -90,6 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_schedulerStateHolder = schedulerStateHolder;
 			_optimizerHelper = optimizerHelper;
 			_dayOffDecisionMaker = dayOffDecisionMaker;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
 		public void OptimizeDaysOff(
@@ -97,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService rollbackService,ISchedulingOptions schedulingOptions,
+			ISchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			ITeamInfoFactory teamInfoFactory,
@@ -105,6 +110,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
+			var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
+			var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
+				_scheduleDayChangeCallback,
+				tagSetter);
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
 
 			IScheduleResultDataExtractor allSkillsDataExtractor =

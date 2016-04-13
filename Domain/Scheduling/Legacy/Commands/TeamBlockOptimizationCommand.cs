@@ -120,15 +120,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (optimizationPreferences.General.OptimizationStepDaysOff)
 			{
 				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-					allMatrixes, rollbackServiceWithResourceCalculation,
-					schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
+					allMatrixes, schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 			}
 
 			if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 			{
 				var optimizeDayOffs = optimizationPreferences.General.OptimizationStepDaysOff;
 				optimizationPreferences.General.OptimizationStepDaysOff = false;
-				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes, rollbackServiceWithResourceCalculation, 
+				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes,  
 										schedulingOptions, teamInfoFactory, resourceCalculateDelayer, dayOffOptimizationPreferenceProvider);
 				optimizationPreferences.General.OptimizationStepDaysOff = optimizeDayOffs;
 			}
@@ -226,7 +225,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences,
 			IList<IScheduleMatrixPro> allMatrixes,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			ISchedulingOptions schedulingOptions,
 			ITeamInfoFactory teamInfoFactory,
 			IResourceCalculateDelayer resourceCalculateDelayer,
@@ -239,7 +237,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				selectedPeriod,
 				selectedPersons,
 				optimizationPreferences,
-				schedulePartModifyAndRollbackService,
 				schedulingOptions,
 				resourceCalculateDelayer,
 				dayOffOptimizationPreferenceProvider,
