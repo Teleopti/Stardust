@@ -7,6 +7,7 @@
 		function($scope, Toggle, ThemeService) {
 			$scope.showOverlay = false;
 			$scope.darkTheme = false;
+			$scope.theme = undefined;
 			Toggle.togglesLoaded.then(function() {
 				$scope.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
 			});
@@ -21,8 +22,8 @@
 			};
 
 			var replaceCurrentTheme = function(theme) {
-				ThemeService.setTheme(theme);
-				ThemeService.saveTheme(theme);
+					ThemeService.setTheme(theme);
+					ThemeService.saveTheme(theme);
 			};
 
 			$scope.toggleDarkTheme = function() {

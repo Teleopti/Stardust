@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'wfm.i18n', 'wfm.businessunits'])
+	angular.module('currentUserInfoService', ['angularMoment', 'ngStorage', 'wfm.i18n', 'wfm.businessunits', 'wfm.themes'])
 		.service('AuthenticationRequests', ['$injector', function ($injector) {
 			var service = {};
 
@@ -53,7 +53,7 @@
 						wfmI18nService.setLocales(data);
 						service.SetCurrentUserInfo(data);
 						BusinessUnitsService.initBusinessUnit();
-						ThemeService.setTheme(ThemeService.getTheme());
+						ThemeService.init();
 						deferred.resolve(data);
 					});
 					return deferred.promise;

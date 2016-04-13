@@ -1,7 +1,7 @@
 (function() {
 
 	'use strict';
-	fdescribe('themeController', function() {
+	describe('themeController', function() {
 		var $rootScope,
 			$httpBackend,
 			$controller,
@@ -31,7 +31,7 @@
 
 		it('should save theme', inject(function(ThemeService) {
 			createController();
-   $httpBackend.expectPOST('../api/Theme', 'dark').respond(200, '');
+   $httpBackend.expectPOST('../api/Theme/Change', {Name:'dark'}).respond(200, '');
 
    ThemeService.saveTheme("dark");
 

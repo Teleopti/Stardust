@@ -1,33 +1,28 @@
 ﻿
 (function() {﻿
 	'use strict';﻿
-	angular﻿.module('wfm.themes')﻿.service('ThemeService', ['$resource', function($resource) {
+	angular﻿.module('wfm.themes')﻿.service('ThemeService', ['$http', function($http) {
 		var service = {};
 
-  service.setTheme = function(theme){
-   document.getElementById('themeModules').setAttribute('href', 'dist/modules_' + theme + '.min.css');
-   document.getElementById('themeStylesheet').setAttribute('href', 'dist/style_' + theme + '.min.css');
-  };
-
-		service.getTheme = function(){
-			return $resource('../api/Theme', {}, {
-				query: {
-					method: 'GET',
-					isArray: false
-				}
-			}).query().$promise;
+		service.setTheme = function(theme) {
+			document.getElementById('themeModules').setAttribute('href', 'dist/modules_' + theme + '.min.css');
+			document.getElementById('themeStylesheet').setAttribute('href', 'dist/style_' + theme + '.min.css');
 		};
 
-		service.init = function(){
-			service.getTheme().then(function(data){
-				service.setTheme(data);
-			});
-		}
+		service.getTheme = function() {
+			return $http.get('../api/Theme');
+		};
 
-		service.saveTheme = function(name){
-			return $resource('../api/Theme', {}, {
-					post: { method: 'POST', params: name }
-			}).post(name).$promise.then(function(){});
+		service.init = function() {
+			service.getTheme().success(function(data) {
+				service.setTheme(data.Name);
+			});
+		};
+
+		service.saveTheme = function(name) {
+			$http.post("../api/Theme/Change", {
+				Name: name
+			});
 		};
 
 		return service;

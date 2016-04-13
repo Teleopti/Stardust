@@ -57,6 +57,7 @@
 			inject(function (CurrentUserInfo) {
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
+				$httpBackend.expectGET("../api/Theme").respond(200, {Name:'light'});
 
 				CurrentUserInfo.initContext().then(function() {
 					var result = CurrentUserInfo.isConnected();

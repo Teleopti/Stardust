@@ -1336,6 +1336,7 @@
     <Content Include="WFM\js\global\wfm-themes\wfm.themes.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
     <Content Include="WFM\js\global\shortcuts.service.spec.js" />
+    <Content Include="WFM\js\global\wfm-themes\wfm.themes.controller.spec.js" />
     <Content Include="WFM\js\global\wfm-themes\wfm.themes.service.js" />
     <Content Include="WFM\js\global\wfm-themes\wfm.themes.service.spec.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.spec.js" />
