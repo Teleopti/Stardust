@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayCtrl', [
@@ -15,9 +15,8 @@
 				$scope.showProductivity = false;
 				$scope.showSummary = false;
 				$scope.selectedIndex = 0;
-				$scope.dataSet = "08:00,08:15,08:30,08:45,09:00,09:15,09:30,09:45,10:00,10:15,10:30,10:45,11:00,11:15,11:30,11:45,12:00,12:15,12:30,12:45,13:00,13:15,13:30,13:45,14:00,14:15,14:30,14:45,15:00,15:15,15:30,15:45,16:00,16:15,16:30,16:45,17:00,17:15,17:30,17:45";
 
-				var getAutoCompleteControls = function() {
+				var getAutoCompleteControls = function () {
 					var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
 					autocompleteSkill = angular.element(autocompleteSkillDOM).scope();
 
@@ -25,16 +24,13 @@
 					autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
 				};
 
-				$scope.format = intradayService.formatDateTime;
-
-
 				$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
 					if (params.isNewSkillArea == true) {
 						reloadSkillAreas(params.isNewSkillArea);
 					}
 				});
 
-				var reloadSkillAreas = function(isNew) {
+				var reloadSkillAreas = function (isNew) {
 					intradayService.getSkillAreas.query()
 						.$promise.then(function (result) {
 							getAutoCompleteControls();
@@ -71,16 +67,16 @@
 					$state.go('intraday.config', { isNewSkillArea: false });
 				};
 
-				$scope.toggleModal = function() {
+				$scope.toggleModal = function () {
 					$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
 				};
 
-				$scope.deleteSkillArea = function(skillArea) {
+				$scope.deleteSkillArea = function (skillArea) {
 					intradayService.deleteSkillArea.remove(
 						{
 							id: skillArea.Id
 						})
-						.$promise.then(function(result) {
+						.$promise.then(function (result) {
 							$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
 							$scope.selectedItem = null;
 							clearSkillAreaSelection();
@@ -94,7 +90,7 @@
 					NoticeService.success("Deleted Area ", 5000, true);
 				};
 
-				$scope.querySearch = function(query, myArray) {
+				$scope.querySearch = function (query, myArray) {
 					var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
 					return results;
 				};
@@ -107,7 +103,7 @@
 					};
 				};
 
-				$scope.selectedSkillChange = function(item) {
+				$scope.selectedSkillChange = function (item) {
 					if (this.selectedSkill) {
 						$scope.skillSelected(item);
 					}
@@ -124,23 +120,24 @@
 					$scope.skillSelected(item);
 				};
 
-			    var setResult = function(result) {
-			        if (result.LatestStatsTime === "") {
-			            $scope.HasMonitorData = false;
-			            return;
-			        }
-			        $scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
-			        $scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
-			        $scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
-			        $scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
-			        $scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-			        $scope.timeSeries = result.DataSeries.Time.toString();
-			        $scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls.toString();
-			        $scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
-			        $scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
+				var setResult = function (result) {
+					if (!result.LatestStatsTime) {
+						$scope.latestStatsTime = '--:--';
+						$scope.HasMonitorData = false;
+						return;
+					}
+					$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
+					$scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
+					$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
+					$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
+					$scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
+					$scope.timeSeries = result.DataSeries.Time.toString();
+					$scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls.toString();
+					$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
+					$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
 
-			        $scope.HasMonitorData = true;
-			    };
+					$scope.HasMonitorData = true;
+				};
 
 				var pollSkillMonitorData = function () {
 					cancelTimeout();
@@ -150,21 +147,21 @@
 						})
 						.$promise.then(function (result) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
-					        setResult(result);
+							setResult(result);
 						},
-						function(error) {
+						function (error) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 							$scope.HasMonitorData = true;
 						});
 				};
 
-				$scope.selectedSkillAreaChange = function(item) {
+				$scope.selectedSkillAreaChange = function (item) {
 					if (this.selectedSkillArea) {
 						$scope.skillAreaSelected(item);
 					}
 				};
 
-				$scope.skillAreaSelected = function(item) {
+				$scope.skillAreaSelected = function (item) {
 					$scope.selectedItem = item;
 					clearSkillSelection();
 					pollSkillAreaMonitorData();
@@ -180,7 +177,7 @@
 							timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
 							setResult(result);
 						},
-						function(error) {
+						function (error) {
 							timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
 						});
 				}
@@ -200,8 +197,8 @@
 				};
 
 				$scope.$on("$destroy", function (event) {
-	               cancelTimeout();
-            });
+					cancelTimeout();
+				});
 
 				$scope.$on('$locationChangeStart', function () {
 					cancelTimeout();
@@ -212,17 +209,17 @@
 						$timeout.cancel(timeoutPromise);
 				};
 
-				var deselectAll = function(){
+				var deselectAll = function () {
 					$scope.showIncoming = false;
 					$scope.showStaffing = false
 					$scope.showProductivity = false;
 				}
-				$scope.toggleOthers = function(index, intraCard){
+				$scope.toggleOthers = function (index, intraCard) {
 					deselectAll();
 					$scope.selectedIndex = index;
 					if (intraCard === 'incoming') {
 						$scope.showIncoming = true;
-					}else if (intraCard === 'staffing' ) {
+					} else if (intraCard === 'staffing') {
 						$scope.showStaffing = true;
 					}
 					else if (intraCard === 'productivity') {

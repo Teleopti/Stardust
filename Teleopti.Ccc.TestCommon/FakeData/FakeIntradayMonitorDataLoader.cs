@@ -8,18 +8,22 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeIntradayMonitorDataLoader : IIntradayMonitorDataLoader
 	{
+		private IList<IncomingIntervalModel> _intervals;
+
 		public IList<IncomingIntervalModel> Load(IList<Guid> skillList, TimeZoneInfo timeZone, DateOnly today)
 		{
-			return Intervals;
+			return intervals;
 		}
-		
-		private IList<IncomingIntervalModel> Intervals { get; set; }
+
+		private IList<IncomingIntervalModel> intervals
+		{
+			get { return _intervals ?? (_intervals = new List<IncomingIntervalModel>()); }
+			set { _intervals = value; }
+		}
 
 		public void AddInterval(IncomingIntervalModel interval)
 		{
-			if (Intervals == null)
-				Intervals = new List<IncomingIntervalModel>();
-			Intervals.Add(interval);
+			intervals.Add(interval);
 		}
 	}
 }

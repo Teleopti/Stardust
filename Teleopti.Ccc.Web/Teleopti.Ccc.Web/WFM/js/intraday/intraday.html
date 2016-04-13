@@ -102,7 +102,7 @@
 							<span class="pointer" ng-click="openSkillFromArea(skill)">
 								<span class="filter-handle"></span>
 								<span class="filter-chip">{{skill.Name}}</span>
-								<span>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -121,40 +121,6 @@
 									<div class="con-row">
 										<div class="con-flex">
 											<h2>Incoming traffic</h2>
-										</div>
-									</div>
-									<div class="con-row">
-										<div class="con-flex">
-											<c3chart bindto-id="chart3">
-												<chart-column column-id="x"
-																  column-values="{{timeSeries}}" />
-												<chart-column column-id="data1"
-																  column-name="xxForecasted Calls"
-																  column-color="red"
-																  column-values="{{forecastedCallsSeries}}"
-																  column-type="line" />
-												<chart-axes values-x="x" y="data1,data3" y2="data2" />
-
-												<chart-axis>
-													<chart-axis-x axis-position="outer-center"
-																	  axis-label="Number by 10"
-																	  axis-type="category">
-													</chart-axis-x>
-													<chart-axis-y axis-id="y"
-																	  axis-position="outer-right"
-																	  axis-label="Calls"
-																	  padding-top="100"
-																	  padding-bottom="0"
-																	  range-min="0" />
-													<chart-axis-y axis-id="y2"
-																	  axis-position="outer-right"
-																	  axis-label="AHT"
-																	  padding-top="10"
-																	  padding-bottom="0"
-																	  range-max="100"
-																	  range-min="0" />
-												</chart-axis>
-											</c3chart>
 										</div>
 									</div>
 								</md-content>

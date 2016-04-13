@@ -7,7 +7,7 @@ GO
 -- Create date: 2016-02-24
 -- Description:	Load queue statistics and forecast data both by interval and by day. Used by web intraday.
 -- =============================================
--- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-04-07', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753'
+-- EXEC [mart].[web_intraday] 'W. Europe Standard Time', '2016-04-13', 'F08D75B3-FDB4-484A-AE4C-9F0800E2F753,C5FFFC8F-BCD6-47F7-9352-9F0800E39578'
 CREATE PROCEDURE [mart].[web_intraday]
 @time_zone_code nvarchar(100),
 @today smalldatetime,
@@ -46,8 +46,8 @@ BEGIN
 	INSERT INTO #result(interval_id, forecasted_calls, forecasted_handle_time_s)
 	SELECT 
 		i.interval_id,
-		fw.forecasted_calls,
-		fw.forecasted_handling_time_s
+		SUM(ISNULL(fw.forecasted_calls, 0)),
+		SUM(ISNULL(fw.forecasted_handling_time_s, 0))
 	FROM
 		mart.fact_forecast_workload fw
 		INNER JOIN mart.dim_skill ds ON fw.skill_id = ds.skill_id
@@ -59,6 +59,9 @@ BEGIN
 		fw.scenario_id = @default_scenario_id
 		AND bz.time_zone_id = @time_zone_id
 		AND d.date_date = @today
+	GROUP BY
+		i.interval_id
+
 
 	-- Queue stats - update result
 	UPDATE r
@@ -75,6 +78,7 @@ BEGIN
 	WHERE
 		bz.time_zone_id = @time_zone_id 
 		AND d.date_date = @today
+
 
 	-- Return data by interval
 	SELECT
@@ -95,46 +99,6 @@ BEGIN
 		END AS AverageHandleTime
 	FROM #result 
 	ORDER BY interval_id
-
-	return
-	
-	DECLARE @queue_stats_max_interval_id smallint
-	DECLARE @queue_stats_max_datetime smalldatetime
-
-	SELECT @queue_stats_max_interval_id = MAX(interval_id) FROM #result WHERE offered_calls IS NOT NULL
-	SELECT @queue_stats_max_datetime = interval_end FROM mart.dim_interval WHERE interval_id = @queue_stats_max_interval_id
-
-	-- Return data summed up by day
-	SELECT 
-	SUM(ISNULL(forecasted_calls,0)) AS ForecastedCalls,
-	CASE SUM(ISNULL(forecasted_calls,0))
-		WHEN 0 THEN 0
-		ELSE 
-			SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0))
-	END AS ForecastedAverageHandleTime,
-	SUM(ISNULL(offered_calls,0)) AS OfferedCalls,
-	CASE SUM(ISNULL(offered_calls,0))
-		WHEN 0 THEN 0
-		ELSE 
-					SUM(ISNULL(handle_time_s,0)) / SUM(ISNULL(offered_calls,0))
-	END AS AverageHandleTime,
-	@queue_stats_max_datetime AS LatestStatsTime,
-	CASE SUM(ISNULL(forecasted_calls,0))
-		WHEN 0 THEN -99
-		ELSE
-			ABS(SUM(ISNULL(offered_calls,0)) - SUM(ISNULL(forecasted_calls,0))) / SUM(ISNULL(forecasted_calls,0)) * 100
-	END AS ForecastedActualCallsDiff,
-	CASE SUM(ISNULL(forecasted_handle_time_s,0))
-		WHEN 0 THEN -99
-		ELSE
-			ABS(SUM(ISNULL(handle_time_s,0)) / SUM(ISNULL(offered_calls,0)) - SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0))) * 100
-			/ (SUM(ISNULL(forecasted_handle_time_s,0)) / SUM(ISNULL(forecasted_calls,0)))
-	END AS ForecastedActualHandleTimeDiff
-	FROM 
-		#result r
-	WHERE
-		r.interval_id <= @queue_stats_max_interval_id
-
 END
 
 GO

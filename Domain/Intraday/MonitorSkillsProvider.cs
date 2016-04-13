@@ -19,18 +19,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_intervalLengthFetcher = intervalLengthFetcher;
 		}
 
-		public MonitorDataViewModel Load(Guid [] skillIdList)
+		public MonitorDataViewModel Load(Guid[] skillIdList)
 		{
 			var intervals = _intradayMonitorDataLoader.Load(skillIdList, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone, DateOnly.Today);
 			var intervalLength = _intervalLengthFetcher.IntervalLength;
 
 			var summary = new MonitorIntradaySummary();
-			var timeSeries = new List<string>();
+			var timeSeries = new List<DateTime>();
 			var forecastedCallsSeries = new List<double>();
 			var forecastedAverageHandleTimeSeries = new List<double>();
 			var offeredCallsSeries = new List<double?>();
 			var averageHandleTimeSeries = new List<double?>();
-		    var latestQueueStatsIntervalId = -1;
+			var latestQueueStatsIntervalId = -1;
 
 			foreach (var interval in intervals)
 			{
@@ -38,36 +38,36 @@ namespace Teleopti.Ccc.Domain.Intraday
 				summary.ForecastedHandleTime += interval.ForecastedHandleTime;
 				summary.OfferedCalls += interval.OfferedCalls ?? 0;
 				summary.HandleTime += interval.HandleTime ?? 0;
-				
-				timeSeries.Add(DateTime.Today.Date.AddMinutes(interval.IntervalId * intervalLength).ToShortTimeString());
+
+				timeSeries.Add(DateTime.MinValue.AddMinutes(interval.IntervalId * intervalLength));
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
 				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
 				offeredCallsSeries.Add(interval.OfferedCalls);
 				averageHandleTimeSeries.Add(interval.AverageHandleTime);
 
-			    if (interval.OfferedCalls.HasValue)
-			        latestQueueStatsIntervalId = interval.IntervalId;
+				if (interval.OfferedCalls.HasValue)
+					latestQueueStatsIntervalId = interval.IntervalId;
 
 			}
 
 			summary.ForecastedAverageHandleTime = summary.ForecastedHandleTime / summary.ForecastedCalls;
 			summary.AverageHandleTime = summary.HandleTime / summary.OfferedCalls;
 
-		    summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
-		        ? -99
-		        : Math.Round(Math.Abs(summary.ForecastedCalls - summary.OfferedCalls)*100/summary.ForecastedCalls, 1);
+			summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
+				 ? -99
+				 : Math.Abs(summary.ForecastedCalls - summary.OfferedCalls) * 100 / summary.ForecastedCalls;
 
-		    summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedHandleTime) < 0.0001
-		        ? -99
-		        : Math.Round(Math.Abs(summary.ForecastedHandleTime - summary.HandleTime)*100/summary.ForecastedHandleTime, 1);
+			summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedHandleTime) < 0.0001
+				 ? -99
+				 : Math.Abs(summary.ForecastedHandleTime - summary.HandleTime) * 100 / summary.ForecastedHandleTime;
 
-		    return new MonitorDataViewModel()
+			return new MonitorDataViewModel()
 			{
+				LatestStatsTime = latestQueueStatsIntervalId == -1
+					? null
+					: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength),
 				Summary = summary,
-                LatestStatsTime = latestQueueStatsIntervalId == - 1 
-                ? String.Empty 
-                : DateTime.Today.Date.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength).ToShortTimeString(),
-                DataSeries = new MonitorIntradayDataSeries
+				DataSeries = new MonitorIntradayDataSeries
 				{
 					Time = timeSeries.ToArray(),
 					ForecastedCalls = forecastedCallsSeries.ToArray(),

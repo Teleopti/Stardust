@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			double minutes = time.TimeOfDay.Minutes;
 			var remainder = minutes % intervalLength;
 
-			return time.Subtract(TimeSpan.FromMinutes(minutes - remainder));
+			return time.Subtract(TimeSpan.FromMinutes(remainder));
 		}
 
 		public static int GetIntervalId(int intervalLength, DateTime time)

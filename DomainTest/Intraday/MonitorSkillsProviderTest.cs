@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 
-		private IncomingIntervalModel firstInterval;
-		private IncomingIntervalModel secondInterval;
+		private IncomingIntervalModel _firstInterval;
+		private IncomingIntervalModel _secondInterval;
+		private const int minutesPerInterval = 15;
 
 		[SetUp]
 		public void Setup()
 		{
-
-			firstInterval = new IncomingIntervalModel()
+			_firstInterval = new IncomingIntervalModel()
 			{
 				IntervalId = 32,
 				ForecastedCalls = 10,
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				OfferedCalls = 12,
 				HandleTime = 200
 			};
-			secondInterval = new IncomingIntervalModel()
+			_secondInterval = new IncomingIntervalModel()
 			{
 				IntervalId = 33,
 				ForecastedCalls = 15,
@@ -44,11 +44,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSummarise()
 		{
-			IntradayMonitorDataLoader.AddInterval(firstInterval);
-			IntradayMonitorDataLoader.AddInterval(secondInterval);
-			IntervalLengthFetcher.Has(15);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
-			var viewModel = Target.Load(new [] {Guid.NewGuid()});
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.Summary.ForecastedCalls.Should().Be.EqualTo(25);
 			viewModel.Summary.ForecastedHandleTime.Should().Be.EqualTo(270);
@@ -62,136 +62,174 @@ namespace Teleopti.Ccc.DomainTest.Intraday
         [Test, SetCulture("sv-SE")]
         public void ShouldReturnTimeSeries()
 		{
-			IntradayMonitorDataLoader.AddInterval(firstInterval);
-			IntradayMonitorDataLoader.AddInterval(secondInterval);
-			IntervalLengthFetcher.Has(15);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.Time.Length.Should().Be.EqualTo(2);
-			viewModel.DataSeries.Time.First().Should().Be.EqualTo("08:00");
-			viewModel.DataSeries.Time.Second().Should().Be.EqualTo("08:15");
+			viewModel.DataSeries.Time.First().Should().Be.EqualTo(DateTime.MinValue.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
+			viewModel.DataSeries.Time.Second().Should().Be.EqualTo(DateTime.MinValue.AddMinutes(_secondInterval.IntervalId * minutesPerInterval));
 		}
 
 		[Test]
 		public void ShouldReturnForecastedCallsSeries()
 		{
-			IntradayMonitorDataLoader.AddInterval(firstInterval);
-			IntradayMonitorDataLoader.AddInterval(secondInterval);
-			IntervalLengthFetcher.Has(15);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.ForecastedCalls.Length.Should().Be.EqualTo(2);
-			viewModel.DataSeries.ForecastedCalls.First().Should().Be.EqualTo(firstInterval.ForecastedCalls);
-			viewModel.DataSeries.ForecastedCalls.Second().Should().Be.EqualTo(secondInterval.ForecastedCalls);
+			viewModel.DataSeries.ForecastedCalls.First().Should().Be.EqualTo(_firstInterval.ForecastedCalls);
+			viewModel.DataSeries.ForecastedCalls.Second().Should().Be.EqualTo(_secondInterval.ForecastedCalls);
 		}
 
 		[Test]
 		public void ShouldReturnForecastedAverageHandleTimeSeries()
 		{
-			IntradayMonitorDataLoader.AddInterval(firstInterval);
-			IntradayMonitorDataLoader.AddInterval(secondInterval);
-			IntervalLengthFetcher.Has(15);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.ForecastedAverageHandleTime.Length.Should().Be.EqualTo(2);
-			viewModel.DataSeries.ForecastedAverageHandleTime.First().Should().Be.EqualTo(firstInterval.ForecastedAverageHandleTime);
-			viewModel.DataSeries.ForecastedAverageHandleTime.Second().Should().Be.EqualTo(secondInterval.ForecastedAverageHandleTime);
+			viewModel.DataSeries.ForecastedAverageHandleTime.First().Should().Be.EqualTo(_firstInterval.ForecastedAverageHandleTime);
+			viewModel.DataSeries.ForecastedAverageHandleTime.Second().Should().Be.EqualTo(_secondInterval.ForecastedAverageHandleTime);
 		}
 
 		[Test]
 		public void ShouldReturnOfferedCallsSeries()
 		{
-			IntradayMonitorDataLoader.AddInterval(firstInterval);
-			IntradayMonitorDataLoader.AddInterval(secondInterval);
-			IntervalLengthFetcher.Has(15);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.OfferedCalls.Length.Should().Be.EqualTo(2);
-			viewModel.DataSeries.OfferedCalls.First().Should().Be.EqualTo(firstInterval.OfferedCalls);
-			viewModel.DataSeries.OfferedCalls.Second().Should().Be.EqualTo(secondInterval.OfferedCalls);
+			viewModel.DataSeries.OfferedCalls.First().Should().Be.EqualTo(_firstInterval.OfferedCalls);
+			viewModel.DataSeries.OfferedCalls.Second().Should().Be.EqualTo(_secondInterval.OfferedCalls);
 		}
 
 		[Test]
 		public void ShouldReturnAverageHandleTimeSeries()
 		{
-			IntradayMonitorDataLoader.AddInterval(firstInterval);
-			IntradayMonitorDataLoader.AddInterval(secondInterval);
-			IntervalLengthFetcher.Has(15);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
-			viewModel.DataSeries.AverageHandleTime.First().Should().Be.EqualTo(firstInterval.AverageHandleTime);
-			viewModel.DataSeries.AverageHandleTime.Second().Should().Be.EqualTo(secondInterval.AverageHandleTime);
+			viewModel.DataSeries.AverageHandleTime.First().Should().Be.EqualTo(_firstInterval.AverageHandleTime);
+			viewModel.DataSeries.AverageHandleTime.Second().Should().Be.EqualTo(_secondInterval.AverageHandleTime);
 		}
 
-        [Test]
-        public void ShouldFillWithNullValueIfNoOfferedCalls()
-        {
-            var thirdInterval = new IncomingIntervalModel()
-            {
-                IntervalId = 34,
-                ForecastedCalls = 12,
-                ForecastedHandleTime = 140,
-                OfferedCalls = 12,
-                HandleTime = 200
-            };         
-            secondInterval.OfferedCalls = null;
-            secondInterval.HandleTime = null;
-            secondInterval.AverageHandleTime = null;
-            IntradayMonitorDataLoader.AddInterval(firstInterval);
-            IntradayMonitorDataLoader.AddInterval(secondInterval);
-            IntradayMonitorDataLoader.AddInterval(thirdInterval);
-            IntervalLengthFetcher.Has(15);
+		[Test]
+		public void ShouldFillWithNullValueIfNoOfferedCalls()
+		{
+			var thirdInterval = new IncomingIntervalModel()
+			{
+				IntervalId = 34,
+				ForecastedCalls = 12,
+				ForecastedHandleTime = 140,
+				OfferedCalls = 12,
+				HandleTime = 200
+			};
+			_secondInterval.OfferedCalls = null;
+			_secondInterval.HandleTime = null;
+			_secondInterval.AverageHandleTime = null;
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntradayMonitorDataLoader.AddInterval(thirdInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
-            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-            viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(3);
-            viewModel.DataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
-        }
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(3);
+			viewModel.DataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
+		}
 
-        [Test, SetCulture("sv-SE")]
+		[Test]
 		public void ShouldReturnLatestStatsTime()
-		{	
-			secondInterval.OfferedCalls = null;
-			secondInterval.HandleTime = null;
-			secondInterval.AverageHandleTime = null;
-            IntradayMonitorDataLoader.AddInterval(firstInterval);
-            IntradayMonitorDataLoader.AddInterval(secondInterval);
-			IntervalLengthFetcher.Has(15);
+		{
+			_secondInterval.OfferedCalls = null;
+			_secondInterval.HandleTime = null;
+			_secondInterval.AverageHandleTime = null;
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
-			viewModel.LatestStatsTime.Should().Be.EqualTo("08:15");
+			viewModel.LatestStatsTime.Should().Be.EqualTo(DateTime.MinValue.AddMinutes((_firstInterval.IntervalId + 1) * minutesPerInterval));
 		}
 
-        [Test]
-        public void ShouldReturnDifferenceBetweenForecastedAndActualCalls()
-        {
-            IntradayMonitorDataLoader.AddInterval(firstInterval);
-            IntradayMonitorDataLoader.AddInterval(secondInterval);
-            IntervalLengthFetcher.Has(15);
+		[Test]
+		public void ShouldReturnLatestStatsTimeWhenNoData()
+		{
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
-            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-            viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(12.0d);
-        }
+			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(0);
+			viewModel.LatestStatsTime.Should().Be.EqualTo(null);
+		}
 
-        [Test]
-        public void ShouldReturnDifferenceBetweenForecastedAndActualHandleTime()
-        {
-            IntradayMonitorDataLoader.AddInterval(firstInterval);
-            IntradayMonitorDataLoader.AddInterval(secondInterval);
-            IntervalLengthFetcher.Has(15);
+		[Test]
+		public void ShouldReturnDifferenceBetweenForecastedAndActualCalls()
+		{
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
 
-            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+			double allForecastedCalls = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
+			double allOfferedCalls = _firstInterval.OfferedCalls.Value + _secondInterval.OfferedCalls.Value;
+			var expectedDiff = Math.Abs(allForecastedCalls - allOfferedCalls) * 100 / allForecastedCalls;
 
-            viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(40.7d);
-        }
-    }
+			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(expectedDiff);
+		}
+
+		[Test]
+		public void ShouldReturnPredefinedDifferenceBetweenForecastedAndActualCallsWhenNoData()
+		{
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+			viewModel.Summary.ForecastedActualCallsDiff.Should().Be.EqualTo(-99);
+		}
+
+		[Test]
+		public void ShouldReturnDifferenceBetweenForecastedAndActualHandleTime()
+		{
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+			double allForecastedHandleTime = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
+			double allHandleTime = _firstInterval.HandleTime.Value + _secondInterval.HandleTime.Value;
+			var expectedDiff = Math.Abs(allForecastedHandleTime - allHandleTime) * 100 / allForecastedHandleTime;
+
+			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(expectedDiff);
+		}
+
+		[Test]
+		public void ShouldReturnPredefinedDifferenceBetweenForecastedAndActualHandleTimeWhenNoData()
+		{
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(-99);
+		}
+	}
 }

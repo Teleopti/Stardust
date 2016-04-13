@@ -2,6 +2,7 @@
 describe('IntradayCtrl', function () {
 	var $httpBackend,
 		$controller,
+		$filter,
 		scope;
 
 	var skillAreas = [];
@@ -51,13 +52,14 @@ describe('IntradayCtrl', function () {
 	                OfferedCalls: {},
 	                AverageHandleTime: {}
 	            },
-	            LatestStatsTime: "13:00"
+	            LatestStatsTime: new Date(2016, 1, 1, 13, 0, 0, 0)
 	        };
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_) {
+	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_, _$filter_) {
 		$controller = _$controller_;
 		$httpBackend = _$httpBackend_;
+		$filter = _$filter_;
 		scope = _$rootScope_.$new();
 
 		$httpBackend.whenGET("../api/intraday/skillarea")
@@ -128,11 +130,11 @@ describe('IntradayCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
+		expect(scope.latestStatsTime).toEqual($filter('date')(monitorData.LatestStatsTime, 'shortTime'));
 		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
 		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
 		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
-		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
 		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
 		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
 	});
@@ -144,11 +146,11 @@ describe('IntradayCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
+		expect(scope.latestStatsTime).toEqual($filter('date')(monitorData.LatestStatsTime, 'shortTime'));
 		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
 		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
 		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
-		expect(scope.latestStatsTime).toEqual(monitorData.LatestStatsTime);
 		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
 		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
 	});
@@ -162,10 +164,11 @@ describe('IntradayCtrl', function () {
 	it('should show friendly message if no data for skill area', function () {
 		createController();
 		scope.skillAreaSelected(scope.skillAreas[0]);
-		monitorData.LatestStatsTime = "";
+		monitorData.LatestStatsTime = null;
 		$httpBackend.flush();
 
 		expect(scope.HasMonitorData).toEqual(false);
+		expect(scope.latestStatsTime).toEqual('--:--');
 	});
 
 	it('should switch active chart tab', function () {

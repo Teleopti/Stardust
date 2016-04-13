@@ -5,14 +5,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class MonitorDataViewModel
 	{
+		public DateTime? LatestStatsTime { get; set; }
 		public MonitorIntradaySummary Summary { get; set; }
 		public MonitorIntradayDataSeries DataSeries { get; set; }	
-		public string LatestStatsTime { get; set; }
 	}
 
 	public class MonitorIntradayDataSeries
 	{
-		public string [] Time { get; set; }
+		public DateTime[] Time { get; set; }
 		public double [] ForecastedCalls { get; set; }
 		public double [] ForecastedAverageHandleTime { get; set; }
 		public double?[] AverageHandleTime { get; set; }
