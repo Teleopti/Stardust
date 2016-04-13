@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				SmoothingStyle = 3,
 				WorkloadIds = _workloadIds,
 				UseDayOfMonth = true,
-				StatisticPeriod = _statPeriod
+				StatisticPeriodStart = _statPeriod.StartDate.Date,
+                StatisticPeriodEnd = _statPeriod.EndDate.Date
 			};
 		}
 

@@ -27,14 +27,17 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 		{
 			return new QuickForecastWorkloadsEvent
 		{
-			TargetPeriod = _stateObj.TargetPeriod,
+			TargetPeriodStart = _stateObj.TargetPeriod.StartDate.Date,
+            TargetPeriodEnd = _stateObj.TargetPeriod.EndDate.Date,
 			ScenarioId = _stateObj.ScenarioId,
 			SmoothingStyle = _stateObj.SmoothingStyle,
-			TemplatePeriod = _stateObj.TemplatePeriod,
+			TemplatePeriodStart = _stateObj.TemplatePeriod.StartDate.Date,
+			TemplatePeriodEnd = _stateObj.TemplatePeriod.EndDate.Date,
 			WorkloadIds = _stateObj.WorkloadIds,
 			IncreaseWith = _stateObj.IncreaseWith,
 			UseDayOfMonth = _stateObj.UseDayOfMonth,
-			StatisticPeriod = _stateObj.StatisticPeriod
+			StatisticPeriodStart = _stateObj.StatisticPeriod.StartDate.Date,
+			StatisticPeriodEnd = _stateObj.StatisticPeriod.EndDate.Date
 		};
 		}
 

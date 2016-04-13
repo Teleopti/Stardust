@@ -37,12 +37,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
         /// <summary>
         /// The period to base the forecast on
         /// </summary>
-        public DateOnlyPeriod StatisticPeriod { get; set; }
+        public DateTime StatisticPeriodStart { get; set; }
+        public DateTime StatisticPeriodEnd { get; set; }
 
         /// <summary>
         /// The period to forecast
         /// </summary>
-        public DateOnlyPeriod TargetPeriod { get; set; }
+        public DateTime TargetPeriodStart { get; set; }
+        public DateTime TargetPeriodEnd { get; set; }
 
         /// <summary>
         /// The smoothing style of the templates
@@ -52,7 +54,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
         /// <summary>
         /// The period to get the templates from
         /// </summary>
-        public DateOnlyPeriod TemplatePeriod { get; set; }
+        public DateTime TemplatePeriodStart { get; set; }
+        public DateTime TemplatePeriodEnd { get; set; }
 
         /// <summary>
         /// How much the progress bar should increase for every step

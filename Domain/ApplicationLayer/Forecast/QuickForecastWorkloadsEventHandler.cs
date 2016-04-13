@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
 
 		[AsSystem]
+        [UnitOfWork]
 		public new virtual void Handle(QuickForecastWorkloadsEvent @event)
 		{
 			base.Handle(@event);
@@ -89,7 +91,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 		public void Handle(QuickForecastWorkloadsEvent @event)
 		{
-			var jobResult = _jobResultRepository.Get(@event.JobId);
+            var targetPeriod = new DateOnlyPeriod(new DateOnly(@event.TargetPeriodStart ),new DateOnly(@event.TargetPeriodEnd));
+            var staticticPeriod = new DateOnlyPeriod(new DateOnly(@event.StatisticPeriodStart ),new DateOnly(@event.StatisticPeriodEnd));
+            var templatePeriod = new DateOnlyPeriod(new DateOnly(@event.TemplatePeriodStart ),new DateOnly(@event.TemplatePeriodEnd));
+            var jobResult = _jobResultRepository.Get(@event.JobId);
 			if (jobResult == null)
 			{
 				return;
@@ -115,32 +120,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					var multisiteSkill = _skillRepository.Get(skill.Id.GetValueOrDefault()) as IMultisiteSkill;
 					if (multisiteSkill != null)
 					{
-						var skillDays = _skillDayRepository.FindRange(@event.TargetPeriod, skill, scenario);
-						skillDays = _skillDayRepository.GetAllSkillDays(@event.TargetPeriod, skillDays, skill, scenario,
+						var skillDays = _skillDayRepository.FindRange(targetPeriod, skill, scenario);
+						skillDays = _skillDayRepository.GetAllSkillDays(targetPeriod, skillDays, skill, scenario,
 																		_skillDayRepository.AddRange);
 
 						var allChildSkillDays = new Dictionary<IChildSkill, ICollection<ISkillDay>>();
 						foreach (var childSkill in multisiteSkill.ChildSkills)
 						{
-							var childSkillDays = _skillDayRepository.FindRange(@event.TargetPeriod, childSkill, scenario);
-							childSkillDays = _skillDayRepository.GetAllSkillDays(@event.TargetPeriod, childSkillDays, childSkill, scenario,
+							var childSkillDays = _skillDayRepository.FindRange(targetPeriod, childSkill, scenario);
+							childSkillDays = _skillDayRepository.GetAllSkillDays(targetPeriod, childSkillDays, childSkill, scenario,
 																				 _skillDayRepository.AddRange);
 							allChildSkillDays.Add(childSkill, childSkillDays);
 						}
 
-						var multisiteDays = _multisiteDayRepository.FindRange(@event.TargetPeriod, multisiteSkill, scenario);
-						multisiteDays = _multisiteDayRepository.GetAllMultisiteDays(@event.TargetPeriod, multisiteDays, multisiteSkill,
+						var multisiteDays = _multisiteDayRepository.FindRange(targetPeriod, multisiteSkill, scenario);
+						multisiteDays = _multisiteDayRepository.GetAllMultisiteDays(targetPeriod, multisiteDays, multisiteSkill,
 																					scenario, true);
 
-						calculator = _forecastClassesCreator.CreateSkillDayCalculator(multisiteSkill, skillDays.ToList(), multisiteDays.ToList(), allChildSkillDays, @event.TargetPeriod);
+						calculator = _forecastClassesCreator.CreateSkillDayCalculator(multisiteSkill, skillDays.ToList(), multisiteDays.ToList(), allChildSkillDays, targetPeriod);
 					}
 					else
 					{
-						var skillDays = _skillDayRepository.FindRange(@event.TargetPeriod, skill, scenario);
-						skillDays = _skillDayRepository.GetAllSkillDays(@event.TargetPeriod, skillDays, skill, scenario,
+						var skillDays = _skillDayRepository.FindRange(targetPeriod, skill, scenario);
+						skillDays = _skillDayRepository.GetAllSkillDays(targetPeriod, skillDays, skill, scenario,
 																		_skillDayRepository.AddRange);
 
-						calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), @event.TargetPeriod);
+						calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), targetPeriod);
 					}
 
 
@@ -149,14 +154,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 						remainingProgress = @event.IncreaseWith*3;
 
 						//Load statistic data
-						var stat = _statisticHelper.LoadStatisticData(@event.StatisticPeriod, workload);
+						var stat = _statisticHelper.LoadStatisticData(staticticPeriod, workload);
 
 						jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded workload " + workload.Name, DateTime.UtcNow, null));
 						_feedback.ReportProgress(@event.IncreaseWith, "Loaded workload " + workload.Name);
 
 						var validated = new List<IValidatedVolumeDay>(0);
 
-						var validatedVolumeDays = _rep.FindRange(@event.StatisticPeriod, workload);
+						var validatedVolumeDays = _rep.FindRange(staticticPeriod, workload);
 						if (validatedVolumeDays != null && stat != null)
 						{
 							_feedback.ReportProgress(@event.IncreaseWith, "Found " + validatedVolumeDays.Count() + " validated days.");
@@ -169,45 +174,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 						}
 
 						var daysWithValidatedStatistics =
-							_statisticHelper.GetWorkloadDaysWithValidatedStatistics(@event.StatisticPeriod,
+							_statisticHelper.GetWorkloadDaysWithValidatedStatistics(staticticPeriod,
 																					workload,
 																					validated);
 						if (!daysWithValidatedStatistics.Any())
 						{
 							// this never happens because we always get empty days back if we don't have statistcs, how should we check that?
 							jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
-																	"No statistics found for workload on " + @event.StatisticPeriod,
+																	"No statistics found for workload on " + staticticPeriod,
 																	DateTime.UtcNow, null));
 
 							_feedback.ReportProgress(remainingProgress,
 													 "No statistics found for workload on " +
-													 @event.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
+                                                     staticticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
 							return;
 						}
 						jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
-																daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " + @event.StatisticPeriod,
+																daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " + staticticPeriod,
 																DateTime.UtcNow, null));
 
 						_feedback.ReportProgress(@event.IncreaseWith,
 												 daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " +
-												 @event.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
+                                                 staticticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
 						remainingProgress -= @event.IncreaseWith;
 
 						var outlierWorkloadDayFilter = new OutlierWorkloadDayFilter<ITaskOwner>(workload, _outlierRepository);
 						var taskOwnerDaysWithoutOutliers =
 							outlierWorkloadDayFilter.FilterStatistics(daysWithValidatedStatistics,
-																	  new[] {@event.StatisticPeriod});
+																	  new[] { staticticPeriod });
 
 						var taskOwnerPeriod = _forecastClassesCreator.GetNewTaskOwnerPeriod(taskOwnerDaysWithoutOutliers);
 
 						var workloadDays =
 							_workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
-						jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days on " + @event.TargetPeriod,
+						jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days on " + targetPeriod,
 																DateTime.UtcNow, null));
 						applyVolumes(workload, taskOwnerPeriod, workloadDays, @event.UseDayOfMonth);
 
 						//(Update templates for workload)
-						updateStandardTemplates(workload, _statisticHelper, @event.TemplatePeriod, @event.SmoothingStyle);
+						updateStandardTemplates(workload, _statisticHelper, templatePeriod, @event.SmoothingStyle);
 
 						//Create budget forecast (apply standard templates for all days in target)
 						var helper = new TaskOwnerHelper(workloadDays);

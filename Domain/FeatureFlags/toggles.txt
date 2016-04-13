@@ -106,7 +106,7 @@ ResourcePlanner_IntradayIslands_36939 = RC
 ResourcePlanner_CascadingSkillsPOC_37679 = false
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
 
-Wfm_QuickForecastOnHangfire_35845 = false
+Wfm_QuickForecastOnHangfire_35845 = RC
 ETL_SpeedUpPermissionReport_33584 = RC
 Wfm_RecalculateForecastOnHangfire_37971 = RC
 ETL_SpeedUpFactScheduleNightly_38019 = false
