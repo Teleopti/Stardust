@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
+			schedulerStateHolderTo.ResetFilteredPersons();
 		}
 
 		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)

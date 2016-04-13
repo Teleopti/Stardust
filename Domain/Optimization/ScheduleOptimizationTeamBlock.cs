@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
+		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 
 		public ScheduleOptimizationTeamBlock(
 			IFillSchedulerStateHolder fillSchedulerStateHolder, 
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			OptimizationResult optimizationResult,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_teamBlockDayOffOptimizerService = teamBlockDayOffOptimizerService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
+			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, period);
 
 			var schedules = schedulerStateHolder.Schedules.SchedulesForPeriod(period, schedulerStateHolder.AllPermittedPersons.FixedStaffPeople(period)).ToList();
-			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListForSelection(schedules);
+			var matrixListForDayOffOptimization = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(period); 
 
 			_optimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForDayOffOptimization, optimizationPreferences, period);
 
@@ -95,20 +98,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
-			
+			var backgroundWorker = new NoSchedulingProgress();
+			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(backgroundWorker, false);
 			using (_resourceCalculationContextFactory.Create())
 			{
 				_teamBlockDayOffOptimizerService.OptimizeDaysOff(
 					matrixListForDayOffOptimization, period,
-					schedulerStateHolder.AllPermittedPersons, //schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList()???
-					optimizationPreferences,					
+					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(),
+					optimizationPreferences,
 					schedulingOptions,
 					resourceCalcDelayer, 
 					dayOffOptimizationPreferenceProvider,
 					teamInfoFactory,
-					new NoSchedulingProgress());
+					backgroundWorker);
 
-				
 				_weeklyRestSolverExecuter.Resolve(
 					optimizationPreferences, 
 					period, 

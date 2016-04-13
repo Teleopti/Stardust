@@ -18,8 +18,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
-	public class DayOffOptimizationTest
+	public class DayOffOptimizationTest : DayOffOptimizationScenario
 	{
 		public IScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -32,6 +34,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeDayOffRulesRepository DayOffRulesRepository;
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
+
+
+		public DayOffOptimizationTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
+		{
+		}
 
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()
