@@ -111,3 +111,4 @@ Wfm_QuickForecastOnHangfire_35845 = RC
 ETL_SpeedUpPermissionReport_33584 = RC
 Wfm_RecalculateForecastOnHangfire_37971 = RC
 ETL_SpeedUpFactScheduleNightly_38019 = false
+ETL_SpeedUpPersonPeriodNightly_38097 = false
