@@ -306,6 +306,55 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 		expect(controller.isAllInCurrentPageSelected()).toEqual(true);
 	}));
 
+	it("cannot select overtime layer", function() {
+		var personActivity1 = {
+			ActivityId: '111',
+			ParentPersonAbsence: null,
+			Start: "2016-02-19 08:00",
+			Selected: false,
+			ToggleSelection: function () {
+				this.Selected = !this.Selected;
+			}
+		};
+		var overtimeActivity = {
+			ActivityId: '222',
+			ParentPersonAbsence: null,
+			IsOvertime: true,
+			Start: "2016-02-19 15:00",
+			Selected: false,
+			ToggleSelection: function () {
+				this.Selected = !this.Selected;
+			}
+		};
+		var allProjections = [personActivity1, overtimeActivity];
+		var schedule = {
+			"PersonId": "1234",
+			"Date": "2016-02-19",
+			"Shifts": [
+				{
+					"Projections": allProjections
+				}
+			]
+		};
+
+		controller.scheduleVm = { Schedules: [schedule] };
+		controller.selectedPersonProjections = [];
+
+		controller.ToggleProjectionSelection(personActivity1, schedule, schedule.Date);
+		expect(controller.selectedPersonProjections.length).toEqual(1);
+		expect(controller.selectedPersonProjections[0].PersonId).toEqual(schedule.PersonId);
+		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(1);
+		expect(personActivity1.Selected).toEqual(true);
+		expect(overtimeActivity.Selected).toEqual(false);
+
+		controller.ToggleProjectionSelection(overtimeActivity, schedule, schedule.Date);
+		expect(controller.selectedPersonProjections.length).toEqual(1);
+		expect(controller.selectedPersonProjections[0].PersonId).toEqual(schedule.PersonId);
+		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(1);
+		expect(personActivity1.Selected).toEqual(true);
+		expect(overtimeActivity.Selected).toEqual(false);
+	});
+
 	function setUpController($controller) {
 		return $controller('scheduleTableCtrl');
 	}

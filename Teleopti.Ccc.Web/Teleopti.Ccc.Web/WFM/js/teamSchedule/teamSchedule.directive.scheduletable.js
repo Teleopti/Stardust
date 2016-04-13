@@ -50,7 +50,7 @@
 				return;
 
 			var isSameDay = moment(shiftDate).isSame(personSchedule.Date, 'day');
-			if (!isSameDay) {
+			if (!isSameDay || currentProjection.IsOvertime) {
 				return;
 			}
 
