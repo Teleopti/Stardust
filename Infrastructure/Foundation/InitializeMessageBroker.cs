@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 						Uri serverUrl;
 						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
 						{
-							var useLongPolling = appSettings.GetSettingValue("MessageBrokerLongPolling", bool.Parse);
+							var useLongPolling = appSettings.GetSettingValue("MessageBrokerLongPolling", x => !string.IsNullOrEmpty(x) && bool.Parse(x));
 							_messageBroker.ServerUrl = messageBrokerConnection;
 							_messageBroker.StartBrokerService(useLongPolling);
 						}
