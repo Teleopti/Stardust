@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var person = PersonFactory.CreatePerson("tester");
 
-			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence);
+			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 4, 1, 23, 00, 00, DateTimeKind.Utc), absence, true);
 			var waitlistedPersonRequest = createWaitlistedAbsenceRequest(person, absence,
 				new DateTimePeriod(
 					new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc),
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var person = PersonFactory.CreatePerson("tester");
 			var scheduleDictionary = new FakeScheduleDictionary();
 
-			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), DateTime.Today, absence);
+			person.WorkflowControlSet = createWorkFlowControlSet(new DateTime(2016, 2, 1, 10, 0, 0, DateTimeKind.Utc), DateTime.Today, absence, true);
 			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, Scenario.Current(), person);
 			
 			var dateTimePeriod = new DateTimePeriod(
@@ -212,9 +212,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			return personRequest;
 		}
 
-		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence)
+		private static WorkflowControlSet createWorkFlowControlSet(DateTime startDate, DateTime endDate, IAbsence absence, bool isWaitListEnabled)
 		{
-			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = true };
+			var workflowControlSet = new WorkflowControlSet { AbsenceRequestWaitlistEnabled = isWaitListEnabled };
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 

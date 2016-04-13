@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.Services
 			get { throw new NotImplementedException(); }
 		}
 
-		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person)
+		public IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person, IAbsenceRequest absenceRequest)
 		{
 			return new List<IBusinessRuleResponse>();
 		}

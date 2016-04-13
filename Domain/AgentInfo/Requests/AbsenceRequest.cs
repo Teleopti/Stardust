@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// </remarks>
         protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
         {
-            var result = approvalService.ApproveAbsence(_absence, Period, Person);
+            var result = approvalService.ApproveAbsence(_absence, Period, Person, this);
             if (result.IsEmpty())
             {
 

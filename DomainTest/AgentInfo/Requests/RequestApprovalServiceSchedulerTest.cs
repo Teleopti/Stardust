@@ -91,5 +91,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 Assert.IsTrue(result.IsEmpty());
             }
         }
-    }
+
+	}
 }
