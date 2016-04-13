@@ -6,9 +6,9 @@
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective)
 
 
-	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder'];
+	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle'];
 
-	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder) {
+	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc) {
 		var vm = this;
 
 		vm.approveRequests = approveRequests;
@@ -54,11 +54,23 @@
 			}				
 		}
 
+		function cancelRequests() {
+			//ROBTODO: implement
+			alert('Not implemented');
+		}
+
 		function disableCommands() {
 			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
 			if (vm.commandsDisabled) return true;
 			return !selectedRequestIds || selectedRequestIds.length === 0;
 		}
+
+		function canCancelRequests() {
+			//ROBTODO: implement rule to ensure only enable when at least one accepted request is chosen.
+			var toggleEnabled = toggleSvc.WfmTeamSchedule_AddActivity_37541 === true;
+			return toggleEnabled && !disableCommands();
+		}
+
 	}
 
 	function requestsCommandsPaneDirective() {

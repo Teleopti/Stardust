@@ -80,6 +80,7 @@
 		Wfm_Requests_ApproveDeny_36297,
 		Wfm_Requests_Waitlist_36232,
 		Wfm_Requests_Filtering_37748,
+		Wfm_Requests_Cancel_37741,
 
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,

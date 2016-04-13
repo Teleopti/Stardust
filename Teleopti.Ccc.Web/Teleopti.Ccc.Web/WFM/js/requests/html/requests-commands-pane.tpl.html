@@ -26,6 +26,13 @@
 				<i class="mdi mdi-block-helper"></i>
 				<label><span translate>Deny</span></label>
 			</li>
+			
+			<li class="wfm-btn wfm-btn-invis-primary"
+				ng-click="requestsCommandsPane.cancelRequests()"
+				ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}">
+				<i class="mdi mdi-block-helper"></i>
+				<label><span translate>Cancel</span></label>
+			</li>
 		</ul>
 	</span>
 </div>
