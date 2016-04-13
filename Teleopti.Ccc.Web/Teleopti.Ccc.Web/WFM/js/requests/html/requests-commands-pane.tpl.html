@@ -29,6 +29,7 @@
 			
 			<li class="wfm-btn wfm-btn-invis-primary"
 				ng-click="requestsCommandsPane.cancelRequests()"
+				ng-show="requestsCommandsPane.cancelToggleIsEnabled()"
 				ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}">
 				<i class="mdi mdi-block-helper"></i>
 				<label><span translate>Cancel</span></label>

@@ -14,6 +14,9 @@
 		vm.approveRequests = approveRequests;
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
+		vm.canCancelRequests = canCancelRequests;
+		vm.cancelRequests = cancelRequests;
+		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
 
 		function approveRequests() {
 			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
@@ -65,10 +68,13 @@
 			return !selectedRequestIds || selectedRequestIds.length === 0;
 		}
 
+		function cancelToggleIsEnabled() {
+			return toggleSvc.Wfm_Requests_Cancel_37741 === true;
+		}
+
 		function canCancelRequests() {
 			//ROBTODO: implement rule to ensure only enable when at least one accepted request is chosen.
-			var toggleEnabled = toggleSvc.WfmTeamSchedule_AddActivity_37541 === true;
-			return toggleEnabled && !disableCommands();
+			return !disableCommands();
 		}
 
 	}
