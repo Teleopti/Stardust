@@ -288,9 +288,11 @@
 		};
 
 		function replaceParameters(text, params) {
-			params.forEach(function (element, index) {
-				text = text.replace('{' + index + '}', element);
-			});
+			if (params) {
+				params.forEach(function(element, index) {
+					text = text.replace('{' + index + '}', element);
+				});
+			}
 			return text;
 		}
 
