@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Payroll;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -16,147 +17,136 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PayrollExportAssemblerTest
     {
-        private IPerson _person;
-        private PayrollFormatDto _payrollFormat;
-        private readonly Guid _payrollExportGuid = Guid.NewGuid();
-        private DateOnly _dateMin;
-        private MockRepository _mocks;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
-        private PayrollExportAssembler _target;
-        private IPayrollExportRepository _payrollExportRepository;
-        private IPersonRepository _personRepository;
+		private readonly PayrollFormatDto _payrollFormat = new PayrollFormatDto(Guid.NewGuid(), "format");
 
-        [SetUp]
-        public void Setup()
-        {
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-            _payrollFormat = new PayrollFormatDto(Guid.NewGuid(), "format");
-            _dateMin = new DateOnly(DateTime.MinValue);
-            _mocks = new MockRepository();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-            _payrollExportRepository = _mocks.StrictMock<IPayrollExportRepository>();
-            _personRepository = _mocks.StrictMock<IPersonRepository>();
-            _target = new PayrollExportAssembler(_payrollExportRepository, _personRepository, _personAssembler, new DateTimePeriodAssembler());
-        }
+		[Test]
+	    public void VerifyDoToDto()
+	    {
+		    var person = PersonFactory.CreatePerson().WithId();
+		    var personRepository = new FakePersonRepository();
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var payrollExportRepository = new FakePayrollExportRepository();
+		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
+			    new DateTimePeriodAssembler());
 
-        [Test]
-        public void VerifyDoToDto()
-        {
-            var payrollExport = CreateDo();
-            using (_mocks.Record())
-            {
-                Expect.Call(_personAssembler.DomainEntitiesToDtos(new List<IPerson> {_person})).Return(new List<PersonDto>
-                                                                                                           {
-                                                                                                               new PersonDto
-                                                                                                                   {
-                                                                                                                       Id = _person.Id,
-                                                                                                                       Name = _person.Name.ToString()
-                                                                                                                   }
-                                                                                                           });
-            }
-            using (_mocks.Playback())
-            {
-                payrollExport.Name = "Tommie";
-                var result = _target.DomainEntityToDto(payrollExport);
-                Assert.AreEqual(payrollExport.Id,result.Id);
-                Assert.AreEqual(payrollExport.Period.StartDate.Date,result.DatePeriod.StartDate.DateTime);
-                Assert.AreEqual(payrollExport.Period.StartDate.Date, result.Period.LocalStartDateTime.Date);
-                Assert.AreEqual(payrollExport.Persons[0].Id,result.PersonCollection[0].Id);
-                Assert.AreEqual(payrollExport.Name,result.Name);
-            }
-        }
+		    var payrollExport = createDo(person);
 
-        [Test]
-        public void VerifyDoToDtoWithNoPersonAssembler()
-        {
-            var payrollExport = CreateDo();
-            using (_mocks.Record())
-            {
-            }
-            using (_mocks.Playback())
-            {
-                _target = new PayrollExportAssembler(_payrollExportRepository, _personRepository, null, new DateTimePeriodAssembler());
-                var result = _target.DomainEntityToDto(payrollExport);
-                Assert.AreEqual(payrollExport.Id, result.Id);
-                Assert.AreEqual(payrollExport.Period.StartDate.Date, result.DatePeriod.StartDate.DateTime);
-                Assert.AreEqual(payrollExport.Period.StartDate.Date, result.Period.LocalStartDateTime.Date);
-                Assert.AreEqual(payrollExport.Persons[0].Id, result.ExportPersonCollection[0]);
-            }
-        }
+		    payrollExport.Name = "Tommie";
+		    var result = target.DomainEntityToDto(payrollExport);
+		    Assert.AreEqual(payrollExport.Id, result.Id);
+		    Assert.AreEqual(payrollExport.Period.StartDate.Date, result.DatePeriod.StartDate.DateTime);
+		    Assert.AreEqual(payrollExport.Period.StartDate.Date, result.Period.LocalStartDateTime.Date);
+		    Assert.AreEqual(payrollExport.Persons[0].Id, result.PersonCollection[0].Id);
+		    Assert.AreEqual(payrollExport.Name, result.Name);
+	    }
 
-        [Test]
-        public void VerifyDtoToDo()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_payrollExportRepository.Get(_payrollExportGuid)).Return(CreateDo());
-            }
-            using (_mocks.Playback())
-            {
-                var payrollExportDto = CreateDto();
-                var result = _target.DtoToDomainEntity(payrollExportDto);
-                Assert.AreEqual(payrollExportDto.Id, result.Id);
-                Assert.AreEqual(payrollExportDto.DatePeriod.StartDate.DateTime, result.Period.StartDate.Date);
-            }
-        }
+	    [Test]
+	    public void VerifyDoToDtoWithNoPersonAssembler()
+	    {
+		    var person = PersonFactory.CreatePerson().WithId();
+		    
+		    var personRepository = new FakePersonRepository();
+		    var payrollExportRepository = new FakePayrollExportRepository();
+		    var payrollExport = createDo(person);
 
-        [Test]
-        public void VerifyDtoToDoWithNoId()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_payrollExportRepository.Get(Guid.Empty)).Return(null);
-            }
-            using (_mocks.Playback())
-            {
-                var payrollExportDto = CreateDto();
-                payrollExportDto.Id = null;
-                var result = _target.DtoToDomainEntity(payrollExportDto);
-                Assert.IsNull(result);
-            }
-        }
+		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, null,
+			    new DateTimePeriodAssembler());
+		    var result = target.DomainEntityToDto(payrollExport);
+		    Assert.AreEqual(payrollExport.Id, result.Id);
+		    Assert.AreEqual(payrollExport.Period.StartDate.Date, result.DatePeriod.StartDate.DateTime);
+		    Assert.AreEqual(payrollExport.Period.StartDate.Date, result.Period.LocalStartDateTime.Date);
+		    Assert.AreEqual(payrollExport.Persons[0].Id, result.ExportPersonCollection[0]);
+	    }
 
-        [Test]
-        public void VerifyDtoToDoWithIdListOnly()
-        {
-            var principalPerson = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
-            using (_mocks.Record())
-            {
-                Expect.Call(_personRepository.FindAllSortByName()).Return(new List<IPerson>{_person, PersonFactory.CreatePerson()});
-                Expect.Call(_personRepository.Get(principalPerson.Id.GetValueOrDefault())).Return(principalPerson);
-            }
-            using (_mocks.Playback())
-            {
-                var payrollExportDto = CreateDto();
-                payrollExportDto.PersonCollection.Clear();
-                payrollExportDto.ExportPersonCollection.Add(_person.Id.GetValueOrDefault());
-                var result = _target.DtoToDomainEntity(payrollExportDto);
-                Assert.AreEqual(1, result.Persons.Count);
-            }
-        }
+	    [Test]
+	    public void VerifyDtoToDo()
+	    {
+		    var person = PersonFactory.CreatePerson().WithId();
+		    
+		    var personRepository = new FakePersonRepository();
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var payrollExportRepository = new FakePayrollExportRepository();
+		    var payrollExport = createDo(person);
+		    payrollExportRepository.Add(payrollExport);
+		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
+			    new DateTimePeriodAssembler());
 
-        private IPayrollExport CreateDo()
+		    var payrollExportDto = createDto(payrollExport.Id.GetValueOrDefault(),person);
+		    var result = target.DtoToDomainEntity(payrollExportDto);
+		    Assert.AreEqual(payrollExportDto.Id, result.Id);
+		    Assert.AreEqual(payrollExportDto.DatePeriod.StartDate.DateTime, result.Period.StartDate.Date);
+	    }
+
+	    [Test]
+	    public void VerifyDtoToDoWithNoId()
+	    {
+		    var personRepository = new FakePersonRepository();
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var payrollExportRepository = new FakePayrollExportRepository();
+		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
+			    new DateTimePeriodAssembler());
+
+		    var result = target.DtoToDomainEntity(new PayrollExportDto());
+		    Assert.IsNull(result);
+	    }
+
+	    [Test]
+	    public void VerifyDtoToDoWithIdListOnly()
+	    {
+		    var person = PersonFactory.CreatePerson().WithId();
+
+		    var personRepository = new FakePersonRepository();
+			personRepository.Add(person);
+
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var payrollExportRepository = new FakePayrollExportRepository();
+		    var payrollExport = createDo(person);
+		    var target = new PayrollExportAssembler(payrollExportRepository, personRepository, personAssembler,
+			    new DateTimePeriodAssembler());
+
+		    var payrollExportDto = createDto(payrollExport.Id.GetValueOrDefault(), person);
+		    payrollExportDto.PersonCollection.Clear();
+		    payrollExportDto.ExportPersonCollection.Add(person.Id.GetValueOrDefault());
+		    var result = target.DtoToDomainEntity(payrollExportDto);
+		    Assert.AreEqual(1, result.Persons.Count);
+	    }
+
+	    private IPayrollExport createDo(IPerson person)
         {
-            IPayrollExport payrollExport = new PayrollExport();
-            payrollExport.AddPersons(new List<IPerson> { _person });
-            payrollExport.Period = new DateOnlyPeriod(_dateMin, _dateMin);
+            IPayrollExport payrollExport = new PayrollExport().WithId();
+            payrollExport.AddPersons(new List<IPerson> { person });
+            payrollExport.Period = new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue);
             payrollExport.PayrollFormatId = _payrollFormat.FormatId;
             payrollExport.PayrollFormatName = _payrollFormat.Name;
             payrollExport.FileFormat = ExportFormat.CommaSeparated;
-            payrollExport.SetId(_payrollExportGuid);
-            ReflectionHelper.SetCreatedBy(payrollExport,_person);
+            ReflectionHelper.SetCreatedBy(payrollExport,person);
             return payrollExport;
         }
 
-        private PayrollExportDto CreateDto()
+        private PayrollExportDto createDto(Guid exportId, IPerson person)
         {
             PayrollExportDto payrollExportDto = new PayrollExportDto();
-            payrollExportDto.Id = _payrollExportGuid;
+            payrollExportDto.Id = exportId;
             payrollExportDto.PayrollFormat = _payrollFormat;
 	        payrollExportDto.DatePeriod = new DateOnlyPeriodDto
-		        {StartDate = new DateOnlyDto {DateTime = _dateMin.Date}, EndDate = new DateOnlyDto {DateTime = _dateMin.Date}};
-            payrollExportDto.PersonCollection.Add(new PersonDto{Id=_person.Id,Name = _person.Name.ToString()});
+		        {StartDate = new DateOnlyDto {DateTime = DateOnly.MinValue.Date}, EndDate = new DateOnlyDto {DateTime = DateOnly.MinValue.Date } };
+	        payrollExportDto.PersonCollection.Add(new PersonDto {Id = person.Id, Name = person.Name.ToString()});
             return payrollExportDto;
         }
     }

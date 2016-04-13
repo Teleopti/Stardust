@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPartTimePercentage Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _partTimePercentages.FirstOrDefault(p => id == p.Id);
 		}
 
 		public IList<IPartTimePercentage> LoadAll()
@@ -52,6 +52,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-
 	}
 }

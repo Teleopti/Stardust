@@ -159,6 +159,7 @@
     <Compile Include="FakeRepositories\FakeAnalyticsTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeApplicationFunctionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAvailableDataRepository.cs" />
+    <Compile Include="FakeRepositories\FakePayrollExportRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepositorySimulateNewUnitOfWork.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\Rta\ExternalUserStateForSnapshot.cs" />

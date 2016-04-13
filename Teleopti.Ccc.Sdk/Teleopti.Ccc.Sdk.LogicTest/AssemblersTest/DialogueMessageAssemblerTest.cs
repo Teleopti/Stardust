@@ -1,10 +1,14 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -12,56 +16,43 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class DialogueMessageAssemblerTest
     {
-        private IPerson _person;
-        private MockRepository _mocks;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
-        private DialogueMessageAssembler _target;
+	    [Test]
+	    public void VerifyDoToDto()
+	    {
+		    var person = PersonFactory.CreatePerson().WithId();
+		    var personRepository = new FakePersonRepository();
+		    personRepository.Has(person);
 
-        [SetUp]
-        public void Setup()
-        {
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-            _mocks = new MockRepository();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-            _target = new DialogueMessageAssembler();
-            _target.PersonAssembler = _personAssembler;
-        }
+			var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var target = new DialogueMessageAssembler();
+		    target.PersonAssembler = personAssembler;
+		    var dialogueMessage = createDo(person);
 
-        [Test]
-        public void VerifyDoToDto()
-        {
-            var dialogueMessage = CreateDo();
-            using (_mocks.Record())
-            {
-                Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-                                                                                    {
-                                                                                        Id = _person.Id,
-                                                                                        Name = _person.Name.ToString()
-                                                                                    });
-            }
-            using (_mocks.Playback())
-            {
-                var result = _target.DomainEntityToDto(dialogueMessage);
-                Assert.AreEqual(dialogueMessage.Sender.Id, result.Sender.Id);
-                Assert.AreEqual(dialogueMessage.Text, result.Text);
-            }
-        }
+		    var result = target.DomainEntityToDto(dialogueMessage);
+		    Assert.AreEqual(dialogueMessage.Sender.Id, result.Sender.Id);
+		    Assert.AreEqual(dialogueMessage.Text, result.Text);
+	    }
 
-        [Test, ExpectedException(typeof(NotSupportedException))]
+	    [Test, ExpectedException(typeof(NotSupportedException))]
         public void VerifyDtoToDo()
         {
-            var dialogueMessageDto = CreateDto();
-            _target.DtoToDomainEntity(dialogueMessageDto);
+            var dialogueMessageDto = createDto();
+			var target = new DialogueMessageAssembler();
+
+			target.DtoToDomainEntity(dialogueMessageDto);
         }
 
-        private IDialogueMessage CreateDo()
+        private static IDialogueMessage createDo(IPerson person)
         {
-            IDialogueMessage dialogueMessage = new DialogueMessage("test",_person);
+            var dialogueMessage = new DialogueMessage("test", person);
             return dialogueMessage;
         }
 
-        private static DialogueMessageDto CreateDto()
+        private static DialogueMessageDto createDto()
         {
             return new DialogueMessageDto();
         }

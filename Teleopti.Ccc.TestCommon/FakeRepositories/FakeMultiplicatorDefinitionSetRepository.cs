@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -7,9 +8,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeMultiplicatorDefinitionSetRepository : IMultiplicatorDefinitionSetRepository
 	{
+		private IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
+
 		public void Add(IMultiplicatorDefinitionSet root)
 		{
-			throw new NotImplementedException();
+			multiplicatorDefinitionSets.Add(root);
 		}
 
 		public void Remove(IMultiplicatorDefinitionSet root)
@@ -19,12 +22,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IMultiplicatorDefinitionSet Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return multiplicatorDefinitionSets.FirstOrDefault(m => id == m.Id);
 		}
 
 		public IList<IMultiplicatorDefinitionSet> LoadAll()
 		{
-			return new List<IMultiplicatorDefinitionSet>();
+			return multiplicatorDefinitionSets;
 		}
 
 		public IMultiplicatorDefinitionSet Load(Guid id)
