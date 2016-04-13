@@ -553,7 +553,6 @@
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="UnitOfWork\NHibernateStatelessUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryFake.cs" />
-    <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryTest.cs" />
     <Compile Include="UnitOfWork\DataSourcesFactoryTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\PersonChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />

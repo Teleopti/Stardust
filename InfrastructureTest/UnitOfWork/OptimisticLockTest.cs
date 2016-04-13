@@ -1,165 +1,93 @@
 using System;
-using NHibernate.Cfg;
-using NHibernate.Mapping;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
-    /// <summary>
-    /// Tests for optimistic lock functionality
-    /// </summary>
-    [TestFixture, Category("LongRunning")]
-	[Ignore("These tests leave some state so TransactionHookInvokationTest fails.")]
-    public class OptimisticLockTest
-    {
-        private MockRepository mocks;
+	[DatabaseTest]
+	public class OptimisticLockTest
+	{
+		public ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 
-        /// <summary>
-        /// Runs once per test
-        /// </summary>
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
+		[Test]
+		public void ShouldThrowOptimisticLockException()
+		{
+			Guid id;
 
-        [Test]
-        public void VerifyHasVersionSuitsWithMapping()
-        {
-            Configuration appCfg = new Configuration()
-                                .SetProperties(SetupFixtureForAssembly.Sql2005conf("doesnotmatter", null))
-                                .AddAssembly(typeof(Person).Assembly);
-            foreach (PersistentClass mapping in appCfg.ClassMappings)
-            {
-                Type entityType = mapping.MappedClass;
-            }
-        }
+			//client 1
+			var uow1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+			var user1 = PersonFactory.CreatePerson();
+			user1.Name = new Name("new", "name");
+			new PersonRepository(new ThisUnitOfWork(uow1)).Add(user1);
+			uow1.PersistAll();
+			id = user1.Id.Value;
 
-        /// <summary>
-        /// Verifies the optimistic concurrency.
-        /// Creates new IUnitOfWorks because the one
-        /// shared among all tests is bound to a transaction.
-        /// </summary>
-        /// <remarks>
-        /// Unfortunatly creates an User i db outside transaction.
-        /// So far no problem - but have in mind!
-        /// </remarks>
-        [Test]
-        [ExpectedException(typeof (OptimisticLockException))]
-        public void VerifyOptimisticConcurrency()
-        {
-            try
-            {
-                IPerson user = PersonFactory.CreatePerson();
-                user.Name = new Name("sdfsdf", "df");
+			//client 2
+			var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+			var user2 = new PersonRepository(new ThisUnitOfWork(uow2)).Load(id);
+			user2.Name = new Name("change", "name");
+			uow2.PersistAll();
+			uow2.Dispose();
 
-							StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, user, BusinessUnitFactory.BusinessUnitUsedInTest, StateHolderProxyHelper.DefaultPrincipalContext);
-							
-                IUnitOfWork uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-                IUnitOfWork uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-                IPersonRepository rep1 = new PersonRepository(new ThisUnitOfWork(uow1));
-                IPersonRepository rep2 = new PersonRepository(new ThisUnitOfWork(uow2));
-                mocks.ReplayAll();
+			//client 1
+			user1.Name = new Name("change", "too");
+			Assert.Throws<OptimisticLockException>(() => { uow1.PersistAll(); });
+			uow1.Dispose();
+		}
 
-                //save
-                rep1.Add(user);
-                uow1.PersistAll();
+		[Test]
+		public void ShouldThrowOptimisticLockExceptionWithDeepGraph()
+		{
+			Guid id;
 
-                //load
-                IPerson user2 = rep2.Load(user.Id.Value);
+			//setup
+			var uow1 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+			var site = SiteFactory.CreateSimpleSite();
+			new SiteRepository(new ThisUnitOfWork(uow1)).Add(site);
+			uow1.PersistAll();
+			var team = TeamFactory.CreateSimpleTeam(".");
+			team.Site = site;
+			new TeamRepository(new ThisUnitOfWork(uow1)).Add(team);
+			uow1.PersistAll();
+			var partTimePercentage = new PartTimePercentage(".");
+			new PartTimePercentageRepository(new ThisUnitOfWork(uow1)).Add(partTimePercentage);
+			uow1.PersistAll();
+			var contract = new Contract(".");
+			new ContractRepository(new ThisUnitOfWork(uow1)).Add(contract);
+			uow1.PersistAll();
+			var contratSchedule = new ContractSchedule(".");
+			new ContractScheduleRepository(new ThisUnitOfWork(uow1)).Add(contratSchedule);
+			uow1.PersistAll();
 
-                //update
-                user.Name = new Name("sdfsdf", "nytt1");
-                user2.Name = new Name("fff", "nytt2");
+			//client 1
+			var user1 = PersonFactory.CreatePerson();
+			var period = PersonPeriodFactory.CreatePersonPeriod("2016-04-13".Date());
+			period.PersonContract = new PersonContract(contract, partTimePercentage, contratSchedule);
+			period.Team = team;
+			user1.AddPersonPeriod(period);
+			new PersonRepository(new ThisUnitOfWork(uow1)).Add(user1);
+			uow1.PersistAll();
+			id = user1.Id.Value;
 
+			//client 2
+			var uow2 = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+			var user2 = new PersonRepository(new ThisUnitOfWork(uow2)).Load(id);
+			user2.Period("2016-04-13".Date()).Note = "a note";
+			uow2.PersistAll();
+			uow2.Dispose();
 
-                //flush
-                uow1.PersistAll();
-                uow2.PersistAll();
-
-                uow1.Dispose();
-                uow2.Dispose();
-                
-            }
-
-            finally
-            {
-                cleanUp();                
-            }
-        }
-
-
-        /// <summary>
-        /// Verifies that optimistic concurrency works as expected in deep graph.
-        /// </summary>
-        [Test]
-        [ExpectedException(typeof(OptimisticLockException))]
-        public void VerifyOptimisticConcurrencyInDeepGraph()
-        {
-            try
-            {
-                IPerson user = PersonFactory.CreatePerson("sdfd232sg");
-
-							StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, user, BusinessUnitFactory.BusinessUnitUsedInTest, StateHolderProxyHelper.DefaultPrincipalContext);
-
-                IUnitOfWork uow1 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-                IUnitOfWork uow2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
-                IPersonRepository rep1 = new PersonRepository(new ThisUnitOfWork(uow1));
-                IPersonRepository rep2 = new PersonRepository(new ThisUnitOfWork(uow2));
-                mocks.ReplayAll();
-
-                //save
-                rep1.Add(user);
-                uow1.PersistAll();
-
-                //load
-                IPerson user2 = rep2.Load(user.Id.Value);
-
-                //update
-	            user.Name = new Name(RandomName.Make(), RandomName.Make());
-							user2.Name = new Name(RandomName.Make(), RandomName.Make());
-
-
-                //flush
-                uow1.PersistAll();
-                uow2.PersistAll();
-
-                uow1.Dispose();
-                uow2.Dispose();   
-            }
-            finally
-            {
-                cleanUp();                
-            }
-        }
-
-
-        private void cleanUp()
-        {
-            using (IUnitOfWork uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-            {
-                PersonRepository rep = new PersonRepository(new ThisUnitOfWork(uow));
-                foreach (IPerson person in rep.LoadAll())
-                {
-                    rep.Remove(person);
-                }
-                uow.PersistAll();
-            }
-
-            mocks.VerifyAll();
-        }
-
-    }
+			//client 1
+			user1.Period("2016-04-13".Date()).Note = "another note";
+			Assert.Throws<OptimisticLockException>(() => { uow1.PersistAll(); });
+			uow1.Dispose();
+		}
+	}
 }
