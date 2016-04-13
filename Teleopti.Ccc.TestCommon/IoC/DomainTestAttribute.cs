@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
 			system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
+			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
 
 			fakePrincipal(system);
 		}
