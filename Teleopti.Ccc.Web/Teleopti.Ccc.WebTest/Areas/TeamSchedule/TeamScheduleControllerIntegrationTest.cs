@@ -122,6 +122,40 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+		public void ShouldGetCorrectIdsForNeighboringPersonAbsences()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(scheduleDate));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
+			var absence = AbsenceFactory.CreateAbsenceWithId();
+			var personAbsence1 = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(2020, 1, 1, 11, 2020, 1, 1, 12), absence);
+			personAbsence1.SetId(Guid.NewGuid());
+			var personAbsence2 = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+				new DateTimePeriod(2020, 1, 1, 12, 2020, 1, 1, 13), absence);
+			personAbsence2.SetId(Guid.NewGuid());
+			scheduleDay.Add(personAbsence1);
+			scheduleDay.Add(personAbsence2);
+
+			scheduleDay.Add(pa);
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+
+			var schedule = result.Single();
+			var projectionVm = schedule.Projection.ToList();
+			projectionVm.Count.Should().Be.EqualTo(4);
+
+			projectionVm[1].ParentPersonAbsence.Should().Be.EqualTo(personAbsence1.Id);
+			projectionVm[2].ParentPersonAbsence.Should().Be.EqualTo(personAbsence2.Id);
+		}
+
+		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
