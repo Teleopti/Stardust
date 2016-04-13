@@ -14194,9 +14194,9 @@ Help us improve your experience by sending an error report</value>
     <value>Loaded:</value>
     <comment>Loaded:</comment>
   </data>
-  <data name="RemoveEntireAbsenceForCrossDayPersonAbsence" xml:space="preserve">
-    <value>Remove entire cross day person absence</value>
-    <comment>Message for user to confirm how to remove cross day absence in remove absence of team schedule</comment>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Remove entire multi-day person absence</value>
+    <comment>Message for user to confirm how to remove multi-day absence in remove absence of team schedule</comment>
   </data>
   <data name="ToggleDarkTheme" xml:space="preserve">
     <value>Toggle dark theme</value>

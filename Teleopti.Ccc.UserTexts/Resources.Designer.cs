@@ -21732,11 +21732,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove entire cross day person absence.
+        ///   Looks up a localized string similar to Remove entire multi-day person absence.
         /// </summary>
-        public static string RemoveEntireAbsenceForCrossDayPersonAbsence {
+        public static string RemoveEntireAbsenceForMultiDayPersonAbsence {
             get {
-                return ResourceManager.GetString("RemoveEntireAbsenceForCrossDayPersonAbsence", resourceCulture);
+                return ResourceManager.GetString("RemoveEntireAbsenceForMultiDayPersonAbsence", resourceCulture);
             }
         }
         
