@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -30,17 +29,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IWorkShiftFinderResultHolder> _workShiftFinderResultHolder;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 
 		public ClassicDaysOffOptimizationCommand(IOptimizerHelperHelper optimizerHelperHelper, 
 			IScheduleMatrixLockableBitArrayConverterEx bitArrayConverter,
-			IWorkShiftBackToLegalStateServiceFactory workShiftBackToLegalStateServiceFactory, IScheduleService scheduleService,
+			IWorkShiftBackToLegalStateServiceFactory workShiftBackToLegalStateServiceFactory, 
+			IScheduleService scheduleService,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			IDayOffDecisionMaker dayOffDecisionMaker,
-			IResourceOptimizationHelper resourceOptimizationHelper, IEffectiveRestrictionCreator effectiveRestrictionCreator,
+			IResourceOptimizationHelper resourceOptimizationHelper, 
+			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IDayOffOptimizerValidator dayOffOptimizerValidator,
-			ISchedulingOptionsCreator schedulingOptionsCreator, Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
-			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+			ISchedulingOptionsCreator schedulingOptionsCreator, 
+			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
+			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended, 
+			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+			Func<ISchedulerStateHolder> schedulerStateHolder)
 		{
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_bitArrayConverter = bitArrayConverter;
@@ -56,14 +61,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_schedulerStateHolder = schedulerStateHolder;
 		}
 
 		public void Execute(
 			IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
 			DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences,
-			ISchedulerStateHolder schedulerStateHolder, ISchedulingProgress backgroundWorker,
+			ISchedulingProgress backgroundWorker,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
+			var schedulerStateHolder = _schedulerStateHolder();
 			IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
 
 			ISchedulePartModifyAndRollbackService rollbackService =

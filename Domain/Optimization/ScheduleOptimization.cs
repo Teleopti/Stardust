@@ -82,8 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (_resourceCalculationContextFactory.Create())
 			{
 				_classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, period,
-					optimizationPreferences, schedulerStateHolder,
-					new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
+					optimizationPreferences, new NoSchedulingProgress(), dayOffOptimizationPreferenceProvider);
 
 				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, schedules,
 					schedulerStateHolder.SchedulingResultState.PersonsInOrganization.ToList(), dayOffOptimizationPreferenceProvider);

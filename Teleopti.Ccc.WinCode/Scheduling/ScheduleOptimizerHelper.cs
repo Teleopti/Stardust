@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(dayOffOptimzePreferences);
 			var classicDaysOffOptimizationCommand = _container.Resolve<ClassicDaysOffOptimizationCommand>();
 			classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod,
-				optimizerPreferences, _schedulerStateHolder(), schedulingProgress, dayOffOptimizationPreferenceProvider);
+				optimizerPreferences, schedulingProgress, dayOffOptimizationPreferenceProvider);
 		}
 
 		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
