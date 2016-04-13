@@ -352,5 +352,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 			_sendDelayedMessages.AssertWasNotCalled(x => x.DelaySend(Arg<DateTime>.Is.Anything, Arg<ProjectionChangedEventScheduleDay>.Is.Anything));
 		}
+
+		[Test]
+		public void ShouldNotBeHandledScenarioDoesNotExistInAnalytics()
+		{
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				DayOff = new ProjectionChangedEventDayOff(),
+				PersonPeriodId = Guid.NewGuid()
+			};
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = Guid.NewGuid()
+			};
+
+			_analyticsScheduleRepository.Stub(x => x.Scenarios()).Return(new List<IAnalyticsGeneric> { });
+
+			_target.Handle(@event);
+
+			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(Arg<int>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything));
+			_analyticsScheduleRepository.AssertWasNotCalled(x => x.PersistFactScheduleBatch(Arg<IList<IFactScheduleRow>>.Is.Anything));
+		}
+
+		[Test]
+		public void ShouldNotBeHandledBecauseFilter()
+		{
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				DayOff = new ProjectionChangedEventDayOff(),
+				PersonPeriodId = Guid.NewGuid()
+			};
+			var @event = new ProjectionChangedEvent
+			{
+				ScheduleDays = new Collection<ProjectionChangedEventScheduleDay> { scheduleDay },
+				ScenarioId = Guid.NewGuid()
+			};
+
+			_analyticsScheduleChangeUpdaterFilter.Stub(x => x.ContinueProcessingEvent(Arg<ProjectionChangedEvent>.Is.Anything))
+				.Return(false).Repeat.Any();
+
+			_target.Handle(@event);
+
+			_analyticsScheduleRepository.AssertWasNotCalled(x => x.DeleteFactSchedule(Arg<int>.Is.Anything, Arg<int>.Is.Anything, Arg<int>.Is.Anything));
+			_analyticsScheduleRepository.AssertWasNotCalled(x => x.PersistFactScheduleBatch(Arg<IList<IFactScheduleRow>>.Is.Anything));
+		}
 	}
 }
