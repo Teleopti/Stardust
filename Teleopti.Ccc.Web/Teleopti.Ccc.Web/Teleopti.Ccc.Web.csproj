@@ -1343,6 +1343,7 @@
     <Content Include="WFM\js\global\wfm.shortcuts.service.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.html" />
+    <Content Include="WFM\js\intraday\intraday-chart.directive.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />

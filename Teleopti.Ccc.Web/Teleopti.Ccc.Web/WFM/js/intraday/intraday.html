@@ -116,11 +116,16 @@
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding">
 						<md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">
-							<md-tab label="Incoming traffic">
+							<md-tab label="Incoming">
 								<md-content class="md-padding">
 									<div class="con-row">
 										<div class="con-flex">
-											<h2>Incoming traffic</h2>
+											<h2>Incoming</h2>
+										</div>
+									</div>
+									<div class="con-row">
+										<div class="con-flex">
+											<div class="wfm-chart" id="myChart"></div>
 										</div>
 									</div>
 								</md-content>
@@ -141,7 +146,7 @@
 
 	<div ng-show="HasMonitorData" tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
 			<div class="sub-header">
-				<h2>Incoming traffic</h2>
+				<h2>Incoming</h2>
 				<!--<div class="head-actions panel-menu">
 																							 <div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
 																							 <i class="filter-header mdi mdi-alert pointer"><md-tooltip>There are some issues</md-tooltip></i>
@@ -177,6 +182,7 @@
 				</div>
 			</div>
 		</div>
+		<div class="con-flex split-3-1"></div>
 
 		<div ng-cloak class="modal-box">
 			<div ng-cloak ng-show="DeleteSkillAreaModal">
@@ -197,5 +203,3 @@
 		</div>
 	</div>
 </div>
-
-
