@@ -87,12 +87,12 @@
 		Wfm_Use_Stardust,
 		Wfm_ForecastFileImportOnStardust_37047,
 
-		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048,
-		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049,
 		ETL_SpeedUpPersonPeriodIntraday_37162_37439,
 		ETL_SpeedUpGroupPagePersonIntraday_37623,
 		WfmGlobalLayout_personalOptions_37114,
 
+		ResourcePlanner_SkillGroupDeleteAfterCalculation_37048,
+		ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049,
 		ResourcePlanner_IntradayIslands_36939,
 		ResourcePlanner_CascadingSkillsPOC_37679,
 		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,

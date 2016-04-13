@@ -104,6 +104,7 @@ WfmGlobalLayout_personalOptions_37114 = RC
 ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = true
 ResourcePlanner_IntradayIslands_36939 = RC
 ResourcePlanner_CascadingSkillsPOC_37679 = false
+ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
 
 Wfm_QuickForecastOnHangfire_35845 = false
 ETL_SpeedUpPermissionReport_33584 = RC
