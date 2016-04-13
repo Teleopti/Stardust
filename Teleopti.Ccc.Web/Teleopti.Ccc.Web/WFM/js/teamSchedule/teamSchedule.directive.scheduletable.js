@@ -45,9 +45,14 @@
 			return -1;
 		};
 
-		vm.ToggleProjectionSelection = function(currentProjection, personSchedule) {
+		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shiftDate) {
 			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
 				return;
+
+			var isSameDay = moment(shiftDate).isSame(personSchedule.Date, 'day');
+			if (!isSameDay) {
+				return;
+			}
 
 			currentProjection.ToggleSelection();
 
