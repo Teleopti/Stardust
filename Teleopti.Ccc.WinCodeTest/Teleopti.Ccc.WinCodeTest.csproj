@@ -593,7 +593,8 @@
     <Compile Include="Scheduler\DaysOnlyHelperTest.cs" />
     <Compile Include="Scheduler\MatrixUnselectedDaysLockerTest.cs" />
     <Compile Include="Scheduler\MultiplicatorsetForPasteSpecialFilterTest.cs" />
-    <Compile Include="Scheduler\OptimizationBugTest.cs" />
+    <Compile Include="Scheduler\OptimizationBug37966Test.cs" />
+    <Compile Include="Scheduler\OptimizationBug37126Test.cs" />
     <Compile Include="Scheduler\OvertimePreferencesDialogPresenterTest.cs" />
     <Compile Include="Scheduler\PasteAsOvertimeTest.cs" />
     <Compile Include="Scheduler\PublishScheduleCommandTest.cs" />
