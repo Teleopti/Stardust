@@ -108,3 +108,4 @@ ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false 
 
 Wfm_QuickForecastOnHangfire_35845 = false
 ETL_SpeedUpPermissionReport_33584 = RC
+Wfm_RecalculateForecastOnHangfire_37971 = RC
