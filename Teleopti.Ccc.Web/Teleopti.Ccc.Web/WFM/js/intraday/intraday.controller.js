@@ -132,7 +132,7 @@
 					$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
 					$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
 					$scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
-					$scope.timeSeries = result.DataSeries.Time.toString();
+					$scope.timeSeries = result.DataSeries.Time;
 					$scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls;
 					$scope.actualCallsSeries = result.DataSeries.OfferedCalls;
 					$scope.forecastedAverageHandleTimeSeries = result.DataSeries.ForecastedAverageHandleTime;
@@ -233,6 +233,8 @@
 							}
 						}
 
+
+
 						var loadIntradayChart = function() {
 							$scope.forecastedCallsSeries.splice(0,0,"Forcasted calls");
 							$scope.actualCallsSeries.splice(0,0,"Actual calls");
@@ -254,7 +256,16 @@
 								},
 								axis: {
 									y2: {
-										show: true
+										show: true,
+										label: 'AHT'
+									},
+									y:{
+										label: 'Calls'
+									},
+									x: {
+										//type: 'category',
+										//categories: $scope.timeSeries,
+										label: 'interval'
 									}
 								}
 							});
