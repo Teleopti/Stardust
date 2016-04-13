@@ -50,6 +50,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 			var scenarioId = getScenario(@event.ScenarioId);
 
+			if (scenarioId == -1)
+			{
+				Logger.DebugFormat("Scenario with code {0} has not been inserted in analytics yet. Schedule changes for agent {1} is not saved into Analytics database.", 
+					@event.ScenarioId, @event.PersonId);
+				return;
+			}
+
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				int dateId;
@@ -62,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 						@event.PersonId);
 					continue;
 				}
-
+				
 				var personPart = _factSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
 				if (personPart.PersonId == -1)
 				{

@@ -23,6 +23,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		public void Handle(ProjectionChangedEvent @event)
 		{
+			if (!@event.IsDefaultScenario)
+				return;
+
 			var person = _personRepository.Get(@event.PersonId);
 			foreach (var projectionChangedEventScheduleDay in @event.ScheduleDays)
 			{

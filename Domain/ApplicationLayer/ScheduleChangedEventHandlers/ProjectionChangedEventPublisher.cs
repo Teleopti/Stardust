@@ -81,7 +81,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
                 Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
                 return null;
             }
-			if (!scenario.DefaultScenario) return null;
 
 			var period = new DateTimePeriod(@event.StartDateTime.Subtract(TimeSpan.FromDays(1)), @event.EndDateTime);
 			if (Logger.IsDebugEnabled)
