@@ -13927,11 +13927,11 @@ Reduce the complexity to use these shifts.</value>
     <comment>Clear value that overrides forecasted value</comment>
   </data>
   <data name="AddAbsenceSuccessedResult" xml:space="preserve">
-    <value>Added absence for {0} selected agent(s), all successed!</value>
+    <value>Successfully added absences for the selected agents</value>
     <comment>use in WFM TeamSchedule, a notify message to user for all added absence successed.</comment>
   </data>
   <data name="AddAbsenceTotalResult" xml:space="preserve">
-    <value>Added absence for {0} selected agent(s), {1} successed, {2} failed!</value>
+    <value>Successfully added {0} absences, {1} absences were unable to be added</value>
     <comment>use in WFM TeamSchedule, a notify message to user for telling the success and fail result.</comment>
   </data>
   <data name="SwapShifts" xml:space="preserve">
@@ -14227,11 +14227,11 @@ Help us improve your experience by sending an error report</value>
     <comment>The opposite to the NextDay</comment>
   </data>
   <data name="FailedMessageForAddingActivity" xml:space="preserve">
-    <value>Added activity for {0} selected agent(s), all failed!</value>
+    <value>Could not add activity for the selected agents</value>
     <comment>Failed message for adding activity in wfm/teamschedule</comment>
   </data>
   <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
-    <value>Added activity for {0} selected agent(s), all successed!</value>
+    <value>Successfully added activities for the selected agents</value>
     <comment>Succeed message for adding activity in wfm/teamschedule</comment>
   </data>
   <data name="SelectAnActivity" xml:space="preserve">
@@ -14266,10 +14266,4 @@ Help us improve your experience by sending an error report</value>
     <value>Must select two agents to swap.</value>
     <comment>Error message alerting the user that the current agent selection is not appropriate for swapping schedule.</comment>
   </data>
-=======
-  <data name="DenyReason" xml:space="preserve">
-    <value>Deny Reason</value>
-    <comment>Used in WFM as a header in the requests table.</comment>
-  </data>
->>>>>>> source
 </root>

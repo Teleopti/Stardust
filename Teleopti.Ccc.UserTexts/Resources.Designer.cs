@@ -727,7 +727,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Added absence for {0} selected agent(s), all successed!.
+        ///   Looks up a localized string similar to Successfully added absences for the selected agents.
         /// </summary>
         public static string AddAbsenceSuccessedResult {
             get {
@@ -745,7 +745,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Added absence for {0} selected agent(s), {1} successed, {2} failed!.
+        ///   Looks up a localized string similar to Successfully added {0} absences, {1} absences were unable to be added.
         /// </summary>
         public static string AddAbsenceTotalResult {
             get {
@@ -10013,7 +10013,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Added activity for {0} selected agent(s), all failed!.
+        ///   Looks up a localized string similar to Could not add activity for the selected agents.
         /// </summary>
         public static string FailedMessageForAddingActivity {
             get {
@@ -27920,7 +27920,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Added activity for {0} selected agent(s), all successed!.
+        ///   Looks up a localized string similar to Successfully added activities for the selected agents.
         /// </summary>
         public static string SuccessfulMessageForAddingActivity {
             get {

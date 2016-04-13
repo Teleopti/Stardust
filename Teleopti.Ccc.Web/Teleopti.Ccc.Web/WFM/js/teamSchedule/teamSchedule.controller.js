@@ -308,17 +308,17 @@
 
 			var message;
 			if (errors == undefined || errors.length === 0) {
-				message = replaceParameters($translate.instant(successMessageTemplate), [total]);
+				message = replaceParameters($translate.instant(successMessageTemplate));
 				notificationService.notifySuccess(message);
 			} else if (errors.length != undefined) {
 				var successCount = total - errors.length;
-				message = replaceParameters($translate.instant(failMessageTemplate), [total, successCount, errors.length]);
+				message = replaceParameters($translate.instant(failMessageTemplate), [successCount, errors.length]);
 				notificationService.notifyFailure(message);
 				vm.errorTitle = message;
 				vm.errorDetails = errors;
 				vm.showErrorDetails = true;
 			} else {
-				message = replaceParameters($translate.instant(failMessageTemplate), [total]);
+				message = replaceParameters($translate.instant(failMessageTemplate));
 				notificationService.notifyFailure(message);
 			}
 		}
