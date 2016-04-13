@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[DomainTest]
 	public class DayOffOptimizationLockDaysTest
 	{
-		public ScheduleOptimization Target;
+		public IScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;

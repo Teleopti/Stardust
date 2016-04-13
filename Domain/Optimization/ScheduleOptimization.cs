@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class ScheduleOptimization
+	public class ScheduleOptimization : IScheduleOptimization
 	{
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;

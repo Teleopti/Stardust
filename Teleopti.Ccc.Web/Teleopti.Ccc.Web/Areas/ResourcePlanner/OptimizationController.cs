@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSchedules)]
 	public class OptimizationController : ApiController
 	{
-		private readonly ScheduleOptimization _scheduleOptimization;
+		private readonly IScheduleOptimization _scheduleOptimization;
 		private readonly IntradayOptimizationFromWeb _intradayOptimizationFromWeb;
 
-		public OptimizationController(ScheduleOptimization scheduleOptimization, IntradayOptimizationFromWeb intradayOptimizationFromWeb)
+		public OptimizationController(IScheduleOptimization scheduleOptimization, IntradayOptimizationFromWeb intradayOptimizationFromWeb)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_intradayOptimizationFromWeb = intradayOptimizationFromWeb;

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[DomainTest]
 	public class DayOffOptimizationTest
 	{
-		public ScheduleOptimization Target;
+		public IScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.True();
 		}
 
-		[Test, Explicit("To be fixed - #36191")]
+		[Test, Explicit("To be fixed")]
 		public void ShouldOptimizeEvenWhenDayoffsAreNotInLegalStateAtStart()
 		{
 			var firstDay = new DateOnly(2015, 12, 07); //mon

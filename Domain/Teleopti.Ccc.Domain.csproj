@@ -222,6 +222,7 @@
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
+    <Compile Include="Optimization\IScheduleOptimization.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionExecutionRepository.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizer.cs" />
