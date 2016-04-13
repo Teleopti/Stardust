@@ -80,6 +80,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
+			/* We think this is needed... Let's confirm it first (preferably in a test) instead of "just adding it".
+			optimizationPreferences.Extra.UseTeams = true; //flytta in i provider
+			optimizationPreferences.Extra.UseTeamBlockOption = true; //flytta in i provider
+			*/
 			var dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
