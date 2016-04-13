@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var target = new PermissionChecker(_permissionProvider);
 			var result = target.CheckModifyAbsencePermissionForAddAbsence();
 
-			result.Should().Be.EqualTo(Resources.HasNoModifyPersonAbsencePermission);
+			result.Should().Be.EqualTo(Resources.NoPermissionToModifyPersonAbsence);
 		}
 	}
 }

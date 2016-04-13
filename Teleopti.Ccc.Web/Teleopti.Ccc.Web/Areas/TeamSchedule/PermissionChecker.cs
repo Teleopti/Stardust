@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule
 		public string CheckModifyAbsencePermissionForAddAbsence()
 		{
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence)) return null;
-			return Resources.HasNoModifyPersonAbsencePermission;
+			return Resources.NoPermissionToModifyPersonAbsence;
 		}
 	}
 }

@@ -2737,7 +2737,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Do you want to remove {0} absences from {1} agents?.
+        ///   Looks up a localized string similar to Are you sure you wish to remove {0} absences from {1} agents?.
         /// </summary>
         public static string AreYouSureToRemoveSelectedAbsence {
             get {
@@ -11706,15 +11706,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have Modify Person Absence permission!.
-        /// </summary>
-        public static string HasNoModifyPersonAbsencePermission {
-            get {
-                return ResourceManager.GetString("HasNoModifyPersonAbsencePermission", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Person {0} has personal activity, overtime activity or meeting in the shift on date {1}..
         /// </summary>
         public static string HasNonMainShiftActivityErrorMessage {
@@ -17540,6 +17531,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionAddFullDayAbsenceForAgent {
             get {
                 return ResourceManager.GetString("NoPermissionAddFullDayAbsenceForAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have permission to modify absence..
+        /// </summary>
+        public static string NoPermissionToModifyPersonAbsence {
+            get {
+                return ResourceManager.GetString("NoPermissionToModifyPersonAbsence", resourceCulture);
             }
         }
         

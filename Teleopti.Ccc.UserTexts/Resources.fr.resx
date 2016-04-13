@@ -10786,7 +10786,7 @@ Ces options sont actives:
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>Vous n'avez pas la permission d'ajouter des absences journée entière pour {0}</value>
   </data>
-  <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
+  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
     <value>Vous n'avez pas la permission de modifier l'absence individuelle!</value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">

@@ -12943,7 +12943,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>Du har inte rättigheter för att lägga till heldagsfrånvaro för {0}</value>
   </data>
-  <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
+  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
     <value>Du har inte rättigheter för att lägga på frånvaro!</value>
   </data>
   <data name="LogonUserTimeZone" xml:space="preserve">

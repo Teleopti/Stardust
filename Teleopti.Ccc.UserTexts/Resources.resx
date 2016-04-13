@@ -13967,7 +13967,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Menu item in WFM team schedule</comment>
   </data>
   <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
-    <value>Do you want to remove {0} absences from {1} agents?</value>
+    <value>Are you sure you wish to remove {0} absences from {1} agents?</value>
     <comment>Message to confirm person absence removing</comment>
   </data>
   <data name="FailedToRemoveAbsence" xml:space="preserve">
@@ -13986,8 +13986,8 @@ Reduce the complexity to use these shifts.</value>
     <value>You don't have permission to add full day absences for {0}</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add full day absence for this agent.</comment>
   </data>
-  <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
-    <value>You don't have Modify Person Absence permission!</value>
+  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
+    <value>You don't have permission to modify absence.</value>
     <comment>use in WFM TeamSchedue, tell user he/she has no modify person permission when try to add absence.</comment>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
