@@ -8,7 +8,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public void ScheduleDayChanging(IScheduleDay partBefore)
         {
-            _dayBefore = partBefore;
+	        if (ResourceCalculationContext.InContext)
+	        {
+		        ResourceCalculationContext.Fetch();
+	        }
+	        _dayBefore = partBefore;
         }
 
         public void ScheduleDayChanged(IScheduleDay partAfter)
