@@ -171,7 +171,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 					_scheduledPaidTimeM,
 					_scheduledPaidTimeActivityM,
 					_scheduledPaidTimeAbsenceM,
-					_businessUnitId);
+					_businessUnitId,
+					DateTime.UtcNow);
 				Bulk.Insert(connection, table);
 			}
 		}

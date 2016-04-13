@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					row.TimePart.PaidTimeActivityMinutes,
 					row.TimePart.PaidTimeAbsenceMinutes,
 					row.PersonPart.BusinessUnitId,
+					row.DatePart.DatasourceUpdateDate,
 					row.TimePart.OverTimeId);
 			}
 
