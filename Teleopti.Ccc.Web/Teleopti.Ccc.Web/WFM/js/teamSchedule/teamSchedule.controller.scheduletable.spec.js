@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-fdescribe('[TeamSchedule ScheduleTable ControllerTest]', function() {
+describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 	var controller;
 
 	beforeEach(function() {
