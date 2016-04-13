@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IScenario> FindEnabledForReportingSorted()
 		{
-			throw new NotImplementedException();
+			return
+				_scenario.OrderBy(s => s.DefaultScenario).ThenBy(s => s.Description.Name).Where(s => s.EnableReporting).ToArray();
 		}
 
 		public IScenario LoadDefaultScenario()
