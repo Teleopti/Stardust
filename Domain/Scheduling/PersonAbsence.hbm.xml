@@ -16,6 +16,7 @@
 					 class="Teleopti.Ccc.Domain.Common.Person"
 					 not-null="true"
 					 foreign-key="FK_PersonAbsence_Person_UpdatedBy"/>
+  
 		<property name="UpdatedOn"
 				  type="UtcDateTime"
 				  not-null="true"/>
@@ -31,12 +32,18 @@
 		<many-to-one name="Scenario"
 					 class="Teleopti.Ccc.Domain.Common.Scenario"
 					 not-null="true" foreign-key="FK_PersonAbsence_Scenario"/>
-    
+
+    <many-to-one name="AbsenceRequest"
+          class="Teleopti.Ccc.Domain.AgentInfo.Requests.AbsenceRequest"
+          not-null="false"
+          foreign-key="FK_PersonAbsence_AbsenceRequest"/>
+
     <component name="Layer" class="AbsenceLayer">
       <many-to-one class="Absence"
                  name="Payload"
                    foreign-key="FK_PersonAbsence_Absence"
                  not-null="true"/>
+      
       <component name="Period" class="Teleopti.Interfaces.Domain.DateTimePeriod, Teleopti.Interfaces">
         <component name="period" access="field">
           <property name="Minimum"

@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -325,14 +327,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, retList.Count);
         }
 
-        /// <summary>
-        /// Determines whether this instance [can find agent absences with correct scenario and priod].
-        /// </summary>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-03-07
-        /// </remarks>
-        [Test]
+
+	    [Test]
+	    public void CanFindRequestThatCreatedTheAbsence()
+	    {
+			var absenceVacation = AbsenceFactory.CreateAbsence("Vacation");
+		    PersistAndRemoveFromUnitOfWork (absenceVacation);
+
+			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
+		    var absenceRequest = new AbsenceRequest (absenceVacation, period);
+			var personRequest = new PersonRequest(agent, absenceRequest);
+			
+			PersistAndRemoveFromUnitOfWork(personRequest);
+			
+			var layer1 = new AbsenceLayer(absenceVacation, period);
+			var personAbsence = new PersonAbsence(agent, defaultScenario, layer1, absenceRequest);
+			PersistAndRemoveFromUnitOfWork(personAbsence);
+			
+			var personAbsences = new PersonAbsenceRepository(CurrUnitOfWork).Find(period.ChangeEndTime (TimeSpan.FromDays (1)), defaultScenario).ToArray();
+			var personAbsenceRetrieved = personAbsences[0];
+
+			Assert.AreEqual(absenceRequest.Id, personAbsenceRetrieved.AbsenceRequest.Id);
+
+	    }
+
+		/// <summary>
+		/// Determines whether this instance [can find agent absences with correct scenario and priod].
+		/// </summary>
+		/// <remarks>
+		/// Created by: Sumedah
+		/// Created date: 2008-03-07
+		/// </remarks>
+		[Test]
         public void CanFindAgentAbsencesWithCorrectScenarioAndPeriod()
         {
             Scenario noScenario = new Scenario("High");
