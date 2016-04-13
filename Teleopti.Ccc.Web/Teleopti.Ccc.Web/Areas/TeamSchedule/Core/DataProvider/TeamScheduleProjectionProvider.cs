@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				scheduleVm.WorkTimeMinutes = visualLayerCollection.WorkTime().TotalMinutes;
 				scheduleVm.ContractTimeMinutes = visualLayerCollection.ContractTime().TotalMinutes;
 
-				foreach (var layer in visualLayerCollection)
+				foreach (var layer in ((VisualLayerCollection)visualLayerCollection).UnMergedCollection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
 					var isPayLoadActivity = layer.Payload is IActivity;
