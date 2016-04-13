@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(380d / 28d);
 
 		}
-
-		[Test]
-		public void ShouldReturnTimeSeries()
+        
+        [Test, SetCulture("sv-SE")]
+        public void ShouldReturnTimeSeries()
 		{
 			IntradayMonitorDataLoader.AddInterval(firstInterval);
 			IntradayMonitorDataLoader.AddInterval(secondInterval);
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
             viewModel.DataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
         }
 
-        [Test]
+        [Test, SetCulture("sv-SE")]
 		public void ShouldReturnLatestStatsTime()
 		{	
 			secondInterval.OfferedCalls = null;
