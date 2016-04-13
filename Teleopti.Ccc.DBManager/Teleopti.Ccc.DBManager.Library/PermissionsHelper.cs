@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.DBManager.Library
 	public class PermissionsHelper
 	{
 		private static readonly Version SQL2005SP2 = Version.Parse("9.00.3042"); //http://www.sqlteam.com/article/sql-server-versions
-		
+
 		private readonly IUpgradeLog _logger;
 		private readonly DatabaseFolder _folder;
 		private readonly ExecuteSql _executeSql;
@@ -53,9 +53,13 @@ namespace Teleopti.Ccc.DBManager.Library
 			}
 			else
 			{
-				var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] WITH PASSWORD='{1}'", user, pwd);
-				_logger.Write("DB user is missing. Creating contained DB user ...");
-				_executeSql.ExecuteTransactionlessNonQuery(createDBUser);
+				var checkExistsSpecificForAzure = string.Format(CultureInfo.CurrentCulture, @"SELECT COUNT(*) FROM sys.database_principals WHERE name = '{0}'", user);
+				if (_executeSql.ExecuteScalar(checkExistsSpecificForAzure) == 0)
+				{
+					var createDBUser = string.Format(CultureInfo.CurrentCulture, @"CREATE USER [{0}] WITH PASSWORD='{1}'", user, pwd);
+					_logger.Write("DB user is missing. Creating contained DB user ...");
+					_executeSql.ExecuteTransactionlessNonQuery(createDBUser);
+				}
 				var permSql = string.Format(CultureInfo.CurrentCulture, "ALTER AUTHORIZATION ON SCHEMA::[db_owner] TO[{0}]", user);
 				_executeSql.ExecuteTransactionlessNonQuery(permSql);
 				permSql = string.Format(CultureInfo.CurrentCulture, "ALTER ROLE[db_owner] ADD MEMBER[{0}]", user);
