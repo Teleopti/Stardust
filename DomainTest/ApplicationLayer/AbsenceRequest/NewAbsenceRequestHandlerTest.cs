@@ -85,11 +85,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			_updateScheduleProjectionReadModel = MockRepository.GenerateMock<IUpdateScheduleProjectionReadModel>();
 
 			_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
-			
+
 			_validatedRequest = new ValidatedRequest { IsValid = true, ValidationErrors = "" };
-			
+
 			_absenceRequest.Stub(x => x.Person).Return(_person);
-			var absenceRequestStatusUpdater = new AbsenceRequestUpdater (_personAbsenceAccountProvider,
+			var absenceRequestStatusUpdater = new AbsenceRequestUpdater(_personAbsenceAccountProvider,
 				_prereqLoader, _scenarioRepository, _loader, _loaderWithoutResourceCalculation, _factory,
 				_alreadyAbsentSpecification, _scheduleIsInvalidSpecification, _authorization, _budgetGroupHeadCountSpecification,
 				_resourceOptimizationHelper, _budgetGroupAllowanceSpecification, _scheduleDictionarySaver, _personAccountUpdater,
@@ -97,9 +97,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 
 
 			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _updateScheduleProjectionReadModel, _schedulingResultStateHolder);
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater, _schedulingResultStateHolder, _updateScheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater, _schedulingResultStateHolder, _updateScheduleProjectionReadModel, new AbsenceRequestWaitlistProvider(_personRequestRepository));
 
-			_target = new NewAbsenceRequestHandler( 
+			_target = new NewAbsenceRequestHandler(
 				_unitOfWorkFactory, _scenarioRepository, _personRequestRepository, absenceRequestWaitlistProcessor, absenceProcessor);
 
 			PrepareUnitOfWork();
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 
 			PrepareAbsenceRequest();
 			ExpectLoadOfSchedules();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person))
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest))
 								   .Return(new List<IBusinessRuleResponse>());
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 
 			PrepareAbsenceRequest();
 			ExpectLoadOfSchedules();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person))
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest))
 								   .Return(new List<IBusinessRuleResponse>());
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			PrepareAbsenceRequest();
 			ExpectLoadOfSchedules();
 
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person)).Return(new List<IBusinessRuleResponse>());
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest)).Return(new List<IBusinessRuleResponse>());
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			var periodList = new List<IAbsenceRequestOpenPeriod> { absenceRequestOpenDatePeriod };
 
 			PrepareAbsenceRequest();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person)).Return(new List<IBusinessRuleResponse>());
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest)).Return(new List<IBusinessRuleResponse>());
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			var periodList = new List<IAbsenceRequestOpenPeriod> { absenceRequestOpenDatePeriod };
 
 			PrepareAbsenceRequest();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person)).Return(new List<IBusinessRuleResponse>());
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest)).Return(new List<IBusinessRuleResponse>());
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			var periodList = new List<IAbsenceRequestOpenPeriod> { absenceRequestOpenDatePeriod };
 
 			PrepareAbsenceRequest();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person)).Return(new List<IBusinessRuleResponse>());
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest)).Return(new List<IBusinessRuleResponse>());
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
@@ -441,9 +441,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(false);
-			
+
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(_requestApprovalService);
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person))
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest))
 								   .Return(new List<IBusinessRuleResponse>());
 			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
 			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			_personRequest.Stub(x => x.IsApproved).Return(true);
 
 			_target.Handle(_message);
-			
+
 			_unitOfWork.AssertWasNotCalled(x => x.PersistAll());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }));
 		}
@@ -476,7 +476,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 			ExpectPersistOfDictionary();
 			ExpectLoadOfSchedules();
 
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person))
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest))
 								   .Return(new List<IBusinessRuleResponse>());
 
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
@@ -537,7 +537,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 
 			PrepareAbsenceRequest();
 			ExpectLoadOfSchedules();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person)).Return(new List<IBusinessRuleResponse>());
+			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest)).Return(new List<IBusinessRuleResponse>());
 			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
 			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
 				.Return(true);
