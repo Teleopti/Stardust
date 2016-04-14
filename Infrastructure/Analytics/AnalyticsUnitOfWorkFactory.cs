@@ -1,4 +1,5 @@
 using NHibernate;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		{
 			new AnalyticsUnitOfWork(
 				_context,
-				_factory.OpenSession()
+				_factory.OpenSession(new AggregateRootInterceptor(CurrentTeleoptiPrincipal.Make()))
 				);
 
 			return CurrentUnitOfWork();
