@@ -253,21 +253,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 														   cancelAction();
 													   }, schedulingProgress);
 
-						if (!success)
-						{
-							var movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, dayOffOptimizationPreference);
-							if (movedDaysOff != null)
-							{
-								allFailed = false;
-								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-							}	
-						}
-
 						if (success)
 						{
 							previousPeriodValue = currentPeriodValue;
 							allFailed = false;
+						}
+						else
+						{
+							if (!optimizationPreferences.Advanced.UseTweakedValues)
+							{
+								var movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, dayOffOptimizationPreference);
+								if (movedDaysOff != null)
+								{
+									allFailed = false;
+									lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+									lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+								}
+							}
 						}
 					}
 					
@@ -321,17 +323,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								cancelMe = true;
 								cancelAction();
 							}, schedulingProgress);
-
-						if (!success)
-						{
-							var movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, dayOffOptimizationPreference);
-							if (movedDaysOff != null)
-							{
-								allFailed = false;
-								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
-								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
-							}
-						}
 
 						if (success)
 						{
