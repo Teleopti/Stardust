@@ -161,9 +161,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Test]
 		public void ShouldUseSettingForDayOffPerWeek_Valid()
 		{
-			if(TeamBlockDayOffForIndividuals)
-				Assert.Ignore("Fix this! Fails when toggle is on!");
-
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
 			var activity = ActivityRepository.Has("_");

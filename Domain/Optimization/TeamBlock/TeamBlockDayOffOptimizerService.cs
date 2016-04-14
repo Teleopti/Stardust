@@ -253,6 +253,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 														   cancelAction();
 													   }, schedulingProgress);
 
+						if (!success)
+						{
+							var movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, dayOffOptimizationPreference);
+							if (movedDaysOff != null)
+							{
+								allFailed = false;
+								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+							}	
+						}
+
 						if (success)
 						{
 							previousPeriodValue = currentPeriodValue;
@@ -311,6 +322,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 								cancelAction();
 							}, schedulingProgress);
 
+						if (!success)
+						{
+							var movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, dayOffOptimizationPreference);
+							if (movedDaysOff != null)
+							{
+								allFailed = false;
+								lockDaysInMatrixes(movedDaysOff.AddedDaysOff, teamInfo);
+								lockDaysInMatrixes(movedDaysOff.RemovedDaysOff, teamInfo);
+							}
+						}
+
 						if (success)
 						{
 							allFailed = false;
@@ -340,19 +362,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			if (!failed && checkPeriodValue)
 			{
-				failed = currentPeriodValue >= previousPeriodValue;	
+				failed = currentPeriodValue >= previousPeriodValue;
 			}
-		
+
 			if (failed)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-				
+
 				currentPeriodValue =
 					periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			}
 
 			var shouldCancel = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
-			                 currentTeamInfoCounter.ToString("####") + ") " +
+							 currentTeamInfoCounter.ToString("####") + ") " +
 							 teamInfo.Name.DisplayString(20) + " (" + currentPeriodValue + ")"), schedulingProgress);
 			if (shouldCancel)
 			{
