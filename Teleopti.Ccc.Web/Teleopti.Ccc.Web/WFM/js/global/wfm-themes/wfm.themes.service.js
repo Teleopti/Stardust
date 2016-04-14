@@ -5,6 +5,10 @@
 		var service = {};
 
 		service.setTheme = function(theme) {
+			if (theme === "dark") {
+				document.getElementById(theme).setAttribute("checked", "true");
+			}
+
 			document.getElementById('themeModules').setAttribute('href', 'dist/modules_' + theme + '.min.css');
 			document.getElementById('themeStylesheet').setAttribute('href', 'dist/style_' + theme + '.min.css');
 		};
