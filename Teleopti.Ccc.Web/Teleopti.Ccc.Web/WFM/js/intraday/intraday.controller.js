@@ -245,7 +245,6 @@
 							$scope.forecastedAverageHandleTimeSeries.splice(0,0,"Forecasted_AHT");
 							$scope.actualAverageHandleTimeSeries.splice(0,0,"AHT");
 							$scope.timeSeries.splice(0,0,"x");
-							console.log('fixd ',	$scope.timeSeries);
 							c3.generate({
 								bindto: '#myChart',
 								data: {
