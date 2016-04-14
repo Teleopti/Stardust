@@ -51,16 +51,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
            
             return appRoles;
         }
-
-        public override bool ValidateUserLoggedOn
-        {
-            get
-            {
-                return false;
-            }
-        }
-
-		  public virtual IList<IApplicationRole> LoadAllRolesByDescription(string role)
+		
+		public virtual IList<IApplicationRole> LoadAllRolesByDescription(string role)
 	    {
 			 var appRoles = Session.CreateCriteria(typeof(ApplicationRole))
 				  .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)

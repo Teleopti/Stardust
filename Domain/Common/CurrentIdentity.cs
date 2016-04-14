@@ -6,6 +6,11 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private readonly ICurrentTeleoptiPrincipal _principal;
 
+		public static ICurrentIdentity Make()
+		{
+			return new CurrentIdentity(CurrentTeleoptiPrincipal.Make());
+		}
+
 		public CurrentIdentity(ICurrentTeleoptiPrincipal principal)
 		{
 			_principal = principal;

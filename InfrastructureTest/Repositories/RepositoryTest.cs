@@ -88,25 +88,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
         
-
-
-        /// <summary>
-        /// Can not create repository when user not logged on.
-        /// </summary>
-        [Test]
-        public void CannotCallDatabaseWhenNotLoggedOn()
-        {
-	        if (!rep.ValidateUserLoggedOn)
-				Assert.Ignore("this repository should be available even if not logged on");
-			Logout();
-	        Assert.Throws<PermissionException>(() => rep.Load(Guid.NewGuid()));
-        }
-
-
-        /// <summary>
-        /// Determines whether this instance can load entity by id.
-        /// Object should not be lazy loaded (agg root)
-        /// </summary>
         [Test]
         public void CanLoadAndPropertiesAreSet()
         {
@@ -208,11 +189,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             }
         }
 
+	    [Test]
+	    public void VerifyAddingWhileLoggedOut()
+	    {
+		    var entity = CreateAggregateWithCorrectBusinessUnit();
+		    Logout();
+			if (entity is IChangeInfo)
+				Assert.Throws<PermissionException>(() => rep.Add(entity));
+			else if (entity is IBelongsToBusinessUnit)
+				Assert.Throws<PermissionException>(() => rep.Add(entity));
+		    else
+				rep.Add(entity);
+		}
 
-        /// <summary>
-        /// Runs every test. Can be overriden by repository's concrete implementation.
-        /// </summary>
-        protected virtual void ConcreteSetup() { }
+		/// <summary>
+		/// Runs every test. Can be overriden by repository's concrete implementation.
+		/// </summary>
+		protected virtual void ConcreteSetup() { }
 
     
 

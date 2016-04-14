@@ -33,15 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.CreateCriteria(typeof(Person), "person")
 				 .SetResultTransformer(Transformers.DistinctRootEntity).List<IPerson>();
 		}
-
-		public override bool ValidateUserLoggedOn
-		{
-			get
-			{
-				return false;
-			}
-		}
-
+		
 		public ICollection<IPerson> LoadAllPeopleWithHierarchyDataSortByName(DateOnly earliestTerminalDate)
 		{
 			try

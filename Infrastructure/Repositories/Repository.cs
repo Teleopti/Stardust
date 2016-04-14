@@ -70,6 +70,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         public virtual void Add(T root)
         {
+			if (root is IBelongsToBusinessUnit && ServiceLocatorForEntity.CurrentBusinessUnit.Current() == null)
+				throw new PermissionException("Business unit is required");
+			if (root is IChangeInfo && ServiceLocatorForEntity.CurrentTeleoptiPrincipal.Current() == null)
+				throw new PermissionException("Identity is required");
 			Session.SaveOrUpdate(root);
 		}
 
@@ -121,20 +125,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			get
 			{
-				if (ValidateUserLoggedOn)
-				{
-					var identity = new CurrentIdentity(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())).Current();
-					var loggedIn = identity != null && identity.IsAuthenticated;
-					if (!loggedIn)
-						throw new PermissionException("This repository is not available for non logged on users");
-				}
 				return UnitOfWork.Session();
 			}
 		}
-
-		public virtual bool ValidateUserLoggedOn
-		{
-			get { return true; }
-		}
+		
 	}
 }

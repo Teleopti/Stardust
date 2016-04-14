@@ -112,12 +112,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
-        public override bool ValidateUserLoggedOn
-        {
-            get
-            {
-                return false;
-            }
-        }
     }
 }

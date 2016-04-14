@@ -21,12 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public RtaMapRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
-
-		public override bool ValidateUserLoggedOn
-		{
-			get { return false; }
-		}
-
+		
 		public IList<IRtaMap> LoadAllCompleteGraph()
 		{
 			return Session.CreateCriteria(typeof (RtaMap))

@@ -28,10 +28,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .List<IRtaStateGroup>();
         }
-
-	    public override bool ValidateUserLoggedOn
-	    {
-		    get { return false; }
-	    }
+		
     }
 }

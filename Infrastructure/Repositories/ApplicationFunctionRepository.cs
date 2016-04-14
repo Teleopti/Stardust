@@ -42,15 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<IApplicationFunction>();
 			return functions;
 		}
-
-		public override bool ValidateUserLoggedOn
-		{
-			get
-			{
-				return false;
-			}
-		}
-
+		
 		private void synchronizeRaptorApplicationFunctions(IApplicationFunction applicationFunction)
 		{
 			if (applicationFunction.ForeignSource == DefinedForeignSourceNames.SourceRaptor)

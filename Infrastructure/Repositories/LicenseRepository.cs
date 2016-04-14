@@ -77,14 +77,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public override bool ValidateUserLoggedOn
-        {
-            get
-            {
-                return false;
-            }
-        }
-
 		public IList<ActiveAgent> GetActiveAgents()
 		{
 			const string sql = @"select b.Name BusinessUnit, FirstName, LastName, Email, EmploymentNumber, MIN(StartDate) StartDate, p.TerminalDate LeavingDate from Person p

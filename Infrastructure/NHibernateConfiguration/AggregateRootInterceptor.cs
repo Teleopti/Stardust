@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Collection;
 using NHibernate.Type;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForInsert(propertyNames);
-				state[props[createdByPropertyName]] = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person;
+				state[props[createdByPropertyName]] = ((IUnsafePerson)ServiceLocatorForEntity.CurrentTeleoptiPrincipal.Current()).Person;
 				state[props[createdOnPropertyName]] = nu;
 				return true;
 			}
@@ -241,7 +242,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForUpdate(propertyNames);
-				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
+				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)ServiceLocatorForEntity.CurrentTeleoptiPrincipal.Current()).Person;
 				currentState[props[updatedOnPropertyName]] = nu;
 				return true;
 			}
