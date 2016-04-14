@@ -284,6 +284,7 @@
     <Compile Include="Transformer\Job\Jobs\IntradayJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\JobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\KpiJobCollection.cs" />
+    <Compile Include="Transformer\Job\Jobs\ReloadDatamartJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\NightlyJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\PerformanceManagerJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\PermissionJobCollection.cs" />
