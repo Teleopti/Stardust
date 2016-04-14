@@ -15,7 +15,7 @@
 			$scope.showProductivity = false;
 			$scope.showSummary = false;
 			$scope.selectedIndex = 0;
-			$scope.fixedTimeSeries = [];
+			$scope.hiddenArray = [];
 
 			var getAutoCompleteControls = function() {
 				var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
@@ -144,6 +144,11 @@
 					$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
 					$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
 
+					$scope.timeSeries.splice(0,0,"x");
+					$scope.forecastedCallsSeries.splice(0,0,"Forecasted_calls");
+					$scope.actualCallsSeries.splice(0,0,"Actual_calls");
+					$scope.forecastedAverageHandleTimeSeries.splice(0,0,"Forecasted_AHT");
+					$scope.actualAverageHandleTimeSeries.splice(0,0,"AHT");
 					$scope.HasMonitorData = true;
 				};
 
@@ -238,11 +243,7 @@
 						}
 
 						var loadIntradayChart = function() {
-							$scope.forecastedCallsSeries.splice(0,0,"Forecasted_calls");
-							$scope.actualCallsSeries.splice(0,0,"Actual_calls");
-							$scope.forecastedAverageHandleTimeSeries.splice(0,0,"Forecasted_AHT");
-							$scope.actualAverageHandleTimeSeries.splice(0,0,"AHT");
-							$scope.timeSeries.splice(0,0,"x");
+							$scope.hiddenArray2 = $scope.hiddenArray;
 							c3.generate({
 								bindto: '#myChart',
 								data: {
@@ -254,6 +255,7 @@
 										$scope.forecastedAverageHandleTimeSeries,
 										$scope.actualAverageHandleTimeSeries
 									],
+									hide: $scope.hiddenArray2,
 									colors: {
 										Forecasted_calls: '#9CCC65',
 										Actual_calls: '#4DB6AC',
@@ -286,9 +288,25 @@
 											fit: true,
 											centered: true,
 											multiline: false,
-											values: [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92, 96]
+											values: [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92]
 										},
 										categories: $scope.timeSeries
+									}
+								},
+								legend: {
+									item: {
+											onclick: function (id) {
+												if ($scope.hiddenArray2.indexOf(id)>-1) {
+													$scope.hiddenArray2.splice($scope.hiddenArray2.indexOf(id), 1);
+												} else {
+													$scope.hiddenArray2.push(id);
+												}
+
+												pollSkillMonitorData();
+
+
+												console.log($scope.hiddenArray2);
+											}
 									}
 								}
 							});
