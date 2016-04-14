@@ -36,9 +36,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
 			Add(new StageShiftCategoryJobStep(jobParameters));
-			Add(new StageScheduleJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
+			{
+				Add(new StageScheduleJobStep(jobParameters));
+				Add(new StageScheduleDayOffCountJobStep(jobParameters));
+			}
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
-			Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			Add(new StageSchedulePreferenceJobStep(jobParameters));
 			Add(new StageAvailabilityJobStep(jobParameters));
 			Add(new StageSkillJobStep(jobParameters));
@@ -70,7 +73,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimAbsenceJobStep(jobParameters));
 			Add(new DimScenarioJobStep(jobParameters));
 			Add(new DimShiftCategoryJobStep(jobParameters));
-			Add(new DimShiftLengthJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
+			{
+				Add(new DimShiftLengthJobStep(jobParameters));
+			}
 			Add(new DimWorkloadJobStep(jobParameters));
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
@@ -82,8 +88,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimOvertimeJobStep(jobParameters));
 
 			// FACT TABLES
-			Add(new FactScheduleJobStep(jobParameters));
-			Add(new FactScheduleDayCountJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
+			{
+				Add(new FactScheduleJobStep(jobParameters));
+				Add(new FactScheduleDayCountJobStep(jobParameters));
+			}
 			Add(new FactSchedulePreferenceJobStep(jobParameters));
 			Add(new FactAvailabilityJobStep(jobParameters));
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
