@@ -209,4 +209,38 @@ $(document).ready(function () {
 
 		resetLocale();
 	});
+
+	test("Should set teleopti time correctly", function() {
+		// We test in Sweden's timezone with DST
+		var options = {
+			UserTimezoneOffsetMinute: 60,
+			HasDayLightSaving: 'True',
+			DayLightSavingStart: "2016-03-27 01:00:00",
+			DayLightSavingEnd: "2016-10-30 02:00:00" ,
+			DayLightSavingAdjustmentInMinute: 60
+		};
+
+		var getTeleoptiTime = common.SetupTeleoptiTime(options);
+
+		var currentUtcTime = new Date('2016-04-12 11:00:00');
+
+		equal(getTeleoptiTime(currentUtcTime).toGMTString(), new Date('2016-04-12 13:00:00').toGMTString());
+
+		// Then we test in China's timezone without DST
+		var options = {
+			UserTimezoneOffsetMinute: 480,
+			HasDayLightSaving: 'False',
+			DayLightSavingStart: null,
+			DayLightSavingEnd: null,
+			DayLightSavingAdjustmentInMinute: null
+		};
+
+		var getTeleoptiTime = common.SetupTeleoptiTime(options);
+
+		var currentUtcTime = new Date('2016-04-12 11:00:00');
+
+		equal(getTeleoptiTime(currentUtcTime).toGMTString(), new Date('2016-04-12 19:00:00').toGMTString());
+
+
+	});
 });

@@ -124,6 +124,31 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	};
 
+	function _setupTeleoptiTime(options) {
+		return function(currentUtcTime) {
+			var timezoneOffsetInMinute = options.UserTimezoneOffsetMinute * 60000;
+			var currentUtc;
+			if (!currentUtcTime) {
+				currentUtc = new Date();
+				currentUtc = new Date(currentUtc.getTime() + currentUtc.getTimezoneOffset() * 60000);
+			} else {
+				currentUtc = currentUtcTime;
+			}
+			
+			var offset = timezoneOffsetInMinute;
+			var hasDayLightSavingStr = options.HasDayLightSaving;
+			if (hasDayLightSavingStr.toLowerCase() === 'true') {				
+				if (currentUtc >= new Date(options.DayLightSavingStart)
+					&& currentUtc <= new Date(options.DayLightSavingEnd)) {
+					offset += options.DayLightSavingAdjustmentInMinute * 60000;
+				}
+			}
+
+			var currentUserTime = new Date(currentUtc.getTime() + offset);
+			return currentUserTime;
+		}
+	};
+
 	function _updateMeridiem(timeFormat) {
 		return timeFormat.replace(/tt|t/gi, "A");
 	};
@@ -251,6 +276,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		SetupCalendar: function (options) {
 			_setupCalendar(options);
+		},
+		
+		SetupTeleoptiTime : function(options) {
+			return _setupTeleoptiTime(options);
 		},
 
 		FormatDate: function (date) {

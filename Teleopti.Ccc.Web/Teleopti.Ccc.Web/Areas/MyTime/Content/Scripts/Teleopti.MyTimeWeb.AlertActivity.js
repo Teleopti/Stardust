@@ -32,9 +32,10 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	}
 
 	function notificationActivities() {
+
 		var self = this;
 		self.getCurrentTime = function() {
-			return new Date().getTeleoptiTime();
+			return new Date().getTeleoptiTimeInUserTimezone();
 		};
 		self.timeZero = moment(self.getCurrentTime()).add('days', -1).startOf('day').toDate();
 
@@ -45,6 +46,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 		self.getCurrentLayerIndex = function () {
 			var now = (self.getCurrentTime() - self.timeZero) / 1000;
+
 			var layerCount = self.layers.length;
 
 			var shiftStartTime = self.layers[0].startMinutesSinceAsmZero * 60;
@@ -245,14 +247,13 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 			alertvm.alertMessage = alert.message;
 			alertvm.restartAlertDelayTime = delayTime;
-
 			setTimeout(alertActivity, interval * 1000);
 		} else {
 			// timespan in negative number means no schedule today or all activity finished.
 			// Then re-start alert when tomorrow comes.
 			var timeZeroTomorrow = moment(alertvm.getCurrentTime()).add('days', 1).startOf('day').toDate();
 			var intervalForTomorrowInSecond = (timeZeroTomorrow - alertvm.getCurrentTime()) / 1000;
-			
+
 			setTimeout(function() {
 				initNotificationViewModel(options);
 				startAlert();

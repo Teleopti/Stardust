@@ -1,6 +1,7 @@
 ﻿@using System.Web.Optimization
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Core.Startup.InitializeApplication
+
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -15,46 +16,55 @@
 	<meta name="description" content="" />
 	<meta name="author" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="@Url.Content("~/favicon.ico")?v=2" rel="shortcut icon" type="image/x-icon" />
-	
+	<link href="@Url.Content(" ~/favicon.ico")?v=2" rel="shortcut icon" type="image/x-icon" />
+
 	@Styles.Render(BundleScripts.BootstrapCss)
 	@Styles.Render(BundleScripts.Select2Css)
 	@Styles.Render(BundleScripts.MyTimeCss)
 	@Scripts.Render(BundleScripts.MyTimeJs)
-	
-	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.js")"></script>
-<!--[if lt IE 9]>
-	<script src="@Url.Content("~/Content/respondjs/respond.min.js")"></script>
-<![endif]-->
 
+	<script src="@Url.Content(" ~/Content/jquery-plugin/jquery.placeholder.js")"></script>
+	<!--[if lt IE 9]>
+		<script src="@Url.Content("~/Content/respondjs/respond.min.js")"></script>
+	<![endif]-->
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{
-		DateTime date = ViewBag.LayoutBase.FixedDate;
-		<script type="text/javascript">
-			$(function () {
-				Date.prototype.getTeleoptiTime = function () { return new Date(@(date.Year), @(date.Month -1), @(date.Day), @(date.Hour), @(date.Minute), @(date.Second)).getTime(); };
-			});
-		</script>		
- }
- else
-	{
-		<script type="text/javascript">
-			$(function () {
-				Date.prototype.getTeleoptiTime = function () { return new Date().getTime(); };
-			});
-		</script>	
+	DateTime date = ViewBag.LayoutBase.FixedDate;
+	<script type="text/javascript">
+		$(function () {
+			Date.prototype.getTeleoptiTime = function () { return new Date(@(date.Year), @(date.Month -1), @(date.Day), @(date.Hour), @(date.Minute), @(date.Second)).getTime(); };
+			Date.prototype.getTeleoptiTimeInUserTimezone = Date.prototype.getTeleoptiTime;  // We don't touch scenario tests
+		});
+	</script>
 	}
-	
+	else
+	{
+	<script type="text/javascript">
+		$(function () {
+			Date.prototype.getTeleoptiTime = function () { return new Date().getTime(); };
+			Date.prototype.getTeleoptiTimeInUserTimezone = Teleopti.MyTimeWeb.Common.SetupTeleoptiTime(
+				{
+					UserTimezoneOffsetMinute:@(ViewBag.LayoutBase.UserTimezoneOffsetMinute),
+					HasDayLightSaving: '@(ViewBag.LayoutBase.HasDayLightSaving)',
+					DayLightSavingStart: '@(ViewBag.LayoutBase.DayLightSavingStart)',
+					DayLightSavingEnd: '@(ViewBag.LayoutBase.DayLightSavingEnd)',
+					DayLightSavingAdjustmentInMinute:@(ViewBag.LayoutBase.DayLightSavingAdjustmentInMinute)
+				}	
+			);			
+		});
+	</script>
+	}
+
 	@RenderSection("head", required: false)
 </head>
 <body @Html.LayoutBase().FullDirClass()@Html.LayoutBase().FullDirAttribute()>
 	@RenderSection("header", required: false)
 	@RenderBody()
-	<footer class="col-1"> 
-		
-		  <p>@ViewBag.LayoutBase.Footer</p>
-		
-	 </footer>
+	<footer class="col-1">
+
+		<p>@ViewBag.LayoutBase.Footer</p>
+
+	</footer>
 	<div id="dialog-modal">
 	</div>
 	<div id="dialog">
