@@ -54,11 +54,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			return agents.Where(agent => agent.PersonWriteProtection.IsWriteProtected(date)).Select(agent => agent.Id.GetValueOrDefault()); 		
 		}
+
+		public List<FailActionResult> RemoveActivity(RemoveActivityFormData input)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 	public interface ITeamScheduleCommandHandlingProvider
 	{
 		void AddActivity(AddActivityFormData formData);		
 		IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds);
+		List<FailActionResult> RemoveActivity(RemoveActivityFormData input);
 	}
 }

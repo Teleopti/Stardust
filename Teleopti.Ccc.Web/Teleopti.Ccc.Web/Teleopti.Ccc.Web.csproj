@@ -674,6 +674,7 @@
     <Compile Include="Areas\Global\ThrottledAction.cs" />
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />
     <Compile Include="Core\ThemeSettingProvider.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />

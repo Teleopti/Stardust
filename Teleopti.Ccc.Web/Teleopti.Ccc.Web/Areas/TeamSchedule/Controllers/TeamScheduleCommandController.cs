@@ -23,6 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_commandHandlingProvider.AddActivity(input);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveActivity")]
+		public virtual List<FailActionResult> RemoveActivityCommand([FromBody]RemoveActivityFormData input)
+		{
+			return _commandHandlingProvider.RemoveActivity(input);
+		}
+
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/PersonWriteProtectionCheck")]
 		public virtual IList<Guid> CheckPersonWriteProtection(CheckPersonWriteProtectionFormData input)
 		{
