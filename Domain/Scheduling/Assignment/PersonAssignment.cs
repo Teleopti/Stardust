@@ -290,10 +290,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			AddActivity(activity, period, null);
 		}
-		public virtual void AddActivityWithShiftLayerId(IActivity activity, DateTimePeriod period)
-		{
-			AddActivity(activity, period, null);
-		}
 
 		public virtual void AddActivity(IActivity activity, TimePeriod period)
 		{
@@ -330,7 +326,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private void addActivityInternal(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new MainShiftLayer(activity, period);
-			layer.SetId(Guid.NewGuid());
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 			SetDayOff(null);

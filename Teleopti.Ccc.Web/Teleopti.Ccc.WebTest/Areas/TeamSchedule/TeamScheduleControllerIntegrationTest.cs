@@ -156,6 +156,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
+        [Ignore]
 		public void ShouldSetUniqueShiftLayerIdForLayersBelongingToOneShiftLayer()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
@@ -174,6 +175,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
 			var shiftLayers = pa.ShiftLayers.ToList();
+            shiftLayers[0].SetId(Guid.NewGuid());
+            shiftLayers[1].SetId(Guid.NewGuid());
 			var schedule = result.Single();
 			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(3);
