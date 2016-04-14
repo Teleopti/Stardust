@@ -7,44 +7,34 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
     [TestFixture]
     public class AgentQueueStatDetailsDtoTest
     {
-        private AgentQueueStatDetailsDto _target;
-        private long _afterContractWorkTime;
-        private int _answeredContacts;
-        private long _averageTalkTime;
-        private string _queueName;
-        private long _totalHandlingTime;
-
-        [SetUp]
-        public void Setup()
-        {
-            _target = new AgentQueueStatDetailsDto();
-            _afterContractWorkTime = TimeSpan.FromMinutes(5).Ticks;
-            _answeredContacts = 76;
-            _averageTalkTime = TimeSpan.FromMinutes(3).Ticks;
-            _queueName = "QueueName";
-            _totalHandlingTime = TimeSpan.FromMinutes(35).Ticks;
-        }
-
         [Test]
         public void VerifyCanCreate()
         {
-            Assert.IsNotNull(_target);
+			var _target = new AgentQueueStatDetailsDto();
+			Assert.IsNotNull(_target);
         }
 
         [Test]
         public void VerifySetAndGetProperties()
         {
-            _target.AfterContactWorkTime = _afterContractWorkTime;
-            _target.AnsweredContacts = _answeredContacts;
-            _target.AverageTalkTime = _averageTalkTime;
-            _target.QueueName = _queueName;
-            _target.AverageHandlingTime = _totalHandlingTime;
+			var afterContractWorkTime = TimeSpan.FromMinutes(5).Ticks;
+			const int answeredContacts = 76;
+			var averageTalkTime = TimeSpan.FromMinutes(3).Ticks;
+			const string queueName = "QueueName";
+			var totalHandlingTime = TimeSpan.FromMinutes(35).Ticks;
 
-            Assert.AreEqual(_afterContractWorkTime, _target.AfterContactWorkTime);
-            Assert.AreEqual(_answeredContacts, _target.AnsweredContacts);
-            Assert.AreEqual(_averageTalkTime, _target.AverageTalkTime);
-            Assert.AreEqual(_queueName, _target.QueueName);
-            Assert.AreEqual(_totalHandlingTime, _target.AverageHandlingTime);
+			var target = new AgentQueueStatDetailsDto();
+			target.AfterContactWorkTime = afterContractWorkTime;
+            target.AnsweredContacts = answeredContacts;
+            target.AverageTalkTime = averageTalkTime;
+            target.QueueName = queueName;
+            target.AverageHandlingTime = totalHandlingTime;
+
+            Assert.AreEqual(afterContractWorkTime, target.AfterContactWorkTime);
+            Assert.AreEqual(answeredContacts, target.AnsweredContacts);
+            Assert.AreEqual(averageTalkTime, target.AverageTalkTime);
+            Assert.AreEqual(queueName, target.QueueName);
+            Assert.AreEqual(totalHandlingTime, target.AverageHandlingTime);
         }
     }
 }

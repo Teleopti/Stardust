@@ -4,9 +4,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -48,11 +46,8 @@ namespace Teleopti.Ccc.TestCommon
 
         public static void ClearAndInitializeStateHolder(IState stateMock)
         {
-            MockRepository mocks = new MockRepository();
-            IApplicationData appData = mocks.StrictMock<IApplicationData>();
-            Expect.Call(stateMock.ApplicationScopeData)
-                .Return(appData)
-                .Repeat.Any();
+            IApplicationData appData = new ApplicationData(new Dictionary<string, string>(), null);
+			stateMock.SetApplicationData(appData);
             ClearAndSetStateHolder(stateMock);
         }
 
@@ -62,29 +57,19 @@ namespace Teleopti.Ccc.TestCommon
             StateHolder.Initialize(state, new MessageBrokerCompositeDummy());
         }
 
-	    public static void ClearAndSetStateHolder(MockRepository mocks, IPerson loggedOnPerson, IBusinessUnit businessUnit, IApplicationData appData, IDataSource logonDataSource, IState stateMock)
+	    public static void ClearAndSetStateHolder(IPerson loggedOnPerson, IBusinessUnit businessUnit, IApplicationData appData, IDataSource logonDataSource, IState stateMock)
 	    {
 		    var principalContext = new WindowsAppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext());
+			loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 		    var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
 		    principalContext.SetCurrentPrincipal(principal);
 
 		    PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
-
-		    SetStateReaderExpectations(stateMock, appData);
-
+			stateMock.SetApplicationData(appData);
+			
 		    ClearAndSetStateHolder(stateMock);
-		    mocks.Replay(stateMock);
 	    }
-
-	    public static void SetStateReaderExpectations(IStateReader stateMock, IApplicationData applicationData)
-        {
-            Expect.Call(stateMock.ApplicationScopeData)
-                .Return(applicationData)
-                .Repeat.Any();
-    		Expect.Call(stateMock.UserTimeZone)
-    			.Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).Repeat.Any();
-        }
-
+		
         /// <summary>
         /// Clears the state holder.
         /// </summary>

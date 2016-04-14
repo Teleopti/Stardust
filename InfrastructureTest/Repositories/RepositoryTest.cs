@@ -5,13 +5,11 @@ using System.Reflection;
 using NHibernate;
 using NHibernate.Criterion;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -49,12 +47,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             if (buRef!=null)
             {
                 PersistAndRemoveFromUnitOfWork(correct);
-
-                MockRepository newMock = new MockRepository();
-                IState newStateMock = newMock.StrictMock<IState>();
+				
+                IState newStateMock = new FakeState();
                 BusinessUnit buTemp = new BusinessUnit("dummy");
                 PersistAndRemoveFromUnitOfWork(buTemp);
-								StateHolderProxyHelper.ClearAndSetStateHolder(newMock, LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData, SetupFixtureForAssembly.DataSource, newStateMock);
+								StateHolderProxyHelper.ClearAndSetStateHolder(LoggedOnPerson, buTemp, SetupFixtureForAssembly.ApplicationData, SetupFixtureForAssembly.DataSource, newStateMock);
                 T inCorrect = CreateAggregateWithCorrectBusinessUnit();
                 PersistAndRemoveFromUnitOfWork(inCorrect);
 

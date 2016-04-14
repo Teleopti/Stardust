@@ -7,9 +7,16 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
     public class GetCurrentBusinessUnitQueryHandler : IHandleQuery<GetCurrentBusinessUnitQueryDto, ICollection<BusinessUnitDto>>
     {
-        public ICollection<BusinessUnitDto> Handle(GetCurrentBusinessUnitQueryDto query)
+	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+
+	    public GetCurrentBusinessUnitQueryHandler(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+	    {
+		    _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+	    }
+
+	    public ICollection<BusinessUnitDto> Handle(GetCurrentBusinessUnitQueryDto query)
         {
-            var currentBusinessUnit = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit;
+            var currentBusinessUnit = ((ITeleoptiIdentity)_currentTeleoptiPrincipal.Current().Identity).BusinessUnit;
             return new[] {new BusinessUnitDto{Id = currentBusinessUnit.Id,Name = currentBusinessUnit.Name}};
         }
     }

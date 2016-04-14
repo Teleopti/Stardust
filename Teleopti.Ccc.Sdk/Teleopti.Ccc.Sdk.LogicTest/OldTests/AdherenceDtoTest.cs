@@ -7,21 +7,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
     [TestFixture]
     public class AdherenceDtoTest
     {
-        private AdherenceDto _target;
-
-        [SetUp]
-        public void Setup()
-        {
-            _target = new AdherenceDto();
-        }
-
         [Test]
         public void VerifyPropertiesAndConstructor()
         {
-            Assert.IsNotNull(_target);
+			var target = new AdherenceDto();
+			Assert.IsNotNull(target);
             ICollection<AdherenceDataDto> list = new List<AdherenceDataDto>();
-            _target.AdherenceDataDtos = list;
-            Assert.AreEqual(list, _target.AdherenceDataDtos);
+            target.AdherenceDataDtos = list;
+            Assert.AreEqual(list, target.AdherenceDataDtos);
         }
     }
 }

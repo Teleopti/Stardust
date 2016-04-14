@@ -175,14 +175,15 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanInitializeWithStateHolder()
         {
-            ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario,new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone),
+	        var disableDeleteFilter = new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory()));
+	        ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario,new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone),
                                                                                   new List<IPerson>
                                                                                       {
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
-            _target = new MeetingComposerPresenter(_view, _model, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), schedulerStateHolder);
+                                                                                      }, disableDeleteFilter, new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+            _target = new MeetingComposerPresenter(_view, _model, disableDeleteFilter, schedulerStateHolder);
             _view.SetRecurrentMeetingActive(true);
 
             _mocks.ReplayAll();
@@ -501,7 +502,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanCreateDefaultMeetingWithSchedulerStateHolder()
         {
-			var commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new DummyCurrentUnitOfWork()));
+			var commonStateHolder = new CommonStateHolder(new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())));
 
             Expect.Call(_schedulerStateHolder.RequestedScenario).Return(_scenario);
             Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_timeZone);
@@ -554,7 +555,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
 														  _repositoryFactory);
 			_target.TrySave();
@@ -571,7 +572,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                           _person,
                                                                                           _requiredPerson,
                                                                                           _optionalPerson
-                                                                                      }, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
+                                                                                      }, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
             _target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
                                                           _repositoryFactory);
 
@@ -640,7 +641,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public MeetingComposerPresenterForTest(IMeetingComposerView view, MeetingViewModel model, ISchedulerStateHolder
 
 schedulerStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
-            : base(view, model, new DisableDeletedFilter(new DummyCurrentUnitOfWork()), schedulerStateHolder)
+            : base(view, model, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), schedulerStateHolder)
         {
             RepositoryFactory = repositoryFactory;
             UnitOfWorkFactory = unitOfWorkFactory;

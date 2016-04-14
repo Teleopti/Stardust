@@ -7,37 +7,30 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
     [TestFixture]
     public class DefinedRaptorApplicationFunctionPathsDtoTest
     {
-        private DefinedRaptorApplicationFunctionPathsDto _target;
-
-        [SetUp]
-        public void Setup()
-        {
-            _target = new DefinedRaptorApplicationFunctionPathsDto();
-        }
-
         [Test]
         public void VerifyCanSetProperties()
         {
-            _target.OpenRaptorApplication = DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication;
-            Assert.AreEqual(_target.OpenRaptorApplication, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication);
+			var target = new DefinedRaptorApplicationFunctionPathsDto();
+			target.OpenRaptorApplication = DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication;
+            Assert.AreEqual(target.OpenRaptorApplication, DefinedRaptorApplicationFunctionPaths.OpenRaptorApplication);
 
-            _target.RaptorGlobal = DefinedRaptorApplicationFunctionPaths.RaptorGlobal;
-            Assert.AreEqual(_target.RaptorGlobal, DefinedRaptorApplicationFunctionPaths.RaptorGlobal);
+            target.RaptorGlobal = DefinedRaptorApplicationFunctionPaths.RaptorGlobal;
+            Assert.AreEqual(target.RaptorGlobal, DefinedRaptorApplicationFunctionPaths.RaptorGlobal);
 
-            _target.ModifyPersonAbsence = DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence;
-            Assert.AreEqual(_target.ModifyPersonAbsence, DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
+            target.ModifyPersonAbsence = DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence;
+            Assert.AreEqual(target.ModifyPersonAbsence, DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
 
-			_target.ModifyPersonDayOff = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
-			Assert.AreEqual(_target.ModifyPersonDayOff, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+			target.ModifyPersonDayOff = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
+			Assert.AreEqual(target.ModifyPersonDayOff, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 
-            _target.ModifyPersonAssignment = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
-            Assert.AreEqual(_target.ModifyPersonAssignment, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+            target.ModifyPersonAssignment = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
+            Assert.AreEqual(target.ModifyPersonAssignment, DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 
-            _target.ViewUnpublishedSchedules = DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules;
-            Assert.AreEqual(_target.ViewUnpublishedSchedules, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+            target.ViewUnpublishedSchedules = DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules;
+            Assert.AreEqual(target.ViewUnpublishedSchedules, DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 
-            _target.AccessToReports = DefinedRaptorApplicationFunctionPaths.AccessToReports;
-            Assert.AreEqual(_target.AccessToReports, DefinedRaptorApplicationFunctionPaths.AccessToReports);
+            target.AccessToReports = DefinedRaptorApplicationFunctionPaths.AccessToReports;
+            Assert.AreEqual(target.AccessToReports, DefinedRaptorApplicationFunctionPaths.AccessToReports);
         }
     }
 }

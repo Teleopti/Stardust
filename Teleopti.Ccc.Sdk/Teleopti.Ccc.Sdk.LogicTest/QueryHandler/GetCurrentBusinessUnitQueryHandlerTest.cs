@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		[SetUp]
 		public void Setup()
 		{
-			target = new GetCurrentBusinessUnitQueryHandler();
+			target = new GetCurrentBusinessUnitQueryHandler(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 		}
 
 		[Test]

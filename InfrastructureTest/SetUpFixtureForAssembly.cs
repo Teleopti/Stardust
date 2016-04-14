@@ -5,10 +5,8 @@ using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
-using Teleopti.Ccc.Domain.Infrastructure;
 using NHibernate;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Optimization;
@@ -138,12 +136,10 @@ After running this test there's still data in db.
 If the test executes code that calls PersistAll(),
 you have to manually clean up or call CleanUpAfterTest() to restore the database state.
 ";
-
-			var mocks = new MockRepository();
-			var stateMock = mocks.StrictMock<IState>();
+			
+			var stateMock = new FakeState();
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(Guid.NewGuid());
 			StateHolderProxyHelper.ClearAndSetStateHolder(
-				mocks,
 				loggedOnPerson,
 				BusinessUnitFactory.BusinessUnitUsedInTest,
 				ApplicationData,

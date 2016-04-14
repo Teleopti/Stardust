@@ -1,11 +1,8 @@
-﻿using System;
-using log4net.Appender;
+﻿using log4net.Appender;
 using log4net.Config;
 using log4net.Core;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,16 +16,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         [SetUp]
         public void SetupTestAssembly()
         {
-            MockRepository mocks = new MockRepository();
-            IState state = mocks.StrictMock<IState>();
+            var state = new FakeState();
 	        var ds = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-            IApplicationData applicationData = StateHolderProxyHelper.CreateApplicationData(null);
-            IBusinessUnit businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+            var applicationData = StateHolderProxyHelper.CreateApplicationData(null);
+            var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
 
-            IPerson per = new Person { Name = new Name("Peter", "Westlin Junior") };
-            per.SetId(Guid.NewGuid());
+            var per = new Person { Name = new Name("Peter", "Westlin Junior") }.WithId();
 
-            StateHolderProxyHelper.ClearAndSetStateHolder(mocks, per, businessUnit, applicationData, ds, state);
+            StateHolderProxyHelper.ClearAndSetStateHolder(per, businessUnit, applicationData, ds, state);
 
             BasicConfigurator.Configure(new DoNothingAppender());
         }

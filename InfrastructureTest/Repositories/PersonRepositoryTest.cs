@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Threading;
 using NHibernate;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Budgeting;
@@ -42,13 +41,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private PersonRepository target;
 		private IAbsence absence;
 		private IWorkflowControlSet _workflowControlSet;
-		private MockRepository _mockRepository;
 		private IPersonAccountUpdater _personAccountUpdater;
 
 		protected override void ConcreteSetup()
 		{
-			_mockRepository = new MockRepository();
-			_personAccountUpdater = _mockRepository.StrictMock<IPersonAccountUpdater>();
+			_personAccountUpdater = new PersonAccountUpdaterDummy();
 
 			target = new PersonRepository(new ThisUnitOfWork(UnitOfWork));
 
@@ -572,14 +569,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyCanCreateUserRepositoryWithoutBeingLoggedOn()
 		{
-			//No calls on this mock is allowed
-			MockRepository mocks = new MockRepository();
-			IState stateMockTemp = mocks.StrictMock<IState>();
+			//No calls on this state object are allowed
+			IState stateMockTemp = new disabledFakeState();
 			StateHolderProxyHelper.ClearAndInitializeStateHolder(stateMockTemp);
-			mocks.ReplayAll();
+			
 			justForTest justForTest1 = new justForTest(UnitOfWork);
 			Assert.IsNotNull(justForTest1.InternalSession);
-			mocks.VerifyAll();
+		}
+
+		private class disabledFakeState : IState
+		{
+			public TimeZoneInfo UserTimeZone { get {throw new NotSupportedException();} }
+			public IApplicationData ApplicationScopeData { get { throw new NotSupportedException(); } }
+			public void SetApplicationData(IApplicationData applicationData)
+			{
+			}
 		}
 
 		[Test]
@@ -1311,11 +1315,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var testList = new List<IPerson>(new PersonRepository(new ThisUnitOfWork(UnitOfWork)).FindPeopleBelongTeamWithSchedulePeriod(team1, testeriod));
 			Assert.AreEqual(2, testList.Count);
 		}
-
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Samisk")]
-		[Test, Explicit("This one fails on some enviroments. Xp os? Bug id 6318. Have a look at this again when NH is upgraded to 3.x ")]
-		public void VerifyNumberOfActiveAgentsSamiskCulture()
+		
+		[Test]
+		public void VerifyNumberOfActiveAgentsSapmiCulture()
 		{
 			//rk: tried to change to 2000dialect and used default INamingStrategy. None of these helps....
 			var curr = Thread.CurrentThread.CurrentCulture;
@@ -1710,25 +1712,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			role.AvailableData = ad;
 			return role;
 		}
-
-		private void createSiteAndTeam()
-		{
-
-			ISite site = SiteFactory.CreateSimpleSite("Site belonging to BU used in test");
-			PersistAndRemoveFromUnitOfWork(site);
-			ISite site2 = SiteFactory.CreateSimpleSite("Site2 belonging to BU used in test");
-			PersistAndRemoveFromUnitOfWork(site2);
-			ITeam team = TeamFactory.CreateSimpleTeam();
-			team.Description = new Description("team1");
-			site.AddTeam(team);
-			PersistAndRemoveFromUnitOfWork(team);
-			ITeam team2 = TeamFactory.CreateSimpleTeam();
-			team2.Description = new Description("team2");
-			site2.AddTeam(team2);
-			PersistAndRemoveFromUnitOfWork(team2);
-			Session.Refresh(BusinessUnitFactory.BusinessUnitUsedInTest);
-		}
-
+		
 		private class justForTest : PersonRepository
 		{
 			public justForTest(IUnitOfWork unitOfWork)

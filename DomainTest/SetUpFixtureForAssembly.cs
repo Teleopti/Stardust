@@ -1,9 +1,6 @@
 using log4net.Config;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.DomainTest.Common;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -16,19 +13,14 @@ namespace Teleopti.Ccc.DomainTest
         [SetUp]
         public void RunBeforeAnyTest()
         {
-            var mocks = new MockRepository();
-            var stateMock = mocks.StrictMock<IState>();
+            var stateMock = new FakeState();
 
-						var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
-            var applicationData = StateHolderProxyHelper.CreateApplicationData(mocks.StrictMock<IMessageBrokerComposite>());
+	        var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
             var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
             StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
-
-            StateHolderProxyHelper.SetStateReaderExpectations(stateMock, applicationData);
+			
             StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
-
-            mocks.ReplayAll();
-
+			
             BasicConfigurator.Configure(new DoNothingAppender());
         }
     }
