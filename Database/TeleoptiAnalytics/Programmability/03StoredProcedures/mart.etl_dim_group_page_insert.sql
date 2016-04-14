@@ -38,6 +38,9 @@ BEGIN
             ,GETUTCDATE()
   from [mart].[dim_business_unit] bu
   where business_unit_code = @business_unit_code
+  and NOT EXISTS (SELECT 1 
+                     FROM [mart].[dim_group_page]
+                    WHERE group_page_code = @group_page_code)
 
 END
 

@@ -93,10 +93,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			logger.DebugFormat("deleting groups {0} for period {1}", string.Join(",", toBeDeleted), personPeriodId);
 			foreach (var groupInfo in toBeAdded)
 			{
-				var @group = _analyticsGroupPageRepository.GetGroupPageByGroupCode(groupInfo.GroupCode);
-				if (@group != null) continue;
-				logger.DebugFormat("adding group page for {0}, {1}, {2}, {3}", groupInfo.GroupPageCode, groupInfo.GroupPageName, groupInfo.GroupCode, groupInfo.GroupCode);
-				_analyticsGroupPageRepository.AddGroupPage(new AnalyticsGroup
+				logger.DebugFormat("add group page if not existing for {0}, {1}, {2}, {3}", groupInfo.GroupPageCode, groupInfo.GroupPageName, groupInfo.GroupCode, groupInfo.GroupCode);
+				_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup
 				{
 					GroupName = groupInfo.GroupName,
 					GroupCode = groupInfo.GroupCode,

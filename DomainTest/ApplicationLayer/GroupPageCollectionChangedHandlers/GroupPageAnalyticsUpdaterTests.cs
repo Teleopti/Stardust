@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			target.Handle(groupPageCollectionChangedEvent);
 
 			analyticsGroupPageRepository.AssertWasCalled(
-				c => c.AddGroupPage(Arg<AnalyticsGroup>.Matches(x => x.GroupPageCode == groupPageId &&
+				c => c.AddGroupPageIfNotExisting(Arg<AnalyticsGroup>.Matches(x => x.GroupPageCode == groupPageId &&
 																		 x.GroupPageName == groupPage.Description.Name &&
 																		 x.GroupPageNameResourceKey == groupPage.DescriptionKey &&
 																		 x.GroupCode == rootPersonGroup.Id.GetValueOrDefault() &&

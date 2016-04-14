@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public void AddGroupPage(AnalyticsGroup analyticsGroup)
+		public void AddGroupPageIfNotExisting(AnalyticsGroup analyticsGroup)
 		{
 			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{

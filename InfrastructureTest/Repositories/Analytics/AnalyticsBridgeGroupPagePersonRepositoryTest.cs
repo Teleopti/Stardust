@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = false,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			analyticsGroupPageRepository.AddGroupPage(@group);
-			analyticsGroupPageRepository.AddGroupPage(groupPage2);
+			analyticsGroupPageRepository.AddGroupPageIfNotExisting(@group);
+			analyticsGroupPageRepository.AddGroupPageIfNotExisting(groupPage2);
 		}
 
 		[Test]

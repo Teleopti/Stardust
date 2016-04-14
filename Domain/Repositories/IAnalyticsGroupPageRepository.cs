@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsGroupPageRepository
 	{
-		void AddGroupPage(AnalyticsGroup analyticsGroup);
+		void AddGroupPageIfNotExisting(AnalyticsGroup analyticsGroup);
 		void DeleteGroupPages(IEnumerable<Guid> groupPageIds);
 		IEnumerable<AnalyticsGroup> GetGroupPage(Guid groupPageCode);
 		AnalyticsGroup GetGroupPageByGroupCode(Guid groupCode);

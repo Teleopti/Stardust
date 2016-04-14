@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 						else
 						{
 							logger.DebugFormat("Creating group page {0}, group {1}", analyticsGroupPage.GroupPageCode, analyticsGroupPage.GroupCode);
-							_analyticsGroupPageRepository.AddGroupPage(analyticsGroupPage);
+							_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 						}
 						var people = getRecursively(rootGroup.ChildGroupCollection, rootGroup.PersonCollection.ToList()).Select(x => x.Id.GetValueOrDefault()).ToList();
 						var currentPersonCodesInGroupPage = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(rootGroupId);
