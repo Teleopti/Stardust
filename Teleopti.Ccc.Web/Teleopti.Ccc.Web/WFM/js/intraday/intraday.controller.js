@@ -15,8 +15,9 @@
 			$scope.showProductivity = false;
 			$scope.showSummary = false;
 			$scope.selectedIndex = 0;
+			$scope.fixedTimeSeries = [];
 
-				var getAutoCompleteControls = function() {
+			var getAutoCompleteControls = function() {
 				var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');
 				autocompleteSkill = angular.element(autocompleteSkillDOM).scope();
 
@@ -24,14 +25,14 @@
 				autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
 			};
 
-				$scope.format = intradayService.formatDateTime;
+			$scope.format = intradayService.formatDateTime;
 			$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
 				if (params.isNewSkillArea == true) {
 					reloadSkillAreas(params.isNewSkillArea);
 				}
 			});
 
-				var reloadSkillAreas = function(isNew) {
+			var reloadSkillAreas = function(isNew) {
 				intradayService.getSkillAreas.query()
 				.$promise.then(function (result) {
 					getAutoCompleteControls();
@@ -68,16 +69,16 @@
 				$state.go('intraday.config', { isNewSkillArea: false });
 			};
 
-				$scope.toggleModal = function() {
+			$scope.toggleModal = function() {
 				$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
 			};
 
-				$scope.deleteSkillArea = function(skillArea) {
+			$scope.deleteSkillArea = function(skillArea) {
 				intradayService.deleteSkillArea.remove(
 					{
 						id: skillArea.Id
 					})
-						.$promise.then(function(result) {
+					.$promise.then(function(result) {
 						$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
 						$scope.selectedItem = null;
 						clearSkillAreaSelection();
@@ -121,7 +122,7 @@
 					$scope.skillSelected(item);
 				};
 
-			    var setResult = function(result) {
+				var setResult = function(result) {
 					if (!result.LatestStatsTime) {
 						$scope.latestStatsTime = '--:--';
 						$scope.HasMonitorData = false;
@@ -132,7 +133,10 @@
 					$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
 					$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
 					$scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
-					$scope.timeSeries = result.DataSeries.Time;
+					$scope.timeSeries = [];
+					angular.forEach(result.DataSeries.Time, function(value,key) {
+						this.push($filter('date')(value, 'shortTime'));
+					},$scope.timeSeries)
 					$scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls;
 					$scope.actualCallsSeries = result.DataSeries.OfferedCalls;
 					$scope.forecastedAverageHandleTimeSeries = result.DataSeries.ForecastedAverageHandleTime;
@@ -160,13 +164,13 @@
 						});
 					};
 
-				$scope.selectedSkillAreaChange = function(item) {
+					$scope.selectedSkillAreaChange = function(item) {
 						if (this.selectedSkillArea) {
 							$scope.skillAreaSelected(item);
 						}
 					};
 
-				$scope.skillAreaSelected = function(item) {
+					$scope.skillAreaSelected = function(item) {
 						$scope.selectedItem = item;
 						clearSkillSelection();
 						pollSkillAreaMonitorData();
@@ -183,7 +187,7 @@
 								setResult(result);
 								loadIntradayChart();
 							},
-						function(error) {
+							function(error) {
 								timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
 							});
 						}
@@ -203,8 +207,8 @@
 						};
 
 						$scope.$on("$destroy", function (event) {
-	               cancelTimeout();
-            });
+							cancelTimeout();
+						});
 
 						$scope.$on('$locationChangeStart', function () {
 							cancelTimeout();
@@ -215,17 +219,17 @@
 							$timeout.cancel(timeoutPromise);
 						};
 
-				var deselectAll = function(){
+						var deselectAll = function(){
 							$scope.showIncoming = false;
 							$scope.showStaffing = false
 							$scope.showProductivity = false;
 						}
-				$scope.toggleOthers = function(index, intraCard){
+						$scope.toggleOthers = function(index, intraCard){
 							deselectAll();
 							$scope.selectedIndex = index;
 							if (intraCard === 'incoming') {
 								$scope.showIncoming = true;
-					} else if (intraCard === 'staffing') {
+							} else if (intraCard === 'staffing') {
 								$scope.showStaffing = true;
 							}
 							else if (intraCard === 'productivity') {
@@ -240,21 +244,25 @@
 							$scope.actualCallsSeries.splice(0,0,"Actual_calls");
 							$scope.forecastedAverageHandleTimeSeries.splice(0,0,"Forecasted_AHT");
 							$scope.actualAverageHandleTimeSeries.splice(0,0,"AHT");
+							$scope.timeSeries.splice(0,0,"x");
+							console.log('fixd ',	$scope.timeSeries);
 							c3.generate({
 								bindto: '#myChart',
 								data: {
+									x:'x',
 									columns: [
+										$scope.timeSeries,
 										$scope.chartForecastedCalls,
 										$scope.actualCallsSeries,
 										$scope.forecastedAverageHandleTimeSeries,
 										$scope.actualAverageHandleTimeSeries
 									],
 									colors: {
-            				Forecasted_calls: 'blue',
-            				Actual_calls: 'cyan',
-            				Forecasted_AHT: 'tomato',
-										AHT: 'red',
-        					},
+										Forecasted_calls: '#9CCC65',
+										Actual_calls: '#4DB6AC',
+										Forecasted_AHT: '#F06292',
+										AHT: '#BA68C8',
+									},
 									axes: {
 										AHT: 'y2',
 										Forecasted_AHT: 'y2'
@@ -269,9 +277,14 @@
 										label: 'Calls'
 									},
 									x: {
-										//type: 'category',
-										//categories: $scope.timeSeries,
-										label: 'interval'
+										label: 'interval',
+										type: 'category',
+										tick: {
+				                culling: {
+				                    max:10
+				                }
+				            },
+										categories: $scope.timeSeries
 									}
 								}
 							});
