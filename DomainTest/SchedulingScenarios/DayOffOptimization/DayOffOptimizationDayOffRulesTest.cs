@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakeDayOffRulesRepository DayOffRulesRepository;
-		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesDefaultValueProvider;
+		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		public DayOffOptimizationDayOffRulesTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{
@@ -210,9 +210,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		[Test]
 		public void ShouldNotContinueWhenWorsePeriodValueAndUsingTweakedValues()
 		{
-			var prefUsedInThisTest = OptimizationPreferencesDefaultValueProvider.Fetch();
+			var prefUsedInThisTest = OptimizationPreferencesProvider.Fetch();
 			prefUsedInThisTest.Advanced.UseTweakedValues = true;
-			OptimizationPreferencesDefaultValueProvider.SetFromTestsOnly(prefUsedInThisTest);
+			OptimizationPreferencesProvider.SetFromTestsOnly(prefUsedInThisTest);
 
 			var firstDay = new DateOnly(2015, 10, 26); //mon
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
