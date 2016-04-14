@@ -57,7 +57,32 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public List<FailActionResult> RemoveActivity(RemoveActivityFormData input)
 		{
-			throw new NotImplementedException();
+			var result = new List<FailActionResult>();
+			foreach (var personActivity in input.PersonActivities)
+			{
+				foreach (var activity in personActivity.Activities)
+				{
+					var command = new RemoveActivityCommand
+					{
+						PersonId = personActivity.PersonId,
+						ActivityId = activity.ActivityId,
+						Date = input.Date,
+						StartTime = activity.StartTime,
+						EndTime = activity.EndTime,
+						TrackedCommandInfo = input.TrackedCommandInfo != null ? input.TrackedCommandInfo : new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+					};
+
+					_commandDispatcher.Execute(command);
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
+						result.Add(new FailActionResult
+						{
+							PersonId = personActivity.PersonId,
+							Message = command.ErrorMessages
+						});
+				}
+			}
+
+			return result;
 		}
 	}
 

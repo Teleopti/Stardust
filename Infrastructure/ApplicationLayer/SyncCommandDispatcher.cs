@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			var handlerType = typeof(IHandleCommand<>).MakeGenericType(new[] { command.GetType() });
 			var handler = _resolver.Resolve(handlerType);
-			var method = handler.GetType().GetMethod("Handle");
+			var method = handler.GetType().GetMethod("Handle", new [] { command.GetType() } );
 			method.Invoke(handler, new[] { command });
 		}
 	}

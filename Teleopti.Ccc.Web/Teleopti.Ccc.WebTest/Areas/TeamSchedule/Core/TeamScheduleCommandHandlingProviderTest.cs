@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 	public class TeamScheduleCommandHandlingProviderTest
 	{
 		public ITeamScheduleCommandHandlingProvider Target;
-		public FakeActivityCommandHandler AddActivityCommandHandler;
+		public FakeActivityCommandHandler ActivityCommandHandler;
 		public FakePersonRepository PersonRepository;
 		public PrincipalAuthorizationWithConfigurablePermission PrincipalAuthorizationWithConfigurablePermission;
 
@@ -35,9 +36,58 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
+			ActivityCommandHandler.ResetCalledCount();
+
 			Target.AddActivity(input);
 
-			AddActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldRemoveActivityCommandHandleWithCorrectCommandData()
+		{
+			var activityItem1 = new RemoveActivityItem
+			{
+				ActivityId = Guid.NewGuid(),
+				StartTime = new DateTime(2016, 4, 13, 8, 0, 0),
+				EndTime = new DateTime(2016, 4, 13, 10, 0, 0)
+			};
+
+			var activityItem2 = new RemoveActivityItem
+			{
+				ActivityId = Guid.NewGuid(),
+				StartTime = new DateTime(2016,4,13,9,0,0),
+				EndTime = new DateTime(2016,4,13,10,0,0)
+			};
+
+			var activityItem3 = new RemoveActivityItem
+			{
+				ActivityId = Guid.NewGuid(),
+				StartTime = new DateTime(2016,4,13,14,0,0),
+				EndTime = new DateTime(2016,4,13,16,0,0)
+			};
+
+			var input = new RemoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<RemovePersonActivityItem>
+				{
+					new RemovePersonActivityItem
+					{
+						PersonId = Guid.NewGuid(),
+						Activities = new List<RemoveActivityItem> {activityItem1, activityItem2}
+					},
+					new RemovePersonActivityItem
+					{
+						PersonId = Guid.NewGuid(),
+						Activities = new List<RemoveActivityItem> {activityItem3}
+					}
+				}
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			Target.RemoveActivity(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -81,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 	}
 
-	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>
+	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>, IHandleCommand<RemoveActivityCommand>
 	{
 		private int calledCount;
 		public void Handle(AddActivityCommand command)
@@ -97,6 +147,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public void ResetCalledCount()
 		{
 			calledCount = 0;
+		}
+
+		public void Handle(RemoveActivityCommand command)
+		{
+			calledCount++;
 		}
 	}
 }
