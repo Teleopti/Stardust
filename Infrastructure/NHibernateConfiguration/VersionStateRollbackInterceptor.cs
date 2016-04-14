@@ -7,7 +7,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-    public class VersionStateRollbackInterceptor : EmptyInterceptor
+	/*
+	RK - don't think this is needed any longer.
+	Was first created to fix persist problems in scheduler. Those problems are now handled in some other way (all persist tests are green)
+	If removing, one test fails (NHibernateUnitOfWorkRealTest.SetIdToNullToNewlyAddedRootsIfTranRollback) and it fails "correctly".
+	However, it's probably wrong if code relies on correct rollback anyhow so it would be nice to remove this functionality all together.
+
+	If you who reads this currently have a Dee Snider attitute - please remove this. I don't have the guts ATM.
+	*/
+	public class VersionStateRollbackInterceptor : EmptyInterceptor
     {
         private readonly IDictionary<object, EntityState> _entityStates = new Dictionary<object, EntityState>();
 
