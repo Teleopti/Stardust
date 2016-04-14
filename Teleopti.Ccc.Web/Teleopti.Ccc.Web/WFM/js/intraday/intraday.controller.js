@@ -238,9 +238,7 @@
 						}
 
 						var loadIntradayChart = function() {
-							$scope.chartForecastedCalls = $scope.forecastedCallsSeries;
-
-							$scope.chartForecastedCalls.splice(0,0,"Forecasted_calls");
+							$scope.forecastedCallsSeries.splice(0,0,"Forecasted_calls");
 							$scope.actualCallsSeries.splice(0,0,"Actual_calls");
 							$scope.forecastedAverageHandleTimeSeries.splice(0,0,"Forecasted_AHT");
 							$scope.actualAverageHandleTimeSeries.splice(0,0,"AHT");
@@ -251,7 +249,7 @@
 									x:'x',
 									columns: [
 										$scope.timeSeries,
-										$scope.chartForecastedCalls,
+										$scope.forecastedCallsSeries,
 										$scope.actualCallsSeries,
 										$scope.forecastedAverageHandleTimeSeries,
 										$scope.actualAverageHandleTimeSeries
@@ -285,10 +283,11 @@
 										label: 'interval',
 										type: 'category',
 										tick: {
-				                culling: {
-				                    max:10
-				                }
-				            },
+											fit: true,
+											centered: true,
+											multiline: false,
+											values: [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92, 96]
+										},
 										categories: $scope.timeSeries
 									}
 								}
