@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.Domain.UnitOfWork
 			_unitOfWork = unitOfWork;
 		}
 
+		public bool HasCurrent()
+		{
+			return true;
+		}
+
 		public IUnitOfWork Current()
 		{
 			return _unitOfWork;

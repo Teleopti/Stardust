@@ -7,20 +7,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	public class CurrentInitiatorIdentifier : ICurrentInitiatorIdentifier, IInitiatorIdentifierScope
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ThreadLocal<IInitiatorIdentifier> _threadInitiatorIdentifier = new ThreadLocal<IInitiatorIdentifier>();
 
-		public CurrentInitiatorIdentifier(ICurrentUnitOfWork unitOfWork, ICurrentUnitOfWorkFactory unitOfWorkFactory)
+		public CurrentInitiatorIdentifier(ICurrentUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
-			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
 		public IInitiatorIdentifier Current()
 		{
 			if (_threadInitiatorIdentifier.Value != null)
 				return _threadInitiatorIdentifier.Value;
-			if (_unitOfWorkFactory.Current().HasCurrentUnitOfWork())
+			if (_unitOfWork.HasCurrent())
 				return _unitOfWork.Current().Initiator();
 			return null;
 		}

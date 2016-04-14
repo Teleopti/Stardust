@@ -11,6 +11,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 		}
 
+		public bool HasCurrent()
+		{
+			var unitOfWorkFactory = _currentUnitOfWorkFactory.Current();
+			return unitOfWorkFactory != null && unitOfWorkFactory.HasCurrentUnitOfWork();
+		}
+
 		public IUnitOfWork Current()
 		{
 			return _currentUnitOfWorkFactory.Current().CurrentUnitOfWork();
