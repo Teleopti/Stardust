@@ -61,10 +61,8 @@
     <Compile Include="ListenSimulators\SimulateMyTimeScreen.cs" />
     <Compile Include="SimulationData\MyTimeData.cs" />
     <Compile Include="SimulationData\SchedulingData.cs" />
-    <Compile Include="SimulationData\SimulationDataBase.cs" />
     <Compile Include="Stats.cs" />
     <Compile Include="TrafficSimulators\SimulateMyTimeScreenTraffic.cs" />
-    <Compile Include="TrafficSimulators\TrafficSimulatorBase.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -90,6 +88,10 @@
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8d2565f2-7c44-45b7-96ad-2cd900e033a1}</Project>
       <Name>Teleopti.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Web.TestApplicationsCommon\Teleopti.Ccc.Web.TestApplicationsCommon.csproj">
+      <Project>{8b8b982e-6482-4170-8e35-0af8ae7d6fc3}</Project>
+      <Name>Teleopti.Ccc.Web.TestApplicationsCommon</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

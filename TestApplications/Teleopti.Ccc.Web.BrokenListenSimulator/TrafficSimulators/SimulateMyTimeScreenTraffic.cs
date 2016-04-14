@@ -9,12 +9,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
+using Teleopti.Ccc.Web.TestApplicationsCommon;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 {
-    public class SimulateMyTimeScreenTraffic : TrafficSimulatorBase<MyTimeData>
+    public class SimulateMyTimeScreenTraffic : TrafficSimulatorBase
     {       
-        public override void AddFullDayAbsenceForThePersonByNextNDays(MyTimeData data, int days)
+        public void AddFullDayAbsenceForThePersonByNextNDays(MyTimeData data, int days)
         {
 			var today = DateTime.Today;
 			var allTasks = new List<Task>();
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 			requestsStatus(allTasks);
         }
 
-	    public override void AddFullDayAbsenceForAllPeopleWithPartTimePercentage100ByNextNDays(MyTimeData data, int days)
+	    public void AddFullDayAbsenceForAllPeopleWithPartTimePercentage100ByNextNDays(MyTimeData data, int days)
 	    {
 		    var today = DateTime.Today;
 		    var people = GetPeopleForPartTimePercentaget100(today);
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 		    }
 	    }
 
-	    public override IEnumerable<Guid> GetPeopleForPartTimePercentaget100(DateTime day)
+	    public IEnumerable<Guid> GetPeopleForPartTimePercentaget100(DateTime day)
 	    {
 		    var message = new HttpRequestMessage(HttpMethod.Get, string.Format("api/GroupSchedule/Get?groupId={0}&date={1}", "b7eda58d-c0a0-4051-b648-9b5e015b240e", day.Date));
 			var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData
+namespace Teleopti.Ccc.Web.TestApplicationsCommon
 {
     public class SimulationDataBase
     {
@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData
         public string DataSource { get; set; }
         public Guid BusinessUnit { get; set; }
         public Guid Scenario { get; set; }
-        public string BusinessUnitName { get; internal set; }
+        public string BusinessUnitName { get; set; }
     }
 }

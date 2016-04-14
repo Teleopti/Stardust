@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -182,8 +182,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Runtime.Environment", "Teleopti.Runtime.Environment\Teleopti.Runtime.Environment\Teleopti.Runtime.Environment.csproj", "{83D40812-9E6A-4EF1-B84F-11BC203283EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCC.CCC7Prereq", "Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj", "{F2AAC129-9537-4381-9634-1F188E4C2A8C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.BrokerListenSimulator", "Teleopti.Ccc.Web\Teleopti.Ccc.Web.BrokenListenSimulator\Teleopti.Ccc.Web.BrokerListenSimulator.csproj", "{34D5B843-AC93-4D94-B87E-AB8C249FD74C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Wfm.Administration", "Teleopti.Wfm.Administration\Teleopti.Wfm.Administration.csproj", "{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}"
 EndProject
@@ -1007,18 +1005,6 @@ Global
 		{F2AAC129-9537-4381-9634-1F188E4C2A8C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{F2AAC129-9537-4381-9634-1F188E4C2A8C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{F2AAC129-9537-4381-9634-1F188E4C2A8C}.Release|x86.ActiveCfg = Release|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Release|.NET.ActiveCfg = Release|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{34D5B843-AC93-4D94-B87E-AB8C249FD74C}.Release|x86.ActiveCfg = Release|Any CPU
 		{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C7CFBE6B-F899-44FD-BB8D-7ACD7131ACD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -1132,8 +1118,8 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8;packages\EnterpriseLibrary.TransientFaultHandling.Data.6.0.1304.1\lib\NET45;packages\EnterpriseLibrary.TransientFaultHandling.WindowsAzure.Storage.6.0.1304.0\lib\NET45
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.0\lib\NET35
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

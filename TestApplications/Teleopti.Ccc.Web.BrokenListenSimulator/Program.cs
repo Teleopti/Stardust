@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
@@ -16,6 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators;
 using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
 using Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators;
+using Teleopti.Ccc.Web.TestApplicationsCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.BrokenListenSimulator
@@ -57,11 +56,11 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			{
 				// start trafic simulator
 				var builder = new ContainerBuilder();
-				builder.RegisterAssemblyTypes(typeof (TrafficSimulatorBase<>).Assembly)
-					.Where(t => t.IsClosedTypeOf(typeof (TrafficSimulatorBase<>)))
-					.AsClosedTypesOf(typeof (TrafficSimulatorBase<>)).InstancePerDependency();
+				builder.RegisterAssemblyTypes(typeof (TrafficSimulatorBase).Assembly)
+					.Where(t => t.IsClosedTypeOf(typeof (TrafficSimulatorBase)))
+					.AsClosedTypesOf(typeof (TrafficSimulatorBase)).InstancePerDependency();
 				var container = builder.Build();
-				TrafficSimulatorBase<MyTimeData> trafficSimulator;
+				SimulateMyTimeScreenTraffic trafficSimulator;
 
 				var sw = new Stopwatch();
 				sw.Start();
@@ -76,16 +75,16 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 					switch (caseNumber)
 					{
 						case "1":
-							simulateTrafficCase1(trafficSimulator, myTimeData);
+							SimulateTrafficCase1(trafficSimulator, myTimeData);
 							break;
 						case "2":
-							simulateTrafficCase2(trafficSimulator, myTimeData);
+							SimulateTrafficCase2(trafficSimulator, myTimeData);
 							break;
 						case "3":
-							simulateTrafficCase3(trafficSimulator, myTimeData);
+							SimulateTrafficCase3(trafficSimulator, myTimeData);
 							break;
 						default:
-							simulateTrafficCase1(trafficSimulator, myTimeData);
+							SimulateTrafficCase1(trafficSimulator, myTimeData);
 							break;
 					}
 				}
@@ -94,16 +93,16 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			else if (args.Any() && args[0] == "-p")
 			{
 				myTimeData.User = new Guid(args[1]);
-				simulate(myTimeData, 1, 10);
+				Simulate(myTimeData, 1, 10);
 			}
 			else if (args.Any() && args[0] == "-s")
 			{
 				var builder = new ContainerBuilder();
-				builder.RegisterAssemblyTypes(typeof(TrafficSimulatorBase<>).Assembly)
-					.Where(t => t.IsClosedTypeOf(typeof(TrafficSimulatorBase<>)))
-					.AsClosedTypesOf(typeof(TrafficSimulatorBase<>)).InstancePerDependency();
+				builder.RegisterAssemblyTypes(typeof(TrafficSimulatorBase).Assembly)
+					.Where(t => t.IsClosedTypeOf(typeof(TrafficSimulatorBase)))
+					.AsClosedTypesOf(typeof(TrafficSimulatorBase)).InstancePerDependency();
 				var container = builder.Build();
-				TrafficSimulatorBase<MyTimeData> trafficSimulator;
+				SimulateMyTimeScreenTraffic trafficSimulator;
 				if (container.TryResolve(out trafficSimulator))
 				{
 					trafficSimulator.Start(myTimeData.BaseUrl, myTimeData.BusinessUnitName, null, null);
@@ -124,25 +123,25 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			else
 			{
 				// start listen simulator
-				simulate(myTimeData, 1, 1000);//200 + 5 + 2;
+				Simulate(myTimeData, 1, 1000);//200 + 5 + 2;
 			}
 		}
 
-		private static void simulateTrafficCase1<T>(TrafficSimulatorBase<T> trafficSimulator, T data) where T : SimulationDataBase
+		private static void SimulateTrafficCase1(SimulateMyTimeScreenTraffic trafficSimulator, MyTimeData data)
 		{
 			// for mytime screen, if one person is subscribed, expected number of notifications should 10 * 2
 			trafficSimulator.Start(data.BaseUrl, data.BusinessUnitName, null, null);
 			trafficSimulator.AddFullDayAbsenceForAllPeopleWithPartTimePercentage100ByNextNDays(data, 10);
 		}
 
-		private static void simulateTrafficCase2<T>(TrafficSimulatorBase<T> trafficSimulator, T data) where T : SimulationDataBase
+		private static void SimulateTrafficCase2(SimulateMyTimeScreenTraffic trafficSimulator, MyTimeData data)
 		{
 			// for mytime screen, if one person is subscribed, expected number of notifications should 3 * 2
 			trafficSimulator.Start(data.BaseUrl, data.BusinessUnitName, null, null);
 			trafficSimulator.AddFullDayAbsenceForThePersonByNextNDays(data, 3);
 		}
 
-		private static void simulateTrafficCase3<T>(TrafficSimulatorBase<T> trafficSimulator, T data) where T : SimulationDataBase
+		private static void SimulateTrafficCase3(SimulateMyTimeScreenTraffic trafficSimulator, MyTimeData data)
 		{
 			trafficSimulator.Start(data.BaseUrl, data.BusinessUnitName, null, null);
 			while (true)
@@ -152,7 +151,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 			}
 		}
 
-		private static void simulate<T>(T data, int clients, int screens) where T : SimulationDataBase
+		private static void Simulate<T>(T data, int clients, int screens) where T : SimulationDataBase
 		{
 			var currentDatasource = new FakeCurrentDatasource(new DataSourceState());
 			currentDatasource.FakeName(data.DataSource);
@@ -186,7 +185,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator
 				builder.RegisterInstance(currentScenario).As<ICurrentScenario>();
 				builder.RegisterInstance(currentDatasource).As<ICurrentDataSource>();
 				builder.RegisterInstance(currentBusinessUnit).As<ICurrentBusinessUnit>();
-				builder.RegisterType(typeof (TrafficSimulatorBase<>)).InstancePerDependency();
+				builder.RegisterType(typeof (TrafficSimulatorBase)).InstancePerDependency();
 				builder.RegisterAssemblyTypes(typeof (SimulateBase<>).Assembly)
 					.Where(t => t.IsClosedTypeOf(typeof (SimulateBase<>)))
 					.AsClosedTypesOf(typeof (SimulateBase<>)).InstancePerDependency();
