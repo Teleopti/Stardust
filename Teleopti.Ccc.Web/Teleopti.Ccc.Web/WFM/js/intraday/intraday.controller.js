@@ -109,6 +109,7 @@
 					if (this.selectedSkill) {
 						$scope.skillSelected(item);
 					}
+					$scope.hiddenArray = [];
 				};
 
 				$scope.skillSelected = function (item) {
@@ -173,6 +174,7 @@
 						if (this.selectedSkillArea) {
 							$scope.skillAreaSelected(item);
 						}
+						$scope.hiddenArray = [];
 					};
 
 					$scope.skillAreaSelected = function(item) {
@@ -301,8 +303,7 @@
 											} else {
 												$scope.hiddenArray2.push(id);
 											}
-
-											pollSkillMonitorData();
+											loadIntradayChart();
 										}
 									}
 								}
