@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             using (_mocks.Record())
             {
                 Expect.Call(_validator.Validate(_absenceRequest,handling)).Return(_validatedRequest);
-                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person)).Return(
+                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person, _absenceRequest)).Return(
                     new List<IBusinessRuleResponse>());
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_validator.Validate(_absenceRequest, handling)).Return(_validatedRequest);
                 undoRedoContainer.UndoAll();
                 _authorization.VerifyEditRequestPermission(_personRequest);
-                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person)).Return(
+                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person, _absenceRequest)).Return(
                     new List<IBusinessRuleResponse>());
             }
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(_validator.Validate(_absenceRequest, handling)).Return(_validatedRequest);
                 undoRedoContainer.UndoAll();
                 _authorization.VerifyEditRequestPermission(_personRequest);
-                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person)).Return(
+                Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person, _absenceRequest)).Return(
                     new List<IBusinessRuleResponse>{businessRuleResponse});
             }
 
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 				Expect.Call(_validator.Validate(_absenceRequest, handling)).Return(_validatedRequest);
 				undoRedoContainer.UndoAll();
 				_authorization.VerifyEditRequestPermission(_personRequest);
-				Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person)).Return(
+				Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person, _absenceRequest)).Return(
 					new List<IBusinessRuleResponse> { businessRuleResponse });
 			}
 

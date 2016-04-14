@@ -50,10 +50,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			var absenceRequest = personRequest.Request as AbsenceRequest;
 
-			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person)).Return(new List<IBusinessRuleResponse>());
+			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, absenceRequest)).Return(new List<IBusinessRuleResponse>());
 			Target.ApproveRequests(new List<Guid> { personRequest.Id.Value });
-			requestApprovalService.AssertWasCalled(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person), options => options.Repeat.AtLeastOnce());
+			requestApprovalService.AssertWasCalled(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, absenceRequest), options => options.Repeat.AtLeastOnce());
 		}
 
 
@@ -68,9 +69,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			var absenceRequest = personRequest.Request as AbsenceRequest;
 			personRequest.Pending();
 
-			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person)).Return(new List<IBusinessRuleResponse>());
+			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, absenceRequest)).Return(new List<IBusinessRuleResponse>());
 			var affectedIds = Target.ApproveRequests(new List<Guid> { personRequest.Id.Value });
 
 			affectedIds.ToList().Count.Should().Be.EqualTo(1);
@@ -94,7 +96,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			personRequest1.Pending();
 			personRequest2.Pending();
 
-			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person)).Return(new List<IBusinessRuleResponse>());
+			var absenceRequest1 = personRequest1.Request as AbsenceRequest;
+			var absenceRequest2 = personRequest2.Request as AbsenceRequest;
+
+			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, absenceRequest1)).Return(new List<IBusinessRuleResponse>());
+			requestApprovalService.Stub(x => x.ApproveAbsence(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9), person, absenceRequest2)).Return(new List<IBusinessRuleResponse>());
+
 			var affectedIds = Target.ApproveRequests(new List<Guid> { personRequest1.Id.Value, personRequest2.Id.Value });
 
 			affectedIds.ToList().Count.Should().Be.EqualTo(2);
