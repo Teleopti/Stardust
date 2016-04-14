@@ -268,20 +268,20 @@
 									}
 								},
 								axis: {
-									y2: {
+									y2:{
 										show: true,
 										label: 'AHT',
-                                        tick: {
-                                            format: d3.format('.1f')
-                                        }
+										tick: {
+											format: d3.format('.1f')
+										}
 									},
 									y:{
-									    label: 'Calls',
-									    tick: {
-									        format: d3.format('.1f')
-									    }
+										label: 'Calls',
+										tick: {
+											format: d3.format('.1f')
+										}
 									},
-									x: {
+									x:{
 										label: 'interval',
 										type: 'category',
 										tick: {
@@ -295,18 +295,15 @@
 								},
 								legend: {
 									item: {
-											onclick: function (id) {
-												if ($scope.hiddenArray2.indexOf(id)>-1) {
-													$scope.hiddenArray2.splice($scope.hiddenArray2.indexOf(id), 1);
-												} else {
-													$scope.hiddenArray2.push(id);
-												}
-
-												pollSkillMonitorData();
-
-
-												console.log($scope.hiddenArray2);
+										onclick: function (id) {
+											if ($scope.hiddenArray2.indexOf(id)>-1) {
+												$scope.hiddenArray2.splice($scope.hiddenArray2.indexOf(id), 1);
+											} else {
+												$scope.hiddenArray2.push(id);
 											}
+
+											pollSkillMonitorData();
+										}
 									}
 								}
 							});
