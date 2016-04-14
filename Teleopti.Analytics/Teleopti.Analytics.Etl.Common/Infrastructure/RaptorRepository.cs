@@ -11,6 +11,8 @@ using log4net;
 using NHibernate;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -1787,6 +1789,28 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return 0;
 		}
 
+		public IEnumerable<WindowsLogonInfo> GetWindowsLogonInfos()
+		{
+			var dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
+				"mart.etl_dim_person_get_allwindowslogons", null,
+				_dataMartConnectionString).Tables[0];
+			var result = new List<WindowsLogonInfo>();
+			for (var i = 0; i < dataTable.Rows.Count; i++)
+			{
+				if (dataTable.Rows[i]["person_code"] != DBNull.Value)
+				{
+					result.Add(new WindowsLogonInfo
+					{
+						PersonCode = (Guid)dataTable.Rows[i]["person_code"],
+						WindowsDomain = dataTable.Rows[i]["windows_domain"].ToString(),
+						WindowsUsername = dataTable.Rows[i]["windows_username"].ToString(),
+
+					});
+				}
+			}
+			return result;
+		}
+
 		private string getAggName()
 		{
 			var dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
@@ -1795,4 +1819,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return dataTable.Rows[0]["target_customName"].ToString();
 		}
 	}
+
+	
 }

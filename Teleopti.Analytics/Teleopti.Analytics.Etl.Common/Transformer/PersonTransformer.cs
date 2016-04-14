@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -117,6 +118,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private static Tuple<string, string> getLogonInfo(IPerson person, IEnumerable<LogonInfo> logonInfos)
 		{
 			var logonInfo = logonInfos.FirstOrDefault(l => l.PersonId.Equals(person.Id));
+			return LogonInfo(logonInfo);
+		}
+
+		private static Tuple<string, string> LogonInfo(LogonInfo logonInfo)
+		{
 			return logonInfo == null
 				? new Tuple<string, string>(string.Empty, string.Empty)
 				: IdentityHelper.Split(logonInfo.Identity);
@@ -166,6 +172,16 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 
 			int minutesPerInterval = 1440 / intervalsPerDay;
 			return endDate.AddMinutes(-minutesPerInterval);
+		}
+
+		public static IEnumerable<WindowsLogonInfo> TransformWindowsLogonInfo(IEnumerable<LogonInfo> logonInfos)
+		{
+			return from logonInfo in logonInfos let windowsLogonTuple = LogonInfo(logonInfo) select new WindowsLogonInfo
+			{
+				PersonCode = logonInfo.PersonId,
+				WindowsDomain = string.IsNullOrEmpty(windowsLogonTuple.Item1)? "Not Defined": windowsLogonTuple.Item1,
+				WindowsUsername = string.IsNullOrEmpty(windowsLogonTuple.Item2) ? "Not Defined" : windowsLogonTuple.Item2
+			};
 		}
 	}
 }

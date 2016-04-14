@@ -313,6 +313,7 @@
     <Compile Include="Transformer\Job\Steps\DimPersonDeleteJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimPersonJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimPersonTrimJobStep.cs" />
+    <Compile Include="Transformer\Job\Steps\DimPersonWindowsLoginJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimQualityQuestLoadJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimQueueJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimScenarioDeleteJobStep.cs" />
@@ -392,6 +393,7 @@
     <Compile Include="Transformer\Job\Steps\StageTimeZoneJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageWorkloadJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StatisticsUpdateNotificationJobStep.cs" />
+    <Compile Include="Transformer\WindowsLogonInfo.cs" />
     <Compile Include="Transformer\KpiTargetTeamTransformer.cs" />
     <Compile Include="Transformer\KpiTransformer.cs" />
     <Compile Include="Transformer\OvertimeTransformer.cs" />

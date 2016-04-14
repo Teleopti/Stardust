@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.ReadModel;
@@ -237,5 +238,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		int FillIntradayFactAgentDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 		int FillIntradayFactAgentQueueDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit);
 		int PerformIndexMaintenance(string database);
+		IEnumerable<WindowsLogonInfo> GetWindowsLogonInfos();
 	}
 }

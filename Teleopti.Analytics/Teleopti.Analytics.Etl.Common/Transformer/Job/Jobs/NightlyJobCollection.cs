@@ -78,6 +78,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new DimSkillSetJobStep(jobParameters));
 				Add(new DimPersonJobStep(jobParameters));
 			}
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
+			{
+				Add(new DimPersonWindowsLoginJobStep(jobParameters));
+			}
 			Add(new DimActivityJobStep(jobParameters));
 			Add(new DimAbsenceJobStep(jobParameters));
 			Add(new DimScenarioJobStep(jobParameters));
