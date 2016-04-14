@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 
 			var personAssignment = scheduleDay.PersonAssignment();
-		    IList<IShiftLayer> shiftLayersList = null;
-		    if (personAssignment != null && personAssignment.ShiftLayers.Any())
-		    {
-                shiftLayersList = personAssignment.ShiftLayers.ToList();
-            }
-            
+			IList<IShiftLayer> shiftLayersList = null;
+			if (personAssignment != null && personAssignment.ShiftLayers.Any())
+			{
+				shiftLayersList = personAssignment.ShiftLayers.ToList();
+			}
+			
 
-            var overtimeActivities = personAssignment != null
+			var overtimeActivities = personAssignment != null
 				? personAssignment.OvertimeActivities().ToArray()
 				: null;
 
@@ -86,12 +86,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
 
-				    Guid? shiftLayerId = null;
-                    if (isMainShiftLayer && shiftLayersList != null)
-				    {
-				        var matchedShiftLayers = shiftLayersList.Where(x => x.Period.Contains(layer.Period)).ToList();
-				        shiftLayerId = matchedShiftLayers.LastOrDefault() != null ? matchedShiftLayers.LastOrDefault().Id: null;
-				    }
+					Guid? shiftLayerId = null;
+					if (isMainShiftLayer && shiftLayersList != null)
+					{
+						var matchedShiftLayers = shiftLayersList.Where(x => x.Period.Contains(layer.Period)).ToList();
+						shiftLayerId = matchedShiftLayers.LastOrDefault() != null ? matchedShiftLayers.LastOrDefault().Id: null;
+					}
 					
 					projections.Add(new GroupScheduleProjectionViewModel
 					{
