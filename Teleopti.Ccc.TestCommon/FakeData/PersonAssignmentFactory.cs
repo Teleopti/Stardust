@@ -35,6 +35,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			personAssignment.SetId(Guid.NewGuid());
 			return personAssignment;
 		}
+		public static IPersonAssignment CreatePersonAssignmentWithId(IPerson agent, IScenario scenario, DateOnly date)
+		{
+			var personAssignment = CreatePersonAssignment(agent, scenario, date);
+			personAssignment.SetId(Guid.NewGuid());
+			return personAssignment;
+		}
 
 		public static IPersonAssignment CreatePersonAssignment(IPerson agent, IScenario scenario)
 		{

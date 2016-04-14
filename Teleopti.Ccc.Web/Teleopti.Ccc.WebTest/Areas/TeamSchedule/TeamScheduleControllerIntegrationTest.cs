@@ -23,9 +23,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
-    
-
-    [TeamScheduleTest]
+	[TeamScheduleTest]
 	public class TeamScheduleControllerIntegrationTest
 	{
 		public TeamScheduleController Target;
@@ -540,6 +538,32 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result[4].Name.Should().Be.EqualTo("e1@e1");
 			result[5].Name.Should().Be.EqualTo("f1@f1");
 		}
+		[Test]
+		public void ShouldSetUniqueShiftLayerIdForLayersBelongingToOneShiftLayer()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			PeopleSearchProvider.Add(person);
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
+			var pa = PersonAssignmentFactory.CreatePersonAssignmentWithId(person,scenario, new DateOnly(scheduleDate));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
+				new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 14));
+
+			scheduleDay.Add(pa);
+			ScheduleProvider.AddScheduleDay(scheduleDay);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+			var shiftLayers = pa.ShiftLayers.ToList();
+			var schedule = result.Single();
+			var projectionVm = schedule.Projection.ToList();
+			projectionVm.Count.Should().Be.EqualTo(3);
+			projectionVm[0].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
+			projectionVm[1].ShiftLayerId.Should().Be.EqualTo(shiftLayers[1].Id);
+			projectionVm[2].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
+		}
 
 		[Test]
 		public void ShouldReturnSchedulesWithCorrectOrderOnContractDayOffDayForScheduleSearch()
@@ -735,366 +759,4 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Schedules.Second().Projection.First().Description.Should().Be("activity2");
 		}
 	}
-
-    public class TeamScheduleShiftLayerSpecificTestAttribute : TeamScheduleTestAttribute
-    {
-        protected override void Setup(ISystem system, IIocConfiguration configuration)
-        {
-            base.Setup(system, configuration);
-            system.UseTestDouble<FakePersonAssignment>().For<IPersonAssignment>();
-        }
-    }
-
-    [TeamScheduleShiftLayerSpecificTest]
-    public class ShouldSetUniqueShiftLayerIdForLayersBelongingToOneShiftLayer
-    {
-        public TeamScheduleController Target;
-        public FakeScheduleProvider ScheduleProvider;
-        public FakePeopleSearchProvider PeopleSearchProvider;
-        public FakePersonAssignment PersonAssignment;
-        [Test]
-        public void Test()
-        {
-            var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
-            PeopleSearchProvider.Add(person);
-            var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-            var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
-
-            PersonAssignment.Init(person, scenario, new DateOnly(scheduleDate));
-            PersonAssignment.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
-                new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
-            PersonAssignment.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
-                new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 14));
-
-
-            scheduleDay.Add(PersonAssignment);
-            ScheduleProvider.AddScheduleDay(scheduleDay);
-
-            var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
-            var shiftLayers = PersonAssignment.ShiftLayers.ToList();
-            var schedule = result.Single();
-            var projectionVm = schedule.Projection.ToList();
-            projectionVm.Count.Should().Be.EqualTo(3);
-            projectionVm[0].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
-            projectionVm[1].ShiftLayerId.Should().Be.EqualTo(shiftLayers[1].Id);
-            projectionVm[2].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
-        }
-    }
-    public class FakePersonAssignment : IPersonAssignment
-    {
-        private IList<IShiftLayer> _shiftLayers;
-        private IPerson _person;
-        private IScenario _scenario;
-        private IShiftCategory _shiftCategory;
-        private IDayOffTemplate _dayOffTemplate;
-
-        public void Init(IPerson agent, IScenario scenario, DateOnly date)
-        {
-            Date = date;
-            _person = agent;
-            _scenario = scenario;
-            _shiftLayers = new List<IShiftLayer>();
-        }
-        public virtual void Clear()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual DateOnly Date { get; protected set; }
-
-        public virtual bool BelongsToScenario(IScenario scenario)
-        {
-            return Scenario.Equals(scenario);
-        }
-
-        public virtual string FunctionPath
-        {
-            get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment; }
-        }
-
-        public virtual IPersistableScheduleData CreateTransient()
-        {
-            return NoneEntityClone();
-        }
-
-        public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
-        {
-            var retObj = (FakePersonAssignment)NoneEntityClone();
-            retObj._scenario = parameters.Scenario;
-            retObj._person = parameters.Person;
-            return retObj;
-        }
-
-        public virtual IShiftCategory ShiftCategory
-        {
-            get
-            {
-                if (!MainActivities().Any())
-                    return null;
-
-                return _shiftCategory;
-            }
-            protected set { _shiftCategory = value; }
-        }
-
-        public virtual IEnumerable<IMainShiftLayer> MainActivities()
-        {
-            return _shiftLayers.OfType<IMainShiftLayer>();
-        }
-
-        public virtual IEnumerable<IPersonalShiftLayer> PersonalActivities()
-        {
-            return _shiftLayers.OfType<IPersonalShiftLayer>();
-        }
-
-        public virtual IEnumerable<IOvertimeShiftLayer> OvertimeActivities()
-        {
-            return _shiftLayers.OfType<IOvertimeShiftLayer>();
-        }
-
-        public virtual IEnumerable<IShiftLayer> ShiftLayers
-        {
-            get { return _shiftLayers; }
-        }
-
-        public virtual IPerson Person
-        {
-            get { return _person; }
-        }
-
-        public virtual IScenario Scenario
-        {
-            get { return _scenario; }
-        }
-
-        public virtual bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddPersonalActivity(IActivity activity, DateTimePeriod period)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void ClearPersonalActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void ClearMainActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void ClearOvertimeActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void CheckRestrictions()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual IRestrictionSet<IPersonAssignment> RestrictionSet { get; }
-
-        public virtual IProjectionService ProjectionService()
-        {
-            var proj = new VisualLayerProjectionService(Person);
-            if (hasProjection())
-            {
-                proj.Add(MainActivities(), new VisualLayerFactory());
-                var validPeriods = new HashSet<DateTimePeriod>(MainActivities().PeriodBlocks());
-                foreach (var overtimeLayer in OvertimeActivities())
-                {
-                    var overTimePeriod = overtimeLayer.Period;
-                    proj.Add(overtimeLayer, new VisualLayerOvertimeFactory());
-                    validPeriods.Add(overTimePeriod);
-                }
-                foreach (var personalLayer in PersonalActivities())
-                {
-                    if (validPeriods.Any(validPeriod => validPeriod.Intersect(personalLayer.Period) || validPeriod.AdjacentTo(personalLayer.Period)))
-                    {
-                        proj.Add(personalLayer, new VisualLayerFactory());
-                    }
-                }
-            }
-
-            return proj;
-        }
-
-        private bool hasProjection()
-        {
-            return MainActivities().Any() || OvertimeActivities().Any();
-        }
-
-        public virtual object Clone()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual IPersonAssignment NoneEntityClone()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual IPersonAssignment EntityClone()
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual IAggregateRoot MainRoot { get; }
-
-        public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDayOff DayOff()
-        {
-            return null;
-        }
-
-        public void SetDayOff(IDayOffTemplate template)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool AssignedWithDayOff(IDayOffTemplate template)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void FillWithDataFrom(IPersonAssignment newAss)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void AddActivity(IActivity activity, DateTimePeriod period)
-        {
-            AddActivity(activity, period, null);
-        }
-
-        public virtual void AddActivity(IActivity activity, TimePeriod period)
-        {
-            var periodAsDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(Date.Date.Add(period.StartTime),
-                Date.Date.Add(period.EndTime),
-                Person.PermissionInformation.DefaultTimeZone());
-            AddActivity(activity, periodAsDateTimePeriod);
-        }
-
-        public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo)
-        {
-            addActivityInternal(activity, period);
-
-        }
-
-        private void addActivityInternal(IActivity activity, DateTimePeriod period)
-        {
-            var layer = new MainShiftLayer(activity, period);
-            layer.SetId(Guid.NewGuid());
-            _shiftLayers.Add(layer);
-        }
-
-        public void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime,
-            TimeSpan length, TrackedCommandInfo trackedCommandInfo)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public virtual void SetShiftCategory(IShiftCategory shiftCategory)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertActivity(IActivity activity, DateTimePeriod period, int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index,
-            IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void MoveLayerVertical(IMoveLayerVertical target, IShiftLayer layer)
-        {
-            throw new NotImplementedException();
-        }
-
-        #region Equals
-
-        public bool Equals(IEntity other)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override bool Equals(object obj)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        public override int GetHashCode()
-        {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        public Guid? Id { get; }
-        public void SetId(Guid? newId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ClearId()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<IEvent> PopAllEvents(INow now)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IPerson UpdatedBy { get; }
-        public DateTime? UpdatedOn { get; }
-        public int? Version { get; }
-        public void SetVersion(int version)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DateTimePeriod Period { get; }
-    }
 }
