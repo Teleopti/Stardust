@@ -253,8 +253,7 @@
     <Compile Include="Container\ContainerConfiguration.cs" />
     <Compile Include="GeneralBusBootStrapper.cs" />
     <Compile Include="NotifyTeleoptiRtaServiceToCheckForActivityChange.cs" />
-    <Compile Include="LocalServiceBusEventPublisher.cs" />
-    <Compile Include="LocalServiceBusEventsPublisherModule.cs" />
+    <Compile Include="ServiceBusDelayedMessageSender.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="QueueClearMessages.cs" />

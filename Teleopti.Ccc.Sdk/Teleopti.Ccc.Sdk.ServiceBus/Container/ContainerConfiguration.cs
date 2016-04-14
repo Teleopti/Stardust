@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -54,11 +55,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterModule<SchedulingContainerInstaller>();
 			build.RegisterModule<ForecastContainerInstaller>();
 			build.RegisterModule<CommandDispatcherModule>();
-			build.RegisterModule<LocalServiceBusEventsPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterModule<IntraIntervalSolverServiceModule>();
-			
+
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();
 			build.RegisterType<RunningEtlJobChecker>().As<IRunningEtlJobChecker>();

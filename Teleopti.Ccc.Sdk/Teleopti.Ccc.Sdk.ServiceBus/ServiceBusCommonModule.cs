@@ -25,10 +25,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
-			
+
+			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
+			builder.RegisterType<ServiceBusDelayedMessageSender>().As<IDelayedMessageSender>().SingleInstance();
+
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().SingleInstance();
-			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>().SingleInstance();
 			builder.RegisterType<DeviceInfoProvider>().As<IDeviceInfoProvider>().SingleInstance();
 			registerDataSourcesFactoryDependencies(builder);
@@ -36,7 +38,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		private static void registerDataSourcesFactoryDependencies(ContainerBuilder builder)
 		{
-			builder.RegisterType<InternalServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 			builder.Register(c => DataSourceConfigurationSetter.ForServiceBus())
 				.As<IDataSourceConfigurationSetter>()

@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -63,6 +64,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
 			_sharedContainer = new ContainerBuilder().Build();
 			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
+			_sharedContainer.Resolve<IHangfireClientStarter>().Start();
+
 			if (toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
 			{
 				var nodeThread = new Thread(StartNode);
@@ -98,7 +101,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer)
 		{
 			var container = new ContainerBuilder().Build();
-				new ContainerConfiguration(container, toggleManager).Configure(sharedContainer);
+			new ContainerConfiguration(container, toggleManager).Configure(sharedContainer);
 			return container;
 		}
 
