@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldReturnDifferenceBetweenForecastedAndActualHandleTime()
+		public void ShouldReturnDifferenceBetweenForecastedAndActualAverageHandleTime()
 		{
 			IntradayMonitorDataLoader.AddInterval(_firstInterval);
 			IntradayMonitorDataLoader.AddInterval(_secondInterval);
@@ -241,11 +241,16 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
-			double allForecastedHandleTime = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
-			double allHandleTime = _firstInterval.HandleTime.Value + _secondInterval.HandleTime.Value;
-			var expectedDiff = Math.Abs(allForecastedHandleTime - allHandleTime) * 100 / allForecastedHandleTime;
+            double allForecastedCalls = _firstInterval.ForecastedCalls + _secondInterval.ForecastedCalls;
+            double allOfferedCalls = _firstInterval.OfferedCalls.Value + _secondInterval.OfferedCalls.Value;
+            double allForecastedHandleTime = _firstInterval.ForecastedHandleTime + _secondInterval.ForecastedHandleTime;
+            double allHandleTime = _firstInterval.HandleTime.Value + _secondInterval.HandleTime.Value;
+            double forecastedAverageHandleTime = allForecastedHandleTime / allForecastedCalls;
+            double actualAverageHandleTime = allHandleTime / allOfferedCalls;
+            
+            var expectedDiff = Math.Abs(forecastedAverageHandleTime - actualAverageHandleTime) * 100 / forecastedAverageHandleTime;
 
-			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(expectedDiff);
+            viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(expectedDiff);
 		}
 
 		[Test]
@@ -257,5 +262,27 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			viewModel.Summary.ForecastedActualHandleTimeDiff.Should().Be.EqualTo(-99);
 		}
+
+	    [Test]
+	    public void ShouldSetForecastedAverageHandleTimeToZeroWhenForecastedCallsAreZero()
+	    {
+	        _firstInterval.ForecastedCalls = 0;
+	        _secondInterval.ForecastedCalls = 0;
+
+	        var viewModel = Target.Load(new[] {Guid.NewGuid()});
+
+	        viewModel.Summary.ForecastedAverageHandleTime.Should().Be.EqualTo(0);
+	    }
+
+	    [Test]
+	    public void ShouldSetAverageHandleTimeToZeroWhenOfferedCallsAreZero()
+	    {
+	        _firstInterval.OfferedCalls = 0;
+	        _secondInterval.OfferedCalls = 0;
+
+	        var viewModel = Target.Load(new[] {Guid.NewGuid()});
+
+	        viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(0);
+	    }
 	}
 }

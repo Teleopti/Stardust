@@ -47,21 +47,25 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 				if (interval.OfferedCalls.HasValue)
 					latestQueueStatsIntervalId = interval.IntervalId;
-
 			}
 
-			summary.ForecastedAverageHandleTime = summary.ForecastedHandleTime / summary.ForecastedCalls;
-			summary.AverageHandleTime = summary.HandleTime / summary.OfferedCalls;
+			summary.ForecastedAverageHandleTime = Math.Abs(summary.ForecastedCalls) < 0.0001
+                ? 0 
+                : summary.ForecastedHandleTime / summary.ForecastedCalls;
+			summary.AverageHandleTime = Math.Abs(summary.OfferedCalls) < 0.0001 
+                ? 0 
+                : summary.HandleTime / summary.OfferedCalls;
 
 			summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
 				 ? -99
 				 : Math.Abs(summary.ForecastedCalls - summary.OfferedCalls) * 100 / summary.ForecastedCalls;
 
-			summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedHandleTime) < 0.0001
-				 ? -99
-				 : Math.Abs(summary.ForecastedHandleTime - summary.HandleTime) * 100 / summary.ForecastedHandleTime;
+		    summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedAverageHandleTime) < 0.0001
+		        ? -99
+		        : Math.Abs(summary.ForecastedAverageHandleTime - summary.AverageHandleTime)*100/
+		          summary.ForecastedAverageHandleTime;
 
-			return new MonitorDataViewModel()
+            return new MonitorDataViewModel()
 			{
 				LatestStatsTime = latestQueueStatsIntervalId == -1
 					? null
