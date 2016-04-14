@@ -17,6 +17,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	var alertvm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var currentTimeout = null;
 
 	function activityLayer(layer) {
 		var self = this;
@@ -225,9 +226,10 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 	function alertActivity() {
 		Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage);
-
 		// Restart alert after delayTime.
-		setTimeout(startAlert, alertvm.restartAlertDelayTime * 1000);
+
+		if (currentTimeout !== null) clearTimeout(currentTimeout);
+		currentTimeout = setTimeout(startAlert, alertvm.restartAlertDelayTime * 1000);
 	}
 
 	function startAlert() {
@@ -247,14 +249,17 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 			alertvm.alertMessage = alert.message;
 			alertvm.restartAlertDelayTime = delayTime;
-			setTimeout(alertActivity, interval * 1000);
+
+			if (currentTimeout !== null) clearTimeout(currentTimeout);
+			currentTimeout = setTimeout(alertActivity, interval * 1000);
 		} else {
 			// timespan in negative number means no schedule today or all activity finished.
 			// Then re-start alert when tomorrow comes.
 			var timeZeroTomorrow = moment(alertvm.getCurrentTime()).add('days', 1).startOf('day').toDate();
 			var intervalForTomorrowInSecond = (timeZeroTomorrow - alertvm.getCurrentTime()) / 1000;
 
-			setTimeout(function() {
+			if (currentTimeout !== null) clearTimeout(currentTimeout);
+			currentTimeout = setTimeout(function() {
 				initNotificationViewModel(options);
 				startAlert();
 			}, intervalForTomorrowInSecond * 1000);
@@ -265,6 +270,11 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		StartAlert: function (options) {
 			notifyOptions = options;
 			initNotificationViewModel(options);
+		},
+		RefreshAlert: function () {
+			if (notifyOptions) {
+				initNotificationViewModel(notifyOptions);
+			}			
 		},
 		AbortAjax: function() {
 			ajax.AbortAll();

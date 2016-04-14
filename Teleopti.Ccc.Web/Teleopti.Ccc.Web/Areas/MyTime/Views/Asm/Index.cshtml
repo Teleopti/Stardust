@@ -25,6 +25,7 @@
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
+				Teleopti.MyTimeWeb.AlertActivity.RefreshAlert();
 			});
 
 		Teleopti.MyTimeWeb.AlertActivity.StartAlert({
