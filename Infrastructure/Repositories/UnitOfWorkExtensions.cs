@@ -21,12 +21,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ((NHibernateStatelessUnitOfWork)statelessUnitOfWork).Session;
 		}
 
-		internal static ISession Session(this IUnitOfWork unitOfWok)
+		internal static ISession Session(this IUnitOfWork unitOfWork)
 		{
-			var application = unitOfWok as NHibernateUnitOfWork;
+			var application = unitOfWork as NHibernateUnitOfWork;
 			if (application != null)
 				return application.Session;
-			var analytics = unitOfWok as AnalyticsUnitOfWork;
+			var analytics = unitOfWork as AnalyticsUnitOfWork;
 			if (analytics != null)
 				return analytics.Session;
 			return null;
