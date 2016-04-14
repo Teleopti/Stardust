@@ -270,10 +270,16 @@
 								axis: {
 									y2: {
 										show: true,
-										label: 'AHT'
+										label: 'AHT',
+                                        tick: {
+                                            format: d3.format('.1f')
+                                        }
 									},
 									y:{
-										label: 'Calls'
+									    label: 'Calls',
+									    tick: {
+									        format: d3.format('.1f')
+									    }
 									},
 									x: {
 										label: 'interval',
