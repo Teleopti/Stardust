@@ -7,8 +7,10 @@ using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Proxy;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,7 +19,7 @@ using TransactionException = NHibernate.TransactionException;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public abstract class NHibernateUnitOfWork : IUnitOfWork
+	public class NHibernateUnitOfWork : IUnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Interceptor.Value.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				Interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
-				BlackSheep();	// <-----
+				BlackSheep();  // <----
 				Session.Flush();
 			}
 			catch (StaleStateException ex)
@@ -102,8 +104,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		protected virtual void BlackSheep()
+		protected void BlackSheep()
 		{
+			// this is a very bad idea
+			// the reason there is 2 flushes is because the first one catches any child, and the second one updates the roots version number
+			// changes here will just be included in the second flush, and therefor that behavior will not work for aggregates modified here!
+			// ---> this behavior belongs in the domain!
+			new SendPushMessageWhenRootAlteredService()
+				.SendPushMessages(
+					Interceptor.Value.ModifiedRoots,
+					new PushMessagePersister(
+						new PushMessageRepository(this),
+						new PushMessageDialogueRepository(this),
+						new CreatePushMessageDialoguesService()
+						));
 		}
 
 		public void AfterSuccessfulTx(Action func)

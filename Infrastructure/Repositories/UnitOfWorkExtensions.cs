@@ -23,7 +23,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		internal static ISession Session(this IUnitOfWork unitOfWok)
 		{
-			return ((NHibernateUnitOfWork) unitOfWok).Session;
+			var application = unitOfWok as NHibernateUnitOfWork;
+			if (application != null)
+				return application.Session;
+			var analytics = unitOfWok as AnalyticsUnitOfWork;
+			if (analytics != null)
+				return analytics.Session;
+			return null;
 		}
 	}
 }

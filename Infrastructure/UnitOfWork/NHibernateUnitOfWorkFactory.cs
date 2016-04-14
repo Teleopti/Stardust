@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
-			new ApplicationUnitOfWork(
+			new NHibernateUnitOfWork(
 				_context,
 				session,
 				isolationLevel,
