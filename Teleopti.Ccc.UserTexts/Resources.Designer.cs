@@ -10013,7 +10013,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not add activity for the selected agents.
+        ///   Looks up a localized string similar to Could not add any activities for the selected agents.
         /// </summary>
         public static string FailedMessageForAddingActivity {
             get {
@@ -17517,7 +17517,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permission to add intraday absences for {0}.
+        ///   Looks up a localized string similar to You do not have permission to add intraday absences for {0}.
         /// </summary>
         public static string NoPermisionAddIntradayAbsenceForAgent {
             get {
@@ -17526,7 +17526,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permission to add full day absences for {0}.
+        ///   Looks up a localized string similar to You do not have permission to add full day absences for {0}.
         /// </summary>
         public static string NoPermissionAddFullDayAbsenceForAgent {
             get {
@@ -17535,7 +17535,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have permission to modify absence..
+        ///   Looks up a localized string similar to You do not have permission to modify absences..
         /// </summary>
         public static string NoPermissionToModifyPersonAbsence {
             get {

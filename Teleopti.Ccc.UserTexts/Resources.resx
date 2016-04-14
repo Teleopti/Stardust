@@ -13979,15 +13979,15 @@ Reduce the complexity to use these shifts.</value>
     <comment>Tips after remove person absence in WFM team schedule</comment>
   </data>
   <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
-    <value>You don't have permission to add intraday absences for {0}</value>
+    <value>You do not have permission to add intraday absences for {0}</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add intraday absence for this agent.</comment>
   </data>
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
-    <value>You don't have permission to add full day absences for {0}</value>
+    <value>You do not have permission to add full day absences for {0}</value>
     <comment>use in WFM TeamSchedule, a hint message to user that who can only view an agent but cannot add full day absence for this agent.</comment>
   </data>
   <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
-    <value>You don't have permission to modify absence.</value>
+    <value>You do not have permission to modify absences.</value>
     <comment>use in WFM TeamSchedue, tell user he/she has no modify person permission when try to add absence.</comment>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
@@ -14227,7 +14227,7 @@ Help us improve your experience by sending an error report</value>
     <comment>The opposite to the NextDay</comment>
   </data>
   <data name="FailedMessageForAddingActivity" xml:space="preserve">
-    <value>Could not add activity for the selected agents</value>
+    <value>Could not add any activities for the selected agents</value>
     <comment>Failed message for adding activity in wfm/teamschedule</comment>
   </data>
   <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
