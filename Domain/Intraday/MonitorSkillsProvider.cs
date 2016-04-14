@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
 				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
 				offeredCallsSeries.Add(interval.OfferedCalls);
-				averageHandleTimeSeries.Add(interval.AverageHandleTime);
+				averageHandleTimeSeries.Add(interval.OfferedCalls.HasValue ? interval.AverageHandleTime : null);
 
 				if (interval.OfferedCalls.HasValue)
 					latestQueueStatsIntervalId = interval.IntervalId;

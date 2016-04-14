@@ -150,9 +150,35 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
+			viewModel.DataSeries.OfferedCalls.Length.Should().Be.EqualTo(3);
+			viewModel.DataSeries.OfferedCalls[1].Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldFillWithNullValueIfNoAverageHandleTime()
+		{
+			var thirdInterval = new IncomingIntervalModel()
+			{
+				IntervalId = 34,
+				ForecastedCalls = 12,
+				ForecastedHandleTime = 140,
+				OfferedCalls = 12,
+				HandleTime = 200
+			};
+			_secondInterval.OfferedCalls = null;
+			_secondInterval.HandleTime = null;
+			_secondInterval.AverageHandleTime = 0;
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntradayMonitorDataLoader.AddInterval(_secondInterval);
+			IntradayMonitorDataLoader.AddInterval(thirdInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(3);
 			viewModel.DataSeries.AverageHandleTime[1].Should().Be.EqualTo(null);
 		}
+
 
 		[Test]
 		public void ShouldReturnLatestStatsTime()

@@ -233,22 +233,28 @@
 							}
 						}
 
-
-
 						var loadIntradayChart = function() {
-							$scope.forecastedCallsSeries.splice(0,0,"Forcasted calls");
-							$scope.actualCallsSeries.splice(0,0,"Actual calls");
+							$scope.chartForecastedCalls = $scope.forecastedCallsSeries;
+
+							$scope.chartForecastedCalls.splice(0,0,"Forecasted_calls");
+							$scope.actualCallsSeries.splice(0,0,"Actual_calls");
 							$scope.forecastedAverageHandleTimeSeries.splice(0,0,"Forecasted_AHT");
 							$scope.actualAverageHandleTimeSeries.splice(0,0,"AHT");
 							c3.generate({
 								bindto: '#myChart',
 								data: {
 									columns: [
-										$scope.forecastedCallsSeries,
+										$scope.chartForecastedCalls,
 										$scope.actualCallsSeries,
 										$scope.forecastedAverageHandleTimeSeries,
 										$scope.actualAverageHandleTimeSeries
 									],
+									colors: {
+            				Forecasted_calls: 'blue',
+            				Actual_calls: 'cyan',
+            				Forecasted_AHT: 'tomato',
+										AHT: 'red',
+        					},
 									axes: {
 										AHT: 'y2',
 										Forecasted_AHT: 'y2'
