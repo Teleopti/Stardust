@@ -40,15 +40,15 @@ namespace Teleopti.Runtime.Environment
                 var isSuc = rsa.VerifyData(Encoding.UTF8.GetBytes(url), CryptoConfig.MapNameToOID("SHA1"), Convert.FromBase64String(signature));
                 if (isSuc)
                 {
-                    EO.WebBrowser.Runtime.AddLicense(
-									 "r6a3wN2vaqumsR70m7z8ARTxnurFBeihb6a3wN2vaq2msSHkq+rtABm8W6mm" +
-	 "sdq9RoGkscufdert+Bngrez29unlgd7aCeO2rdvbyf73adru6vjmbM/Vzui7" +
-	 "aOrt+Bngrez29umMQ7Oz/RTinuX39umMQ3Xj7fQQ7azcwp61n1mXpM0X6Jzc" +
-	 "8gQQyJ21usPdtG2vuMrgtHWm8PoO5Kfq6doPvUaBpLHLn3Xj7fQQ7azc6c/n" +
-	 "rqXg5/YZ8p7cwp61n1mXpM0M66Xm+8+4iVmXpLHLn1mXwPIP41nr/QEQvFu8" +
-	 "07/u56vm8fbNn6/c9gQU7qe0psLgrWmZpMDpjEOXpLHLu2jY8P0a9neEjrHL" +
-	 "n1mz8wMP5KvA8vcan53Y+PbooW8=");
-                    Application.Run(new MainForm(url));
+					EO.WebBrowser.Runtime.AddLicense(
+	"ewQU7qe0psLhrWmZpMDpjEOXpLHLu2jY8P0a9neEjrHLn1mz8wMP5KvA8vca" +
+	"n53Y+PbooW+mt8Ddr2qrprEe9Ju8/AEU8Z7qxQXooW+mt8Ddr2qtprEh5Kvq" +
+	"7QAZvFupprHavUaBpLHLn3Xq7fgZ4K3s9vbpz5DF/Qnas4LR0dP36WzPyNQQ" +
+	"127o+87ou2jq7fgZ4K3s9vbpjEOzs/0U4p7l9/bpjEN14+30EO2s3MKetZ9Z" +
+	"l6TNF+ic3PIEEMidtbrD3bRtr7jK4LR1pvD6DuSn6unaD71GgaSxy5914+30" +
+	"EO2s3OnP566l4Of2GfKe3MKetZ9Zl6TNDOul5vvPuIlZl6Sxy59Zl8DyD+NZ" +
+	"6/0BELxbvNO/7uer5vH2zZ+v3PY=");
+					Application.Run(new MainForm(url));
                 }
                 else
                 {
