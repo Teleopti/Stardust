@@ -24,6 +24,9 @@
 			themeStylesheet.setAttribute("id", "themeStylesheet");
 			themeStylesheet.setAttribute("href", "");
 			document.head.appendChild(themeStylesheet);
+			var checkBox = document.createElement("input");
+			checkBox.setAttribute("id","dark");
+			document.body.appendChild(checkBox);
 		};
 		var teardownTemplate = function() {
 			document.getElementById('themeModules').remove();

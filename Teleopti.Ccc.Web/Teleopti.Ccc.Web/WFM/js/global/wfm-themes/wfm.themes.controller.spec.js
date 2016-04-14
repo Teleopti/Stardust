@@ -14,7 +14,10 @@
 			scope = _$rootScope_.$new();
 			$rootScope = _$rootScope_;
 			$httpBackend = _$httpBackend_;
-
+			$httpBackend.expectGET("../api/Theme")
+				.respond(200, {
+					Name: "dark"
+				});
 			$httpBackend.whenGET("../ToggleHandler/AllToggles")
 				.respond(200, {
 					WfmGlobalLayout_personalOptions_37114: true
@@ -31,9 +34,11 @@
 
 		it('should save theme', inject(function(ThemeService) {
 			createController();
-   $httpBackend.expectPOST('../api/Theme/Change', {Name:'dark'}).respond(200, '');
 
-   ThemeService.saveTheme("dark");
+			$httpBackend.expectPOST('../api/Theme/Change', {
+				Name: 'dark'
+			}).respond(200, '');
+			ThemeService.saveTheme("dark");
 
 			$httpBackend.flush();
 		}));

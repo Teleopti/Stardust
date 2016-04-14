@@ -3,18 +3,33 @@
 	var themes = angular.module('wfm.themes', ['toggleService']);
 
 	themes.controller('themeController', [
-		'$scope', 'Toggle', 'ThemeService',
-		function($scope, Toggle, ThemeService) {
+		'$scope', 'Toggle', 'ThemeService', '$q',
+		function($scope, Toggle, ThemeService, $q) {
 			$scope.showOverlay = false;
-			$scope.darkTheme = false;
-			$scope.theme = undefined;
 			Toggle.togglesLoaded.then(function() {
 				$scope.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
 			});
 
+
 			var focusMenu = function() {
 				document.getElementById("themeMenu").focus();
-			}
+			};
+
+			checkThemeState().then(function(result) {
+				if (result.data.Name === "dark") {
+					$scope.darkTheme = true;
+				} else {
+					$scope.darkTheme = false;
+				}
+			});
+
+			function checkThemeState() {
+				var deferred = $q.defer();
+				ThemeService.getTheme().then(function(response) {
+					deferred.resolve(response);
+				});
+				return deferred.promise;
+			};
 
 			$scope.toggleOverlay = function() {
 				$scope.showOverlay = !$scope.showOverlay;
@@ -22,13 +37,12 @@
 			};
 
 			var replaceCurrentTheme = function(theme) {
-					ThemeService.setTheme(theme);
-					ThemeService.saveTheme(theme);
+				ThemeService.setTheme(theme);
+				ThemeService.saveTheme(theme);
 			};
 
 			$scope.toggleDarkTheme = function() {
 				focusMenu();
-				var theme = 'classic';
 				if ($scope.darkTheme) {
 					replaceCurrentTheme('classic');
 				} else {
