@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -551,6 +552,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
 				new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 14));
+			pa.ShiftLayers.ForEach(l => l.WithId());
 
 			scheduleDay.Add(pa);
 			ScheduleProvider.AddScheduleDay(scheduleDay);
