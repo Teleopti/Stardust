@@ -547,7 +547,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			PeopleSearchProvider.Add(person);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
-			var pa = PersonAssignmentFactory.CreatePersonAssignmentWithId(person,scenario, new DateOnly(scheduleDate));
+			var pa = PersonAssignmentFactory.CreatePersonAssignment(person,scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
 				new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", new Color()),
