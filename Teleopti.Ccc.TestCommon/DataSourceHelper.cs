@@ -5,6 +5,7 @@ using System.IO;
 using Newtonsoft.Json;
 using NHibernate.Dialect;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
@@ -192,7 +193,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static IDataSource makeDataSource(ICurrentTransactionHooks transactionHooks, string name)
 		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), transactionHooks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), transactionHooks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), CurrentTeleoptiPrincipal.Make());
 			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
 			return dataSourceFactory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
 		}

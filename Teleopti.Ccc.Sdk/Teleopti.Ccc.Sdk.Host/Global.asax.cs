@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Hangfire;
@@ -164,7 +165,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				new EnversConfiguration(),
 				c.Resolve<ICurrentTransactionHooks>(),
 				DataSourceConfigurationSetter.ForSdk(),
-				new CurrentHttpContext()
+				new CurrentHttpContext(),
+				CurrentTeleoptiPrincipal.Make()
 				)).As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 		}

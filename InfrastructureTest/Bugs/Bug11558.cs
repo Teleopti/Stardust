@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
         [SetUp]
         public void Setup()
         {
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), CurrentTeleoptiPrincipal.Make());
             dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ConnectionString, 1),
 								  InfraTestConfigReader.AnalyticsConnectionString);
         }

@@ -15,18 +15,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly UnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
+		private readonly ICurrentTeleoptiPrincipal _principal;
 
 		protected internal NHibernateUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			IAuditSetter auditSettingProvider,
 			string connectionString,
-			ICurrentTransactionHooks transactionHooks)
+			ICurrentTransactionHooks transactionHooks,
+			ICurrentTeleoptiPrincipal principal)
 		{
 			ConnectionString = connectionString;
 			_context = new UnitOfWorkContext(sessionFactory);
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
+			_principal = principal;
 		}
 
 		public string Name
@@ -95,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private IUnitOfWork createAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel, IQueryFilter businessUnitFilter)
 		{
 			var businessUnitId = getBusinessUnitId();
-			var session = _factory.OpenSession(new AggregateRootInterceptor());
+			var session = _factory.OpenSession(new AggregateRootInterceptor(_principal));
 
 			businessUnitFilter.Enable(session, businessUnitId);
 			QueryFilter.Deleted.Enable(session, null);

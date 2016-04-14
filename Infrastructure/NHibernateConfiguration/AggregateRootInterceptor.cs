@@ -4,7 +4,6 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Collection;
 using NHibernate.Type;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	/// </summary>
 	public class AggregateRootInterceptor : EmptyInterceptor
 	{
+		private readonly ICurrentTeleoptiPrincipal _principal;
 		private const string createdByPropertyName = "CREATEDBY";
 		private const string createdOnPropertyName = "CREATEDON";
 		private const string updatedByPropertyName = "UPDATEDBY";
@@ -26,8 +26,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private readonly VersionStateRollbackInterceptor _entityStateRollbackInterceptor = new VersionStateRollbackInterceptor();
 
-		public AggregateRootInterceptor()
+		public AggregateRootInterceptor(ICurrentTeleoptiPrincipal principal)
 		{
+			_principal = principal;
 			Iteration = InterceptorIteration.Normal;
 		}
 
@@ -214,7 +215,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForInsert(propertyNames);
-				state[props[createdByPropertyName]] = ((IUnsafePerson)ServiceLocatorForEntity.CurrentTeleoptiPrincipal.Current()).Person;
+				state[props[createdByPropertyName]] = ((IUnsafePerson)_principal.Current()).Person;
 				state[props[createdOnPropertyName]] = nu;
 				return true;
 			}
@@ -236,13 +237,13 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 		}
 
-		private static bool setUpdatedProperties(object root, IEnumerable<string> propertyNames, object[] currentState)
+		private bool setUpdatedProperties(object root, IEnumerable<string> propertyNames, object[] currentState)
 		{
 			if (root is IChangeInfo)
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForUpdate(propertyNames);
-				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)ServiceLocatorForEntity.CurrentTeleoptiPrincipal.Current()).Person;
+				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)_principal.Current()).Person;
 				currentState[props[updatedOnPropertyName]] = nu;
 				return true;
 			}

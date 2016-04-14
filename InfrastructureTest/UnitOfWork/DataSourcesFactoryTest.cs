@@ -5,6 +5,7 @@ using NHibernate.Transaction;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = new DataSourcesFactory(enversConfiguration, new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext());
+			target = new DataSourcesFactory(enversConfiguration, new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), CurrentTeleoptiPrincipal.Make());
 		}
 
 		[Test]

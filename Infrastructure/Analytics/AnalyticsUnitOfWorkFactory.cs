@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		{
 			new AnalyticsUnitOfWork(
 				_context,
-				_factory.OpenSession(new AggregateRootInterceptor())
+				_factory.OpenSession()
 				);
 
 			return CurrentUnitOfWork();

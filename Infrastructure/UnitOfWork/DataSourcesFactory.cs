@@ -5,6 +5,7 @@ using NHibernate.Dialect;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
+		private readonly ICurrentTeleoptiPrincipal _principal;
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
@@ -27,12 +29,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnversConfiguration enversConfiguration,
 			ICurrentTransactionHooks transactionHooks,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
-			ICurrentHttpContext httpContext)
+			ICurrentHttpContext httpContext,
+			ICurrentTeleoptiPrincipal principal)
 		{
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
+			_principal = principal;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -66,9 +70,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var sessionFactory = buildSessionFactory(appConfig);
 			var appFactory = new NHibernateUnitOfWorkFactory(
 				sessionFactory,
-				_enversConfiguration.AuditSettingProvider, 
+				_enversConfiguration.AuditSettingProvider,
 				applicationConnectionString,
-				_transactionHooks);
+				_transactionHooks,
+				_principal
+				);
 
 			AnalyticsUnitOfWorkFactory statFactory = null;
 			if (!string.IsNullOrEmpty(statisticConnectionString))
