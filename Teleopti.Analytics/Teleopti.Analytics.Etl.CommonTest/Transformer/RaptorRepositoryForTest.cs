@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Reflection;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -780,7 +781,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<Guid> GetAllPersonCodes()
+		public IEnumerable<WindowsLogonInfo> GetWindowsLogonInfos()
 		{
 			throw new NotImplementedException();
 		}
