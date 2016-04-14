@@ -39,17 +39,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		{
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				var period = new DateOnlyPeriod(new DateOnly(message.PeriodStart), new DateOnly(message.PeriodEnd));
 				var jobResult = _jobResultRepository.Get(message.JobId);
 
 				_feedback.SetJobResult(jobResult, _messageBroker);
 				_feedback.Info(string.Format(CultureInfo.InvariantCulture, "Export forecasts to target skills for skill {0} period {1}.",
-				                             message.MultisiteSkillSelections.MultisiteSkillId, message.Period));
+				                             message.MultisiteSkillSelections.MultisiteSkillId, period));
 				_feedback.Info(string.Format(CultureInfo.InvariantCulture,
 				                             "Incoming number of child skills for multisite skill {0}: {1}.", message.MultisiteSkillSelections.MultisiteSkillId,
 				                             message.MultisiteSkillSelections.ChildSkillSelections.Count()));
 			    var multisteSkill = (IMultisiteSkill) _skillRepository.Get(message.MultisiteSkillSelections.MultisiteSkillId);
                 _feedback.ReportProgress(1,string.Format(CultureInfo.InvariantCulture, "Export forecasts to target skills for skill {0} period {1}.",
-				                                       multisteSkill.Name, message.Period));
+				                                       multisteSkill.Name, period));
 
 				using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
 				{
@@ -117,8 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				                          	});
 			}
 			selections.Add(export);
-
-		    var selection = new SkillExportSelection(selections) {Period = message.Period};
+			var selection = new SkillExportSelection(selections) {Period = new DateOnlyPeriod(new DateOnly(message.PeriodStart), new DateOnly(message.PeriodEnd)) };
 		    return selection;
 		}
 	}

@@ -1408,7 +1408,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 								using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 								{
 									var jobResultRep = new JobResultRepository(uow);
-									var period = message.Period;
+									var period = new DateOnlyPeriod(new DateOnly( message.PeriodStart),new DateOnly(message.PeriodEnd));
 									var jobResult = new JobResult(JobCategory.MultisiteExport, period,
 																			((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person, DateTime.UtcNow);
 									jobResultRep.Add(jobResult);

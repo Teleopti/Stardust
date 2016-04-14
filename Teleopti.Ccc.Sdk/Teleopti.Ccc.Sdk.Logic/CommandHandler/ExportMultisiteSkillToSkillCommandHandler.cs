@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                           ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
                                               Guid.Empty),
                                               JobId = jobId,
-                                      Period = period
+                                      PeriodStart = period.StartDate.Date,
+									  PeriodEnd = period.EndDate.Date
                                   };
 	            foreach (var multisiteSkillSelection in command.MultisiteSkillSelection)
                 {

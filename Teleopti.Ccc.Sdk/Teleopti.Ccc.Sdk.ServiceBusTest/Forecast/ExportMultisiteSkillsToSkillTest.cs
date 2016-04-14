@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -60,7 +57,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			using (mocks.Playback())
 			{
 				var message = new ExportMultisiteSkillsToSkill { JobId = jobId };
-				message.Period = period;
+				message.PeriodStart = period.StartDate.Date;
+				message.PeriodEnd = period.EndDate.Date;
 				message.MultisiteSkillSelections.Add(new MultisiteSkillSelection { MultisiteSkillId = firstMultisiteId });
 				message.MultisiteSkillSelections.Add(new MultisiteSkillSelection { MultisiteSkillId = secondMultisiteId });
 				target.Consume(message);

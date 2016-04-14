@@ -25,7 +25,8 @@ namespace Teleopti.Interfaces.Messages.General
 		///<summary>
 		/// The period to export in the source skills time zone.
 		///</summary>
-		public DateOnlyPeriod Period { get; set; }
+		public DateTime PeriodStart { get; set; }
+		public DateTime PeriodEnd { get; set; }
 
 		///<summary>
 		/// The selection of data to export for multisite skills.
