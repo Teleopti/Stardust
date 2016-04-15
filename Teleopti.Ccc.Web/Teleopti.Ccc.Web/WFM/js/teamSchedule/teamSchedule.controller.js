@@ -391,7 +391,7 @@
 			}
 			vm.permissionsAndTogglesLoaded = true;
 
-			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled;
+			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled || vm.toggles.RemoveActivityEnabled || vm.toggles.RemoveAbsenceEnabled || vm.toggles.SwapShiftEnabled;
 		};
 		$q.all([
 			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
