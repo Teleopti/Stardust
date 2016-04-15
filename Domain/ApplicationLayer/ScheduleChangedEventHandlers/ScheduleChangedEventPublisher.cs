@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<DayOffAddedEvent>,
 		IHandleEvent<DayUnscheduledEvent>,
 		IHandleEvent<PersonAssignmentLayerRemovedEvent>,
-		IRunOnHangfire
+		IRunOnServiceBus
 	{
 		private readonly IEventPublisher _publisher;
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 		public void Handle(PersonAssignmentLayerRemovedEvent @event)
 		{
-			_publisher.Publish(new ScheduleChangedEvent
+			_publisher.Publish ( new ScheduleChangedEvent
 			{
 				Timestamp = @event.Timestamp,
 				LogOnDatasource = @event.LogOnDatasource,
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				EndDateTime = @event.EndDateTime,
 				InitiatorId = @event.InitiatorId,
 				CommandId = @event.CommandId
-			});
+			} );
 		}
 	}
 }

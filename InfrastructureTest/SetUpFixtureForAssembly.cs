@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -51,8 +50,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), null);
-
-			container.Resolve<IHangfireClientStarter>().Start();
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
