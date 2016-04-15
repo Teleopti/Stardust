@@ -57,8 +57,7 @@
 				$scope.agentDetailsUrl = function(personId) {
 					return RtaRouteService.urlForAgentDetails(personId);
 				};
-
-				$scope.$watch('agents', filterData, true);
+			
 				$scope.$watch('filterText', filterData);
 				$scope.$watch('agentsInAlarm', function(newValue, oldValue) {
 					if (newValue !== oldValue) {
@@ -108,6 +107,7 @@
 					.then(function(agentsInfo) {
 						$scope.agentsInfo = agentsInfo;
 						$scope.agents = agentsInfo;
+						$scope.$watchCollection('agents', filterData);
 						updateBreadCrumb(agentsInfo);
 					})
 					.then(updateStates);

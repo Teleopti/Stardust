@@ -150,3 +150,29 @@ Scenario: See schedule updates
 		| Field    | Value        |
 		| Name     | Pierre Baldi |
 		| Activity | Phone        |
+
+
+Scenario: See agent status when call center is in Istanbul
+	Given I am located in Istanbul
+	And 'Pierre Baldi' is located in Istanbul
+	And Pierre Baldi has a shift with
+	| Field                    | Value            |
+	| Start time               | 2015-03-24 08:00 |
+	| End time                 | 2015-03-24 10:00 |
+	| Activity                 | Phone            |
+	| Next activity            | Lunch            |
+	| Next activity start time | 2015-03-24 10:00 |
+	| Next activity end time   | 2015-03-24 10:30 |
+	When the utc time is '2015-03-24 06:00:00'
+	And 'Pierre Baldi' sets his phone state to 'Ready'
+	And the utc time is '2015-03-24 07:00:00'
+	And I view real time adherence for all agents on team 'Red'
+	Then I should see agent status
+		| Field                    | Value        |
+		| Name                     | Pierre Baldi |
+		| State                    | Ready        |
+		| Next activity start time | 10:00        |
+		| Alarm                    | Adhering     |
+		| Alarm Time               | 1:00:00      |
+		| Alarm Color              | Green        |
+
