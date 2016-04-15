@@ -321,11 +321,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998))
 			{
-				builder.RegisterType<ScheduleOptimizationTeamBlock>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
+				builder.RegisterType<ScheduleOptimizationTeamBlock>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DayOffOptimizationDesktopTeamBlock>().As<IDayOffOptimizationDesktop>().InstancePerLifetimeScope();
 			}
 			else
 			{
-				builder.RegisterType<ScheduleOptimization>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
+				builder.RegisterType<ScheduleOptimization>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DayOffOptimizationDesktopClassic>().As<IDayOffOptimizationDesktop>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects(); //should be singleinstance but not yet possible
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();

@@ -5,7 +5,6 @@ using Autofac;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -40,8 +38,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
 		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
-		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
+		private readonly IDayOffOptimizationDesktop _dayOffOptimizationDesktop;
 
 
 		public ScheduleOptimizerHelper(ILifetimeScope container, OptimizerHelperHelper optimizerHelper,
@@ -62,8 +59,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 			_resourceCalculationContextFactory = _container.Resolve<ResourceCalculationContextFactory>();
-			_teamBlockDayOffOptimizerService = _container.Resolve<ITeamBlockDayOffOptimizerService>();
-			_groupPersonBuilderWrapper = _container.Resolve<IGroupPersonBuilderWrapper>();
+			_dayOffOptimizationDesktop = _container.Resolve<IDayOffOptimizationDesktop>();
 		}
 
 		private void optimizeWorkShifts(
@@ -106,44 +102,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			service.ReportProgress += resourceOptimizerPersonOptimized;
 			service.Execute();
 			service.ReportProgress -= resourceOptimizerPersonOptimized;
-		}
-
-		private void classicDaysOffOptimization(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
-												DateOnlyPeriod selectedPeriod, 
-												ISchedulingProgress schedulingProgress, 
-												IOptimizationPreferences optimizationPreferences, 
-												IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
-		{
-			var classicDaysOffOptimizationCommand = _container.Resolve<ClassicDaysOffOptimizationCommand>();
-			classicDaysOffOptimizationCommand.Execute(matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod,
-				optimizationPreferences, schedulingProgress, dayOffOptimizationPreferenceProvider);
-		}
-
-		private void runTeamBlockDaysOffOptimization(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
-													DateOnlyPeriod selectedPeriod,
-													ISchedulingProgress backgroundWorker,
-													IOptimizationPreferences optimizerPreferences,
-													IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider
-													)
-		{
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
-			var matrixListForDayOffOptimization = matrixOriginalStateContainerListForDayOffOptimization.Select(container => container.ScheduleMatrix).ToList();
-			var selectedPersons = matrixListForDayOffOptimization.Select(matrixList => matrixList.Person).Distinct().ToList();
-
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
-			_groupPersonBuilderWrapper.Reset();
-			_groupPersonBuilderWrapper.SetSingleAgentTeam();
-			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
-
-			_teamBlockDayOffOptimizerService.OptimizeDaysOff(matrixListForDayOffOptimization,
-				selectedPeriod,
-				selectedPersons,
-				optimizerPreferences,
-				schedulingOptions,
-				resourceCalculateDelayer,
-				dayOffOptimizationPreferenceProvider,
-				teamInfoFactory,
-				backgroundWorker);
 		}
 
 		public IWorkShiftFinderResultHolder WorkShiftFinderResultHolder
@@ -647,15 +605,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						false);
 				}
 			}
-		
-			classicDaysOffOptimization(validMatrixContainerList, selectedPeriod, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider);
 
-
-			//runTeamBlockDaysOffOptimization(validMatrixContainerList,
-			//								selectedPeriod,
-			//								_backgroundWorker,
-			//								optimizerPreferences,
-			//								dayOffOptimizationPreferenceProvider);
+			_dayOffOptimizationDesktop.Execute(validMatrixContainerList, selectedPeriod, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider);
 			
 			foreach (IScheduleMatrixOriginalStateContainer matrixContainer in validMatrixContainerList)
 			{

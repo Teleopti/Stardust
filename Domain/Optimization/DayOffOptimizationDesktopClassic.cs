@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationDesktopClassic : IDayOffOptimizationDesktop
 	{

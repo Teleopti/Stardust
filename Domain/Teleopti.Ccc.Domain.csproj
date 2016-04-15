@@ -221,7 +221,10 @@
     <Compile Include="DayOffPlanning\PeopleInOrganization.cs" />
     <Compile Include="ExceptionExtensions.cs" />
     <Compile Include="Intraday\IncomingIntervalModel.cs" />
+    <Compile Include="Optimization\DayOffOptimizationDesktopClassic.cs" />
+    <Compile Include="Optimization\DayOffOptimizationDesktopTeamBlock.cs" />
     <Compile Include="Optimization\ICurrentIntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\IDayOffOptimizationDesktop.cs" />
     <Compile Include="Optimization\IntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\IOptimizationPreferencesProvider.cs" />
     <Compile Include="ApplicationLayer\Events\GroupPageCollectionChangedEvent.cs" />

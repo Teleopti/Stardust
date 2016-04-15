@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationDesktopTeamBlock : IDayOffOptimizationDesktop
 	{
