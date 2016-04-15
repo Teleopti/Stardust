@@ -19,11 +19,14 @@ namespace Teleopti.Ccc.Web.Loadtest
 		private void GetReportsPage(Guid reportId)
 		{
 			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("Reporting/Report/{0}#{0}", reportId));
-			var response = HttpClient.SendAsync(message).GetAwaiter().GetResult();
+			var response = HttpClient.SendAsync(message).Result;
 			if (!response.IsSuccessStatusCode)
 			{
 				throw new Exception("Unable to go to Reports");
 			}
-	}
+			var content = response.Content.ReadAsStringAsync().Result;
+			if (!content.Contains("<iframe"))
+				throw new Exception("Unable to go to Reports");
+		}	
 	}
 }

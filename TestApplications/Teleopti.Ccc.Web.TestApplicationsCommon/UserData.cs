@@ -31,5 +31,16 @@ namespace Teleopti.Ccc.Web.TestApplicationsCommon
 			new UserData {Username = "co", Password = "co"},
 			new UserData {Username = "lk", Password = "lk"}
 		};
+
+
+		public static List<UserData> GenerateTestUsers(int number)
+		{
+			var testUsers = new List<UserData>();
+			for (var i = 1; i <= number; i++)
+			{
+				testUsers.Add(new UserData {Username = i.ToString(), Password = i.ToString()});
+			}
+			return testUsers;
+		}
 	}
 }

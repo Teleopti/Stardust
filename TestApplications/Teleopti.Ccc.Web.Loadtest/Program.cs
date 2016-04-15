@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Threading.Tasks;
 using Teleopti.Ccc.Web.TestApplicationsCommon;
 
 namespace Teleopti.Ccc.Web.Loadtest
 {
 	class Program
 	{
-		private static object Lock = new object();
 		static void Main(string[] args)
 		{
 			RunReportsTest();
@@ -19,23 +16,16 @@ namespace Teleopti.Ccc.Web.Loadtest
 		{
 			var baseUrl = ConfigurationManager.AppSettings["BaseUrl"];
 			var businessUnitName = ConfigurationManager.AppSettings["BusinessUnitName"];
-			double totalElapsedMilliseconds = 0;
-
-			Task.WaitAll(UserData.TestUsers.Select(user => Task.Run(() =>
-			{
-				using (var trafficSimulator = new SimulateReportsTraffic())
-				{
-					trafficSimulator.Start(baseUrl, businessUnitName, user.Username, user.Password);
-					var timeTaken = trafficSimulator.GoToReportsController();
-					lock (Lock)
-					{
-						totalElapsedMilliseconds += timeTaken.TotalMilliseconds;
-					}
-				}
-			})).ToArray());
-			Console.WriteLine("Total milliseconds spend loading reports: {0}", totalElapsedMilliseconds);
-			Console.WriteLine("Total users loading reports: {0}", UserData.TestUsers.Count);
-			Console.WriteLine("Average: {0}", totalElapsedMilliseconds / UserData.TestUsers.Count);
+			var users = UserData.GenerateTestUsers(100);
+			var reportsTest = new LoadReportsTest(baseUrl, businessUnitName);
+			var result = reportsTest.RunAsync(users, 100).Result;
+			var loginTotalElapsedMilliseconds = result.Sum(x => x.Logon);
+			var totalElapsedMilliseconds = result.Sum(x => x.Reports);
+			Console.WriteLine("Total users: {0}", users.Count);
+			Console.WriteLine("Total spend logging in: {0} ms", loginTotalElapsedMilliseconds);
+			Console.WriteLine("Average/login: {0} ms", loginTotalElapsedMilliseconds / users.Count);
+			Console.WriteLine("Total spend loading reports: {0} ms", totalElapsedMilliseconds);
+			Console.WriteLine("Average/report: {0} ms", totalElapsedMilliseconds / users.Count);
 			Console.ReadKey();
 		}
 	}
