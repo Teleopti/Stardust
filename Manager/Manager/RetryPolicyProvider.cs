@@ -5,8 +5,8 @@ namespace Stardust.Manager
 {
 	public class RetryPolicyProvider
 	{
-		private const int DelaysSeconds = 3;
-		private const int MaxRetry = 20; 
+		private const int DelaysSeconds = 1;
+		private const int MaxRetry = 150; 
 		private const int DelaysMilisecondsTimeout = 500;
 		private const int MaxRetryTimeout = 1;
 
