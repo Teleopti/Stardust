@@ -1,27 +1,36 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using System.Threading;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class ServiceBusAsSyncEventPublisher : IEventPublisher
 	{
-		private readonly ResolveEventHandlers _resolver;
-		private readonly CommonEventProcessor _processor;
+		private readonly ServiceBusEventProcessor _processor;
 
-		public ServiceBusAsSyncEventPublisher(
-			ResolveEventHandlers resolver, 
-			CommonEventProcessor processor)
+		public ServiceBusAsSyncEventPublisher(ServiceBusEventProcessor processor)
 		{
-			_resolver = resolver;
 			_processor = processor;
 		}
 
 		public void Publish(params IEvent[] events)
 		{
 			foreach (var @event in events)
-				foreach (var handlerType in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
-					_processor.Process(@event, handlerType);
+			{
+				var thread = new Thread(() =>
+				{
+					ProcessLikeTheBus(@event);
+				});
+				thread.Start();
+				thread.Join();
+			}
+		}
+
+		[AsSystem]
+		protected virtual void ProcessLikeTheBus(IEvent @event)
+		{
+			_processor.Process(@event);
 		}
 	}
 }
