@@ -1,10 +1,10 @@
 ﻿<table class="table" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule">
 	<thead>
 		<tr class="person">
-			<th class="person-name person-name-column" ng-click="vm.toggleAllSelectionInCurrentPage()">
+			<th class="person-name person-name-column" >
 				<div class="wfm-checkbox" ng-if="vm.selectMode">
 					<label>
-						<input type="checkbox" ng-checked="vm.isAllInCurrentPageSelected()" ng-click="vm.toggleAllSelectionInCurrentPage()">
+						<input type="checkbox" ng-model="vm.toggleAllInCurrentPage" ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
 						<span class="wfm-checkbox-toggle"></span>
 						<span class="wfm-checkbox-label person-name nowrap">{{'AgentName' | translate}}</span>
 					</label>
@@ -19,10 +19,10 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules">
-			<td class="person-name person-name-column" ng-click="vm.updatePersonIdSelection(personSchedule)">
+			<td class="person-name person-name-column" ng-click="">
 				<div class="wfm-checkbox" ng-show="vm.selectMode">
 					<label>
-						<input type="checkbox" ng-checked="vm.isPersonSelected(personSchedule)" ng-click="vm.updatePersonIdSelection(personSchedule)">
+						<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonSelection(personSchedule)">
 						<span class="wfm-checkbox-toggle"></span>
 						<span class="wfm-checkbox-label person-name nowrap">{{personSchedule.Name}}</span>
 					</label>

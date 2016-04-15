@@ -8,21 +8,22 @@
 		return {
 			restrict: 'E',
 			scope: {
-				selectedAgents: '&',
 				selectedDate: '&',
 				actionsAfterActivityApply: '&?',
 				defaultStart: '&?'
 			},
 			templateUrl: 'js/teamSchedule/html/addActivityPanel.tpl.html',
-			controller: ['ActivityService', 'guidgenerator', 'CommandCommon', addActivityCtrl],
+			controller: ['ActivityService', 'guidgenerator', 'CommandCommon', 'PersonSelection', addActivityCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function addActivityCtrl(ActivityService, guidgenerator, CommandCommon) {
+	function addActivityCtrl(ActivityService, guidgenerator, CommandCommon, personSelectionSvc) {
 		var vm = this;
 		var startTimeMoment;
+		
+		init();
 	
 		if (vm.defaultStart) {
 			startTimeMoment = moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart());
@@ -53,7 +54,7 @@
 			var ret = true;
 			if (vm.timeRange == undefined || vm.selectedActivityId == undefined)
 				return ret;
-			angular.forEach(vm.selectedAgents(), function(schedule) {
+			angular.forEach(vm.selectedAgents, function(schedule) {
 				var isAllowed = isNewActivityAllowed(vm.timeRange.startTime, schedule.scheduleEndTime);
 				if (isAllowed != undefined && !isAllowed) {
 					ret = false;
@@ -73,13 +74,13 @@
 			}
 			var mActivityStart = moment(activityStart);
 			var mScheduleEnd = moment(scheduleEnd);
-			return!vm.isNextDay || (vm.isNextDay && mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart)));
+			return !vm.isNextDay || (vm.isNextDay && mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart)));
 		}
 				
 		function addActivity() {
 			var trackId = guidgenerator.newGuid();
 			ActivityService.addActivity({
-				PersonIds: vm.selectedAgents().map(function(agent) { return agent.personId; }),
+				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
 				BelongsToDate: vm.selectedDate(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DD HH:mm"),
@@ -89,7 +90,7 @@
 				if (vm.actionsAfterActivityApply) {
 					vm.actionsAfterActivityApply({
 						result: { TrackId: trackId},
-						personIds: vm.selectedAgents().map(function (agent) { return agent.personId; }),
+						personIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
 						successMessageTemplate: 'SuccessfulMessageForAddingActivity',
 						failMessageTemplate: ''
 					});
@@ -98,12 +99,16 @@
 				if (vm.actionsAfterActivityApply) {
 					vm.actionsAfterActivityApply({
 						result: { TrackId: trackId, Errors: error },
-						personIds: vm.selectedAgents().map(function (agent) { return agent.personId; }),
+						personIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
 						successMessageTemplate: '',
 						failMessageTemplate: 'FailedMessageForAddingActivity'
 					});
 				}
 			});
+		}
+		
+		function init() {
+			vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
 		}
 	}
 })();

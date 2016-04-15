@@ -3,7 +3,7 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['Toggle', scheduleTableController]);
+		.controller('scheduleTableCtrl', ['Toggle','PersonSelection','$scope', scheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
@@ -21,28 +21,22 @@
 		};
 	};
 
-	function scheduleTableController(toggleSvc) {
+	function scheduleTableController(toggleSvc, personSelectionSvc, $scope) {
 		var vm = this;
-
-		vm.toggleAllSelectionInCurrentPage = function () {
-			var isAllSelected = vm.isAllInCurrentPageSelected();
-
+		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
-				vm.personSelection[personSchedule.PersonId].isSelected = !isAllSelected;
+				personSchedule.IsSelected = isAllSelected;
+				$scope.$evalAsync(function(){
+					vm.updatePersonSelection(personSchedule);
+				});
 			});
+			
 		};
-
-		vm.updatePersonIdSelection = function (person) {
-			vm.personSelection[person.PersonId].isSelected = !vm.personSelection[person.PersonId].isSelected;
-		};
-
-		var getSelectedPersonIndex = function(personId) {
-			for (var i = 0; i < vm.selectedPersonProjections.length; i++) {
-				if (vm.selectedPersonProjections[i].PersonId === personId) {
-					return i;
-				}
-			};
-			return -1;
+		
+		vm.updatePersonSelection = function (personSchedule) {
+			personSelectionSvc.updatePersonSelection(personSchedule);
+			personSelectionSvc.toggleAllPersonProjections(personSchedule);
+			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 		};
 
 		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shiftDate) {
@@ -56,53 +50,21 @@
 
 			currentProjection.ToggleSelection();
 
-			var selected = currentProjection.Selected;
-			var selectedPersonAbsencesLocal = [],
-				selectedPersonActivitiesLocal = [];
-			angular.forEach(personSchedule.Shifts, function(shift) {
-				angular.forEach(shift.Projections, function (projection) {
-					
-					var isPersonAbsenceValid = projection.ParentPersonAbsence != undefined && currentProjection.ParentPersonAbsence != undefined;
-					var isPersonActivityValid = projection.ShiftLayerId != undefined && currentProjection.ShiftLayerId != undefined;
-					if ((isPersonAbsenceValid && projection.ParentPersonAbsence === currentProjection.ParentPersonAbsence) || (isPersonActivityValid && projection.ShiftLayerId === currentProjection.ShiftLayerId)) {
-						projection.Selected = selected;
-					}
-					if (projection.Selected && projection.ParentPersonAbsence != undefined && selectedPersonAbsencesLocal.indexOf(projection.ParentPersonAbsence) === -1)
-						selectedPersonAbsencesLocal.push(projection.ParentPersonAbsence);
-
-					if (projection.Selected && projection.ShiftLayerId != undefined && selectedPersonActivitiesLocal.indexOf(projection.ShiftLayerId) === -1)
-					    selectedPersonActivitiesLocal.push(projection.ShiftLayerId);
-				});
-			});
-
-			var personId = personSchedule.PersonId;
-			var personIndex = getSelectedPersonIndex(personId);
-			var data;
-			if (selectedPersonAbsencesLocal.length === 0 && selectedPersonActivitiesLocal.length === 0) {
-					vm.selectedPersonProjections.splice(personIndex, 1);
-			}
-			else {
-				data = {
-					PersonId: personId,
-					SelectedPersonAbsences: selectedPersonAbsencesLocal,
-					SelectedPersonActivities: selectedPersonActivitiesLocal
-				};
-				if (personIndex > -1) {
-					vm.selectedPersonProjections[personIndex] = data;
-				} else {
-					vm.selectedPersonProjections.push(data);
+			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
+		};
+		
+		function isAllInCurrentPageSelected(){
+			var isAllSelected = true;
+			var selectedPeople = personSelectionSvc.personInfo;
+			for(var i = 0; i < vm.scheduleVm.Schedules.length; i++){
+				var personSchedule = vm.scheduleVm.Schedules[i];
+				if(!selectedPeople[personSchedule.PersonId]){
+					isAllSelected = false;
+					break;
 				}
 			}
-		};
 
-		vm.isAllInCurrentPageSelected = function() {
-			return vm.scheduleVm.Schedules.every(function(personSchedule) {
-				return vm.personSelection[personSchedule.PersonId]&&vm.personSelection[personSchedule.PersonId].isSelected;
-			});
-		};
-
-		vm.isPersonSelected = function (personSchedule) {
-			return vm.personSelection[personSchedule.PersonId] && vm.personSelection[personSchedule.PersonId].isSelected;
+			return isAllSelected;
 		}
 	};
 }());

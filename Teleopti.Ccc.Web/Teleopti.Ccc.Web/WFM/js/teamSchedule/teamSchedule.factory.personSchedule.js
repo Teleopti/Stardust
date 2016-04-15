@@ -21,7 +21,7 @@
 		var getPersonActivitiesCount = function() {
 			var personActivities =[];
 			angular.forEach(this.Projections, function(projection) {
-			    if (projection.ShiftLayerId != null && personActivities.indexOf(projection.ShiftLayerId) === -1) {
+			    if (projection.ShiftLayerId != null && !projection.IsOvertime && personActivities.indexOf(projection.ShiftLayerId) === -1) {
 			        personActivities.push(projection.ShiftLayerId);
 				}
 			});
@@ -40,7 +40,7 @@
 				Date: moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone),
 				Shifts: projectionVms == undefined ? [] : [
 					{
-						Date: schedule.Date,
+						Date: moment.tz(schedule.Date, currentUserInfo.DefaultTimeZone),
 						Projections: projectionVms,
 						AbsenceCount: getPersonAbsencesCount,
 						ActivityCount: getPersonActivitiesCount
@@ -71,6 +71,24 @@
 						}
 					});
 					return end.format("YYYY-MM-DD HH:mm");
+				},
+				AbsenceCount: function(){
+					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
+						return this.Date.isSame(shift.Date, 'day');
+					}, this);
+					if(shiftsForCurrentDate.length > 0){
+						return shiftsForCurrentDate[0].AbsenceCount()
+					}
+					return 0;
+				},
+				ActivityCount: function(){
+					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
+						return this.Date.isSame(shift.Date, 'day');
+					}, this);
+					if(shiftsForCurrentDate.length > 0){
+						return shiftsForCurrentDate[0].ActivityCount()
+					}
+					return 0;
 				}
 			}
 
@@ -163,7 +181,7 @@
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
 			if (otherProjections != undefined) {
 				this.Shifts.push({
-					Date: otherSchedule.Date,
+					Date: moment.tz(otherSchedule.Date, currentUserInfo.DefaultTimeZone),
 					Projections: otherProjections,
 					AbsenceCount: getPersonAbsencesCount,
 					ActivityCount: getPersonActivitiesCount

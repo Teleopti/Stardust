@@ -76,8 +76,6 @@
 
 		vm.resetSchedulePage = function () {
 			vm.paginationOptions.pageNumber = 1;
-			vm.selectedPersonProjections = [];
-			vm.selectedPersonActivities = [];
 			vm.loadSchedules();
 		};
 
@@ -154,8 +152,6 @@
 			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
-			personSelectionSvc.setScheduleDate(vm.scheduleDateMoment().format('YYYY-MM-DD'));
-			personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 			setPersonAbsenceAndActivitySelection();
 		};
 
@@ -165,6 +161,7 @@
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				afterSchedulesLoaded(result);
+				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
 				vm.isLoading = false;
 			});
 		};
@@ -177,7 +174,7 @@
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
 			scheduleMgmtSvc.updateScheduleForPeoples(personIdList, vm.scheduleDateMoment(), function() {
-				personSelectionSvc.resetPersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				personSelectionSvc.clearPersonInfo();
 				vm.isLoading = false;
 			});
 		};
@@ -230,7 +227,7 @@
 
 
 		function swapShifts() {
-			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
+			var selectedPersonIds = personSelectionSvc.getCheckedPersonIds();
 			var personIdFrom = selectedPersonIds[0];
 			var personIdTo = selectedPersonIds[1];
 			swapShiftsSvc.PromiseForSwapShifts(personIdFrom, personIdTo, vm.scheduleDateMoment(), function(result) {
@@ -278,13 +275,6 @@
 
 		vm.selectedPersonInfo = function() {
 			return personSelectionSvc.personInfo;
-		};
-
-		vm.getSelectedPersonIdList = function() {
-			return personSelectionSvc.getSelectedPersonIdList();
-		};
-		vm.getSelectedPersonInfoList = function () {
-			return personSelectionSvc.getSelectedPersonInfoList();
 		};
 
 		function replaceParameters(text, params) {

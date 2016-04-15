@@ -50,8 +50,7 @@
 	it('should display full day absence check box with only full day absence permission', function () {
 		var background = {
 			startDate: new Date('2015-01-01 10:00:00'),
-			permissions: { IsAddIntradayAbsenceAvailable: false, IsAddFullDayAbsenceAvailable: true },
-			getSelectedPersonIdList: {}
+			permissions: { IsAddIntradayAbsenceAvailable: false, IsAddFullDayAbsenceAvailable: true }
 		};
 		var addAbsence = compileAddAbsenceTag(background);
 
@@ -64,8 +63,7 @@
 	it('should not display full day absence check box with only intraday absence permission', function () {
 		var background = {
 			startDate: new Date('2015-01-01 10:00:00'),
-			permissions: { IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false},
-			getSelectedPersonIdList: {}
+			permissions: { IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false}
 		};
 		var addAbsence = compileAddAbsenceTag(background);
 
@@ -77,7 +75,7 @@
 
 	function compileAddAbsenceTag(params) {
 		scope.vm = params;
-		var addAbsenceTag = '<add-absence default-date-time="vm.startDate" permissions="vm.permissions" agent-id-list="vm.getSelectedPersonIdList()"/>';
+		var addAbsenceTag = '<add-absence default-date-time="vm.startDate" permissions="vm.permissions"/>';
 		var addAbsence = compiler(addAbsenceTag)(scope);
 		rootScope.$apply();
 		return addAbsence;

@@ -25,7 +25,7 @@
 				shortcut: "Alt+A",
 				panelName: 'report-absence',
 				action: function () {vm.setCurrentCommand('AddAbsence');parentVm.addAbsence();},
-				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
+				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
 				visible: function () { return vm.canActiveAddAbsence(); }
 			},
 			{
@@ -35,7 +35,7 @@
 				action: function () {
 					 vm.setCurrentCommand('AddActivity'); parentVm.addActivity();
 				},
-				clickable: function () { return personSelectionSvc.isAnyAgentSelected(); },
+				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
 				visible: function () { return vm.canActiveAddActivity(); }
 			},
 			{
@@ -150,11 +150,11 @@
 
 		function registerShortCuts() {
 			shortCuts.registerKeySequence([keyCodes.A], [keyCodes.ALT], function () {
-				if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddAbsence()) return;
+				if (!personSelectionSvc.anyAgentChecked() || !vm.canActiveAddAbsence()) return;
 				vm.commands[0].action(); // Alt+A for add absence
 			});
 			shortCuts.registerKeySequence([keyCodes.T], [keyCodes.ALT], function () {
-				if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddActivity()) return;
+				if (!personSelectionSvc.anyAgentChecked() || !vm.canActiveAddActivity()) return;
 				vm.commands[1].action(); // Alt+T for add activity
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {

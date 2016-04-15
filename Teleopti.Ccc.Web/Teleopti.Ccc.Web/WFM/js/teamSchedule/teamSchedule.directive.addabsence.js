@@ -9,10 +9,9 @@
 			scope: {
 				permissions: '&',
 				defaultDateTime: '&',
-				agentIdList: '&',
 				actionsAfterAbsenceApply: '&'
 			},
-			controller: ['$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', addAbsenceCtrl],
+			controller: ['$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', 'PersonSelection', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
@@ -21,7 +20,7 @@
 		};
 	};
 
-	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator, CommandCommon) {
+	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator, CommandCommon, personSelectionSvc) {
 		var vm = this;
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
@@ -49,7 +48,7 @@
 
 		function applyAbsence() {
 			var trackId = guidgenerator.newGuid();
-			var personIds = vm.agentIdList();
+			var personIds = personSelectionSvc.getCheckedPersonIds();
 			var afterAppliedAbsence = function(result) {
 				vm.actionsAfterAbsenceApply({
 					result: { TrackId: trackId, Errors: result },
