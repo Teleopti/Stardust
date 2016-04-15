@@ -8,7 +8,7 @@
 			var autocompleteSkill;
 			var autocompleteSkillArea;
 			var timeoutPromise;
-			var pollingTimeout = 6000;
+			var pollingTimeout = 60000;
 			$scope.DeleteSkillAreaModal = false;
 			$scope.showIncoming = true;
 			$scope.showStaffing = false;
