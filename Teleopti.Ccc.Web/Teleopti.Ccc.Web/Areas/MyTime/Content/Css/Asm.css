@@ -96,7 +96,8 @@
 	animation-direction: alternate;
 	animation-timing-function: linear;
 	margin-right: 8px !important;
-
+	border: 8px solid transparent;
+	margin-top: -15px!important;
 }
 
 @keyframes asm {
@@ -107,7 +108,7 @@
 .asm-info-canvas-column-messages 
 {
 	background: #F8F8F8;
-	left: 365px;
+	left: 360px;
 	width: 35px;
 	padding-bottom: 2px;
 	position: absolute;
