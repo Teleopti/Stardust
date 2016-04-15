@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Web.Loadtest
 				}
 			})).ToArray());
 			Console.WriteLine("Total milliseconds spend loading reports: {0}", totalElapsedMilliseconds);
+			Console.WriteLine("Total users loading reports: {0}", UserData.TestUsers.Count);
 			Console.WriteLine("Average: {0}", totalElapsedMilliseconds / UserData.TestUsers.Count);
 			Console.ReadKey();
 		}
