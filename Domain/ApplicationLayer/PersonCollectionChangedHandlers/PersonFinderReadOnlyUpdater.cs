@@ -1,6 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -20,28 +19,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_personFinderReadOnlyRepository.UpdateFindPerson(@event.PersonIdCollection);
 		}
 	}
-
-	public class PersonCollectionChangedEventPublisherOfLegacyPersonChangedMessage : 
-		IHandleEvent<PersonChangedMessage>,
-		IRunOnServiceBus
-	{
-		private readonly IEventPublisher _publisher;
-
-		public PersonCollectionChangedEventPublisherOfLegacyPersonChangedMessage(IEventPublisher publisher)
-		{
-			_publisher = publisher;
-		}
-
-		public void Handle(PersonChangedMessage @event)
-		{
-			_publisher.Publish(new PersonCollectionChangedEvent
-			{
-				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
-				LogOnDatasource = @event.LogOnDatasource,
-				InitiatorId = @event.InitiatorId,
-				SerializedPeople = @event.SerializedPeople,
-				Timestamp = @event.Timestamp
-			});
-		}
-	}
+	
 }

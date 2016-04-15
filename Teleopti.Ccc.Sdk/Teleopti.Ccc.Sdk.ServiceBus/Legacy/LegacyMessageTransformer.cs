@@ -11,15 +11,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 		ConsumerOf<DenormalizeScheduleProjection>,
 		ConsumerOf<NewAbsenceRequestCreated>,
 		ConsumerOf<GroupPageChangedMessage>,
-		ConsumerOf<PersonPeriodChangedMessage>
+		ConsumerOf<PersonPeriodChangedMessage>,
+		ConsumerOf<PersonChangedMessage>
 	{
 		private readonly IServiceBus _bus;
-		private readonly IEventPublisher _eventPublisher;
+		private readonly IEventPublisher _publisher;
 
-		public LegacyMessageTransformer(IServiceBus bus, IEventPublisher eventPublisher)
+		public LegacyMessageTransformer(IServiceBus bus, IEventPublisher publisher)
 		{
 			_bus = bus;
-			_eventPublisher = eventPublisher;
+			_publisher = publisher;
 		}
 
 		public void Consume(DenormalizeScheduleProjection message)
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 
 		public void Consume(NewAbsenceRequestCreated message)
 		{
-			_eventPublisher.Publish(new NewAbsenceRequestCreatedEvent
+			_publisher.Publish(new NewAbsenceRequestCreatedEvent
 			{
 				InitiatorId = message.InitiatorId,
 				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 
 		public void Consume(GroupPageChangedMessage message)
 		{
-			_eventPublisher.Publish(new GroupPageCollectionChangedEvent
+			_publisher.Publish(new GroupPageCollectionChangedEvent
 			{
 				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 				LogOnDatasource = message.LogOnDatasource,
@@ -80,12 +81,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 
 		public void Consume(PersonPeriodChangedMessage message)
 		{
-			_eventPublisher.Publish(new SettingsForPersonPeriodChangedEvent
+			_publisher.Publish(new SettingsForPersonPeriodChangedEvent
 			{
 				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 				LogOnDatasource = message.LogOnDatasource,
 				InitiatorId = message.InitiatorId,
 				SerializedIds = message.SerializedPersonPeriod,
+				Timestamp = message.Timestamp
+			});
+		}
+
+		public void Consume(PersonChangedMessage message)
+		{
+			_publisher.Publish(new PersonCollectionChangedEvent
+			{
+				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+				LogOnDatasource = message.LogOnDatasource,
+				InitiatorId = message.InitiatorId,
+				SerializedPeople = message.SerializedPeople,
 				Timestamp = message.Timestamp
 			});
 		}
