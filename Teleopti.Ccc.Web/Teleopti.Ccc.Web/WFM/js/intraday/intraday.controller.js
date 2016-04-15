@@ -162,6 +162,8 @@
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
+							if (timeoutPromise)
+								return;
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 							setResult(result);
 					    },
@@ -191,6 +193,8 @@
 								id: $scope.selectedItem.Id
 							})
 							.$promise.then(function (result) {
+								if (timeoutPromise)
+									return;
 								timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
 								setResult(result);
 							},
