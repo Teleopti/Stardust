@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 		[Test]
 		public void ShouldCallStartLogonOnViewAtStartUp()
 		{
-			_view.Stub(x => x.StartLogon(_mBroker)).Return(true);
+			_view.Stub(x => x.StartLogon()).Return(true);
 			_target.Start("raptor");
 		}
 

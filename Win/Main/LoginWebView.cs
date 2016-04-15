@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Main
 		}
 
 		public ILogonPresenter Presenter { get; set; }
-		public bool StartLogon(IMessageBrokerComposite messageBroker)
+		public bool StartLogon()
 		{
 			webView1.BeforeContextMenu += webView1_BeforeContextMenu;
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);

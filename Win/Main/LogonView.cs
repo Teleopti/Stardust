@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Main
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 		}
 
-		public bool StartLogon(IMessageBrokerComposite messageBroker)
+		public bool StartLogon()
 		{
 			_logonSteps = new List<ILogonStep>
 				{

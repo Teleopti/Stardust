@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			CurrentStep = LoginStep.SelectLogonType;
 			_view.ServerUrl = serverUrl;
-			return _view.StartLogon(_messageBroker);
+			return _view.StartLogon();
 			
 		}
 
