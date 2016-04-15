@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences); 
 			var resourceCalcDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
 
-			_groupPersonBuilderWrapper.Reset();
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);

@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var selectedPersons = matrixListForDayOffOptimization.Select(matrixList => matrixList.Person).Distinct().ToList();
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, schedulingOptions.ConsiderShortBreaks);
-			_groupPersonBuilderWrapper.Reset();
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 
