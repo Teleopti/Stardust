@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 {
     public class SimulateMyTimeScreen : SimulateBase<MyTimeData>
     {
-		public static ICollection<Task<HttpResponseMessage>> AllTasks = new SynchronizedCollection<Task<HttpResponseMessage>>();
+		public static readonly object Lock = new object();
+		public static ICollection<Task> AllTasks = new SynchronizedCollection<Task>();
 
         public SimulateMyTimeScreen(IMessageBrokerUrl url, ICurrentDataSource dataSource, ICurrentBusinessUnit businessUnit, ICurrentScenario scenario, IJsonSerializer serializer, IMessageBrokerComposite messageBroker) : base(url, dataSource, businessUnit, scenario, serializer, messageBroker)
         {
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 
 		public override void CallbackAction()
 		{
-			AllTasks.Add(FetchSchedule());
+			lock (Lock)
+				AllTasks.Add(Task.Factory.StartNew(FetchSchedule, TaskCreationOptions.LongRunning));
 		}
 
 	    public override void LogOn(MyTimeData data)
@@ -68,13 +70,15 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.ListenSimulators
 		    LogOn(data.BusinessUnitName, data.Username, data.Password);
 	    }
 
-	    public Task<HttpResponseMessage> FetchSchedule()
+	    public void FetchSchedule()
 		{
-			Console.WriteLine("FetchData for date {0}", DateTime.Today);
+			//Console.WriteLine("FetchData for date {0}", DateTime.Today);
 			var message = new HttpRequestMessage(HttpMethod.Get, string.Format("api/Schedule/FetchData?date=&_={0}", Guid.NewGuid()));
 			
-			var response = HttpClient.SendAsync(message);
-			return response;
+			var response = HttpClient.SendAsync(message).Result;
+			if (!response.IsSuccessStatusCode)
+				throw new Exception("Asd");
+
 		}
     }
 }

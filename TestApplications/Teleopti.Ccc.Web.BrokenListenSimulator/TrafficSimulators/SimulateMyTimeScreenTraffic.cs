@@ -7,7 +7,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.BrokenListenSimulator.SimulationData;
 using Teleopti.Ccc.Web.TestApplicationsCommon;
 
@@ -19,13 +18,13 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
         {
 			var today = DateTime.Today;
 			var allTasks = new List<Task>();
-	        for (var i = 0; i < days; i++)
-	        {
-				var dateTime = today + TimeSpan.FromDays(i);
-				var fullDayAbsenseAsync = addFullDayAbsenseAsync(data.User, dateTime, dateTime, data.AbsenseId);
-				allTasks.Add(fullDayAbsenseAsync);
+	        allTasks.AddRange(Enumerable.Range(0, days).Select(day => Task.Factory.StartNew(() =>
+			{
+				var dateTime = today + TimeSpan.FromDays(day);
+				addFullDayAbsence(data.User, dateTime, dateTime, data.AbsenseId);
 				Console.WriteLine("Added full day absense for 1 person for {0} days", days);
-	        }
+			}, TaskCreationOptions.LongRunning)));
+	        Task.WaitAll(allTasks.ToArray());
 			requestsStatus(allTasks);
         }
 
@@ -37,12 +36,11 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 			for (var i = 0; i < days; i++)
 		    {
 			    var li = i;
-			    people.ForEach(p =>
+				allTasks.AddRange(people.Select(p => Task.Factory.StartNew(() =>
 				{
 					var dateTime = today + TimeSpan.FromDays(li);
-					var fullDayAbsenseAsync = addFullDayAbsenseAsync(p, dateTime, dateTime, data.AbsenseId);
-					allTasks.Add(fullDayAbsenseAsync);
-				});
+					addFullDayAbsence(p, dateTime, dateTime, data.AbsenseId);
+				}, TaskCreationOptions.LongRunning)));
 				Console.WriteLine("Added full day absense for {0} people for {1} days", people.Count(), days);
 		    }
 		    requestsStatus(allTasks);
@@ -79,7 +77,7 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
 			return schedules.Select(x => new Guid(x.PersonId.ToObject<string>()));
 	    }
 
-        private Task<HttpResponseMessage> addFullDayAbsenseAsync(Guid user, DateTime start, DateTime end, Guid absenceId)
+        private void addFullDayAbsence(Guid user, DateTime start, DateTime end, Guid absenceId)
         {
             var body =
                 string.Format(
@@ -90,7 +88,9 @@ namespace Teleopti.Ccc.Web.BrokenListenSimulator.TrafficSimulators
                 Content = new StringContent(body, Encoding.UTF8, "application/json")
             };
 
-            return HttpClient.SendAsync(message);
+            var response = HttpClient.SendAsync(message).Result;
+			if (!response.IsSuccessStatusCode)
+				throw new Exception("Unable to add full days absence");
         }
     }
 }
