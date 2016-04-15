@@ -67,7 +67,7 @@
 				});
 			setUpTemplate();
 
-			ThemeService.init()
+		    ThemeService.init();
 
 			$httpBackend.flush();
 			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_light.min.css');

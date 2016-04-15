@@ -3,16 +3,25 @@ describe('IntradayCtrl', function () {
 	var $httpBackend,
 		$controller,
 		$filter,
-		scope;
+		scope,
+        $q,
+		deferred;
 
 	var skillAreas = [];
 	var skills = [];
 	var skillAreaInfo;
 	var monitorData;
 
+
 	beforeEach(module('wfm.intraday'));
 
+	beforeEach(inject(function (_$q_) {
+        $q = _$q_;
+        deferred = _$q_.defer();
+    }));
+
 	beforeEach(function () {
+	    deferred = $q.defer();
 		skills = [
 		{
 			Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
@@ -46,11 +55,11 @@ describe('IntradayCtrl', function () {
 	                ForecastedActualHandleTimeDiff: "55.0"
 	            },
 	            DataSeries: {
-	                Time: {},
-	                ForecastedCalls: {},
-	                ForecastedAverageHandleTime: {},
-	                OfferedCalls: {},
-	                AverageHandleTime: {}
+	                Time: [],
+	                ForecastedCalls: [],
+	                ForecastedAverageHandleTime: [],
+	                OfferedCalls: [],
+	                AverageHandleTime: []
 	            },
 	            LatestStatsTime: new Date(2016, 1, 1, 13, 0, 0, 0)
 	        };
@@ -122,7 +131,7 @@ describe('IntradayCtrl', function () {
 		expect(scope.skillAreas.length).toEqual(1);
 	});
 
-	xit('should monitor first skill if no skill areas', function() {
+	it('should monitor first skill if no skill areas', function() {
 		skillAreaInfo.SkillAreas = [];
 		createController();
 
@@ -137,9 +146,15 @@ describe('IntradayCtrl', function () {
 		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
 		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
 		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
+		expect(scope.timeSeries[0]).toEqual('x');
+		expect(scope.forecastedCallsSeries[0]).toEqual('Forecasted_calls');
+		expect(scope.actualCallsSeries[0]).toEqual('Actual_calls');
+		expect(scope.forecastedAverageHandleTimeSeries[0]).toEqual('Forecasted_AHT');
+		expect(scope.actualAverageHandleTimeSeries[0]).toEqual('AHT');
+		expect(scope.HasMonitorData).toEqual(true);
 	});
 
-	xit('should monitor first skill area if there are any', function () {
+	it('should monitor first skill area if there are any', function () {
 		createController();
 
 		scope.skillAreaSelected(scope.skillAreas[0]);
@@ -153,6 +168,12 @@ describe('IntradayCtrl', function () {
 		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
 		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
 		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
+		expect(scope.timeSeries[0]).toEqual('x');
+		expect(scope.forecastedCallsSeries[0]).toEqual('Forecasted_calls');
+		expect(scope.actualCallsSeries[0]).toEqual('Actual_calls');
+		expect(scope.forecastedAverageHandleTimeSeries[0]).toEqual('Forecasted_AHT');
+		expect(scope.actualAverageHandleTimeSeries[0]).toEqual('AHT');
+		expect(scope.HasMonitorData).toEqual(true);
 	});
 
 	it('should have permission to modify skill area', function() {
@@ -161,7 +182,7 @@ describe('IntradayCtrl', function () {
 		expect(scope.HasPermissionToModifySkillArea).toEqual(true);
 	});
 
-	xit('should show friendly message if no data for skill area', function () {
+	it('should show friendly message if no data for skill area', function () {
 		createController();
 		scope.skillAreaSelected(scope.skillAreas[0]);
 		monitorData.LatestStatsTime = null;

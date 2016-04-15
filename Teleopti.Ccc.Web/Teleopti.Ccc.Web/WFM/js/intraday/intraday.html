@@ -112,7 +112,7 @@
 
 	<div class="con-row">
 	<div class="con-flex" >
-		<div class="panel slide-panel full-padding material-depth-1" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
+		<div class="panel slide-panel full-padding material-depth-1" ng-show="HasMonitorData" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding">
 						<md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">

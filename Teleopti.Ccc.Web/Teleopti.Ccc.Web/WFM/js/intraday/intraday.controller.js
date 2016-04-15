@@ -8,7 +8,7 @@
 			var autocompleteSkill;
 			var autocompleteSkillArea;
 			var timeoutPromise;
-			var pollingTimeout = 60000;
+			var pollingTimeout = 6000;
 			$scope.DeleteSkillAreaModal = false;
 			$scope.showIncoming = true;
 			$scope.showStaffing = false;
@@ -128,29 +128,31 @@
 						$scope.latestStatsTime = '--:--';
 						$scope.HasMonitorData = false;
 						return;
-					}
-					$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
-					$scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
-					$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
-					$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
-					$scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
-					$scope.timeSeries = [];
-					angular.forEach(result.DataSeries.Time, function(value,key) {
-						this.push($filter('date')(value, 'shortTime'));
-					},$scope.timeSeries)
-					$scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls;
-					$scope.actualCallsSeries = result.DataSeries.OfferedCalls;
-					$scope.forecastedAverageHandleTimeSeries = result.DataSeries.ForecastedAverageHandleTime;
-					$scope.actualAverageHandleTimeSeries = result.DataSeries.AverageHandleTime;
-					$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
-					$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
+					} else {
+					    $scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
+					    $scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
+					    $scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
+					    $scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
+					    $scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
+					    $scope.timeSeries = [];
+					    angular.forEach(result.DataSeries.Time, function (value, key) {
+					        this.push($filter('date')(value, 'shortTime'));
+					    }, $scope.timeSeries)
+					    $scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls;
+					    $scope.actualCallsSeries = result.DataSeries.OfferedCalls;
+					    $scope.forecastedAverageHandleTimeSeries = result.DataSeries.ForecastedAverageHandleTime;
+					    $scope.actualAverageHandleTimeSeries = result.DataSeries.AverageHandleTime;
+					    $scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
+					    $scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
 
-					$scope.timeSeries.splice(0,0,"x");
-					$scope.forecastedCallsSeries.splice(0,0,"Forecasted_calls");
-					$scope.actualCallsSeries.splice(0,0,"Actual_calls");
-					$scope.forecastedAverageHandleTimeSeries.splice(0,0,"Forecasted_AHT");
-					$scope.actualAverageHandleTimeSeries.splice(0,0,"AHT");
-					$scope.HasMonitorData = true;
+					    $scope.timeSeries.splice(0, 0, 'x');
+					    $scope.forecastedCallsSeries.splice(0, 0, 'Forecasted_calls');
+					    $scope.actualCallsSeries.splice(0, 0, 'Actual_calls');
+					    $scope.forecastedAverageHandleTimeSeries.splice(0, 0, 'Forecasted_AHT');
+					    $scope.actualAverageHandleTimeSeries.splice(0, 0, 'AHT');
+					    $scope.HasMonitorData = true;
+					    loadIntradayChart();
+					}				
 				};
 
 				var pollSkillMonitorData = function () {
@@ -162,11 +164,10 @@
 						.$promise.then(function (result) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 							setResult(result);
-							loadIntradayChart();
-						},
+					    },
 						function (error) {
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
-							$scope.HasMonitorData = true;
+							$scope.HasMonitorData = false;
 						});
 					};
 
@@ -192,10 +193,10 @@
 							.$promise.then(function (result) {
 								timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
 								setResult(result);
-								loadIntradayChart();
 							},
 							function(error) {
-								timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
+							    timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
+							    $scope.HasMonitorData = false;
 							});
 						}
 
@@ -245,7 +246,7 @@
 						}
 
 						var loadIntradayChart = function() {
-							$scope.hiddenArray2 = $scope.hiddenArray;
+							$scope.chartHiddenLines = $scope.hiddenArray;
 							c3.generate({
 								bindto: '#myChart',
 								data: {
@@ -257,7 +258,7 @@
 										$scope.forecastedAverageHandleTimeSeries,
 										$scope.actualAverageHandleTimeSeries
 									],
-									hide: $scope.hiddenArray2,
+									hide: $scope.chartHiddenLines,
 									colors: {
 										Forecasted_calls: '#9CCC65',
 										Actual_calls: '#4DB6AC',
@@ -298,10 +299,10 @@
 								legend: {
 									item: {
 										onclick: function (id) {
-											if ($scope.hiddenArray2.indexOf(id)>-1) {
-												$scope.hiddenArray2.splice($scope.hiddenArray2.indexOf(id), 1);
+										    if ($scope.chartHiddenLines.indexOf(id) > -1) {
+										        $scope.chartHiddenLines.splice($scope.chartHiddenLines.indexOf(id), 1);
 											} else {
-												$scope.hiddenArray2.push(id);
+										        $scope.chartHiddenLines.push(id);
 											}
 											loadIntradayChart();
 										}
