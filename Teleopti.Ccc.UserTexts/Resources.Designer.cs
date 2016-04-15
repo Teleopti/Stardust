@@ -17526,11 +17526,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to add activity for agent {0}..
+        /// </summary>
+        public static string NoPermissionAddAgentActivity {
+            get {
+                return ResourceManager.GetString("NoPermissionAddAgentActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have permission to add full day absences for {0}.
         /// </summary>
         public static string NoPermissionAddFullDayAbsenceForAgent {
             get {
                 return ResourceManager.GetString("NoPermissionAddFullDayAbsenceForAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to remove activities for agent {0}..
+        /// </summary>
+        public static string NoPermissionRemoveAgentActivity {
+            get {
+                return ResourceManager.GetString("NoPermissionRemoveAgentActivity", resourceCulture);
             }
         }
         

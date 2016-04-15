@@ -22,17 +22,28 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakeActivityCommandHandler ActivityCommandHandler;
 		public FakePersonRepository PersonRepository;
 		public PrincipalAuthorizationWithConfigurablePermission PrincipalAuthorizationWithConfigurablePermission;
+		public FakePermissionProvider PermissionProvider;
 
 		[Test]
-		public void ShouldInvokeAddActivityCommandHandleWithCorrectCommandData()
+		public void ShouldInvokeAddActivityCommandHandleWithPermission()
 		{
+			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
+			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person2);
+
+			var date = new DateOnly(2016,4,16);
+
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,date,person1);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,date,person2);
+
 			var input = new AddActivityFormData
 			{
 				ActivityId = Guid.NewGuid(),
-				BelongsToDate = DateOnly.Today,
-				StartTime = new DateTime(2016,3,28, 8, 0, 0),
-				EndTime = new DateTime(2016, 3, 28, 17, 0, 0),
-				PersonIds = new [] { Guid.NewGuid(),Guid.NewGuid() },
+				BelongsToDate = date,
+				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
+				PersonIds = new [] { person1.Id.Value, person2.Id.Value },
 				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
@@ -44,8 +55,39 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		public void ShouldRemoveActivityCommandHandleWithCorrectCommandData()
+		public void ShouldNotInvokeAddActivityCommandHandleWithoutPermission()
 		{
+			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
+			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person2);
+
+			var date = new DateOnly(2016,4,16);
+
+			var input = new AddActivityFormData
+			{
+				ActivityId = Guid.NewGuid(),
+				BelongsToDate = date,
+				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
+				PersonIds = new[] { person1.Id.Value, person2.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			Target.AddActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldNotRemoveActivityWithoutPermission()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("a","b");
+			PersonRepository.Has(person);
+
+			var date = new DateOnly(2016,4,16);
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
@@ -53,15 +95,50 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				{
 					new RemovePersonActivityItem
 					{
-						PersonId = Guid.NewGuid(),
+						PersonId = person.Id.Value,
 						ShiftLayerIds = new List<Guid> {new Guid(), new Guid()}
 					},
 					new RemovePersonActivityItem
 					{
-						PersonId = Guid.NewGuid(),
+						PersonId = person.Id.Value,
 						ShiftLayerIds = new List<Guid> {new Guid()}
 					}
-				}
+				},
+				Date = date
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			Target.RemoveActivity(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldRemoveActivityWithPermission()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+
+			var date = new DateOnly(2016, 4, 16);
+
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.RemoveActivity,date, person);
+
+			var input = new RemoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<RemovePersonActivityItem>
+				{
+					new RemovePersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {new Guid(), new Guid()}
+					},
+					new RemovePersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {new Guid()}
+					}
+				},
+				Date = date
 			};
 
 			ActivityCommandHandler.ResetCalledCount();

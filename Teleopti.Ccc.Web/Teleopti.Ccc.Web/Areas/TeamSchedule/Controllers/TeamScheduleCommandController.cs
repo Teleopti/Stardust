@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddActivity")]
-		public virtual void AddActivityCommand([FromBody]AddActivityFormData input)
+		public virtual List<FailActionResult> AddActivityCommand([FromBody]AddActivityFormData input)
 		{
-			_commandHandlingProvider.AddActivity(input);
+			return _commandHandlingProvider.AddActivity(input);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveActivity")]
