@@ -48,13 +48,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 
 		private void makeTarget()
 		{
-			var currUnitOfWork = new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make());
 			var uowFactory = CurrentUnitOfWorkFactory.Make();
+			var currUnitOfWork = new CurrentUnitOfWork(uowFactory);
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
 			Target = new PersonAccountPersister(uowFactory, 
 																	rep, 
 																	MockRepository.GenerateMock<IInitiatorIdentifier>(),
-																	new PersonAccountConflictCollector(uowFactory),
+																	new PersonAccountConflictCollector(new DatabaseVersion(currUnitOfWork)),
 																	new PersonAccountConflictResolver(
 																		uowFactory,
 																		new TraceableRefreshService(new DefaultScenarioFromRepository(new ScenarioRepository(currUnitOfWork)), 

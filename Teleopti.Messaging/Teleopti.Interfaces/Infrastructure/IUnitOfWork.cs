@@ -114,18 +114,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		void Remove(IAggregateRoot root);
 
 		/// <summary>
-		/// Gets current db version 
-		/// </summary>
-		/// <param name="root">The root.</param>
-		/// <param name="usePessimisticLock">If <code>true</code>, this db row will be locked for updates during the transaction.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2009-11-17
-		/// </remarks>
-		int? DatabaseVersion(IAggregateRoot root, bool usePessimisticLock=false);
-
-		/// <summary>
 		/// Disables the filter.
 		/// </summary>
 		/// <param name="filter">The filter.</param>

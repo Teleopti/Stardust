@@ -12,17 +12,20 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly IReassociateDataForSchedules _reassociateDataForSchedules;
 		private readonly ILazyLoadingManager _lazyLoadingManager;
+		private readonly DatabaseVersion _databaseVersion;
 
 		public ScheduleRangeConflictCollector(
 			IScheduleStorage scheduleStorage,
 			IPersonAssignmentRepository personAssignmentRepository,
 			IReassociateDataForSchedules reassociateDataForSchedules,
-			ILazyLoadingManager lazyLoadingManager)
+			ILazyLoadingManager lazyLoadingManager,
+			DatabaseVersion databaseVersion)
 		{
 			_scheduleStorage = scheduleStorage;
 			_personAssignmentRepository = personAssignmentRepository;
 			_reassociateDataForSchedules = reassociateDataForSchedules;
 			_lazyLoadingManager = lazyLoadingManager;
+			_databaseVersion = databaseVersion;
 		}
 
 		public IEnumerable<PersistConflict> GetConflicts(IDifferenceCollection<IPersistableScheduleData> differences, IScheduleParameters scheduleParameters)
@@ -30,8 +33,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_reassociateDataForSchedules.ReassociateDataFor(scheduleParameters.Person);
 			var dateOnlyPeriod = scheduleParameters.Period.ToDateOnlyPeriod(scheduleParameters.Person.PermissionInformation.DefaultTimeZone());
 			var personAssignmentsInDb = _personAssignmentRepository.FetchDatabaseVersions(dateOnlyPeriod, scheduleParameters.Scenario, scheduleParameters.Person);
-
-			var uow = _scheduleStorage.UnitOfWork;
 
 			var modifiedAndDeletedEntities = from e in differences
 			                                 where e.Status != DifferenceStatus.Added
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 					var assInDbVersion = personAssignmentsInDb.FirstOrDefault(p => p.EqualWith(inMemoryEntityAsAssignment));
 					if (assInDbVersion != null)
 					{
-						databaseVersion = assInDbVersion.Version;						
+						databaseVersion = assInDbVersion.Version;
 					}
 					else
 					{
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				}
 				else
 				{
-					databaseVersion = uow.DatabaseVersion(inMemoryEntity);
+					databaseVersion = _databaseVersion.FetchFor(inMemoryEntity, false);
 				}
 				if (inMemoryVersion.Version != databaseVersion)
 				{

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Proxy;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -198,35 +196,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void Remove(IAggregateRoot root)
 		{
 			Session.Evict(root);
-		}
-
-		public int? DatabaseVersion(IAggregateRoot root, bool usePessimisticLock = false)
-		{
-			if (!root.Id.HasValue)
-				throw new ArgumentException("Cannot find " + root + " in db");
-			int result;
-
-			var proxy = root as INHibernateProxy;
-			var type = proxy == null ? root.GetType() : proxy.HibernateLazyInitializer.PersistentClass;
-			if (usePessimisticLock)
-			{
-				// use hql query here when SetLockMode works on non entities. Seems to be a problem currently
-				//possible sql injection here but that's pretty lĺngsökt so never mind...
-				var sql = "select Version from " + type.Name + " with(updlock, holdlock) where Id =:id";
-				result = Session.CreateSQLQuery(sql)
-					.SetGuid("id", root.Id.Value)
-					.UniqueResult<int>();
-			}
-			else
-			{
-				result = Session.CreateCriteria(type)
-					.Add(Restrictions.Eq("Id", root.Id))
-					.SetProjection(Projections.Property("Version"))
-					.UniqueResult<int>();
-			}
-			if (result == 0)
-				return null;
-			return result;
 		}
 
 		public void Dispose()

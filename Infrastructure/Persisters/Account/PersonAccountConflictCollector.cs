@@ -1,24 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 {
 	public class PersonAccountConflictCollector : IPersonAccountConflictCollector
 	{
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly DatabaseVersion _databaseVersion;
 
-		public PersonAccountConflictCollector(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory)
+		public PersonAccountConflictCollector(DatabaseVersion databaseVersion)
 		{
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+			_databaseVersion = databaseVersion;
 		}
 
 		public IEnumerable<IPersonAbsenceAccount> GetConflicts(IEnumerable<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
-			var unitOfWork = _currentUnitOfWorkFactory.Current().CurrentUnitOfWork();
 			return (from e in personAbsenceAccounts
-							let databaseVersion = unitOfWork.DatabaseVersion(e, true)
+							let databaseVersion = _databaseVersion.FetchFor(e, true)
 							where e.Version != databaseVersion
 							select e);
 		}

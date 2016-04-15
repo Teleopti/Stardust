@@ -4072,9 +4072,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					doSaveProcess();
 				}
 
-				using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 				{
-					var accountConflictCollector = new PersonAccountConflictCollector(UnitOfWorkFactory.CurrentUnitOfWorkFactory());
+					var accountConflictCollector = new PersonAccountConflictCollector(new DatabaseVersion(new ThisUnitOfWork(uow)));
 					var accountConflicts = accountConflictCollector.GetConflicts(_schedulerState.Schedules.ModifiedPersonAccounts);
 					if (accountConflicts != null && accountConflicts.Any()) refreshData();
 				}

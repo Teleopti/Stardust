@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -18,72 +17,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
     [Category("LongRunning")]
     public class NHibernateUnitOfWorkRealTest : DatabaseTest
     {
-        [Test]
-        public void VerifyDatabaseVersionOnExistingRoot()
-        {
-            CleanUpAfterTest();
-            var p = PersonFactory.CreatePerson();
-            PersistAndRemoveFromUnitOfWork(p);
-            UnitOfWork.PersistAll();
-
-            using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-            {
-                Assert.Greater(uow.DatabaseVersion(p), 0);
-            }
-
-            removeFromDb(p);
-        }
-
-				[Test]
-				public void VerifyDatabaseVersionOnExistingRootUsingPessimisticLock()
-				{
-					//does not verify that a pess lock is created, just that the method works logically
-					//the lock itself will be tested in the use cases where needed
-					CleanUpAfterTest();
-					var p = PersonFactory.CreatePerson();
-					PersistAndRemoveFromUnitOfWork(p);
-					UnitOfWork.PersistAll();
-
-					using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-					{
-						Assert.Greater(uow.DatabaseVersion(p, true), 0);
-					}
-
-					removeFromDb(p);
-				}
-
-
-        [Test]
-        public void VerifyDatabaseVersionOnNonDatabaseExistingRoot()
-        {
-            IPerson p = PersonFactory.CreatePerson();
-            p.SetId(Guid.NewGuid());
-            Assert.That(UnitOfWork.DatabaseVersion(p), Is.Null);
-        }
-
-        [Test]
-        public void VerifyDatabaseVersionOnTransientRoot()
-        {
-            Assert.Throws<ArgumentException>(() => UnitOfWork.DatabaseVersion(PersonFactory.CreatePerson()));
-        }
-
-        [Test]
-        public void VerifyDatabaseVersionOnProxy()
-        {
-            CleanUpAfterTest();
-            var p = PersonFactory.CreatePerson();
-            PersistAndRemoveFromUnitOfWork(p);
-            UnitOfWork.PersistAll();
-
-            using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
-            {
-                var pProxy = new PersonRepository(new ThisUnitOfWork(uow)).Load(p.Id.Value);
-                Assert.Greater(uow.DatabaseVersion(pProxy), 0);
-            }
-
-            removeFromDb(p);
-        }
-
         [Test]
         public void VerifyFlush()
         {

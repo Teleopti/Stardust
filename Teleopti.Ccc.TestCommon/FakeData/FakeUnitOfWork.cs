@@ -65,11 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 		}
 
-		public int? DatabaseVersion(IAggregateRoot root, bool usePessimisticLock = false)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IDisposable DisableFilter(IQueryFilter filter)
 		{
 			return new GenericDisposable(() =>{});
