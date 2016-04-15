@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public interface IDayOffOptimization
+	public interface IDayOffOptimizationDesktop
 	{
 		void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
 													DateOnlyPeriod selectedPeriod,

@@ -10,13 +10,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public class DayOffOptimizationTeamBlock : IDayOffOptimization
+	public class DayOffOptimizationDesktopTeamBlock : IDayOffOptimizationDesktop
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 		private readonly ITeamBlockDayOffOptimizerService _teamBlockDayOffOptimizerService;
 
-		public DayOffOptimizationTeamBlock(
+		public DayOffOptimizationDesktopTeamBlock(
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService)
