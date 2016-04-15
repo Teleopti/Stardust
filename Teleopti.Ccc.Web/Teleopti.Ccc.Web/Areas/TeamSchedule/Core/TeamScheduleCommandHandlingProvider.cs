@@ -60,15 +60,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var result = new List<FailActionResult>();
 			foreach (var personActivity in input.PersonActivities)
 			{
-				foreach (var activity in personActivity.Activities)
+				foreach (var shiftLayerId in personActivity.ShiftLayerIds)
 				{
 					var command = new RemoveActivityCommand
 					{
 						PersonId = personActivity.PersonId,
-						ActivityId = activity.ActivityId,
+						ShiftLayerId = shiftLayerId,
 						Date = input.Date,
-						StartTime = activity.StartTime,
-						EndTime = activity.EndTime,
 						TrackedCommandInfo = input.TrackedCommandInfo != null ? input.TrackedCommandInfo : new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 

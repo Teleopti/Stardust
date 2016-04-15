@@ -46,27 +46,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldRemoveActivityCommandHandleWithCorrectCommandData()
 		{
-			var activityItem1 = new RemoveActivityItem
-			{
-				ActivityId = Guid.NewGuid(),
-				StartTime = new DateTime(2016, 4, 13, 8, 0, 0),
-				EndTime = new DateTime(2016, 4, 13, 10, 0, 0)
-			};
-
-			var activityItem2 = new RemoveActivityItem
-			{
-				ActivityId = Guid.NewGuid(),
-				StartTime = new DateTime(2016,4,13,9,0,0),
-				EndTime = new DateTime(2016,4,13,10,0,0)
-			};
-
-			var activityItem3 = new RemoveActivityItem
-			{
-				ActivityId = Guid.NewGuid(),
-				StartTime = new DateTime(2016,4,13,14,0,0),
-				EndTime = new DateTime(2016,4,13,16,0,0)
-			};
-
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
@@ -75,12 +54,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new RemovePersonActivityItem
 					{
 						PersonId = Guid.NewGuid(),
-						Activities = new List<RemoveActivityItem> {activityItem1, activityItem2}
+						ShiftLayerIds = new List<Guid> {new Guid(), new Guid()}
 					},
 					new RemovePersonActivityItem
 					{
 						PersonId = Guid.NewGuid(),
-						Activities = new List<RemoveActivityItem> {activityItem3}
+						ShiftLayerIds = new List<Guid> {new Guid()}
 					}
 				}
 			};
