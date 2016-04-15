@@ -296,7 +296,6 @@
     <Compile Include="ApplicationLayer\EventTrackerTest.cs" />
     <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\PersonChangedMessageLegacyHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="Logon\DataSourceAspectTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Cache\CacheTest.cs" />
