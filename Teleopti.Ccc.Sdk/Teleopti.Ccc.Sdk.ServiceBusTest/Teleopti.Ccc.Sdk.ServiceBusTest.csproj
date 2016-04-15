@@ -150,7 +150,6 @@
     <Compile Include="Denormalizer\PersonPeriodChangedMessageLegacyHandlerTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumerTest.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueResolveTest.cs" />
-    <Compile Include="Denormalizer\DenormalizeScheduleProjectionResolveTest.cs" />
     <Compile Include="Denormalizer\GroupPageChangedMessageLegacyHandlerTest.cs" />
     <Compile Include="Diagnostics\ServiceBusHealthCheckEventHandlerTest.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillTest.cs" />
