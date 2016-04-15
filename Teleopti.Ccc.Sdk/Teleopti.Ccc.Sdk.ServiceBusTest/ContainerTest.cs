@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.ServiceBus;
 using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -17,32 +15,14 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
-using Teleopti.Ccc.Sdk.ServiceBus.Legacy;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
 	[TestFixture]
 	public class ContainerTest
 	{
-
-		[Test]
-		public void ShouldResolveNewAbsenceRequestConsumer()
-		{
-			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
-
-			var builder = new ContainerBuilder();
-			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), toggleManager);
-			builder.RegisterModule(new CommonModule(configuration));
-			builder.RegisterType<LegacyAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
-			using (var container = builder.Build())
-			{
-				container.Resolve<ConsumerOf<NewAbsenceRequestCreated>>().Should().Not.Be.Null();
-			}
-		}
-
 		[Test]
 		public void ShouldResolveScheduleStateHolder()
 		{
