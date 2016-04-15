@@ -113,3 +113,4 @@ Wfm_RecalculateForecastOnHangfire_37971 = RC
 ETL_SpeedUpFactScheduleNightly_38019 = false
 ETL_SpeedUpPersonPeriodNightly_38097 = false
 ETL_SpeedUpNightlyReloadDatamart_38131 = RC
+ETL_SpeedUpIntradayPreference_37124 = false

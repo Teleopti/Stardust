@@ -103,7 +103,8 @@
 		Wfm_RecalculateForecastOnHangfire_37971,
 		ETL_SpeedUpFactScheduleNightly_38019,
 		ETL_SpeedUpPersonPeriodNightly_38097,
-		ETL_SpeedUpNightlyReloadDatamart_38131
+		ETL_SpeedUpNightlyReloadDatamart_38131,
+		ETL_SpeedUpIntradayPreference_37124,
 		// ReSharper restore InconsistentNaming
 	}
 }
