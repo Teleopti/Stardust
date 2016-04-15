@@ -14274,4 +14274,11 @@ Help us improve your experience by sending an error report</value>
     <value>No permission to remove activities for agent {0}.</value>
     <comment>Error message to notify missing permission for removing activity</comment>
   </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Incoming traffic</value>
+  </data>
+  <data name="ToggleIncludedSkills" xml:space="preserve">
+    <value>Toggle included skills</value>
+    <comment>label for toggeling visibility of included skills</comment>
+  </data>
 </root>

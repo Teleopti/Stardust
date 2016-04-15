@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.intraday')
 	.controller('IntradayCtrl', [
-		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout', '$compile',
-		function ($scope, $state, intradayService, $filter, NoticeService, $timeout, $compile) {
+		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout', '$compile', '$translate',
+		function ($scope, $state, intradayService, $filter, NoticeService, $timeout, $compile, $translate) {
 
 			var autocompleteSkill;
 			var autocompleteSkillArea;
@@ -89,7 +89,8 @@
 				};
 
 				var notifySkillAreaDeletion = function () {
-					NoticeService.success("Deleted Area ", 5000, true);
+					var message = $translate.instant('Deleted');
+					NoticeService.success(message, 5000, true);
 				};
 
 				$scope.querySearch = function (query, myArray) {
@@ -152,7 +153,7 @@
 					    $scope.actualAverageHandleTimeSeries.splice(0, 0, 'AHT');
 					    $scope.HasMonitorData = true;
 					    loadIntradayChart();
-					}				
+					}
 				};
 
 				var pollSkillMonitorData = function () {
@@ -162,8 +163,6 @@
 							id: $scope.selectedItem.Id
 						})
 						.$promise.then(function (result) {
-							if (timeoutPromise)
-								return;
 							timeoutPromise = $timeout(pollSkillMonitorData, pollingTimeout);
 							setResult(result);
 					    },
@@ -193,8 +192,6 @@
 								id: $scope.selectedItem.Id
 							})
 							.$promise.then(function (result) {
-								if (timeoutPromise)
-									return;
 								timeoutPromise = $timeout(pollSkillAreaMonitorData, pollingTimeout);
 								setResult(result);
 							},
@@ -283,13 +280,13 @@
 										}
 									},
 									y:{
-										label: 'Calls',
+										label: $translate.instant('Calls'),
 										tick: {
 											format: d3.format('.1f')
 										}
 									},
 									x:{
-										label: 'interval',
+										label: $translate.instant('SkillTypeTime'),
 										type: 'category',
 										tick: {
 											fit: true,
