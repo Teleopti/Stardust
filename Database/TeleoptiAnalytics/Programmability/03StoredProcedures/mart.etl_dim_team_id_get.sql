@@ -5,7 +5,7 @@ GO
 -- =============================================
 -- Author:		Karin
 -- Create date: 2016-02-24
--- Description:	Get a team_id from given team_code. If not exits hten create it first.
+-- Description:	Get a team_id from given team_code. If not exits then create it first.
 -- =============================================
 CREATE PROCEDURE [mart].[etl_dim_team_id_get]
 @team_code uniqueidentifier, 
@@ -22,15 +22,22 @@ BEGIN
     SELECT @team_id = team_id 
 	FROM mart.dim_team WITH (NOLOCK)
 	WHERE team_code = @team_code
+	AND site_id=@site_id
+	AND business_unit_id=@business_unit_id
 
 	IF @team_id IS NULL
 	BEGIN
 		SELECT @scorecard_id  = isnull(scorecard_id,-1) FROM mart.dim_scorecard WITH (NOLOCK) WHERE business_unit_id=@business_unit_id
 		
-		INSERT INTO mart.dim_team(team_code,team_name,scorecard_id,site_id,business_unit_id,datasource_id)
-		VALUES (@team_code,@team_name,@scorecard_id,@site_id,@business_unit_id, 1)
+		INSERT mart.dim_team(team_code,team_name,scorecard_id,site_id,business_unit_id,datasource_id)
+		SELECT @team_code,@team_name,@scorecard_id,@site_id,@business_unit_id, 1
+		WHERE NOT EXISTS(SELECT 1 FROM mart.dim_team where team_code=@team_code AND site_id=@site_id AND business_unit_id = @business_unit_id)
 
-		SET @team_id = @@IDENTITY
+		SELECT @team_id = team_id 
+		FROM mart.dim_team
+		WHERE team_code = @team_code
+		AND site_id=@site_id
+		AND business_unit_id=@business_unit_id
 	END
 
 	SELECT @team_id
