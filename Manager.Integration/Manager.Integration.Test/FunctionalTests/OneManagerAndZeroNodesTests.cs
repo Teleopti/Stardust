@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
@@ -15,6 +16,8 @@ namespace Manager.Integration.Test.FunctionalTests
 		[Test]
 		public void JobsShouldJustBeQueuedIfNoNodesTest()
 		{
+			var startedTest = DateTime.UtcNow;
+
 			this.Log().DebugWithLineNumber("Start.");
 
 			var createNewJobRequests =
@@ -59,6 +62,19 @@ namespace Manager.Integration.Test.FunctionalTests
 			{
 				jobManagerTaskCreator.Dispose();
 			}
+
+			var endedTest = DateTime.UtcNow;
+
+			string description =
+				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
+								createNewJobRequests.Count,
+								base.NumberOfManagers,
+								base.NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+											  description,
+											  startedTest,
+											  endedTest);
 
 			this.Log().DebugWithLineNumber("Finished.");
 		}

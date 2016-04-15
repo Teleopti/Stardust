@@ -1,5 +1,6 @@
 using System;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Stardust.Manager.Constants;
@@ -12,12 +13,14 @@ namespace Stardust.Manager
 {
 	public class ManagerController : ApiController
 	{
-		private readonly JobManager _jobManager;
-		private readonly Validator _validator;
-
+		private readonly JobManagerNewVersion _jobManager;
 		private readonly INodeManager _nodeManager;
 
-		public ManagerController(INodeManager nodeManager, JobManager jobManager, Validator validator)
+		private readonly Validator _validator;
+
+		public ManagerController(INodeManager nodeManager,
+		                         JobManagerNewVersion jobManager,
+		                         Validator validator)
 		{
 			_nodeManager = nodeManager;
 			_jobManager = jobManager;
@@ -25,39 +28,43 @@ namespace Stardust.Manager
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Job)]
-		public IHttpActionResult DoThisJob([FromBody] JobRequestModel job)
+		public IHttpActionResult AddItemToJobQueue([FromBody] JobRequestModel job)
 		{
 			var isValidRequest = _validator.ValidateObject(job);
+
 			if (!isValidRequest.Success)
 			{
 				return BadRequest(isValidRequest.Message);
 			}
 
-			var jobReceived = new JobDefinition
+			var jobReceived = new JobQueueItem
 			{
 				Name = job.Name,
 				Serialized = job.Serialized,
 				Type = job.Type,
-				UserName = job.UserName,
-				Id = Guid.NewGuid()
+				CreatedBy = job.CreatedBy,
+				JobId = Guid.NewGuid()
 			};
 
-			_jobManager.AddJobDefinition(jobReceived);
+			_jobManager.AddItemToJobQueue(jobReceived);
 
 			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
 			                        WhoAmI(Request),
-			                        jobReceived.Id,
+			                        jobReceived.JobId,
 			                        jobReceived.Name);
 
 			this.Log().InfoWithLineNumber(msg);
 
-			Task.Factory.StartNew(() => { _jobManager.CheckAndAssignNextJob(); });
+			Task.Factory.StartNew(() =>
+			{
+				_jobManager.TryAssignJobToWorkerNode();
+			});
 
-			return Ok(jobReceived.Id);
+			return Ok(jobReceived.JobId);
 		}
 
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
-		public IHttpActionResult CancelThisJob(Guid jobId)
+		public IHttpActionResult CancelJobByJobId(Guid jobId)
 		{
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success)
@@ -73,15 +80,15 @@ namespace Stardust.Manager
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
-		public IHttpActionResult JobHistoryList()
+		public IHttpActionResult GetAllJobs()
 		{
-			var jobHistory = _jobManager.GetAllJobHistories();
+			var jobHistory = _jobManager.GetAllJobs();
 
 			return Ok(jobHistory);
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
-		public IHttpActionResult JobHistory(Guid jobId)
+		public IHttpActionResult GetJobByJobId(Guid jobId)
 		{
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success)
@@ -89,13 +96,13 @@ namespace Stardust.Manager
 				return BadRequest(isValidRequest.Message);
 			}
 
-			var jobHistory = _jobManager.GetJobHistoryByJobId(jobId);
+			var jobHistory = _jobManager.GetJobByJobId(jobId);
 
 			return Ok(jobHistory);
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.JobDetail)]
-		public IHttpActionResult JobHistoryDetails(Guid jobId)
+		public IHttpActionResult GetJobDetailsByJobId(Guid jobId)
 		{
 			var isValidRequest = _validator.ValidateJobId(jobId);
 			if (!isValidRequest.Success)
@@ -103,13 +110,13 @@ namespace Stardust.Manager
 				return BadRequest(isValidRequest.Message);
 			}
 
-			var jobHistoryDetail = _jobManager.GetJobHistoryDetailsByJobId(jobId);
+			var jobHistoryDetail = _jobManager.GetJobDetailsByJobId(jobId);
 
 			return Ok(jobHistoryDetail);
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
-		public IHttpActionResult Heartbeat([FromBody] Uri nodeUri)
+		public IHttpActionResult RegisterHeartbeat([FromBody] Uri nodeUri)
 		{
 			var isValidRequest = _validator.ValidateUri(nodeUri);
 			if (!isValidRequest.Success)
@@ -140,10 +147,13 @@ namespace Stardust.Manager
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
 
-				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-				                                         "Success");
+				_jobManager.SetEndResultOnJob(jobId,
+				                              "Success",
+											  DateTime.UtcNow);
 
-				_jobManager.CheckAndAssignNextJob();
+				Thread.Sleep(TimeSpan.FromSeconds(2));
+
+				_jobManager.TryAssignJobToWorkerNode();
 			});
 
 			return Ok();
@@ -167,15 +177,18 @@ namespace Stardust.Manager
 				{
 					JobId = jobFailedModel.JobId,
 					Created = DateTime.UtcNow,
-					ProgressDetail = jobFailedModel.AggregateException.ToString()
+					Detail = jobFailedModel.AggregateException.ToString()
 				};
 
 				_jobManager.ReportProgress(progress);
 
-				_jobManager.SetEndResultOnJobAndRemoveIt(jobFailedModel.JobId,
-				                                         "Failed");
+				_jobManager.SetEndResultOnJob(jobFailedModel.JobId,
+				                              "Failed",
+											  DateTime.UtcNow);
 
-				_jobManager.CheckAndAssignNextJob();
+				Thread.Sleep(TimeSpan.FromSeconds(2));
+
+				_jobManager.TryAssignJobToWorkerNode();
 			});
 
 			return Ok();
@@ -194,10 +207,13 @@ namespace Stardust.Manager
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
 
-				_jobManager.SetEndResultOnJobAndRemoveIt(jobId,
-				                                         "Canceled");
+				_jobManager.SetEndResultOnJob(jobId,
+				                              "Canceled",
+											  DateTime.UtcNow);
 
-				_jobManager.CheckAndAssignNextJob();
+				Thread.Sleep(TimeSpan.FromSeconds(2));
+
+				_jobManager.TryAssignJobToWorkerNode();
 			});
 
 			return Ok();
@@ -213,7 +229,10 @@ namespace Stardust.Manager
 				return BadRequest(isValidRequest.Message);
 			}
 
-			Task.Factory.StartNew(() => { _jobManager.ReportProgress(model); });
+			Task.Factory.StartNew(() =>
+			{
+				_jobManager.ReportProgress(model);
+			});
 
 			return Ok();
 		}
@@ -235,7 +254,8 @@ namespace Stardust.Manager
 
 				_nodeManager.FreeJobIfAssingedToNode(nodeUri);
 				_nodeManager.AddIfNeeded(nodeUri);
-				_jobManager.CheckAndAssignNextJob();
+
+				_jobManager.TryAssignJobToWorkerNode();
 			});
 
 			return Ok();
@@ -248,9 +268,9 @@ namespace Stardust.Manager
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.Nodes)]
-		public IHttpActionResult Nodes()
+		public IHttpActionResult GetAllWorkerNodes()
 		{
-			var workernodes = _jobManager.Nodes();
+			var workernodes = _jobManager.GetAllWorkerNodes();
 
 			return Ok(workernodes);
 		}

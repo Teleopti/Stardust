@@ -6,11 +6,11 @@ using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Entities
 {
-	public class SendJobProgressModel : ISendJobProgressModel, IValidatableObject
+	public class JobDetailEntity : IJobDetail, IValidatableObject
 	{
 		public Guid JobId { get; set; }
 
-		public string ProgressDetail { get; set; }
+		public string Detail { get; set; }
 
 		public DateTime? Created { get; set; }
 
@@ -29,7 +29,7 @@ namespace Stardust.Node.Entities
 				list.Add(new ValidationResult("Invalid job id value.", pIncome));
 			}
 
-			if (string.IsNullOrEmpty(ProgressDetail))
+			if (string.IsNullOrEmpty(Detail))
 			{
 				pIncome = new[]
 				{

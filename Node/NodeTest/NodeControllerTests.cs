@@ -29,9 +29,9 @@ namespace NodeTest
 
 			var ser = JsonConvert.SerializeObject(parameters);
 
-			_jobToDo = new JobToDo
+			_jobQueueItemEntity = new JobQueueItemEntity
 			{
-				Id = Guid.NewGuid(),
+				JobId = Guid.NewGuid(),
 				Name = "JobToDo Name",
 				Serialized = ser,
 				Type = "NodeTest.JobHandlers.TestJobParams"
@@ -41,21 +41,21 @@ namespace NodeTest
 			                                                                    new FakeHttpSender());
 			_pingToManagerFake = new PingToManagerFake();
 
-			_trySendJobProgressToManagerTimerFake =
-				new TrySendJobProgressToManagerTimerFake(_nodeConfigurationFake,
+			_trySendJobDetailToManagerTimerFake =
+				new TrySendJobDetailToManagerTimerFake(_nodeConfigurationFake,
 				                                         new FakeHttpSender(),
 				                                         1000);
 
 			_sendJobDoneTimer = new SendJobDoneTimerFake(_nodeConfigurationFake,
-			                                             _trySendJobProgressToManagerTimerFake,
+			                                             _trySendJobDetailToManagerTimerFake,
 			                                             new FakeHttpSender());
 
 			_sendJobCanceledTimer = new SendJobCanceledTimerFake(_nodeConfigurationFake,
-			                                                     _trySendJobProgressToManagerTimerFake,
+			                                                     _trySendJobDetailToManagerTimerFake,
 			                                                     new FakeHttpSender());
 
 			_sendJobFaultedTimer = new SendJobFaultedTimerFake(_nodeConfigurationFake,
-			                                                   _trySendJobProgressToManagerTimerFake,
+			                                                   _trySendJobDetailToManagerTimerFake,
 			                                                   new FakeHttpSender());
 		}
 
@@ -83,13 +83,13 @@ namespace NodeTest
 		private NodeConfiguration _nodeConfigurationFake;
 		private IWorkerWrapper _workerWrapper;
 		private NodeController _nodeController;
-		private JobToDo _jobToDo;
+		private JobQueueItemEntity _jobQueueItemEntity;
 		private PingToManagerFake _pingToManagerFake;
 		private NodeStartupNotificationToManagerFake _nodeStartupNotification;
 		private SendJobDoneTimerFake _sendJobDoneTimer;
 		private SendJobCanceledTimerFake _sendJobCanceledTimer;
 		private SendJobFaultedTimerFake _sendJobFaultedTimer;
-		private TrySendJobProgressToManagerTimerFake _trySendJobProgressToManagerTimerFake;
+		private TrySendJobDetailToManagerTimerFake _trySendJobDetailToManagerTimerFake;
 
 		[Test]
 		public void CancelJobShouldReturnNotFoundWhenCancellingJobWhenIdle()
@@ -101,14 +101,14 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobProgressToManagerTimerFake);
+			                                   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
 				Request = new HttpRequestMessage()
 			};
 
-			IHttpActionResult actionResultCancel = _nodeController.TryCancelJob(_jobToDo.Id);
+			IHttpActionResult actionResultCancel = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
 
 			Assert.IsTrue(actionResultCancel.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
@@ -125,28 +125,28 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobProgressToManagerTimerFake);
+			                                   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
 				Request = new HttpRequestMessage()
 			};
 
-			var wrongJobToDo = new JobToDo
+			var wrongJobToDo = new JobQueueItemEntity
 			{
-				Id = Guid.NewGuid(),
+				JobId = Guid.NewGuid(),
 				Name = "Another name",
 				Type = "NodeTest.JobHandlers.TestJobParams",
 				Serialized = "Serialized data"
 			};
 
-			var actionResult = _nodeController.StartJob(_jobToDo);
+			var actionResult = _nodeController.StartJob(_jobQueueItemEntity);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
 						  HttpStatusCode.OK);
 
-			actionResult = _nodeController.TryCancelJob(wrongJobToDo.Id);
+			actionResult = _nodeController.TryCancelJob(wrongJobToDo.JobId);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
@@ -163,18 +163,18 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobProgressToManagerTimerFake);
+			                                   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
 				Request = new HttpRequestMessage()
 			};
 
-			_nodeController.StartJob(_jobToDo);
+			_nodeController.StartJob(_jobQueueItemEntity);
 
-			_trySendJobProgressToManagerTimerFake.WaitHandle.Wait(1500);
+			_trySendJobDetailToManagerTimerFake.WaitHandle.Wait(1500);
 
-			var actionResult = _nodeController.TryCancelJob(_jobToDo.Id);
+			var actionResult = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
@@ -191,7 +191,7 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobProgressToManagerTimerFake);
+			                                   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -216,7 +216,7 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobProgressToManagerTimerFake);
+			                                   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -242,7 +242,7 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobProgressToManagerTimerFake);
+			                                   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
@@ -254,15 +254,15 @@ namespace NodeTest
 			                                   "i lingonskogen");
 			var ser = JsonConvert.SerializeObject(parameters);
 
-			var jobToDo2 = new JobToDo
+			var jobToDo2 = new JobQueueItemEntity
 			{
-				Id = Guid.NewGuid(),
+				JobId = Guid.NewGuid(),
 				Name = "Another name",
 				Serialized = ser,
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
 
-			_nodeController.StartJob(_jobToDo);
+			_nodeController.StartJob(_jobQueueItemEntity);
 
 			var actionResult = _nodeController.StartJob(jobToDo2);
 
@@ -281,14 +281,14 @@ namespace NodeTest
 			                                   _sendJobDoneTimer,
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
-			                                   _trySendJobProgressToManagerTimerFake);
+			                                   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
 				Request = new HttpRequestMessage()
 			};
 
-			var actionResult = _nodeController.StartJob(_jobToDo);
+			var actionResult = _nodeController.StartJob(_jobQueueItemEntity);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==

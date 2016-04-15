@@ -7,28 +7,28 @@ namespace Stardust.Node.Extensions
 {
 	public static class JobToDoExtensions
 	{
-		public static string SerializeToJson(this JobToDo jobToDo)
+		public static string SerializeToJson(this JobQueueItemEntity jobQueueItemEntity)
 		{
-			jobToDo.ThrowExceptionWhenNull();
+			jobQueueItemEntity.ThrowExceptionWhenNull();
 
-			return JsonConvert.SerializeObject(jobToDo);
+			return JsonConvert.SerializeObject(jobQueueItemEntity);
 		}
 
-		public static Uri CreateUri(this JobToDo jobToDo,
+		public static Uri CreateUri(this JobQueueItemEntity jobQueueItemEntity,
 		                            string endPoint)
 		{
-			jobToDo.ThrowExceptionWhenNull();
+			jobQueueItemEntity.ThrowExceptionWhenNull();
 			endPoint.ThrowArgumentExceptionIfNullOrEmpty();
 
 			var transformUri = new Uri(endPoint.Replace(NodeRouteConstants.JobIdOptionalParameter,
-			                                            jobToDo.Id.ToString()));
+			                                            jobQueueItemEntity.JobId.ToString()));
 
 			return transformUri;
 		}
 
-		public static void ThrowExceptionWhenNull(this JobToDo jobToDo)
+		public static void ThrowExceptionWhenNull(this JobQueueItemEntity jobQueueItemEntity)
 		{
-			if (jobToDo == null)
+			if (jobQueueItemEntity == null)
 			{
 				throw new ArgumentException();
 			}

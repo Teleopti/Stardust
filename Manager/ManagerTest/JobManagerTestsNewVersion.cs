@@ -17,7 +17,7 @@ using Stardust.Manager.Models;
 namespace ManagerTest
 {
 //	[TestFixture, JobTests]
-//	public class JobManagerTests : DatabaseTest
+//	public class JobManagerTestsNewVersion : DatabaseTest
 //	{
 //		[TearDown]
 //		public void TearDown()
@@ -37,7 +37,7 @@ namespace ManagerTest
 
 //		private FakeHttpSender FakeHttpSender
 //		{
-//			get { return (FakeHttpSender) HttpSender; }
+//			get { return (FakeHttpSender)HttpSender; }
 //		}
 
 //		[TestFixtureSetUp]
@@ -170,7 +170,8 @@ namespace ManagerTest
 
 //			WorkerNodeRepository.AddWorkerNode(new WorkerNode
 //			{
-//				Id = Guid.NewGuid(), Url = _nodeUri1
+//				Id = Guid.NewGuid(),
+//				Url = _nodeUri1
 //			});
 
 //			FakeHttpSender.Responses = new List<HttpResponseMessage>
@@ -200,7 +201,7 @@ namespace ManagerTest
 //				Serialized = "",
 //				Type = ""
 //			});
-//			WorkerNodeRepository.AddWorkerNode(new WorkerNode {Id = Guid.NewGuid(), Url = _nodeUri1});
+//			WorkerNodeRepository.AddWorkerNode(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1 });
 //			JobManager.CheckAndAssignNextJob();
 //			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
 //			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
@@ -230,7 +231,8 @@ namespace ManagerTest
 
 //			WorkerNodeRepository.AddWorkerNode(new WorkerNode
 //			{
-//				Id = nodeId, Url = _nodeUri1
+//				Id = nodeId,
+//				Url = _nodeUri1
 //			});
 
 //			JobManager.CheckAndAssignNextJob();

@@ -5,12 +5,20 @@ using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Entities
 {
-	public class JobToDo : IJobToDo, IValidatableObject
+	public class JobQueueItemEntity : IJobQueueItem, IValidatableObject
 	{
-		public Guid Id { get; set; }
+		public Guid JobId { get; set; }
+
 		public string Name { get; set; }
+
 		public string Serialized { get; set; }
+
 		public string Type { get; set; }
+
+
+		public string CreatedBy { get; set; }
+
+		public DateTime? Created { get; set; }
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
@@ -21,7 +29,7 @@ namespace Stardust.Node.Entities
 				"Id"
 			};
 
-			if (this.Id == Guid.Empty)
+			if (this.JobId == Guid.Empty)
 			{
 				list.Add(new ValidationResult("Invalid job id value.", pIncome));
 			}

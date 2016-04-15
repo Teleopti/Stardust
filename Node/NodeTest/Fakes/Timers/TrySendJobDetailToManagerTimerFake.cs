@@ -5,9 +5,9 @@ using Stardust.Node.Workers;
 
 namespace NodeTest.Fakes.Timers
 {
-	public class TrySendJobProgressToManagerTimerFake : TrySendJobProgressToManagerTimer
+	public class TrySendJobDetailToManagerTimerFake : TrySendJobDetailToManagerTimer
 	{
-		public TrySendJobProgressToManagerTimerFake(NodeConfiguration nodeConfiguration, 
+		public TrySendJobDetailToManagerTimerFake(NodeConfiguration nodeConfiguration, 
 													IHttpSender httpSender,
 		                                            double interval) : base(nodeConfiguration, 
 																			httpSender, 

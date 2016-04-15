@@ -32,12 +32,12 @@ namespace Manager.Integration.Test.WPF.Commands
 
 			var testJobParamsJson = JsonConvert.SerializeObject(testJobParams);
 
-			var job = new JobRequestModel
+			var job = new JobQueueItem
 			{
 				Name = "Job Name ",
 				Serialized = testJobParamsJson,
 				Type = "NodeTest.JobHandlers.TestJobParams",
-				UserName = SecurityHelper.GetLoggedInUser()
+				CreatedBy = SecurityHelper.GetLoggedInUser()
 			};
 
 			var response = HttpSender.PostAsync(uri, job);

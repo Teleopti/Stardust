@@ -11,7 +11,7 @@ namespace Stardust.Manager.Models
 
 		public string Type { get; set; }
 
-		public string UserName { get; set; }
+		public string CreatedBy { get; set; }
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
@@ -47,7 +47,7 @@ namespace Stardust.Manager.Models
 				list.Add(new ValidationResult("Invalid job serialized value.", pIncome));
 			}
 
-			if (string.IsNullOrEmpty(UserName))
+			if (string.IsNullOrEmpty(CreatedBy))
 			{
 				pIncome = new[]
 				{

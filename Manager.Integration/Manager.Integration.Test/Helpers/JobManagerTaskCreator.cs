@@ -78,16 +78,16 @@ namespace Manager.Integration.Test.Helpers
 			NewJobToManagerTask.Wait(timeout);
 		}
 
-		public void CreateNewJobToManagerTask(JobRequestModel jobRequestModel)
+		public void CreateNewJobToManagerTask(JobQueueItem jobQueueItem)
 		{
 			NewJobToManagerTask = new Task(() =>
 			{
-				CreateNewJobToManager(jobRequestModel);
+				CreateNewJobToManager(jobQueueItem);
 			},
 			CancellationTokenSource.Token);
 		}
 
-		public async void CreateNewJobToManager(JobRequestModel jobRequestModel)
+		public async void CreateNewJobToManager(JobQueueItem jobQueueItem)
 		{
 			CreateNewJobToManagerSucceeded = false;
 
@@ -102,10 +102,10 @@ namespace Manager.Integration.Test.Helpers
 				while (!CreateNewJobToManagerSucceeded)
 				{
 					this.Log().DebugWithLineNumber(
-						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobRequestModel.Name + " )");
+						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobQueueItem.Name + " )");
 					try
 					{
-						response = await httpSender.PostAsync(uri, jobRequestModel);
+						response = await httpSender.PostAsync(uri, jobQueueItem);
 
 						CreateNewJobToManagerSucceeded = response.IsSuccessStatusCode;
 					}
@@ -116,7 +116,7 @@ namespace Manager.Integration.Test.Helpers
 
 						this.Log().WarningWithLineNumber(
 							"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
-							jobRequestModel.Name + " ).");
+							jobQueueItem.Name + " ).");
 
 						Thread.Sleep(TimeSpan.FromSeconds(1));
 					}
@@ -135,7 +135,7 @@ namespace Manager.Integration.Test.Helpers
 
 						this.Log().DebugWithLineNumber(
 							"Finished calling post async. Uri : ( " + uri + " ). ( jobId, jobName ) : ( " + jobId + ", " +
-							jobRequestModel.Name + " )");
+							jobQueueItem.Name + " )");
 					}
 				}
 			}

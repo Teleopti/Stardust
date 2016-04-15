@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 
-namespace Manager.Integration.Test
+namespace Stardust.Manager.Models
 {
-	public class JobHistory
+	public class Job
 	{
-		public Guid Id { get; set; }
+		public Guid JobId { get; set; }
 
 		public string Name { get; set; }
 
@@ -16,8 +16,10 @@ namespace Manager.Integration.Test
 
 		public DateTime? Ended { get; set; }
 
-		public string SentTo { get; set; }
+		public string SentToWorkerNodeUri { get; set; }
 
 		public string Result { get; set; }
+
+		public string Type { get; set; }
 	}
 }

@@ -32,15 +32,15 @@ namespace Stardust.Node.API
 		private NodeConfiguration NodeConfiguration { get; set; }
 
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
-		public IHttpActionResult StartJob(JobToDo jobToDo)
+		public IHttpActionResult StartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
-			var isJobToDoValidObject = ValidateObject(jobToDo);
+			var isJobToDoValidObject = ValidateObject(jobQueueItemEntity);
 			if (isJobToDoValidObject.IsBadRequest)
 			{
 				return BadRequest(isJobToDoValidObject.Message);
 			}
 			
-			var isValidRequest = _workerWrapper.ValidateStartJob(jobToDo);
+			var isValidRequest = _workerWrapper.ValidateStartJob(jobQueueItemEntity);
 			if (isValidRequest.IsBadRequest)
 			{
 				return BadRequest(isValidRequest.Message);
@@ -51,18 +51,18 @@ namespace Stardust.Node.API
 				return Conflict();
 			}
 
-			Logger.InfoWithLineNumber("Received Start Job from Manager. JobId: " + jobToDo.Id);
+			Logger.InfoWithLineNumber("Received Start Job from Manager. JobId: " + jobQueueItemEntity.JobId);
 
 			Task.Factory.StartNew(() =>
 			{
 				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
 				                                    _workerWrapper.WhoamI,
-				                                    jobToDo.Id,
-				                                    jobToDo.Name);
+				                                    jobQueueItemEntity.JobId,
+				                                    jobQueueItemEntity.Name);
 
 				Logger.DebugWithLineNumber(startJobMessage);
 
-				_workerWrapper.StartJob(jobToDo);
+				_workerWrapper.StartJob(jobQueueItemEntity);
 			});
 
 			return Ok();
@@ -114,7 +114,7 @@ namespace Stardust.Node.API
 
 			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
 
-			if (currentJob == null || currentJob.Id != jobId)
+			if (currentJob == null || currentJob.JobId != jobId)
 			{
 				return NotFound();
 			}

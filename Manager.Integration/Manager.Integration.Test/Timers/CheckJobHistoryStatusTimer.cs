@@ -211,7 +211,7 @@ namespace Manager.Integration.Test.Timers
 								try
 								{
 										var jobHistory =
-										JsonConvert.DeserializeObject<JobHistory>(jobSerialized);
+										JsonConvert.DeserializeObject<Job>(jobSerialized);
 
 									if (jobHistory != null)
 									{

@@ -90,7 +90,7 @@
     <Compile Include="Fakes\Timers\SendJobDoneTimerFake.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Fakes\Timers\TrySendJobProgressToManagerTimerFake.cs">
+    <Compile Include="Fakes\Timers\TrySendJobDetailToManagerTimerFake.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="JobHandlersTests.cs" />

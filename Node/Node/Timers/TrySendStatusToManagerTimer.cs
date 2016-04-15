@@ -20,14 +20,14 @@ namespace Stardust.Node.Timers
 
 		public TrySendStatusToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                   Uri callbackTemplateUri,
-		                                   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+		                                   TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
 		                                   IHttpSender httpSender,
 		                                   double interval = 500) : base(interval)
 		{
 			// Validate arguments.
 			nodeConfiguration.ThrowArgumentNullException();
 			callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
-			sendJobProgressToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			sendJobDetailToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 
 			if (httpSender == null)
 			{
@@ -42,7 +42,7 @@ namespace Stardust.Node.Timers
 
 			CallbackTemplateUri = callbackTemplateUri;
 
-			SendJobProgressToManagerTimer = sendJobProgressToManagerTimer;
+			SendJobDetailToManagerTimer = sendJobDetailToManagerTimer;
 			HttpSender = httpSender;
 
 			Elapsed += OnTimedEvent;
@@ -54,12 +54,12 @@ namespace Stardust.Node.Timers
 
 		public string WhoAmI { get; private set; }
 
-		public JobToDo JobToDo { get; set; }
+		public JobQueueItemEntity JobQueueItemEntity { get; set; }
 
 		public NodeConfiguration NodeConfiguration { get; private set; }
 
 		public Uri CallbackTemplateUri { get; set; }
-		public TrySendJobProgressToManagerTimer SendJobProgressToManagerTimer { get; set; }
+		public TrySendJobDetailToManagerTimer SendJobDetailToManagerTimer { get; set; }
 		public IHttpSender HttpSender { get; set; }
 
 		public event EventHandler TrySendStatusSucceded;
@@ -73,12 +73,12 @@ namespace Stardust.Node.Timers
 			}
 		}
 
-		protected virtual async Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		protected virtual async Task<HttpResponseMessage> TrySendStatus(JobQueueItemEntity jobQueueItemEntity,
 		                                                                CancellationToken cancellationToken)
 		{
 			try
 			{
-				var uri = jobToDo.CreateUri(CallbackTemplateUri.ToString());
+				var uri = jobQueueItemEntity.CreateUri(CallbackTemplateUri.ToString());
 
 				var httpResponseMessage = await HttpSender.PostAsync(uri,
 				                                                     null,
@@ -109,13 +109,13 @@ namespace Stardust.Node.Timers
 		private async void OnTimedEvent(object sender,
 		                                ElapsedEventArgs e)
 		{
-			if (JobToDo == null)
+			if (JobQueueItemEntity == null)
 			{
 				return;
 			}
 
 			// All job progresses must have been sent to manager. 
-			if (!SendJobProgressToManagerTimer.HasAllProgressesBeenSent(JobToDo.Id))
+			if (!SendJobDetailToManagerTimer.HasAllProgressesBeenSent(JobQueueItemEntity.JobId))
 			{
 				return;
 			}
@@ -124,17 +124,17 @@ namespace Stardust.Node.Timers
 
 			try
 			{
-				var httpResponseMessage = await TrySendStatus(new JobToDo
+				var httpResponseMessage = await TrySendStatus(new JobQueueItemEntity
 				{
-					Id = JobToDo.Id
+					JobId = JobQueueItemEntity.JobId
 				}, CancellationTokenSource.Token);
 
 				if (httpResponseMessage.IsSuccessStatusCode)
 				{
 					var msg = string.Format("{0} : Sent job status to manager ({3}) for job ( jobId, jobName ) : ( {1}, {2} )",
 					                        WhoAmI,
-					                        JobToDo.Id,
-					                        JobToDo.Name,
+					                        JobQueueItemEntity.JobId,
+					                        JobQueueItemEntity.Name,
 					                        httpResponseMessage.RequestMessage.RequestUri);
 
 					Logger.DebugWithLineNumber(msg);
@@ -149,8 +149,8 @@ namespace Stardust.Node.Timers
 					var msg =
 						string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} ). Reason : {3}",
 						              WhoAmI,
-						              JobToDo.Id,
-						              JobToDo.Name,
+						              JobQueueItemEntity.JobId,
+						              JobQueueItemEntity.Name,
 						              httpResponseMessage.ReasonPhrase);
 
 					Logger.InfoWithLineNumber(msg);
@@ -164,8 +164,8 @@ namespace Stardust.Node.Timers
 				var msg =
 					string.Format("{0} : Send status to manager failed for job ( jobId, jobName ) : ( {1}, {2} )",
 					              WhoAmI,
-					              JobToDo.Id,
-					              JobToDo.Name);
+					              JobQueueItemEntity.JobId,
+					              JobQueueItemEntity.Name);
 
 				Logger.ErrorWithLineNumber(msg, exp);
 			}

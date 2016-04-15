@@ -9,7 +9,6 @@ using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
-using Manager.IntegrationTest.Console.Host.Diagnostics;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
@@ -27,6 +26,8 @@ namespace Manager.Integration.Test.FunctionalTests
 		public void CancelWrongJobsTest()
 		{
 			LogMessage("Start.");
+
+			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
@@ -95,6 +96,19 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
+			var endedTest = DateTime.UtcNow;
+
+			string description =
+				string.Format("Creates {0} CANCEL WRONG jobs with {1} manager and {2} nodes.",
+								createNewJobRequests.Count,
+								base.NumberOfManagers,
+								base.NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+											  description,
+											  startedTest,
+											  endedTest);
+
 			LogMessage("Finished.");
 		}
 
@@ -102,6 +116,8 @@ namespace Manager.Integration.Test.FunctionalTests
 		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
 		{
 			LogMessage("Start.");
+
+			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
 				JobHelper.GenerateLongRunningParamsRequests(1);
@@ -180,6 +196,20 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
+
+			var endedTest = DateTime.UtcNow;
+
+			string description =
+				string.Format("Creates {0} CANCEL jobs with {1} manager and {2} nodes.",
+								createNewJobRequests.Count,
+								base.NumberOfManagers,
+								base.NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+											  description,
+											  startedTest,
+											  endedTest);
+
 			LogMessage("Finished.");
 		}
 
@@ -187,6 +217,8 @@ namespace Manager.Integration.Test.FunctionalTests
 		[Test]
 		public void JobShouldHaveStatusFailedIfFailedTest()
 		{
+			var startedTest = DateTime.UtcNow;
+
 			LogMessage("Start.");
 
 			var createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
@@ -227,6 +259,19 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
+			var endedTest = DateTime.UtcNow;
+
+			string description =
+				string.Format("Creates {0} FAILED jobs with {1} manager and {2} nodes.",
+								createNewJobRequests.Count,
+								base.NumberOfManagers,
+								base.NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+											  description,
+											  startedTest,
+											  endedTest);
+
 			LogMessage("Finished.");
 		}
 
@@ -237,9 +282,11 @@ namespace Manager.Integration.Test.FunctionalTests
 		[Test]
 		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
+			var startedTest = DateTime.UtcNow;
+
 			LogMessage("Start.");
 
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
+			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(10);
 
 			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
@@ -263,7 +310,6 @@ namespace Manager.Integration.Test.FunctionalTests
 			}
 
 			var startJobTaskHelper = new StartJobTaskHelper();
-			var managerIntegrationStopwatch = new ManagerIntegrationStopwatch();
 
 			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 			                                                          CancellationTokenSource,
@@ -271,10 +317,6 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
-			var elapsedTime =
-				managerIntegrationStopwatch.GetTotalElapsedTimeInSeconds();
-
-			LogMessage("Job took : " + elapsedTime + " seconds.");
 
 			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count,
 			              "Number of requests must be equal.");
@@ -290,6 +332,19 @@ namespace Manager.Integration.Test.FunctionalTests
 			}
 
 			LogMessage("Finished.");
+
+			var endedTest = DateTime.UtcNow;
+
+			string description =
+				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.", 
+								createNewJobRequests.Count,
+								base.NumberOfManagers,
+								base.NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+											  description,
+			                                  startedTest,
+			                                  endedTest);
 		}
 	}
 }

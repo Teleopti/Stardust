@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Stardust.Node.Entities
 {
-	public class JobFailedModel : IValidatableObject
+	public class JobFailedEntity : IValidatableObject
 	{
 		public Guid JobId { get; set; }
 

@@ -38,13 +38,13 @@ namespace Manager.Integration.Test.Helpers
 			                    numberOfRequest*latencyPerRequestInSeconds);
 		}
 
-		public static List<JobRequestModel> GenerateLongRunningParamsRequests(int numberOfJobRequests)
+		public static List<JobQueueItem> GenerateLongRunningParamsRequests(int numberOfJobRequests)
 		{
-			List<JobRequestModel> requestModels = null;
+			List<JobQueueItem> requestModels = null;
 
 			if (numberOfJobRequests > 0)
 			{
-				requestModels = new List<JobRequestModel>();
+				requestModels = new List<JobQueueItem>();
 
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
@@ -52,12 +52,12 @@ namespace Manager.Integration.Test.Helpers
 
 					var longRunningJobParamsJson = JsonConvert.SerializeObject(longRunningJobParams);
 
-					var job = new JobRequestModel
+					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
 						Serialized = longRunningJobParamsJson,
 						Type = "NodeTest.JobHandlers.LongRunningJobParams",
-						UserName = SecurityHelper.GetLoggedInUser()
+						CreatedBy = SecurityHelper.GetLoggedInUser()
 					};
 
 					requestModels.Add(job);
@@ -67,13 +67,13 @@ namespace Manager.Integration.Test.Helpers
 			return requestModels;
 		}
 
-		public static List<JobRequestModel> GenerateFailingJobParamsRequests(int numberOfJobRequests)
+		public static List<JobQueueItem> GenerateFailingJobParamsRequests(int numberOfJobRequests)
 		{
-			List<JobRequestModel> requestModels = null;
+			List<JobQueueItem> requestModels = null;
 
 			if (numberOfJobRequests > 0)
 			{
-				requestModels = new List<JobRequestModel>();
+				requestModels = new List<JobQueueItem>();
 
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
@@ -81,12 +81,12 @@ namespace Manager.Integration.Test.Helpers
 
 					var failingJobParamsJson = JsonConvert.SerializeObject(failingJobParams);
 
-					var job = new JobRequestModel
+					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
 						Serialized = failingJobParamsJson,
 						Type = "NodeTest.JobHandlers.FailingJobParams",
-						UserName = SecurityHelper.GetLoggedInUser()
+						CreatedBy = SecurityHelper.GetLoggedInUser()
 					};
 
 					requestModels.Add(job);
@@ -96,13 +96,13 @@ namespace Manager.Integration.Test.Helpers
 			return requestModels;
 		}
 
-		public static List<JobRequestModel> GenerateFastJobParamsRequests(int numberOfJobRequests)
+		public static List<JobQueueItem> GenerateFastJobParamsRequests(int numberOfJobRequests)
 		{
-			List<JobRequestModel> requestModels = null;
+			List<JobQueueItem> requestModels = null;
 
 			if (numberOfJobRequests > 0)
 			{
-				requestModels = new List<JobRequestModel>();
+				requestModels = new List<JobQueueItem>();
 
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
@@ -110,12 +110,12 @@ namespace Manager.Integration.Test.Helpers
 
 					var fastJobParamsJson = JsonConvert.SerializeObject(fastJobParams);
 
-					var job = new JobRequestModel
+					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
 						Serialized = fastJobParamsJson,
 						Type = "NodeTest.JobHandlers.FastJobParams",
-						UserName = SecurityHelper.GetLoggedInUser()
+						CreatedBy = SecurityHelper.GetLoggedInUser()
 					};
 
 					requestModels.Add(job);
@@ -125,13 +125,13 @@ namespace Manager.Integration.Test.Helpers
 			return requestModels;
 		}
 
-		public static List<JobRequestModel> GenerateInvalidTestJobParamsRequests(int numberOfJobRequests)
+		public static List<JobQueueItem> GenerateInvalidTestJobParamsRequests(int numberOfJobRequests)
 		{
-			List<JobRequestModel> requestModels = null;
+			List<JobQueueItem> requestModels = null;
 
 			if (numberOfJobRequests > 0)
 			{
-				requestModels = new List<JobRequestModel>();
+				requestModels = new List<JobQueueItem>();
 
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
@@ -140,12 +140,12 @@ namespace Manager.Integration.Test.Helpers
 
 					var testJobParamsJson = JsonConvert.SerializeObject(testJobParams);
 
-					var job = new JobRequestModel
+					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
 						Serialized = testJobParamsJson,
 						Type = null,
-						UserName = SecurityHelper.GetLoggedInUser()
+						CreatedBy = SecurityHelper.GetLoggedInUser()
 					};
 
 					requestModels.Add(job);
@@ -155,13 +155,13 @@ namespace Manager.Integration.Test.Helpers
 			return requestModels;
 		}
 
-		public static List<JobRequestModel> GenerateTestReportProgressJobParamsRequests(int numberOfJobRequests)
+		public static List<JobQueueItem> GenerateTestReportProgressJobParamsRequests(int numberOfJobRequests)
 		{
-			List<JobRequestModel> requestModels = null;
+			List<JobQueueItem> requestModels = null;
 
 			if (numberOfJobRequests > 0)
 			{
-				requestModels = new List<JobRequestModel>();
+				requestModels = new List<JobQueueItem>();
 
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
@@ -170,12 +170,12 @@ namespace Manager.Integration.Test.Helpers
 
 					var testJobParamsJson = JsonConvert.SerializeObject(testJobParams);
 
-					var job = new JobRequestModel
+					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
 						Serialized = testJobParamsJson,
 						Type = "NodeTest.JobHandlers.TestReportProgressJobParams",
-						UserName = SecurityHelper.GetLoggedInUser()
+						CreatedBy = SecurityHelper.GetLoggedInUser()
 					};
 
 					requestModels.Add(job);
@@ -185,13 +185,13 @@ namespace Manager.Integration.Test.Helpers
 			return requestModels;
 		}
 
-		public static List<JobRequestModel> GenerateTestJobParamsRequests(int numberOfJobRequests)
+		public static List<JobQueueItem> GenerateTestJobParamsRequests(int numberOfJobRequests)
 		{
-			List<JobRequestModel> requestModels = null;
+			List<JobQueueItem> requestModels = null;
 
 			if (numberOfJobRequests > 0)
 			{
-				requestModels = new List<JobRequestModel>();
+				requestModels = new List<JobQueueItem>();
 
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
@@ -200,12 +200,12 @@ namespace Manager.Integration.Test.Helpers
 
 					var testJobParamsJson = JsonConvert.SerializeObject(testJobParams);
 
-					var job = new JobRequestModel
+					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
 						Serialized = testJobParamsJson,
 						Type = "NodeTest.JobHandlers.TestJobParams",
-						UserName = SecurityHelper.GetLoggedInUser()
+						CreatedBy = SecurityHelper.GetLoggedInUser()
 					};
 
 					requestModels.Add(job);

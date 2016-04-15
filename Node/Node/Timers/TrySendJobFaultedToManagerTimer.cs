@@ -16,12 +16,12 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobFaultedToManagerTimer));
 
 		public TrySendJobFaultedToManagerTimer(NodeConfiguration nodeConfiguration,
-		                                       TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+		                                       TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
 											   IHttpSender httpSender,
 		                                       double interval = 500) : base(nodeConfiguration,
 		                                                                      nodeConfiguration
 			                                                                      .GetManagerJobHasFaileTemplatedUri(),
-		                                                                      sendJobProgressToManagerTimer,
+		                                                                      sendJobDetailToManagerTimer,
 																			  httpSender,
 																			  interval)
 		{
@@ -32,16 +32,16 @@ namespace Stardust.Node.Timers
 
 		public DateTime? ErrorOccured { get; set; }
 
-		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		protected override Task<HttpResponseMessage> TrySendStatus(JobQueueItemEntity jobQueueItemEntity,
 		                                                           CancellationToken cancellationToken)
 		{
 			try
 			{
 				var httpSender = new HttpSender();
 
-				var payload = new JobFailedModel
+				var payload = new JobFailedEntity
 				{
-					JobId = jobToDo.Id,
+					JobId = jobQueueItemEntity.JobId,
 					AggregateException = AggregateExceptionToSend,
 					Created = ErrorOccured
 				};

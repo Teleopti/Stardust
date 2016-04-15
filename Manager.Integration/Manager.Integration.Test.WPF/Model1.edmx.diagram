@@ -4,12 +4,13 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="f3b9ed14273e47909c513e7f44e87001" Name="Diagram1" ZoomLevel="114">
-        <EntityTypeShape EntityType="ManagerDbModel.JobDefinition" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ManagerDbModel.JobHistory" Width="1.5" PointX="2.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ManagerDbModel.JobHistoryDetail" Width="1.5" PointX="4.75" PointY="0.75" />
-        <EntityTypeShape EntityType="ManagerDbModel.Logging" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="ManagerDbModel.WorkerNode" Width="1.5" PointX="2.75" PointY="4.75" />
+      <Diagram DiagramId="f3b9ed14273e47909c513e7f44e87001" Name="Diagram1" ZoomLevel="131">
+        <EntityTypeShape EntityType="ManagerDbModel.Job" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.JobDetail" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.JobQueue" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.Logging" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.WorkerNode" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ManagerDbModel.PerformanceTest" Width="1.5" PointX="8.125" PointY="1.875" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

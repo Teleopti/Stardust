@@ -2,7 +2,6 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net.Repository.Hierarchy;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Notifications
@@ -73,7 +72,7 @@ namespace Manager.Integration.Test.Notifications
 						sqlConnection.Open();
 
 						using (var command =
-							new SqlCommand("SELECT COUNT(*) FROM Stardust.WorkerNodes",
+							new SqlCommand("SELECT COUNT(*) FROM [Stardust].[WorkerNode]",
 							               sqlConnection))
 						{
 							var rowCount = (int) command.ExecuteScalar();

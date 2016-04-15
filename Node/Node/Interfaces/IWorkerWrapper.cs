@@ -14,12 +14,12 @@ namespace Stardust.Node.Interfaces
 		bool IsTaskExecuting { get; }
 		Task Task { get; }
 
-		JobToDo GetCurrentMessageToProcess();
+		JobQueueItemEntity GetCurrentMessageToProcess();
 		void CancelJob(Guid id);
 
-		void StartJob(JobToDo jobToDo);
+		void StartJob(JobQueueItemEntity jobQueueItemEntity);
 
-		ObjectValidationResult ValidateStartJob(JobToDo jobToDo);
+		ObjectValidationResult ValidateStartJob(JobQueueItemEntity jobQueueItemEntity);
 
 	}
 }

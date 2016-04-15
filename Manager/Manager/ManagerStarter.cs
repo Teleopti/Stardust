@@ -16,13 +16,13 @@ namespace Stardust.Manager
 			builder.RegisterType<NodeManager>()
 				.As<INodeManager>();
 
-			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<JobManagerNewVersion>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
 
 			builder.RegisterType<HttpSender>().As<IHttpSender>();
 
-			builder.Register(c => new JobRepository(managerConfiguration.ConnectionString,
-			                                        new RetryPolicyProvider()))
+			builder.Register(c => new JobRepositoryWithLock(managerConfiguration.ConnectionString,
+															new RetryPolicyProvider()))
 				.As<IJobRepository>();
 
 			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString,

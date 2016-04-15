@@ -27,7 +27,10 @@ namespace Manager.Integration.Test.LoadTests
 		{
 			this.Log().DebugWithLineNumber("Start.");
 
+			var startedTest = DateTime.UtcNow;
+
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
+
 			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
 			                                                                StatusConstants.DeletedStatus,
@@ -98,6 +101,20 @@ namespace Manager.Integration.Test.LoadTests
 			}
 
 			taskHelper.Dispose();
+
+			var endedTest = DateTime.UtcNow;
+
+			string description =
+				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
+								createNewJobRequests.Count,
+								base.NumberOfManagers,
+								base.NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+											  description,
+											  startedTest,
+											  endedTest);
+
 			LogMessage("Finished.");
 		}
 	}

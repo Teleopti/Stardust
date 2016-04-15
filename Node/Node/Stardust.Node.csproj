@@ -106,7 +106,7 @@
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="Diagnostics\TaskToExecuteStopWatch.cs" />
-    <Compile Include="Entities\JobFailedModel.cs" />
+    <Compile Include="Entities\JobFailedEntity.cs" />
     <Compile Include="Extensions\HttpClientExtensions.cs" />
     <Compile Include="Extensions\InvokeHandlerExtensions.cs" />
     <Compile Include="Extensions\JobToDoExtensions.cs" />
@@ -125,10 +125,10 @@
     <Compile Include="Interfaces\IHttpSender.cs" />
     <Compile Include="Interfaces\IInvokeHandler.cs" />
     <Compile Include="Interfaces\IJobProgress.cs" />
-    <Compile Include="Interfaces\IJobToDo.cs" />
+    <Compile Include="Interfaces\IJobQueueItem.cs" />
     <Compile Include="Interfaces\INodeStarter.cs" />
     <Compile Include="Interfaces\IWorkerWrapper.cs" />
-    <Compile Include="Entities\JobToDo.cs" />
+    <Compile Include="Entities\JobQueueItemEntity.cs" />
     <Compile Include="Log4Net\Interceptors\Log4NetInterceptor.cs" />
     <Compile Include="NodeStarter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -137,7 +137,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Timers\TrySendJobProgressToManagerTimer.cs">
+    <Compile Include="Timers\TrySendJobDetailToManagerTimer.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Timers\TrySendNodeStartUpNotificationToManagerTimer.cs">
@@ -159,9 +159,9 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Workers\HttpSender.cs" />
-    <Compile Include="Interfaces\ISendJobProgressModel.cs" />
+    <Compile Include="Interfaces\IJobDetail.cs" />
     <Compile Include="Workers\InvokeHandler.cs" />
-    <Compile Include="Entities\SendJobProgressModel.cs" />
+    <Compile Include="Entities\JobDetailEntity.cs" />
     <Compile Include="Workers\ObjectValidationResult.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
   </ItemGroup>

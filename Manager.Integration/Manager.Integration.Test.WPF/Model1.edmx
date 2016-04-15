@@ -5,19 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ManagerDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="JobDefinitions">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Name" Type="nvarchar(max)" />
-          <Property Name="Serialized" Type="nvarchar(max)" />
-          <Property Name="Type" Type="nvarchar(max)" />
-          <Property Name="UserName" Type="nvarchar" MaxLength="500" Nullable="false" />
-          <Property Name="AssignedNode" Type="nvarchar(max)" />
-          <Property Name="Status" Type="nvarchar(max)" />
-        </EntityType>
-        <EntityType Name="JobHistory">
+        <EntityType Name="Job">
           <Key>
             <PropertyRef Name="JobId" />
           </Key>
@@ -29,10 +17,10 @@
           <Property Name="Ended" Type="datetime" />
           <Property Name="Serialized" Type="nvarchar(max)" />
           <Property Name="Type" Type="nvarchar(max)" />
-          <Property Name="SentTo" Type="nvarchar(max)" />
+          <Property Name="SentToWorkerNodeUri" Type="nvarchar(max)" />
           <Property Name="Result" Type="nvarchar(max)" />
         </EntityType>
-        <EntityType Name="JobHistoryDetail">
+        <EntityType Name="JobDetail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -40,6 +28,17 @@
           <Property Name="JobId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="Created" Type="datetime" Nullable="false" />
           <Property Name="Detail" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="JobQueue">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" />
+          <Property Name="Serialized" Type="nvarchar(max)" />
+          <Property Name="Type" Type="nvarchar(max)" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="500" Nullable="false" />
+          <Property Name="Created" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Logging">
           <Key>
@@ -53,7 +52,27 @@
           <Property Name="Message" Type="varchar" MaxLength="4000" Nullable="false" />
           <Property Name="Exception" Type="varchar" MaxLength="2000" />
         </EntityType>
-        <EntityType Name="WorkerNodes">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ManagerDB.Stardust.PerformanceTest' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="PerformanceTest">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="Started" />
+            <PropertyRef Name="Ended" />
+            <PropertyRef Name="ElapsedInSeconds" />
+            <PropertyRef Name="ElapsedInMinutes" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Started" Type="datetime" Nullable="false" />
+          <Property Name="Ended" Type="datetime" Nullable="false" />
+          <Property Name="ElapsedInSeconds" Type="float" Nullable="false" />
+          <Property Name="ElapsedInMinutes" Type="float" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WorkerNode">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -63,36 +82,36 @@
           <Property Name="Alive" Type="bit" />
         </EntityType>
         <EntityContainer Name="ManagerDbModelStoreContainer">
-          <EntitySet Name="JobDefinitions" EntityType="Self.JobDefinitions" Schema="Stardust" store:Type="Tables" />
-          <EntitySet Name="JobHistory" EntityType="Self.JobHistory" Schema="Stardust" store:Type="Tables" />
-          <EntitySet Name="JobHistoryDetail" EntityType="Self.JobHistoryDetail" Schema="Stardust" store:Type="Tables" />
+          <EntitySet Name="Job" EntityType="Self.Job" Schema="Stardust" store:Type="Tables" />
+          <EntitySet Name="JobDetail" EntityType="Self.JobDetail" Schema="Stardust" store:Type="Tables" />
+          <EntitySet Name="JobQueue" EntityType="Self.JobQueue" Schema="Stardust" store:Type="Tables" />
           <EntitySet Name="Logging" EntityType="Self.Logging" Schema="Stardust" store:Type="Tables" />
-          <EntitySet Name="WorkerNodes" EntityType="Self.WorkerNodes" Schema="Stardust" store:Type="Tables" />
+          <EntitySet Name="WorkerNode" EntityType="Self.WorkerNode" Schema="Stardust" store:Type="Tables" />
+          <EntitySet Name="PerformanceTest" EntityType="Self.PerformanceTest" store:Type="Tables" store:Schema="Stardust">
+            <DefiningQuery>SELECT 
+    [PerformanceTest].[Id] AS [Id], 
+    [PerformanceTest].[Name] AS [Name], 
+    [PerformanceTest].[Description] AS [Description], 
+    [PerformanceTest].[Started] AS [Started], 
+    [PerformanceTest].[Ended] AS [Ended], 
+    [PerformanceTest].[ElapsedInSeconds] AS [ElapsedInSeconds], 
+    [PerformanceTest].[ElapsedInMinutes] AS [ElapsedInMinutes]
+    FROM [Stardust].[PerformanceTest] AS [PerformanceTest]</DefiningQuery>
+          </EntitySet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ManagerDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="ManagerDbEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="JobDefinitions" EntityType="ManagerDbModel.JobDefinition" />
-          <EntitySet Name="JobHistories" EntityType="ManagerDbModel.JobHistory" />
-          <EntitySet Name="JobHistoryDetails" EntityType="ManagerDbModel.JobHistoryDetail" />
+          <EntitySet Name="Jobs" EntityType="ManagerDbModel.Job" />
+          <EntitySet Name="JobDetails" EntityType="ManagerDbModel.JobDetail" />
+          <EntitySet Name="JobQueues" EntityType="ManagerDbModel.JobQueue" />
           <EntitySet Name="Loggings" EntityType="ManagerDbModel.Logging" />
           <EntitySet Name="WorkerNodes" EntityType="ManagerDbModel.WorkerNode" />
+          <EntitySet Name="PerformanceTests" EntityType="ManagerDbModel.PerformanceTest" />
         </EntityContainer>
-        <EntityType Name="JobDefinition">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Guid" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Serialized" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="UserName" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="AssignedNode" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="JobHistory">
+        <EntityType Name="Job">
           <Key>
             <PropertyRef Name="JobId" />
           </Key>
@@ -104,10 +123,10 @@
           <Property Name="Ended" Type="DateTime" Precision="3" />
           <Property Name="Serialized" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SentTo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SentToWorkerNodeUri" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Result" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="JobHistoryDetail">
+        <EntityType Name="JobDetail">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -115,6 +134,17 @@
           <Property Name="JobId" Type="Guid" Nullable="false" />
           <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="JobQueue">
+          <Key>
+            <PropertyRef Name="JobId" />
+          </Key>
+          <Property Name="JobId" Type="Guid" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Serialized" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Type" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Created" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
         <EntityType Name="Logging">
           <Key>
@@ -137,30 +167,35 @@
           <Property Name="Heartbeat" Type="DateTime" Precision="3" />
           <Property Name="Alive" Type="Boolean" />
         </EntityType>
-      </Schema>
+        <EntityType Name="PerformanceTest">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="Name" />
+            <PropertyRef Name="Description" />
+            <PropertyRef Name="Started" />
+            <PropertyRef Name="Ended" />
+            <PropertyRef Name="ElapsedInSeconds" />
+            <PropertyRef Name="ElapsedInMinutes" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Started" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Ended" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ElapsedInSeconds" Type="Double" Nullable="false" />
+          <Property Name="ElapsedInMinutes" Type="Double" Nullable="false" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ManagerDbModelStoreContainer" CdmEntityContainer="ManagerDbEntities">
-          <EntitySetMapping Name="JobDefinitions">
-            <EntityTypeMapping TypeName="ManagerDbModel.JobDefinition">
-              <MappingFragment StoreEntitySet="JobDefinitions">
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="AssignedNode" ColumnName="AssignedNode" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
-                <ScalarProperty Name="Type" ColumnName="Type" />
-                <ScalarProperty Name="Serialized" ColumnName="Serialized" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="JobHistories">
-            <EntityTypeMapping TypeName="ManagerDbModel.JobHistory">
-              <MappingFragment StoreEntitySet="JobHistory">
+          <EntitySetMapping Name="Jobs">
+            <EntityTypeMapping TypeName="ManagerDbModel.Job">
+              <MappingFragment StoreEntitySet="Job">
                 <ScalarProperty Name="Result" ColumnName="Result" />
-                <ScalarProperty Name="SentTo" ColumnName="SentTo" />
+                <ScalarProperty Name="SentToWorkerNodeUri" ColumnName="SentToWorkerNodeUri" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Serialized" ColumnName="Serialized" />
                 <ScalarProperty Name="Ended" ColumnName="Ended" />
@@ -172,13 +207,25 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="JobHistoryDetails">
-            <EntityTypeMapping TypeName="ManagerDbModel.JobHistoryDetail">
-              <MappingFragment StoreEntitySet="JobHistoryDetail">
+          <EntitySetMapping Name="JobDetails">
+            <EntityTypeMapping TypeName="ManagerDbModel.JobDetail">
+              <MappingFragment StoreEntitySet="JobDetail">
                 <ScalarProperty Name="Detail" ColumnName="Detail" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="JobId" ColumnName="JobId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JobQueues">
+            <EntityTypeMapping TypeName="ManagerDbModel.JobQueue">
+              <MappingFragment StoreEntitySet="JobQueue">
+                <ScalarProperty Name="Created" ColumnName="Created" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Serialized" ColumnName="Serialized" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="JobId" ColumnName="JobId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -197,10 +244,23 @@
           </EntitySetMapping>
           <EntitySetMapping Name="WorkerNodes">
             <EntityTypeMapping TypeName="ManagerDbModel.WorkerNode">
-              <MappingFragment StoreEntitySet="WorkerNodes">
+              <MappingFragment StoreEntitySet="WorkerNode">
                 <ScalarProperty Name="Alive" ColumnName="Alive" />
                 <ScalarProperty Name="Heartbeat" ColumnName="Heartbeat" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PerformanceTests">
+            <EntityTypeMapping TypeName="ManagerDbModel.PerformanceTest">
+              <MappingFragment StoreEntitySet="PerformanceTest">
+                <ScalarProperty Name="ElapsedInMinutes" ColumnName="ElapsedInMinutes" />
+                <ScalarProperty Name="ElapsedInSeconds" ColumnName="ElapsedInSeconds" />
+                <ScalarProperty Name="Ended" ColumnName="Ended" />
+                <ScalarProperty Name="Started" ColumnName="Started" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

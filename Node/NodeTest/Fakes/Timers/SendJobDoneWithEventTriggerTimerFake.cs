@@ -16,15 +16,15 @@ namespace NodeTest.Fakes.Timers
 
 		public SendJobDoneWithEventTriggerTimerFake(NodeConfiguration nodeConfiguration,
 		                                            Uri callbackTemplateUri,
-		                                            TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+		                                            TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
 		                                            IHttpSender httpSender) : base(nodeConfiguration,
 		                                                                           callbackTemplateUri,
-		                                                                           sendJobProgressToManagerTimer,
+		                                                                           sendJobDetailToManagerTimer,
 		                                                                           httpSender)
 		{
 		}
 
-		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		protected override Task<HttpResponseMessage> TrySendStatus(JobQueueItemEntity jobQueueItemEntity,
 		                                                           CancellationToken cancellationToken)
 		{
 			InvokeTriggerTrySendStatusSucceded();

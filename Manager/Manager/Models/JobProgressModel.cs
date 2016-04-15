@@ -8,7 +8,7 @@ namespace Stardust.Manager.Models
 	{
 		public Guid JobId { get; set; }
 
-		public string ProgressDetail { get; set; }
+		public string Detail { get; set; }
 
 		public DateTime Created { get; set; }
 
@@ -26,14 +26,14 @@ namespace Stardust.Manager.Models
 				list.Add(new ValidationResult("Invalid job id value.", pIncome));
 			}
 
-			if (string.IsNullOrEmpty(ProgressDetail))
+			if (string.IsNullOrEmpty(Detail))
 			{
 				pIncome = new[]
 				{
-					"ProgressDetail"
+					"Detail"
 				};
 
-				list.Add(new ValidationResult("Invalid progress detail value.", pIncome));
+				list.Add(new ValidationResult("Invalid detail value.", pIncome));
 			}
 
 			return list;

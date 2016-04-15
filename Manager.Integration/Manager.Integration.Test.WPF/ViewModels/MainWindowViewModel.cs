@@ -12,25 +12,27 @@ namespace Manager.Integration.Test.WPF.ViewModels
 {
 	public class MainWindowViewModel : INotifyPropertyChanged
 	{
-		private const string WorkerNodeHeaderConstant = "Worker Node";
+		private const string WorkerNodeHeaderConstant = "Worker Nodes";
 
 		private const string ErrorLoggingHeaderConstant = "Logging errors";
 		private const string LoggingHeaderConstant = "Logging";
-		private const string JobHistoryHeaderConstant = "Job History";
-		private const string JobHistoryGroupBySentToHeaderConstant = "Job History Group By Sent To";
-		private const string JobHistoryDetailHeaderConstant = "Job History Detail";
-		private const string JobDefinitionHeaderConstant = "Job Definition";
+		private const string JobHistoryHeaderConstant = "Jobs";
+		private const string JobHistoryGroupBySentToHeaderConstant = "Job Group By Worker Nodes";
+		private const string JobHistoryDetailHeaderConstant = "Job Details";
+		private const string JobDefinitionHeaderConstant = "Job Queue";
+
+		private const string PerformanceTestHeaderConstant = "Performance tests";
 
 		private ClearDatabaseCommand _clearDatabaseCommand;
 		private List<Logging> _errorLoggingData;
 
 		private string _errorLoggingHeader;
-		private List<JobDefinition> _jobDefinitionData;
+		private List<JobQueue> _jobDefinitionData;
 		private string _jobDefinitionDataHeader;
 
-		private List<JobHistory> _jobHistoryData;
+		private List<Job> _jobHistoryData;
 		private ListCollectionView _jobHistoryDataGroupBySentToData;
-		private List<JobHistoryDetail> _jobHistoryDetailData;
+		private List<JobDetail> _jobHistoryDetailData;
 		private string _jobHistoryDetailHeader;
 		private string _jobHistoryGroupBySentToHeader;
 		private string _jobHistoryHeader;
@@ -44,6 +46,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private string _toggleRefreshStatus;
 		private string _workerNodeHeader;
 		private List<WorkerNode> _workerNodesData;
+		private List<PerformanceTest> _performanceTestData;
+		private string _performanceTestHeader;
 
 		public MainWindowViewModel()
 		{
@@ -189,7 +193,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public List<JobDefinition> JobDefinitionData
+		public List<JobQueue> JobDefinitionData
 		{
 			get { return _jobDefinitionData; }
 			set
@@ -200,7 +204,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public List<JobHistoryDetail> JobHistoryDetailData
+		public List<JobDetail> JobHistoryDetailData
 		{
 			get { return _jobHistoryDetailData; }
 
@@ -212,7 +216,20 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public List<JobHistory> JobHistoryData
+		public List<PerformanceTest> PerformanceTestData
+		{
+			get { return _performanceTestData; }
+
+			set
+			{
+				_performanceTestData = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+
+		public List<Job> JobHistoryData
 		{
 			get { return _jobHistoryData; }
 
@@ -284,6 +301,18 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
+		public string PerformanceTestHeader
+		{
+			get { return _performanceTestHeader; }
+
+			set
+			{
+				_performanceTestHeader = value;
+
+				OnPropertyChanged();
+			}
+		}
+
 		public string ErrorLoggingHeader
 		{
 			get { return _errorLoggingHeader; }
@@ -343,6 +372,12 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			using (var managerDbEntities = new ManagerDbEntities())
 			{
+				PerformanceTestData = 
+					managerDbEntities.PerformanceTests.OrderByDescending(test => test.Id).ToList();
+
+				PerformanceTestHeader= 
+					PerformanceTestHeaderConstant  +" ( " + PerformanceTestData.Count + " )";
+
 				LoggingData =
 					managerDbEntities.Loggings.OrderByDescending(logging => logging.Id)
 						.ToList();
@@ -357,7 +392,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 				LoggingHeader = LoggingHeaderConstant + " ( " + LoggingData.Count + " )";
 
 				JobHistoryData =
-					managerDbEntities.JobHistories.OrderByDescending(history => history.Created)
+					managerDbEntities.Jobs.OrderByDescending(history => history.Created)
 						.ToList();
 
 				JobHistoryDataGroupBySentToData = new ListCollectionView(JobHistoryData);
@@ -376,7 +411,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 					JobHistoryGroupBySentToHeaderConstant + " ( " + JobHistoryData.Count + " )";
 
 				JobHistoryDetailData =
-					managerDbEntities.JobHistoryDetails.OrderByDescending(history => history.Created)
+					managerDbEntities.JobDetails.OrderByDescending(history => history.Created)
 						.ToList();
 
 				++RefreshProgressValue;
@@ -385,7 +420,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 					JobHistoryDetailHeaderConstant + " ( " + JobHistoryDetailData.Count + " )";
 
 				JobDefinitionData =
-					managerDbEntities.JobDefinitions
+					managerDbEntities.JobQueues
 						.ToList();
 
 				++RefreshProgressValue;

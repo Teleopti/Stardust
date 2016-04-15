@@ -31,13 +31,14 @@ namespace ManagerTest.Fakes
 #pragma warning restore 1998
 		                                                 object data)
 		{
+
 			if (BusyNodesUrl.Any(url.ToString().Contains))
 			{
 				return new HttpResponseMessage(HttpStatusCode.Conflict);
 			}
 
 			CalledNodes.Add(url.ToString(),
-			                data);
+							data);
 
 			if (Responses.Count == CalledNodes.Count())
 			{

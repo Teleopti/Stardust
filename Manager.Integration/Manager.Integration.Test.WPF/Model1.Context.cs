@@ -25,10 +25,11 @@ namespace Manager.Integration.Test.WPF
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<JobDefinition> JobDefinitions { get; set; }
-        public virtual DbSet<JobHistory> JobHistories { get; set; }
-        public virtual DbSet<JobHistoryDetail> JobHistoryDetails { get; set; }
+        public virtual DbSet<Job> Jobs { get; set; }
+        public virtual DbSet<JobDetail> JobDetails { get; set; }
+        public virtual DbSet<JobQueue> JobQueues { get; set; }
         public virtual DbSet<Logging> Loggings { get; set; }
         public virtual DbSet<WorkerNode> WorkerNodes { get; set; }
+        public virtual DbSet<PerformanceTest> PerformanceTests { get; set; }
     }
 }

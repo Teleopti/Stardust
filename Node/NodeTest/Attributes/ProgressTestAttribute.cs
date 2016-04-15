@@ -54,7 +54,7 @@ namespace NodeTest.Attributes
 
 			builder.RegisterInstance(nodeConfiguration);
 
-			builder.RegisterType<TrySendJobProgressToManagerTimerFake>().WithParameter("interval", 1000d).As<TrySendJobProgressToManagerTimer>();
+			builder.RegisterType<TrySendJobDetailToManagerTimerFake>().WithParameter("interval", 1000d).As<TrySendJobDetailToManagerTimer>();
 			builder.RegisterType<SendJobDoneTimerFake>().As<TrySendStatusToManagerTimer>();
 			builder.RegisterType<SendJobCanceledTimerFake>().As<TrySendJobCanceledToManagerTimer>();
 			builder.RegisterType<SendJobFaultedTimerFake>().As<TrySendJobFaultedToManagerTimer>();

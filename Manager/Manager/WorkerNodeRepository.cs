@@ -15,7 +15,8 @@ namespace Stardust.Manager
 		private readonly string _connectionString;
 		private readonly RetryPolicy _retryPolicy;
 
-		public WorkerNodeRepository(string connectionString, RetryPolicyProvider retryPolicyProvider)
+		public WorkerNodeRepository(string connectionString,
+		                            RetryPolicyProvider retryPolicyProvider)
 		{
 			_connectionString = connectionString;
 			_retryPolicy = retryPolicyProvider.GetPolicy();
@@ -23,16 +24,17 @@ namespace Stardust.Manager
 
 		public List<WorkerNode> GetAllWorkerNodes()
 		{
-			List<WorkerNode> listToReturn = new List<WorkerNode>();
+			var listToReturn = new List<WorkerNode>();
 
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
-				{					
+				{
 					var command = new SqlCommand
 					{
 						Connection = connection,
-						CommandText = "SELECT Id, Url, Heartbeat, Alive FROM [Stardust].WorkerNodes",
+						CommandText = "SELECT Id, Url, Heartbeat, Alive " +
+						              "FROM [Stardust].[WorkerNode]",
 						CommandType = CommandType.Text
 					};
 
@@ -87,7 +89,7 @@ namespace Stardust.Manager
 					{
 						Connection = connection,
 						CommandText = "SELECT Id, Url, Heartbeat, Alive " +
-						              "FROM [Stardust].WorkerNodes WHERE Url=@Url",
+						              "FROM [Stardust].[WorkerNode] WHERE Url=@Url",
 						CommandType = CommandType.Text
 					};
 
@@ -139,7 +141,7 @@ namespace Stardust.Manager
 
 					var workerNodeCommand = connection.CreateCommand();
 
-					workerNodeCommand.CommandText = "INSERT INTO [Stardust].WorkerNodes " +
+					workerNodeCommand.CommandText = "INSERT INTO [Stardust].[WorkerNode] " +
 					                                "(Id, Url, Heartbeat, Alive) " +
 					                                "VALUES(@Id, @Url, @Heartbeat, @Alive)";
 
@@ -168,7 +170,7 @@ namespace Stardust.Manager
 				using (var connection = new SqlConnection(_connectionString))
 				{
 					var deleteCommand = connection.CreateCommand();
-					deleteCommand.CommandText = "DELETE FROM[Stardust].WorkerNodes WHERE Id = @ID";
+					deleteCommand.CommandText = "DELETE FROM [Stardust].[WorkerNode] WHERE Id = @ID";
 					deleteCommand.Parameters.AddWithValue("@ID", nodeId);
 
 					connection.OpenWithRetry(_retryPolicy);
@@ -184,9 +186,13 @@ namespace Stardust.Manager
 
 		public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
 		{
-			var selectCommand = @"SELECT Id, Url, Heartbeat, Alive FROM Stardust.WorkerNodes";
+			var selectCommand = @"SELECT Id, 
+										 Url, 
+										 Heartbeat, 
+										 Alive 
+								 FROM [Stardust].[WorkerNode]";
 
-			var updateCommandText = @"UPDATE Stardust.WorkerNodes 
+			var updateCommandText = @"UPDATE [Stardust].[WorkerNode]
 											SET Alive = @Alive
 										WHERE Url = @Url";
 
@@ -276,13 +282,13 @@ namespace Stardust.Manager
 				{
 					connection.OpenWithRetry(_retryPolicy);
 
-					var updateCommandText = @"UPDATE Stardust.WorkerNodes SET Heartbeat = @Heartbeat,
+					var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat,
 											Alive = @Alive
 											WHERE Url = @Url";
 
 					if (!updateStatus)
 					{
-						updateCommandText = @"UPDATE Stardust.WorkerNodes SET Heartbeat = @Heartbeat
+						updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat
 											WHERE Url = @Url";
 					}
 

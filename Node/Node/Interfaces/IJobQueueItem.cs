@@ -2,11 +2,18 @@
 
 namespace Stardust.Node.Interfaces
 {
-	public interface IJobToDo
+	public interface IJobQueueItem
 	{
-		Guid Id { get; set; }
+		Guid JobId { get; set; }
+
 		string Name { get; set; }
+
 		string Serialized { get; set; }
+
 		string Type { get; set; }
+
+		string CreatedBy { get; set; }
+
+		DateTime? Created { get; set; }
 	}
 }

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.IO;
+using System.Runtime.CompilerServices;
 using log4net;
-using Manager.Integration.Test.Annotations;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Helpers
@@ -9,6 +10,64 @@ namespace Manager.Integration.Test.Helpers
 	public static class DatabaseHelper
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (DatabaseHelper));
+
+
+		public static void AddPerformanceData(string connectionString, 
+											  string description,
+											  DateTime started,
+											  DateTime ended,
+											  [CallerFilePath] string file = "",
+											  [CallerMemberName] string member = "")
+		{
+			var filename = Path.GetFileName(file) + "_" + member;
+
+			AddPerformanceData(connectionString, filename, description, started, ended);
+		}
+
+		public static void AddPerformanceData(string connectionString,
+		                                      string name,
+		                                      string description,
+		                                      DateTime started,
+											  DateTime ended)
+		{
+			const string insertCommandText =
+				@"INSERT INTO [Stardust].[PerformanceTest]
+						  (Name, 
+						   Description, 
+						   Started,
+						   Ended,
+						   ElapsedInSeconds,
+						   ElapsedInMinutes)
+				 VALUES
+						  (@Name, 
+						   @Description, 
+						   @Started,
+						   @Ended,
+						   @ElapsedInSeconds,
+						   @ElapsedInMinutes)";
+
+			using (var sqlConnection = new SqlConnection(connectionString))
+			{
+				sqlConnection.Open();
+
+				using (var sqlCommand = new SqlCommand(insertCommandText,
+				                                       sqlConnection))
+				{
+					sqlCommand.Parameters.AddWithValue("@Name", name);
+					sqlCommand.Parameters.AddWithValue("@Description", description);
+
+					sqlCommand.Parameters.AddWithValue("@Started", started);
+
+					sqlCommand.Parameters.AddWithValue("@Ended", ended);
+
+					sqlCommand.Parameters.AddWithValue("@ElapsedInSeconds", (ended - started).TotalSeconds);
+					sqlCommand.Parameters.AddWithValue("@ElapsedInMinutes", (ended - started).TotalMinutes);
+
+					sqlCommand.ExecuteNonQuery();
+				}
+			}
+		}
+
 
 		public static void TryClearDatabase(string connectionString)
 		{
@@ -21,28 +80,28 @@ namespace Manager.Integration.Test.Helpers
 
 			Logger.DebugWithLineNumber("Start truncating database tables.");
 
-			using (var connection = new SqlConnection(connectionString))
+			using (var sqlConnection = new SqlConnection(connectionString))
 			{
-				connection.Open();
+				sqlConnection.Open();
 
 				//-------------------------------------------------
 				// Truncate table Stardust.JobDefinitions.
 				//-------------------------------------------------
-				using (var command = new SqlCommand("truncate table Stardust.JobDefinitions",
-				                                    connection))
+				using (var sqlCommand = new SqlCommand("truncate table [Stardust].[JobQueue]",
+				                                       sqlConnection))
 				{
-					Logger.DebugWithLineNumber("Start: " + command.CommandText);
+					Logger.DebugWithLineNumber("Start: " + sqlCommand.CommandText);
 
-					command.ExecuteNonQuery();
+					sqlCommand.ExecuteNonQuery();
 
-					Logger.DebugWithLineNumber("Finished: " + command.CommandText);
+					Logger.DebugWithLineNumber("Finished: " + sqlCommand.CommandText);
 				}
 
 				//-------------------------------------------------
 				// Truncate table Stardust.JobHistory.
 				//-------------------------------------------------
-				using (var command = new SqlCommand("truncate table Stardust.JobHistory",
-				                                    connection))
+				using (var command = new SqlCommand("truncate table [Stardust].[Job]",
+				                                    sqlConnection))
 				{
 					Logger.DebugWithLineNumber("Start: " + command.CommandText);
 
@@ -54,8 +113,8 @@ namespace Manager.Integration.Test.Helpers
 				//-------------------------------------------------
 				// Truncate table Stardust.JobHistoryDetail.
 				//-------------------------------------------------
-				using (var command = new SqlCommand("truncate table Stardust.JobHistoryDetail",
-				                                    connection))
+				using (var command = new SqlCommand("truncate table [Stardust].[JobDetail]",
+				                                    sqlConnection))
 				{
 					Logger.DebugWithLineNumber("Start: " + command.CommandText);
 
@@ -67,8 +126,8 @@ namespace Manager.Integration.Test.Helpers
 				//-------------------------------------------------
 				// Truncate table Stardust.WorkerNodes.
 				//-------------------------------------------------
-				using (var command = new SqlCommand("truncate table Stardust.WorkerNodes",
-				                                    connection))
+				using (var command = new SqlCommand("truncate table [Stardust].[WorkerNode]",
+				                                    sqlConnection))
 				{
 					Logger.DebugWithLineNumber("Start: " + command.CommandText);
 
@@ -77,7 +136,7 @@ namespace Manager.Integration.Test.Helpers
 					Logger.DebugWithLineNumber("Finished: " + command.CommandText);
 				}
 
-				connection.Close();
+				sqlConnection.Close();
 
 				Logger.DebugWithLineNumber("Finished truncating database tables.");
 			}

@@ -6,18 +6,32 @@ namespace Stardust.Manager.Interfaces
 {
 	public interface IJobRepository
 	{
-		void AddJobDefinition(JobDefinition jobDefinition);
-		List<JobDefinition> GetAllJobDefinitions();
-		void DeleteJobByJobId(Guid jobId);
+		void AddItemToJobQueue(JobQueueItem jobQueueItem);
+
+		List<JobQueueItem> GetAllItemsInJobQueue();
+
+		void DeleteItemInJobQueueByJobId(Guid jobId);
+
 		void FreeJobIfNodeIsAssigned(string url);
-		void CheckAndAssignNextJob(IHttpSender httpSender);
+
+		void TryAssignJobToWorkerNode(IHttpSender httpSender);
+
 		void CancelJobByJobId(Guid jobId, IHttpSender httpSender);
 
-		void SetEndResultOnJob(Guid jobId, string result);
+		void SetEndResultForJob(Guid jobId, string result, DateTime ended);
 
 		void ReportProgress(Guid jobId, string detail, DateTime created);
-		JobHistory GetJobHistoryByJobId(Guid jobId);
-		IList<JobHistory> GetAllJobHistories();
-		IList<JobHistoryDetail> GetJobHistoryDetailsByJobId(Guid jobId);
+
+		Job GetJobByJobId(Guid jobId);
+
+		IList<Job> GetAllJobs();
+
+		IList<Job> GetAllExecutingJobs();
+
+		IList<Uri> GetAllDistinctSentToWorkerNodeUri();
+
+		IList<Uri> GetDistinctSentToWorkerNodeUriForExecutingJobs();
+
+		IList<JobDetail> GetJobDetailsByJobId(Guid jobId);
 	}
 }

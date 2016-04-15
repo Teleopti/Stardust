@@ -2,12 +2,12 @@
 
 namespace Stardust.Node.Interfaces
 {
-	public interface ISendJobProgressModel
+	public interface IJobDetail
 	{
 		DateTime? Created { get; set; }
 
 		Guid JobId { get; set; }
 
-		string ProgressDetail { get; set; }
+		string Detail { get; set; }
 	}
 }

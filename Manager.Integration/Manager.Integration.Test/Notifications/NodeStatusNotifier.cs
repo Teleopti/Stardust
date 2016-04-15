@@ -2,9 +2,6 @@
 using System.Data.SqlClient;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using log4net.Repository.Hierarchy;
-using Manager.Integration.Test.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 
 namespace Manager.Integration.Test.Notifications
@@ -63,17 +60,14 @@ namespace Manager.Integration.Test.Notifications
 					connection.Open();
 
 					var sqlCommand =
-						@"SELECT COUNT(*) FROM Stardust.JobDefinitions 
-                            WHERE Id = @Id AND Status = @Status";
+						@"SELECT COUNT(*) FROM [Stardust].[JobQueue] 
+                            WHERE JobId = @JobId";
 
 					using (var command = new SqlCommand(sqlCommand,
 					                                    connection))
 					{
-						command.Parameters.AddWithValue("@Id",
+						command.Parameters.AddWithValue("@JobId",
 						                                guid);
-
-						command.Parameters.AddWithValue("@Status",
-						                                status);
 
 						while (!cancellationTokenSource.IsCancellationRequested &&
 						       !JobDefinitionStatusNotify.IsSet)

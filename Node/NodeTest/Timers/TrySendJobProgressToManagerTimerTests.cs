@@ -42,7 +42,7 @@ namespace NodeTest.Timers
 		public void ShouldBeAbleToClearAllJobProgresses()
 		{
 			var timer =
-				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
 				                                     _httpSenderFake,
 				                                     1000);
 
@@ -64,7 +64,7 @@ namespace NodeTest.Timers
 		public void ShouldBeAbleToInstantiateObject()
 		{
 			var timer =
-				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
 				                                     _httpSenderFake,
 				                                     1000);
 
@@ -77,7 +77,7 @@ namespace NodeTest.Timers
 		public void ShouldHave100JobProgressesWhen100AreAdded()
 		{
 			var timer =
-				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
 				                                     _httpSenderFake,
 				                                     1000);
 
@@ -98,7 +98,7 @@ namespace NodeTest.Timers
 		public void ShouldHaveTwoJobProgressesWhenTwoWithSameGuidAreAdded()
 		{
 			var timer =
-				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
 				                                     _httpSenderFake,
 				                                     1000);
 
@@ -124,14 +124,14 @@ namespace NodeTest.Timers
 			const int numberOfConcurrentProcesses = 10;
 
 			var timer =
-				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
 				                                     _httpSenderFake,
 				                                     1000);
 
 
 			var numberOfProgressesReceived = 0;
 
-			timer.SendJobProgressModelWithSuccessEventHandler += 
+			timer.SendJobDetailWithSuccessEventHandler += 
 				(sender, model) => { numberOfProgressesReceived++; };
 
 
@@ -187,7 +187,7 @@ namespace NodeTest.Timers
 		public void ShouldThrowArgumentNullExceptionWhenHttpSenderIsNull()
 		{
 			var timer =
-				new TrySendJobProgressToManagerTimer(_nodeConfiguration,
+				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
 				                                     null,
 				                                     1000);
 
@@ -199,7 +199,7 @@ namespace NodeTest.Timers
 		public void ShouldThrowArgumentNullExceptionWhenNodeConfigurationIsNull()
 		{
 			var timer =
-				new TrySendJobProgressToManagerTimer(null,
+				new TrySendJobDetailToManagerTimer(null,
 				                                     null,
 				                                     1000);
 

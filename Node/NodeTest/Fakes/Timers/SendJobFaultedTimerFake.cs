@@ -16,16 +16,16 @@ namespace NodeTest.Fakes.Timers
 		public ManualResetEventSlim Wait = new ManualResetEventSlim();
 
 		public SendJobFaultedTimerFake(NodeConfiguration nodeConfiguration,
-									   TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+									   TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
 									   IHttpSender httpSender,
 									   double interval = 1000) : base(nodeConfiguration,
-																	  sendJobProgressToManagerTimer,
+																	  sendJobDetailToManagerTimer,
 																	  httpSender,
 																	  interval)
 		{
 		}
 
-		protected override Task<HttpResponseMessage> TrySendStatus(JobToDo jobToDo,
+		protected override Task<HttpResponseMessage> TrySendStatus(JobQueueItemEntity jobQueueItemEntity,
 		                                                           CancellationToken cancellationToken)
 		{
 			NumberOfTimeCalled++;

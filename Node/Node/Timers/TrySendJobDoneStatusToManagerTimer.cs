@@ -11,11 +11,11 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobDoneStatusToManagerTimer));
 
 		public TrySendJobDoneStatusToManagerTimer(NodeConfiguration nodeConfiguration,
-												  TrySendJobProgressToManagerTimer sendJobProgressToManagerTimer,
+												  TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
 												  IHttpSender httpSender,
 												  double interval = 500) : base(nodeConfiguration,
 		                                                                          nodeConfiguration.GetManagerJobDoneTemplateUri(),
-																				  sendJobProgressToManagerTimer,
+																				  sendJobDetailToManagerTimer,
 																				  httpSender,
 																				  interval)
 		{

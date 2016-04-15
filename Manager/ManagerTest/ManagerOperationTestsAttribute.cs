@@ -17,8 +17,9 @@ namespace ManagerTest
 
 			builder.RegisterType<NodeManager>().As<INodeManager>().SingleInstance().AsSelf();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
+
 			builder.Register(
-				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
+				c => new JobRepositoryWithLock(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
 				.As<IJobRepository>();
 
 			builder.Register(
@@ -26,7 +27,7 @@ namespace ManagerTest
 				.As<IWorkerNodeRepository>();
 			builder.RegisterType<ManagerController>();
 
-			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<JobManagerNewVersion>().SingleInstance();
 		}
 	}
 }

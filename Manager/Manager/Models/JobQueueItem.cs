@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Stardust.Manager.Models
 {
-	public class JobToDo : IValidatableObject
+	public class JobQueueItem : IValidatableObject
 	{
-		public Guid Id { get; set; }
+		public Guid JobId { get; set; }
 
 		public string Name { get; set; }
 
@@ -15,6 +15,9 @@ namespace Stardust.Manager.Models
 		public string Type { get; set; }
 
 		public string CreatedBy { get; set; }
+
+		public DateTime Created { get; set; }
+
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			var list = new List<ValidationResult>();
@@ -24,7 +27,7 @@ namespace Stardust.Manager.Models
 				"Id"
 			};
 
-			if (Id == Guid.Empty)
+			if (JobId == Guid.Empty)
 			{
 				list.Add(new ValidationResult("Invalid job id value.", pIncome));
 			}
@@ -60,7 +63,6 @@ namespace Stardust.Manager.Models
 			}
 
 			return list;
-
 		}
 	}
 }

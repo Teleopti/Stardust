@@ -40,7 +40,7 @@ namespace Stardust.Node.Workers
 		                     TrySendJobDoneStatusToManagerTimer trySendJobDoneStatusToManagerTimer,
 		                     TrySendJobCanceledToManagerTimer trySendJobCanceledStatusToManagerTimer,
 		                     TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
-		                     TrySendJobProgressToManagerTimer trySendJobProgressToManagerTimer)
+		                     TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer)
 		{
 			invokeHandler.ThrowArgumentNullExceptionWhenNull();
 			nodeConfiguration.ThrowArgumentNullException();
@@ -50,7 +50,7 @@ namespace Stardust.Node.Workers
 			trySendJobDoneStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 			trySendJobCanceledStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 			trySendJobFaultedStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-			trySendJobProgressToManagerTimer.ThrowArgumentNullExceptionWhenNull();
+			trySendJobDetailToManagerTimer.ThrowArgumentNullExceptionWhenNull();
 
 			Handler = invokeHandler;
 			NodeConfiguration = nodeConfiguration;
@@ -67,24 +67,31 @@ namespace Stardust.Node.Workers
 			TrySendJobCanceledStatusToManagerTimer = trySendJobCanceledStatusToManagerTimer;
 			TrySendJobFaultedStatusToManagerTimer = trySendJobFaultedStatusToManagerTimer;
 
-			TrySendJobProgressToManagerTimer = trySendJobProgressToManagerTimer;
-			TrySendJobProgressToManagerTimer.Start();
+			TrySendJobDetailToManagerTimer = trySendJobDetailToManagerTimer;
+			TrySendJobDetailToManagerTimer.Start();
 
 			NodeStartUpNotificationToManagerTimer.Start();
 		}
 
 		private IInvokeHandler Handler { get; set; }
+
 		private Timer PingToManagerTimer { get; set; }
+
 		private TrySendStatusToManagerTimer TrySendJobDoneStatusToManagerTimer { get; set; }
+
 		private TrySendStatusToManagerTimer TrySendJobCanceledStatusToManagerTimer { get; set; }
+
 		private TrySendStatusToManagerTimer TrySendJobFaultedStatusToManagerTimer { get; set; }
-		private TrySendJobProgressToManagerTimer TrySendJobProgressToManagerTimer { get; set; }
+
+		private TrySendJobDetailToManagerTimer TrySendJobDetailToManagerTimer { get; set; }
 
 		private TrySendStatusToManagerTimer TrySendStatusToManagerTimer { get; set; }
-		private NodeConfiguration NodeConfiguration { get; set; }
-		private JobToDo CurrentMessageToProcess { get; set; }
-		private TrySendNodeStartUpNotificationToManagerTimer NodeStartUpNotificationToManagerTimer { get; set; }
 
+		private NodeConfiguration NodeConfiguration { get; set; }
+
+		private JobQueueItemEntity CurrentMessageToProcess { get; set; }
+
+		private TrySendNodeStartUpNotificationToManagerTimer NodeStartUpNotificationToManagerTimer { get; set; }
 
 		public string WhoamI { get; private set; }
 
@@ -101,72 +108,101 @@ namespace Stardust.Node.Workers
 			}
 		}
 
-		public ObjectValidationResult ValidateStartJob(JobToDo jobToDo)
+		public ObjectValidationResult ValidateStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
 			lock (_startJobLock)
 			{
 				if (CurrentMessageToProcess != null)
 				{
-					return new ObjectValidationResult {IsConflict = true, Message = WorkerIsAlreadyWorking};
+					return new ObjectValidationResult
+					{
+						IsConflict = true,
+
+						Message = WorkerIsAlreadyWorking
+					};
 				}
 
-				if (jobToDo == null)
+				if (jobQueueItemEntity == null)
 				{
-					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoIsNull };
+					return new ObjectValidationResult
+					{
+						IsBadRequest = true,
+						Message = JobToDoIsNull
+					};
 				}
 
-				if (jobToDo.Id == Guid.Empty)
+				if (jobQueueItemEntity.JobId == Guid.Empty)
 				{
-					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoIdIsInvalid };
+					return new ObjectValidationResult
+					{
+						IsBadRequest = true,
+						Message = JobToDoIdIsInvalid
+					};
 				}
 
-				if (string.IsNullOrEmpty(jobToDo.Name))
+				if (string.IsNullOrEmpty(jobQueueItemEntity.Name))
 				{
-					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoNameIsInvalid };
+					return new ObjectValidationResult
+					{
+						IsBadRequest = true,
+						Message = JobToDoNameIsInvalid
+					};
 				}
 
-				if (string.IsNullOrEmpty(jobToDo.Type))
+				if (string.IsNullOrEmpty(jobQueueItemEntity.Type))
 				{
-					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoTypeIsNullOrEmpty };
+					return new ObjectValidationResult
+					{
+						IsBadRequest = true,
+						Message = JobToDoTypeIsNullOrEmpty
+					};
 				}
 
 				var type = 
-					NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
+					NodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
 
 				if (type == null)
 				{
 					Logger.WarningWithLineNumber(string.Format(
 						WhoamI +
 						": The job type [{0}] could not be resolved. The job cannot be started.",
-						jobToDo.Type));
+						jobQueueItemEntity.Type));
 
-					return new ObjectValidationResult { IsBadRequest = true, Message = string.Format(JobToDoTypeCanNotBeResolved, jobToDo.Type) };
+					return new ObjectValidationResult
+					{
+						IsBadRequest = true,
+						Message = string.Format(JobToDoTypeCanNotBeResolved, jobQueueItemEntity.Type)
+					};
 				}
 
 				try
 				{
-					JsonConvert.DeserializeObject(jobToDo.Serialized, type);
+					JsonConvert.DeserializeObject(jobQueueItemEntity.Serialized, type);
 
 				}
 				catch (Exception)
 				{
-					return new ObjectValidationResult { IsBadRequest = true, Message = JobToDoCanNotBeDeserialize };
+					return new ObjectValidationResult
+					{
+						IsBadRequest = true,
+						Message = JobToDoCanNotBeDeserialize
+					};
 				}
 
-				CurrentMessageToProcess = jobToDo;
+				CurrentMessageToProcess = jobQueueItemEntity;
 
 				return new ObjectValidationResult();
 			}
 		}
 
-		public void StartJob(JobToDo jobToDo)
+		public void StartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
 			CancellationTokenSource = new CancellationTokenSource();
 
-			CurrentMessageToProcess = jobToDo;
+			CurrentMessageToProcess = jobQueueItemEntity;
 
-			var typ = NodeConfiguration.HandlerAssembly.GetType(jobToDo.Type);
-			var deSer = JsonConvert.DeserializeObject(jobToDo.Serialized,
+			var typ = NodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
+			var deSer = JsonConvert.DeserializeObject(jobQueueItemEntity.Serialized,
 			                                          typ);
 			//-----------------------------------------------------
 			// Clear faulted timer.
@@ -199,7 +235,7 @@ namespace Stardust.Node.Workers
 			{
 				Logger.DebugWithLineNumber(string.Format(
 					"Job ( id, name, type ) : ( {0}, {1}, {2} ) took ( seconds, minutes ) : ( {3}, {4} )",
-					CurrentMessageToProcess.Id,
+					CurrentMessageToProcess.JobId,
 					CurrentMessageToProcess.Name,
 					CurrentMessageToProcess.Type,
 					taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(),
@@ -213,7 +249,7 @@ namespace Stardust.Node.Workers
 						logInfo =
 							string.Format("{0} : The task has completed for job ( jobId, jobName ) : ( {1}, {2} )",
 							              WhoamI,
-							              CurrentMessageToProcess.Id,
+							              CurrentMessageToProcess.JobId,
 							              CurrentMessageToProcess.Name);
 
 						Logger.DebugWithLineNumber(logInfo);
@@ -227,7 +263,7 @@ namespace Stardust.Node.Workers
 						logInfo =
 							string.Format("{0} : The task has been canceled for job ( jobId, jobName ) : ( {1}, {2} )",
 							              WhoamI,
-							              CurrentMessageToProcess.Id,
+							              CurrentMessageToProcess.JobId,
 							              CurrentMessageToProcess.Name);
 
 						Logger.DebugWithLineNumber(logInfo);
@@ -261,7 +297,7 @@ namespace Stardust.Node.Workers
 			Task.Start();
 		}
 
-		public JobToDo GetCurrentMessageToProcess()
+		public JobQueueItemEntity GetCurrentMessageToProcess()
 		{
 			return CurrentMessageToProcess;
 		}
@@ -270,7 +306,7 @@ namespace Stardust.Node.Workers
 		{
 			if (CurrentMessageToProcess != null &&
 			    id != Guid.Empty &&
-			    CurrentMessageToProcess.Id == id)
+			    CurrentMessageToProcess.JobId == id)
 			{
 				Logger.DebugWithLineNumber(WhoamI +
 				                           " : Cancel job method called. Will call cancel on canellation token source.");
@@ -335,9 +371,9 @@ namespace Stardust.Node.Workers
 				TrySendJobFaultedStatusToManagerTimer.Dispose();
 			}
 
-			if (TrySendJobProgressToManagerTimer != null)
+			if (TrySendJobDetailToManagerTimer != null)
 			{
-				TrySendJobProgressToManagerTimer.Dispose();
+				TrySendJobDetailToManagerTimer.Dispose();
 			}
 
 			if (NodeStartUpNotificationToManagerTimer != null)
@@ -364,7 +400,7 @@ namespace Stardust.Node.Workers
 		}
 
 		private void SetNodeStatusTimer(TrySendStatusToManagerTimer newTrySendStatusToManagerTimer,
-		                                JobToDo jobToDo)
+		                                JobQueueItemEntity jobQueueItemEntity)
 		{
 			// Stop and dispose old timer.
 			if (TrySendStatusToManagerTimer != null)
@@ -383,7 +419,7 @@ namespace Stardust.Node.Workers
 			{
 				TrySendStatusToManagerTimer = newTrySendStatusToManagerTimer;
 
-				TrySendStatusToManagerTimer.JobToDo = jobToDo;
+				TrySendStatusToManagerTimer.JobQueueItemEntity = jobQueueItemEntity;
 
 				TrySendStatusToManagerTimer.TrySendStatusSucceded +=
 					TrySendStatusToManagerTimer_TrySendStatusSucceded;
@@ -406,7 +442,7 @@ namespace Stardust.Node.Workers
 			// Clear all job progresses for jobid.
 			if (CurrentMessageToProcess != null)
 			{
-				TrySendJobProgressToManagerTimer.ClearAllJobProgresses(CurrentMessageToProcess.Id);
+				TrySendJobDetailToManagerTimer.ClearAllJobProgresses(CurrentMessageToProcess.JobId);
 			}
 
 			// Reset jobToDo, so it can start processing new work.
@@ -417,7 +453,7 @@ namespace Stardust.Node.Workers
 		{
 			if (CurrentMessageToProcess != null)
 			{
-				TrySendJobProgressToManagerTimer.SendProgress(CurrentMessageToProcess.Id,
+				TrySendJobDetailToManagerTimer.SendProgress(CurrentMessageToProcess.JobId,
 				                                              message);
 			}
 		}

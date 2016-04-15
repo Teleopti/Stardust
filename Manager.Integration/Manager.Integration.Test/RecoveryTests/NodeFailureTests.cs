@@ -106,7 +106,7 @@ namespace Manager.Integration.Test.RecoveryTests
 			response.EnsureSuccessStatusCode();
 
 			ser = await response.Content.ReadAsStringAsync();
-			var jobHistory = JsonConvert.DeserializeObject<JobHistory>(ser);
+			var jobHistory = JsonConvert.DeserializeObject<Job>(ser);
 
 			Assert.NotNull(jobHistory);
 			Assert.IsTrue(jobHistory.Result == "Fatal Node Failure");

@@ -12,11 +12,13 @@ namespace Manager.Integration.Test.WPF
     using System;
     using System.Collections.Generic;
     
-    public partial class JobHistoryDetail
+    public partial class JobQueue
     {
-        public int Id { get; set; }
         public System.Guid JobId { get; set; }
+        public string Name { get; set; }
+        public string Serialized { get; set; }
+        public string Type { get; set; }
+        public string CreatedBy { get; set; }
         public System.DateTime Created { get; set; }
-        public string Detail { get; set; }
     }
 }

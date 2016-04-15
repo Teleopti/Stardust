@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net.Config;
@@ -15,18 +14,15 @@ using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.LoadTests
+namespace Manager.Integration.Test.LongRunningTests
 {
 	[TestFixture]
-	public class OneManagerAndFiveNodesLoadTests
+	public class OneManagerAndFiveNodesLongRunningTest
 	{
 		private string ManagerDbConnectionString { get; set; }
 		private Task Task { get; set; }
 		private AppDomainTask AppDomainTask { get; set; }
 		private CancellationTokenSource CancellationTokenSource { get; set; }
-
-		private const int NumberOfManagers = 1;
-		private const int NumberOfNodes = 5;
 
 #if (DEBUG)
 		private const bool ClearDatabase = true;
@@ -63,8 +59,8 @@ namespace Manager.Integration.Test.LoadTests
 
 			AppDomainTask = new AppDomainTask(BuildMode);
 
-			Task = AppDomainTask.StartTask(numberOfManagers: NumberOfManagers,
-			                               numberOfNodes: NumberOfNodes,
+			Task = AppDomainTask.StartTask(numberOfManagers: 1,
+			                               numberOfNodes: 10,
 			                               useLoadBalancerIfJustOneManager: true,
 			                               cancellationTokenSource: CancellationTokenSource);
 			Thread.Sleep(TimeSpan.FromSeconds(2));
@@ -104,38 +100,12 @@ namespace Manager.Integration.Test.LoadTests
 
 			var startedTest = DateTime.UtcNow;
 
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
-
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-			                                                                StatusConstants.SuccessStatus,
-			                                                                StatusConstants.DeletedStatus,
-			                                                                StatusConstants.FailedStatus,
-			                                                                StatusConstants.CanceledStatus);
-
-			//---------------------------------------------
-			// Create timeout time.
-			//---------------------------------------------
-			var timeout =
-				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
-
-			//---------------------------------------------
-			// Create jobs.
-			//---------------------------------------------
-			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-			foreach (var jobRequestModel in createNewJobRequests)
-			{
-				var jobManagerTaskCreator =
-					new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-				jobManagerTaskCreators.Add(jobManagerTaskCreator);
-			}
-
 			LogMessage("Waiting for all nodes to start up.");
 
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(10,
 			                                                      sqlNotiferCancellationTokenSource,
 			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
@@ -145,52 +115,124 @@ namespace Manager.Integration.Test.LoadTests
 
 			LogMessage("All nodes has started.");
 
-			//---------------------------------------------
-			// Execute all jobs. 
-			//---------------------------------------------
-			var startJobTaskHelper = new StartJobTaskHelper();
 
-			var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-			                                                             CancellationTokenSource,
-			                                                             TimeSpan.FromMilliseconds(50));
-
-			//---------------------------------------------
-			// Wait for all jobs to finish.
-			//---------------------------------------------
-			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-			//---------------------------------------------
-			// Cancel tasks.
-			//---------------------------------------------
-			CancellationTokenSource.Cancel();
-
-			//---------------------------------------------
-			// Dispose.
-			//---------------------------------------------
-			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			Task task1 = new Task(() =>
 			{
-				jobManagerTaskCreator.Dispose();
-			}
+				int loop = 1;
 
-			taskHelper.Dispose();
+				while (loop <= 5000)
+				{
+					loop++;
+
+					//---------------------------------------------
+					// Create jobs.
+					//---------------------------------------------
+					var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(10);
+
+					var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+																					StatusConstants.SuccessStatus,
+																					StatusConstants.DeletedStatus,
+																					StatusConstants.FailedStatus,
+																					StatusConstants.CanceledStatus);
+
+
+					var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+
+					foreach (var jobRequestModel in createNewJobRequests)
+					{
+						var jobManagerTaskCreator =
+							new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+						jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+						jobManagerTaskCreators.Add(jobManagerTaskCreator);
+					}
+
+					//---------------------------------------------
+					// Execute all jobs. 
+					//---------------------------------------------
+					var startJobTaskHelper = new StartJobTaskHelper();
+
+					var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+																				 CancellationTokenSource,
+																				 TimeSpan.FromMilliseconds(100));
+
+					var timeout =
+						JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+
+					checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+				}
+
+			});
+
+			Task task2 = new Task(() =>
+			{
+				int loop = 1;
+
+				while (loop <= 5000)
+				{
+					loop++;
+
+					//---------------------------------------------
+					// Create jobs.
+					//---------------------------------------------
+					var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(5);
+
+					var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+																					StatusConstants.SuccessStatus,
+																					StatusConstants.DeletedStatus,
+																					StatusConstants.FailedStatus,
+																					StatusConstants.CanceledStatus);
+
+
+					var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+
+					foreach (var jobRequestModel in createNewJobRequests)
+					{
+						var jobManagerTaskCreator =
+							new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+						jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+
+						jobManagerTaskCreators.Add(jobManagerTaskCreator);
+					}
+
+					//---------------------------------------------
+					// Execute all jobs. 
+					//---------------------------------------------
+					var startJobTaskHelper = new StartJobTaskHelper();
+
+					var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
+																				 CancellationTokenSource,
+																				 TimeSpan.FromMilliseconds(100));
+
+					var timeout =
+						JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
+
+					checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+				}
+
+			});
+
+			task1.Start();
+			task2.Start();
+
+			Task.WaitAll(task1, task2);
+
 
 			var endedTest = DateTime.UtcNow;
 
 			string description =
-				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
-								createNewJobRequests.Count,
-								NumberOfManagers,
-								NumberOfNodes);
+				string.Format("Creates {0} FAST jobs with {1} manager and {2} nodes.",
+								50000,
+								1,
+								10);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
 											  description,
 											  startedTest,
 											  endedTest);
 
-			LogMessage("Finished.");
 		}
 	}
 }
