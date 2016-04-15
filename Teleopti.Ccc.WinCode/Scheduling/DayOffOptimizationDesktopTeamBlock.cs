@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
 													DateOnlyPeriod selectedPeriod,
 													ISchedulingProgress backgroundWorker,
-													IOptimizationPreferences optimizerPreferences,
+													IOptimizationPreferences optimizationPreferences,
 													IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
+			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);
 			var matrixListForDayOffOptimization = matrixOriginalStateContainerListForDayOffOptimization.Select(container => container.ScheduleMatrix).ToList();
 			var selectedPersons = matrixListForDayOffOptimization.Select(matrixList => matrixList.Person).Distinct().ToList();
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_teamBlockDayOffOptimizerService.OptimizeDaysOff(matrixListForDayOffOptimization,
 				selectedPeriod,
 				selectedPersons,
-				optimizerPreferences,
+				optimizationPreferences,
 				schedulingOptions,
 				resourceCalculateDelayer,
 				dayOffOptimizationPreferenceProvider,

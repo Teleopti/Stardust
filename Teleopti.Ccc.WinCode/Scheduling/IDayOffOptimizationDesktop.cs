@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		void Execute(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization,
 													DateOnlyPeriod selectedPeriod,
 													ISchedulingProgress backgroundWorker,
-													IOptimizationPreferences optimizerPreferences,
+													IOptimizationPreferences optimizationPreferences,
 													IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 }

@@ -637,6 +637,7 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\DayOffOptimizationDesktopClassic.cs" />
     <Compile Include="Scheduling\DayOffOptimizationDesktopTeamBlock.cs" />
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
