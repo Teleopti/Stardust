@@ -187,6 +187,7 @@
     <Compile Include="ApplicationLayer\CommonEventProcessor.cs" />
     <Compile Include="ApplicationLayer\CurrentInitiatorIdentifier.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsPersonPeriodSkillsChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\PreferenceChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAssignmentLayerRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\NewAbsenceRequestCreatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\QuickForecastWorkloadsEvent.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="ApplicationLayer\PersonAbsenceAccountProvider.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="Analytics\AnalyticsFactAgentSkill.cs" />
+    <Compile Include="ApplicationLayer\Preference\PreferenceChangedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />
