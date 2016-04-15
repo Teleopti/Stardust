@@ -637,6 +637,7 @@
     <Compile Include="Scheduling\AgentOvertimeAvailabilityAddCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityEditCommand.cs" />
     <Compile Include="Scheduling\AgentOvertimeAvailabilityRemoveCommand.cs" />
+    <Compile Include="Scheduling\DayOffOptimizationTeamBlock.cs" />
     <Compile Include="Scheduling\ExtendReduceDaysOffHelper.cs" />
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\FilterHourlyAvailabilityPresenter.cs" />
@@ -648,6 +649,7 @@
     <Compile Include="Scheduling\IAgentPreferenceView.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityCommand.cs" />
     <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
+    <Compile Include="Scheduling\IDayOffOptimization.cs" />
     <Compile Include="Scheduling\IOvertimePreferencesDialog.cs" />
     <Compile Include="Scheduling\IProgressReporter.cs" />
     <Compile Include="Scheduling\ISchedulePresenterBase.cs" />
