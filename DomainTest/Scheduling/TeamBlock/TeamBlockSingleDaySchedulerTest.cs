@@ -179,11 +179,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,
-																		 _schedulingOptions, finderResult)).Return(shifts);
+																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
-																		 _schedulingOptions, finderResult)).Return(shifts);
+																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
@@ -237,11 +237,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,
-															_schedulingOptions, finderResult)).Return(null);
+															_schedulingOptions, finderResult, false)).Return(null);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
-															_schedulingOptions, finderResult)).Return(shifts);
+															_schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
@@ -295,11 +295,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person1, _teamBlockInfo, restriction,
-																		 _schedulingOptions, finderResult)).Return(shifts);
+																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 						.Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForTeamMember(_dateOnly, _person2, _teamBlockInfo, restriction,
-																		 _schedulingOptions, finderResult)).Return(shifts);
+																		 _schedulingOptions, finderResult, false)).Return(shifts);
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, false))
 					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,

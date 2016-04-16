@@ -30,7 +30,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IDayOffTemplate> LoadAll()
 		{
-			return new List<IDayOffTemplate> { DayOffFactory.CreateDayOff() };
+			if(!_dayOffTemplates.Any())
+				return new List<IDayOffTemplate> { DayOffFactory.CreateDayOff() };
+
+			return _dayOffTemplates;
 		}
 
 		public IDayOffTemplate Load(Guid id)

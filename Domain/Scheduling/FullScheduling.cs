@@ -56,6 +56,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return CreateResult(period);
 		}
 
+		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
+		{
+			var stateHolder = _schedulerStateHolder();
+			SetupAndSchedule(period, schedulingOptions);
+			_persister.Persist(stateHolder.Schedules);
+			return CreateResult(period);
+		}
+
 		[LogTime]
 		[UnitOfWork]
 		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period)
@@ -102,6 +110,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				}), _schedulingProgress,
 					_schedulerStateHolder(),
 					_schedulerStateHolder().Schedules.SchedulesForPeriod(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period)).ToList(), 
+					_groupPagePerDateHolder(),
+					_requiredScheduleHelper(),
+					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			}
+		}
+
+		[UnitOfWork]
+		protected virtual void SetupAndSchedule(DateOnlyPeriod period, ISchedulingOptions schedulingOptions)
+		{
+			_fillSchedulerStateHolder.Fill(_schedulerStateHolder(), null, period);
+
+			if (_schedulerStateHolder().Schedules.Any())
+			{
+				_scheduleCommand().Execute(new OptimizerOriginalPreferences(schedulingOptions),
+					_schedulingProgress,
+					_schedulerStateHolder(),
+					_schedulerStateHolder()
+						.Schedules.SchedulesForPeriod(period,
+							_schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period))
+						.ToList(),
 					_groupPagePerDateHolder(),
 					_requiredScheduleHelper(),
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
@@ -174,5 +202,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
 			});
 		}
+
+		
 	}
 }
