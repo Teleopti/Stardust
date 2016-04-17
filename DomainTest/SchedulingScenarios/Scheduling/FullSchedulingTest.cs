@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public FakePreferenceDayRepository PreferenceDayRepository;
+		//public FakePreferenceDayRepository PreferenceDayRepository;
 
 		[Test]
 		public void ShouldNotCreateTags()
@@ -278,11 +278,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ruleSetBag.AddRuleSet(normalRuleSet);
 			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
 			agent2.Period(firstDay).RuleSetBag = ruleSetBag;
-			PreferenceDayRepository.Add(new PreferenceDay(agent2, firstDay,
-				new PreferenceRestriction
-				{
-					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
-				}).WithId());
+			//PreferenceDayRepository.Add(new PreferenceDay(agent2, firstDay,
+			//	new PreferenceRestriction
+			//	{
+			//		StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
+			//	}).WithId());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				TimeSpan.FromHours(10),
 				TimeSpan.FromHours(10),
