@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			assignment.DayOff().Should().Not.Be.Null();
 		}
 
-		[Test, Ignore("Need help on this")]
+		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 		}
 
-		[Test, Ignore("Need help on this")]
+		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestrictionOnSingleAgentTeams()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 		}
 
-		[Test, Ignore("Need help on this")]
+		[Test]
 		public void TeamBlockSchedulingShouldUseShiftsMarkedForRestrictionOnlyWhenThereIsRestriction()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
