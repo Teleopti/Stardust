@@ -66,11 +66,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	            Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers);
 				Expect.Call(_skillAggregator.AggregatedSkills(_groupMembers, dateOnlyPeriod)).Return(_skillList);
 	            Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_workShiftRuleSet1, _skillList)).Return(true);
-	            Expect.Call(_workShiftRuleSet1.OnlyForRestrictions).Return(false);
             }
             using (_mock.Playback())
             {
-                var result = _target.FilterForRoleModel(_teamBlockInfo, false);
+                var result = _target.FilterForRoleModel(_teamBlockInfo);
                 Assert.AreEqual(new List<IWorkShiftRuleSet> { _workShiftRuleSet1 }, result);
             }
 
@@ -87,11 +86,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                       .Return(new List<IRuleSetBag> { _ruleSetBag });
                 Expect.Call(_teamBlockIncludedWorkShiftRuleFilter.Filter(dateOnlyPeriod, new List<IRuleSetBag> { _ruleSetBag }))
                       .Return(new List<IWorkShiftRuleSet> { _workShiftRuleSet1 });
-				Expect.Call(_workShiftRuleSet1.OnlyForRestrictions).Return(false);
-			}
+            }
             using (_mock.Playback())
             {
-                var result = _target.FilterForTeamMember(_person, new DateOnly(2014, 03, 05), false);
+                var result = _target.FilterForTeamMember(_person, new DateOnly(2014, 03, 05));
 				Assert.IsTrue(result.ToList().Contains(_workShiftRuleSet1));
             }
 
