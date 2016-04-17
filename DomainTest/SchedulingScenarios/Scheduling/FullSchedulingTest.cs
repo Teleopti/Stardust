@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 			var site = new Site("site");
 			var team = new Team {Description = new Description("team")};
 			site.AddTeam(team);
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 			var site = new Site("site");
 			var team1 = new Team { Description = new Description("team1") };
 			var team2 = new Team { Description = new Description("team2") };
@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var scenario = ScenarioRepository.Has("some name");
-			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
 			var site = new Site("site");
 			var team1 = new Team { Description = new Description("team1") };
 			var team2 = new Team { Description = new Description("team2") };
