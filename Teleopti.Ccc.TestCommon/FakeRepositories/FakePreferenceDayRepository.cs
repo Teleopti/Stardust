@@ -8,16 +8,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePreferenceDayRepository : IPreferenceDayRepository
 	{
-		private IList<IPreferenceDay> _preferensDays = new List<IPreferenceDay>();
-
 		public void Add(IPreferenceDay root)
 		{
-			_preferensDays.Add(root);
+			throw new NotImplementedException();
 		}
 
 		public void Remove(IPreferenceDay root)
 		{
-			_preferensDays.Remove(root);
+			throw new NotImplementedException();
 		}
 
 		public IPreferenceDay Get(Guid id)
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPreferenceDay> LoadAll()
 		{
-			return _preferensDays;
+			throw new NotImplementedException();
 		}
 
 		public IPreferenceDay Load(Guid id)
@@ -58,7 +56,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
 		{
-			return _preferensDays;
+			//impl when needed
+			return new List<IPreferenceDay>();
 		}
 
 		public IList<IPreferenceDay> Find(DateOnly dateOnly, IPerson person)
