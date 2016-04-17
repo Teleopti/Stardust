@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
 				schedulingOptions,
-				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
+				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), false);
 
 			if (shifts.IsNullOrEmpty())
 				return resultList;
@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			foreach (var person in selectedTeamMembers)
 			{
-				if (cancelMe) return false;
+				if (cancelMe)
+					return false;
 
 				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> {person}, day, teamBlockSingleDayInfo))
 					continue;
@@ -139,32 +140,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person,
 						roleModelShift);
-					if (restriction == null) return false;
+					if (restriction == null)
+						return false;
+
 					if (shiftNudgeRestriction != null)
 						restriction = restriction.Combine(shiftNudgeRestriction);
 
-					var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
-						schedulingOptions,
-						new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
-					if (shifts.IsNullOrEmpty()) continue;
+					bestShiftProjectionCache = filterAndSelect(teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
+						restriction, schedulingResultStateHolder, false);
 
-					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
-						schedulingResultStateHolder, false);
+					if (bestShiftProjectionCache == null && restriction.IsRestriction)
+						bestShiftProjectionCache = filterAndSelect(teamBlockInfo, schedulingOptions, day, person, teamBlockSingleDayInfo,
+						restriction, schedulingResultStateHolder, true);
 
-					IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
-						_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
-			
-
-					var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
-						new DateOnlyPeriod(day, day));
-					bool hasMaxSeatSkill = maxSeatSkills.Any();
-
-					var parameters = new PeriodValueCalculationParameters(schedulingOptions
-						.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
-						schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
-					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-						parameters, TimeZoneGuard.Instance.TimeZone);
-					if (bestShiftProjectionCache == null) continue;
+					if (bestShiftProjectionCache == null)
+						continue;
 				}
 				cancelMe = _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
 					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, dayScheduled);
@@ -178,6 +168,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day,
 				selectedTeamMembers);
+		}
+
+		private IShiftProjectionCache filterAndSelect(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
+			IPerson person, TeamBlockSingleDayInfo teamBlockSingleDayInfo,
+			IEffectiveRestriction restriction, ISchedulingResultStateHolder schedulingResultStateHolder, bool useShiftsForRestrictions)
+		{
+			var shifts = _workShiftFilterService.FilterForTeamMember(day, person, teamBlockSingleDayInfo, restriction,
+						schedulingOptions,
+						new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), 
+						useShiftsForRestrictions);
+
+			if (shifts.IsNullOrEmpty())
+				return null;
+
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockSingleDayInfo, day,
+				schedulingResultStateHolder, false);
+
+			IDictionary<DateTime, IntervalLevelMaxSeatInfo> maxSeatInfo =
+				_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, day, schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
+
+			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(),
+				new DateOnlyPeriod(day, day));
+			bool hasMaxSeatSkill = maxSeatSkills.Any();
+
+			var parameters = new PeriodValueCalculationParameters(schedulingOptions
+				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
+				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
+
+			return _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+				parameters, TimeZoneGuard.Instance.TimeZone);
 		}
 	}
 }

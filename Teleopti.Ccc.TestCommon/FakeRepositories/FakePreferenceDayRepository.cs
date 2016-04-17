@@ -58,7 +58,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
 		{
-			//impl when needed
 			return _preferensDays;
 		}
 

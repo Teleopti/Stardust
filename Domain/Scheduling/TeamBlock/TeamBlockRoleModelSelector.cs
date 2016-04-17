@@ -62,18 +62,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return foundShiftProjectionCache;
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
+			var roleModel = filterAndSelect(teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, false);
+			if(roleModel == null && effectiveRestriction.IsRestriction)
+				roleModel = filterAndSelect(teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, true);
+
+			return roleModel;
+		}
+
+		private IShiftProjectionCache filterAndSelect(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions)
+		{
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo);
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions,
 				new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
-				isSameOpenHoursInBlock);
+				isSameOpenHoursInBlock, useShiftsForRestrictions);
 			if (shifts.IsNullOrEmpty())
 				return null;
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
 				_schedulingResultStateHolder, true);
 			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, _schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
-			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList() , new DateOnlyPeriod(datePointer, datePointer));
+			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer, datePointer));
 			bool hasMaxSeatSkill = maxSeatSkills.Any();
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,

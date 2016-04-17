@@ -202,5 +202,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				Name = person.Name.ToString(NameOrderOption.FirstNameLastName)
 			});
 		}
+
+		
 	}
 }

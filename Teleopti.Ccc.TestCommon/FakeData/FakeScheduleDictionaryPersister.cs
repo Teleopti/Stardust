@@ -3,6 +3,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -51,6 +53,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 								break;
 						}
 					}
+
+				
 				}
 				//foreach (var scheduleChange in diff)
 				//{
