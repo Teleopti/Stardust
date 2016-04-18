@@ -111,7 +111,7 @@
 	</div>
 
 	<div class="con-row">
-	<div class="con-flex" ng-if="HasMonitorData">
+	<div class="con-flex">
 		<div class="panel slide-panel full-padding material-depth-1" ng-show="HasMonitorData">
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding">
@@ -140,7 +140,7 @@
 	<div class="con-row">
 		<div class="con-flex" ng-cloak ng-if="!HasMonitorData">
 			<div class="panel full-padding material-depth-1">
-			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}}: {{'NoDataAvailable'|translate}}</span>
+			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>
 			</div>
 		</div>
 

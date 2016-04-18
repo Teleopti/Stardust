@@ -84,6 +84,7 @@
 					.$promise.then(function(result) {
 						$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
 						$scope.selectedItem = null;
+						$scope.HasMonitorData = false;
 						clearSkillAreaSelection();
 						notifySkillAreaDeletion();
 					});
