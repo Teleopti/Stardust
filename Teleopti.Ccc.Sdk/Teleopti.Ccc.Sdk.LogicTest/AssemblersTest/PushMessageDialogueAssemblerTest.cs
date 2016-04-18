@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -14,120 +18,118 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PushMessageDialogueAssemblerTest
     {
-        private IPerson _person;
-        private MockRepository _mocks;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
-        private PushMessageDialogueAssembler _target;
-        private IPerson _receiver;
-        private IAssembler<IPushMessage, PushMessageDto> _pushMessageAssembler;
-        private IAssembler<IDialogueMessage, DialogueMessageDto> _dialogueMessageAssembler;
+	    [Test]
+	    public void VerifyDoToDto()
+	    {
+		    var receiver = PersonFactory.CreatePerson("Da receiver").WithId();
+		    var person = PersonFactory.CreatePerson().WithId();
+		    var personRepository = new FakePersonRepository();
+		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
+		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+		    var activityRepository = new FakeActivityRepository();
+		    var activityAssembler = new ActivityAssembler(activityRepository);
+		    var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+		    var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
+				    dayOffAssembler, activityAssembler,
+				    absenceAssembler), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var pushMessageAssembler = new PushMessageAssembler {PersonAssembler = personAssembler};
+		    var dialogueMessageAssembler = new DialogueMessageAssembler {PersonAssembler = personAssembler};
+		    var target = new PushMessageDialogueAssembler();
+		    target.PersonAssembler = personAssembler;
+		    target.DialogueMessageAssembler = dialogueMessageAssembler;
+		    target.PushMessageAssembler = pushMessageAssembler;
 
-        [SetUp]
-        public void Setup()
-        {
-            _receiver = PersonFactory.CreatePerson("Da receiver");
-            _receiver.SetId(Guid.NewGuid());
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-            _mocks = new MockRepository();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-            _pushMessageAssembler = _mocks.StrictMock<IAssembler<IPushMessage, PushMessageDto>>();
-            _dialogueMessageAssembler = _mocks.StrictMock<IAssembler<IDialogueMessage, DialogueMessageDto>>();
-            _target = new PushMessageDialogueAssembler();
-            _target.PersonAssembler = _personAssembler;
-            _target.DialogueMessageAssembler = _dialogueMessageAssembler;
-            _target.PushMessageAssembler = _pushMessageAssembler;
-        }
-
-        [Test]
-        public void VerifyDoToDto()
-        {
-            var dialogueMessage = CreateDo();
-            using (_mocks.Record())
-            {
-                var senderDto = new PersonDto
-                                    {
-                                        Id = _person.Id,
-                                        Name = _person.Name.ToString()
-                                    };
-                var recieverDto = new PersonDto
-                                      {
-                                          Id = _receiver.Id,
-                                          Name = _receiver.Name.ToString(),
-                                          TimeZoneId = TimeZoneInfo.Utc.Id
-                };
-                Expect.Call(_personAssembler.DomainEntityToDto(_receiver)).Return(recieverDto);
-                Expect.Call(_dialogueMessageAssembler.DomainEntityToDto(dialogueMessage.DialogueMessages[0])).Return(
-                    new DialogueMessageDto{Text = dialogueMessage.DialogueMessages[0].Text});
-                Expect.Call(_pushMessageAssembler.DomainEntityToDto(dialogueMessage.PushMessage)).Return(
-                    new PushMessageDto {Sender = senderDto});
-            }
-            using (_mocks.Playback())
-            {
-                var result = _target.DomainEntityToDto(dialogueMessage);
-                Assert.AreEqual(1, result.Messages.Count);
-                Assert.AreEqual(_person.Id, result.PushMessage.Sender.Id);
-                Assert.AreEqual("Da receiver Da receiver", result.Receiver.Name);
-                IList<DialogueMessageDto> dialogueMessageDtos = (IList<DialogueMessageDto>)result.Messages;
-                Assert.AreEqual("Glöm det!!", dialogueMessageDtos[0].Text);
-            }
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.IPushMessage.set_Message(System.String)"), Test]
-		public void ShouldTransformToDtoWithInvalidCharacter()
-		{
-			var dialogueMessage = CreateDo();
-			dialogueMessage.PushMessage.Message = "invalid character: ";
-			using (_mocks.Record())
+			IList<string> replyOptions = new List<string> { "OK", "NOK" };
+			IPushMessage pushMessage = new PushMessage(replyOptions)
 			{
-				var senderDto = new PersonDto
-				{
-					Id = _person.Id,
-					Name = _person.Name.ToString()
-				};
-				var recieverDto = new PersonDto
-				{
-					Id = _receiver.Id,
-					Name = _receiver.Name.ToString(),
-					TimeZoneId = TimeZoneInfo.Utc.Id
-				};
-				Expect.Call(_personAssembler.DomainEntityToDto(_receiver)).Return(recieverDto);
-				Expect.Call(_dialogueMessageAssembler.DomainEntityToDto(dialogueMessage.DialogueMessages[0])).Return(
-					new DialogueMessageDto { Text = dialogueMessage.DialogueMessages[0].Text });
-				Expect.Call(_pushMessageAssembler.DomainEntityToDto(dialogueMessage.PushMessage)).Return(
-					new PushMessageDto { Sender = senderDto });
-			}
-			using (_mocks.Playback())
-			{
-				var result = _target.DomainEntityToDto(dialogueMessage);
-				result.Message.Should().Not.Contain("");
-			}
-		}
+				Title = "Vem kan jobba?",
+				Message = "Vi är underbemannade och behöver extrainsatser.",
+				Sender = person
+			};
+			IPushMessageDialogue pushMessageDialogue = new PushMessageDialogue(pushMessage, receiver);
+			pushMessageDialogue.DialogueReply("Glöm det!!", person);
+			
+		    var result = target.DomainEntityToDto(pushMessageDialogue);
+		    Assert.AreEqual(1, result.Messages.Count);
+		    Assert.AreEqual(person.Id, result.PushMessage.Sender.Id);
+		    Assert.AreEqual("Da receiver Da receiver", result.Receiver.Name);
+		    IList<DialogueMessageDto> dialogueMessageDtos = (IList<DialogueMessageDto>) result.Messages;
+		    Assert.AreEqual("Glöm det!!", dialogueMessageDtos[0].Text);
+	    }
 
-        [Test, ExpectedException(typeof(NotSupportedException))]
+	    [Test]
+	    public void ShouldTransformToDtoWithInvalidCharacter()
+	    {
+			var receiver = PersonFactory.CreatePerson("Da receiver").WithId();
+			var person = PersonFactory.CreatePerson().WithId();
+			var personRepository = new FakePersonRepository();
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var shiftCategoryRepository = new FakeShiftCategoryRepository();
+			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+			var activityRepository = new FakeActivityRepository();
+			var activityAssembler = new ActivityAssembler(activityRepository);
+			var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+			var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+			var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(shiftCategoryAssembler,
+					dayOffAssembler, activityAssembler,
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var pushMessageAssembler = new PushMessageAssembler { PersonAssembler = personAssembler };
+			var dialogueMessageAssembler = new DialogueMessageAssembler {PersonAssembler = personAssembler};
+		    var target = new PushMessageDialogueAssembler
+		    {
+			    PersonAssembler = personAssembler,
+			    DialogueMessageAssembler = dialogueMessageAssembler,
+			    PushMessageAssembler = pushMessageAssembler
+		    };
+
+		    IList<string> replyOptions = new List<string> { "OK", "NOK" };
+			IPushMessage pushMessage = new PushMessage(replyOptions)
+			{
+				Title = "Vem kan jobba?",
+				Message = "Vi är underbemannade och behöver extrainsatser.",
+				Sender = person
+			};
+			IPushMessageDialogue pushMessageDialogue = new PushMessageDialogue(pushMessage, receiver);
+			pushMessageDialogue.DialogueReply("Glöm det!!", person);
+			pushMessageDialogue.PushMessage.Message = "invalid character: ";
+
+		    var result = target.DomainEntityToDto(pushMessageDialogue);
+		    result.Message.Should().Not.Contain("");
+	    }
+
+	    [Test, ExpectedException(typeof(NotSupportedException))]
         public void VerifyDtoToDo()
         {
-            var dialogueMessageDto = CreateDto();
-            _target.DtoToDomainEntity(dialogueMessageDto);
-        }
+			var personRepository = new FakePersonRepository();
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var shiftCategoryRepository = new FakeShiftCategoryRepository();
+			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+			var activityRepository = new FakeActivityRepository();
+			var activityAssembler = new ActivityAssembler(activityRepository);
+			var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+			var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+			var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(shiftCategoryAssembler,
+					dayOffAssembler, activityAssembler,
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var pushMessageAssembler = new PushMessageAssembler { PersonAssembler = personAssembler };
+			var dialogueMessageAssembler = new DialogueMessageAssembler {PersonAssembler = personAssembler};
+		    var target = new PushMessageDialogueAssembler
+		    {
+			    PersonAssembler = personAssembler,
+			    DialogueMessageAssembler = dialogueMessageAssembler,
+			    PushMessageAssembler = pushMessageAssembler
+		    };
 
-        private IPushMessageDialogue CreateDo()
-        {
-            IList<string> replyOptions = new List<string> { "OK", "NOK" };
-            IPushMessage pushMessage = new PushMessage(replyOptions)
-            {
-                Title = "Vem kan jobba?",
-                Message = "Vi är underbemannade och behöver extrainsatser.",
-                Sender = _person
-            };
-            IPushMessageDialogue pushMessageDialogue = new PushMessageDialogue(pushMessage, _receiver);
-            pushMessageDialogue.DialogueReply("Glöm det!!", _person);
-            return pushMessageDialogue;
-        }
-
-        private static PushMessageDialogueDto CreateDto()
-        {
-            return new PushMessageDialogueDto();
+		    var dialogueMessageDto = new PushMessageDialogueDto();
+            target.DtoToDomainEntity(dialogueMessageDto);
         }
     }
 }

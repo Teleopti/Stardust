@@ -1,9 +1,14 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -11,83 +16,58 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PersonDayOffAssemblerTest
     {
-        private PersonDayOffAssembler _target;
+        private readonly TimeZoneInfo _timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 
-        private IPerson _person;
-        private IScenario _scenario;
-        private TimeZoneInfo _timeZoneInfo;
-        private MockRepository _mocks;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
+	    [Test]
+	    public void VerifyDoToDto()
+	    {
+		    var person = PersonFactory.CreatePerson().WithId();
+		    person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
+		    var scenario = ScenarioFactory.CreateScenarioAggregate();
+		    var personAssembler = new PersonAssembler(new FakePersonRepository(),
+			    new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+				    new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+				    new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var date = new DateOnly(1900, 1, 1);
+		    var anchorTime = new TimeSpan(23);
+		    var flexibility = new TimeSpan(124);
+		    var length = new TimeSpan(1244);
 
-        [SetUp]
-        public void Setup()
-        {
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-            _timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            _person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
-            _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _mocks = new MockRepository();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-            _target = new PersonDayOffAssembler(_personAssembler,new DateTimePeriodAssembler());
-            _target.Person = _person;
-            _target.DefaultScenario = _scenario;
-        }
+		    var dayOff = DayOffFactory.CreateDayOff(new Description("test"));
+		    dayOff.Anchor = anchorTime;
+		    dayOff.SetTargetAndFlexibility(length, flexibility);
+		    var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, date, dayOff).WithId();
 
-        [Test]
-        public void VerifyDoToDto()
-        {
-            var date = new DateOnly(1900, 1, 1);
-            var anchorTime = new TimeSpan(23);
-            var flexibility = new TimeSpan(124);
-            var length = new TimeSpan(1244);
+			var target = new PersonDayOffAssembler(personAssembler, new DateTimePeriodAssembler());
+			target.Person = person;
+			target.DefaultScenario = scenario;
+			var dayOffDto = target.DomainEntityToDto(personDayOff);
 
-						var dayOff = DayOffFactory.CreateDayOff(new Description("test"));
-					dayOff.Anchor = anchorTime;
-						dayOff.SetTargetAndFlexibility(length, flexibility);
-						var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, date, dayOff);
+		    Assert.IsNotNull(dayOffDto);
+		    Assert.AreEqual(personDayOff.Person.Id.GetValueOrDefault(), dayOffDto.Person.Id.GetValueOrDefault());
+		    Assert.AreEqual(personDayOff.Id.GetValueOrDefault(), dayOffDto.Id.GetValueOrDefault());
+		    Assert.AreEqual(personDayOff.Period.StartDateTime, dayOffDto.Period.UtcStartTime);
+	    }
 
+	    [Test]
+	    public void VerifyDoToDtoWithNoDayOffInAssignment()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			person.PermissionInformation.SetDefaultTimeZone(_timeZoneInfo);
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					new AbsenceAssembler(new FakeAbsenceRepository())), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personDayOff = PersonAssignmentFactory.CreatePersonAssignment(person).WithId();
 
-            personDayOff.SetId(Guid.NewGuid());
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-                                                                                   {
-                                                                                       Id = _person.Id,
-                                                                                       Name = _person.Name.ToString()
-                                                                                   });
-            }
-            using (_mocks.Playback())
-            {
-                var dayOffDto = _target.DomainEntityToDto(personDayOff);
-
-                Assert.IsNotNull(dayOffDto);
-                Assert.AreEqual(personDayOff.Person.Id.GetValueOrDefault(), dayOffDto.Person.Id.GetValueOrDefault());
-                Assert.AreEqual(personDayOff.Id.GetValueOrDefault(), dayOffDto.Id.GetValueOrDefault());
-                Assert.AreEqual(personDayOff.Period.StartDateTime, dayOffDto.Period.UtcStartTime);
-            }
-        }
-
-        [Test]
-        public void VerifyDoToDtoWithNoDayOffInAssignment()
-        {
-            var personDayOff = PersonAssignmentFactory.CreatePersonAssignment(_person);
-            personDayOff.SetId(Guid.NewGuid());
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-                {
-                    Id = _person.Id,
-                    Name = _person.Name.ToString()
-                }).Repeat.Never();
-            }
-            using (_mocks.Playback())
-            {
-                var dayOffDto = _target.DomainEntityToDto(personDayOff);
-                Assert.IsNull(dayOffDto);
-            }
-        }
+			var target = new PersonDayOffAssembler(personAssembler, new DateTimePeriodAssembler());
+			target.Person = person;
+			target.DefaultScenario = scenario;
+			var dayOffDto = target.DomainEntityToDto(personDayOff);
+		    Assert.IsNull(dayOffDto);
+	    }
     }
 }

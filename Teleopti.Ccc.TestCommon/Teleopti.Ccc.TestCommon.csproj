@@ -289,6 +289,7 @@
     <Compile Include="IoC\ToggleOffAttribute.cs" />
     <Compile Include="LinqPerumationExtension.cs" />
     <Compile Include="RequestInfo.cs" />
+    <Compile Include="Services\ShiftTradeRequestStatusCheckerForTestAlwaysRefer.cs" />
     <Compile Include="SkillExtensions.cs" />
     <Compile Include="TestData\Analytics\DimDayOff.cs" />
     <Compile Include="IoC\ToggleAttribute.cs" />

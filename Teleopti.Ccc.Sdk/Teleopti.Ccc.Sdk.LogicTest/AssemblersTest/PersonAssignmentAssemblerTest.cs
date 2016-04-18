@@ -1,150 +1,139 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
     public class PersonAssignmentAssemblerTest
     {
-        private PersonAssignmentAssembler target;
-        private IShiftCategoryRepository shiftCatRep;
-        private IActivityRepository actRep;
-        private MockRepository mocks;
-        private IPerson person;
-        private IScenario scenario;
-        private IMultiplicatorDefinitionSetRepository definitionSetRep;
-        private IContract contract;
-        private DateTimePeriodAssembler dateTimePeriodAssembler;
-        private ActivityAssembler activityAssembler;
-        private IActivityLayerAssembler<IMainShiftLayer> mainShiftLayerAssembler;
-        private IActivityLayerAssembler<IPersonalShiftLayer> personalShiftLayerAssembler;
-        private IOvertimeLayerAssembler overtimeShiftLayerAssembler;
+	    [Test]
+	    public void VerifyDtoToDo()
+	    {
+		    var shiftCatRep = new FakeShiftCategoryRepository();
+		    var actRep = new FakeActivityRepository();
+		    var definitionSetRep = new FakeMultiplicatorDefinitionSetRepository();
 
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-            SetupRepositories();
-            SetupAssemblers();
-            target = new PersonAssignmentAssembler(shiftCatRep, mainShiftLayerAssembler,personalShiftLayerAssembler,overtimeShiftLayerAssembler);
-            contract = ContractFactory.CreateContract("test");
-            person = PersonFactory.CreatePerson();
-            person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(1800, 1, 1),
-                                                                          PersonContractFactory.CreatePersonContract(
-                                                                              contract,
-                                                                              PartTimePercentageFactory.
-                                                                                  CreatePartTimePercentage("test"),
-                                                                              ContractScheduleFactory.
-                                                                                  CreateContractSchedule("test")),
-                                                                          TeamFactory.CreateSimpleTeam()));
-            scenario = ScenarioFactory.CreateScenarioAggregate();
-            target.Person = person;
-            target.DefaultScenario = scenario;
-        }
+		    var activityAssembler = new ActivityAssembler(actRep);
+		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+		    var mainShiftLayerAssembler =
+			    new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(),
+				    dateTimePeriodAssembler, activityAssembler);
+		    var personalShiftLayerAssembler =
+			    new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+				    dateTimePeriodAssembler, activityAssembler);
+		    var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
+			    definitionSetRep);
 
-        private void SetupAssemblers()
-        {
-            activityAssembler = new ActivityAssembler(actRep);
-            dateTimePeriodAssembler = new DateTimePeriodAssembler();
-            mainShiftLayerAssembler =
-                new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(),
-                                                                    dateTimePeriodAssembler,activityAssembler);
-            personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
-                                                                                                  dateTimePeriodAssembler, activityAssembler);
-            overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
-        }
+		    var contract = ContractFactory.CreateContract("test");
+		    var person = PersonFactory.CreatePerson();
+		    var scenario = ScenarioFactory.CreateScenarioAggregate();
 
-        private void SetupRepositories()
-        {
-            shiftCatRep = mocks.StrictMock<IShiftCategoryRepository>();
-            actRep = mocks.StrictMock<IActivityRepository>();
-            definitionSetRep = mocks.StrictMock<IMultiplicatorDefinitionSetRepository>();
-        }
 
-        [Test]
-        public void VerifyDtoToDo()
-        {
-            PersonAssignmentDto dto = new PersonAssignmentDto {Id=Guid.NewGuid(), Version = 4};
-            dto.MainShift = new MainShiftDto {Id = Guid.NewGuid(), ShiftCategoryId = Guid.NewGuid()};
-            ActivityDto actMain = new ActivityDto {Id = Guid.NewGuid()};
-            ActivityDto actPers = new ActivityDto {Id = Guid.NewGuid()};
-            ActivityDto actOvertime = new ActivityDto {Id = Guid.NewGuid()};
-            OvertimeDefinitionSetDto overtimeDefinitionSetDto = new OvertimeDefinitionSetDto {Id = Guid.NewGuid()};
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("d1").WithId();
+			var activityMain = ActivityFactory.CreateActivity("sd").WithId();
+			var activityPers = ActivityFactory.CreateActivity("sd").WithId();
+			var activityOvertime = ActivityFactory.CreateActivity("sd").WithId();
+			var definitionSet = new MultiplicatorDefinitionSet("Overtime", MultiplicatorType.Overtime).WithId();
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 
-            ActivityLayerDto mainShiftLayer = new ActivityLayerDto
-                                                  {
-                                                      Period =
-                                                          dateTimePeriodAssembler.DomainEntityToDto(
-                                                              new DateTimePeriod(1900, 1, 1, 1900, 1, 2)),
-                                                      Activity = actMain
-                                                  };
-            dto.MainShift.LayerCollection.Add(mainShiftLayer);
+			shiftCatRep.Add(shiftCategory);
+			actRep.Add(activityMain);
+			actRep.Add(activityPers);
+			actRep.Add(activityOvertime);
+			definitionSetRep.Add(definitionSet);
+			
+		    var dto = new PersonAssignmentDto {Id = Guid.NewGuid(), Version = 4};
+		    dto.MainShift = new MainShiftDto {Id = Guid.NewGuid(), ShiftCategoryId = shiftCategory.Id.Value};
+		    var actMain = new ActivityDto {Id = activityMain.Id.Value};
+		    var actPers = new ActivityDto { Id = activityPers.Id.Value };
+		    var actOvertime = new ActivityDto {Id = activityOvertime.Id.Value};
+		    var overtimeDefinitionSetDto = new OvertimeDefinitionSetDto {Id = definitionSet.Id.Value};
 
-            ActivityLayerDto persShiftLayer = new ActivityLayerDto
-                                                  {
-                                                      Period =
-                                                          dateTimePeriodAssembler.DomainEntityToDto(
-                                                              new DateTimePeriod(2000, 1, 1, 2000, 1, 2)),
-                                                      Activity = actPers
-                                                  };
-            var personalShift = new ShiftDto {Id = Guid.NewGuid()};
-            personalShift.LayerCollection.Add(persShiftLayer);
-            dto.PersonalShiftCollection.Add(personalShift);
+		    var mainShiftLayer = new ActivityLayerDto
+		    {
+			    Period =
+				    dateTimePeriodAssembler.DomainEntityToDto(
+					    new DateTimePeriod(1900, 1, 1, 1900, 1, 2)),
+			    Activity = actMain
+		    };
+		    dto.MainShift.LayerCollection.Add(mainShiftLayer);
 
-            OvertimeLayerDto overtimeLayerDto =
-                new OvertimeLayerDto { Period = dateTimePeriodAssembler.DomainEntityToDto(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)), Activity = actOvertime, OvertimeDefinitionSetId = overtimeDefinitionSetDto.Id.Value };
-            var overtimeShift = new ShiftDto { Id = Guid.NewGuid() };
-            overtimeShift.LayerCollection.Add(overtimeLayerDto);
-            dto.OvertimeShiftCollection.Add(overtimeShift);
+		    var persShiftLayer = new ActivityLayerDto
+		    {
+			    Period =
+				    dateTimePeriodAssembler.DomainEntityToDto(
+					    new DateTimePeriod(2000, 1, 1, 2000, 1, 2)),
+			    Activity = actPers
+		    };
+		    var personalShift = new ShiftDto {Id = Guid.NewGuid()};
+		    personalShift.LayerCollection.Add(persShiftLayer);
+		    dto.PersonalShiftCollection.Add(personalShift);
 
-            IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("d1");
-            IActivity activityMain = ActivityFactory.CreateActivity("sd");
-            IActivity activityPers = ActivityFactory.CreateActivity("sd");
-            IActivity activityOvertime = ActivityFactory.CreateActivity("sd");
-            IMultiplicatorDefinitionSet definitionSet = mocks.StrictMock<IMultiplicatorDefinitionSet>();
-            contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+		    var overtimeLayerDto =
+			    new OvertimeLayerDto
+			    {
+				    Period = dateTimePeriodAssembler.DomainEntityToDto(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)),
+				    Activity = actOvertime,
+				    OvertimeDefinitionSetId = overtimeDefinitionSetDto.Id.Value
+			    };
+		    var overtimeShift = new ShiftDto {Id = Guid.NewGuid()};
+		    overtimeShift.LayerCollection.Add(overtimeLayerDto);
+		    dto.OvertimeShiftCollection.Add(overtimeShift);
 
-            using(mocks.Record())
-            {
-                Expect.Call(shiftCatRep.Load(dto.MainShift.ShiftCategoryId)).Return(shiftCategory);
-                Expect.Call(actRep.Get(actMain.Id.Value)).Return(activityMain);
-                Expect.Call(actRep.Get(actPers.Id.Value)).Return(activityPers);
-                Expect.Call(actRep.Get(actOvertime.Id.Value)).Return(activityOvertime);
-                Expect.Call(definitionSetRep.Load(overtimeDefinitionSetDto.Id.Value)).Return(definitionSet);
-            }
-            using(mocks.Playback())
-            {
-                IPersonAssignment entity = target.DtoToDomainEntity(dto);
+		    var target = new PersonAssignmentAssembler(shiftCatRep, mainShiftLayerAssembler, personalShiftLayerAssembler,
+			    overtimeShiftLayerAssembler);
+			target.Person = person;
+			target.DefaultScenario = scenario;
 
-                Assert.AreEqual(dto.Version, entity.Version);
-                Assert.AreEqual(dto.Id, entity.Id);
-                Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.MainActivities().Single().Period);
-                Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), entity.PersonalActivities().Single().Period);
-                Assert.AreEqual(new DateTimePeriod(2001, 1, 1, 2001, 1, 2), entity.OvertimeActivities().Single().Period);
-                Assert.AreSame(person, entity.Person);
-                Assert.AreSame(scenario, entity.Scenario);             
-                Assert.AreSame(shiftCategory, entity.ShiftCategory);
-                Assert.AreSame(activityMain, entity.MainActivities().First().Payload);
-                Assert.AreSame(activityPers, entity.PersonalActivities().First().Payload);
-                Assert.AreSame(activityOvertime, entity.OvertimeActivities().First().Payload);
-                Assert.AreSame(definitionSet, entity.OvertimeActivities().First().DefinitionSet);
-            }
-        }
+			var entity = target.DtoToDomainEntity(dto);
 
-        [Test]
+		    Assert.AreEqual(dto.Version, entity.Version);
+		    Assert.AreEqual(dto.Id, entity.Id);
+		    Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.MainActivities().Single().Period);
+		    Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), entity.PersonalActivities().Single().Period);
+		    Assert.AreEqual(new DateTimePeriod(2001, 1, 1, 2001, 1, 2), entity.OvertimeActivities().Single().Period);
+		    Assert.AreSame(person, entity.Person);
+		    Assert.AreSame(scenario, entity.Scenario);
+		    Assert.AreSame(shiftCategory, entity.ShiftCategory);
+		    Assert.AreSame(activityMain, entity.MainActivities().First().Payload);
+		    Assert.AreSame(activityPers, entity.PersonalActivities().First().Payload);
+		    Assert.AreSame(activityOvertime, entity.OvertimeActivities().First().Payload);
+		    Assert.AreSame(definitionSet, entity.OvertimeActivities().First().DefinitionSet);
+	    }
+
+	    [Test]
         [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutPerson()
         {
-            target.Person = null;
+			var shiftCatRep = new FakeShiftCategoryRepository();
+			var actRep = new FakeActivityRepository();
+			var definitionSetRep = new FakeMultiplicatorDefinitionSetRepository();
+
+			var activityAssembler = new ActivityAssembler(actRep);
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var mainShiftLayerAssembler =
+				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(),
+																	dateTimePeriodAssembler, activityAssembler);
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+																								  dateTimePeriodAssembler, activityAssembler);
+			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
+
+			var target = new PersonAssignmentAssembler(shiftCatRep, mainShiftLayerAssembler, personalShiftLayerAssembler, overtimeShiftLayerAssembler);
+			
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+
+			target.DefaultScenario = scenario;
+			target.Person = null;
+
             target.DtoToDomainEntity(new PersonAssignmentDto());
         }
 
@@ -152,24 +141,57 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
         [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutDefaultScenario()
         {
-            target.DefaultScenario = null;
-            target.DtoToDomainEntity(new PersonAssignmentDto());
+			var shiftCatRep = new FakeShiftCategoryRepository();
+			var actRep = new FakeActivityRepository();
+			var definitionSetRep = new FakeMultiplicatorDefinitionSetRepository();
+
+			var activityAssembler = new ActivityAssembler(actRep);
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var mainShiftLayerAssembler =
+				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(),
+																	dateTimePeriodAssembler, activityAssembler);
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+																								  dateTimePeriodAssembler, activityAssembler);
+			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
+
+			var target = new PersonAssignmentAssembler(shiftCatRep, mainShiftLayerAssembler, personalShiftLayerAssembler, overtimeShiftLayerAssembler);
+			var person = PersonFactory.CreatePerson();
+			
+			target.Person = person;
+			target.DefaultScenario = null;
+
+			target.DtoToDomainEntity(new PersonAssignmentDto());
         }
 
         [Test]
         public void VerifyDoToDto()
         {
-            IActivity act = ActivityFactory.CreateActivity("asdf");
-            act.SetId(Guid.NewGuid());
-            IMultiplicatorDefinitionSet definitionSet =
-                MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("ovt", MultiplicatorType.Overtime);
-            definitionSet.SetId(Guid.NewGuid());
-            IShiftCategory sCat = ShiftCategoryFactory.CreateShiftCategory("d1");
-            sCat.SetId(Guid.NewGuid());
-           
-            IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
-            ass.SetId(Guid.NewGuid());
-					ass.AddOvertimeActivity(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet);
+			var shiftCatRep = new FakeShiftCategoryRepository();
+			var actRep = new FakeActivityRepository();
+			var definitionSetRep = new FakeMultiplicatorDefinitionSetRepository();
+
+			var activityAssembler = new ActivityAssembler(actRep);
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var mainShiftLayerAssembler =
+				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(),
+																	dateTimePeriodAssembler, activityAssembler);
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+																								  dateTimePeriodAssembler, activityAssembler);
+			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
+
+			var target = new PersonAssignmentAssembler(shiftCatRep, mainShiftLayerAssembler, personalShiftLayerAssembler, overtimeShiftLayerAssembler);
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			target.Person = person;
+			target.DefaultScenario = scenario;
+
+			var act = ActivityFactory.CreateActivity("asdf").WithId();
+            var definitionSet =
+                MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("ovt", MultiplicatorType.Overtime).WithId();
+            var sCat = ShiftCategoryFactory.CreateShiftCategory("d1").WithId();
+            
+            var ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario).WithId();
+            ass.AddOvertimeActivity(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet);
             ass.OvertimeActivities().First().SetId(Guid.NewGuid());
 						ass.AddActivity(act, new DateTimePeriod(1900, 1, 1, 1900, 1, 2));
 					ass.SetShiftCategory(sCat);
@@ -194,8 +216,27 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		[Test]
 		public void ShouldNotReturnEmptyDtoWhenNoLayersInAssignment()
 		{
-			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
-			ass.SetId(Guid.NewGuid());
+			var shiftCatRep = new FakeShiftCategoryRepository();
+			var actRep = new FakeActivityRepository();
+			var definitionSetRep = new FakeMultiplicatorDefinitionSetRepository();
+
+			var activityAssembler = new ActivityAssembler(actRep);
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var mainShiftLayerAssembler =
+				new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(),
+																	dateTimePeriodAssembler, activityAssembler);
+			var personalShiftLayerAssembler = new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+																								  dateTimePeriodAssembler, activityAssembler);
+			var overtimeShiftLayerAssembler = new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler, definitionSetRep);
+
+			var target = new PersonAssignmentAssembler(shiftCatRep, mainShiftLayerAssembler, personalShiftLayerAssembler, overtimeShiftLayerAssembler);
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+
+			target.Person = person;
+			target.DefaultScenario = scenario;
+
+			var ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario).WithId();
 			
 			target.DomainEntityToDto(ass).Should().Be.Null();
 		}

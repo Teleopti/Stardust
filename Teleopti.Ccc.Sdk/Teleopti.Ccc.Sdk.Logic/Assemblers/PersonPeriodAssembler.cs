@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
     public class PersonPeriodAssembler : Assembler<IPersonPeriod, PersonPeriodDetailDto>
     {
-    	private IAssembler<IExternalLogOn, ExternalLogOnDto> _externalLogOnAssembler;
+    	private readonly IAssembler<IExternalLogOn, ExternalLogOnDto> _externalLogOnAssembler;
 
 		public PersonPeriodAssembler(IAssembler<IExternalLogOn, ExternalLogOnDto> externalLogOnAssembler)
 		{
@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     		var team = entity.Team;
 			var personPeriodDto = new PersonPeriodDetailDto();
 			
-			personPeriodDto.PersonId = entity.Parent.Id.GetValueOrDefault(Guid.Empty);
+			personPeriodDto.PersonId = entity.Parent.Id.GetValueOrDefault();
 			personPeriodDto.StartDate = new DateOnlyDto { DateTime = entity.StartDate.Date };
 			personPeriodDto.Team = new TeamDto { Id = team.Id, Description = team.Description.Name, SiteAndTeam = team.SiteAndTeam };
 			personPeriodDto.Note = entity.Note;
-			personPeriodDto.ContractId = entity.PersonContract.Contract.Id.GetValueOrDefault(Guid.Empty);
-			personPeriodDto.PartTimePercentageId = entity.PersonContract.PartTimePercentage.Id.GetValueOrDefault(Guid.Empty);
-			personPeriodDto.ContractScheduleId = entity.PersonContract.ContractSchedule.Id.GetValueOrDefault(Guid.Empty);
+			personPeriodDto.ContractId = entity.PersonContract.Contract.Id.GetValueOrDefault();
+			personPeriodDto.PartTimePercentageId = entity.PersonContract.PartTimePercentage.Id.GetValueOrDefault();
+			personPeriodDto.ContractScheduleId = entity.PersonContract.ContractSchedule.Id.GetValueOrDefault();
 
 			foreach (var externalLogOn in entity.ExternalLogOnCollection)
 			{

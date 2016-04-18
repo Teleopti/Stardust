@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,11 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeShiftCategoryRepository : IShiftCategoryRepository
 	{
-		private IList<IShiftCategory> _absences = new List<IShiftCategory>();
+		private readonly IList<IShiftCategory> storage = new List<IShiftCategory>();
 
 		public void Add(IShiftCategory root)
 		{
-			throw new NotImplementedException();
+			storage.Add(root);
 		}
 
 		public void Remove(IShiftCategory root)
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IShiftCategory Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return storage.FirstOrDefault(s => id == s.Id);
 		}
 
 		public IList<IShiftCategory> LoadAll()
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IShiftCategory Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return Get(id);
 		}
 
 		public long CountAllEntities()
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IList<IShiftCategory> FindAll()
 		{
-			return _absences;
+			return storage;
 		}
 	}
 }

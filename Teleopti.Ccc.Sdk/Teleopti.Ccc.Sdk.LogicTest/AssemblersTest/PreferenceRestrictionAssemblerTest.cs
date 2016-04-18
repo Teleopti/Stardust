@@ -1,10 +1,14 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
+﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.Sdk.WcfService.Factory;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -12,115 +16,107 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PreferenceRestrictionAssemblerTest
     {
-        private MockRepository _mocks;
-        private PreferenceDayAssembler _target;
-        private IPerson _person;
-        private readonly DateOnly _date = new DateOnly(2009,2,2);
-        private IActivity _activity;
-        private IShiftCategory _shiftCategory;
-        private IDayOffTemplate _dayOffTemplate;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
-        private bool _mustHave;
-        private IAssembler<IPreferenceRestriction, PreferenceRestrictionDto> _restrictionAssembler;
-        private const string _templateName = "My template";
+	    [Test]
+	    public void ShouldMapDtoToDomainEntity()
+	    {
+		    var personRepository = new FakePersonRepository();
+		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
+		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+		    var activityRepository = new FakeActivityRepository();
+		    var activityAssembler = new ActivityAssembler(activityRepository);
+		    var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+		    var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
+				    dayOffAssembler, activityAssembler,
+				    absenceAssembler), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var restrictionAssembler =
+			    new RestrictionAssembler<IPreferenceRestriction, PreferenceRestrictionDto, IActivityRestriction>(
+				    new PreferenceRestrictionConstructor(), shiftCategoryAssembler,
+					    dayOffAssembler,
+					    new ActivityRestrictionAssembler<IActivityRestriction>(new ActivityRestrictionDomainObjectCreator(),
+						    activityAssembler), absenceAssembler);
+			var target = new PreferenceDayAssembler(restrictionAssembler, personAssembler);
 
-        [SetUp]
-        public void Setup()
-        {
-            _mocks = new MockRepository();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-            _restrictionAssembler = _mocks.StrictMock<IAssembler<IPreferenceRestriction, PreferenceRestrictionDto>>();
-            _target = new PreferenceDayAssembler(_restrictionAssembler, _personAssembler);
-            _person = PersonFactory.CreatePerson();
-            _person.Name = new Name("ett fint namn", "");
-            _person.SetId(Guid.NewGuid());
-            _activity = ActivityFactory.CreateActivity("Activity");
-            _activity.SetId(Guid.NewGuid());
-            _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Category");
-            _shiftCategory.SetId(Guid.NewGuid());
-            _dayOffTemplate = DayOffFactory.CreateDayOff(new Description("DayOff"));
-            _dayOffTemplate.SetId(Guid.NewGuid());
-            _mustHave = true;
-        }
+			var person = PersonFactory.CreatePerson().WithId();
+			var activity = ActivityFactory.CreateActivity("Activity").WithId();
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Category").WithId();
+			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("DayOff")).WithId();
+			var mustHave = true;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldMapDtoToDomainEntity()
-        {
-            PreferenceRestrictionDto dto = CreatePreferenceRestrictionDto();
-            using (_mocks.Record())
-            {
-                Expect.Call(_restrictionAssembler.DtoToDomainEntity(dto)).Return(new PreferenceRestriction());
-                Expect.Call(_personAssembler.DtoToDomainEntity(dto.Person)).Return(_person);
-            }
-            using (_mocks.Playback())
-            {
-                IPreferenceDay domainEntity = _target.DtoToDomainEntity(dto);
-                Assert.AreEqual(dto.Person.Name, domainEntity.Person.Name.FirstName);
-                Assert.AreEqual(dto.MustHave, domainEntity.Restriction.MustHave);
-                Assert.AreEqual(dto.TemplateName,domainEntity.TemplateName);
-            }
-        }
+			personRepository.Add(person);
+			activityRepository.Add(activity);
+			shiftCategoryRepository.Add(shiftCategory);
+			dayOffTemplateRepository.Add(dayOffTemplate);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldMapDomainEntityToDto()
-        {
-            IPreferenceDay domainEntity = CreatePreferenceRestriction();
-            using (_mocks.Record())
-            {
-                Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-                                                                                    {
-                                                                                        Id = _person.Id,
-                                                                                        Name = _person.Name.ToString()
-                                                                                    });
-                Expect.Call(_restrictionAssembler.DomainEntityToDto(null))
-                    .Return(new PreferenceRestrictionDto())
-                    .IgnoreArguments();
-            }
-            using (_mocks.Playback())
-            {
-                PreferenceRestrictionDto dto = _target.DomainEntityToDto(domainEntity);
-                Assert.AreEqual(domainEntity.Person.Name.FirstName, dto.Person.Name);
-                Assert.AreEqual(domainEntity.RestrictionDate.Date, dto.RestrictionDate.DateTime);
-                Assert.AreEqual(domainEntity.Restriction.MustHave, dto.MustHave);
-                Assert.AreEqual(domainEntity.TemplateName, dto.TemplateName);
-            }
-        }
+			var dto = new PreferenceRestrictionDto();
+			dto.DayOff = new DayOffInfoDto { Id = dayOffTemplate.Id, Name = dayOffTemplate.Description.Name };
+			dto.ShiftCategory = new ShiftCategoryDto
+			{
+				Name = shiftCategory.Description.Name,
+				Id = shiftCategory.Id
+			};
+			dto.ActivityRestrictionCollection.Add(new ActivityRestrictionDto
+			{
+				Activity = new ActivityDto { Description = activity.Description.Name, PayrollCode = activity.PayrollCode, Id = activity.Id }
+			});
+			dto.RestrictionDate = new DateOnlyDto { DateTime = new DateOnly(2001,1,1).Date };
+			dto.Person = new PersonDto { Id = person.Id, Name = person.Name.ToString() };
+			dto.MustHave = mustHave;
+			dto.TemplateName = "template name";
 
-        private PreferenceRestrictionDto CreatePreferenceRestrictionDto()
-        {
-            PreferenceRestrictionDto dto = new PreferenceRestrictionDto();
-            dto.DayOff = new DayOffInfoDto{Id = _dayOffTemplate.Id,Name = _dayOffTemplate.Description.Name};
-            dto.ShiftCategory = new ShiftCategoryDto
-                                    {
-                                        Name = _shiftCategory.Description.Name,
-                                        Id = _shiftCategory.Id
-                                    };
-            dto.ActivityRestrictionCollection.Add(new ActivityRestrictionDto
-                                                      {
-                                                         Activity  = new ActivityDto{Description = _activity.Description.Name,PayrollCode = _activity.PayrollCode, Id = _activity.Id}
-                                                      });
-			dto.RestrictionDate = new DateOnlyDto { DateTime = _date.Date };
-            dto.Person = new PersonDto{Id = _person.Id,Name = _person.Name.ToString()};
-            dto.MustHave = _mustHave;
-            dto.TemplateName = _templateName;
-            
-            return dto;
-        }
+		    IPreferenceDay domainEntity = target.DtoToDomainEntity(dto);
+		    Assert.AreEqual(dto.Person.Name, domainEntity.Person.Name.ToString());
+		    Assert.AreEqual(dto.MustHave, domainEntity.Restriction.MustHave);
+		    Assert.AreEqual(dto.TemplateName, domainEntity.TemplateName);
+	    }
 
-        private IPreferenceDay CreatePreferenceRestriction()
-        {
-            IPreferenceRestriction restrictionNew = new PreferenceRestriction();
-            
-            restrictionNew.AddActivityRestriction(new ActivityRestriction(_activity));
+	    [Test]
+	    public void ShouldMapDomainEntityToDto()
+		{
+			var personRepository = new FakePersonRepository();
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var shiftCategoryRepository = new FakeShiftCategoryRepository();
+			var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+			var activityRepository = new FakeActivityRepository();
+			var activityAssembler = new ActivityAssembler(activityRepository);
+			var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+			var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+			var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(shiftCategoryAssembler,
+					dayOffAssembler, activityAssembler,
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var restrictionAssembler =
+				new RestrictionAssembler<IPreferenceRestriction, PreferenceRestrictionDto, IActivityRestriction>(
+					new PreferenceRestrictionConstructor(), shiftCategoryAssembler,
+						dayOffAssembler,
+						new ActivityRestrictionAssembler<IActivityRestriction>(new ActivityRestrictionDomainObjectCreator(),
+							activityAssembler), absenceAssembler);
+			var target = new PreferenceDayAssembler(restrictionAssembler, personAssembler);
+			var person = PersonFactory.CreatePerson().WithId();
+			var activity = ActivityFactory.CreateActivity("Activity").WithId();
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Category").WithId();
+			var dayOffTemplate = DayOffFactory.CreateDayOff(new Description("DayOff")).WithId();
+			const bool mustHave = true;
+			
+			IPreferenceRestriction restrictionNew = new PreferenceRestriction();
 
-            restrictionNew.ShiftCategory = _shiftCategory;
-            restrictionNew.DayOffTemplate = _dayOffTemplate;
-            IPreferenceDay day = new PreferenceDay(_person, _date, restrictionNew);
-            day.Restriction.MustHave = _mustHave;
-            day.TemplateName = _templateName;
-            return day;
-        }
+			restrictionNew.AddActivityRestriction(new ActivityRestriction(activity));
+
+			restrictionNew.ShiftCategory = shiftCategory;
+			restrictionNew.DayOffTemplate = dayOffTemplate;
+			IPreferenceDay domainEntity = new PreferenceDay(person, new DateOnly(2001,1,1), restrictionNew);
+			domainEntity.Restriction.MustHave = mustHave;
+			domainEntity.TemplateName = "template name";
+
+			PreferenceRestrictionDto dto = target.DomainEntityToDto(domainEntity);
+		    Assert.AreEqual(domainEntity.Person.Name.ToString(), dto.Person.Name);
+		    Assert.AreEqual(domainEntity.RestrictionDate.Date, dto.RestrictionDate.DateTime);
+		    Assert.AreEqual(domainEntity.Restriction.MustHave, dto.MustHave);
+		    Assert.AreEqual(domainEntity.TemplateName, dto.TemplateName);
+	    }
     }
-
-    
 }

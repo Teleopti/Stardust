@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
@@ -17,411 +21,599 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PersonRequestAssemblerTest
     {
-        private PersonRequestAssembler _target;
-        private MockRepository _mocks;
-        private IAssembler<IRequest, TextRequestDto> _textRequestAssembler;
-        private IAssembler<IAbsenceRequest, AbsenceRequestDto> _absenceRequestAssembler;
-        private IAssembler<IShiftTradeRequest,ShiftTradeRequestDto> _shiftTradeRequestAssembler;
-        private IAssembler<IShiftTradeSwapDetail, ShiftTradeSwapDetailDto> _shiftTradeSwapDetailAssembler;
-        private IPerson _person;
-        private DateOnly _date;
-        private IPersonRequestRepository _personRequestRepository;
-        private IAbsence _absence;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
-        private IBatchShiftTradeRequestStatusChecker _batchStatusChecker;
-
-        [SetUp]
-        public void Setup()
-        {
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-            _date = new DateOnly(2009, 9, 3);
-            _absence = AbsenceFactory.CreateAbsence("Sjuk");
-
-            _mocks = new MockRepository();
-            _textRequestAssembler = _mocks.StrictMock<IAssembler<IRequest, TextRequestDto>>();
-            _absenceRequestAssembler = _mocks.StrictMock<IAssembler<IAbsenceRequest, AbsenceRequestDto>>();
-            _shiftTradeRequestAssembler = _mocks.StrictMock<IAssembler<IShiftTradeRequest,ShiftTradeRequestDto>>();
-            _batchStatusChecker = _mocks.StrictMock<IBatchShiftTradeRequestStatusChecker>();
-            _shiftTradeSwapDetailAssembler = _mocks.StrictMock<IAssembler<IShiftTradeSwapDetail, ShiftTradeSwapDetailDto>>();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-            _personRequestRepository = _mocks.StrictMock<IPersonRequestRepository>();
-            _target = new PersonRequestAssembler(_textRequestAssembler, _absenceRequestAssembler, _shiftTradeRequestAssembler, _shiftTradeSwapDetailAssembler, _personAssembler, _batchStatusChecker);
-            _target.PersonRequestRepository = _personRequestRepository;
-        }
-
         [Test]
         public void VerifyDtoToDoTextRequestWithReload()
         {
-            Guid id = Guid.NewGuid();
-            PersonDto personDto = new PersonDto { Id = _person.Id };
-            TextRequestDto textRequestDto = new TextRequestDto();
-            TextRequest textRequest = new TextRequest(new DateTimePeriod());
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
+
+	        var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+	        var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+	        var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+	        var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+	        var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+	        var personRepository = new FakePersonRepository();
+			personRepository.Add(person);
+	        var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+
+			TextRequest textRequest = new TextRequest(new DateTimePeriod());
+			IPersonRequest personRequest = new PersonRequest(person, textRequest).WithId();
+			personRequestRepository.Add(personRequest);
+
+			PersonDto personDto = new PersonDto { Id = person.Id };
+            TextRequestDto textRequestDto = new TextRequestDto {Period = new DateTimePeriodDto()};
             PersonRequestDto personRequestDto = new PersonRequestDto
                 {
-                    CreatedDate = _date.Date,
+                    CreatedDate = date.Date,
                     Message = "test",
-                    Id = id,
+                    Id = personRequest.Id.GetValueOrDefault(),
                     Person = personDto,
                     Request = textRequestDto,
-                    RequestedDate = _date.Date,
-                    RequestedDateLocal = _date.Date,
+                    RequestedDate = date.Date,
+                    RequestedDateLocal = date.Date,
                     RequestStatus = RequestStatusDto.Pending,
                     Subject = "subject",
-                    UpdatedOn = _date.Date
+                    UpdatedOn = date.Date
                 };
 
-            IPersonRequest personRequest = new PersonRequest(_person, textRequest);
-            personRequest.SetId(id);
-
-            Expect.Call(_personRequestRepository.Load(id)).Return(personRequest);
-            Expect.Call(_textRequestAssembler.DtoToDomainEntity((TextRequestDto)personRequestDto.Request)).Return(textRequest);
-
-            _mocks.ReplayAll();
-            personRequest = _target.DtoToDomainEntity(personRequestDto);
+            personRequest = target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
-            _mocks.VerifyAll();
         }
 
         [Test]
         public void VerifyDtoToDoTextRequest()
         {
-            PersonDto personDto = new PersonDto { Id = _person.Id };
-            TextRequestDto textRequestDto = new TextRequestDto();
-            TextRequest textRequest = new TextRequest(new DateTimePeriod());
-            PersonRequestDto personRequestDto = new PersonRequestDto
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
+
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+	        var personRepository = new FakePersonRepository();
+			personRepository.Add(person);
+	        var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+
+			var personDto = new PersonDto { Id = person.Id };
+            var textRequestDto = new TextRequestDto {Period = new DateTimePeriodDto()};
+            var personRequestDto = new PersonRequestDto
                 {
-                    CreatedDate = _date.Date,
+                    CreatedDate = date.Date,
                     Message = "test",
                     Person = personDto,
                     Request = textRequestDto,
-                    RequestedDate = _date.Date,
-                    RequestedDateLocal = _date.Date,
+                    RequestedDate = date.Date,
+                    RequestedDateLocal = date.Date,
                     RequestStatus = RequestStatusDto.Pending,
                     Subject = "subject",
-                    UpdatedOn = _date.Date
+                    UpdatedOn = date.Date
                 };
-
-            Expect.Call(_personAssembler.DtoToDomainEntity(personDto)).Return(_person);
-            Expect.Call(_textRequestAssembler.DtoToDomainEntity((TextRequestDto)personRequestDto.Request)).Return(
-                textRequest);
-
-            _mocks.ReplayAll();
-            IPersonRequest personRequest = _target.DtoToDomainEntity(personRequestDto);
+			
+            var personRequest = target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
             Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is TextRequest);
             Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
-            _mocks.VerifyAll();
         }
 
         [Test]
         public void VerifyDtoToDoAbsenceRequest()
         {
-            PersonDto personDto = new PersonDto { Id = _person.Id };
-            AbsenceRequestDto absenceRequestDto = new AbsenceRequestDto();
-            IAbsenceRequest absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
-            PersonRequestDto personRequestDto = new PersonRequestDto
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
+			var absence = AbsenceFactory.CreateAbsence("Sjuk").WithId();
+
+	        var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+	        var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+	        var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+	        var absenceRepository = new FakeAbsenceRepository();
+			absenceRepository.Add(absence);
+	        var absenceAssembler = new AbsenceAssembler(absenceRepository);
+	        var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+	        var personRepository = new FakePersonRepository();
+			personRepository.Add(person);
+	        var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+
+			var personDto = new PersonDto { Id = person.Id };
+            var absenceRequestDto = new AbsenceRequestDto {Period = new DateTimePeriodDto(),Absence = new AbsenceDto {Id = absence.Id.Value} };
+            var personRequestDto = new PersonRequestDto
             {
-                CreatedDate = _date.Date,
+                CreatedDate = date.Date,
                 Message = "test",
                 Person = personDto,
                 Request = absenceRequestDto,
-                RequestedDate = _date.Date,
-                RequestedDateLocal = _date.Date,
+                RequestedDate = date.Date,
+                RequestedDateLocal = date.Date,
                 RequestStatus = RequestStatusDto.Pending,
                 Subject = "subject",
-                UpdatedOn = _date.Date
+                UpdatedOn = date.Date
             };
-
-            Expect.Call(_personAssembler.DtoToDomainEntity(personDto)).Return(_person);
-            Expect.Call(_absenceRequestAssembler.DtoToDomainEntity((AbsenceRequestDto)personRequestDto.Request)).Return(
-                absenceRequest);
-            absenceRequest.SetParent(null);
-            LastCall.IgnoreArguments();
-
-            _mocks.ReplayAll();
-            IPersonRequest personRequest = _target.DtoToDomainEntity(personRequestDto);
+			
+            IPersonRequest personRequest = target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
             Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is IAbsenceRequest);
             Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
-            _mocks.VerifyAll();
         }
-
+		
         [Test]
         public void VerifyDtoToDoShiftTradeRequest()
         {
-            PersonDto personDto = new PersonDto { Id = _person.Id };
-            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
 
-            ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var personRepository = new FakePersonRepository();
+			personRepository.Add(person);
+			var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler {PersonAssembler = personAssembler};
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+
+			var personDto = new PersonDto { Id = person.Id };
+            var shiftTradeRequestDto = new ShiftTradeRequestDto {Period = new DateTimePeriodDto()};
+
+	        ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto
+	        {
+		        DateFrom = new DateOnlyDto {DateTime = date.Date},
+		        DateTo = new DateOnlyDto {DateTime = date.Date},
+		        PersonFrom = personDto,
+		        PersonTo = personDto
+			};
             shiftTradeRequestDto.ShiftTradeSwapDetails.Add(shiftTradeSwapDetailDto);
-
-            IShiftTradeSwapDetail shiftTradeSwapDetail = _mocks.StrictMock<IShiftTradeSwapDetail>();
-            IShiftTradeRequest shiftTradeRequest = _mocks.StrictMock<IShiftTradeRequest>();
+			
             PersonRequestDto personRequestDto = new PersonRequestDto
             {
-                CreatedDate = _date.Date,
+                CreatedDate = date.Date,
                 Message = "test",
                 Person = personDto,
                 Request = shiftTradeRequestDto,
-                RequestedDate = _date.Date,
-                RequestedDateLocal = _date.Date,
+                RequestedDate = date.Date,
+                RequestedDateLocal = date.Date,
                 RequestStatus = RequestStatusDto.Pending,
                 Subject = "subject",
-                UpdatedOn = _date.Date
+                UpdatedOn = date.Date
             };
-
-            Expect.Call(_personAssembler.DtoToDomainEntity(personDto)).Return(_person);
-            Expect.Call(_shiftTradeSwapDetailAssembler.DtoToDomainEntity(shiftTradeSwapDetailDto)).Return(
-                shiftTradeSwapDetail);
-            Expect.Call(_shiftTradeRequestAssembler.DtoToDomainEntity((ShiftTradeRequestDto)personRequestDto.Request)).Return(
-                shiftTradeRequest);
-            shiftTradeRequest.ClearShiftTradeSwapDetails();
-            shiftTradeRequest.AddShiftTradeSwapDetail(null);
-            LastCall.IgnoreArguments();
-            shiftTradeRequest.SetParent(null);
-            LastCall.IgnoreArguments();
-
-            _mocks.ReplayAll();
-            IPersonRequest personRequest = _target.DtoToDomainEntity(personRequestDto);
+			
+            IPersonRequest personRequest = target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
             Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is IShiftTradeRequest);
             Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
-            _mocks.VerifyAll();
         }
-
+		
         [Test]
         public void VerifyDtoToDoShiftTradeRequestWithReload()
         {
-            PersonDto personDto = new PersonDto { Id = _person.Id };
-            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
 
-            ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { Id = Guid.NewGuid() };
-            shiftTradeRequestDto.ShiftTradeSwapDetails.Add(shiftTradeSwapDetailDto);
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var personRepository = new FakePersonRepository();
+			personRepository.Add(person);
+			var personAssembler = new PersonAssembler(personRepository,
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler { PersonAssembler = personAssembler };
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+			
+			var existingRequest = new PersonRequest(person,new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {new ShiftTradeSwapDetail(person,person,date,date)})).WithId();
+			personRequestRepository.Add(existingRequest);
 
-            IShiftTradeSwapDetail shiftTradeSwapDetail = _mocks.StrictMock<IShiftTradeSwapDetail>();
-            IShiftTradeRequest shiftTradeRequest = _mocks.StrictMock<IShiftTradeRequest>();
-            PersonRequestDto personRequestDto = new PersonRequestDto
-            {
-                Id = Guid.NewGuid(),
-                CreatedDate = _date.Date,
-                Message = "test",
-                Person = personDto,
-                Request = shiftTradeRequestDto,
-                RequestedDate = _date.Date,
-                RequestedDateLocal = _date.Date,
-                RequestStatus = RequestStatusDto.Pending,
-                Subject = "subject",
-                UpdatedOn = _date.Date
-            };
+			var personDto = new PersonDto { Id = person.Id };
+			var shiftTradeRequestDto = new ShiftTradeRequestDto { Period = new DateTimePeriodDto() };
 
-            IPersonRequest personRequest = new PersonRequest(_person, shiftTradeRequest);
-            personRequest.SetId(personRequestDto.Id);
+			ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto
+			{
+				DateFrom = new DateOnlyDto { DateTime = date.Date },
+				DateTo = new DateOnlyDto { DateTime = date.Date },
+				PersonFrom = personDto,
+				PersonTo = personDto
+			};
+			shiftTradeRequestDto.ShiftTradeSwapDetails.Add(shiftTradeSwapDetailDto);
 
-            Expect.Call(_personRequestRepository.Load(personRequestDto.Id.GetValueOrDefault())).Return(personRequest);
-            Expect.Call(_shiftTradeSwapDetailAssembler.DtoToDomainEntity(shiftTradeSwapDetailDto)).Return(shiftTradeSwapDetail);
-            Expect.Call(_shiftTradeRequestAssembler.DtoToDomainEntity((ShiftTradeRequestDto)personRequestDto.Request)).Return(shiftTradeRequest);
-            shiftTradeRequest.TextForNotification = "test";
-            shiftTradeRequest.ClearShiftTradeSwapDetails();
-            shiftTradeRequest.AddShiftTradeSwapDetail(null);
-            LastCall.IgnoreArguments();
+			PersonRequestDto personRequestDto = new PersonRequestDto
+			{
+				Id = existingRequest.Id,
+				CreatedDate = date.Date,
+				Message = "test",
+				Person = personDto,
+				Request = shiftTradeRequestDto,
+				RequestedDate = date.Date,
+				RequestedDateLocal = date.Date,
+				RequestStatus = RequestStatusDto.Pending,
+				Subject = "subject",
+				UpdatedOn = date.Date
+			};
 
-            _mocks.ReplayAll();
-
-            personRequest = _target.DtoToDomainEntity(personRequestDto);
+			var personRequest = target.DtoToDomainEntity(personRequestDto);
             Assert.AreEqual(personRequestDto.Id, personRequest.Id);
             Assert.AreEqual(personRequestDto.Message, personRequest.GetMessage(new NormalizeText()));
             Assert.AreEqual(personRequestDto.Person.Id, personRequest.Person.Id);
             Assert.IsTrue(personRequest.Request is IShiftTradeRequest);
             Assert.AreEqual(personRequestDto.Subject, personRequest.GetSubject(new NormalizeText()));
             Assert.AreEqual(string.Empty, personRequest.DenyReason);
-            _mocks.VerifyAll();
         }
-
+		
         [Test]
         public void VerifyDoToDtoTextRequest()
         {
-            TextRequestDto textRequestDto = new TextRequestDto();
-            TextRequest textRequest = new TextRequest(new DateTimePeriod());
-            IPersonRequest personRequest = new PersonRequest(_person, textRequest);
+			var person = PersonFactory.CreatePerson().WithId();
 
-            Expect.Call(_textRequestAssembler.DomainEntityToDto(textRequest)).Return(
-                textRequestDto);
-            Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-            {
-                Id = _person.Id,
-                Name = _person.Name.ToString()
-            }).Repeat.AtLeastOnce();
-
-            _mocks.ReplayAll();
-            PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
-            Assert.AreEqual(textRequestDto, personRequestDtoInReturn.Request);
-            _mocks.VerifyAll();
+	        var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+	        var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+	        var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+	        var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+	        var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+			
+            var textRequest = new TextRequest(new DateTimePeriod());
+            var personRequest = new PersonRequest(person, textRequest);
+	        personRequest.TrySetMessage("ledig?");
+			
+            var personRequestDtoInReturn = target.DomainEntityToDto(personRequest);
+            Assert.IsInstanceOf<TextRequestDto>(personRequestDtoInReturn.Request);
+	        personRequestDtoInReturn.Message.Should().Be.EqualTo("ledig?");
         }
-
+		
         [Test]
         public void VerifyDoToDtoAbsenceRequest()
         {
-            AbsenceRequestDto absenceRequestDto = new AbsenceRequestDto();
-            AbsenceRequest absenceRequest = new AbsenceRequest(_absence, new DateTimePeriod());
-            IPersonRequest personRequest = new PersonRequest(_person, absenceRequest);
+			var person = PersonFactory.CreatePerson().WithId();
+			var absence = AbsenceFactory.CreateAbsence("Sjuk").WithId();
 
-            Expect.Call(_absenceRequestAssembler.DomainEntityToDto(absenceRequest)).Return(
-                absenceRequestDto);
-            Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-            {
-                Id = _person.Id,
-                Name = _person.Name.ToString()
-            });
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+	        var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+	        var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+	        var absenceRepository = new FakeAbsenceRepository();
+			absenceRepository.Add(absence);
+	        var absenceAssembler = new AbsenceAssembler(absenceRepository);
+	        var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
 
-            _mocks.ReplayAll();
-            PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
-            Assert.AreEqual(absenceRequestDto, personRequestDtoInReturn.Request);
-            _mocks.VerifyAll();
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod());
+            var personRequest = new PersonRequest(person, absenceRequest);
+			
+            var personRequestDtoInReturn = target.DomainEntityToDto(personRequest);
+            Assert.IsInstanceOf<AbsenceRequestDto>(personRequestDtoInReturn.Request);
         }
-
+		
         [Test]
         public void VerifyDoToDtoShiftTradeRequest()
         {
-            ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
-            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
-            IShiftTradeSwapDetail shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, _person, _date, _date);
-            ShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-            IPersonRequest personRequest = new PersonRequest(_person, shiftTradeRequest);
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
+			
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+	        var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+	        var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+	        var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+	        var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+	        var shiftCategoryRepository = new FakeShiftCategoryRepository();
+	        var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
+	        var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+	        shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
+	        shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
+		        new PersonAssignmentAssembler(shiftCategoryRepository,
+			        new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+				        activityAssembler),
+			        new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+				        new DateTimePeriodAssembler(), activityAssembler),
+			        new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
+				        new FakeMultiplicatorDefinitionSetRepository())),
+		        new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler),
+		        new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler),
+		        new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler),
+		        new ProjectedLayerAssembler(dateTimePeriodAssembler), dateTimePeriodAssembler,
+		        new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
 
-            Expect.Call(_shiftTradeRequestAssembler.DomainEntityToDto(shiftTradeRequest)).Return(
-                shiftTradeRequestDto);
-            Expect.Call(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail)).Return(
-                shiftTradeSwapDetailDto);
-            Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-                                                                                {
-                                                                                    Id = _person.Id,
-                                                                                    Name = _person.Name.ToString()
-                                                                                }).Repeat.AtLeastOnce();
-
-            _mocks.ReplayAll();
-            PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
-            Assert.AreEqual(shiftTradeRequestDto, personRequestDtoInReturn.Request);
-            Assert.AreEqual(shiftTradeSwapDetailDto, ((ShiftTradeRequestDto)personRequestDtoInReturn.Request).ShiftTradeSwapDetails[0]);
-            _mocks.VerifyAll();
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(person, person, date, date);
+            var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+            var personRequest = new PersonRequest(person, shiftTradeRequest);
+			
+            PersonRequestDto personRequestDtoInReturn = target.DomainEntityToDto(personRequest);
+            Assert.IsInstanceOf<ShiftTradeRequestDto>(personRequestDtoInReturn.Request);
         }
-
+		
         [Test]
         public void VerifyDoToDtoShiftTradeRequestCannotDelete()
         {
-            ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
-            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
-            shiftTradeRequestDto.ShiftTradeStatus = ShiftTradeStatusDto.OkByBothParts;
-            IShiftTradeSwapDetail shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, _person, _date, _date);
-            ShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-            IPersonRequest personRequest = new PersonRequest(_person, shiftTradeRequest);
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
 
-            Expect.Call(_shiftTradeRequestAssembler.DomainEntityToDto(shiftTradeRequest)).Return(
-                shiftTradeRequestDto);
-            Expect.Call(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail)).Return(
-                shiftTradeSwapDetailDto);
-            Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-            {
-                Id = _person.Id,
-                Name = _person.Name.ToString()
-            }).Repeat.AtLeastOnce();
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+			var shiftCategoryRepository = new FakeShiftCategoryRepository();
+			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
+			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+			shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
+			shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
+				new PersonAssignmentAssembler(shiftCategoryRepository,
+					new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+						activityAssembler),
+					new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+						new DateTimePeriodAssembler(), activityAssembler),
+					new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
+						new FakeMultiplicatorDefinitionSetRepository())),
+				new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler),
+				new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler),
+				new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler),
+				new ProjectedLayerAssembler(dateTimePeriodAssembler), dateTimePeriodAssembler,
+				new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
 
-            _mocks.ReplayAll();
-            PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
-            Assert.AreEqual(shiftTradeRequestDto, personRequestDtoInReturn.Request);
-            Assert.AreEqual(shiftTradeSwapDetailDto, ((ShiftTradeRequestDto)personRequestDtoInReturn.Request).ShiftTradeSwapDetails[0]);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(person, person, date, date);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(person, shiftTradeRequest);
+			shiftTradeRequest.Accept(PersonFactory.CreatePerson(),new EmptyShiftTradeRequestSetChecksum(), new PersonRequestAuthorizationCheckerForTest());
+			
+            var personRequestDtoInReturn = target.DomainEntityToDto(personRequest);
             Assert.IsFalse(personRequestDtoInReturn.CanDelete);
-            _mocks.VerifyAll();
         }
-
+		
         [Test]
         public void VerifyDoToDtoShiftTradeRequestCanDelete()
         {
-            ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
-            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
-            shiftTradeRequestDto.ShiftTradeStatus = ShiftTradeStatusDto.OkByMe;
-            IShiftTradeSwapDetail shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, _person, _date, _date);
-            ShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-            IPersonRequest personRequest = new PersonRequest(_person, shiftTradeRequest);
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
 
-            Expect.Call(_shiftTradeRequestAssembler.DomainEntityToDto(shiftTradeRequest)).Return(
-                shiftTradeRequestDto);
-            Expect.Call(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail)).Return(
-                shiftTradeSwapDetailDto);
-            Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-            {
-                Id = _person.Id,
-                Name = _person.Name.ToString()
-            }).Repeat.AtLeastOnce();
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+			var shiftCategoryRepository = new FakeShiftCategoryRepository();
+			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
+			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+			shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
+			shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
+				new PersonAssignmentAssembler(shiftCategoryRepository,
+					new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+						activityAssembler),
+					new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+						new DateTimePeriodAssembler(), activityAssembler),
+					new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
+						new FakeMultiplicatorDefinitionSetRepository())),
+				new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler),
+				new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler),
+				new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler),
+				new ProjectedLayerAssembler(dateTimePeriodAssembler), dateTimePeriodAssembler,
+				new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
 
-            _mocks.ReplayAll();
-            PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
-            Assert.AreEqual(shiftTradeRequestDto, personRequestDtoInReturn.Request);
-            Assert.AreEqual(shiftTradeSwapDetailDto, ((ShiftTradeRequestDto)personRequestDtoInReturn.Request).ShiftTradeSwapDetails[0]);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(person, person, date, date);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(person, shiftTradeRequest);
+			shiftTradeRequest.Accept(person,new EmptyShiftTradeRequestSetChecksum(), new PersonRequestAuthorizationCheckerForTest());
+			
+            var personRequestDtoInReturn = target.DomainEntityToDto(personRequest);
             Assert.IsTrue(personRequestDtoInReturn.CanDelete);
-            _mocks.VerifyAll();
         }
-
+		
         [Test]
         public void VerifyDoToDtoShiftTradeRequestCanDeleteReferred()
         {
-            ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
-            ShiftTradeRequestDto shiftTradeRequestDto = new ShiftTradeRequestDto();
-            shiftTradeRequestDto.ShiftTradeStatus = ShiftTradeStatusDto.Referred;
-            IShiftTradeSwapDetail shiftTradeSwapDetail = new ShiftTradeSwapDetail(_person, _person, _date, _date);
-            ShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-            IPersonRequest personRequest = new PersonRequest(_person, shiftTradeRequest);
+			var person = PersonFactory.CreatePerson().WithId();
+			var date = new DateOnly(2009, 9, 3);
 
-            Expect.Call(_shiftTradeRequestAssembler.DomainEntityToDto(shiftTradeRequest)).Return(
-                shiftTradeRequestDto);
-            Expect.Call(_shiftTradeSwapDetailAssembler.DomainEntityToDto(shiftTradeSwapDetail)).Return(
-                shiftTradeSwapDetailDto);
-            Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-            {
-                Id = _person.Id,
-                Name = _person.Name.ToString()
-            }).Repeat.AtLeastOnce();
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestAlwaysRefer();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+			var shiftCategoryRepository = new FakeShiftCategoryRepository();
+			var activityAssembler = new ActivityAssembler(new FakeActivityRepository());
+			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(shiftCategoryRepository),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), activityAssembler,
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+			shiftTradeSwapDetailAssembler.PersonAssembler = personAssembler;
+			shiftTradeSwapDetailAssembler.SchedulePartAssembler = new SchedulePartAssembler(
+				new PersonAssignmentAssembler(shiftCategoryRepository,
+					new ActivityLayerAssembler<IMainShiftLayer>(new MainShiftLayerConstructor(), dateTimePeriodAssembler,
+						activityAssembler),
+					new ActivityLayerAssembler<IPersonalShiftLayer>(new PersonalShiftLayerConstructor(),
+						new DateTimePeriodAssembler(), activityAssembler),
+					new OvertimeLayerAssembler(dateTimePeriodAssembler, activityAssembler,
+						new FakeMultiplicatorDefinitionSetRepository())),
+				new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler),
+				new PersonDayOffAssembler(personAssembler, dateTimePeriodAssembler),
+				new PersonMeetingAssembler(personAssembler, dateTimePeriodAssembler),
+				new ProjectedLayerAssembler(dateTimePeriodAssembler), dateTimePeriodAssembler,
+				new SdkProjectionServiceFactory(), new ScheduleTagAssembler(new FakeScheduleTagRepository()));
 
-            _mocks.ReplayAll();
-            PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
-            Assert.AreEqual(shiftTradeRequestDto, personRequestDtoInReturn.Request);
-            Assert.AreEqual(shiftTradeSwapDetailDto, ((ShiftTradeRequestDto)personRequestDtoInReturn.Request).ShiftTradeSwapDetails[0]);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(person, person, date, date);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(person, shiftTradeRequest);
+			shiftTradeRequest.Accept(person,new EmptyShiftTradeRequestSetChecksum(), new PersonRequestAuthorizationCheckerForTest());
+			
+            var personRequestDtoInReturn = target.DomainEntityToDto(personRequest);
             Assert.IsTrue(personRequestDtoInReturn.CanDelete);
-            _mocks.VerifyAll();
         }
 
 		[Test]
 		public void VerifyDoToDtoSwallowAutodeny()
 		{
-			AbsenceRequestDto absenceRequestDto = new AbsenceRequestDto();
-			AbsenceRequest absenceRequest = new AbsenceRequest(_absence, new DateTimePeriod());
-			IPersonRequest personRequest = new PersonRequest(_person, absenceRequest);
-			personRequest.Deny(_person, string.Empty, new PersonRequestAuthorizationCheckerForTest());
+			var person = PersonFactory.CreatePerson().WithId();
+			var absence = AbsenceFactory.CreateAbsence("Sjuk").WithId();
+
+			var cultureProvider = new TestCultureProvider(CultureInfo.GetCultureInfo(1053));
+	        var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+	        var textRequestAssembler = new TextRequestAssembler(cultureProvider, dateTimePeriodAssembler);
+	        var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+	        var absenceRequestAssembler = new AbsenceRequestAssembler(cultureProvider, absenceAssembler, dateTimePeriodAssembler);
+			var batchStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
+			var shiftTradeRequestAssembler =
+				new ShiftTradeRequestAssembler(cultureProvider,
+					new PersonRequestAuthorizationCheckerForTest(), dateTimePeriodAssembler,
+					batchStatusChecker);
+			var shiftTradeSwapDetailAssembler = new ShiftTradeSwapDetailAssembler();
+			var personAssembler = new PersonAssembler(new FakePersonRepository(),
+				new WorkflowControlSetAssembler(new ShiftCategoryAssembler(new FakeShiftCategoryRepository()),
+					new DayOffAssembler(new FakeDayOffTemplateRepository()), new ActivityAssembler(new FakeActivityRepository()),
+					absenceAssembler), new PersonAccountUpdaterDummy(),
+				new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			var personRequestRepository = new FakePersonRequestRepository();
+			var target = new PersonRequestAssembler(textRequestAssembler, absenceRequestAssembler, shiftTradeRequestAssembler, shiftTradeSwapDetailAssembler, personAssembler, batchStatusChecker);
+			target.PersonRequestRepository = personRequestRepository;
+
+			AbsenceRequest absenceRequest = new AbsenceRequest(absence, new DateTimePeriod());
+			IPersonRequest personRequest = new PersonRequest(person, absenceRequest);
+			personRequest.Deny(person, string.Empty, new PersonRequestAuthorizationCheckerForTest());
 			Assert.IsTrue(personRequest.IsAutoDenied);
-
-			Expect.Call(_absenceRequestAssembler.DomainEntityToDto(absenceRequest)).Return(
-				absenceRequestDto);
-			Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-			{
-				Id = _person.Id,
-				Name = _person.Name.ToString()
-			});
-
-			_mocks.ReplayAll();
-			PersonRequestDto personRequestDtoInReturn = _target.DomainEntityToDto(personRequest);
+			
+			PersonRequestDto personRequestDtoInReturn = target.DomainEntityToDto(personRequest);
 			Assert.AreEqual(RequestStatusDto.Denied, personRequestDtoInReturn.RequestStatus);
-			_mocks.VerifyAll();
 		}
-
-
-    }
+	}
 }

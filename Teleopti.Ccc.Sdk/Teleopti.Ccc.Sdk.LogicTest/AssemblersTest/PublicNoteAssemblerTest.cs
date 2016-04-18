@@ -7,6 +7,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -14,70 +19,71 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PublicNoteAssemblerTest
     {
-        private PublicNoteAssembler _target;
-        private IPublicNote _publicNoteDomain;
-        private PublicNoteDto _publicNoteDto;
-        private MockRepository _mocks;
-        private IPublicNoteRepository _repository;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
-        IPerson _personDomain;
+	    [Test]
+	    public void ShouldTransformDomainObjectToDto()
+	    {
+		    var personDomain = new Person {Name = new Name("Bosse", "Bäver")}.WithId();
+		    var date = new DateOnly(2011, 1, 12);
 
-        [SetUp]
-        public void Setup()
-        {
-            _personDomain = new Person {Name = new Name("Bosse", "Bäver")};
-            _personDomain.SetId(Guid.NewGuid());
-            var date = new DateOnly(2011, 1, 12);
+		    var publicNoteDomain =
+			    new PublicNote(personDomain, date, new Scenario("Default scenario"), "Work harder!").WithId();
+		    
+		    var repository = new FakePublicNoteRepository();
 
-            _publicNoteDomain = new PublicNote(_personDomain, date, new Scenario("Default scenario"), "Work harder!");
-            _publicNoteDomain.SetId(Guid.NewGuid());
+		    var personRepository = new FakePersonRepository();
+		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
+		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+		    var activityRepository = new FakeActivityRepository();
+		    var activityAssembler = new ActivityAssembler(activityRepository);
+		    var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+		    var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
+				    dayOffAssembler, activityAssembler,
+				    absenceAssembler), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 
-            _publicNoteDto = new PublicNoteDto{Id = _publicNoteDomain.Id};
+		    var target = new PublicNoteAssembler(repository, personAssembler);
 
-            _mocks = new MockRepository();
-            _repository = _mocks.StrictMock<IPublicNoteRepository>();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
+		    var publicNoteDto = target.DomainEntityToDto(publicNoteDomain);
+		    Assert.AreEqual(publicNoteDomain.Id, publicNoteDto.Id);
+		    Assert.AreEqual(publicNoteDomain.Person.Id, publicNoteDto.Person.Id);
+		    Assert.AreEqual(publicNoteDomain.Person.Name.ToString(), publicNoteDto.Person.Name);
+		    Assert.AreEqual(publicNoteDomain.GetScheduleNote(new NormalizeText()), publicNoteDto.ScheduleNote);
+		    Assert.AreEqual(publicNoteDomain.NoteDate.Date, publicNoteDto.Date.DateTime);
+	    }
 
-            _target = new PublicNoteAssembler(_repository, _personAssembler);
-        }
+	    [Test]
+	    public void ShouldTransformDtoObjectToDomain()
+	    {
+		    var personDomain = new Person {Name = new Name("Bosse", "Bäver")}.WithId();
+		    var date = new DateOnly(2011, 1, 12);
 
-        [Test]
-        public void ShouldTransformDomainObjectToDto()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_personAssembler.DomainEntityToDto(_personDomain)).Return(new PersonDto
-                                                                                          {
-                                                                                              Id = _personDomain.Id,
-                                                                                              Name =_personDomain.Name.ToString()
-                                                                                          });
-            }
+		    var publicNoteDomain =
+			    new PublicNote(personDomain, date, new Scenario("Default scenario"), "Work harder!").WithId();
+		    var publicNoteDto = new PublicNoteDto {Id = publicNoteDomain.Id};
 
-            using (_mocks.Playback())
-            {
-                _publicNoteDto = _target.DomainEntityToDto(_publicNoteDomain);
-                Assert.AreEqual(_publicNoteDomain.Id, _publicNoteDto.Id);
-                Assert.AreEqual(_publicNoteDomain.Person.Id, _publicNoteDto.Person.Id);
-                Assert.AreEqual(_publicNoteDomain.Person.Name.ToString(), _publicNoteDto.Person.Name);
-                Assert.AreEqual(_publicNoteDomain.GetScheduleNote(new NormalizeText()), _publicNoteDto.ScheduleNote);
-                Assert.AreEqual(_publicNoteDomain.NoteDate.Date, _publicNoteDto.Date.DateTime);
-            }
-        }
+		    var repository = new FakePublicNoteRepository();
 
-        [Test]
-        public void ShouldTransformDtoObjectToDomain()
-        {
-            Assert.IsTrue(_publicNoteDto.Id.HasValue);
-            using (_mocks.Record())
-            {
-                Expect.Call(_repository.Get(_publicNoteDto.Id.Value)).Return(_publicNoteDomain);
-            }
+		    var personRepository = new FakePersonRepository();
+		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
+		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+		    var activityRepository = new FakeActivityRepository();
+		    var activityAssembler = new ActivityAssembler(activityRepository);
+		    var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+		    var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
+				    dayOffAssembler, activityAssembler,
+				    absenceAssembler), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+			repository.Add(publicNoteDomain);
 
-            using (_mocks.Playback())
-            {
-                IPublicNote domainEntity = _target.DtoToDomainEntity(_publicNoteDto);
-                Assert.IsNotNull(domainEntity);
-            }
-        }
+		    var target = new PublicNoteAssembler(repository, personAssembler);
+		    var domainEntity = target.DtoToDomainEntity(publicNoteDto);
+		    Assert.IsNotNull(domainEntity);
+	    }
     }
 }

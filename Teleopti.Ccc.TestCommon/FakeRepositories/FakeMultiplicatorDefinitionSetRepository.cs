@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeMultiplicatorDefinitionSetRepository : IMultiplicatorDefinitionSetRepository
 	{
-		private IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets = new List<IMultiplicatorDefinitionSet>();
+		private readonly IList<IMultiplicatorDefinitionSet> storage = new List<IMultiplicatorDefinitionSet>();
 
 		public void Add(IMultiplicatorDefinitionSet root)
 		{
-			multiplicatorDefinitionSets.Add(root);
+			storage.Add(root);
 		}
 
 		public void Remove(IMultiplicatorDefinitionSet root)
@@ -22,17 +22,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IMultiplicatorDefinitionSet Get(Guid id)
 		{
-			return multiplicatorDefinitionSets.FirstOrDefault(m => id == m.Id);
+			return storage.FirstOrDefault(m => id == m.Id);
 		}
 
 		public IList<IMultiplicatorDefinitionSet> LoadAll()
 		{
-			return multiplicatorDefinitionSets;
+			return storage;
 		}
 
 		public IMultiplicatorDefinitionSet Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return Get(id);
 		}
 
 		public void AddRange(IEnumerable<IMultiplicatorDefinitionSet> entityCollection)

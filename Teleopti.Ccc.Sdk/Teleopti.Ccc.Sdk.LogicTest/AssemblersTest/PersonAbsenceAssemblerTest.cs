@@ -1,9 +1,10 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Rhino.Mocks;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -11,92 +12,89 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PersonAbsenceAssemblerTest 
     {
-        private PersonAbsenceAssembler target;
-        private MockRepository mocks;
-        private IPerson person;
-        private IScenario scenario;
-        private IAssembler<IAbsence, AbsenceDto> absenceAssembler;
-        private DateTimePeriodAssembler dateTimePeriodAssembler;
+	    [Test]
+	    public void VerifyDtoToDo()
+	    {
+		    var absenceRepository = new FakeAbsenceRepository();
+		    var absenceAssembler = new AbsenceAssembler(absenceRepository);
+		    var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+		    var target = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
+		    var person = PersonFactory.CreatePerson();
+		    var scenario = ScenarioFactory.CreateScenarioAggregate();
+		    target.Person = person;
+		    target.DefaultScenario = scenario;
 
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-            absenceAssembler = mocks.StrictMock<IAssembler<IAbsence, AbsenceDto>>();
-            dateTimePeriodAssembler = new DateTimePeriodAssembler();
-            target = new PersonAbsenceAssembler(absenceAssembler,dateTimePeriodAssembler);
-            person = PersonFactory.CreatePerson();
-            scenario = ScenarioFactory.CreateScenarioAggregate();
-            target.Person = person;
-            target.DefaultScenario = scenario;
-        }
+		    var dto = new PersonAbsenceDto {Id = Guid.NewGuid(), Version = 4};
+		    var absenceDto = new AbsenceDto {Id = Guid.NewGuid()};
 
-        [Test]
-        public void VerifyDtoToDo()
-        {
-            PersonAbsenceDto dto = new PersonAbsenceDto { Id = Guid.NewGuid(), Version = 4 };
-            AbsenceDto absenceDto = new AbsenceDto{Id=Guid.NewGuid()};
-            
-            dto.AbsenceLayer = new AbsenceLayerDto();
-            dto.AbsenceLayer.Id = Guid.NewGuid();
-            dto.AbsenceLayer.Period = dateTimePeriodAssembler.DomainEntityToDto(new DateTimePeriod(1900, 1, 1, 1900, 1, 2));
-            dto.AbsenceLayer.Absence = absenceDto;
+		    dto.AbsenceLayer = new AbsenceLayerDto();
+		    dto.AbsenceLayer.Id = Guid.NewGuid();
+		    dto.AbsenceLayer.Period = dateTimePeriodAssembler.DomainEntityToDto(new DateTimePeriod(1900, 1, 1, 1900, 1, 2));
+		    dto.AbsenceLayer.Absence = absenceDto;
 
-            IAbsence absence = AbsenceFactory.CreateAbsence("abs");
+		    var absence = AbsenceFactory.CreateAbsence("abs").WithId(absenceDto.Id.Value);
+		    absenceRepository.Add(absence);
 
-            using (mocks.Record())
-            {
-                Expect.Call(absenceAssembler.DtoToDomainEntity(dto.AbsenceLayer.Absence)).Return(absence);
-            }
-            using (mocks.Playback())
-            {
-                IPersonAbsence entity = target.DtoToDomainEntity(dto);
+		    IPersonAbsence entity = target.DtoToDomainEntity(dto);
 
-                Assert.AreEqual(dto.Version, entity.Version);
-                Assert.AreEqual(dto.Id, entity.Id);
-                Assert.AreSame(absence, entity.Layer.Payload);
-                Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.Layer.Period);
-            }
-        }
+		    Assert.AreEqual(dto.Version, entity.Version);
+		    Assert.AreEqual(dto.Id, entity.Id);
+		    Assert.AreSame(absence, entity.Layer.Payload);
+		    Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.Layer.Period);
+	    }
 
-        [Test]
+	    [Test]
         [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutPerson()
         {
-            target.Person = null;
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var target = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+
+			target.DefaultScenario = scenario;
+			target.Person = null;
+
             target.DtoToDomainEntity(new PersonAbsenceDto());
         }
 
         [Test]
         [ExpectedException(typeof(InvalidOperationException))]
         public void CannotExecuteFromDtoConverterWithoutDefaultScenario()
-        {
-            target.DefaultScenario = null;
+		{
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var target = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
+			var person = PersonFactory.CreatePerson();
+
+			target.Person = person;
+			target.DefaultScenario = null;
+
             target.DtoToDomainEntity(new PersonAbsenceDto());
         }
 
         [Test]
         public void VerifyDoToDto()
-        {
-            IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
+		{
+	        var absenceRepository = new FakeAbsenceRepository();
+	        var absenceAssembler = new AbsenceAssembler(absenceRepository);
+			var dateTimePeriodAssembler = new DateTimePeriodAssembler();
+			var target = new PersonAbsenceAssembler(absenceAssembler, dateTimePeriodAssembler);
+			var person = PersonFactory.CreatePerson().WithId();
+			var scenario = ScenarioFactory.CreateScenarioAggregate().WithId();
+			target.Person = person;
+			target.DefaultScenario = scenario;
+
+			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario,
                                                                                     new DateTimePeriod(1900, 1, 1, 1900,
-                                                                                                       1, 2));
-
-            person.SetId(Guid.NewGuid());
-            personAbsence.SetId(Guid.NewGuid());
-            personAbsence.Layer.Payload.SetId(Guid.NewGuid());
-
-            Expect.Call(absenceAssembler.DomainEntityToDto(personAbsence.Layer.Payload)).Return(new AbsenceDto
-                                                                                            {
-                                                                                                Id = personAbsence.Layer.Payload.Id
-                                                                                            });
-
-            mocks.ReplayAll();
+                                                                                                       1, 2)).WithId();
+			
+            absenceRepository.Add(personAbsence.Layer.Payload.WithId());
+			
             PersonAbsenceDto personAbsenceDto = target.DomainEntityToDto(personAbsence);
             Assert.AreEqual(person.Id.Value, personAbsence.Person.Id.Value);
             Assert.AreEqual(personAbsence.Id.Value, personAbsenceDto.Id.Value);
             Assert.AreEqual(personAbsence.Layer.Payload.Id.Value, personAbsenceDto.AbsenceLayer.Absence.Id.Value);
-            mocks.VerifyAll();
         }
     }
 }

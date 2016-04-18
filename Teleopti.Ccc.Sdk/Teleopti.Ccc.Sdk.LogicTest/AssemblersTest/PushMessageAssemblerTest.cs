@@ -1,77 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
+using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
     public class PushMessageAssemblerTest
     {
-        private IPerson _person;
-        private MockRepository _mocks;
-        private IAssembler<IPerson, PersonDto> _personAssembler;
-        private PushMessageAssembler _target;
+	    [Test]
+	    public void VerifyDoToDto()
+	    {
+			var personRepository = new FakePersonRepository();
+		    var person = PersonFactory.CreatePerson().WithId();
+		    personRepository.Add(person);
 
-        [SetUp]
-        public void Setup()
-        {
-            _person = PersonFactory.CreatePerson();
-            _person.SetId(Guid.NewGuid());
-            _mocks = new MockRepository();
-            _personAssembler = _mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
-            _target = new PushMessageAssembler();
-            _target.PersonAssembler = _personAssembler;
-        }
+			var pushMessage = new PushMessage(new List<string> { "Yes", "No" }).WithId();
+			pushMessage.Sender = person;
+			pushMessage.Title = "title";
+			pushMessage.Message = "message";
 
-        [Test]
-        public void VerifyDoToDto()
-        {
-            var dialogueMessage = CreateDo();
-            using (_mocks.Record())
-            {
-                Expect.Call(_personAssembler.DomainEntityToDto(_person)).Return(new PersonDto
-                                                                                    {
-                                                                                        Id = _person.Id,
-                                                                                        Name = _person.Name.ToString()
-                                                                                    });
-            }
-            using (_mocks.Playback())
-            {
-                var result = _target.DomainEntityToDto(dialogueMessage);
-                Assert.AreEqual(dialogueMessage.Sender.Id, result.Sender.Id);
-                Assert.AreEqual(dialogueMessage.GetMessage(new NormalizeText()), result.Message);
-                Assert.AreEqual(dialogueMessage.GetTitle(new NormalizeText()), result.Title);
-                Assert.AreEqual(2,result.ReplyOptions.Count);
-            }
-        }
+			var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
+		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
+		    var shiftCategoryAssembler = new ShiftCategoryAssembler(shiftCategoryRepository);
+		    var activityRepository = new FakeActivityRepository();
+		    var activityAssembler = new ActivityAssembler(activityRepository);
+		    var dayOffTemplateRepository = new FakeDayOffTemplateRepository();
+		    var dayOffAssembler = new DayOffAssembler(dayOffTemplateRepository);
+		    var personAssembler = new PersonAssembler(personRepository,
+			    new WorkflowControlSetAssembler(shiftCategoryAssembler,
+				    dayOffAssembler, activityAssembler,
+				    absenceAssembler), new PersonAccountUpdaterDummy(),
+			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
+		    var target = new PushMessageAssembler();
+		    target.PersonAssembler = personAssembler;
 
-        [Test, ExpectedException(typeof(NotSupportedException))]
+		    var result = target.DomainEntityToDto(pushMessage);
+		    Assert.AreEqual(pushMessage.Sender.Id, result.Sender.Id);
+		    Assert.AreEqual(pushMessage.GetMessage(new NormalizeText()), result.Message);
+		    Assert.AreEqual(pushMessage.GetTitle(new NormalizeText()), result.Title);
+		    Assert.AreEqual(2, result.ReplyOptions.Count);
+	    }
+
+	    [Test, ExpectedException(typeof(NotSupportedException))]
         public void VerifyDtoToDo()
         {
-            var dialogueMessageDto = CreateDto();
-            _target.DtoToDomainEntity(dialogueMessageDto);
-        }
-
-        private IPushMessage CreateDo()
-        {
-            IPushMessage pushMessage = new PushMessage(new List<string>{"Yes","No"});
-            pushMessage.SetId(Guid.NewGuid());
-            pushMessage.Sender = _person;
-            pushMessage.Title = "title";
-            pushMessage.Message = "message";
-            return pushMessage;
-        }
-
-        private static PushMessageDto CreateDto()
-        {
-            return new PushMessageDto();
+            var dialogueMessageDto = new PushMessageDto();
+			var target = new PushMessageAssembler();
+			target.DtoToDomainEntity(dialogueMessageDto);
         }
     }
 }

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void ShouldReturnCorrectMergerUsingCorrectScheduleDayWhenMidnightSplitIsUsed()
 		{
 			const string specialProjection = "midnightSplit";
-			var timeZoneInfo = (TimeZoneInfo.Local);
+			var timeZoneInfo = TimeZoneInfo.Local;
 			var projService = (ScheduleProjectionService)target.CreateProjectionService(scheduleDay, specialProjection, timeZoneInfo);
 
 			projService.ProjectionMerger.Should().Be.InstanceOf<ProjectionMidnightSplitterMerger>();
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void ShouldReturnCorrectMergerUsingCorrectScheduleDayWhenExcludeAbsencesMidnightSplitIsUsed()
 		{
 			const string specialProjection = "excludeAbsencesMidnightSplit";
-			var timeZoneInfo = (TimeZoneInfo.Local);
+			var timeZoneInfo = TimeZoneInfo.Local;
 			var projService = (ScheduleProjectionService)target.CreateProjectionService(scheduleDay, specialProjection, timeZoneInfo);
 
 			projService.ProjectionMerger.Should().Be.InstanceOf<ProjectionMidnightSplitterMerger>();
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void ShouldReturnCorrectMergerUsingCorrectScheduleDayWhenExcludeAbsenceIsUsed()
 		{
 			const string specialProjection = "excludeAbsences";
-			var timeZoneInfo = (TimeZoneInfo.Local);
+			var timeZoneInfo = TimeZoneInfo.Local;
 			var projService = (ScheduleProjectionService)target.CreateProjectionService(scheduleDay, specialProjection, timeZoneInfo);
 
 			projService.ProjectionMerger.Should().Be.InstanceOf<ProjectionPayloadMerger>();
@@ -71,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		public void ShouldReturnCorrectMergerUsingCorrectScheduleDayWhenBlankIsUsed()
 		{
 			var specialProjection = string.Empty;
-			var timeZoneInfo = (TimeZoneInfo.Local);
+			var timeZoneInfo = TimeZoneInfo.Local;
 			var projService = (ScheduleProjectionService)target.CreateProjectionService(scheduleDay, specialProjection, timeZoneInfo);
 
 			projService.ProjectionMerger.Should().Be.InstanceOf<ProjectionPayloadMerger>();
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		{
 			//throw or default? Choose default here....
 			const string specialProjection = "arne anka";
-			var timeZoneInfo = (TimeZoneInfo.Local);
+			var timeZoneInfo = TimeZoneInfo.Local;
 			var projService = (ScheduleProjectionService)target.CreateProjectionService(scheduleDay, specialProjection, timeZoneInfo);
 
 			projService.ProjectionMerger.Should().Be.InstanceOf<ProjectionPayloadMerger>();
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 		{
 			//throw or default? Choose default here....
 			const string specialProjection = null;
-			var timeZoneInfo = (TimeZoneInfo.Local);
+			var timeZoneInfo = TimeZoneInfo.Local;
 			var projService = (ScheduleProjectionService)target.CreateProjectionService(scheduleDay, specialProjection, timeZoneInfo);
 
 			projService.ProjectionMerger.Should().Be.InstanceOf<ProjectionPayloadMerger>();

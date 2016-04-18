@@ -11,62 +11,39 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class PersonAccountAssemblerTest
     {
-        private PersonAccountAssembler _target;
-        private PersonAccountAssembler _target2;
-        private IPerson _person;
-        private IScenario _scenario;
-       
-        private IAbsence _absence;
-
-        [SetUp]
-        public void Setup()
-        {
-            _target = new PersonAccountAssembler();
-            _target2 = new PersonAccountAssembler();
-            _person = PersonFactory.CreatePerson();
-            _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _target.Person = _person;
-            _target2.Person = _person;
-            _target.DefaultScenario = _scenario;
-            _target2.DefaultScenario = _scenario;
-            _absence = AbsenceFactory.CreateAbsence("hej");
-        }
-
-        [Test]
-        public void VerifySetup()
-        {
-            Assert.IsNotNull(_target);
-            Assert.IsNotNull(_target2);
-        }
-
         [Test]
         [ExpectedException(typeof(NotImplementedException))]
         public void VerifyDoToDo()
         {
-            _target.DtoToDomainEntity(null);
+			var target = new PersonAccountAssembler();
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			target.Person = person;
+			target.DefaultScenario = scenario;
+			target.DtoToDomainEntity(new PersonAccountDto());
         }
-
-        [Test]
-        [ExpectedException(typeof(NotImplementedException))]
-        public void VerifyDoToDo2()
-        {
-            _target2.DtoToDomainEntity(null);
-        }
-
+		
         [Test]
         public void VerifyDoToDtoTime()
-        {
-            var personAccount = new AccountTime(new DateOnly(2009, 1, 1));
+		{
+			var target = new PersonAccountAssembler();
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			target.Person = person;
+			target.DefaultScenario = scenario;
+			var absence = AbsenceFactory.CreateAbsence("hej");
+
+			var personAccount = new AccountTime(new DateOnly(2009, 1, 1));
             var timeSpan = new TimeSpan(5,2,23);
           
-            var absenceAccount = new PersonAbsenceAccount(_person, _absence);
+            var absenceAccount = new PersonAbsenceAccount(person, absence);
             absenceAccount.Add(personAccount);
            
             personAccount.Accrued = timeSpan;
             personAccount.Extra = timeSpan;
             personAccount.LatestCalculatedBalance = timeSpan;
 
-            PersonAccountDto result =  _target.DomainEntityToDto(personAccount);
+            PersonAccountDto result =  target.DomainEntityToDto(personAccount);
             Assert.IsTrue(result.IsInMinutes);
             Assert.AreEqual(result.Accrued, timeSpan.Ticks);
             Assert.AreEqual(result.BalanceIn, 0);
@@ -78,17 +55,24 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
         [Test]
         public void VerifyDoToDtoDay()
-        {
-            var personAccount = new AccountDay(new DateOnly(2009, 1, 1));
+		{
+			var target = new PersonAccountAssembler();
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			target.Person = person;
+			target.DefaultScenario = scenario;
+
+			var absence = AbsenceFactory.CreateAbsence("hej");
+			var personAccount = new AccountDay(new DateOnly(2009, 1, 1));
             
-            var absenceAccount = new PersonAbsenceAccount(_person, _absence);
+            var absenceAccount = new PersonAbsenceAccount(person, absence);
             absenceAccount.Add(personAccount);
             
             personAccount.Accrued = TimeSpan.FromDays(20);
             personAccount.Extra = TimeSpan.FromDays(2);
             personAccount.LatestCalculatedBalance = TimeSpan.FromDays(6);
 
-            PersonAccountDto result = _target2.DomainEntityToDto(personAccount);
+            PersonAccountDto result = target.DomainEntityToDto(personAccount);
             Assert.IsFalse(result.IsInMinutes);
             Assert.AreEqual(personAccount.Accrued.Ticks, result.Accrued);
             Assert.AreEqual(personAccount.BalanceIn.Ticks, result.BalanceIn);

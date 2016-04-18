@@ -9,7 +9,6 @@ using Teleopti.Ccc.Sdk.LogicTest.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
@@ -30,9 +29,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
 		    var target = new DialogueMessageAssembler();
 		    target.PersonAssembler = personAssembler;
-		    var dialogueMessage = createDo(person);
+		    var dialogueMessage = new DialogueMessage("test", person);
 
-		    var result = target.DomainEntityToDto(dialogueMessage);
+			var result = target.DomainEntityToDto(dialogueMessage);
 		    Assert.AreEqual(dialogueMessage.Sender.Id, result.Sender.Id);
 		    Assert.AreEqual(dialogueMessage.Text, result.Text);
 	    }
@@ -40,21 +39,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 	    [Test, ExpectedException(typeof(NotSupportedException))]
         public void VerifyDtoToDo()
         {
-            var dialogueMessageDto = createDto();
+            var dialogueMessageDto = new DialogueMessageDto();
 			var target = new DialogueMessageAssembler();
 
 			target.DtoToDomainEntity(dialogueMessageDto);
-        }
-
-        private static IDialogueMessage createDo(IPerson person)
-        {
-            var dialogueMessage = new DialogueMessage("test", person);
-            return dialogueMessage;
-        }
-
-        private static DialogueMessageDto createDto()
-        {
-            return new DialogueMessageDto();
         }
     }
 }
