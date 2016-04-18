@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -13,13 +12,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeScheduleDictionaryPersister : IScheduleDictionaryPersister
 	{
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly object lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository = new object();
 
-		public FakeScheduleDictionaryPersister(IPersonAssignmentRepository personAssignmentRepository, IPreferenceDayRepository preferenceDayRepository)
+		public FakeScheduleDictionaryPersister(IPersonAssignmentRepository personAssignmentRepository)
 		{
 			_personAssignmentRepository = personAssignmentRepository;
-			_preferenceDayRepository = preferenceDayRepository;
 		}
 
 		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
@@ -50,30 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 								_personAssignmentRepository.Add(currAss);
 								break;
 						}
-					}
-
-				
-				}
-				foreach (var scheduleChange in diff)
-				{
-
-					if (!(scheduleChange.CurrentItem is IPreferenceDay))
-						continue;
-
-					var curr = (IPreferenceDay)scheduleChange.CurrentItem;
-					var org = (IPreferenceDay)scheduleChange.OriginalItem;
-					switch (scheduleChange.Status)
-					{
-						case DifferenceStatus.Added:
-							_preferenceDayRepository.Add(curr);
-							break;
-						case DifferenceStatus.Deleted:
-							_preferenceDayRepository.Remove(org);
-							break;
-						case DifferenceStatus.Modified:
-							_preferenceDayRepository.Remove(org);
-							_preferenceDayRepository.Add(curr);
-							break;
 					}
 				}
 			}
