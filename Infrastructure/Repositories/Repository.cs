@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
 			if (root is IBelongsToBusinessUnit && ServiceLocatorForEntity.CurrentBusinessUnit.Current() == null)
 				throw new PermissionException("Business unit is required");
-			if (root is IChangeInfo && ServiceLocatorForEntity.CurrentTeleoptiPrincipal.Current() == null)
+			if (root is IChangeInfo && ServiceLocatorForEntity.UpdatedBy.Person() == null)
 				throw new PermissionException("Identity is required");
 			Session.SaveOrUpdate(root);
 		}

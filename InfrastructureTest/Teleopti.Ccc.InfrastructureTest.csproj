@@ -201,6 +201,7 @@
     <Compile Include="Foundation\DatabaseVersionTest.cs" />
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
     <Compile Include="Licensing\SetLicenseActivatorTest.cs" />
+    <Compile Include="Logon\ImpersonateSystemTest.cs" />
     <Compile Include="MessageBroker\MailboxConcurrencyTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTest.cs" />
     <Compile Include="MessageBroker\MailboxRepositoryTest.cs" />

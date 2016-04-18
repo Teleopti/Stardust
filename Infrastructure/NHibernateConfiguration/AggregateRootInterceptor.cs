@@ -11,12 +11,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
-	/// <summary>
-	/// Interceptor adding support for "changed roots"
-	/// </summary>
 	public class AggregateRootInterceptor : EmptyInterceptor
 	{
-		private readonly ICurrentTeleoptiPrincipal _principal;
+		private readonly IUpdatedBy _updatedBy;
 		private const string createdByPropertyName = "CREATEDBY";
 		private const string createdOnPropertyName = "CREATEDON";
 		private const string updatedByPropertyName = "UPDATEDBY";
@@ -26,9 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		private readonly VersionStateRollbackInterceptor _entityStateRollbackInterceptor = new VersionStateRollbackInterceptor();
 
-		public AggregateRootInterceptor(ICurrentTeleoptiPrincipal principal)
+		public AggregateRootInterceptor(IUpdatedBy updatedBy)
 		{
-			_principal = principal;
+			_updatedBy = updatedBy;
 			Iteration = InterceptorIteration.Normal;
 		}
 
@@ -215,7 +212,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForInsert(propertyNames);
-				state[props[createdByPropertyName]] = ((IUnsafePerson)_principal.Current()).Person;
+				state[props[createdByPropertyName]] = _updatedBy.Person();
 				state[props[createdOnPropertyName]] = nu;
 				return true;
 			}
@@ -228,13 +225,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			var deleteInfo = root as IDeleteTag;
 			if (deleteInfo != null && deleteInfo.IsDeleted)
-			{
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Delete));
-			}
 			else
-			{
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Update));
-			}
 		}
 
 		private bool setUpdatedProperties(object root, IEnumerable<string> propertyNames, object[] currentState)
@@ -243,7 +236,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				var nu = DateTime.UtcNow;
 				var props = propertyIndexesForUpdate(propertyNames);
-				currentState[props[updatedByPropertyName]] = ((IUnsafePerson)_principal.Current()).Person;
+				currentState[props[updatedByPropertyName]] = _updatedBy.Person();
 				currentState[props[updatedOnPropertyName]] = nu;
 				return true;
 			}

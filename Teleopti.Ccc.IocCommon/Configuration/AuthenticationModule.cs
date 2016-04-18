@@ -1,5 +1,8 @@
-﻿using Autofac;
+﻿using System;
+using System.Linq;
+using Autofac;
 using Teleopti.Ccc.Domain;
+using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Logon.Aspects;
@@ -9,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
@@ -17,6 +21,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -25,12 +30,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<TenantScopeAspect>().SingleInstance();
-
 			builder.RegisterType<TenantFromArguments>().SingleInstance();
-			builder.RegisterType<AsSystemAspect>().SingleInstance();
 
+			builder.RegisterType<AsSystemAspect>().SingleInstance();
 			builder.RegisterType<AsSystem>().SingleInstance();
+
+			builder.RegisterType<ImpersonateSystemAspect>().SingleInstance();
+
 			builder.RegisterType<LogOnOff>().As<ILogOnOff>().SingleInstance();
+
 			builder.RegisterType<WindowsAppDomainPrincipalContext>().SingleInstance();
 			builder.RegisterType<WebRequestPrincipalContext>().SingleInstance();
 			builder.RegisterType<ThreadPrincipalContext>().As<IThreadPrincipalContext>().SingleInstance();
@@ -82,6 +90,73 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>().SingleInstance();
+			builder.RegisterType<UpdatedBy>()
+				.As<IUpdatedBy>()
+				.As<IUpdatedByScope>()
+				.SingleInstance();
 		}
 	}
+
+	public class ImpersonateSystemAttribute : AspectAttribute
+	{
+		public ImpersonateSystemAttribute() : base(typeof(ImpersonateSystemAspect))
+		{
+		}
+	}
+
+	public class ImpersonateSystemAspect : IAspect
+	{
+		private readonly TenantFromArguments _tenant;
+		private readonly IDataSourceScope _dataSource;
+		private readonly IBusinessUnitRepository _businessUnits;
+		private readonly IPersonRepository _persons;
+		private readonly WithUnitOfWork _withUnitOfWork;
+		private readonly IBusinessUnitScope _businessUnit;
+		private readonly IUpdatedByScope _updatedBy;
+
+		[ThreadStatic]
+		private static IDisposable _tenantScope;
+
+		public ImpersonateSystemAspect(
+			TenantFromArguments tenant,
+			IDataSourceScope dataSource,
+			IBusinessUnitRepository businessUnits, 
+			IPersonRepository persons,
+			WithUnitOfWork withUnitOfWork,
+			IBusinessUnitScope businessUnit,
+			IUpdatedByScope updatedBy)
+		{
+			_tenant = tenant;
+			_dataSource = dataSource;
+			_businessUnits = businessUnits;
+			_persons = persons;
+			_withUnitOfWork = withUnitOfWork;
+			_businessUnit = businessUnit;
+			_updatedBy = updatedBy;
+		}
+
+		public void OnBeforeInvocation(IInvocationInfo invocation)
+		{
+			var tenant = _tenant.Resolve(invocation.Arguments);
+			_tenantScope = _dataSource.OnThisThreadUse(tenant);
+			_withUnitOfWork.Do(uow =>
+			{
+				var businessUnitId = invocation.Arguments.Cast<ILogOnContext>().First().LogOnBusinessUnitId;
+				var businessUnit = _businessUnits.Load(businessUnitId);
+				_businessUnit.OnThisThreadUse(businessUnit);
+
+				var person = _persons.Load(SystemUser.Id);
+				_updatedBy.OnThisThreadUse(person);
+			});
+		}
+
+		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
+		{
+			_updatedBy.OnThisThreadUse(null);
+			_businessUnit.OnThisThreadUse(null);
+			_tenantScope.Dispose();
+		}
+	}
+
+
 }

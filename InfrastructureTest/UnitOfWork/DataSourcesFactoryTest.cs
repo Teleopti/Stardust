@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Setup()
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
-			target = new DataSourcesFactory(enversConfiguration, new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), CurrentTeleoptiPrincipal.Make());
+			target = new DataSourcesFactory(enversConfiguration, new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), UpdatedBy.Make());
 		}
 
 		[Test]

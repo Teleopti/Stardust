@@ -33,7 +33,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			persistCallbacks(builder);
 
-			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>().SingleInstance();
+			builder.RegisterType<CurrentBusinessUnit>()
+				.As<ICurrentBusinessUnit>()
+				.As<IBusinessUnitScope>()
+				.SingleInstance();
 			builder.RegisterType<NoBusinessUnitForRequest>().As<IBusinessUnitForRequest>().SingleInstance();
 
 			builder.RegisterType<CurrentInitiatorIdentifier>()

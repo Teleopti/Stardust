@@ -242,6 +242,10 @@
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
+    <Compile Include="Common\IBusinessUnitScope.cs" />
+    <Compile Include="Security\Principal\IUpdatedBy.cs" />
+    <Compile Include="Security\Principal\IUpdatedByScope.cs" />
+    <Compile Include="Security\Principal\UpdatedBy.cs" />
     <Compile Include="DayOffPlanning\IPeopleInOrganization.cs" />
     <Compile Include="DayOffPlanning\PeopleInOrganization.cs" />
     <Compile Include="ExceptionExtensions.cs" />

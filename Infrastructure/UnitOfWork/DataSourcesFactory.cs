@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private readonly ICurrentHttpContext _httpContext;
-		private readonly ICurrentTeleoptiPrincipal _principal;
+		private readonly IUpdatedBy _updatedBy;
 
 		public const string AnalyticsDataSourceName = "AnalyticsDatasource";
 
@@ -30,13 +30,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTransactionHooks transactionHooks,
 			IDataSourceConfigurationSetter dataSourceConfigurationSetter, 
 			ICurrentHttpContext httpContext,
-			ICurrentTeleoptiPrincipal principal)
+			IUpdatedBy updatedBy)
 		{
 			_enversConfiguration = enversConfiguration;
 			_transactionHooks = transactionHooks;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 			_httpContext = httpContext;
-			_principal = principal;
+			_updatedBy = updatedBy;
 		}
 
 		public IDataSource Create(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_enversConfiguration.AuditSettingProvider,
 				applicationConnectionString,
 				_transactionHooks,
-				_principal,
+				_updatedBy,
 				tenant
 				);
 

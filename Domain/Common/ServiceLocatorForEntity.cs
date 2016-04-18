@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Common
 	{
 		private static ICurrentBusinessUnit _currentBusinessUnit;
 		private static IAppliedAlarm _appliedAlarm;
-		private static ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private static IUpdatedBy _updatedBy;
 
 		// these properties are injected by reflection in ServiceLocatorModule
 
@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.Domain.Common
 			set { _appliedAlarm = value; }
 		}
 
-		public static ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal
+		public static IUpdatedBy UpdatedBy
 		{
-			get { return _currentTeleoptiPrincipal ?? Security.Principal.CurrentTeleoptiPrincipal.Make(); }
-			set { _currentTeleoptiPrincipal = value; }
+			get { return _updatedBy ?? Security.Principal.UpdatedBy.Make(); }
+			set { _updatedBy = value; }
 		}
 	}
 }

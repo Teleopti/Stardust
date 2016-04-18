@@ -1,13 +1,14 @@
+using System.Threading;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	public class CurrentBusinessUnit : ICurrentBusinessUnit
+	public class CurrentBusinessUnit : ICurrentBusinessUnit, IBusinessUnitScope
 	{
 		private readonly ICurrentIdentity _identity;
 		private readonly IBusinessUnitForRequest _businessUnitForRequest;
+		private readonly ThreadLocal<IBusinessUnit> _threadBusinessUnit = new ThreadLocal<IBusinessUnit>();
 
 		public static ICurrentBusinessUnit Make()
 		{
@@ -23,13 +24,20 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IBusinessUnit Current()
 		{
+			if (_threadBusinessUnit.Value != null)
+				return _threadBusinessUnit.Value;
+
 			var businessUnit = _businessUnitForRequest.TryGetBusinessUnit();
-			if (businessUnit == null)
-			{
-				var identity = _identity.Current();
-				return identity == null ? null : identity.BusinessUnit;
-			}
-			return businessUnit;
+			if (businessUnit != null)
+				return businessUnit;
+
+			var identity = _identity.Current();
+			return identity?.BusinessUnit;
+		}
+
+		public void OnThisThreadUse(IBusinessUnit businessUnit)
+		{
+			_threadBusinessUnit.Value = businessUnit;
 		}
 	}
 }
