@@ -30,7 +30,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
-				JobHelper.GenerateLongRunningParamsRequests(1);
+				JobHelper.GenerateTestJobTimerRequests(1,TimeSpan.FromSeconds(30));
 
 			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
