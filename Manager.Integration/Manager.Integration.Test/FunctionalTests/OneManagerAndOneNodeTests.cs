@@ -114,7 +114,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			LogMessage("Finished.");
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
 		{
 			LogMessage("Start.");
