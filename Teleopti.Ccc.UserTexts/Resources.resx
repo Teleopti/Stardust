@@ -14274,4 +14274,8 @@ Help us improve your experience by sending an error report</value>
     <value>No permission to remove activities for agent {0}.</value>
     <comment>Error message to notify missing permission for removing activity</comment>
   </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>Modify Skill Area</value>
+    <comment>Modify skill area</comment>
+  </data>
 </root>

@@ -15534,6 +15534,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modify Skill Area.
+        /// </summary>
+        public static string ModifySkillArea {
+            get {
+                return ResourceManager.GetString("ModifySkillArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modify Write Protected Schedule.
         /// </summary>
         public static string ModifyWriteProtectedSchedule {
@@ -16173,7 +16182,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to My Team.
+        ///   Looks up a localized string similar to MyTeam.
         /// </summary>
         public static string MyTeam {
             get {
