@@ -4,6 +4,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -66,25 +68,5 @@ namespace Teleopti.Ccc.DomainTest.Collection
             IDifferenceCollection<IPersonAbsence> res = target.Difference(org, current);
             Assert.AreEqual(0, res.Count());
         }
-
-	    [Test, Ignore("Gift to Roger")]
-	    public void NonModifiedPreferenceDayShouldNotBeReturned()
-	    {
-		    var preferenceDay =
-			    new PreferenceDay(_person, new DateOnly(2016, 4, 17),
-				    new PreferenceRestriction()
-				    {
-					    StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
-				    }).WithId();
-
-		    var preferenceDayClone = (IPreferenceDay) preferenceDay.Clone();
-			var org = new List<IPreferenceDay> { preferenceDayClone };
-			var current = new List<IPreferenceDay> { preferenceDay };
-
-			var testTarget = new DifferenceEntityCollectionService<IPreferenceDay>();
-
-			IDifferenceCollection<IPreferenceDay> res = testTarget.Difference(org, current);
-		    res.Count().Should().Be.EqualTo(0);
-	    }
     }
 }
