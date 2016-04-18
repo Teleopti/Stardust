@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -25,9 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[SetUp]
 		public void SetUp()
 		{
-			DataSourceHelper.RestoreAnalyticsDatabase(123);
-			DataSourceHelper.ClearAnalyticsData();
-
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			datasource = new ExistingDatasources(timeZones);

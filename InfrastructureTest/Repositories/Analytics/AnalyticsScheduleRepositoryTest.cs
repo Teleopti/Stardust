@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure.Analytics;
@@ -17,6 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
 	[Category("LongRunning")]
+	[AnalyticsDatabaseTest]
 	public class AnalyticsScheduleRepositoryTest
 	{
 		private IAnalyticsScheduleRepository _target;
@@ -35,12 +35,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory = new AnalyticsDataFactory();
 			_timeZones = new UtcAndCetTimeZones();
 			_datasource = new ExistingDatasources(_timeZones);
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			DataSourceHelper.ClearAnalyticsData();
 		}
 
 		[Test]
@@ -229,7 +223,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ScholdBeAbleToDeleteADay()
+		public void ShouldBeAbleToDeleteADay()
 		{
 			_target.DeleteFactSchedule(1, 1, 1);
 		}
