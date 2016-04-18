@@ -136,7 +136,7 @@ namespace Manager.Integration.Test.LoadTests
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(5,
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(6,
 			                                                      sqlNotiferCancellationTokenSource,
 			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();

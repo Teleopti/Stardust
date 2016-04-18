@@ -57,6 +57,10 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			ToggleRefreshCommand = new ToggleRefreshCommand(this);
 
 			CreateNewJobCommand = new CreateNewJobCommand();
+			Create20NewJobCommand = new CreateNewJobCommand(20);
+
+			StartUpNewManagerCommand = new StartUpNewManagerCommand();
+			StartUpNewNodeCommand = new StartUpNewNodeCommand();
 
 			RefreshTimer = new Timer(5000);
 
@@ -66,6 +70,12 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			RefreshEnabled = true;
 		}
+
+		public StartUpNewNodeCommand StartUpNewNodeCommand { get; set; }
+
+		public StartUpNewManagerCommand StartUpNewManagerCommand { get; set; }
+
+		public CreateNewJobCommand Create20NewJobCommand { get; set; }
 
 		public CreateNewJobCommand CreateNewJobCommand { get; set; }
 
@@ -399,7 +409,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 				if (JobHistoryDataGroupBySentToData.GroupDescriptions != null)
 				{
-					JobHistoryDataGroupBySentToData.GroupDescriptions.Add(new PropertyGroupDescription("SentTo"));
+					JobHistoryDataGroupBySentToData.GroupDescriptions.Add(new PropertyGroupDescription("SentToWorkerNodeUri"));
 				}
 
 				++RefreshProgressValue;
@@ -421,7 +431,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 				JobDefinitionData =
 					managerDbEntities.JobQueues
-						.ToList();
+						.OrderBy(queue => queue.Created).ToList();
 
 				++RefreshProgressValue;
 

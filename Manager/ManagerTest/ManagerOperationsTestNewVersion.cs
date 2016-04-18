@@ -74,6 +74,7 @@ namespace ManagerTest
 			JobRepository.TryAssignJobToWorkerNode(HttpSender);
 
 			Target.RegisterHeartbeat(_nodeUri1);
+
 			HttpSender.CalledNodes.First()
 				.Key.Should()
 				.Contain(_nodeUri1.ToString());
@@ -154,7 +155,7 @@ namespace ManagerTest
 
 
 		[Test]
-		public void ShouldBeAbleToPersistBadRequestResonsToHistoryDetail()
+		public void ShouldBeAbleToPersistBadRequestResonsToJob()
 		{
 			var job = new JobRequestModel
 			{

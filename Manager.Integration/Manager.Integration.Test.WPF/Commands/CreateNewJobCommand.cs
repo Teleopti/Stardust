@@ -8,13 +8,17 @@ namespace Manager.Integration.Test.WPF.Commands
 {
 	public class CreateNewJobCommand : ICommand
 	{
-		private HttpSender HttpSender { get; set; }
-
-		public CreateNewJobCommand()
+		public CreateNewJobCommand(int numberOfJobs = 1)
 		{
+			NumberOfJobs = numberOfJobs;
+
 			HttpSender = new HttpSender();
 			ManagerUriBuilder = new ManagerUriBuilder();
 		}
+
+		public int NumberOfJobs { get; private set; }
+
+		private HttpSender HttpSender { get; set; }
 
 		public ManagerUriBuilder ManagerUriBuilder { get; set; }
 
@@ -26,22 +30,24 @@ namespace Manager.Integration.Test.WPF.Commands
 		public void Execute(object parameter)
 		{
 			var uri = ManagerUriBuilder.GetStartJobUri();
+			var username = SecurityHelper.GetLoggedInUser();
 
-			var testJobParams = new TestJobParams("Dummy data",
-												  "Name data");
-
-			var testJobParamsJson = JsonConvert.SerializeObject(testJobParams);
-
-			var job = new JobQueueItem
+			for (var i = 0; i < NumberOfJobs; i++)
 			{
-				Name = "Job Name ",
-				Serialized = testJobParamsJson,
-				Type = "NodeTest.JobHandlers.TestJobParams",
-				CreatedBy = SecurityHelper.GetLoggedInUser()
-			};
+				var fastJobParams = new FastJobParams("Fast job data " + i);
 
-			var response = HttpSender.PostAsync(uri, job);
+				var fastJobParamsToJson = JsonConvert.SerializeObject(fastJobParams);
 
+				var job = new JobQueueItem
+				{
+					Name = "Job Name " + i,
+					Serialized = fastJobParamsToJson,
+					Type = "NodeTest.JobHandlers.FastJobParams",
+					CreatedBy = username
+				};
+
+				var response = HttpSender.PostAsync(uri, job);
+			}
 		}
 
 		public event EventHandler CanExecuteChanged;

@@ -29,7 +29,7 @@ namespace Manager.Integration.Test.LoadTests
 
 			var startedTest = DateTime.UtcNow;
 
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
+			var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(50);
 
 			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
@@ -60,7 +60,7 @@ namespace Manager.Integration.Test.LoadTests
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(6,
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(base.NumberOfManagers,
 			                                                      sqlNotiferCancellationTokenSource,
 			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
@@ -105,7 +105,7 @@ namespace Manager.Integration.Test.LoadTests
 			var endedTest = DateTime.UtcNow;
 
 			string description =
-				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
+				string.Format("Creates {0} FAST jobs with {1} manager and {2} nodes.",
 								createNewJobRequests.Count,
 								base.NumberOfManagers,
 								base.NumberOfNodes);

@@ -19,6 +19,11 @@ namespace NodeTest.JobHandlers
 			builder.RegisterType<TestReportProgressJobParams>();
 			builder.RegisterType<TestReportProgressJobWorker>().As<IHandle<TestReportProgressJobParams>>();
 
+
+			builder.RegisterType<TestJobTimerJobCode>();
+			builder.RegisterType<TestJobTimerParams>();
+			builder.RegisterType<TestJobTimerWorker>().As<IHandle<TestJobTimerParams>>();
+
 			builder.RegisterType<LongRunningJobWorker>().As<IHandle<LongRunningJobParams>>();
 			builder.RegisterType<FailingJobWorker>().As<IHandle<FailingJobParams>>();
 

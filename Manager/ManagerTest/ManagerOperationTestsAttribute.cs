@@ -25,6 +25,7 @@ namespace ManagerTest
 			builder.Register(
 				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,new RetryPolicyProvider()))
 				.As<IWorkerNodeRepository>();
+
 			builder.RegisterType<ManagerController>();
 
 			builder.RegisterType<JobManagerNewVersion>().SingleInstance();

@@ -1,6 +1,35 @@
-﻿namespace Manager.Integration.Test.WPF.Commands
+﻿using System;
+using System.Windows.Input;
+using Manager.Integration.Test.Helpers;
+using Manager.IntegrationTest.Console.Host.Helpers;
+
+namespace Manager.Integration.Test.WPF.Commands
 {
-	public class StartUpNewNodeCommand
+	public class StartUpNewNodeCommand : ICommand
 	{
+		public bool CanExecute(object parameter)
+		{
+			return true;
+		}
+
+		public void Execute(object parameter)
+		{
+			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
+			var httpSender = new HttpSender();
+
+			var nodeName = IntegrationControllerApiHelper.StartNewNode(intergrationControllerUriBuilder,
+			                                                           httpSender);
+		}
+
+		public event EventHandler CanExecuteChanged;
+
+		protected virtual void OnCanExecuteChanged()
+		{
+			var handler = CanExecuteChanged;
+			if (handler != null)
+			{
+				handler(this, System.EventArgs.Empty);
+			}
+		}
 	}
 }

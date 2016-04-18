@@ -37,7 +37,7 @@ namespace Stardust.Manager
 				return BadRequest(isValidRequest.Message);
 			}
 
-			var jobReceived = new JobQueueItem
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = job.Name,
 				Serialized = job.Serialized,
@@ -46,12 +46,12 @@ namespace Stardust.Manager
 				JobId = Guid.NewGuid()
 			};
 
-			_jobManager.AddItemToJobQueue(jobReceived);
+			_jobManager.AddItemToJobQueue(jobQueueItem);
 
 			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
 			                        WhoAmI(Request),
-			                        jobReceived.JobId,
-			                        jobReceived.Name);
+			                        jobQueueItem.JobId,
+			                        jobQueueItem.Name);
 
 			this.Log().InfoWithLineNumber(msg);
 
@@ -60,7 +60,7 @@ namespace Stardust.Manager
 				_jobManager.TryAssignJobToWorkerNode();
 			});
 
-			return Ok(jobReceived.JobId);
+			return Ok(jobQueueItem.JobId);
 		}
 
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
@@ -82,9 +82,9 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
 		public IHttpActionResult GetAllJobs()
 		{
-			var jobHistory = _jobManager.GetAllJobs();
+			var allJobs = _jobManager.GetAllJobs();
 
-			return Ok(jobHistory);
+			return Ok(allJobs);
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
@@ -96,9 +96,9 @@ namespace Stardust.Manager
 				return BadRequest(isValidRequest.Message);
 			}
 
-			var jobHistory = _jobManager.GetJobByJobId(jobId);
+			var job = _jobManager.GetJobByJobId(jobId);
 
-			return Ok(jobHistory);
+			return Ok(job);
 		}
 
 		[HttpGet, Route(ManagerRouteConstants.JobDetail)]
@@ -110,9 +110,9 @@ namespace Stardust.Manager
 				return BadRequest(isValidRequest.Message);
 			}
 
-			var jobHistoryDetail = _jobManager.GetJobDetailsByJobId(jobId);
+			var jobDetailsByJobId = _jobManager.GetJobDetailsByJobId(jobId);
 
-			return Ok(jobHistoryDetail);
+			return Ok(jobDetailsByJobId);
 		}
 
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]

@@ -37,7 +37,7 @@ namespace ManagerTest.StressTests
 		                                          string createdby)
 		{
 			var insertCommandText =
-				@"INSERT INTO [Stardust.JobDefinition]
+				@"INSERT INTO [Stardust.Job]
 							   ([JobId],
 								[Name],
 								[Type],

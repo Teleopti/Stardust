@@ -38,8 +38,8 @@ namespace Manager.Integration.Test.LongRunningTests
 			this.Log().DebugWithLineNumber(message);
 		}
 
-		private const int NumberOfManagers = 2;
-		private const int NumberOfNodes = 6;
+		private const int NumberOfManagers = 1;
+		private const int NumberOfNodes = 5;
 
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
@@ -94,6 +94,12 @@ namespace Manager.Integration.Test.LongRunningTests
 		}
 
 
+		[Test]
+		public void TestLongRunning()
+		{
+			Thread.Sleep(TimeSpan.FromHours(8));	
+		}
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
@@ -128,20 +134,18 @@ namespace Manager.Integration.Test.LongRunningTests
 			IHttpSender httpSender = new HttpSender();
 
 			Task<int> task1 = new Task<int>(() => GenerateJobs(createdBy, uri, httpSender));
-			Task<int> task2 = new Task<int>(() => GenerateJobs(createdBy, uri, httpSender));
 
 			task1.Start();
-			task2.Start();
 
-			Task.WaitAll(task1, task2);
+			Task.WaitAll(task1);
 
-			Thread.Sleep(TimeSpan.FromHours(2));
+			Thread.Sleep(TimeSpan.FromHours(8));
 
 			var endedTest = DateTime.UtcNow;
 
 			var description =
 				string.Format("Creates {0} FAST jobs with {1} manager and {2} nodes.",
-				              task1.Result + task2.Result ,
+				              task1.Result  ,
 							  NumberOfManagers,
 							  NumberOfNodes);
 

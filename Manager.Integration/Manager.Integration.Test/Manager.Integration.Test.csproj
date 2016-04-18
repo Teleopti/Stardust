@@ -151,7 +151,6 @@
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />
     <Compile Include="IntegrationControllerTests\IntegrationControllerOneManagerAndOneNodeTests.cs" />
     <Compile Include="Interceptor\FunctionalTestInterceptor.cs" />
-    <Compile Include="LoadTests\OneManagerAndOneNodeLoadTests.cs" />
     <Compile Include="LongRunningTests\OneManagerAndFiveNodesLongRunningTest.cs" />
     <Compile Include="Models\WorkerNode.cs" />
     <Compile Include="RecoveryTests\NodeFailureTests.cs" />
@@ -170,6 +169,7 @@
     <Compile Include="Tasks\AppDomainTask.cs" />
     <Compile Include="Tasks\StartJobTaskHelper.cs" />
     <Compile Include="FastJobParams.cs" />
+    <Compile Include="TestJobTimerParams.cs" />
     <Compile Include="TestJobParams.cs" />
     <Compile Include="JobQueueItem.cs" />
     <Compile Include="FunctionalTests\OneManagerAndOneNodeTests.cs" />

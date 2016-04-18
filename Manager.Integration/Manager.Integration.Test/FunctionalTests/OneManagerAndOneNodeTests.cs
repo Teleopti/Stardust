@@ -29,7 +29,9 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var startedTest = DateTime.UtcNow;
 
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
+			var createNewJobRequests =
+				JobHelper.GenerateLongRunningParamsRequests(1);
+
 			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
 			var timeout =
@@ -98,16 +100,16 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var endedTest = DateTime.UtcNow;
 
-			string description =
+			var description =
 				string.Format("Creates {0} CANCEL WRONG jobs with {1} manager and {2} nodes.",
-								createNewJobRequests.Count,
-								base.NumberOfManagers,
-								base.NumberOfNodes);
+				              createNewJobRequests.Count,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
+			                                  description,
+			                                  startedTest,
+			                                  endedTest);
 
 			LogMessage("Finished.");
 		}
@@ -199,16 +201,16 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var endedTest = DateTime.UtcNow;
 
-			string description =
+			var description =
 				string.Format("Creates {0} CANCEL jobs with {1} manager and {2} nodes.",
-								createNewJobRequests.Count,
-								base.NumberOfManagers,
-								base.NumberOfNodes);
+				              createNewJobRequests.Count,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
+			                                  description,
+			                                  startedTest,
+			                                  endedTest);
 
 			LogMessage("Finished.");
 		}
@@ -261,16 +263,16 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var endedTest = DateTime.UtcNow;
 
-			string description =
+			var description =
 				string.Format("Creates {0} FAILED jobs with {1} manager and {2} nodes.",
-								createNewJobRequests.Count,
-								base.NumberOfManagers,
-								base.NumberOfNodes);
+				              createNewJobRequests.Count,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
+			                                  description,
+			                                  startedTest,
+			                                  endedTest);
 
 			LogMessage("Finished.");
 		}
@@ -335,14 +337,14 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var endedTest = DateTime.UtcNow;
 
-			string description =
-				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.", 
-								createNewJobRequests.Count,
-								base.NumberOfManagers,
-								base.NumberOfNodes);
+			var description =
+				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
+				              createNewJobRequests.Count,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
+			                                  description,
 			                                  startedTest,
 			                                  endedTest);
 		}

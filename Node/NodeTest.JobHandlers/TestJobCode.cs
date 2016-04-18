@@ -5,11 +5,6 @@ namespace NodeTest.JobHandlers
 {
 	public class TestJobCode
 	{
-		private void sleep()
-		{
-			Thread.Sleep(TimeSpan.FromSeconds(10));
-		}
-
 		public void DoTheThing(TestJobParams message,
 		                       CancellationTokenSource cancellationTokenSource,
 		                       Action<string> progress)
@@ -34,10 +29,11 @@ namespace NodeTest.JobHandlers
 			}
 			else
 			{
-				sleep();
+				Thread.Sleep(TimeSpan.FromSeconds(5));
+
 				jobProgress.Text = "(" + message.Name + ") First job step done";
 				progress(jobProgress.Text);
-				sleep();
+
 				if (cancellationTokenSource.IsCancellationRequested)
 				{
 					jobProgress.Text = "Job " + message.Name + " has been cancelled.";
@@ -52,7 +48,9 @@ namespace NodeTest.JobHandlers
 					// -----------------------------------------------------------
 					jobProgress.Text = "(" + message.Name + ") Second job step done";
 					progress(jobProgress.Text);
-					sleep();
+
+					Thread.Sleep(TimeSpan.FromSeconds(5));
+
 					if (cancellationTokenSource.IsCancellationRequested)
 					{
 						jobProgress.Text = "Job " + message.Name + " has been cancelled.";
@@ -67,11 +65,10 @@ namespace NodeTest.JobHandlers
 						// -----------------------------------------------------------
 						jobProgress.Text = "(" + message.Name + ") Last job step done";
 						progress(jobProgress.Text);
+
 						// -----------------------------------------------------------
 						// Execution Finished.
 						// -----------------------------------------------------------
-
-						//jobDone
 					}
 				}
 			}

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -37,7 +38,7 @@ namespace Stardust.Manager
 		/// <param name="connectionString"></param>
 		/// <param name="retryPolicyProvider"></param>
 		public JobRepositoryWithLock(string connectionString,
-		                               RetryPolicyProvider retryPolicyProvider)
+		                             RetryPolicyProvider retryPolicyProvider)
 		{
 			_connectionString = connectionString;
 			_retryPolicy = retryPolicyProvider.GetPolicy();
@@ -100,13 +101,13 @@ namespace Stardust.Manager
 		public List<JobQueueItem> GetAllItemsInJobQueue()
 		{
 			const string selectAllItemsInJobQueueCommandText =
-									@"SELECT 
+				@"SELECT 
 										[JobId],
 										[Name],
 										[Type],
 										[Serialized],
 										[CreatedBy],
-										[Created],
+										[Created]
 									FROM [Stardust].[JobQueue]";
 
 			var listToReturn = new List<JobQueueItem>();
@@ -171,8 +172,8 @@ namespace Stardust.Manager
 		public void DeleteItemInJobQueueByJobId(Guid jobId)
 		{
 			const string deleteItemFromJobQueueItemCommandText =
-								"DELETE FROM [Stardust].[JobQueue] " +
-								"WHERE JobId = @JobId";
+				"DELETE FROM [Stardust].[JobQueue] " +
+				"WHERE JobId = @JobId";
 
 			try
 			{
@@ -205,9 +206,68 @@ namespace Stardust.Manager
 						  ,[Url]
 						  ,[Heartbeat]
 						  ,[Alive]
-					  FROM [Stardust].[WorkerNode]
-					  where Alive = 1";
+					  FROM [Stardust].[WorkerNode] WITH (NOLOCK) 
+					  WHERE Alive = 1";
+			
+			try
+			{
+				Monitor.Enter(_lockTryAssignJobToWorkerNode);
 
+				List<Uri> allAliveWorkerNodesUri;
+
+				using (var sqlConnection = new SqlConnection(_connectionString))
+				{
+					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
+
+					// --------------------------------------------------
+					// Get all alive worker nodes.
+					// --------------------------------------------------
+					var selectAllAliveWorkerNodesCommand =
+					new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection);
+
+					var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader();
+
+					if (!readerAliveWorkerNodes.HasRows)
+					{
+						readerAliveWorkerNodes.Close();
+						sqlConnection.Close();
+
+						return;
+					}
+
+					allAliveWorkerNodesUri = new List<Uri>();
+
+					var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
+
+					while (readerAliveWorkerNodes.Read())
+					{
+						allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
+					}
+
+					readerAliveWorkerNodes.Close();
+					readerAliveWorkerNodes.Dispose();
+
+					sqlConnection.Close();
+				}
+
+				if (allAliveWorkerNodesUri.Any())
+				{
+					foreach (var uri in allAliveWorkerNodesUri)
+					{
+						TryAssignJobToWorkerNodeWorker(httpSender, uri);
+					}
+				}
+			}
+			finally
+			{
+				Monitor.Exit(_lockTryAssignJobToWorkerNode);
+			}
+		}
+
+		private readonly object _lockTryAssignJobToWorkerNodeWorker = new object();
+
+		private void TryAssignJobToWorkerNodeWorker(IHttpSender httpSender, Uri availableNode)
+		{
 			var selectOneJobQueueItemCommandText =
 				@"SELECT Top 1  [JobId],
 								[Name],
@@ -215,7 +275,8 @@ namespace Stardust.Manager
 								[Type],
 								[Serialized],
 								[CreatedBy]
-				FROM [Stardust].[JobQueue]";
+				FROM [Stardust].[JobQueue] 
+				ORDER BY Created";
 
 			var insertIntoJobCommandText = @"INSERT INTO [Stardust].[Job]
 								   ([JobId]
@@ -243,39 +304,11 @@ namespace Stardust.Manager
 
 			try
 			{
-				Monitor.Enter(_lockTryAssignJobToWorkerNode);
+				//Monitor.Enter(_lockTryAssignJobToWorkerNodeWorker);
 
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
-
-					// --------------------------------------------------
-					// Get all alive worker nodes.
-					// --------------------------------------------------
-					var selectAllAliveWorkerNodesCommand =
-						new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection);
-
-					var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader();
-
-					if (!readerAliveWorkerNodes.HasRows)
-					{
-						readerAliveWorkerNodes.Close();
-						sqlConnection.Close();
-
-						return;
-					}
-
-					var allAliveWorkerNodesUri = new List<Uri>();
-
-					var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
-
-					while (readerAliveWorkerNodes.Read())
-					{
-						allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
-					}
-
-					readerAliveWorkerNodes.Close();
-					readerAliveWorkerNodes.Dispose();
 
 					// --------------------------------------------------
 					// Select one job defintion.
@@ -328,22 +361,15 @@ namespace Stardust.Manager
 						//------------------------------------------------
 						var taskPostJob = new Task<HttpResponseMessage>(() =>
 						{
-							foreach (var workerNodeUri in allAliveWorkerNodesUri)
-							{
-								var builderHelper = new NodeUriBuilderHelper(workerNodeUri);
-								var urijob = builderHelper.GetJobTemplateUri();
+							var builderHelper = new NodeUriBuilderHelper(availableNode);
+							var urijob = builderHelper.GetJobTemplateUri();
 
-								var response =
-									httpSender.PostAsync(urijob, jobDefinition).Result;
+							var response =
+								httpSender.PostAsync(urijob, jobDefinition).Result;
 
-								if (!response.IsSuccessStatusCode) continue;
+							response.Content = new StringContent(availableNode.ToString());
 
-								response.Content = new StringContent(workerNodeUri.ToString());
-
-								return response;
-							}
-
-							return new HttpResponseMessage(HttpStatusCode.NotFound);
+							return response;
 						});
 
 						taskPostJob.Start();
@@ -353,10 +379,9 @@ namespace Stardust.Manager
 
 						if (taskPostJob.IsCompleted)
 						{
-							//--------------------------------------------
-							// Success.
-							//--------------------------------------------
-							if (taskPostJob.Result.IsSuccessStatusCode)
+							// Success or bad request.
+							if (taskPostJob.Result.IsSuccessStatusCode ||
+							    taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
 							{
 								//----------------------------------------
 								// Insert into job.
@@ -377,8 +402,15 @@ namespace Stardust.Manager
 								commandInsertIntoJobHistory.Parameters.AddWithValue("@CreatedBy", createdBy);
 								commandInsertIntoJobHistory.Parameters.AddWithValue("@Created", created);
 								commandInsertIntoJobHistory.Parameters.AddWithValue("@Ended", DBNull.Value);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@Result", DBNull.Value);
 
+								if (taskPostJob.Result.IsSuccessStatusCode)
+								{
+									commandInsertIntoJobHistory.Parameters.AddWithValue("@Result", DBNull.Value);
+								}
+								else
+								{
+									commandInsertIntoJobHistory.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
+								}
 								commandInsertIntoJobHistory.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 
 								//----------------------------------------
@@ -395,28 +427,18 @@ namespace Stardust.Manager
 
 								deleteItemFromJobQueueCommandText.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 							}
-							else
+
+							sqlTransaction.Commit();
+
+							if (sentToWorkerNodeUri != null)
 							{
-								//--------------------------------------------
-								// Bad request.
-								//--------------------------------------------
-								if (taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
-								{
-								}
+								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
+								var urijob = builderHelper.GetUpdateJobUri(jobId);
+
+								var resp =
+									httpSender.PutAsync(urijob, null);
 							}
 						}
-
-						sqlTransaction.Commit();
-
-						if (sentToWorkerNodeUri != null)
-						{
-							var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-							var urijob = builderHelper.GetUpdateJobUri(jobId);
-
-							var resp =
-								httpSender.PutAsync(urijob, null);
-
-						}						
 					}
 				}
 			}
@@ -439,49 +461,7 @@ namespace Stardust.Manager
 
 			finally
 			{
-				Monitor.Exit(_lockTryAssignJobToWorkerNode);
-			}
-		}
-
-		private  void Retry(Action action, int numerOfTries =3)
-		{
-			int count = numerOfTries;
-
-			TimeSpan delay = TimeSpan.FromSeconds(1);
-
-			while (true)
-			{
-				try
-				{
-					action();
-
-					return;
-				}
-
-				catch (SqlException e)
-				{
-					--count;
-
-					if (count <= 0) throw;
-
-					if (e.Number == -2)
-					{
-						this.Log().Debug("Time out will retry.");
-					}
-					else
-					{
-						if (e.Number == 1205)
-						{
-							this.Log().Debug("Deadlock will retry.");
-						}
-						else
-						{
-							throw;
-						}
-					}
-				
-					Thread.Sleep(delay);
-				}
+				//Monitor.Exit(_lockTryAssignJobToWorkerNodeWorker);
 			}
 		}
 
@@ -696,7 +676,7 @@ namespace Stardust.Manager
 											  ,[Type]
 											  ,[SentToWorkerNodeUri]
 											  ,[Result]
-										  FROM [Stardust].[Job]";
+										  FROM [Stardust].[Job] WITH (NOLOCK)";
 
 			try
 			{
@@ -771,7 +751,7 @@ namespace Stardust.Manager
 											  ,[Type]
 											  ,[SentToWorkerNodeUri]
 											  ,[Result]
-										  FROM [ManagerDB].[Stardust].[Job]
+										  FROM [ManagerDB].[Stardust].[Job] WITH (NOLOCK)
 										  WHERE [Started] IS NOT NULL AND [Ended] IS NULL";
 
 			var jobs = new List<Job>();
@@ -837,7 +817,7 @@ namespace Stardust.Manager
 		{
 			const string selectCommandText = @"SELECT   
 											   DISTINCT([SentToWorkerNodeUri])
-											   FROM [ManagerDB].[Stardust].[Job]
+											   FROM [ManagerDB].[Stardust].[Job] WITH (NOLOCK)
 											   WHERE SentToWorkerNodeUri IS NOT NULL";
 
 
@@ -880,7 +860,7 @@ namespace Stardust.Manager
 		{
 			const string selectCommandText = @"SELECT   
 											   DISTINCT([SentToWorkerNodeUri])
-											   FROM [ManagerDB].[Stardust].[Job]
+											   FROM [ManagerDB].[Stardust].[Job] WITH (NOLOCK)
 											   WHERE [SentToWorkerNodeUri] IS NOT NULL AND 
 													 [Started] IS NOT NULL AND [Ended] IS NULL";
 
@@ -935,7 +915,7 @@ namespace Stardust.Manager
 											JobId, 
 											Created, 
 											Detail  
-										FROM [Stardust].[JobDetail]  
+										FROM [Stardust].[JobDetail] WITH (NOLOCK) 
 										WHERE JobId = @JobId";
 
 					var sqlCommand = new SqlCommand(selectCommandText);
@@ -981,6 +961,48 @@ namespace Stardust.Manager
 			}
 
 			return null;
+		}
+
+		private void Retry(Action action, int numerOfTries = 3)
+		{
+			var count = numerOfTries;
+
+			var delay = TimeSpan.FromSeconds(1);
+
+			while (true)
+			{
+				try
+				{
+					action();
+
+					return;
+				}
+
+				catch (SqlException e)
+				{
+					--count;
+
+					if (count <= 0) throw;
+
+					if (e.Number == -2)
+					{
+						this.Log().Debug("Time out will retry.");
+					}
+					else
+					{
+						if (e.Number == 1205)
+						{
+							this.Log().Debug("Deadlock will retry.");
+						}
+						else
+						{
+							throw;
+						}
+					}
+
+					Thread.Sleep(delay);
+				}
+			}
 		}
 	}
 }

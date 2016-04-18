@@ -272,11 +272,11 @@ namespace NodeTest
 
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
-			var actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
+			var actionResult = _nodeController.StartJob(Guid.NewGuid());
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
-						  HttpStatusCode.Conflict);
+						  HttpStatusCode.BadRequest);
 		}
 
 		[Test]
