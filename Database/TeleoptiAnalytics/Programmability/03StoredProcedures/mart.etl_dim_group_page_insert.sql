@@ -40,7 +40,7 @@ BEGIN
   where business_unit_code = @business_unit_code
   and NOT EXISTS (SELECT 1 
                      FROM [mart].[dim_group_page]
-                    WHERE group_page_code = @group_page_code)
+                    WHERE group_code = @group_code and business_unit_id = bu.business_unit_id)
 
 END
 
