@@ -158,6 +158,7 @@
     <Compile Include="Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="Analytics\AnalyticsPermission.cs" />
     <Compile Include="Analytics\AnalyticsPersonRepository.cs" />
+    <Compile Include="Analytics\AnalyticsTimeZone.cs" />
     <Compile Include="Analytics\AnalyticTeam.cs" />
     <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\Core\AspectAttribute.cs" />
@@ -238,6 +239,7 @@
     <Compile Include="Repositories\IAnalyticsDateRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionExecutionRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolderProvider.cs" />
+    <Compile Include="Repositories\IAnalyticsTimeZoneRepository.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizer.cs" />
     <Compile Include="Repositories\IAnalyticsBusinessUnitRepository.cs" />

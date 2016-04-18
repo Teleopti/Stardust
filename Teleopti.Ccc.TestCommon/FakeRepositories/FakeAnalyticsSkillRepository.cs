@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			fakeSkills = new List<AnalyticsSkill>();
 		}
 
-		public IList<AnalyticsSkill> Skills(int businessUnitId)
+		public IEnumerable<AnalyticsSkill> Skills(int businessUnitId)
 		{
 			return fakeSkills;
 		}
@@ -59,9 +60,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return skillSet == null ? null : (int?) skillSet.SkillsetId;
 		}
 
-		public void SetSkills(List<AnalyticsSkill> analyticsSkills)
+		public void SetSkills(IEnumerable<AnalyticsSkill> analyticsSkills)
 		{
-			fakeSkills = analyticsSkills;
+			fakeSkills = analyticsSkills.ToList();
 		}
 
 		public void SetSkillSets(List<AnalyticsSkillSet> list)
@@ -90,6 +91,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId)
 		{
 			return fakeFactAgentSkills.Where(a => a.PersonId == personId).ToList();
+		}
+
+		public void AddOrUpdateSkill(AnalyticsSkill analyticsSkill)
+		{
+			var existings = fakeSkills.FirstOrDefault(x => x.SkillCode == analyticsSkill.SkillCode);
+			if (existings != null)
+			{
+				existings.SkillName = analyticsSkill.SkillName;
+			}
+			else
+			{
+				fakeSkills.Add(analyticsSkill);
+			}
 		}
 	}
 }

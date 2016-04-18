@@ -210,6 +210,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodAnalyticsUpdaterHandlerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\UpdatePersonGroupsAnalyticsHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\UpdateSkillAnalyticsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdaterTest.cs" />

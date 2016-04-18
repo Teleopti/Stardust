@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IList<AnalyticsSkillSet> SkillSets();
 		int? SkillSetId(IList<AnalyticsSkill> skills);
-		IList<AnalyticsSkill> Skills(int businessUnitId);
+		IEnumerable<AnalyticsSkill> Skills(int businessUnitId);
 		int AddSkillSet(AnalyticsSkillSet analyticsSkillSet);
 		void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill);
 
@@ -15,5 +15,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddAgentSkill(int personId, int skillId, bool active, int businessUnitId);
 		void DeleteAgentSkillForPersonId(int personId);
 		IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId);
+		void AddOrUpdateSkill(AnalyticsSkill analyticsSkill);
 	}
 }

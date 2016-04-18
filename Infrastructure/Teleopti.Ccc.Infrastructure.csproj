@@ -408,6 +408,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTeamRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepository.cs" />
     <Compile Include="Repositories\Analytics\IntradayMonitorDataLoader.cs" />
     <Compile Include="Repositories\ExistingForecastRepository.cs" />
     <Compile Include="Repositories\IQueryExtensions.cs" />

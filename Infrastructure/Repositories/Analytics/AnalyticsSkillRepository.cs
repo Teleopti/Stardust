@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsSkillRepository : IAnalyticsSkillRepository
 	{
+		private readonly ICurrentDataSource _currentDataSource;
+
+		public AnalyticsSkillRepository(ICurrentDataSource currentDataSource)
+		{
+			_currentDataSource = currentDataSource;
+		}
+
 		public IList<AnalyticsSkillSet> SkillSets()
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
 					@"select 
@@ -34,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public int? SkillSetId(IList<AnalyticsSkill> skills)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var skillSetCode = string.Join(",", skills.Select(a => a.SkillId).OrderBy(a => a));
 				return uow.Session().CreateSQLQuery(
@@ -46,9 +52,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		public IList<AnalyticsSkill> Skills(int businessUnitId)
+		public IEnumerable<AnalyticsSkill> Skills(int businessUnitId)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
 					@"select 
@@ -73,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public int AddSkillSet(AnalyticsSkillSet analyticsSkillSet)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var insertAndUpdateDateTime = DateTime.Now;
 				var query = uow.Session().CreateSQLQuery(
@@ -99,7 +105,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void AddBridgeSkillsetSkill(AnalyticsBridgeSkillsetSkill analyticsBridgeSkillsetSkill)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var insertAndUpdateDateTime = DateTime.Now;
 				var query = uow.Session().CreateSQLQuery(
@@ -125,7 +131,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void AddAgentSkill(int personId, int skillId, bool active, int businessUnitId)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var query = uow.Session().CreateSQLQuery(
 					@"exec mart.[etl_fact_agent_skill_insert]
@@ -144,7 +150,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void DeleteAgentSkillForPersonId(int personId)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				var query = uow.Session().CreateSQLQuery(
 					@"exec mart.[etl_fact_agent_skill_delete]
@@ -157,7 +163,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IList<AnalyticsFactAgentSkill> GetFactAgentSkillsForPerson(int personId)
 		{
-			using (var uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(
 					@"SELECT 
@@ -176,10 +182,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
-		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
+		public void AddOrUpdateSkill(AnalyticsSkill analyticsSkill)
 		{
-			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
-			return identity.DataSource.Analytics;
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				var query = uow.Session().CreateSQLQuery(
+					@"exec mart.[etl_dim_skill_add_or_update]
+					@skill_code=:SkillCode,
+					@skill_name=:SkillName,
+					@time_zone_id=:TimeZoneId,
+					@forecast_method_code=:ForecastMethodCode,
+					@forecast_method_name=:ForecastMethodName,
+					@business_unit_id=:BusinessUnitId,
+					@datasource_update_date=:DatasourceUpdateDate,
+					@is_deleted=:IsDeleted")
+					.SetGuid("SkillCode", analyticsSkill.SkillCode)
+					.SetString("SkillName", analyticsSkill.SkillName)
+					.SetInt32("TimeZoneId", analyticsSkill.TimeZoneId)
+					.SetGuid("ForecastMethodCode", analyticsSkill.ForecastMethodCode)
+					.SetString("ForecastMethodName", analyticsSkill.ForecastMethodName)
+					.SetInt32("BusinessUnitId", analyticsSkill.BusinessUnitId)
+					.SetDateTime("DatasourceUpdateDate", analyticsSkill.DatasourceUpdateDate)
+					.SetBoolean("IsDeleted", analyticsSkill.IsDeleted)
+					;
+				query.ExecuteUpdate();
+			}
 		}
 	}
 }
