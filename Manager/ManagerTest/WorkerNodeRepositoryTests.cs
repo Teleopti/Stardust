@@ -39,11 +39,9 @@ namespace ManagerTest
 			node = WorkerNodeRepository.GetWorkerNodeByNodeId(_nodeUri1);
 			var beforeHeartbeat = node.Heartbeat;
 
-			Thread.Sleep(TimeSpan.FromSeconds(1)); // to create a difference between heartbeats
+			Thread.Sleep(TimeSpan.FromSeconds(2)); 
 
 			WorkerNodeRepository.RegisterHeartbeat(_nodeUri1.ToString(), true);
-
-			Thread.Sleep(TimeSpan.FromSeconds(1));  // to let the task that writes heartbeat finish
 
 			node = WorkerNodeRepository.GetWorkerNodeByNodeId(_nodeUri1);
 			var afterHeartbeat = node.Heartbeat;

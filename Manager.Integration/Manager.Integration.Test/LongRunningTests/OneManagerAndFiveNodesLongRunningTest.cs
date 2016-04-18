@@ -20,8 +20,12 @@ namespace Manager.Integration.Test.LongRunningTests
 	public class OneManagerAndFiveNodesLongRunningTest
 	{
 		private string ManagerDbConnectionString { get; set; }
+
+
 		private Task Task { get; set; }
+
 		private AppDomainTask AppDomainTask { get; set; }
+
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
 #if (DEBUG)

@@ -12,6 +12,7 @@ namespace NodeTest.JobHandlers
 		}
 
 		public string Name { get; private set; }
+
 		public TimeSpan Duration { get; set; }
 	}
 }

@@ -28,6 +28,7 @@ namespace ManagerTest
 		public FakeHttpSender HttpSender;
 
 		private DatabaseHelper _databaseHelper;
+
 		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
 		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
 
@@ -236,35 +237,10 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldNotRemoveARunningJobFromRepo()
-		{
-			var jobId = Guid.NewGuid();
-
-			var job = new JobQueueItem
-			{
-				Name = "Name",
-				Serialized = "Serialized",
-				Type = "Type",
-				CreatedBy = "ManagerTests",
-				JobId = jobId
-			};
-
-			JobRepository.AddItemToJobQueue(job);
-			NodeRepository.AddWorkerNode(new WorkerNode
-			{
-				Url = _nodeUri1
-			});
-			JobRepository.TryAssignJobToWorkerNode(HttpSender);
-			ThisNodeIsBusy(_nodeUri1.ToString());
-			Target.CancelJobByJobId(jobId);
-			JobRepository.GetAllItemsInJobQueue()
-				.Count.Should()
-				.Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldRemoveAQueuedJob()
 		{
+			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri1 });
+
 			var jobId = Guid.NewGuid();
 
 			var job = new JobQueueItem
@@ -277,7 +253,11 @@ namespace ManagerTest
 			};
 
 			JobRepository.AddItemToJobQueue(job);
+
+			JobRepository.TryAssignJobToWorkerNode(HttpSender);
+
 			Target.CancelJobByJobId(jobId);
+
 			JobRepository.GetAllItemsInJobQueue()
 				.Count.Should()
 				.Be.EqualTo(0);
@@ -512,29 +492,6 @@ namespace ManagerTest
 					})).Content;
 			newJobId.Should()
 				.Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldReturnJobHistoryFromJobId()
-		{
-			var job = new JobRequestModel
-			{
-				Name = "Name",
-				Serialized = "Ser",
-				Type = "Type",
-				CreatedBy = "ManagerTests"
-			};
-
-			var doJobResult = Target.AddItemToJobQueue(job);
-
-			var okNegotiatedDoJobResult = doJobResult as OkNegotiatedContentResult<Guid>;
-			var jobId = okNegotiatedDoJobResult.Content;
-
-			var getResult = Target.GetJobByJobId(jobId);
-
-			var okNegotiatedGetResult = getResult as OkNegotiatedContentResult<Job>;
-			var jobHistory = okNegotiatedGetResult.Content;
-			Assert.IsNotNull(jobHistory);
 		}
 
 		[Test]

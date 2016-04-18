@@ -48,15 +48,16 @@ namespace ManagerTest.Fakes
 			return Responses[0];
 		}
 
-		public Task<HttpResponseMessage> PutAsync(Uri url, object data)
+		public  Task<HttpResponseMessage> PutAsync(Uri url, object data)
 		{
-			throw new NotImplementedException();
+			return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
 		}
 
 		public Task<HttpResponseMessage> TryPostAsync(Uri url, object data)
 		{
-			throw new NotImplementedException();
+			return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
 		}
+
 #pragma warning disable 1998
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 #pragma warning restore 1998
@@ -65,6 +66,7 @@ namespace ManagerTest.Fakes
 
 			return new HttpResponseMessage(HttpStatusCode.OK);
 		}
+
 #pragma warning disable 1998
 		public async Task<HttpResponseMessage> GetAsync(Uri url)
 #pragma warning restore 1998
