@@ -1,26 +1,27 @@
-﻿using Teleopti.Ccc.Domain.Security.Principal;
+﻿using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class IntervalLengthFetcher : IIntervalLengthFetcher
 	{
-		//have a repository or do it self
+		private readonly ICurrentDataSource _currentDataSource;
+
+		public IntervalLengthFetcher(ICurrentDataSource currentDataSource)
+		{
+			_currentDataSource = currentDataSource;
+		}
+
 		public int IntervalLength
 		{
 			get
 			{
-				using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+				using (IStatelessUnitOfWork uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
 				{
 					return uow.Session().CreateSQLQuery(@"mart.sys_interval_length_get")
 						.UniqueResult<int>();
 				}
 			}
-		}
-		private IAnalyticsUnitOfWorkFactory statisticUnitOfWorkFactory()
-		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
-			return identity.DataSource.Analytics;
 		}
 	}
 }

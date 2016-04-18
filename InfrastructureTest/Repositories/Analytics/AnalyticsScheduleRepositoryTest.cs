@@ -4,29 +4,33 @@ using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure.Analytics;
+using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
+using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
-namespace Teleopti.Analytics.Etl.IntegrationTest
+namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	public class AnalyticsScheduleRepositoryTest //: DatabaseTest
+	public class AnalyticsScheduleRepositoryTest
 	{
 		private IAnalyticsScheduleRepository _target;
 		private AnalyticsDataFactory analyticsDataFactory;
 		private UtcAndCetTimeZones _timeZones;
 		private ExistingDatasources _datasource;
 		private const int businessUnitId = 12;
+		ICurrentDataSource currentDataSource;
 
 		[SetUp]
 		public void Setup()
 		{
-			
-			_target = StatisticRepositoryFactory.CreateAnalyticsSchedule();
-			SetupFixtureForAssembly.BeginTest();
+			currentDataSource = CurrentDataSource.Make();
+			_target = new AnalyticsScheduleRepository(currentDataSource);
 
 			analyticsDataFactory = new AnalyticsDataFactory();
 			_timeZones = new UtcAndCetTimeZones();
@@ -36,7 +40,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[TearDown]
 		public void TearDown()
 		{
-			SetupFixtureForAssembly.EndTest();
+			DataSourceHelper.ClearAnalyticsData();
 		}
 
 		[Test]
@@ -99,16 +103,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var cats = _target.ShiftCategories();
 			cats.Count.Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldLoadDates()
-		{
-			var weekDates = new CurrentWeekDates();
-			analyticsDataFactory.Setup(weekDates);
-			analyticsDataFactory.Persist();
-			var dates = _target.Dates();
-			dates.Count.Should().Be.EqualTo(7);
 		}
 
 		[Test]

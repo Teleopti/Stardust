@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -52,6 +53,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsSkillRepository.AddAgentSkill(1, 2, true, 1);
 
 			analyticsSkillRepository.AddAgentSkill(2, 2, true, 1);
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			DataSourceHelper.ClearAnalyticsData();
 		}
 
 		private void SetUpPerson()

@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -138,10 +139,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
+			_config.Cache().This<IAnalyticsDateRepository>(b => b
+				.CacheMethod(x => x.Dates())
+				);
+			builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
+
 			_config.Cache().This<IAnalyticsScheduleRepository>(b => b
 				.CacheMethod(x => x.Absences())
 				.CacheMethod(x => x.Activities())
-				.CacheMethod(x => x.Dates())
 				.CacheMethod(x => x.Scenarios())
 				.CacheMethod(x => x.ShiftCategories())
 				.CacheMethod(x => x.Overtimes())

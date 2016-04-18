@@ -76,7 +76,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AnalyticsScheduleRepositoryTest.cs" />
     <Compile Include="Bug25126.cs" />
     <Compile Include="DimPersonTests.cs" />
     <Compile Include="Bug25131.cs" />

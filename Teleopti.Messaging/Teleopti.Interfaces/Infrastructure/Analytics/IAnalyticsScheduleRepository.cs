@@ -9,7 +9,6 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 		void PersistFactScheduleBatch(IList<IFactScheduleRow> factScheduleRows);
 		void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount);
 		void DeleteFactSchedule(int date, int personId, int scenarioId);
-		IList<KeyValuePair<DateOnly, int>> Dates();
 
 		IList<IAnalyticsActivity> Activities();
 		IList<IAnalyticsAbsence> Absences();

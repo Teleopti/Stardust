@@ -71,7 +71,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			action(new ThisUnitOfWork(TestState.UnitOfWork));
 			TestState.UnitOfWork.PersistAll();
 		}
-		
+
 		public static void BeginTest()
 		{
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 						tenantUnitOfWorkManager.CommitAndDisposeCurrent();
 					});
 			DataSourceHelper.RestoreApplicationDatabase(123);
-      DataSourceHelper.ClearAnalyticsData();
+			DataSourceHelper.ClearAnalyticsData();
 			OpenUnitOfWork();
 		}
 

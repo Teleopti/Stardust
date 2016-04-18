@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -8,16 +9,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 {
 	public class AnalyticsFactScheduleDateHandler : IAnalyticsFactScheduleDateHandler
 	{
-		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
-			
-		public AnalyticsFactScheduleDateHandler(IAnalyticsScheduleRepository analyticsScheduleRepository)
+		private readonly IAnalyticsDateRepository _analyticsDateRepository;
+
+		public AnalyticsFactScheduleDateHandler(IAnalyticsDateRepository analyticsDateRepository)
 		{
-			_analyticsScheduleRepository = analyticsScheduleRepository;
+			_analyticsDateRepository = analyticsDateRepository;
 		}
 
 		public bool MapDateId(DateOnly date, out int dateId)
 		{
-			var dimDateList = _analyticsScheduleRepository.Dates();
+			var dimDateList = _analyticsDateRepository.Dates();
 			var datePair = dimDateList.SingleOrDefault(x => x.Key == date);
 			var noDateIdFound = new KeyValuePair<DateOnly, int>();
 			if (datePair.Key == noDateIdFound.Key)

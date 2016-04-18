@@ -401,6 +401,7 @@
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsDateRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionExecutionRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionRepository.cs" />
