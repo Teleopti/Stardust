@@ -112,7 +112,7 @@
 
 	<div class="con-row">
 	<div class="con-flex" ng-if="HasMonitorData">
-		<div class="panel slide-panel full-padding material-depth-1" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
+		<div class="panel slide-panel full-padding material-depth-1" ng-show="HasMonitorData">
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding">
 						<md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">
@@ -139,12 +139,12 @@
 
 	<div class="con-row">
 		<div class="con-flex" ng-cloak ng-if="!HasMonitorData">
-			<div class="panel full-padding material-depth-1 " ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
+			<div class="panel full-padding material-depth-1">
 			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}}: {{'NoDataAvailable'|translate}}</span>
 			</div>
 		</div>
 
-	<div ng-if="HasMonitorData" ng-cloak ng-hide="!selectedSkillArea.Name && !selectedSkill.Name" tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
+	<div ng-if="HasMonitorData" ng-cloak tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
 			<div class="sub-header">
 				<h2>{{'IncomingTraffic'|translate}}</h2>
 				<!--<div class="head-actions panel-menu">

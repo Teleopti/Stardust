@@ -254,6 +254,10 @@
 							}
 						}
 
+						if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestStatsTime === '--:--') {
+						    $scope.HasMonitorData = false;
+						}
+
 						var loadIntradayChart = function() {
 							$scope.chartHiddenLines = $scope.hiddenArray;
 							c3.generate({
