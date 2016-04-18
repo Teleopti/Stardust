@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var result = target.CreateLayoutBaseViewModel("title");
 
 			result.HasDayLightSaving.Should().Be.True();
-			result.DayLightSavingStart.Should().Be("2016-03-27 01:00:00");
-			result.DayLightSavingEnd.Should().Be("2016-10-30 02:00:00");
+			result.DayLightSavingStart.Should().Be("2016-03-27T00:00:00Z");
+			result.DayLightSavingEnd.Should().Be("2016-10-29T23:59:59Z");
 			result.DayLightSavingAdjustmentInMinute.Should().Be(60);
 		}
 	}

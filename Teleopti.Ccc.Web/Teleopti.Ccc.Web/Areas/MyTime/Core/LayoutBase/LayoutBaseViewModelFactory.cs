@@ -45,14 +45,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				Title = title,
 				FixedDate = fixedDate,
 				UserTimezoneOffsetMinute = (int) offset.TotalMinutes
-
 			};
+
+			;
 
 			if (dayLightSavingAdjustment != null)
 			{
 				returnValue.HasDayLightSaving = true;
-				returnValue.DayLightSavingStart = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dayLightSavingAdjustment.Start);
-				returnValue.DayLightSavingEnd = string.Format("{0:yyyy-MM-dd HH:mm:ss}", dayLightSavingAdjustment.End);
+				returnValue.DayLightSavingStart = string.Format("{0:yyyy-MM-ddTHH:mm:ssZ}",TimeZoneHelper.ConvertToUtc(dayLightSavingAdjustment.Start,_userTimeZone.TimeZone()));
+				returnValue.DayLightSavingEnd = string.Format("{0:yyyy-MM-ddTHH:mm:ssZ}",TimeZoneHelper.ConvertToUtc(dayLightSavingAdjustment.End.AddSeconds(-1),_userTimeZone.TimeZone()));
 				returnValue.DayLightSavingAdjustmentInMinute = (int) dayLightSavingAdjustment.Delta.TotalMinutes;
 			}
 
