@@ -84,10 +84,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy
 
 		public void RemoveDataSource(string tenantName)
 		{
-			// shouldnt this dispose?
 			lock (dataSourceListLocker)
 			{
-				DataSources.Remove(tenantName);
+				IDataSource ds;
+				if (DataSources.TryGetValue(tenantName, out ds))
+				{
+					DataSources.Remove(tenantName);
+					ds.Dispose();
+				}
 			}
 		}
 
