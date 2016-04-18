@@ -125,7 +125,7 @@
 									</div>
 									<div class="con-row">
 										<div class="con-flex">
-											<div class="wfm-chart" id="myChart"></div>
+											<div class="wfm-chart" id="intradayChart"></div>
 										</div>
 									</div>
 								</md-content>
@@ -138,13 +138,13 @@
 	</div>
 
 	<div class="con-row">
-		<div class="con-flex" ng-cloak ng-show="!HasMonitorData">
+		<div class="con-flex" ng-cloak ng-if="!HasMonitorData">
 			<div class="panel full-padding material-depth-1 " ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
 				<i class="mdi mdi-alert"></i> <span class="text-warning">No data available for {{selectedItem.Name}}</span>
 			</div>
 		</div>
 
-	<div ng-show="HasMonitorData" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name" tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
+	<div ng-if="HasMonitorData" ng-cloak ng-hide="!selectedSkillArea.Name && !selectedSkill.Name" tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
 			<div class="sub-header">
 				<h2>Incoming</h2>
 				<!--<div class="head-actions panel-menu">

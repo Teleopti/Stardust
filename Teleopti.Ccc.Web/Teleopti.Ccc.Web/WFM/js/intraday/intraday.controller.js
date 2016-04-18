@@ -152,7 +152,7 @@
 					    $scope.actualAverageHandleTimeSeries.splice(0, 0, 'AHT');
 					    $scope.HasMonitorData = true;
 					    loadIntradayChart();
-					}				
+					}
 				};
 
 				var pollSkillMonitorData = function () {
@@ -254,7 +254,7 @@
 						var loadIntradayChart = function() {
 							$scope.chartHiddenLines = $scope.hiddenArray;
 							c3.generate({
-								bindto: '#myChart',
+								bindto: '#intradayChart',
 								data: {
 									x:'x',
 									columns: [
