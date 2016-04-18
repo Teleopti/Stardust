@@ -14,7 +14,6 @@ namespace Teleopti.Interfaces.Infrastructure
 	public interface IUnitOfWorkFactory : IDisposable
 	{
 		string Name { get; }
-		long? NumberOfLiveUnitOfWorks { get; }
 		IAuditSetter AuditSetting { get; }
 		string ConnectionString { get; }
 

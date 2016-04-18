@@ -42,17 +42,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			get { return _factory; }
 		}
 
-		public long? NumberOfLiveUnitOfWorks
-		{
-			get
-			{
-				var statistics = _factory.Statistics;
-				if(statistics.IsStatisticsEnabled)
-					return statistics.SessionOpenCount - statistics.SessionCloseCount;
-				return null;
-			}
-		}
-
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
 		{
 			return new NHibernateStatelessUnitOfWork(_factory.OpenStatelessSession());

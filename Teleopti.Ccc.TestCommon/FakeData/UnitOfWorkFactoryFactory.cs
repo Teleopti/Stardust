@@ -65,11 +65,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 get { return _name; }
             }
 
-            public long? NumberOfLiveUnitOfWorks
-            {
-                get { return null; }
-            }
-
             public void Dispose()
             {
             }

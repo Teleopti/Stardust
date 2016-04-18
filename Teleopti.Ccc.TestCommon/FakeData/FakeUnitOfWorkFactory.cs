@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		public string Name { get; set; }
-		public long? NumberOfLiveUnitOfWorks { get; set; }
 		public IAuditSetter AuditSetting { get; set; }
 		public string ConnectionString { get; set; }
 		
