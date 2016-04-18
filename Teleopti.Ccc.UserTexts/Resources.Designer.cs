@@ -12265,15 +12265,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incoming traffic.
-        /// </summary>
-        public static string IncomingTraffic {
-            get {
-                return ResourceManager.GetString("IncomingTraffic", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Increase decimals.
         /// </summary>
         public static string IncreaseDecimals {
@@ -29304,15 +29295,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ToggleDateSelection {
             get {
                 return ResourceManager.GetString("ToggleDateSelection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Toggle included skills.
-        /// </summary>
-        public static string ToggleIncludedSkills {
-            get {
-                return ResourceManager.GetString("ToggleIncludedSkills", resourceCulture);
             }
         }
         
