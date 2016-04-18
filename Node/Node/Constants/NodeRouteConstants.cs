@@ -8,6 +8,8 @@
 
 		public const string CancelJob = "job/" + JobIdOptionalParameter;
 
+		public const string UpdateJob = "job/" + JobIdOptionalParameter;
+
 		public const string IsAlive = "ping";
 	}
 }

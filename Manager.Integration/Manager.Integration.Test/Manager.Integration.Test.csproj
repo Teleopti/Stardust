@@ -157,7 +157,7 @@
     <Compile Include="RecoveryTests\NodeFailureTests.cs" />
     <Compile Include="Notifications\NodeStatusNotifier.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
-    <Compile Include="LoadTests\OneManagerAndFiveNodesLoadTests.cs" />
+    <Compile Include="LoadTests\OneManagerAndSixNodesLoadTests.cs" />
     <Compile Include="FunctionalTests\OneManagerAndZeroNodesTests.cs" />
     <Compile Include="LongRunningJobParams.cs" />
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />

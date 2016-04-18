@@ -18,7 +18,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.LoadTests
 {
 	[TestFixture]
-	public class OneManagerAndFiveNodesLoadTests
+	public class OneManagerAndSixNodesLoadTests
 	{
 		private string ManagerDbConnectionString { get; set; }
 		private Task Task { get; set; }
@@ -26,7 +26,7 @@ namespace Manager.Integration.Test.LoadTests
 		private CancellationTokenSource CancellationTokenSource { get; set; }
 
 		private const int NumberOfManagers = 1;
-		private const int NumberOfNodes = 5;
+		private const int NumberOfNodes = 6;
 
 #if (DEBUG)
 		private const bool ClearDatabase = true;
@@ -93,6 +93,7 @@ namespace Manager.Integration.Test.LoadTests
 			}
 		}
 
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
@@ -104,7 +105,7 @@ namespace Manager.Integration.Test.LoadTests
 
 			var startedTest = DateTime.UtcNow;
 
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(50);
+			var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(50);
 
 			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
@@ -180,7 +181,7 @@ namespace Manager.Integration.Test.LoadTests
 			var endedTest = DateTime.UtcNow;
 
 			string description =
-				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
+				string.Format("Creates {0} FAST jobs with {1} manager and {2} nodes.",
 								createNewJobRequests.Count,
 								NumberOfManagers,
 								NumberOfNodes);

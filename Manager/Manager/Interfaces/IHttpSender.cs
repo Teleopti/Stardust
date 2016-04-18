@@ -9,6 +9,9 @@ namespace Stardust.Manager.Interfaces
 		Task<HttpResponseMessage> PostAsync(Uri url,
 		                                    object data);
 
+		Task<HttpResponseMessage> PutAsync(Uri url,
+											object data);
+
 		Task<HttpResponseMessage> DeleteAsync(Uri url);
 
 		Task<HttpResponseMessage> GetAsync(Uri url);

@@ -286,7 +286,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			LogMessage("Start.");
 
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(10);
+			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 
 			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 

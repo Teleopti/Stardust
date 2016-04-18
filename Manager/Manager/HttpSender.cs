@@ -12,7 +12,42 @@ namespace Stardust.Manager
 {
     public class HttpSender : IHttpSender
     {
-        /// <summary>
+		public async Task<HttpResponseMessage> PutAsync(Uri url,
+														 object data)
+		{
+			this.Log().DebugWithLineNumber("Start.");
+
+			try
+			{
+				using (var client = new HttpClient())
+				{
+					client.DefaultRequestHeaders.Accept.Clear();
+					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+					var sez = JsonConvert.SerializeObject(data);
+
+					var response =
+						await client.PutAsync(url,
+											   new StringContent(sez,
+																 Encoding.Unicode,
+																 "application/json"))
+							.ConfigureAwait(false);
+
+					this.Log().DebugWithLineNumber("Finished.");
+
+					return response;
+				}
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message,
+												 exp);
+
+				throw;
+			}
+		}
+
+		/// <summary>
 		/// </summary>
 		/// <param name="url"></param>
 		/// <param name="data"></param>

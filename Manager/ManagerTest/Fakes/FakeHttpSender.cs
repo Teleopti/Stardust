@@ -48,6 +48,11 @@ namespace ManagerTest.Fakes
 			return Responses[0];
 		}
 
+		public Task<HttpResponseMessage> PutAsync(Uri url, object data)
+		{
+			throw new NotImplementedException();
+		}
+
 		public Task<HttpResponseMessage> TryPostAsync(Uri url, object data)
 		{
 			throw new NotImplementedException();

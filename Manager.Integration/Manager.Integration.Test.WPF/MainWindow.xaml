@@ -807,6 +807,7 @@
                       Command="{Binding ToggleRefreshCommand}"
                       IsChecked="{Binding RefreshEnabled, Mode=OneWay}"
                       IsThreeState="True" />
+        
         <ProgressBar Grid.Row="0"
                      Grid.Column="0"
                      Maximum="5"
@@ -814,6 +815,18 @@
                      BorderThickness="0"
                      Margin="0,5"
                      Background="{x:Null}" />
+
+        <TextBlock Grid.Row="0"
+                   Foreground="#FFCEDBF7"
+                   Text="Reloading data ..."
+                   Grid.Column="0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="10"
+                   Margin="10,0,0,0">
+
+        </TextBlock>
+
         <Button x:Name="button"
                 Content="Create New Job"
                 Grid.Column="2"

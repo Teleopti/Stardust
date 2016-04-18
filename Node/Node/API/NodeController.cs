@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Results;
 using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Stardust.Node.Constants;
@@ -31,15 +32,17 @@ namespace Stardust.Node.API
 
 		private NodeConfiguration NodeConfiguration { get; set; }
 
+
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
-		public IHttpActionResult StartJob(JobQueueItemEntity jobQueueItemEntity)
+		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
 			var isJobToDoValidObject = ValidateObject(jobQueueItemEntity);
+
 			if (isJobToDoValidObject.IsBadRequest)
 			{
 				return BadRequest(isJobToDoValidObject.Message);
 			}
-			
+
 			var isValidRequest = _workerWrapper.ValidateStartJob(jobQueueItemEntity);
 			if (isValidRequest.IsBadRequest)
 			{
@@ -51,18 +54,55 @@ namespace Stardust.Node.API
 				return Conflict();
 			}
 
-			Logger.InfoWithLineNumber("Received Start Job from Manager. JobId: " + jobQueueItemEntity.JobId);
-
 			Task.Factory.StartNew(() =>
 			{
+				var task=_workerWrapper.CreateTimeoutCurrentMessageTask(jobQueueItemEntity);
+
+				try
+				{
+					task.Start();
+				}
+
+				catch (Exception)
+				{				
+				}				
+			});
+
+			return Ok();
+		}
+
+		[HttpPut, AllowAnonymous, Route(NodeRouteConstants.UpdateJob)]
+		public IHttpActionResult StartJob(Guid jobId)
+		{
+			if (jobId == Guid.Empty)
+			{
+				return BadRequest("Invalid job id.");
+			}
+
+			_workerWrapper.CancelTimeoutCurrentMessageTask();
+
+			var currentMessage = _workerWrapper.GetCurrentMessageToProcess();
+
+			if (currentMessage == null)
+			{
+				return BadRequest("Current message has timed out.");
+			}
+
+			if (currentMessage.JobId != jobId)
+			{
+				return BadRequest("Current message job id does not match with job id argument.");
+			}
+
+			Task.Factory.StartNew(() =>
+			{				
 				var startJobMessage = string.Format("{0} : Starting job ( jobId, jobName ) : ( {1}, {2} )",
 				                                    _workerWrapper.WhoamI,
-				                                    jobQueueItemEntity.JobId,
-				                                    jobQueueItemEntity.Name);
+													currentMessage.JobId,
+													currentMessage.Name);
 
 				Logger.DebugWithLineNumber(startJobMessage);
 
-				_workerWrapper.StartJob(jobQueueItemEntity);
+				_workerWrapper.StartJob(currentMessage);
 			});
 
 			return Ok();
@@ -80,7 +120,11 @@ namespace Stardust.Node.API
 
 				if (enumerable.Any())
 				{
-					return new ObjectValidationResult {IsBadRequest = true, Message = enumerable.First().ErrorMessage};
+					return new ObjectValidationResult
+					{
+						IsBadRequest = true,
+						Message = enumerable.First().ErrorMessage
+					};
 				}				
 			}
 
@@ -91,7 +135,11 @@ namespace Stardust.Node.API
 		{
 			if (jobId == Guid.Empty)
 			{
-				return new ObjectValidationResult {IsBadRequest = true, Message = JobIdIsInvalid};
+				return new ObjectValidationResult
+				{
+					IsBadRequest = true,
+					Message = JobIdIsInvalid
+				};
 			}
 
 			return new ObjectValidationResult();

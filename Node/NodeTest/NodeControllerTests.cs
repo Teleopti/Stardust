@@ -140,7 +140,13 @@ namespace NodeTest
 				Serialized = "Serialized data"
 			};
 
-			var actionResult = _nodeController.StartJob(_jobQueueItemEntity);
+			var actionResult = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
+
+			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
+							  .Result.StatusCode ==
+						  HttpStatusCode.OK);
+
+			actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
@@ -170,7 +176,9 @@ namespace NodeTest
 				Request = new HttpRequestMessage()
 			};
 
-			_nodeController.StartJob(_jobQueueItemEntity);
+			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+
+			_nodeController.StartJob(_jobQueueItemEntity.JobId);
 
 			_trySendJobDetailToManagerTimerFake.WaitHandle.Wait(1500);
 
@@ -225,7 +233,7 @@ namespace NodeTest
 			};
 
 
-			var actionResult = _nodeController.StartJob(null);
+			var actionResult = _nodeController.PrepareToStartJob(null);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
@@ -262,9 +270,9 @@ namespace NodeTest
 				Type = "NodeTest.JobHandlers.TestJobParams"
 			};
 
-			_nodeController.StartJob(_jobQueueItemEntity);
+			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
-			var actionResult = _nodeController.StartJob(jobToDo2);
+			var actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
@@ -288,11 +296,18 @@ namespace NodeTest
 				Request = new HttpRequestMessage()
 			};
 
-			var actionResult = _nodeController.StartJob(_jobQueueItemEntity);
+			var actionResult = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
 						  HttpStatusCode.OK);
+
+			actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
+
+			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
+							  .Result.StatusCode ==
+						  HttpStatusCode.OK);
+
 		}
 	}
 }

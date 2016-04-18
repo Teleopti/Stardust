@@ -324,7 +324,7 @@ namespace Stardust.Manager
 						reader.Dispose();
 
 						//------------------------------------------------
-						// POST message.
+						// POST message to prepare for a job.
 						//------------------------------------------------
 						var taskPostJob = new Task<HttpResponseMessage>(() =>
 						{
@@ -349,6 +349,8 @@ namespace Stardust.Manager
 						taskPostJob.Start();
 						taskPostJob.Wait();
 
+						string sentToWorkerNodeUri = null;
+
 						if (taskPostJob.IsCompleted)
 						{
 							//--------------------------------------------
@@ -359,7 +361,7 @@ namespace Stardust.Manager
 								//----------------------------------------
 								// Insert into job.
 								//----------------------------------------
-								var sentToWorkerNodeUri = taskPostJob.Result.Content.ContentToString();
+								sentToWorkerNodeUri = taskPostJob.Result.Content.ContentToString();
 
 								var commandInsertIntoJobHistory = new SqlCommand(insertIntoJobCommandText, sqlConnection)
 								{
@@ -405,13 +407,23 @@ namespace Stardust.Manager
 						}
 
 						sqlTransaction.Commit();
+
+						if (sentToWorkerNodeUri != null)
+						{
+							var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
+							var urijob = builderHelper.GetUpdateJobUri(jobId);
+
+							var resp =
+								httpSender.PutAsync(urijob, null);
+
+						}						
 					}
 				}
 			}
 
 			catch (SqlException exp)
 			{
-				if (exp.Number == -2) //Timeout
+				if (exp.Number == -2 || exp.Number == 1205) //Timeout
 				{
 					this.Log().InfoWithLineNumber(exp.Message);
 				}
@@ -428,6 +440,48 @@ namespace Stardust.Manager
 			finally
 			{
 				Monitor.Exit(_lockTryAssignJobToWorkerNode);
+			}
+		}
+
+		private  void Retry(Action action, int numerOfTries =3)
+		{
+			int count = numerOfTries;
+
+			TimeSpan delay = TimeSpan.FromSeconds(1);
+
+			while (true)
+			{
+				try
+				{
+					action();
+
+					return;
+				}
+
+				catch (SqlException e)
+				{
+					--count;
+
+					if (count <= 0) throw;
+
+					if (e.Number == -2)
+					{
+						this.Log().Debug("Time out will retry.");
+					}
+					else
+					{
+						if (e.Number == 1205)
+						{
+							this.Log().Debug("Deadlock will retry.");
+						}
+						else
+						{
+							throw;
+						}
+					}
+				
+					Thread.Sleep(delay);
+				}
 			}
 		}
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net;
@@ -193,6 +194,43 @@ namespace Stardust.Node.Workers
 
 				return new ObjectValidationResult();
 			}
+		}
+
+		private CancellationTokenSource CurrentMessageTimeoutTaskCancellationTokenSource { get; set; }
+
+		public void CancelTimeoutCurrentMessageTask()
+		{
+			if (CurrentMessageTimeoutTaskCancellationTokenSource != null)
+			{
+				CurrentMessageTimeoutTaskCancellationTokenSource.Cancel();
+			}
+		}
+
+		public Task CreateTimeoutCurrentMessageTask(JobQueueItemEntity jobQueueItemEntity)
+		{
+			CurrentMessageToProcess = jobQueueItemEntity;
+
+			CurrentMessageTimeoutTaskCancellationTokenSource = new CancellationTokenSource();
+
+			return new Task(() =>
+			{
+				Stopwatch stopwatch = new Stopwatch();
+				stopwatch.Start();
+
+				while (stopwatch.Elapsed.Seconds <= 60)
+				{
+					if (IsCancellationRequested)
+					{
+						CurrentMessageTimeoutTaskCancellationTokenSource.Token.ThrowIfCancellationRequested();
+					}
+
+					Thread.Sleep(TimeSpan.FromSeconds(5));
+				}
+
+				// Current message timed out.
+				CurrentMessageToProcess = null;
+
+			}, CurrentMessageTimeoutTaskCancellationTokenSource.Token);			
 		}
 
 		public void StartJob(JobQueueItemEntity jobQueueItemEntity)

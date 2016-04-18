@@ -1,22 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net.Config;
-using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
-using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.Validators;
+using Manager.IntegrationTest.Console.Host.Helpers;
+using Manager.IntegrationTest.Console.Host.Interfaces;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.LongRunningTests
 {
-	[TestFixture]
+	[TestFixture, Ignore]
 	public class OneManagerAndFiveNodesLongRunningTest
 	{
 		private string ManagerDbConnectionString { get; set; }
@@ -37,6 +37,9 @@ namespace Manager.Integration.Test.LongRunningTests
 		{
 			this.Log().DebugWithLineNumber(message);
 		}
+
+		private const int NumberOfManagers = 2;
+		private const int NumberOfNodes = 6;
 
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
@@ -59,10 +62,11 @@ namespace Manager.Integration.Test.LongRunningTests
 
 			AppDomainTask = new AppDomainTask(BuildMode);
 
-			Task = AppDomainTask.StartTask(numberOfManagers: 1,
-			                               numberOfNodes: 10,
+			Task = AppDomainTask.StartTask(numberOfManagers: NumberOfManagers,
+			                               numberOfNodes: NumberOfNodes,
 			                               useLoadBalancerIfJustOneManager: true,
 			                               cancellationTokenSource: CancellationTokenSource);
+
 			Thread.Sleep(TimeSpan.FromSeconds(2));
 			LogMessage("Finished TestFixtureSetUp");
 		}
@@ -89,6 +93,7 @@ namespace Manager.Integration.Test.LongRunningTests
 			}
 		}
 
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
@@ -105,7 +110,7 @@ namespace Manager.Integration.Test.LongRunningTests
 			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
 			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(10,
+			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(NumberOfNodes,
 			                                                      sqlNotiferCancellationTokenSource,
 			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
 			task.Start();
@@ -115,124 +120,86 @@ namespace Manager.Integration.Test.LongRunningTests
 
 			LogMessage("All nodes has started.");
 
+			var mangerUriBuilder = new ManagerUriBuilder();
+			var uri = mangerUriBuilder.GetStartJobUri();
 
-			Task task1 = new Task(() =>
-			{
-				int loop = 1;
+			var createdBy = SecurityHelper.GetLoggedInUser();
 
-				while (loop <= 5000)
-				{
-					loop++;
+			IHttpSender httpSender = new HttpSender();
 
-					//---------------------------------------------
-					// Create jobs.
-					//---------------------------------------------
-					var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(10);
-
-					var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-																					StatusConstants.SuccessStatus,
-																					StatusConstants.DeletedStatus,
-																					StatusConstants.FailedStatus,
-																					StatusConstants.CanceledStatus);
-
-
-					var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-
-					foreach (var jobRequestModel in createNewJobRequests)
-					{
-						var jobManagerTaskCreator =
-							new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-
-						jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-
-						jobManagerTaskCreators.Add(jobManagerTaskCreator);
-					}
-
-					//---------------------------------------------
-					// Execute all jobs. 
-					//---------------------------------------------
-					var startJobTaskHelper = new StartJobTaskHelper();
-
-					var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-																				 CancellationTokenSource,
-																				 TimeSpan.FromMilliseconds(100));
-
-					var timeout =
-						JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
-
-					checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-				}
-
-			});
-
-			Task task2 = new Task(() =>
-			{
-				int loop = 1;
-
-				while (loop <= 5000)
-				{
-					loop++;
-
-					//---------------------------------------------
-					// Create jobs.
-					//---------------------------------------------
-					var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(5);
-
-					var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-																					StatusConstants.SuccessStatus,
-																					StatusConstants.DeletedStatus,
-																					StatusConstants.FailedStatus,
-																					StatusConstants.CanceledStatus);
-
-
-					var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-
-					foreach (var jobRequestModel in createNewJobRequests)
-					{
-						var jobManagerTaskCreator =
-							new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-
-						jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-
-						jobManagerTaskCreators.Add(jobManagerTaskCreator);
-					}
-
-					//---------------------------------------------
-					// Execute all jobs. 
-					//---------------------------------------------
-					var startJobTaskHelper = new StartJobTaskHelper();
-
-					var taskHelper = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-																				 CancellationTokenSource,
-																				 TimeSpan.FromMilliseconds(100));
-
-					var timeout =
-						JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count);
-
-					checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-				}
-
-			});
+			Task<int> task1 = new Task<int>(() => GenerateJobs(createdBy, uri, httpSender));
+			Task<int> task2 = new Task<int>(() => GenerateJobs(createdBy, uri, httpSender));
 
 			task1.Start();
 			task2.Start();
 
 			Task.WaitAll(task1, task2);
 
+			Thread.Sleep(TimeSpan.FromHours(2));
 
 			var endedTest = DateTime.UtcNow;
 
-			string description =
+			var description =
 				string.Format("Creates {0} FAST jobs with {1} manager and {2} nodes.",
-								50000,
-								1,
-								10);
+				              task1.Result + task2.Result ,
+							  NumberOfManagers,
+							  NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
+			                                  description,
+			                                  startedTest,
+			                                  endedTest);
+		}
 
+		private int GenerateJobs(string createdBy, Uri uri, IHttpSender httpSender)
+		{
+			var loop = 1;
+
+			while (loop <= 5000)
+			{
+				loop++;
+
+				var fastJobParams = new FastJobParams("Loop " + loop);
+
+				var fastJobParamsToJson = JsonConvert.SerializeObject(fastJobParams);
+
+				var jobQueueItem = new JobQueueItem
+				{
+					Name = "Job Name " + loop,
+					Serialized = fastJobParamsToJson,
+					Type = "NodeTest.JobHandlers.FastJobParams",
+					CreatedBy = createdBy
+				};
+
+				var createNewJobToManagerSucceeded = false;
+
+				while (!createNewJobToManagerSucceeded)
+				{
+					this.Log().DebugWithLineNumber(
+						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobQueueItem.Name + " )");
+					try
+					{
+						var response = httpSender.PostAsync(uri, jobQueueItem).Result;
+
+						createNewJobToManagerSucceeded = response.IsSuccessStatusCode;
+					}
+
+					catch
+					{
+						createNewJobToManagerSucceeded = false;
+
+						this.Log().WarningWithLineNumber(
+							"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
+							jobQueueItem.Name + " ).");
+
+						Thread.Sleep(TimeSpan.FromSeconds(1));
+					}
+
+					Thread.Sleep(TimeSpan.FromSeconds(1));
+				}
+			}
+
+			return loop;
 		}
 	}
 }
