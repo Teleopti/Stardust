@@ -1,41 +1,22 @@
 ﻿using NUnit.Framework;
-using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
-	[SetUpFixture]
+	[TestFixture]
 	public class ExternalLogOnAssemblerTest
 	{
-		private ExternalLogOnAssembler _externalLogOnAssembler;
-		private IExternalLogOn _externalLogOn;
-		private MockRepository _mockRepository;
-		
-		[SetUp]
-		public void Setup()
-		{
-			_mockRepository = new MockRepository();
-			_externalLogOnAssembler = new ExternalLogOnAssembler();
-			_externalLogOn = _mockRepository.StrictMock<IExternalLogOn>();
-		}
-
 		[Test]
 		public void ShouldCreateDtoFromEntity()
 		{
-			using (_mockRepository.Record())
-			{
-				Expect.Call(_externalLogOn.AcdLogOnOriginalId).Return("OriginalId");
-				Expect.Call(_externalLogOn.AcdLogOnName).Return("LogOnName");
-			}
+			var externalLogOnAssembler = new ExternalLogOnAssembler();
+			var externalLogOn = new ExternalLogOn(1, 2, "OriginalId", "LogOnName", true);
 
-			using (_mockRepository.Playback())
-			{
-				var externalLogonDto = _externalLogOnAssembler.DomainEntityToDto(_externalLogOn);
+			var externalLogonDto = externalLogOnAssembler.DomainEntityToDto(externalLogOn);
 
-				Assert.IsNotNull(externalLogonDto.AcdLogOnOriginalId);
-				Assert.IsNotNull(externalLogonDto.AcdLogOnName);
-			}
+			Assert.IsNotNull(externalLogonDto.AcdLogOnOriginalId);
+			Assert.IsNotNull(externalLogonDto.AcdLogOnName);
 		}
 	}
 }
