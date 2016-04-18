@@ -163,6 +163,7 @@
     <Compile Include="AssemblersTest\ShiftTradeSwapDetailAssemblerTest.cs" />
     <Compile Include="AssemblersTest\ShiftTradeRequestAssemblerTest.cs" />
     <Compile Include="AssemblersTest\StudentAvailabilityAssemblerTest.cs" />
+    <Compile Include="AssemblersTest\TestCultureProvider.cs" />
     <Compile Include="AssemblersTest\TextRequestAssemblerTest.cs" />
     <Compile Include="AssemblersTest\PersonRequestAssemblerTest.cs" />
     <Compile Include="AssemblersTest\PersonAbsenceAssemblerTest.cs" />

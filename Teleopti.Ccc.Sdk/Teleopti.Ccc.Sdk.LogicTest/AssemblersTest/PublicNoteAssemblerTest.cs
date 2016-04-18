@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
 		    var publicNoteDomain =
 			    new PublicNote(personDomain, date, new Scenario("Default scenario"), "Work harder!").WithId();
-		    var publicNoteDto = new PublicNoteDto {Id = publicNoteDomain.Id};
-
-		    var repository = new FakePublicNoteRepository();
-
+			var repository = new FakePublicNoteRepository();
+			repository.Add(publicNoteDomain);
+			var publicNoteDto = new PublicNoteDto {Id = publicNoteDomain.Id};
+			
 		    var personRepository = new FakePersonRepository();
 		    var absenceAssembler = new AbsenceAssembler(new FakeAbsenceRepository());
 		    var shiftCategoryRepository = new FakeShiftCategoryRepository();
@@ -79,8 +79,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 				    dayOffAssembler, activityAssembler,
 				    absenceAssembler), new PersonAccountUpdaterDummy(),
 			    new TenantPeopleLoader(new FakeTenantLogonDataManager()));
-			repository.Add(publicNoteDomain);
-
+			
 		    var target = new PublicNoteAssembler(repository, personAssembler);
 		    var domainEntity = target.DtoToDomainEntity(publicNoteDto);
 		    Assert.IsNotNull(domainEntity);

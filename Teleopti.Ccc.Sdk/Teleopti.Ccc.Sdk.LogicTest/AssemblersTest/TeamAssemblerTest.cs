@@ -1,11 +1,10 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
@@ -13,54 +12,42 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     [TestFixture]
     public class TeamAssemblerTest
     {
-        private TeamAssembler _target;
-        private ITeam _teamDomain;
-        private TeamDto _teamDto;
-        private MockRepository _mocks;
-        private ITeamRepository _teamRep;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocks=new MockRepository();
-            _teamRep = _mocks.StrictMock<ITeamRepository>();
-            _target = new TeamAssembler(_teamRep);
-
-            // Create domain object
-            _teamDomain = new Team
-                              {
-                                  Description = new Description("Team Stockholm", "TS"),
-                                  Site = new Site("Europe")
-                                 };
-            _teamDomain.SetId(Guid.NewGuid());
-
-            // Create Dto object
-			_teamDto = new TeamDto { Description = _teamDomain.Description.Name, Id = _teamDomain.Id};
-        }
-
         [Test]
         public void VerifyDomainEntityToDto()
         {
-            TeamDto teamDto = _target.DomainEntityToDto(_teamDomain);
+			var teamRep = new FakeTeamRepository();
+			var target = new TeamAssembler(teamRep);
 
-            Assert.AreEqual(_teamDomain.Id, teamDto.Id);
-            Assert.AreEqual(_teamDomain.Description.Name, teamDto.Description);
-            Assert.AreEqual(_teamDomain.SiteAndTeam, teamDto.SiteAndTeam);
+			var teamDomain = new Team
+			{
+				Description = new Description("Team Stockholm", "TS"),
+				Site = new Site("Europe")
+			}.WithId();
+
+			var teamDto = target.DomainEntityToDto(teamDomain);
+
+            Assert.AreEqual(teamDomain.Id, teamDto.Id);
+            Assert.AreEqual(teamDomain.Description.Name, teamDto.Description);
+            Assert.AreEqual(teamDomain.SiteAndTeam, teamDto.SiteAndTeam);
         }
 
-        [Test]
-        public void VerifyDtoToDomainEntity()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_teamRep.Get(_teamDto.Id.Value)).Return(_teamDomain).Repeat.Once();
-            }
+	    [Test]
+	    public void VerifyDtoToDomainEntity()
+	    {
+		    var teamRep = new FakeTeamRepository();
+		    var target = new TeamAssembler(teamRep);
 
-            using (_mocks.Playback())
-            {
-                ITeam teamDomain = _target.DtoToDomainEntity(_teamDto);
-                Assert.IsNotNull(teamDomain);
-            }
-        }
+		    var teamDomain = new Team
+		    {
+			    Description = new Description("Team Stockholm", "TS"),
+			    Site = new Site("Europe")
+		    }.WithId();
+		    teamRep.Add(teamDomain);
+
+		    var teamDto = new TeamDto {Description = teamDomain.Description.Name, Id = teamDomain.Id};
+
+		    var result = target.DtoToDomainEntity(teamDto);
+		    Assert.IsNotNull(result);
+	    }
     }
 }

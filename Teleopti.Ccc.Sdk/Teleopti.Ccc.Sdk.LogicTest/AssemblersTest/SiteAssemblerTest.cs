@@ -1,60 +1,42 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
-    [TestFixture]
-    public class SiteAssemblerTest
-        {
-            private SiteAssembler _target;
-            private ISite _siteDomain;
-            private SiteDto _siteDto;
-            private MockRepository _mocks;
-            private ISiteRepository _siteRep;
+	[TestFixture]
+	public class SiteAssemblerTest
+	{
+		[Test]
+		public void VerifyDomainEntityToDto()
+		{
+			var siteRep = new FakeSiteRepository();
+			var target = new SiteAssembler(siteRep);
 
-        [SetUp]
-        public void Setup()
-        {
-            _mocks=new MockRepository();
-            _siteRep = _mocks.StrictMock<ISiteRepository>();
-            _target = new SiteAssembler(_siteRep);
+			var siteDomain = new Site("Europe").WithId();
+			
+			var siteDto = target.DomainEntityToDto(siteDomain);
 
-            // Create domain object
-            _siteDomain = new Site("Europe");
-            _siteDomain.SetId(Guid.NewGuid());
+			Assert.AreEqual(siteDomain.Id, siteDto.Id);
+			Assert.AreEqual(siteDomain.Description.Name, siteDto.DescriptionName);
+		}
 
-            // Create Dto object
-			_siteDto = new SiteDto { DescriptionName = _siteDomain.Description.Name, Id = _siteDomain.Id};
-        }
+		[Test]
+		public void VerifyDtoToDomainEntity()
+		{
+			var siteRep = new FakeSiteRepository();
+			var target = new SiteAssembler(siteRep);
 
-        [Test]
-        public void VerifyDomainEntityToDto()
-        {
-            SiteDto siteDto = _target.DomainEntityToDto(_siteDomain);
+			var siteDomain = new Site("Europe").WithId();
+			siteRep.Add(siteDomain);
 
-            Assert.AreEqual(_siteDomain.Id, siteDto.Id);
-            Assert.AreEqual(_siteDomain.Description.Name, siteDto.DescriptionName);
-        }
+			var siteDto = new SiteDto {DescriptionName = siteDomain.Description.Name, Id = siteDomain.Id};
 
-        [Test]
-        public void VerifyDtoToDomainEntity()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_siteRep.Get(_siteDto.Id.Value)).Return(_siteDomain).Repeat.Once();
-            }
-
-            using (_mocks.Playback())
-            {
-                ISite siteDomain = _target.DtoToDomainEntity(_siteDto);
-                Assert.IsNotNull(siteDomain);
-            }
-        }
-    }
+			var result = target.DtoToDomainEntity(siteDto);
+			Assert.IsNotNull(result);
+		}
+	}
 }
