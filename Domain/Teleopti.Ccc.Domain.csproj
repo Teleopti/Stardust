@@ -194,6 +194,7 @@
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkill.cs" />
     <Compile Include="ApplicationLayer\Events\RecalculateForecastOnSkillCollectionEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ServiceBusHealthCheckEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\SkillChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantMinuteTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CommandScope.cs" />
     <Compile Include="ApplicationLayer\Forecast\ForecastClassesCreator.cs" />
@@ -209,6 +210,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="Analytics\AnalyticsFactAgentSkill.cs" />
     <Compile Include="ApplicationLayer\Preference\PreferenceChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateSkillAnalyticsHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />

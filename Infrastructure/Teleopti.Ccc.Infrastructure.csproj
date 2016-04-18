@@ -586,6 +586,7 @@
     <Compile Include="UnitOfWork\NoTransactionHooks.cs" />
     <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisherForTeamOrSite.cs" />
     <Compile Include="UnitOfWork\ReadOnlyUnitOfWorkAspect.cs" />
+    <Compile Include="UnitOfWork\SkillChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="Util\CloudSafeSqlExecute.cs" />
