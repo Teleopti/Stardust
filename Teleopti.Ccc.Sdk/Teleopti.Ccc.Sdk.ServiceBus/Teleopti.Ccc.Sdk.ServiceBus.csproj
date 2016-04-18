@@ -236,6 +236,7 @@
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="HealthCheck\DeviceInfoProvider.cs" />
     <Compile Include="InternalServiceBusSender.cs" />
+    <Compile Include="NodeHandlers\AbsenceRequstHandler.cs" />
     <Compile Include="NodeHandlers\RunSchedulingHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />

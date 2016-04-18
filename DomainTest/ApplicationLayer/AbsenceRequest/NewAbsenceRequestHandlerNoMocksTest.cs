@@ -73,9 +73,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 				new MultisiteDayRepository(new FakeUnitOfWork()));
 			_scenarioRepository = new FakeScenarioRepository(_currentScenario.Current());
 
-			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_schedulingResultStateHolder, _personAbsenceAccountRepository, _scheduleRepository);
+			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation( _personAbsenceAccountRepository, _scheduleRepository);
 			_loadSchedulingStateHolderForResourceCalculation = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, skillRepository,
-				workloadRepository, _scheduleRepository, _schedulingResultStateHolder, peopleAndSkillLoaderDecider, skillDayLoadHelper);
+				workloadRepository, _scheduleRepository, peopleAndSkillLoaderDecider, skillDayLoadHelper);
 		}
 
 		[Test]
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 
 			var requestFactory =
 				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
-					new PersonRequestAuthorizationCheckerForTest(), _schedulingResultStateHolder, new FakeGlobalSettingDataRepository());
+					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository());
 
 
 			var toggleManager = enableWaitlisting
@@ -490,7 +490,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 				_loadSchedulingStateHolderForResourceCalculation,
 				_loadSchedulesForRequestWithoutResourceCalculation,
 				requestFactory,
-				new AlreadyAbsentSpecification(_schedulingResultStateHolder),
+				new AlreadyAbsentSpecification(),
 				new ScheduleIsInvalidSpecification(),
 				new PersonRequestCheckAuthorization(),
 				new BudgetGroupHeadCountSpecification(_scenarioRepository, _fakeBudgetDayRepository,
@@ -501,8 +501,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
 				_personAccountUpdaterDummy, toggleManager);
 
-			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, _scheduleProjectionReadModel, _schedulingResultStateHolder);
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, _schedulingResultStateHolder, _scheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
+			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, _scheduleProjectionReadModel, new SchedulingResultStateHolderProvider());
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, new SchedulingResultStateHolderProvider(), _scheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
 			
 			var newAbsenceRequestConsumer = new NewAbsenceRequestHandler(
 				_unitOfWorkFactory, _currentScenario,_personRequestRepository, absenceRequestWaitlistProcessor,absenceProcessor);

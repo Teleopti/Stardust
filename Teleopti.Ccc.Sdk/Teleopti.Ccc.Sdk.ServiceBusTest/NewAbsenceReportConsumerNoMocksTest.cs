@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.AbsenceReport;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_scheduleProjectionReadOnlyRepository = new FakeScheduleProjectionReadOnlyRepository();
 			_scheduleProjectionReadModel = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), _scheduleProjectionReadOnlyRepository);
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_schedulingResultStateHolder, _personAbsenceAccountRepository, _scheduleRepository);
+			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation( _personAbsenceAccountRepository, _scheduleRepository);
 			_personRepository = new FakePersonRepository();
 		}
 		
@@ -115,7 +114,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			var requestFactory =
 				new RequestFactory (new SwapAndModifyService (new SwapService(), new DoNothingScheduleDayChangeCallBack()),
-					new PersonRequestAuthorizationCheckerForTest(), _schedulingResultStateHolder, new FakeGlobalSettingDataRepository());
+					new PersonRequestAuthorizationCheckerForTest(),  new FakeGlobalSettingDataRepository());
 
 			var scheduleDictionarySaver = new FakeScheduleDifferenceSaver (_scheduleRepository);
 
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				_schedulingResultStateHolder);
 
 			var absenceReportConsumer = new NewAbsenceReportConsumer (_unitOfWorkFactory, _currentScenario,
-				_schedulingResultStateHolder, requestFactory, scheduleDictionarySaver, _scheduleProjectionReadModel,
+				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), requestFactory, scheduleDictionarySaver, _scheduleProjectionReadModel,
 				_loadSchedulesForRequestWithoutResourceCalculation, _personRepository, businessRules);
 			return absenceReportConsumer;
 		}

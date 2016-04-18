@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				PersonRequestId = message.PersonRequestId,
 				Timestamp = message.Timestamp,
 				JobName = "Absence Request",
-				Type = typeof (NewAbsenceRequestCreatedEvent).ToString()
+				UserName = message.InitiatorId.ToString()
 			});
 		}
 

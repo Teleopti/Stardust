@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,23 +10,28 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestWaitlistProcessor : IAbsenceRequestWaitlistProcessor
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(AbsenceRequestWaitlistProcessor));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestWaitlistProcessor));
 
 		private readonly IAbsenceRequestUpdater _absenceRequestUpdater;
+		private readonly ISchedulingResultStateHolderProvider _schedulingResultStateHolderProvider;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
 		private readonly IAbsenceRequestWaitlistProvider _absenceRequestWaitlistProvider;
 
-		public AbsenceRequestWaitlistProcessor(IAbsenceRequestUpdater absenceRequestUpdater, ISchedulingResultStateHolder schedulingResultStateHolder, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IAbsenceRequestWaitlistProvider absenceRequestWaitlistProvider)
+		public AbsenceRequestWaitlistProcessor(IAbsenceRequestUpdater absenceRequestUpdater,
+			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider,
+			IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel,
+			IAbsenceRequestWaitlistProvider absenceRequestWaitlistProvider)
 		{
 			_absenceRequestUpdater = absenceRequestUpdater;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_schedulingResultStateHolderProvider = schedulingResultStateHolderProvider;
 			_updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
 			_absenceRequestWaitlistProvider = absenceRequestWaitlistProvider;
 		}
 
 		public void ProcessAbsenceRequestWaitlist(IUnitOfWork unitOfWork, DateTimePeriod period, IWorkflowControlSet workflowControlSet)
 		{
+			_schedulingResultStateHolder = _schedulingResultStateHolderProvider.GiveMeANew();
 			var waitlistedRequestsForPeriod = _absenceRequestWaitlistProvider.GetWaitlistedRequests (period, workflowControlSet);
 			processRequests(unitOfWork, waitlistedRequestsForPeriod);
 		}
@@ -44,10 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				{
 					logger.Error("A optimistic locking error occurred. Review the error log. Processing cannot continue this time.", ex);
 				}
-			}
-
-			clearStateHolder(); 
-			
+			}		
 		}
 
 		private void processRequest(IUnitOfWork unitOfWork, IPersonRequest request)
@@ -70,12 +73,5 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 			_updateScheduleProjectionReadModel.Execute(_schedulingResultStateHolder.Schedules[person], dateOnlyPeriod);
 		}
-
-		private void clearStateHolder()
-		{
-			_schedulingResultStateHolder.Dispose();
-			_schedulingResultStateHolder = null;
-		}
-
 	}
 }

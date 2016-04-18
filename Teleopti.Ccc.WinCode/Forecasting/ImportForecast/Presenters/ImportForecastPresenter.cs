@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 					LogOnDatasource = _unitOfWorkFactory.Name,
 					LogOnBusinessUnitId = _model.SelectedSkill.BusinessUnit.Id.GetValueOrDefault(),
 					JobName = "Import forecast from file",
-					InitiatorId = person.Id.GetValueOrDefault(),
-					Type = typeof(ImportForecastsFileToSkill).ToString()
+					InitiatorId = person.Id.GetValueOrDefault()
 				};
 				_eventPublisher.Publish(message);
 			}

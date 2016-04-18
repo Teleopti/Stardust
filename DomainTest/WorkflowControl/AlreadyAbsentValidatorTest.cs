@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         	scenario = ScenarioFactory.CreateScenarioAggregate();
 			person = PersonFactory.CreatePerson();
 			stateHolder = mocks.DynamicMock<ISchedulingResultStateHolder>();
-			target = new AlreadyAbsentSpecification(stateHolder);
+			target = new AlreadyAbsentSpecification();
         }
 
         [Test]
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person, range);
 				
-				Assert.False(target.IsSatisfiedBy(absenceRequest));
+				Assert.False(target.IsSatisfiedBy(new AbsenceRequstAndSchedules {AbsenceRequest = absenceRequest, SchedulingResultStateHolder = stateHolder }));
 			}
         }
 
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			{
 				((ScheduleDictionaryForTest)schedulePart.Owner).AddTestItem(person,range);
 				
-				Assert.True(target.IsSatisfiedBy(absenceRequest));
+				Assert.True(target.IsSatisfiedBy(new AbsenceRequstAndSchedules {AbsenceRequest = absenceRequest, SchedulingResultStateHolder = stateHolder}));
 			}
 		}
     }

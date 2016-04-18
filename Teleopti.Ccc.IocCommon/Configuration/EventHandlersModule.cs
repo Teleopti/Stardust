@@ -2,7 +2,6 @@
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
@@ -91,14 +90,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.AsSelf()
 						.InstancePerLifetimeScope()
 						.ApplyAspects();
-				}).Except<NewAbsenceRequestHandler>(ct =>
-				{
-					ct.As<IHandleEvent<NewAbsenceRequestCreatedEvent>>()
-						.AsSelf()
-						.InstancePerLifetimeScope()
-						.ApplyAspects();
-				})
-				;
+				});
 
 			builder.RegisterType<UnitOfWorkTransactionEventSyncronization>().As<IEventSyncronization>().SingleInstance();
 

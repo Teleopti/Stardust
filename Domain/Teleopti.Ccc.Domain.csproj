@@ -235,6 +235,7 @@
     <Compile Include="Optimization\ScheduleOptimizationTeamBlock.cs" />
     <Compile Include="Repositories\IAnalyticsDateRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionExecutionRepository.cs" />
+    <Compile Include="ResourceCalculation\SchedulingResultStateHolderProvider.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizer.cs" />
     <Compile Include="Repositories\IAnalyticsBusinessUnitRepository.cs" />
@@ -2233,6 +2234,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriod.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenPeriodMerger.cs" />
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.cs" />
+    <Compile Include="WorkflowControl\AbsenceRequstAndSchedules.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentSpecification.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />

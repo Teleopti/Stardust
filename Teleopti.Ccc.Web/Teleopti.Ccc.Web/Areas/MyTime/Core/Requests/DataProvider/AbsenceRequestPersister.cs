@@ -74,7 +74,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
 					LogOnDatasource = _currentDataSource.Current().DataSourceName,
 					PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
-					Timestamp = _now.UtcDateTime()
+					Timestamp = _now.UtcDateTime(),
+					JobName = "Absence Request",
+					UserName = personRequest.Person.Id.GetValueOrDefault().ToString()
 				};
 				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _publisher.Publish(message));
 			}

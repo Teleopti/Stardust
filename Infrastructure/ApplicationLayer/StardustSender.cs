@@ -39,12 +39,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
 			var job = @event as IStardustJobInfo;
-			if (job != null)
+			if (job != null && job.JobName != null)
 			{
 				jobName = job.JobName;
-				type = job.Type;
 			}
-
+			if (job != null && job.UserName != null)
+			{
+				userName = job.UserName;
+			}
 			var ser = JsonConvert.SerializeObject(@event);
 			var jobModel = new JobRequestModel
 			{

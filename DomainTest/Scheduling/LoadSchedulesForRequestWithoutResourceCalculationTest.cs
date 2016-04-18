@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_personAbsenceAccountRepository = _mocks.DynamicMock<IPersonAbsenceAccountRepository>();
 			_scheduleStorage = _mocks.DynamicMock<IScheduleStorage>();
 			_personProvider = _mocks.DynamicMock<IPersonProvider>();
-            _target = new LoadSchedulesForRequestWithoutResourceCalculation(_schedulingResultStateHolder, _personAbsenceAccountRepository, _scheduleStorage, p => _personProvider);
+            _target = new LoadSchedulesForRequestWithoutResourceCalculation( _personAbsenceAccountRepository, _scheduleStorage, p => _personProvider);
 		}
 
 		[Test]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 			_mocks.ReplayAll();
 
-			_target.Execute(null, new DateTimePeriod(2010, 2, 1, 2010, 2, 2), new IPerson[]{});
+			_target.Execute(null, new DateTimePeriod(2010, 2, 1, 2010, 2, 2), new IPerson[]{}, _schedulingResultStateHolder);
 
 			_mocks.VerifyAll();
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(scenario, period, requestedPeople);
+				_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder);
 
 			    _schedulingResultStateHolder.Schedules.Should().Not.Be.Null();
 			    _schedulingResultStateHolder.SkillDays.Should().Not.Be.Null();

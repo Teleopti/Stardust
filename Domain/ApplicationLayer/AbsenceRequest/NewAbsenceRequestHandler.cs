@@ -3,6 +3,8 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
@@ -10,9 +12,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 {
-	public class NewAbsenceRequestHandler : IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnServiceBus
+	public class NewAbsenceRequestHandler
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ICurrentScenario _scenarioRepository;
@@ -29,8 +31,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 		private readonly IList<LoadDataAction> _loadDataActions;
 
 		public NewAbsenceRequestHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
-												  IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
-												  IAbsenceRequestProcessor absenceRequestProcessor)
+			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
+			IAbsenceRequestProcessor absenceRequestProcessor)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat("Consuming event for person request with Id = {0}. (Message timestamp = {1})",
-								   @event.PersonRequestId, @event.Timestamp);
+									@event.PersonRequestId, @event.Timestamp);
 			}
 
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -67,11 +69,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 
 				if (shouldUseWaitlisting())
 				{
-					_waitlistProcessor.ProcessAbsenceRequestWaitlist (unitOfWork, _absenceRequest.Period, _absenceRequest.Person.WorkflowControlSet);
+					_waitlistProcessor.ProcessAbsenceRequestWaitlist(unitOfWork, _absenceRequest.Period,
+						_absenceRequest.Person.WorkflowControlSet);
 				}
 				else
 				{
-					_absenceRequestProcessor.ProcessAbsenceRequest(unitOfWork, _absenceRequest, _personRequest);	
+					_absenceRequestProcessor.ProcessAbsenceRequest(unitOfWork, _absenceRequest, _personRequest);
 				}
 			}
 		}
@@ -81,14 +84,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 			var workflowControlSet = _absenceRequest.Person.WorkflowControlSet;
 			return workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(_absenceRequest);
 		}
-		
+
 		private bool loadDefaultScenario(NewAbsenceRequestCreatedEvent message)
 		{
 			var defaultScenario = _scenarioRepository.Current();
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", defaultScenario.Description,
-								   defaultScenario.Id);
+									defaultScenario.Id);
 			}
 			return true;
 		}
@@ -144,4 +147,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 	}
 
+	public class NewAbsenceRequestHandlerStardust : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnStardust
+	{
+		public NewAbsenceRequestHandlerStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
+			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
+			IAbsenceRequestProcessor absenceRequestProcessor) : base(unitOfWorkFactory, scenarioRepository, personRequestRepository, waitlistProcessor, absenceRequestProcessor)
+		{}
+
+		[AsSystem, UseOnToggle(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
+		public new virtual void Handle(NewAbsenceRequestCreatedEvent @event)
+		{
+			base.Handle(@event);
+		}
+	}
+
+	[UseNotOnToggle(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
+	public class NewAbsenceRequestHandlerBus : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnServiceBus
+	{
+		public NewAbsenceRequestHandlerBus(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
+			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,
+			IAbsenceRequestProcessor absenceRequestProcessor) : base(unitOfWorkFactory, scenarioRepository, personRequestRepository, waitlistProcessor, absenceRequestProcessor)
+		{ }
+	}
 }

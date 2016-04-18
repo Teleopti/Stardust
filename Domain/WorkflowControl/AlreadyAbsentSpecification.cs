@@ -3,30 +3,20 @@ using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
-	public interface IAlreadyAbsentSpecification : ISpecification<IAbsenceRequest>
+	public interface IAlreadyAbsentSpecification : ISpecification<IAbsenceRequestAndSchedules>
+	{}
+
+	public class AlreadyAbsentSpecification : Specification<IAbsenceRequestAndSchedules>, IAlreadyAbsentSpecification
 	{
-	}
-
-	public class AlreadyAbsentSpecification : Specification<IAbsenceRequest>, IAlreadyAbsentSpecification
-	{
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-
-		public AlreadyAbsentSpecification(ISchedulingResultStateHolder schedulingResultStateHolder)
+		public override bool IsSatisfiedBy(IAbsenceRequestAndSchedules obj)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public override bool IsSatisfiedBy(IAbsenceRequest obj)
-		{
-			var scheduleDays = _schedulingResultStateHolder.Schedules[obj.Person]
+			var scheduleDays = obj.SchedulingResultStateHolder.Schedules[obj.AbsenceRequest.Person]
 				.ScheduledDayCollection(
-					obj.Period.ToDateOnlyPeriod(obj.Person.PermissionInformation.DefaultTimeZone()));
+					obj.AbsenceRequest.Period.ToDateOnlyPeriod(obj.AbsenceRequest.Person.PermissionInformation.DefaultTimeZone()));
 			foreach (var scheduleDay in scheduleDays)
 			{
 				var projection = scheduleDay.ProjectionService().CreateProjection();
-				var absenceLayers = projection.FilterLayers(obj.Period).FilterLayers<IAbsence>();
+				var absenceLayers = projection.FilterLayers(obj.AbsenceRequest.Period).FilterLayers<IAbsence>();
 				if (absenceLayers.Count()>0)
 				{
 					return true;

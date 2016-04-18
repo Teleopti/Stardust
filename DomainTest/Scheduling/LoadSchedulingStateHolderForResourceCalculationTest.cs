@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
 			_scheduleStorage = MockRepository.GenerateMock<IScheduleStorage>();
 			_personProvider = MockRepository.GenerateMock<IPersonProvider>();
-			_target = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleStorage, _schedulingResultStateHolder, _peopleAndSkillLoadDecider, _skillDayLoadHelper, p => _personProvider);
+			_target = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleStorage, _peopleAndSkillLoadDecider, _skillDayLoadHelper, p => _personProvider);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillRepository.Stub(x => x.FindAllWithSkillDays(new DateOnlyPeriod())).Return(new List<ISkill>()).IgnoreArguments();
 			_schedulingResultStateHolder.AllPersonAccounts = accounts;
 
-			_target.Execute(null, period, people);
+			_target.Execute(null, period, people, _schedulingResultStateHolder);
 
 			_personAbsenceAccountRepository.AssertWasCalled(x => x.FindByUsers(null), o => o.IgnoreArguments());
 		}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
 				.Return(skillDictionary).IgnoreArguments();
 
-			_target.Execute(scenario, period, requestedPeople);
+			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder);
 
 			_schedulingResultStateHolder.Schedules.Should().Be.SameInstanceAs(scheduleDictionary);
 			_schedulingResultStateHolder.SkillDays.Should().Be.SameInstanceAs(skillDictionary);
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
 				.Return(skillDictionary);
 
-			_target.Execute(scenario, period, requestedPeople);
+			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder);
 
 			_scheduleStorage.AssertWasCalled(
 				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null),
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				.Return(new Dictionary<ISkill, IList<ISkillDay>>());
 
 			Assert.AreEqual(0, _schedulingResultStateHolder.PersonsInOrganization.Count);
-			_target.Execute(scenario, period, requestedPeople);
+			_target.Execute(scenario, period, requestedPeople, _schedulingResultStateHolder);
 
 			_peopleAndSkillLoadDecider.AssertWasCalled(x => x.Execute(scenario, period, requestedPeople));
 			Assert.AreEqual(1, _schedulingResultStateHolder.PersonsInOrganization.Count);

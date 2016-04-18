@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class LoadSchedulingStateHolderForResourceCalculation : ILoadSchedulingStateHolderForResourceCalculation
 	{
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
@@ -22,15 +21,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly Func<IEnumerable<IPerson>, IPersonProvider> _personProviderMaker;
 
-		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage, ISchedulingResultStateHolder schedulingResultStateHolder, IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper) : this(personRepository, personAbsenceAccountRepository, skillRepository, workloadRepository, scheduleStorage,
-			 schedulingResultStateHolder, peopleAndSkillLoaderDecider, skillDayLoadHelper, p => new PersonsInOrganizationProvider(p))
+		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository,
+			IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository,
+			IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage,
+			IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
+			ISkillDayLoadHelper skillDayLoadHelper)
+			: this(personRepository, personAbsenceAccountRepository, skillRepository, workloadRepository, scheduleStorage,
+				peopleAndSkillLoaderDecider, skillDayLoadHelper,
+				p => new PersonsInOrganizationProvider(p))
 		{
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage, ISchedulingResultStateHolder schedulingResultStateHolder, IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider, ISkillDayLoadHelper skillDayLoadHelper, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")
+		]
+		public LoadSchedulingStateHolderForResourceCalculation(IPersonRepository personRepository,
+			IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository,
+			IWorkloadRepository workloadRepository, IScheduleStorage scheduleStorage,
+			IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider,
+			ISkillDayLoadHelper skillDayLoadHelper, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
 			_personRepository = personRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
@@ -41,30 +50,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_personProviderMaker = personProviderMaker;
 		}
 
-		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons)
+		public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
-			_schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
+			schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
 
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod).ToArray();
 			_workloadRepository.LoadAll();
-			_schedulingResultStateHolder.AddSkills(skills);
+			schedulingResultStateHolder.AddSkills(skills);
 
 			var result = _peopleAndSkillLoaderDecider.Execute(scenario, period, requestedPersons);
-			result.FilterPeople(_schedulingResultStateHolder.PersonsInOrganization);
-			result.FilterSkills(skills,_schedulingResultStateHolder.RemoveSkill,s => _schedulingResultStateHolder.AddSkills(s));
+			result.FilterPeople(schedulingResultStateHolder.PersonsInOrganization);
+			result.FilterSkills(skills,schedulingResultStateHolder.RemoveSkill,s => schedulingResultStateHolder.AddSkills(s));
 
 			var personsToAdd = from p in requestedPersons
-							   where !_schedulingResultStateHolder.PersonsInOrganization.Contains(p)
+							   where !schedulingResultStateHolder.PersonsInOrganization.Contains(p)
 			                   select p;
-			personsToAdd.ForEach(p => _schedulingResultStateHolder.PersonsInOrganization.Add(p));
+			personsToAdd.ForEach(p => schedulingResultStateHolder.PersonsInOrganization.Add(p));
 
-			var personsProvider = _personProviderMaker.Invoke(_schedulingResultStateHolder.PersonsInOrganization);
+			var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.PersonsInOrganization);
 		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
 			 var scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod(period.StartDateTime.AddDays(-9), period.EndDateTime.AddDays(2)));
-			_schedulingResultStateHolder.Schedules =
+			schedulingResultStateHolder.Schedules =
 				_scheduleStorage.FindSchedulesForPersons(
 					scheduleDateTimePeriod,
 					scenario, 
@@ -72,9 +81,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     scheduleDictionaryLoadOptions,
 					requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
 
-			_schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
-
-		    _schedulingResultStateHolder.SkillDays =
+			schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
+		
+		    schedulingResultStateHolder.SkillDays =
 		        _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);
 		}
 	}

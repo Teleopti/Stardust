@@ -11,6 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public string LogOnDatasource { get; set; }
 		public Guid LogOnBusinessUnitId { get; set; }
 		public string JobName { get; set; }
-		public string Type { get; set; }
+		public string UserName { get; set; }
 	}
 }

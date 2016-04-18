@@ -3,6 +3,6 @@
 	public interface IStardustJobInfo
 	{
 		string JobName { get; set; }
-		string Type { get; set; }
+		string UserName { get; set; }
 	}
 }

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestUpdater : IAbsenceRequestUpdater
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 
 		private readonly DenyAbsenceRequest _denyAbsenceRequest = new DenyAbsenceRequest();
 		private readonly PendingAbsenceRequest _pendingAbsenceRequest = new PendingAbsenceRequest();
@@ -29,26 +29,31 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private readonly IResourceCalculationPrerequisitesLoader _prereqLoader;
 		private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
-
 		private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
 		private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
 		private readonly IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
 		private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
-
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
-
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly IRequestFactory _requestFactory;
 		private readonly ICurrentScenario _scenarioRepository;
-
 		private readonly IPersonAccountUpdater _personAccountUpdater;
-
 		private IProcessAbsenceRequest _process;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IToggleManager _toggleManager;
 
-		public AbsenceRequestUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider, IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IRequestFactory requestFactory, IAlreadyAbsentSpecification alreadyAbsentSpecification, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification, IResourceOptimizationHelper resourceOptimizationHelper, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater, IToggleManager toggleManager)
+		public AbsenceRequestUpdater(IPersonAbsenceAccountProvider personAbsenceAccountProvider,
+			IResourceCalculationPrerequisitesLoader prereqLoader, ICurrentScenario scenarioRepository,
+			ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation,
+			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
+			IRequestFactory requestFactory, IAlreadyAbsentSpecification alreadyAbsentSpecification,
+			IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization,
+			IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification,
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
+			IScheduleDifferenceSaver scheduleDictionarySaver, IPersonAccountUpdater personAccountUpdater,
+			IToggleManager toggleManager)
 		{
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 			_prereqLoader = prereqLoader;
@@ -112,7 +117,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
 				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules,
-																													 _scenarioRepository.Current());
+					_scenarioRepository.Current(), schedulingResultStateHolder);
 				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
 
 				//Will issue a rollback for simulated schedule data
@@ -236,7 +241,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				new DateOnly(absenceRequest.Period.StartDateTime)))
 			{
 				unitOfWork.PersistAll();
-			};
+			}
 		}
 
 		private void handleNoWorkflowControlSet(IAbsenceRequest absenceRequest, IPersonRequest personRequest)
@@ -269,7 +274,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				_prereqLoader.Execute();
 				_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
 																		 periodForResourceCalc,
-																		 new List<IPerson> { absenceRequest.Person });
+																		 new List<IPerson> { absenceRequest.Person }, _schedulingResultStateHolder);
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})",
@@ -281,7 +286,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				var periodForResourceCalc = absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
 				_loadSchedulesForRequestWithoutResourceCalculation.Execute(_scenarioRepository.Current(),
 																		 periodForResourceCalc,
-																		 new List<IPerson> { absenceRequest.Person });
+																		 new List<IPerson> { absenceRequest.Person }, _schedulingResultStateHolder);
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
@@ -360,7 +365,12 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 		private bool personAlreadyAbsentDuringRequestPeriod(IAbsenceRequest absenceRequest)
 		{
-			return _alreadyAbsentSpecification.IsSatisfiedBy(absenceRequest);
+			return
+				_alreadyAbsentSpecification.IsSatisfiedBy(new AbsenceRequstAndSchedules
+				{
+					AbsenceRequest = absenceRequest,
+					SchedulingResultStateHolder = _schedulingResultStateHolder
+				});
 		}
 
 

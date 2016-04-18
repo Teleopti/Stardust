@@ -9,48 +9,51 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
     public interface ILoadSchedulesForRequestWithoutResourceCalculation
     {
-        void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons);
+        void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons, ISchedulingResultStateHolder schedulingResultStateHolder);
     }
 
     public class LoadSchedulesForRequestWithoutResourceCalculation : ILoadSchedulesForRequestWithoutResourceCalculation
     {
-        private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IScheduleStorage _scheduleStorage;
         private readonly Func<IEnumerable<IPerson>, IPersonProvider> _personProviderMaker;
 
-        public LoadSchedulesForRequestWithoutResourceCalculation(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage) : this(schedulingResultStateHolder, personAbsenceAccountRepository,scheduleStorage, p => new PersonProvider(p))
-        {
-        }
+	    public LoadSchedulesForRequestWithoutResourceCalculation(
+		    IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage)
+		    : this(personAbsenceAccountRepository, scheduleStorage, p => new PersonProvider(p))
+	    {
+	    }
 
-        public LoadSchedulesForRequestWithoutResourceCalculation(ISchedulingResultStateHolder schedulingResultStateHolder, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage, Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
-        {
-            _schedulingResultStateHolder = schedulingResultStateHolder;
-            _personAbsenceAccountRepository = personAbsenceAccountRepository;
-            _scheduleStorage = scheduleStorage;
-            _personProviderMaker = personProviderMaker;
-        }
+	    public LoadSchedulesForRequestWithoutResourceCalculation(
+		    IPersonAbsenceAccountRepository personAbsenceAccountRepository, IScheduleStorage scheduleStorage,
+			    Func<IEnumerable<IPerson>, IPersonProvider> personProviderMaker)
+	    {
+		    _personAbsenceAccountRepository = personAbsenceAccountRepository;
+		    _scheduleStorage = scheduleStorage;
+		    _personProviderMaker = personProviderMaker;
+	    }
 
-        public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons)
-        {
-            _schedulingResultStateHolder.PersonsInOrganization = requestedPersons.ToList();
+	    public void Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> requestedPersons,
+		    ISchedulingResultStateHolder schedulingResultStateHolder)
+	    {
+		    schedulingResultStateHolder.PersonsInOrganization = requestedPersons.ToList();
 
-            var personsProvider = _personProviderMaker.Invoke(_schedulingResultStateHolder.PersonsInOrganization);
-            personsProvider.DoLoadByPerson = true;
+		    var personsProvider = _personProviderMaker.Invoke(schedulingResultStateHolder.PersonsInOrganization);
+		    personsProvider.DoLoadByPerson = true;
 
-            var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
+		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
-            var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period, requestedPersons);
-            _schedulingResultStateHolder.Schedules =
-                _scheduleStorage.FindSchedulesForPersons(
-                    scheduleDateTimePeriod,
-                    scenario,
-                    personsProvider,
-                    scheduleDictionaryLoadOptions,
-                    requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
+		    var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period, requestedPersons);
+		    schedulingResultStateHolder.Schedules =
+			    _scheduleStorage.FindSchedulesForPersons(
+				    scheduleDateTimePeriod,
+				    scenario,
+				    personsProvider,
+				    scheduleDictionaryLoadOptions,
+				    requestedPersons); //rk - fattar inte, för rörigt. lägger till detta av nån anledning här
 
-            _schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
-            _schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
-        }
+		    schedulingResultStateHolder.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(requestedPersons);
+		    schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
+	    }
     }
 }

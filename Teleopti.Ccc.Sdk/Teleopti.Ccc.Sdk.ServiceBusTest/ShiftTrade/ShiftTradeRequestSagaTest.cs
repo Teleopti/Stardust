@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
-using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 		    unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 		    loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 
-		    target = new ShiftTradeRequestSaga(unitOfWorkFactory, schedulingResultState, validator, requestFactory,
+		    target = new ShiftTradeRequestSaga(unitOfWorkFactory, new FakeSchedulingResultStateHolderProvider(schedulingResultState), validator, requestFactory,
 		                                       scenarioRepository, personRequestRepository, scheduleStorage,
 		                                       personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
 		                                       loader, differenceCollectionService);
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 		    validator.Stub(x=> x.Validate((IShiftTradeRequest) personRequest.Request)).Return(new ShiftTradeRequestValidationResult(true));
 		    personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
 		    scenarioRepository.Stub(x => x.Current()).Return(scenario);
-			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			
 		    target.Consume(created);
 		    Assert.AreEqual(false, personRequest.IsNew);
@@ -129,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			validator.Stub(x => x.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(false));
 			personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
-			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			
 		    target.Consume(created);
 		    Assert.AreEqual(true, personRequest.IsDenied);
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 		    validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 		    personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 
-		    requestFactory.Stub(x => x.GetRequestApprovalService(null, null)).Constraints(new[]
+		    requestFactory.Stub(x => x.GetRequestApprovalService(null, null, schedulingResultState)).Constraints(new[]
 			    {
 				    Is.Matching<NewBusinessRuleCollection>(
 					    b =>
@@ -159,10 +158,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 							    ruleCollection = b;
 							    return true;
 						    }),
-				    Is.Equal(scenario)
+				    Is.Equal(scenario), Is.Equal(schedulingResultState)
 			    }).Return(approvalService);
 		    approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
-		    requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+		    requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 
 		    target.Consume(accept);
 		    Assert.AreEqual(false, personRequest.IsNew);
@@ -174,7 +173,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
 			statusChecker.AssertWasCalled(x => x.Check(shiftTradeRequest), o => o.Repeat.Twice());
 			scheduleDictionarySaver.AssertWasCalled(x => x.SaveChanges(null, null), o => o.IgnoreArguments());
-			loader.AssertWasCalled(x => x.Execute(scenario, new DateTimePeriod(), null), o => o.IgnoreArguments());
+			loader.AssertWasCalled(x => x.Execute(scenario, new DateTimePeriod(), null, schedulingResultState), o => o.IgnoreArguments());
 	    }
 
 	    [Test]
@@ -189,10 +188,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
-			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(approvalService);
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState)).IgnoreArguments().Return(approvalService);
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
-			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			scheduleDictionarySaver.Stub(x => x.SaveChanges(null, null)).IgnoreArguments().Throw(new ValidationException());
 
 		    target.Consume(accept);
@@ -220,10 +219,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 		    approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
 		                   .Return(new List<IBusinessRuleResponse> {rule, rule});
-			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(approvalService);
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState)).IgnoreArguments().Return(approvalService);
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);
-			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			rule.Stub(x => x.Message).Return("aja baja!");
 
 			target.Consume(accept);
