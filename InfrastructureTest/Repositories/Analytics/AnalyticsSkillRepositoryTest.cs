@@ -25,6 +25,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[SetUp]
 		public void SetUp()
 		{
+			DataSourceHelper.RestoreAnalyticsDatabase(123);
+			DataSourceHelper.ClearAnalyticsData();
+
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			datasource = new ExistingDatasources(timeZones);
@@ -53,12 +56,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsSkillRepository.AddAgentSkill(1, 2, true, 1);
 
 			analyticsSkillRepository.AddAgentSkill(2, 2, true, 1);
-		}
-
-		[TearDown]
-		public void TearDown()
-		{
-			DataSourceHelper.ClearAnalyticsData();
 		}
 
 		private void SetUpPerson()
