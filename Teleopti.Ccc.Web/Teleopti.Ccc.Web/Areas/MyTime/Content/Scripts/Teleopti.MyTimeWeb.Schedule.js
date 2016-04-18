@@ -688,7 +688,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		var timelineHeight = 668;
-		var offset = 117;
+		var offset = 123;
 		var timeindicatorHeight = 2;
 
 		var hours = theDate.hours();
