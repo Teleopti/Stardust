@@ -12909,7 +12909,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Lade till frånvaro för {0} valda agent(er), {1} gick bra, {2} misslyckades!</value>
   </data>
   <data name="SwapShifts" xml:space="preserve">
-    <value>Byta skift</value>
+    <value>Skiftbyte</value>
   </data>
   <data name="ScheduleHasBeenChanged" xml:space="preserve">
     <value>Schemat har ändrats av någon annan. Var god ladda om schemat.</value>
@@ -13155,5 +13155,38 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   </data>
   <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
     <value>Du måste välja minst en agent.</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Ta bort hela flerdagsfrånvaron</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>Kunde inte lägga till några aktiviteter för de valda agenterna</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>Aktiviteter tillagda för de valda agenterna</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>Kunde inte ta bort frånvaro från skrivskyddat schema.</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Orsak till avslag</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>Skrivskyddat schema hittades för {0} agenter.</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Två agenter måste markeras för skiftbyte.</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>Rättigheter saknas för att lägga till aktivitet för agent {0}.</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>Rättigheter saknas fär att ta bort aktiviteter för agent {0}.</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Inkommande trafik</value>
+  </data>
+  <data name="ToggleIncludedSkills" xml:space="preserve">
+    <value>Visa inkluderade kompetenser</value>
   </data>
 </root>
