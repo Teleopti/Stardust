@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -15,7 +14,6 @@ using Teleopti.Ccc.InfrastructureTest.Rta;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public FakeMessageSender MessageSender;
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
-		public ILicenseRepository Licenses;
 
 		protected override FakeConfigReader Config()
 		{
@@ -73,20 +70,14 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
-
-			// fake for now. if real repo needs to be included in the scope....
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
+			system.UseTestDouble<SetNoLicenseActivator>().For<ISetLicenseActivator>();
 		}
 
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
-			
-			DataSourceForTenant.MakeSureDataSourceCreated(
-				SetupFixtureForAssembly.DataSource.DataSourceName,
-				InfraTestConfigReader.ConnectionString,
-				InfraTestConfigReader.AnalyticsConnectionString,
-				null);
+
+			DataSourceForTenant.MakeSureDataSourceCreated("App", InfraTestConfigReader.ConnectionString, null, null);
 
 			MessageSender.AllNotifications.Clear();
 			TransactionHook.Clear();

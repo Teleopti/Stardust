@@ -11,11 +11,9 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -38,7 +36,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 		internal static IPerson loggedOnPerson;
 		internal static IApplicationData ApplicationData;
 		internal static IDataSource DataSource;
-		private static readonly int dataHash = 5454;
 
 		[SetUp]
 		public void BeforeTestSuite()
@@ -53,9 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), "TestData");
-
-			container.Resolve<IHangfireClientStarter>().Start();
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), null);
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
@@ -64,25 +59,24 @@ namespace Teleopti.Ccc.InfrastructureTest
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
-			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState {ApplicationScopeData = ApplicationData});
+			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState{ApplicationScopeData = ApplicationData});
 
 			persistLoggedOnPerson();
 			persistBusinessUnit();
 			deleteAllAggregates();
-			//persistLicense();
 
-			DataSourceHelper.BackupApplicationDatabase(dataHash);
-			DataSourceHelper.BackupAnalyticsDatabase(dataHash);
+			DataSourceHelper.BackupApplicationDatabase(123);
+			DataSourceHelper.BackupAnalyticsDatabase(123);
 		}
 
 		public static void RestoreCcc7Database()
 		{
-			DataSourceHelper.RestoreApplicationDatabase(dataHash);
+			DataSourceHelper.RestoreApplicationDatabase(123);
 		}
 
 		public static void RestoreAnalyticsDatabase()
 		{
-			DataSourceHelper.RestoreAnalyticsDatabase(dataHash);
+			DataSourceHelper.RestoreAnalyticsDatabase(123);
 		}
 
 		private static void persistLoggedOnPerson()
@@ -99,15 +93,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				new BusinessUnitRepository(uow).Add(BusinessUnitFactory.BusinessUnitUsedInTest);
-				uow.PersistAll();
-			}
-		}
-
-		private void persistLicense()
-		{
-			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
-			{
-				new LicenseRepository(uow).Add(new License { XmlString = System.IO.File.ReadAllText("Teleopti_RD.xml") });
 				uow.PersistAll();
 			}
 		}

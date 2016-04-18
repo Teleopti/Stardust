@@ -6,58 +6,51 @@ using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 {
-	public class LegacyMessageTransformer :
-		ConsumerOf<ScheduleChanged>,
+	public class LegacyMessageTransformer : 
+		ConsumerOf<ScheduleChanged>, 
 		ConsumerOf<DenormalizeScheduleProjection>,
 		ConsumerOf<NewAbsenceRequestCreated>,
 		ConsumerOf<GroupPageChangedMessage>,
 		ConsumerOf<PersonPeriodChangedMessage>,
-		ConsumerOf<PersonChangedMessage>,
-		ConsumerOf<FullDayAbsenceAddedEvent>,
-		ConsumerOf<PersonAbsenceRemovedEvent>,
-		ConsumerOf<PersonAbsenceAddedEvent>,
-		ConsumerOf<ActivityAddedEvent>,
-		ConsumerOf<ActivityMovedEvent>,
-		ConsumerOf<PersonAbsenceModifiedEvent>,
-		ConsumerOf<DayOffAddedEvent>,
-		ConsumerOf<DayUnscheduledEvent>,
-		ConsumerOf<PersonAssignmentLayerRemovedEvent>
+		ConsumerOf<PersonChangedMessage>
 	{
+		private readonly IServiceBus _bus;
 		private readonly IEventPublisher _publisher;
 
-		public LegacyMessageTransformer(IEventPublisher publisher)
+		public LegacyMessageTransformer(IServiceBus bus, IEventPublisher publisher)
 		{
+			_bus = bus;
 			_publisher = publisher;
 		}
 
 		public void Consume(DenormalizeScheduleProjection message)
 		{
-			_publisher.Publish(new ScheduleChangedEvent
-			{
-				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
-				LogOnDatasource = message.LogOnDatasource,
-				PersonId = message.PersonId,
-				ScenarioId = message.ScenarioId,
-				SkipDelete = message.SkipDelete,
-				StartDateTime = message.StartDateTime,
-				EndDateTime = message.EndDateTime,
-				Timestamp = message.Timestamp
-			});
+			_bus.SendToSelf(new ScheduleChangedEvent
+				{
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
+					PersonId = message.PersonId,
+					ScenarioId = message.ScenarioId,
+					SkipDelete = message.SkipDelete,
+					StartDateTime = message.StartDateTime,
+					EndDateTime = message.EndDateTime,
+					Timestamp = message.Timestamp
+				});
 		}
 
 		public void Consume(ScheduleChanged message)
 		{
-			_publisher.Publish(new ScheduleChangedEvent
-			{
-				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
-				LogOnDatasource = message.LogOnDatasource,
-				PersonId = message.PersonId,
-				ScenarioId = message.ScenarioId,
-				SkipDelete = message.SkipDelete,
-				StartDateTime = message.StartDateTime,
-				EndDateTime = message.EndDateTime,
-				Timestamp = message.Timestamp
-			});
+			_bus.SendToSelf(new ScheduleChangedEvent
+				{
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+					LogOnDatasource = message.LogOnDatasource,
+					PersonId = message.PersonId,
+					ScenarioId = message.ScenarioId,
+					SkipDelete = message.SkipDelete,
+					StartDateTime = message.StartDateTime,
+					EndDateTime = message.EndDateTime,
+					Timestamp = message.Timestamp
+				});
 		}
 
 		public void Consume(NewAbsenceRequestCreated message)
@@ -108,51 +101,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				SerializedPeople = message.SerializedPeople,
 				Timestamp = message.Timestamp
 			});
-		}
-
-		public void Consume(PersonAbsenceRemovedEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(FullDayAbsenceAddedEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(PersonAbsenceAddedEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(ActivityAddedEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(ActivityMovedEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(PersonAbsenceModifiedEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(DayOffAddedEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(DayUnscheduledEvent message)
-		{
-			_publisher.Publish(message);
-		}
-
-		public void Consume(PersonAssignmentLayerRemovedEvent message)
-		{
-			_publisher.Publish(message);
 		}
 	}
 }

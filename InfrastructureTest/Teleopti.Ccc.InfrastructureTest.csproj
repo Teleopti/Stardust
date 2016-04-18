@@ -291,7 +291,7 @@
     <Compile Include="Rta\InfrastructureTest.cs" />
     <Compile Include="Rta\Persisters\AdherenceDetailsReadModelPersisterTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
-    <Compile Include="ApplicationLayer\Events\ServiceBusAsSyncEventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\Events\SyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
@@ -404,6 +404,7 @@
     <Compile Include="NHibernateConfiguration\EnversConfigurationTest.cs" />
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />
+    <Compile Include="Foundation\DataSourceExceptionTest.cs" />
     <Compile Include="Foundation\LazyLoadingManagerTest.cs" />
     <Compile Include="Foundation\MatrixRaptorExternalLogOnSynchronizationTest.cs" />
     <Compile Include="Foundation\MatrixRaptorQueueSynchronizationTest.cs" />
