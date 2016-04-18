@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text;
 using Autofac;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
@@ -171,9 +172,11 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 											  .List<IAggregateRoot>();
 					if (leftInDb.Count > 0)
 					{
-						string mess = string.Concat(assertMess, "\n\nThe problem is with following roots...");
-						leftInDb.ForEach(root => mess = string.Concat(mess, "\n", root.GetType(), " : ", root.Id));
-						Assert.Fail(mess);
+						StringBuilder builder = new StringBuilder(assertMess);
+						builder.Append("\n\nThe problem is with following roots...");
+
+						leftInDb.ForEach(root => builder.AppendFormat("\n{0} : {1}", root.GetType(), root.Id));
+						Assert.Fail(builder.ToString());
 					}
 				}
 			}

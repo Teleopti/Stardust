@@ -1,13 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Xml.Linq;
-using NHibernate.Engine;
-using NHibernate.Transaction;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Analytics;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -63,64 +58,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			ret.Add("dialect", "NHibernate.Dialect.MsSql2008Dialect");
 
 			return ret;
-		}
-
-		private static XElement xmlText(string applicationDataSourceName,
-											 string matrixInfo)
-		{
-			var str =  string.Concat(
-				 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
-						 <datasource>
-						  <hibernate-configuration  xmlns=""urn:nhibernate-configuration-2.2"" >
-							 <session-factory name=""", applicationDataSourceName, @""">
-								<!-- properties -->
-								<property name=""connection.provider"">NHibernate.Connection.DriverConnectionProvider</property>
-								<property name=""connection.driver_class"">NHibernate.Driver.SqlClientDriver</property>
-								<property name=""connection.connection_string"">",
-			InfraTestConfigReader.ConnectionString,
-				 @"</property>
-								<property name=""show_sql"">false</property> 
-								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
-								<property name=""default_schema"">nhtest2.dbo</property>
-							 </session-factory >
-						  </hibernate-configuration>
-						  ", matrixInfo, @"
-						</datasource>
-					 ");
-			return XElement.Parse(str);
-		}
-
-		private static XElement nonValidXmlTextWithAuthenticationSettings(string authenticationSettings)
-		{
-			var str = string.Concat(
-				 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
-						 <datasource>
-						  <hibernate-configuration  xmlns=""urn:nhibernate-configuration-2.2"" >
-							 <session-factory name=""test"">
-								<!-- properties -->
-								<property name=""connection.provider"">NHibernate.Connection.DriverConnectionProvider</property>
-								<property name=""connection.driver_class"">NHibernate.Driver.SqlClientDriver</property>
-								<property name=""connection.connection_string"">",
-			InfraTestConfigReader.InvalidConnectionString,
-				 @"</property>
-								<property name=""show_sql"">false</property> 
-								<property name=""dialect"">NHibernate.Dialect.MsSql2008Dialect</property>
-								<property name=""default_schema"">nhtest2.dbo</property>
-							 </session-factory >
-						  </hibernate-configuration>
-						  <matrix name=""matrixName""><connectionString>",
-			InfraTestConfigReader.AnalyticsConnectionString,
-					  @"</connectionString></matrix>
-						  ", authenticationSettings, @"
-						</datasource>
-					 ");
-			return XElement.Parse(str);
-		}
-
-		private void wasSuccess(bool result)
-		{
-			result.Should().Be.True();
-			enversConfiguration.AssertWasCalled(x => x.Configure(null), options => options.IgnoreArguments());
 		}
 	}
 }
