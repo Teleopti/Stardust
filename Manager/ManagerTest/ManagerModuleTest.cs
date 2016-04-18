@@ -36,7 +36,7 @@ namespace ManagerTest
 
 		private ContainerBuilder _containerBuilder;
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldResolveManagerController()
 		{
 			using (var ioc = _containerBuilder.Build())
@@ -44,6 +44,7 @@ namespace ManagerTest
 				using (var scope = ioc.BeginLifetimeScope())
 				{
 					var controller = scope.Resolve<ManagerController>();
+
 					controller.Should().Not.Be.Null();
 				}
 			}
