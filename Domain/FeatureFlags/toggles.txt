@@ -116,3 +116,5 @@ Stardust_MoveAbsenceRequestTo_37941 = RC
 ETL_SpeedUpNightlyReloadDatamart_38131 = RC
 ETL_SpeedUpIntradayPreference_37124 = false
 ShiftTrade_ToHangfire_38181 = false
+ETL_SpeedUpIntradaySkill_37543 = false
+ETL_SpeedUpNightlySkill_37543 = false

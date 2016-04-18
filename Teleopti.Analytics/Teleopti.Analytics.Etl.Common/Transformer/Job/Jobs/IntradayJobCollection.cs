@@ -40,7 +40,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new IntradayStageSchedulePreferenceJobStep(jobParameters));
 			}
 			Add(new IntradayStageAvailabilityJobStep(jobParameters));
-			Add(new StageSkillJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradaySkill_37543))
+			{
+				Add(new StageSkillJobStep(jobParameters));
+			}
 			Add(new StageWorkloadJobStep(jobParameters));
 			Add(new IntradayStageForecastWorkloadJobStep(jobParameters));
 			Add(new StageKpiJobStep(jobParameters));
@@ -63,7 +66,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new DimSiteJobStep(jobParameters));
 				Add(new DimTeamJobStep(jobParameters));
 			}
-			Add(new DimSkillJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradaySkill_37543))
+			{
+				Add(new DimSkillJobStep(jobParameters));
+			}
 		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 		    {
 		        Add(new DimSkillSetJobStep(jobParameters));
