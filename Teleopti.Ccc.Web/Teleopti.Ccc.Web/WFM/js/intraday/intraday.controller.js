@@ -16,6 +16,9 @@
 			$scope.showSummary = false;
 			$scope.selectedIndex = 0;
 			$scope.hiddenArray = [];
+			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>";
+
+			NoticeService.info(message, null, true);
 
 			var getAutoCompleteControls = function() {
 				var autocompleteSkillDOM = document.querySelector('.autocomplete-skill');

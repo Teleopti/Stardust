@@ -26,7 +26,7 @@
 											  md-items="skill in querySearch(searchSkillText, skills)"
 											  md-item-text="skill.Name"
 											  md-min-length="0"
-											  placeholder="Select skill">
+											  placeholder="{{'SelectSkill'|translate}}">
 							<md-item-template>
 								<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 							</md-item-template>
@@ -59,14 +59,14 @@
 						<span ng-show="selectedSkill.Name">
 							<span class="cursor-pointer">
 								{{latestStatsTime}} <i class="mdi mdi-clock"></i>
-								<md-tooltip>Last updated</md-tooltip>
+								<md-tooltip>{{'LastUpdated'|translate}}</md-tooltip>
 							</span>
 						</span>
 
 						<span ng-show="selectedSkillArea.Name">
 							<span class="cursor-pointer">
 								{{latestStatsTime}} <i class="mdi mdi-clock"></i>
-								<md-tooltip>Last updated</md-tooltip>
+								<md-tooltip>{{'LastUpdated'|translate}}</md-tooltip>
 							</span>
 						</span>
 					</div>
@@ -79,7 +79,7 @@
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="sub-header">
-					<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b> contains <b>{{selectedSkillArea.Skills.length}}</b> skills</h2>
+					<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b>: {{selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}}</h2>
 					<div class="head-actions panel-menu">
 						<div tabindex=0 class="context-menu card-context">
 							<i class="skill-area-options mdi mdi-dots-vertical"></i>
@@ -111,8 +111,8 @@
 	</div>
 
 	<div class="con-row">
-	<div class="con-flex" >
-		<div class="panel slide-panel full-padding material-depth-1" ng-show="HasMonitorData" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
+	<div class="con-flex" ng-if="HasMonitorData">
+		<div class="panel slide-panel full-padding material-depth-1" ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding">
 						<md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">
@@ -120,7 +120,7 @@
 								<md-content class="md-padding">
 									<div class="con-row">
 										<div class="con-flex">
-											<h2>Incoming</h2>
+											<h2>{{'IncomingTraffic'|translate}}</h2>
 										</div>
 									</div>
 									<div class="con-row">
@@ -140,13 +140,13 @@
 	<div class="con-row">
 		<div class="con-flex" ng-cloak ng-if="!HasMonitorData">
 			<div class="panel full-padding material-depth-1 " ng-hide="!selectedSkillArea.Name && !selectedSkill.Name">
-				<i class="mdi mdi-alert"></i> <span class="text-warning">No data available for {{selectedItem.Name}}</span>
+			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}}: {{'NoDataAvailable'|translate}}</span>
 			</div>
 		</div>
 
 	<div ng-if="HasMonitorData" ng-cloak ng-hide="!selectedSkillArea.Name && !selectedSkill.Name" tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
 			<div class="sub-header">
-				<h2>Incoming</h2>
+				<h2>{{'IncomingTraffic'|translate}}</h2>
 				<!--<div class="head-actions panel-menu">
 																							 <div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
 																							 <i class="filter-header mdi mdi-alert pointer"><md-tooltip>There are some issues</md-tooltip></i>
@@ -158,15 +158,15 @@
 					<table class="wfm-table wfm-filter-options">
 						<thead>
 							<tr>
-								<th>Type</th>
-								<th>Actual</th>
-								<th>Forecasted</th>
-								<th>Difference</th>
+								<th>{{'Type'|translate}}</th>
+								<th>{{'Actual'|translate}}</th>
+								<th>{{'Forecasted'|translate}}</th>
+								<th>{{'Difference'|translate}}</th>
 							</tr>
 						</thead>
 						<tbody>
 							<tr>
-								<td>Calls</td>
+								<td>{{'Calls'|translate}}</td>
 								<td class="number-cell">{{offeredCalls}}</td>
 								<td class="number-cell">{{forecastedCalls}}</td>
 								<td class="number-cell">{{forecastActualCallsDifference}}%</td>
