@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				summary.OfferedCalls += interval.OfferedCalls ?? 0;
 				summary.HandleTime += interval.HandleTime ?? 0;
 
-				timeSeries.Add(DateTime.MinValue.AddMinutes(interval.IntervalId * intervalLength));
+				timeSeries.Add(DateTime.MinValue.AddMinutes((interval.IntervalId + 1) * intervalLength));
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
 				forecastedAverageHandleTimeSeries.Add(interval.ForecastedAverageHandleTime);
 				offeredCallsSeries.Add(interval.OfferedCalls);
