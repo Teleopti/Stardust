@@ -227,13 +227,15 @@
 						});
 
 						var cancelTimeout = function () {
-							if (timeoutPromise)
-							$timeout.cancel(timeoutPromise);
+						    if (timeoutPromise) {
+						        $timeout.cancel(timeoutPromise);
+						        timeoutPromise = undefined;
+						    }
 						};
 
 						var deselectAll = function(){
 							$scope.showIncoming = false;
-							$scope.showStaffing = false
+						    $scope.showStaffing = false;
 							$scope.showProductivity = false;
 						}
 						$scope.toggleOthers = function(index, intraCard){
