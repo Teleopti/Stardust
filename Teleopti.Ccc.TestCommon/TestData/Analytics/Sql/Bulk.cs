@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Sql
 		{
 			using (var bulk = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity, null))
 			{
+				bulk.BulkCopyTimeout = 60;
 				bulk.DestinationTableName = table.TableName;
 				bulk.WriteToServer(table);
 			}
