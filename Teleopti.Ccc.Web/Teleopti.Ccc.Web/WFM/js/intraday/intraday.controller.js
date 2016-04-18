@@ -8,6 +8,7 @@
 			var autocompleteSkill;
 			var autocompleteSkillArea;
 			var timeoutPromise;
+		    var interval;
 			var pollingTimeout = 60000;
 			$scope.DeleteSkillAreaModal = false;
 			$scope.showIncoming = true;
@@ -260,8 +261,12 @@
 						}
 
 						var loadIntradayChart = function() {
-							$scope.chartHiddenLines = $scope.hiddenArray;
-							c3.generate({
+						    $scope.chartHiddenLines = $scope.hiddenArray;
+						    var intervalsList = [];
+						    for (interval = 0; interval < $scope.timeSeries.length-1; interval += 4) {
+						        intervalsList.push(interval);
+						    }
+						    c3.generate({
 								bindto: '#intradayChart',
 								data: {
 									x:'x',
@@ -305,7 +310,7 @@
 											fit: true,
 											centered: true,
 											multiline: false,
-											values: [0, 4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 72, 76, 80, 84, 88, 92]
+											values: intervalsList
 										},
 										categories: $scope.timeSeries
 									}
