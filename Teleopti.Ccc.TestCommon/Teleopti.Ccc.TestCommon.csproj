@@ -152,6 +152,7 @@
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
+    <Compile Include="FakeData\FakeScheduleRangePersister.cs" />
     <Compile Include="FakeData\PrincipalAuthorizationWithConfigurablePermission.cs" />
     <Compile Include="FakeEventPublisherWithOverwritingHandlers.cs" />
     <Compile Include="FakeHttpServer.cs" />
@@ -186,7 +187,6 @@
     <Compile Include="FakeData\FakePersonContractProvider.cs" />
     <Compile Include="FakeData\FakeScheduleDayForPerson.cs" />
     <Compile Include="FakeData\FakeScheduleDictionary.cs" />
-    <Compile Include="FakeData\FakeScheduleDictionaryPersister.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolder.cs" />
     <Compile Include="FakeData\FakeSkillRepository.cs" />
     <Compile Include="FakeData\FakeUnitOfWork.cs" />

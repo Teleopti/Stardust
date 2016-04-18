@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -9,38 +7,33 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	//only work for personassignments ATM
 	//if needed, create a new type called SchedulesInDb or something that shares state between "schedule repositories",
 	//then we can manipulate that list here
-	public class FakeScheduleDictionaryPersister : IScheduleDictionaryPersister
+	public class FakeScheduleRangePersister : IScheduleRangePersister
 	{
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly object lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository = new object();
 
-		public FakeScheduleDictionaryPersister(IPersonAssignmentRepository personAssignmentRepository)
+		public FakeScheduleRangePersister(IPersonAssignmentRepository personAssignmentRepository)
 		{
 			_personAssignmentRepository = personAssignmentRepository;
 		}
 
-		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
+		public SchedulePersistResult Persist(IScheduleRange scheduleRange)
 		{
 			var diffSvc = new DifferenceEntityCollectionService<IPersistableScheduleData>();
-			foreach (var scheduleRange in scheduleDictionary.Values)
-			{
-				var diff = scheduleRange.DifferenceSinceSnapshot(diffSvc);
-				lock (lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository)
-				{
-					foreach (var scheduleChange in diff)
-					{
-						if (!(scheduleChange.CurrentItem is IPersonAssignment))
-							continue;
 
-						var currAss = (IPersonAssignment) scheduleChange.CurrentItem;
-						var orgAss = (IPersonAssignment) scheduleChange.OriginalItem;
+			var diff = scheduleRange.DifferenceSinceSnapshot(diffSvc);
+			lock (lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository)
+			{
+				foreach (var scheduleChange in diff)
+				{
+					var currAss = scheduleChange.CurrentItem as IPersonAssignment;
+					if (currAss != null)
+					{
+						var orgAss = (IPersonAssignment)scheduleChange.OriginalItem;
 						switch (scheduleChange.Status)
 						{
 							case DifferenceStatus.Added:
 								_personAssignmentRepository.Add(currAss);
-								break;
-							case DifferenceStatus.Deleted:
-								_personAssignmentRepository.Remove(orgAss);
 								break;
 							case DifferenceStatus.Modified:
 								_personAssignmentRepository.Remove(orgAss);
@@ -50,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					}
 				}
 			}
-			return Enumerable.Empty<PersistConflict>();
+			return new SchedulePersistResult();
 		}
 	}
 }
