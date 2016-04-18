@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public SchedulePartFactoryForDomain(IPerson person, DateTimePeriod period)
-			: this(person, ScenarioFactory.CreateScenarioAggregate("For test", true), period, SkillFactory.CreateSkill("Skill"))
+			: this(person, ScenarioFactory.CreateScenarioAggregate("For test", true), period, SkillFactory.CreateSkill("Skill"), person.PermissionInformation.DefaultTimeZone())
 		{	
 		}
 

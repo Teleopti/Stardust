@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IAbsence Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return Get(id);
 		}
 
 		public long CountAllEntities()

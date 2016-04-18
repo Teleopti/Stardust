@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 	[Serializable]
 	public class WorkShiftProjection : IWorkShiftProjection
 	{
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static IWorkShiftProjection FromWorkShift(IWorkShift workShift)
 		{
 			return new WorkShiftProjection

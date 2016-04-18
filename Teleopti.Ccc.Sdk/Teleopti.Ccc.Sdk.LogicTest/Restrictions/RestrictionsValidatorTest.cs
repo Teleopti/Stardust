@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.Restrictions;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -51,10 +52,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 			_target = new RestrictionsValidator(_isEditablePredicate, _preferenceDayAssembler, _studentAvailabilityDayAssembler, 
 				_minMaxChecker, new CultureInfo(1053), _preferenceNightRestChecker);
             _workflowControlSet = new WorkflowControlSet("Normal");
-						_person = PersonFactory.CreatePerson("mycket", "hemligt");
-            _person.SetId(Guid.NewGuid());
+						_person = PersonFactory.CreatePerson("mycket", "hemligt").WithId();
             _person.WorkflowControlSet = _workflowControlSet;
-            _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
+            _person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
             _person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
             IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2009, 1, 2));
             IRuleSetBag bag = new RuleSetBag();
