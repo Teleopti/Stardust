@@ -106,6 +106,7 @@
 		Stardust_MoveAbsenceRequestTo_37941,
 		ETL_SpeedUpNightlyReloadDatamart_38131,
 		ETL_SpeedUpIntradayPreference_37124,
+		ShiftTrade_ToHangfire_38181
 		// ReSharper restore InconsistentNaming
 	}
 }
