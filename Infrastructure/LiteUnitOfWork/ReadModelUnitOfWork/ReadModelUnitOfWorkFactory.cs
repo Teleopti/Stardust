@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 	public class ReadModelUnitOfWorkFactory : IReadModelUnitOfWorkFactory
 	{
 		private readonly string _connectionString;
-		private readonly ReadModelUnitOfWorkState _state;
+		private ReadModelUnitOfWorkState _state;
 		private ISessionFactory _sessionFactory;
 
 		public ReadModelUnitOfWorkFactory(ICurrentHttpContext httpContext, string connectionString)
@@ -39,6 +39,16 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork
 			if (exception == null)
 				uow.Commit();
 			uow.Dispose();
+		}
+
+		public void Dispose()
+		{
+			if (_sessionFactory != null)
+			{
+				_sessionFactory.Dispose();
+				_sessionFactory = null;
+			}
+			_state = null;
 		}
 	}
 }

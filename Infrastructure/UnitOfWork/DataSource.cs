@@ -30,8 +30,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void Dispose()
 		{
 			if (Analytics != null)
+			{
 				Analytics.Dispose();
+				Analytics = null;
+			}
+			if (ReadModel != null)
+			{
+				ReadModel.Dispose();
+				ReadModel = null;
+			}
 			Application.Dispose();
+			Application = null;
 		}
 	}
 }

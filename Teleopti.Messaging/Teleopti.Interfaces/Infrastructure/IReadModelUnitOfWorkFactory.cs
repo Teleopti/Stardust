@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Infrastructure
 {
-	public interface IReadModelUnitOfWorkFactory
+	public interface IReadModelUnitOfWorkFactory : IDisposable
 	{
 		void Configure();
 		void StartUnitOfWork();
