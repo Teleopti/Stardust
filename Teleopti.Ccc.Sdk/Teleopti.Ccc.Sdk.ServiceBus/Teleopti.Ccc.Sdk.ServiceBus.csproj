@@ -260,7 +260,6 @@
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="Denormalizer\ProcessDenormalizeQueueConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumer.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />

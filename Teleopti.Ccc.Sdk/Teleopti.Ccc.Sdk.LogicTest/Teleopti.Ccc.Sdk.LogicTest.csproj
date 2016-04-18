@@ -196,7 +196,6 @@
     <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\CreatePayrollExportCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\DeletePersonAccountForPersonCommandHandlerTest.cs" />
-    <Compile Include="CommandHandler\DenormalizeNotificationCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\DenormalizeScheduleCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\DenyRequestCommandHandlerTest.cs" />
     <Compile Include="CommandHandler\EmployPersonCommandHandlerTest.cs" />

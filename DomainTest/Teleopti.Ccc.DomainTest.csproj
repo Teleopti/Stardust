@@ -554,7 +554,6 @@
     <Compile Include="Helper\NormalizeTextTest.cs" />
     <Compile Include="MessageBroker\ImplementationDetailTests\NotificationTest.cs" />
     <Compile Include="Helper\PersonPeriodChangedMessageTest.cs" />
-    <Compile Include="Helper\ProcessDenormalizeQueueTest.cs" />
     <Compile Include="Helper\StringExtensionsTest.cs" />
     <Compile Include="Infrastructure\ComplexRuleSetEventArgsTest.cs" />
     <Compile Include="Infrastructure\EventMessageArgsTest.cs" />

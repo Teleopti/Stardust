@@ -445,7 +445,6 @@
     <Compile Include="Repositories\OvertimeAvailabilityRepositoryTest.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelFinderTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />
-    <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepositoryTest.cs" />
     <Compile Include="Repositories\ImportForecastRepositoryTest.cs" />
     <Compile Include="Repositories\JobResultRepositoryTest.cs" />
