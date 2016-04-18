@@ -275,6 +275,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandTests.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStopWhenLargeGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\TeamBlockSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TrackIntradayOptimizationCallback.cs" />
     <Compile Include="SchedulingScenarios\TrackOptimizeDaysForAgents.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizerTest.cs" />

@@ -242,7 +242,9 @@
     <Compile Include="Repositories\IAnalyticsPermissionRepository.cs" />
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\IAnalyticsTeamRepository.cs" />
+    <Compile Include="Scheduling\ISchedulingOptionsProvider.cs" />
     <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
+    <Compile Include="Scheduling\SchedulingOptionsProvider.cs" />
     <Compile Include="Security\Principal\CurrentProcess.cs" />
     <Compile Include="Security\Principal\ThreadPrincipalContext.cs" />
     <Compile Include="Security\Principal\WindowsAppDomainPrincipalContext.cs" />

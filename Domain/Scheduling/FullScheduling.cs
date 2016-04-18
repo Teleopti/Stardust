@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -29,12 +28,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ISchedulingProgress _schedulingProgress;
+		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 
 		public FullScheduling(IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<IScheduleCommand> scheduleCommand, Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IRequiredScheduleHelper> requiredScheduleHelper, Func<IGroupPagePerDateHolder> groupPagePerDateHolder,
 			IScheduleDictionaryPersister persister, ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
-			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork, ISchedulingProgress schedulingProgress)
+			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork, 
+			ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider)
 		{
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_scheduleCommand = scheduleCommand;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 			_currentUnitOfWork = currentUnitOfWork;
 			_schedulingProgress = schedulingProgress;
+			_schedulingOptionsProvider = schedulingOptionsProvider;
 		}
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
@@ -89,17 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			if (_schedulerStateHolder().Schedules.Any())
 			{
-				_scheduleCommand().Execute(new OptimizerOriginalPreferences(new SchedulingOptions
-				{
-					UseAvailability = true,
-					UsePreferences = true,
-					UseRotations = true,
-					UseStudentAvailability = false,
-					DayOffTemplate = _schedulerStateHolder().CommonStateHolder.DefaultDayOffTemplate,
-					ScheduleEmploymentType = ScheduleEmploymentType.FixedStaff,
-					GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
-					TagToUseOnScheduling = NullScheduleTag.Instance
-				}), _schedulingProgress,
+				_scheduleCommand().Execute(new OptimizerOriginalPreferences(_schedulingOptionsProvider.Fetch()), _schedulingProgress,
 					_schedulerStateHolder(),
 					_schedulerStateHolder().Schedules.SchedulesForPeriod(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period)).ToList(), 
 					_groupPagePerDateHolder(),
