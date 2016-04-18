@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
-			var serviceBusSender = MockRepository.GenerateMock<IEventPublisher>();
+			var eventSender = MockRepository.GenerateMock<IEventPublisher>();
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 			var now = MockRepository.GenerateMock<INow>();
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var datasource = MockRepository.GenerateMock<IDataSource>();
 			datasource.Stub(x => x.DataSourceName).Return("Data Source");
 			currentDataSourceProvider.Stub(x => x.Current()).Return(datasource);
-
+			personRequest.Stub(p => p.Person).Return(new Person());
 			mapper.Stub(x => x.Map<AbsenceRequestForm, IPersonRequest>(form)).Return(personRequest);
 
 			var message = new NewAbsenceRequestCreatedEvent
@@ -88,10 +88,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			              		Timestamp = time
 			              	};
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, currentUnitOfWork);
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, eventSender, currentBusinessUnitProvider, currentDataSourceProvider, now, currentUnitOfWork);
 			target.Persist(form);
 
-			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.Publish(message)));
+			currUow.Expect(c => c.AfterSuccessfulTx(() => eventSender.Publish(message)));
 		}
 
 		[Test]
