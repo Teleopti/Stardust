@@ -3,8 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -15,13 +13,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeScheduleDictionaryPersister : IScheduleDictionaryPersister
 	{
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		//private readonly IPreferenceDayRepository _preferenceDayRepository;
+		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly object lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository = new object();
 
-		public FakeScheduleDictionaryPersister(IPersonAssignmentRepository personAssignmentRepository) //, IPreferenceDayRepository preferenceDayRepository)
+		public FakeScheduleDictionaryPersister(IPersonAssignmentRepository personAssignmentRepository, IPreferenceDayRepository preferenceDayRepository)
 		{
 			_personAssignmentRepository = personAssignmentRepository;
-			//_preferenceDayRepository = preferenceDayRepository;
+			_preferenceDayRepository = preferenceDayRepository;
 		}
 
 		public IEnumerable<PersistConflict> Persist(IScheduleDictionary scheduleDictionary)
@@ -56,28 +54,28 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 				
 				}
-				//foreach (var scheduleChange in diff)
-				//{
+				foreach (var scheduleChange in diff)
+				{
 
-				//	if (!(scheduleChange.CurrentItem is IPreferenceDay))
-				//		continue;
+					if (!(scheduleChange.CurrentItem is IPreferenceDay))
+						continue;
 
-				//	var curr = (IPreferenceDay) scheduleChange.CurrentItem;
-				//	var org = (IPreferenceDay) scheduleChange.OriginalItem;
-				//	switch (scheduleChange.Status)
-				//	{
-				//		case DifferenceStatus.Added:
-				//			_preferenceDayRepository.Add(curr);
-				//			break;
-				//		case DifferenceStatus.Deleted:
-				//			_preferenceDayRepository.Remove(org);
-				//			break;
-				//		case DifferenceStatus.Modified:
-				//			_preferenceDayRepository.Remove(org);
-				//			_preferenceDayRepository.Add(curr);
-				//			break;
-				//	}
-				//}
+					var curr = (IPreferenceDay)scheduleChange.CurrentItem;
+					var org = (IPreferenceDay)scheduleChange.OriginalItem;
+					switch (scheduleChange.Status)
+					{
+						case DifferenceStatus.Added:
+							_preferenceDayRepository.Add(curr);
+							break;
+						case DifferenceStatus.Deleted:
+							_preferenceDayRepository.Remove(org);
+							break;
+						case DifferenceStatus.Modified:
+							_preferenceDayRepository.Remove(org);
+							_preferenceDayRepository.Add(curr);
+							break;
+					}
+				}
 			}
 			return Enumerable.Empty<PersistConflict>();
 		}
