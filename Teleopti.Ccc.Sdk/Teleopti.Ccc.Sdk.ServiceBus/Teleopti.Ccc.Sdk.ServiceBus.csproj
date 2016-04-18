@@ -243,7 +243,6 @@
     <Compile Include="NodeHandlers\StardustHealthCheckHandler.cs" />
     <Compile Include="PayrollBusBootStrapper.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
-    <Compile Include="Rta\FactQueueUpdatedConsumer.cs" />
     <Compile Include="NotificationModule.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />

@@ -12,6 +12,7 @@ using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 {
+	//POC
 	[KeyBasedAuthentication] // Enable authentication via a key
 	[Authorize] // Require some form of authentication
 	public class QueueStatsController : ApiController
@@ -29,13 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 		[HttpPost]
 		public void PostIntervalsCompleted([FromBody] QueueDataCompleted queueDataCompleted)
 		{
-			var headers = getHeader();
-			_serviceBusSender.Send(new FactQueueUpdatedMessage
-			{
-				Datasource = headers.DataSource,
-				SourceId = headers.SourceId,
-				DataSentUpUntilInterval = queueDataCompleted.DataSentUpUntilInterval
-			}, false);
+			getHeader();
 		}
 
 		[Route("api/Mart/QueueStats/PostIntervals")]

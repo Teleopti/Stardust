@@ -159,7 +159,6 @@
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
-    <Compile Include="Rta\FactQueueUpdatedConsumerTest.cs" />
     <Compile Include="Rta\NotifyRtaDeciderTest.cs" />
     <Compile Include="Rta\UpdatedScheduleInfoConsumerResolveTest.cs" />
     <Compile Include="Rta\UpdatedScheduleInfoHandlerTest.cs" />

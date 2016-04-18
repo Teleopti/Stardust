@@ -30,18 +30,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 			handler.AssertWasCalled(x => x.Handle(queueStatsModels, "Teleopti WFM", 1, 0));
 		}
 
-		[Test]
-		public void ShouldCallBusSender()
-		{
-			var queueDataCompleted =  new QueueDataCompleted{DataSentUpUntilInterval = "20"} ;
-			var handler = MockRepository.GenerateMock<IQueueStatHandler>();
-			var publisher = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
-			var controller = setupControllerForTests(handler, "Teleopti WFM", 1, publisher);
-			controller.PostIntervalsCompleted(queueDataCompleted);
-			
-			publisher.AssertWasCalled(x => x.Send(Arg<FactQueueUpdatedMessage>.Is.Anything, Arg<bool>.Is.Anything));
-		}
-
 		private static QueueStatsController setupControllerForTests(IQueueStatHandler handler, string nhibName, int sourceId, IMessagePopulatingServiceBusSender populatingPublisher)
 		{
 			//other properties could be set if needed later

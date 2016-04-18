@@ -851,7 +851,6 @@
     <Compile Include="Messages\General\BadgeCalculationInitMessage.cs" />
     <Compile Include="Messages\ILogOnContext.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
-    <Compile Include="Messages\Rta\FactQueueUpdatedMessage.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewAbsenceReportCreated.cs" />
