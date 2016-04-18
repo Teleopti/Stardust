@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 													   out checkPeriodValue);
 						double currentPeriodValue =
 							periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-						success = handleResult(periodValueCalculatorForAllSkills, rollbackService, schedulingOptions, previousPeriodValue, success,
+						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
 													   teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, ()=>
 													   {
 														   cancelMe = true;
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 												 out checkPeriodValue);
 						double currentPeriodValue =
 							periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-						success = handleResult(periodValueCalculatorForAllSkills, rollbackService, schedulingOptions, previousPeriodValue, success,
+						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
 							teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, () =>
 							{
 								cancelMe = true;
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return teamInfosToRemove;
 		}
 
-		private bool handleResult(IPeriodValueCalculator periodValueCalculatorForAllSkills, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
+		private bool handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 		                            double previousPeriodValue, bool success, ITeamInfo teamInfo,
 									int totalLiveTeamInfos, int currentTeamInfoCounter, double currentPeriodValue, bool checkPeriodValue, Action cancelAction, ISchedulingProgress schedulingProgress)
 		{
@@ -360,8 +360,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 
-				currentPeriodValue =
-					periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+				currentPeriodValue =previousPeriodValue;
 			}
 
 			var shouldCancel = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
