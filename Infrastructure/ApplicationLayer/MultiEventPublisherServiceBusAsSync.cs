@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly HangfireEventPublisher _hangfirePublisher;
 		private readonly ServiceBusAsSyncEventPublisher _serviceBusPublisher;
 		private readonly StardustEventPublisher _stardustEventPublisher;
-		private RunInProcessEventPublisher _runInProcessEventPublisher;
+		private readonly RunInProcessEventPublisher _runInProcessEventPublisher;
 
 		public MultiEventPublisherServiceBusAsSync(
 			HangfireEventPublisher hangfirePublisher, 

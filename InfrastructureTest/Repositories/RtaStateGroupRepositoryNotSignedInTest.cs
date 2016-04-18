@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			public virtual void DoesWhileNotLoggedIn(Action<IUnitOfWork> action)
 			{
-				using (_dataSource.OnThisThreadUse("App"))
+				using (_dataSource.OnThisThreadUse(SetupFixtureForAssembly.DataSource.DataSourceName))
 					DoesWhileNotLoggedInInner(action);
 			}
 

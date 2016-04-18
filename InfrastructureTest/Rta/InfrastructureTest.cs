@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			public virtual void DoesWhileNotLoggedIn(Action<IUnitOfWork> action)
 			{
-				using (_dataSource.OnThisThreadUse("App"))
+				using (_dataSource.OnThisThreadUse(SetupFixtureForAssembly.DataSource.DataSourceName))
 					DoesWhileNotLoggedInInner(action);
 			}
 
