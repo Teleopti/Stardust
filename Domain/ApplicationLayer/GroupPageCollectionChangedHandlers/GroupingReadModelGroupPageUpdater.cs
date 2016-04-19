@@ -1,9 +1,11 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
+	[UseOnToggle(Toggles.GroupPageCollection_ToHangfire_38178)]
 	public class GroupingReadModelGroupPageUpdaterHangfire : 
 		IHandleEvent<GroupPageCollectionChangedEvent>, 
 		IRunOnHangfire
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		}
 	}
 
+	[UseNotOnToggle(Toggles.GroupPageCollection_ToHangfire_38178)]
 	public class GroupingReadModelGroupPageUpdaterServicebus :
 		IHandleEvent<GroupPageCollectionChangedEvent>,
 		IRunOnServiceBus
