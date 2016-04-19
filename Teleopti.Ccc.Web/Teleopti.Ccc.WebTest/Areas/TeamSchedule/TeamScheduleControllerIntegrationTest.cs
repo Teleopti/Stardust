@@ -18,6 +18,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.WebTest.Areas.Search;
 using Teleopti.Ccc.WebTest.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -752,7 +753,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			ScheduleProvider.AddScheduleDay(scheduleDay1);
 			ScheduleProvider.AddScheduleDay(scheduleDay2);
 
-			var result = Target.GetSchedulesForPeople(new[] { person1.Id.Value, person2.Id.Value }, scheduleDate);
+			var result = Target.GetSchedulesForPeople(new GetSchedulesForPeopleFormData
+			{
+				Date = scheduleDate,
+				PersonIds = new List<Guid>{ person1.Id.Value, person2.Id.Value }
+			});
 
 			result.Schedules.Count().Should().Be(2);
 			result.Schedules.First().PersonId.Should().Be(person1.Id.Value.ToString());

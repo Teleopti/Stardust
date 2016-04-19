@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 angular.module("wfm.teamSchedule").service("TeamSchedule", [
-	"$resource", "$q", function($resource, $q) {
+	"$resource", "$q", '$http', function($resource, $q, $http) {
 
 		var service = this;
 
@@ -19,13 +19,21 @@ angular.module("wfm.teamSchedule").service("TeamSchedule", [
 			}
 		});
 
-		service.getSchedules = $resource("../api/TeamSchedule/GetSchedules", {}, {
-			query: {
-				method: "GET",
-				params: {},
-				isArray: false
-			}
-		});
+
+		// gradually replace with $http.post
+		service.getSchedules = function (date, personIds) {
+			var deferred = $q.defer();
+			$http.post("../api/TeamSchedule/GetSchedules", {
+				PersonIds: personIds,
+				Date: date
+			}).success(function(data) {
+				deferred.resolve(data);
+			}).error(function(e) {
+				deferred.reject(e);
+			});
+			return deferred.promise;
+		}
+		
 
 		service.getPermissions = $resource("../api/TeamSchedule/GetPermissions", {
 

@@ -32,9 +32,8 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 					schedule.WorkTimeMinutes = 0;
 				}
 			});
-
-			var params = { personIds: currentPeoples, date: scheduleDateMoment.format('YYYY-MM-DD') };
-			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
+		
+			teamScheduleSvc.getSchedules(scheduleDateMoment.format('YYYY-MM-DD'), currentPeoples).then(function (result) {
 				svc.mergeSchedules(result.Schedules, scheduleDateMoment);
 				afterLoading();
 			});

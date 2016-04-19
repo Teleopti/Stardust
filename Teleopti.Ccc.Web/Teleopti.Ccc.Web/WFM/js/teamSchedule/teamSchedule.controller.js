@@ -50,12 +50,8 @@
 			}
 
 			var currentDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
-			var params = {
-				personIds: selectedPersonIdList,
-				date: currentDate
-			};
-
-			teamScheduleSvc.getSchedules.query(params).$promise.then(function (result) {
+		
+			teamScheduleSvc.getSchedules(currentDate, selectedPersonIdList).then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules, currentDate);
 			});

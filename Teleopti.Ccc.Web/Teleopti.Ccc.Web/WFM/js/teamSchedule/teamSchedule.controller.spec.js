@@ -234,14 +234,13 @@ describe("[Test for TeamScheduleController]:", function() {
 			}
 		};
 
-		teamScheduleService.getSchedules = {
-			query: function(params) {
-				searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
-				var queryDeferred = $q.defer();
-				queryDeferred.resolve();
-				return { $promise: queryDeferred.promise };
+		teamScheduleService.getSchedules = function(date, agents) {
+			return {
+				then: function(cb) {
+					searchScheduleCalledTimes = searchScheduleCalledTimes + 1;
+				}
 			}
-		};
+		}	
 
 		teamScheduleService.getAgentsPerPageSetting = {
 			post: function() {
