@@ -32,10 +32,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		private long _lastUpdated = DateTime.UtcNow.Ticks;
+		private readonly object locker = new object();
 		private bool preventCallbackDueToTooMany()
 		{
-			var ticksNow = DateTime.UtcNow.Ticks;
-			return ticksNow - waitBetweenCallbacks < Interlocked.Exchange(ref _lastUpdated, ticksNow);
+			lock (locker)
+			{
+				var ticksNow = DateTime.UtcNow.Ticks;
+				if (ticksNow - waitBetweenCallbacks < _lastUpdated)
+				{
+					return true;
+				}
+				_lastUpdated = ticksNow;
+				return false;
+			}
 		}
 
 		public bool IsCancelled()
