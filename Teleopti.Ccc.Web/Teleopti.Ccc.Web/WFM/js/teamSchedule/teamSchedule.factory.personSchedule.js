@@ -54,19 +54,19 @@
 					return !this.IsFullDayAbsence;
 				},
 				ScheduleStartTime: function () {
-					var start = schedule.Date;
+					var start = this.Date;
 					angular.forEach(this.Shifts, function(shift) {
-						if (start === shift.Date && shift.Projections.length > 0) {
+						if (shift.Date.isSame(start,'day') && shift.Projections.length > 0) {
 							start = shift.Projections[0].Start;
 						}
 					});
 					return start;
 				},
 				ScheduleEndTime: function () {
-					var start = schedule.Date;
+					var start = this.Date;
 					var end = moment(schedule.Date).endOf('day');
 					angular.forEach(this.Shifts, function (shift) {
-						if (start === shift.Date && shift.Projections.length > 0) {
+						if (shift.Date.isSame(start,'day') && shift.Projections.length > 0) {
 							end = moment(shift.Projections[shift.Projections.length - 1].Start).add(shift.Projections[shift.Projections.length - 1].Minutes,'minutes');
 						}
 					});

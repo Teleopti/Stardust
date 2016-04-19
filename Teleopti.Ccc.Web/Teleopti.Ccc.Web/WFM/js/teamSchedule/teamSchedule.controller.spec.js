@@ -5,7 +5,8 @@ describe("[Test for TeamScheduleController]:", function() {
 		rootScope,
 		controller,
 		searchScheduleCalledTimes,
-		mockSignalRBackendServer = {};
+		mockSignalRBackendServer = {},
+		personSelection;
 
 	var nowDate = new Date("2015-10-26 12:16:00");
 
@@ -31,35 +32,43 @@ describe("[Test for TeamScheduleController]:", function() {
 		});
 	});
 
-	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _TeamSchedule_) {
+	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_) {
 		$q = _$q_;
 		rootScope = _$rootScope_.$new();
+		personSelection = _PersonSelection_;
 		setupMockTeamScheduleService(_TeamSchedule_);
 		controller = setUpController(_$controller_);
 	}));
 
-	it("can select one person", inject(function() {
+	it("can display person selection status correctly when turning pages", inject(function () {
+		controller.scheduleDate = new Date("2015-10-26");
 		rootScope.$digest();
 
-		var selectedPersons = controller.selectedPersonInfo();
-		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
-		selectedPersons[personSchedule1.PersonId].isSelected = true;
-		var selectedPersonList = controller.getSelectedPersonIdList();
-
-		expect(selectedPersonList.length).toEqual(1);
-		expect(selectedPersonList[0]).toEqual("221B-Baker-SomeoneElse");
-	}));
-
-	it("can deselect one person", inject(function() {
+		personSelection.personInfo['person-emptySchedule'] = { checked: true };
+		controller.loadSchedules();
 		rootScope.$digest();
 
-		var selectedPersons = controller.selectedPersonInfo();
-		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
-		selectedPersons[personSchedule1.PersonId].isSelected = false;
-		var selectedPersonList = controller.getSelectedPersonIdList();
-
-		expect(selectedPersonList.length).toEqual(0);
+		var schedules = controller.groupScheduleVm().Schedules;
+		expect(schedules[2].IsSelected).toEqual(true);
+		expect(schedules[1].IsSelected).toEqual(false);
+		expect(schedules[0].IsSelected).toEqual(false);
 	}));
+	
+	
+	it("should keep the activity selection when schedule reloaded", function () {
+		controller.scheduleDate = new Date("2015-10-26");
+		rootScope.$digest();
+		personSelection.personInfo['221B-Baker-SomeoneElse'] = {
+			selectedActivities: ["activity1"],
+			selectedAbsences:[]
+		}
+
+		controller.loadSchedules();
+		rootScope.$digest();
+		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
+		expect(personSchedule1.Shifts[0].Projections[0].Selected).toEqual(true);
+
+	});
 
 	it("should reload schedule when schedule changed by others", inject(function() {
 		rootScope.$digest();
@@ -112,9 +121,9 @@ describe("[Test for TeamScheduleController]:", function() {
 	it("should get correct new activity start for today", function() {
 		rootScope.$digest();
 		controller.scheduleDate = new Date("2015-10-26");
-		var selectedPersons = controller.selectedPersonInfo();
+		var selectedPersons = personSelection.personInfo;
 		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
-		selectedPersons[personSchedule1.PersonId].isSelected = true;
+		selectedPersons[personSchedule1.PersonId] = {checked: true};
 
 		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 12:30:00").format('HH:mm'));
 	});
@@ -124,36 +133,18 @@ describe("[Test for TeamScheduleController]:", function() {
 		nowDate = new Date("2015-10-25 12:16:00");
 		rootScope.$digest();
 		
-		
-		var selectedPersons = controller.selectedPersonInfo();
+		var selectedPersons = personSelection.personInfo;
 		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
-		selectedPersons[personSchedule1.PersonId].isSelected = true;
+		selectedPersons[personSchedule1.PersonId] = {checked: true};
 
 		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 08:00:00").format('HH:mm'));
 	});
 
-	it("should keep the activity selection when schedule reloaded", function () {
-		controller.scheduleDate = new Date("2015-10-26");
-		rootScope.$digest();
-
-		controller.selectedPersonProjections = [
-			{
-				PersonId: "221B-Baker-SomeoneElse",
-				SelectedPersonActivities: ["activity1"],
-				SelectedPersonAbsences:[]
-			}
-		];
-
-		controller.loadSchedules();
-		rootScope.$digest();
-		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
-		expect(personSchedule1.Shifts[0].Projections[0].Selected).toEqual(true);
-
-	});
 
 	function setUpController($controller) {
 		return $controller("TeamScheduleCtrl", {
-			$scope: rootScope
+			$scope: rootScope,
+			personSelectionSvc: personSelection
 		});
 	};
 
@@ -223,9 +214,17 @@ describe("[Test for TeamScheduleController]:", function() {
 							],
 							"IsFullDayAbsence": false,
 							"DayOff": null
+						},
+						{
+							"PersonId": "person-emptySchedule",
+							"Name": "Sherlock Holmes",
+							"Date": today,
+							"Projection": [],
+							"IsFullDayAbsence": false,
+							"DayOff": null
 						}
 					],
-					Total: 2,
+					Total: 3,
 					Keyword: ""
 				});
 
@@ -290,5 +289,52 @@ describe("[Test for TeamScheduleController]:", function() {
 				mockSignalRBackendServer.notifyClients = messageHandler;
 			}
 		};
+	}
+	
+	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray) {
+
+		var dateMoment = moment(belongsToDate);
+		var projections = [];
+
+		var fakeSchedule = {
+			PersonId: personId,
+			Date: dateMoment,
+			DayOff: dayOff == null ? null : createDayOff(),
+			Shifts: [{
+				Date: dateMoment,
+				Projections: createProjection(),
+				AbsenceCount: 0,
+				ActivityCount: 0
+			}],
+			ScheduleEndTime: function () { return dateMoment.endOf('day') },
+			AllowSwap: function () { return false; }
+		};
+
+		function createProjection() {
+
+			if (dayOff == null) {
+				projectionInfoArray.forEach(function (projectionInfo) {
+					var dateMomentCopy = moment(dateMoment);
+
+					projections.push({
+						Start: dateMomentCopy.add(projectionInfo.startHour, 'hours').format('YYYY-MM-DD HH:mm'),
+						Minutes: moment.duration(projectionInfo.endHour - projectionInfo.startHour, 'hours').asMinutes()
+					});
+				});
+			}
+
+			return projections;
+		};
+
+		function createDayOff() {
+			return {
+				DayOffName: 'Day off',
+				Start: dateMoment.format('YYYY-MM-DD HH:mm'),
+				Minutes: 1440
+			};
+
+		};
+
+		return fakeSchedule;
 	}
 });

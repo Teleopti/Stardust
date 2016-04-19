@@ -1,12 +1,13 @@
 ﻿'use strict';
 
-describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
+describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 	var controller;
+	var scope, personSelection;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module('wfm.teamSchedule');
-		module(function($provide) {
-			$provide.service('Toggle', function() {
+		module(function ($provide) {
+			$provide.service('Toggle', function () {
 				return {
 					WfmTeamSchedule_RemoveAbsence_36705: true
 				};
@@ -14,7 +15,9 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 		});
 	});
 
-	beforeEach(inject(function ($controller) {
+	beforeEach(inject(function ($controller, $rootScope, PersonSelection) {
+		scope = $rootScope.$new();
+		personSelection = PersonSelection;
 		controller = setUpController($controller);
 	}));
 
@@ -26,20 +29,19 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 		];
 
 		controller.scheduleVm = { Schedules: schedules };
-		setupPersonIdSelectionDic(schedules, controller);
+		schedules[2].IsSelected = true;
+		controller.updatePersonSelection(schedules[2]);
+		var checkedPersonIds = personSelection.getCheckedPersonIds();
+		expect(checkedPersonIds.length).toEqual(1);
+		expect(checkedPersonIds[0]).toEqual('3333');
 
-		controller.updatePersonIdSelection(schedules[2]);
-		expect(controller.isPersonSelected(schedules[0])).toEqual(false);
-		expect(controller.isPersonSelected(schedules[1])).toEqual(false);
-		expect(controller.isPersonSelected(schedules[2])).toEqual(true);
-
-		controller.updatePersonIdSelection(schedules[2]);
-		expect(controller.isPersonSelected(schedules[0])).toEqual(false);
-		expect(controller.isPersonSelected(schedules[1])).toEqual(false);
-		expect(controller.isPersonSelected(schedules[2])).toEqual(false);
+		schedules[2].IsSelected = false;
+		controller.updatePersonSelection(schedules[2]);
+		checkedPersonIds = personSelection.getCheckedPersonIds();
+		expect(checkedPersonIds.length).toEqual(0);
 	}));
 
-	it('can select and deselect current page', inject(function() {
+	it('can select and deselect current page', inject(function () {
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
 			createSchedule('2222', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
@@ -47,28 +49,30 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 		];
 
 		controller.scheduleVm = { Schedules: schedules };
-		setupPersonIdSelectionDic(schedules, controller);
 
-		controller.toggleAllSelectionInCurrentPage();
-		var selectedPersonList = getSelectedPersonIdList(controller);
+		controller.updateAllSelectionInCurrentPage(true);
+		scope.$apply();
+		var selectedPersonIds = personSelection.getCheckedPersonIds();
 
-		expect(selectedPersonList.length).toEqual(3);
-		expect(selectedPersonList[0]).toEqual("1111");
-		expect(selectedPersonList[1]).toEqual("2222");
-		expect(selectedPersonList[2]).toEqual("3333");
+		expect(selectedPersonIds.length).toEqual(3);
+		expect(selectedPersonIds[0]).toEqual("1111");
+		expect(selectedPersonIds[1]).toEqual("2222");
+		expect(selectedPersonIds[2]).toEqual("3333");
 
-		controller.toggleAllSelectionInCurrentPage();
-		selectedPersonList = getSelectedPersonIdList(controller);
-		expect(selectedPersonList.length).toEqual(0);
+		controller.updateAllSelectionInCurrentPage(false);
+		scope.$apply();
+		selectedPersonIds = personSelection.getCheckedPersonIds();
+		expect(selectedPersonIds.length).toEqual(0);
 	}));
 
-	it('can select and deselect person absence', inject(function() {
+	it('can select and deselect person absence', inject(function () {
 		var personAbsence1 = {
 			ParentPersonAbsence: "PersonAbsenceId-111",
 			ShiftLayerId: null,
 			Start: "2016-02-19 08:00",
+			Minutes: 640,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
@@ -76,8 +80,9 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			ParentPersonAbsence: "PersonAbsenceId-222",
 			ShiftLayerId: null,
 			Start: "2016-02-19 15:00",
+			Minutes: 60,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
@@ -85,120 +90,153 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			ParentPersonAbsence: "PersonAbsenceId-111",
 			ShiftLayerId: null,
 			Start: "2016-02-19 15:30",
+			Minutes: 60,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		}
 		var allProjections = [personAbsence1, personAbsence2, personAbsence3];
 		var schedule = {
 			"PersonId": "1234",
-			"Date": "2016-02-19",
+			"Date": moment("2016-02-19"),
 			"Shifts": [
 				{
+					"Date": moment("2016-02-19"),
 					"Projections": allProjections
 				}
-			]
+			],
+			ScheduleEndTime: function () {
+				return moment("2016-02-19 16:30")
+			},
+			AbsenceCount: function () {
+				return 3;
+			},
+			AllowSwap: function(){
+				return true;
+			}
 		};
 
 		controller.scheduleVm = { Schedules: [schedule] };
-		controller.selectedPersonProjections = [];
 
 		controller.ToggleProjectionSelection(personAbsence2, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].PersonId).toEqual(schedule.PersonId);
-		expect(controller.selectedPersonProjections[0].SelectedPersonAbsences.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(0);
+		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList.length).toEqual(1);
+		expect(selectedPersonInfoList[0].personId).toEqual(schedule.PersonId);
+		expect(selectedPersonInfoList[0].selectedAbsences.length).toEqual(1);
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(0);
 		expect(personAbsence1.Selected).toEqual(false);
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(false);
 
 		controller.ToggleProjectionSelection(personAbsence1, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections[0].SelectedPersonAbsences.length).toEqual(2);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(0);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList[0].selectedAbsences.length).toEqual(2);
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(0);
 		expect(personAbsence1.Selected).toEqual(true);
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(true);
 
 		controller.ToggleProjectionSelection(personAbsence3, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections[0].SelectedPersonAbsences.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(0);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList[0].selectedAbsences.length).toEqual(1);
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(0);
 		expect(personAbsence1.Selected).toEqual(false);
 		expect(personAbsence2.Selected).toEqual(true);
 		expect(personAbsence3.Selected).toEqual(false);
 
 		controller.ToggleProjectionSelection(personAbsence2, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections.length).toEqual(0);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList.length).toEqual(0);
 	}));
 
 	it('can select and deselect person activities', inject(function () {
 		var personActivity1 = {
-		    ShiftLayerId: '111',
+			ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 08:00",
+			Minutes: 640,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
 		var personActivity2 = {
-		    ShiftLayerId: '222',
+			ShiftLayerId: '222',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:00",
+			Minutes: 60,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
 		var personActivity3 = {
-		    ShiftLayerId: '333',
+			ShiftLayerId: '333',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:30",
+			Minutes: 60,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var schedule = {
 			"PersonId": "1234",
-			"Date": "2016-02-19",
+			"Date": moment("2016-02-19"),
 			"Shifts": [
 				{
+					"Date": moment("2016-02-19"),
 					"Projections": allProjections
 				}
-			]
+			],
+			ScheduleEndTime: function () {
+				return moment("2016-02-19 16:30")
+			},
+			ActivityCount: function () {
+				return 3;
+			},
+			AbsenceCount: function () {
+				return 0;
+			}, 
+			AllowSwap: function(){
+				return true;
+			}
 		};
 
 		controller.scheduleVm = { Schedules: [schedule] };
-		controller.selectedPersonProjections = [];
 
 		controller.ToggleProjectionSelection(personActivity1, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].PersonId).toEqual(schedule.PersonId);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].SelectedPersonAbsences.length).toEqual(0);
+		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList.length).toEqual(1);
+		expect(selectedPersonInfoList[0].personId).toEqual(schedule.PersonId);
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(1);
+		expect(selectedPersonInfoList[0].selectedAbsences.length).toEqual(0);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(personActivity2.Selected).toEqual(false);
 		expect(personActivity3.Selected).toEqual(false);
 
 		controller.ToggleProjectionSelection(personActivity2, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(2);
-		expect(controller.selectedPersonProjections[0].SelectedPersonAbsences.length).toEqual(0);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(2);
+		expect(selectedPersonInfoList[0].selectedAbsences.length).toEqual(0);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(false);
 
 		controller.ToggleProjectionSelection(personActivity3, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(3);
-		expect(controller.selectedPersonProjections[0].SelectedPersonAbsences.length).toEqual(0);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(3);
+		expect(selectedPersonInfoList[0].selectedAbsences.length).toEqual(0);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(true);
 
 		controller.ToggleProjectionSelection(personActivity1, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(2);
-		expect(controller.selectedPersonProjections[0].SelectedPersonAbsences.length).toEqual(0);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(2);
+		expect(selectedPersonInfoList[0].selectedAbsences.length).toEqual(0);
 		expect(personActivity1.Selected).toEqual(false);
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(true);
@@ -207,108 +245,129 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 
 	it('can select and deselect same activities in different layers', inject(function () {
 		var personActivity1 = {
-		    ShiftLayerId: '111',
+			ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 08:00",
+			Minutes: 640,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
 		var personActivity2 = {
-		    ShiftLayerId: '222',
+			ShiftLayerId: '222',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:00",
+			Minutes: 60,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
 		var personActivity3 = {
-		    ShiftLayerId: '111',
+			ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 15:30",
+			Minutes: 60,
 			Selected: false,
-			ToggleSelection: function() {
+			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			}
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var schedule = {
 			"PersonId": "1234",
-			"Date": "2016-02-19",
+			"Date": moment("2016-02-19"),
 			"Shifts": [
 				{
+					"Date": moment("2016-02-19"),
 					"Projections": allProjections
 				}
-			]
+			],
+			ScheduleEndTime: function () {
+				return moment("2016-02-19 16:30")
+			},
+			ActivityCount: function () {
+				return 2;
+			},
+			AbsenceCount: function () {
+				return 0;
+			},
+			AllowSwap: function(){
+				return true;
+			}
 		};
 
 		controller.scheduleVm = { Schedules: [schedule] };
-		controller.selectedPersonProjections = [];
 
 		controller.ToggleProjectionSelection(personActivity1, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].PersonId).toEqual(schedule.PersonId);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(1);
+		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList.length).toEqual(1);
+		expect(selectedPersonInfoList[0].personId).toEqual(schedule.PersonId);
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(1);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(personActivity2.Selected).toEqual(false);
 		expect(personActivity3.Selected).toEqual(true);
 
 		controller.ToggleProjectionSelection(personActivity2, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(2);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(2);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(true);
 
 		controller.ToggleProjectionSelection(personActivity3, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(1);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(1);
 		expect(personActivity1.Selected).toEqual(false);
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(false);
 
 		controller.ToggleProjectionSelection(personActivity2, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections.length).toEqual(0);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList.length).toEqual(0);
 		expect(personActivity1.Selected).toEqual(false);
 		expect(personActivity2.Selected).toEqual(false);
 		expect(personActivity3.Selected).toEqual(false);
 
 	}));
 
-	it("can display person selection status correctly", inject(function () {
+
+	it("can select all people in current page", inject(function () {
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
 			createSchedule('2222', '2015-01-01', null, [{ startHour: 8, endHour: 16 }])
 		];
 
 		controller.scheduleVm = { Schedules: schedules };
-		setupPersonIdSelectionDic(schedules, controller);
-		controller.personSelection['1111'].isSelected = true;
+		controller.updateAllSelectionInCurrentPage(true);
+		scope.$apply();
 
-		expect(controller.isPersonSelected(schedules[0])).toEqual(true);
-		expect(controller.isPersonSelected(schedules[1])).toEqual(false);
-		expect(controller.isAllInCurrentPageSelected()).toEqual(false);
+		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(controller.scheduleVm.Schedules[0].IsSelected).toEqual(true);
+		expect(controller.scheduleVm.Schedules[1].IsSelected).toEqual(true);
+		expect(selectedPersonInfoList.length).toEqual(2);
 	}));
 
-	it("can display current page selection status correctly when all people in current page are selected", inject(function() {
-		
+	it("can initialize current page selection status correctly when all people in current page are selected", inject(function () {
+
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
 			createSchedule('2222', '2015-01-01', null, [{ startHour: 8, endHour: 16 }])
 		];
-
+		schedules[0].IsSelected = true;
+		schedules[1].IsSelected = true;
+		personSelection.personInfo['1111'] = { checked: true };
+		personSelection.personInfo['2222'] = { checked: true };
 		controller.scheduleVm = { Schedules: schedules };
-		setupPersonIdSelectionDic(schedules, controller);
-		controller.toggleAllSelectionInCurrentPage();
+		scope.$apply();
 
-		expect(controller.isPersonSelected(schedules[0])).toEqual(true);
-		expect(controller.isPersonSelected(schedules[0])).toEqual(true);
-		expect(controller.isAllInCurrentPageSelected()).toEqual(true);
+		expect(controller.toggleAllInCurrentPage).toEqual(true);
 	}));
 
-	it("cannot select overtime layer", function() {
+	it("cannot select overtime layer", function () {
 		var personActivity1 = {
-		    ShiftLayerId: '111',
+			ShiftLayerId: '111',
 			ParentPersonAbsence: null,
 			Start: "2016-02-19 08:00",
 			Selected: false,
@@ -317,7 +376,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 			}
 		};
 		var overtimeActivity = {
-		    ShiftLayerId: '222',
+			ShiftLayerId: '222',
 			ParentPersonAbsence: null,
 			IsOvertime: true,
 			Start: "2016-02-19 15:00",
@@ -329,34 +388,49 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 		var allProjections = [personActivity1, overtimeActivity];
 		var schedule = {
 			"PersonId": "1234",
-			"Date": "2016-02-19",
+			"Date": moment("2016-02-19"),
 			"Shifts": [
 				{
+					"Date": moment("2016-02-19"),
 					"Projections": allProjections
 				}
-			]
+			],
+			ScheduleEndTime: function () {
+				return moment("2016-02-19 16:30")
+			},
+			ActivityCount: function () {
+				return 3;
+			},
+			AbsenceCount: function () {
+				return 0;
+			},
+			AllowSwap: function(){
+				return true;
+			}
 		};
 
 		controller.scheduleVm = { Schedules: [schedule] };
 		controller.selectedPersonProjections = [];
 
 		controller.ToggleProjectionSelection(personActivity1, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].PersonId).toEqual(schedule.PersonId);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(1);
+		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList.length).toEqual(1);
+		expect(selectedPersonInfoList[0].personId).toEqual(schedule.PersonId);
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(1);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(overtimeActivity.Selected).toEqual(false);
 
 		controller.ToggleProjectionSelection(overtimeActivity, schedule, schedule.Date);
-		expect(controller.selectedPersonProjections.length).toEqual(1);
-		expect(controller.selectedPersonProjections[0].PersonId).toEqual(schedule.PersonId);
-		expect(controller.selectedPersonProjections[0].SelectedPersonActivities.length).toEqual(1);
+		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
+		expect(selectedPersonInfoList.length).toEqual(1);
+		expect(selectedPersonInfoList[0].personId).toEqual(schedule.PersonId);
+		expect(selectedPersonInfoList[0].selectedActivities.length).toEqual(1);
 		expect(personActivity1.Selected).toEqual(true);
 		expect(overtimeActivity.Selected).toEqual(false);
 	});
 
 	function setUpController($controller) {
-		return $controller('scheduleTableCtrl');
+		return $controller('scheduleTableCtrl', { $scope: scope, personSelectionSvc: personSelection });
 	}
 
 	function createSchedule(personId, belongsToDate, dayOff, projectionInfoArray) {
@@ -366,9 +440,16 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function() {
 
 		var fakeSchedule = {
 			PersonId: personId,
-			Date: dateMoment.format('YYYY-MM-DD'),
+			Date: dateMoment,
 			DayOff: dayOff == null ? null : createDayOff(),
-			Projection: createProjection()
+			Shifts: [{
+				Date: dateMoment,
+				Projections: createProjection(),
+				AbsenceCount: 0,
+				ActivityCount: 0
+			}],
+			ScheduleEndTime: function () { return dateMoment.endOf('day') },
+			AllowSwap: function () { return false; }
 		};
 
 		function createProjection() {

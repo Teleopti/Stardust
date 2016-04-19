@@ -16,7 +16,6 @@
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.lastCommandTrackId = "";
-		vm.selectedPersonProjections = [];
 		vm.isScenarioTest = false;
 		vm.permissionsAndTogglesLoaded = false;
 
@@ -91,45 +90,10 @@
 			return params;
 		}
 
-		function setPersonAbsenceAndActivitySelection() {
-			var selectedAbsences = [], selectedPersonActivities = {};
-			for (var i = 0; i < vm.selectedPersonProjections.length; i++) {
-				var personAndAbsencePair = vm.selectedPersonProjections[i];
-				for (var j = 0; j < personAndAbsencePair.SelectedPersonAbsences.length; j++) {
-					selectedAbsences.push(personAndAbsencePair.SelectedPersonAbsences[j]);
-				};
-				selectedPersonActivities[vm.selectedPersonProjections[i].PersonId] = vm.selectedPersonProjections[i].SelectedPersonActivities;
-			}
-			var schedules = vm.groupScheduleVm().Schedules;
-			for (var i = 0; i < schedules.length; i++) {
-				var schedule = schedules[i];
-				for (var j = 0; j < schedule.Shifts.length; j++) {
-					var shift = schedule.Shifts[j];
-					for (var k = 0; k < shift.Projections.length; k++) {
-						var projection = shift.Projections[k];
-						if (projection.ParentPersonAbsence != null && selectedAbsences.indexOf(projection.ParentPersonAbsence) > -1) {
-							projection.Selected = true;
-						}
-						if (projection.ShiftLayerId != null && selectedPersonActivities[schedule.PersonId] != undefined &&
-							selectedPersonActivities[schedule.PersonId].indexOf(projection.ShiftLayerId) > -1) {
-							projection.Selected = true;
-						}
-					}
-				}
-			}
-		}
-
 		vm.getTotalSelectedPersonAndProjectionCount = function() {
 			var absenceCount = 0,
 				activityCount = 0,
 				personIds = [];
-
-			vm.selectedPersonProjections.forEach(function(projection) {
-				absenceCount += projection.SelectedPersonAbsences.length;
-				activityCount += projection.SelectedPersonActivities.length;
-				personIds.push(projection.PersonId);
-			});
-
 			var selectedPersonInfo = personSelectionSvc.getSelectedPersonInfoList();
 			for (var j = 0; j < selectedPersonInfo.length; j++) {
 				var selectedPerson = selectedPersonInfo[j];
@@ -152,7 +116,6 @@
 			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
-			setPersonAbsenceAndActivitySelection();
 		};
 
 		vm.loadSchedules = function() {
@@ -237,24 +200,16 @@
 		
 		function removeAbsence(removeEntireCrossDayAbsence) {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
+			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
 
-			var personWithSelectedAbsences = [];
 			var selectedAbsences = [];
-			for (var i = 0; i < vm.selectedPersonProjections.length; i++) {
-				if (vm.selectedPersonProjections[i].SelectedPersonAbsences.length > 0) {
-					var personAndAbsencePair = vm.selectedPersonProjections[i];
-					personWithSelectedAbsences.push(personAndAbsencePair.PersonId);
-					for (var j = 0; j < personAndAbsencePair.SelectedPersonAbsences.length; j++) {
-						selectedAbsences.push(personAndAbsencePair.SelectedPersonAbsences[j]);
-					};
-				}
+			for (var i = 0; i < selectedPersonProjections.length; i++) {
+				selectedAbsences = selectedAbsences.concat(selectedPersonProjections[i].selectedAbsences);
 			}
 
-			var allPersonWithAbsenceRemoved = selectedPersonIdList.concat(personWithSelectedAbsences);
-			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), selectedPersonIdList, selectedAbsences,
+			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), [], selectedAbsences,
 				removeEntireCrossDayAbsence, function(result) {
-					vm.selectedPersonProjections = [];
-					vm.afterActionCallback(result, allPersonWithAbsenceRemoved, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
+					vm.afterActionCallback(result, selectedPersonIdList, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
 				}
 			);
 		}

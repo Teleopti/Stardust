@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-describe("PersonSelection", function() {
+describe("test of PersonSelection", function() {
 	var target;
 
 	beforeEach(function() {
@@ -11,12 +11,13 @@ describe("PersonSelection", function() {
 		target = PersonSelection;
 	}));
 
-	var scheduleDate = "2016-03-20";
+	var scheduleDate = moment("2016-03-20");
 	var personId1 = "221B-Sherlock";
 	var personId2 = "221B-SomeoneElse";
 
 	var schedule1 = {
 		PersonId: personId1,
+		Date: scheduleDate,
 		Shifts: [],
 		AllowSwap: function () { return false; },
 		ScheduleEndTime: function () {
@@ -26,6 +27,7 @@ describe("PersonSelection", function() {
 
 	var newSchedule1 = {
 		PersonId: personId1,
+		Date: scheduleDate,
 		Shifts: [
 			{
 				Date: scheduleDate,
@@ -45,6 +47,7 @@ describe("PersonSelection", function() {
 
 	var schedule2 = {
 		PersonId: personId2,
+		Date: scheduleDate,
 		Shifts: [],
 		AllowSwap: function () { return true; },
 		ScheduleEndTime: function () {
@@ -53,27 +56,31 @@ describe("PersonSelection", function() {
 	};
 
 	it("Can update correct person info", inject(function () {
+		
 		target.updatePersonInfo([schedule1, schedule2]);
 		expect(target.isAnyAgentSelected()).toEqual(false);
 
+		target.personInfo[personId1] = {
+			checked: true,
+			selectedAbsences:[],
+			selectedActivities:[],
+			personAbsenceCount:0,
+			personActivityCount:0,
+			allowSwap:true
+			}
+		target.updatePersonInfo([schedule1, schedule2]);
 		var person1 = target.personInfo[personId1];
-		expect(person1.isSelected).toEqual(false);
+		expect(person1.checked).toEqual(true);
 		expect(person1.allowSwap).toEqual(schedule1.AllowSwap());
 		expect(person1.personAbsenceCount).toEqual(0);
+		expect(person1.personActivityCount).toEqual(0);
 
-		var person2 = target.personInfo[personId2];
-		expect(person2.isSelected).toEqual(false);
-		expect(person2.allowSwap).toEqual(schedule2.AllowSwap());
-		expect(person2.personAbsenceCount).toEqual(0);
-
-
-		target.setScheduleDate(scheduleDate);
 		target.updatePersonInfo([newSchedule1]);
 
 		person1 = target.personInfo[personId1];
-		expect(person1.isSelected).toEqual(false);
+		expect(person1.checked).toEqual(true);
 		expect(person1.allowSwap).toEqual(newSchedule1.AllowSwap());
-		expect(person1.personAbsenceCount).toEqual(1);
+		expect(person1.personAbsenceCount).toEqual(0);
 	}));
 
 	it("Should clear person info", inject(function () {
@@ -82,44 +89,45 @@ describe("PersonSelection", function() {
 		expect(target.personInfo).toEqual({});
 	}));
 
-	it("Should reset person info", inject(function () {
-		target.updatePersonInfo([schedule1]);
-		target.resetPersonInfo([schedule2]);
+	it("can select/deselect one person", inject(function () {
+		schedule1.IsSelected = true;
+		target.updatePersonSelection(schedule1);
 
 		var person1 = target.personInfo[personId1];
-		expect(person1).toEqual(undefined);
+		expect(person1.checked).toEqual(true);
+		expect(target.getSelectedPersonInfoList().length).toEqual(1);
+		
+		schedule1.IsSelected = false;
+		target.updatePersonSelection(schedule1);
 
-		var person2 = target.personInfo[personId2];
-		expect(person2.isSelected).toEqual(false);
-		expect(person2.allowSwap).toEqual(schedule2.AllowSwap());
-		expect(person2.personAbsenceCount).toEqual(0);
+		expect(target.getSelectedPersonInfoList().length).toEqual(0);
 	}));
+	
+	it("can select several people", inject(function () {
+		schedule1.IsSelected = true;
+		schedule2.IsSelected = true;
+		target.selectAllPerson([schedule1, schedule2]);
 
-	it("Should select person", inject(function () {
-		target.updatePersonInfo([schedule1]);
-		target.selectAllPerson([schedule2]);
-
-		var person1 = target.personInfo[personId1];
-		expect(person1.isSelected).toEqual(true);
-
-		var person2 = target.personInfo[personId2];
-		expect(person2.isSelected).toEqual(true);
+		expect(target.personInfo[personId1].checked).toEqual(true);
+		expect(target.personInfo[personId2].checked).toEqual(true);
+		expect(target.getSelectedPersonInfoList().length).toEqual(2);
 	}));
 
 	it("Should get selected person ids", inject(function () {
-		target.updatePersonInfo([schedule1, schedule2]);
-		target.personInfo[schedule1.PersonId].isSelected = true;
+		schedule1.IsSelected = true;
+		schedule2.IsSelected = true;
+		target.selectAllPerson([schedule1, schedule2]);
 		expect(target.isAnyAgentSelected()).toEqual(true);
 
 		var selectedPersonId = target.getSelectedPersonIdList();
-		expect(selectedPersonId.length).toEqual(1);
+		expect(selectedPersonId.length).toEqual(2);
 		expect(selectedPersonId[0]).toEqual(personId1);
+		expect(selectedPersonId[1]).toEqual(personId2);
 	}));
 
 	it("Should get selected person info", inject(function () {
-		target.setScheduleDate(scheduleDate);
-		target.resetPersonInfo([newSchedule1, schedule2]);
-		target.personInfo[personId1].isSelected = true;
+		newSchedule1.IsSelected = true;
+		target.updatePersonSelection(newSchedule1);
 		expect(target.isAnyAgentSelected()).toEqual(true);
 
 		var selectedPerson = target.getSelectedPersonInfoList();
@@ -128,6 +136,6 @@ describe("PersonSelection", function() {
 		var person = selectedPerson[0];
 		expect(person.personId).toEqual(personId1);
 		expect(person.allowSwap).toEqual(newSchedule1.AllowSwap());
-		expect(person.personAbsenceCount).toEqual(1);
+		expect(person.personAbsenceCount).toEqual(0);
 	}));
 });

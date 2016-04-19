@@ -9,12 +9,6 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			svc.personInfo = {};
 		}
 
-		// to be deleted
-		svc.setScheduleDate = function(currentDate)
-		{
-			svc.scheduleDate = currentDate;
-		}
-
 		svc.updatePersonSelection = function (personSchedule) {
 			var selectedPeople = svc.personInfo;
 			if (personSchedule.IsSelected) {
@@ -35,7 +29,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				selectedPeople[personSchedule.PersonId] = {
 					name: personSchedule.Name,
 					checked: true,
-					allowSwap: personSchedule.allowSwap,
+					allowSwap: personSchedule.AllowSwap(),
 					scheduleEndTime: personSchedule.ScheduleEndTime(),
 					personAbsenceCount: absences.length,
 					personActivityCount: activities.length,
@@ -54,13 +48,20 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				var allowSwap = personSchedule.AllowSwap();
 
 				var selectedPerson = svc.personInfo[personSchedule.PersonId];
+				if(selectedPerson && selectedPerson.checked){
+					personSchedule.IsSelected = true;
+				}
+				else {
+					personSchedule.IsSelected = false;
+				}
+				
 				if (selectedPerson) {
 					selectedPerson.scheduleEndTime = personSchedule.ScheduleEndTime();
+					selectedPerson.allowSwap = allowSwap;
 					for (var i = 0; i < personSchedule.Shifts.length; i++) {
 						if (!personSchedule.Shifts[i].Date.isSame(personSchedule.Date, 'day')) {
 							continue;
 						}
-						var hasUnselected = false;
 						angular.forEach(personSchedule.Shifts[i].Projections, function(projection) {
 							if (projection.ParentPersonAbsence && selectedPerson.selectedAbsences.indexOf(projection.ParentPersonAbsence) > -1) {
 								projection.Selected = true;
@@ -68,11 +69,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 							else if (projection.ShiftLayerId && selectedPerson.selectedActivities.indexOf(projection.ShiftLayerId) > -1) {
 								projection.Selected = true;
 							}
-							else if(projection.ParentPersonAbsence || (projection.ShiftLayerId && !projection.IsOvertime)){
-								hasUnselected = true;
-							}
 						});
-						personSchedule.IsSelected = !hasUnselected;
 					}
 				}
 			});
@@ -109,7 +106,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				
 				selectedPeople[personId] = {
 					name: personSchedule.Name,
-					allowSwap: personSchedule.allowSwap,
+					allowSwap: personSchedule.AllowSwap(),
 					scheduleEndTime: personSchedule.ScheduleEndTime(),
 					personAbsenceCount: 0,
 					personActivityCount: 0,

@@ -3,36 +3,41 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['Toggle','PersonSelection','$scope', scheduleTableController]);
+		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope', scheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
 			scope: {
 				scheduleVm: '=',
-				personSelection: '=',
-				selectedPersonProjections: '=',
 				selectMode: '='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
 			bindToController: true,
 			controller: 'scheduleTableCtrl',
-			templateUrl: "js/teamSchedule/html/scheduletable.html"
+			templateUrl: "js/teamSchedule/html/scheduletable.html",
 		};
 	};
-
 	function scheduleTableController(toggleSvc, personSelectionSvc, $scope) {
 		var vm = this;
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
 				personSchedule.IsSelected = isAllSelected;
-				$scope.$evalAsync(function(){
+				$scope.$evalAsync(function () {
 					vm.updatePersonSelection(personSchedule);
 				});
 			});
-			
+
 		};
+		vm.init = init; 
 		
+		$scope.$watch(function () {
+			return vm.scheduleVm.Schedules;
+		}, function (newVal) {
+			if (newVal)
+				vm.init();
+		});
+
 		vm.updatePersonSelection = function (personSchedule) {
 			personSelectionSvc.updatePersonSelection(personSchedule);
 			personSelectionSvc.toggleAllPersonProjections(personSchedule);
@@ -52,13 +57,13 @@
 
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
 		};
-		
-		function isAllInCurrentPageSelected(){
+
+		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;
-			for(var i = 0; i < vm.scheduleVm.Schedules.length; i++){
+			for (var i = 0; i < vm.scheduleVm.Schedules.length; i++) {
 				var personSchedule = vm.scheduleVm.Schedules[i];
-				if(!selectedPeople[personSchedule.PersonId]){
+				if (!selectedPeople[personSchedule.PersonId]) {
 					isAllSelected = false;
 					break;
 				}
@@ -66,5 +71,9 @@
 
 			return isAllSelected;
 		}
+
+		function init() {
+			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
+		}
 	};
-}());
+} ());

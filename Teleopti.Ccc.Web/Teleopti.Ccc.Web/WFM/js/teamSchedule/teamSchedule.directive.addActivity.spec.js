@@ -140,7 +140,7 @@
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	it('should see a diabled button when time range is invalid', function () {
+	it('should see a disabled button when time range is invalid', function () {
 		var html = '<add-activity-panel selected-agents="" selected-date="getSelectedDate()"></add-activity-panel>';
 		var scope = $rootScope.$new();
 		scope.getSelectedDate = function () {		
@@ -167,16 +167,18 @@
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	it('should see a diabled button when anyone in selected is not allowed to add current activity', function () {
-		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()"></add-activity-panel>';
+	it('should see a disabled button when anyone in selected is not allowed to add current activity', function () {
+		var html = '<add-activity-panel selected-date="getSelectedDate()"></add-activity-panel>';
 		var scope = $rootScope.$new();
 		var selectedDate = new Date('2016-01-01');
 		scope.getSelectedDate = function () {
 			return selectedDate;
 		};
 
-		scope.getSelectedAgents = function () {
-			return [
+		var element = $compile(html)(scope);
+		scope.$apply();
+		var innerScope = element.isolateScope().vm;
+		innerScope.selectedAgents = [
 			{
 				personId: 'agent1',
 				name: 'agent1',
@@ -186,13 +188,6 @@
 				name: 'agent2',
 				scheduleEndTime: '2016-01-02 05:00'
 			}];
-		};
-
-		var element = $compile(html)(scope);
-		scope.$apply();
-
-		var innerScope = element.isolateScope().vm;
-
 		innerScope.timeRange.startTime = new Date('2016-01-02 01:00');
 		innerScope.timeRange.endTime = new Date('2016-01-02 02:00');
 		innerScope.isNextDay = true;
@@ -213,12 +208,9 @@
 	});
 
 	it('should call add activity when click apply with correct data', function () {
-		var html = '<add-activity-panel selected-agents="getSelectedAgents()" selected-date="getSelectedDate()"></add-activity-panel>';
+		var html = '<add-activity-panel selected-date="getSelectedDate()"></add-activity-panel>';
 		
 		var scope = $rootScope.$new();
-		scope.getSelectedAgents = function() {
-			return [{personId: 'agent1' }, {personId: 'agent2' }];
-		};
 		scope.getSelectedDate = function () {		
 			return new Date('2016-01-01');
 		};
@@ -251,7 +243,7 @@
 		scope.$apply();
 
 		var innerScope = element.isolateScope().vm;
-
+		innerScope.selectedAgents = [{personId: 'agent1' }, {personId: 'agent2' }];
 		innerScope.timeRange.startTime = new Date('2015-01-01 02:00:00');
 		innerScope.timeRange.endTime = new Date('2015-01-01 08:00:00');
 		innerScope.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
