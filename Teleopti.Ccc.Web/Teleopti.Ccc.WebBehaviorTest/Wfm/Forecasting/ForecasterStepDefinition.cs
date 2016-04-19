@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I choose to add a campaign")]
 		public void WhenIChooseToAddACampaign()
 		{
-			Browser.Interactions.Click(".forecast-add-campaign-button");
+           Browser.Interactions.Click(".forecast-add-campaign-button");
 		}
 
 		[When(@"I select to do override calls")]
@@ -272,7 +272,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I apply the campaign")]
 		public void WhenIApplyTheCampaign()
 		{
-			Browser.Interactions.Click(".forecast-apply-campaign-button");
+            Browser.Interactions.WaitScopeCondition(".modal-inner-content", "disableApplyCampaign()", false,
+              () => {
+                  Browser.Interactions.Click(".forecast-apply-campaign-button.wfm-btn-invis-primary");
+              });
 		}
 
 		[When(@"I apply the override calls")]

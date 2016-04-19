@@ -264,7 +264,7 @@
 				};
 
 				$scope.campaign = function (value) {
-					if ($scope.disableApplyCampaign()) {
+					if ($scope.isForecastRunning) {
 						return;
 					}
 					$scope.modalModifyLaunch = false;
@@ -473,7 +473,7 @@
 				};
 
 				$scope.disableApplyCampaign = function () {
-					return $scope.isForecastRunning;
+					return $scope.isForecastRunning || $scope.modalModifyInfo.campaignPercentage === 0;
 				};
 
 				$scope.disableApplyOverride = function () {
