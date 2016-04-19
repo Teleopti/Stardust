@@ -285,6 +285,12 @@
 										Forecasted_AHT: '#F06292',
 										AHT: '#BA68C8',
 									},
+									names: {
+										Forecasted_calls:$translate.instant('ForecastedCalls'),
+										Actual_calls: $translate.instant('OfferedCalls'),
+										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime'),
+										AHT: $translate.instant('OfferedAverageHandleTime'),
+									},
 									axes: {
 										AHT: 'y2',
 										Forecasted_AHT: 'y2'

@@ -10743,6 +10743,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Forecasted average handle time.
+        /// </summary>
+        public static string ForecastedAverageHandleTime {
+            get {
+                return ResourceManager.GetString("ForecastedAverageHandleTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Forecasted average talk time.
         /// </summary>
         public static string ForecastedAverageTalkTime {
@@ -18179,6 +18188,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Offered {
             get {
                 return ResourceManager.GetString("Offered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Offered average handle time.
+        /// </summary>
+        public static string OfferedAverageHandleTime {
+            get {
+                return ResourceManager.GetString("OfferedAverageHandleTime", resourceCulture);
             }
         }
         

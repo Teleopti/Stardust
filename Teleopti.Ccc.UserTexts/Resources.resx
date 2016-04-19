@@ -14281,12 +14281,19 @@ Help us improve your experience by sending an error report</value>
   <data name="CreateSkillArea" xml:space="preserve">
     <value>Create skill area</value>
   </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>Forecasted average handle time</value>
+    <comment>legend label in intraday chart</comment>
+  </data>
   <data name="IncomingTraffic" xml:space="preserve">
     <value>Incoming traffic</value>
   </data>
   <data name="IntradayIntroText" xml:space="preserve">
     <value>Here you monitor intraday values, start by selecting either a skill or your area</value>
-    <comment>descriptive text at the start of intraday module</comment>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Offered average handle time</value>
+    <comment>legend label in intraday chart</comment>
   </data>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Select skill area</value>
