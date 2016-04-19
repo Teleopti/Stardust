@@ -14278,4 +14278,21 @@ Help us improve your experience by sending an error report</value>
     <value>Modify Skill Area</value>
     <comment>Modify skill area</comment>
   </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Create skill area</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Incoming traffic</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Here you monitor intraday values, start by selecting either a skill or your area</value>
+    <comment>descriptive text at the start of intraday module</comment>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Select skill area</value>
+  </data>
+  <data name="ToggleIncludedSkills" xml:space="preserve">
+    <value>Toggle included skills</value>
+    <comment>label for toggeling visibility of included skills</comment>
+  </data>
 </root>

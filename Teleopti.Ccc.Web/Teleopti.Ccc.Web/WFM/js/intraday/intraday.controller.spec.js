@@ -4,8 +4,7 @@ describe('IntradayCtrl', function () {
 		$controller,
 		$filter,
 		scope,
-        $q,
-		deferred;
+		$translate;
 
 	var skillAreas = [];
 	var skills = [];
@@ -15,13 +14,7 @@ describe('IntradayCtrl', function () {
 
 	beforeEach(module('wfm.intraday'));
 
-	beforeEach(inject(function (_$q_) {
-        $q = _$q_;
-        deferred = _$q_.defer();
-    }));
-
 	beforeEach(function () {
-	    deferred = $q.defer();
 		skills = [
 		{
 			Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
@@ -65,10 +58,11 @@ describe('IntradayCtrl', function () {
 	        };
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_, _$filter_) {
+	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_, _$filter_, _$translate_) {
 		$controller = _$controller_;
 		$httpBackend = _$httpBackend_;
 		$filter = _$filter_;
+		$translate = _$translate_;
 		scope = _$rootScope_.$new();
 
 		$httpBackend.whenGET("../api/intraday/skillarea")
@@ -97,7 +91,8 @@ describe('IntradayCtrl', function () {
 
 	var createController = function() {
 		$controller('IntradayCtrl', {
-			$scope: scope
+			$scope: scope,
+			$translate: $translate
 		});
 		scope.$digest();
 		$httpBackend.flush();

@@ -3,12 +3,12 @@
 	<div class="view-header">
 		<div class="view-title">
 			<h1><i class="mdi mdi-compass-outline"></i> {{'Intraday'|translate}}</h1>
-			<p class="con-flex">Here you monitor intraday values, start by selecting either a skill or your area</p>
+			<p class="con-flex">{{'IntradayIntroText'|translate}}</p>
 		</div>
 		<div class="fab-wrapper" ng-if="HasPermissionToModifySkillArea">
 			<button class="skill-area-create wfm-fab  material-depth-1" ng-click="configMode()">
 				<i class="mdi mdi-plus"></i>
-				<md-tooltip>Add new area</md-tooltip>
+				<md-tooltip>{{'CreateSkillArea'|translate}}</md-tooltip>
 			</button>
 		</div>
 	</div>
@@ -19,170 +19,174 @@
 				<div class="con-row">
 					<span class="con-flex">
 						<md-autocomplete id="skill-id"
-											  class="autocomplete-skill"
-											  md-selected-item="selectedSkill"
-											  md-search-text="searchSkillText"
-											  md-selected-item-change="selectedSkillChange(skill)"
-											  md-items="skill in querySearch(searchSkillText, skills)"
-											  md-item-text="skill.Name"
-											  md-min-length="0"
-											  placeholder="{{'SelectSkill'|translate}}">
-							<md-item-template>
-								<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-							</md-item-template>
-							<md-not-found>
-								No skills matching "{{searchSkillText}}" were found.
-							</md-not-found>
-						</md-autocomplete>
+						class="autocomplete-skill"
+						md-selected-item="selectedSkill"
+						md-search-text="searchSkillText"
+						md-selected-item-change="selectedSkillChange(skill)"
+						md-items="skill in querySearch(searchSkillText, skills)"
+						md-item-text="skill.Name"
+						md-min-length="0"
+						placeholder="{{'SelectSkill'|translate}}">
+						<md-item-template>
+							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+						</md-item-template>
+						<md-not-found>
+							{{'RepViewerNoMoreMatches'|translate}}
+						</md-not-found>
+					</md-autocomplete>
+				</span>
+				<span class="con-flex ">
+					<md-autocomplete id="skill-area-id"
+					class="autocomplete-skillarea"
+					md-input-id="skill-area-input"
+					md-selected-item="selectedSkillArea"
+					md-search-text="searchSkillAreaText"
+					md-selected-item-change="selectedSkillAreaChange(skillArea)"
+					md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
+					md-item-text="skillArea.Name"
+					md-min-length="0"
+					placeholder="{{'SelectSkillArea'|translate}}">
+					<md-item-template>
+						<span md-highlight-text="searchSkillAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
+					</md-item-template>
+					<md-not-found>
+						{{'RepViewerNoMoreMatches'|translate}}
+					</md-not-found>
+				</md-autocomplete>
+			</span>
+			<div class="hide-on-ie con-flex split-1-2"></div>
+			<div class="line-right last-time">
+				<span ng-show="selectedSkill.Name">
+					<span class="cursor-pointer">
+						{{latestStatsTime}} <i class="mdi mdi-clock"></i>
+						<md-tooltip>{{'LastUpdated'|translate}}</md-tooltip>
 					</span>
-					<span class="con-flex ">
-						<md-autocomplete id="skill-area-id"
-											  class="autocomplete-skillarea"
-											  md-input-id="skill-area-input"
-											  md-selected-item="selectedSkillArea"
-											  md-search-text="searchSkillAreaText"
-											  md-selected-item-change="selectedSkillAreaChange(skillArea)"
-											  md-items="skillArea in querySearch(searchSkillAreaText, skillAreas)"
-											  md-item-text="skillArea.Name"
-											  md-min-length="0"
-											  placeholder="Select skill area">
-							<md-item-template>
-								<span md-highlight-text="searchSkillAreaText" md-highlight-flags="^i">{{skillArea.Name}}</span>
-							</md-item-template>
-							<md-not-found>
-								No skill areas matching "{{searchSkillAreaText}}" were found.
-							</md-not-found>
-						</md-autocomplete>
+				</span>
+
+				<span ng-show="selectedSkillArea.Name">
+					<span class="cursor-pointer">
+						{{latestStatsTime}} <i class="mdi mdi-clock"></i>
+						<md-tooltip>{{'LastUpdated'|translate}}</md-tooltip>
 					</span>
-					<div class="hide-on-ie con-flex split-1-2"></div>
-					<div class="line-right last-time">
-						<span ng-show="selectedSkill.Name">
-							<span class="cursor-pointer">
-								{{latestStatsTime}} <i class="mdi mdi-clock"></i>
-								<md-tooltip>{{'LastUpdated'|translate}}</md-tooltip>
-							</span>
-						</span>
-
-						<span ng-show="selectedSkillArea.Name">
-							<span class="cursor-pointer">
-								{{latestStatsTime}} <i class="mdi mdi-clock"></i>
-								<md-tooltip>{{'LastUpdated'|translate}}</md-tooltip>
-							</span>
-						</span>
-					</div>
-				</div>
+				</span>
 			</div>
 		</div>
 	</div>
+</div>
+</div>
 
-	<div class="con-row intraday-monitor-item" ng-if="selectedSkillArea.Name">
-		<div class="con-flex">
-			<div class="panel material-depth-1">
-				<div class="sub-header">
-					<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b>: {{selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}}</h2>
-					<div class="head-actions panel-menu">
-						<div tabindex=0 class="context-menu card-context">
-							<i class="skill-area-options mdi mdi-dots-vertical"></i>
-							<span class="context-menu-left">
-								<ul class="wfm-list">
-									<li ng-click="showIncluded=!showIncluded">
-										<i ng-hide="showIncluded" class="mdi mdi-eye"></i>
-										<i ng-show="showIncluded" class="mdi mdi-eye-off"></i>
-										included skills
-									</li>
-									<li ng-click='toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>Delete this area</li>
-								</ul>
-							</span>
-						</div>
-					</div>
-				</div>
-				<div ng-hide="showIncluded" class="animate-show con-row">
-					<div class="con-flex">
-						<div class="unrelated-filters" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name">
-							<span class="pointer" ng-click="openSkillFromArea(skill)">
-								<span class="filter-handle"></span>
-								<span class="filter-chip">{{skill.Name}}</span>
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div class="panel material-depth-1" ng-show="HasMonitorData">
-		<div class="con-row">
-			<div class="con-flex">
-				<h2>{{'IncomingTraffic'|translate}}</h2>
-			</div>
-		</div>
-				<div id="intradayChart"></div>
-	</div>
-
-	<div class="con-row">
-		<div class="con-flex" ng-cloak ng-if="!HasMonitorData">
-			<div class="panel full-padding material-depth-1">
-			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>
-			</div>
-		</div>
-
-	<div ng-if="HasMonitorData" ng-cloak tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
+<div class="con-row intraday-monitor-item" ng-if="selectedSkillArea.Name">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
 			<div class="sub-header">
-				<h2>{{'IncomingTraffic'|translate}}</h2>
-				<!--<div class="head-actions panel-menu">
-																							 <div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
-																							 <i class="filter-header mdi mdi-alert pointer"><md-tooltip>There are some issues</md-tooltip></i>
-													  </div>
-				</div>-->
-			</div>
-			<div class="con-row">
-				<div class="con-flex">
-					<table class="wfm-table wfm-filter-options">
-						<thead>
-							<tr>
-								<th>{{'Type'|translate}}</th>
-								<th>{{'Actual'|translate}}</th>
-								<th>{{'Forecasted'|translate}}</th>
-								<th>{{'Difference'|translate}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>{{'Calls'|translate}}</td>
-								<td class="number-cell">{{offeredCalls}}</td>
-								<td class="number-cell">{{forecastedCalls}}</td>
-								<td class="number-cell">{{forecastActualCallsDifference}}%</td>
-							</tr>
-							<tr>
-								<td>AHT</td>
-								<td class="number-cell">{{averageHandleTime}}</td>
-								<td class="number-cell">{{forecastedAverageHandleTime}}</td>
-								<td class="number-cell">{{forecastActualAverageHandleTimeDifference}}%</td>
-							</tr>
-						</tbody>
-					</table>
+				<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b>: {{selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}}</h2>
+				<div class="head-actions panel-menu">
+					<div tabindex=0 class="context-menu card-context">
+						<i class="skill-area-options mdi mdi-dots-vertical"></i>
+						<span class="context-menu-left">
+							<ul class="wfm-list">
+								<li ng-click="showIncluded=!showIncluded">
+									<i ng-hide="showIncluded" class="mdi mdi-eye"></i>
+									<i ng-show="showIncluded" class="mdi mdi-eye-off"></i>
+									{{'ToggleIncludedSkills'|translate}}
+								</li>
+								<li ng-click='toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
+							</ul>
+						</span>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="con-flex"></div>
-		<div class="con-flex"></div>
-
-		<div ng-cloak class="modal-box">
-			<div ng-cloak ng-show="DeleteSkillAreaModal">
-				<div class="modalbg">
-					<div class="dialog-mini">
-						<div class="modal-inner-content">
-							Are you sure you want to permanently delete {{selectedSkillArea.Name}}?
-						</div>
-						<div class="modal-actions">
-							<aside>
-								<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-								<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
-							</aside>
-						</div>
+			<div ng-hide="showIncluded" class="animate-show con-row">
+				<div class="con-flex">
+					<div class="unrelated-filters" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name">
+						<span class="pointer" ng-click="openSkillFromArea(skill)">
+							<span class="filter-handle"></span>
+							<span class="filter-chip">{{skill.Name}}</span>
+						</span>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+</div>
+
+<div class="panel material-depth-1" ng-show="HasMonitorData">
+	<div class="con-row">
+		<div class="con-flex">
+			<h2>{{'IncomingTraffic'|translate}}</h2>
+		</div>
+	</div>
+	<div id="intradayChart"></div>
+</div>
+
+<div class="con-row" ng-cloak ng-if="!HasMonitorData">
+	<div class="con-flex">
+		<div class="panel full-padding material-depth-1">
+			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>
+		</div>
+	</div>
+	<div class="con-flex"></div>
+	<div class="con-flex"></div>
+</div>
+
+<div class="con-row" ng-if="HasMonitorData">
+	<div tabindex="0" class="con-flex panel material-depth-1 filter-boxes" ng-class="{'selected-card': showIncoming}" ng-click="toggleOthers(0, 'incoming')">
+		<div class="sub-header">
+			<h2>{{'IncomingTraffic'|translate}}</h2>
+			<!--<div class="head-actions panel-menu">
+			<div tabindex=0 class="context-menu card-context" ng-click="editRuleset(node)">
+			<i class="filter-header mdi mdi-alert pointer"><md-tooltip>There are some issues</md-tooltip></i>
+		</div>
+	</div>-->
+</div>
+<div class="con-row">
+	<div class="con-flex">
+		<table class="wfm-table wfm-filter-options">
+			<thead>
+				<tr>
+					<th>{{'Type'|translate}}</th>
+					<th>{{'Actual'|translate}}</th>
+					<th>{{'Forecasted'|translate}}</th>
+					<th>{{'Difference'|translate}}</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>{{'Calls'|translate}}</td>
+					<td class="number-cell">{{offeredCalls}}</td>
+					<td class="number-cell">{{forecastedCalls}}</td>
+					<td class="number-cell">{{forecastActualCallsDifference}}%</td>
+				</tr>
+				<tr>
+					<td>AHT</td>
+					<td class="number-cell">{{averageHandleTime}}</td>
+					<td class="number-cell">{{forecastedAverageHandleTime}}</td>
+					<td class="number-cell">{{forecastActualAverageHandleTimeDifference}}%</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+</div>
+<div class="con-flex"></div>
+<div class="con-flex"></div>
+</div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="DeleteSkillAreaModal">
+		<div class="modalbg">
+			<div class="dialog-mini">
+				<div class="modal-inner-content">
+					<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+						<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </div>

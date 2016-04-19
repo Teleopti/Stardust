@@ -2,13 +2,13 @@
 	'use strict';
 	angular.module('wfm.intraday')
 	.controller('IntradayCtrl', [
-		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout', '$compile',
-		function ($scope, $state, intradayService, $filter, NoticeService, $timeout, $compile) {
+		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout', '$compile','$translate',
+		function ($scope, $state, intradayService, $filter, NoticeService, $timeout, $compile, $translate ) {
 
 			var autocompleteSkill;
 			var autocompleteSkillArea;
 			var timeoutPromise;
-		    var interval;
+		  var interval;
 			var pollingTimeout = 60000;
 			$scope.DeleteSkillAreaModal = false;
 			$scope.showIncoming = true;
@@ -17,7 +17,7 @@
 			$scope.showSummary = false;
 			$scope.selectedIndex = 0;
 			$scope.hiddenArray = [];
-			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>";
+			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx' target='_blank'>feedback.</a>";
 
 			NoticeService.info(message, null, true);
 
@@ -94,7 +94,8 @@
 				};
 
 				var notifySkillAreaDeletion = function () {
-					NoticeService.success("Deleted Area ", 5000, true);
+					var message = $translate.instant('Deleted');
++					NoticeService.success(message, 5000, true);
 				};
 
 				$scope.querySearch = function (query, myArray) {
@@ -298,13 +299,13 @@
 										}
 									},
 									y:{
-										label: 'Calls',
+										label: $translate.instant('Calls'),
 										tick: {
 											format: d3.format('.1f')
 										}
 									},
 									x:{
-										label: 'interval',
+										label: $translate.instant('SkillTypeTime'),
 										type: 'category',
 										tick: {
 											fit: true,

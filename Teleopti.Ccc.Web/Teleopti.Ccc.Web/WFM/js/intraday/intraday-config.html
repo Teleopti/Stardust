@@ -1,6 +1,6 @@
 <div class="view-header">
 	<div class="view-title">
-		<h1><i class="mdi mdi-compass-outline"></i> Skill area</h1>
+		<h1><i class="mdi mdi-compass-outline"></i>{{'CreateSkillArea'|translate}}</h1>
 	</div>
 </div>
 
@@ -11,7 +11,7 @@
 				<dl>
 					<dd>
 						<div class="form-input-wrap">
-							<label for="skillAreaName">Name: <input type="text" ng-model="skillAreaName" name="Name" ng-maxlength="45" maxlength="46" required="" id="skillAreaName"/></label>
+							<label for="skillAreaName">{{'Name'|translate}}: <input type="text" ng-model="skillAreaName" name="Name" ng-maxlength="45" maxlength="46" required="" id="skillAreaName"/></label>
 							<div ng-cloak class="animate-input-message" ng-show ="form.$submitted || form.Name.$invalid">
 								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}" translate>
 									NameRequired

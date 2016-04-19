@@ -6536,6 +6536,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create skill area.
+        /// </summary>
+        public static string CreateSkillArea {
+            get {
+                return ResourceManager.GetString("CreateSkillArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create skill summary.
         /// </summary>
         public static string CreateSkillSummery {
@@ -12265,6 +12274,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incoming traffic.
+        /// </summary>
+        public static string IncomingTraffic {
+            get {
+                return ResourceManager.GetString("IncomingTraffic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Increase decimals.
         /// </summary>
         public static string IncreaseDecimals {
@@ -12703,6 +12721,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string IntradayAbsence {
             get {
                 return ResourceManager.GetString("IntradayAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Here you monitor intraday values, start by selecting either a skill or your area.
+        /// </summary>
+        public static string IntradayIntroText {
+            get {
+                return ResourceManager.GetString("IntradayIntroText", resourceCulture);
             }
         }
         
@@ -25298,6 +25325,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select skill area.
+        /// </summary>
+        public static string SelectSkillArea {
+            get {
+                return ResourceManager.GetString("SelectSkillArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a suitable color.
         /// </summary>
         public static string SelectSuitableColor {
@@ -29304,6 +29340,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ToggleDateSelection {
             get {
                 return ResourceManager.GetString("ToggleDateSelection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Toggle included skills.
+        /// </summary>
+        public static string ToggleIncludedSkills {
+            get {
+                return ResourceManager.GetString("ToggleIncludedSkills", resourceCulture);
             }
         }
         

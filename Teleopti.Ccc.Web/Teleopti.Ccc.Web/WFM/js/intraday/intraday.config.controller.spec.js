@@ -2,6 +2,8 @@
 describe('IntradayConfigCtrl', function () {
 	var $httpBackend,
 		$controller,
+		$translate,
+		$translate,
 		scope;
 
 	var skills = [];
@@ -16,10 +18,11 @@ describe('IntradayConfigCtrl', function () {
 		}];
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_) {
+	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_, _$translate_) {
 		$controller = _$controller_;
 		$httpBackend = _$httpBackend_;
 		scope = _$rootScope_.$new();
+		$translate = _$translate_;
 
 		$httpBackend.whenGET("../api/intraday/skills")
 			.respond(200, skills);
@@ -27,7 +30,8 @@ describe('IntradayConfigCtrl', function () {
 
 	var createController = function () {
 		$controller('IntradayConfigCtrl', {
-			$scope: scope
+			$scope: scope,
+			$translate: $translate
 		});
 		scope.$digest();
 		$httpBackend.flush();
