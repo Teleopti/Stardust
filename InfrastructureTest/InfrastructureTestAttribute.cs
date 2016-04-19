@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public FakeMessageSender MessageSender;
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
+		private TenantUnitOfWorkManager _tenantUnitOfWorkManager;
 
 		protected override FakeConfigReader Config()
 		{
@@ -57,7 +58,8 @@ namespace Teleopti.Ccc.InfrastructureTest
 			// Tenant stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();
-			system.AddService(TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString));
+			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
+			system.AddService(_tenantUnitOfWorkManager);
 
 			// Hangfire bus maybe? ;)
 			system.UseTestDouble<FakeHangfireEventClient>().For<IHangfireEventClient>();
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			base.AfterTest();
 
 			_transactionHookScope.Dispose();
+			_tenantUnitOfWorkManager.Dispose();
 		}
 	}
 }

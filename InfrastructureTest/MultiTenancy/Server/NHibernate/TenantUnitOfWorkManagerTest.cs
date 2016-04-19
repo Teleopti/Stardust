@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.NHibernate
 		[TearDown]
 		public void VerifySessionIsClosed()
 		{
-			target.CancelAndDisposeCurrent();
+			target.Dispose();
 		}
 	}
 }
