@@ -154,6 +154,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
+    <Compile Include="Analytics\AnalyticsDayOff.cs" />
     <Compile Include="Analytics\AnalyticsGroup.cs" />
     <Compile Include="Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="Analytics\AnalyticsPermission.cs" />
@@ -244,6 +245,7 @@
     <Compile Include="Repositories\IAnalyticsPreferenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsDateRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionExecutionRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsScheduleRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolderProvider.cs" />
     <Compile Include="Repositories\IAnalyticsTimeZoneRepository.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />

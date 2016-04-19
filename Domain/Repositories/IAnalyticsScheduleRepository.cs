@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
-namespace Teleopti.Interfaces.Infrastructure.Analytics
+namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsScheduleRepository
 	{
@@ -17,6 +19,8 @@ namespace Teleopti.Interfaces.Infrastructure.Analytics
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 		IList<IAnalyticsGeneric> Overtimes();
 		IList<IAnalyticsShiftLength> ShiftLengths();
+		IList<AnalyticsDayOff> DayOffs(); 
+
 		int ShiftLengthId(int shiftLength);
 
 		void InsertStageScheduleChangedServicebus(DateOnly date, Guid personId, Guid scenarioId, Guid businessUnitId,

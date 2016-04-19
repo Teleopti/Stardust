@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -273,6 +275,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsShiftLength)))
 					.SetReadOnly(true)
 					.List<IAnalyticsShiftLength>();
+			}
+		}
+
+		public IList<AnalyticsDayOff> DayOffs()
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"select 
+						  day_off_id DayOffId
+						, day_off_name DayOffName
+						, business_unit_id BusinessUnitId
+						, day_off_shortname DayOffShortname 
+						from mart.dim_day_off WITH (NOLOCK)")
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDayOff)))
+					.SetReadOnly(true)
+					.List<AnalyticsDayOff>();
 			}
 		}
 

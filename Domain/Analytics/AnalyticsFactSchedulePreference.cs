@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Analytics
 		public int DayOffId { get; set; }
 		public int PreferencesRequested { get; set; }
 		public int PreferencesFulfilled { get; set; }
-		public int PreferencesUnfulFilled { get; set; }
+		public int PreferencesUnfulfilled { get; set; }
 		public int BusinessUnitId { get; set; }
 		public int DatasourceId { get; set; }
 		public DateTime InsertDate { get; set; }

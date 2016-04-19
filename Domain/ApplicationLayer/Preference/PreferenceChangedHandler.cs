@@ -7,11 +7,8 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
@@ -23,8 +20,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 #pragma warning restore 618
 	{
 		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
-
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
@@ -34,17 +29,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IAnalyticsPreferenceRepository _analyticsPreferenceRepository;
 
-		public PreferenceChangedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
-			IScenarioRepository scenarioRepository,
+		public PreferenceChangedHandler(IScenarioRepository scenarioRepository,
 			IPreferenceDayRepository preferenceDayRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
 			IAnalyticsDateRepository analyticsDateRepository,
-			IScheduleStorage scheduleStorage, 
+			IScheduleStorage scheduleStorage,
 			IAnalyticsPreferenceRepository analyticsPreferenceRepository)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
 			_preferenceDayRepository = preferenceDayRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -68,21 +61,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 								   @event.PreferenceDayId, @event.Timestamp);
 			}
 
-			var preferenceDay = _preferenceDayRepository.Find(@event.PreferenceDayId);
+			// General init
 			var restrictionChecker = new RestrictionChecker();
+			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
+			var resultFactSchedulePreference = new List<AnalyticsFactSchedulePreference>();
 
+			// General look ups
+			var scenarios = _scenarioRepository.FindEnabledForReportingSorted();
+			var analyticsScenarios = _analyticsScheduleRepository.Scenarios();
+			var analyticsDayOffs = _analyticsScheduleRepository.DayOffs();
+			var analyticsAbsences = _analyticsScheduleRepository.Absences();
+			var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
+
+			// Preference and person look ups
+			var preferenceDay = _preferenceDayRepository.Find(@event.PreferenceDayId);
 			var personPeriod = preferenceDay.Person.Period(preferenceDay.RestrictionDate);
 			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
 
+			// Mapping
 			var dateId = _analyticsDateRepository.Date(preferenceDay.RestrictionDate.Date);
-			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
-
-			var scenarios = _scenarioRepository.FindEnabledForReportingSorted();
 			var period = new DateOnlyPeriod(new DateOnly(preferenceDay.RestrictionDate.Date), new DateOnly(preferenceDay.RestrictionDate.Date));
 			var person = preferenceDay.Person;
-			var analyticsScenarios = _analyticsScheduleRepository.Scenarios();
-
-			var resultFactSchedulePreference = new List<AnalyticsFactSchedulePreference>();
 
 			foreach (var scenario in scenarios)
 			{
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 						var preferenceRestriction = restrictionBase as IPreferenceRestriction;
 						if (preferenceRestriction == null)
 						{
-							logger.ErrorFormat("Could not get restrictions for preference day id '{0}' for person with person code {1}", 
+							logger.ErrorFormat("Could not get restrictions for preference day id '{0}' for person with person code {1}",
 								@event.PreferenceDayId, person.Id);
 							continue;
 						}
@@ -107,10 +106,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 						var permissionState = restrictionChecker.CheckPreference(schedulePart);
 						var scenarioId = analyticsScenarios.First(a => a.Code == scenario.Id.GetValueOrDefault()).Id;
-						var shiftCategory = _analyticsScheduleRepository.ShiftCategories()
-							.FirstOrDefault(a => a.Code == (preferenceRestriction.ShiftCategory?.Id ?? Guid.Empty));
-						var absence = _analyticsScheduleRepository.Absences()
-							.FirstOrDefault(a => a.AbsenceCode == (preferenceRestriction.Absence?.Id ?? Guid.Empty));
+						var shiftCategory = analyticsShiftCategories.FirstOrDefault(a => a.Code == (preferenceRestriction.ShiftCategory?.Id ?? Guid.Empty));
+						var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == (preferenceRestriction.Absence?.Id ?? Guid.Empty));
+						var dayOffId = preferenceRestriction.DayOffTemplate == null ? -1 : analyticsDayOffs.First(
+											   a => a.DayOffName == preferenceRestriction.DayOffTemplate.Description.Name &&
+													a.BusinessUnitId == businessUnitId.BusinessUnitId).DayOffId;
 
 						var preferenceItem = new AnalyticsFactSchedulePreference
 						{
@@ -120,10 +120,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 							ScenarioId = scenarioId,
 							PreferenceTypeId = SchedulePreferenceTransformerHelper.GetPreferenceTypeId(preferenceRestriction),
 							ShiftCategoryId = shiftCategory?.Id ?? -1,
-							DayOffId = 0, //vad? NOT NULL
+							DayOffId = dayOffId,
 							PreferencesRequested = 1,
 							PreferencesFulfilled = permissionState == PermissionState.Satisfied ? 1 : 0,
-							PreferencesUnfulFilled = permissionState == PermissionState.Satisfied ? 0 : 1,
+							PreferencesUnfulfilled = permissionState == PermissionState.Satisfied ? 0 : 1,
 							BusinessUnitId = businessUnitId.BusinessUnitId,
 							DatasourceId = 1,
 							DatasourceUpdateDate = preferenceDay.UpdatedOn.GetValueOrDefault(DateTime.Now),

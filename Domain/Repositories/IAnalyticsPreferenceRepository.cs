@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IAnalyticsPreferenceRepository
 	{
 		void AddPreference(AnalyticsFactSchedulePreference analyticsFactSchedulePreference);
-		void DeletePreferences(int dateId, int personId);
+		void DeletePreferences(int dateId, int personId, int? scenarioId = null);
 		IList<AnalyticsFactSchedulePreference> PreferencesForPerson(int personId);
 	}
 }

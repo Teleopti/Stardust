@@ -7,23 +7,23 @@ GO
 -- Description:	Delete fact schedule preference data
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_schedule_preference_delete]
-	@personId int,
-	@dateId int,
-	@scenarioId int
+	@person_id int,
+	@date_id int,
+	@scenario_id int
 AS
 BEGIN
-	IF @scenarioId IS NULL
+	IF @scenario_id IS NULL
 	BEGIN
 		DELETE mart.fact_schedule_preference
-		WHERE	person_id=@personId AND
-				date_id=@dateId
+		WHERE	person_id=@person_id AND
+				date_id=@date_id
 	END
 	ELSE
 	BEGIN
 		DELETE mart.fact_schedule_preference
-		WHERE	person_id=@personId AND
-				date_id=@dateId AND
-				scenario_id=@scenarioId
+		WHERE	person_id=@person_id AND
+				date_id=@date_id AND
+				scenario_id=@scenario_id
 	END
 END
 GO
