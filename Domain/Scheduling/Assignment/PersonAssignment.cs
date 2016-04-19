@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SetDayOff(null);
 			AddEvent(() => new DayUnscheduledEvent
 			{
-				Date = Date,
+				Date = Date.Date,
 				PersonId = Person.Id.Value,
 				ScenarioId = Scenario.Id.Value,
 				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
@@ -147,9 +147,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				AddEvent ( () =>
 				{
-					var activityAddedEvent = new PersonAssignmentLayerRemovedEvent
+					var activityRemovedEvent = new PersonAssignmentLayerRemovedEvent
 					{
-						Date = Date,
+						Date = Date.Date,
 						PersonId = Person.Id.Value,						
 						StartDateTime = layer.Period.StartDateTime,
 						EndDateTime = layer.Period.EndDateTime,
@@ -158,10 +158,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					};
 					if ( trackedCommandInfo != null )
 					{
-						activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-						activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
+						activityRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						activityRemovedEvent.CommandId = trackedCommandInfo.TrackId;
 					}
-					return activityAddedEvent;
+					return activityRemovedEvent;
 				} );
 			}
 
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				var activityAddedEvent = new ActivityAddedEvent
 				{
-					Date = Date,
+					Date = Date.Date,
 					PersonId = Person.Id.Value,
 					ActivityId = activity.Id.Value,
 					StartDateTime = period.StartDateTime,
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ClearMainActivities();
 			AddEvent(() => new DayOffAddedEvent
 			{
-				Date = Date,
+				Date = Date.Date,
 				PersonId = Person.Id.Value,
 				ScenarioId = Scenario.Id.Value,
 				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()

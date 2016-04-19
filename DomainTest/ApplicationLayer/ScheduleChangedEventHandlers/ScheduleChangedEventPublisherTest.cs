@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 					LogOnDatasource = "datasource",
 					LogOnBusinessUnitId = Guid.NewGuid(),
 					PersonId = Guid.NewGuid(),
-					Date = new DateOnly(2013,11,15),
+					Date = new DateTime(2013,11,15),
 					ActivityId = Guid.NewGuid(),
 					ScenarioId = Guid.NewGuid(),
 					StartDateTime = new DateTime(2013, 11, 15, 8, 0, 0),

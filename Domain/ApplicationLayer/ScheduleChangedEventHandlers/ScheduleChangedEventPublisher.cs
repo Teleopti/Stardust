@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			});
 		}
 
-		private static DateTimePeriod dateOnlyToScheduleChangedPeriodWithOverflowBecauseWeAreScared(DateOnly date)
+		private static DateTimePeriod dateOnlyToScheduleChangedPeriodWithOverflowBecauseWeAreScared(DateTime date)
 		{
 			var dateTime = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
 			return new DateTimePeriod(
