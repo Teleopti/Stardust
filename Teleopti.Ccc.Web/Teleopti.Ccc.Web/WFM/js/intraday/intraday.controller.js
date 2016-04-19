@@ -83,12 +83,13 @@
 				$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
 			};
 
-			$scope.deleteSkillArea = function(skillArea) {
+			$scope.deleteSkillArea = function (skillArea) {
+				cancelTimeout();
 				intradayService.deleteSkillArea.remove(
 					{
 						id: skillArea.Id
 					})
-					.$promise.then(function(result) {
+					.$promise.then(function (result) {
 						$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
 						$scope.selectedItem = null;
 						$scope.HasMonitorData = false;
