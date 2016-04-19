@@ -238,12 +238,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						var dayOffOptimizationPreference = dayOffOptimizationPreferenceProvider.ForAgent(matrix.Person, matrix.EffectivePeriodDays.First().Day);
 
 						bool checkPeriodValue;
+						movedDaysOff movedDaysOff;
 						var success = runOneMatrixOnly(teamBlockDaysOffMoveFinder, optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 						                               resourceCalculateDelayer,
 													   schedulingResultStateHolder,
 													   dayOffOptimizationPreference,
 													   dayOffOptimizationPreferenceProvider,
-													   out checkPeriodValue);
+													   out checkPeriodValue,
+														 out movedDaysOff);
 						double currentPeriodValue =
 							periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
@@ -262,7 +264,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						{
 							if (!optimizationPreferences.Advanced.UseTweakedValues)
 							{
-								var movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, dayOffOptimizationPreference);
 								if (movedDaysOff != null)
 								{
 									allFailed = false;
@@ -381,10 +382,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 										ISchedulingResultStateHolder schedulingResultStateHolder,
 										IDaysOffPreferences daysOffPreferences,
 										IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-										out bool checkPeriodValue)
+										out bool checkPeriodValue,
+										out movedDaysOff movedDaysOff)
 		{
 
-			var movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, daysOffPreferences);
+			movedDaysOff = affectedDaysOff(teamBlockDaysOffMoveFinder, optimizationPreferences, matrix, daysOffPreferences);
 			if (movedDaysOff == null)
 			{
 				checkPeriodValue = true;
