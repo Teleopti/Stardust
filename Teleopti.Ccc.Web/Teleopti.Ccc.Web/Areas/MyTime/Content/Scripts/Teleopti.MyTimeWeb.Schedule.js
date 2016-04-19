@@ -68,9 +68,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					resetToUserTimeWithoutDST(userTime);
 				}
 			} else { // for DST like Brasilia
-				if (userTimestamp < dstEndTimestamp) {
-					adjustToDST(userTime);
-				} else if (dstEndTimestamp <= userTimestamp && userTimestamp <= dstStartTimestamp) {
+				if (dstEndTimestamp <= userTimestamp && userTimestamp <= dstStartTimestamp) {
 					resetToUserTimeWithoutDST(userTime);
 				}
 				else {
