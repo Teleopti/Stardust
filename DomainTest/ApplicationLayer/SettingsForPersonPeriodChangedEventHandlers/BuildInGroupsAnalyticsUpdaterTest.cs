@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 	[TestFixture]
 	public class BuildInGroupsAnalyticsUpdaterTest
 	{
-		private BuildInGroupsAnalyticsUpdater _target;
+		private BuildInGroupsAnalyticsUpdaterBase _target;
 		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private ISkillRepository _skillRepository;
 		private IPartTimePercentageRepository _partTimePercentageRepository;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 			_contractRepository = MockRepository.GenerateMock<IContractRepository>();
 			_contractScheduleRepository = MockRepository.GenerateMock<IContractScheduleRepository>();
 
-			_target = new BuildInGroupsAnalyticsUpdater(_analyticsGroupPageRepository, _skillRepository, _partTimePercentageRepository, _ruleSetBagRepository, _contractRepository, _contractScheduleRepository);
+			_target = new BuildInGroupsAnalyticsUpdaterBase(_analyticsGroupPageRepository, _skillRepository, _partTimePercentageRepository, _ruleSetBagRepository, _contractRepository, _contractScheduleRepository);
 		}
 
 		[Test]

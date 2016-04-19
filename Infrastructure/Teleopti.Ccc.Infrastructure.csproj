@@ -709,7 +709,7 @@
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWork.cs" />
     <Compile Include="UnitOfWork\PersonCollectionChangedEventPublisher.cs" />
-    <Compile Include="UnitOfWork\PersonPeriodChangedBusMessagePublisher.cs" />
+    <Compile Include="UnitOfWork\SettingsForPersonPeriodChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\QueryFilter.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\TransactionSynchronization.cs" />

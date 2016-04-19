@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 	[TestFixture]
 	public class GroupingReadModelDataUpdaterTest
 	{
-		private GroupingReadModelDataUpdater _target;
+		private GroupingReadModelDataUpdaterHangfire _target;
 		private MockRepository _mocks;
 		private IGroupingReadOnlyRepository _groupReadOnlyRepository;
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 			_mocks = new MockRepository();
 			_groupReadOnlyRepository = _mocks.DynamicMock<IGroupingReadOnlyRepository>();
 
-			_target = new GroupingReadModelDataUpdater(_groupReadOnlyRepository);
+			_target = new GroupingReadModelDataUpdaterHangfire(_groupReadOnlyRepository);
 		}
 
 

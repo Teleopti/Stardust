@@ -110,6 +110,7 @@
 		ETL_SpeedUpNightlySkill_37543,
 		ShiftTrade_ToHangfire_38181,
 		GroupPageCollection_ToHangfire_38178,
+		SettingsForPersonPeriodChanged_ToHangfire_38207,
 		// ReSharper restore InconsistentNaming
 	}
 }

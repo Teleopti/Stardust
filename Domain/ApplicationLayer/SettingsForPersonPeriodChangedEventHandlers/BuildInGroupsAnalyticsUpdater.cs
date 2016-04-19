@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -8,10 +9,47 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
-				 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
-	public class BuildInGroupsAnalyticsUpdater :
+		Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439,
+		Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+	public class BuildInGroupsAnalyticsUpdaterHangfire : BuildInGroupsAnalyticsUpdaterBase,
+		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
+		IRunOnHangfire
+	{
+		public BuildInGroupsAnalyticsUpdaterHangfire(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository,
+													 IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository,
+													 IContractScheduleRepository contractScheduleRepository) : base(analyticsGroupPageRepository, skillRepository, partTimePercentageRepository,
+																													ruleSetBagRepository, contractRepository, contractScheduleRepository)
+		{
+		}
+
+		[UnitOfWork]
+		public new virtual void Handle(SettingsForPersonPeriodChangedEvent @event)
+		{
+			base.Handle(@event);
+		}
+	}
+
+	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
+		Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
+	 UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+	public class BuildInGroupsAnalyticsUpdaterServiceBus : BuildInGroupsAnalyticsUpdaterBase,
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
 		IRunOnServiceBus
+	{
+		public BuildInGroupsAnalyticsUpdaterServiceBus(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository,
+													   IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository,
+													   IContractScheduleRepository contractScheduleRepository) : base(analyticsGroupPageRepository, skillRepository, partTimePercentageRepository,
+																													  ruleSetBagRepository, contractRepository, contractScheduleRepository)
+		{
+		}
+
+		public new void Handle(SettingsForPersonPeriodChangedEvent @event)
+		{
+			base.Handle(@event);
+		}
+	}
+
+	public class BuildInGroupsAnalyticsUpdaterBase
 	{
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly ISkillRepository _skillRepository;
@@ -20,8 +58,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		private readonly IContractRepository _contractRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly List<Func<AnalyticsGroup, Guid, bool>> _checks;
-		
-		public BuildInGroupsAnalyticsUpdater(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository, IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository)
+
+		public BuildInGroupsAnalyticsUpdaterBase(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository, IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository)
 		{
 			_skillRepository = skillRepository;
 			_partTimePercentageRepository = partTimePercentageRepository;
@@ -67,4 +105,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 			return true;
 		}
 	}
+
 }
