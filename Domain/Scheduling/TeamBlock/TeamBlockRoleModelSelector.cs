@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -50,6 +49,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person, ISchedulingOptions schedulingOptions, IEffectiveRestriction additionalEffectiveRestriction)
 		{
+			//remove this code when the null reference problem is solved
+			string message = null;
+			if (teamBlockInfo == null)
+				message = "TeamBlockInfo is null for " + datePointer.ToShortDateString() + " " + person.Name;
+			if (person == null)
+				message = "Person is null " + teamBlockInfo.TeamInfo.Name + " " + datePointer.ToShortDateString();
+			if (additionalEffectiveRestriction == null)
+				message = "AdditionalEffectiveRestriction is null for " + datePointer.ToShortDateString() + " " + person.Name;
+
+			if(message != null)
+				throw new ArgumentNullException(message);
+
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo,
 				schedulingOptions);
 			if (effectiveRestriction == null)
@@ -62,18 +73,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return foundShiftProjectionCache;
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
+			var roleModel = filterAndSelect(teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, false);
+			if(roleModel == null && effectiveRestriction.IsRestriction)
+				roleModel = filterAndSelect(teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, true);
+
+			return roleModel;
+		}
+
+		private IShiftProjectionCache filterAndSelect(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, bool useShiftsForRestrictions)
+		{
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo);
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions,
 				new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
-				isSameOpenHoursInBlock);
+				isSameOpenHoursInBlock, useShiftsForRestrictions);
 			if (shifts.IsNullOrEmpty())
 				return null;
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
 				_schedulingResultStateHolder, true);
 			var maxSeatInfo = _maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(teamBlockInfo, datePointer, _schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true);
-			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList() , new DateOnlyPeriod(datePointer, datePointer));
+			var maxSeatSkills = _maxSeatSkillAggregator.GetAggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers.ToList(), new DateOnlyPeriod(datePointer, datePointer));
 			bool hasMaxSeatSkill = maxSeatSkills.Any();
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,

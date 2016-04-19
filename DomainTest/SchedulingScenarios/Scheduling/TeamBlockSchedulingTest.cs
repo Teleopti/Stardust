@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
-		[Test, Ignore]
+		[Test]
 		public void TeamBlockSchedulingShouldNotUseShiftsMarkedForRestrictionOnlyWhenThereIsNoRestriction()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
