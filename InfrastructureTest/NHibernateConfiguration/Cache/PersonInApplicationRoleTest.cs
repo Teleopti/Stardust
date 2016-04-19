@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
@@ -85,6 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 				new PersonRepository(new ThisUnitOfWork(uow)).Remove(person);
 				uow.PersistAll();
 			}
+			dataSource.Dispose();
 		}
 	}
 }

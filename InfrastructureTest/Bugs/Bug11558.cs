@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -7,7 +6,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Bugs
 {
@@ -15,32 +13,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
     [Category("LongRunning")]
     public class Bug11558 
     {
-        private IDataSource dataSource;
-
-        [SetUp]
-        public void Setup()
-        {
-			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), CurrentTeleoptiPrincipal.Make());
-            dataSource = dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ConnectionString, 1),
-								  InfraTestConfigReader.AnalyticsConnectionString);
-        }
-
         [Test]
         public void CanSetTimeoutValueOnConfig()
         {
-            const string query = @"select 1 WAITFOR DELAY :waitFor";
+			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), CurrentTeleoptiPrincipal.Make());
+	        using (
+		        var dataSource =
+			        dsFactory.Create(SetupFixtureForAssembly.Sql2005conf(InfraTestConfigReader.ConnectionString, 1),
+				        InfraTestConfigReader.AnalyticsConnectionString))
+	        {
+		        const string query = @"select 1 WAITFOR DELAY :waitFor";
 
-            using(var uow = dataSource.Application.CreateAndOpenUnitOfWork())
-            {
+		        using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+		        {
 
-                var session = uow.FetchSession();
-                Assert.Throws<DataSourceException>(() =>
-                                        session.CreateSQLQuery(query)
-                                            .SetString("waitFor", "00:00:02")
-                                            .UniqueResult<int>()
-                                            );
+			        var session = uow.FetchSession();
+			        Assert.Throws<DataSourceException>(() =>
+				        session.CreateSQLQuery(query)
+					        .SetString("waitFor", "00:00:02")
+					        .UniqueResult<int>()
+				        );
 
-            }
+		        }
+	        }
         }
     }
 }

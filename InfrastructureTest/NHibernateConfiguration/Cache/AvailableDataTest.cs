@@ -129,6 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 				new BusinessUnitRepository(uow).Remove(businessUnit);
 				uow.PersistAll();
 			}
+			dataSource.Dispose();
 		}
 	}
 }

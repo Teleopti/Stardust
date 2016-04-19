@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration.Cache
 				new ApplicationRoleRepository(uow).Remove(applicationRole);
 				uow.PersistAll();
 			}
+			dataSource.Dispose();
 		}
 	}
 }
