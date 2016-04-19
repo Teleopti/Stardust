@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using Hangfire;
-using Hangfire.States;
 using Hangfire.Storage;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -20,9 +20,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public void CancelQueue()
 		{
-			_monitoring
-				.EnqueuedJobs(EnqueuedState.DefaultQueue, 0, 100)
+			foreach (var queueName in QueueNames.From<Priority>())
+			{
+				_monitoring
+				.EnqueuedJobs(queueName, 0, 100)
 				.ForEach(j => _backgroundJobs.Delete(j.Key));
+			}
+			
 			_monitoring
 				.ScheduledJobs(0, 100)
 				.ForEach(j => _backgroundJobs.Delete(j.Key));
@@ -33,8 +37,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		{
 			while (true)
 			{
-				var enqueuedCount = _monitoring.EnqueuedCount(EnqueuedState.DefaultQueue);
-				var fetchedCount = _monitoring.FetchedCount(EnqueuedState.DefaultQueue);
+				long enqueuedCount = 0;
+				long fetchedCount = 0;
+				foreach (var queueName in QueueNames.From<Priority>())
+				{
+					enqueuedCount += _monitoring.EnqueuedCount(queueName);
+					fetchedCount += _monitoring.FetchedCount(queueName);
+				}
 				var scheduledCount = _monitoring.ScheduledCount();
 				var failedCount = _monitoring.FailedCount();
 

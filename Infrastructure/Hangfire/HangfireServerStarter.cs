@@ -9,6 +9,7 @@ using Owin;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -78,7 +79,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			GlobalConfiguration.Configuration.UseAutofacActivator(_lifetimeScope);
 
 
-
 			// for optimization, only add the filters that we currently use
 			// NOT FUTURE PROOF! DANGER DANGER!
 			GlobalJobFilters.Filters.Clear();
@@ -91,6 +91,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			{
 				JobExpirationTimeoutSeconds = jobExpiration
 			});
+
+			
 			// for optimization, only add the history counters as extra if explicitly configured so
 			// NOT FUTURE PROOF! DANGER DANGER!
 			if (dashboardStatistics)
@@ -107,23 +109,20 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				GlobalStateHandlers.Handlers.Add(new emptyHandler(SucceededState.StateName));
 				GlobalStateHandlers.Handlers.Add(new emptyHandler(DeletedState.StateName));
 			}
-
-
 			var options = new BackgroundJobServerOptions
 			{
-				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully
+				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully,
+				Queues = QueueNames.From<Priority>()
 			};
 			if (_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
 				app.UseHangfireServer(options);
 			else
 				app.UseHangfireServer(options, _activityChangesChecker);
 
-
-
 			if (dashboard)
 				app.UseHangfireDashboard();
 
-
+			GlobalJobFilters.Filters.Add(new InterfacedPriorityJobFilter());
 		}
 
 		private class emptyHandler : IStateHandler
@@ -143,7 +142,5 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 			public string StateName { get; set; }
 		}
-
 	}
-
 }
