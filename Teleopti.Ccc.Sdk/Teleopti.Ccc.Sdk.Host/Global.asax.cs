@@ -136,7 +136,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterModule<AssemblerModule>();
 			builder.RegisterModule<RequestFactoryModule>();
 			builder.RegisterModule<QueryHandlerModule>();
-			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<SdkCommandHandlersModule>();
 			builder.RegisterModule<CommandDispatcherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
