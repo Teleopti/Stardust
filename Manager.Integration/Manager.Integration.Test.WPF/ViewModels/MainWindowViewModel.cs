@@ -4,17 +4,21 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
+using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.WPF.Annotations;
 using Manager.Integration.Test.WPF.Commands;
 using Manager.Integration.Test.WPF.HttpListeners.Fiddler;
+using Timer = System.Timers.Timer;
 
 namespace Manager.Integration.Test.WPF.ViewModels
 {
-	public class MainWindowViewModel : INotifyPropertyChanged
+	public class MainWindowViewModel : INotifyPropertyChanged, IDisposable
 	{
 		private const string WorkerNodeHeaderConstant = "Worker Nodes";
 
@@ -524,6 +528,41 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		public void ToggleRefresh()
 		{
 			RefreshEnabled = !RefreshEnabled;
+		}
+
+		public void StartConsoleHost()
+		{
+			CancellationTokenSourceAppDomainTask = new CancellationTokenSource();
+
+			AppDomainTask = new AppDomainTask("Debug");
+
+			var task = AppDomainTask.StartTask(numberOfManagers: 2,
+										   numberOfNodes: 10,
+										   useLoadBalancerIfJustOneManager: true,
+										   cancellationTokenSource: CancellationTokenSourceAppDomainTask);
+
+		}
+
+		private CancellationTokenSource CancellationTokenSourceAppDomainTask { get; set; }
+
+		public AppDomainTask AppDomainTask { get; set; }
+
+		public void Dispose()
+		{
+			if (CancellationTokenSourceAppDomainTask != null)
+			{
+				CancellationTokenSourceAppDomainTask.Cancel();
+			}
+
+			if (AppDomainTask != null && AppDomainTask.Task != null)
+			{
+				AppDomainTask.Task.Dispose();
+			}
+
+			if (FiddlerCapture != null)
+			{
+				FiddlerCapture.Dispose();
+			}			
 		}
 	}
 }

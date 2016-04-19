@@ -12,6 +12,8 @@
 
 		public const string CanceledStatus = "Canceled";
 
+		public const string CancelingStatus = "Canceling";
+
 		public const string DeletedStatus = "Deleted";
 	}
 }

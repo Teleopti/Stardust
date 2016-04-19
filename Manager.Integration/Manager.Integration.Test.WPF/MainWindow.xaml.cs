@@ -88,7 +88,7 @@ namespace Manager.Integration.Test.WPF
 
 			if (mainWindowViewModel != null)
 			{
-				mainWindowViewModel.StopFiddlerCaptureCommand.Execute(null);
+				mainWindowViewModel.Dispose();
 			}
 		}
     }

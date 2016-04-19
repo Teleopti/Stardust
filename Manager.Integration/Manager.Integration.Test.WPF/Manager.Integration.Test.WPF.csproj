@@ -105,6 +105,7 @@
     </ApplicationDefinition>
     <Compile Include="Commands\ClearDatabaseCommand.cs" />
     <Compile Include="Commands\CreateNewJobCommand.cs" />
+    <Compile Include="Commands\StartHostCommand.cs" />
     <Compile Include="Commands\StopFiddlerCaptureCommand.cs" />
     <Compile Include="Commands\StartFiddlerCaptureCommand.cs" />
     <Compile Include="Commands\StartUpNewManagerCommand.cs" />
