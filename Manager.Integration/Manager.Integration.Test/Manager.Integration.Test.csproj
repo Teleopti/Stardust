@@ -101,13 +101,13 @@
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\MediaTypeConstants.cs" />
     <Compile Include="Constants\StatusConstants.cs" />
-    <Compile Include="Data\JobDefinition.cs">
+    <Compile Include="Data\Job.cs">
       <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\JobHistory.cs">
+    <Compile Include="Data\JobDetail.cs">
       <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Data\JobHistoryDetail.cs">
+    <Compile Include="Data\JobQueue.cs">
       <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\Logging.cs">
@@ -127,6 +127,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ManagerDBEntityModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\PerformanceTest.cs">
+      <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Data\WorkerNode.cs">
       <DependentUpon>ManagerDBEntityModel.tt</DependentUpon>

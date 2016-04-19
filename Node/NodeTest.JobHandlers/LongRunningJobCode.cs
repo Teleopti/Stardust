@@ -43,7 +43,7 @@ namespace NodeTest.JobHandlers
 
 			var jobSteps = 0;
 
-			var maxNumberOfJobSteps = 10;
+			var maxNumberOfJobSteps = 4;
 
 			string progressMessage;
 
@@ -52,7 +52,7 @@ namespace NodeTest.JobHandlers
 				jobSteps++;
 
 				progressMessage =
-					WhoAmI + ": Executed job step ( " + jobSteps + " ). Long running job name : ( " + message.Name + " ) is running.";
+					WhoAmI + ": Executed job step " + jobSteps + " of  ("  + maxNumberOfJobSteps +  ") . Long running job name : ( " + message.Name + " ) is running.";
 
 				jobProgress = new TestJobProgress
 				{
@@ -81,6 +81,12 @@ namespace NodeTest.JobHandlers
 
 					cancellationTokenSource.Token.ThrowIfCancellationRequested();
 				}
+
+				jobProgress = new TestJobProgress
+				{
+					Text = "Will sleep for 60 seconds now."
+				};
+				progress(jobProgress.Text);
 
 				Thread.Sleep(TimeSpan.FromSeconds(60));
 			}

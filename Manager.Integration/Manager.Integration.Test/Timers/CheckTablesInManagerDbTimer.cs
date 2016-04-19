@@ -8,49 +8,49 @@ namespace Manager.Integration.Test.Timers
 {
 	public class CheckTablesInManagerDbTimer
 	{
-		public EventHandler<List<JobDefinition>> ReceivedJobDefinitionsData;
+		public EventHandler<List<Manager.Integration.Test.Data.JobQueue>> ReceivedJobQueueItem;
 
-		public EventHandler<List<Data.JobHistory>> ReceivedJobHistoriesData;
+		public EventHandler<List<Manager.Integration.Test.Data.Job>> ReceivedJobItem;
 
-		public EventHandler<List<JobHistoryDetail>> ReceivedJobHistoryDetailsData;
+		public EventHandler<List<Manager.Integration.Test.Data.JobDetail>> ReceivedJobDetailItem;
 
-		public EventHandler<List<Logging>> ReceivedLoggingData;
+		public EventHandler<List<Manager.Integration.Test.Data.Logging>> ReceivedLoggingData;
 
-		public EventHandler<List<WorkerNode>> ReceivedWorkerNodesData;
+		public EventHandler<List<Manager.Integration.Test.Data.WorkerNode>> ReceivedWorkerNodesData;
 
 		public CheckTablesInManagerDbTimer(double interval = 5000)
 		{
 			ManagerDbEntities = new ManagerDbEntities();
 
-			JobDefinitionsTimer = new Timer(interval);
-			JobDefinitionsTimer.Elapsed += JobDefinitionsTimer_Elapsed;
+			JobQueueTimer = new Timer(interval);
+			JobQueueTimer.Elapsed += JobQueueTimer_Elapsed;
 
-			JobHistoryTimer = new Timer(interval);
-			JobHistoryTimer.Elapsed += JobHistoryTimer_Elapsed;
+			JobTimer = new Timer(interval);
+			JobTimer.Elapsed += JobTimer_Elapsed;
 
-			JobHistoryDetailsTimer = new Timer(interval);
-			JobHistoryDetailsTimer.Elapsed += JobHistoryDetailsTimer_Elapsed;
+			JobDetailTimer = new Timer(interval);
+			JobDetailTimer.Elapsed += JobDetailTimer_Elapsed;
 
-			LoggingsTimer = new Timer(interval);
-			LoggingsTimer.Elapsed += LoggingsTimerOnElapsed;
+			LoggingTimer = new Timer(interval);
+			LoggingTimer.Elapsed += LoggingTimerOnElapsed;
 
-			WorkerNodesTimer = new Timer(interval);
-			WorkerNodesTimer.Elapsed += WorkerNodesTimerOnElapsed;
+			WorkerNodeTimer = new Timer(interval);
+			WorkerNodeTimer.Elapsed += WorkerNodeTimerOnElapsed;
 		}
 
-		public Timer WorkerNodesTimer { get; set; }
+		public Timer WorkerNodeTimer { get; set; }
 
-		public Timer LoggingsTimer { get; set; }
+		public Timer LoggingTimer { get; set; }
 
-		public Timer JobHistoryDetailsTimer { get; set; }
+		public Timer JobDetailTimer { get; set; }
 
-		public Timer JobHistoryTimer { get; set; }
+		public Timer JobTimer { get; set; }
 
 		private ManagerDbEntities ManagerDbEntities { get; set; }
 
-		public Timer JobDefinitionsTimer { get; private set; }
+		public Timer JobQueueTimer { get; private set; }
 
-		private void WorkerNodesTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+		private void WorkerNodeTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
 		{
 			if (ReceivedWorkerNodesData != null)
 			{
@@ -58,7 +58,7 @@ namespace Manager.Integration.Test.Timers
 			}
 		}
 
-		private void LoggingsTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
+		private void LoggingTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
 		{
 			if (ReceivedLoggingData != null)
 			{
@@ -66,27 +66,27 @@ namespace Manager.Integration.Test.Timers
 			}
 		}
 
-		private void JobHistoryDetailsTimer_Elapsed(object sender, ElapsedEventArgs e)
+		private void JobDetailTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if (ReceivedJobHistoryDetailsData != null)
+			if (ReceivedJobDetailItem != null)
 			{
-				ReceivedJobHistoryDetailsData(this, ManagerDbEntities.JobHistoryDetails.ToList());
+				ReceivedJobDetailItem(this, ManagerDbEntities.JobDetails.ToList());
 			}
 		}
 
-		private void JobHistoryTimer_Elapsed(object sender, ElapsedEventArgs e)
+		private void JobTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if (ReceivedJobHistoriesData != null)
+			if (ReceivedJobItem != null)
 			{
-				ReceivedJobHistoriesData(this, ManagerDbEntities.JobHistories.ToList());
+				ReceivedJobItem(this, ManagerDbEntities.Jobs.ToList());
 			}
 		}
 
-		private void JobDefinitionsTimer_Elapsed(object sender, ElapsedEventArgs e)
+		private void JobQueueTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if (ReceivedJobDefinitionsData != null)
+			if (ReceivedJobQueueItem != null)
 			{
-				ReceivedJobDefinitionsData(this, ManagerDbEntities.JobDefinitions.ToList());
+				ReceivedJobQueueItem(this, ManagerDbEntities.JobQueues.ToList());
 			}
 		}
 	}

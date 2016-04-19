@@ -12,7 +12,7 @@ namespace Manager.Integration.Test.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class JobHistory
+    public partial class Job
     {
         public System.Guid JobId { get; set; }
         public string Name { get; set; }
@@ -22,7 +22,7 @@ namespace Manager.Integration.Test.Data
         public Nullable<System.DateTime> Ended { get; set; }
         public string Serialized { get; set; }
         public string Type { get; set; }
-        public string SentTo { get; set; }
+        public string SentToWorkerNodeUri { get; set; }
         public string Result { get; set; }
     }
 }

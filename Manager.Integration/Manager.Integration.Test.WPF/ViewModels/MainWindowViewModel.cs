@@ -1,12 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Timers;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Threading;
 using Manager.Integration.Test.WPF.Annotations;
 using Manager.Integration.Test.WPF.Commands;
+using Manager.Integration.Test.WPF.HttpListeners.Fiddler;
 
 namespace Manager.Integration.Test.WPF.ViewModels
 {
@@ -23,10 +27,14 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		private const string PerformanceTestHeaderConstant = "Performance tests";
 
+		private const string HttpTrafficListenerHeaderConstant = "Http Traffic";
+
 		private ClearDatabaseCommand _clearDatabaseCommand;
 		private List<Logging> _errorLoggingData;
 
 		private string _errorLoggingHeader;
+
+		private string _httpTrafficListenerHeader = HttpTrafficListenerHeaderConstant;
 		private List<JobQueue> _jobDefinitionData;
 		private string _jobDefinitionDataHeader;
 
@@ -38,6 +46,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private string _jobHistoryHeader;
 		private List<Logging> _loggingData;
 		private string _loggingHeader;
+		private List<PerformanceTest> _performanceTestData;
+		private string _performanceTestHeader;
 		private bool _refreshEnabled;
 		private int _refreshProgressValue;
 
@@ -46,11 +56,23 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private string _toggleRefreshStatus;
 		private string _workerNodeHeader;
 		private List<WorkerNode> _workerNodesData;
-		private List<PerformanceTest> _performanceTestData;
-		private string _performanceTestHeader;
 
 		public MainWindowViewModel()
 		{
+			// Set up Fiddler.
+			FiddlerCaptureUrlConfiguration = new FiddlerCaptureUrlConfiguration();
+
+			FiddlerCapture = new FiddlerCapture(FiddlerCaptureUrlConfiguration);
+
+			FiddlerCapture.NewDataCapturedEventHandler += NewDataCapturedEventHandler;
+
+			StartFiddlerCaptureCommand = new StartFiddlerCaptureCommand(FiddlerCapture);
+
+			StopFiddlerCaptureCommand = new StopFiddlerCaptureCommand(FiddlerCapture);
+
+			FiddlerCaptureInformation = new ObservableCollection<FiddlerCaptureInformation>();
+
+			// Do the rest.
 			GetData();
 
 			ClearDatabaseCommand = new ClearDatabaseCommand(this);
@@ -70,6 +92,14 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			RefreshEnabled = true;
 		}
+
+		public FiddlerCapture FiddlerCapture { get; private set; }
+
+		public FiddlerCaptureUrlConfiguration FiddlerCaptureUrlConfiguration { get; set; }
+
+		public StartFiddlerCaptureCommand StartFiddlerCaptureCommand { get; set; }
+
+		public StopFiddlerCaptureCommand StopFiddlerCaptureCommand { get; set; }
 
 		public StartUpNewNodeCommand StartUpNewNodeCommand { get; set; }
 
@@ -226,6 +256,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
+		public ObservableCollection<FiddlerCaptureInformation> FiddlerCaptureInformation { get; set; }
+
 		public List<PerformanceTest> PerformanceTestData
 		{
 			get { return _performanceTestData; }
@@ -311,6 +343,18 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
+		public string HttpTrafficListenerHeader
+		{
+			get { return _httpTrafficListenerHeader; }
+
+			set
+			{
+				_httpTrafficListenerHeader = value;
+
+				OnPropertyChanged();
+			}
+		}
+
 		public string PerformanceTestHeader
 		{
 			get { return _performanceTestHeader; }
@@ -348,6 +392,13 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		private void NewDataCapturedEventHandler(object sender, FiddlerCaptureInformation fiddlerCaptureInformation)
+		{
+			Application.Current.Dispatcher.Invoke(
+				DispatcherPriority.Normal,
+				(Action) delegate { FiddlerCaptureInformation.Add(fiddlerCaptureInformation); });
+		}
+
 		private void RefreshTimerOnElapsed(object sender,
 		                                   ElapsedEventArgs elapsedEventArgs)
 		{
@@ -382,11 +433,11 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			using (var managerDbEntities = new ManagerDbEntities())
 			{
-				PerformanceTestData = 
+				PerformanceTestData =
 					managerDbEntities.PerformanceTests.OrderByDescending(test => test.Id).ToList();
 
-				PerformanceTestHeader= 
-					PerformanceTestHeaderConstant  +" ( " + PerformanceTestData.Count + " )";
+				PerformanceTestHeader =
+					PerformanceTestHeaderConstant + " ( " + PerformanceTestData.Count + " )";
 
 				LoggingData =
 					managerDbEntities.Loggings.OrderByDescending(logging => logging.Id)

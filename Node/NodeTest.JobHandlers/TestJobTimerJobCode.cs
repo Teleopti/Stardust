@@ -21,21 +21,39 @@ namespace NodeTest.JobHandlers
 
 			jobProgress = new TestJobTimerProgress
 			{
-				Text = "Will execute for : " + message.Duration.TotalSeconds
+				Text = "Will execute for : " + message.Duration.TotalSeconds + " seconds."
 			};
 			progress(jobProgress.Text);
 
 			Stopwatch stopwatch = new Stopwatch();
-			stopwatch.Start();			
+			stopwatch.Start();
+
+			int progressCounter = 0;
 
 			while (stopwatch.Elapsed <= message.Duration)
 			{
+				progressCounter++;
+
 				if (cancellationTokenSource.IsCancellationRequested)
 				{
 					cancellationTokenSource.Token.ThrowIfCancellationRequested();
 				}
 
+				jobProgress = new TestJobTimerProgress
+				{
+					Text = "Progress loop number :" + progressCounter + ". Will sleep for 500 milliseconds."
+				};
+				progress(jobProgress.Text);
+
 				Thread.Sleep(TimeSpan.FromMilliseconds(500));
+
+				progressCounter++;
+
+				jobProgress = new TestJobTimerProgress
+				{
+					Text = "Progress loop number :" + progressCounter + ". Elapsed " + stopwatch.Elapsed.TotalSeconds + "seconds."
+				};
+				progress(jobProgress.Text);
 			}
 
 			// -----------------------------------------------------------

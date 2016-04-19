@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Manager.Integration.Test.WPF.ViewModels;
 
 namespace Manager.Integration.Test.WPF
 {
@@ -80,5 +81,15 @@ namespace Manager.Integration.Test.WPF
                 }
             }
         }
+
+		private void Window_Closed(object sender, System.EventArgs e)
+		{
+			var mainWindowViewModel = this.DataContext as MainWindowViewModel;
+
+			if (mainWindowViewModel != null)
+			{
+				mainWindowViewModel.StopFiddlerCaptureCommand.Execute(null);
+			}
+		}
     }
 }

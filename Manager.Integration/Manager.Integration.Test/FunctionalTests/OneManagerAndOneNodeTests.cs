@@ -114,7 +114,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			LogMessage("Finished.");
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
 		{
 			LogMessage("Start.");
@@ -122,7 +122,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
-				JobHelper.GenerateLongRunningParamsRequests(1);
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(2));
 
 			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
 			                                                     2);
@@ -143,32 +143,38 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreators.Add(jobManagerTaskCreator);
 			}
 
+			Task.Factory.StartNew(() =>
+			{
+				CheckTablesInManagerDbTimer checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(500);
+				checkTablesInManagerDbTimer.JobTimer.Start();
+
+				checkTablesInManagerDbTimer.ReceivedJobItem += (o, jobs) =>
+				{
+					if (jobs.Any())
+					{
+						checkTablesInManagerDbTimer.JobTimer.Stop();
+
+						var jobManagerTaskCreator =
+							new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+
+						jobManagerTaskCreator.CreateDeleteJobToManagerTask(jobs.First().JobId);
+						jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
+
+						jobManagerTaskCreator.Dispose();
+
+						checkTablesInManagerDbTimer.JobTimer.Dispose();
+					}
+				};
+			},
+			CancellationTokenSource.Token);
+
 			var startJobTaskHelper = new StartJobTaskHelper();
 
 			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 			                                                          CancellationTokenSource,
 			                                                          timeout);
-			checkJobHistoryStatusTimer.GuidAddedEventHandler += (sender,
-			                                                     args) =>
-			{
-				Task.Factory.StartNew(() =>
-				{
-					var nodeStartedNotifier =
-						new NodeStatusNotifier(ManagerDbConnectionString);
-					nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
-					                                                     "Started",
-					                                                     CancellationTokenSource);
-					nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
 
-					var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-					jobManagerTaskCreator.CreateDeleteJobToManagerTask(args.Guid);
-					jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
-					nodeStartedNotifier.Dispose();
-					jobManagerTaskCreator.Dispose();
-				},
-				                      CancellationTokenSource.Token);
-			};
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
@@ -177,10 +183,13 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			Assert.IsTrue(condition,
 			              "Must have equal number of rows.");
+
 			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.SuccessStatus),
 			               "Invalid SUCCESS status.");
+
 			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.NullStatus),
 			               "Invalid NULL status.");
+
 			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.EmptyStatus),
 			               "Invalid EMPTY status.");
 

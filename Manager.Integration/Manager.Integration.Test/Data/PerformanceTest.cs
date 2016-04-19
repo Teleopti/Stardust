@@ -12,14 +12,14 @@ namespace Manager.Integration.Test.Data
     using System;
     using System.Collections.Generic;
     
-    public partial class JobDefinition
+    public partial class PerformanceTest
     {
-        public System.Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public string Serialized { get; set; }
-        public string Type { get; set; }
-        public string UserName { get; set; }
-        public string AssignedNode { get; set; }
-        public string Status { get; set; }
+        public string Description { get; set; }
+        public System.DateTime Started { get; set; }
+        public System.DateTime Ended { get; set; }
+        public double ElapsedInSeconds { get; set; }
+        public double ElapsedInMinutes { get; set; }
     }
 }
