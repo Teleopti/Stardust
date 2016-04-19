@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
@@ -87,7 +89,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public IList<AnalyticsFactSchedulePreference> PreferencesForPerson(int personId)
 		{
-			throw new NotImplementedException();
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"SELECT [date_id] DateId
+						  ,[interval_id] IntervalId
+						  ,[person_id] PersonId
+						  ,[scenario_id] ScenarioId
+						  ,[preference_type_id] PreferenceTypeId
+						  ,[shift_category_id] ShiftCategoryId
+						  ,[day_off_id] DayOffId
+						  ,[preferences_requested] PreferencesRequested
+						  ,[preferences_fulfilled] PreferencesFulfilled
+						  ,[preferences_unfulfilled] PreferencesUnfulfilled
+						  ,[business_unit_id] BusinessUnitId
+						  ,[datasource_id] DatasourceId
+						  ,[insert_date] InsertDate
+						  ,[update_date] UpdateDate
+						  ,[datasource_update_date] DatasourceUpdateDate
+						  ,[must_haves] MustHaves
+						  ,[absence_id] AbsenceId
+					  FROM [mart].[fact_schedule_preference] WITH (NOLOCK) WHERE person_id=:PersonId ")
+					.SetInt32("PersonId", personId)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsFactSchedulePreference)))
+					.SetReadOnly(true)
+					.List<AnalyticsFactSchedulePreference>();
+			}
 		}
 	}
 }

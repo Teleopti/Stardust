@@ -249,6 +249,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsPermissionExecutionRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPermissionsRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDateRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsPreferenceRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsScheduleRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepositoryTest.cs" />
