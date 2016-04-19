@@ -1,11 +1,11 @@
 using System;
 using AutoMapper;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IMappingEngine _mapper;
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPublisher _publisher;
 		private readonly INow _nu;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 									ILoggedOnUser loggedOnUser,
 									IMappingEngine mapper,
-									IMessagePopulatingServiceBusSender serviceBusSender,
+									IEventPublisher publisher,
 									INow nu)
 		{
 			_personRequestRepository = personRequestRepository;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_loggedOnUser = loggedOnUser;
 			_mapper = mapper;
-			_serviceBusSender = serviceBusSender;
+			_publisher = publisher;
 			_nu = nu;
 			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
@@ -71,22 +71,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			}
 
 			personRequest.Request.Accept(personRequest.Person, _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
-			_serviceBusSender.Send(new NewShiftTradeRequestCreated
+			_publisher.Publish(new NewShiftTradeRequestCreatedEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault()
-			}, false);
+			});
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
 
 		private void persistWithBus(IPersonRequest personRequest)
 		{
-			_serviceBusSender.Send(new AcceptShiftTrade
+			_publisher.Publish(new AcceptShiftTradeEvent
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 				Message = personRequest.GetMessage(new NoFormatting())
-			}, false);
+			});
 		}
 
 	}

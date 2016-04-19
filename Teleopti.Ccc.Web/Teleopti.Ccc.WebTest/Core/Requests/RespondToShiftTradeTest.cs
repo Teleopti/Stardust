@@ -3,6 +3,7 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -29,14 +30,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var shiftTradeRequestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
-			var busSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
+			var eventPublisher = MockRepository.GenerateMock<IEventPublisher>();
 			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			uowFactory.Expect(x => x.Name).Return("gegga");
 			unitOfWorkFactoryProvider.Expect(x => x.Current()).Return(uowFactory);
 			var bsProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			bsProvider.Expect(x => x.Current()).Return(new BusinessUnit("sdf"));
-			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper, busSender, MockRepository.GenerateMock<INow>());
+			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper, eventPublisher, MockRepository.GenerateMock<INow>());
 			var requestViewModel = new RequestViewModel();
 
 			personRequestRepository.Expect(p => p.Find(shiftTradeId)).Return(personRequest);
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			target.OkByMe(shiftTradeId, "");
 
 			//verify expectation:
-			busSender.AssertWasCalled(s => s.Send(null, false), o => o.IgnoreArguments());
+			eventPublisher.AssertWasCalled(s => s.Publish(null), o => o.IgnoreArguments());
 		}
 
 		[Test]

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IShiftTradeRequestMapper mapper;
 		private IMappingEngine autoMapper;
 		private IPersonRequestRepository repository;
-		private IMessagePopulatingServiceBusSender serviceBusSender;
+		private IEventPublisher publisher;
 		private IShiftTradeRequestSetChecksum shiftTradeSetChecksum;
 		private IShiftTradeRequestProvider shiftTradeRequestProvider;
 		private ICurrentUnitOfWork currentUnitOfWork;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			mapper = MockRepository.GenerateMock<IShiftTradeRequestMapper>();
 			autoMapper = MockRepository.GenerateMock<IMappingEngine>();
 			repository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			serviceBusSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
+			publisher = MockRepository.GenerateMock<IEventPublisher>();
 			shiftTradeSetChecksum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 			shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldPersistMappedData()
 		{
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm();
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel();
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.Completed);
 			var personRequests = new PersonRequest(new Person()){Request = offer};
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm() { ShiftExchangeOfferId = Guid.Empty };
 			var shiftTradeRequest = new PersonRequest(new Person());
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			offer.Stub(x => x.Status).Return(ShiftExchangeOfferStatus.PendingAdminApproval);
 			var personRequests = new PersonRequest(new Person()){Request = offer};
 			repository.Stub(x => x.FindPersonRequestByRequestId(Guid.Empty)).Return(personRequests);
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, currentUnitOfWork, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm() { ShiftExchangeOfferId = Guid.Empty };
 			var shiftTradeRequest = new PersonRequest(new Person());
 			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel { Status = Resources.New, ExchangeOffer = new ShiftExchangeOfferRequestViewModel() { IsOfferAvailable = true } };
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true, AutoGrantShiftTradeRequest = false});
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel { Status = Resources.New, ExchangeOffer = new ShiftExchangeOfferRequestViewModel() { IsOfferAvailable = true } };
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = false});
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = Guid.Empty};
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel{Status = Resources.New};
@@ -181,7 +182,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			shiftTradeRequestProvider.Stub(x => x.RetrieveUserWorkflowControlSet())
 				.Return(new WorkflowControlSet("bla") {LockTrading = true});
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm{ShiftExchangeOfferId = null};
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel{Status = Resources.New};
@@ -210,7 +211,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new ShiftTradeRequestPersister(MockRepository.GenerateMock<IPersonRequestRepository>(),
 			                                            mapper,
 			                                            autoMapper,
-			                                            serviceBusSender,
+			                                            publisher,
 			                                            now,
 			                                            dataSourceProvider,
 			                                            businessUnitProvider,
@@ -228,7 +229,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldSetChecksumOnRequest()
 		{
 			//elände - borde inte behöva anropa setchecksum explicit
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, publisher, null, null, null, null, shiftTradeSetChecksum, shiftTradeRequestProvider);
 			var form = new ShiftTradeRequestForm();
 			var shiftTradeRequest = new PersonRequest(new Person());
 
