@@ -5,6 +5,8 @@
 
 Background:
 	Given there is a switch
+	And the time is '2015-11-23 12:30:00'
+	And rta is ready
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'

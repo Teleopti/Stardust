@@ -31,6 +31,7 @@ Background:
 @OnlyRunIfEnabled('RTA_TerminatedPersons_36042')
 Scenario: Exclude terminated agents
 	Given the time is '2016-01-14 09:00:00'
+	And rta is ready
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see team 'Red' with 1 employees out of adherence
@@ -41,6 +42,7 @@ Scenario: Exclude terminated agents
 @OnlyRunIfEnabled('RTA_TerminatedPersons_36042')
 Scenario: Exclude agents terminated retroactively
 	Given the time is '2016-01-14 09:00:00'
+	And rta is ready
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
 	Then I should see team 'Red' with 1 employees out of adherence

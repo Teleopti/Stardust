@@ -7,7 +7,8 @@ Background:
 	Given there is a switch
 
 Scenario: See sites of a selected business unit
-	Given the time is '2014-08-01 13:00'
+	Given the time is '2016-01-21 00:00:00'
+	And rta is ready
 	And I have a role with full access
 	And there is a business unit with
 	| Field | Value           |
@@ -32,7 +33,9 @@ Scenario: See sites of a selected business unit
 	Then I should see the site 'Paris'
 
 Scenario: See statupdates after changing business unit
-	Given I have a role with full access
+	Given the time is '2014-01-21 00:00:00'
+	And rta is ready
+	And I have a role with full access
 	And there is a business unit named 'France'
 	And there is a site 'Paris' on business unit 'France'
 	And there is a team named 'Red' on site 'Paris'

@@ -9,7 +9,9 @@ Background:
 @ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence percentage for night shift agents
-	Given there is an activity named 'Phone'
+	Given the time is '2014-10-06 00:00:00'
+	And rta is ready
+	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with
@@ -52,7 +54,9 @@ Scenario: Should see adherence percentage for night shift agents
 @ignore
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence details for night shift agents
-	Given there is an activity named 'Phone'
+	Given the time is '2014-10-06 00:00:00'
+	And rta is ready
+	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with

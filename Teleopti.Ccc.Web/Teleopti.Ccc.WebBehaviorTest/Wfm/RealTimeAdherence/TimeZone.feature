@@ -9,7 +9,9 @@ Background:
 
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: See adherence percentage when call center is in Hawaii
-	Given I am located in Hawaii
+	Given the time is '2014-10-06 00:00'
+	And rta is ready
+	And I am located in Hawaii
 	And 'Pierre Baldi' is located in Hawaii
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -49,7 +51,9 @@ Scenario: See adherence percentage when call center is in Hawaii
 
 @OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: See adherence details when call center is in Hawaii
-	Given I am located in Hawaii
+	Given the time is '2014-10-07 13:00'
+	And rta is ready
+	And I am located in Hawaii
 	And 'Pierre Baldi' is located in Hawaii
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'

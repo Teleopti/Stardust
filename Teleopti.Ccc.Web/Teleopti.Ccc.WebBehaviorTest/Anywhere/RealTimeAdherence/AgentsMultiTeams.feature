@@ -7,7 +7,9 @@ Background:
 	Given there is a switch
 
 Scenario: Should be able to see agents for multiple sites
-	Given there is a site named 'Paris'
+	Given the time is '2014-01-21 00:00:00'
+	And rta is ready
+	And there is a site named 'Paris'
 	And there is a team named 'Team Paris' on site 'Paris'
 	And there is a site named 'London'
 	And there is a team named 'Team London' on site 'London'
@@ -33,7 +35,9 @@ Scenario: Should be able to see agents for multiple sites
 	And I should see agent status for 'Ashley Andeen'
 
 Scenario: Should be able to see agents for multiple teams
-	Given there is a site named 'Stockholm'
+	Given the time is '2014-01-21 00:00:00'
+	And rta is ready
+	And there is a site named 'Stockholm'
 	And there is a team named 'Täby' on site 'Stockholm'
 	And there is a team named 'Garnisonen' on site 'Stockholm'
 	And I have a role with

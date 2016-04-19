@@ -8,7 +8,9 @@ Background:
 
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
 Scenario: See adherence percentage with neutral adherence
-	Given there is an activity named 'Phone'
+	Given the time is '2015-03-02 00:00:00'
+	And rta is ready
+	And there is an activity named 'Phone'
 	And there is an activity named 'Administration'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -50,7 +52,9 @@ Scenario: See adherence percentage with neutral adherence
 
 @OnlyRunIfEnabled('RTA_NeutralAdherence_30930')
 Scenario: See adherence details with neutral adherence
-	Given there is an activity named 'Phone'
+	Given the time is '2015-03-02 00:00:00'
+	And rta is ready
+	And there is an activity named 'Phone'
 	And there is an activity named 'Administration'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'

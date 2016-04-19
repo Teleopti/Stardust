@@ -17,7 +17,9 @@ Scenario: Should not be able to see agents if not permitted
 	Then I should see a message that I have no permission for this function
 
 Scenario: Should be able to see current states of all agents
-	Given there is an activity named 'Phone'
+	Given the time is '2014-01-21 00:00:00'
+	And rta is ready
+	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -91,7 +93,9 @@ Scenario: Should be able to see current states of all agents
 		| Alarm Color              | Green              |
 
 Scenario: Should be able to see state updates of all agents
-	Given there is an activity named 'Phone'
+	Given the time is '2014-01-21 00:00:00'
+	And rta is ready
+	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -165,7 +169,9 @@ Scenario: Should be able to see state updates of all agents
 		| Alarm Color              | Green         |
 
 Scenario: Should be able to see all agents of the team with or without state updates
-	Given there is an activity named 'Phone'
+	Given the time is '2014-01-21 00:00:00'
+	And rta is ready
+	And there is an activity named 'Phone'
 	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -252,7 +258,9 @@ Scenario: Should be able to see all agents of the team with or without state upd
 	And I should see agent status for 'John Smith'
 
 Scenario: Should see adherence status when call center is in Istanbul
-	Given I am located in Istanbul
+	Given the time is '2015-03-24 00:00:00'
+	And rta is ready
+	And I am located in Istanbul
 	And 'Pierre Baldi' is located in Istanbul
 	And there is an activity named 'Phone'
 	And there is a site named 'Istanbul'
