@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingProgress _backgroundWorker;
 		private int _counter;
 		private readonly string output = Resources.OptimizingIntraday + Resources.Colon + "({0}){1} {2} {3}";
-		private static readonly long waitBetweenCallbacks = TimeSpan.FromSeconds(0.5).Ticks;
+		private static readonly long waitBetweenCallbacks = TimeSpan.FromSeconds(0.2).Ticks;
 
 		public IntradayOptimizationCallback(ISchedulingProgress backgroundWorker)
 		{
