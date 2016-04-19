@@ -1,9 +1,13 @@
 /*
 
-DO NOT!! run this on your production database, that will drop all users!
+--=====
+NOTE: Do NOT(!) run this on your PRODUCTION database, that will drop all users!
+--=====
 
+--=====
 --manuell instructions
-Run this script in both your restored/copied databases:
+--=====
+Run this script in _both_ your restored test databases:
 e.g
 Bug28762_Acme_TeleoptiAnalytics
 Bug28762_Acme_TeleoptiApp
@@ -12,19 +16,46 @@ See instruction for what to change below!
 
 This script will update the tenant info in your db copy to point to MySelf, (rather that poiting back to the production DB)
 
+--Remove $ and () and replace with actuall name of Analytics _Test_ database between the single quots
+--Same for Username and password
+--For Example:
+declare @DESTANALYTICS VARCHAR(100) = 'IkeaTest_TeleoptiAnalytics' -- NOTE: Should always be Anayltics, even when executing in App database
+declare @DESTUSER VARCHAR(100) = 'SomeUser'
+declare @DESTPWD VARCHAR(100) = 'SomePassword'
 */
 
-declare @DESTANALYTICS VARCHAR(100) = '$(DESTANALYTICS)' -- <-- Edit me e.g: Bug28762_Acme_TeleoptiAnalytics
+declare @DESTANALYTICS VARCHAR(100) = '$(DESTANALYTICS)' -- <-- Edit me e.g: Bug28762_Acme_TeleoptiAnalytics.
 declare @DESTUSER VARCHAR(100) = '$(DESTUSER)'  -- < -- put your new debug SQL login here
 declare @DESTPWD VARCHAR(100) = '$(DESTPWD)' -- < -- put your new debug SQL password here
 --========================
 
 SET NOCOUNT ON
 print '---'
-declare @stmt nvarchar(max) = 'CREATE USER ['+@DESTUSER+'] WITH PASSWORD = '''+@DESTPWD+''''
+declare @userStmt nvarchar(max)
+declare @loginStmt nvarchar(max)
+DECLARE @sqlEdition NVARCHAR(200)
+SELECT @sqlEdition = CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))
+IF @sqlEdition = 'SQL Azure'
+BEGIN
+	SET @loginStmt = @sqlEdition
+	SET @userStmt = 'CREATE USER ['+@DESTUSER+'] WITH PASSWORD = '''+@DESTPWD+''''
+END
+ELSE  --OnPrem
+BEGIN
+		SET @loginStmt = 'IF NOT EXISTS 
+    (SELECT name  
+     FROM master.sys.server_principals
+     WHERE name = '''+@DESTUSER+''')
+	BEGIN
+		CREATE LOGIN ['+@DESTUSER+'] WITH PASSWORD=N''' + @DESTPWD + ''', DEFAULT_DATABASE=[master], CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF
+	END'
 
+		SET @userStmt = 'CREATE USER ['+@DESTUSER+']'
+END
 declare @ApplicationConnectionString nVARCHAR(200)
 declare @AnalyticsConnectionString nVARCHAR(200)
+DECLARE @username VARCHAR(64)
+DECLARE @dropUser nvarchar(max)
 
 select @ApplicationConnectionString = 'Data Source='+@@servername+'.database.windows.net;Initial Catalog='+DB_NAME()+';User ID='+@DESTUSER+';Password='+@DESTPWD+';Current Language=us_english'
 select @AnalyticsConnectionString = 'Data Source='+@@servername+'.database.windows.net;Initial Catalog='+@DESTANALYTICS+';User ID='+@DESTUSER+';Password='+@DESTPWD+';Current Language=us_english'
@@ -39,8 +70,8 @@ BEGIN
 	where Name = 'Teleopti WFM'
 END
 
-DECLARE @username VARCHAR(64)
-DECLARE @dropUser nvarchar(max)
+IF @sqlEdition = 'SQL Azure'
+BEGIN
   DECLARE c1 CURSOR FOR 
     SELECT name   
     FROM sysusers
@@ -55,11 +86,31 @@ DECLARE @dropUser nvarchar(max)
 		exec sp_executesql @dropUser
      FETCH next FROM c1 INTO @username
    END
-CLOSE c1
-DEALLOCATE c1
+  CLOSE c1
+  DEALLOCATE c1
+END
+ELSE
+BEGIN
+	SELECT * FROM sys.database_principals WHERE name = @DESTUSER
+	IF EXISTS (SELECT * FROM sys.database_principals WHERE name = @DESTUSER)
+	BEGIN
+		SELECT @dropUser = 'DROP USER ['+@DESTUSER+']'
+		EXEC sp_executesql @dropUser
+	END
+END
+
+--create new login
+IF @sqlEdition = 'SQL Azure'
+BEGIN
+	PRINT 'Azure, no need to create login at server level'
+END
+ELSE
+BEGIN
+	exec sp_executesql @loginStmt
+END
 
 --create new user
-exec sp_executesql @stmt
+exec sp_executesql @userStmt
 
 /********************************************************************************
 $Revision: 
