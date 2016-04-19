@@ -1,25 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
 	public class PersonRequestFactory : IPersonRequestFactory
 	{
 		private readonly IPersistPersonRequest _persistPersonRequest;
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPublisher _publisher;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IScheduleStorage _scheduleStorage;
@@ -27,12 +26,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		private readonly IAssembler<IPersonRequest, PersonRequestDto> _personRequestAssembler;
 
 		public PersonRequestFactory(IPersistPersonRequest persistPersonRequest,
-			IMessagePopulatingServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository,
+			IEventPublisher publisher, IPersonRequestRepository personRequestRepository,
 			ICurrentScenario currentScenario, IScheduleStorage scheduleStorage, IPersonRepository personRepository,
 			IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
 		{
 			_persistPersonRequest = persistPersonRequest;
-			_serviceBusSender = serviceBusSender;
+			_publisher = publisher;
 			_personRequestRepository = personRequestRepository;
 			_currentScenario = currentScenario;
 			_scheduleStorage = scheduleStorage;
@@ -98,11 +97,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			var result = _persistPersonRequest.Persist(personRequestDto, unitOfWork, requestCallback);
 
 			//Call RSB!
-			var message = new NewShiftTradeRequestCreated
+			var @event = new NewShiftTradeRequestCreatedEvent
 				{
 					PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
 				};
-			_serviceBusSender.Send(message, true);
+			_publisher.Publish(@event);
 
 			return new PersonRequestDto { Id = result.Id };
 		}
@@ -203,21 +202,20 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			if (personRequestedShiftTrade.IsSatisfiedBy(person))
 			{
 				var command = new AcceptPreviouslyReferredShiftTradeCommand(_scheduleStorage, _personRequestRepository,
-																			_currentScenario, _serviceBusSender,
-																			personRequestDto);
+					_currentScenario, _publisher,
+					personRequestDto);
 				command.Execute();
 			}
 			else
 			{
-				var message = new AcceptShiftTrade
+				var message = new AcceptShiftTradeEvent
 				{
 					PersonRequestId = personRequestDto.Id.GetValueOrDefault(Guid.Empty),
 					AcceptingPersonId = person.Id.GetValueOrDefault(Guid.Empty),
 					Message = personRequestDto.Message
 				};
-				_serviceBusSender.Send(message, true);
+				_publisher.Publish(message);
 			}
-
 			return personRequestDto;
 		}
 

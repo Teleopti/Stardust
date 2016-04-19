@@ -2,13 +2,13 @@ using System;
 using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
@@ -17,17 +17,17 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
+		private readonly IEventPublisher _publisher;
 		private readonly PersonRequestDto _personRequestDto;
 
 		public AcceptPreviouslyReferredShiftTradeCommand(IScheduleStorage scheduleStorage,
 			IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario,
-			IMessagePopulatingServiceBusSender serviceBusSender, PersonRequestDto personRequestDto)
+			IEventPublisher publisher, PersonRequestDto personRequestDto)
 		{
 			_scheduleStorage = scheduleStorage;
 			_personRequestRepository = personRequestRepository;
 			_currentScenario = currentScenario;
-			_serviceBusSender = serviceBusSender;
+			_publisher = publisher;
 			_personRequestDto = personRequestDto;
 		}
 
@@ -55,12 +55,12 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				uow.PersistAll();
 			}
 
-			var message = new NewShiftTradeRequestCreated
-				{
-					PersonRequestId =
+			var @event = new NewShiftTradeRequestCreatedEvent
+			{
+				PersonRequestId =
 						_personRequestDto.Id.GetValueOrDefault(Guid.Empty)
-				};
-			_serviceBusSender.Send(message, true);
+			};
+			_publisher.Publish(@event);
 		}
 	}
 }
