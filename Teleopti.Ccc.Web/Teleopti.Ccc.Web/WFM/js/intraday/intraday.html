@@ -110,31 +110,13 @@
 		</div>
 	</div>
 
-	<div class="con-row">
-	<div class="con-flex">
-		<div class="panel slide-panel full-padding material-depth-1" ng-show="HasMonitorData">
-				<div class="wfm-slide-tabs tabbed-panel">
-					<md-content class="md-padding">
-						<md-tabs md-dynamic-height md-border-bottom md-selected="selectedIndex">
-							<md-tab label="Incoming">
-								<md-content class="md-padding">
-									<div class="con-row">
-										<div class="con-flex">
-											<h2>{{'IncomingTraffic'|translate}}</h2>
-										</div>
-									</div>
-									<div class="con-row">
-										<div class="con-flex">
-											<div class="wfm-chart" id="intradayChart"></div>
-										</div>
-									</div>
-								</md-content>
-							</md-tab>
-						</md-tabs>
-					</md-content>
-				</div>
+	<div class="panel material-depth-1" ng-show="HasMonitorData">
+		<div class="con-row">
+			<div class="con-flex">
+				<h2>{{'IncomingTraffic'|translate}}</h2>
 			</div>
 		</div>
+				<div id="intradayChart"></div>
 	</div>
 
 	<div class="con-row">
