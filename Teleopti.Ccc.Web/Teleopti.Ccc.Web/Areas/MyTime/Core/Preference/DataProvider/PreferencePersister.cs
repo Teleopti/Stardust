@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				{
 					LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
 					LogOnDatasource = _currentDataSource.Current().DataSourceName,
-					PreferenceId = input.PreferenceId.Value,
+					PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 					Timestamp = _now.UtcDateTime()
 				};
 				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _publisher.Publish(message));

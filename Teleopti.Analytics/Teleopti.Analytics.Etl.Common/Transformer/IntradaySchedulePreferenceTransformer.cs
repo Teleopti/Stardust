@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
@@ -34,7 +35,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 					continue;
 				var newDataRow = table.NewRow();
 
-				newDataRow = SchedulePreferenceTransformerHelper.FillDataRow(newDataRow, preferenceDay.Restriction, schedulePart);
+				newDataRow = SchedulePreferenceTransformer.FillDataRow(newDataRow, preferenceDay.Restriction, schedulePart);
 				table.Rows.Add(newDataRow);
 				preferenceDayAndPersonList.Add(preferenceDayAndPerson);
 			}

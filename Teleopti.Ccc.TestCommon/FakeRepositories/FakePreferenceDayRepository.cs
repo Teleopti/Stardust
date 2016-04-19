@@ -80,5 +80,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
+		public IPreferenceDay Find(Guid preferenceId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

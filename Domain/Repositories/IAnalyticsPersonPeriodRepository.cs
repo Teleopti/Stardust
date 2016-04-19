@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		int SiteId(Guid siteCode, string siteName, int businessUnitId);
 
 		IList<AnalyticsPersonPeriod> GetPersonPeriods(Guid personCode);
+		AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode);
 		void AddPersonPeriod(AnalyticsPersonPeriod personPeriod);
 		void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
 		

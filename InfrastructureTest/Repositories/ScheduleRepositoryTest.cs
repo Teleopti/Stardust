@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _prefDays.Add(new PreferenceDay(person, new DateOnly(2000, 1, 10), new PreferenceRestriction()));
         }
-
+		
         [Test]
         public void VerifyCanLoadReadOnlyScheduleBasedOnPersonsAndPeriodAndScenario()
         {

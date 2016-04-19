@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
@@ -66,7 +67,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				table.Locale = Thread.CurrentThread.CurrentCulture;
 				SchedulePreferenceInfrastructure.AddColumnsToDataTable(table);
 				var row = table.NewRow();
-				var result = SchedulePreferenceTransformerHelper.FillDataRow(row, preferenceRestriction, schedulepart);
+				var result = SchedulePreferenceTransformer.FillDataRow(row, preferenceRestriction, schedulepart);
 				result["restriction_date"].Should().Be.EqualTo(new DateTime(2010, 11, 12));
 			}
 		}
@@ -79,13 +80,13 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 				table.Locale = Thread.CurrentThread.CurrentCulture;
 				SchedulePreferenceInfrastructure.AddColumnsToDataTable(table);
 				var row = table.NewRow();
-				var result = SchedulePreferenceTransformerHelper.FillDataRow(row, preferenceRestriction, schedulepart);
+				var result = SchedulePreferenceTransformer.FillDataRow(row, preferenceRestriction, schedulepart);
 				result.Should().Not.Be.Null();
 
 				var absence = new Absence();
 				absence.SetId(Guid.NewGuid());
 				preferenceRestriction.Absence = absence;
-				result = SchedulePreferenceTransformerHelper.FillDataRow(row, preferenceRestriction, schedulepart);
+				result = SchedulePreferenceTransformer.FillDataRow(row, preferenceRestriction, schedulepart);
 				result.Should().Not.Be.Null();
 			}
 		}

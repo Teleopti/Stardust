@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public PreferenceDayRepository(ICurrentUnitOfWork currentUnitOfWork)
 			: base(currentUnitOfWork)
 		{
-			
+
 		}
 
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
@@ -102,6 +102,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			InitializePreferenceDays(retList);
 			return retList;
+		}
+
+		public IPreferenceDay Find(Guid preferenceId)
+		{
+			ICriteria crit = Session.CreateCriteria(typeof(PreferenceDay))
+				.Add(Restrictions.Eq("Id", preferenceId))
+				.SetFetchMode("Restriction", FetchMode.Join);
+			IList<IPreferenceDay> retList = crit.List<IPreferenceDay>();
+
+			InitializePreferenceDays(retList);
+
+			return retList.First();
 		}
 
 		private ICriteria FilterByPeriod(DateOnlyPeriod period)

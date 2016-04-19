@@ -159,6 +159,7 @@
     <Compile Include="Analytics\AnalyticsPermission.cs" />
     <Compile Include="Analytics\AnalyticsPersonRepository.cs" />
     <Compile Include="Analytics\AnalyticsTimeZone.cs" />
+    <Compile Include="Analytics\AnalyticsFactSchedulePreference.cs" />
     <Compile Include="Analytics\AnalyticTeam.cs" />
     <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\Core\AspectAttribute.cs" />
@@ -240,6 +241,7 @@
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
     <Compile Include="Optimization\IScheduleOptimization.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTeamBlock.cs" />
+    <Compile Include="Repositories\IAnalyticsPreferenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsDateRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionExecutionRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolderProvider.cs" />
@@ -251,6 +253,7 @@
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\IAnalyticsTeamRepository.cs" />
     <Compile Include="Scheduling\ISchedulingOptionsProvider.cs" />
+    <Compile Include="Scheduling\Restrictions\SchedulePreferenceTransformerHelper.cs" />
     <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProvider.cs" />
     <Compile Include="Security\Principal\CurrentProcess.cs" />

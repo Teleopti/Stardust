@@ -50,6 +50,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 
+		public AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void AddPersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
 			fakePersonPeriods.Add(personPeriod);

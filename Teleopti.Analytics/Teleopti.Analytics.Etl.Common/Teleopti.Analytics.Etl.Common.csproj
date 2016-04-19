@@ -412,7 +412,6 @@
     <Compile Include="Transformer\ScheduleForecastSkillResourceCalculation.cs" />
     <Compile Include="Transformer\ScheduleForecastSkillTransformer.cs" />
     <Compile Include="Transformer\SchedulePreferenceTransformer.cs" />
-    <Compile Include="Transformer\SchedulePreferenceTransformerHelper.cs" />
     <Compile Include="Transformer\ScheduleProjection.cs" />
     <Compile Include="Transformer\ScheduleThreading\DayAbsenceDataRowFactory.cs" />
     <Compile Include="Transformer\ScheduleThreading\IScheduleDataRowCollectionFactory.cs" />

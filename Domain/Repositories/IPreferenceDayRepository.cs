@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<IPreferenceDay> FindAndLock(DateOnly dateOnly, IPerson person);
 		IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person);
 		IList<IPreferenceDay> FindNewerThan(DateTime newerThan);
+		IPreferenceDay Find(Guid preferenceId);
 	}
 }

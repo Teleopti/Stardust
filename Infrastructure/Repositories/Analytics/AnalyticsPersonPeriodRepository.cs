@@ -66,6 +66,60 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			}
 		}
 
+		public AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode)
+		{
+			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"SELECT person_id PersonId
+                        , person_code PersonCode
+                        , valid_from_date ValidFromDate
+                        , valid_to_date ValidToDate
+                        , valid_from_date_id ValidFromDateId
+                        , valid_to_date_id ValidToDateId
+                        , valid_to_interval_id ValidToIntervalId
+                        , person_period_code PersonPeriodCode
+                        , person_name PersonName
+                        , first_name FirstName
+                        , last_name LastName
+                        , employment_number EmploymentNumber
+                        , employment_type_code EmploymentTypeCode
+                        , employment_type_name EmploymentTypeName
+                        , contract_code ContractCode
+                        , contract_name ContractName
+                        , parttime_code ParttimeCode
+                        , parttime_percentage ParttimePercentage
+                        , team_id TeamId
+                        , team_code TeamCode
+                        , team_name TeamName
+                        , site_id SiteId
+                        , site_code SiteCode
+                        , site_name SiteName
+                        , business_unit_id BusinessUnitId
+                        , business_unit_code BusinessUnitCode
+                        , business_unit_name BusinessUnitName
+                        , skillset_id SkillsetId
+                        , email Email
+                        , note Note
+                        , employment_start_date EmploymentStartDate
+                        , employment_end_date EmploymentEndDate
+                        , time_zone_id TimeZoneId
+                        , is_agent IsAgent
+                        , is_user IsUser
+                        , datasource_id DatasourceId
+                        , insert_date InsertDate
+                        , update_date UpdateDate
+                        , datasource_update_date DatasourceUpdateDate
+                        , to_be_deleted ToBeDeleted
+                        , windows_domain WindowsDomain
+                        , windows_username WindowsUsername from mart.dim_person WITH (NOLOCK) WHERE person_period_code=:code ")
+					.SetGuid("code", personPeriodCode)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (AnalyticsPersonPeriod)))
+					.SetReadOnly(true)
+					.UniqueResult<AnalyticsPersonPeriod>();
+			}
+		}
+
 		public int SiteId(Guid siteCode, string siteName, int businessUnitId)
 		{
 			using (IStatelessUnitOfWork uow = statisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
