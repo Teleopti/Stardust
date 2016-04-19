@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			groupPageRepository.Stub(x => x.LoadGroupPagesByIds(groupPageIdCollection)).Return(new IGroupPage[] {});
 			var analyticsGroupPageRepository = MockRepository.GenerateMock<IAnalyticsGroupPageRepository>();
 			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
-			var target = new GroupPageAnalyticsUpdater(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			var target = new GroupPageAnalyticsUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent();
 			groupPageCollectionChangedEvent.SetGroupPageIdCollection( groupPageIdCollection);
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			analyticsGroupPageRepository.Stub(x => x.GetGroupPage(groupPageId)).Return(new AnalyticsGroup[] {});
 			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new Guid[] { });
-			var target = new GroupPageAnalyticsUpdater(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			var target = new GroupPageAnalyticsUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			});
 			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new Guid[] { });
-			var target = new GroupPageAnalyticsUpdater(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			var target = new GroupPageAnalyticsUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			});
 			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new Guid[] { });
-			var target = new GroupPageAnalyticsUpdater(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			var target = new GroupPageAnalyticsUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			var analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 			var person2 = PersonFactory.CreatePersonWithGuid("person2", "person2Last");
 			analyticsBridgeGroupPagePersonRepository.Stub(x => x.GetBridgeGroupPagePerson(rootPersonGroup.Id.GetValueOrDefault())).Return(new[] { person2.Id.GetValueOrDefault() });
-			var target = new GroupPageAnalyticsUpdater(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
+			var target = new GroupPageAnalyticsUpdaterBase(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository);
 
 			var groupPageCollectionChangedEvent = new GroupPageCollectionChangedEvent
 			{

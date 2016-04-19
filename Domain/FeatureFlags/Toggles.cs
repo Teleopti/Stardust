@@ -108,7 +108,8 @@
 		ETL_SpeedUpIntradayPreference_37124,
 		ETL_SpeedUpIntradaySkill_37543,
 		ETL_SpeedUpNightlySkill_37543,
-		ShiftTrade_ToHangfire_38181
+		ShiftTrade_ToHangfire_38181,
+		GroupPageCollection_ToHangfire_38178,
 		// ReSharper restore InconsistentNaming
 	}
 }
