@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 							OptimizeScheduleChangedEvents_DontUseFromWeb = true
 						}, _toggleManager)));
 
-			build.RegisterModule<ShiftTradeModule>();
+			
 			build.RegisterModule<AuthorizationContainerInstaller>();
 			build.RegisterModule<SerializationContainerInstaller>();
 			build.RegisterModule<ServiceBusCommonModule>();

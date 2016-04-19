@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 		ConsumerOf<NewAbsenceRequestCreated>,
 		ConsumerOf<GroupPageChangedMessage>,
 		ConsumerOf<PersonPeriodChangedMessage>,
-		ConsumerOf<PersonChangedMessage>
+		ConsumerOf<PersonChangedMessage>, 
+		ConsumerOf<NewShiftTradeRequestCreated>,
+		ConsumerOf<AcceptShiftTrade>
 	{
 		private readonly IServiceBus _bus;
 		private readonly IEventPublisher _publisher;
@@ -100,6 +102,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				InitiatorId = message.InitiatorId,
 				SerializedPeople = message.SerializedPeople,
 				Timestamp = message.Timestamp
+			});
+		}
+
+		public void Consume(NewShiftTradeRequestCreated message)
+		{
+			_publisher.Publish(new NewShiftTradeRequestCreatedEvent
+			{
+				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+				LogOnDatasource = message.LogOnDatasource,
+				InitiatorId = message.InitiatorId,
+				Timestamp = message.Timestamp,
+				PersonRequestId = message.PersonRequestId
+			});
+		}
+
+		public void Consume(AcceptShiftTrade message)
+		{
+			_publisher.Publish(new AcceptShiftTradeEvent
+			{
+				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+				LogOnDatasource = message.LogOnDatasource,
+				InitiatorId = message.InitiatorId,
+				Timestamp = message.Timestamp,
+				PersonRequestId = message.PersonRequestId,
+				AcceptingPersonId = message.AcceptingPersonId,
+				Message = message.Message
 			});
 		}
 	}

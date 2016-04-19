@@ -5,10 +5,7 @@ using Rhino.ServiceBus;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Sdk.ServiceBus.Legacy;
 using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
@@ -16,31 +13,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
     [TestFixture]
     public class ShiftTradeContainerInstallerTest
     {
-        private MockRepository _mocker;
-				private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mocker = new MockRepository();
-
-						_unitOfWorkFactory = _mocker.DynamicMock<ICurrentUnitOfWorkFactory>();
-        }
-
         [Test]
         public void ShouldResolveConsumerOfNewShiftTrade()
         {
-            UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
-			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<NewShiftTradeRequestCreated>>();
+			builder.RegisterType<LegacyMessageTransformer>().As<ConsumerOf<NewShiftTradeRequestCreated>>();
 
-			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterModule<ShiftTradeModule>();
-			builder.RegisterModule<ServiceBusCommonModule>();
-			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<RequestModule>();
-			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.Register(x => MockRepository.GenerateMock<IServiceBus>()).As<IServiceBus>();
 			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 
 			using (var container = builder.Build())
@@ -52,17 +31,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         [Test]
         public void ShouldResolveConsumerOfAcceptedShiftTrade()
         {
-            UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
-			builder.RegisterType<ShiftTradeRequestSaga>().As<ConsumerOf<AcceptShiftTrade>>();
-
-			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterModule<ShiftTradeModule>();
-			builder.RegisterModule<ServiceBusCommonModule>();
-			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<RequestModule>();
-			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterType<LegacyMessageTransformer>().As<ConsumerOf<AcceptShiftTrade>>();
+			builder.Register(x => MockRepository.GenerateMock<IServiceBus>()).As<IServiceBus>();
+			builder.RegisterModule(new CommonModule(new IocConfiguration(new IocArgs(new ConfigReader()), null)));
 
 			using (var container = builder.Build())
 			{

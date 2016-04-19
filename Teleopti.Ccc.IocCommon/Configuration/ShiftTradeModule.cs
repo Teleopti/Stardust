@@ -9,14 +9,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class ShiftTradeModule : Module
+	internal class ShiftTradeModule : Module
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
-			builder.RegisterType<SchedulerStateHolder>()
-				.As<ISchedulerStateHolder>()
-				.InstancePerLifetimeScope();
+			//builder.RegisterType<SchedulerStateHolder>()
+			//	.As<ISchedulerStateHolder>()
+			//	.InstancePerLifetimeScope();
 			builder.RegisterType<MatrixUserLockLocker>().As<IMatrixUserLockLocker>().InstancePerLifetimeScope();
 			builder.RegisterType<GridlockManager>().As<IGridlockManager>().InstancePerLifetimeScope();
 			builder.RegisterType<MatrixNotPermittedLocker>().As<IMatrixNotPermittedLocker>().InstancePerLifetimeScope();

@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<RequestModule>();
 			builder.RegisterModule<PersonAccountModule>();
 			builder.RegisterModule(new SchedulingCommonModule(_configuration));
+			builder.RegisterModule<ShiftTradeModule>();
 		}
 
 		public static IToggleManager ToggleManagerForIoc(IocArgs iocArgs)

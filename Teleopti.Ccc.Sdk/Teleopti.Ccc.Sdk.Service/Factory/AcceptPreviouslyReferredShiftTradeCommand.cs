@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		private readonly IMessagePopulatingServiceBusSender _serviceBusSender;
 		private readonly PersonRequestDto _personRequestDto;
 
-		public AcceptPreviouslyReferredShiftTradeCommand(IScheduleStorage scheduleStorage, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IMessagePopulatingServiceBusSender serviceBusSender, PersonRequestDto personRequestDto)
+		public AcceptPreviouslyReferredShiftTradeCommand(IScheduleStorage scheduleStorage,
+			IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario,
+			IMessagePopulatingServiceBusSender serviceBusSender, PersonRequestDto personRequestDto)
 		{
 			_scheduleStorage = scheduleStorage;
 			_personRequestRepository = personRequestRepository;

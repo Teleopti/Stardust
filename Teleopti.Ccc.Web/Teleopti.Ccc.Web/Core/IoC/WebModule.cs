@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new RtaAreaModule(_configuration));
 			builder.RegisterModule(new MartAreaModule(_configuration));
 
-			builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<NotificationModule>();
 
 			builder.RegisterModule<CommandDispatcherModule>();

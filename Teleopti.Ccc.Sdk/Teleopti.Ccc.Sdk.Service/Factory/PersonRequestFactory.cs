@@ -26,7 +26,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		private readonly IPersonRepository _personRepository;
 		private readonly IAssembler<IPersonRequest, PersonRequestDto> _personRequestAssembler;
 
-		public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IMessagePopulatingServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
+		public PersonRequestFactory(IPersistPersonRequest persistPersonRequest,
+			IMessagePopulatingServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository,
+			ICurrentScenario currentScenario, IScheduleStorage scheduleStorage, IPersonRepository personRepository,
+			IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
 		{
 			_persistPersonRequest = persistPersonRequest;
 			_serviceBusSender = serviceBusSender;

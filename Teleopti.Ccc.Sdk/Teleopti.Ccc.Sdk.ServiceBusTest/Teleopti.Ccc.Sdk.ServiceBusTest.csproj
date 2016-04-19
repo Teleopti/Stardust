@@ -166,7 +166,6 @@
     <Compile Include="Rta\BusinessUnitInfoFinderTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
-    <Compile Include="ShiftTrade\ShiftTradeRequestSagaTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus\log4net.config">
