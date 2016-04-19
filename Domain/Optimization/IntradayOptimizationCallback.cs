@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
 		{
+			//this is here because of "half dead GUI" if many islands... Maybe overkill?
 			if (preventCallbackDueToTooMany())
 				return;
 
