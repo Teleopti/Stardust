@@ -3,7 +3,6 @@ describe('IntradayConfigCtrl', function () {
 	var $httpBackend,
 		$controller,
 		$translate,
-		$translate,
 		scope;
 
 	var skills = [];
