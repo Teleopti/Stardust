@@ -477,11 +477,32 @@
 				};
 
 				$scope.disableApplyOverride = function () {
-					return $scope.isForecastRunning
-						||
-						(!$scope.modalModifyInfo.shouldSetOverrideTasks
-							&& !$scope.modalModifyInfo.shouldSetOverrideTalkTime
-							&& !$scope.modalModifyInfo.shouldSetOverrideAfterCallWork);
+				    var buttonArr = [], returnValue = false;
+				    if (!$scope.isForecastRunning) {
+				        if ($scope.modalModifyInfo.shouldSetOverrideTasks) {
+				            if ($scope.modalModifyInfo.overrideTasks != undefined) buttonArr.push(false);
+				            else buttonArr.push(true);
+				        }
+				        if ($scope.modalModifyInfo.shouldSetOverrideTalkTime) {
+				            if ($scope.modalModifyInfo.overrideTalkTime != undefined) buttonArr.push(false);
+				            else buttonArr.push(true);
+				        }
+				        if ($scope.modalModifyInfo.shouldSetOverrideAfterCallWork) {
+				            if ($scope.modalModifyInfo.overrideAcw != undefined) buttonArr.push(false);
+				            else buttonArr.push(true);
+				        }
+
+				        buttonArr.forEach(function (item) {
+				            if (item) returnValue = true;
+				        });
+				        if (returnValue) return true;
+
+				        return !$scope.modalModifyInfo.shouldSetOverrideTasks
+                            && !$scope.modalModifyInfo.shouldSetOverrideTalkTime 
+                            && !$scope.modalModifyInfo.shouldSetOverrideAfterCallWork;
+				    } else {
+				        return true;
+				    }
 				};
 
 				$scope.disableClearOverride = function () {

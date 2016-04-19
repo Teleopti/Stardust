@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using SharpTestsEx;
@@ -197,7 +198,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 			Browser.Interactions.Click(".c3-event-rect-0");
 		}
 
-		[When(@"I select to modify the forecast")]
+        [When(@"I select the first two days in the forecast chart")]
+        public void WhenISelectTheFirstTwoDaysInTheForecastChart()
+        {
+            Browser.Interactions.Click(".c3-event-rect-0");
+            Browser.Interactions.Click(".c3-event-rect-1");
+        }
+
+        [When(@"I select to modify the forecast")]
 		public void WhenISelectToModifyTheForecast()
 		{
 			Browser.Interactions.Click(".forecast-modify-button.wfm-btn-invis-default");
@@ -476,7 +484,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			var openingHours = table.CreateInstance<OpeningHours>();
 		}
-	}
+
+
+        [When(@"I check calls checkbox but enter no calls value")]
+        public void WhenICheckCallsCheckboxButEnterNoCallsValue()
+        {
+            Browser.Interactions.Click(".override-tasks-checkbox");
+        }
+
+        [Then(@"I should see override apply button disabled")]
+        public void ThenIShouldSeeOverrideApplyButtonDisabled()
+        {
+	        Browser.Interactions.WaitScopeCondition(".modal-inner-content","disableApplyOverride()", true,
+                () => {
+                    Browser.Interactions.AssertExists(".modal-inner-content .forecast-apply-override-tasks-button.wfm-btn-invis-disabled");
+                });
+        }
+    }
 
 	public class OpeningHours
 	{

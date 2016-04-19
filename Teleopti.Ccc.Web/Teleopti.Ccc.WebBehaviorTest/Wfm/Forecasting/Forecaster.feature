@@ -111,7 +111,18 @@ Scenario: Override only forecasted calls for one day
 	And I enter '500' calls per day
 	And I apply the override calls
 	Then I should see that the total calls for the first day is '500'
-		
+
+Scenario: Should disable override apply button when input field is empty
+	Given I am viewing forecast page
+	And I select workload 'TheWorkload1'
+	And I use default forecast period and forecast for one workload
+	And Forecast has succeeded
+	When I select the first two days in the forecast chart
+	And I select to modify the forecast
+	And I select to override forecasted values
+	And I check calls checkbox but enter no calls value
+	Then I should see override apply button disabled
+
 Scenario: Override the forecasted values for one day
 	Given I am viewing forecast page
 	And I select workload 'TheWorkload1'
