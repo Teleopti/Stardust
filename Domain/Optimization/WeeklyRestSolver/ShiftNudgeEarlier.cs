@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -40,11 +41,16 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projectionPeriodUtc = personAssignment.ProjectionService().CreateProjection().Period().Value;
-			var shiftEndUserLocalDateTime = projectionPeriodUtc.EndDateTimeLocal(scheduleDay.TimeZone);
+			var timeZone = scheduleDay.TimeZone;
+			var shiftEndUserLocalDateTime = projectionPeriodUtc.EndDateTimeLocal(timeZone);
+			var shiftStartUserLocalDateTime = projectionPeriodUtc.StartDateTimeLocal(timeZone);
 			var latestStartDateTime = shiftEndUserLocalDateTime.AddMinutes(-15); //allways adjust 15 minutes regardless of interval length
 			var shiftDate = personAssignment.Date;
 			
 			var latestEndTime = latestStartDateTime.TimeOfDay;
+				
+			if (shiftEndUserLocalDateTime.Date > shiftStartUserLocalDateTime.Date)
+				latestEndTime = latestEndTime.Add(TimeSpan.FromDays(1));
 
 			if (optimizationPreferences != null)
 			{
