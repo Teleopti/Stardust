@@ -119,4 +119,4 @@ ShiftTrade_ToHangfire_38181 = false
 ETL_SpeedUpIntradaySkill_37543 = false
 ETL_SpeedUpNightlySkill_37543 = false
 GroupPageCollection_ToHangfire_38178 = RC
-SettingsForPersonPeriodChanged_ToHangfire_38207 = RC
+SettingsForPersonPeriodChanged_ToHangfire_38207 = false
