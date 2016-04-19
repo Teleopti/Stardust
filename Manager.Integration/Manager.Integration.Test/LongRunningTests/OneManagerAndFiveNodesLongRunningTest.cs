@@ -62,6 +62,7 @@ namespace Manager.Integration.Test.LongRunningTests
 			{
 				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 			}
+
 			CancellationTokenSource = new CancellationTokenSource();
 
 			AppDomainTask = new AppDomainTask(BuildMode);
@@ -72,6 +73,7 @@ namespace Manager.Integration.Test.LongRunningTests
 			                               cancellationTokenSource: CancellationTokenSource);
 
 			Thread.Sleep(TimeSpan.FromSeconds(2));
+
 			LogMessage("Finished TestFixtureSetUp");
 		}
 
@@ -79,10 +81,12 @@ namespace Manager.Integration.Test.LongRunningTests
 		public void TestFixtureTearDown()
 		{
 			LogMessage("Start TestFixtureTearDown");
+
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
+
 			LogMessage("Finished TestFixtureTearDown");
 		}
 

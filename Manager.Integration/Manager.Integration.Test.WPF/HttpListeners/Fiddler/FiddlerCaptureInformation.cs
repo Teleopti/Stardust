@@ -7,6 +7,7 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 	public class FiddlerCaptureInformation : INotifyPropertyChanged
 	{
 		private string _uri;
+		private int _responseCode;
 
 		public string Uri
 		{
@@ -14,6 +15,17 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 			set
 			{
 				_uri = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public int ResponseCode
+		{
+			get { return _responseCode; }
+			set
+			{
+				_responseCode = value;
 
 				OnPropertyChanged();
 			}

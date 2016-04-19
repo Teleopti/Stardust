@@ -57,7 +57,7 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 				return;
 			}
 
-			if (oSession.hostname.Contains("localhost"))
+			if (oSession.fullUrl.ToLower().Contains("stardust"))
 			{
 				InvokeNewDataCapturedEventHandler(new FiddlerCaptureInformation
 				{

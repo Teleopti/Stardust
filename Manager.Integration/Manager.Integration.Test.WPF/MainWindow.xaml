@@ -14,7 +14,607 @@
         Closed="Window_Closed">
     <Window.Resources>
         <local:RowNumberConverter x:Key="RowNumberConverter" />
-
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2"
+                                   SnapsToDevicePixels="true"
+                                   Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
+                                   StrokeThickness="1"
+                                   StrokeDashArray="1 2" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background"
+                         Color="#FFDDDDDD" />
+        <SolidColorBrush x:Key="Button.Static.Border"
+                         Color="#FF707070" />
+        <SolidColorBrush x:Key="Button.MouseOver.Background"
+                         Color="#FFBEE6FD" />
+        <SolidColorBrush x:Key="Button.MouseOver.Border"
+                         Color="#FF3C7FB1" />
+        <SolidColorBrush x:Key="Button.Pressed.Background"
+                         Color="#FFC4E5F6" />
+        <SolidColorBrush x:Key="Button.Pressed.Border"
+                         Color="#FF2C628B" />
+        <SolidColorBrush x:Key="Button.Disabled.Background"
+                         Color="#FFF4F4F4" />
+        <SolidColorBrush x:Key="Button.Disabled.Border"
+                         Color="#FFADB2B5" />
+        <SolidColorBrush x:Key="Button.Disabled.Foreground"
+                         Color="#FF838383" />
+        <Style x:Key="ButtonStyle1"
+               TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle"
+                    Value="{StaticResource FocusVisual}" />
+            <Setter Property="Background"
+                    Value="{StaticResource Button.Static.Background}" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource Button.Static.Border}" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                SnapsToDevicePixels="true"
+                                CornerRadius="5"
+                                Background="#FFF0F0F0">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted"
+                                     Value="true">
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver"
+                                     Value="true">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.MouseOver.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.MouseOver.Border}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed"
+                                     Value="true">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Pressed.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Pressed.Border}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Disabled.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Disabled.Border}" />
+                                <Setter Property="TextElement.Foreground"
+                                        TargetName="contentPresenter"
+                                        Value="{StaticResource Button.Disabled.Foreground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ToggleButtonStyle1"
+               TargetType="{x:Type ToggleButton}">
+            <Setter Property="FocusVisualStyle"
+                    Value="{StaticResource FocusVisual}" />
+            <Setter Property="Background"
+                    Value="{StaticResource Button.Static.Background}" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource Button.Static.Border}" />
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="BorderThickness"
+                    Value="1" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Center" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center" />
+            <Setter Property="Padding"
+                    Value="1" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                        <Border x:Name="border"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="true"
+                                CornerRadius="5">
+                            <ContentPresenter x:Name="contentPresenter"
+                                              Focusable="False"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Button.IsDefaulted"
+                                     Value="true">
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver"
+                                     Value="true">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.MouseOver.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.MouseOver.Border}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed"
+                                     Value="true">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Pressed.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Pressed.Border}" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Background"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Disabled.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="border"
+                                        Value="{StaticResource Button.Disabled.Border}" />
+                                <Setter Property="TextElement.Foreground"
+                                        TargetName="contentPresenter"
+                                        Value="{StaticResource Button.Disabled.Foreground}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="GridSplitterPreviewStyle">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Fill="#80000000" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="GridSplitterStyle1"
+               TargetType="{x:Type GridSplitter}">
+            <Setter Property="Background"
+                    Value="{DynamicResource {x:Static SystemColors.ControlBrushKey}}" />
+            <Setter Property="PreviewStyle"
+                    Value="{StaticResource GridSplitterPreviewStyle}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridSplitter}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="5" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <LinearGradientBrush x:Key="TabItem.Static.Background"
+                             EndPoint="0,1"
+                             StartPoint="0,0">
+            <GradientStop Color="#F0F0F0"
+                          Offset="0.0" />
+            <GradientStop Color="#E5E5E5"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="TabItem.Static.Border"
+                         Color="#ACACAC" />
+        <LinearGradientBrush x:Key="TabItem.MouseOver.Background"
+                             EndPoint="0,1"
+                             StartPoint="0,0">
+            <GradientStop Color="#ECF4FC"
+                          Offset="0.0" />
+            <GradientStop Color="#DCECFC"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="TabItem.MouseOver.Border"
+                         Color="#7EB4EA" />
+        <SolidColorBrush x:Key="TabItem.Disabled.Background"
+                         Color="#F0F0F0" />
+        <SolidColorBrush x:Key="TabItem.Disabled.Border"
+                         Color="#D9D9D9" />
+        <SolidColorBrush x:Key="TabItem.Selected.Border"
+                         Color="#ACACAC" />
+        <SolidColorBrush x:Key="TabItem.Selected.Background"
+                         Color="#FFFFFF" />
+        <Style TargetType="{x:Type TabItem}">
+            <Setter Property="FocusVisualStyle"
+                    Value="{StaticResource FocusVisual}" />
+            <Setter Property="Foreground"
+                    Value="Black" />
+            <Setter Property="Background"
+                    Value="{StaticResource TabItem.Static.Background}" />
+            <Setter Property="BorderBrush"
+                    Value="{StaticResource TabItem.Static.Border}" />
+            <Setter Property="Margin"
+                    Value="0" />
+            <Setter Property="Padding"
+                    Value="6,2,6,2" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabItem}">
+                        <Grid x:Name="templateRoot"
+                              SnapsToDevicePixels="true">
+                            <Border x:Name="mainBorder"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1,1,1,0"
+                                    Background="{TemplateBinding Background}"
+                                    Margin="0"
+                                    CornerRadius="5,5,0,0">
+                                <Border x:Name="innerBorder"
+                                        BorderBrush="{StaticResource TabItem.Selected.Border}"
+                                        BorderThickness="1,1,1,0"
+                                        Background="{StaticResource TabItem.Selected.Background}"
+                                        Margin="-1"
+                                        Opacity="0" />
+                            </Border>
+                            <ContentPresenter x:Name="contentPresenter"
+                                              ContentSource="Header"
+                                              Focusable="False"
+                                              HorizontalAlignment="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                              Margin="{TemplateBinding Padding}"
+                                              RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" />
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Left" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,0,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,0,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Bottom" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,0,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,0,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Right" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="0,1,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="0,1,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Top" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.MouseOver.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,1,0" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,1,0" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Left" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity"
+                                        TargetName="contentPresenter"
+                                        Value="0.56" />
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,0,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,0,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Bottom" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity"
+                                        TargetName="contentPresenter"
+                                        Value="0.56" />
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,0,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,0,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Right" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity"
+                                        TargetName="contentPresenter"
+                                        Value="0.56" />
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="0,1,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="0,1,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsEnabled, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Top" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Opacity"
+                                        TargetName="contentPresenter"
+                                        Value="0.56" />
+                                <Setter Property="Background"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Background}" />
+                                <Setter Property="BorderBrush"
+                                        TargetName="mainBorder"
+                                        Value="{StaticResource TabItem.Disabled.Border}" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,1,0" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,1,0" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Left" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,0,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,0,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Left" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex"
+                                        Value="1" />
+                                <Setter Property="Margin"
+                                        Value="-2,-2,0,-2" />
+                                <Setter Property="Opacity"
+                                        TargetName="innerBorder"
+                                        Value="1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,0,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,0,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Bottom" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,0,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,0,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Bottom" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex"
+                                        Value="1" />
+                                <Setter Property="Margin"
+                                        Value="-2,0,-2,-2" />
+                                <Setter Property="Opacity"
+                                        TargetName="innerBorder"
+                                        Value="1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,0,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,0,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Right" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="0,1,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="0,1,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Right" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex"
+                                        Value="1" />
+                                <Setter Property="Margin"
+                                        Value="0,-2,-2,-2" />
+                                <Setter Property="Opacity"
+                                        TargetName="innerBorder"
+                                        Value="1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="0,1,1,1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="0,1,1,1" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="false" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Top" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,1,0" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,1,0" />
+                            </MultiDataTrigger>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                               Value="true" />
+                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}"
+                                               Value="Top" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Panel.ZIndex"
+                                        Value="1" />
+                                <Setter Property="Margin"
+                                        Value="-2,-2,-2,0" />
+                                <Setter Property="Opacity"
+                                        TargetName="innerBorder"
+                                        Value="1" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="innerBorder"
+                                        Value="1,1,1,0" />
+                                <Setter Property="BorderThickness"
+                                        TargetName="mainBorder"
+                                        Value="1,1,1,0" />
+                            </MultiDataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Window.Background>
@@ -26,879 +626,936 @@
                           Offset="1" />
         </LinearGradientBrush>
     </Window.Background>
+
     <Window.DataContext>
         <viewModels:MainWindowViewModel />
     </Window.DataContext>
-    <Grid Margin="10,5,10,10">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="120" />
-            <ColumnDefinition Width="95" />
-            <ColumnDefinition Width="10" />
-            <ColumnDefinition Width="110" />
-            <ColumnDefinition />
-            <ColumnDefinition Width="120" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="135" />
-            <ColumnDefinition Width="20" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="125" />
-            <RowDefinition Height="20" />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-        <TabControl Grid.Row="3"
-                    Grid.ColumnSpan="11"
-                    Margin="0,0,0,10">
-
-            <TabControl.Effect>
-                <DropShadowEffect Color="#FFECDDDD" />
-            </TabControl.Effect>
-
-            <TabItem Header="{Binding JobDefinitionDataHeader, FallbackValue='Job Queue'}">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding JobDefinitionData}"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              AutoGenerateColumns="False"
-                              SelectionUnit="Cell"
-                              IsReadOnly="True"
-                              BorderBrush="{x:Null}">
-
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Status}"
-                                                 Value="Started">
-                                        <Setter Property="Background"
-                                                Value="LightGreen" />
-                                        <Setter Property="Foreground"
-                                                Value="Black" />
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding JobId}"
-                                                ClipboardContentBinding="{Binding JobId}"
-                                                Header="Id" />
-
-                            <DataGridTextColumn Binding="{Binding Name}"
-                                                ClipboardContentBinding="{Binding Name}"
-                                                Header="Name" />
-
-                            <DataGridTextColumn Binding="{Binding Serialized}"
-                                                ClipboardContentBinding="{Binding Serialized}"
-                                                Header="Serialized" />
-
-                            <DataGridTextColumn Binding="{Binding Type}"
-                                                ClipboardContentBinding="{Binding Type}"
-                                                Header="Type" />
-
-                            <DataGridTextColumn Binding="{Binding CreatedBy}"
-                                                ClipboardContentBinding="{Binding CreatedBy}"
-                                                Header="Created by" />
-
-
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="{Binding WorkerNodeHeader, FallbackValue='Worker Node'}">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding WorkerNodesData}"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              SelectionUnit="Cell"
-                              IsReadOnly="True"
-                              BorderBrush="{x:Null}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding Id}"
-                                                ClipboardContentBinding="{Binding Id}"
-                                                Header="Id" />
-                            <DataGridTextColumn Binding="{Binding Url}"
-                                                ClipboardContentBinding="{Binding Url}"
-                                                Header="Url" />
-                            <DataGridTextColumn Binding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Heartbeat" />
-                            <DataGridTextColumn Binding="{Binding Alive}"
-                                                ClipboardContentBinding="{Binding Alive}"
-                                                Header="Alive" />
-
-
-
-                        </DataGrid.Columns>
-
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Alive}"
-                                                 Value="False">
-                                        <Setter Property="Background"
-                                                Value="Red" />
-                                        <Setter Property="Foreground"
-                                                Value="White" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
-
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="{Binding PerformanceTestHeader, FallbackValue='Performance Test'}">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding PerformanceTestData}"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              SelectionUnit="Cell"
-                              IsReadOnly="True"
-                              BorderBrush="{x:Null}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding Id}"
-                                                ClipboardContentBinding="{Binding Id}"
-                                                Header="Id" />
-
-                            <DataGridTextColumn Binding="{Binding Name}"
-                                                ClipboardContentBinding="{Binding Name}"
-                                                Header="Name" />
-
-                            <DataGridTextColumn Binding="{Binding Description}"
-                                                ClipboardContentBinding="{Binding Description}"
-                                                Header="Description" />
-
-                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Started" />
-
-                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Ended" />
-
-                            <DataGridTextColumn Binding="{Binding ElapsedInSeconds}"
-                                                ClipboardContentBinding="{Binding ElapsedInSeconds}"
-                                                Header="Elapsed in Seconds">
-
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="HorizontalAlignment"
-                                                Value="Right" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding ElapsedInMinutes}"
-                                                ClipboardContentBinding="{Binding ElapsedInMinutes}"
-                                                Header="Elapsed in Minutess">
-
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="HorizontalAlignment"
-                                                Value="Right" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-
-                        </DataGrid.Columns>
-
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="{Binding HttpTrafficListenerHeader, FallbackValue='Http Traffic'}">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding FiddlerCaptureInformation}"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              SelectionUnit="Cell"
-                              IsReadOnly="True"
-                              BorderBrush="{x:Null}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Uri}"
-                                                ClipboardContentBinding="{Binding Uri}"
-                                                Header="Id" />
-
-
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-        </TabControl>
-
-        <TabControl x:Name="TabControl"
-                    Grid.Row="5"
-                    Grid.ColumnSpan="11"
-                    Grid.Column="0"
-                    Margin="0,10,0,0">
-            <TabControl.Effect>
-                <DropShadowEffect Color="#FFECDDDD" />
-            </TabControl.Effect>
-
-
-
-            <TabItem Header="{Binding LoggingHeader, FallbackValue='Logging'}"
-                     IsSelected="True">
-                <Grid Background="#FFE5E5E5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <DataGrid ItemsSource="{Binding LoggingData}"
-                              SelectionUnit="Cell"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              IsReadOnly="True"
-                              RowDetailsVisibilityMode="VisibleWhenSelected"
-                              CanUserDeleteRows="False"
-                              Grid.Row="1"
-                              BorderBrush="{x:Null}">
-
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Level}"
-                                                 Value="ERROR">
-                                        <Setter Property="Background"
-                                                Value="Red" />
-                                        <Setter Property="Foreground"
-                                                Value="White" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Level}"
-                                                 Value="FATAL">
-                                        <Setter Property="Background"
-                                                Value="Red" />
-                                        <Setter Property="Foreground"
-                                                Value="White" />
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
-
-                        <DataGrid.LayoutTransform>
-                            <ScaleTransform CenterX="0"
-                                            CenterY="0"
-                                            ScaleX="{Binding ElementName=UiScaleSlider,Path=Value}"
-                                            ScaleY="{Binding ElementName=UiScaleSlider,Path=Value}" />
-                        </DataGrid.LayoutTransform>
-
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Expander IsExpanded="True"
-                                                  Expanded="Expander_OnExpanded"
-                                                  Collapsed="Expander_OnCollapsed">
-                                        </Expander>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Date" />
-
-                            <DataGridTextColumn Binding="{Binding Message}"
-                                                ClipboardContentBinding="{Binding Message}"
-                                                Header="Message" />
-
-                            <DataGridTextColumn Binding="{Binding Logger}"
-                                                ClipboardContentBinding="{Binding Logger}"
-                                                Header="Logger" />
-
-                            <DataGridTextColumn Binding="{Binding Level}"
-                                                ClipboardContentBinding="{Binding Level}"
-                                                Header="Level" />
-
-                            <DataGridTextColumn Binding="{Binding Exception}"
-                                                ClipboardContentBinding="{Binding Exception}"
-                                                Header="Exception" />
-
-                        </DataGrid.Columns>
-
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <Grid Background="#FFD5F5F5"
-                                      Margin="10,10,10,10"
-                                      ShowGridLines="False">
-                                    <Grid.Effect>
-                                        <DropShadowEffect Color="#FFECDDDD" />
-                                    </Grid.Effect>
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="5" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="5" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="5" />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="1">Date</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="1"
-                                               Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="2">Message</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="2"
-                                               TextWrapping="Wrap"
-                                               Text="{Binding Message}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="3">Logger</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="3"
-                                               Text="{Binding Logger}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="4">Level</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="4"
-                                               Text="{Binding Level}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="5">Exception</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="5"
-                                               TextWrapping="Wrap"
-                                               Text="{Binding Exception}" />
-
-
-                                </Grid>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
-
-                    <Slider Grid.Row="0"
-                            x:Name="UiScaleSlider"
-                            Value="1"
-                            Minimum="0.1"
-                            Maximum="4"
-                            d:LayoutOverrides="Height"
-                            VerticalAlignment="Center" />
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="{Binding ErrorLoggingHeader, FallbackValue='Logging errors'}"
-                     IsSelected="True"
-                     Background="Red"
-                     Foreground="Black">
-                <Grid Background="#FFE5E5E5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25" />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
-                    <DataGrid ItemsSource="{Binding ErrorLoggingData}"
-                              SelectionUnit="Cell"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              IsReadOnly="True"
-                              RowDetailsVisibilityMode="VisibleWhenSelected"
-                              CanUserDeleteRows="False"
-                              Grid.Row="1"
-                              BorderBrush="{x:Null}">
-
-
-                        <DataGrid.LayoutTransform>
-                            <ScaleTransform CenterX="0"
-                                            CenterY="0"
-                                            ScaleX="{Binding ElementName=UiScaleSlider,Path=Value}"
-                                            ScaleY="{Binding ElementName=UiScaleSlider,Path=Value}" />
-                        </DataGrid.LayoutTransform>
-
-                        <DataGrid.Columns>
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Expander IsExpanded="True"
-                                                  Expanded="Expander_OnExpanded"
-                                                  Collapsed="Expander_OnCollapsed">
-                                        </Expander>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Date" />
-
-                            <DataGridTextColumn Binding="{Binding Message}"
-                                                ClipboardContentBinding="{Binding Message}"
-                                                Header="Message" />
-
-                            <DataGridTextColumn Binding="{Binding Logger}"
-                                                ClipboardContentBinding="{Binding Logger}"
-                                                Header="Logger" />
-
-                            <DataGridTextColumn Binding="{Binding Level}"
-                                                ClipboardContentBinding="{Binding Level}"
-                                                Header="Level" />
-
-                            <DataGridTextColumn Binding="{Binding Exception}"
-                                                ClipboardContentBinding="{Binding Exception}"
-                                                Header="Exception" />
-
-                        </DataGrid.Columns>
-
-                        <DataGrid.RowDetailsTemplate>
-                            <DataTemplate>
-                                <Grid Background="#FFD5F5F5"
-                                      Margin="10,10,10,10"
-                                      ShowGridLines="False">
-                                    <Grid.Effect>
-                                        <DropShadowEffect Color="#FFECDDDD" />
-                                    </Grid.Effect>
-
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="5" />
-                                        <ColumnDefinition Width="100" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="5" />
-                                    </Grid.ColumnDefinitions>
-
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="5" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="5" />
-                                    </Grid.RowDefinitions>
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="1">Date</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="1"
-                                               Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="2">Message</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="2"
-                                               TextWrapping="Wrap"
-                                               Text="{Binding Message}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="3">Logger</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="3"
-                                               Text="{Binding Logger}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="4">Level</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="4"
-                                               Text="{Binding Level}" />
-
-                                    <TextBlock Grid.Column="1"
-                                               Grid.Row="5">Exception</TextBlock>
-
-                                    <TextBlock Grid.Column="2"
-                                               Grid.Row="5"
-                                               TextWrapping="Wrap"
-                                               Text="{Binding Exception}" />
-
-
-                                </Grid>
-                            </DataTemplate>
-                        </DataGrid.RowDetailsTemplate>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="{Binding JobHistoryHeader, FallbackValue='Jobs'}">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding JobHistoryData}"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              SelectionUnit="Cell"
-                              IsReadOnly="True"
-                              BorderBrush="{x:Null}">
-
-
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Result}"
-                                                 Value="Success">
-                                        <Setter Property="Background"
-                                                Value="LightGreen" />
-                                        <Setter Property="Foreground"
-                                                Value="Black" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Result}"
-                                                 Value="Failed">
-                                        <Setter Property="Background"
-                                                Value="Red" />
-                                        <Setter Property="Foreground"
-                                                Value="White" />
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
-
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding JobId}"
-                                                ClipboardContentBinding="{Binding JobId}"
-                                                Header="Job id" />
-
-                            <DataGridTextColumn Binding="{Binding Name}"
-                                                ClipboardContentBinding="{Binding Name}"
-                                                Header="Job name" />
-
-                            <DataGridTextColumn Binding="{Binding SentToWorkerNodeUri}"
-                                                ClipboardContentBinding="{Binding SentToWorkerNodeUri}"
-                                                Header="Sent to worker node uri" />
-
-
-                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Created" />
-
-                            <DataGridTextColumn Binding="{Binding Result}"
-                                                ClipboardContentBinding="{Binding Result}"
-                                                Header="Result" />
-
-                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Started" />
-
-                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Ended" />
-
-                            <DataGridTextColumn Binding="{Binding Type}"
-                                                ClipboardContentBinding="{Binding Type}"
-                                                Header="Type" />
-
-                            <DataGridTextColumn Binding="{Binding CreatedBy}"
-                                                ClipboardContentBinding="{Binding CreatedBy}"
-                                                Header="Created by" />
-
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="{Binding JobHistoryGroupBySentToHeader, FallbackValue='Jobs Group By Worker Nodes'}">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding JobHistoryDataGroupBySentToData}"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              SelectionUnit="Cell"
-                              IsReadOnly="True"
-                              BorderBrush="{x:Null}">
-                        <DataGrid.RowStyle>
-                            <Style TargetType="DataGridRow">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Result}"
-                                                 Value="Success">
-                                        <Setter Property="Background"
-                                                Value="LightGreen" />
-                                        <Setter Property="Foreground"
-                                                Value="Black" />
-                                    </DataTrigger>
-
-                                    <DataTrigger Binding="{Binding Result}"
-                                                 Value="Failed">
-                                        <Setter Property="Background"
-                                                Value="Red" />
-                                        <Setter Property="Foreground"
-                                                Value="White" />
-                                    </DataTrigger>
-
-                                </Style.Triggers>
-                            </Style>
-                        </DataGrid.RowStyle>
-
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding SentTo}"
-                                                ClipboardContentBinding="{Binding SentTo}"
-                                                Header="Sent to" />
-
-                            <DataGridTextColumn Binding="{Binding Name}"
-                                                ClipboardContentBinding="{Binding Name}"
-                                                Header="Job name" />
-
-                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Created" />
-
-                            <DataGridTextColumn Binding="{Binding Result}"
-                                                ClipboardContentBinding="{Binding Result}"
-                                                Header="Result" />
-
-                            <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Started" />
-
-                            <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Ended" />
-
-                            <DataGridTextColumn Binding="{Binding Type}"
-                                                ClipboardContentBinding="{Binding Type}"
-                                                Header="Type" />
-
-                            <DataGridTextColumn Binding="{Binding CreatedBy}"
-                                                ClipboardContentBinding="{Binding CreatedBy}"
-                                                Header="Created by" />
-
-                        </DataGrid.Columns>
-                        <DataGrid.GroupStyle>
-                            <GroupStyle>
-                                <GroupStyle.HeaderTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding SentTo}" />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GroupStyle.HeaderTemplate>
-
-                                <GroupStyle.ContainerStyle>
-                                    <Style TargetType="{x:Type GroupItem}">
-                                        <Setter Property="Template">
-                                            <Setter.Value>
-                                                <ControlTemplate TargetType="{x:Type GroupItem}">
-                                                    <Expander>
-                                                        <Expander.Header>
-                                                            <StackPanel Orientation="Horizontal">
-                                                                <TextBlock Text="{Binding SentTo}" />
-                                                                <TextBlock Text="{Binding ItemCount}" />
-                                                                <TextBlock Text=" Items" />
-                                                            </StackPanel>
-                                                        </Expander.Header>
-                                                        <ItemsPresenter />
-                                                    </Expander>
-                                                </ControlTemplate>
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Style>
-                                </GroupStyle.ContainerStyle>
-
-                            </GroupStyle>
-                        </DataGrid.GroupStyle>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="{Binding JobHistoryDetailHeader, FallbackValue='Job Details'}">
-                <Grid Background="#FFE5E5E5">
-                    <DataGrid ItemsSource="{Binding JobHistoryDetailData}"
-                              AutoGenerateColumns="False"
-                              HorizontalGridLinesBrush="#FFF5EFEF"
-                              VerticalGridLinesBrush="#FFF5EFEF"
-                              SelectionUnit="Cell"
-                              IsReadOnly="True"
-                              BorderBrush="{x:Null}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Row">
-                                <DataGridTextColumn.Binding>
-                                    <MultiBinding Converter="{StaticResource RowNumberConverter}">
-                                        <Binding />
-                                        <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
-                                    </MultiBinding>
-                                </DataGridTextColumn.Binding>
-                            </DataGridTextColumn>
-
-                            <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
-                                                Header="Created" />
-
-                            <DataGridTextColumn Binding="{Binding JobId}"
-                                                ClipboardContentBinding="{Binding JobId}"
-                                                Header="JobId" />
-
-                            <DataGridTextColumn Binding="{Binding Detail}"
-                                                ClipboardContentBinding="{Binding Detail}"
-                                                Header="Detail" />
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-
-        </TabControl>
-        <Button x:Name="Button"
-                Content="Clear Logging Table"
-                Grid.Row="1"
-                Grid.Column="9"
-                Command="{Binding ClearDatabaseCommand}"
-                Margin="0" />
-        <ToggleButton x:Name="ToggleButton"
-                      Content="{Binding ToggleRefreshStatus}"
-                      Grid.Row="1"
-                      Grid.Column="7"
-                      Command="{Binding ToggleRefreshCommand}"
-                      IsChecked="{Binding RefreshEnabled, Mode=OneWay}"
-                      IsThreeState="True"
-                      Margin="0" />
-
-        <ProgressBar Grid.Column="0"
-                     Maximum="5"
-                     Value="{Binding RefreshProgressValue}"
-                     BorderThickness="0"
-                     Background="{x:Null}"
-                     Grid.ColumnSpan="10"
-                     Margin="0,0,0,3" />
-
-        <TextBlock Grid.Row="0"
-                   Foreground="#FFCEDBF7"
-                   Text="Reloading data ..."
-                   Grid.Column="0"
-                   FontSize="10"
-                   Width="76"
-                   HorizontalAlignment="Left" />
-
-        <Button x:Name="button"
-                Content="Create New Job"
-                Command="{Binding CreateNewJobCommand}"
-                Grid.Row="2" />
-        <GridSplitter x:Name="gridSplitter"
-                      HorizontalAlignment="Stretch"
-                      Grid.Row="4"
-                      Grid.ColumnSpan="11">
-            <GridSplitter.Background>
-                <LinearGradientBrush EndPoint="0.5,1"
-                                     StartPoint="0.5,0">
-                    <GradientStop Color="#FFBFC2C5"
-                                  Offset="0" />
-                    <GradientStop Color="#FFBFC2C5"
-                                  Offset="1" />
-                    <GradientStop Color="White"
-                                  Offset="0.418" />
-                    <GradientStop Color="White"
-                                  Offset="0.573" />
-                </LinearGradientBrush>
-            </GridSplitter.Background>
-        </GridSplitter>
-        <Button Content="Create 20 New Jobs"
-                Command="{Binding Create20NewJobCommand}"
-                Grid.Row="2"
-                Grid.Column="2" />
-        <Button Content="Start New Manager"
-                Command="{Binding StartUpNewManagerCommand}"
-                Grid.Row="2"
-                Grid.Column="7" />
-        <Button Content="Start New Node"
-                Command="{Binding StartUpNewNodeCommand}"
-                Grid.Row="2"
-                Grid.Column="9" />
-        <Button Content="Start capture http"
-                Grid.Row="1"
-                Grid.Column="2"
-                Command="{Binding StartFiddlerCaptureCommand}" />
-        
-        <Button Content="Stop capture http"
-                Grid.Row="1"
-                Grid.Column="3"
-                Command="{Binding StopFiddlerCaptureCommand}"
-                Grid.ColumnSpan="2"
-                HorizontalAlignment="Left"
-                Width="105" />
-
-
-    </Grid>
+
+    <DockPanel>
+        <Grid DockPanel.Dock="Left">
+            <Expander ExpandDirection="Right"
+                      IsExpanded="True"
+                      Margin="5,5,0,5">
+                <Border BorderBrush="#FFBFBFBF"
+                        BorderThickness="1"
+                        CornerRadius="5">
+                    <Grid Width="155">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="145" />
+                            <ColumnDefinition Width="5" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="19" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+
+                        </Grid.RowDefinitions>
+                        <Button x:Name="button"
+                                Content="Create New Job"
+                                Style="{DynamicResource ButtonStyle1}"
+                                Command="{Binding CreateNewJobCommand}"
+                                Grid.Row="5"
+                                Grid.Column="1" />
+                        <Button Content="Create 20 New Jobs"
+                                Style="{DynamicResource ButtonStyle1}"
+                                Command="{Binding Create20NewJobCommand}"
+                                Grid.Row="7"
+                                Grid.Column="1" />
+                        <Button Content="Start capture HTTP"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Command="{Binding StartFiddlerCaptureCommand}"
+                                Style="{DynamicResource ButtonStyle1}" />
+                        <Button Content="Stop capture HTTP"
+                                Grid.Row="3"
+                                Style="{DynamicResource ButtonStyle1}"
+                                Grid.Column="1"
+                                Command="{Binding StopFiddlerCaptureCommand}" />
+                        <Button Content="Start New Manager"
+                                Command="{Binding StartUpNewManagerCommand}"
+                                Grid.Row="11"
+                                Style="{DynamicResource ButtonStyle1}"
+                                Grid.Column="1" />
+                        <Button Content="Start New Node"
+                                Style="{DynamicResource ButtonStyle1}"
+                                Command="{Binding StartUpNewNodeCommand}"
+                                Grid.Row="9"
+                                Grid.Column="1" />
+
+                    </Grid>
+                </Border>
+            </Expander>
+        </Grid>
+
+
+        <Grid Margin="10,5,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="95" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="110" />
+                <ColumnDefinition />
+                <ColumnDefinition Width="120" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="135" />
+                <ColumnDefinition Width="20" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="40" />
+                <RowDefinition Height="125" />
+                <RowDefinition Height="20" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TabControl Grid.Row="1"
+                        Grid.ColumnSpan="11"
+                        Margin="0,0,0,10"
+                        Grid.RowSpan="3">
+
+                <TabControl.Effect>
+                    <DropShadowEffect Color="#FFECDDDD" />
+                </TabControl.Effect>
+
+                <TabItem Header="{Binding JobDefinitionDataHeader, FallbackValue='Job Queue'}">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid ItemsSource="{Binding JobDefinitionData}"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  AutoGenerateColumns="False"
+                                  SelectionUnit="Cell"
+                                  IsReadOnly="True"
+                                  BorderBrush="{x:Null}">
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Status}"
+                                                     Value="Started">
+                                            <Setter Property="Background"
+                                                    Value="LightGreen" />
+                                            <Setter Property="Foreground"
+                                                    Value="Black" />
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding JobId}"
+                                                    ClipboardContentBinding="{Binding JobId}"
+                                                    Header="Id" />
+
+                                <DataGridTextColumn Binding="{Binding Name}"
+                                                    ClipboardContentBinding="{Binding Name}"
+                                                    Header="Name" />
+
+                                <DataGridTextColumn Binding="{Binding Serialized}"
+                                                    ClipboardContentBinding="{Binding Serialized}"
+                                                    Header="Serialized" />
+
+                                <DataGridTextColumn Binding="{Binding Type}"
+                                                    ClipboardContentBinding="{Binding Type}"
+                                                    Header="Type" />
+
+                                <DataGridTextColumn Binding="{Binding CreatedBy}"
+                                                    ClipboardContentBinding="{Binding CreatedBy}"
+                                                    Header="Created by" />
+
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{Binding WorkerNodeHeader, FallbackValue='Worker Node'}">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid ItemsSource="{Binding WorkerNodesData}"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  SelectionUnit="Cell"
+                                  IsReadOnly="True"
+                                  BorderBrush="{x:Null}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding Id}"
+                                                    ClipboardContentBinding="{Binding Id}"
+                                                    Header="Id" />
+                                <DataGridTextColumn Binding="{Binding Url}"
+                                                    ClipboardContentBinding="{Binding Url}"
+                                                    Header="Url" />
+                                <DataGridTextColumn Binding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Heartbeat, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Heartbeat" />
+                                <DataGridTextColumn Binding="{Binding Alive}"
+                                                    ClipboardContentBinding="{Binding Alive}"
+                                                    Header="Alive" />
+
+
+
+                            </DataGrid.Columns>
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Alive}"
+                                                     Value="False">
+                                            <Setter Property="Background"
+                                                    Value="Red" />
+                                            <Setter Property="Foreground"
+                                                    Value="White" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{Binding PerformanceTestHeader, FallbackValue='Performance Test'}">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid ItemsSource="{Binding PerformanceTestData}"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  SelectionUnit="Cell"
+                                  IsReadOnly="True"
+                                  BorderBrush="{x:Null}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding Id}"
+                                                    ClipboardContentBinding="{Binding Id}"
+                                                    Header="Id" />
+
+                                <DataGridTextColumn Binding="{Binding Name}"
+                                                    ClipboardContentBinding="{Binding Name}"
+                                                    Header="Name" />
+
+                                <DataGridTextColumn Binding="{Binding Description}"
+                                                    ClipboardContentBinding="{Binding Description}"
+                                                    Header="Description" />
+
+                                <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Started" />
+
+                                <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Ended" />
+
+                                <DataGridTextColumn Binding="{Binding ElapsedInSeconds}"
+                                                    ClipboardContentBinding="{Binding ElapsedInSeconds}"
+                                                    Header="Elapsed in Seconds">
+
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment"
+                                                    Value="Right" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding ElapsedInMinutes}"
+                                                    ClipboardContentBinding="{Binding ElapsedInMinutes}"
+                                                    Header="Elapsed in Minutess">
+
+                                    <DataGridTextColumn.ElementStyle>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="HorizontalAlignment"
+                                                    Value="Right" />
+                                        </Style>
+                                    </DataGridTextColumn.ElementStyle>
+                                </DataGridTextColumn>
+
+                            </DataGrid.Columns>
+
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{Binding HttpTrafficListenerHeader, FallbackValue='HTTP Traffic'}">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid ItemsSource="{Binding FiddlerCaptureInformation}"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  SelectionUnit="Cell"
+                                  IsReadOnly="True"
+                                  BorderBrush="{x:Null}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Binding="{Binding ResponseCode}"
+                                                    ClipboardContentBinding="{Binding ResponseCode}"
+                                                    Header="Response Code" />
+
+                                <DataGridTextColumn Binding="{Binding Uri}"
+                                                    ClipboardContentBinding="{Binding Uri}"
+                                                    Header="Uri" />
+
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <TabControl x:Name="TabControl"
+                        Grid.Row="5"
+                        Grid.ColumnSpan="11"
+                        Grid.Column="0"
+                        Margin="0,10,0,0">
+                <TabControl.Effect>
+                    <DropShadowEffect Color="#FFECDDDD" />
+                </TabControl.Effect>
+
+
+
+                <TabItem Header="{Binding LoggingHeader, FallbackValue='Logging'}"
+                         IsSelected="True">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="129" />
+                            <ColumnDefinition Width="15" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <DataGrid ItemsSource="{Binding LoggingData}"
+                                  SelectionUnit="Cell"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  IsReadOnly="True"
+                                  RowDetailsVisibilityMode="VisibleWhenSelected"
+                                  CanUserDeleteRows="False"
+                                  Grid.Row="2"
+                                  BorderBrush="{x:Null}"
+                                  Grid.ColumnSpan="3">
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="ERROR">
+                                            <Setter Property="Background"
+                                                    Value="Red" />
+                                            <Setter Property="Foreground"
+                                                    Value="White" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Level}"
+                                                     Value="FATAL">
+                                            <Setter Property="Background"
+                                                    Value="Red" />
+                                            <Setter Property="Foreground"
+                                                    Value="White" />
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.LayoutTransform>
+                                <ScaleTransform CenterX="0"
+                                                CenterY="0"
+                                                ScaleX="{Binding ElementName=UiScaleSlider,Path=Value}"
+                                                ScaleY="{Binding ElementName=UiScaleSlider,Path=Value}" />
+                            </DataGrid.LayoutTransform>
+
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Expander IsExpanded="True"
+                                                      Expanded="Expander_OnExpanded"
+                                                      Collapsed="Expander_OnCollapsed">
+                                            </Expander>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Date" />
+
+                                <DataGridTextColumn Binding="{Binding Message}"
+                                                    ClipboardContentBinding="{Binding Message}"
+                                                    Header="Message" />
+
+                                <DataGridTextColumn Binding="{Binding Logger}"
+                                                    ClipboardContentBinding="{Binding Logger}"
+                                                    Header="Logger" />
+
+                                <DataGridTextColumn Binding="{Binding Level}"
+                                                    ClipboardContentBinding="{Binding Level}"
+                                                    Header="Level" />
+
+                                <DataGridTextColumn Binding="{Binding Exception}"
+                                                    ClipboardContentBinding="{Binding Exception}"
+                                                    Header="Exception" />
+
+                            </DataGrid.Columns>
+
+                            <DataGrid.RowDetailsTemplate>
+                                <DataTemplate>
+                                    <Grid Background="#FFD5F5F5"
+                                          Margin="10,10,10,10"
+                                          ShowGridLines="False">
+                                        <Grid.Effect>
+                                            <DropShadowEffect Color="#FFECDDDD" />
+                                        </Grid.Effect>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="5" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="5" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="5" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="5" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="1">Date</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="1"
+                                                   Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="2">Message</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="2"
+                                                   TextWrapping="Wrap"
+                                                   Text="{Binding Message}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="3">Logger</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="3"
+                                                   Text="{Binding Logger}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="4">Level</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="4"
+                                                   Text="{Binding Level}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="5">Exception</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="5"
+                                                   TextWrapping="Wrap"
+                                                   Text="{Binding Exception}" />
+
+
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGrid.RowDetailsTemplate>
+                        </DataGrid>
+
+                        <Slider Grid.Row="1"
+                                x:Name="UiScaleSlider"
+                                Value="1"
+                                Minimum="0.1"
+                                Maximum="4"
+                                VerticalAlignment="Center"
+                                Height="18"
+                                Grid.Column="2" />
+                        <Button x:Name="Button"
+                                Style="{DynamicResource ButtonStyle1}"
+                                Content="Clear Logging Table"
+                                Command="{Binding ClearDatabaseCommand}"
+                                Grid.Row="1"
+                                Margin="0,0,0,5" />
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{Binding ErrorLoggingHeader, FallbackValue='Logging errors'}"
+                         IsSelected="True"
+                         Background="Red"
+                         Foreground="Black">
+                    <Grid Background="#FFE5E5E5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <DataGrid ItemsSource="{Binding ErrorLoggingData}"
+                                  SelectionUnit="Cell"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  IsReadOnly="True"
+                                  RowDetailsVisibilityMode="VisibleWhenSelected"
+                                  CanUserDeleteRows="False"
+                                  Grid.Row="1"
+                                  BorderBrush="{x:Null}">
+
+
+                            <DataGrid.LayoutTransform>
+                                <ScaleTransform CenterX="0"
+                                                CenterY="0"
+                                                ScaleX="{Binding ElementName=UiScaleSlider,Path=Value}"
+                                                ScaleY="{Binding ElementName=UiScaleSlider,Path=Value}" />
+                            </DataGrid.LayoutTransform>
+
+                            <DataGrid.Columns>
+                                <DataGridTemplateColumn>
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Expander IsExpanded="True"
+                                                      Expanded="Expander_OnExpanded"
+                                                      Collapsed="Expander_OnCollapsed">
+                                            </Expander>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Date" />
+
+                                <DataGridTextColumn Binding="{Binding Message}"
+                                                    ClipboardContentBinding="{Binding Message}"
+                                                    Header="Message" />
+
+                                <DataGridTextColumn Binding="{Binding Logger}"
+                                                    ClipboardContentBinding="{Binding Logger}"
+                                                    Header="Logger" />
+
+                                <DataGridTextColumn Binding="{Binding Level}"
+                                                    ClipboardContentBinding="{Binding Level}"
+                                                    Header="Level" />
+
+                                <DataGridTextColumn Binding="{Binding Exception}"
+                                                    ClipboardContentBinding="{Binding Exception}"
+                                                    Header="Exception" />
+
+                            </DataGrid.Columns>
+
+                            <DataGrid.RowDetailsTemplate>
+                                <DataTemplate>
+                                    <Grid Background="#FFD5F5F5"
+                                          Margin="10,10,10,10"
+                                          ShowGridLines="False">
+                                        <Grid.Effect>
+                                            <DropShadowEffect Color="#FFECDDDD" />
+                                        </Grid.Effect>
+
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="5" />
+                                            <ColumnDefinition Width="100" />
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="5" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="5" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="5" />
+                                        </Grid.RowDefinitions>
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="1">Date</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="1"
+                                                   Text="{Binding Date, StringFormat=yyyy-MM-dd HH:mm:ss}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="2">Message</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="2"
+                                                   TextWrapping="Wrap"
+                                                   Text="{Binding Message}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="3">Logger</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="3"
+                                                   Text="{Binding Logger}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="4">Level</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="4"
+                                                   Text="{Binding Level}" />
+
+                                        <TextBlock Grid.Column="1"
+                                                   Grid.Row="5">Exception</TextBlock>
+
+                                        <TextBlock Grid.Column="2"
+                                                   Grid.Row="5"
+                                                   TextWrapping="Wrap"
+                                                   Text="{Binding Exception}" />
+
+
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGrid.RowDetailsTemplate>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{Binding JobHistoryHeader, FallbackValue='Jobs'}">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid ItemsSource="{Binding JobHistoryData}"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  SelectionUnit="Cell"
+                                  IsReadOnly="True"
+                                  BorderBrush="{x:Null}">
+
+
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Result}"
+                                                     Value="Success">
+                                            <Setter Property="Background"
+                                                    Value="LightGreen" />
+                                            <Setter Property="Foreground"
+                                                    Value="Black" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Result}"
+                                                     Value="Failed">
+                                            <Setter Property="Background"
+                                                    Value="Red" />
+                                            <Setter Property="Foreground"
+                                                    Value="White" />
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding JobId}"
+                                                    ClipboardContentBinding="{Binding JobId}"
+                                                    Header="Job id" />
+
+                                <DataGridTextColumn Binding="{Binding Name}"
+                                                    ClipboardContentBinding="{Binding Name}"
+                                                    Header="Job name" />
+
+                                <DataGridTextColumn Binding="{Binding SentToWorkerNodeUri}"
+                                                    ClipboardContentBinding="{Binding SentToWorkerNodeUri}"
+                                                    Header="Sent to worker node uri" />
+
+
+                                <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Created" />
+
+                                <DataGridTextColumn Binding="{Binding Result}"
+                                                    ClipboardContentBinding="{Binding Result}"
+                                                    Header="Result" />
+
+                                <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Started" />
+
+                                <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Ended" />
+
+                                <DataGridTextColumn Binding="{Binding Type}"
+                                                    ClipboardContentBinding="{Binding Type}"
+                                                    Header="Type" />
+
+                                <DataGridTextColumn Binding="{Binding CreatedBy}"
+                                                    ClipboardContentBinding="{Binding CreatedBy}"
+                                                    Header="Created by" />
+
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{Binding JobHistoryGroupBySentToHeader, FallbackValue='Jobs Group By Worker Nodes'}">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid ItemsSource="{Binding JobHistoryDataGroupBySentToData}"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  SelectionUnit="Cell"
+                                  IsReadOnly="True"
+                                  BorderBrush="{x:Null}">
+                            <DataGrid.RowStyle>
+                                <Style TargetType="DataGridRow">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Result}"
+                                                     Value="Success">
+                                            <Setter Property="Background"
+                                                    Value="LightGreen" />
+                                            <Setter Property="Foreground"
+                                                    Value="Black" />
+                                        </DataTrigger>
+
+                                        <DataTrigger Binding="{Binding Result}"
+                                                     Value="Failed">
+                                            <Setter Property="Background"
+                                                    Value="Red" />
+                                            <Setter Property="Foreground"
+                                                    Value="White" />
+                                        </DataTrigger>
+
+                                    </Style.Triggers>
+                                </Style>
+                            </DataGrid.RowStyle>
+
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding SentTo}"
+                                                    ClipboardContentBinding="{Binding SentTo}"
+                                                    Header="Sent to" />
+
+                                <DataGridTextColumn Binding="{Binding Name}"
+                                                    ClipboardContentBinding="{Binding Name}"
+                                                    Header="Job name" />
+
+                                <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Created" />
+
+                                <DataGridTextColumn Binding="{Binding Result}"
+                                                    ClipboardContentBinding="{Binding Result}"
+                                                    Header="Result" />
+
+                                <DataGridTextColumn Binding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Started, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Started" />
+
+                                <DataGridTextColumn Binding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Ended, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Ended" />
+
+                                <DataGridTextColumn Binding="{Binding Type}"
+                                                    ClipboardContentBinding="{Binding Type}"
+                                                    Header="Type" />
+
+                                <DataGridTextColumn Binding="{Binding CreatedBy}"
+                                                    ClipboardContentBinding="{Binding CreatedBy}"
+                                                    Header="Created by" />
+
+                            </DataGrid.Columns>
+                            <DataGrid.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding SentTo}" />
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+
+                                    <GroupStyle.ContainerStyle>
+                                        <Style TargetType="{x:Type GroupItem}">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                        <Expander>
+                                                            <Expander.Header>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <TextBlock Text="{Binding SentTo}" />
+                                                                    <TextBlock Text="{Binding ItemCount}" />
+                                                                    <TextBlock Text=" Items" />
+                                                                </StackPanel>
+                                                            </Expander.Header>
+                                                            <ItemsPresenter />
+                                                        </Expander>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </GroupStyle.ContainerStyle>
+
+                                </GroupStyle>
+                            </DataGrid.GroupStyle>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+                <TabItem Header="{Binding JobHistoryDetailHeader, FallbackValue='Job Details'}">
+                    <Grid Background="#FFE5E5E5">
+                        <DataGrid ItemsSource="{Binding JobHistoryDetailData}"
+                                  AutoGenerateColumns="False"
+                                  HorizontalGridLinesBrush="#FFF5EFEF"
+                                  VerticalGridLinesBrush="#FFF5EFEF"
+                                  SelectionUnit="Cell"
+                                  IsReadOnly="True"
+                                  BorderBrush="{x:Null}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Row">
+                                    <DataGridTextColumn.Binding>
+                                        <MultiBinding Converter="{StaticResource RowNumberConverter}">
+                                            <Binding />
+                                            <Binding RelativeSource="{RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}" />
+                                        </MultiBinding>
+                                    </DataGridTextColumn.Binding>
+                                </DataGridTextColumn>
+
+                                <DataGridTextColumn Binding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    ClipboardContentBinding="{Binding Created, StringFormat=yyyy-MM-dd HH:mm:ss}"
+                                                    Header="Created" />
+
+                                <DataGridTextColumn Binding="{Binding JobId}"
+                                                    ClipboardContentBinding="{Binding JobId}"
+                                                    Header="JobId" />
+
+                                <DataGridTextColumn Binding="{Binding Detail}"
+                                                    ClipboardContentBinding="{Binding Detail}"
+                                                    Header="Detail" />
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </TabItem>
+
+
+            </TabControl>
+            <ToggleButton x:Name="ToggleButton"
+                          Content="{Binding ToggleRefreshStatus}"
+                          Grid.Column="7"
+                          Command="{Binding ToggleRefreshCommand}"
+                          IsChecked="{Binding RefreshEnabled, Mode=OneWay}"
+                          IsThreeState="True"
+                          Style="{DynamicResource ToggleButtonStyle1}"
+                          Margin="0,0,5,0" />
+
+            <ProgressBar Grid.Column="0"
+                         Maximum="5"
+                         Value="{Binding RefreshProgressValue}"
+                         BorderThickness="0"
+                         Background="{x:Null}"
+                         Margin="0,0,10,3"
+                         Grid.ColumnSpan="7" />
+
+            <TextBlock Grid.Row="0"
+                       Foreground="#FFCEDBF7"
+                       Text="Reloading data ..."
+                       Grid.Column="0"
+                       FontSize="10"
+                       Width="76"
+                       HorizontalAlignment="Left" />
+            <GridSplitter x:Name="gridSplitter"
+                          HorizontalAlignment="Stretch"
+                          Grid.Row="4"
+                          Grid.ColumnSpan="11"
+                          Style="{DynamicResource GridSplitterStyle1}">
+                <GridSplitter.Background>
+                    <LinearGradientBrush EndPoint="0.5,1"
+                                         StartPoint="0.5,0">
+                        <GradientStop Color="#FFBFC2C5"
+                                      Offset="0" />
+                        <GradientStop Color="#FFBFC2C5"
+                                      Offset="1" />
+                        <GradientStop Color="White"
+                                      Offset="0.418" />
+                        <GradientStop Color="White"
+                                      Offset="0.573" />
+                    </LinearGradientBrush>
+                </GridSplitter.Background>
+            </GridSplitter>
+
+
+        </Grid>
+    </DockPanel>
+
+
 </Window>

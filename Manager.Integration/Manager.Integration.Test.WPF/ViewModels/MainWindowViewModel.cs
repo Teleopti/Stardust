@@ -27,7 +27,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		private const string PerformanceTestHeaderConstant = "Performance tests";
 
-		private const string HttpTrafficListenerHeaderConstant = "Http Traffic";
+		private const string HttpTrafficListenerHeaderConstant = "HTTP Traffic";
 
 		private ClearDatabaseCommand _clearDatabaseCommand;
 		private List<Logging> _errorLoggingData;
@@ -59,7 +59,9 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public MainWindowViewModel()
 		{
+			//---------------------------------------
 			// Set up Fiddler.
+			//---------------------------------------
 			FiddlerCaptureUrlConfiguration = new FiddlerCaptureUrlConfiguration();
 
 			FiddlerCapture = new FiddlerCapture(FiddlerCaptureUrlConfiguration);
@@ -72,7 +74,9 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			FiddlerCaptureInformation = new ObservableCollection<FiddlerCaptureInformation>();
 
+			//---------------------------------------
 			// Do the rest.
+			//---------------------------------------
 			GetData();
 
 			ClearDatabaseCommand = new ClearDatabaseCommand(this);

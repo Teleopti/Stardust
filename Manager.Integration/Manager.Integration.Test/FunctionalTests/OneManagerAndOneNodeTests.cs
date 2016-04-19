@@ -152,17 +152,22 @@ namespace Manager.Integration.Test.FunctionalTests
 				{
 					if (jobs.Any())
 					{
-						checkTablesInManagerDbTimer.JobTimer.Stop();
+						var job = jobs.First();
 
-						var jobManagerTaskCreator =
-							new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+						if (job.Started != null)
+						{
+							checkTablesInManagerDbTimer.JobTimer.Stop();
 
-						jobManagerTaskCreator.CreateDeleteJobToManagerTask(jobs.First().JobId);
-						jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
+							var jobManagerTaskCreator =
+								new JobManagerTaskCreator(checkJobHistoryStatusTimer);
 
-						jobManagerTaskCreator.Dispose();
+							jobManagerTaskCreator.CreateDeleteJobToManagerTask(jobs.First().JobId);
+							jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
 
-						checkTablesInManagerDbTimer.JobTimer.Dispose();
+							jobManagerTaskCreator.Dispose();
+
+							checkTablesInManagerDbTimer.JobTimer.Dispose();
+						}
 					}
 				};
 			},
@@ -173,8 +178,6 @@ namespace Manager.Integration.Test.FunctionalTests
 			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
 			                                                          CancellationTokenSource,
 			                                                          timeout);
-
-
 
 			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
 
