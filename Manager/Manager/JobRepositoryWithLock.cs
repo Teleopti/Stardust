@@ -304,8 +304,6 @@ namespace Stardust.Manager
 
 			try
 			{
-				//Monitor.Enter(_lockTryAssignJobToWorkerNodeWorker);
-
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
@@ -458,11 +456,6 @@ namespace Stardust.Manager
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
-
-			finally
-			{
-				//Monitor.Exit(_lockTryAssignJobToWorkerNodeWorker);
-			}
 		}
 
 		public void CancelJobByJobId(Guid jobId, IHttpSender httpSender)
@@ -523,7 +516,8 @@ namespace Stardust.Manager
 						taskSendCancel.Start();
 						taskSendCancel.Wait();
 
-						if (taskSendCancel.IsCompleted && taskSendCancel.Result.IsSuccessStatusCode)
+						if (taskSendCancel.IsCompleted && 
+							taskSendCancel.Result.IsSuccessStatusCode)
 						{
 							var updateJobSetResultCommandText = "UPDATE [Stardust].[Job] " +
 							                                    "SET Result = @Result " +
@@ -538,9 +532,9 @@ namespace Stardust.Manager
 							updateCommand.Parameters.AddWithValue("@Result", Canceling);
 
 							updateCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
-						}
 
-						sqlTransaction.Commit();
+							sqlTransaction.Commit();
+						}						
 					}
 
 					sqlConnection.Close();

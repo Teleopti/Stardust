@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using Autofac;
+using ManagerTest.Database;
 using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -10,7 +11,7 @@ using Stardust.Manager.Validations;
 namespace ManagerTest
 {
 	[TestFixture]
-	public class ManagerModuleTest
+	public class ManagerModuleTest : DatabaseTest
 	{
 		[SetUp]
 		public void SetUp()
@@ -36,7 +37,7 @@ namespace ManagerTest
 
 		private ContainerBuilder _containerBuilder;
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldResolveManagerController()
 		{
 			using (var ioc = _containerBuilder.Build())
