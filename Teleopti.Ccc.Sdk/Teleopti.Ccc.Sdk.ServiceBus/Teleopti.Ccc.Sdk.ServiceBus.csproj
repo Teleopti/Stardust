@@ -261,7 +261,6 @@
     <Compile Include="DenormalizeBusBootStrapper.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
-    <Compile Include="Denormalizer\UpdateFindPersonDataConsumer.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillsToSkillConsumer.cs" />
     <Compile Include="Forecast\ExportMultisiteSkillToSkillConsumer.cs" />
