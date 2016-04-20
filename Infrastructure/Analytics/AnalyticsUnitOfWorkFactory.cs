@@ -12,11 +12,12 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 
 		protected internal AnalyticsUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
-			string connectionString)
+			string connectionString,
+			string tenant)
 		{
 			ConnectionString = connectionString;
-			_context = new AnalyticsUnitOfWorkContext();
 			_factory = sessionFactory;
+			_context = new AnalyticsUnitOfWorkContext(tenant);
 		}
 		
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()

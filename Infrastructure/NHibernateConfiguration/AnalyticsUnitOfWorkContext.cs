@@ -1,34 +1,52 @@
+using System.Collections;
 using System.Threading;
 using System.Web;
+using NHibernate;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
 	public class AnalyticsUnitOfWorkContext
 	{
-		private static readonly ThreadLocal<IUnitOfWork> _unitOfWork = new ThreadLocal<IUnitOfWork>();
 		private const string itemsKey = "AnalyticsUnitOfWork";
+		private static readonly ThreadLocal<Hashtable> threadSessions = new ThreadLocal<Hashtable>(() => new Hashtable());
+		private readonly string _tenant;
+
+		public AnalyticsUnitOfWorkContext(string tenant)
+		{
+			_tenant = tenant;
+		}
 
 		public void Set(IUnitOfWork unitOfWork)
 		{
-			if (HttpContext.Current != null)
-			{
-				HttpContext.Current.Items[itemsKey] = unitOfWork;
-				return;
-			}
-			_unitOfWork.Value = unitOfWork;
+			sessions()[_tenant] = unitOfWork;
 		}
 
 		public IUnitOfWork Get()
 		{
-			if (HttpContext.Current != null)
-				return (IUnitOfWork)HttpContext.Current.Items[itemsKey];
-			return _unitOfWork.Value;
+			return (IUnitOfWork)sessions()[_tenant];
 		}
 
 		public void Clear()
 		{
 			Set(null);
+		}
+
+		private static Hashtable sessions()
+		{
+			var httpContext = HttpContext.Current;
+			return httpContext == null ? threadSessions.Value : getWebSessions(httpContext);
+		}
+
+		private static Hashtable getWebSessions(HttpContext httpContext)
+		{
+			var items = httpContext.Items;
+			var sessions = items[itemsKey] as Hashtable;
+			if (sessions != null)
+				return sessions;
+			sessions = new Hashtable();
+			items[itemsKey] = sessions;
+			return sessions;
 		}
 	}
 }

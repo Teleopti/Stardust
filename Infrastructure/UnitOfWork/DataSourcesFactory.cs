@@ -61,19 +61,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return createDataSource(applicationNhibConfiguration, statisticConnectionString);
 		}
 
-		private IDataSource createDataSource(IDictionary<string, string> applicationNhibConfiguration, string statisticConnectionString)
+		private IDataSource createDataSource(IDictionary<string, string> applicationConfiguration, string statisticConnectionString)
 		{
-			if (applicationNhibConfiguration == null)
-				applicationNhibConfiguration = new Dictionary<string, string>();
-			var appConfig = createApplicationConfiguration(applicationNhibConfiguration);
-			var applicationConnectionString = appConfig.Properties[Environment.ConnectionString];
-			var sessionFactory = buildSessionFactory(appConfig);
+			if (applicationConfiguration == null)
+				applicationConfiguration = new Dictionary<string, string>();
+			var configuration = createApplicationConfiguration(applicationConfiguration);
+			var tenant = configuration.Properties[Environment.SessionFactoryName];
+			var applicationConnectionString = configuration.Properties[Environment.ConnectionString];
+			var sessionFactory = buildSessionFactory(configuration);
 			var appFactory = new NHibernateUnitOfWorkFactory(
 				sessionFactory,
 				_enversConfiguration.AuditSettingProvider,
 				applicationConnectionString,
 				_transactionHooks,
-				_principal
+				_principal,
+				tenant
 				);
 
 			AnalyticsUnitOfWorkFactory statFactory = null;
@@ -86,8 +88,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				}, typeof(AnalyticsPermission).Assembly);
 				statFactory = new AnalyticsUnitOfWorkFactory(
 					buildSessionFactory(statConfiguration),
-					statConfiguration.Properties[Environment.ConnectionString]
-					);
+					statConfiguration.Properties[Environment.ConnectionString], 
+					tenant);
 			}
 
 			var readModel = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);
@@ -96,11 +98,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return new DataSource(appFactory, statFactory, readModel);
 		}
 
-		private static ISessionFactory buildSessionFactory(Configuration nhConf)
+		private static ISessionFactory buildSessionFactory(Configuration configuration)
 		{
-			using (PerformanceOutput.ForOperation("Building sessionfactory for " + nhConf.Properties[Environment.SessionFactoryName]))
+			using (PerformanceOutput.ForOperation("Building sessionfactory for " + configuration.Properties[Environment.SessionFactoryName]))
 			{
-				var sessionFactory = nhConf.BuildSessionFactory();
+				var sessionFactory = configuration.BuildSessionFactory();
 				sessionFactory.Statistics.IsStatisticsEnabled = true;
 				return sessionFactory;
 			}

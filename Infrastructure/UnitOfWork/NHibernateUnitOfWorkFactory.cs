@@ -22,11 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IAuditSetter auditSettingProvider,
 			string connectionString,
 			ICurrentTransactionHooks transactionHooks,
-			ICurrentTeleoptiPrincipal principal)
+			ICurrentTeleoptiPrincipal principal,
+			string tenant)
 		{
 			ConnectionString = connectionString;
-			_context = new ApplicationUnitOfWorkContext();
 			_factory = sessionFactory;
+			_context = new ApplicationUnitOfWorkContext(tenant);
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;
 			_principal = principal;
