@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 					db.Dialect<MsSql2008Dialect>();
 					db.ExceptionConverter<TenantNhibernateExceptionConverter>();
 				});
-			cfg.SetProperty(Environment.CurrentSessionContextClass, typeof(TeleoptiSessionContext).AssemblyQualifiedName);
+			cfg.SetProperty(Environment.CurrentSessionContextClass, typeof(TenantSessionContext).AssemblyQualifiedName);
 			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
 			cfg.AddResources(new[]
 			{

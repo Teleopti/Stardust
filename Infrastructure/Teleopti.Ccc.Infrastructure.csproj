@@ -502,7 +502,7 @@
     <Compile Include="Foundation\ApplicationData.cs" />
     <Compile Include="NHibernateConfiguration\AuditSetter.cs" />
     <Compile Include="NHibernateConfiguration\EnversConfiguration.cs" />
-    <Compile Include="NHibernateConfiguration\TeleoptiSessionContext.cs" />
+    <Compile Include="NHibernateConfiguration\TenantSessionContext.cs" />
     <Compile Include="NHibernateConfiguration\IDataSourceConfigurationSetter.cs" />
     <Compile Include="NHibernateConfiguration\IEnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriver.cs" />
