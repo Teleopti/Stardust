@@ -1,8 +1,5 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -42,15 +39,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IEnumerable<IDayOffDecisionMaker> decisionMakers =
 				_dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(originalArray, optimizationPreferences, daysOffPreferences);
 
-			//var workingBitArray = (ILockableBitArray)originalArray.Clone();
-			//var daysOffLegalStateValidatorsFactory =  new DaysOffLegalStateValidatorsFactory();
-			//var validators = daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(workingBitArray, optimizationPreferences);
-			//var test = new ExtendReduceDaysOffDecisionMaker(new ScheduleMatrixLockableBitArrayConverterEx());
-			//var result = test.Execute2(matrix, scheduleResultDataExtractor, validators);
-
-
-			//return result;
-
 			foreach (IDayOffDecisionMaker dayOffDecisionMaker in decisionMakers)
 			{
 				var workingBitArray = (ILockableBitArray)originalArray.Clone();
@@ -62,10 +50,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					if (!dayOffDecisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values()))
 						continue;
 				}
-
-				// DayOffBackToLegal if decisionMaker did something wrong
-				if (!_daysOffBackToLegal.Execute(_daysOffBackToLegal.BuildSolverList(workingBitArray, daysOffPreferences), 100))
-					continue;
 
 				return workingBitArray;
 			}

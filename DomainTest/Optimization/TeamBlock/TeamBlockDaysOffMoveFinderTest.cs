@@ -110,12 +110,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			if (failOnNoMoveFound)
 				return;
 
-			Expect.Call(_daysOffBackToLegal.BuildSolverList(_workingArray, _daysOffPreferences)).IgnoreArguments().Return(solverList);
-			Expect.Call(_daysOffBackToLegal.Execute(solverList, 100)).Return(true);
-
-
-
-
 		}
 
 	}
