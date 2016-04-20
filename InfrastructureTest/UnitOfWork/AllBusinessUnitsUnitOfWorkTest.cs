@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			public virtual void Does(Action<IUnitOfWork> action)
 			{
-				using (_dataSource.OnThisThreadUse("App"))
+				using (_dataSource.OnThisThreadUse(SetupFixtureForAssembly.DataSource.DataSourceName))
 					DoesInner(action);
 			}
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			public virtual void DoesOnAllBusinessUnits(Action<IUnitOfWork> action)
 			{
-				using (_dataSource.OnThisThreadUse("App"))
+				using (_dataSource.OnThisThreadUse(SetupFixtureForAssembly.DataSource.DataSourceName))
 					DoesOnAllBusinessUnitsWithoutDatasource(action);
 			}
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldDisposeUnitOfWorkAfterNotFilteringOnBusinessUnit()
 		{
 			Context.Logout();
-			using (DataSource.OnThisThreadUse("App"))
+			using (DataSource.OnThisThreadUse(SetupFixtureForAssembly.DataSource.DataSourceName))
 			{
 				TheService.DoesOnAllBusinessUnitsWithoutDatasource(uow => { });
 
