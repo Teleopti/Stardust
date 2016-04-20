@@ -84,22 +84,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 			var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
 
 			//create one full day period
-			var fullDayTimeSpanStart = new TimeSpan(0, 0, 0);
 			var fullDayTimeSpanEnd = new TimeSpan(23, 59, 0);
-			var startDateTime = new DateTime(message.RequestedDate.Year, message.RequestedDate.Month,
-				message.RequestedDate.Day, fullDayTimeSpanStart.Hours, fullDayTimeSpanStart.Minutes,
-				fullDayTimeSpanStart.Seconds);
-			var endDateTime = new DateTime(message.RequestedDate.Year, message.RequestedDate.Month,
-				message.RequestedDate.Day, fullDayTimeSpanEnd.Hours, fullDayTimeSpanEnd.Minutes,
-				fullDayTimeSpanEnd.Seconds);
-
-			var period = new DateTimePeriod(
-				DateTime.SpecifyKind(
-					TimeZoneHelper.ConvertToUtc(startDateTime, agentTimeZone),
-					DateTimeKind.Utc),
-				DateTime.SpecifyKind(
-					TimeZoneHelper.ConvertToUtc(endDateTime, agentTimeZone),
-					DateTimeKind.Utc));
+			var startDateTime = message.RequestedDate.Date;
+			var endDateTime = message.RequestedDate.Date.Add(fullDayTimeSpanEnd);
+			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime, agentTimeZone);
 
 			if (person.WorkflowControlSet == null)
 			{

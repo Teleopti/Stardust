@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 		ConsumerOf<PersonPeriodChangedMessage>,
 		ConsumerOf<PersonChangedMessage>, 
 		ConsumerOf<NewShiftTradeRequestCreated>,
-		ConsumerOf<PersonChangedMessage>,
 		ConsumerOf<NewAbsenceReportCreated>,
 		ConsumerOf<AcceptShiftTrade>
 	{
@@ -107,8 +106,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 			});
 		}
 
-			});
-		}
 
 		public void Consume(NewShiftTradeRequestCreated message)
 		{
@@ -149,7 +146,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				RequestedDate = message.RequestedDate,
 				Timestamp = message.Timestamp,
 				UserName = message.InitiatorId.ToString()
-			}
+			});
 		}
 
 	}
