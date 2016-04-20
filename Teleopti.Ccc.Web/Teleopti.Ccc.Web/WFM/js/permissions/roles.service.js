@@ -39,9 +39,12 @@
 			};
 
 			roles.removeRole = function (role) {
+				var deferred = $q.defer();
 				PermissionsService.manageRole.deleteRole({ Id: role.Id }).$promise.then(function (result) {
 					roles.list.$promise.then(function (r) { r.splice(roles.list.indexOf(role), 1); });
+					deferred.resolve();
 				});
+				return deferred.promise;
 			};
 
 			roles.selectRole = function (role) {

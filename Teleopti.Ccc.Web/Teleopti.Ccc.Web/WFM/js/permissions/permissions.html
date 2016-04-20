@@ -20,7 +20,7 @@
 						<input type="text" id="addRole" ng-model="roleName" placeholder="{{'CreateNewRole' | translate}}" class="role-input role"/>
 					</label>
 				</form>
-				<form ng-submit="createRole(); reset()" class="full-padding">
+				<form ng-submit="reset()" class="full-padding">
 					<label for="filterRoles" class="input-prepend">
 						<i class="mdi mdi-filter-outline">
 							<md-tooltip>{{'FilterRoles'|translate}}</md-tooltip>
@@ -38,7 +38,7 @@
 								</form>
 							</span>
 							<span ng-cloak ng-show="role.Id === selectedRole" ng-if="!role.editing" class="list-dot grow-out"><b class="mdi mdi-check list-mark"></b></span>
-							<div ng-show="!role.editing" class="wfm-leave-behind" ng-mousedown="showRole(role)" ng-class="{'hide-list-actions': role.editing===true, 'hide-list-actions-none': role.BuiltIn === true}">
+							<div ng-show="!role.editing" class="wfm-leave-behind" ng-class="{'hide-list-actions': role.editing===true, 'hide-list-actions-none': role.BuiltIn === true}">
 								<span>
 									<i ng-click="copyRole(role);" class="mdi mdi-content-copy">
 										<md-tooltip>

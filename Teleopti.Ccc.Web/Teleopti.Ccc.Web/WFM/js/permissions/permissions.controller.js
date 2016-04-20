@@ -4,12 +4,9 @@
         .controller('PermissionsCtrl', [
 			'$scope', '$filter', 'PermissionsService', 'Roles', '$stateParams',
 			function($scope, $filter, Permissions, Roles, $stateParams) {
-				$scope.list = [];
 				$scope.roleName = null;
 				$scope.roleDetails = 'functionsAvailable';
 
-				$scope.functionsFlat = [];
-				$scope.dataFlat = [];
 				$scope.selectedRole = Roles.selectedRole;
 				$scope.selectedDataToggle = false;
 				$scope.unselectedDataToggle = false;
@@ -44,9 +41,25 @@
 						$scope.showRole($scope.roles[0]);
 					});
 				};
-
+				var getIndexInRoles = function(target){
+					var result = $scope.roles.map(function(e){
+						return e.Id;
+					}).indexOf(target);
+					return result
+				}
 				$scope.removeRole = function(role) {
-						Roles.removeRole(role);
+					var currentSelected = getIndexInRoles($scope.selectedRole);
+					var roleToBeDeleted = getIndexInRoles(role.Id);
+					var isSelected = role.Id === $scope.selectedRole;
+					Roles.removeRole(role).then(function(){
+						if (isSelected) {
+							$scope.showRole($scope.roles[0]);
+						}else if (currentSelected > roleToBeDeleted) {
+							$scope.showRole($scope.roles[currentSelected-1])
+						}else {
+							$scope.showRole($scope.roles[currentSelected]);
+						}
+					});
 				};
 
 				$scope.updateRole = function(role) {
