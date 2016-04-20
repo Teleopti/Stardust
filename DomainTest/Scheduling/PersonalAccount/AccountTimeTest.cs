@@ -73,53 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
             Assert.IsTrue(_target.Remaining <= TimeSpan.Zero);
         }
 
-
-        //[Test]
-        //public void VerifyCalculateBalanceInFromEarlierPersonAccount()
-        //{
-        //    IAbsence absence = new Absence();
-        //    TimeSpan accruedIn = TimeSpan.FromMilliseconds(45668456);
-        //    var account1 = new AccountTime(_baseDateTime);
-        //    account1.Accrued = accruedIn;
-        //    var account2 = new AccountTime(_baseDateTime.AddDays(1));
-        //    account2.BalanceIn = TimeSpan.FromMinutes(5);
-        //    IPerson person = new Person();
-        //    var a = new PersonAbsenceAccount(person, absence);
-        //    a.Add(account2);
-
-        //    account2.CalculateBalanceIn();
-        //    Assert.AreEqual(TimeSpan.Zero, account2.BalanceIn, "Set to 0 if no erlier accounts exists");
-
-        //    a.Add(account1);
-        //    account2.CalculateBalanceIn();
-        //    Assert.AreEqual(accruedIn, account2.BalanceIn, "Calculates from earlier PersonAccount BalanceOut");
-        //}
-
-        [Test]
-        public void VerifyFindEarlierPersonAccount()
-        {
-            var paAcc = new PersonAbsenceAccount(new Person(), new Absence());
-
-            var pAcc1 = new AccountTime(_baseDateTime);
-            var pAcc2 = new AccountTime(_baseDateTime.AddDays(2));
-            var pAcc3 = new AccountTime(_baseDateTime.AddDays(3));
-            var pAcc4 = new AccountTime(_baseDateTime.AddDays(4));
-            var pAcc5 = new AccountTime(_baseDateTime.AddDays(5));
-            var pAcc6 = new AccountTime(_baseDateTime.AddDays(6));
-
-            paAcc.Add(pAcc2);
-            paAcc.Add(pAcc3);
-            paAcc.Add(pAcc5);
-            paAcc.Add(pAcc6);
-
-            Assert.IsNull(pAcc2.FindEarliestPersonAccount(), "Null if first in list");
-            paAcc.Add(pAcc1);
-            Assert.AreEqual(pAcc1.StartDate, pAcc2.FindEarliestPersonAccount().StartDate, "Not null, gets earlier account");
-            Assert.AreEqual(pAcc1.StartDate, pAcc5.FindEarliestPersonAccount().StartDate, "Gets earlier");
-            paAcc.Add(pAcc4);
-            Assert.AreEqual(pAcc1.StartDate, pAcc5.FindEarliestPersonAccount().StartDate, "Gets earlier in unsorted-list");
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyDefaultValuesAreSet()
         {

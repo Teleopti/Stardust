@@ -106,70 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
             Assert.IsTrue(_target.Remaining <= TimeSpan.Zero);
         }
 
-        //[Test]
-        //public void VerifyCalculateBalanceInFromEarlierPersonAccount()
-        //{
-            
-        //    var personAccount1 = new AccountDayForTest(_startDate, 10 , 7);
-        //    var personAccount2 = new AccountDayForTest(_startDate.AddDays(1), 0, 0);
-        //    personAccount2.SetBalanceIn(TimeSpan.FromDays(5));
-        //    IPerson person = new Person();
-        //    var personAbsenceAccount = new PersonAbsenceAccount(person, _absenceWithdayTracker);
-        //    personAbsenceAccount.Add(personAccount2);
-
-        //    personAccount2.CalculateBalanceIn();
-        //    Assert.AreEqual(TimeSpan.Zero, personAccount2.BalanceIn, "Set to 0 if no erlier accounts exists");
-
-        //    personAbsenceAccount.Add(personAccount1);
-
-        //    personAccount2.CalculateBalanceIn();
-        //    Assert.AreEqual(TimeSpan.FromDays(17), personAccount2.BalanceIn, "Calculates from earlier PersonAccount BalanceOut");
-        //}
-
-        //[Test]
-        //public void VerifyCalculateBalanceInUpdatesNextPersonAccountBalanceIn()
-        //{
-
-        //    AccountDayForTest account1 = new AccountDayForTest(_startDate, 10, 7);
-        //    AccountDayForTest account2 = new AccountDayForTest(_startDate.AddDays(1), 0, 0);
-        //    account2.SetBalanceIn(TimeSpan.FromDays(5));
-        //    IPerson person = new Person();
-        //    var personAbsenceAccount = new PersonAbsenceAccount(person, _absenceWithdayTracker);
-        //    personAbsenceAccount.Add(account2);
-
-        //    account2.CalculateBalanceIn();
-        //    Assert.AreEqual(TimeSpan.Zero, account2.BalanceIn, "Set to 0 if no erlier accounts exists");
-
-        //    personAbsenceAccount.Add(account1);
-
-        //    account1.CalculateBalanceIn();
-
-        //}
-
-        [Test]
-        public void VerifyFindEarlierPersonAccount()
-        {
-            var paAcc = new PersonAbsenceAccount(new Person(), new Absence());
-            var pAcc1 = new AccountDayForTest(_startDate, 0);
-            var pAcc2 = new AccountDayForTest(_startDate.AddDays(2), 0);
-            var pAcc3 = new AccountDayForTest(_startDate.AddDays(3), 0);
-            var pAcc4 = new AccountDayForTest(_startDate.AddDays(4), 0);
-            var pAcc5 = new AccountDayForTest(_startDate.AddDays(5), 0);
-            var pAcc6 = new AccountDayForTest(_startDate.AddDays(6), 0);
-            
-            paAcc.Add(pAcc2);
-            paAcc.Add(pAcc3);
-            paAcc.Add(pAcc5);
-            paAcc.Add(pAcc6);
-
-            Assert.IsNull(pAcc2.FindEarlierPersonAccount(), "Null if first in list");
-            paAcc.Add(pAcc1);
-            Assert.AreEqual(pAcc1.StartDate, pAcc2.FindEarlierPersonAccount().StartDate, "Not null, gets earlier account");
-            Assert.AreEqual(pAcc1.StartDate, pAcc5.FindEarlierPersonAccount().StartDate, "Gets earlier");
-            paAcc.Add(pAcc4);
-            Assert.AreEqual(pAcc1.StartDate, pAcc5.FindEarlierPersonAccount().StartDate, "Gets earlier in unsorted-list");
-        }
-
         [Test]
         public void VerifyCloneWorks()
         {
@@ -222,11 +158,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
             public void SetBalanceIn(TimeSpan newValue)
             {
                 BalanceIn = newValue;
-            }
-
-            public IAccount FindEarlierPersonAccount()
-            {
-                return FindEarliestPersonAccount();
             }
 
         }

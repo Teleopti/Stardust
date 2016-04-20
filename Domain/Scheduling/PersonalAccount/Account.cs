@@ -92,12 +92,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
             }
         }
 
-        public virtual IAccount FindEarliestPersonAccount()
-        {
-            //The list is sorted descending!
-            return Owner.AccountCollection().LastOrDefault(o => o.StartDate < StartDate);
-        }
-
         public virtual IAccount FindPreviousPersonAccount()
         {
             //The list is sorted descending!
