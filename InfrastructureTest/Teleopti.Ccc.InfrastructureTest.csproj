@@ -404,7 +404,6 @@
     <Compile Include="NHibernateConfiguration\EnversConfigurationTest.cs" />
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />
-    <Compile Include="Foundation\DataSourceExceptionTest.cs" />
     <Compile Include="Foundation\LazyLoadingManagerTest.cs" />
     <Compile Include="Foundation\MatrixRaptorExternalLogOnSynchronizationTest.cs" />
     <Compile Include="Foundation\MatrixRaptorQueueSynchronizationTest.cs" />
