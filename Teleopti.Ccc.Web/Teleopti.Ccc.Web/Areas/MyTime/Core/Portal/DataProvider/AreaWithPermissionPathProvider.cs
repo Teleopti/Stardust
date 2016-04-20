@@ -100,9 +100,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 				return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Basic_35986);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules))
-			{
+			{				
 				return _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
 			}
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules))
+			{
+				return !_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_PrepareForRelease_37752);
+			}
+			
 			return true;
 		}
 	}

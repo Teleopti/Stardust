@@ -102,5 +102,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			areas.Count().Should().Be(0);
 		}
+
+		[Test]
+		public void ShouldNotHaveAngelMyTeamSchedulesWhenWfmTeamScheduleIsReleased()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.WfmTeamSchedule_PrepareForRelease_37752);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
 	}
 }
