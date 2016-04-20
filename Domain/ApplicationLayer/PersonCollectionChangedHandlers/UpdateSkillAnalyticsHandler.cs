@@ -5,9 +5,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+#pragma warning disable 618
 	public class UpdateSkillAnalyticsHandler :
 		IHandleEvent<SkillChangedEvent>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{
