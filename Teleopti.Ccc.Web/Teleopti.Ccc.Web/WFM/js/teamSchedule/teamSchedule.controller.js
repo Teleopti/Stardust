@@ -3,12 +3,17 @@
 (function () {
 	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$q', '$translate', 'TeamSchedule',
 		'GroupScheduleFactory', 'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts',
-		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', 'ActivityService', 'guidgenerator', TeamScheduleController]);
+		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', 'ActivityService', 'guidgenerator', 'NoticeService', TeamScheduleController]);
 
 	function TeamScheduleController($q, $translate, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
-		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc, ActivityService, guidgenerator) {
+		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc, ActivityService, guidgenerator, NoticeService) {
 
 		var vm = this;
+
+		var message = "MyTeam has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>\
+				Old <a href='../Anywhere#teamschedule'>MyTeam</a> can be accessed for a limited time.";
+
+		NoticeService.info(message, null, true);
 
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
