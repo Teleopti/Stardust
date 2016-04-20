@@ -18,8 +18,9 @@
 			$scope.toggleFixDetail = toggleFixDetail;
 			$scope.translatedMessage = message(ctrl.getTargets().length);
 			$scope.hasError = false;
-			$scope.isRemoveAbsence = ctrl.getRemoveAbsenceMessage != null;
-			$scope.getRemoveAbsenceMessage = ctrl.getRemoveAbsenceMessage;
+			$scope.isRemoveCommand = ctrl.commandTitle.indexOf('Remove') > -1;
+			$scope.isRemoveAbsence = ctrl.commandTitle === 'RemoveAbsence';
+			$scope.getCommandMessage = ctrl.getCommandMessage;
 			if ($scope.isRemoveAbsence) {
 				$scope.removeFullDayAbsence = false;
 				$scope.toggleRemoveFullDayAbsence = function () {					
@@ -56,7 +57,12 @@
 
 		function getApply(action) {
 			return function () {
-				action($scope.removeFullDayAbsence);
+				if ($scope.isRemoveAbsence) {
+					action($scope.removeFullDayAbsence);
+				} else {
+					action();
+				}
+				
 				$mdDialog.hide();
 			};
 		}

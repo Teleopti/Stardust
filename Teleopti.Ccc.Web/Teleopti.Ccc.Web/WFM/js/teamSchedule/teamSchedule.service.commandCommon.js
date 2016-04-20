@@ -28,7 +28,7 @@
 		}
 
 
-		function wrapPersonWriteProtectionCheck(skipDialogIfNormal, commandTitle, action, requirement, selectedDate, getRemoveAbsenceMessage) {
+		function wrapPersonWriteProtectionCheck(skipDialogIfNormal, commandTitle, action, requirement, selectedDate, getCommandMessage) {
 
 			var getPersons = PersonSelection.getSelectedPersonIdList;
 			var date = selectedDate? selectedDate: PersonSelection.scheduleDate;
@@ -37,7 +37,9 @@
 				if (writeProtectedPersons.length > 0)
 					return {
 						targets: writeProtectedPersons,
-						action: function() { PersonSelection.unselectPersonsWithIds(writeProtectedPersons); }
+						action: function () {
+							PersonSelection.unselectPersonsWithIds(writeProtectedPersons);
+						}
 					};
 				else
 					return null;
@@ -65,7 +67,7 @@
 						getTargets: getPersons,
 						command: action,
 						require: requirement,
-						getRemoveAbsenceMessage: getRemoveAbsenceMessage
+						getCommandMessage: getCommandMessage
 					}
 				});
 			}
