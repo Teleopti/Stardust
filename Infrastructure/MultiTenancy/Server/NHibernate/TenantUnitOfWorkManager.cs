@@ -1,27 +1,27 @@
 ﻿using System;
 using NHibernate;
 using NHibernate.Cfg;
-using NHibernate.Context;
 using NHibernate.Dialect;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 {
 	public class TenantUnitOfWorkManager : ITenantUnitOfWork, ICurrentTenantSession, IDisposable
 	{
 		private readonly ISessionFactory _sessionFactory;
+		private readonly TenantSessionContext _context;
 
-		private TenantUnitOfWorkManager(ISessionFactory sessionFactory)
+		private TenantUnitOfWorkManager(TenantSessionContext context, ISessionFactory sessionFactory)
 		{
+			_context = context;
 			_sessionFactory = sessionFactory;
 		}
-		
+
 		public static TenantUnitOfWorkManager Create(string connectionString)
 		{
 			if(connectionString==null)
-				return new TenantUnitOfWorkManager(null);
+				return new TenantUnitOfWorkManager(new TenantSessionContext(""), null);
 
 			var cfg = new Configuration()
 				.DataBaseIntegration(db =>
@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 					db.Dialect<MsSql2008Dialect>();
 					db.ExceptionConverter<TenantNhibernateExceptionConverter>();
 				});
-			cfg.SetProperty(Environment.CurrentSessionContextClass, typeof(TenantSessionContext).AssemblyQualifiedName);
 			//TODO: tenant - if/when tenant stuff is it's own service, we don't have to pick these one-by-one but take all assembly instead.
 			cfg.AddResources(new[]
 			{
@@ -41,17 +40,25 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 				"Teleopti.Ccc.Infrastructure.Authentication.NonceInfo.dbconf.xml"
 			}, typeof (TenantUnitOfWorkManager).Assembly);
 
-			return new TenantUnitOfWorkManager(cfg.BuildSessionFactory());
+			return new TenantUnitOfWorkManager(
+				new TenantSessionContext(connectionString),
+				cfg.BuildSessionFactory()
+				);
 		}
 
 		public ISession CurrentSession()
 		{
-			return _sessionFactory.GetCurrentSession();
+			var session = _context.Get();
+			// maybe better to return null..
+			// but mimic nhibernate session context for now
+			if (session == null)
+				throw new HibernateException("No session bound to the current context");
+			return session;
 		}
 
 		public bool HasCurrentSession()
 		{
-			return CurrentSessionContext.HasBind(_sessionFactory);
+			return _context.Get() != null;
 		}
 
 		public IDisposable EnsureUnitOfWorkIsStarted()
@@ -61,13 +68,14 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 			var session = _sessionFactory.OpenSession();
 			session.BeginTransaction();
-			CurrentSessionContext.Bind(session);
+			_context.Set(session);
 			return new GenericDisposable(CommitAndDisposeCurrent);
 		}
 
 		public void CancelAndDisposeCurrent()
 		{
-			var session = CurrentSessionContext.Unbind(_sessionFactory);
+			var session = _context.Get();
+			_context.Clear();
 			if (session == null) return;
 			try
 			{
@@ -81,7 +89,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate
 
 		public void CommitAndDisposeCurrent()
 		{
-			var session = CurrentSessionContext.Unbind(_sessionFactory);
+			var session = _context.Get();
+			_context.Clear();
 			if (session == null) return;
 			try
 			{

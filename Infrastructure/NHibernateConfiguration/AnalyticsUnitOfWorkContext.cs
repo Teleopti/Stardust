@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
 	public class AnalyticsUnitOfWorkContext
 	{
-		private const string itemsKey = "AnalyticsUnitOfWork";
+		private const string itemsKey = "AnalyticsUnitOfWorkContext";
 		private static readonly ThreadLocal<Hashtable> threadSessions = new ThreadLocal<Hashtable>(() => new Hashtable());
 		private readonly string _tenant;
 
