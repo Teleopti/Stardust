@@ -13,7 +13,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	public class PersonPeriodAnalyticsUpdater :
 		IHandleEvent<PersonCollectionChangedEvent>,
 		IHandleEvent<PersonDeletedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(PersonPeriodAnalyticsUpdater));
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;

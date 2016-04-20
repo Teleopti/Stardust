@@ -81,7 +81,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IHandleEvent<TestEvent>, 
 			IHandleEvent<TestEventTwo>, 
 			IHandleEvent<TestDomainEvent>,
+#pragma warning disable 618
 			IRunOnServiceBus
+#pragma warning restore 618
 		{
 			public Event CalledWithEvent;
 			public Event CalledWithEventTwo;

@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 	[UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class GroupingReadModelDataUpdaterServiceBus :
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 

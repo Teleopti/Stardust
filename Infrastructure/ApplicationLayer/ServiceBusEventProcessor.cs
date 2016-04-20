@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+#pragma warning disable 618
 				foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
+#pragma warning restore 618
 					_processor.Process(@event, handler);
 				unitOfWork.PersistAll(InitiatorIdentifier.FromMessage(@event));
 			}

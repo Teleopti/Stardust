@@ -9,7 +9,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	[UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class AnalyticsPersonPeriodSkillsUpdater :
 		IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(PersonPeriodAnalyticsUpdater));
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;

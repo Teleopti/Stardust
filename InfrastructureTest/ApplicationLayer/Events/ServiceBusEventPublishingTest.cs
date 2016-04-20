@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Bus.SentMessages.Single().Should().Be(@event);
 		}
 
+#pragma warning disable 618
 		public class EventHandler : IHandleEvent<Event>, IRunOnServiceBus
+#pragma warning restore 618
 		{
 			public void Handle(Event @event)
 			{

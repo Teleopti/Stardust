@@ -19,7 +19,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Publish(params IEvent[] events)
 		{
+#pragma warning disable 618
 			events.Where(e => _resolver.HandlerTypesFor<IRunOnServiceBus>(e).Any())
+#pragma warning restore 618
 				.Batch(100)
 				.ForEach(b =>
 					_sender.Send(true, b.ToArray())

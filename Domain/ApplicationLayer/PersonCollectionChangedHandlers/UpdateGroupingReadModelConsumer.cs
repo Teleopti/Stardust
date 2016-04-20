@@ -5,7 +5,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	public class UpdateGroupingReadModelConsumer :
 		IHandleEvent<PersonCollectionChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 

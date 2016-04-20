@@ -55,7 +55,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					if (hasHandleInterfaces)
 					{
 						var runOnHangfire = typeof (IRunOnHangfire).IsAssignableFrom(t);
+#pragma warning disable 618
 						var runOnServiceBus = typeof (IRunOnServiceBus).IsAssignableFrom(t);
+#pragma warning restore 618
 						var runOnStardust = typeof (IRunOnStardust).IsAssignableFrom(t);
 						var runInProcess = typeof (IRunInProcess).IsAssignableFrom(t);
 						if (!(runOnHangfire ^ runOnServiceBus ^ runOnStardust ^ runInProcess))

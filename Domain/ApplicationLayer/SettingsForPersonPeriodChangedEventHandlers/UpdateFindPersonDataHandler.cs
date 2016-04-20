@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 	}
 
 	[UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+#pragma warning disable 618
 	public class UpdateFindPersonDataHandlerServiceBus : IHandleEvent<SettingsForPersonPeriodChangedEvent>, IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
 

@@ -111,7 +111,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		public class BusEventHandler :
+#pragma warning disable 618
 			IRunOnServiceBus,
+#pragma warning restore 618
 			IHandleEvent<EventWithBusHandler>,
 			IHandleEvent<EventWithBothHandlers>
 		{

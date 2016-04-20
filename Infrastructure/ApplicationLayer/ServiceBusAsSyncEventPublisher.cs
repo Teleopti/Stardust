@@ -20,7 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public void Publish(params IEvent[] events)
 		{
 			foreach (var @event in events)
+#pragma warning disable 618
 				foreach (var handlerType in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
+#pragma warning restore 618
 					_processor.Process(@event, handlerType);
 		}
 	}

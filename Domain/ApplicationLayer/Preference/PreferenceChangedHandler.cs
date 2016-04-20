@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
 	public class PreferenceChangedHandler :
 		IHandleEvent<PreferenceChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
 

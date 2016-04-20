@@ -56,7 +56,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			}
 			
 
+#pragma warning disable 618
 			events.Where(e => _resolver.HandlerTypesFor<IRunOnServiceBus>(e).Any())
+#pragma warning restore 618
 				.ForEach(@event =>
 				{
 					Exception exception = null;

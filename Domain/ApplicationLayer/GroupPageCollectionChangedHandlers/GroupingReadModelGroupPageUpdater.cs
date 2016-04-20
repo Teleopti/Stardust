@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 	[UseNotOnToggle(Toggles.GroupPageCollection_ToHangfire_38178)]
 	public class GroupingReadModelGroupPageUpdaterServicebus :
 		IHandleEvent<GroupPageCollectionChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 

@@ -226,7 +226,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 	}
 
 	[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+#pragma warning disable 618
 	public class ImportForecastsFileToSkillBus : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkill>, IRunOnServiceBus
+#pragma warning restore 618
 	{
 		public ImportForecastsFileToSkillBus(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			ISkillRepository skillRepository,

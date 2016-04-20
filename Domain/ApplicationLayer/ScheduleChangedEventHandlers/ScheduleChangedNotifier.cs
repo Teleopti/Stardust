@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public class ScheduleChangedNotifier : 
 		IHandleEvent<ScheduleChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IMessageCreator _broker;
 

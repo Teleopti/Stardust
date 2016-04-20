@@ -15,7 +15,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		UseNotOnToggle(Toggles.GroupPageCollection_ToHangfire_38178)]
 	public class GroupPageAnalyticsUpdaterOnServicebus : GroupPageAnalyticsUpdaterBase,
 	IHandleEvent<GroupPageCollectionChangedEvent>,
+#pragma warning disable 618
 	IRunOnServiceBus
+#pragma warning restore 618
 	{
 		public GroupPageAnalyticsUpdaterOnServicebus(IGroupPageRepository groupPageRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, 
 			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) : base(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository)

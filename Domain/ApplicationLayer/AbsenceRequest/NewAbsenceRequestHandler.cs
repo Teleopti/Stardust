@@ -162,7 +162,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 	}
 
 	[UseNotOnToggle(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
+#pragma warning disable 618
 	public class NewAbsenceRequestHandlerBus : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnServiceBus
+#pragma warning restore 618
 	{
 		public NewAbsenceRequestHandlerBus(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
 			IPersonRequestRepository personRequestRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor,

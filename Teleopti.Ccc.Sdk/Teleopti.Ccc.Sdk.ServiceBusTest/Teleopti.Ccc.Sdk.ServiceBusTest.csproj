@@ -155,6 +155,7 @@
     <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
     <Compile Include="NewAbsenceReportConsumerNoMocksTest.cs" />
     <Compile Include="NewAbsenceReportConsumerTest.cs" />
+    <Compile Include="NoNewConsumersTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />

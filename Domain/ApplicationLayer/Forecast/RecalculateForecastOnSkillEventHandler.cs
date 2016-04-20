@@ -11,7 +11,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
     [UseNotOnToggle(Toggles.Wfm_RecalculateForecastOnHangfire_37971)]
+#pragma warning disable 618
     public class RecalculateForecastOnSkillEventHandlerOnServiceBus : RecalculateForecastOnSkillEventHandlerBase, IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnServiceBus
+#pragma warning restore 618
     {
         public RecalculateForecastOnSkillEventHandlerOnServiceBus(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository, 
                                                                 ISkillRepository skillRepository,  IStatisticLoader statisticLoader, 

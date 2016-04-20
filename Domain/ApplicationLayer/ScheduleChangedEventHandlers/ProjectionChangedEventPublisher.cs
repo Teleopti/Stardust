@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IEventPublisher _publisher;
 	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ProjectionChangedEventPublisher));

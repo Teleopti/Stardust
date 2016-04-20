@@ -7,7 +7,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
+#pragma warning disable 618
 	public class ServiceBusHealthCheckEventHandler : IHandleEvent<ServiceBusHealthCheckEvent>, IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IMessageBrokerComposite _sender;
 		private readonly IDeviceInfoProvider _deviceInfo;

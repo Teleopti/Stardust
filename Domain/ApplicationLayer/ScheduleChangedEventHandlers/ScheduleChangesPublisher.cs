@@ -10,7 +10,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
+#pragma warning disable 618
 	public class ScheduleChangesPublisher : IHandleEvent<ProjectionChangedEvent>, IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IHttpServer _server;
 		private readonly INow _now;

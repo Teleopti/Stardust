@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 	 UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class BuildInGroupsAnalyticsUpdaterServiceBus : BuildInGroupsAnalyticsUpdaterBase,
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		public BuildInGroupsAnalyticsUpdaterServiceBus(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository,
 													   IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository,

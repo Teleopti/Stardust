@@ -45,7 +45,9 @@ namespace Teleopti.Ccc.TestCommon
 				}
 				else
 				{
+#pragma warning disable 618
 					var handlerTypes = _resolver.HandlerTypesFor<IRunOnServiceBus>(@event)
+#pragma warning restore 618
 						.Concat(_resolver.HandlerTypesFor<IRunOnHangfire>(@event))
 						.Concat(_resolver.HandlerTypesFor<IRunOnStardust>(@event))
 						.Concat(_resolver.HandlerTypesFor<IRunInProcess>(@event));

@@ -7,7 +7,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	public class UpdateSkillAnalyticsHandler :
 		IHandleEvent<SkillChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;

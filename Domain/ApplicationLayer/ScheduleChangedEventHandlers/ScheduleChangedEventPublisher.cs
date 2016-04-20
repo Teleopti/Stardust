@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<DayOffAddedEvent>,
 		IHandleEvent<DayUnscheduledEvent>,
 		IHandleEvent<PersonAssignmentLayerRemovedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IEventPublisher _publisher;
 

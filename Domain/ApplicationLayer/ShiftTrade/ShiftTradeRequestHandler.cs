@@ -18,7 +18,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 {
+#pragma warning disable 618
 	public class ShiftTradeRequestHandler : IHandleEvent<NewShiftTradeRequestCreatedEvent> , IHandleEvent<AcceptShiftTradeEvent>, IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestHandler));
 

@@ -13,7 +13,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	[UseOnToggle(Toggles.ETL_SpeedUpETL_30791)]
 	public class AnalyticsScheduleChangeUpdater :
 		IHandleEvent<ProjectionChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly static ILog Logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
 		private readonly IAnalyticsFactScheduleHandler _factScheduleHandler;

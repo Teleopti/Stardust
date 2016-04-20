@@ -25,7 +25,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			allEvents().ForEach(x =>
 			{
+#pragma warning disable 618
 				Resolver.HandlerTypesFor<IRunOnServiceBus>(x);
+#pragma warning restore 618
 				Resolver.HandlerTypesFor<IRunOnHangfire>(x);
 				Resolver.HandlerTypesFor<IRunOnStardust>(x);
 			});
@@ -37,7 +39,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			allEvents().ForEach(x =>
 			{
+#pragma warning disable 618
 				Resolver.HandlerTypesFor<IRunOnServiceBus>(x);
+#pragma warning restore 618
 				Resolver.HandlerTypesFor<IRunOnHangfire>(x);
 				Resolver.HandlerTypesFor<IRunOnStardust>(x);
 			});
@@ -48,7 +52,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			allEvents().ForEach(x =>
 			{
+#pragma warning disable 618
 				var handlerTypes = Resolver.HandlerTypesFor<IRunOnServiceBus>(x)
+#pragma warning restore 618
 					.Concat(Resolver.HandlerTypesFor<IRunOnHangfire>(x))
 					.Concat(Resolver.HandlerTypesFor<IRunOnStardust>(x))
 					.Concat(Resolver.HandlerTypesFor<IRunInProcess>(x))
@@ -70,7 +76,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				.Where(e => !(e is ILogOnContext));
 			eventsWithoutLogOnContext.ForEach(x =>
 			{
+#pragma warning disable 618
 				Resolver.HandlerTypesFor<IRunOnServiceBus>(x)
+#pragma warning restore 618
 					.Should().Be.Empty();
 			});
 		}
@@ -83,7 +91,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				.Where(e => !(e is ILogOnContext));
 			eventsWithoutLogOnContext.ForEach(x =>
 			{
+#pragma warning disable 618
 				Resolver.HandlerTypesFor<IRunOnServiceBus>(x)
+#pragma warning restore 618
 					.Should().Be.Empty();
 			});
 		}

@@ -8,7 +8,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 {
 	public class ShiftExchangeOfferHandler : 
 		IHandleEvent<ProjectionChangedEvent>,
+#pragma warning disable 618
 		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
