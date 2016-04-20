@@ -307,15 +307,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_filterOnHourlyAvailability = false;	
 		}
 
-		public void FilterPersons(IList<ITeam> selectedTeams)
-		{
-			List<IPerson> list = new List<IPerson>(AllPermittedPersons).FindAll(
-				new PersonBelongsToTeamSpecification(RequestedPeriod.DateOnlyPeriod, selectedTeams).IsSatisfiedBy);
-            _filteredAgents =
-				(from p in list orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
-
-		}
-
 		public void FilterPersons(IList<IPerson> selectedPersons)
 		{
 			_filteredAgents =

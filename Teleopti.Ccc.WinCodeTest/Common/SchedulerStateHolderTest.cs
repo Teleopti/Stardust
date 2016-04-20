@@ -393,12 +393,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(0, target.DaysToRecalculate.Count());
         }
 
-        
-        [Test]
-        public void CanFilterPersons()
-        {
-            target.FilterPersons(new List<ITeam>());
-        }
         [Test]
         public void CanFilterPersonsOnPerson()
         {
