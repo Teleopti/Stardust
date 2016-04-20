@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 		public AbsenceReportViewModel Persist(AbsenceReportInput input)
 		{
-			var message = new NewAbsenceReportCreated
+			var message = new NewAbsenceReportCreatedEvent
 			{
 				LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
 				LogOnDatasource = _currentDataSource.Current().DataSourceName,

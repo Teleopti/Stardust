@@ -2,6 +2,8 @@
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
@@ -12,13 +14,11 @@ using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceReport;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 	[TestFixture]
 	class NewAbsenceReportConsumerNoMocksTest
 	{
-		readonly FakeCurrentUnitOfWorkFactory _unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
 		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
 		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
 		private FakeScheduleDataReadScheduleStorage _scheduleRepository;
@@ -44,10 +43,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_scheduleProjectionReadOnlyRepository = new FakeScheduleProjectionReadOnlyRepository();
 			_scheduleProjectionReadModel = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), _scheduleProjectionReadOnlyRepository);
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation( _personAbsenceAccountRepository, _scheduleRepository);
+			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);
 			_personRepository = new FakePersonRepository();
 		}
-		
+
 		[Test]
 		public void VerifyAbsenceIsCreatedForAbsenceReport()
 		{
@@ -60,18 +59,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			var absenceReportConsumer = setupAbsenceReportConsumer();
 
-			var absenceReport = new NewAbsenceReportCreated()
+			var absenceReport = new NewAbsenceReportCreatedEvent()
 			{
 				RequestedDate = startDate,
 				PersonId = person.Id.GetValueOrDefault(),
 				AbsenceId = absence.Id.GetValueOrDefault()
 			};
 
-			absenceReportConsumer.Consume(absenceReport);
+			absenceReportConsumer.Handle(absenceReport);
 
-			var scheduleLoadOptions = new ScheduleDictionaryLoadOptions (false, false);
-			var schedules = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod (person, scheduleLoadOptions, new DateTimePeriod (startDate, startDate.AddDays (1)), _currentScenario.Current());
-			var scheduleDay = schedules.SchedulesForDay (new DateOnly (startDate)).FirstOrDefault();
+			var scheduleLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
+			var schedules = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, scheduleLoadOptions, new DateTimePeriod(startDate, startDate.AddDays(1)), _currentScenario.Current());
+			var scheduleDay = schedules.SchedulesForDay(new DateOnly(startDate)).FirstOrDefault();
 			var personAbsence = scheduleDay.PersonAbsenceCollection().SingleOrDefault(abs => abs.Layer.Payload == absence && abs.Person == person);
 
 			Assert.IsNotNull(personAbsence);
@@ -82,14 +81,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		public void VerifyPersonAccountIsUpdated()
 		{
 			var absence = AbsenceFactory.CreateAbsenceWithId();
-			
+
 			var startDate = new DateTime(2016, 02, 17, 0, 0, 0, DateTimeKind.Utc);
 			var endDate = new DateTime(2016, 02, 19, 23, 59, 0, DateTimeKind.Utc);
 
 			var person = setupPerson(startDate, endDate, absence);
 			var absenceReportConsumer = setupAbsenceReportConsumer();
 
-			var absenceReport = new NewAbsenceReportCreated()
+			var absenceReport = new NewAbsenceReportCreatedEvent()
 			{
 				RequestedDate = startDate,
 				PersonId = person.Id.GetValueOrDefault(),
@@ -105,37 +104,38 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			createPersonAbsenceAccount(person, absence, accountDay);
 
-			absenceReportConsumer.Consume(absenceReport);
+			absenceReportConsumer.Handle(absenceReport);
 
 			Assert.AreEqual(24, accountDay.Remaining.TotalDays);
 		}
 
-		private NewAbsenceReportConsumer setupAbsenceReportConsumer()
+		private NewAbsenceReportBase setupAbsenceReportConsumer()
 		{
 			var requestFactory =
-				new RequestFactory (new SwapAndModifyService (new SwapService(), new DoNothingScheduleDayChangeCallBack()),
-					new PersonRequestAuthorizationCheckerForTest(),  new FakeGlobalSettingDataRepository());
+				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
+					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository());
 
-			var scheduleDictionarySaver = new FakeScheduleDifferenceSaver (_scheduleRepository);
+			var scheduleDictionarySaver = new FakeScheduleDifferenceSaver(_scheduleRepository);
 
-			var businessRules = new BusinessRulesForPersonalAccountUpdate (_personAbsenceAccountRepository,
+			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository,
 				_schedulingResultStateHolder);
 
-			var absenceReportConsumer = new NewAbsenceReportConsumer (_unitOfWorkFactory, _currentScenario,
+			var absenceReportConsumer = new NewAbsenceReportBase( _currentScenario,
 				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), requestFactory, scheduleDictionarySaver, _scheduleProjectionReadModel,
 				_loadSchedulesForRequestWithoutResourceCalculation, _personRepository, businessRules);
 			return absenceReportConsumer;
 		}
 
-		private IPerson setupPerson (DateTime startDate, DateTime endDate, IAbsence absence)
+		private IPerson setupPerson(DateTime startDate, DateTime endDate, IAbsence absence)
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			_personRepository.Add (person);
+			_personRepository.Add(person);
 
-			person.WorkflowControlSet = createWorkFlowControlSet (startDate, endDate, absence);
 
-			var assignmentOne = createAssignment (person, startDate, startDate.AddHours (8), _currentScenario);
-			_scheduleRepository.Set (new IScheduleData[] {assignmentOne});
+			person.WorkflowControlSet = createWorkFlowControlSet(startDate, endDate, absence);
+
+			var assignmentOne = createAssignment(person, startDate, startDate.AddHours(8), _currentScenario);
+			_scheduleRepository.Set(new IScheduleData[] { assignmentOne });
 			return person;
 		}
 

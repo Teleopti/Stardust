@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
@@ -21,13 +22,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 			var currUow = MockRepository.GenerateMock<IUnitOfWork>();
 			currentUnitOfWork.Expect(c => c.Current()).Return(currUow);
 
-			NewAbsenceReportCreated message;
+			NewAbsenceReportCreatedEvent message;
 			var serviceBusSender = mockPersistAbsenceReport(currentUnitOfWork, out message);
 
 			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.Send(message, false)));
 		}
 
-		private static IMessagePopulatingServiceBusSender mockPersistAbsenceReport(ICurrentUnitOfWork currentUnitOfWork, out NewAbsenceReportCreated message)
+		private static IMessagePopulatingServiceBusSender mockPersistAbsenceReport(ICurrentUnitOfWork currentUnitOfWork, out NewAbsenceReportCreatedEvent message)
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IMessagePopulatingServiceBusSender>();
 			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(u => u.CurrentUser().Id).Return(Guid.NewGuid());
-			message = new NewAbsenceReportCreated
+			message = new NewAbsenceReportCreatedEvent
 			{
 				LogOnBusinessUnitId = buId,
 				LogOnDatasource = datasource.DataSourceName,

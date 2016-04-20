@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -11,19 +13,16 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Sdk.ServiceBus.AbsenceReport;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest
 {
 	[TestFixture]
 	public class NewAbsenceReportConsumerTest
 	{
-		private NewAbsenceReportConsumer _target;
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private NewAbsenceReportBase _target;
 		private IUnitOfWork _unitOfWork;
 		private IPerson _person;
 		private readonly IScenario _scenario = new Scenario("Test");
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			Tracker = Tracker.CreateDayTracker()
 		};
 
-		private NewAbsenceReportCreated _message;
+		private NewAbsenceReportCreatedEvent _message;
 		private readonly DateTimePeriod _period = new DateTimePeriod(2010, 3, 30, 2010, 3, 31);
 		private IWorkflowControlSet _workflowControlSet;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			createRepositories();
 
 			_absence.SetId(Guid.NewGuid());
-			_message = new NewAbsenceReportCreated
+			_message = new NewAbsenceReportCreatedEvent
 			{
 				AbsenceId = (Guid) _absence.Id,
 				RequestedDate = new DateTime(2010, 3, 30),
@@ -73,10 +72,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_updateScheduleProjectionReadModel = MockRepository.GenerateMock<IUpdateScheduleProjectionReadModel>();
 
-			_target = new NewAbsenceReportConsumer(_unitOfWorkFactory, _scenarioRepository,
+			_target = new NewAbsenceReportBase( _scenarioRepository,
 				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), _factory, _scheduleDictionarySaver, _updateScheduleProjectionReadModel,
 				_loaderWithoutResourceCalculation, _personRepository, businessRules);
-			prepareUnitOfWork();
 		}
 
 		[Test]
@@ -89,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
 
-			_target.Consume(_message);
+			_target.Handle(_message);
 
 
 			var expectedPeriod = getExpectedPeriod().ChangeStartTime(TimeSpan.FromDays(-1));
@@ -114,8 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			expectLoadOfSchedules();
 			expectPersistOfDictionary();
 
-			_target.Consume(_message);
-			_unitOfWork.AssertWasCalled(x => x.PersistAll());
+			_target.Handle(_message);
 			_updateScheduleProjectionReadModel.AssertWasCalled(x => x.Execute(_scheduleRange, dateOnlyPeriod));
 		}
 
@@ -124,13 +121,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			prepareAbsenceReport();
 
-			var message = new NewAbsenceReportCreated
+			var message = new NewAbsenceReportCreatedEvent
 			{
 				AbsenceId = Guid.NewGuid(),
 				RequestedDate = _message.RequestedDate,
 				PersonId = _message.PersonId
 			};
-			_target.Consume(message);
+			_target.Handle(message);
 			_unitOfWork.AssertWasNotCalled(x => x.PersistAll());
 		}
 
@@ -142,13 +139,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_personRepository.Stub(x => x.FindPeople(new List<Guid>())).IgnoreArguments().Return(new List<IPerson> {_person});
 		}
 
-		private void prepareUnitOfWork()
-		{
-			var currentUowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			currentUowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
-			_unitOfWorkFactory.Stub(x => x.Current()).Return(currentUowFactory);
-		}
-
 		private void createServices()
 		{
 			_requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
@@ -156,7 +146,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 		private void createInfrastructure()
 		{
-			_unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			_unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			_factory = MockRepository.GenerateMock<IRequestFactory>();
 		}

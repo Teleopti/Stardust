@@ -108,6 +108,7 @@
 		ETL_SpeedUpNightlyReloadDatamart_38131,
 		ETL_SpeedUpIntradayPreference_37124,
 		ETL_SpeedUpIntradaySkill_37543,
+		Wfm_MoveNewAbsenceReportOnHangfire_38203,
 		ETL_SpeedUpNightlySkill_37543,
 		ShiftTrade_ToHangfire_38181,
 		GroupPageCollection_ToHangfire_38178,

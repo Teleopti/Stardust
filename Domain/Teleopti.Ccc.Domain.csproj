@@ -178,6 +178,7 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IErrorAttachedCommand.cs" />
@@ -192,6 +193,7 @@
     <Compile Include="ApplicationLayer\Events\AcceptShiftTradeEvent.cs" />
     <Compile Include="ApplicationLayer\Events\AnalyticsPersonPeriodSkillsChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\NewShiftTradeRequestCreatedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\NewAbsenceReportCreatedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PreferenceChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAssignmentLayerRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\NewAbsenceRequestCreatedEvent.cs" />

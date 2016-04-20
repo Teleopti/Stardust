@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 		ConsumerOf<PersonPeriodChangedMessage>,
 		ConsumerOf<PersonChangedMessage>, 
 		ConsumerOf<NewShiftTradeRequestCreated>,
+		ConsumerOf<PersonChangedMessage>,
+		ConsumerOf<NewAbsenceReportCreated>,
 		ConsumerOf<AcceptShiftTrade>
 	{
 		private readonly IServiceBus _bus;
@@ -105,6 +107,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 			});
 		}
 
+			});
+		}
+
 		public void Consume(NewShiftTradeRequestCreated message)
 		{
 			_publisher.Publish(new NewShiftTradeRequestCreatedEvent
@@ -130,5 +135,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				Message = message.Message
 			});
 		}
+		
+		public void Consume(NewAbsenceReportCreated message)
+		{
+			_publisher.Publish(new NewAbsenceReportCreatedEvent
+			{
+				AbsenceId = message.AbsenceId,
+				InitiatorId = message.InitiatorId,
+				JobName = "Absence Report",
+				LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+				LogOnDatasource = message.LogOnDatasource,
+				PersonId = message.PersonId,
+				RequestedDate = message.RequestedDate,
+				Timestamp = message.Timestamp,
+				UserName = message.InitiatorId.ToString()
+			}
+		}
+
 	}
 }
