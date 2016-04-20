@@ -30,11 +30,18 @@
 			};
 
 			$scope.format = intradayService.formatDateTime;
-			$scope.$on('$stateChangeSuccess', function (evt, to, params, from) {
-				if (params.isNewSkillArea == true) {
-					reloadSkillAreas(params.isNewSkillArea);
-				}
-			});
+
+			$scope.onStateChanged = function (evt, to, params, from) {
+				if (to.name !== 'intraday')
+					return;
+
+				if (params.isNewSkillArea === true)
+					reloadSkillAreas(true);
+				else
+					reloadSkillAreas(false);
+			};
+
+			$scope.$on('$stateChangeSuccess', $scope.onStateChanged);
 
 			var reloadSkillAreas = function(isNew) {
 				intradayService.getSkillAreas.query()
@@ -67,7 +74,6 @@
 					});
 				});
 			};
-			reloadSkillAreas();
 
 			$scope.configMode = function () {
 				$state.go('intraday.config', { isNewSkillArea: false });
@@ -95,7 +101,7 @@
 
 				var notifySkillAreaDeletion = function () {
 					var message = $translate.instant('Deleted');
-+					NoticeService.success(message, 5000, true);
+					NoticeService.success(message, 5000, true);
 				};
 
 				$scope.querySearch = function (query, myArray) {
@@ -112,9 +118,7 @@
 				};
 
 				$scope.selectedSkillChange = function (item) {
-					if (this.selectedSkill) {
-						$scope.skillSelected(item);
-					}
+					$scope.skillSelected(item);
 					$scope.hiddenArray = [];
 				};
 
@@ -163,6 +167,10 @@
 
 				var pollSkillMonitorData = function () {
 					cancelTimeout();
+					if (!$scope.selectedItem) {
+						$scope.HasMonitorData = false;
+						return;
+					}
 					intradayService.getSkillMonitorData.query(
 						{
 							id: $scope.selectedItem.Id
@@ -180,9 +188,7 @@
 					};
 
 					$scope.selectedSkillAreaChange = function(item) {
-						if (this.selectedSkillArea) {
-							$scope.skillAreaSelected(item);
-						}
+						$scope.skillAreaSelected(item);
 						$scope.hiddenArray = [];
 					};
 
@@ -194,6 +200,10 @@
 
 					var pollSkillAreaMonitorData = function () {
 						cancelTimeout();
+						if (!$scope.selectedItem) {
+							$scope.HasMonitorData = false;
+							return;
+						}
 						intradayService.getSkillAreaMonitorData.query(
 							{
 								id: $scope.selectedItem.Id
