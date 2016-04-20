@@ -765,12 +765,6 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyToLocalString()
-        {
-            Assert.AreEqual(_period.LocalStartDateTime + " - " + _period.LocalEndDateTime, _period.ToLocalString());
-        }
-
-        [Test]
         public void VerifyLocalDateString()
         {
             Assert.AreEqual(_period.LocalStartDateTime.ToShortDateString() + " - " + _period.LocalEndDateTime.AddDays(-1).ToShortDateString(), _period.LocalDateString);

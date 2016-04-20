@@ -556,19 +556,6 @@ namespace Teleopti.Interfaces.Domain
         }
 
         /// <summary>
-        /// Toes the local string.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2008-03-06
-        /// </remarks>
-        public string ToLocalString()
-        {
-            return LocalStartDateTime + DATETIME_SEPARATOR + LocalEndDateTime;
-        }
-
-        /// <summary>
         /// Converts to DateOnlyPeriod using the timezone sent as parameter.
         /// </summary>
         /// <param name="info">The time zone info.</param>
