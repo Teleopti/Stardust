@@ -52,8 +52,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), "TestData");
 
-			container.Resolve<IHangfireClientStarter>().Start();
-
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
 			ApplicationData = new ApplicationData(appSettings, null);
