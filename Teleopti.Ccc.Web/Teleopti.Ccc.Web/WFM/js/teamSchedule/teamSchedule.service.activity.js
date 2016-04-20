@@ -29,6 +29,16 @@
 		function normalizeActivity(activity) {
 			return activity;
 		}
+
+		this.removeActivity = function(params) {
+			var deffered = $q.defer();
+			$http.post('../api/TeamScheduleCommand/RemoveActivity', params).then(function(result) {
+				deferred.resolve(result);
+			}, function(error) {
+				deffered.reject(error);
+			});
+			return deffered.promise;
+		}
 	}
 
 })();

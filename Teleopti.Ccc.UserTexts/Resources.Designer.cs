@@ -2746,6 +2746,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to remove {0} activities from {1} agents?	.
+        /// </summary>
+        public static string AreYouSureToRemoveSelectedActivity {
+            get {
+                return ResourceManager.GetString("AreYouSureToRemoveSelectedActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete?.
         /// </summary>
         public static string AreYouSureYouWantToDelete {

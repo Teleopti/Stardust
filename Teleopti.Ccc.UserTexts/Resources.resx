@@ -14302,4 +14302,8 @@ Help us improve your experience by sending an error report</value>
     <value>Toggle included skills</value>
     <comment>label for toggeling visibility of included skills</comment>
   </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Are you sure you wish to remove {0} activities from {1} agents?	</value>
+    <comment>Message to confirm activities to be removed</comment>
+  </data>
 </root>

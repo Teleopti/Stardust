@@ -3,10 +3,10 @@
 (function () {
 	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$q', '$translate', 'TeamSchedule',
 		'GroupScheduleFactory', 'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts',
-		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', TeamScheduleController]);
+		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', 'ActivityService', 'guidgenerator', TeamScheduleController]);
 
 	function TeamScheduleController($q, $translate, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
-		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc) {
+		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc, ActivityService, guidgenerator) {
 		
 		var vm = this;
 
@@ -219,10 +219,27 @@
 		vm.confirmRemoveAbsence = CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
 			'RemoveAbsence', removeAbsence, null, vm.scheduleDate, getRemoveAbsenceMessage);
 		
+		function removeActivity() {
+			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
+			var personActivities = [];
+			var trackId = guidgenerator.newGuid();
+			angular.forEach(selectedPersonProjections, function(personProjection) {
+				personActivities.push({
+					PersonId: personProjection.personId,
+					ShiftLayerIds: personProjection.selectedActivities
+				});
+			});
+			ActivityService.removeActivity({ Date: vm.scheduleDateMoment(), PersonActivities: personActivities, TrackedCommandInfo: { TrackId: trackId } }).then(function(result) {
 
-		vm.removeActivity = function() {
-			//do something
+			});
 		};
+		function getRemoveActivityMessage() {
+			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedActivity"),
+			[vm.getTotalSelectedPersonAndProjectionCount().ActivityCount, vm.getTotalSelectedPersonAndProjectionCount().PersonCount]);
+		};
+		vm.confirmRemoveActivity = CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
+			'RemoveActivity', removeActivity, null, vm.scheduleDate, getRemoveActivityMessage);
+		
 
 		vm.selectedPersonInfo = function() {
 			return personSelectionSvc.personInfo;
