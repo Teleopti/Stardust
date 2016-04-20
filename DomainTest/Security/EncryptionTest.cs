@@ -52,18 +52,6 @@ namespace Teleopti.Ccc.DomainTest.Security
         }
 
         [Test]
-        public void VerifyBase64DecryptionOfList()
-        {
-            // Encrypt the string to an array of bytes.
-            string encrypted = Encryption.EncryptStringToBase64(_original, _myRijndael.Key, _myRijndael.IV);
-
-            // Decrypt the bytes to a string.
-            string roundtrip = new List<string>{encrypted}.DecryptList(_myRijndael.Key, _myRijndael.IV).First();
-
-            Assert.AreEqual(_original, roundtrip);
-        }
-
-        [Test]
         public void VerifyBase64DecryptionOfDictionary()
         {
             // Encrypt the string to an array of bytes.

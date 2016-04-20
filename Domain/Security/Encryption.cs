@@ -175,14 +175,6 @@ namespace Teleopti.Ccc.Domain.Security
             return DecryptStringFromBytes(Convert.FromBase64String(cipherTextInBase64), key, iv);
         }
 
-        public static IEnumerable<string> DecryptList(this IEnumerable<string> encryptedList,byte[] key, byte[] iv)
-        {
-            foreach (var encryptedText in encryptedList)
-            {
-                yield return DecryptStringFromBase64(encryptedText, key, iv);
-            }
-        }
-
         public static IDictionary<TKey, string> DecryptDictionary<TKey>(this IDictionary<TKey,string> encryptedDictionary, byte[] key, byte[] iv)
         {
 	        var ret = new Dictionary<TKey, string>(encryptedDictionary.Count);
