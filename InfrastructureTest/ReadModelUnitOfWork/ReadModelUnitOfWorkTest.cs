@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 		public virtual void Does(Action<ILiteUnitOfWork> action)
 		{
-			using (_dataSource.OnThisThreadUse("App"))
+			using (_dataSource.OnThisThreadUse(SetupFixtureForAssembly.DataSource.DataSourceName))
 				DoesWithoutDatasource(action);
 		}
 
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 
 		public virtual void CallNestedServices()
 		{
-			using (_dataSource.OnThisThreadUse("App"))
+			using (_dataSource.OnThisThreadUse(SetupFixtureForAssembly.DataSource.DataSourceName))
 				CallNestedServicesWithoutDatasource();
 		}
 

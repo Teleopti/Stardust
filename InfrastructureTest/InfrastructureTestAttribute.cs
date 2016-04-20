@@ -78,8 +78,12 @@ namespace Teleopti.Ccc.InfrastructureTest
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
-
-			DataSourceForTenant.MakeSureDataSourceCreated("App", InfraTestConfigReader.ConnectionString, null, null);
+			
+			DataSourceForTenant.MakeSureDataSourceCreated(
+				SetupFixtureForAssembly.DataSource.DataSourceName,
+				InfraTestConfigReader.ConnectionString,
+				InfraTestConfigReader.AnalyticsConnectionString,
+				null);
 
 			MessageSender.AllNotifications.Clear();
 			TransactionHook.Clear();

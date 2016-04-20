@@ -50,7 +50,9 @@ namespace Teleopti.Ccc.InfrastructureTest
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
 				 name => appSettings.Add(name, ConfigurationManager.AppSettings[name]));
 
-			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), null);
+			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), "TestData");
+
+			container.Resolve<IHangfireClientStarter>().Start();
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(null);
 			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, DataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
 
-			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState{ApplicationScopeData = ApplicationData});
+			StateHolderProxyHelper.ClearAndSetStateHolder(new FakeState {ApplicationScopeData = ApplicationData});
 
 			persistLoggedOnPerson();
 			persistBusinessUnit();
