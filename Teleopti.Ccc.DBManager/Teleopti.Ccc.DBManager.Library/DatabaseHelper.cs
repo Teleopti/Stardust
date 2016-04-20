@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DBManager.Library
 		public LoginHelper LoginTasks()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder(DbManagerFolderPath));
-			var loginHandler = new LoginHelper(Logger, _usingMaster, _usingDatabase, databaseFolder);
+			var loginHandler = new LoginHelper(Logger, _usingMaster, databaseFolder);
 			loginHandler.EnablePolicyCheck();
 			return loginHandler;
 		}

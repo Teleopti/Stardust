@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DBManager.Library
 					var executeSql = new ExecuteSql(() => connectAndOpen(commandLineArgument.ConnectionString), _logger);
 					if (commandLineArgument.PermissionMode && safeMode && isSrvSecurityAdmin)
 					{
-						var loginHelper = new LoginHelper(_logger, masterExecuteSql, executeSql, databaseFolder);
+						var loginHelper = new LoginHelper(_logger, masterExecuteSql, databaseFolder);
 						loginHelper.CreateLogin(commandLineArgument.appUserName, commandLineArgument.appUserPwd, commandLineArgument.isWindowsGroupName, sqlVersion);
 					}
 

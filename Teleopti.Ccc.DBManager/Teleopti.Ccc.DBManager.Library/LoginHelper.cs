@@ -11,15 +11,13 @@ namespace Teleopti.Ccc.DBManager.Library
 	{
 		private readonly IUpgradeLog _logger;
 		private readonly ExecuteSql _masterExecuteSql;
-		private readonly ExecuteSql _executeSql;
 		private readonly DatabaseFolder _databaseFolder;
 		private readonly NameValueCollection _replaceValues = new NameValueCollection();
 
-		public LoginHelper(IUpgradeLog logger, ExecuteSql masterExecuteSql, ExecuteSql executeSql, DatabaseFolder databaseFolder)
+		public LoginHelper(IUpgradeLog logger, ExecuteSql masterExecuteSql, DatabaseFolder databaseFolder)
 		{
 			_logger = logger;
 			_masterExecuteSql = masterExecuteSql;
-			_executeSql = executeSql;
 			_databaseFolder = databaseFolder;
 		}
 
@@ -32,18 +30,6 @@ namespace Teleopti.Ccc.DBManager.Library
 		{
 			const string sql = @"select count(*) from sys.sql_logins where name = @SQLLogin";
 			return Convert.ToBoolean(_masterExecuteSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlLogin } }));
-		}
-
-		private bool azureContainedDatabaseUserExist(string sqlUser)
-		{
-			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND authentication_type=2";
-			return Convert.ToBoolean(_executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlUser } }));
-		}
-
-		private bool azureDatabaseUserExist(string sqlUser)
-		{
-			const string sql = @"select count(*) from sys.database_principals where name=@SQLLogin AND authentication_type=1";
-			return Convert.ToBoolean(_executeSql.ExecuteScalar(sql, parameters: new Dictionary<string, object> { { "@SQLLogin", sqlUser } }));
 		}
 
 		public bool LoginExists(string login, SqlVersion sqlVersion)
