@@ -90,7 +90,7 @@ define([
 			viewModel.Loading(true);
 
 			viewModel.SetViewOptions(options);
-
+			viewModel.WfmTeamSchedule_PrepareForRelease_37752(resources.WfmTeamSchedule_PrepareForRelease_37752);
 
 			var groupPagesDeferred = $.Deferred();
 

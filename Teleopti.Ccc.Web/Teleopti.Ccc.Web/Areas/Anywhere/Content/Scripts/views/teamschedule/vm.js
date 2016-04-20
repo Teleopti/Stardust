@@ -37,6 +37,7 @@ define([
 		this.PreSelectedPersonId = ko.observable(false);
 		this.PreSelectedStartMinute = ko.observable(NaN);
 		this.BusinessUnitId = ko.observable();
+		this.WfmTeamSchedule_PrepareForRelease_37752 = ko.observable();
 
 		this.Persons = ko.observableArray();
 		this.SortedPersons = ko.computed(function() {

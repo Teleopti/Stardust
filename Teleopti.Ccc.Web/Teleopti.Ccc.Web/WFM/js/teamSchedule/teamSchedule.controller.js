@@ -12,9 +12,7 @@
 
 		var message = "MyTeam has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>\
 				Old <a href='../Anywhere#teamschedule'>MyTeam</a> can be accessed for a limited time.";
-
-		NoticeService.info(message, null, true);
-
+	
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
@@ -367,7 +365,8 @@
 				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
 				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
-				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231
+				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
+				PrepareToRelease: toggleSvc.WfmTeamSchedule_PrepareForRelease_37752
 			};
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
@@ -381,6 +380,10 @@
 			vm.permissionsAndTogglesLoaded = true;
 
 			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled || vm.toggles.RemoveActivityEnabled || vm.toggles.RemoveAbsenceEnabled || vm.toggles.SwapShiftEnabled;
+
+			if (vm.toggles.PrepareToRelease) {
+				NoticeService.info(message, null, true);
+			}		
 		};
 		$q.all([
 			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
