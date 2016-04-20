@@ -34,11 +34,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
         INote NoneEntityClone();
-
-        /// <summary>
-        /// Replaces the text in the note.
-        /// </summary>
-        /// <param name="text">The text.</param>
-        void ReplaceText(string text);
     }
 }

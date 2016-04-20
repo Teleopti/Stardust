@@ -190,14 +190,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			Assert.AreEqual(_target.GetScheduleNote(new NoFormatting()), castedNote.GetScheduleNote(new NoFormatting()));
             Assert.AreEqual(_target.NoteDate, castedNote.NoteDate);
         }
-
-        [Test]
-        public void CanReplaceText()
-        {
-            string text = string.Concat(_scheduleNote, " ", "and went home");
-			Assert.AreEqual(_scheduleNote, _target.GetScheduleNote(new NoFormatting()));
-            _target.ReplaceText(text);
-			Assert.AreEqual(text, _target.GetScheduleNote(new NoFormatting()));
-        }
     }
 }
