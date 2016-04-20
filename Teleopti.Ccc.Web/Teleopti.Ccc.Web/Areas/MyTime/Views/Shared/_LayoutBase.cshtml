@@ -23,9 +23,9 @@
 	@Styles.Render(BundleScripts.MyTimeCss)
 	@Scripts.Render(BundleScripts.MyTimeJs)
 
-	<script src="@Url.Content(" ~/Content/jquery-plugin/jquery.placeholder.js")"></script>
+	<script src="@Url.Content("/Content/jquery-plugin/jquery.placeholder.js")"></script>
 	<!--[if lt IE 9]>
-		<script src="@Url.Content("~/Content/respondjs/respond.min.js")"></script>
+		<script src="@Url.Content("/Content/respondjs/respond.min.js")"></script>
 	<![endif]-->
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{
