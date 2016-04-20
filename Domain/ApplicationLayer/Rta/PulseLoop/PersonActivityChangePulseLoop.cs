@@ -7,10 +7,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 {
+#pragma warning disable 618
 	public class PersonActivityChangePulseLoop : 
 		IHandleEvent<PersonActivityChangePulseEvent>,
 		IHandleEvent<ScheduleProjectionReadOnlyChanged>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

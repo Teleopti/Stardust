@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		}
 	}
 
+#pragma warning disable 618
 	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 		Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
 	 UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class BuildInGroupsAnalyticsUpdaterServiceBus : BuildInGroupsAnalyticsUpdaterBase,
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

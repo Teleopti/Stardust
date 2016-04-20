@@ -5,9 +5,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
+#pragma warning disable 618
 	public class PreferenceChangedHandler :
 		IHandleEvent<PreferenceChangedEvent>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

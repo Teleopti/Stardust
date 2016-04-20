@@ -3,9 +3,9 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-    public class PersonFinderReadOnlyUpdater : 
-		IHandleEvent<PersonCollectionChangedEvent>,
 #pragma warning disable 618
+	public class PersonFinderReadOnlyUpdater : 
+		IHandleEvent<PersonCollectionChangedEvent>,
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

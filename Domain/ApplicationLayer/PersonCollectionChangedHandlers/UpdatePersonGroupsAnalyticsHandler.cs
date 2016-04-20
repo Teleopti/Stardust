@@ -13,11 +13,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+#pragma warning disable 618
 	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, 
 				 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class UpdatePersonGroupsAnalyticsHandler :
 		IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

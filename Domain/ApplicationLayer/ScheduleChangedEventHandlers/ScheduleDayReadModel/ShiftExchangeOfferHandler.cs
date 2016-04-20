@@ -6,9 +6,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
+#pragma warning disable 618
 	public class ShiftExchangeOfferHandler : 
 		IHandleEvent<ProjectionChangedEvent>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

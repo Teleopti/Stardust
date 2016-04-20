@@ -3,9 +3,9 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+#pragma warning disable 618
 	public class UpdateGroupingReadModelConsumer :
 		IHandleEvent<PersonCollectionChangedEvent>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

@@ -9,12 +9,12 @@ using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
+#pragma warning disable 618
 	public class ProjectionChangedEventPublisher : 
 		IHandleEvent<ScheduleChangedEvent>, 
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

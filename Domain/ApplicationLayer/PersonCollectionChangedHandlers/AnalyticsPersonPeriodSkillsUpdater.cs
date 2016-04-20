@@ -6,10 +6,10 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+#pragma warning disable 618
 	[UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
 	public class AnalyticsPersonPeriodSkillsUpdater :
 		IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
-#pragma warning disable 618
 		IRunOnServiceBus
 #pragma warning restore 618
 	{

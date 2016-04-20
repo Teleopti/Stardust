@@ -10,12 +10,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
+#pragma warning disable 618
 	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 			 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
 		UseNotOnToggle(Toggles.GroupPageCollection_ToHangfire_38178)]
 	public class GroupPageAnalyticsUpdaterOnServicebus : GroupPageAnalyticsUpdaterBase,
 	IHandleEvent<GroupPageCollectionChangedEvent>,
-#pragma warning disable 618
 	IRunOnServiceBus
 #pragma warning restore 618
 	{
