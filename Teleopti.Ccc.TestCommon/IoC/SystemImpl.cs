@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 								.SingleInstance()
 								.AsSelf()
 								.As(asTypes);
-						});
+						}, null);
 						_builder
 							.RegisterType(_type)
 							.SingleInstance()
@@ -140,6 +140,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 										.AsSelf()
 										.As(asTypes);
 								};
+								registration.Instance = c.Instance;
 							});
 					}
 					else
@@ -150,7 +151,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 								.SingleInstance()
 								.AsSelf()
 								.As(asTypes);
-						});
+						}, null);
 						_builder
 							.RegisterType<TTestDouble>()
 							.SingleInstance()
@@ -166,6 +167,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 										.AsSelf()
 										.As(asTypes);
 								};
+								registration.Instance = c.Instance;
 							});
 					}
 				}
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 							.SingleInstance()
 							.AsSelf()
 							.As(asTypes);
-					});
+					}, _instance);
 					_builder
 						.RegisterInstance(_instance)
 						.SingleInstance()

@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(AnalyticsUnitOfWork));
 
-		private readonly UnitOfWorkContext _context;
+		private readonly AnalyticsUnitOfWorkContext _context;
 		private readonly ISession _session;
 		private readonly NHibernateFilterManager _filterManager;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
 
 		protected internal AnalyticsUnitOfWork(
-			UnitOfWorkContext context,
+			AnalyticsUnitOfWorkContext context,
 			ISession session)
 		{
 			_context = context;

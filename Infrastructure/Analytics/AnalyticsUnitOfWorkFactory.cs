@@ -1,5 +1,4 @@
 using NHibernate;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,14 +8,14 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 	public class AnalyticsUnitOfWorkFactory : IAnalyticsUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
-		private readonly UnitOfWorkContext _context;
+		private readonly AnalyticsUnitOfWorkContext _context;
 
 		protected internal AnalyticsUnitOfWorkFactory(
 			ISessionFactory sessionFactory,
 			string connectionString)
 		{
 			ConnectionString = connectionString;
-			_context = new UnitOfWorkContext(sessionFactory);
+			_context = new AnalyticsUnitOfWorkContext();
 			_factory = sessionFactory;
 		}
 		

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 
-		private readonly UnitOfWorkContext _context;
+		private readonly ApplicationUnitOfWorkContext _context;
 		private readonly ISession _session;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private readonly ICurrentTransactionHooks _transactionHooks;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private TransactionSynchronization _transactionSynchronization;
 
 		protected internal NHibernateUnitOfWork(
-			UnitOfWorkContext context, 
+			ApplicationUnitOfWorkContext context, 
 			ISession session, 
 			TransactionIsolationLevel isolationLevel, 
 			ICurrentTransactionHooks transactionHooks)

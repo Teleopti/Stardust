@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class NHibernateUnitOfWorkFactory : IUnitOfWorkFactory
 	{
 		private readonly ISessionFactory _factory;
-		private readonly UnitOfWorkContext _context;
+		private readonly ApplicationUnitOfWorkContext _context;
 		private readonly IAuditSetter _auditSettingProvider;
 		private readonly ICurrentTransactionHooks _transactionHooks;
 		private readonly ICurrentTeleoptiPrincipal _principal;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ICurrentTeleoptiPrincipal principal)
 		{
 			ConnectionString = connectionString;
-			_context = new UnitOfWorkContext(sessionFactory);
+			_context = new ApplicationUnitOfWorkContext();
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
 			_transactionHooks = transactionHooks;

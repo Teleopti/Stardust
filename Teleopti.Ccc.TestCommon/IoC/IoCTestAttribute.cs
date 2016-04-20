@@ -7,7 +7,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -94,6 +93,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		{
 			AfterTest();
 			disposeContainer();
+			disposeTestDoubles();
 		}
 
 		private void fixture(TestDetails testDetails)
@@ -121,6 +121,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			setupBuilder(new ignoringTestDoubles(builder, null));
 			_testDoubles.RegisterFromPreviousContainer(builder);
 			_container = builder.Build();
+		}
+
+		private void disposeTestDoubles()
+		{
+			if (_testDoubles != null)
+				_testDoubles.Dispose();
+			_testDoubles = null;
 		}
 
 		private void setupBuilder(ISystem system)

@@ -4,20 +4,22 @@ using Autofac;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {
-	public class TestDoubles
+	public class TestDoubles : IDisposable
 	{
 		public class Registration
 		{
 			public Action<ContainerBuilder> Action;
+			public object Instance;
 		}
 
 		private readonly List<Registration> _registrations = new List<Registration>();
 
-		public Registration Register(Action<ContainerBuilder> action)
+		public Registration Register(Action<ContainerBuilder> action, object instance)
 		{
 			var registration = new Registration
 			{
-				Action = action
+				Action = action,
+				Instance = instance
 			};
 			_registrations.Add(registration);
 			return registration;
@@ -29,6 +31,16 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			{
 				if (r.Action != null)
 					r.Action.Invoke(builder);
+			});
+		}
+
+		public void Dispose()
+		{
+			_registrations.ForEach(r =>
+			{
+				var disposable = r.Instance as IDisposable; 
+				if (disposable != null)
+					disposable.Dispose();
 			});
 		}
 	}
