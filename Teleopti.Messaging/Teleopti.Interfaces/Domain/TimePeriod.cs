@@ -407,44 +407,6 @@ namespace Teleopti.Interfaces.Domain
             }
 
             return retList;
-           
-
-
-
         }
-
-
-        /// <summary>
-        /// Aligns to minutes.
-        /// </summary>
-        /// <param name="timePeriod">The time period.</param>
-        /// <param name="minutes">The minutes.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2009-01-21
-        /// </remarks>
-        public static TimePeriod AlignToMinutes(TimePeriod timePeriod, int minutes)
-        {
-            long minutesTicks = new TimeSpan(0, minutes, 0).Ticks;
-            TimeSpan startTimeSpan = TimeSpan.FromTicks(divideAndMultiply(timePeriod.StartTime.Ticks, minutesTicks));
-            TimeSpan endTimeSpan;
-            if (timePeriod.EndTime.Minutes == 0)
-            {
-                endTimeSpan = timePeriod.EndTime;
-            }
-            else
-            {
-                endTimeSpan = TimeSpan.FromTicks(divideAndMultiply(timePeriod.EndTime.Ticks, minutesTicks) + minutesTicks);
-            }
-            TimePeriod newTimePeriod = new TimePeriod(startTimeSpan, endTimeSpan);
-            return newTimePeriod;
-        }
-
-        private static long divideAndMultiply(long value, long divisor)
-        {
-            return (value / divisor) * divisor;
-        }
-
     }
 }

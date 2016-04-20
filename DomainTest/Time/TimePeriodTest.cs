@@ -346,24 +346,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             Assert.AreEqual(new TimePeriod(TimeSpan.FromHours(4), new TimeSpan(1, 1, 0, 0)), combinedPeriods[0], "Verify Overlapping TimePeriod");
 
         }
-
-        [Test]
-        public void VerifyAlign()
-        {
-            TimePeriod testTimePeriod = new TimePeriod(7, 7, 16, 55);
-            TimePeriod alignedTimePeriod = TimePeriod.AlignToMinutes(testTimePeriod, 15);
-            Assert.AreEqual(0, alignedTimePeriod.StartTime.Minutes);
-            Assert.AreEqual(17, alignedTimePeriod.EndTime.Hours);
-
-            testTimePeriod = new TimePeriod(0, 0, 17, 0);
-            alignedTimePeriod = TimePeriod.AlignToMinutes(testTimePeriod, 15);
-            Assert.AreEqual(0, alignedTimePeriod.StartTime.Minutes);
-            Assert.AreEqual(17, alignedTimePeriod.EndTime.Hours);
-            Assert.AreEqual(0, alignedTimePeriod.EndTime.Minutes);
-            //Console.Out.WriteLine(alignedTimePeriod.ToShortTimeString());
-        }
-        
-
     }
 }
    
