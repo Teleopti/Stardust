@@ -21,19 +21,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Panels
         }
 
         /// <summary>
-        /// Returns the DateTime represented by the position
-        /// </summary>
-        /// <param name="position">The position.</param>
-        /// <returns>
-        /// Returns the DateTime represented by the position
-        /// </returns>
-        public DateOnly DateTimeFromPosition(double position)
-        {
-            return DateTimeFromPosition(position, false);
-        }
-
-
-        /// <summary>
         /// Returns the position represented by the DateTime
         /// </summary>
         /// <param name="dateTime">The date time.(in Utc)</param>

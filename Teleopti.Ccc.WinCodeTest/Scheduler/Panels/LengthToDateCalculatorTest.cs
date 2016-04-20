@@ -22,18 +22,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Panels
         }
 
         [Test]
-        public void VerifyCalculatorDateTimes()
-        {
-            Assert.AreEqual(_period.StartDate, _target.DateTimeFromPosition(0));
-            Assert.AreEqual(_period.EndDate, _target.DateTimeFromPosition(100));
-            Assert.AreEqual(_period.StartDate.AddDays(_days / 5), _target.DateTimeFromPosition(_length / 5));
-
-            //Outside Boundries
-            Assert.AreEqual(_period.StartDate.AddDays(-1*_days),_target.DateTimeFromPosition(-1*_length));
-            Assert.AreEqual(_period.StartDate.AddDays(3*_days),_target.DateTimeFromPosition(3*_length));
-        }
-
-        [Test]
         public void VerifyCanGetPositionFromDateTime()
         {
             Assert.AreEqual(0,_target.PositionFromDateTime(_period.StartDate));
