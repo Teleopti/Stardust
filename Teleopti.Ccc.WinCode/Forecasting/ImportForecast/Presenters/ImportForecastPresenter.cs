@@ -2,11 +2,8 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Views;
 using Teleopti.Interfaces.Domain;
@@ -100,13 +97,5 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 
 			_view.ShowStatusDialog(jobResultId);
 		}
-	}
-
-	internal class JobRequestModel
-	{
-		public string Name { get; set; }
-		public string Serialized { get; set; }
-		public string Type { get; set; }
-		public string UserName { get; set; }
 	}
 }
