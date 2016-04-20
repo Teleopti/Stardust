@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Repositories;
-using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -82,35 +80,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                             new DateOnlyPeriod(multisiteDay.MultisiteDayDate,multisiteDay.MultisiteDayDate).ToDateTimePeriod(multisiteDay.Skill.TimeZone),
                             distribution)
                     });
-        }
-
-        /// <summary>
-        /// Verifies the load multisite days.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-08
-        /// </remarks>
-        [Test]
-        public void VerifyLoadMultisiteDays()
-        {
-            MockRepository mocks = new MockRepository();
-
-            DateOnlyPeriod period = new DateOnlyPeriod(_dt, _dt.AddDays(3));
-            IMultisiteDayRepository rep = mocks.StrictMock<IMultisiteDayRepository>();
-            Expect.Call(rep.FindRange(period, _multisiteSkill, _multisiteDays[0].Scenario))
-                .Return(_multisiteDays).Repeat.Once();
-            Expect.Call(rep.GetAllMultisiteDays(period, _multisiteDays, _multisiteSkill, _multisiteDays[0].Scenario))
-                .Return(_multisiteDays).Repeat.Once();
-
-            mocks.ReplayAll();
-            ICollection<IMultisiteDay> multisiteDays = MultisiteHelper.LoadMultisiteDays(
-                period,
-                _multisiteSkill,
-                _multisiteDays[0].Scenario,
-                rep);
-            mocks.VerifyAll();
-            Assert.AreEqual(3, multisiteDays.Count);
         }
 
         [Test]

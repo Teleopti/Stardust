@@ -14,28 +14,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// </remarks>
     public static class MultisiteHelper
     {
-        /// <summary>
-        /// Loads the multisite days.
-        /// </summary>
-        /// <param name="dateTimePeriod">The date time period.</param>
-        /// <param name="multisiteSkill">The multisite skill.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <param name="multisiteDayRepository">The multisite day repository.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-05-08
-        /// </remarks>
-        public static ICollection<IMultisiteDay> LoadMultisiteDays(
-            DateOnlyPeriod dateTimePeriod, 
-            IMultisiteSkill multisiteSkill, 
-            IScenario scenario, 
-            IMultisiteDayRepository multisiteDayRepository)
-        {
-            ICollection<IMultisiteDay> multisiteDays = multisiteDayRepository.FindRange(dateTimePeriod,multisiteSkill, scenario);
-            return multisiteDayRepository.GetAllMultisiteDays(dateTimePeriod, multisiteDays, multisiteSkill, scenario);
-        }
-
 		public static ICollection<IMultisiteDay> LoadMultisiteDays(
 			DateOnlyPeriod dateTimePeriod,
 			IMultisiteSkill multisiteSkill,
