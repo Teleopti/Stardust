@@ -5,9 +5,9 @@ using Manager.Integration.Test.WPF.ViewModels;
 
 namespace Manager.Integration.Test.WPF.Commands
 {
-	public class StartHostCommand : ICommand
+	public class ShutDownHostCommand : ICommand
 	{
-		public StartHostCommand(MainWindowViewModel mainWindowViewModel)
+		public ShutDownHostCommand(MainWindowViewModel mainWindowViewModel)
 		{
 			if (mainWindowViewModel == null)
 			{
@@ -16,12 +16,13 @@ namespace Manager.Integration.Test.WPF.Commands
 
 			MainWindowViewModel = mainWindowViewModel;
 
-			MainWindowViewModel.PropertyChanged +=MainWindowViewModelOnPropertyChanged;
+			MainWindowViewModel.PropertyChanged += MainWindowViewModel_PropertyChanged;
+
 		}
 
-		private void MainWindowViewModelOnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+		private void MainWindowViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (propertyChangedEventArgs.PropertyName.Equals("IsConsoleHostStarted", StringComparison.InvariantCultureIgnoreCase))
+			if (e.PropertyName.Equals("IsConsoleHostStarted", StringComparison.InvariantCultureIgnoreCase))
 			{
 				OnCanExecuteChanged();
 			}
@@ -31,12 +32,12 @@ namespace Manager.Integration.Test.WPF.Commands
 
 		public bool CanExecute(object parameter)
 		{
-			return !MainWindowViewModel.IsConsoleHostStarted;
+			return MainWindowViewModel.IsConsoleHostStarted;
 		}
 
 		public void Execute(object parameter)
 		{
-			MainWindowViewModel.StartConsoleHost();
+			MainWindowViewModel.ShutDownConsoleHost();
 		}
 
 		public event EventHandler CanExecuteChanged;

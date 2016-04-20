@@ -39,7 +39,7 @@ namespace Stardust.Manager
 
 		public void FreeJobIfAssingedToNode(Uri url)
 		{
-			_jobRepository.FreeJobIfNodeIsAssigned(url.ToString());
+			_jobRepository.RequeueJobBySentToWorkerNodeUri(url.ToString());
 		}
 	}
 }

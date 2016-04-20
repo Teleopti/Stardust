@@ -90,7 +90,6 @@ namespace Stardust.Manager
 						Connection = connection,
 						CommandText = "SELECT Id, Url, Heartbeat, Alive " +
 						              "FROM [Stardust].[WorkerNode] WHERE Url=@Url",
-						CommandType = CommandType.Text
 					};
 
 					command.Parameters.AddWithValue("@Url", nodeUri.ToString());

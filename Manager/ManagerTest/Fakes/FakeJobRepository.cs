@@ -28,9 +28,9 @@ namespace ManagerTest.Fakes
 			_jobs.Remove(j);
 		}
 
-		public void FreeJobIfNodeIsAssigned(string url)
+		public void RequeueJobBySentToWorkerNodeUri(string sentToWorkerNodeUri)
 		{
-			var jobs = _jobs.FirstOrDefault(x => x.SentToWorkerNodeUri == url);
+			var jobs = _jobs.FirstOrDefault(x => x.SentToWorkerNodeUri == sentToWorkerNodeUri);
 
 			if (jobs != null)
 			{
@@ -38,7 +38,7 @@ namespace ManagerTest.Fakes
 			}
 		}
 
-		public void TryAssignJobToWorkerNode(IHttpSender httpSender)
+		public void AssignJobToWorkerNode(IHttpSender httpSender)
 		{
 			throw new NotImplementedException();
 		}
@@ -48,17 +48,22 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public void SetEndResultForJob(Guid jobId, string result, DateTime ended)
+		public void UpdateResultForJob(Guid jobId, string result, DateTime ended)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void ReportProgress(Guid jobId, string detail, DateTime created)
+		public void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created)
 		{
 			throw new NotImplementedException();
 		}
 
 		public Job GetJobByJobId(Guid jobId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Job GetJobBySentToWorkerNodeUri(string sentToWorkerNodeUri)
 		{
 			throw new NotImplementedException();
 		}

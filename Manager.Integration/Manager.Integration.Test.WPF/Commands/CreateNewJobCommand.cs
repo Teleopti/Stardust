@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Manager.Integration.Test.Helpers;
 using Manager.IntegrationTest.Console.Host.Helpers;
@@ -29,25 +30,28 @@ namespace Manager.Integration.Test.WPF.Commands
 
 		public void Execute(object parameter)
 		{
-			var uri = ManagerUriBuilder.GetStartJobUri();
-			var username = SecurityHelper.GetLoggedInUser();
-
-			for (var i = 0; i < NumberOfJobs; i++)
+			Task.Factory.StartNew(() =>
 			{
-				var fastJobParams = new FastJobParams("Fast job data " + i);
+				var uri = ManagerUriBuilder.GetStartJobUri();
+				var username = SecurityHelper.GetLoggedInUser();
 
-				var fastJobParamsToJson = JsonConvert.SerializeObject(fastJobParams);
-
-				var job = new JobQueueItem
+				for (var i = 0; i < NumberOfJobs; i++)
 				{
-					Name = "Job Name " + i,
-					Serialized = fastJobParamsToJson,
-					Type = "NodeTest.JobHandlers.FastJobParams",
-					CreatedBy = username
-				};
+					var fastJobParams = new FastJobParams("Fast job data " + i);
 
-				var response = HttpSender.PostAsync(uri, job);
-			}
+					var fastJobParamsToJson = JsonConvert.SerializeObject(fastJobParams);
+
+					var job = new JobQueueItem
+					{
+						Name = "Job Name " + i,
+						Serialized = fastJobParamsToJson,
+						Type = "NodeTest.JobHandlers.FastJobParams",
+						CreatedBy = username
+					};
+
+					var response = HttpSender.PostAsync(uri, job);
+				}
+			});
 		}
 
 		public event EventHandler CanExecuteChanged;

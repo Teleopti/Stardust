@@ -615,6 +615,40 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="LabelStyle1"
+               TargetType="{x:Type Label}">
+            <Setter Property="Foreground"
+                    Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+            <Setter Property="Background"
+                    Value="Transparent" />
+            <Setter Property="Padding"
+                    Value="5" />
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left" />
+            <Setter Property="VerticalContentAlignment"
+                    Value="Top" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Label}">
+                        <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="true"
+                                HorizontalAlignment="Left">
+                            <ContentPresenter RecognizesAccessKey="True"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="Stretch" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled"
+                                     Value="false">
+                                <Setter Property="Foreground"
+                                        Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Window.Background>
@@ -658,39 +692,148 @@
                             <RowDefinition Height="30" />
                             <RowDefinition Height="5" />
                             <RowDefinition Height="30" />
+                            <RowDefinition Height="4" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="30" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="140" />
 
                         </Grid.RowDefinitions>
                         <Button x:Name="button"
                                 Content="Create New Job"
                                 Style="{DynamicResource ButtonStyle1}"
                                 Command="{Binding CreateNewJobCommand}"
-                                Grid.Row="5"
+                                Grid.Row="11"
                                 Grid.Column="1" />
                         <Button Content="Create 20 New Jobs"
                                 Style="{DynamicResource ButtonStyle1}"
                                 Command="{Binding Create20NewJobCommand}"
-                                Grid.Row="7"
+                                Grid.Row="13"
                                 Grid.Column="1" />
-                        <Button Content="Start capture HTTP"
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Command="{Binding StartFiddlerCaptureCommand}"
-                                Style="{DynamicResource ButtonStyle1}" />
-                        <Button Content="Stop capture HTTP"
-                                Grid.Row="3"
-                                Style="{DynamicResource ButtonStyle1}"
-                                Grid.Column="1"
-                                Command="{Binding StopFiddlerCaptureCommand}" />
                         <Button Content="Start New Manager"
                                 Command="{Binding StartUpNewManagerCommand}"
-                                Grid.Row="11"
+                                Grid.Row="17"
                                 Style="{DynamicResource ButtonStyle1}"
                                 Grid.Column="1" />
                         <Button Content="Start New Node"
                                 Style="{DynamicResource ButtonStyle1}"
                                 Command="{Binding StartUpNewNodeCommand}"
-                                Grid.Row="9"
+                                Grid.Row="15"
                                 Grid.Column="1" />
+                        <TabControl x:Name="tabitemFiddler"
+                                    Grid.Column="1"
+                                    Grid.Row="21">
+                            <TabItem Header="Console Host"
+                                     Background="{x:Null}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4" />
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="2" />
+                                        <ColumnDefinition Width="25" />
+                                        <ColumnDefinition Width="0*" />
+                                        <ColumnDefinition Width="5" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="15" />
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="15" />
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="7" />
+                                    </Grid.RowDefinitions>
+                                    <Label Content="Number of Managers"
+                                           Grid.Column="1"
+                                           Grid.Row="1"
+                                           FontSize="10.667"
+                                           Padding="0" />
+                                    <TextBox Grid.Column="3"
+                                             Grid.Row="1"
+                                             TextWrapping="Wrap"
+                                             Text="{Binding NumberOfManagers, Mode=TwoWay}"
+                                             BorderThickness="0,0,0,1"
+                                             HorizontalContentAlignment="Center" />
+                                    <Label Content="Number of Nodes"
+                                           Grid.Column="1"
+                                           Grid.Row="3"
+                                           FontSize="10.667"
+                                           Padding="0" />
+                                    <TextBox Grid.Column="3"
+                                             Grid.Row="3"
+                                             TextWrapping="Wrap"
+                                             Text="{Binding NumberOfNodes, Mode=TwoWay}"
+                                             BorderThickness="0,0,0,1"
+                                             HorizontalContentAlignment="Center" />
+                                    <Button Content="Start"
+                                            Grid.Row="5"
+                                            Command="{Binding StartHostCommand}"
+                                            Style="{DynamicResource ButtonStyle1}"
+                                            Grid.Column="1"
+                                            Grid.ColumnSpan="3" />
+                                    <Button Content="Shut down"
+                                            Grid.Row="7"
+                                            Command="{Binding ShutDownHostCommand}"
+                                            Style="{DynamicResource ButtonStyle1}"
+                                            Grid.Column="1"
+                                            Grid.ColumnSpan="3" />
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+                        <TabControl x:Name="s"
+                                    Grid.Column="1"
+                                    Grid.RowSpan="6">
+                            <TabItem Header="Fiddler - HTTP capture">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="5" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="4" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="3" />
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="5" />
+                                        <RowDefinition Height="25" />
+                                        <RowDefinition Height="3" />
+                                    </Grid.RowDefinitions>
+                                    <Button Content="Start"
+                                            Grid.Row="1"
+                                            Command="{Binding StartFiddlerCaptureCommand}"
+                                            Style="{DynamicResource ButtonStyle1}"
+                                            Grid.Column="1" />
+                                    <Button Content="Stop"
+                                            Grid.Row="1"
+                                            Style="{DynamicResource ButtonStyle1}"
+                                            Command="{Binding StopFiddlerCaptureCommand}"
+                                            Grid.Column="3" />
+                                    <Button Content="Install certificate"
+                                            Grid.Row="3"
+                                            Command="{Binding InstallCertificateCommand}"
+                                            Style="{DynamicResource ButtonStyle1}"
+                                            Grid.Column="1"
+                                            Grid.ColumnSpan="3" />
+                                    <Button Content="Uninstall certificate"
+                                            Grid.Row="5"
+                                            Command="{Binding UnInstallCertificateCommand}"
+                                            Style="{DynamicResource ButtonStyle1}"
+                                            Grid.Column="1"
+                                            Grid.ColumnSpan="3"
+                                            Grid.RowSpan="2" />
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
 
                     </Grid>
                 </Border>

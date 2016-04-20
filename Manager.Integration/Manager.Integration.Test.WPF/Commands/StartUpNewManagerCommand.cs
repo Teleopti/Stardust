@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Manager.Integration.Test.Helpers;
 using Manager.IntegrationTest.Console.Host.Helpers;
@@ -14,11 +15,15 @@ namespace Manager.Integration.Test.WPF.Commands
 
 		public void Execute(object parameter)
 		{
-			var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
-			var httpSender = new HttpSender();
+			Task.Factory.StartNew(() =>
+			{
+				var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
+				var httpSender = new HttpSender();
 
-			var managerName = IntegrationControllerApiHelper.StartNewManager(intergrationControllerUriBuilder,
-			                                                                 httpSender);
+				var managerName = IntegrationControllerApiHelper.StartNewManager(intergrationControllerUriBuilder,
+				                                                                 httpSender);
+
+			});
 		}
 
 		public event EventHandler CanExecuteChanged;

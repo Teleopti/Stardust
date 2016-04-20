@@ -34,12 +34,13 @@ namespace ManagerTest
 				Heartbeat = DateTime.UtcNow,
 				Alive = true
 			};
+
 			WorkerNodeRepository.AddWorkerNode(node);
 
 			node = WorkerNodeRepository.GetWorkerNodeByNodeId(_nodeUri1);
 			var beforeHeartbeat = node.Heartbeat;
 
-			Thread.Sleep(TimeSpan.FromSeconds(2)); 
+			Thread.Sleep(TimeSpan.FromSeconds(1)); 
 
 			WorkerNodeRepository.RegisterHeartbeat(_nodeUri1.ToString(), true);
 

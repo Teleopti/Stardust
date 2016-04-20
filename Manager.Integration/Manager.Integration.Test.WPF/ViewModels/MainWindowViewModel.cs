@@ -14,6 +14,7 @@ using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.WPF.Annotations;
 using Manager.Integration.Test.WPF.Commands;
 using Manager.Integration.Test.WPF.HttpListeners.Fiddler;
+using Manager.Integration.Test.WPF.Properties;
 using Timer = System.Timers.Timer;
 
 namespace Manager.Integration.Test.WPF.ViewModels
@@ -34,11 +35,14 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private const string HttpTrafficListenerHeaderConstant = "HTTP Traffic";
 
 		private ClearDatabaseCommand _clearDatabaseCommand;
+		private CreateNewJobCommand _create20NewJobCommand;
+		private CreateNewJobCommand _createNewJobCommand;
 		private List<Logging> _errorLoggingData;
 
 		private string _errorLoggingHeader;
 
 		private string _httpTrafficListenerHeader = HttpTrafficListenerHeaderConstant;
+		private InstallCertificateCommand _installCertificateCommand;
 		private List<JobQueue> _jobDefinitionData;
 		private string _jobDefinitionDataHeader;
 
@@ -50,16 +54,27 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private string _jobHistoryHeader;
 		private List<Logging> _loggingData;
 		private string _loggingHeader;
+
+		private int _numberOfManagers;
+		private int _numberOfNodes;
 		private List<PerformanceTest> _performanceTestData;
 		private string _performanceTestHeader;
 		private bool _refreshEnabled;
 		private int _refreshProgressValue;
+		private StartFiddlerCaptureCommand _startFiddlerCaptureCommand;
+		private StartHostCommand _startHostCommand;
+		private StartUpNewManagerCommand _startUpNewManagerCommand;
+		private StartUpNewNodeCommand _startUpNewNodeCommand;
 
 		private string _status;
+		private StopFiddlerCaptureCommand _stopFiddlerCaptureCommand;
 		private ToggleRefreshCommand _toggleRefreshCommand;
 		private string _toggleRefreshStatus;
+		private UnInstallCertificateCommand _unInstallCertificateCommand;
 		private string _workerNodeHeader;
 		private List<WorkerNode> _workerNodesData;
+		private ShutDownHostCommand _shutDownHostCommand;
+		private bool _isConsoleHostStarted;
 
 		public MainWindowViewModel()
 		{
@@ -77,6 +92,21 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			StopFiddlerCaptureCommand = new StopFiddlerCaptureCommand(FiddlerCapture);
 
 			FiddlerCaptureInformation = new ObservableCollection<FiddlerCaptureInformation>();
+
+			InstallCertificateCommand = new InstallCertificateCommand();
+
+			UnInstallCertificateCommand = new UnInstallCertificateCommand();
+
+			//---------------------------------------
+			// Manager console host.
+			//---------------------------------------
+			StartHostCommand = new StartHostCommand(this);
+			ShutDownHostCommand = new ShutDownHostCommand(this);
+			
+			NumberOfManagers = Settings.Default.NumberOfManagers;
+			NumberOfNodes = Settings.Default.NumberOfNodes;
+
+			IsConsoleHostStarted = false;
 
 			//---------------------------------------
 			// Do the rest.
@@ -101,21 +131,119 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			RefreshEnabled = true;
 		}
 
+		public ShutDownHostCommand ShutDownHostCommand
+		{
+			get { return _shutDownHostCommand; }
+			set
+			{
+				_shutDownHostCommand = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public UnInstallCertificateCommand UnInstallCertificateCommand
+		{
+			get { return _unInstallCertificateCommand; }
+			set
+			{
+				_unInstallCertificateCommand = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public InstallCertificateCommand InstallCertificateCommand
+		{
+			get { return _installCertificateCommand; }
+			set
+			{
+				_installCertificateCommand = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public StartHostCommand StartHostCommand
+		{
+			get { return _startHostCommand; }
+			set
+			{
+				_startHostCommand = value;
+
+				OnPropertyChanged();
+			}
+		}
+
 		public FiddlerCapture FiddlerCapture { get; private set; }
 
 		public FiddlerCaptureUrlConfiguration FiddlerCaptureUrlConfiguration { get; set; }
 
-		public StartFiddlerCaptureCommand StartFiddlerCaptureCommand { get; set; }
+		public StartFiddlerCaptureCommand StartFiddlerCaptureCommand
+		{
+			get { return _startFiddlerCaptureCommand; }
+			set
+			{
+				_startFiddlerCaptureCommand = value;
 
-		public StopFiddlerCaptureCommand StopFiddlerCaptureCommand { get; set; }
+				OnPropertyChanged();
+			}
+		}
 
-		public StartUpNewNodeCommand StartUpNewNodeCommand { get; set; }
+		public StopFiddlerCaptureCommand StopFiddlerCaptureCommand
+		{
+			get { return _stopFiddlerCaptureCommand; }
+			set
+			{
+				_stopFiddlerCaptureCommand = value;
 
-		public StartUpNewManagerCommand StartUpNewManagerCommand { get; set; }
+				OnPropertyChanged();
+			}
+		}
 
-		public CreateNewJobCommand Create20NewJobCommand { get; set; }
+		public StartUpNewNodeCommand StartUpNewNodeCommand
+		{
+			get { return _startUpNewNodeCommand; }
+			set
+			{
+				_startUpNewNodeCommand = value;
 
-		public CreateNewJobCommand CreateNewJobCommand { get; set; }
+				OnPropertyChanged();
+			}
+		}
+
+		public StartUpNewManagerCommand StartUpNewManagerCommand
+		{
+			get { return _startUpNewManagerCommand; }
+			set
+			{
+				_startUpNewManagerCommand = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public CreateNewJobCommand Create20NewJobCommand
+		{
+			get { return _create20NewJobCommand; }
+			set
+			{
+				_create20NewJobCommand = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public CreateNewJobCommand CreateNewJobCommand
+		{
+			get { return _createNewJobCommand; }
+			set
+			{
+				_createNewJobCommand = value;
+
+				OnPropertyChanged();
+			}
+		}
 
 		public string WorkerNodeHeader
 		{
@@ -398,13 +526,66 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
+		public int NumberOfManagers
+		{
+			get { return _numberOfManagers; }
+
+			set
+			{
+				_numberOfManagers = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public int NumberOfNodes
+		{
+			get { return _numberOfNodes; }
+			set
+			{
+				_numberOfNodes = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		private CancellationTokenSource CancellationTokenSourceAppDomainTask { get; set; }
+
+		public AppDomainTask AppDomainTask { get; set; }
+
+		public void Dispose()
+		{
+			if (CancellationTokenSourceAppDomainTask != null)
+			{
+				CancellationTokenSourceAppDomainTask.Cancel();
+			}
+
+			if (AppDomainTask != null)
+			{
+				AppDomainTask.Dispose();
+			}
+
+			if (FiddlerCapture != null)
+			{
+				FiddlerCapture.Dispose();
+			}
+
+			Settings.Default.NumberOfManagers = NumberOfManagers;
+			Settings.Default.NumberOfNodes = NumberOfNodes;
+
+			Settings.Default.Save();
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		private void NewDataCapturedEventHandler(object sender, FiddlerCaptureInformation fiddlerCaptureInformation)
 		{
-			Application.Current.Dispatcher.Invoke(
-				DispatcherPriority.Normal,
-				(Action) delegate { FiddlerCaptureInformation.Add(fiddlerCaptureInformation); });
+			Task.Factory.StartNew(() =>
+			{
+				Application.Current.Dispatcher.Invoke(
+					DispatcherPriority.Normal,
+					(Action) delegate { FiddlerCaptureInformation.Add(fiddlerCaptureInformation); });
+			});
 		}
 
 		private void RefreshTimerOnElapsed(object sender,
@@ -517,12 +698,15 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public void DatabaseClearAllInformation()
 		{
-			using (var managerDbEntities = new ManagerDbEntities())
+			Task.Factory.StartNew(() =>
 			{
-				managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.Logging");
-			}
+				using (var managerDbEntities = new ManagerDbEntities())
+				{
+					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.Logging");
+				}
 
-			GetData();
+				GetData();
+			});
 		}
 
 		public void ToggleRefresh()
@@ -530,39 +714,49 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			RefreshEnabled = !RefreshEnabled;
 		}
 
-		public void StartConsoleHost()
+		public bool IsConsoleHostStarted
 		{
-			CancellationTokenSourceAppDomainTask = new CancellationTokenSource();
+			get { return _isConsoleHostStarted; }
 
-			AppDomainTask = new AppDomainTask("Debug");
+			set
+			{
+				_isConsoleHostStarted = value;
 
-			var task = AppDomainTask.StartTask(numberOfManagers: 2,
-										   numberOfNodes: 10,
-										   useLoadBalancerIfJustOneManager: true,
-										   cancellationTokenSource: CancellationTokenSourceAppDomainTask);
-
+				OnPropertyChanged();
+			}
 		}
 
-		private CancellationTokenSource CancellationTokenSourceAppDomainTask { get; set; }
 
-		public AppDomainTask AppDomainTask { get; set; }
+		public void StartConsoleHost()
+		{
+			Task.Factory.StartNew(() =>
+			{
+				CancellationTokenSourceAppDomainTask = new CancellationTokenSource();
 
-		public void Dispose()
+				AppDomainTask = new AppDomainTask("Debug");
+
+				var task = AppDomainTask.StartTask(NumberOfManagers,
+				                                   NumberOfNodes,
+				                                   useLoadBalancerIfJustOneManager: true,
+				                                   cancellationTokenSource: CancellationTokenSourceAppDomainTask);
+
+				IsConsoleHostStarted = true;
+			});
+		}
+
+		public void ShutDownConsoleHost()
 		{
 			if (CancellationTokenSourceAppDomainTask != null)
 			{
 				CancellationTokenSourceAppDomainTask.Cancel();
 			}
 
-			if (AppDomainTask != null && AppDomainTask.Task != null)
+			if (AppDomainTask != null)
 			{
-				AppDomainTask.Task.Dispose();
+				AppDomainTask.Dispose();
 			}
 
-			if (FiddlerCapture != null)
-			{
-				FiddlerCapture.Dispose();
-			}			
+			IsConsoleHostStarted = false;
 		}
 	}
 }

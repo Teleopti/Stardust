@@ -137,7 +137,7 @@ namespace Stardust.Manager
 
 			try
 			{
-				_jobRepository.TryAssignJobToWorkerNode(_httpSender);
+				_jobRepository.AssignJobToWorkerNode(_httpSender);
 
 				this.Log().DebugWithLineNumber("Finished TryAssignJobToWorkerNode.");
 			}
@@ -174,14 +174,14 @@ namespace Stardust.Manager
 		                              string result,
 									  DateTime ended)
 		{
-			_jobRepository.SetEndResultForJob(jobId,
+			_jobRepository.UpdateResultForJob(jobId,
 			                                 result,
 											 ended);
 		}
 
 		public void ReportProgress(JobProgressModel model)
 		{
-			_jobRepository.ReportProgress(model.JobId,
+			_jobRepository.CreateJobDetailByJobId(model.JobId,
 			                              model.Detail,
 			                              model.Created);
 		}

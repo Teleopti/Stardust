@@ -12,17 +12,19 @@ namespace Stardust.Manager.Interfaces
 
 		void DeleteItemInJobQueueByJobId(Guid jobId);
 
-		void FreeJobIfNodeIsAssigned(string url);
+		void RequeueJobBySentToWorkerNodeUri(string sentToWorkerNodeUri);
 
-		void TryAssignJobToWorkerNode(IHttpSender httpSender);
+		void AssignJobToWorkerNode(IHttpSender httpSender);
 
 		void CancelJobByJobId(Guid jobId, IHttpSender httpSender);
 
-		void SetEndResultForJob(Guid jobId, string result, DateTime ended);
+		void UpdateResultForJob(Guid jobId, string result, DateTime ended);
 
-		void ReportProgress(Guid jobId, string detail, DateTime created);
+		void CreateJobDetailByJobId(Guid jobId, string detail, DateTime created);
 
 		Job GetJobByJobId(Guid jobId);
+
+		Job GetJobBySentToWorkerNodeUri(string sentToWorkerNodeUri);
 
 		IList<Job> GetAllJobs();
 

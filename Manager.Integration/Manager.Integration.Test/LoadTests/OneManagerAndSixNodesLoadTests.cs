@@ -75,10 +75,12 @@ namespace Manager.Integration.Test.LoadTests
 		public void TestFixtureTearDown()
 		{
 			LogMessage("Start TestFixtureTearDown");
+
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
 			}
+
 			LogMessage("Finished TestFixtureTearDown");
 		}
 

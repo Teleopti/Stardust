@@ -59,7 +59,9 @@ namespace ManagerTest
 		public void ResetJobsOnFalseClaimOnHeartBeatIfItsFree()
 		{
 			var jobId = Guid.NewGuid();
-			var userName = "ManagerTests";
+
+			var userName = "ManagerOperationsTestNewVersion";
+
 			var job = new JobQueueItem
 			{
 				JobId = jobId,
@@ -70,9 +72,13 @@ namespace ManagerTest
 			};
 
 			JobRepository.AddItemToJobQueue(job);
-			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri1 });
 
-			JobRepository.TryAssignJobToWorkerNode(HttpSender);
+			NodeRepository.AddWorkerNode(new WorkerNode
+			{
+				Url = _nodeUri1
+			});
+
+			JobRepository.AssignJobToWorkerNode(HttpSender);
 
 			Target.RegisterHeartbeat(_nodeUri1);
 
@@ -91,7 +97,9 @@ namespace ManagerTest
 				Type = "bra",
 				CreatedBy = "ManagerTests"
 			};
+
 			var result = Target.AddItemToJobQueue(job);
+
 			result.Should()
 				.Not.Be.Null();
 		}
@@ -99,14 +107,23 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToCancelJobOnNode()
 		{
-			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri1 });
-			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri2 });
+			NodeRepository.AddWorkerNode(new WorkerNode
+			{
+				Url = _nodeUri1
+			});
+
+			NodeRepository.AddWorkerNode(new WorkerNode
+			{
+				Url = _nodeUri2
+			});
+
 			Target.RegisterHeartbeat(_nodeUri1);
 			Target.RegisterHeartbeat(_nodeUri2);
 
 			var jobId = Guid.NewGuid();
 			JobRepository.AddItemToJobQueue(new JobQueueItem {JobId = jobId, Serialized = "", Name = "", Type = "", CreatedBy = "ManagerTests"});
-			JobRepository.TryAssignJobToWorkerNode(HttpSender);
+
+			JobRepository.AssignJobToWorkerNode(HttpSender);
 			HttpSender.CalledNodes.Clear();
 			Target.CancelJobByJobId(jobId);
 			HttpSender.CalledNodes.Count()
@@ -160,10 +177,10 @@ namespace ManagerTest
 		{
 			var job = new JobRequestModel
 			{
-				Name = "ShouldBeAbleToPersistNewJob",
-				Serialized = "ngtbara",
-				Type = "typngtannat",
-				CreatedBy = "ManagerTests"
+				Name = "ShouldBeAbleToPersistBadRequestResonsToJob",
+				Serialized = "Serialized Data",
+				Type = "Type data",
+				CreatedBy = "ManagerOperationsTestNewVersion"
 			};
 
 			Target.AddItemToJobQueue(job);
@@ -254,7 +271,7 @@ namespace ManagerTest
 
 			JobRepository.AddItemToJobQueue(job);
 
-			JobRepository.TryAssignJobToWorkerNode(HttpSender);
+			JobRepository.AssignJobToWorkerNode(HttpSender);
 
 			Target.CancelJobByJobId(jobId);
 

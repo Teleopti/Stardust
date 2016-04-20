@@ -125,6 +125,7 @@
     <Compile Include="AppBuilderExtension.cs" />
     <Compile Include="Constants\ManagerRouteConstans.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
+    <Compile Include="Context\SqlContext.cs" />
     <Compile Include="Diagnostics\ManagerStopWatch.cs" />
     <Compile Include="Extensions\HttpContentExtensions.cs" />
     <Compile Include="Extensions\SqlCommandExtensions.cs" />

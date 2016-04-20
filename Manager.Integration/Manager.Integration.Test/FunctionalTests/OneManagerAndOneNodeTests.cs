@@ -114,7 +114,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			LogMessage("Finished.");
 		}
 
-		[Test]
+		[Test,  Ignore]
 		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
 		{
 			LogMessage("Start.");
@@ -187,13 +187,22 @@ namespace Manager.Integration.Test.FunctionalTests
 			Assert.IsTrue(condition,
 			              "Must have equal number of rows.");
 
+			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.SuccessStatus),
+			               "Invalid SUCCESS status.");
+
+			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.NullStatus),
+			               "Invalid NULL status.");
+
+			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.EmptyStatus),
+			               "Invalid EMPTY status.");
+
 			var allCancelOrDeleteStatus =
 				checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-															 pair.Value.Contains(StatusConstants.CancelingStatus) ||
+														     pair.Value.Contains(StatusConstants.CancelingStatus) ||
 				                                             pair.Value == StatusConstants.DeletedStatus);
 
 			Assert.IsTrue(allCancelOrDeleteStatus,
-			              "All rows shall have CANCEL, CANCELING or DELETE status.");
+			              "All rows shall have CANCEL or DELETE status.");
 
 			taskHlp.Dispose();
 
