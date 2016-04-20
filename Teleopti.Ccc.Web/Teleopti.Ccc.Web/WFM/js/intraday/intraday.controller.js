@@ -118,17 +118,6 @@
 					};
 				};
 
-				$scope.selectedSkillChange = function (item) {
-					$scope.skillSelected(item);
-					$scope.hiddenArray = [];
-				};
-
-				$scope.skillSelected = function (item) {
-					$scope.selectedItem = item;
-					clearSkillAreaSelection();
-					pollSkillMonitorData();
-				};
-
 				$scope.openSkillFromArea = function (item) {
 					autocompleteSkill.selectedSkill = item;
 					$scope.skillSelected(item);
@@ -166,12 +155,21 @@
 					}
 				};
 
+				$scope.selectedSkillChange = function (item) {
+				    if (item) {
+				        $scope.skillSelected(item);
+				        $scope.hiddenArray = [];
+				    }
+				};
+
+				$scope.skillSelected = function (item) {
+				    $scope.selectedItem = item;
+				    clearSkillAreaSelection();
+				    pollSkillMonitorData();
+				};
+
 				var pollSkillMonitorData = function () {
 					cancelTimeout();
-					if (!$scope.selectedItem) {
-						$scope.HasMonitorData = false;
-						return;
-					}
 					intradayService.getSkillMonitorData.query(
 						{
 							id: $scope.selectedItem.Id
@@ -188,10 +186,13 @@
 						});
 					};
 
-					$scope.selectedSkillAreaChange = function(item) {
-						$scope.skillAreaSelected(item);
-						$scope.hiddenArray = [];
-					};
+				    $scope.selectedSkillAreaChange = function (item) {
+				        if (item) {
+				            $scope.skillAreaSelected(item);
+				            $scope.hiddenArray = [];
+				        }
+
+				    };
 
 					$scope.skillAreaSelected = function(item) {
 						$scope.selectedItem = item;
@@ -201,10 +202,6 @@
 
 					var pollSkillAreaMonitorData = function () {
 						cancelTimeout();
-						if (!$scope.selectedItem) {
-							$scope.HasMonitorData = false;
-							return;
-						}
 						intradayService.getSkillAreaMonitorData.query(
 							{
 								id: $scope.selectedItem.Id
