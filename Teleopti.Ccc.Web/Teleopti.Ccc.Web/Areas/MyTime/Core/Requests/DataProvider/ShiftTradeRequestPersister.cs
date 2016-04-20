@@ -91,6 +91,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				{
 					@event = new AcceptShiftTradeEvent
 					{
+						LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+						LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
 						PersonRequestId = personRequest.Id.GetValueOrDefault(),
 						AcceptingPersonId = shiftTrade.PersonTo.Id.GetValueOrDefault()
 					};

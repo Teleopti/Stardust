@@ -2,6 +2,7 @@ using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -17,15 +18,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IMappingEngine _mapper;
 		private readonly IEventPublisher _publisher;
 		private readonly INow _nu;
+		private readonly ICurrentDataSource _dataSourceProvider;
+		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
 		public RespondToShiftTrade(IPersonRequestRepository personRequestRepository,
-									IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
-									IPersonRequestCheckAuthorization personRequestCheckAuthorization,
-									ILoggedOnUser loggedOnUser,
-									IMappingEngine mapper,
-									IEventPublisher publisher,
-									INow nu)
+			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+			ILoggedOnUser loggedOnUser,
+			IMappingEngine mapper,
+			IEventPublisher publisher,
+			INow nu,
+			ICurrentDataSource dataSourceProvider,
+			ICurrentBusinessUnit businessUnitProvider)
 		{
 			_personRequestRepository = personRequestRepository;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
@@ -33,6 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_mapper = mapper;
 			_publisher = publisher;
 			_nu = nu;
+			_dataSourceProvider = dataSourceProvider;
+			_businessUnitProvider = businessUnitProvider;
 			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
 
@@ -73,7 +80,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			personRequest.Request.Accept(personRequest.Person, _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
 			_publisher.Publish(new NewShiftTradeRequestCreatedEvent
 			{
-				PersonRequestId = personRequest.Id.GetValueOrDefault()
+				LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+				LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				Timestamp = _nu.UtcDateTime()
 			});
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
@@ -83,6 +93,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			_publisher.Publish(new AcceptShiftTradeEvent
 			{
+				LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+				LogOnDatasource = _dataSourceProvider.Current().DataSourceName,
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
 				Message = personRequest.GetMessage(new NoFormatting())
