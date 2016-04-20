@@ -65,13 +65,5 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 
 			return parsedTerms;
 		}
-
-		private static void addSearchCriteria(IDictionary<PersonFinderField, string> criterias,
-			PersonFinderField searchType, string searchValue)
-		{
-			if (string.IsNullOrEmpty(searchValue)) return;
-
-			criterias.Add(searchType, searchValue);
-		}
 	}
 }
