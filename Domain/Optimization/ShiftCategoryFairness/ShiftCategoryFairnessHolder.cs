@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
@@ -35,30 +34,6 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                     _shiftDictionary = new Dictionary<IShiftCategory, int>();
                 return new ReadOnlyDictionary<IShiftCategory, int>(_shiftDictionary);
             }
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IShiftCategoryFairnessHolder Add(IShiftCategoryFairnessHolder holder)
-        {
-            Dictionary<IShiftCategory, int> result = new Dictionary<IShiftCategory, int>();
-
-            foreach (KeyValuePair<IShiftCategory, int> keyValuePair in ShiftCategoryFairnessDictionary)
-            {
-                result.Add(keyValuePair.Key, keyValuePair.Value);
-            }
-
-            foreach (KeyValuePair<IShiftCategory, int> keyValuePair in holder.ShiftCategoryFairnessDictionary)
-            {
-                if (!result.ContainsKey(keyValuePair.Key))
-                    result.Add(keyValuePair.Key, 0);
-                result[keyValuePair.Key] += keyValuePair.Value;
-            }
-
-        	IFairnessValueResult fairnessValueResult = new FairnessValueResult();
-        	fairnessValueResult.TotalNumberOfShifts = _fairnessValueResult.TotalNumberOfShifts +
-        	                                          holder.FairnessValueResult.TotalNumberOfShifts;
-
-            return new ShiftCategoryFairnessHolder(result, fairnessValueResult);
         }
 
         #region Equals stuff

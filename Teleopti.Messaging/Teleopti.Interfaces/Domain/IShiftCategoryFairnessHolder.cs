@@ -19,13 +19,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <value>The fairness value result.</value>
     	IFairnessValueResult FairnessValueResult { get; }
 
-    	/// <summary>
-        /// Adds the specified holder.
-        /// </summary>
-        /// <param name="holder">The holder.</param>
-        /// <returns></returns>
-        IShiftCategoryFairnessHolder Add(IShiftCategoryFairnessHolder holder);
-
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
