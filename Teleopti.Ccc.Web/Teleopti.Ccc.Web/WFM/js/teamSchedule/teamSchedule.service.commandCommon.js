@@ -14,7 +14,6 @@
 		this.wrapPersonWriteProtectionCheck = wrapPersonWriteProtectionCheck;
 
 		function checkPersonWriteProtectionPromise(date, agentIds) {
-			console.log("date", date, $filter('date')(date, 'yyyy-MM-dd'));
 			var dateString = $filter('date')(date, 'yyyy-MM-dd');
 			var deferred = $q.defer();
 			$http.post(checkPersonWriteProtectionUrl, {

@@ -147,11 +147,13 @@
 			vm.loadAllResults(function(result) {
 				var groupSchedule = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 				personSelectionSvc.selectAllPerson(groupSchedule.Schedules);
+				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
+				vm.toggleAllInCurrentPage = true;
 			});
 		};
 
 		vm.loadAllResults = function (callback) {
-			var params = getParamsForLoadingSchedules({ pageSize: vm.total });
+			var params = getParamsForLoadingSchedules({ currentPageIndex: 1, pageSize: vm.total });
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(callback);
 		};
 

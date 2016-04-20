@@ -9,7 +9,8 @@
 		return {
 			scope: {
 				scheduleVm: '=',
-				selectMode: '='
+				selectMode: '=',
+				toggleAllInCurrentPage: '='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
@@ -61,6 +62,9 @@
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;
+			if (!vm.scheduleVm.Schedules) {
+				return false;
+			}
 			for (var i = 0; i < vm.scheduleVm.Schedules.length; i++) {
 				var personSchedule = vm.scheduleVm.Schedules[i];
 				if (!selectedPeople[personSchedule.PersonId]) {

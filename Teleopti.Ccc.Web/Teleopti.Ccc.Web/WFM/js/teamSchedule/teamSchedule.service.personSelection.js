@@ -18,13 +18,13 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				});
 				if(shiftsForCurrentDate.length > 0){
 					var projectionsForCurrentDate = shiftsForCurrentDate[0].Projections;
-					angular.forEach(projectionsForCurrentDate, function (projection) {
-					if (projection.ParentPersonAbsence && absences.indexOf(projection.ParentPersonAbsence) === -1) {
-						absences.push(projection.ParentPersonAbsence);
-					} else if (projection.ShiftLayerId && !projection.IsOvertime && activities.indexOf(projection.ShiftLayerId) === -1) {
-						activities.push(projection.ShiftLayerId);
-					}
-				});
+					angular.forEach(projectionsForCurrentDate, function(projection) {
+						if (projection.ParentPersonAbsence && absences.indexOf(projection.ParentPersonAbsence) === -1) {
+							absences.push(projection.ParentPersonAbsence);
+						} else if (projection.ShiftLayerId && !projection.IsOvertime && activities.indexOf(projection.ShiftLayerId) === -1) {
+							activities.push(projection.ShiftLayerId);
+						}
+					});
 				}
 				selectedPeople[personSchedule.PersonId] = {
 					name: personSchedule.Name,
@@ -43,8 +43,6 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 
 		svc.updatePersonInfo = function (schedules) {
 			angular.forEach(schedules, function (personSchedule) {
-				var personAbsencesCount = 0,
-					personActivitiesCount = 0;
 				var allowSwap = personSchedule.AllowSwap();
 
 				var selectedPerson = svc.personInfo[personSchedule.PersonId];
