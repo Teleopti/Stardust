@@ -444,50 +444,6 @@ namespace Teleopti.Interfaces.Domain
 			return new TimeFormatter(new ThisCulture(cultureInfo)).GetLongHourMinuteTimeString(timeSpan);
         }
 
-	    /// <summary>
-        /// Gets the long hour and minutes tring from a timespan eg. 123:23.
-        /// </summary>
-        /// <param name="timeSpan">The time span.</param>
-        /// <param name="previousPreposition">The previous preposition "-" or "+".</param>
-        /// <param name="cultureInfo">The culture info.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// </remarks>
-        public static string GetLongHourMinuteTimeString(TimeSpan timeSpan, char previousPreposition, CultureInfo cultureInfo)
-        {
-            if (previousPreposition != '-' && previousPreposition != '+')
-                throw new ArgumentException("previousPreposition must be either '-' or '+'", "previousPreposition");
-            int prepositionSign = previousPreposition == '+' ? 1 : -1;
-
-            string separator = cultureInfo.DateTimeFormat.TimeSeparator;
-            int valueSign = Math.Sign(timeSpan.Ticks);
-
-            TimeSpan absValue = TimeSpan.FromTicks(Math.Abs(timeSpan.Ticks));
-
-            int hour = (int)absValue.TotalHours;
-            int minutes = absValue.Minutes;
-
-            if (absValue.Seconds >= 30)
-                minutes += 1;
-            if (minutes == 60)
-            {
-                hour++;
-                minutes = 0;
-            }
-
-            string min = Convert.ToString(minutes, CultureInfo.CurrentCulture);
-            string hours = Convert.ToString(hour, CultureInfo.CurrentCulture);
-
-            int sign = valueSign * prepositionSign;
-            string signChar = sign >= 0 ? "+" : "-";
-
-            if (min.Length == 1)
-                min = "0" + min;
-
-            return string.Concat(signChar, " ", hours, separator, min);
-        }
-
-
         private static bool CheckMinutesSeconds(int minutes, int seconds)
         {
             if (minutes > 59 || seconds > 59)

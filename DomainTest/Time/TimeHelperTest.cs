@@ -401,31 +401,6 @@ namespace Teleopti.Ccc.DomainTest.Time
             TimeHelper.GetLongHourMinuteSecondTimeString(new TimeSpan(0, 1, 2), CultureInfo.CurrentCulture);
         }
 
-        [Test]
-        public void VerifyGetLongHourMinuteTimeStringWithPreposition()
-        {
-            timeValue = new TimeSpan(0, 1, 2, 3);
-            CultureInfo ci = CultureInfo.CurrentCulture;
-            Assert.AreEqual("+ 1:02", TimeHelper.GetLongHourMinuteTimeString(timeValue, '+', ci));
-            Assert.AreEqual("- 1:02", TimeHelper.GetLongHourMinuteTimeString(timeValue, '-', ci));
-            timeValue = new TimeSpan(0, 0, 20, 30);
-            Assert.AreEqual("+ 0:21", TimeHelper.GetLongHourMinuteTimeString(timeValue, '+', ci));
-            Assert.AreEqual("- 0:21", TimeHelper.GetLongHourMinuteTimeString(timeValue, '-', ci));
-            timeValue = new TimeSpan(0, 0, 20, 60);
-            Assert.AreEqual("+ 0:21", TimeHelper.GetLongHourMinuteTimeString(timeValue, '+', ci));
-            Assert.AreEqual("- 0:21", TimeHelper.GetLongHourMinuteTimeString(timeValue, '-', ci));
-            timeValue = new TimeSpan(0, 0, -20, -60);
-            Assert.AreEqual("- 0:21", TimeHelper.GetLongHourMinuteTimeString(timeValue, '+', ci));
-            Assert.AreEqual("+ 0:21", TimeHelper.GetLongHourMinuteTimeString(timeValue, '-', ci));
-            timeValue = TimeSpan.FromHours(-36.5);
-            Assert.AreEqual("- 36:30", TimeHelper.GetLongHourMinuteTimeString(timeValue, '+', ci));
-            Assert.AreEqual("+ 36:30", TimeHelper.GetLongHourMinuteTimeString(timeValue, '-', ci));
-
-            timeValue = TimeSpan.Zero;
-            Assert.AreEqual("+ 0:00", TimeHelper.GetLongHourMinuteTimeString(timeValue, '-', ci));
-            Assert.AreEqual("+ 0:00", TimeHelper.GetLongHourMinuteTimeString(timeValue, '+', ci));
-        }
-
 
         [Test]
         public void VerifyGetLongHourMinuteSecondTimeString()
