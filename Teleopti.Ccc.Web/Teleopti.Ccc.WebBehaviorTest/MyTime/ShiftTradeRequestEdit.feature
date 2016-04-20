@@ -3,6 +3,7 @@
 	As an agent
 	I want to be able to take actions on my shift trade requests
 
+	
 Background:
 	Given there is a role with
 	| Field | Value                 |
