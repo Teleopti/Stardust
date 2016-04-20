@@ -446,34 +446,5 @@ namespace Teleopti.Interfaces.Domain
         {
             get { return _maxSmallDateTime; }
         }
-
-        /// <summary>
-        /// Splits the date time period.
-        /// TODO: Maybe should be moved to DatetimePeriod
-        /// </summary>
-        /// <param name="dateTimePeriod">The date time period.</param>
-        /// <param name="timeSpan">The time span.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Henryg
-        /// Created date: 2009-11-13
-        /// </remarks>
-        public static IEnumerable<DateTimePeriod> SplitDateTimePeriod(DateTimePeriod dateTimePeriod, TimeSpan timeSpan)
-        {
-            IList<DateTimePeriod> splittedDateTimePeriods = new List<DateTimePeriod>();
-            DateTime startDateTime = dateTimePeriod.StartDateTime;
-            DateTime endDateTime = dateTimePeriod.StartDateTime.Add(timeSpan);
-
-            while (endDateTime <= dateTimePeriod.EndDateTime)
-            {
-                DateTimePeriod partDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime.AddTicks(-1));
-                splittedDateTimePeriods.Add(partDateTimePeriod);
-                startDateTime = endDateTime;
-                endDateTime = startDateTime.Add(timeSpan);
-            }
-            DateTimePeriod lastDateTimePeriod = new DateTimePeriod(startDateTime, dateTimePeriod.EndDateTime);
-            splittedDateTimePeriods.Add(lastDateTimePeriod);
-            return splittedDateTimePeriods;
-        }
     }
 }
