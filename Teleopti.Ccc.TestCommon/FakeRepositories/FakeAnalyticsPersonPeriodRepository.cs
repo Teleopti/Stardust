@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode)
 		{
-			throw new NotImplementedException();
+			return fakePersonPeriods.First(a => a.PersonPeriodCode == personPeriodCode);
 		}
 
 		public void AddPersonPeriod(AnalyticsPersonPeriod personPeriod)

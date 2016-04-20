@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPreferenceDay Find(Guid preferenceId)
 		{
-			throw new NotImplementedException();
+			return _preferensDays.First(a => a.Id == preferenceId);
 		}
 	}
 }
