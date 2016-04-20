@@ -106,27 +106,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             return (categoryCounter > shiftCategoryLimitation.MaxNumberOf);
         }
-
-        public bool IsShiftCategoryOverWeekLimit(IShiftCategoryLimitation shiftCategoryLimitation)
-        {
-            if (!shiftCategoryLimitation.Weekly)
-                throw new ArgumentException("shiftCategoryLimitation.Weekly must not be true");
-
-            IList<IScheduleDayPro> days = _scheduleMatrix.FullWeeksPeriodDays;
-
-            for (int o = 0; o < days.Count; o+=7)
-            {
-                int categoryCounter = 0;
-                for (int i = 0; i < 7; i++)
-                {
-                    if (_removeShiftCategoryOnBestDateService.IsThisDayCorrectShiftCategory(days[o + i], shiftCategoryLimitation.ShiftCategory))
-                        categoryCounter++;
-                }
-                if (categoryCounter > shiftCategoryLimitation.MaxNumberOf)
-                    return true;
-            }
-
-            return false;
-        }
     }
 }

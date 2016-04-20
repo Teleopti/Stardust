@@ -164,50 +164,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(result);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void VerifyIsShiftCategoryOverWeekLimitThrowsWhenCalledWithPeriod()
-        {
-            _shiftCategoryLimitation.Weekly = false;
-            _shiftCategoryLimitation.MaxNumberOf = 1;
-
-            using (_mocks.Playback())
-            {
-                _target.IsShiftCategoryOverWeekLimit(_shiftCategoryLimitation);
-            }
-        }
-
-        [Test]
-        public void VerifyIsShiftCategoryOverWeekLimit()
-        {
-            _shiftCategoryLimitation.Weekly = true;
-            _shiftCategoryLimitation.MaxNumberOf = 1;
-
-            bool result;
-
-            using (_mocks.Playback())
-            {
-                result = _target.IsShiftCategoryOverWeekLimit(_shiftCategoryLimitation);
-            }
-
-            Assert.IsTrue(result);
-        }
-
-        [Test]
-        public void VerifyIsShiftCategoryOverWeekLimit2()
-        {
-            _shiftCategoryLimitation.Weekly = true;
-            _shiftCategoryLimitation.MaxNumberOf = 3;
-
-            bool result;
-
-            using (_mocks.Playback())
-            {
-                result = _target.IsShiftCategoryOverWeekLimit(_shiftCategoryLimitation);
-            }
-
-            Assert.IsFalse(result);
-        }
-
         [Test]
         public void VerifyExecutePeriod()
         {
@@ -215,15 +171,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _shiftCategoryLimitation.MaxNumberOf = 3;
 
             IList<IScheduleDayPro> result;
-
-            //_mocks.BackToRecordAll(BackToRecordOptions.All);
-            //using (_mocks.Record())
-            //{
-            //    mockExpectations();
-            //    //Expect.Call(_removeOnBestDateServiceMock.Execute(_shiftCategory)).Return(true).Repeat.Once();
-            //    //_shiftCategoryLimitation.MaxNumberOf = 3;
-            //    //Expect.Call(_removeOnBestDateServiceMock.Execute(_shiftCategory)).Return(false).Repeat.Once();
-            //}
 
             using (_mocks.Playback())
             {
