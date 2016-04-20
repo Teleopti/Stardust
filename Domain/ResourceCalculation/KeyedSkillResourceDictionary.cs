@@ -46,25 +46,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             SkillCollectionKey key = new SkillCollectionKey(skillList);
             return key;
         }
-
-        /// <summary>
-        /// Gets a list with unique skill combinations.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-03-06
-        /// </remarks>
-        public ICollection<SkillCollectionKey> UniqueSkillCombinations()
-        {
-            ICollection<SkillCollectionKey> result = new HashSet<SkillCollectionKey>();
-            foreach (var person in Keys)
-            {
-                SkillCollectionKey skillCollectionKey = SkillCombination(person);
-                result.Add(skillCollectionKey);
-            }
-
-            return result;
-        }
     }
 }

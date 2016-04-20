@@ -74,13 +74,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(2, key.SkillCollection.Count());
         }
 
-        [Test]
-        public void CanGetUniqueSkillCombinations()
-        {
-            ICollection<SkillCollectionKey> result = _target.UniqueSkillCombinations();
-            Assert.AreEqual(2, result.Count);
-        }
-
 		private class KeyedSkillResourceDictionaryTestClass : KeyedSkillResourceDictionary
 		{
 
