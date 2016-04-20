@@ -7,7 +7,7 @@
 
 	function TeamScheduleController($q, $translate, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
 		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc, ActivityService, guidgenerator) {
-		
+
 		var vm = this;
 
 		vm.isLoading = false;
@@ -50,7 +50,7 @@
 			}
 
 			var currentDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
-		
+
 			teamScheduleSvc.getSchedules(currentDate, selectedPersonIdList).then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules, currentDate);
@@ -193,7 +193,7 @@
 				vm.afterActionCallback(result, personSelectionSvc.getSelectedPersonIdList(), "FinishedSwapShifts", "FailedToSwapShifts");
 			});
 		}
-		
+
 		function removeAbsence(removeEntireCrossDayAbsence) {
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
@@ -218,28 +218,48 @@
 
 		vm.confirmRemoveAbsence = CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
 			'RemoveAbsence', removeAbsence, null, vm.scheduleDate, getRemoveAbsenceMessage);
-		
+
 		function removeActivity() {
 			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
 			var personActivities = [];
 			var trackId = guidgenerator.newGuid();
-			angular.forEach(selectedPersonProjections, function(personProjection) {
+			var personIds = personSelectionSvc.getSelectedPersonIdList();
+			angular.forEach(selectedPersonProjections, function (personProjection) {
 				personActivities.push({
 					PersonId: personProjection.personId,
 					ShiftLayerIds: personProjection.selectedActivities
 				});
 			});
-			ActivityService.removeActivity({ Date: vm.scheduleDateMoment(), PersonActivities: personActivities, TrackedCommandInfo: { TrackId: trackId } }).then(function(result) {
-
+			var removeActivityForm = {
+				Date: vm.scheduleDateMoment(),
+				PersonActivities: personActivities,
+				TrackedCommandInfo: { TrackId: trackId }
+			};
+			ActivityService.removeActivity(removeActivityForm).then(function (result) {
+				vm.afterActionCallback(
+					{ TrackId: trackId },
+					personIds,
+					'SuccessfulMessageForRemovingActivity',
+					''
+				);
+			}, function (error) {
+				vm.afterActionCallback(
+					{ TrackId: trackId, Errors: error },
+					personIds,
+					'',
+					'FailedMessageForRemovingActivity'
+				);
 			});
-		};
+		}
+
 		function getRemoveActivityMessage() {
 			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedActivity"),
 			[vm.getTotalSelectedPersonAndProjectionCount().ActivityCount, vm.getTotalSelectedPersonAndProjectionCount().PersonCount]);
-		};
+		}
+
 		vm.confirmRemoveActivity = CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
 			'RemoveActivity', removeActivity, null, vm.scheduleDate, getRemoveActivityMessage);
-		
+
 
 		vm.selectedPersonInfo = function() {
 			return personSelectionSvc.personInfo;

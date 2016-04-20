@@ -10040,6 +10040,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not remove activities for selected agents.
+        /// </summary>
+        public static string FailedMessageForRemovingActivity {
+            get {
+                return ResourceManager.GetString("FailedMessageForRemovingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to remove selected absence..
         /// </summary>
         public static string FailedToRemoveAbsence {
@@ -28015,6 +28024,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfulMessageForAddingActivity {
             get {
                 return ResourceManager.GetString("SuccessfulMessageForAddingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully removed activities for selected agents.
+        /// </summary>
+        public static string SuccessfulMessageForRemovingActivity {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForRemovingActivity", resourceCulture);
             }
         }
         

@@ -7,7 +7,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 
 		svc.clearPersonInfo = function() {
 			svc.personInfo = {};
-		}
+		};
 
 		svc.updatePersonSelection = function (personSchedule) {
 			var selectedPeople = svc.personInfo;
@@ -40,7 +40,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				delete selectedPeople[personSchedule.PersonId];
 			}
 		};
-		
+
 		svc.updatePersonInfo = function (schedules) {
 			angular.forEach(schedules, function (personSchedule) {
 				var personAbsencesCount = 0,
@@ -54,7 +54,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				else {
 					personSchedule.IsSelected = false;
 				}
-				
+
 				if (selectedPerson) {
 					selectedPerson.scheduleEndTime = personSchedule.ScheduleEndTime();
 					selectedPerson.allowSwap = allowSwap;
@@ -74,7 +74,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				}
 			});
 		};
-		
+
 		svc.toggleAllPersonProjections = function (personSchedule) {
 			angular.forEach(personSchedule.Shifts, function (shift) {
 				if (shift.Date.isSame(personSchedule.Date, 'day')) {
@@ -95,7 +95,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				if (shift.Date.isSame(personSchedule.Date, 'day')) {
 					angular.forEach(shift.Projections, function(projection) {
 						var sameActivity = currentProjection.ShiftLayerId && projection.ShiftLayerId === currentProjection.ShiftLayerId;
-						var sameAbsence = currentProjection.ParentPersonAbsence && currentProjection.ParentPersonAbsence === projection.ParentPersonAbsence;  
+						var sameAbsence = currentProjection.ParentPersonAbsence && currentProjection.ParentPersonAbsence === projection.ParentPersonAbsence;
 						if (sameActivity || sameAbsence) {
 							projection.Selected = currentProjection.Selected;
 						}
@@ -103,7 +103,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				}
 			});
 			if (selected && !selectedPeople[personId]) {
-				
+
 				selectedPeople[personId] = {
 					name: personSchedule.Name,
 					allowSwap: personSchedule.AllowSwap(),
@@ -121,7 +121,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					selectedPeople[personId].selectedActivities.push(currentProjection.ShiftLayerId);
 					selectedPeople[personId].personActivityCount = 1;
 				}
-				
+
 			}
 			else if (selected && selectedPeople[personId]) {
 				if (currentProjection.ParentPersonAbsence !== null && selectedPeople[personId].selectedAbsences.indexOf(currentProjection.ParentPersonAbsence) === -1) {
@@ -153,7 +153,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				selectedPeople[personId].checked = personSchedule.IsSelected;
 			}
 		};
-		
+
 		svc.selectAllPerson = function (schedules) {
 			angular.forEach(schedules, function (schedule) {
 				schedule.IsSelected = true;
@@ -166,7 +166,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				delete svc.personInfo[id];
 			});
 		};
-		
+
 		svc.getCheckedPersonIds = function () {
 			var result = [];
 			for (var personId in svc.personInfo) {
@@ -176,7 +176,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			}
 			return result;
 		};
-		
+
 		svc.getCheckedPersonInfoList = function () {
 			var result = [];
 			for (var personId in svc.personInfo) {
@@ -206,21 +206,17 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				});
 			}
 			return result;
-		}
+		};
 
 		svc.getSelectedPersonIdList = function() {
-			var personIds = [];
-			for (var key in svc.personInfo) {
-				personIds.push(key);
-			}
-			return personIds;
-		}
+			return Object.keys(svc.personInfo);
+		};
 
 		svc.isAnyAgentSelected = function() {
 			var selectedPersonList = svc.getSelectedPersonIdList();
 			return selectedPersonList.length > 0;
 		};
-		
+
 		svc.anyAgentChecked = function () {
 			var personInfoList = svc.getCheckedPersonInfoList();
 			return personInfoList.length > 0;
@@ -230,8 +226,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			var personIds = svc.getCheckedPersonIds();
 			if (personIds.length !== 2) {
 				return false;
-			} 
+			}
 			return svc.personInfo[personIds[0]].allowSwap && svc.personInfo[personIds[1]].allowSwap;
-		}
+		};
 	}
 ]);

@@ -14306,4 +14306,12 @@ Help us improve your experience by sending an error report</value>
     <value>Are you sure you wish to remove {0} activities from {1} agents?	</value>
     <comment>Message to confirm activities to be removed</comment>
   </data>
+	<data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+		<value>Successfully removed activities for selected agents</value>
+		<comment>Success Message for Removing Activity</comment>
+	</data>
+	<data name="FailedMessageForRemovingActivity" xml:space="preserve">
+		<value>Could not remove activities for selected agents</value>
+		<comment>Fail Message for Removing Activity</comment>
+	</data>
 </root>

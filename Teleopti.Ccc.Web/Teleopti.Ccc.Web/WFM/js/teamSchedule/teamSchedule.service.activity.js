@@ -7,20 +7,25 @@
 
 		var getAllActivitiesUrl = '../api/TeamScheduleData/FetchActivities';
 		var addActivityUrl = '../api/TeamScheduleCommand/AddActivity';
+		var removeActivityUrl = '../api/TeamScheduleCommand/RemoveActivity';
 
-		this.fetchAvailableActivities = function () {
+		this.fetchAvailableActivities = fetchAvailableActivities;
+		this.addActivity = addActivity;
+		this.removeActivity = removeActivity;
+
+		function fetchAvailableActivities() {
 			var deferred = $q.defer();
 			$http.get(getAllActivitiesUrl).success(function (data) {
 				deferred.resolve(data);
 			});
 			return deferred.promise;
-		};
+		}
 
-		this.addActivity = function(activity) {
+		function addActivity(activity) {
 			var deferred = $q.defer();
-			$http.post(addActivityUrl, normalizeActivity(activity)).then(function(data) {
+			$http.post(addActivityUrl, normalizeActivity(activity)).then(function (data) {
 				deferred.resolve(data);
-			}, function(error) {
+			}, function (error) {
 				deferred.reject(error);
 			});
 			return deferred.promise;
@@ -30,11 +35,11 @@
 			return activity;
 		}
 
-		this.removeActivity = function(params) {
+		function removeActivity(removeActivityForm) {
 			var deffered = $q.defer();
-			$http.post('../api/TeamScheduleCommand/RemoveActivity', params).then(function(result) {
+			$http.post(removeActivityUrl, removeActivityForm).then(function (result) {
 				deffered.resolve(result);
-			}, function(error) {
+			}, function (error) {
 				deffered.reject(error);
 			});
 			return deffered.promise;
