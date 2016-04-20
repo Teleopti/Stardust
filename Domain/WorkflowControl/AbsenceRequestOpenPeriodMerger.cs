@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
-    public class AbsenceRequestOpenPeriodMerger : IAbsenceRequestOpenPeriodMerger
+    public class AbsenceRequestOpenPeriodMerger
     {
         public IAbsenceRequestOpenPeriod Merge(IEnumerable<IAbsenceRequestOpenPeriod> absenceRequestOpenPeriods)
         {

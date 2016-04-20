@@ -308,7 +308,6 @@
     <Compile Include="Domain\IGroupPageOptions.cs" />
     <Compile Include="Domain\IMoveTimeDecisionMaker.cs" />
     <Compile Include="Domain\EnumTargetValueType.cs" />
-    <Compile Include="Domain\IAbsenceRequestOpenPeriodMerger.cs" />
     <Compile Include="Domain\IAbsenceRequestValidator.cs" />
     <Compile Include="Domain\IChildPersonGroup.cs" />
     <Compile Include="Domain\ICreatePersonAbsence.cs" />

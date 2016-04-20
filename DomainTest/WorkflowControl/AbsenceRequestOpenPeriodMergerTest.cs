@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     [TestFixture]
     public class AbsenceRequestOpenPeriodMergerTest
     {
-        private IAbsenceRequestOpenPeriodMerger _target;
+        private AbsenceRequestOpenPeriodMerger _target;
 
         [SetUp]
         public void Setup()
