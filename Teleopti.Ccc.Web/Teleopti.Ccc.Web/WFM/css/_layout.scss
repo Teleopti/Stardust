@@ -128,8 +128,17 @@ wfm-notice{
 	}
 }
 
-//Temp move us to styleguide 
+//Temp move us to styleguide
 
 .dropdown-menu{
 	background-color: $white;
 }//bootstrap datepicker dropdown menu
+
+
+.bu-change{
+	padding: 0 15px;
+}
+
+.ui-select .bu-caret {
+	top: 0;
+}
