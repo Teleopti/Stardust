@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -220,6 +221,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				offSet.Should().Be.EqualTo(TimeSpan.FromHours(23));
 			}    
 	    }
+
+		[Test]
+	    public void ShouldUseCurrentViewPointWhenCalculatingPeriodOffsetWithDaylightSaving()
+		{
+			var originalTimeZone = TimeZoneGuard.Instance.TimeZone;
+
+			TimeZoneGuard.Instance.TimeZone = TimeZoneInfoFactory.NewYorkTimeZoneInfo();
+
+			_sourceDateTimePeriod = new DateTimePeriod(2016, 10, 25, 13, 2016, 10, 25, 21);
+			_targetDateTimePeriod = new DateTimePeriod(2016, 11, 1, 13, 2016, 11, 1, 21);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_sourceScheduleDay.Period).Return(_sourceDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_targetScheduleDay.Period).Return(_targetDateTimePeriod).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				var offSet = _target.CalculatePeriodOffsetConsiderDaylightSavings(_sourceScheduleDay, _targetScheduleDay, new DateTimePeriod(2016, 10, 25, 9, 2016, 10, 25, 10));
+				offSet.Should().Be.EqualTo(TimeSpan.FromDays(7));
+			}
+
+			TimeZoneGuard.Instance.TimeZone = originalTimeZone;
+		}
 
         [Test]
         public void VerifyCalculatePeriodOffsetCalculatesWithDaylightSavingsWithinTimeZoneEvenIfIgnoreTimeZoneChanges()
