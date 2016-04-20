@@ -38,7 +38,7 @@
 		vm.isNextDay = false;
 		vm.selectedActivityId = null;
 		vm.disableNextDay = false;	
-		vm.addActivity = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddActivity', addActivity);
+		vm.addActivity = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddActivity', addActivity, null, vm.selectedDate());
 
 		ActivityService.fetchAvailableActivities().then(function (activities) {
 			vm.activities = activities;

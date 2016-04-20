@@ -44,7 +44,7 @@
 			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
 		}
 
-		vm.applyAbsence = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddAbsence', applyAbsence);
+		vm.applyAbsence = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddAbsence', applyAbsence,null, vm.selectedAbsenceStartDate);
 
 		function applyAbsence() {
 			var trackId = guidgenerator.newGuid();

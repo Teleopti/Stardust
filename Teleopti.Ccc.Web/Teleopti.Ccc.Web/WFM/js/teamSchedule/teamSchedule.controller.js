@@ -216,8 +216,10 @@
 		};
 
 
-		vm.confirmRemoveAbsence = CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
-			'RemoveAbsence', removeAbsence, null, vm.scheduleDate, getRemoveAbsenceMessage);
+		vm.confirmRemoveAbsence = function () {
+			CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
+			'RemoveAbsence', removeAbsence, null, vm.scheduleDate, getRemoveAbsenceMessage)();
+		}
 
 		function removeActivity() {
 			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
@@ -257,8 +259,10 @@
 			[vm.getTotalSelectedPersonAndProjectionCount().ActivityCount, vm.getTotalSelectedPersonAndProjectionCount().PersonCount]);
 		}
 
-		vm.confirmRemoveActivity = CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
-			'RemoveActivity', removeActivity, null, vm.scheduleDate, getRemoveActivityMessage);
+		vm.confirmRemoveActivity = function () {
+			CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
+			'RemoveActivity', removeActivity, null, vm.scheduleDate, getRemoveActivityMessage)();
+		}
 
 
 		vm.selectedPersonInfo = function() {
