@@ -33,7 +33,7 @@
 		this.removeActivity = function(params) {
 			var deffered = $q.defer();
 			$http.post('../api/TeamScheduleCommand/RemoveActivity', params).then(function(result) {
-				deferred.resolve(result);
+				deffered.resolve(result);
 			}, function(error) {
 				deffered.reject(error);
 			});
