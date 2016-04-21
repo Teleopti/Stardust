@@ -246,8 +246,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 													   dayOffOptimizationPreferenceProvider,
 													   out checkPeriodValue,
 														 out movedDaysOff);
-						double currentPeriodValue =
-							periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+						var currentPeriodValue = new Lazy<double>(() => periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
 													   teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, ()=>
 													   {
@@ -257,7 +256,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 						if (success)
 						{
-							previousPeriodValue = currentPeriodValue;
+							previousPeriodValue = currentPeriodValue.Value;
 							allFailed = false;
 						}
 						else
@@ -316,8 +315,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 												 dayOffOptimizationPreference,
 												 dayOffOptimizationPreferenceProvider,
 												 out checkPeriodValue);
-						double currentPeriodValue =
-							periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+						var currentPeriodValue = new Lazy<double>(()=> periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization));
 						success = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
 							teamInfo, totalLiveTeamInfos, currentTeamInfoCounter, currentPeriodValue, checkPeriodValue, () =>
 							{
@@ -328,7 +326,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						if (success)
 						{
 							allFailed = false;
-							previousPeriodValue = currentPeriodValue;
+							previousPeriodValue = currentPeriodValue.Value;
 						}
 
 						if (cancelMe)
@@ -348,18 +346,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private bool handleResult(ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions,
 		                            double previousPeriodValue, bool success, ITeamInfo teamInfo,
-									int totalLiveTeamInfos, int currentTeamInfoCounter, double currentPeriodValue, bool checkPeriodValue, Action cancelAction, ISchedulingProgress schedulingProgress)
+									int totalLiveTeamInfos, int currentTeamInfoCounter, Lazy<double> currentPeriodCalculator, bool checkPeriodValue, Action cancelAction, ISchedulingProgress schedulingProgress)
 		{
+			var currentPeriodValue = previousPeriodValue;
 			if (success && checkPeriodValue)
 			{
+				currentPeriodValue = currentPeriodCalculator.Value;
 				success = currentPeriodValue < previousPeriodValue;
 			}
-
 			if (!success)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-
-				currentPeriodValue =previousPeriodValue;
 			}
 
 			var shouldCancel = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
