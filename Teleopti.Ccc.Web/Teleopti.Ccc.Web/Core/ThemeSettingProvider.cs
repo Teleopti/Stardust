@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			var setting = _settingDataRepository.FindValueByKey(Key, new ThemeSetting());
 			setting.Name = themeSetting.Name;
+			setting.Overlay = themeSetting.Overlay;
 			_settingDataRepository.PersistSettingValue(setting);
 			return setting;
 		}
