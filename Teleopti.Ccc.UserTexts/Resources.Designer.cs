@@ -745,6 +745,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Failed to add absence(s).
+        /// </summary>
+        public static string AddAbsenceFailed {
+            get {
+                return ResourceManager.GetString("AddAbsenceFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Successfully added absences for the selected agents.
         /// </summary>
         public static string AddAbsenceSuccessedResult {
@@ -10139,7 +10148,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Could not remove activities for selected agents.
+        ///   Looks up a localized string similar to Failed to remove activities for selected agents.
         /// </summary>
         public static string FailedMessageForRemovingActivity {
             get {
@@ -19476,6 +19485,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PaidTimeHeader {
             get {
                 return ResourceManager.GetString("PaidTimeHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adding activities for {0} agent(s), {1} succeeded and {2} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForAddingActivity {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForAddingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing absences for {0} agent(s): {1} succeeded, {1} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForRemovingAbsence {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForRemovingAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Removing activities for {0} agent(s), {1} succeeded and {2} failed..
+        /// </summary>
+        public static string PartialSuccessMessageForRemovingActivity {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForRemovingActivity", resourceCulture);
             }
         }
         

@@ -55,10 +55,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 	public class RemovePersonAbsenceForm
 	{
 		public DateTime ScheduleDate { get; set; }
-		public IEnumerable<Guid> PersonIds { get; set; }
-		public IEnumerable<Guid> PersonAbsenceIds { get; set; }
+		public SelectedPersonAbsence[] SelectedPersonAbsences { get; set; }
 		public bool RemoveEntireCrossDayAbsence { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+	}
+
+	public class SelectedPersonAbsence
+	{
+		public Guid PersonId { get; set; }
+		public Guid[] PersonAbsenceIds { get; set; }
 	}
 
 	public class GroupScheduleInput
@@ -69,8 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 	public class FailActionResult
 	{
-		public string PersonName { get; set; }
-		public IList<string> Message { get; set; }
+		public IList<string> Messages { get; set; }
 		public Guid PersonId { get; set; }
 	}
 

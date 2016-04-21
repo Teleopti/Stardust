@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		{
 			return errorResponses.Select(r => new FailActionResult
 			{
-				PersonName = _commonNameDescriptionSetting.BuildCommonNameDescription(r.Person),
-				Message = new List<string> {r.Message}
+				PersonId = r.Person.Id.GetValueOrDefault(),
+				Messages = new List<string> {r.Message}
 			});
 		}
 	}

@@ -25,7 +25,7 @@
 		});
 	});
 
-	function FakeCommandCommonService() {		
+	function FakeCommandCommonService() {
 		this.wrapPersonWriteProtectionCheck = function(skipDialogIfNormal, commandTitle, action) {
 			return action;
 		}
@@ -34,6 +34,7 @@
 	function FakeActivityService() {
 		var availableActivities = [];
 		var targetActivity = null;
+		var fakeResponse = { data: [] };
 
 		this.fetchAvailableActivities = function() {
 			return {
@@ -47,7 +48,7 @@
 			targetActivity = input;
 			return {
 				then: (function (cb) {
-					cb(targetActivity);
+					cb(fakeResponse);
 				})
 			};
 		};
@@ -84,7 +85,7 @@
 			var ae = angular.element(e);
 			if (element.hasClass('form-submit')) applyButton = ae;
 		});
-	
+
 		expect(form.length).toBe(1);
 		expect(selectElements.length).toBe(1);
 		expect(timeRangePicker.length).toBe(1);
@@ -143,7 +144,7 @@
 	it('should see a disabled button when time range is invalid', function () {
 		var html = '<add-activity-panel selected-agents="" selected-date="getSelectedDate()"></add-activity-panel>';
 		var scope = $rootScope.$new();
-		scope.getSelectedDate = function () {		
+		scope.getSelectedDate = function () {
 			return new Date('2016-01-01');
 		};
 
@@ -209,9 +210,9 @@
 
 	it('should call add activity when click apply with correct data', function () {
 		var html = '<add-activity-panel selected-date="getSelectedDate()"></add-activity-panel>';
-		
+
 		var scope = $rootScope.$new();
-		scope.getSelectedDate = function () {		
+		scope.getSelectedDate = function () {
 			return new Date('2016-01-01');
 		};
 
@@ -254,13 +255,13 @@
 			var element = angular.element(e);
 			if (element.hasClass('form-submit')) applyButton = element;
 		});
-		
+
 		applyButton.triggerHandler('click');
 
 		scope.$apply();
 
 		var activityData = fakeActivityService.getAddActivityCalledWith();
-	
+
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonIds.length).toEqual(2);
 		expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');

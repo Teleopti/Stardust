@@ -228,5 +228,38 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			}
 			return svc.personInfo[personIds[0]].allowSwap && svc.personInfo[personIds[1]].allowSwap;
 		};
+
+		svc.getTotalSelectedPersonAndProjectionCount = function() {
+			var ret = {
+				checkedPersonCount: 0,
+				selectedActivityInfo: {
+					PersonCount: 0,
+					ActivityCount: 0
+				},
+				selectedAbsenceInfo: {
+					PersonCount: 0,
+					AbsenceCount: 0
+				}
+			};
+			var absenceCount = 0,
+				activityCount = 0,
+				personIds = [];
+			var selectedPersonInfo = svc.getSelectedPersonInfoList();
+			for (var j = 0; j < selectedPersonInfo.length; j++) {
+				var selectedPerson = selectedPersonInfo[j];
+				if (selectedPerson.checked) {
+					ret.checkedPersonCount++;
+				}
+				if (selectedPerson.personAbsenceCount > 0) {
+					ret.selectedAbsenceInfo.AbsenceCount += selectedPerson.personAbsenceCount;
+					ret.selectedAbsenceInfo.PersonCount++;
+				}
+				if (selectedPerson.personActivityCount > 0) {
+					ret.selectedActivityInfo.ActivityCount += selectedPerson.personActivityCount;
+					ret.selectedActivityInfo.PersonCount++;
+				}
+			}
+			return ret;
+		};
 	}
 ]);

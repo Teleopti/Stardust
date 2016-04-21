@@ -1,0 +1,36 @@
+<md-dialog aria-label="{{dialogTitle}}" ng-cloak class="team-schedule-command-failure-details-dialog">
+	<form>
+		<md-toolbar>
+			<div class="md-toolbar-tools">
+				<h2 translate>{{dialogTitle}}</h2>
+				<span flex></span>
+			</div>
+		</md-toolbar>
+		<md-dialog-content>
+			<div class="md-dialog-content">
+				<table style="width:100%;">
+                    <thead>
+                        <tr>
+                            <th style="width:25%;">{{'AgentName' | translate}}</th>
+                            <th>{{'Message' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="detail in details">
+                            <td>{{detail.PersonName}}</td>
+                            <td>
+                                <div ng-repeat="message in detail.Messages">{{message}}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+			</div>
+		</md-dialog-content>
+		<md-dialog-actions layout="row">
+			<span flex></span>
+			<button ng-click="cancel()" style="margin-right:20px;" class="wfm-btn wfm-btn-default">
+				{{'Close' | translate}}
+			</button>
+		</md-dialog-actions>
+	</form>
+</md-dialog>

@@ -344,12 +344,20 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var form = new RemovePersonAbsenceForm
 			{
 				ScheduleDate = scheduleDate,
-				PersonIds = new List<Guid> {personId1},
-				RemoveEntireCrossDayAbsence = true,
-				PersonAbsenceIds = new List<Guid>
+				SelectedPersonAbsences = new[]
 				{
-					personAbsenceId2
-				}
+					new SelectedPersonAbsence
+					{
+						PersonId = personId1,
+						PersonAbsenceIds = new Guid[] {personAbsenceId1}
+					},
+					new SelectedPersonAbsence
+					{
+						PersonId = personId2,
+						PersonAbsenceIds = new Guid[] {personAbsenceId2}
+					}
+				},
+				RemoveEntireCrossDayAbsence = true,
 			};
 			target.RemoveAbsence(form);
 
@@ -403,12 +411,26 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var form = new RemovePersonAbsenceForm
 			{
 				ScheduleDate = scheduleDate,
-				PersonIds = new List<Guid> {personId1},
-				RemoveEntireCrossDayAbsence = false,
-				PersonAbsenceIds = new List<Guid>
+				SelectedPersonAbsences = new []
 				{
-					personAbsenceId2
-				}
+					new SelectedPersonAbsence()
+					{
+						PersonId = personId1,
+						PersonAbsenceIds = new Guid[]
+						{
+							personAbsenceId1
+						}
+					}, 
+					new SelectedPersonAbsence()
+					{
+						PersonId = personId2,
+						PersonAbsenceIds = new Guid[]
+						{
+							personAbsenceId2
+						}
+					}, 
+				},
+				RemoveEntireCrossDayAbsence = false,
 			};
 			target.RemoveAbsence(form);
 

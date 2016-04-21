@@ -63,7 +63,7 @@
 				visible: function () { return vm.canActiveRemoveActivity(); }
 			}
 		];
-	
+
 		vm.canActiveAddActivity = function () {
 			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
 		};
@@ -88,11 +88,11 @@
 		}
 
 		vm.canRemoveAbsence = function () {
-			return parentVm.getTotalSelectedPersonAndProjectionCount().AbsenceCount > 0;
+			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.AbsenceCount > 0;
 		};
 
 		vm.canRemoveActivity = function () {
-			return parentVm.getTotalSelectedPersonAndProjectionCount().ActivityCount > 0;
+			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.ActivityCount > 0;
 		};
 
 		vm.toggleCommandState = function (menuName) {

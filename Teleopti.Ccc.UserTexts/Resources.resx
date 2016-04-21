@@ -14319,24 +14319,40 @@ Help us improve your experience by sending an error report</value>
     <comment>Success Message for Removing Activity</comment>
   </data>
   <data name="FailedMessageForRemovingActivity" xml:space="preserve">
-    <value>Could not remove activities for selected agents</value>
+    <value>Failed to remove activities for selected agents</value>
     <comment>Fail Message for Removing Activity</comment>
   </data>
   <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
     <value>The absence request for {0} on {1} could not be cancelled as no related absence was found.</value>
     <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Date.</comment>
   </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>Removing activities for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <comment>Partial success message for removing activity</comment>
+  </data>
   <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
     <value>The absence request for {0} from {1} - {2} could not be cancelled as no related absence was found.</value>
     <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Start Date/Time (2) End Date/Time</comment>
+  </data>
+   <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>Failed to add absence(s)</value>
+    <comment>Message for when failing to add absence</comment>
   </data>
   <data name="RequestsHaveBeenCancelled" xml:space="preserve">
     <value>{0} request(s) have been cancelled</value>
     <comment>Multiple requests have been cancelled  - shows the count of the affected requests.</comment>
   </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>Adding activities for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <comment>Message for when adding activity is not totally successful</comment>
+  </data>
   <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
     <value>{0} request(s) have not been cancelled</value>
     <comment>Multiple requests have been not been cancelled  - shows the count of the non affected requests.</comment>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>Removing absences for {0} agent(s): {1} succeeded, {1} failed.</value>
+  </data>
   </data>
   <data name="CancelRequest" xml:space="preserve">
     <value>Cancel Request</value>

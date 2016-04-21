@@ -120,9 +120,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.Count.Should().Be.EqualTo(1);
 			var error = result[0];
 
-			error.PersonName.Should().Be.EqualTo("Abc 123");
-			error.Message.Count.Should().Be.EqualTo(1);
-			error.Message[0].Should().Be.EqualTo(errorMessage);
+			error.PersonId.Should().Be.EqualTo(personIdFrom);
+			error.Messages.Count.Should().Be.EqualTo(1);
+			error.Messages[0].Should().Be.EqualTo(errorMessage);
 		}
 	}
 }

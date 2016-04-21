@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Repositories;
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					result.Add(new FailActionResult()
 					{
 						PersonId = personId,
-						Message = new List<string> { Resources.NoPermissionAddAgentActivity}
+						Messages = new List<string> { Resources.NoPermissionAddAgentActivity}
 					});
 				}
 			}
@@ -83,7 +84,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var result = new List<FailActionResult>();
 			foreach (var personActivity in input.PersonActivities)
 			{
-
+				var actionResult = new FailActionResult();
+				actionResult.PersonId = personActivity.PersonId;
 				if (_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveActivity, input.Date,
 					_personRepository.Load(personActivity.PersonId)))
 				{
@@ -102,21 +104,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 						_commandDispatcher.Execute(command);
 						if (command.ErrorMessages != null && command.ErrorMessages.Any())
-							result.Add(new FailActionResult
-							{
-								PersonId = personActivity.PersonId,
-								Message = command.ErrorMessages
-							});
+						{
+							actionResult.Messages.AddRange(command.ErrorMessages);
+						}
+							
 					}
 				}
 				else
 				{
-					result.Add(new FailActionResult
-					{
-						PersonId = personActivity.PersonId,
-						Message = new List<string> { Resources.NoPermissionRemoveAgentActivity}
-					});
+					actionResult.Messages = new List<string> {Resources.NoPermissionRemoveAgentActivity};
 				}
+				if (actionResult.Messages.Any())
+					result.Add(actionResult);
 			}
 
 			return result;

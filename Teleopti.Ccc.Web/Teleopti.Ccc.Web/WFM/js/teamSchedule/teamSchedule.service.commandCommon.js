@@ -10,6 +10,7 @@
 		var checkPersonWriteProtectionUrl = '../api/TeamScheduleCommand/PersonWriteProtectionCheck';
 
 		this.checkPersonWriteProtectionPromise = checkPersonWriteProtectionPromise;
+		this.showCommandFailureDetailsDialog = showCommandFailureDetailsDialog;
 
 		this.wrapPersonWriteProtectionCheck = wrapPersonWriteProtectionCheck;
 
@@ -32,7 +33,7 @@
 
 			var getPersons = PersonSelection.getSelectedPersonIdList;
 			var date = selectedDate;
-			
+
 			function getFix(writeProtectedPersons) {
 				if (writeProtectedPersons.length > 0)
 					return {
@@ -81,7 +82,38 @@
 			return wrapped;
 		}
 
+		function showCommandFailureDetailsDialog(title, details) {
+			return $mdDialog.show({
+				controller: commandFailureDetailsDialogCtrl,
+				templateUrl: 'js/teamSchedule/html/commandFailureDetailsDialog.tpl.html',
+				parent: angular.element(document.body),
+				clickOutsideToClose: true,
+				bindToController: true,
+				locals: {
+					dialogTitle: title,
+					details: details
+				}
+			});
+		}
+
 	}
 
+	commandFailureDetailsDialogCtrl.$inject = ['$scope', '$mdDialog', 'PersonSelection'];
+	function commandFailureDetailsDialogCtrl($scope, $mdDialog, PersonSelection) {
+		var ctrl = this;
+		$scope.dialogTitle = ctrl.dialogTitle;
+		$scope.details = [];
+		$scope.cancel = function () { $mdDialog.cancel(); };
+		init.apply(ctrl);
+
+		function init() {
+			angular.forEach(this.details, function (detail) {
+				$scope.details.push({
+					PersonName: PersonSelection.personInfo[detail.PersonId].name,
+					Messages: detail.Message
+				});
+			});
+		}
+	}
 
 })();

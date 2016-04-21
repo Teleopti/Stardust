@@ -11,7 +11,7 @@
 				defaultDateTime: '&',
 				actionsAfterAbsenceApply: '&'
 			},
-			controller: ['$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', 'PersonSelection', addAbsenceCtrl],
+			controller: ['$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
@@ -20,7 +20,7 @@
 		};
 	};
 
-	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator, CommandCommon, personSelectionSvc) {
+	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator, CommandCommon, personSelectionSvc, NotificationService) {
 		var vm = this;
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
@@ -50,14 +50,6 @@
 		function applyAbsence() {
 			var trackId = guidgenerator.newGuid();
 			var personIds = personSelectionSvc.getCheckedPersonIds();
-			var afterAppliedAbsence = function(result) {
-				vm.actionsAfterAbsenceApply({
-					result: { TrackId: trackId, Errors: result },
-					personIds: personIds,
-					successMessageTemplate: 'AddAbsenceSuccessedResult',
-					failMessageTemplate: 'AddAbsenceTotalResult'
-				});
-			}
 			if (vm.isFullDayAbsence) {
 				personAbsenceSvc.applyFullDayAbsence.post({
 					PersonIds: personIds,
@@ -65,7 +57,7 @@
 					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
 					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD"),
 					TrackedCommandInfo: { TrackId: trackId }
-				}).$promise.then(function(result) { afterAppliedAbsence(result) });
+				}).$promise.then(onSuccessfullyAppliedAbsence, onFailingToApplyAbsence);
 			} else {
 				personAbsenceSvc.applyIntradayAbsence.post({
 					PersonIds: personIds,
@@ -73,9 +65,32 @@
 					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
 					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm"),
 					TrackedCommandInfo: { TrackId: trackId }
-				}).$promise.then(function (result) { afterAppliedAbsence(result) });
+				}).$promise.then(onSuccessfullyAppliedAbsence, onFailingToApplyAbsence);
 			}
-		};
+
+			function onFailingToApplyAbsence(result) {
+				vm.actionsAfterAbsenceApply({
+					trackId: trackId,
+					personIds: personIds,
+				});
+				NotificationService.notify('error', 'AddAbsenceFailed');
+			}
+
+			function onSuccessfullyAppliedAbsence(result) {
+				vm.actionsAfterAbsenceApply({
+					trackId: trackId,
+					personIds: personIds,
+				});
+				var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().checkedPersonCount;
+				var fail = result.length;
+				if (fail === 0) {
+					NotificationService.notify('success', 'AddAbsenceSuccessedResult');
+				} else {
+					var title = NotificationService.notify('warning', 'AddAbsenceTotalResult', [total - fail, fail]);
+					CommandCommon.showCommandFailureDetailsDialog(title, result);
+				}
+			}
+		}
 
 		function updateDateAndTimeFormat($scope, $locale) {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;

@@ -36,22 +36,16 @@ angular.module("wfm.teamSchedule").service("PersonAbsence", [
 			}
 		});
 
-		service.PromiseForRemovePersonAbsence = function (scheduleDate, personIds, personAbsenceIds, removeEntireCrossDayAbsence, action) {
-			var trackId = guidgenerator.newGuid();
+		service.removePersonAbsence = removePersonAbsence;
 
+		function removePersonAbsence(scheduleDate, selectedPersonAbsences, removeEntireCrossDayAbsence, trackId) {
 			var cmd = {
 				ScheduleDate: scheduleDate.format("YYYY-MM-DD"),
-				PersonIds: personIds,
-				PersonAbsenceIds: personAbsenceIds,
+				SelectedPersonAbsences: selectedPersonAbsences,
 				RemoveEntireCrossDayAbsence: removeEntireCrossDayAbsence,
 				TrackedCommandInfo: { TrackId: trackId }
-			}
-			service.removeAbsence.post(cmd).$promise.then(function (result) {
-				action({
-					TrackId: trackId,
-					Errors: result
-				});
-			});
+			};
+			return service.removeAbsence.post(cmd).$promise;
 		}
 	}
 ]);

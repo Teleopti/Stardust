@@ -89,26 +89,6 @@
 			return params;
 		}
 
-		vm.getTotalSelectedPersonAndProjectionCount = function() {
-			var absenceCount = 0,
-				activityCount = 0,
-				personIds = [];
-			var selectedPersonInfo = personSelectionSvc.getSelectedPersonInfoList();
-			for (var j = 0; j < selectedPersonInfo.length; j++) {
-				var selectedPerson = selectedPersonInfo[j];
-				if (personIds.indexOf(selectedPerson.personId) === -1) {
-					personIds.push(selectedPerson.personId);
-					absenceCount += selectedPerson.personAbsenceCount;
-					activityCount += selectedPerson.personActivityCount;
-				}
-			}
-			return {
-				PersonCount: personIds.length,
-				AbsenceCount: absenceCount,
-				ActivityCount: activityCount
-			};
-		};
-
 		function afterSchedulesLoaded(result) {
 			vm.paginationOptions.totalPages = result.Schedules.length > 0 ? Math.ceil(result.Total / vm.paginationOptions.pageSize) : 0;
 			vm.scheduleCount = scheduleMgmtSvc.groupScheduleVm.Schedules.length;
@@ -131,7 +111,7 @@
 		vm.toggleShowAbsenceOnly = function () {
 			vm.paginationOptions.pageNumber = 1;
 			vm.loadSchedules();
-		}
+		};
 
 		vm.updateSchedules = function (personIdList) {
 			vm.isLoading = true;
@@ -195,30 +175,48 @@
 			var personIdFrom = selectedPersonIds[0];
 			var personIdTo = selectedPersonIds[1];
 			swapShiftsSvc.PromiseForSwapShifts(personIdFrom, personIdTo, vm.scheduleDateMoment(), function(result) {
-				vm.afterActionCallback(result, personSelectionSvc.getSelectedPersonIdList(), "FinishedSwapShifts", "FailedToSwapShifts");
+				vm.afterActionCallback(null, personSelectionSvc.getSelectedPersonIdList());
+				if (result.length === 0) {
+					notificationService.notify('success', 'FinishedSwapShifts');
+				} else {
+					notificationService.notify('error', 'FailedToSwapShifts');
+				}
 			});
 		}
 
 		function removeAbsence(removeEntireCrossDayAbsence) {
+			var trackId = guidgenerator.newGuid();
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
 			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
 
-			var selectedAbsences = [];
-			for (var i = 0; i < selectedPersonProjections.length; i++) {
-				selectedAbsences = selectedAbsences.concat(selectedPersonProjections[i].selectedAbsences);
-			}
-
-			personAbsenceSvc.PromiseForRemovePersonAbsence(vm.scheduleDateMoment(), [], selectedAbsences,
-				removeEntireCrossDayAbsence, function(result) {
-					vm.afterActionCallback(result, selectedPersonIdList, "FinishedRemoveAbsence", "FailedToRemoveAbsence");
+			var selectedPersonAbsences = [];
+			angular.forEach(selectedPersonProjections, function (personProjection) {
+				if (personProjection.personAbsenceCount > 0) {
+					selectedPersonAbsences.push({
+						PersonId: personProjection.personId,
+						PersonAbsenceIds: personProjection.selectedAbsences
+					});
 				}
-			);
+			});
+
+			personAbsenceSvc.removePersonAbsence(vm.scheduleDateMoment(), selectedPersonAbsences,
+				removeEntireCrossDayAbsence, trackId).then(function (result) {
+					vm.afterActionCallback(trackId, selectedPersonIdList);
+					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.PersonCount;
+					var fail = result.length;
+					if (fail === 0) {
+						notificationService.notify('success', 'FinishedRemoveAbsence');
+					} else {
+						var title = notificationService.notify('warning', 'PartialSuccessMessageForRemovingAbsence', [total, total - fail, fail]);
+						CommandCommonSvc.showCommandFailureDetailsDialog(title, result);
+					}
+				});
 		}
 
-		var getRemoveAbsenceMessage = function() {
+		function getRemoveAbsenceMessage() {
 			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
-			[vm.getTotalSelectedPersonAndProjectionCount().AbsenceCount, vm.getTotalSelectedPersonAndProjectionCount().PersonCount]);
-		};
+			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.AbsenceCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.PersonCount]);
+		}
 
 
 		vm.confirmRemoveAbsence = function () {
@@ -242,26 +240,25 @@
 				PersonActivities: personActivities,
 				TrackedCommandInfo: { TrackId: trackId }
 			};
-			ActivityService.removeActivity(removeActivityForm).then(function (result) {
-				vm.afterActionCallback(
-					{ TrackId: trackId },
-					personIds,
-					'SuccessfulMessageForRemovingActivity',
-					''
-				);
+			ActivityService.removeActivity(removeActivityForm).then(function (response) {
+				vm.afterActionCallback(trackId, personIds);
+				if (response.data.length === 0) {
+					notificationService.notify('success', 'SuccessfulMessageForRemovingActivity');
+				} else {
+					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.PersonCount;
+					var fail = response.data.length;
+					var title = notificationService.notify('warning', 'PartialSuccessMessageForRemovingActivity', [total, total - fail, fail]);
+					CommandCommonSvc.showCommandFailureDetailsDialog(title, response.data);
+				}
 			}, function (error) {
-				vm.afterActionCallback(
-					{ TrackId: trackId, Errors: error },
-					personIds,
-					'',
-					'FailedMessageForRemovingActivity'
-				);
+				vm.afterActionCallback(trackId, personIds);
+				notificationService.notify('error', 'FailedMessageForRemovingActivity');
 			});
 		}
 
 		function getRemoveActivityMessage() {
 			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedActivity"),
-			[vm.getTotalSelectedPersonAndProjectionCount().ActivityCount, vm.getTotalSelectedPersonAndProjectionCount().PersonCount]);
+			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.ActivityCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.PersonCount]);
 		}
 
 		vm.confirmRemoveActivity = function () {
@@ -287,36 +284,40 @@
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
 
-		var handleActionResult = function (errors, successMessageTemplate, failMessageTemplate) {
+		function showErrorDetail(error){
+			vm.showErrorDetail = true;
+			vm.errorDetails = error;
+		}
+
+		function handleActionResult(errors, successMessageTemplate, totalFailMessageTemplate, partialSuccessMessageTemplate) {
 			var selectedPersonList = personSelectionSvc.getSelectedPersonIdList();
-			var total = selectedPersonList.length;
+			var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().ActivityCount;
+			var _partialSuccessMessageTemplate = partialSuccessMessageTemplate ? partialSuccessMessageTemplate : totalFailMessageTemplate;
 
 			vm.errorTitle = "";
 			vm.errorDetails = [];
 			vm.showErrorDetails = false;
 
 			var message;
-			if (errors == undefined || errors.length === 0) {
+			if (!errors || errors.length === 0) {
 				message = replaceParameters($translate.instant(successMessageTemplate));
 				notificationService.notifySuccess(message);
-			} else if (errors.length != undefined) {
+			} else if (errors.length) {
 				var successCount = total - errors.length;
-				message = replaceParameters($translate.instant(failMessageTemplate), [successCount, errors.length]);
+				message = replaceParameters($translate.instant(_partialSuccessMessageTemplate), [errors.length, total]);
 				notificationService.notifyFailure(message);
 				vm.errorTitle = message;
 				vm.errorDetails = errors;
 				vm.showErrorDetails = true;
-			} else {
-				message = replaceParameters($translate.instant(failMessageTemplate));
+			} else if (typeof errors === "string") {
+				message = replaceParameters($translate.instant(totalFailMessageTemplate));
 				notificationService.notifyFailure(message);
 			}
 		}
 
-		vm.afterActionCallback = function (result, personIds, successMessageTemplate, failMessageTemplate) {
+		vm.afterActionCallback = function (trackId, personIds) {
 			vm.cmdConfigurations.currentCommandName = null;
-			vm.lastCommandTrackId = result.TrackId;
-			handleActionResult(result.Errors, successMessageTemplate, failMessageTemplate);
-
+			vm.lastCommandTrackId = trackId;
 			vm.updateSchedules(personIds);
 		};
 

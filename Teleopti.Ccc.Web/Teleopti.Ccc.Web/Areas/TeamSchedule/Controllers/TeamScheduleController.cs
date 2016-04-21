@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
+using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -169,16 +170,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IHttpActionResult RemoveAbsence(RemovePersonAbsenceForm command)
 		{
 			setTrackedCommandInfo(command.TrackedCommandInfo);
-
-			var personAbsenceIds = getPersonAbsencesForPeople(command.PersonIds.ToList(), command.ScheduleDate);
-			var personAbsenceIdsForRemove = new HashSet<Guid>(command.PersonAbsenceIds.Concat(personAbsenceIds));
-
-			var personAbsencesForRemove = _personAbsenceRepository.Find(personAbsenceIdsForRemove);
-			
-			var errors = command.RemoveEntireCrossDayAbsence
+			var errors = new List<FailActionResult>();
+			foreach (var personAbsence in command.SelectedPersonAbsences)
+			{
+				var personAbsencesForRemove = _personAbsenceRepository.Find(personAbsence.PersonAbsenceIds);
+				var result = command.RemoveEntireCrossDayAbsence
 				? removeEntirePersonAbsence(command.ScheduleDate, personAbsencesForRemove, command.TrackedCommandInfo)
 				: removePartPersonAbsence(command.ScheduleDate, personAbsencesForRemove, command.ScheduleDate,
 					command.TrackedCommandInfo);
+				errors.AddRange(result);
+			}
+
 			return Ok(errors);
 		}
 
@@ -309,19 +311,18 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 
 		private void appendErrorMessage(ICollection<FailActionResult> failResults, ActionErrorMessage error)
 		{
-			var personName = _personNameProvider.BuildNameFromSetting(error.PersonName);
-			var existingFailResult = failResults.SingleOrDefault(r => r.PersonName == personName);
+			var existingFailResult = failResults.SingleOrDefault(r => r.PersonId == error.PersonId);
 			if (existingFailResult == null)
 			{
 				failResults.Add(new FailActionResult
 				{
-					PersonName = personName,
-					Message = error.ErrorMessages.ToList()
+					PersonId = error.PersonId,
+					Messages = error.ErrorMessages.ToList()
 				});
 			}
 			else
 			{
-				existingFailResult.Message = existingFailResult.Message.Concat(error.ErrorMessages).ToList();
+				existingFailResult.Messages = existingFailResult.Messages.Concat(error.ErrorMessages).ToList();
 			}
 		}
 	}
