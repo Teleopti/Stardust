@@ -145,3 +145,9 @@ wfm-notice{
 .ui-select .bu-caret {
 	top: 0;
 }
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.container.content{
+		height: 92vh;
+	}
+}
