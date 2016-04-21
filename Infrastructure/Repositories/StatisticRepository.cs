@@ -437,23 +437,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			});
 		}
 
-		public IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications()
-		{
-			return repositoryActionWithRetry(uow =>
-			{
-				const string sql =
-					"exec [mart].[raptor_forecast_actual_differ_notifications]";
-
-				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(sql)
-					.AddScalar("Receiver", NHibernateUtil.String)
-					.AddScalar("Subject", NHibernateUtil.String)
-					.AddScalar("Body", NHibernateUtil.String)
-					.SetReadOnly(true)
-					.SetResultTransformer(Transformers.AliasToBean(typeof (ForecastActualDifferNotification)))
-					.List<ForecastActualDifferNotification>();
-			});
-		}
-
 		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
 		{
 			return repositoryActionWithRetry(uow =>

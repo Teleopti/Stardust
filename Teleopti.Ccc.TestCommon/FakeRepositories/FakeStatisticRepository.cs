@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using NUnit.Framework;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -102,11 +99,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
-		{
-			throw new NotImplementedException();
-		}
-
-		public IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications()
 		{
 			throw new NotImplementedException();
 		}

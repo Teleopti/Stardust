@@ -146,12 +146,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void CheckForecastDifferShouldWork()
-		{
-			target.ForecastActualDifferNotifications();
-		}
-
-		[Test]
 		public void ShouldLoadSkillStatisticForSpecificDates()
 		{
 			target.LoadSkillStatisticForSpecificDates( new DateOnly(2006, 1, 1));

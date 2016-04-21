@@ -172,11 +172,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new List<Guid>();
 	    }
 
-	    public IEnumerable<ForecastActualDifferNotification> ForecastActualDifferNotifications()
-	    {
-		    return new List<ForecastActualDifferNotification>();
-	    }
-
 	    public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
         {
             return new List<Guid>();
