@@ -115,12 +115,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return retObj;
         }
 
-        public virtual void ReplaceText(string text)
-        {
-            InParameter.StringTooLong("text", text, 255);
-            _scheduleNote = text;
-        }
-
         public virtual IAggregateRoot MainRoot
         {
             get { return _person; }
