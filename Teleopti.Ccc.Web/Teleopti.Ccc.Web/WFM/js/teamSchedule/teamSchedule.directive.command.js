@@ -65,19 +65,17 @@
 		];
 	
 		vm.canActiveAddActivity = function () {
-			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission && vm.permissions.HasModifyAssignmentPermission;
+			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
 		};
 
 		vm.canActiveAddAbsence = function() {
 			return vm.toggles.AbsenceReportingEnabled
-				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable)
-				&& vm.permissions.IsModifyScheduleAvailable && vm.permissions.HasModifyPersonAbsencePermission;
+				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
 		};
 
 		vm.canActiveRemoveAbsence = function() {
 			return vm.toggles.RemoveAbsenceEnabled
-				&& vm.permissions.IsRemoveAbsenceAvailable
-				&& vm.permissions.IsModifyScheduleAvailable;
+				&& vm.permissions.IsRemoveAbsenceAvailable;
 		};
 
 		vm.canActiveRemoveActivity = function() {
@@ -86,8 +84,7 @@
 
 		vm.canActiveSwapShifts = function () {
 			return vm.toggles.SwapShiftEnabled
-				&& vm.permissions.IsSwapShiftsAvailable
-				&& vm.permissions.IsModifyScheduleAvailable;
+				&& vm.permissions.IsSwapShiftsAvailable;
 		}
 
 		vm.canRemoveAbsence = function () {
