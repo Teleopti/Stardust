@@ -23,7 +23,8 @@
 	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator, CommandCommon, personSelectionSvc) {
 		var vm = this;
 
-		vm.selectedAbsenceStartDate = vm.defaultDateTime();
+		vm.selectedAbsenceStartDate = vm.defaultDateTime().toDate();
+		
 		vm.selectedAbsenceEndDate = moment(vm.defaultDateTime()).add(1, 'hour').toDate();
 		vm.absencePermissions = {
 			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
