@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
@@ -35,7 +36,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				fixedDate = _now.UtcDateTime();
 
 			var offset = _userTimeZone.TimeZone().BaseUtcOffset;
-			var dayLightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(_userTimeZone.TimeZone(), _now.LocalDateTime().Year);
+			var calendar = new GregorianCalendar();
+
+			var dayLightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(_userTimeZone.TimeZone(),calendar.GetYear(_now.LocalDateTime()));
 
 			var returnValue = new LayoutBaseViewModel
 			{
@@ -46,14 +49,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 				FixedDate = fixedDate,
 				UserTimezoneOffsetMinute = (int) offset.TotalMinutes
 			};
-
-			;
-
+			
 			if (dayLightSavingAdjustment != null)
 			{
 				returnValue.HasDayLightSaving = true;
-				returnValue.DayLightSavingStart = string.Format("{0:yyyy-MM-ddTHH:mm:ssZ}",TimeZoneHelper.ConvertToUtc(dayLightSavingAdjustment.Start,_userTimeZone.TimeZone()));
-				returnValue.DayLightSavingEnd = string.Format("{0:yyyy-MM-ddTHH:mm:ssZ}",TimeZoneHelper.ConvertToUtc(dayLightSavingAdjustment.End.AddSeconds(-1),_userTimeZone.TimeZone()));
+				returnValue.DayLightSavingStart = TimeZoneHelper.ConvertToUtc(dayLightSavingAdjustment.Start,_userTimeZone.TimeZone()).ToGregorianDateTimeString();
+				returnValue.DayLightSavingEnd = TimeZoneHelper.ConvertToUtc(dayLightSavingAdjustment.End.AddSeconds(-1),_userTimeZone.TimeZone()).ToGregorianDateTimeString();
 				returnValue.DayLightSavingAdjustmentInMinute = (int) dayLightSavingAdjustment.Delta.TotalMinutes;
 			}
 

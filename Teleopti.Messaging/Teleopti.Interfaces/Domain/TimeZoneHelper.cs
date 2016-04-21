@@ -176,19 +176,20 @@ namespace Teleopti.Interfaces.Domain
 
 			var localCalendar = CultureInfo.CurrentCulture.Calendar;
 			var startOfWeekForTransition = transitionTime.Week * 7 - 6;
-			var dayOfWeekMonthStart = (int)localCalendar.GetDayOfWeek(new DateTime(year, transitionTime.Month, 1));
+
+			var gregorianDate = new DateTime(year,transitionTime.Month,1);
+
+			var dayOfWeekMonthStart = (int)localCalendar.GetDayOfWeek(gregorianDate);
 			var changeDayOfWeek = (int)transitionTime.DayOfWeek;
 
 			var transitionDay = dayOfWeekMonthStart <= changeDayOfWeek
 				? startOfWeekForTransition + (changeDayOfWeek - dayOfWeekMonthStart)
 				: startOfWeekForTransition + (7 - dayOfWeekMonthStart + changeDayOfWeek);
 
-			if (transitionDay > localCalendar.GetDaysInMonth(year, transitionTime.Month))
+			if (transitionDay > localCalendar.GetDaysInMonth(localCalendar.GetYear(gregorianDate), localCalendar.GetMonth(gregorianDate)))
 			{
 				transitionDay -= 7;
 			}
-
-
 
 			return ConvertToUtc(new DateTime(
 				year,
