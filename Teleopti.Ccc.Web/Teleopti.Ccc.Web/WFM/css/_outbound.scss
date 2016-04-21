@@ -48,7 +48,7 @@
         border-bottom:2px solid $red-700;
 	}
 	.enhanced-gantt-header{
-		@extend .cursor-pointer;
+		cursor: pointer; 
 		transition: $transition-timing;
 	}
 	.enhanced-gantt-header:hover{
