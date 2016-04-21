@@ -66,17 +66,6 @@ namespace Teleopti.Interfaces.Domain
         void SetTasks(double numberOfTasks);
 
         /// <summary>
-        /// Combines the specified task period.
-        /// </summary>
-        /// <param name="taskPeriod">The task period.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-01-11
-        /// </remarks>
-        IList<ITemplateTaskPeriod> Combine(ITemplateTaskPeriod taskPeriod);
-
-        /// <summary>
         /// Splits the specified period length.
         /// </summary>
         /// <param name="periodLength">Length of the period.</param>
