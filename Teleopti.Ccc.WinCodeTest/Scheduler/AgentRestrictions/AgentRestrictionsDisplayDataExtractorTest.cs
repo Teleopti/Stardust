@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 	public class AgentRestrictionsDisplayDataExtractorTest
 	{
 		private MockRepository _mocks;
-		private IAgentRestrictionsDisplayDataExtractor _target;
+		private AgentRestrictionsDisplayDataExtractor _target;
 		private IScheduleMatrixPro _matrix;
 		private RestrictionSchedulingOptions _schedulingOptions;
 		private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;

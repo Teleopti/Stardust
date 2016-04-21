@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Threading;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 {
-	public interface IAgentRestrictionsDisplayDataExtractor
-	{
-		void ExtractTo(IAgentDisplayData agentDisplayData, RestrictionSchedulingOptions schedulingOptions);
-	}
-
-	public class AgentRestrictionsDisplayDataExtractor : IAgentRestrictionsDisplayDataExtractor
+	public class AgentRestrictionsDisplayDataExtractor 
 	{
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff;
