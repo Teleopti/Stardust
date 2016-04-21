@@ -154,22 +154,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             get { return _isDeleted; }
         }
 
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-07-29
-        /// </remarks>
-        public virtual object Clone()
-        {
-            ExternalLogOn retobj = (ExternalLogOn)MemberwiseClone();
-            return retobj;
-        }
-
         public virtual void SetDeleted()
         {
             _isDeleted = true;

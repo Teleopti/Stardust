@@ -52,13 +52,5 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.IsFalse(target.Active);
             Assert.AreEqual(3,target.DataSourceId);
         }
-
-        [Test]
-        public void VerifyCloneWorks()
-        {
-            ExternalLogOn clonedEntity = (ExternalLogOn)target.Clone();
-            Assert.AreNotEqual(clonedEntity, target);
-            Assert.AreNotSame(clonedEntity, target);
-        }
     }
 }
