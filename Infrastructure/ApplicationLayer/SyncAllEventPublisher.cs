@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using Teleopti.Ccc.Domain;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -34,24 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				var handlerTypes = _resolver.HandlerTypesFor<IRunOnHangfire>(@event);
 				foreach (var handlerType in handlerTypes)
 				{
-					Exception exception = null;
-					var thread = new Thread(() =>
-					{
-						try
-						{
-							_processor.Process(@event, handlerType);
-						}
-						catch (Exception ex)
-						{
-							PreserveStack.For(ex);
-							exception = ex;
-						}
-					});
-					thread.Start();
-					thread.Join();
-					if (exception != null)
-						throw exception;
-					
+					_processor.Process(@event, handlerType);
+
 				}
 			}
 			
@@ -61,30 +42,17 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 #pragma warning restore 618
 				.ForEach(@event =>
 				{
-					Exception exception = null;
-					var thread = new Thread(() =>
-					{
-						try
-						{
-							ProcessLikeTheBus(@event);
-						}
-						catch (Exception ex)
-						{
-							PreserveStack.For(ex);
-							exception = ex;
-						}
-					});
-					thread.Start();
-					thread.Join();
-					if (exception != null)
-						throw exception;
+					ProcessLikeTheBus(@event);
 				});
 		}
 
 		[AsSystem]
 		protected virtual void ProcessLikeTheBus(IEvent @event)
 		{
-			_serviceBusEventProcessor.Process(@event);
+#pragma warning disable 618
+			foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
+#pragma warning restore 618
+				_processor.Process(@event, handler);
 		}
 	}
 
