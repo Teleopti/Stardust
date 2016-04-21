@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
@@ -353,22 +352,6 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         public new IAccount ContainedEntity
         {
             get { return base.ContainedEntity; }
-        }
-
-        /// <summary>
-        /// Gets the current person accoung by date.
-        /// </summary>
-        /// <param name="selectedDate">The selected date.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Shiran Ginige
-        /// Created date: 2008-08-21
-        /// </remarks>
-        public IAccount GetCurrentPersonAccountByDate(DateOnly selectedDate)
-        {
-            //kan vara flera. har kvar samma fel som polackerna
-            _currentAccount = _containedEntity.Find(selectedDate).FirstOrDefault();
-            return _currentAccount;
         }
     }
 }

@@ -14,7 +14,6 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -93,23 +92,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             //Assert.IsNotNull(_target.Used);
             Assert.IsNotNull(_targetDay.CurrentAccount);
             Assert.IsFalse(_targetDay.CanGray);
-            Assert.IsFalse(_targetDay.CanBold);
-        }
-
-        [Test]
-        public void VerifyCurrentPersonAccountNullChecks()
-        {
-            SetTargetDayWithoutAccount();
-            IAccount account = _targetDay.GetCurrentPersonAccountByDate(new DateOnly(2005, 5, 2));
-
-            Assert.IsNull(account);
-            Assert.IsNull(_targetDay.AccountDate);
-            Assert.IsNull(_targetDay.Extra);
-            Assert.IsNull(_targetDay.Accrued);
-            Assert.IsNull(_targetDay.BalanceIn);
-            Assert.IsNull(_targetDay.BalanceOut);
-            Assert.IsTrue(_targetDay.CanGray);
-            Assert.IsNull(_targetDay.Used);
             Assert.IsFalse(_targetDay.CanBold);
         }
 
