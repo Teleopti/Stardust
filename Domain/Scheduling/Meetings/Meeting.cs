@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 {
@@ -73,17 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		public virtual IEnumerable<IMeetingPerson> MeetingPersons
 		{
 			get { return _meetingPersons; }
-		}
-
-		public virtual bool ContainsPerson(IPerson person)
-		{
-			foreach (IMeetingPerson meetingPerson in _meetingPersons)
-			{
-				if (meetingPerson.Person.Equals(person))
-					return true;
-			}
-
-			return false;
 		}
 
 		public virtual string Subject

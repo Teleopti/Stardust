@@ -167,17 +167,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.AreEqual(0, personMeetings.Count);
         }
 
-        [Test]
-        public void VerifyContainsPerson()
-        {
-            var meetingPerson = new MeetingPerson(_person, true);
-
-            _target.ClearMeetingPersons();
-            _target.AddMeetingPerson(meetingPerson);
-
-            Assert.IsTrue(_target.ContainsPerson(_person));
-            Assert.IsFalse(_target.ContainsPerson(PersonFactory.CreatePerson()));
-        }
 
         [Test]
         public void VerifyCanRemoveRecurrence()

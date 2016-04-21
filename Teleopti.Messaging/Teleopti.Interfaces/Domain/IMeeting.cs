@@ -25,13 +25,6 @@ namespace Teleopti.Interfaces.Domain
         void ClearMeetingPersons();
 
         /// <summary>
-        /// ContainsPerson
-        /// </summary>
-        /// <param name="person"></param>
-        /// <returns></returns>
-        bool ContainsPerson(IPerson person);
-
-        /// <summary>
         /// Description
         /// </summary>
         string Description { set; }
