@@ -3,12 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-    public interface IBlockPeriodFinderBetweenDayOff
-    {
-        DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly, bool isSingleAgentTeam);
-    }
-
-    public class BlockPeriodFinderBetweenDayOff : IBlockPeriodFinderBetweenDayOff
+    public class BlockPeriodFinderBetweenDayOff
     {
         public DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly,bool isSingleAgentTeam)
         {

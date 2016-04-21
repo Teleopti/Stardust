@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     {
         private MockRepository _mocks;
         private IScheduleMatrixPro _matrix;
-        private IBlockPeriodFinderBetweenDayOff _target;
+        private BlockPeriodFinderBetweenDayOff _target;
 	    private IScheduleRange _range;
 	    private IPerson _person;
 	    private IScheduleDay _scheduleDay;
