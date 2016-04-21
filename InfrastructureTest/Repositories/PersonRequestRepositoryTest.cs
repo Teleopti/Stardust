@@ -210,31 +210,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void FindPersonRequestByRequestType()
-		{
-			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
-
-			var shiftExchangeOfferPersonRequest = createShiftExchangeOffer(startDate);
-			var shiftTradePersonRequest = CreateShiftTradeRequest("Test");
-
-			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferPersonRequest);
-			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
-
-			var period = new DateTimePeriod(2000, 04, 1, 2014, 08, 20);
-			var foundShiftExchangeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftExchangeOffer>(_person, period);
-			var foundShiftTradeRequests = new PersonRequestRepository(UnitOfWork).Find<ShiftTradeRequest>(_person, period);
-
-			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0].Request));
-			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferPersonRequest));
-
-			Assert.AreEqual(1, foundShiftTradeRequests.Count);
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftTradeRequests[0].Request));
-			Assert.IsTrue(foundShiftTradeRequests.Contains(shiftTradePersonRequest));
-
-		}
-
-		[Test]
 		public void FindPendingPersonRequestByRequestTypeAndStartDate()
 		{
 			var startDate = new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc);
