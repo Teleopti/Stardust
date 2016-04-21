@@ -133,53 +133,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             _rotation.SetDeleted();
             Assert.IsFalse(_rotation.IsChoosable);
         }
-
-        [Test]
-        public void VerifyCanCheckIsRotationDay()
-        {
-            IRotationDay day = _rotation.RotationDays[0];
-            Assert.IsFalse(day.IsRotationDay());
-            
-            day.SignificantRestriction().ShiftCategory = new ShiftCategory("öskö");
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().ShiftCategory = null;
-            Assert.IsFalse(day.IsRotationDay());
-
-            day.SignificantRestriction().DayOffTemplate = new DayOffTemplate(new Description("öa"));
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().DayOffTemplate = null;
-            Assert.IsFalse(day.IsRotationDay());
-
-            day.SignificantRestriction().StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6,0,0),null); 
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().StartTimeLimitation = new StartTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsRotationDay());
-
-            day.SignificantRestriction().StartTimeLimitation = new StartTimeLimitation( null,new TimeSpan(9, 0, 0));
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().StartTimeLimitation = new StartTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsRotationDay());
-
-            day.SignificantRestriction().EndTimeLimitation = new EndTimeLimitation(new TimeSpan(17, 0, 0), null);
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().EndTimeLimitation = new EndTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsRotationDay());
-
-            day.SignificantRestriction().EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(19, 0, 0));
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().EndTimeLimitation = new EndTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsRotationDay());
-
-            day.SignificantRestriction().WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(17, 0, 0), null);
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().WorkTimeLimitation = new WorkTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsRotationDay());
-
-            day.SignificantRestriction().WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(19, 0, 0));
-            Assert.IsTrue(day.IsRotationDay());
-            day.SignificantRestriction().WorkTimeLimitation = new WorkTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsRotationDay());
-        }
     }
 
 }

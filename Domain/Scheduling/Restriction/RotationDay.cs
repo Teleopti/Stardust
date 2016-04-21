@@ -38,10 +38,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
         {
             return _restrictionCollection[0];
         }
-
-        public virtual bool IsRotationDay()
-        {
-            return SignificantRestriction().IsRestriction();
-        }
     }
 }

@@ -25,13 +25,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
         IRotationRestriction SignificantRestriction();
-
-        /// <summary>
-        /// Determines whether [is rotation day].
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if [is rotation day]; otherwise, <c>false</c>.
-        /// </returns>
-        bool IsRotationDay();
     }
 }
