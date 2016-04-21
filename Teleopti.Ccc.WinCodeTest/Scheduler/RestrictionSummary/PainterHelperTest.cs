@@ -65,15 +65,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         [Test]
         public void VerifyCanPaintAbsence()
         {
-            PreferenceCellData cellData = new PreferenceCellData();
-            cellData.SchedulingOption = GetSchedulingOptions(false, false, false, false, false);
+	        var cellData = new PreferenceCellData
+	        {
+		        HasFullDayAbsence = true,
+		        SchedulingOption = GetSchedulingOptions(true, false, false, false, false),
+		        HasDayOff = false,
+		        HasAbsenceOnContractDayOff = true
+	        };
+	        _target = new PainterHelper(cellData);
+			Assert.IsTrue(_target.CanPaintAbsenceOnContractDayOff());
 
-            cellData.HasAbsenceOnContractDayOff = true;
-            _target = new PainterHelper(cellData);
-            Assert.IsTrue(_target.CanPaintAbsenceOnContractDayOff());
-        }
+		}
 
-        [Test]
+		[Test]
         public void ShouldPaintPreferredAbsence()
         {
             PreferenceCellData cellData = new PreferenceCellData();
