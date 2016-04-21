@@ -162,7 +162,7 @@
 
 		vm.setEarliestStartOfSelectedSchedule = function() {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
-			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds);
+			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds).toDate();
 		};
 
 		vm.defaultNewActivityStart = function() {
