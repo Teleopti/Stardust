@@ -62,15 +62,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             return new PdfLinearGradientBrush(rect, Color.WhiteSmoke, color, 90);
         }
 
-        public PdfTilingBrush TilingBrush()
-        {
-            var rect = new RectangleF(0, 0, _projectionRectangle.Height, _projectionRectangle.Height);
-            var tilingBrush = new PdfTilingBrush(rect);
-            var pen = new PdfPen(Color.LightGray, 0.5f);
-            tilingBrush.Graphics.DrawLine(pen, 0, _projectionRectangle.Height, _projectionRectangle.Height, 0);
-            return tilingBrush;   
-        }
-
         public IDayOff PersonDayOff()
         {
             if(_scheduleDay.SignificantPartForDisplay() != SchedulePartView.DayOff) 

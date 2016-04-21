@@ -131,15 +131,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
         }
 
         [Test]
-        public void ShouldReturnTilingBruch()
-        {
-            var tilingBrush = _target.TilingBrush();
-            Assert.IsNotNull(tilingBrush);
-            Assert.AreEqual(tilingBrush.Rectangle.Width, _projectionRectangle.Height);
-            Assert.AreEqual(tilingBrush.Rectangle.Height, _projectionRectangle.Height);
-        }
-
-        [Test]
         public void ShouldNotDrawAndReturnEmptyRectangleWhenNoDayOff()
         {
             using(_mock.Record())
