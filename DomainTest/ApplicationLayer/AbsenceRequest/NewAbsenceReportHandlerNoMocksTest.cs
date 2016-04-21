@@ -20,11 +20,11 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 {
 
 	[TestFixture]
-	class NewAbsenceReportConsumerNoMocksTest
+	class NewAbsenceReportHandlerNoMocksTest
 	{
 		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
 		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;

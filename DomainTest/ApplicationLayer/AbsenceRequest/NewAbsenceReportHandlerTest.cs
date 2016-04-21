@@ -17,10 +17,10 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 {
 	[TestFixture]
-	public class NewAbsenceReportConsumerTest
+	public class NewAbsenceReportHandlerTest
 	{
 		private NewAbsenceReportBase _target;
 		private IUnitOfWork _unitOfWork;
