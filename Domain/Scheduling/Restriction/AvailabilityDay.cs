@@ -36,10 +36,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
                     _restriction.SetParent(this);
             }
         }
-
-        public virtual bool IsAvailabilityDay()
-        {
-            return Restriction.IsRestriction();
-        }
     }
 }

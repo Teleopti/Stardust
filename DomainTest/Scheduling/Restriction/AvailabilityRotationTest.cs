@@ -125,50 +125,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restriction
             _availabilityRotation.SetDeleted();
             Assert.IsFalse(_availabilityRotation.IsChoosable);
         }
-
-        [Test]
-        public void VerifyCanCheckIsAvailabilityDay()
-        {
-            IAvailabilityDay day = _availabilityRotation.AvailabilityDays[0];
-            Assert.IsFalse(day.IsAvailabilityDay());
-
-            day.Restriction.NotAvailable = true;
-            Assert.IsTrue(day.IsAvailabilityDay());
-            day.Restriction.NotAvailable = false;
-            Assert.IsFalse(day.IsAvailabilityDay());
-
-
-
-            day.Restriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), null);
-            Assert.IsTrue(day.IsAvailabilityDay());
-            day.Restriction.StartTimeLimitation = new StartTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsAvailabilityDay());
-
-            day.Restriction.StartTimeLimitation = new StartTimeLimitation(null, new TimeSpan(9, 0, 0));
-            Assert.IsTrue(day.IsAvailabilityDay());
-            day.Restriction.StartTimeLimitation = new StartTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsAvailabilityDay());
-
-            day.Restriction.EndTimeLimitation = new EndTimeLimitation(new TimeSpan(17, 0, 0), null);
-            Assert.IsTrue(day.IsAvailabilityDay());
-            day.Restriction.EndTimeLimitation = new EndTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsAvailabilityDay());
-
-            day.Restriction.EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(19, 0, 0));
-            Assert.IsTrue(day.IsAvailabilityDay());
-            day.Restriction.EndTimeLimitation = new EndTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsAvailabilityDay());
-
-            day.Restriction.WorkTimeLimitation = new WorkTimeLimitation(new TimeSpan(17, 0, 0), null);
-            Assert.IsTrue(day.IsAvailabilityDay());
-            day.Restriction.WorkTimeLimitation = new WorkTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsAvailabilityDay());
-
-            day.Restriction.WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(19, 0, 0));
-            Assert.IsTrue(day.IsAvailabilityDay());
-            day.Restriction.WorkTimeLimitation = new WorkTimeLimitation(null, null); ;
-            Assert.IsFalse(day.IsAvailabilityDay());
-        }
     }
 
 }

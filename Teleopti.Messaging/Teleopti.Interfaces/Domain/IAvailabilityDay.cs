@@ -17,13 +17,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <value>The restriction.</value>
         IAvailabilityRestriction Restriction { get; set; }
-
-        /// <summary>
-        /// Determines whether [is availability day].
-        /// </summary>
-        /// <returns>
-        /// 	<c>true</c> if [is availability day]; otherwise, <c>false</c>.
-        /// </returns>
-        bool IsAvailabilityDay();
     }
 }
