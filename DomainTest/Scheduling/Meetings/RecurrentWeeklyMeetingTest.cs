@@ -45,9 +45,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 
             _target[DayOfWeek.Wednesday] = false;
             Assert.AreEqual(1, _target.WeekDays.Count());
-
-            _target.ClearWeekDays();
-            Assert.AreEqual(0, _target.WeekDays.Count());
         }
 
         [Test, ExpectedException(typeof(ArgumentOutOfRangeException))]

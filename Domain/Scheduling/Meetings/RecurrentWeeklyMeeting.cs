@@ -29,11 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             get { return _weekDays; }
         }
 
-        public virtual void ClearWeekDays()
-        {
-            _weekDays.Clear();
-        }
-
         public virtual bool this[DayOfWeek dayOfWeek]
         {
             get { return _weekDays.Contains(dayOfWeek); }

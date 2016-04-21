@@ -23,15 +23,6 @@ namespace Teleopti.Interfaces.Domain
 		IEnumerable<DayOfWeek> WeekDays { get; }
 
         /// <summary>
-        /// Clears the week days.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2009-10-13
-        /// </remarks>
-        void ClearWeekDays();
-
-        /// <summary>
         /// Gets or sets the <see cref="System.Boolean"/> with the specified day of week.
         /// </summary>
         /// <value></value>
