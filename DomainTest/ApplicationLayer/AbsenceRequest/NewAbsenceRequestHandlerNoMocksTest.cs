@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
 				new BudgetGroupHeadCountSpecification(_scenarioRepository, _fakeBudgetDayRepository,
 					_scheduleProjectionReadOnlyRepository),
 				null,
-				new BudgetGroupAllowanceSpecification(_schedulingResultStateHolder, _currentScenario, _fakeBudgetDayRepository,
+				new BudgetGroupAllowanceSpecification(_currentScenario, _fakeBudgetDayRepository,
 					_scheduleProjectionReadOnlyRepository),
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
 				_personAccountUpdaterDummy, toggleManager);

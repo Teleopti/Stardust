@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					}
 
 					absenceRequest.Absence.Tracker.Track(account, absenceRequest.Absence, scheduleDays);
-					
+
 					if (logger.IsInfoEnabled)
 					{
 						logger.InfoFormat("Remaining after tracking: {0}", account.Remaining);
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				}
 			}
 		}
-		
+
 
 		private void setupUndoContainersAndTakeSnapshot(UndoRedoContainer undoRedoContainer, IEnumerable<IPersonAbsenceAccount> allAccounts)
 		{
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Loaded schedules and data needed for resource calculation. (Period = {0})",
-									   periodForResourceCalc);
+										periodForResourceCalc);
 				}
 			}
 			else
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Loaded schedules and data needed for absence request handling. (Period = {0})",
-									   periodForResourceCalc);
+										periodForResourceCalc);
 				}
 			}
 		}
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			else
 			{
-				trackAccounts (personAccount, dateOnlyPeriod, absenceRequest);
+				trackAccounts(personAccount, dateOnlyPeriod, absenceRequest);
 
 				//We must have the current and all after...
 				var affectedAccounts = personAccount.Find(new DateOnlyPeriod(dateOnlyPeriod.StartDate, DateOnly.MaxValue));

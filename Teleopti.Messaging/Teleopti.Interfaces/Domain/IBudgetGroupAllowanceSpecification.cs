@@ -1,10 +1,13 @@
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// A specification for checking if absence request exceeds allowance or not
-    /// </summary>
-    public interface IBudgetGroupAllowanceSpecification : IPersonRequestSpecification<IAbsenceRequest>
-    {
-       
-    }
+	public interface IAbsenceRequestAndSchedules
+	{
+		IAbsenceRequest AbsenceRequest { get; set; }
+		ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
+	}
+
+	public interface IBudgetGroupAllowanceSpecification : IPersonRequestSpecification<IAbsenceRequestAndSchedules>
+	{
+
+	}
 }

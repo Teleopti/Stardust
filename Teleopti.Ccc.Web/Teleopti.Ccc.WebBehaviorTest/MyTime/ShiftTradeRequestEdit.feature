@@ -1,4 +1,5 @@
-﻿Feature: Shift Trade Request Edit
+﻿@ignore
+Feature: Shift Trade Request Edit
 	In order to handle existing shift trade requests
 	As an agent
 	I want to be able to take actions on my shift trade requests

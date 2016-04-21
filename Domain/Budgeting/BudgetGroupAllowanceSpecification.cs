@@ -13,18 +13,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Budgeting
 {
-	public class BudgetGroupAllowanceSpecification : PersonRequestSpecification<IAbsenceRequest>, IBudgetGroupAllowanceSpecification
+
+	public class BudgetGroupAllowanceSpecification : PersonRequestSpecification<IAbsenceRequestAndSchedules>, IBudgetGroupAllowanceSpecification
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupAllowanceSpecification));
-
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IBudgetDayRepository _budgetDayRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		public BudgetGroupAllowanceSpecification(ISchedulingResultStateHolder schedulingResultStateHolder, ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public BudgetGroupAllowanceSpecification(ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository,
+			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
 		{
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scenarioRepository = scenarioRepository;
 			_budgetDayRepository = budgetDayRepository;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
@@ -35,17 +34,17 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
 		}
 
-		public override IValidatedRequest IsSatisfied(IAbsenceRequest absenceRequest)
+		public override IValidatedRequest IsSatisfied(IAbsenceRequestAndSchedules absenceRequestAndSchedules)
 		{
-			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
-			var culture = absenceRequest.Person.PermissionInformation.Culture();
-			var requestedPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
-			var personPeriod = absenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
+			var timeZone = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.DefaultTimeZone();
+			var culture = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.Culture();
+			var requestedPeriod = absenceRequestAndSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
+			var personPeriod = absenceRequestAndSchedules.AbsenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
 
 
 			if (personPeriod == null || personPeriod.BudgetGroup == null)
 			{
-				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(culture, absenceRequest.Person.Id);
+				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(culture, absenceRequestAndSchedules.AbsenceRequest.Person.Id);
 			}
 
 			var defaultScenario = _scenarioRepository.Current();
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(culture, requestedPeriod);
 			}
 
-			var invalidDays = getInvalidDays(absenceRequest, budgetDays, personPeriod, defaultScenario, culture);
+			var invalidDays = getInvalidDays(absenceRequestAndSchedules.AbsenceRequest, budgetDays, personPeriod, defaultScenario, culture, absenceRequestAndSchedules.SchedulingResultStateHolder);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
 				var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays", culture);
@@ -73,9 +72,10 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 
 
-		private string getInvalidDays(IAbsenceRequest absenceRequest, IList<IBudgetDay> budgetDays, IPersonPeriod personPeriod, IScenario defaultScenario, CultureInfo culture)
+		private string getInvalidDays(IAbsenceRequest absenceRequest, IList<IBudgetDay> budgetDays, IPersonPeriod personPeriod,
+			IScenario defaultScenario, CultureInfo culture, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			var scheduleRange = _schedulingResultStateHolder.Schedules[absenceRequest.Person];
+			var scheduleRange = schedulingResultStateHolder.Schedules[absenceRequest.Person];
 			var count = 0;
 			var invalidDays = string.Empty;
 
@@ -85,7 +85,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 				var currentDay = budgetDay.Day;
 				var remainingAllowanceMinutes = getRemainingAllowanceMinutes(personPeriod, defaultScenario, budgetDay, currentDay);
-				var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
+				var requestedAbsenceMinutes =
+					calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
 
 				if (remainingAllowanceMinutes < requestedAbsenceMinutes)
 				{
@@ -93,10 +94,11 @@ namespace Teleopti.Ccc.Domain.Budgeting
 					count++;
 					if (count > 5) break;
 
-					Logger.DebugFormat(	"There is not enough allowance for day {0}. The remaining allowance is {1} hours, but you request for {2} hours",
-										currentDay, 
-										remainingAllowanceMinutes / TimeDefinition.MinutesPerHour,
-										requestedAbsenceMinutes / TimeDefinition.MinutesPerHour);
+					Logger.DebugFormat(
+						"There is not enough allowance for day {0}. The remaining allowance is {1} hours, but you request for {2} hours",
+						currentDay,
+						remainingAllowanceMinutes / TimeDefinition.MinutesPerHour,
+						requestedAbsenceMinutes / TimeDefinition.MinutesPerHour);
 					invalidDays += currentDay.ToShortDateString(culture) + ",";
 				}
 			}
@@ -129,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			}
 			else
 			{
-				var averageContractTimeSpan = TimeSpan.FromMinutes( personPeriod.PersonContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes 
+				var averageContractTimeSpan = TimeSpan.FromMinutes(personPeriod.PersonContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes
 																  * personPeriod.PersonContract.PartTimePercentage.Percentage.Value);
 				requestedTime += requestedPeriod.ElapsedTime() < averageContractTimeSpan
 									 ? requestedPeriod.ElapsedTime()

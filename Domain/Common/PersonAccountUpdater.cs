@@ -7,12 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-	/// <summary>
-	/// Person account updater that works with the SDK data and loads the domani data self
-	/// </summary>
-	/// <remarks>
-	/// Used for the sdk client
-	/// </remarks>
 	public class PersonAccountUpdater : IPersonAccountUpdater
 	{
 		private readonly IPersonAbsenceAccountRepository _provider;
@@ -40,18 +34,18 @@ namespace Teleopti.Ccc.Domain.Common
 		public bool UpdateForAbsence(IPerson person, IAbsence absence, DateOnly personAbsenceStartDate)
 		{
 			var personAccounts = _provider.Find(person);
-			var accountsForAbsence = personAccounts.Find (absence);
-			
+			var accountsForAbsence = personAccounts.Find(absence);
+
 			if (accountsForAbsence == null) return false;
 
 			var accountCollection =
 				accountsForAbsence.AccountCollection()
-					.Where (personAbsenceAccount => personAbsenceAccount.Period().Contains (personAbsenceStartDate)).ToList();
+					.Where(personAbsenceAccount => personAbsenceAccount.Period().Contains(personAbsenceStartDate)).ToList();
 
 			if (!accountCollection.Any()) return false;
 
 			accountCollection.ForEach(_traceableRefreshService.Refresh);
-			
+
 			return true;
 		}
 	}
