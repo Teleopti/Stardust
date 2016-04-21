@@ -67,13 +67,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target[_person2].ContainsKey(_skill1));
         }
 
-        [Test]
-        public void CanGetSkillCombination()
-        {
-            SkillCollectionKey key = _target.SkillCombination(_person1);
-            Assert.AreEqual(2, key.SkillCollection.Count());
-        }
-
 		private class KeyedSkillResourceDictionaryTestClass : KeyedSkillResourceDictionary
 		{
 

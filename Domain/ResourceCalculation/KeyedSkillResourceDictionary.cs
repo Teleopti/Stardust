@@ -29,22 +29,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             : base(info, context)
         {
         }
-
-        /// <summary>
-        /// Gets the SkillCollectionKey for the specifyed person.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2008-03-06
-        /// </remarks>
-		public SkillCollectionKey SkillCombination(string person)
-        {
-            Dictionary<ISkill, double> personSkills = this[person];
-            List<ISkill> skillList = new List<ISkill>(personSkills.Keys);
-            SkillCollectionKey key = new SkillCollectionKey(skillList);
-            return key;
-        }
     }
 }
