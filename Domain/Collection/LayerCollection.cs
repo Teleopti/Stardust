@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common;
@@ -87,31 +86,5 @@ namespace Teleopti.Ccc.Domain.Collection
 		    }
 		    Items.Insert(index, item);
 	    }
-
-	    public void MoveUpLayer(ILayer<T> layer)
-        {
-            var index = Items.IndexOf(layer);
-            if (index == -1) return;
-            Items.Remove(layer);
-            Items.Insert(Math.Max(0, index - 1), layer);
-        }
-
-        public void MoveDownLayer(ILayer<T> layer)
-        {
-            var index = Items.IndexOf(layer);
-            if (index == -1) return;
-            Items.Remove(layer);
-            Items.Insert(Math.Min(Items.Count, index + 1), layer);
-        }
-
-        public bool CanMoveUpLayer(ILayer<T> layer)
-        {
-            return Items.IndexOf(layer) > 0;
-        }
-
-        public bool CanMoveDownLayer(ILayer<T> layer)
-        {
-            return Items.Contains(layer) && Items.Last() != layer;
-        }
     }
 }

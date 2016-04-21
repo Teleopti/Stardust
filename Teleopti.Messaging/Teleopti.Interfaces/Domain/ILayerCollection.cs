@@ -34,35 +34,5 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-01-18
         /// </remarks>
         DateTime? LatestEnd();
-
-        /// <summary>
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        /// <remarks>
-        /// Created by: Ola
-        /// Created date: 2008-02-21
-        /// </remarks> 
-        void MoveUpLayer(ILayer<T> layer);
-
-        /// <summary>
-        /// Moves layer 
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2008-02-21
-        /// </remarks>
-        void MoveDownLayer(ILayer<T> layer);
-
-
-        /// <summary>
-        /// Determines whether this instance [can move up layer] the specified layer.
-        /// </summary>
-        bool CanMoveUpLayer(ILayer<T> layer);
-
-        /// <summary>
-        /// Determines whether this instance [can move down layer] the specified layer.
-        /// </summary>
-        bool CanMoveDownLayer(ILayer<T> layer);
     }
 }
