@@ -43,53 +43,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldPredictIfTheMoveWillResultInABetterPeriodResult()
-		{
-			ILockableBitArray originalArray = new LockableBitArray(2, false, false, null);
-			originalArray.Set(0, true);
-			ILockableBitArray workingArray = new LockableBitArray(2, false, false, null);
-			workingArray.Set(1, true);
-			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-			ForecastScheduleValuePair forecastScheduleValuePair = new ForecastScheduleValuePair();
-			forecastScheduleValuePair.ScheduleValue = 1000;
-			forecastScheduleValuePair.ForecastValue = 1000;
-			using(_mocks.Record())
-			{
-				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.AverageWorkTimePerDay).Return(TimeSpan.FromHours(8));
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(2012, 1, 1),
-				                                                                      new DateOnly(2012, 1, 2)));
-				Expect.Call(_matrix.EffectivePeriodDays).Return(
-					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro1, _scheduleDayPro2}));
-				Expect.Call(_matrix.OuterWeeksPeriodDays).Return(
-					new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {
-						_scheduleDayPro1, 
-						_scheduleDayPro1, 
-						_scheduleDayPro1, 
-						_scheduleDayPro1, 
-						_scheduleDayPro1, 
-						_scheduleDayPro1, 
-						_scheduleDayPro1,
-						_scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2012, 1, 1)).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2012, 1, 2)).Repeat.AtLeastOnce();
-				Expect.Call(_matrix.Person).Return(_person);
-				Expect.Call(_dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(_skill, new DateOnly(2012, 1,1))).
-					Return(forecastScheduleValuePair);
-				Expect.Call(_dailySkillForecastAndScheduledValueCalculator.CalculateDailyForecastAndScheduleDataForSkill(_skill, new DateOnly(2012, 1, 2))).
-					Return(forecastScheduleValuePair);
-			}
-
-			double predictedNewPeriodValue;
-			using(_mocks.Playback())
-			{
-				predictedNewPeriodValue = _target.PredictedValue(_matrix, workingArray, originalArray, daysOffPreferences);
-			}
-
-			Assert.AreEqual(0.48, predictedNewPeriodValue, 0.01);
-		}
-
-		[Test]
 		public void ShouldReturnCurrentValueWithoutMakingAnyMove()
 		{
 			ForecastScheduleValuePair forecastScheduleValuePair = new ForecastScheduleValuePair();

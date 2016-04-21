@@ -8,10 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IDayOffOptimizerPreMoveResultPredictor
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		double PredictedValue(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
-			ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences);
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		double CurrentValue(IScheduleMatrixPro matrix);
 
 		PredictorResult IsPredictedBetterThanCurrent(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
@@ -28,20 +24,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
 			_deviationStatisticData = deviationStatisticData;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public double PredictedValue(IScheduleMatrixPro matrix, ILockableBitArray workingBitArray,
-		                             ILockableBitArray originalBitArray, IDaysOffPreferences daysOffPreferences)
-		{
-			IVirtualSchedulePeriod schedulePeriod = matrix.SchedulePeriod;
-			IEnumerable<ISkill> personalSkills = extractSkills(matrix);
-			var rawDataDictionary = createRawDataDictionary(schedulePeriod, personalSkills);
-			TimeSpan averageWorkTime = schedulePeriod.AverageWorkTimePerDay;
-			modifyRawData(workingBitArray, matrix, originalBitArray, daysOffPreferences, rawDataDictionary, averageWorkTime);
-			double result = calculateValue(rawDataDictionary);
-
-			return result;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
