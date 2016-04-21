@@ -107,14 +107,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
             }
         }
 
-        public bool FilterByPeriod(DateTime? value)
-        {
-            if (!value.HasValue) return true;
-
-	        var dateOnly = new DateOnly(value.Value);
-	        return ContainedEntity.IsAgent(dateOnly);
-        }
-
         public bool FilterByValue(string value)
         {
             if (string.IsNullOrEmpty(value)) return true;

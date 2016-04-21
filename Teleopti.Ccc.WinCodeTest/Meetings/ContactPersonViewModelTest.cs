@@ -128,10 +128,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.IsFalse(_target.FilterByValue("ite2"));
             Assert.IsTrue(_target.FilterByValue("001"));
             Assert.IsFalse(_target.FilterByValue("1123"));
-
-            Assert.IsTrue(_target.FilterByPeriod(null));
-            Assert.IsFalse(_target.FilterByPeriod(new DateTime(2004, 12, 31)));
-            Assert.IsTrue(_target.FilterByPeriod(new DateTime(2005, 1, 1)));
         }
     }
 }
