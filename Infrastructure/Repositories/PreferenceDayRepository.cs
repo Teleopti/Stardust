@@ -113,6 +113,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			InitializePreferenceDays(retList);
 
+			if (retList.IsEmpty())
+				return null;
 			return retList.First();
 		}
 

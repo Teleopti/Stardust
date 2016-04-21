@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IAnalyticsPreferenceRepository _analyticsPreferenceRepository;
+		private readonly IPersonRepository _personRepository;
 
 		public PreferenceChangedHandler(IScenarioRepository scenarioRepository,
 			IPreferenceDayRepository preferenceDayRepository,
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
 			IAnalyticsDateRepository analyticsDateRepository,
 			IScheduleStorage scheduleStorage,
-			IAnalyticsPreferenceRepository analyticsPreferenceRepository)
+			IAnalyticsPreferenceRepository analyticsPreferenceRepository, IPersonRepository personRepository)
 		{
 			_scenarioRepository = scenarioRepository;
 			_preferenceDayRepository = preferenceDayRepository;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			_analyticsDateRepository = analyticsDateRepository;
 			_scheduleStorage = scheduleStorage;
 			_analyticsPreferenceRepository = analyticsPreferenceRepository;
+			_personRepository = personRepository;
 
 			if (logger.IsInfoEnabled)
 			{
@@ -61,6 +63,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 								   @event.PreferenceDayId, @event.Timestamp);
 			}
 
+			// Preference, person look ups, mapping
+			var preferenceDay = _preferenceDayRepository.Find(@event.PreferenceDayId);
+			var dateId = _analyticsDateRepository.Date(@event.RestrictionDate.Date);
+			var person = _personRepository.FindPeople(new[] {@event.PersonId}).First();
+			var personPeriod = person.Period(new DateOnly(@event.RestrictionDate.Date));
+			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
+
+			if (preferenceDay == null)
+			{
+				// Preference day does not exists anymore so it has been deleted.
+				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+				return;
+			}
+
 			// General init
 			var restrictionChecker = new RestrictionChecker();
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
@@ -73,15 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			var analyticsAbsences = _analyticsScheduleRepository.Absences();
 			var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
 
-			// Preference and person look ups
-			var preferenceDay = _preferenceDayRepository.Find(@event.PreferenceDayId);
-			var personPeriod = preferenceDay.Person.Period(preferenceDay.RestrictionDate);
-			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
-
-			// Mapping
-			var dateId = _analyticsDateRepository.Date(preferenceDay.RestrictionDate.Date);
 			var period = new DateOnlyPeriod(new DateOnly(preferenceDay.RestrictionDate.Date), new DateOnly(preferenceDay.RestrictionDate.Date));
-			var person = preferenceDay.Person;
 
 			foreach (var scenario in scenarios)
 			{

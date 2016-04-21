@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPreferenceDay Find(Guid preferenceId)
 		{
-			return _preferensDays.First(a => a.Id == preferenceId);
+			return _preferensDays.FirstOrDefault(a => a.Id == preferenceId);
 		}
 	}
 }

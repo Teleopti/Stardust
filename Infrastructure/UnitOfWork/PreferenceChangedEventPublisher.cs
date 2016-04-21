@@ -32,19 +32,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				return;
 
 			var affectedInterfaces = from r in modifiedRoots
-				let t = r.Root.GetType()
-				where _triggerInterfaces.Any(ti => ti.IsAssignableFrom(t))
-				select (IAggregateRoot)r.Root;
+									 let t = r.Root.GetType()
+									 where _triggerInterfaces.Any(ti => ti.IsAssignableFrom(t))
+									 select (IAggregateRoot)r.Root;
 
-			var ids = affectedInterfaces.Select(p => p.Id.GetValueOrDefault());
-			foreach (var id in ids)
+			foreach (var affectedInterface in affectedInterfaces)
 			{
-				if (id == Guid.Empty)
+				if (!affectedInterface.Id.HasValue || affectedInterface.Id.GetValueOrDefault() == Guid.Empty || !(affectedInterface is IPreferenceDay))
 					continue;
+				var preferenceDay = affectedInterface as IPreferenceDay;
 				var message = new PreferenceChangedEvent
 				{
+					PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
+					PersonId = preferenceDay.Person.Id.GetValueOrDefault(),
+					RestrictionDate = preferenceDay.RestrictionDate.Date,
 					LogOnBusinessUnitId = bu.Id.GetValueOrDefault(Guid.Empty),
-					PreferenceDayId = id,
 					Timestamp = _now.UtcDateTime()
 				};
 				_eventsPublisher.Publish(message);
