@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class MatrixUnselectedDaysLocker : IMatrixUnselectedDaysLocker
+	public class MatrixUnselectedDaysLocker
 	{
 		private readonly IEnumerable<IScheduleMatrixPro> _matrixList;
 		private readonly DateOnlyPeriod _selectedPeriod;

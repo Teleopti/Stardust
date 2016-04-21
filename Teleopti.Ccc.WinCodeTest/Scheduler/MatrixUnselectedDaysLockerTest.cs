@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	public class MatrixUnselectedDaysLockerTest
 	{
 		private MockRepository _mocks;
-		private IMatrixUnselectedDaysLocker _target;
+		private MatrixUnselectedDaysLocker _target;
 		private IScheduleMatrixPro _matrix;
 		private DateOnlyPeriod _dop;
 		private IScheduleDayPro _scheduleDayPro1;
