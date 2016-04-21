@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
 	public class HourlyAvailabilityPersonFilterTest
 	{
 		private MockRepository _mock;
-		private IHourlyAvailabilityPersonFilter _target;
+		private HourlyAvailabilityPersonFilter _target;
 		private IList<IScheduleDay> _scheduleDaysList;
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;

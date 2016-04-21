@@ -5,12 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
 {
-	public interface IHourlyAvailabilityPersonFilter
-	{
-		IList<IPerson> GetFilterdPerson(IList<IScheduleDay> scheduleDaysList, TimeSpan filterStartTime, TimeSpan filterEndTime);
-	}
-
-	public class HourlyAvailabilityPersonFilter : IHourlyAvailabilityPersonFilter
+	public class HourlyAvailabilityPersonFilter
 	{
 		public IList<IPerson> GetFilterdPerson(IList<IScheduleDay> scheduleDaysList, TimeSpan filterStartTime, TimeSpan filterEndTime)
 		{
