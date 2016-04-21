@@ -67,6 +67,15 @@
 						document.getElementById("webrta").href = "/TeleoptiWFM/Web/Anywhere#realtimeadherencesites";
 					}
 				});
+
+				loadToggle('WfmTeamSchedule_PrepareForRelease_37752', function (value) {
+					if (value) {
+						document.getElementById("webteamschedule").href = "/TeleoptiWFM/Web/Wfm/#/teamSchedule";
+					} else {
+						document.getElementById("webteamschedule").href = "/TeleoptiWFM/Web/Anywhere";
+					}
+				});
+
 			};
 
 		</script>
@@ -80,7 +89,7 @@
 				</a>
 			</div>
 			<div class="col-md-3">
-				<a class="block green" href="/TeleoptiWFM/Web/Anywhere">
+				<a id="webteamschedule" class="block green" href="">
 					<span>Team Leaders</span>
 				</a>
 			</div>
