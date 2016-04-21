@@ -203,9 +203,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 	}
 
 	[UseNotOnToggle(Toggles.Wfm_MoveNewAbsenceReportOnHangfire_38203)]
-	public class NewAbsenceReportServiceBusEventHandler : NewAbsenceReportBase, IHandleEvent<NewAbsenceReportCreatedEvent>,
 #pragma warning disable 618
-		IRunOnServiceBus
+	public class NewAbsenceReportServiceBusEventHandler : NewAbsenceReportBase, IHandleEvent<NewAbsenceReportCreatedEvent>,IRunOnServiceBus
 #pragma warning restore 618
 	{
 		public new void Handle(NewAbsenceReportCreatedEvent @event)
