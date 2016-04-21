@@ -35,11 +35,6 @@ namespace Teleopti.Interfaces.Domain
 
 	    IActivity DoNotAlterLengthOfActivity { get; set; }
 
-	    /// <summary>
-        /// Set all activities
-        /// </summary>
-        /// <param name="activities"></param>
-        void SetActivities(IList<IActivity> activities);
         /// <summary>
         /// Set all activities not to move
         /// </summary>

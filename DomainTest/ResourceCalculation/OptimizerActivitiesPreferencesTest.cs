@@ -34,14 +34,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void VerifySetActivities()
-        {
-            _target.SetActivities(_activities);
-            Assert.IsTrue(_target.Activities.Contains(_activity));
-            Assert.AreNotSame(_activities, _target.Activities);
-        }
-
-        [Test]
         public void VerifySetDoNotMoveActivities()
         {
             _target.SetDoNotMoveActivities(_activities);

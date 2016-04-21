@@ -48,13 +48,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             get { return _doNotMoveActivities; }
         }
 
-	    
-
-	    public void SetActivities(IList<IActivity> activities)
-        {
-            _activities = new List<IActivity>(activities);
-        }
-
         public void SetDoNotMoveActivities(IList<IActivity> activities)
         {
             _doNotMoveActivities = activities;
