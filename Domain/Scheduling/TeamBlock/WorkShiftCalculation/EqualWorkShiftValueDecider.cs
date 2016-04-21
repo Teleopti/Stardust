@@ -19,10 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 		public IShiftProjectionCache Decide(IShiftProjectionCache cache1, IShiftProjectionCache cache2)
 		{
-			if (_trueFalseRandomizer.Randomize((int) DateTime.Now.TimeOfDay.Ticks))
-				return cache1;
-
-			return cache2;
+			return _trueFalseRandomizer.Randomize() ? cache1 : cache2;
 		}
 	}
 }

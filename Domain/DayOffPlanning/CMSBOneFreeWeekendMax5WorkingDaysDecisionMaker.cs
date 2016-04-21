@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 					continue;
 				if (aggregatedValue == maxValue)
 				{
-					if(_trueFalseRandomizer.Randomize((int)DateTime.Now.Ticks))
+					if(_trueFalseRandomizer.Randomize())
 					{
 						maxTuple = weekendDayIndexTuple;
 					}

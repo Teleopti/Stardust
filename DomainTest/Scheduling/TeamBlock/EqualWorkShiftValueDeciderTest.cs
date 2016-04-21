@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_randomizer.Randomize(0)).IgnoreArguments().Return(true);
+				Expect.Call(_randomizer.Randomize()).IgnoreArguments().Return(true);
 			}
 
 			IShiftProjectionCache result;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_randomizer.Randomize(0)).IgnoreArguments().Return(false);
+				Expect.Call(_randomizer.Randomize()).IgnoreArguments().Return(false);
 			}
 
 			IShiftProjectionCache result;

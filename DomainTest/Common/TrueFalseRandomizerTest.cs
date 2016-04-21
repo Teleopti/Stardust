@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			IList<bool> result = new List<bool>();
 			for (int i = 0; i < 100; i++)
 			{
-				if(_target.Randomize(i))
+				if(_target.Randomize())
 					result.Add(true);
 			}
 
