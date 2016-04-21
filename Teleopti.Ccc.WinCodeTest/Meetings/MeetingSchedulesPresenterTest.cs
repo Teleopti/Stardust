@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -9,10 +8,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IMeetingSchedulesView _view;
         private IScenario _scenario;
         private DateOnlyPeriod _period;
-        private IRangeProjectionService _rangeProjectionService;
         private ISchedulerStateLoader _schedulerStateLoader;
         private IMeetingSlotFinderService _meetingSlotFinderService;
         private IMeetingMover _meetingMover;
@@ -50,7 +46,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _startDate = new DateOnly(2009, 10, 27);
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));
             _scenario = _mocks.StrictMock<IScenario>();
-            _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
             _schedulerStateLoader = _mocks.DynamicMock<ISchedulerStateLoader>();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person }, _mocks.DynamicMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
@@ -69,7 +64,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _meetingMover = _mocks.StrictMock<IMeetingMover>();
             _meetingMousePositionDecider = _mocks.StrictMock<IMeetingMousePositionDecider>();
 
-            _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _rangeProjectionService, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
+            _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
         }
 
         [TearDown]
@@ -123,29 +118,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         }
 
         [Test]
-        public void VerifyCanRefreshRecurringDates()
-        {
-            _view.SetRecurringDates(_model.Meeting.GetRecurringDates());
-
-            _mocks.ReplayAll();
-            _target.RefreshRecurringDates();
-            _mocks.VerifyAll();
-        }
-
-        [Test]
         public void VerifyCanGetStateHolder()
         {
             Assert.IsNotNull(_target.StateHolder);
-        }
-
-        [Test]
-        public void VerifyCanSetStartTime()
-        {
-            _target.SetStartTime(TimeSpan.FromHours(7));
-
-            _mocks.ReplayAll();
-            _view.SetStartTime(_model.StartTime);
-            _mocks.VerifyAll();
         }
 
         [Test]
@@ -207,50 +182,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _target.SetCurrentDate(_startDate.AddDays(5));
             var count = _target.GetAvailableDays;
             Assert.That(count, Is.Not.Null);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyCanGetVisualLayers()
-        {
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var scheduleRange = _mocks.StrictMock<IScheduleRange>();
-            var visualLayer = _mocks.StrictMock<IVisualLayer>();
-            IList<IVisualLayer> visualLayerCollection = new List<IVisualLayer> { visualLayer };
-            
-            _target.Model.AddParticipants(new List<ContactPersonViewModel>{new ContactPersonViewModel(_person)}, new List<ContactPersonViewModel>());
-
-            Expect.Call(scheduleDictionary[_target.Model.RequiredParticipants[0].ContainedEntity]).Return(scheduleRange);
-			Expect.Call(_rangeProjectionService.CreateProjection(scheduleRange, _target.GetCurrentPeriod().ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone))).Return(visualLayerCollection);
-
-            _schedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
-
-            _mocks.ReplayAll();
-            var layerCollection = _target.GetVisualLayersForPerson(_target.Model.RequiredParticipants[0]);
-            Assert.IsTrue(visualLayerCollection[0] == layerCollection.ElementAt(0));
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyCanSetStartDateForRecurringMeeting()
-        {
-            _model.RecurringEndDate = _startDate.AddDays(10);
-            _view.SetEndDate(_model.EndDate.AddDays(1));
-            _view.SetCurrentDate(_model.StartDate.AddDays(1));
-
-            _mocks.ReplayAll();
-            _target.SetStartDate(_model.StartDate.AddDays(1));
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyCanSetStartDateForNonrecurringMeeting()
-        {
-            _view.SetEndDate(_model.EndDate.AddDays(1));
-            _view.SetCurrentDate(_model.StartDate.AddDays(1));
-
-            _mocks.ReplayAll();
-            _target.SetStartDate(_model.StartDate.AddDays(1));
             _mocks.VerifyAll();
         }
 
@@ -416,47 +347,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			}
 		}
 
-		[Test]
-        public void ShouldKnowIfDayOff()
-        {
-            var person = new Person();
-            var personViewModel = new EntityContainer<IPerson>(person);
-            _schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var range = _mocks.StrictMock<IScheduleRange>();
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary);
-            Expect.Call(scheduleDictionary[person]).Return(range);
-            Expect.Call(range.ScheduledDay(_startDate)).Return(scheduleDay).IgnoreArguments();
-            Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
-            _mocks.ReplayAll();
-            _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _rangeProjectionService, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
-            var isDayOff = _target.IsDayOff(personViewModel);
-            Assert.That(isDayOff,Is.True);
-            _mocks.VerifyAll();
-        }
 
         [Test]
-        public void ShouldKnowIfNoDayOff()
-        {
-            var person = new Person();
-            var personViewModel = new EntityContainer<IPerson>(person);
-            _schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var range = _mocks.StrictMock<IScheduleRange>();
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary);
-            Expect.Call(scheduleDictionary[person]).Return(range);
-            Expect.Call(range.ScheduledDay(_startDate)).Return(scheduleDay).IgnoreArguments();
-            Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-            _mocks.ReplayAll();
-            _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _rangeProjectionService, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
-            var isDayOff = _target.IsDayOff(personViewModel);
-            Assert.That(isDayOff,Is.False);
-            _mocks.VerifyAll();
-        }
-
-        [Test, ]
         public void GetPersonShouldReturnContainedPerson()
         {
             var personViewModel = new EntityContainer<IPerson>(_person);
@@ -491,7 +383,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             using (_mocks.Playback())
             {
-                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _rangeProjectionService, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
+                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
                 _target.Model.AddParticipants(new List<ContactPersonViewModel> { new ContactPersonViewModel(person) }, new List<ContactPersonViewModel>());
                 _target.RecreateParticipantList();
                 var period = _target.MergedOrDefaultPeriod();
@@ -527,7 +419,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             using (_mocks.Playback())
             {
-                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _rangeProjectionService, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
+                _target = new MeetingSchedulesPresenter(_view, _model, _schedulerStateHolder, _schedulerStateLoader, _meetingSlotFinderService, _meetingMover, _meetingMousePositionDecider);
                 _target.Model.AddParticipants(new List<ContactPersonViewModel> { new ContactPersonViewModel(person) }, new List<ContactPersonViewModel>());
                 _target.RecreateParticipantList();
                 var period = _target.MergedOrDefaultPeriod();

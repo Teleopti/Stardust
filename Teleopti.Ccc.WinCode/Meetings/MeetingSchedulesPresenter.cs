@@ -7,7 +7,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
@@ -25,11 +24,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		  private readonly IMeetingSchedulesView _view;
 		  private readonly IMeetingViewModel _meetingViewModel;
 		  private readonly ISchedulerStateHolder _schedulerStateHolder;
-		  private readonly IRangeProjectionService _rangeProjectionService;
 		  private readonly ISchedulerStateLoader _schedulerStateLoader;
 		  
-		  private readonly IDictionary<PersonSchedulePeriodCacheKey, IEnumerable<IVisualLayer>> _projectionCache =
-				new Dictionary<PersonSchedulePeriodCacheKey, IEnumerable<IVisualLayer>>();
 		  private DateOnly _currentDate;
 		  private DateOnlyPeriod _currentPeriod;
 		  private IList<ContactPersonViewModel> _participantList;
@@ -43,7 +39,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		  public MeetingSchedulesPresenter(IMeetingSchedulesView view, 
 				IMeetingViewModel meetingViewModel, 
 				ISchedulerStateHolder schedulerStateHolder, 
-				IRangeProjectionService rangeProjectionService,
 				ISchedulerStateLoader schedulerStateLoader,
 				IMeetingSlotFinderService meetingSlotFinderService,
 				IMeetingMover meetingMover,
@@ -52,7 +47,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 				_view = view;
 				_meetingViewModel = meetingViewModel;
 				_schedulerStateHolder = schedulerStateHolder;
-				_rangeProjectionService = rangeProjectionService;
 				_schedulerStateLoader = schedulerStateLoader;
 				_meetingSlotFinderService = meetingSlotFinderService;
 				_meetingMover = meetingMover;
@@ -107,11 +101,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		  {
 				RecreateParticipantList();
 				_view.RefreshGrid();
-		  }
-
-		  public void RefreshRecurringDates()
-		  {
-				_view.SetRecurringDates(_meetingViewModel.Meeting.GetRecurringDates());
 		  }
 
 		  public void RecreateParticipantList()
@@ -251,21 +240,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 				}
 		  }
 
-		  public IEnumerable<IVisualLayer> GetVisualLayersForPerson(EntityContainer<IPerson> personViewModel)
-		  {
-				var period = _currentPeriod;
-				var cacheKey = new PersonSchedulePeriodCacheKey { Period = period, Person = personViewModel.ContainedEntity };
-				IEnumerable<IVisualLayer> projection;
-				if (!_projectionCache.TryGetValue(cacheKey, out projection))
-				{
-					 projection =
-						  _rangeProjectionService.CreateProjection(
-								_schedulerStateHolder.Schedules[personViewModel.ContainedEntity], period.ToDateTimePeriod(TimeZoneHelper.CurrentSessionTimeZone));
-					 _projectionCache.Add(cacheKey,projection);
-				}
-				return projection;
-		  }
-
 		  public DateTimePeriod MergedOrDefaultPeriod()
 		  {
 				var start = DateTime.MaxValue;
@@ -301,11 +275,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 				return personViewModel.ContainedEntity;
 		  }
 			
-		  public DateOnlyPeriod GetCurrentPeriod()
-		  {
-				return _currentPeriod;
-		  }
-
 		  public void SetCurrentDate(DateOnly currentDate)
 		  {
 				SetPeriodAndLoadSchedulesWhenNeeded(currentDate);
@@ -333,30 +302,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 				_currentPeriod = new DateOnlyPeriod(_currentDate.AddDays(-1), _currentDate.AddDays(1)); //OBS var 1.5
 		  }
 
-		  public void SetStartTime(TimeSpan startTime)
-		  {
-				_meetingViewModel.StartTime = startTime;
-				_view.SetStartTime(_meetingViewModel.StartTime);
-		  }
-
-		  public void SetEndTime(TimeSpan endTime)
-		  {
-				_meetingViewModel.EndTime = endTime;
-				_view.SetEndTime(_meetingViewModel.EndTime);
-		  }
-
-		  public void SetStartDate(DateOnly startDate)
-		  {
-				var isRecurring = _meetingViewModel.IsRecurring;
-				_meetingViewModel.StartDate = startDate;
-				if (!isRecurring)
-				{
-					 _meetingViewModel.RecurringEndDate = startDate;
-				}
-				_view.SetEndDate(_meetingViewModel.EndDate);
-				_view.SetCurrentDate(_meetingViewModel.StartDate);
-		  }
-
 		  public void SetStartDateFromCurrentDate(DateOnly theDate)
 		  {
 				var isRecurring = _meetingViewModel.IsRecurring;
@@ -376,29 +321,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 				_view.SetStartTime(startTime);
 				_view.SetEndTime(endTime);
-		  }
-
-		private struct PersonSchedulePeriodCacheKey
-		{
-			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-			public IPerson Person {     get; set; }
-			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-			public DateOnlyPeriod Period { get; set; }
-		}
-
-		  public bool IsDayOff(EntityContainer<IPerson> personViewModel)
-		  {
-				IScheduleRange scheduleRange = _schedulerStateHolder.Schedules[personViewModel.ContainedEntity];
-				IScheduleDay scheduleDay = scheduleRange.ScheduledDay(_currentDate);
-				if (scheduleDay != null)
-				{
-					 SchedulePartView schedulePartView = scheduleDay.SignificantPart();
-					 if (schedulePartView == SchedulePartView.DayOff)
-					 {
-						  return true;
-					 }
-				}
-				return false;
 		  }
 
 		public void UpdateView()

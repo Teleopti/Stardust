@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -201,7 +200,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder);
 			var meetingMover = new MeetingMover(this, meetingViewModel, schedulerStateHolder.DefaultSegmentLength, TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.TextInfo.IsRightToLeft);
 			var meetingMousePositionDecider = new MeetingMousePositionDecider(this);
-			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulerStateHolder, new RangeProjectionService(), stateHolderLoader, new MeetingSlotFinderService(), meetingMover, meetingMousePositionDecider);
+			_presenter = new MeetingSchedulesPresenter(this, meetingViewModel, schedulerStateHolder, stateHolderLoader, new MeetingSlotFinderService(), meetingMover, meetingMousePositionDecider);
 
 			SetTexts();
 			setTimes();
