@@ -16,7 +16,7 @@
 	  <issuer uri="urn:Teleopti" thumbprint="" displayName="Teleopti"/>
 	  <issuer uri="urn:AzureAd" thumbprint="" displayName="AzureAd"/>
 	  <issuer uri="urn:ADFS3" thumbprint="" displayName="ADFS3"/>
-	  <issuer uri="urn:SamlIdp" thumbprint="" displayName="SamlIdp"/>
+	  <issuer uri="urn:Saml" thumbprint="" displayName="Saml"/>
 		<!-- custom section starts here -->
 		<!--<issuer uri="urn:SalesForce" thumbprint="" displayName="SalesForce"/>-->
 		<!-- custom section ends here -->
@@ -48,7 +48,7 @@
 		</rule>
 		<rule assertionsMatch="any">
 			<input>
-				<claim type="nameidentifier" issuer="SamlIdp" value="*"/>
+				<claim type="nameidentifier" issuer="Saml" value="*"/>
 			</input>
 			<output type="nameidentifier" copyFrom="INPUT_VALUE"/>
 		</rule>
