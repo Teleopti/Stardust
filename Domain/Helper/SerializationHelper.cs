@@ -56,43 +56,6 @@ namespace Teleopti.Ccc.Domain.Helper
         }
 
         /// <summary>
-        /// Deserializes the specified content from XML.
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="xml">The XML.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2008-07-07
-        /// </remarks>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
-        public static T Deserialize<T>(string xml)
-        {
-            return (T)Deserialize(typeof(T),xml);
-        }
-
-        /// <summary>
-        /// Deserializes the specified type from xml content.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <param name="xml">The XML.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-11-18
-        /// </remarks>
-        public static object Deserialize(Type type, string xml)
-        {
-            var xs = new XmlSerializer(type);
-            object value;
-            using (var memoryStream = new MemoryStream(StringToUTF8ByteArray(xml)))
-            {
-                value = xs.Deserialize(memoryStream);
-            }
-            return value;
-        }
-
-        /// <summary>
         /// To convert a Byte Array of Unicode values (UTF-8 encoded) to a complete String.
         /// </summary>
         /// <param name="characters">Unicode Byte Array to be converted to String</param>
@@ -102,18 +65,6 @@ namespace Teleopti.Ccc.Domain.Helper
             var encoding = new UTF8Encoding();
             string constructedString = encoding.GetString(characters);
             return (constructedString);
-        }
-
-        /// <summary>
-        /// Converts the String to UTF8 Byte array and is used in De serialization
-        /// </summary>
-        /// <param name="pXmlString"></param>
-        /// <returns></returns>
-        private static byte[] StringToUTF8ByteArray(string pXmlString)
-        {
-            var encoding = new UTF8Encoding();
-            byte[] byteArray = encoding.GetBytes(pXmlString);
-            return byteArray;
         }
 
         /// <summary>
