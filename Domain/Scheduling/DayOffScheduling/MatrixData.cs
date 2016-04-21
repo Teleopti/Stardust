@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		IScheduleMatrixPro Matrix { get; }
 		ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection { get; }
 		void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
-	    bool ContainsKey(DateOnly key);
 	    bool TryGetValue(DateOnly key, out IScheduleDayData value);
 		int TargetDaysOff { get; }
 	}
@@ -31,11 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		{
 			get { return ScheduleDayDataDictionary[key]; }
 		}
-
-        public bool ContainsKey(DateOnly key)
-        {
-            return ScheduleDayDataDictionary.ContainsKey(key);
-        }
 
 		public bool TryGetValue(DateOnly key, out IScheduleDayData value)
 		{

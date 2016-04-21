@@ -77,22 +77,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			}
 		}
 
-        [Test]
-        public void ShouldFindTheKey()
-        {
-            using (_mocks.Record())
-            {
-				commonMocks();
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Store(_matrix, _schedulingOptions);
-                var keyExists = _target.ContainsKey( DateOnly.MinValue.AddDays(1));
-                Assert.IsTrue(keyExists);
-            }
-        }
-
 		[Test]
 		public void ShouldExposeTargetDaysOff()
 		{
