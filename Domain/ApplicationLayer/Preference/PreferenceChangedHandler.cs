@@ -133,15 +133,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 						resultFactSchedulePreference.Add(preferenceItem);
 					}
 				}
+			}
 
-				// Delete
-				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+			// Delete
+			_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
 
-				// Insert
-				foreach (var analyticsFactSchedulePreference in resultFactSchedulePreference)
-				{
-					_analyticsPreferenceRepository.AddPreference(analyticsFactSchedulePreference);
-				}
+			// Insert
+			foreach (var analyticsFactSchedulePreference in resultFactSchedulePreference)
+			{
+				_analyticsPreferenceRepository.AddPreference(analyticsFactSchedulePreference);
 			}
 		}
 	}

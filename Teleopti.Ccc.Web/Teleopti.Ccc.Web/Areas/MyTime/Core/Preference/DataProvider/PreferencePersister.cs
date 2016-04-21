@@ -67,18 +67,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 				_mapper.Map(input, preferenceDay);
 			}
 
-			if (_currentUnitOfWork != null && input.PreferenceId.HasValue)
-			{
-				var message = new PreferenceChangedEvent
-				{
-					LogOnBusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
-					LogOnDatasource = _currentDataSource.Current().DataSourceName,
-					PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
-					Timestamp = _now.UtcDateTime()
-				};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _publisher.Publish(message));
-			}
-
 			return _mapper.Map<IPreferenceDay, PreferenceDayViewModel>(preferenceDay);
 		}
 
