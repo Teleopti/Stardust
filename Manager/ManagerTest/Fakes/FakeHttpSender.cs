@@ -13,71 +13,82 @@ namespace ManagerTest.Fakes
 		public FakeHttpSender()
 		{
 			BusyNodesUrl = new List<string>();
-			CalledNodes = new Dictionary<string, object>();
-
-			Responses = new List<HttpResponseMessage>
-			{
-				new HttpResponseMessage(HttpStatusCode.OK)
-			};
+			CallToWorkerNodes = new List<string>();
 		}
 
 		public List<string> BusyNodesUrl { get; set; }
-		public Dictionary<string, object> CalledNodes { get; set; }
-		public List<HttpResponseMessage> Responses { get; set; }
 
+		public List<string> CallToWorkerNodes { get; set; }
 
-#pragma warning disable 1998
-		public async Task<HttpResponseMessage> PostAsync(Uri url,
-#pragma warning restore 1998
-		                                                 object data)
+		public Task<HttpResponseMessage> PostAsync(Uri url,
+		                                           object data)
 		{
-
 			if (BusyNodesUrl.Any(url.ToString().Contains))
 			{
-				return new HttpResponseMessage(HttpStatusCode.Conflict);
+				return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.Conflict));
 			}
 
-			CalledNodes.Add(url.ToString(),
-							data);
+			CallToWorkerNodes.Add(url.ToString());
 
-			if (Responses.Count == CalledNodes.Count())
-			{
-				return Responses[CalledNodes.Count - 1];
-			}
+			var task= new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
 
-			return Responses[0];
+			task.Start();
+			task.Wait();
+
+			return task;
 		}
 
-		public  Task<HttpResponseMessage> PutAsync(Uri url, object data)
+		public Task<HttpResponseMessage> PutAsync(Uri url, object data)
 		{
-			return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
+			CallToWorkerNodes.Add(url.ToString());
+
+			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
+
+			task.Start();
+			task.Wait();
+
+			return task;
 		}
 
-		public Task<HttpResponseMessage> TryPostAsync(Uri url, object data)
+		public Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
-			return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
+			CallToWorkerNodes.Add(url.ToString());
+
+			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
+
+			task.Start();
+			task.Wait();
+
+			return task;
 		}
 
-#pragma warning disable 1998
-		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
-#pragma warning restore 1998
+		public Task<HttpResponseMessage> GetAsync(Uri url)
 		{
-			CalledNodes.Add(url.ToString(), null);
+			CallToWorkerNodes.Add(url.ToString());
 
-			return new HttpResponseMessage(HttpStatusCode.OK);
-		}
+			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
 
-#pragma warning disable 1998
-		public async Task<HttpResponseMessage> GetAsync(Uri url)
-#pragma warning restore 1998
-		{
-			CalledNodes.Add(url.ToString(), null);
-			return new HttpResponseMessage(HttpStatusCode.OK);
+			task.Start();
+			task.Wait();
+
+			return task;
 		}
 
 		public Task<bool> TryGetAsync(Uri url)
 		{
 			var task = new Task<bool>(() => true);
+			task.Start();
+			task.Wait();
+
+			return task;
+		}
+
+		public Task<HttpResponseMessage> TryPostAsync(Uri url, object data)
+		{
+			CallToWorkerNodes.Add(url.ToString());
+
+			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
+
 			task.Start();
 			task.Wait();
 

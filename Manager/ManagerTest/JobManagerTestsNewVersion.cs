@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Threading.Tasks;
 using log4net.Config;
 using ManagerTest.Database;
 using ManagerTest.Fakes;
@@ -16,298 +12,160 @@ using Stardust.Manager.Models;
 
 namespace ManagerTest
 {
-//	[TestFixture, JobTests]
-//	public class JobManagerTestsNewVersion : DatabaseTest
-//	{
-//		[TearDown]
-//		public void TearDown()
-//		{
-//			JobManager.Dispose();
-//		}
+	[TestFixture, JobTests]
+	public class JobManagerTestsNewVersion : DatabaseTest
+	{
+		[TearDown]
+		public void TearDown()
+		{
+			JobManager.Dispose();
+		}
 
-//		public JobManager JobManager;
-//		public NodeManager NodeManager;
-//		public IHttpSender HttpSender;
-//		public IJobRepository JobRepository;
-//		public IWorkerNodeRepository WorkerNodeRepository;
+		public JobManagerNewVersion JobManager;
+		public NodeManager NodeManager;
+		public IHttpSender HttpSender;
+		public IJobRepository JobRepository;
+		public IWorkerNodeRepository WorkerNodeRepository;
 
-//		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
-//		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
-//		private readonly Uri _nodeUri3 = new Uri("http://localhost:9052/");
+		private readonly Uri _nodeUri1 = new Uri("http://localhost:9050/");
+		private readonly Uri _nodeUri2 = new Uri("http://localhost:9051/");
+		private readonly Uri _nodeUri3 = new Uri("http://localhost:9052/");
 
-//		private FakeHttpSender FakeHttpSender
-//		{
-//			get { return (FakeHttpSender)HttpSender; }
-//		}
+		private FakeHttpSender FakeHttpSender
+		{
+			get { return (FakeHttpSender) HttpSender; }
+		}
 
-//		[TestFixtureSetUp]
-//		public void TextFixtureSetUp()
-//		{
-//#if DEBUG
-//			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-//			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-//#endif
-//		}
+		[TestFixtureSetUp]
+		public void TextFixtureSetUp()
+		{
+#if DEBUG
+			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+#endif
+		}
 
-//		[Test]
-//		public void ShouldAddANodeOnInit()
-//		{
-//			NodeManager.AddIfNeeded(_nodeUri1);
+		[Test]
+		public void ShouldAddANodeOnInit()
+		{
+			NodeManager.AddIfNeeded(_nodeUri1);
 
-//			WorkerNodeRepository.GetAllWorkerNodes()
-//				.First()
-//				.Url.Should()
-//				.Be.EqualTo(_nodeUri1.ToString());
-//		}
+			WorkerNodeRepository.GetAllWorkerNodes()
+				.First()
+				.Url.Should()
+				.Be.EqualTo(_nodeUri1.ToString());
+		}
 
-//		[Test]
-//		public void ShouldBeAbleToCancelJobIfStarted()
-//		{
-//			var jobId = Guid.NewGuid();
+		[Test]
+		public void ShouldBeAbleToCancelJobIfStarted()
+		{
+			//------------------------------------------
+			// Add worker node.
+			//------------------------------------------
+			var workerNode = new WorkerNode
+			{
+				Id = Guid.NewGuid(),
+				Url = _nodeUri1
+			};
+			WorkerNodeRepository.AddWorkerNode(workerNode);
 
-//			JobRepository.AddJobDefinition(new JobDefinition
-//			{
-//				JobId = jobId,
-//				Name = "For test",
-//				CreatedBy = "JobManagerTests",
-//				Serialized = "Serialized",
-//				Type = "Type"
-//			});
+			//------------------------------------------
+			// Create job queue item.
+			//------------------------------------------			
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
 
-//			WorkerNodeRepository.AddWorkerNode(new WorkerNode
-//			{
-//				Id = Guid.NewGuid(),
-//				Url = _nodeUri1
-//			});
+			//----------------------------------------------
+			// Add item to job queue.
+			//----------------------------------------------
+			JobManager.AddItemToJobQueue(jobQueueItem);
 
-//			JobManager.CheckAndAssignNextJob();
-//			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.Status.Should().Be.EqualTo("Started");
-//			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
-//			JobManager.CancelJobByJobId(jobId);
-//			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(2);
-//			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.Status.Should().Be.EqualTo("Canceling");
-//		}
+			//----------------------------------------------
+			// Assign job to worker node.
+			//----------------------------------------------
+			FakeHttpSender.CallToWorkerNodes.Clear();
+			JobManager.AssignJobToWorkerNode();
+			FakeHttpSender.CallToWorkerNodes.Count().Should().Be(2);
 
+			//----------------------------------------------
+			// Check that job started.
+			//----------------------------------------------
+			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
+			job.Satisfy(job1 => job1.Started != null);
 
-//		[Test]
-//		public void ShouldContainJobManager()
-//		{
-//			JobManager.Should().Not.Be.Null();
-//		}
+			//----------------------------------------------
+			// Try to cancel the job.
+			//----------------------------------------------
+			FakeHttpSender.CallToWorkerNodes.Clear();
+			JobManager.CancelJobByJobId(jobQueueItem.JobId);
+			FakeHttpSender.CallToWorkerNodes.Count.Should().Be.EqualTo(1);
 
-//		[Test]
-//		public void ShouldJumpOutIfNoJob()
-//		{
-//			JobManager.CheckAndAssignNextJob();
-//			FakeHttpSender.CalledNodes.Should().Be.Empty();
-//		}
+			//----------------------------------------------
+			// Check that job is canceling or has canceled.
+			//----------------------------------------------
+			job = JobManager.GetJobByJobId(jobQueueItem.JobId);
+			job.Satisfy(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
+		}
 
-//		[Test]
-//		public void ShouldJumpOutIfNoNode()
-//		{
-//			var id = Guid.NewGuid();
-//			JobRepository.AddJobDefinition(new JobDefinition
-//			{
-//				JobId = id,
-//				Name = "For test",
-//				CreatedBy = "JobManagerTests",
-//				Serialized = "",
-//				Type = ""
-//			});
-//			JobManager.CheckAndAssignNextJob();
-//			FakeHttpSender.CalledNodes.Should().Be.Empty();
-//		}
+		[Test]
+		public void ShouldContainJobManager()
+		{
+			JobManager.Should().Not.Be.Null();
+		}
 
-//		[Test]
-//		public void ShouldJustDeleteJobIfNotStarted()
-//		{
-//			var jobId = Guid.NewGuid();
+		[Test]
+		public void ShouldDoNothing_WhenNoWorkerNodeExists_AndJobQueueHasItems()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
 
-//			JobRepository.AddJobDefinition(new JobDefinition
-//			{
-//				JobId = jobId,
-//				Name = "For test",
-//				CreatedBy = "JobManagerTests",
-//				JobProgress = "Waiting",
-//				Serialized = "Serialized",
-//				AssignedNode = "",
-//				Status = "Added",
-//				Type = "Type"
-//			});
+			JobManager.AddItemToJobQueue(jobQueueItem);
 
-//			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.Should().Not.Be.Null();
-//			JobManager.CancelJobByJobId(jobId);
-//			FakeHttpSender.CalledNodes.Should().Be.Empty();
-//			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.Should().Be.Null();
-//		}
+			JobManager.AssignJobToWorkerNode();
 
-//		[Test]
-//		public void ShouldNotAddSameNodeTwiceInInit()
-//		{
-//			NodeManager.AddIfNeeded(_nodeUri1);
-//			NodeManager.AddIfNeeded(_nodeUri1);
-//			WorkerNodeRepository.GetAllWorkerNodes()
-//				.Count.Should()
-//				.Be.EqualTo(1);
-//		}
+			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
+		}
 
-//		[Test]
-//		public void ShouldRemoveJobOnBadRequest()
-//		{
-//			var jobId = Guid.NewGuid();
-//			JobRepository.AddJobDefinition(new JobDefinition
-//			{
-//				JobId = jobId,
-//				Name = "For test",
-//				CreatedBy = "JobManagerTests",
-//				Serialized = "",
-//				Type = ""
-//			});
+		[Test]
+		public void ShouldDoNothing_WhenNoWorkerNodeExists_AndJobQueueIsEmpty()
+		{
+			JobManager.AssignJobToWorkerNode();
 
-//			WorkerNodeRepository.AddWorkerNode(new WorkerNode
-//			{
-//				Id = Guid.NewGuid(),
-//				Url = _nodeUri1
-//			});
+			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
+		}
 
-//			FakeHttpSender.Responses = new List<HttpResponseMessage>
-//			{
-//				new HttpResponseMessage(HttpStatusCode.BadRequest)
-//				{
-//					ReasonPhrase = "Reason comes here."
-//				}
-//			};
+		[Test]
+		public void ShouldJustDeleteJobIfNotStarted()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
 
-//			JobManager.CheckAndAssignNextJob();
-//			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.Should().Be.Null();
-//			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
-//			JobRepository.GetJobHistoryByJobId(jobId).Result.Should().Contain("Removed");
-//		}
+			JobManager.AddItemToJobQueue(jobQueueItem);
 
-//		[Test]
-//		public void ShouldResetAssignedNodeOnInitIfItIsAssigned()
-//		{
-//			var jobId = Guid.NewGuid();
-//			JobRepository.AddJobDefinition(new JobDefinition
-//			{
-//				JobId = jobId,
-//				Name = "For test",
-//				CreatedBy = "JobManagerTests",
-//				Serialized = "",
-//				Type = ""
-//			});
-//			WorkerNodeRepository.AddWorkerNode(new WorkerNode { Id = Guid.NewGuid(), Url = _nodeUri1 });
-//			JobManager.CheckAndAssignNextJob();
-//			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
+			JobManager.CancelJobByJobId(jobQueueItem.JobId);
 
-//			NodeManager.FreeJobIfAssingedToNode(_nodeUri1);
-//			job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.AssignedNode.Should().Be.Null();
-//		}
+			var deletedJobQueueItemExists =
+				JobManager.DoesJobQueueItemExists(jobQueueItem.JobId);
 
-//		[Test]
-//		public void ShouldSendJobToNode()
-//		{
-//			var jobId = Guid.NewGuid();
-//			var nodeId = Guid.NewGuid();
-
-//			JobRepository.AddJobDefinition(new JobDefinition
-//			{
-//				JobId = jobId,
-//				Name = "For test",
-//				CreatedBy = "JobManagerTests",
-//				JobProgress = "Waiting",
-//				Serialized = "Serialized",
-//				AssignedNode = "",
-//				Status = "Added",
-//				Type = "Type"
-//			});
-
-//			WorkerNodeRepository.AddWorkerNode(new WorkerNode
-//			{
-//				Id = nodeId,
-//				Url = _nodeUri1
-//			});
-
-//			JobManager.CheckAndAssignNextJob();
-//			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
-
-//			var job =
-//				JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-
-//			job.AssignedNode.Should().Be.EqualTo(_nodeUri1.ToString());
-//		}
-
-//		[Test]
-//		public void ShouldSendJobToNodeLoadTest()
-//		{
-//			var numberOfJobs = 100;
-
-//			var tasks = new List<Task>();
-
-//			for (var i = 0; i < numberOfJobs; i++)
-//			{
-//				tasks.Add(new Task(() =>
-//				{
-//					JobRepository.AddJobDefinition(new JobDefinition
-//					{
-//						JobId = Guid.NewGuid(),
-//						Name = "For test",
-//						CreatedBy = "JobManagerTests",
-//						JobProgress = "Waiting",
-//						Serialized = "Serialized",
-//						AssignedNode = "",
-//						Status = "Added",
-//						Type = "Type"
-//					});
-//				}));
-//			}
-
-//			Parallel.ForEach(tasks, task => { task.Start(); });
-
-
-//			Task.WaitAll(tasks.ToArray());
-
-//			var all = JobRepository.GetAllJobDefinitions().Count;
-
-//			Assert.IsTrue(numberOfJobs == all, "Should be equal");
-//		}
-
-//		[Test]
-//		public void ShouldSetEndResultInHistoryAndRemoveTheJobWhenJobIsDone()
-//		{
-//			var jobId = Guid.NewGuid();
-
-//			var jobDefinition = new JobDefinition
-//			{
-//				JobId = jobId,
-//				Name = "For test",
-//				CreatedBy = "JobManagerTests",
-//				Serialized = "",
-//				Type = ""
-//			};
-
-//			JobRepository.AddJobDefinition(jobDefinition);
-
-//			WorkerNodeRepository.AddWorkerNode(new WorkerNode
-//			{
-//				Id = Guid.NewGuid(),
-//				Url = _nodeUri1
-//			});
-
-//			JobManager.CheckAndAssignNextJob();
-//			var job = JobRepository.GetAllJobDefinitions().FirstOrDefault(j => j.JobId.Equals(jobId));
-//			job.Status.Should().Be.EqualTo("Started");
-//			FakeHttpSender.CalledNodes.Count.Should().Be.EqualTo(1);
-//			JobManager.SetEndResultOnJobAndRemoveIt(jobId, "Success");
-//			JobManager.GetAllJobHistories().Should().Not.Be.Empty();
-//			JobManager.GetJobHistoryDetailsByJobId(jobId).Should().Not.Be.Empty();
-//		}
-//	}
+			deletedJobQueueItemExists.Should().Be.False();
+		}
+	}
 }

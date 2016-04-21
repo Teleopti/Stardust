@@ -1,16 +1,16 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Stardust.Manager.Models
 {
-	public class JobProgressModel : IValidatableObject
+	public class JobFailed : IValidatableObject
 	{
 		public Guid JobId { get; set; }
 
-		public string Detail { get; set; }
+		public AggregateException AggregateException { get; set; }
 
-		public DateTime Created { get; set; }
+		public DateTime? Created { get; set; }
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
@@ -24,16 +24,6 @@ namespace Stardust.Manager.Models
 			if (JobId == Guid.Empty)
 			{
 				list.Add(new ValidationResult("Invalid job id value.", pIncome));
-			}
-
-			if (string.IsNullOrEmpty(Detail))
-			{
-				pIncome = new[]
-				{
-					"Detail"
-				};
-
-				list.Add(new ValidationResult("Invalid detail value.", pIncome));
 			}
 
 			return list;

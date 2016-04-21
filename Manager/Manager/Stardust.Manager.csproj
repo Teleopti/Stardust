@@ -142,13 +142,11 @@
     <Compile Include="JobRepositoryWithLock.cs" />
     <Compile Include="ManagerStarter.cs" />
     <Compile Include="Models\JobQueueItem.cs" />
-    <Compile Include="Models\JobFailedModel.cs" />
+    <Compile Include="Models\JobFailed.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="JobManager.cs" />
     <Compile Include="Models\JobDetail.cs" />
-    <Compile Include="Models\JobProgressModel.cs" />
     <Compile Include="JobRepository.cs" />
-    <Compile Include="Models\JobRequestModel.cs" />
     <Compile Include="ManagerController.cs" />
     <Compile Include="ManagerConfiguration.cs" />
     <Compile Include="NodeManager.cs" />

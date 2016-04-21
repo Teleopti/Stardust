@@ -74,7 +74,7 @@ namespace Stardust.Manager
 		{
 			this.Log().DebugWithLineNumber("Start.");
 
-			TryAssignJobToWorkerNode();
+			AssignJobToWorkerNode();
 
 			this.Log().DebugWithLineNumber("CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
 		}
@@ -98,9 +98,9 @@ namespace Stardust.Manager
 							this.Log().ErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.JobId +
 							                               " , " + job.Name + " )");
 
-							SetEndResultOnJob(job.JobId, 
-											  "Fatal Node Failure", 
-											  DateTime.UtcNow);
+							UpdateResultForJob(job.JobId,
+							                   "Fatal Node Failure",
+							                   DateTime.UtcNow);
 						}
 					}
 				}
@@ -120,7 +120,7 @@ namespace Stardust.Manager
 			return _workerNodeRepository.GetAllWorkerNodes();
 		}
 
-		public void RegisterHeartbeat(string nodeUri)
+		public void WorkerNodeRegisterHeartbeat(string nodeUri)
 		{
 			this.Log().DebugWithLineNumber("Start RegisterHeartbeat.");
 
@@ -129,7 +129,7 @@ namespace Stardust.Manager
 			this.Log().DebugWithLineNumber("Finished RegisterHeartbeat.");
 		}
 
-		public void TryAssignJobToWorkerNode()
+		public void AssignJobToWorkerNode()
 		{
 			this.Log().DebugWithLineNumber("Start TryAssignJobToWorkerNode.");
 
@@ -159,9 +159,29 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void AddItemToJobQueue(JobQueueItem job)
+		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
 		{
-			_jobRepository.AddItemToJobQueue(job);
+			return _jobRepository.GetJobQueueItemByJobId(jobId);
+		}
+
+		public void AddItemToJobQueue(JobQueueItem jobQueueItem)
+		{
+			_jobRepository.AddItemToJobQueue(jobQueueItem);
+		}
+
+		public bool DoesJobDetailItemExists(Guid jobId)
+		{
+			return _jobRepository.DoesJobDetailItemExists(jobId);
+		}
+
+		public bool DoesJobItemItemExists(Guid jobId)
+		{
+			return _jobRepository.DoesJobItemExists(jobId);
+		}
+
+		public bool DoesJobQueueItemExists(Guid jobId)
+		{
+			return _jobRepository.DoesJobQueueItemExists(jobId);
 		}
 
 		public void CancelJobByJobId(Guid jobId)
@@ -170,20 +190,20 @@ namespace Stardust.Manager
 			                                _httpSender);
 		}
 
-		public void SetEndResultOnJob(Guid jobId,
-		                              string result,
-									  DateTime ended)
+		public void UpdateResultForJob(Guid jobId,
+		                               string result,
+		                               DateTime ended)
 		{
 			_jobRepository.UpdateResultForJob(jobId,
-			                                 result,
-											 ended);
+			                                  result,
+			                                  ended);
 		}
 
-		public void ReportProgress(JobProgressModel model)
+		public void CreateJobDetail(JobDetail jobDetail)
 		{
-			_jobRepository.CreateJobDetailByJobId(model.JobId,
-			                              model.Detail,
-			                              model.Created);
+			_jobRepository.CreateJobDetailByJobId(jobDetail.JobId,
+			                                      jobDetail.Detail,
+			                                      jobDetail.Created);
 		}
 
 		public Job GetJobByJobId(Guid jobId)

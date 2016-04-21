@@ -12,6 +12,26 @@ namespace ManagerTest.Fakes
 
 		private readonly List<JobQueueItem> _jobQueue = new List<JobQueueItem>();
 
+		public bool DoesJobQueueItemExists(Guid jobId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool DoesJobItemExists(Guid jobId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public bool DoesJobDetailItemExists(Guid jobId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
+		{
+			throw new NotImplementedException();
+		}
+
 		public void AddItemToJobQueue(JobQueueItem jobQueueItem)
 		{
 			_jobQueue.Add(jobQueueItem);

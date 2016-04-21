@@ -6,6 +6,14 @@ namespace Stardust.Manager.Interfaces
 {
 	public interface IJobRepository
 	{
+		bool DoesJobQueueItemExists(Guid jobId);
+
+		bool DoesJobItemExists(Guid jobId);
+
+		bool DoesJobDetailItemExists(Guid jobId);
+
+		JobQueueItem GetJobQueueItemByJobId(Guid jobId);
+
 		void AddItemToJobQueue(JobQueueItem jobQueueItem);
 
 		List<JobQueueItem> GetAllItemsInJobQueue();

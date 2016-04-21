@@ -82,20 +82,18 @@ namespace ManagerTest
 
 			Target.RegisterHeartbeat(_nodeUri1);
 
-			HttpSender.CalledNodes.First()
-				.Key.Should()
-				.Contain(_nodeUri1.ToString());
+			HttpSender.CallToWorkerNodes.First().Contains(_nodeUri1.ToString());
 		}
 
 		[Test]
 		public void ShouldBeAbleToAcknowledgeWhenJobIsReceived()
 		{
-			var job = new JobRequestModel
+			var job = new JobQueueItem
 			{
-				Name = "ShouldBeAbleToAcknowledgeWhenJobIsReceived",
-				Serialized = "ngt",
-				Type = "bra",
-				CreatedBy = "ManagerTests"
+				Name = "Name Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				CreatedBy = "Created By Test"
 			};
 
 			var result = Target.AddItemToJobQueue(job);
@@ -120,13 +118,20 @@ namespace ManagerTest
 			Target.RegisterHeartbeat(_nodeUri1);
 			Target.RegisterHeartbeat(_nodeUri2);
 
-			var jobId = Guid.NewGuid();
-			JobRepository.AddItemToJobQueue(new JobQueueItem {JobId = jobId, Serialized = "", Name = "", Type = "", CreatedBy = "ManagerTests"});
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Serialized = "Serialized Test",
+				Name = "Name Test",
+				Type = "Type Test",
+				CreatedBy = "Created By Test"
+			};
+			JobRepository.AddItemToJobQueue(jobQueueItem);
 
 			JobRepository.AssignJobToWorkerNode(HttpSender);
-			HttpSender.CalledNodes.Clear();
-			Target.CancelJobByJobId(jobId);
-			HttpSender.CalledNodes.Count()
+			HttpSender.CallToWorkerNodes.Clear();
+			Target.CancelJobByJobId(jobQueueItem.JobId);
+			HttpSender.CallToWorkerNodes.Count()
 				.Should()
 				.Be.EqualTo(1);
 		}
@@ -134,26 +139,26 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToPersistManyJobs()
 		{
-			var jobRequestModels = new List<JobRequestModel>();
+			var jobQueueItems = new List<JobQueueItem>();
 
 			for (var i = 0; i < 50; i++)
 			{
-				var jobRequestModel = new JobRequestModel
+				var jobQueueItem = new JobQueueItem
 				{
-					Name = "Name data " + i,
-					Serialized = "Serialized",
-					Type = "Type",
-					CreatedBy = "User name"
+					Name = "Name Test " + i,
+					Serialized = "Serialized Test",
+					Type = "Type Test",
+					CreatedBy = "Created By Test"
 				};
 
-				jobRequestModels.Add(jobRequestModel);
+				jobQueueItems.Add(jobQueueItem);
 			}
 
 			var tasks = new List<Task>();
 
-			foreach (var jobRequestModel in jobRequestModels)
+			foreach (var jobQueueItem in jobQueueItems)
 			{
-				var model = jobRequestModel;
+				var model = jobQueueItem;
 
 				tasks.Add(new Task(() =>
 				{
@@ -175,15 +180,15 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToPersistBadRequestResonsToJob()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
-				Name = "ShouldBeAbleToPersistBadRequestResonsToJob",
-				Serialized = "Serialized Data",
-				Type = "Type data",
-				CreatedBy = "ManagerOperationsTestNewVersion"
+				Name = "Name Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				CreatedBy = "Created By Test"
 			};
 
-			Target.AddItemToJobQueue(job);
+			Target.AddItemToJobQueue(jobQueueItem);
 
 			JobRepository.GetAllItemsInJobQueue()
 				.Count.Should()
@@ -193,19 +198,19 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToPersistNewJob()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
-				Name = "ShouldBeAbleToPersistNewJob",
-				Serialized = "ngtbara",
-				Type = "typngtannat",
-				CreatedBy = "ManagerTests"
+				Name = "Name Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				CreatedBy = "Created By Test"
 			};
 
-			var response=Target.AddItemToJobQueue(job);
+			var response=Target.AddItemToJobQueue(jobQueueItem);
 
 			if (response is BadRequestErrorMessageResult)
 			{
-				Assert.Fail("Invalid job request model.");
+				Assert.Fail("Invalid job queue item.");
 			}
 			else
 			{
@@ -219,12 +224,12 @@ namespace ManagerTest
 		[Test]
 		public void ShouldGetUniqueJobIdWhilePersistingJob()
 		{
-			var response=Target.AddItemToJobQueue(new JobRequestModel
+			var response=Target.AddItemToJobQueue(new JobQueueItem
 			{
-				Name = "ShouldGetUniqueJobIdWhilePersistingJob",
-				Serialized = "ngt",
-				Type = "bra",
-				CreatedBy = "ManagerTests"
+				Name = "Name Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				CreatedBy = "Created By Test"
 			});
 
 			if (response is BadRequestErrorMessageResult)
@@ -232,12 +237,12 @@ namespace ManagerTest
 				Assert.Fail("Invalid job request model 1.");	
 			}
 
-			response = Target.AddItemToJobQueue(new JobRequestModel
+			response = Target.AddItemToJobQueue(new JobQueueItem
 			{
-				Name = "ShouldGetUniqueJobIdWhilePersistingJob",
-				Serialized = "ngt",
-				Type = "bra",
-				CreatedBy = "ManagerTests"
+				Name = "Name Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				CreatedBy = "Created By Test"
 			});
 
 			if (response is BadRequestErrorMessageResult)
@@ -258,22 +263,20 @@ namespace ManagerTest
 		{
 			NodeRepository.AddWorkerNode(new WorkerNode { Url = _nodeUri1 });
 
-			var jobId = Guid.NewGuid();
-
-			var job = new JobQueueItem
+			var jobQueueItem = new JobQueueItem
 			{
-				Name = "Name",
-				Serialized = "Serialized",
-				Type = "Type",
-				CreatedBy = "ManagerTests",
-				JobId = jobId
+				Name = "Name Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				CreatedBy = "Created By Test",
+				JobId = Guid.NewGuid()
 			};
 
-			JobRepository.AddItemToJobQueue(job);
+			JobRepository.AddItemToJobQueue(jobQueueItem);
 
 			JobRepository.AssignJobToWorkerNode(HttpSender);
 
-			Target.CancelJobByJobId(jobId);
+			Target.CancelJobByJobId(jobQueueItem.JobId);
 
 			JobRepository.GetAllItemsInJobQueue()
 				.Count.Should()
@@ -283,7 +286,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelNameIsNull()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = null,
 				Serialized = "Serialized",
@@ -291,7 +294,7 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			IHttpActionResult response=Target.AddItemToJobQueue(job);
+			IHttpActionResult response=Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult),response);
 
@@ -308,9 +311,9 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobFailedGetsInvalidJobFailedMode()
 		{
-			JobFailedModel jobFailedModel=new JobFailedModel();
+			JobFailed jobFailed=new JobFailed();
 
-			var response = Target.JobFailed(jobFailedModel);
+			var response = Target.JobFailed(jobFailed);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 		}
@@ -359,7 +362,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelNameIsEmptyString()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = string.Empty,
 				Serialized = "Serialized",
@@ -367,7 +370,7 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			IHttpActionResult response = Target.AddItemToJobQueue(job);
+			IHttpActionResult response = Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
@@ -376,7 +379,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelSerializedIsNull()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = "Name",
 				Serialized = null,
@@ -384,7 +387,7 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			IHttpActionResult response = Target.AddItemToJobQueue(job);
+			IHttpActionResult response = Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
@@ -393,7 +396,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelSerializedIsEmptyString()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = "Name",
 				Serialized = string.Empty,
@@ -401,7 +404,7 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			IHttpActionResult response = Target.AddItemToJobQueue(job);
+			IHttpActionResult response = Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
@@ -410,7 +413,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelTypeIsNull()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = "Name",
 				Serialized = "Serialized",
@@ -418,7 +421,7 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			IHttpActionResult response = Target.AddItemToJobQueue(job);
+			IHttpActionResult response = Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
@@ -427,7 +430,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelTypeIsEmptyString()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = "Name",
 				Serialized = "Serialized",
@@ -435,7 +438,7 @@ namespace ManagerTest
 				CreatedBy = "UserName"
 			};
 
-			IHttpActionResult response = Target.AddItemToJobQueue(job);
+			IHttpActionResult response = Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
@@ -444,7 +447,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelUserNameIsNull()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = "Name",
 				Serialized = "Serialized",
@@ -452,7 +455,7 @@ namespace ManagerTest
 				CreatedBy = null
 			};
 
-			IHttpActionResult response = Target.AddItemToJobQueue(job);
+			IHttpActionResult response = Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
@@ -461,7 +464,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfJobRequestModelUserNameIsEmtpyString()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = "Name",
 				Serialized = "Serialized",
@@ -469,7 +472,7 @@ namespace ManagerTest
 				CreatedBy = string.Empty
 			};
 
-			IHttpActionResult response = Target.AddItemToJobQueue(job);
+			IHttpActionResult response = Target.AddItemToJobQueue(jobQueueItem);
 
 			Assert.IsInstanceOf(typeof(BadRequestErrorMessageResult), response);
 
@@ -478,7 +481,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnConflictIfNodeIsBusy()
 		{
-			var job = new JobRequestModel
+			var jobQueueItem = new JobQueueItem
 			{
 				Name = "ShouldBeAbleToSendNewJobToAvailableNode",
 				Serialized = "ngt",
@@ -489,9 +492,9 @@ namespace ManagerTest
 
 			Target.RegisterHeartbeat(_nodeUri1);
 
-			Target.AddItemToJobQueue(job);
+			Target.AddItemToJobQueue(jobQueueItem);
 
-			HttpSender.CalledNodes.Count.Should()
+			HttpSender.CallToWorkerNodes.Count.Should()
 				.Be.EqualTo(0);
 		}
 
@@ -500,7 +503,7 @@ namespace ManagerTest
 		{
 			var newJobId =
 				((OkNegotiatedContentResult<Guid>)
-					Target.AddItemToJobQueue(new JobRequestModel
+					Target.AddItemToJobQueue(new JobQueueItem
 					{
 						Name = "ShouldReturnIdOfPersistedJob",
 						Serialized = "ngt",
