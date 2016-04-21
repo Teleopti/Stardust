@@ -9,8 +9,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
 																		 IList<IPerson> selectedPersons);
-
-		bool IsTeamBlockScheduledForSelectedPersons(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons);
 	}
 
 	public class TeamBlockSchedulingCompletionChecker : ITeamBlockSchedulingCompletionChecker
@@ -52,21 +50,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			return true;
 
-		}
-
-		public bool IsTeamBlockScheduledForSelectedPersons(ITeamBlockInfo teamBlockInfo, IList<IPerson> selectedPersons)
-		{
-			if (teamBlockInfo == null) return false;
-
-			foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-			{
-				foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
-				{
-					if (!selectedPersons.Contains(matrix.Person)) continue;
-                    if (!checkScheduleStatus(dateOnly, matrix)) return false;
-				}
-			}
-			return true;
 		}
 	}
 }
