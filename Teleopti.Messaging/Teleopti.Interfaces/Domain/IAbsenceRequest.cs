@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -19,5 +22,10 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         IAbsence Absence { get; }
 
-    }
+	    bool IsRequestForOneLocalDay (TimeZoneInfo timeZone);
+
+		IList<IPersonAbsence> PersonAbsences { get;  }
+
+
+	}
 }

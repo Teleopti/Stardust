@@ -103,6 +103,8 @@ namespace Teleopti.Interfaces.Domain
 
 		bool IsWaitlisted { get; }
 
+		bool IsCancelled { get; }
+
 		// Was manually denied by an administrator.
 		bool WasManuallyDenied { get; }
 			
@@ -186,5 +188,8 @@ namespace Teleopti.Interfaces.Domain
         /// Set the status to new to be able to perform validation after edits.
         ///</summary>
         void SetNew();
+
+	    void Cancel (IPersonRequestCheckAuthorization authorization);
+
     }
 }

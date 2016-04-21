@@ -93,6 +93,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			TextForNotification = string.Format(Resources.AnnouncementInvalidMessage, _date.ToShortDateString());
 		}
 
+		public override void Cancel()
+		{
+			throw new NotImplementedException();
+		}
+
 		public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
 			IPersonRequestCheckAuthorization authorization)
 		{

@@ -22,5 +22,8 @@ namespace Teleopti.Interfaces.Domain
         ///<param name="personRequest"></param>
         ///<returns></returns>
         bool HasViewRequestPermission(IPersonRequest personRequest);
-    }
+
+
+		bool HasCancelRequestPermission(IPersonRequest personRequest);
+	}
 }

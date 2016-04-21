@@ -55,7 +55,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period, IScenario scenario)
 		{
-			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc), _data.Where(d => d.BelongsToScenario(scenario)).ToArray());
+			//return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc), _data.Where(d => d.BelongsToScenario(scenario)).ToArray());
+			
+			return FindSchedulesForPersonOnlyInGivenPeriod (person, scheduleDictionaryLoadOptions, period.ToDateTimePeriod (TimeZoneInfo.Utc), scenario);
+
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,

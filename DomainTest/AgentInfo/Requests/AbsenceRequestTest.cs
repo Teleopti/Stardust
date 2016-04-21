@@ -268,7 +268,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 throw new NotImplementedException();
             }
 
-            public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
+	        public override void Cancel()
+	        {
+		        throw new NotImplementedException();
+	        }
+
+	        public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
             {
                 throw new NotImplementedException();
             }

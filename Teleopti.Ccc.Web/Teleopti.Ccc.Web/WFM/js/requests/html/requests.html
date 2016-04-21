@@ -13,6 +13,7 @@
 	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled"
 							before-command="requests.onBeforeCommand()"
 							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount)"
+							on-error-messages="requests.onErrorMessages(errorMessages)"
 							after-command-error="requests.onCommandError(error)"
 							commands-disabled="requests.disableInteraction"></requests-commands-pane>
 

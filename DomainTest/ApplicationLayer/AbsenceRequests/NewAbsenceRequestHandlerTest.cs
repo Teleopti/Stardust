@@ -23,7 +23,7 @@ using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequest
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[TestFixture]
 	public class NewAbsenceRequestHandlerTest

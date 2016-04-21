@@ -126,6 +126,7 @@
 		public const string WebSchedules = "Raptor/Anywhere/WebSchedules";
 		public const string WebPeople = "Raptor/Anywhere/WebPeople";
 		public const string WebRequests = "Raptor/Anywhere/WebRequests";
+		public const string WebCancelRequest = "Raptor/Anywhere/WebRequests/CancelRequest";
 		public const string WebModifySkill = "Raptor/Anywhere/WebForecasts/WebModifySkill";
 		public const string WebModifySkillArea = "Raptor/Anywhere/WebIntraday/WebModifySkillArea";
 	}

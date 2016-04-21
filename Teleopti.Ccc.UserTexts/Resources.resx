@@ -4418,7 +4418,7 @@ Accounts</value>
     <comment>Default name to be appeared in the tree in the shift creator module</comment>
   </data>
   <data name="InsufficientPermission" xml:space="preserve">
-    <value>You don't have sufficient permission perform this task. please contact Administrator.</value>
+    <value>You don't have sufficient permission to perform this task. please contact your Administrator.</value>
     <comment> Error message shows in Agnet Portal when Agent tries to perform a task which he/she doesn't have sufficient permission.</comment>
   </data>
   <data name="SortAtoZ" xml:space="preserve">
@@ -14274,6 +14274,18 @@ Help us improve your experience by sending an error report</value>
     <value>No permission to remove activities for agent {0}.</value>
     <comment>Error message to notify missing permission for removing activity</comment>
   </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value> The absence request for {0} was cancelled and the absence was removed from your schedule.</value>
+    <comment>Used to notify the user when an absence request has been successfully cancelled, and the related absence that was created by the request has been removed.</comment>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>The absence request for {0} - {1} was cancelled and the absence was removed from your schedule.</value>
+    <comment>Used to notify the user when an absence request has been successfully cancelled, and the related absence that was created by the request has been removed.</comment>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+    <comment>Cancelled</comment>
+  </data>
   <data name="ModifySkillArea" xml:space="preserve">
     <value>Modify Skill Area</value>
     <comment>Modify skill area</comment>
@@ -14314,4 +14326,44 @@ Help us improve your experience by sending an error report</value>
 		<value>Could not remove activities for selected agents</value>
 		<comment>Fail Message for Removing Activity</comment>
 	</data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value> The absence request for {0} was cancelled and the absence was removed from your schedule.</value>
+    <comment>Used to notify the user when an absence request has been successfully cancelled, and the related absence that was created by the request has been removed.</comment>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>The absence request for {0} - {1} was cancelled and the absence was removed from your schedule.</value>
+    <comment>Used to notify the user when an absence request has been successfully cancelled, and the related absence that was created by the request has been removed.</comment>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Cancelled</value>
+    <comment>Cancelled</comment>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>The absence request for {0} on {1} could not be cancelled as no related absence was found.</value>
+    <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Date.</comment>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>The absence request for {0} from {1} - {2} could not be cancelled as no related absence was found.</value>
+    <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Start Date/Time (2) End Date/Time</comment>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>{0} request(s) have been cancelled</value>
+    <comment>Multiple requests have been cancelled  - shows the count of the affected requests.</comment>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>{0} request(s) have not been cancelled</value>
+    <comment>Multiple requests have been not been cancelled  - shows the count of the non affected requests.</comment>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Cancel Request</value>
+    <comment>Permission to Cancel Absence Requests in the new Angel Web Project.</comment>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>Cannot cancel the absence request for {0} on {1} as it has not been approved.</value>
+    <comment>Displays in an error to the administrator when attempting to cancel a absence request that has not already been approved. {0} is the person, {1} is the date.</comment>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>Cannot cancel the absence request for {0} from {1} - {2} as it has not been approved.</value>
+    <comment>Displays in an error to the administrator when attempting to cancel a absence request that has not already been approved. {0} is the person, {1} is the start date time and {2} is the end date time.</comment>
+  </data>  
 </root>

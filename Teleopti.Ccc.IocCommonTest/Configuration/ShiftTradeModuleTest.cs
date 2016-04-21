@@ -106,6 +106,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			{
 				return false;
 			}
+
+			public bool HasCancelRequestPermission (IPersonRequest personRequest)
+			{
+				return false;
+			}
 		}
 	}
 }

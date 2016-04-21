@@ -178,10 +178,14 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceReportEventHandler.cs" />
+    <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceRequestHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IErrorAttachedCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\IPersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\Commands\MyTeamRemovePersonAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\MyTeamRemovePersonAbsenceCommandHandler.cs" />

@@ -263,7 +263,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         }
 
-        /// <summary>
+	    public override void Cancel()
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    /// <summary>
         /// Accepts the shift trade request.
         /// </summary>
         /// <param name="acceptingPerson">The accepting person.</param>

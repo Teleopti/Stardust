@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public Guid CommandId { get; set; }
+		public Guid AbsenceRequestId { get; set; }
 	}
 }

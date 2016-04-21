@@ -276,5 +276,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
 			return true;
 		}
+
+		public bool HasCancelRequestPermission (IPersonRequest personRequest)
+		{
+			return false;
+		}
 	}
 }

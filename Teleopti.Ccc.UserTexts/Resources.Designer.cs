@@ -259,6 +259,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to  The absence request for {0} was cancelled and the absence was removed from your schedule..
+        /// </summary>
+        public static string AbsenceRequestForOneDayWasCancelled {
+            get {
+                return ResourceManager.GetString("AbsenceRequestForOneDayWasCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An absence request {0} - {1} was approved..
         /// </summary>
         public static string AbsenceRequestHasBeenApprovedDot {
@@ -300,6 +309,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AbsenceRequestsWeb {
             get {
                 return ResourceManager.GetString("AbsenceRequestsWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The absence request for {0} - {1} was cancelled and the absence was removed from your schedule..
+        /// </summary>
+        public static string AbsenceRequestWasCancelled {
+            get {
+                return ResourceManager.GetString("AbsenceRequestWasCancelled", resourceCulture);
             }
         }
         
@@ -4683,6 +4701,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancelled.
+        /// </summary>
+        public static string Cancelled {
+            get {
+                return ResourceManager.GetString("Cancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Waiting to stop....
         /// </summary>
         public static string CancellingThreeDots {
@@ -4697,6 +4724,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CancelLoading {
             get {
                 return ResourceManager.GetString("CancelLoading", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel Request.
+        /// </summary>
+        public static string CancelRequest {
+            get {
+                return ResourceManager.GetString("CancelRequest", resourceCulture);
             }
         }
         
@@ -4906,6 +4942,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CannotReadProductActivationKeyFile {
             get {
                 return ResourceManager.GetString("CannotReadProductActivationKeyFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot cancel the absence request for {0} on {1} as it has not been approved..
+        /// </summary>
+        public static string CanOnlyCancelApprovedAbsenceRequest {
+            get {
+                return ResourceManager.GetString("CanOnlyCancelApprovedAbsenceRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot cancel the absence request for {0} from {1} - {2} as it has not been approved..
+        /// </summary>
+        public static string CanOnlyCancelApprovedAbsenceRequestMultiDay {
+            get {
+                return ResourceManager.GetString("CanOnlyCancelApprovedAbsenceRequestMultiDay", resourceCulture);
             }
         }
         
@@ -6279,6 +6333,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CouldNotApply {
             get {
                 return ResourceManager.GetString("CouldNotApply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The absence request for {0} on {1} could not be cancelled as no related absence was found..
+        /// </summary>
+        public static string CouldNotCancelRequestNoAbsence {
+            get {
+                return ResourceManager.GetString("CouldNotCancelRequestNoAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The absence request for {0} from {1} - {2} could not be cancelled as no related absence was found..
+        /// </summary>
+        public static string CouldNotCancelRequestNoAbsenceMultiDay {
+            get {
+                return ResourceManager.GetString("CouldNotCancelRequestNoAbsenceMultiDay", resourceCulture);
             }
         }
         
@@ -12616,7 +12688,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have sufficient permission perform this task. please contact Administrator..
+        ///   Looks up a localized string similar to You don&apos;t have sufficient permission to perform this task. please contact your Administrator..
         /// </summary>
         public static string InsufficientPermission {
             get {
@@ -22517,6 +22589,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {0} request(s) have been cancelled.
+        /// </summary>
+        public static string RequestsHaveBeenCancelled {
+            get {
+                return ResourceManager.GetString("RequestsHaveBeenCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} request(s) have been denied..
         /// </summary>
         public static string RequestsHaveBeenDenied {
@@ -22531,6 +22612,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestsHaveNotBeenApproved {
             get {
                 return ResourceManager.GetString("RequestsHaveNotBeenApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} request(s) have not been cancelled.
+        /// </summary>
+        public static string RequestsHaveNotBeenCancelled {
+            get {
+                return ResourceManager.GetString("RequestsHaveNotBeenCancelled", resourceCulture);
             }
         }
         

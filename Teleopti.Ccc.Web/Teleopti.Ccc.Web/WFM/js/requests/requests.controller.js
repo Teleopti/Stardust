@@ -43,6 +43,7 @@
 			vm.onBeforeCommand = onBeforeCommand;
 			vm.onCommandSuccess = onCommandSuccess;
 			vm.onCommandError = onCommandError;
+			vm.onErrorMessages = onErrorMessages;
 			vm.disableInteraction = false;
 
 		}
@@ -103,7 +104,18 @@
 				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Deny) {
 				requestsNotificationService.notifyDenyRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Cancel) {
+				requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
 			}
+		}
+
+		function onErrorMessages(errorMessages) {
+			vm.disableInteraction = false;
+			forceRequestsReloadWithoutSelection();
+
+			errorMessages.forEach(function(errorMessage) {
+				requestsNotificationService.notifyCommandError(errorMessage);
+			});
 		}
 
 		function onCommandError(error) {

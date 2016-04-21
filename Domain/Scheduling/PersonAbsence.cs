@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -40,7 +38,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_person = agent;
 			_scenario = scenario;
 			_layer = layer;
+
 			_absenceRequest = absenceRequest;
+
+			if (_absenceRequest != null)
+			{
+				_absenceRequest.PersonAbsences.Add (this);
+			}
 		}
 
 		/// <summary>
@@ -105,7 +109,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				StartDateTime = Period.StartDateTime,
 				EndDateTime = Period.EndDateTime,
 				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				
 			};
+
+			if (AbsenceRequest != null)
+			{
+				personAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
+			}
+
 			if (trackedCommandInfo != null)
 			{
 				personAbsenceRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
@@ -254,7 +265,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 						{
 							var newLayer = new AbsenceLayer(Layer.Payload, dateTimePeriod);
-							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer);
+							IPersonAbsence personAbsence = new PersonAbsence(Person, Scenario, newLayer, _absenceRequest);
 							splitList.Add(personAbsence);
 						}
 					}

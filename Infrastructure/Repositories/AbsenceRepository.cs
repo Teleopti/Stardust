@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        public IList<IAbsence> FindAbsenceTrackerUsedByPersonAccount()
+		public IList<IAbsence> FindAbsenceTrackerUsedByPersonAccount()
         {
             return Session.GetNamedQuery("FindAbsenceTrackerUsedByPersonAccount")
                             .List<IAbsence>();

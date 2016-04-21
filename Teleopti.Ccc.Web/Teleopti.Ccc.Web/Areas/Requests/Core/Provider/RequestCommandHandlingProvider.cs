@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public IEnumerable<Guid> ApproveRequests(IEnumerable<Guid> ids)
+		public RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> ids)
 		{
 			var trackInfo = new TrackedCommandInfo
 			{
@@ -36,13 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 				_commandDispatcher.Execute(command);
 
-				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);				
+				if (command.AffectedRequestId.HasValue)  affectedRequestIds.Add(command.AffectedRequestId.Value);
 			}
 
-			return affectedRequestIds;
+			return new RequestCommandHandlingResult(affectedRequestIds, null);
 		}
 
-		public IEnumerable<Guid> DenyRequests(IEnumerable<Guid> ids)
+		public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids)
 		{
 			var trackInfo = new TrackedCommandInfo
 			{
@@ -65,7 +66,44 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
 			}
 
-			return affectedRequestIds;
+			return new RequestCommandHandlingResult (affectedRequestIds, null);
+
+		}
+
+		public RequestCommandHandlingResult CancelRequests (IEnumerable<Guid> ids)
+		{
+
+
+			var trackInfo = new TrackedCommandInfo
+			{
+				OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value
+			};
+
+			var affectedRequestIds = new List<Guid>();
+			var errorMessages = new List<string>();
+
+			foreach (var personRequestId in ids)
+			{
+				var command = new CancelAbsenceRequestCommand()
+				{
+					TrackedCommandInfo = trackInfo,
+					PersonRequestId = personRequestId
+				};
+
+				_commandDispatcher.Execute (command);
+
+				if (command.AffectedRequestId.HasValue)
+				{
+					affectedRequestIds.Add (command.AffectedRequestId.Value);
+				}
+
+				if (command.ErrorMessages != null)
+				{
+					errorMessages.AddRange (command.ErrorMessages);
+				}
+			}
+
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
 		}
 	}
 }

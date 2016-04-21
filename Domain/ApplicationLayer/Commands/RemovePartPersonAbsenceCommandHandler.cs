@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var person = command.Person;
 			var errors =
-				_personAbsenceRemover.RemovePartPersonAbsence(command.ScheduleDate, person, personAbsences,
+				_personAbsenceRemover.RemovePartPersonAbsence(new DateOnly(command.ScheduleDate), person, personAbsences,
 					command.PeriodToRemove, command.TrackedCommandInfo).ToList();
 			if (!errors.Any())
 			{

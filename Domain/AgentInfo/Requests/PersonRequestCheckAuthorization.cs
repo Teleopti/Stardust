@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             return hasPermission(DefinedRaptorApplicationFunctionPaths.RequestScheduler,personRequest);
         }
 
+	    public bool HasCancelRequestPermission (IPersonRequest personRequest)
+	    {
+			return hasPermission(DefinedRaptorApplicationFunctionPaths.WebCancelRequest, personRequest);
+		}
+
         private static bool hasPermission(string applicationFunctionPath, IPersonRequest personRequest)
         {
             DateOnly dateOnly = new DateOnly(personRequest.RequestedDate);

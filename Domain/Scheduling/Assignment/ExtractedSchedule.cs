@@ -675,9 +675,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 Add(publicNote);
 		 }
 
-        public IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer)
+        public IPersonAbsence CreateAndAddAbsence(IAbsenceLayer layer, IAbsenceRequest request = null)
 		{
-			var personAbsence = new PersonAbsence(Person, Scenario, layer) {LastChange = DateTime.UtcNow};
+			var personAbsence = new PersonAbsence(Person, Scenario, layer, request) {LastChange = DateTime.UtcNow};
 			Add(personAbsence);
 	        return personAbsence;
 		}

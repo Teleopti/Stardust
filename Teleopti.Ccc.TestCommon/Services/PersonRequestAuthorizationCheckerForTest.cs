@@ -17,5 +17,10 @@ namespace Teleopti.Ccc.TestCommon.Services
         {
             return true;
         }
+
+		public bool HasCancelRequestPermission (IPersonRequest personRequest)
+		{
+			return true;
+		}
     }
 }

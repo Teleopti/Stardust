@@ -7,6 +7,7 @@ using System.Text;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -181,6 +182,27 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 
 			_denyReason = denyReasonTextResourceKey ?? string.Empty;
+			notifyOnStatusChange();
+		}
+
+
+		public virtual void Cancel(IPersonRequestCheckAuthorization authorization)
+		{
+			if (!authorization.HasCancelRequestPermission (this))
+			{
+				throw new PermissionException (Resources.InsufficientPermission);
+			};
+
+			var request = getRequest();
+			var absenceRequest = request as AbsenceRequest;
+			if (absenceRequest == null)
+			{
+				return;
+			}
+
+			RequestState.Cancel();
+			absenceRequest.Cancel();
+
 			notifyOnStatusChange();
 		}
 
@@ -390,7 +412,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			RequestState.SetNew();
 			notifyOnStatusChange();
 		}
-
+		
 		private void moveToPending()
 		{
 			RequestState = new pendingPersonRequest(this);
@@ -403,6 +425,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			else
 				RequestState = new approvedPersonRequest(this);
 		}
+
+
+		private void moveToCancelled()
+		{
+		
+			RequestState = new cancelledPersonRequest (this);
+		}
+
 
 		private void moveToDenied(bool autoDenied = false)
 		{
@@ -475,6 +505,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			get { return RequestState.IsWaitlisted; }
 		}
 
+		public virtual bool IsCancelled
+		{
+			get { return RequestState.IsCancelled; }
+		}
+
 
 		public virtual bool IsApproved
 		{
@@ -517,7 +552,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			protected readonly PersonRequest PersonRequest;
 			private readonly int _requestStatusId;
-			
+
 			protected personRequestState(PersonRequest personRequest, int requestStatusId)
 			{
 				PersonRequest = personRequest;
@@ -540,6 +575,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 
 			protected internal virtual bool IsWaitlisted
+			{
+				get { return false; }
+			}
+
+			protected internal virtual bool IsCancelled
 			{
 				get { return false; }
 			}
@@ -577,6 +617,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 																			   "This transition is not allowed (from {0} to approved).",
 																			   GetType().Name));
 			}
+			protected internal virtual void Cancel()
+			{
+				throw new InvalidRequestStateTransitionException(string.Format(CultureInfo.InvariantCulture,
+																			   "This transition is not allowed (from {0} to cancelled).",
+																			   GetType().Name));
+			}
 
 			protected internal virtual void MakePending()
 			{
@@ -611,6 +657,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						return new autoDeniedPersonRequest(personRequest);
 					case 5:
 						return new waitListedPersonRequest(personRequest);
+					case 6:
+						return new cancelledPersonRequest(personRequest);
+
 				}
 				throw new ArgumentOutOfRangeException("requestStatusId", "The request status id is invalid");
 			}
@@ -628,11 +677,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				get { return true; }
 			}
 
+			protected internal override void Cancel()
+			{
+				PersonRequest.moveToCancelled();
+			}
+
+
 			protected internal override string StatusText
 			{
 				get { return Resources.Approved; }
 			}
 		}
+		
 
 		private class autoApprovedPersonRequest : personRequestState
 		{
@@ -694,7 +750,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					return true;
 				}
 			}
-			
+
 			protected internal override string StatusText
 			{
 				get
@@ -717,7 +773,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					return true;
 				}
 			}
-			
+
 			protected internal override bool IsWaitlisted
 			{
 				get { return true; }
@@ -777,6 +833,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			protected internal override bool IsPending
 			{
 				get { return true; }
+			}
+		}
+
+		private class cancelledPersonRequest : personRequestState
+		{
+			public cancelledPersonRequest(PersonRequest personRequest)
+				: base(personRequest, 6)
+			{
+			}
+
+			protected internal override bool IsCancelled
+			{
+				get { return true; }
+			}
+
+			
+			protected internal override string StatusText
+			{
+				get
+				{
+					return Resources.Cancelled;
+				}
 			}
 		}
 

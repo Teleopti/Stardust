@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -17,29 +18,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 		}
 
-		public IList<string> Create(AbsenceCreatorInfo info, bool isFullDayAbsence)
+		public IList<string> Create(AbsenceCreatorInfo absenceCreatorInfo, bool isFullDayAbsence)
 		{
-			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(info.ScheduleRange);
-			var personAbsence = createPersonAbsence(info.ScheduleDay, info.Absence, info.AbsenceTimePeriod);
-			var ruleCheckResult = _saveSchedulePartService.Save(info.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
+			var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(absenceCreatorInfo.ScheduleRange);
+			var personAbsence = createPersonAbsence(absenceCreatorInfo);
+			var ruleCheckResult = _saveSchedulePartService.Save(absenceCreatorInfo.ScheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
 			if (ruleCheckResult != null) return ruleCheckResult;
 
 			if (isFullDayAbsence)
 			{
-				personAbsence.FullDayAbsence(info.Person, info.TrackedCommandInfo);
+				personAbsence.FullDayAbsence(absenceCreatorInfo.Person, absenceCreatorInfo.TrackedCommandInfo);
 			}
 			else
 			{
-				personAbsence.IntradayAbsence(info.Person, info.TrackedCommandInfo);
+				personAbsence.IntradayAbsence(absenceCreatorInfo.Person, absenceCreatorInfo.TrackedCommandInfo);
 			}
 
 			return null;
 		}
 
-		private static PersonAbsence createPersonAbsence(IScheduleDay scheduleDay, IAbsence absence, DateTimePeriod absenceTimePeriod)
+		private static PersonAbsence createPersonAbsence(AbsenceCreatorInfo absenceCreatorInfo )
 		{
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(absenceTimePeriod.StartDateTime, absenceTimePeriod.EndDateTime));
-			var personAbsence = scheduleDay.CreateAndAddAbsence(absenceLayer) as PersonAbsence;
+			var absenceLayer = new AbsenceLayer(
+				absenceCreatorInfo.Absence, 
+				new DateTimePeriod(absenceCreatorInfo.AbsenceTimePeriod.StartDateTime, 
+				absenceCreatorInfo.AbsenceTimePeriod.EndDateTime));
+
+			var personAbsence = absenceCreatorInfo.ScheduleDay.CreateAndAddAbsence(absenceLayer, absenceCreatorInfo.AbsenceRequest) as PersonAbsence;
+
 			return personAbsence;
 		}
 	}

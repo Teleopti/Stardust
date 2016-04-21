@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAbsence Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _personAbsences.SingleOrDefault(personAbsence => personAbsence.Id == id);
 		}
 
 		public IList<IPersonAbsence> LoadAll()
@@ -83,6 +83,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var idList = personAbsenceIds.ToList();
 			return _personAbsences.Where(x => idList.Contains(x.Id.GetValueOrDefault())).ToArray();
+		}
+
+		public IList<IPersonAbsence> Find (IAbsenceRequest absenceRequest)
+		{
+			return _personAbsences.Where(personAbsence => personAbsence.AbsenceRequest == absenceRequest).ToList();
 		}
 
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)

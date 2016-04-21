@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public abstract void Deny(IPerson denyPerson);
 
+		public abstract void Cancel();
+
 		public abstract void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization);
 
 		public abstract void Refer(IPersonRequestCheckAuthorization authorization);

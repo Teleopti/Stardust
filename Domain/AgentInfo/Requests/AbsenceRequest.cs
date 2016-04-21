@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -17,8 +19,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     {
         private readonly IAbsence _absence;
         private string _typeDescription = string.Empty;
-        
-        /// <summary>
+	    private IList<IPersonAbsence> _personAbsences = new List<IPersonAbsence>();
+
+	    /// <summary>
         /// Initializes a new instance of the <see cref="AbsenceRequest"/> class.
         /// For NHibernate to use.
         /// </summary>
@@ -43,7 +46,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public AbsenceRequest(IAbsence absence, DateTimePeriod period) : base(period)
         {
             _absence = absence;
-            _typeDescription = UserTexts.Resources.RequestTypeAbsence;
+            _typeDescription = Resources.RequestTypeAbsence;
         }
 
      
@@ -52,33 +55,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             get { return _absence; }
         }
 
-		public override void Deny(IPerson denyPerson)
+	    public virtual IList<IPersonAbsence> PersonAbsences
+	    {
+		    get { return _personAbsences; }
+		    
+	    }
+
+	    public override void Deny(IPerson denyPerson)
 		{
-			var timeZone = Person.PermissionInformation.DefaultTimeZone();
-			var culture = Person.PermissionInformation.Culture();
 			var hasBeenWaitlisted = ((PersonRequest)Parent).IsWaitlisted;
 
-			var absenceRequestMsgForOneDay = hasBeenWaitlisted ? "AbsenceRequestForOneDayHasBeenWaitlisted" : "AbsenceRequestForOneDayHasBeenDeniedDot";
-			var absenceRequestMsg = hasBeenWaitlisted ? "AbsenceRequestHasBeenWaitlisted" : "AbsenceRequestHasBeenDeniedDot";
-			
-			if (isRequestForOneLocalDay(timeZone))
-			{
-			    TextForNotification =
-					string.Format(culture, UserTexts.Resources.ResourceManager.GetString(absenceRequestMsgForOneDay, culture),
-			            Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));                
-			}
-			else
-			{
-				TextForNotification =
-					string.Format(culture, UserTexts.Resources.ResourceManager.GetString(absenceRequestMsg, culture),
-                       Period.StartDateTimeLocal(timeZone).Date.ToString(
-                                                        culture.DateTimeFormat.ShortDatePattern, culture),
-                                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
-                                                        culture.DateTimeFormat.ShortDatePattern, culture));
-			}
+			setupTextForNotification(
+				hasBeenWaitlisted ? Resources.AbsenceRequestForOneDayHasBeenWaitlisted : Resources.AbsenceRequestForOneDayHasBeenDeniedDot,
+				hasBeenWaitlisted ? Resources.AbsenceRequestHasBeenWaitlisted : Resources.AbsenceRequestHasBeenDeniedDot);
 		}
 
-		private bool isRequestForOneLocalDay(TimeZoneInfo timeZone)
+		public override void Cancel ()
+	    {
+			setupTextForNotification(Resources.AbsenceRequestForOneDayWasCancelled, Resources.AbsenceRequestWasCancelled);
+		}
+
+
+		public virtual bool IsRequestForOneLocalDay(TimeZoneInfo timeZone)
     	{
     		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
     	}
@@ -118,24 +116,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             var result = approvalService.ApproveAbsence(_absence, Period, Person, this);
             if (result.IsEmpty())
             {
-
-				var timeZone = Person.PermissionInformation.DefaultTimeZone();
-				var culture = Person.PermissionInformation.Culture();
-				if (isRequestForOneLocalDay(timeZone))
-				{
-                    TextForNotification = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("AbsenceRequestForOneDayHasBeenApprovedDot", culture),
-                        Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));                
-				}
-				else
-				{
-
-                    TextForNotification =
-                    string.Format(culture, UserTexts.Resources.ResourceManager.GetString("AbsenceRequestHasBeenApprovedDot", culture),
-                       Period.StartDateTimeLocal(timeZone).Date.ToString(
-                                                        culture.DateTimeFormat.ShortDatePattern, culture),
-                                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
-                                                        culture.DateTimeFormat.ShortDatePattern, culture));
-				}
+				setupTextForNotification (Resources.AbsenceRequestForOneDayHasBeenApprovedDot, Resources.AbsenceRequestHasBeenApprovedDot);
             }
             return result;
         }
@@ -161,5 +142,29 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             get{return _absence.Description;}
         }
-    }
+
+		private void setupTextForNotification(string oneDayRequestMessage, string requestMessage)
+		{
+			var timeZone = Person.PermissionInformation.DefaultTimeZone();
+			var culture = Person.PermissionInformation.Culture();
+
+			if (IsRequestForOneLocalDay(timeZone))
+			{
+				TextForNotification =
+					string.Format(culture, oneDayRequestMessage,
+						Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));
+			}
+			else
+			{
+				TextForNotification =
+					string.Format(culture, requestMessage,
+						Period.StartDateTimeLocal(timeZone).Date.ToString(
+							culture.DateTimeFormat.ShortDatePattern, culture),
+						Period.EndDateTimeLocal(timeZone).Date.ToString(
+							culture.DateTimeFormat.ShortDatePattern, culture));
+			}
+		}
+
+
+	}
 }

@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.requests')
@@ -18,48 +18,52 @@
 		vm.cancelRequests = cancelRequests;
 		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
 
-		function approveRequests() {
-			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
-			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
-			if (vm.beforeCommand && !vm.beforeCommand()) return;
-
-			var commandInProgress = requestsDataService.approveRequestsPromise(selectedRequestIds);
-			if (vm.afterCommandSuccess) {
-				commandInProgress.success(function (changedRequestIds) {					
-					vm.afterCommandSuccess({
-						commandType: requestsDefinitions.REQUEST_COMMANDS.Approve, 
-						changedRequestsCount: changedRequestIds.length,
-						requestsCount: selectedRequestIds.length
-					});
-				});
-			}
-			if (vm.afterCommandError) {				
-				commandInProgress.error(vm.afterCommandError);
+		function handleErrorMessages(errorMessages) {
+			if (errorMessages && errorMessages.length > 0) {
+				if (vm.onErrorMessages) {
+					vm.onErrorMessages({ errorMessages: errorMessages });
+				}
 			}
 		}
 
-		function denyRequests() {
+		function doStandardCommandHandling(requestType, dataServicePromise) {
+
 			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
 			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 			if (vm.beforeCommand && !vm.beforeCommand()) return;
-			var commandInProgress = requestsDataService.denyRequestsPromise(selectedRequestIds);
+
+			var commandInProgress = dataServicePromise(selectedRequestIds);
 			if (vm.afterCommandSuccess) {
-				commandInProgress.success(function (changedRequestIds) {
-					vm.afterCommandSuccess({
-						commandType: requestsDefinitions.REQUEST_COMMANDS.Deny,
-						changedRequestsCount: changedRequestIds.length,
-						requestsCount: selectedRequestIds.length
-					});
+				commandInProgress.success(function (requestCommandHandlingResult) {
+
+					if (requestCommandHandlingResult.Success) {
+						vm.afterCommandSuccess({
+							commandType: requestType,
+							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
+							requestsCount: selectedRequestIds.length
+						});
+					} else {
+
+						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
+					}
 				});
 			}
-			if (vm.afterCommandError) {				
+			if (vm.afterCommandError) {
 				commandInProgress.error(vm.afterCommandError);
-			}				
+			}
+
+		}
+
+		function approveRequests() {
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise);
 		}
 
 		function cancelRequests() {
-			//ROBTODO: implement
-			alert('Not implemented');
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Cancel, requestsDataService.cancelRequestsPromise);
+		}
+
+		function denyRequests() {
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Deny, requestsDataService.denyRequestsPromise);
 		}
 
 		function disableCommands() {
@@ -76,7 +80,6 @@
 			//ROBTODO: implement rule to ensure only enable when at least one accepted request is chosen.
 			return !disableCommands();
 		}
-
 	}
 
 	function requestsCommandsPaneDirective() {
@@ -88,10 +91,11 @@
 				beforeCommand: '&?',
 				afterCommandSuccess: '&?',
 				afterCommandError: '&?',
+				onErrorMessages: '&?',
 				commandsDisabled: '=?'
 			},
 			restrict: 'E',
-			templateUrl: 'js/requests/html/requests-commands-pane.tpl.html'			
+			templateUrl: 'js/requests/html/requests-commands-pane.tpl.html'
 		};
 	}
 

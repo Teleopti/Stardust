@@ -5,7 +5,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
 	public interface IRequestCommandHandlingProvider
 	{
-		IEnumerable<Guid> ApproveRequests(IEnumerable<Guid> ids);
-		IEnumerable<Guid> DenyRequests(IEnumerable<Guid> ids);
+		RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> ids);
+		RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids);
+		RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> ids);
 	}
 }

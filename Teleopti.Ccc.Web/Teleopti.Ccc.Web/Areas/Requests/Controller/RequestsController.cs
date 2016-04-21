@@ -38,15 +38,21 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]
-		public virtual IEnumerable<Guid> ApproveRequests(IEnumerable<Guid> ids)
+		public virtual RequestCommandHandlingResult ApproveRequests(IEnumerable<Guid> ids)
 		{
 			return _commandHandlingProvider.ApproveRequests(ids);
 		}
 
 		[HttpPost, Route("api/Requests/denyRequests"), UnitOfWork]
-		public virtual IEnumerable<Guid> DenyRequests(IEnumerable<Guid> ids)
+		public virtual RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids)
 		{
 			return _commandHandlingProvider.DenyRequests(ids);
+		}
+
+		[HttpPost, Route("api/Requests/cancelRequests"), UnitOfWork]
+		public virtual RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> ids)
+		{
+			return _commandHandlingProvider.CancelRequests (ids);
 		}
 
 	}

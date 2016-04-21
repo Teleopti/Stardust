@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -14,45 +13,95 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class PersonAbsenceRemover : IPersonAbsenceRemover
 	{
-		private readonly IScenarioRepository _scenarioRepository;
+		private readonly ICurrentScenario _scenario;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
 		public PersonAbsenceRemover(
-			IScenarioRepository scenarioRepository,
+			ICurrentScenario scenario,
 			IScheduleStorage scheduleStorage,
 			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
-			ILoggedOnUser loggedOnUser)
+			ILoggedOnUser loggedOnUser, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
-			_scenarioRepository = scenarioRepository;
+			_scenario = scenario;
 			_scheduleStorage = scheduleStorage;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 			_personAbsenceCreator = personAbsenceCreator;
 			_loggedOnUser = loggedOnUser;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
-		public IEnumerable<string> RemovePersonAbsence(DateTime scheduleDate, IPerson person,
+		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
 			IEnumerable<IPersonAbsence> personAbsences, TrackedCommandInfo commandInfo = null)
 		{
-			var errorMessages = removePersonAbsenceFromScheduleDay(scheduleDate, person,
-				personAbsences.ToList(), commandInfo);
-			return errorMessages ?? new List<string>();
+			var errors =  removePersonAbsenceFromScheduleDay(scheduleDate, person,personAbsences.ToList(), commandInfo);
+			return errors ?? new List<string>();
 		}
 
-		public IEnumerable<string> RemovePartPersonAbsence(DateTime scheduleDate, IPerson person,
-			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove,
+		public IEnumerable<string> RemovePartPersonAbsence(DateOnly scheduleDate, IPerson person,
+			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove, TrackedCommandInfo commandInfo = null)
+		{
+			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo, periodToRemove);
+			return errors ?? new List<string>();
+		}
+
+
+		public IEnumerable<string> RemovePersonAbsences (IEnumerable<IPersonAbsence> personAbsences,
 			TrackedCommandInfo commandInfo = null)
 		{
-			var errorMessages = removePartPersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(),
-				periodToRemove, commandInfo);
-			return errorMessages ?? new List<string>();
+			foreach (var personAbsence in personAbsences)
+			{
+				var person = personAbsence.Person;
+
+				var scheduleRange =
+					getScheduleRangeForPeriod (
+						personAbsence.Period.ToDateOnlyPeriod (
+							person.PermissionInformation.DefaultTimeZone()),
+							person);
+
+				var startDate = new DateOnly (personAbsence.Period.StartDateTime);
+				var scheduleDay = scheduleRange.ScheduledDay(startDate);
+				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+
+
+				if (!canRemovePersonAbsence(person, startDate))
+				{
+					return new[] { Resources.CouldNotRemoveAbsenceFromProtectedSchedule };
+				}
+
+				if (scheduleDay != null)
+				{
+					scheduleDay.Remove(personAbsence);
+					
+				}
+
+				var ruleCheckResult = _saveSchedulePartService.Save(scheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
+				if (ruleCheckResult != null) return ruleCheckResult;
+
+			}
+
+			return new List<string>();
 		}
+
+
+		private IScheduleRange getScheduleRangeForPeriod(DateOnlyPeriod period, IPerson person)
+		{
+			var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+					person,
+					new ScheduleDictionaryLoadOptions(false, false),
+					period,
+					_scenario.Current());
+
+			return dictionary[person];
+		}
+
 
 		private bool canRemovePersonAbsence(IPerson person, DateOnly startDate)
 		{
@@ -92,71 +141,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			return periods;
 		}
-
-		private IEnumerable<string> removePersonAbsenceFromScheduleDay(DateTime scheduleDate,
-			IPerson person, IList<IPersonAbsence> personAbsences, TrackedCommandInfo commandInfo)
+		
+		private IEnumerable<string> removePersonAbsenceFromScheduleDay (
+			DateOnly scheduleDate, IPerson person, IList<IPersonAbsence> personAbsences,
+			TrackedCommandInfo commandInfo, DateTimePeriod? periodToRemove = null )
 		{
 			foreach (var personAbsence in personAbsences)
 			{
-				personAbsence.RemovePersonAbsence(commandInfo);
+				personAbsence.RemovePersonAbsence (commandInfo);
 			}
 
-			var startDate = new DateOnly(scheduleDate);
-			var endDate = startDate.AddDays(1);
+			var endDate = scheduleDate.AddDays (1);
 
 			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-					new ScheduleDictionaryLoadOptions(false, false),
-					new DateOnlyPeriod(startDate, endDate),
-					_scenarioRepository.LoadDefaultScenario());
+				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod (person,
+					new ScheduleDictionaryLoadOptions (false, false),
+					new DateOnlyPeriod (scheduleDate, endDate),
+					_scenario.Current());
 
 			var scheduleRange = scheduleDictionary[person];
-			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange (scheduleRange);
 
-			if (!canRemovePersonAbsence(person, startDate))
-			{
-				return new[] {Resources.CouldNotRemoveAbsenceFromProtectedSchedule};
-			}
+			var scheduleDay = scheduleRange.ScheduledDay (scheduleDate) as ExtractedSchedule;
 
-			var scheduleDay = scheduleRange.ScheduledDay(startDate) as ExtractedSchedule;
-
-			if (scheduleDay != null)
-			{
-				foreach (var personAbsence in personAbsences)
-				{
-					scheduleDay.Remove(personAbsence);
-				}
-			}
-
-			return _saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
-		}
-
-		private IEnumerable<string> removePartPersonAbsenceFromScheduleDay(DateTime scheduleDate,
-			IPerson person,
-			IList<IPersonAbsence> personAbsences,
-			DateTimePeriod periodToRemove,
-			TrackedCommandInfo commandInfo)
-		{
-			foreach (var personAbsence in personAbsences)
-			{
-				personAbsence.RemovePersonAbsence(commandInfo);
-			}
-
-			var startDate = new DateOnly(scheduleDate);
-			var endDate = startDate.AddDays(1);
-
-			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-					new ScheduleDictionaryLoadOptions(false, false),
-					new DateOnlyPeriod(startDate, endDate),
-					_scenarioRepository.LoadDefaultScenario());
-
-			var scheduleRange = scheduleDictionary[person];
-			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
-
-			var scheduleDay = scheduleRange.ScheduledDay(startDate) as ExtractedSchedule;
-
-			if (!canRemovePersonAbsence(person, startDate))
+			if (!canRemovePersonAbsence (person, scheduleDate))
 			{
 				return new[] {Resources.CouldNotRemoveAbsenceFromProtectedSchedule};
 			}
@@ -165,43 +173,74 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				foreach (var personAbsence in personAbsences)
 				{
-					scheduleDay.Remove(personAbsence);
+					scheduleDay.Remove (personAbsence);
 				}
 			}
 
-			var errorMessages = _saveSchedulePartService.Save(scheduleDay, rules, KeepOriginalScheduleTag.Instance);
+			var errorMessages = _saveSchedulePartService.Save (scheduleDay, rules, KeepOriginalScheduleTag.Instance);
 			if (errorMessages != null && errorMessages.Any())
 			{
 				return errorMessages;
 			}
 
-			errorMessages = new List<string>();
+			if (periodToRemove.HasValue)
+			{
+				errorMessages = createNewAbsencesForSplitAbsence(person, personAbsences, periodToRemove.Value, commandInfo, scheduleDay, scheduleRange);
+			}
+
+			cancelAbsenceRequestIfAllPersonAbsenceRemoved(personAbsences);
+
+			return errorMessages;
+		}
+
+		private IList<string> createNewAbsencesForSplitAbsence (IPerson person, IEnumerable<IPersonAbsence> personAbsences,
+			DateTimePeriod periodToRemove, TrackedCommandInfo commandInfo, IScheduleDay scheduleDay,
+			IScheduleRange scheduleRange)
+		{
+			IList<string> errorMessages = new List<string>();
 			foreach (var personAbsence in personAbsences)
 			{
-				var newAbsencePeriods = getPeriodsForNewAbsence(personAbsence.Period, periodToRemove);
+				var newAbsencePeriods = getPeriodsForNewAbsence (personAbsence.Period, periodToRemove);
 				if (!newAbsencePeriods.Any()) return errorMessages;
 
 				foreach (var period in newAbsencePeriods)
 				{
 					// xinfli: The second parameter "isFullDayAbsence" doesn't matter, since it just raise different event
 					// and all the events will be converted to "ScheduleChangedEvent" (Refer to ScheduleChangedEventPublisher class)
-					var errors = _personAbsenceCreator.Create(new AbsenceCreatorInfo
+					var errors = _personAbsenceCreator.Create (new AbsenceCreatorInfo
 					{
 						Person = person,
 						Absence = personAbsence.Layer.Payload,
 						ScheduleDay = scheduleDay,
 						ScheduleRange = scheduleRange,
+						AbsenceRequest = personAbsence.AbsenceRequest,
 						AbsenceTimePeriod = period,
 						TrackedCommandInfo = commandInfo
 					}, false);
 
 					if (errors == null || !errors.Any()) continue;
 
-					errorMessages = errorMessages.Concat(errors).ToList();
+					errorMessages = errorMessages.Concat (errors).ToList();
 				}
 			}
 
 			return errorMessages;
+		}
+
+		private void cancelAbsenceRequestIfAllPersonAbsenceRemoved (IEnumerable<IPersonAbsence> personAbsences)
+		{
+			foreach (var personAbsence in personAbsences.Where (perAbs => perAbs.AbsenceRequest != null))
+			{
+				var absenceRequest = personAbsence.AbsenceRequest;
+				var personRequest = absenceRequest.Parent as IPersonRequest;
+
+				absenceRequest.PersonAbsences.Remove (personAbsence);
+				
+				if (absenceRequest.PersonAbsences.IsEmpty())
+				{
+					personRequest.Cancel (_personRequestCheckAuthorization);
+				}
+			}
 		}
 	}
 }

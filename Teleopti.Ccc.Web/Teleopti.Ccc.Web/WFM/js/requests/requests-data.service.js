@@ -9,6 +9,7 @@
 		var listRequestsUrl = '../api/Requests/requests';
 		var approveRequestsUrl = '../api/Requests/approveRequests';
 		var denyRequestsUrl = '../api/Requests/denyRequests';
+		var cancelRequestsUrl = '../api/Requests/cancelRequests';
 	
 		this.getAllRequestsPromise_old = function(filter, sortingOrders) {			
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -22,6 +23,10 @@
 
 		this.approveRequestsPromise = function (selectedRequestIds) {
 			return $http.post(approveRequestsUrl, selectedRequestIds);
+		};
+
+		this.cancelRequestsPromise = function (selectedRequestIds) {
+			return $http.post(cancelRequestsUrl, selectedRequestIds);
 		};
 
 		this.denyRequestsPromise = function(selectedRequestIds) {
