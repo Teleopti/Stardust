@@ -164,6 +164,11 @@ namespace Stardust.Manager
 			return _jobRepository.GetJobQueueItemByJobId(jobId);
 		}
 
+		public List<JobQueueItem> GetAllItemsInJobQueue()
+		{
+			return _jobRepository.GetAllItemsInJobQueue();
+		}
+
 		public void AddItemToJobQueue(JobQueueItem jobQueueItem)
 		{
 			_jobRepository.AddItemToJobQueue(jobQueueItem);

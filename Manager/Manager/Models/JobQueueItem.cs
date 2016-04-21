@@ -62,6 +62,17 @@ namespace Stardust.Manager.Models
 				list.Add(new ValidationResult("Invalid job serialized value.", pIncome));
 			}
 
+			if (string.IsNullOrEmpty(CreatedBy))
+			{
+				pIncome = new[]
+				{
+					"CreatedBy"
+				};
+
+				list.Add(new ValidationResult("Invalid job created by value.", pIncome));
+			}
+
+
 			return list;
 		}
 	}

@@ -22,11 +22,11 @@ namespace ManagerTest
 
 			JobTemplateUri = UriBuilder.Uri;
 
-			UriBuilder.Path = NodeRouteConstants.CancelJob;
+			UriBuilder.Path = NodeRouteConstants.CancelJobByJobId;
 			CancelJobTemplateUri = UriBuilder.Uri;
 
 			UriBuilder.Path =
-				NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
+				NodeRouteConstants.CancelJobByJobId.Replace(NodeRouteConstants.JobIdOptionalParameter,
 				                                     Guid.ToString());
 
 			CancelJobUri = UriBuilder.Uri;

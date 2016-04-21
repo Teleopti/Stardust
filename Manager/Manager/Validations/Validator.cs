@@ -14,7 +14,10 @@ namespace Stardust.Manager.Validations
 		{
 			if (validatableObject == null)
 			{
-				return new ObjectValidationResult{Message = "Object can not be null."};
+				return new ObjectValidationResult
+				{
+					Message = "Object can not be null."
+				};
 			}
 
 			var validationResults =
@@ -25,17 +28,26 @@ namespace Stardust.Manager.Validations
 
 			if (enumerable.Any())
 			{
-				return new ObjectValidationResult{Message = enumerable.First().ErrorMessage};
+				return new ObjectValidationResult
+				{
+					Message = enumerable.First().ErrorMessage
+				};
 			}
 
-			return new ObjectValidationResult{Success = true};
+			return new ObjectValidationResult
+			{
+				Success = true
+			};
 		}
 
 		public ObjectValidationResult ValidateJobId(Guid jobId)
 		{
 			if (jobId == Guid.Empty)
 			{
-				return new ObjectValidationResult { Message = JobIdIsInvalid };
+				return new ObjectValidationResult
+				{
+					Message = JobIdIsInvalid
+				};
 			}
 
 			return new ObjectValidationResult { Success = true };
@@ -45,7 +57,10 @@ namespace Stardust.Manager.Validations
 		{
 			if (uri == null)
 			{
-				return new ObjectValidationResult{Message = NodeUriIsInvalid};
+				return new ObjectValidationResult
+				{
+					Message = NodeUriIsInvalid
+				};
 			}
 
 			return new ObjectValidationResult{Success = true};

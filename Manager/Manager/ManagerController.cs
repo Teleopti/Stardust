@@ -30,6 +30,11 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult AddItemToJobQueue([FromBody] JobQueueItem jobQueueItem)
 		{
+			if (jobQueueItem != null && jobQueueItem.JobId == Guid.Empty)
+			{
+				jobQueueItem.JobId = Guid.NewGuid();
+			}
+
 			var isValidRequest = _validator.ValidateObject(jobQueueItem);
 
 			if (!isValidRequest.Success)
@@ -70,7 +75,7 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		[HttpGet, Route(ManagerRouteConstants.GetJobHistoryList)]
+		[HttpGet, Route(ManagerRouteConstants.Jobs)]
 		public IHttpActionResult GetAllJobs()
 		{
 			var allJobs = _jobManager.GetAllJobs();
@@ -78,7 +83,7 @@ namespace Stardust.Manager
 			return Ok(allJobs);
 		}
 
-		[HttpGet, Route(ManagerRouteConstants.GetJobHistory)]
+		[HttpGet, Route(ManagerRouteConstants.JobByJobId)]
 		public IHttpActionResult GetJobByJobId(Guid jobId)
 		{
 			var isValidRequest = _validator.ValidateJobId(jobId);
@@ -92,7 +97,7 @@ namespace Stardust.Manager
 			return Ok(job);
 		}
 
-		[HttpGet, Route(ManagerRouteConstants.JobDetail)]
+		[HttpGet, Route(ManagerRouteConstants.JobDetailByJobJobId)]
 		public IHttpActionResult GetJobDetailsByJobId(Guid jobId)
 		{
 			var isValidRequest = _validator.ValidateJobId(jobId);
@@ -124,6 +129,8 @@ namespace Stardust.Manager
 
 			return Ok();
 		}
+
+
 
 		[HttpPost, Route(ManagerRouteConstants.JobDone)]
 		public IHttpActionResult JobDone(Guid jobId)

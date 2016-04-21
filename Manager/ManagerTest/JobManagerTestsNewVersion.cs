@@ -147,7 +147,7 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldJustDeleteJobIfNotStarted()
+		public void ShouldDeleteJobFromJobQueueIfNotAssignedToWorkerNode()
 		{
 			var jobQueueItem = new JobQueueItem
 			{

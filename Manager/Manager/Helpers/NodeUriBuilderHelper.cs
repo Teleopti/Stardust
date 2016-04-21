@@ -46,12 +46,12 @@ namespace Stardust.Manager.Helpers
 
 		public Uri GetCancelJobTemplateUri()
 		{
-			return CreateUri(NodeRouteConstants.CancelJob);
+			return CreateUri(NodeRouteConstants.CancelJobByJobId);
 		}
 
 		public Uri GetUpdateJobUri(Guid jobId)
 		{
-			var path = NodeRouteConstants.UpdateJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
+			var path = NodeRouteConstants.UpdateJobByJobId.Replace(NodeRouteConstants.JobIdOptionalParameter,
 															jobId.ToString());
 
 			return CreateUri(path);
@@ -59,7 +59,7 @@ namespace Stardust.Manager.Helpers
 
 		public Uri GetCancelJobUri(Guid jobId)
 		{
-			var path = NodeRouteConstants.CancelJob.Replace(NodeRouteConstants.JobIdOptionalParameter,
+			var path = NodeRouteConstants.CancelJobByJobId.Replace(NodeRouteConstants.JobIdOptionalParameter,
 			                                                jobId.ToString());
 
 			return CreateUri(path);
