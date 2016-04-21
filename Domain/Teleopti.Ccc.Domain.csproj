@@ -1839,7 +1839,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatSkillAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\MaxSeatsSpecificationDictionaryExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\PeriodValueCalculationParameters.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\VisualLayerToBaseDateMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelector.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftValueCalculator.cs" />
