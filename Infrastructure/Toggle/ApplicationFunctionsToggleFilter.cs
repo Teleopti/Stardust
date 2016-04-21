@@ -30,8 +30,21 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 			{
 				hideWfmTeamScheduleSwapShifts(functions);
 			}
+			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_PrepareForRelease_37752))
+			{
+				hideWebWfmTeamSchedule(functions);
+			}
 
 			return functions;
+		}
+
+		private static void hideWebWfmTeamSchedule(AllFunctions functions)
+		{
+			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.AngelMyTeamSchedules);
+			if(foundFunction != null)
+			{
+				foundFunction.SetHidden();
+			}
 		}
 
 		private static void hideSeatPlanner (AllFunctions functions)

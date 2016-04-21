@@ -104,15 +104,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		[Test]
-		public void ShouldNotHaveAngelMyTeamSchedulesWhenWfmTeamScheduleIsReleased()
+		public void ShouldReturnMyTeamScheduleWhenWfmTeamScheduleIsReleased()
 		{
 			PermissionProvider.Enable();
 			ToggleManager.Enable(Toggles.WfmTeamSchedule_PrepareForRelease_37752);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
-
 			var areas = Target.GetWfmAreasWithPermissions();
 
-			areas.Count().Should().Be(0);
+			areas.Count().Should().Be(1);
+			areas.First().Path.Should().Be.EqualTo(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
+
+		[Test]
+		public void ShouldReturnAngelTeamScheduleWhenWfmTeamScheduleIsNotReleased()
+		{
+			PermissionProvider.Enable();
+		
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(1);
+			areas.First().Path.Should().Be.EqualTo(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules);
+		}
+
 	}
 }
