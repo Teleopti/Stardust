@@ -36,16 +36,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				where _triggerInterfaces.Any(ti => ti.IsAssignableFrom(t))
 				select (IAggregateRoot)r.Root;
 
-			var id = affectedInterfaces.Select(p => p.Id.GetValueOrDefault()).SingleOrDefault();
-			if (id == Guid.Empty)
-				return;
-			var message = new PreferenceChangedEvent
+			var ids = affectedInterfaces.Select(p => p.Id.GetValueOrDefault());
+			foreach (var id in ids)
 			{
-				LogOnBusinessUnitId = bu.Id.GetValueOrDefault(Guid.Empty),
-				PreferenceDayId = id,
-				Timestamp = _now.UtcDateTime()
-			};
-			_eventsPublisher.Publish(message);
+				if (id == Guid.Empty)
+					continue;
+				var message = new PreferenceChangedEvent
+				{
+					LogOnBusinessUnitId = bu.Id.GetValueOrDefault(Guid.Empty),
+					PreferenceDayId = id,
+					Timestamp = _now.UtcDateTime()
+				};
+				_eventsPublisher.Publish(message);
+			}
 		}
 	}
 }
