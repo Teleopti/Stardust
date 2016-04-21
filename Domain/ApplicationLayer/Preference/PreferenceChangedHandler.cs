@@ -106,8 +106,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 						var permissionState = restrictionChecker.CheckPreference(schedulePart);
 						var scenarioId = analyticsScenarios.First(a => a.Code == scenario.Id.GetValueOrDefault()).Id;
-						var shiftCategory = analyticsShiftCategories.FirstOrDefault(a => a.Code == (preferenceRestriction.ShiftCategory?.Id ?? Guid.Empty));
-						var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == (preferenceRestriction.Absence?.Id ?? Guid.Empty));
+						var shiftCategory = analyticsShiftCategories.FirstOrDefault(a => a.Code == ((preferenceRestriction.ShiftCategory != null ? preferenceRestriction.ShiftCategory.Id : (Guid?) null) ?? Guid.Empty));
+						var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == ((preferenceRestriction.Absence != null ? preferenceRestriction.Absence.Id : (Guid?) null) ?? Guid.Empty));
 						var dayOffId = preferenceRestriction.DayOffTemplate == null ? -1 : analyticsDayOffs.First(
 											   a => a.DayOffName == preferenceRestriction.DayOffTemplate.Description.Name &&
 													a.BusinessUnitId == businessUnitId.BusinessUnitId).DayOffId;
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 							PersonId = analyticsPersonPeriodId,
 							ScenarioId = scenarioId,
 							PreferenceTypeId = SchedulePreferenceTransformerHelper.GetPreferenceTypeId(preferenceRestriction),
-							ShiftCategoryId = shiftCategory?.Id ?? -1,
+							ShiftCategoryId = shiftCategory != null ? shiftCategory.Id : -1,
 							DayOffId = dayOffId,
 							PreferencesRequested = 1,
 							PreferencesFulfilled = permissionState == PermissionState.Satisfied ? 1 : 0,
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 							DatasourceId = 1,
 							DatasourceUpdateDate = preferenceDay.UpdatedOn.GetValueOrDefault(DateTime.Now),
 							MustHaves = preferenceRestriction.MustHave ? 1 : 0,
-							AbsenceId = absence?.AbsenceId ?? -1
+							AbsenceId = absence != null ? absence.AbsenceId : -1
 						};
 						resultFactSchedulePreference.Add(preferenceItem);
 					}
