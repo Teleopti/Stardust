@@ -10,11 +10,17 @@ describe('IntradayCtrl', function () {
 	var skills = [];
 	var skillAreaInfo;
 	var monitorData;
+	var appInsights;
 
 
 	beforeEach(module('wfm.intraday'));
 
 	beforeEach(function () {
+	    appInsights = {
+	                 trackPageView:function() {
+	                         return;
+	                     }
+	           }
 		skills = [
 		{
 			Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
@@ -92,7 +98,8 @@ describe('IntradayCtrl', function () {
 	var createController = function(isNewlyCreatedSkillArea) {
 		$controller('IntradayCtrl', {
 			$scope: scope,
-			$translate: $translate
+			$translate: $translate,
+			appInsights: appInsights
 		});
 
 		scope.onStateChanged(undefined, { name: 'intraday' }, { isNewSkillArea: isNewlyCreatedSkillArea });

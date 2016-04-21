@@ -6,10 +6,16 @@ describe('IntradayConfigCtrl', function () {
 		scope;
 
 	var skills = [];
+	var appInsights;
 
 	beforeEach(module('wfm.intraday'));
 
-	beforeEach(function() {
+	beforeEach(function () {
+	    appInsights = {
+	               trackPageView:function() {
+	        	            return;
+	        	        }
+	       }
 		skills = [
 		{
 			Id: "fa9b5393-ef48-40d1-b7cc-09e797589f81",
@@ -22,6 +28,7 @@ describe('IntradayConfigCtrl', function () {
 		$httpBackend = _$httpBackend_;
 		scope = _$rootScope_.$new();
 		$translate = _$translate_;
+	    appInsights: appInsights
 
 		$httpBackend.whenGET("../api/intraday/skills")
 			.respond(200, skills);

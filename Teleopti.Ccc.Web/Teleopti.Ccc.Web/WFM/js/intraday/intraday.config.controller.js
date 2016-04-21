@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.intraday')
 		.controller('IntradayConfigCtrl', [
-			'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$translate',
-			function ($scope, $state, intradayService, $filter, NoticeService, $translate) {
+			'$scope', '$state', 'intradayService', 'appInsights', '$filter', 'NoticeService', '$translate',
+			function ($scope, $state, intradayService, appInsights, $filter, NoticeService, $translate) {
 
 				$scope.skills = [];
 				$scope.skillAreaName = '';
@@ -44,7 +44,9 @@
 
 				var notifySkillAreaCreation = function () {
 						NoticeService.success($translate.instant('Created') + ' ' + $scope.skillAreaName, 5000, false);
-			    };
+				};
+
+				appInsights.trackPageView('intraday config', "/#/intraday/config");
 			}
 		]);
 })();
