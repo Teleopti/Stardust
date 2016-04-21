@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Restriction
     public class OvertimeAvailabilityPersonFilterTest
     {
         private MockRepository _mock;
-        private IOvertimeAvailabilityPersonFilter _target;
+        private OvertimeAvailabilityPersonFilter _target;
         private IList<IScheduleDay > _scheduleDaysList;
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
