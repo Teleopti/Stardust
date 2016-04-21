@@ -45,6 +45,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".bulletin-ready-loading-flag.is-ready-loaded");
 		}
 
+		[When(@"I see '(.*)' in agent name area")]
+		public void ShouldSeeInShiftTradeAgentNameArea(string name)
+		{
+			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
+		}
+
 		private static void gotoAddRequestToday()
 		{
 			TestControllerMethods.Logon();

@@ -129,6 +129,7 @@ Scenario: Should possible make shift trade in Bulletin board with day off
 	| WishShiftType | Day Off          |
 	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'OtherAgent' in agent name area
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
