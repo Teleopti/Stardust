@@ -23,11 +23,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return true;
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit)
-		{
-			return true;
-		}
-
 		public bool IsPermitted(string functionPath)
 		{
 			return true;

@@ -25,11 +25,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _permittedFunctionPaths.Contains(functionPath);
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit)
-		{
-			return _permittedFunctionPaths.Contains(functionPath);
-		}
-
 		public bool IsPermitted(string functionPath)
 		{
 			return _permittedFunctionPaths.Contains(functionPath);

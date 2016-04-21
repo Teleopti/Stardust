@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.IdentityModel.Claims;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person);
         bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team);
         bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site);
-        bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit);
         bool IsPermitted(string functionPath);
 		IEnumerable<IApplicationFunction> GrantedFunctions();
 		IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification);

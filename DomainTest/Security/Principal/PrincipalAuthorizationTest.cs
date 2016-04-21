@@ -94,21 +94,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         }
 
         [Test]
-        public void ShouldCheckPermissionsForBusinessUnit()
-        {
-            var toCheck = mocks.StrictMock<IBusinessUnit>();
-            using (mocks.Record())
-            {
-                Expect.Call(authorizeAvailableData.Check(organisationMembership, DateOnly.Today, toCheck)).Return(true);
-            }
-            using (mocks.Playback())
-            {
-                organisationMembership.AddFromPerson(person);
-                Assert.IsTrue(principalAuthorization.IsPermitted(Function, DateOnly.Today, toCheck));
-            }
-        }
-
-        [Test]
         public void ShouldHandlePermittedPeriodsCorrectly()
         {
             var today = DateOnly.Today;

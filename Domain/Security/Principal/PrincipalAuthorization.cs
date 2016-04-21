@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IdentityModel.Claims;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Specification;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
@@ -77,11 +75,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
         {
             return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, site));
-        }
-
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit)
-        {
-            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, businessUnit));
         }
 
         public bool IsPermitted(string functionPath)
