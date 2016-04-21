@@ -11,17 +11,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly ResolveEventHandlers _resolver;
 		private readonly CommonEventProcessor _processor;
-		private readonly ServiceBusEventProcessor _serviceBusEventProcessor;
 
 
 		public SyncAllEventPublisher(
 			ResolveEventHandlers resolver,
-			CommonEventProcessor processor,
-			ServiceBusEventProcessor serviceBusEventProcessor)
+			CommonEventProcessor processor)
 		{
 			_resolver = resolver;
 			_processor = processor;
-			_serviceBusEventProcessor = serviceBusEventProcessor;
 		}
 
 		public void Publish(params IEvent[] events)
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				foreach (var handlerType in handlerTypes)
 				{
 					_processor.Process(@event, handlerType);
-
 				}
 			}
 			
@@ -40,10 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 #pragma warning disable 618
 			events.Where(e => _resolver.HandlerTypesFor<IRunOnServiceBus>(e).Any())
 #pragma warning restore 618
-				.ForEach(@event =>
-				{
-					ProcessLikeTheBus(@event);
-				});
+				.ForEach(ProcessLikeTheBus);
 		}
 
 		[AsSystem]
@@ -55,6 +48,4 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				_processor.Process(@event, handler);
 		}
 	}
-
-
 }
