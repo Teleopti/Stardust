@@ -350,14 +350,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                            double previousPeriodValue, bool success, ITeamInfo teamInfo,
 									int totalLiveTeamInfos, int currentTeamInfoCounter, double currentPeriodValue, bool checkPeriodValue, Action cancelAction, ISchedulingProgress schedulingProgress)
 		{
-			var failed = !success;
-
-			if (!failed && checkPeriodValue)
+			if (success && checkPeriodValue)
 			{
-				failed = currentPeriodValue >= previousPeriodValue;
+				success = currentPeriodValue < previousPeriodValue;
 			}
 
-			if (failed)
+			if (!success)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 
@@ -372,7 +370,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				cancelAction();
 			}
 
-			return !failed;
+			return success;
 		}
 
 		private bool runOneMatrixOnly(ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder, IOptimizationPreferences optimizationPreferences,
