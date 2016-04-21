@@ -54,12 +54,12 @@
 					return !this.IsFullDayAbsence;
 				},
 				ScheduleStartTime: function () {
-					var start = this.Date;
+					var start = this.Date.toDate();			
 					angular.forEach(this.Shifts, function(shift) {
 						if (shift.Date.isSame(start,'day') && shift.Projections.length > 0) {
 							start = shift.Projections[0].Start;
 						}
-					});
+					});					
 					return start;
 				},
 				ScheduleEndTime: function () {
