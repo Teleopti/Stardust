@@ -96,23 +96,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         }
 
         [Test]
-        public void VerifyPriorityOnExtender()
-        {
-            IWorkShiftExtender ext1 =
-                new ActivityAbsoluteStartExtender(ActivityFactory.CreateActivity("sdf"), new TimePeriodWithSegment(2, 3, 4, 5, 5),
-                                                  new TimePeriodWithSegment(6, 7, 8, 9, 5));
-            IWorkShiftExtender ext2 =
-                new ActivityAbsoluteStartExtender(ActivityFactory.CreateActivity("sdf"), new TimePeriodWithSegment(12, 13, 14, 15, 5),
-                                                  new TimePeriodWithSegment(16, 17, 18, 19, 5));
-            Assert.IsNull(ext1.Priority());
-            Assert.IsNull(ext2.Priority());
-            _target.AddExtender(ext1);
-            _target.AddExtender(ext2);
-            Assert.AreEqual(1, ext1.Priority());
-            Assert.AreEqual(2, ext2.Priority());
-        }
-
-        [Test]
         public void VerifyParent()
         {
             IWorkShiftExtender ext =

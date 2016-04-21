@@ -33,16 +33,6 @@ namespace Teleopti.Interfaces.Domain
         TimePeriodWithSegment ActivityLengthWithSegment { get; set; }
 
         /// <summary>
-        /// Priorities this instance.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-28
-        /// </remarks>
-        int? Priority();
-
-        /// <summary>
         /// Gets the maximum, possible length of the activity.
         /// </summary>
         /// <value>The length of the activity.</value>

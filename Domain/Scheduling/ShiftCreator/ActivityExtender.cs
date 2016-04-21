@@ -95,22 +95,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             }
         }
 
-
-        /// <summary>
-        /// Priorities this instance.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-28
-        /// </remarks>
-        public virtual int? Priority()
-        {
-            if (Parent == null)
-                return null;
-            return OrderIndex + 1;
-        }
-
         /// <summary>
         /// Gets the activity to extend.
         /// </summary>

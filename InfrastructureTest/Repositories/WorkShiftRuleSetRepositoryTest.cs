@@ -85,7 +85,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(new TimePeriodWithSegment(1, 2, 3, 4, 5), extCheck.ActivityLengthWithSegment);
             Assert.AreEqual("used in test", extCheck.ExtendWithActivity.Description.Name);
             Assert.AreEqual(new TimePeriodWithSegment(2, 3, 4, 5, 6), extCheck.ActivityPositionWithSegment);
-            Assert.AreEqual(1, extCheck.Priority());
             Assert.IsNotInstanceOf<ActivityRelativeEndExtender>(extenders[1].GetType());
             Assert.IsNotInstanceOf<ActivityRelativeStartExtender>(extenders[2].GetType());
             Assert.IsNotInstanceOf<AutoPositionedActivityExtender>(extenders[3].GetType());
