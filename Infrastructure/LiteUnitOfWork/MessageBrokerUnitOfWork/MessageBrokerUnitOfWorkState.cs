@@ -10,15 +10,17 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 {
-	public class MessageBrokerUnitOfWorkState : ICurrentMessageBrokerUnitOfWork, IMessageBrokerUnitOfWorkScope
+	public class MessageBrokerUnitOfWorkState : ICurrentMessageBrokerUnitOfWork, IMessageBrokerUnitOfWorkScope, IDisposable
 	{
-		[ThreadStatic] 
+		[ThreadStatic]
 		private static IDictionary _threadState;
 		private const string itemsKey = "MessageBrokerUnitOfWork";
 
 		private readonly ICurrentHttpContext _httpContext;
 		private readonly IConfigReader _configReader;
 		private ISessionFactory _sessionFactory;
+
+		private static object locker = new object();
 
 		public MessageBrokerUnitOfWorkState(ICurrentHttpContext httpContext, IConfigReader configReader)
 		{
@@ -29,13 +31,17 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 		private void configure()
 		{
 			if (_sessionFactory != null) return;
-			var configuration = new Configuration()
-				.DataBaseIntegration(db =>
-				{
-					db.ConnectionString = _configReader.ConnectionString("MessageBroker");
-					db.Dialect<MsSql2008Dialect>();
-				});
-			_sessionFactory = configuration.BuildSessionFactory();
+			lock (locker)
+			{
+				if (_sessionFactory != null) return;
+				var configuration = new Configuration()
+					.DataBaseIntegration(db =>
+					{
+						db.ConnectionString = _configReader.ConnectionString("MessageBroker");
+						db.Dialect<MsSql2008Dialect>();
+					});
+				_sessionFactory = configuration.BuildSessionFactory();
+			}
 		}
 
 		public void Start()
@@ -90,6 +96,15 @@ namespace Teleopti.Ccc.Infrastructure.LiteUnitOfWork.MessageBrokerUnitOfWork
 			if (_httpContext.Current() != null)
 				return _httpContext.Current().Items;
 			return _threadState ?? (_threadState = new Dictionary<string, object>());
+		}
+
+		public void Dispose()
+		{
+			if (_sessionFactory != null)
+			{
+				_sessionFactory.Dispose();
+				_sessionFactory = null;
+			}
 		}
 	}
 

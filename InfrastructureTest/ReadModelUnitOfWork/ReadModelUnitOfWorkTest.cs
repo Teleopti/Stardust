@@ -200,50 +200,54 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 			using (new TestTable("TestTable", InfraTestConfigReader.AnalyticsConnectionString))
 			{
 				var factory = DataSourcesFactory;
-				var dataSource1 = factory.Create("One", InfraTestConfigReader.ConnectionString, null);
-				var dataSource2 = factory.Create("Two", InfraTestConfigReader.AnalyticsConnectionString, null);
+				using (var dataSource1 = factory.Create("One", InfraTestConfigReader.ConnectionString, null))
+				using (var dataSource2 = factory.Create("Two", InfraTestConfigReader.AnalyticsConnectionString, null))
+				{
+					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null, null), null));
+					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
-				Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource1, null, null, null), null));
-				TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
+					Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null, null), null));
+					TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
 
-				Principal.Fake(new TeleoptiPrincipal(new TeleoptiIdentity("", dataSource2, null, null, null), null));
-				TheService.DoesUpdateWithoutDatasource("INSERT INTO TestTable (Value) VALUES (0)");
-
-				TestTable.Values("TestTable", InfraTestConfigReader.ConnectionString).Count().Should().Be(1);
-				TestTable.Values("TestTable", InfraTestConfigReader.AnalyticsConnectionString).Count().Should().Be(1);
+					TestTable.Values("TestTable", InfraTestConfigReader.ConnectionString).Count().Should().Be(1);
+					TestTable.Values("TestTable", InfraTestConfigReader.AnalyticsConnectionString).Count().Should().Be(1);
+				}
 			}
 		}
-		
+
 		[Test]
 		public void ShouldProduceUnitOfWorkForDataSourceOnThread()
 		{
 			using (new TestTable("TestTable1", InfraTestConfigReader.AnalyticsConnectionString))
 			using (new TestTable("TestTable2", InfraTestConfigReader.ConnectionString))
 			{
-				var dataSource1 = DataSourcesFactory.Create("One", InfraTestConfigReader.AnalyticsConnectionString, null);
-				var dataSource2 = DataSourcesFactory.Create("Two", InfraTestConfigReader.ConnectionString, null);
-
-				var thread1 = onAnotherThread(() =>
+				using (var dataSource1 = DataSourcesFactory.Create("One", InfraTestConfigReader.AnalyticsConnectionString, null))
+				using (var dataSource2 = DataSourcesFactory.Create("Two", InfraTestConfigReader.ConnectionString, null))
 				{
-					using (DataSource.OnThisThreadUse(dataSource1))
+					var thread1 = onAnotherThread(() =>
 					{
-						TheService.DoesWithoutDatasource(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
-					}
-				});
+						using (DataSource.OnThisThreadUse(dataSource1))
+						{
+							TheService.DoesWithoutDatasource(
+								uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable1 (Value) VALUES (0)").ExecuteUpdate()));
+						}
+					});
 
-				var thread2 = onAnotherThread(() =>
-				{
-					using (DataSource.OnThisThreadUse(dataSource2))
+					var thread2 = onAnotherThread(() =>
 					{
-						TheService.DoesWithoutDatasource(uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate()));
-					}
-				});
+						using (DataSource.OnThisThreadUse(dataSource2))
+						{
+							TheService.DoesWithoutDatasource(
+								uow => 1000.Times(i => uow.CreateSqlQuery("INSERT INTO TestTable2 (Value) VALUES (0)").ExecuteUpdate()));
+						}
+					});
 
-				thread1.Join();
-				thread2.Join();
+					thread1.Join();
+					thread2.Join();
 
-				TestTable.Values("TestTable1", InfraTestConfigReader.AnalyticsConnectionString).Count().Should().Be(1000);
-				TestTable.Values("TestTable2", InfraTestConfigReader.ConnectionString).Count().Should().Be(1000);
+					TestTable.Values("TestTable1", InfraTestConfigReader.AnalyticsConnectionString).Count().Should().Be(1000);
+					TestTable.Values("TestTable2", InfraTestConfigReader.ConnectionString).Count().Should().Be(1000);
+				}
 			}
 		}
 
@@ -307,9 +311,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ReadModelUnitOfWork
 		private readonly IDataSourceScope _dataSource;
 
 		public TheService(
-			NestedService1 nested1, 
-			NestedService2 nested2, 
-			ICurrentReadModelUnitOfWork uow, 
+			NestedService1 nested1,
+			NestedService2 nested2,
+			ICurrentReadModelUnitOfWork uow,
 			IDataSourceScope dataSource)
 		{
 			_nested1 = nested1;
