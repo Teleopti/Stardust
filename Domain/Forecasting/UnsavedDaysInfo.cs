@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _unsavedDays.Add(unsavedDayInfo);
         }
 
-        public void Remove(IUnsavedDayInfo unsavedDayInfo)
-        {
-            _unsavedDays.Remove(unsavedDayInfo);
-        }
-
         public bool Contains(IUnsavedDayInfo unsavedDayInfo)
         {
             return _unsavedDays.Contains(unsavedDayInfo);
@@ -68,11 +63,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public bool ContainsDateTime(DateOnly dateTime)
         {
             return _unsavedDays.Any(day => day.DateTime.Equals(dateTime));
-        }
-
-        public void Clear()
-        {
-            _unsavedDays.Clear();
         }
 
         public bool Equals(IUnsavedDaysInfo other)

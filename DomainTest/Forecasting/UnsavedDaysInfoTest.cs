@@ -74,23 +74,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         }
 
         [Test]
-        public void ShouldRemoveItem()
-        {
-            var unsavedDay = new UnsavedDayInfo(new DateOnly(2011, 5, 9), _scenario1);
-            _target.Remove(unsavedDay);
-            Assert.AreEqual(2, _target.Count);
-            Assert.IsFalse(_target.Contains(unsavedDay));
-        }
-
-        [Test]
-        public void ShouldClearItems()
-        {
-            Assert.AreEqual(3, _target.Count);
-            _target.Clear();
-            Assert.AreEqual(0, _target.Count);
-        }
-
-        [Test]
         public void ShouldGetOrderedDays()
         {
             Assert.IsFalse(_target.UnsavedDays.SequenceEqual(_target.UnsavedDaysOrderedByDate));

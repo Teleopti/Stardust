@@ -14,11 +14,6 @@ namespace Teleopti.Interfaces.Domain
         ///<param name="unsavedDayInfo"></param>
         void Add(IUnsavedDayInfo unsavedDayInfo);
         ///<summary>
-        /// Remove an unsaved day.
-        ///</summary>
-        ///<param name="unsavedDayInfo"></param>
-        void Remove(IUnsavedDayInfo unsavedDayInfo);
-        ///<summary>
         /// Check if item exists.
         ///</summary>
         ///<param name="unsavedDayInfo"></param>
@@ -42,10 +37,6 @@ namespace Teleopti.Interfaces.Domain
         ///<param name="dateTime"></param>
         ///<returns></returns>
         bool ContainsDateTime(DateOnly dateTime);
-        ///<summary>
-        /// Clear unsaved days info.
-        ///</summary>
-        void Clear();
     }
 
     ///<summary>
