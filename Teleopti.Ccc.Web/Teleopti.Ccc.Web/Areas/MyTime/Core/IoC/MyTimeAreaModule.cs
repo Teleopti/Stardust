@@ -264,7 +264,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<LinkProvider>().As<ILinkProvider>();
 			builder.RegisterType<SchedulePersonProvider>().As<ISchedulePersonProvider>();
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
-			builder.RegisterType<PersonPeriodProvider>().As<IPersonPeriodProvider>();
 			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
 			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
@@ -274,7 +273,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonNameProvider>().As<IPersonNameProvider>().SingleInstance();
 			builder.RegisterType<TimeFilterHelper>().As<ITimeFilterHelper>().SingleInstance();
 			builder.RegisterType<PersonForScheduleFinder>().As<IPersonForScheduleFinder>();
-			
 		}
 	}
 }

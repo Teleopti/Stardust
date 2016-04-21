@@ -22,10 +22,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnRequestPartialView()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
 			var now = MockRepository.GenerateMock<INow>();
 			var date = DateOnly.Today.AddDays(1);
-			personPeriodProvider.Stub(x => x.HasPersonPeriod(date)).Return(true);
 			now.Stub(x => x.UtcDateTime()).Return(date.Date.ToUniversalTime());
 			var id = Guid.NewGuid();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
@@ -46,10 +44,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseTodayWhenDateNotSpecified()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
 			var now = MockRepository.GenerateMock<INow>();
 			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow); 
-			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
 
 			var target = new TeamScheduleController(now, viewModelFactory, MockRepository.GenerateMock<IDefaultTeamProvider>(),
 				 MockRepository.GenerateMock<ITimeFilterHelper>(), MockRepository.GenerateMock<IToggleManager>(),
@@ -68,8 +64,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var defaultTeamCalculator = MockRepository.GenerateMock<IDefaultTeamProvider>();
 			var now = MockRepository.GenerateMock<INow>();
 			now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
-			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
-			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
 			var team = new Team();
 			team.SetId(Guid.NewGuid());
 			defaultTeamCalculator.Stub(x => x.DefaultTeam(DateOnly.Today)).Return(team);
