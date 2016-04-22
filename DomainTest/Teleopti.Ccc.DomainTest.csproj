@@ -185,16 +185,11 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Aop\InfoLogAspectTest.cs" />
 
-    <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceReportHandlerNoMocksTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequest\NewAbsenceReportHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerNoMocksTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\CancelAbsenceRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
-
-    <Compile Include="ApplicationLayer\AbsenceRequests\CancelAbsenceRequestCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerNoMocksTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
-
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />

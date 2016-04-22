@@ -16,7 +16,7 @@ using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
+namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class NewAbsenceReportBase
 	{

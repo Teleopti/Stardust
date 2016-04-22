@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -11,7 +10,7 @@ using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
+namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
 	public class NewAbsenceRequestHandler
 	{
@@ -148,14 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequest
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 	}
 
-<<<<<<< dest
 	[UseOnToggle(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
-=======
-<<<<<<< dest
->>>>>>> source
-=======
-
->>>>>>> source
 	public class NewAbsenceRequestHandlerStardust : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnStardust
 	{
 		public NewAbsenceRequestHandlerStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
