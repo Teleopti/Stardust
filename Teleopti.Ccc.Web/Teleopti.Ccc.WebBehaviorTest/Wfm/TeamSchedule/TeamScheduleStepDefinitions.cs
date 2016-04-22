@@ -128,19 +128,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
 		}
 
-		[When(@"I apply remove activity")]
-		public void WhenIApplyRemoveActivity()
-		{
-
-			var propertyValues = new Dictionary<string,string>
-			{
-				{"vm.isScenarioTest", "true"}
-			};
-			Browser.Interactions.SetScopeValues(".scenario-test-trick",propertyValues);
-			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
-			Browser.Interactions.ClickUsingJQuery("#menuItemRemoveActivity");
-			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
-		}		
 	}
 
 	public class AddActivityFormInfo

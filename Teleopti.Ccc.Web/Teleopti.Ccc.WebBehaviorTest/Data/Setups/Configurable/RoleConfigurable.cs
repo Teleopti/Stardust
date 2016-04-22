@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool RemoveAbsence { get; set; }
 		public bool AddActivity { get; set; }
 		public bool MoveActivity { get; set; }
-		public bool RemoveActivity { get; set; }
 
 		public bool QuickForecaster { get; set; }
 		public bool AccessToIntraday { get; set; }
@@ -114,7 +113,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			RemoveAbsence = true;
 			AddActivity = true;
 			MoveActivity = true;
-			RemoveActivity = true;
 			QuickForecaster = false;
 			AccessToOutbound = false;
 			AccessToWfmRequests = false;
@@ -316,10 +314,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AddActivity
 					select f;
-			if(!RemoveActivity)
-				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RemoveActivity
-									   select f;
 			if (!MoveActivity)
 				applicationFunctions = from f in applicationFunctions
 					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MoveActivity
