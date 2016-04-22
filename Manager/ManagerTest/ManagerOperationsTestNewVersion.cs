@@ -81,7 +81,7 @@ namespace ManagerTest
 
 			JobRepository.AssignJobToWorkerNode(HttpSender);
 
-			ManagerController.RegisterHeartbeat(_nodeUri1);
+			ManagerController.WorkerNodeRegisterHeartbeat(_nodeUri1);
 
 			HttpSender.CallToWorkerNodes.First().Contains(_nodeUri1.ToString());
 		}
@@ -116,8 +116,8 @@ namespace ManagerTest
 				Url = _nodeUri2
 			});
 
-			ManagerController.RegisterHeartbeat(_nodeUri1);
-			ManagerController.RegisterHeartbeat(_nodeUri2);
+			ManagerController.WorkerNodeRegisterHeartbeat(_nodeUri1);
+			ManagerController.WorkerNodeRegisterHeartbeat(_nodeUri2);
 
 			var jobQueueItem = new JobQueueItem
 			{
@@ -233,7 +233,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIfHeartbeatGetsAnInvalidUri()
 		{
-			var response = ManagerController.RegisterHeartbeat(null);
+			var response = ManagerController.WorkerNodeRegisterHeartbeat(null);
 
 			Assert.IsInstanceOf(typeof (BadRequestErrorMessageResult), response);
 		}
@@ -411,7 +411,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldReturnBadRequestIJobDoneGetsAnInvalidUri()
 		{
-			var response = ManagerController.JobDone(Guid.Empty);
+			var response = ManagerController.JobSucceed(Guid.Empty);
 
 			Assert.IsInstanceOf(typeof (BadRequestErrorMessageResult), response);
 		}
@@ -429,7 +429,7 @@ namespace ManagerTest
 
 			ThisNodeIsBusy(_nodeUri1.ToString());
 
-			ManagerController.RegisterHeartbeat(_nodeUri1);
+			ManagerController.WorkerNodeRegisterHeartbeat(_nodeUri1);
 
 			ManagerController.AddItemToJobQueue(jobQueueItem);
 
@@ -471,7 +471,7 @@ namespace ManagerTest
 			JobRepository.AddItemToJobQueue(jobQueueItem);
 
 			var result =
-				ManagerController.JobDone(jobQueueItem.JobId);
+				ManagerController.JobSucceed(jobQueueItem.JobId);
 
 			result.Should().Not.Be.Null();
 		}

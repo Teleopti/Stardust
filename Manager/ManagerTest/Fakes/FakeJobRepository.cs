@@ -42,15 +42,20 @@ namespace ManagerTest.Fakes
 			return _jobQueue;
 		}
 
-		public void DeleteItemInJobQueueByJobId(Guid jobId)
+		public void DeleteJobByJobId(Guid jobId, bool removeJobDetails)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void DeleteJobQueueItemByJobId(Guid jobId)
 		{
 			var j = _jobs.FirstOrDefault(x => x.JobId.Equals(jobId));
 			_jobs.Remove(j);
 		}
 
-		public void RequeueJobBySentToWorkerNodeUri(string sentToWorkerNodeUri)
+		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri, bool keepJobDetails)
 		{
-			var jobs = _jobs.FirstOrDefault(x => x.SentToWorkerNodeUri == sentToWorkerNodeUri);
+			var jobs = _jobs.FirstOrDefault(x => x.SentToWorkerNodeUri == workerNodeUri);
 
 			if (jobs != null)
 			{
@@ -83,7 +88,7 @@ namespace ManagerTest.Fakes
 			throw new NotImplementedException();
 		}
 
-		public Job GetJobBySentToWorkerNodeUri(string sentToWorkerNodeUri)
+		public Job GetSelectJobThatDidNotEndByWorkerNodeUri(string sentToWorkerNodeUri)
 		{
 			throw new NotImplementedException();
 		}

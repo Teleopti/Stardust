@@ -184,6 +184,13 @@ namespace Stardust.Manager
 			return _jobRepository.DoesJobItemExists(jobId);
 		}
 
+		public void DeleteJobByJobId(Guid jobId,
+		                             bool removeJobDetails)
+		{
+			_jobRepository.DeleteJobByJobId(jobId,
+											removeJobDetails);
+		}
+
 		public bool DoesJobQueueItemExists(Guid jobId)
 		{
 			return _jobRepository.DoesJobQueueItemExists(jobId);

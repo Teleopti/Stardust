@@ -9,13 +9,13 @@
 
 		public const string Heartbeat = "heartbeat";
 
-		public const string JobHasBeenCanceled = "status/cancel/" + JobIdOptionalParameter;
+		public const string JobCanceled = "status/cancel/" + JobIdOptionalParameter;
 
-		public const string JobDone = "status/done/" + JobIdOptionalParameter;
+		public const string JobSucceed = "status/done/" + JobIdOptionalParameter;
 
 		public const string JobFailed = "status/fail";
 
-		public const string JobProgress = "status/progress";
+		public const string JobDetail = "status/progress";
 
 		//Client
 		public const string Job = "job";
@@ -28,7 +28,7 @@
 
 		public const string Ping = "ping";
 
-		public const string JobDetailByJobJobId = "jobdetail/" + JobIdOptionalParameter;
+		public const string JobDetailByJobId = "jobdetail/" + JobIdOptionalParameter;
 
 		public const string Nodes = "node/";
 	}

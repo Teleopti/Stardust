@@ -18,9 +18,11 @@ namespace Stardust.Manager.Interfaces
 
 		List<JobQueueItem> GetAllItemsInJobQueue();
 
-		void DeleteItemInJobQueueByJobId(Guid jobId);
+		void DeleteJobByJobId(Guid jobId, bool removeJobDetails);
 
-		void RequeueJobBySentToWorkerNodeUri(string sentToWorkerNodeUri);
+		void DeleteJobQueueItemByJobId(Guid jobId);
+
+		void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri, bool keepJobDetailsIfExists);
 
 		void AssignJobToWorkerNode(IHttpSender httpSender);
 
@@ -32,7 +34,7 @@ namespace Stardust.Manager.Interfaces
 
 		Job GetJobByJobId(Guid jobId);
 
-		Job GetJobBySentToWorkerNodeUri(string sentToWorkerNodeUri);
+		Job GetSelectJobThatDidNotEndByWorkerNodeUri(string sentToWorkerNodeUri);
 
 		IList<Job> GetAllJobs();
 

@@ -4,7 +4,8 @@ namespace Stardust.Manager.Interfaces
 {
 	public interface INodeManager
 	{
-		void AddIfNeeded(Uri nodeUrl);
-		void FreeJobIfAssingedToNode(Uri url);
+		void AddWorkerNode(Uri workerNodeUri);
+
+		void RequeueJobsThatDidNotFinishedByWorkerNodeUri(Uri workerNodeUri, bool keepJobDetailsIfExists);
 	}
 }

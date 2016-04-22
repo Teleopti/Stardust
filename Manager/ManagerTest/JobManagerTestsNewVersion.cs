@@ -48,7 +48,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldAddANodeOnInit()
 		{
-			NodeManager.AddIfNeeded(_nodeUri1);
+			NodeManager.AddWorkerNode(_nodeUri1);
 
 			WorkerNodeRepository.GetAllWorkerNodes()
 				.First()
@@ -147,6 +147,15 @@ namespace ManagerTest
 		}
 
 		[Test]
+		public void ShouldNotAddSameNodeTwiceInInit()
+		{
+			NodeManager.AddWorkerNode(_nodeUri1);
+			NodeManager.AddWorkerNode(_nodeUri1);
+
+			WorkerNodeRepository.GetAllWorkerNodes().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldDeleteJobFromJobQueueIfNotAssignedToWorkerNode()
 		{
 			var jobQueueItem = new JobQueueItem
@@ -167,5 +176,60 @@ namespace ManagerTest
 
 			deletedJobQueueItemExists.Should().Be.False();
 		}
+
+
+		[Test]
+		public void ShouldBeAbleToRequeueDeadJob()
+		{
+			//------------------------------------------
+			// Add worker node.
+			//------------------------------------------
+			var workerNode = new WorkerNode
+			{
+				Id = Guid.NewGuid(),
+				Url = _nodeUri1
+			};
+			WorkerNodeRepository.AddWorkerNode(workerNode);
+
+			//------------------------------------------
+			// Create job queue item.
+			//------------------------------------------			
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "ShouldBeAbleToRequeueDeadJob",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			//----------------------------------------------
+			// Add item to job queue.
+			//----------------------------------------------
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			//----------------------------------------------
+			// Assign job to worker node.
+			//----------------------------------------------
+			FakeHttpSender.CallToWorkerNodes.Clear();
+			JobManager.AssignJobToWorkerNode();
+			FakeHttpSender.CallToWorkerNodes.Count().Should().Be(2);
+
+			//----------------------------------------------
+			// Check that job started.
+			//----------------------------------------------
+			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
+			job.Satisfy(job1 => job1.Started != null);
+			job.Satisfy(job1 => job1.Ended ==null);
+
+			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(new Uri(job.SentToWorkerNodeUri),
+											    keepJobDetailsIfExists: false);
+
+			JobRepository.GetAllJobs().Count.Should().Be(0);
+
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+		}
+
+
 	}
 }
