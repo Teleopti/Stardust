@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Specification;
@@ -19,13 +18,13 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 {
 #pragma warning disable 618
-	public class ShiftTradeRequestHandler : IHandleEvent<NewShiftTradeRequestCreatedEvent> , IHandleEvent<AcceptShiftTradeEvent>, IRunOnServiceBus
+	public class ShiftTradeRequestHandler : IHandleEvent<NewShiftTradeRequestCreatedEvent>, IHandleEvent<AcceptShiftTradeEvent>, IRunOnServiceBus
 #pragma warning restore 618
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestHandler));
 
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		//private readonly ISchedulingResultStateHolderProvider _schedulingResultStateHolderProvider;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IShiftTradeValidator _validator;
 		private readonly IRequestFactory _requestFactory;
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private IPersonRequestCheckAuthorization _authorization;
 		private IScenario _defaultScenario;
 
-		public ShiftTradeRequestHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public ShiftTradeRequestHandler(ICurrentUnitOfWork currentUnitOfWork,
 			//ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IShiftTradeValidator validator,
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			//_schedulingResultStateHolderProvider = schedulingResultStateHolderProvider;
 			_validator = validator;
@@ -80,29 +79,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		{
 			//_schedulingResultStateHolder = _schedulingResultStateHolderProvider.GiveMeANew();
 			Logger.DebugFormat("Consuming @event for person request with Id = {0}. (@event timestamp = {1})", @event.PersonRequestId, @event.Timestamp);
-			using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			loadPersonRequest(@event.PersonRequestId);
+			if (!IsRequestReadyForProcessing.IsSatisfiedBy(_personRequest))
 			{
-				loadPersonRequest(@event.PersonRequestId);
-				if (!IsRequestReadyForProcessing.IsSatisfiedBy(_personRequest))
+				if (Logger.IsWarnEnabled)
 				{
-					if (Logger.IsWarnEnabled)
-					{
-						Logger.WarnFormat(
-							 "No person request found with the supplied Id, or the request is not in New or Pending status mode. (Id = {0})",
-							 @event.PersonRequestId);
-					}
-
-					clearStateHolder();
-					return;
+					Logger.WarnFormat(
+						 "No person request found with the supplied Id, or the request is not in New or Pending status mode. (Id = {0})",
+						 @event.PersonRequestId);
 				}
-				loadDefaultScenario();
-				loadSchedules(_shiftTradeRequest.Period, _shiftTradeRequest.InvolvedPeople());
-				var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker(_schedulingResultStateHolder);
-				getShiftTradeStatus(shiftTradeRequestStatusChecker);
-				validateRequest();
-				setPersonRequestState();
-				save(unitOfWork);
+
+				clearStateHolder();
+				return;
 			}
+			loadDefaultScenario();
+			loadSchedules(_shiftTradeRequest.Period, _shiftTradeRequest.InvolvedPeople());
+			var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker(_schedulingResultStateHolder);
+			getShiftTradeStatus(shiftTradeRequestStatusChecker);
+			validateRequest();
+			setPersonRequestState();
+			save(_currentUnitOfWork.Current());
 
 			clearStateHolder();
 		}
@@ -111,85 +107,83 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		{
 			//_schedulingResultStateHolder = _schedulingResultStateHolderProvider.GiveMeANew();
 			Logger.DebugFormat("Consuming @event for person request with Id = {0}. (@event timestamp = {1})", @event.PersonRequestId, @event.Timestamp);
-			using (IUnitOfWork unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+
+			Logger.DebugFormat("Loading PersonRequest = {0}", @event.PersonRequestId);
+			loadPersonRequest(@event.PersonRequestId);
+			if (!IsRequestReadyForProcessing.IsSatisfiedBy(_personRequest))
 			{
-				Logger.DebugFormat("Loading PersonRequest = {0}", @event.PersonRequestId);
-				loadPersonRequest(@event.PersonRequestId);
-				if (!IsRequestReadyForProcessing.IsSatisfiedBy(_personRequest))
+				if (Logger.IsWarnEnabled)
 				{
-					if (Logger.IsWarnEnabled)
+					Logger.WarnFormat(
+						 "No person request found with the supplied Id, or the request is not in New or Pending status mode. (Id = {0})",
+						 @event.PersonRequestId);
+				}
+				clearStateHolder();
+				return;
+			}
+			Logger.Debug("Loading Default Scenario");
+			loadDefaultScenario();
+			Logger.Debug("Loading Schedules");
+			loadSchedules(_shiftTradeRequest.Period, _shiftTradeRequest.InvolvedPeople());
+			var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker(_schedulingResultStateHolder);
+
+			Logger.Debug("Checking MF ShiftTrade status");
+			ShiftTradeStatus shiftTradeStatus = getShiftTradeStatus(shiftTradeRequestStatusChecker);
+			Logger.DebugFormat("Status is: {0}", shiftTradeStatus);
+
+			Logger.Debug("Validating ShiftTrade");
+			validateRequest();
+
+			if (checkStatus(shiftTradeStatus))
+			{
+				Logger.Debug("Loading Accepting person");
+				var acceptingPerson = loadPersonAcceptingPerson(@event);
+				var checkSum = new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleStorage);
+
+				try
+				{
+					Logger.DebugFormat("Accepting ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
+					_personRequest.Request.Accept(acceptingPerson, checkSum, _authorization);
+					setUpdatedMessage(@event);
+
+					INewBusinessRuleCollection allNewRules = getAllNewBusinessRules();
+					var approvalService = _requestFactory.GetRequestApprovalService(allNewRules, _defaultScenario,
+						_schedulingResultStateHolder);
+
+					_personRequest.Pending();
+					if (ShouldShiftTradeBeAutoGranted.IsSatisfiedBy(_shiftTradeRequest))
 					{
-						Logger.WarnFormat(
-							 "No person request found with the supplied Id, or the request is not in New or Pending status mode. (Id = {0})",
-							 @event.PersonRequestId);
+						Logger.DebugFormat("Approving ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
+						var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization, true);
+						handleBrokenBusinessRules(brokenBusinessRules);
+						foreach (var range in _schedulingResultStateHolder.Schedules.Values)
+						{
+							var diff = range.DifferenceSinceSnapshot(_differenceService);
+							_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
+						}
 					}
+				}
+				catch (ShiftTradeRequestStatusException exception)
+				{
+					Logger.Error("An exception occured when trying to accept the shift trade request.", exception);
 					clearStateHolder();
 					return;
 				}
-				Logger.Debug("Loading Default Scenario");
-				loadDefaultScenario();
-				Logger.Debug("Loading Schedules");
-				loadSchedules(_shiftTradeRequest.Period, _shiftTradeRequest.InvolvedPeople());
-				var shiftTradeRequestStatusChecker = _requestFactory.GetShiftTradeRequestStatusChecker(_schedulingResultStateHolder);
-
-				Logger.Debug("Checking MF ShiftTrade status");
-				ShiftTradeStatus shiftTradeStatus = getShiftTradeStatus(shiftTradeRequestStatusChecker);
-				Logger.DebugFormat("Status is: {0}", shiftTradeStatus);
-
-				Logger.Debug("Validating ShiftTrade");
-				validateRequest();
-
-				if (checkStatus(shiftTradeStatus))
+				catch (ValidationException exception)
 				{
-					Logger.Debug("Loading Accepting person");
-					var acceptingPerson = loadPersonAcceptingPerson(@event);
-					var checkSum = new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleStorage);
-
-					try
-					{
-						Logger.DebugFormat("Accepting ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
-						_personRequest.Request.Accept(acceptingPerson, checkSum, _authorization);
-						setUpdatedMessage(@event);
-
-						INewBusinessRuleCollection allNewRules = getAllNewBusinessRules();
-						var approvalService = _requestFactory.GetRequestApprovalService(allNewRules, _defaultScenario,
-							_schedulingResultStateHolder);
-
-						_personRequest.Pending();
-						if (ShouldShiftTradeBeAutoGranted.IsSatisfiedBy(_shiftTradeRequest))
-						{
-							Logger.DebugFormat("Approving ShiftTrade: {0}", _personRequest.GetSubject(new NormalizeText()));
-							var brokenBusinessRules = _personRequest.Approve(approvalService, _authorization, true);
-							handleBrokenBusinessRules(brokenBusinessRules);
-							foreach (var range in _schedulingResultStateHolder.Schedules.Values)
-							{
-								var diff = range.DifferenceSinceSnapshot(_differenceService);
-								_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
-							}
-						}
-					}
-					catch (ShiftTradeRequestStatusException exception)
-					{
-						Logger.Error("An exception occured when trying to accept the shift trade request.", exception);
-						clearStateHolder();
-						return;
-					}
-					catch (ValidationException exception)
-					{
-						Logger.Error("A validation exception occured when trying to accept the shift trade request.", exception);
-						clearStateHolder();
-						return;
-					}
-
-					var status = _shiftTradeRequest.GetShiftTradeStatus(shiftTradeRequestStatusChecker);
-					Logger.InfoFormat("Shift trade state is Accepted, status is: {0}", status);
+					Logger.Error("A validation exception occured when trying to accept the shift trade request.", exception);
+					clearStateHolder();
+					return;
 				}
-				else if (!_validationResult.Value)
-				{
-					_personRequest.Deny(null, _validationResult.DenyReason, _authorization);
-				}
-				save(unitOfWork);
+
+				var status = _shiftTradeRequest.GetShiftTradeStatus(shiftTradeRequestStatusChecker);
+				Logger.InfoFormat("Shift trade state is Accepted, status is: {0}", status);
 			}
+			else if (!_validationResult.Value)
+			{
+				_personRequest.Deny(null, _validationResult.DenyReason, _authorization);
+			}
+			save(_currentUnitOfWork.Current());
 
 			clearStateHolder();
 		}
