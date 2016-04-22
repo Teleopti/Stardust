@@ -46,7 +46,7 @@
 		<Exec Command="$(NpmInstallKarmaCliCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
 		<Message Text="Restore Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
-		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" ContinueOnError="WarnAndContinue" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 
 		<Exec Command="$(NpmRebuildNodeSassCmd)"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
 	  
