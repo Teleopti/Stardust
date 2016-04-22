@@ -49,28 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person, ISchedulingOptions schedulingOptions, IEffectiveRestriction additionalEffectiveRestriction)
 		{
-			//remove this code when the null reference problem is solved
-			string message;
-			var personName = "nullPerson";
-			if (person != null)
-				personName = person.Name.ToString();
-
-			if (teamBlockInfo == null)
-			{
-				message = "TeamBlockInfo is null for " + datePointer.ToShortDateString() + " " + personName;
-				throw new ArgumentNullException(message);
-			}
-			if (person == null)
-			{
-				message = "Person is null " + teamBlockInfo.TeamInfo.Name + " " + datePointer.ToShortDateString();
-				throw new ArgumentNullException(message);
-			}
-			if (additionalEffectiveRestriction == null)
-			{
-				message = "AdditionalEffectiveRestriction is null for " + datePointer.ToShortDateString() + " " + person.Name;
-				throw new ArgumentNullException(message);
-			}
-
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo,
 				schedulingOptions);
 			if (effectiveRestriction == null)
@@ -83,13 +61,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return foundShiftProjectionCache;
 			
 			effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
-			if (effectiveRestriction == null)
-			{
-				message = "EffectiveRestriction after combine is null for " + datePointer.ToShortDateString() + " " + person.Name;
-				throw new ArgumentNullException(message);
-			}
+
 			var roleModel = filterAndSelect(teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, false);
-			if(roleModel == null && effectiveRestriction.IsRestriction)
+			if(roleModel == null && effectiveRestriction!= null && effectiveRestriction.IsRestriction)
 				roleModel = filterAndSelect(teamBlockInfo, datePointer, schedulingOptions, effectiveRestriction, true);
 
 			return roleModel;
