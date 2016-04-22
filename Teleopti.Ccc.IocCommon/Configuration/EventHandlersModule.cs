@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -140,15 +141,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				);
 			builder.CacheByInterfaceProxy<AnalyticsDateRepository, IAnalyticsDateRepository>();
 
-			_config.Cache().This<IAnalyticsScheduleRepository>(b => b
-				.CacheMethod(x => x.Absences())
-				.CacheMethod(x => x.Activities())
-				.CacheMethod(x => x.Scenarios())
-				.CacheMethod(x => x.ShiftCategories())
-				.CacheMethod(x => x.Overtimes())
-				.CacheMethod(x => x.ShiftLengths())
-				);
-			builder.CacheByInterfaceProxy<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
+			if (!_config.Toggle(Toggles.ETL_SpeedUpIntradayPreference_37124))
+			{
+				_config.Cache().This<IAnalyticsScheduleRepository>(b => b
+					.CacheMethod(x => x.Absences())
+					.CacheMethod(x => x.Activities())
+					.CacheMethod(x => x.Scenarios())
+					.CacheMethod(x => x.ShiftCategories())
+					.CacheMethod(x => x.Overtimes())
+					.CacheMethod(x => x.ShiftLengths())
+					);
+				builder.CacheByInterfaceProxy<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();
+			}
 
 			builder.RegisterType<PerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
