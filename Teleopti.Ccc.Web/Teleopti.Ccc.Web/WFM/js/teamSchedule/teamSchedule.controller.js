@@ -10,7 +10,7 @@
 
 		var vm = this;
 
-		var message = "MyTeam has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customer-feedback.aspx'>feedback.</a>\
+		var message = "MyTeam has been improved! We appreciate your <a href='mailto:product@teleopti.com'>feedback.</a>\
 				Old <a href='../Anywhere#teamschedule'>MyTeam</a> can be accessed for a limited time.";
 	
 		vm.isLoading = false;
