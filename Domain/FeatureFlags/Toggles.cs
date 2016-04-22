@@ -7,6 +7,7 @@
 		//Don't remove this one - used in tests
 		TestToggle,
 		TestToggle2,
+		TestToggle3,
 		//////
 		// ReSharper disable InconsistentNaming
 		Forecast_CopySettingsToWorkflow_11112,

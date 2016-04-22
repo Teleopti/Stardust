@@ -10,34 +10,50 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 	{
 		public static bool TypeEnabledByToggle(this Type type, IIocConfiguration iocConfiguration)
 		{
-			var attributes = type.GetCustomAttributes(typeof(UseNotOnToggle), false);
-			if (!attributes.IsEmpty())
+			var attributesOn = type.GetCustomAttributes(typeof(UseOnToggle), false);
+			var attributesOff = type.GetCustomAttributes(typeof(UseNotOnToggle), false);
+
+			if (attributesOn.IsEmpty() && attributesOff.IsEmpty()) return true;
+
+			bool resultOn = true;
+			bool resultOff = true;
+
+			if (attributesOn.Any())
 			{
-				var theToggle = ((UseNotOnToggle)attributes.First()).Toggle;
-				return !iocConfiguration.Toggle(theToggle);
+				var togglesOn = ((UseOnToggle)attributesOn.First()).Toggles;
+				resultOn = togglesOn.All(iocConfiguration.Toggle);
 			}
-
-			attributes = type.GetCustomAttributes(typeof(UseOnToggle), false);
-			if (attributes.IsEmpty()) return true;
-
-			var toggles = ((UseOnToggle)attributes.First()).Toggles;
-			return toggles.All(iocConfiguration.Toggle);
+			if (attributesOff.Any())
+			{
+				var togglesOff = ((UseNotOnToggle)attributesOff.First()).Toggles;
+				resultOff = !togglesOff.Any(iocConfiguration.Toggle); 
+			}
+			
+			return resultOn && resultOff;
 		}
 
 		public static bool MethodEnabledByToggle(this MethodInfo method, IIocConfiguration iocConfiguration)
 		{
-			var attributes = method.GetCustomAttributes(typeof(UseNotOnToggle), false);
-			if (!attributes.IsEmpty())
+			var attributesOn = method.GetCustomAttributes(typeof(UseOnToggle), false);
+			var attributesOff = method.GetCustomAttributes(typeof(UseNotOnToggle), false);
+
+			if (attributesOn.IsEmpty() && attributesOff.IsEmpty()) return true;
+
+			bool resultOn = true;
+			bool resultOff = true;
+
+			if (attributesOn.Any())
 			{
-				var theToggle = ((UseNotOnToggle)attributes.First()).Toggle;
-				return !iocConfiguration.Toggle(theToggle);
+				var togglesOn = ((UseOnToggle)attributesOn.First()).Toggles;
+				resultOn = togglesOn.All(iocConfiguration.Toggle);
+			}
+			if (attributesOff.Any())
+			{
+				var togglesOff = ((UseNotOnToggle)attributesOff.First()).Toggles;
+				resultOff = !togglesOff.Any(iocConfiguration.Toggle);
 			}
 
-			attributes = method.GetCustomAttributes(typeof(UseOnToggle), false);
-			if (attributes.IsEmpty()) return true;
-
-			var toggles = ((UseOnToggle)attributes.First()).Toggles;
-			return toggles.All(iocConfiguration.Toggle);
+			return resultOn && resultOff;
 		}
 	}
 }
