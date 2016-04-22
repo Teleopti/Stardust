@@ -1305,6 +1305,7 @@
     <Content Include="WFM\js\forecasting\forecasting.default.controller.js" />
     <Content Include="WFM\js\forecasting\forecasting.resultChart.directive.js" />
     <Content Include="WFM\js\forecasting\skill.create.controller.spec.js" />
+    <Content Include="WFM\js\global\applicationInsights.js" />
     <Content Include="WFM\js\global\areas.controller.spec.js" />
     <Content Include="WFM\js\global\businessunits\businessunits.service.js" />
     <Content Include="WFM\js\global\businessunits\_modules.js" />
@@ -1320,6 +1321,7 @@
     <Content Include="WFM\js\global\wfm-themes\wfm.themes.controller.spec.js" />
     <Content Include="WFM\js\global\wfm-themes\wfm.themes.service.js" />
     <Content Include="WFM\js\global\wfm-themes\wfm.themes.service.spec.js" />
+    <Content Include="WFM\js\global\wfm.appInsights.service.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.spec.js" />
     <Content Include="WFM\js\global\wfm.shortcuts.service.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />
