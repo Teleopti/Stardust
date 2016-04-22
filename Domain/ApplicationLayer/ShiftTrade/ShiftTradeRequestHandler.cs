@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -17,9 +20,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 {
-#pragma warning disable 618
-	public class ShiftTradeRequestHandler : IHandleEvent<NewShiftTradeRequestCreatedEvent>, IHandleEvent<AcceptShiftTradeEvent>, IRunOnServiceBus
-#pragma warning restore 618
+	public class ShiftTradeRequestHandler 
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestHandler));
 
@@ -312,6 +313,58 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			{
 				return (obj != null && (obj.IsNew || obj.IsPending));
 			}
+		}
+	}
+
+	[UseOnToggle(Toggles.ShiftTrade_ToHangfire_38181)]
+	public class ShiftTradeRequestHandlerHangfire : ShiftTradeRequestHandler, IHandleEvent<NewShiftTradeRequestCreatedEvent>, IHandleEvent<AcceptShiftTradeEvent>, IRunOnHangfire
+	{
+		public ShiftTradeRequestHandlerHangfire(ICurrentUnitOfWork currentUnitOfWork,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IShiftTradeValidator validator,
+			IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository,
+			IScheduleStorage scheduleStorage, IPersonRepository personRepository,
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver,
+			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService)
+			: base(
+				currentUnitOfWork, schedulingResultStateHolder, validator, requestFactory, scenarioRepository,
+				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
+				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService)
+		{ }
+
+		[AsSystem, UnitOfWork]
+		public new virtual void Handle(NewShiftTradeRequestCreatedEvent @event)
+		{
+			base.Handle(@event);
+		}
+
+		[AsSystem, UnitOfWork]
+		public new virtual void Handle(AcceptShiftTradeEvent @event)
+		{
+			base.Handle(@event);
+		}
+	}
+
+	[UseNotOnToggle(Toggles.ShiftTrade_ToHangfire_38181)]
+#pragma warning disable 618
+	public class ShiftTradeRequestHandlerBus : ShiftTradeRequestHandler, IHandleEvent<NewShiftTradeRequestCreatedEvent>, IHandleEvent<AcceptShiftTradeEvent>, IRunOnServiceBus
+#pragma warning restore 618
+	{
+		public ShiftTradeRequestHandlerBus(ICurrentUnitOfWork currentUnitOfWork,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IShiftTradeValidator validator,
+			IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository,
+			IScheduleStorage scheduleStorage, IPersonRepository personRepository,
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver,
+			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation,
+			IDifferenceCollectionService<IPersistableScheduleData> differenceService)
+			: base(
+				currentUnitOfWork, schedulingResultStateHolder, validator, requestFactory, scenarioRepository,
+				personRequestRepository, scheduleStorage, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
+				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService)
+		{
+
 		}
 	}
 }
