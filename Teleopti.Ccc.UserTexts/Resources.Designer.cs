@@ -17715,15 +17715,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You do not have permission to modify absences..
-        /// </summary>
-        public static string NoPermissionToModifyPersonAbsence {
-            get {
-                return ResourceManager.GetString("NoPermissionToModifyPersonAbsence", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You have no permission to view restricted scenarios and all scenarios are restricted..
         /// </summary>
         public static string NoPermissionToViewRestrictedScenarios {

@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		/// <param name="scheduleDictionary">The schedule dictionary.</param>
 		/// <param name="newBusinessRuleCollection">The new business rule collection.</param>
 		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
-		/// <param name="commandInfo">optional info for distinguishing where notifications come from</param>
+		/// <param name="optionalParams">optional info including distinguishing where notifications come from and whether it's needed to check the modify person assignment permission </param>
 		/// <returns></returns>
-		IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter, TrackedCommandInfo commandInfo = null);
+		IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter, OptionalParamsForSwapShift optionalParams = null);
 	}
 }

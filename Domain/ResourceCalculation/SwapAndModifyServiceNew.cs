@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter, TrackedCommandInfo trackedCommandInfo = null)
+        public IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter, OptionalParamsForSwapShift optionalParams = null)
 		{
 			InParameter.NotNull("person1", person1);
 			InParameter.NotNull("person2", person2);
@@ -41,10 +41,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    var authorizationService = PrincipalAuthorization.Instance();
             var applicationFunction = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 			var modifiedParts = new List<IScheduleDay>();
+	        var trackedCommandInfo = optionalParams == null ? null : optionalParams.TrackedCommandInfo;
+	        var checkModifyAssPermission = optionalParams == null || optionalParams.CheckModifyAssPermission;
 			
 			foreach (var dateOnly in dates)
 			{
-                if (!authorizationService.IsPermitted(applicationFunction, dateOnly, person1) || !authorizationService.IsPermitted(applicationFunction, dateOnly, person2))
+                if (checkModifyAssPermission &&(!authorizationService.IsPermitted(applicationFunction, dateOnly, person1) || !authorizationService.IsPermitted(applicationFunction, dateOnly, person2)))
 					throw new PermissionException("No permission to change the person assignment");
 
 				var part1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
@@ -81,5 +83,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_swapService.Init(selectedSchedules);
 			return _swapService.Swap(scheduleDictionary, trackedCommandInfo);
 		}
+	}
+
+	public class OptionalParamsForSwapShift
+	{
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+		public bool CheckModifyAssPermission { get; set; }
 	}
 }
