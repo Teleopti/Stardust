@@ -16,202 +16,202 @@ using NUnit.Framework;
 
 namespace Manager.Integration.Test.LongRunningTests
 {
-	[TestFixture, Ignore]
-	public class OneManagerAndFiveNodesLongRunningTest
-	{
-		private string ManagerDbConnectionString { get; set; }
+//	[TestFixture, Ignore]
+//	public class OneManagerAndFiveNodesLongRunningTest
+//	{
+//		private string ManagerDbConnectionString { get; set; }
 
 
-		private Task Task { get; set; }
+//		private Task Task { get; set; }
 
-		private AppDomainTask AppDomainTask { get; set; }
+//		private AppDomainTask AppDomainTask { get; set; }
 
-		private CancellationTokenSource CancellationTokenSource { get; set; }
+//		private CancellationTokenSource CancellationTokenSource { get; set; }
 
-#if (DEBUG)
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Debug";
+//#if (DEBUG)
+//		private const bool ClearDatabase = true;
+//		private const string BuildMode = "Debug";
 
-#else
-		private const bool ClearDatabase = true;
-		private const string BuildMode = "Release";
-#endif
+//#else
+//		private const bool ClearDatabase = true;
+//		private const string BuildMode = "Release";
+//#endif
 
-		private void LogMessage(string message)
-		{
-			this.Log().DebugWithLineNumber(message);
-		}
+//		private void LogMessage(string message)
+//		{
+//			this.Log().DebugWithLineNumber(message);
+//		}
 
-		private const int NumberOfManagers = 1;
-		private const int NumberOfNodes = 5;
+//		private const int NumberOfManagers = 1;
+//		private const int NumberOfNodes = 5;
 
-		[TestFixtureSetUp]
-		public void TestFixtureSetUp()
-		{
-			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+//		[TestFixtureSetUp]
+//		public void TestFixtureSetUp()
+//		{
+//			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			ManagerDbConnectionString =
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
+//			ManagerDbConnectionString =
+//				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
+//			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
+//			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-			LogMessage("Start TestFixtureSetUp");
+//			LogMessage("Start TestFixtureSetUp");
 
-			if (ClearDatabase)
-			{
-				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
-			}
+//			if (ClearDatabase)
+//			{
+//				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
+//			}
 
-			CancellationTokenSource = new CancellationTokenSource();
+//			CancellationTokenSource = new CancellationTokenSource();
 
-			AppDomainTask = new AppDomainTask(BuildMode);
+//			AppDomainTask = new AppDomainTask(BuildMode);
 
-			Task = AppDomainTask.StartTask(numberOfManagers: NumberOfManagers,
-			                               numberOfNodes: NumberOfNodes,
-			                               useLoadBalancerIfJustOneManager: true,
-			                               cancellationTokenSource: CancellationTokenSource);
+//			Task = AppDomainTask.StartTask(numberOfManagers: NumberOfManagers,
+//			                               numberOfNodes: NumberOfNodes,
+//			                               useLoadBalancerIfJustOneManager: true,
+//			                               cancellationTokenSource: CancellationTokenSource);
 
-			Thread.Sleep(TimeSpan.FromSeconds(2));
+//			Thread.Sleep(TimeSpan.FromSeconds(2));
 
-			LogMessage("Finished TestFixtureSetUp");
-		}
+//			LogMessage("Finished TestFixtureSetUp");
+//		}
 
-		[TestFixtureTearDown]
-		public void TestFixtureTearDown()
-		{
-			LogMessage("Start TestFixtureTearDown");
+//		[TestFixtureTearDown]
+//		public void TestFixtureTearDown()
+//		{
+//			LogMessage("Start TestFixtureTearDown");
 
-			if (AppDomainTask != null)
-			{
-				AppDomainTask.Dispose();
-			}
+//			if (AppDomainTask != null)
+//			{
+//				AppDomainTask.Dispose();
+//			}
 
-			LogMessage("Finished TestFixtureTearDown");
-		}
+//			LogMessage("Finished TestFixtureTearDown");
+//		}
 
-		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-		{
-			var exp = e.ExceptionObject as Exception;
+//		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+//		{
+//			var exp = e.ExceptionObject as Exception;
 
-			if (exp != null)
-			{
-				this.Log().FatalWithLineNumber(exp.Message,
-				                               exp);
-			}
-		}
+//			if (exp != null)
+//			{
+//				this.Log().FatalWithLineNumber(exp.Message,
+//				                               exp);
+//			}
+//		}
 
 
-		[Test]
-		public void TestLongRunning()
-		{
-			Thread.Sleep(TimeSpan.FromHours(8));	
-		}
+//		[Test]
+//		public void TestLongRunning()
+//		{
+//			Thread.Sleep(TimeSpan.FromHours(8));	
+//		}
 
-		/// <summary>
-		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
-		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
-		/// </summary>
-		[Test]
-		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
-		{
-			this.Log().DebugWithLineNumber("Start.");
+//		/// <summary>
+//		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
+//		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
+//		/// </summary>
+//		[Test]
+//		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
+//		{
+//			this.Log().DebugWithLineNumber("Start.");
 
-			var startedTest = DateTime.UtcNow;
+//			var startedTest = DateTime.UtcNow;
 
-			LogMessage("Waiting for all nodes to start up.");
+//			LogMessage("Waiting for all nodes to start up.");
 
-			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
-			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
+//			var sqlNotiferCancellationTokenSource = new CancellationTokenSource();
+//			var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
-			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(NumberOfNodes,
-			                                                      sqlNotiferCancellationTokenSource,
-			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
-			task.Start();
+//			var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(NumberOfNodes,
+//			                                                      sqlNotiferCancellationTokenSource,
+//			                                                      IntegerValidators.Value1IsLargerThenOrEqualToValue2Validator);
+//			task.Start();
 
-			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
-			sqlNotifier.Dispose();
+//			sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(30));
+//			sqlNotifier.Dispose();
 
-			LogMessage("All nodes has started.");
+//			LogMessage("All nodes has started.");
 
-			var mangerUriBuilder = new ManagerUriBuilder();
-			var uri = mangerUriBuilder.GetStartJobUri();
+//			var mangerUriBuilder = new ManagerUriBuilder();
+//			var uri = mangerUriBuilder.GetStartJobUri();
 
-			var createdBy = SecurityHelper.GetLoggedInUser();
+//			var createdBy = SecurityHelper.GetLoggedInUser();
 
-			IHttpSender httpSender = new HttpSender();
+//			IHttpSender httpSender = new HttpSender();
 
-			Task<int> task1 = new Task<int>(() => GenerateJobs(createdBy, uri, httpSender));
+//			Task<int> task1 = new Task<int>(() => GenerateJobs(createdBy, uri, httpSender));
 
-			task1.Start();
+//			task1.Start();
 
-			Task.WaitAll(task1);
+//			Task.WaitAll(task1);
 
-			Thread.Sleep(TimeSpan.FromHours(8));
+//			Thread.Sleep(TimeSpan.FromHours(8));
 
-			var endedTest = DateTime.UtcNow;
+//			var endedTest = DateTime.UtcNow;
 
-			var description =
-				string.Format("Creates {0} FAST jobs with {1} manager and {2} nodes.",
-				              task1.Result  ,
-							  NumberOfManagers,
-							  NumberOfNodes);
+//			var description =
+//				string.Format("Creates {0} FAST jobs with {1} manager and {2} nodes.",
+//				              task1.Result  ,
+//							  NumberOfManagers,
+//							  NumberOfNodes);
 
-			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-			                                  description,
-			                                  startedTest,
-			                                  endedTest);
-		}
+//			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+//			                                  description,
+//			                                  startedTest,
+//			                                  endedTest);
+//		}
 
-		private int GenerateJobs(string createdBy, Uri uri, IHttpSender httpSender)
-		{
-			var loop = 1;
+//		private int GenerateJobs(string createdBy, Uri uri, IHttpSender httpSender)
+//		{
+//			var loop = 1;
 
-			while (loop <= 5000)
-			{
-				loop++;
+//			while (loop <= 5000)
+//			{
+//				loop++;
 
-				var fastJobParams = new FastJobParams("Loop " + loop);
+//				var fastJobParams = new FastJobParams("Loop " + loop);
 
-				var fastJobParamsToJson = JsonConvert.SerializeObject(fastJobParams);
+//				var fastJobParamsToJson = JsonConvert.SerializeObject(fastJobParams);
 
-				var jobQueueItem = new JobQueueItem
-				{
-					Name = "Job Name " + loop,
-					Serialized = fastJobParamsToJson,
-					Type = "NodeTest.JobHandlers.FastJobParams",
-					CreatedBy = createdBy
-				};
+//				var jobQueueItem = new JobQueueItem
+//				{
+//					Name = "Job Name " + loop,
+//					Serialized = fastJobParamsToJson,
+//					Type = "NodeTest.JobHandlers.FastJobParams",
+//					CreatedBy = createdBy
+//				};
 
-				var createNewJobToManagerSucceeded = false;
+//				var createNewJobToManagerSucceeded = false;
 
-				while (!createNewJobToManagerSucceeded)
-				{
-					this.Log().DebugWithLineNumber(
-						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobQueueItem.Name + " )");
-					try
-					{
-						var response = httpSender.PostAsync(uri, jobQueueItem).Result;
+//				while (!createNewJobToManagerSucceeded)
+//				{
+//					this.Log().DebugWithLineNumber(
+//						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobQueueItem.Name + " )");
+//					try
+//					{
+//						var response = httpSender.PostAsync(uri, jobQueueItem).Result;
 
-						createNewJobToManagerSucceeded = response.IsSuccessStatusCode;
-					}
+//						createNewJobToManagerSucceeded = response.IsSuccessStatusCode;
+//					}
 
-					catch
-					{
-						createNewJobToManagerSucceeded = false;
+//					catch
+//					{
+//						createNewJobToManagerSucceeded = false;
 
-						this.Log().WarningWithLineNumber(
-							"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
-							jobQueueItem.Name + " ).");
+//						this.Log().WarningWithLineNumber(
+//							"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
+//							jobQueueItem.Name + " ).");
 
-						Thread.Sleep(TimeSpan.FromSeconds(1));
-					}
+//						Thread.Sleep(TimeSpan.FromSeconds(1));
+//					}
 
-					Thread.Sleep(TimeSpan.FromSeconds(1));
-				}
-			}
+//					Thread.Sleep(TimeSpan.FromSeconds(1));
+//				}
+//			}
 
-			return loop;
-		}
-	}
+//			return loop;
+//		}
+//	}
 }
