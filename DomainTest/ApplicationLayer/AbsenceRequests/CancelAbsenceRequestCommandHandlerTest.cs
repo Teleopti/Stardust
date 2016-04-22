@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 
-		[Test, Ignore] //ROBTODO: fix this
+		[Test] 
 		public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
 		{
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private PersonRequest cancelAbsenceRequestWithMultipleAbsences (CancelAbsenceRequestCommand cancelRequestCommand)
 		{
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 13);
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 14);
 
 			var absenceRequest = createApprovedAbsenceRequest (_absence, dateTimePeriodOfAbsenceRequest, _person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
@@ -249,8 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personRequest;
 		}
 
-		private PersonAbsence createPersonAbsence (IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person,
-			AbsenceRequest absenceRequest)
+		private PersonAbsence createPersonAbsence (IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person, AbsenceRequest absenceRequest)
 		{
 			var absenceLayer = new AbsenceLayer (absence, dateTimePeriodOfAbsenceRequest);
 			var personAbsence = new PersonAbsence (person, _scenario.Current(), absenceLayer, absenceRequest).WithId();

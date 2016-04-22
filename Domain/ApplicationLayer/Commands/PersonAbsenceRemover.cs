@@ -51,58 +51,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo, periodToRemove);
 			return errors ?? new List<string>();
 		}
-
-
-		public IEnumerable<string> RemovePersonAbsences (IEnumerable<IPersonAbsence> personAbsences,
-			TrackedCommandInfo commandInfo = null)
-		{
-			foreach (var personAbsence in personAbsences)
-			{
-				var person = personAbsence.Person;
-
-				var scheduleRange =
-					getScheduleRangeForPeriod (
-						personAbsence.Period.ToDateOnlyPeriod (
-							person.PermissionInformation.DefaultTimeZone()),
-							person);
-
-				var startDate = new DateOnly (personAbsence.Period.StartDateTime);
-				var scheduleDay = scheduleRange.ScheduledDay(startDate);
-				var businessRulesForPersonAccountUpdate = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
-
-
-				if (!canRemovePersonAbsence(person, startDate))
-				{
-					return new[] { Resources.CouldNotRemoveAbsenceFromProtectedSchedule };
-				}
-
-				if (scheduleDay != null)
-				{
-					scheduleDay.Remove(personAbsence);
-					
-				}
-
-				var ruleCheckResult = _saveSchedulePartService.Save(scheduleDay, businessRulesForPersonAccountUpdate, KeepOriginalScheduleTag.Instance);
-				if (ruleCheckResult != null) return ruleCheckResult;
-
-			}
-
-			return new List<string>();
-		}
-
-
-		private IScheduleRange getScheduleRangeForPeriod(DateOnlyPeriod period, IPerson person)
-		{
-			var dictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
-					person,
-					new ScheduleDictionaryLoadOptions(false, false),
-					period,
-					_scenario.Current());
-
-			return dictionary[person];
-		}
-
-
+		
+		
 		private bool canRemovePersonAbsence(IPerson person, DateOnly startDate)
 		{
 			var factory = new DefinedRaptorApplicationFunctionFactory();

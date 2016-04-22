@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -47,6 +48,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ThePeriodThatWasUsedForFindingSchedules = dateTimePeriod;
 
 			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario)).ToArray();
+
+			if (scheduleData.IsEmpty())
+			{
+				return ScheduleDictionaryForTest.WithScheduleData(person, scenario, dateTimePeriod, scheduleData); ;
+			}
 			var period = scheduleData.Select(s => s.Period).Aggregate((a, b) => a.MaximumPeriod(b));
 			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period, scheduleData);
 		}
@@ -55,10 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			DateOnlyPeriod period, IScenario scenario)
 		{
-			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, period.ToDateTimePeriod(TimeZoneInfo.Utc), _data.Where(d => d.BelongsToScenario(scenario)).ToArray());
-			
-			//return FindSchedulesForPersonOnlyInGivenPeriod (person, scheduleDictionaryLoadOptions, period.ToDateTimePeriod (TimeZoneInfo.Utc), scenario);
-
+			return FindSchedulesForPersonOnlyInGivenPeriod (person, scheduleDictionaryLoadOptions, period.ToDateTimePeriod (TimeZoneInfo.Utc), scenario);
 		}
 
 		public IScheduleDictionary FindSchedulesForPersonsOnlyInGivenPeriod(IEnumerable<IPerson> persons,

@@ -110,11 +110,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (absenceRequest.IsRequestForOneLocalDay(timeZone))
 			{
-				errorMessage = string.Format(culture, Resources.CanOnlyCancelApprovedAbsenceRequest, personName, absenceRequest.Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));
+				errorMessage = string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest, personName, absenceRequest.Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));
 			}
 			else
 			{
-				errorMessage = string.Format(culture, Resources.CanOnlyCancelApprovedAbsenceRequestMultiDay,
+				errorMessage = string.Format(Resources.CanOnlyCancelApprovedAbsenceRequestMultiDay,
 					personName,
 					absenceRequest.Period.StartDateTimeLocal(timeZone).Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture),
 					absenceRequest.Period.EndDateTimeLocal(timeZone).Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture));
@@ -132,11 +132,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (absenceRequest.IsRequestForOneLocalDay(timeZone))
 			{
-				errorMessage = string.Format(culture, Resources.CouldNotCancelRequestNoAbsence, personName, absenceRequest.Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));
+				errorMessage = string.Format(Resources.CouldNotCancelRequestNoAbsence, personName, absenceRequest.Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));
 			}
 			else
 			{
-				errorMessage = string.Format(culture, Resources.CouldNotCancelRequestNoAbsenceMultiDay,
+				errorMessage = string.Format(Resources.CouldNotCancelRequestNoAbsenceMultiDay,
 					personName,
 					absenceRequest.Period.StartDateTimeLocal(timeZone).Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture),
 					absenceRequest.Period.EndDateTimeLocal(timeZone).Date.ToString(culture.DateTimeFormat.ShortDatePattern, culture));
