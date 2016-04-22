@@ -146,5 +146,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		public void Warning(string message)
 		{
 		}
+
+		public void RefreshRow(int rowIndex)
+		{
+		}
 	}
 }

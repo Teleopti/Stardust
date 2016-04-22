@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.Rta
 		private static void updateIsAlarm(IRtaRule rule, IEnumerable<IRtaRule> rules, IAlarmControlView view, GridSaveCellInfoEventArgs e)
 		{
 			rule.IsAlarm = (bool)e.Style.CellValue;
+			view.RefreshRow(e.RowIndex);
 		}
 
 		private static void getCellValue(IRtaRule rule, GridQueryCellInfoEventArgs e)

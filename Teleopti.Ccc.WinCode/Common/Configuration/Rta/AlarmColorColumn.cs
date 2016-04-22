@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.Rta
 {
 	public class AlarmColorColumn : IAlarmControlPresenterDecorator
 	{
+		public const int DisabledOpacity = 50;
+
 		public void Decorate(AlarmControlPresenter alarmControlPresenter)
 		{
 			var isAlarm = alarmControlPresenter.Columns.ToList().FindIndex(x => x.Text == Resources.IsAlarm);
@@ -28,9 +30,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.Rta
 
 		private static void getColor(IRtaRule rule, GridQueryCellInfoEventArgs e)
 		{
+			e.Style.Enabled = rule.IsAlarm;
 			e.Style.CellType = "ColorPickerCell";
-			e.Style.CellValueType = typeof(Color);
-			e.Style.CellValue = rule.AlarmColor;
+			e.Style.CellValueType = typeof (Color);
+			e.Style.CellValue = rule.IsAlarm ? rule.AlarmColor : Color.FromArgb(DisabledOpacity, rule.AlarmColor);
 		}
 	}
 }

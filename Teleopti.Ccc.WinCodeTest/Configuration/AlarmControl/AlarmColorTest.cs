@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 		[Test]
 		public void ShouldDisplayAlarmColor()
 		{
-			var rule = new RtaRule { AlarmColor = Color.Aqua };
+			var rule = new RtaRule { AlarmColor = Color.Aqua, IsAlarm = true };
 			var target = new AlarmControlPresenter(new IRtaRule[] { rule }, new FakeView(), new[] { new AlarmColorColumn() });
 			var alarmColor = target.Columns.Single(x => x.Text == Resources.AlarmColor);
 
@@ -58,6 +58,32 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration.AlarmControl
 			target.SaveCellInfo(this, new GridSaveCellInfoEventArgs(1, alarmColor.Index, new GridStyleInfo { CellValue = Color.AliceBlue }, new StyleModifyType()));
 
 			rule.AlarmColor.Should().Be(Color.AliceBlue);
+		}
+
+		[Test]
+		public void ShouldBeDisabledWhenItIsNotAlarm()
+		{
+			var rule = new RtaRule {AlarmColor = Color.Aqua, IsAlarm = false};
+			var target = new AlarmControlPresenter(new IRtaRule[] {rule}, new FakeView(), new[] {new AlarmColorColumn()});
+			var alarmColor = target.Columns.Single(x => x.Text == Resources.AlarmColor);
+
+			var info = new GridStyleInfo();
+			target.QueryCellInfo(this, new GridQueryCellInfoEventArgs(1, alarmColor.Index, info));
+
+			info.Enabled.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldShowColumnIsDisabledIfNotAlarm()
+		{
+			var rule = new RtaRule {AlarmColor = Color.Aqua, IsAlarm = false};
+			var target = new AlarmControlPresenter(new IRtaRule[] {rule}, new FakeView(), new[] {new AlarmColorColumn()});
+			var alarmColor = target.Columns.Single(x => x.Text == Resources.AlarmColor);
+
+			var info = new GridStyleInfo();
+			target.QueryCellInfo(this, new GridQueryCellInfoEventArgs(1, alarmColor.Index, info));
+
+			info.CellValue.Should().Be(Color.FromArgb(AlarmColorColumn.DisabledOpacity, Color.Aqua));
 		}
 	}
 }

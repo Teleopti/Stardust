@@ -70,7 +70,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _grid.Model.ColWidths.ResizeToFit(GridRangeInfo.Cols(0, _grid.ColCount));
         }
 
-        #region IDisposable Members
+
+	    public void RefreshRow(int rowIndex)
+	    {
+		    _grid.RefreshRange(GridRangeInfo.Row(rowIndex));
+	    }
+
+	    #region IDisposable Members
 
         public void Dispose()
         {

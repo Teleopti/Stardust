@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
     {
         void ShowThisItem(int alarmListItemId);
         void Warning(string message);
+	    void RefreshRow(int rowIndex);
     }
 }
