@@ -222,6 +222,7 @@
     <Compile Include="ApplicationLayer\RemovePartAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />
+    <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelperTest.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewByFakeTest.cs" />
     <Compile Include="SchedulingScenarios\ApplicationLayer\IntradayOptimizationCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodDateTransformerTests.cs" />
