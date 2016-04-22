@@ -104,12 +104,12 @@ Scheduler_IntradayOptimization_36617 = true
 WfmGlobalLayout_personalOptions_37114 = RC
 
 ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = true
-ResourcePlanner_IntradayIslands_36939 = RC
+ResourcePlanner_IntradayIslands_36939 = true
 ResourcePlanner_CascadingSkillsPOC_37679 = false
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
 
 Wfm_QuickForecastOnHangfire_35845 = RC
-ETL_SpeedUpPermissionReport_33584 = RC
+ETL_SpeedUpPermissionReport_33584 = true
 Wfm_RecalculateForecastOnHangfire_37971 = RC
 ETL_SpeedUpFactScheduleNightly_38019 = false
 ETL_SpeedUpPersonPeriodNightly_38097 = false
