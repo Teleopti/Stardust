@@ -14318,25 +14318,13 @@ Help us improve your experience by sending an error report</value>
     <value>Are you sure you wish to remove {0} activities from {1} agents?	</value>
     <comment>Message to confirm activities to be removed</comment>
   </data>
-	<data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
-		<value>Successfully removed activities for selected agents</value>
-		<comment>Success Message for Removing Activity</comment>
-	</data>
-	<data name="FailedMessageForRemovingActivity" xml:space="preserve">
-		<value>Could not remove activities for selected agents</value>
-		<comment>Fail Message for Removing Activity</comment>
-	</data>
-  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
-    <value> The absence request for {0} was cancelled and the absence was removed from your schedule.</value>
-    <comment>Used to notify the user when an absence request has been successfully cancelled, and the related absence that was created by the request has been removed.</comment>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Successfully removed activities for selected agents</value>
+    <comment>Success Message for Removing Activity</comment>
   </data>
-  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
-    <value>The absence request for {0} - {1} was cancelled and the absence was removed from your schedule.</value>
-    <comment>Used to notify the user when an absence request has been successfully cancelled, and the related absence that was created by the request has been removed.</comment>
-  </data>
-  <data name="Cancelled" xml:space="preserve">
-    <value>Cancelled</value>
-    <comment>Cancelled</comment>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>Could not remove activities for selected agents</value>
+    <comment>Fail Message for Removing Activity</comment>
   </data>
   <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
     <value>The absence request for {0} on {1} could not be cancelled as no related absence was found.</value>
@@ -14365,5 +14353,17 @@ Help us improve your experience by sending an error report</value>
   <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
     <value>Cannot cancel the absence request for {0} from {1} - {2} as it has not been approved.</value>
     <comment>Displays in an error to the administrator when attempting to cancel a absence request that has not already been approved. {0} is the person, {1} is the start date time and {2} is the end date time.</comment>
-  </data>  
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Are you sure you wish to cancel this absence request?</value>
+    <comment>Used as a confirmation on the confirmation dialog shown when cancelling an absence request in the new Angel project request view</comment>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Cancel Approved Absence Request</value>
+    <comment>Used as a title on the confirmation dialog shown when cancelling an absence request in the new Angel project request view</comment>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>If you cancel this approved absence request then any absences created from this request will be deleted from the agent's schedule.</value>
+    <comment>Used as a description on the confirmation dialog shown when cancelling an absence request in the new Angel project request view</comment>
+  </data>
 </root>

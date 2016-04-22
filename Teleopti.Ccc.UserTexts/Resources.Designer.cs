@@ -2926,6 +2926,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to cancel this absence request?.
+        /// </summary>
+        public static string AreYouSureYouWishToCancelAbsence {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWishToCancelAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;&lt;&amp;Delete.
         /// </summary>
         public static string ArrowsRemove {
@@ -4688,6 +4697,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Cancel {
             get {
                 return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel Approved Absence Request.
+        /// </summary>
+        public static string CancelAbsenceRequest {
+            get {
+                return ResourceManager.GetString("CancelAbsenceRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you cancel this approved absence request then any absences created from this request will be deleted from the agent&apos;s schedule..
+        /// </summary>
+        public static string CancelAbsenceRequestDescription {
+            get {
+                return ResourceManager.GetString("CancelAbsenceRequestDescription", resourceCulture);
             }
         }
         

@@ -17,6 +17,7 @@
 		vm.canCancelRequests = canCancelRequests;
 		vm.cancelRequests = cancelRequests;
 		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
+		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 
 		function handleErrorMessages(errorMessages) {
 			if (errorMessages && errorMessages.length > 0) {
@@ -59,6 +60,7 @@
 		}
 
 		function cancelRequests() {
+			vm.toggleCancelConfirmationModal();
 			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Cancel, requestsDataService.cancelRequestsPromise);
 		}
 
@@ -79,6 +81,10 @@
 		function canCancelRequests() {
 			//ROBTODO: implement rule to ensure only enable when at least one accepted request is chosen.
 			return !disableCommands();
+		}
+
+		function toggleCancelConfirmationModal() {
+			vm.ShowCancelAbsenceConfirmationModal = !vm.ShowCancelAbsenceConfirmationModal;
 		}
 	}
 

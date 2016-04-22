@@ -28,7 +28,7 @@
 			</li>
 			
 			<li class="wfm-btn wfm-btn-invis-primary"
-				ng-click="requestsCommandsPane.cancelRequests()"
+				ng-click="requestsCommandsPane.toggleCancelConfirmationModal()"
 				ng-show="requestsCommandsPane.cancelToggleIsEnabled()"
 				ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}">
 				<i class="mdi mdi-block-helper"></i>
@@ -37,3 +37,27 @@
 		</ul>
 	</span>
 </div>
+
+<div ng-cloak class="modal-box">
+	<div ng-cloak ng-show="requestsCommandsPane.ShowCancelAbsenceConfirmationModal">
+		<div class="modalbg">
+			<div class="dialog">
+				<div class="modal-inner-content">
+					<h3>{{'CancelAbsenceRequest'|translate}}</h3>
+					&nbsp;<br/>
+					<p>{{'CancelAbsenceRequestDescription'|translate}}</p>
+					<p>{{'AreYouSureYouWishToCancelAbsence'|translate}}</p>
+
+				</div>
+				<div class="modal-actions">
+					<aside>
+						<button ng-click="requestsCommandsPane.toggleCancelConfirmationModal()" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
+						<button ng-click='requestsCommandsPane.cancelRequests()' class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
+					</aside>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
