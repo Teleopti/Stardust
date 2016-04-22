@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private IPersonRequestRepository personRequestRepository;
 		private IPersonRepository personRepository;
 		private IPersonRequest personRequest;
-		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWork currentUnitOfWork;
 		private Person fromPerson;
 		private Person toPerson;
 		private ICurrentScenario scenarioRepository;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
 			differenceCollectionService = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
-			unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			requestFactory = MockRepository.GenerateMock<IRequestFactory>();
 			personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerForTest();
 			schedulingResultState = new SchedulingResultStateHolder();
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 
-			target = new ShiftTradeRequestHandler(unitOfWorkFactory, schedulingResultState, validator, requestFactory,
+			target = new ShiftTradeRequestHandler(currentUnitOfWork, schedulingResultState, validator, requestFactory,
 														  scenarioRepository, personRequestRepository, scheduleStorage,
 														  personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
 														  loader, differenceCollectionService);
@@ -267,9 +267,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private void prepareUnitOfWork()
 		{
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			unitOfWorkFactory.Stub(x => x.Current()).Return(uowFactory);
-			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			currentUnitOfWork.Stub(x => x.Current()).Return(unitOfWork);
 		}
 
 		private static NewShiftTradeRequestCreatedEvent getNewShiftTradeRequestCreated()
