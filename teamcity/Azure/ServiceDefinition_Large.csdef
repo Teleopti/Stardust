@@ -26,7 +26,6 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<InternalEndpoint name="StardustNode" protocol="http" port="14100" />
     </Endpoints>
     <Imports>
-		<Import moduleName="Diagnostics" />
 		<Import moduleName="RemoteAccess" />
 		<Import moduleName="RemoteForwarder" />
     </Imports>
