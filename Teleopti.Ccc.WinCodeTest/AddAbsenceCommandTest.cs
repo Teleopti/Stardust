@@ -183,13 +183,13 @@ namespace Teleopti.Ccc.WinCodeTest
 			
 			_target.Execute();
 
-			_schedulePart.AssertWasCalled(x => x.CreateAndAddAbsence(null),
+			_schedulePart.AssertWasCalled(x => x.CreateAndAddAbsence(null, null),
 			                                 o =>
 			                                 o.IgnoreArguments()
 			                                  .Repeat.Once()
 			                                  .Constraints(
-				                                  Rhino.Mocks.Constraints.Is.Matching<IAbsenceLayer>(
-					                                  p => p.Period.StartDateTime == period.StartDateTime)));
+				                                  Rhino.Mocks.Constraints.Is.Matching<IAbsenceLayer>(p => p.Period.StartDateTime == period.StartDateTime),
+												  Rhino.Mocks.Constraints.Is.Anything()));
 		}
 
 
