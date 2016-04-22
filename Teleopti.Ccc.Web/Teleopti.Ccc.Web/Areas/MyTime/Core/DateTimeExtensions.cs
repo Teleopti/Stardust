@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 	{
 		public static string ToShortDateTimeString(this DateTime dateTime)
 		{
-			return string.Format("{0} {1}", dateTime.ToShortDateString(), dateTime.ToShortTimeString());
+			return $"{dateTime.ToShortDateString()} {dateTime.ToShortTimeString()}";
 		}
 
 		public static string ToShortDateTimeString(this DateTimePeriod period, TimeZoneInfo timeZone)
