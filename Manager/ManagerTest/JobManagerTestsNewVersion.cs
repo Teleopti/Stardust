@@ -56,6 +56,117 @@ namespace ManagerTest
 				.Be.EqualTo(_nodeUri1.ToString());
 		}
 
+
+		[Test]
+		public void ShouldBeAbleToAddAJob()
+		{
+			//------------------------------------------
+			// Add worker node.
+			//------------------------------------------
+			var workerNode = new WorkerNode
+			{
+				Id = Guid.NewGuid(),
+				Url = _nodeUri1
+			};
+			WorkerNodeRepository.AddWorkerNode(workerNode);
+
+			//------------------------------------------
+			// Create job queue item.
+			//------------------------------------------			
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+			//----------------------------------------------
+			// Add item to job queue.
+			//----------------------------------------------
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			//----------------------------------------------
+			// Validate.
+			//----------------------------------------------
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+
+			//----------------------------------------------
+			// Assign to worker node.
+			//----------------------------------------------
+			JobManager.AssignJobToWorkerNode();
+
+			//----------------------------------------------
+			// Validate.
+			//----------------------------------------------
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
+			JobRepository.GetAllJobs().Count.Should().Be(1);
+		}
+	
+
+		[Test]
+		public void ShouldBeAbleToDeleteFromJobQueue()
+		{
+			//------------------------------------------
+			// Create job queue item.
+			//------------------------------------------			
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			//----------------------------------------------
+			// Add item to job queue.
+			//----------------------------------------------
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			//----------------------------------------------
+			// Validate.
+			//----------------------------------------------
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+
+			//----------------------------------------------
+			// Delete item from job queue.
+			//----------------------------------------------
+			JobManager.DeleteJobQueueItemByJobId(jobQueueItem.JobId);
+
+			//----------------------------------------------
+			// Validate.
+			//----------------------------------------------
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
+
+		}
+
+		[Test]
+		public void ShouldBeAbleToAddToJobQueue()
+		{
+			//------------------------------------------
+			// Create job queue item.
+			//------------------------------------------			
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			//----------------------------------------------
+			// Add item to job queue.
+			//----------------------------------------------
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			//----------------------------------------------
+			// Validate.
+			//----------------------------------------------
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+		}
+
 		[Test]
 		public void ShouldBeAbleToCancelJobIfStarted()
 		{

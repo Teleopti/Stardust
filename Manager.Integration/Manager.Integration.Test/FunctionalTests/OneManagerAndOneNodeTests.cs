@@ -122,7 +122,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(2));
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(5));
 
 			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
 			                                                     2);
@@ -145,7 +145,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			Task.Factory.StartNew(() =>
 			{
-				CheckTablesInManagerDbTimer checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(500);
+				CheckTablesInManagerDbTimer checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(100);
 				checkTablesInManagerDbTimer.JobTimer.Start();
 
 				checkTablesInManagerDbTimer.ReceivedJobItem += (o, jobs) =>
