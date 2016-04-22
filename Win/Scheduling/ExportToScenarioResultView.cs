@@ -5,6 +5,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
@@ -26,7 +27,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 											IEnumerable<IPerson> fullyLoadedPersonsToMove,
 											IEnumerable<IScheduleDay> schedulePartsToExport,
 											IScenario exportScenario,
-											IScheduleDictionaryPersister scheduleDictionaryPersister)
+											IScheduleDictionaryPersister scheduleDictionaryPersister,
+											IExportToScenarioAccountPersister exportToScenarioAccountPersister,
+											IExportToScenarioAbsenceFinder exportToScenarioAbsenceFinder,
+											IDictionary<IPerson, IPersonAccountCollection> allPersonAccounts,
+											ICollection<DateOnly> datesToExport)
 		{
 			InitializeComponent();
 			if (!DesignMode)
@@ -35,7 +40,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_presenter = new ExportToScenarioResultPresenter(uowFactory, this,
 										scheduleStorage, moveDataBetweenSchedules, callback,
 										fullyLoadedPersonsToMove, schedulePartsToExport,
-										exportScenario, scheduleDictionaryPersister);
+										exportScenario, scheduleDictionaryPersister,
+										exportToScenarioAccountPersister,
+										exportToScenarioAbsenceFinder,
+										allPersonAccounts,
+										datesToExport
+										);
 			}
 		}
 

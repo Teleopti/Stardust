@@ -24,10 +24,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IEnumerable<IPerson> _fullyLoadedPersonsToMove;
 		private readonly IEnumerable<IScheduleDay> _schedulePartsToExport;
 		private readonly IScheduleDictionaryPersister _scheduleDictionaryBatchPersister;
+		private readonly IExportToScenarioAccountPersister _exportToScenarioAccountPersister;
+		private readonly IExportToScenarioAbsenceFinder _exportToScenarioAbsenceFinder;
+		private readonly IDictionary<IPerson, IPersonAccountCollection> _allPersonAccounts;
+		private readonly ICollection<DateOnly> _datesToExport;
 		private readonly BackgroundWorker _exportBackrgroundWorker = new BackgroundWorker();
 		private bool _exportSuccesful;
 		private IEnumerable<IBusinessRuleResponse> _warnings;
 		private DataSourceException _exception;
+		private Dictionary<IPerson, HashSet<IAbsence>> _involvedAbsences;
 
 		public IScheduleDictionary ScheduleDictionaryToPersist { get; private set; }
 
@@ -41,7 +46,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 												IEnumerable<IPerson> fullyLoadedPersonsToMove,
 												IEnumerable<IScheduleDay> schedulePartsToExport,
 												IScenario exportScenario,
-												IScheduleDictionaryPersister scheduleDictionaryBatchPersister)
+												IScheduleDictionaryPersister scheduleDictionaryBatchPersister,
+												IExportToScenarioAccountPersister exportToScenarioAccountPersister,
+												IExportToScenarioAbsenceFinder exportToScenarioAbsenceFinder,
+												IDictionary<IPerson, IPersonAccountCollection> allPersonAccounts,
+												ICollection<DateOnly> datesToExport)
 		{
 			_uowFactory = uowFactory;
 			_moveSchedules = moveSchedules;
@@ -52,6 +61,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_exportScenario = exportScenario;
 			_schedulePartsToExport = schedulePartsToExport;
 			_scheduleDictionaryBatchPersister = scheduleDictionaryBatchPersister;
+			_exportToScenarioAccountPersister = exportToScenarioAccountPersister;
+			_exportToScenarioAbsenceFinder = exportToScenarioAbsenceFinder;
+			_allPersonAccounts = allPersonAccounts;
+			_datesToExport = datesToExport;
 		}
 
 		protected void SetScheduleDictionaryToPersist(IScheduleDictionary dictionary)
@@ -96,6 +109,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			try
 			{
 				_scheduleDictionaryBatchPersister.Persist(ScheduleDictionaryToPersist);
+				_exportToScenarioAccountPersister.Persist(_exportScenario, _uowFactory, _fullyLoadedPersonsToMove, _allPersonAccounts, _involvedAbsences, _datesToExport);
 			}
 			catch (DataSourceException exception)
 			{
@@ -131,8 +145,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 				_callback.ReassociateDataForAllPeople();
-				ScheduleDictionaryToPersist =
-					_scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
+				ScheduleDictionaryToPersist = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
+				_involvedAbsences = _exportToScenarioAbsenceFinder.Find(_exportScenario, ScheduleDictionaryToPersist, _fullyLoadedPersonsToMove,_schedulePartsToExport, _datesToExport);
+				
 				return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);
 			}
 		}

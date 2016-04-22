@@ -9,13 +9,13 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Text = Rhino.Mocks.Constraints.Text;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
@@ -34,7 +34,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IUnitOfWorkFactory uowFactory;
 		private List<IPerson> persons;
 		private IReassociateDataForSchedules callback;
-
+		private IExportToScenarioAccountPersister exportToScenarioAccountPersister;
+		private IExportToScenarioAbsenceFinder exportToScenarioAbsenceFinder;
+		private Dictionary<IPerson, IPersonAccountCollection> allPersonAccounts;
+		private List<DateOnly> datesToExport;
+			
 		[SetUp]
 		public void Setup()
 		{
@@ -44,12 +48,30 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			moveSvc = mocks.StrictMock<IMoveDataBetweenSchedules>();
 			uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			scheduleDictionaryBatchPersister = mocks.DynamicMock<IScheduleDictionaryPersister>();
+			exportToScenarioAccountPersister = mocks.DynamicMock<IExportToScenarioAccountPersister>();
+			exportToScenarioAbsenceFinder = mocks.DynamicMock<IExportToScenarioAbsenceFinder>();
 			callback = mocks.DynamicMock<IReassociateDataForSchedules>();
 			partsToMove = new List<IScheduleDay>();
 			persons = new List<IPerson>();
 			exportScenario = new Scenario("export");
 			orginalScenario = new Scenario("original");
-			target = new Presenter(uowFactory, view, scheduleStorage, moveSvc, callback, persons, partsToMove, exportScenario, scheduleDictionaryBatchPersister);
+			allPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
+			datesToExport = new List<DateOnly>();
+
+			target = new Presenter(uowFactory, 
+									view, 
+									scheduleStorage, 
+									moveSvc, 
+									callback, 
+									persons, 
+									partsToMove, 
+									exportScenario, 
+									scheduleDictionaryBatchPersister,
+									exportToScenarioAccountPersister,
+									exportToScenarioAbsenceFinder,
+									allPersonAccounts,
+									datesToExport
+									);
 		}
 
 		[Test]
@@ -108,6 +130,77 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 			Assert.AreSame(dictionaryToExportTo, target.ScheduleDictionaryToPersist);
 		}
+
+		//[Test]
+		//public void ShouldConsiderPersonAccountWhenInitializing()
+		//{
+		//	exportScenario.DefaultScenario = true;
+		//	var person = new Person();
+		//	var absence = new Absence();
+		//	absence.SetId(Guid.NewGuid());
+		//	var scheduleDay = createDummyPart(person);
+		//	var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, orginalScenario, scheduleDay.Period, absence);
+		//	scheduleDay.Add(personAbsence);
+		//	partsToMove.Add(scheduleDay);
+		//	persons.Add(person);
+		//	var dictionaryToExportTo = mocks.StrictMock<IScheduleDictionary>();
+		//	var warnings = new List<IBusinessRuleResponse>();		
+		//	var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
+		//	datesToExport.Add(dateOnly);
+			
+		//	var personAccountCollection = new PersonAccountCollection(person);
+		//	var accountDay = new AccountDay(dateOnly);
+		//	personAccountCollection.Add(absence, accountDay);
+		//	allPersonAccounts.Add(person, personAccountCollection);
+
+		//	var involvedAbsences = new Dictionary<IPerson, HashSet<IAbsence>>();
+		//	involvedAbsences.Add(person,new HashSet<IAbsence>() {absence});
+
+		//	using (mocks.Record())
+		//	{
+		//		Expect.Call(() => view.DisableInteractions());
+		//		Expect.Call(() => view.EnableInteractions());
+		//		Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
+		//		callback.ReassociateDataForAllPeople();
+		//		Expect.Call(scheduleStorage.FindSchedulesForPersons(null, null, null, null, null)).Return(dictionaryToExportTo);
+		//		LastCall.IgnoreArguments();
+		//		Expect.Call(moveSvc.CopySchedulePartsToAnotherDictionary(dictionaryToExportTo, partsToMove)).Return(warnings);
+		//		verifyScenarioText();
+		//		verifyAgentText("1");
+		//		view.DisableBodyText();
+
+		//		Expect.Call(exportToScenarioAbsenceFinder.Find(exportScenario, dictionaryToExportTo, persons, partsToMove, datesToExport)).Return(involvedAbsences);
+		//	}
+		//	using (mocks.Playback())
+		//	{
+		//		Initialize(target);
+		//	}
+		//	Assert.AreSame(dictionaryToExportTo, target.ScheduleDictionaryToPersist);
+		//}
+
+		//[Test]
+		//public void ShouldPersistPersonAccount()
+		//{
+		//	var uow = mocks.DynamicMock<IUnitOfWork>();
+		//	var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()));
+
+		//	target.SetPersistingDic(dic);
+		//	using (mocks.Record())
+		//	{
+		//		Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Any();
+		//		scheduleDictionaryBatchPersister.Persist(target.ScheduleDictionaryToPersist);
+		//		Expect.Call(() => exportToScenarioAccountPersister.Persist(exportScenario, 
+		//																	uowFactory, 
+		//																	persons, 
+		//																	allPersonAccounts,
+		//																	new Dictionary<IPerson, HashSet<IAbsence>>(), datesToExport)).IgnoreArguments();
+		//		view.CloseForm();
+		//	}
+		//	using (mocks.Playback())
+		//	{
+		//		target.OnConfirm();
+		//	}
+		//}
 
 		[Test]
 		public void VerifyDoNothingIfNoScheduleParts()
@@ -295,8 +388,34 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private class Presenter : ExportToScenarioResultPresenter
 		{
-			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleStorage scheduleStorage, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryPersister scheduleDictionaryBatchPersister)
-				: base(uowFactory, view, scheduleStorage, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryBatchPersister)
+			public Presenter(IUnitOfWorkFactory uowFactory, 
+							IExportToScenarioResultView view, 
+							IScheduleStorage scheduleStorage, 
+							IMoveDataBetweenSchedules moveSchedules, 
+							IReassociateDataForSchedules callback, 
+							IEnumerable<IPerson> persons, 
+							IEnumerable<IScheduleDay> schedulePartsToExport, 
+							IScenario exportScenario, 
+							IScheduleDictionaryPersister scheduleDictionaryBatchPersister,
+							IExportToScenarioAccountPersister exportToScenarioAccountPersister,
+							IExportToScenarioAbsenceFinder exportToScenarioAbsenceFinder,
+							IDictionary<IPerson, IPersonAccountCollection> allPersonAccounts,
+							ICollection<DateOnly> datesToExport
+							)
+				: base(uowFactory, 
+					  view, 
+					  scheduleStorage, 
+					  moveSchedules, 
+					  callback, 
+					  persons, 
+					  schedulePartsToExport, 
+					  exportScenario, 
+					  scheduleDictionaryBatchPersister,
+					  exportToScenarioAccountPersister,
+					  exportToScenarioAbsenceFinder,
+					  allPersonAccounts,
+					  datesToExport
+					  )
 			{
 			}
 
@@ -317,6 +436,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			public IEnumerable<IScheduleDay> SchedulePartsToExport { get; set; }
 			public IScenario ExportScenario { get; set; }
 			public IScheduleDictionaryPersister ScheduleDictionaryBatchPersister { get; set; }
+			public IExportToScenarioAccountPersister ExportToScenarioAccountPersister { get; set; }
+			public IExportToScenarioAbsenceFinder ExportToScenarioAbsenceFinder { get; set; }
+			public Dictionary<IPerson, IPersonAccountCollection> AllPersonAccounts { get; set; }
+			public ICollection<DateOnly> DatesToExport { get; set; } 
 
 			public ExportToScenarioResultPresenter Create()
 			{
@@ -365,8 +488,42 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				{
 					ScheduleDictionaryBatchPersister = fakeFactory.Stub<IScheduleDictionaryPersister>();
 				}
+
+				if (ExportToScenarioAccountPersister == null)
+				{
+					ExportToScenarioAccountPersister = fakeFactory.Stub<IExportToScenarioAccountPersister>();
+				}
+
+				if (ExportToScenarioAbsenceFinder == null)
+				{
+					ExportToScenarioAbsenceFinder = fakeFactory.Stub<IExportToScenarioAbsenceFinder>();
+				}
+
+				if (AllPersonAccounts == null)
+				{
+					AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();	
+				}
+
+				if (DatesToExport == null)
+				{
+					DatesToExport = new List<DateOnly>() {SchedulePartsToExport.First().DateOnlyAsPeriod.DateOnly};
+				}
+
 				fakeFactory.ReplayAll();
-				return new ExportToScenarioResultPresenter(UowFactory, View, ScheduleStorage, MoveSchedules, Callback, FullyLoadedPersonsToMove, SchedulePartsToExport, ExportScenario, ScheduleDictionaryBatchPersister);
+				return new ExportToScenarioResultPresenter(UowFactory, 
+															View, 
+															ScheduleStorage, 
+															MoveSchedules, 
+															Callback, 
+															FullyLoadedPersonsToMove, 
+															SchedulePartsToExport, 
+															ExportScenario, 
+															ScheduleDictionaryBatchPersister,
+															ExportToScenarioAccountPersister,
+															ExportToScenarioAbsenceFinder,
+															AllPersonAccounts,
+															DatesToExport
+															);
 			}
 		}
 		#endregion

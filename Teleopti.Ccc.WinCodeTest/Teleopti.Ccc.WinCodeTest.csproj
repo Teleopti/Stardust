@@ -588,6 +588,8 @@
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
     <Compile Include="Scheduler\Editor\Bug26842.cs" />
+    <Compile Include="Scheduler\ExportToScenarioAbsenceFinderTest.cs" />
+    <Compile Include="Scheduler\ExportToScenarioAccountPersisterTest.cs" />
     <Compile Include="Scheduler\FilterHourlyAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\DaysOnlyHelperTest.cs" />

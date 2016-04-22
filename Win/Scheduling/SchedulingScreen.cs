@@ -63,10 +63,12 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters;
@@ -4764,6 +4766,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
 			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory());
+			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
+			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
 			using (
 				var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository,
 					new MoveDataBetweenSchedules(allNewRules,
@@ -4772,7 +4776,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_scheduleView.AllSelectedPersons(selectedSchedules),
 					selectedSchedules,
 					scenario,
-					_container.Resolve<IScheduleDictionaryPersister>()))
+					_container.Resolve<IScheduleDictionaryPersister>(),
+					exportToScenarioAccountPersister,
+					exportToScenarioAbsenceFinder,
+					SchedulerState.SchedulingResultState.AllPersonAccounts,
+					_scheduleView.AllSelectedDates()))
 			{
 				exportForm.ShowDialog(this);
 			}
