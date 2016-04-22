@@ -17,7 +17,7 @@
 			$scope.showSummary = false;
 			$scope.selectedIndex = 0;
 			$scope.hiddenArray = [];
-			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx' target='_blank'>feedback.</a>";
+			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>feedback.</a>";
 
 			NoticeService.info(message, null, true);
 

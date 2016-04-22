@@ -34,8 +34,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var interval in intervals)
 			{
-				summary.ForecastedCalls += interval.ForecastedCalls;
-				summary.ForecastedHandleTime += interval.ForecastedHandleTime;
 				summary.OfferedCalls += interval.OfferedCalls ?? 0;
 				summary.HandleTime += interval.HandleTime ?? 0;
 
@@ -49,7 +47,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 					latestQueueStatsIntervalId = interval.IntervalId;
 			}
 
-			summary.ForecastedAverageHandleTime = Math.Abs(summary.ForecastedCalls) < 0.0001
+		    foreach (var interval in intervals.Where(interval => interval.IntervalId <= latestQueueStatsIntervalId))
+		    {
+		        summary.ForecastedCalls += interval.ForecastedCalls;
+		        summary.ForecastedHandleTime += interval.ForecastedHandleTime;
+		    }
+
+            summary.ForecastedAverageHandleTime = Math.Abs(summary.ForecastedCalls) < 0.0001
                 ? 0 
                 : summary.ForecastedHandleTime / summary.ForecastedCalls;
 			summary.AverageHandleTime = Math.Abs(summary.OfferedCalls) < 0.0001 
@@ -58,11 +62,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			summary.ForecastedActualCallsDiff = Math.Abs(summary.ForecastedCalls) < 0.0001
 				 ? -99
-				 : Math.Abs(summary.ForecastedCalls - summary.OfferedCalls) * 100 / summary.ForecastedCalls;
+				 :(summary.OfferedCalls - summary.ForecastedCalls) * 100 / summary.ForecastedCalls;
 
 		    summary.ForecastedActualHandleTimeDiff = Math.Abs(summary.ForecastedAverageHandleTime) < 0.0001
 		        ? -99
-		        : Math.Abs(summary.ForecastedAverageHandleTime - summary.AverageHandleTime)*100/
+		        : (summary.AverageHandleTime - summary.ForecastedAverageHandleTime)*100/
 		          summary.ForecastedAverageHandleTime;
 
             return new MonitorDataViewModel()
