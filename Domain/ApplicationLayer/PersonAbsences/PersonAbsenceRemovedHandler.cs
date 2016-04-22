@@ -1,6 +1,5 @@
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,18 +15,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 		private readonly static ILog logger = LogManager.GetLogger(typeof(PersonAbsenceRemovedHandler));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;
 		private readonly IPersonRequestRepository _personRequestRepository;
 
-		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository)
+		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_scenarioRepository = scenarioRepository;
 			_waitlistProcessor = waitlistProcessor;
 			_personRequestRepository = personRequestRepository;
-
-			loadDefaultScenario();
 		}
 
 		public void Handle(PersonAbsenceRemovedEvent @event)
@@ -61,15 +56,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 			var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
 			return workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(absenceRequest);
 		}
-
-		private void loadDefaultScenario()
-		{
-			var defaultScenario = _scenarioRepository.Current();
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", defaultScenario.Description,
-					defaultScenario.Id);
-			}
-		}
+		
 	}
 }
