@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly ICurrentEventPublisher _currentEventPublisher;
+		private readonly IEventPublisher _eventPublisher;
 
 
 		public PreferenceFulfillmentChangedHandler(IPreferenceDayRepository preferenceDayRepository, 
 			IPersonRepository personRepository, 
-			ICurrentEventPublisher currentEventPublisher)
+			IEventPublisher eventPublisher)
 		{
 			_preferenceDayRepository = preferenceDayRepository;
 			_personRepository = personRepository;
-			_currentEventPublisher = currentEventPublisher;
+			_eventPublisher = eventPublisher;
 
 			if (logger.IsInfoEnabled)
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 					_preferenceDayRepository.Find(new DateOnly(projectionChangedEventScheduleDay.Date), person).FirstOrDefault();
 				if (preferenceDay == null)
 					continue;
-				_currentEventPublisher.Current().Publish(new PreferenceChangedEvent
+				_eventPublisher.Publish(new PreferenceChangedEvent
 				{
 					PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
 					PersonId = person.Id.GetValueOrDefault(),

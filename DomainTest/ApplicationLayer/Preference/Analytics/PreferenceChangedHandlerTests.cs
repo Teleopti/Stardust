@@ -61,6 +61,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		}
 
 		[Test]
+		public void ShouldHandleEventForNewScenario()
+		{
+			var date1 = new DateTime(2001, 1, 1);
+			IPerson person;
+			IScenario scenario;
+			var preferenceDay = setupValidPreferenceDay(date1, out person, out scenario);
+
+			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			{
+				PersonId = 0,
+				DateId = _analyticsDateRepository.Date(date1).Value,
+				ScenarioId = 123 // Not matched
+			});
+			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
+
+			_target.Handle(new PreferenceChangedEvent
+			{
+				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDate = date1,
+				ScenarioId = scenario.Id.GetValueOrDefault()
+			});
+			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldHandleEventForNotNewScenario()
+		{
+			var date1 = new DateTime(2001, 1, 1);
+			IPerson person;
+			IScenario scenario;
+			var preferenceDay = setupValidPreferenceDay(date1, out person, out scenario);
+
+			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			{
+				PersonId = 0,
+				DateId = _analyticsDateRepository.Date(date1).Value,
+				ScenarioId = 123 // Not matched
+			});
+			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
+			{
+				PersonId = 0,
+				DateId = _analyticsDateRepository.Date(date1).Value,
+				ScenarioId = 2 // Matched
+			});
+			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+
+			_target.Handle(new PreferenceChangedEvent
+			{
+				PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				RestrictionDate = date1,
+				ScenarioId = scenario.Id.GetValueOrDefault()
+			});
+			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
 		public void ShouldHandleDeletedPreferenceDay()
 		{
 			var date = new DateTime(2001, 1, 1);
@@ -122,7 +180,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public void ShouldHandleDeleteAndAddPreference()
 		{
 			IPerson person;
-			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person);
+			IScenario scenario;
+			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
 
 			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
@@ -151,7 +210,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public void ShouldHandleAndAddPreference()
 		{
 			IPerson person;
-			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person);
+			IScenario scenario;
+			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
 
 			_target.Handle(new PreferenceChangedEvent
 			{
@@ -168,7 +228,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		public void ShouldHandleSameEventTwicePreference()
 		{
 			IPerson person;
-			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person);
+			IScenario scenario;
+			var preferenceDay = setupValidPreferenceDay(new DateTime(2001, 1, 1), out person, out scenario);
 
 			_target.Handle(new PreferenceChangedEvent
 			{
@@ -238,13 +299,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			return preferenceDay;
 		}
 
-		private PreferenceDay setupValidPreferenceDay(DateTime date, out IPerson person)
+		private PreferenceDay setupValidPreferenceDay(DateTime date, out IPerson person, out IScenario scenario)
 		{
 			var preferenceRestrictionNew = new PreferenceRestriction
 			{
 				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej")
 			};
-			IScenario scenario;
 			return setupPreferenceDay(date, preferenceRestrictionNew, out person, out scenario);
 		}
 

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IUnitOfWork UnitOfWork { get; private set; }
+		public IUnitOfWork UnitOfWork { get; set; }
 		IPreferenceDay ILoadAggregateByTypedId<IPreferenceDay, Guid>.LoadAggregate(Guid id)
 		{
 			return LoadAggregate(id);
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPreferenceDay> Find(DateOnly dateOnly, IPerson person)
 		{
-			throw new NotImplementedException();
+			return _preferensDays.Where(a => a.RestrictionDate == dateOnly && a.Person == person).ToList();
 		}
 
 		public IList<IPreferenceDay> FindAndLock(DateOnly dateOnly, IPerson person)
