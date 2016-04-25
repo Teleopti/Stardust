@@ -107,33 +107,6 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
         }
 
         [Test]
-        public void VerifySortModelCollection()
-        {
-            _target.AddNewDefinitionSet(_definitionSet);
-            _target.AddNewDefinitionSet(_definitionSet1);
-            _target.AddNewDefinitionSet(_definitionSet2);
-            _target.AddNewDefinitionSet(_definitionSet3);
-            _target.AddNewDefinitionSet(_definitionSet4);
-
-            _target.LoadModel();
-            Assert.AreEqual(5, _target.ModelCollection.Count);
-
-            _target.SortModelCollection(SortingMode.Descending);
-            Assert.AreEqual("Sample5", _target.ModelCollection[0].DomainEntity.Name);
-            Assert.AreEqual("Sample4", _target.ModelCollection[1].DomainEntity.Name);
-            Assert.AreEqual("Sample3", _target.ModelCollection[2].DomainEntity.Name);
-            Assert.AreEqual("Sample2", _target.ModelCollection[3].DomainEntity.Name);
-            Assert.AreEqual("Sample1", _target.ModelCollection[4].DomainEntity.Name);
-
-            _target.SortModelCollection(SortingMode.Ascending);
-            Assert.AreEqual("Sample5", _target.ModelCollection[4].DomainEntity.Name);
-            Assert.AreEqual("Sample4", _target.ModelCollection[3].DomainEntity.Name);
-            Assert.AreEqual("Sample3", _target.ModelCollection[2].DomainEntity.Name);
-            Assert.AreEqual("Sample2", _target.ModelCollection[1].DomainEntity.Name);
-            Assert.AreEqual("Sample1", _target.ModelCollection[0].DomainEntity.Name);
-        }
-
-        [Test]
         public void VerifyRenameDefinitionSet()
         {
             string oldName = _definitionSet.Name;

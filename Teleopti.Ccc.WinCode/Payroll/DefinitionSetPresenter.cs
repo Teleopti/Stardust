@@ -76,20 +76,6 @@ namespace Teleopti.Ccc.WinCode.Payroll
         }
 
         /// <summary>
-        /// Sorts the model collection.
-        /// </summary>
-        /// <param name="mode">The mode.</param>
-        public void SortModelCollection(SortingMode mode)
-        {
-            List<IDefinitionSetViewModel> sortedCollection = ModelCollection;
-            if (mode == SortingMode.Ascending)
-                sortedCollection.Sort(DefinitionSetComparison());
-            else
-                sortedCollection.Reverse();
-            ModelCollection = sortedCollection;
-        }
-
-        /// <summary>
         /// Definitions the set comparison.
         /// </summary>
         /// <returns></returns>

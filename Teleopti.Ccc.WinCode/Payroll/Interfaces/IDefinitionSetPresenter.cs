@@ -22,12 +22,6 @@ namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
         void LoadModel();
 
         /// <summary>
-        /// Sorts the model collection.
-        /// </summary>
-        /// <param name="mode">The mode.</param>
-        void SortModelCollection(SortingMode mode);
-
-        /// <summary>
         /// Renames the definition set.
         /// </summary>
         /// <param name="definitionSet">The definition set.</param>
