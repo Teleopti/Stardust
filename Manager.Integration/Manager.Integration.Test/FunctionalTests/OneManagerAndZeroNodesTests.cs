@@ -13,7 +13,7 @@ namespace Manager.Integration.Test.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndZeroNodesTests : InitialzeAndFinalizeOneManagerAndZeroNodes
 	{
-		[Test]
+		[Test, Ignore]
 		public void JobsShouldJustBeQueuedIfNoNodesTest()
 		{
 			var startedTest = DateTime.UtcNow;

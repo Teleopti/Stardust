@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -145,8 +144,8 @@ namespace Stardust.Manager
 			return listToReturn;
 		}
 
-		public void DeleteJobByJobId(Guid jobId, 
-									 bool removeJobDetails)
+		public void DeleteJobByJobId(Guid jobId,
+		                             bool removeJobDetails)
 		{
 			try
 			{
@@ -158,15 +157,15 @@ namespace Stardust.Manager
 					{
 						// Delete job.
 						DeleteJobByJobIdWorker(jobId,
-											   sqlConnection,
-											   sqlTransaction);
+						                       sqlConnection,
+						                       sqlTransaction);
 
 						// Delete job details.
 						if (removeJobDetails)
 						{
 							DeleteJobDetailsByJobIdWorker(jobId,
-														  sqlConnection,
-														  sqlTransaction);
+							                              sqlConnection,
+							                              sqlTransaction);
 						}
 
 						sqlTransaction.Commit();
@@ -203,8 +202,8 @@ namespace Stardust.Manager
 			}
 		}
 
-		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri, 
-														   bool keepJobDetails)
+		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri,
+		                                                   bool keepJobDetails)
 		{
 			ThrowExceptionIfStringIsNullOrEmpty(workerNodeUri);
 
@@ -265,11 +264,11 @@ namespace Stardust.Manager
 						if (!keepJobDetails)
 						{
 							DeleteJobDetailsByJobIdWorker(jobQueueItem.JobId,
-														  sqlConnection,
-														  sqlTransaction);
+							                              sqlConnection,
+							                              sqlTransaction);
 						}
 
-						sqlTransaction.Commit();
+						Retry(sqlTransaction.Commit);
 					}
 				}
 			}
@@ -281,8 +280,8 @@ namespace Stardust.Manager
 			}
 		}
 
-		public virtual void AssignJobToWorkerNode(IHttpSender httpSender, 
-												  string useThisWorkerNodeUri)
+		public virtual void AssignJobToWorkerNode(IHttpSender httpSender,
+		                                          string useThisWorkerNodeUri)
 		{
 			ThrowArgumentNullExceptionIfHttpSenderIsNull(httpSender);
 
@@ -290,7 +289,7 @@ namespace Stardust.Manager
 			{
 				Monitor.Enter(_lockTryAssignJobToWorkerNode);
 
-				List<Uri> allAliveWorkerNodesUri = new List<Uri>();
+				var allAliveWorkerNodesUri = new List<Uri>();
 
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
@@ -301,7 +300,7 @@ namespace Stardust.Manager
 						// --------------------------------------------------
 						// Get all alive worker nodes.
 						// --------------------------------------------------
-						SqlCommand selectAllAliveWorkerNodesCommand =
+						var selectAllAliveWorkerNodesCommand =
 							CreateSelectAllAliveWorkerNodesSqlCommand(sqlConnection);
 
 						var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader();
@@ -339,12 +338,12 @@ namespace Stardust.Manager
 						var builderHelper = new NodeUriBuilderHelper(uri);
 						var isIdleUri = builderHelper.GetIsIdleTemplateUri();
 
-						HttpResponseMessage response = httpSender.GetAsync(isIdleUri).Result;
+						var response = httpSender.GetAsync(isIdleUri).Result;
 
 						if (response.IsSuccessStatusCode)
 						{
 							AssignJobToWorkerNodeWorker(httpSender, uri);
-						}						
+						}
 					}
 				}
 			}
@@ -421,19 +420,19 @@ namespace Stardust.Manager
 		public bool DoesJobQueueItemExists(Guid jobId)
 		{
 			return DoesItemExistsTemplateMethod(jobId,
-			                                      DoesJobQueueItemExistsWorker);
+			                                    DoesJobQueueItemExistsWorker);
 		}
 
 		public bool DoesJobItemExists(Guid jobId)
 		{
 			return DoesItemExistsTemplateMethod(jobId,
-			                                      DoesJobItemExistsWorker);
+			                                    DoesJobItemExistsWorker);
 		}
 
 		public bool DoesJobDetailItemExists(Guid jobId)
 		{
 			return DoesItemExistsTemplateMethod(jobId,
-			                                      DoesJobDetailItemExistsWorker);
+			                                    DoesJobDetailItemExistsWorker);
 		}
 
 		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
@@ -866,7 +865,7 @@ namespace Stardust.Manager
 		}
 
 		private bool DoesItemExistsTemplateMethod(Guid jobId,
-		                                            Func<Guid, SqlConnection, bool> func)
+		                                          Func<Guid, SqlConnection, bool> func)
 		{
 			ThrowExceptionIfInvalidGuid(jobId);
 
@@ -987,7 +986,7 @@ namespace Stardust.Manager
 		private SqlCommand CreateSelectAllAliveWorkerNodesSqlCommand()
 		{
 			const string selectAllAliveWorkerNodesCommandText =
-											  @"SELECT   
+				@"SELECT   
 												   [Id]
 												  ,[Url]
 												  ,[Heartbeat]
@@ -1078,7 +1077,11 @@ namespace Stardust.Manager
 
 							updateCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 
-							sqlTransaction.Commit();
+							DeleteItemInJobQueueByJobIdWorker(jobId,
+							                                  sqlConnection,
+							                                  sqlTransaction);
+
+							Retry(sqlTransaction.Commit);							
 						}
 					}
 
@@ -1088,6 +1091,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 
@@ -1615,7 +1619,6 @@ namespace Stardust.Manager
 				sqlConnection.Close();
 			}
 
-
 			return jobs;
 		}
 
@@ -1790,7 +1793,7 @@ namespace Stardust.Manager
 								deleteItemFromJobQueueCommandText.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 							}
 
-							sqlTransaction.Commit();
+							Retry(sqlTransaction.Commit);
 
 							if (sentToWorkerNodeUri != null)
 							{
@@ -1805,20 +1808,10 @@ namespace Stardust.Manager
 				}
 			}
 
-			catch (SqlException exp)
-			{
-				if (exp.Number == -2 || exp.Number == 1205) //Timeout
-				{
-					this.Log().InfoWithLineNumber(exp.Message);
-				}
-				else
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-			}
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 

@@ -85,6 +85,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -103,10 +104,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Commands\ClearDatabaseCommand.cs" />
+    <Compile Include="Commands\ClearLoggingTableInDatabaseCommand.cs" />
+    <Compile Include="Commands\ClearManagerTablesInDatabaseCommand.cs" />
     <Compile Include="Commands\CreateNewJobCommand.cs" />
     <Compile Include="Commands\InstallCertificateCommand.cs" />
     <Compile Include="Commands\ShutDownHostCommand.cs" />
+    <Compile Include="Commands\StartDurationTestCommand.cs" />
     <Compile Include="Commands\StartHostCommand.cs" />
     <Compile Include="Commands\StopFiddlerCaptureCommand.cs" />
     <Compile Include="Commands\StartFiddlerCaptureCommand.cs" />
@@ -118,6 +121,7 @@
     <Compile Include="HttpListeners\Fiddler\FiddlerCapture.cs" />
     <Compile Include="HttpListeners\Fiddler\FiddlerCaptureInformation.cs" />
     <Compile Include="HttpListeners\Fiddler\FiddlerCaptureUrlConfiguration.cs" />
+    <Compile Include="Interceptors\NoLockInterceptor.cs" />
     <Compile Include="Job.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

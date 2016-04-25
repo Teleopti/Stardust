@@ -10,8 +10,9 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 {
 	public class FiddlerCapture : IDisposable, INotifyPropertyChanged
 	{
-		public EventHandler<FiddlerCaptureInformation> NewDataCapturedEventHandler;
 		private bool _isStarted;
+
+		public EventHandler<FiddlerCaptureInformation> NewDataCapturedEventHandler;
 
 		public FiddlerCapture(FiddlerCaptureUrlConfiguration fiddlerCaptureUrlConfiguration)
 		{
@@ -25,19 +26,6 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 
 		public FiddlerCaptureUrlConfiguration FiddlerCaptureUrlConfiguration { get; private set; }
 
-		public void Dispose()
-		{
-			Stop();
-		}
-
-		private void InvokeNewDataCapturedEventHandler(FiddlerCaptureInformation fiddlerCaptureInformation)
-		{
-			if (NewDataCapturedEventHandler != null)
-			{
-				NewDataCapturedEventHandler(this, fiddlerCaptureInformation);
-			}
-		}
-
 		public bool IsStarted
 		{
 			get { return _isStarted; }
@@ -49,18 +37,38 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 			}
 		}
 
+		public void Dispose()
+		{
+			Stop();
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		private void InvokeNewDataCapturedEventHandler(FiddlerCaptureInformation fiddlerCaptureInformation)
+		{
+			if (NewDataCapturedEventHandler != null)
+			{
+				NewDataCapturedEventHandler(this, fiddlerCaptureInformation);
+			}
+		}
+
 		public void Start()
 		{
 			Task.Factory.StartNew(() =>
 			{
-				if (!FiddlerApplication.IsStarted())
+				if (FiddlerApplication.IsStarted())
 				{
-					FiddlerApplication.AfterSessionComplete += FiddlerApplicationOnAfterSessionComplete;
-
-					FiddlerApplication.Startup(8888, true, true, true);
-
-					IsStarted = true;
+					return;
 				}
+
+				FiddlerApplication.AfterSessionComplete += FiddlerApplicationOnAfterSessionComplete;
+
+				FiddlerApplication.Startup(iListenPort: 8888,
+				                           bRegisterAsSystemProxy: false,
+				                           bDecryptSSL: true,
+				                           bAllowRemote: true);
+
+				IsStarted = true;
 			});
 		}
 
@@ -70,12 +78,14 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 			{
 				FiddlerApplication.AfterSessionComplete -= FiddlerApplicationOnAfterSessionComplete;
 
-				if (FiddlerApplication.IsStarted())
+				if (!FiddlerApplication.IsStarted())
 				{
-					FiddlerApplication.Shutdown();
-
-					IsStarted = false;
+					return;
 				}
+
+				FiddlerApplication.Shutdown();
+
+				IsStarted = false;
 			});
 		}
 
@@ -94,11 +104,8 @@ namespace Manager.Integration.Test.WPF.HttpListeners.Fiddler
 				RequestHeaders = sess.oRequest.headers.ToString(),
 				RequestBody = Encoding.UTF8.GetString(sess.RequestBody),
 				RequestMethod = sess.RequestMethod
-		});
-
+			});
 		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		[NotifyPropertyChangedInvocator]
 		protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

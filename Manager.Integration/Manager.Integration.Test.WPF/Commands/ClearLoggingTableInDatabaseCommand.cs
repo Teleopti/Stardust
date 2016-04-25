@@ -5,11 +5,11 @@ using Manager.Integration.Test.WPF.ViewModels;
 
 namespace Manager.Integration.Test.WPF.Commands
 {
-    public class ClearDatabaseCommand : ICommand
+    public class ClearLoggingTableInDatabaseCommand : ICommand
     {
         public MainWindowViewModel MainWindowViewModel { get; private set; }
 
-        public ClearDatabaseCommand(MainWindowViewModel mainWindowViewModel)
+        public ClearLoggingTableInDatabaseCommand(MainWindowViewModel mainWindowViewModel)
         {
             MainWindowViewModel = mainWindowViewModel;
 

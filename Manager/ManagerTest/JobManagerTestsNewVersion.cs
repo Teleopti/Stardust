@@ -222,6 +222,12 @@ namespace ManagerTest
 			//----------------------------------------------
 			job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
+
+			var deletedJobQueueItemExists =
+				JobManager.DoesJobQueueItemExists(jobQueueItem.JobId);
+
+			deletedJobQueueItemExists.Should().Be.False();
+
 		}
 
 		[Test]
