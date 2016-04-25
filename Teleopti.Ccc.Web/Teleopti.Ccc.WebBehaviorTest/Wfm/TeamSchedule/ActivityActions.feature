@@ -9,7 +9,7 @@ Background:
 	And I have a role with
 	| Field                         | Value          |
 	| Name                          | Wfm Team Green |
-	| Access to team                | Team green     |
+	| Access to everyone            | True           |
 	| Access to Wfm MyTeam Schedule | true           |
 	| Add Activity                  | true           |
 	| Remove Activity               | true           |
@@ -63,6 +63,7 @@ Scenario: Happy Path for add activity
 	When I apply my new activity
 	Then I should see a successful notice
 
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Happy Path for remove activity
 	Given 'John Smith' has a shift with
