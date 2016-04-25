@@ -1,0 +1,66 @@
+﻿using System.Linq;
+using log4net;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
+{
+	[UseOnToggle(Toggles.ETL_SpeedUpIntradayPreference_37124)]
+	public class PreferenceFulfillmentChangedHandler :
+		IHandleEvent<ProjectionChangedEvent>,
+		IRunOnHangfire
+	{
+		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
+		private readonly IPreferenceDayRepository _preferenceDayRepository;
+		private readonly IPersonRepository _personRepository;
+		private readonly ICurrentEventPublisher _currentEventPublisher;
+
+
+		public PreferenceFulfillmentChangedHandler(IPreferenceDayRepository preferenceDayRepository, 
+			IPersonRepository personRepository, 
+			ICurrentEventPublisher currentEventPublisher)
+		{
+			_preferenceDayRepository = preferenceDayRepository;
+			_personRepository = personRepository;
+			_currentEventPublisher = currentEventPublisher;
+
+			if (logger.IsInfoEnabled)
+			{
+				logger.Info("New instance of handler was created");
+			}
+		}
+
+		[AsSystem]
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEvent @event)
+		{
+			var person = _personRepository.FindPeople(new[] { @event.PersonId }).FirstOrDefault();
+			if (person == null)
+				return;
+
+			foreach (var projectionChangedEventScheduleDay in @event.ScheduleDays)
+			{
+				var preferenceDay =
+					_preferenceDayRepository.Find(new DateOnly(projectionChangedEventScheduleDay.Date), person).FirstOrDefault();
+				if (preferenceDay == null)
+					continue;
+				_currentEventPublisher.Current().Publish(new PreferenceChangedEvent
+				{
+					PreferenceDayId = preferenceDay.Id.GetValueOrDefault(),
+					PersonId = person.Id.GetValueOrDefault(),
+					RestrictionDate = preferenceDay.RestrictionDate.Date,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					InitiatorId = @event.InitiatorId,
+					LogOnDatasource = @event.LogOnDatasource,
+					Timestamp = @event.Timestamp,
+					UserName = @event.UserName,
+					ScenarioId = @event.ScenarioId
+				});
+			}
+		}
+	}
+}

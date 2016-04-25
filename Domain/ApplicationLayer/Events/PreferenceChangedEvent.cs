@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 		public Guid PreferenceDayId { get; set; }
 		public DateTime RestrictionDate { get; set; }
 		public Guid PersonId { get; set; }
+		public Guid ScenarioId { get; set; }
 	}
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
@@ -82,8 +83,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true) { LoadDaysAfterLeft = true };
 			var resultFactSchedulePreference = new List<AnalyticsFactSchedulePreference>();
 
+			IList<IScenario> scenarios;
+			if (@event.ScenarioId == Guid.Empty)
+			{
+				scenarios = _scenarioRepository.FindEnabledForReportingSorted();
+			}
+			else
+			{
+				scenarios = _scenarioRepository.FindEnabledForReportingSorted().Where(a => a.Id.Equals(@event.ScenarioId)).ToList();
+				if (scenarios.IsEmpty())
+				{
+					logger.DebugFormat("Nothing to do with preference id {0} because scenario {1} was not found as reportable.", 
+						@event.PreferenceDayId, @event.ScenarioId);
+					return;
+				}
+			}
+
 			// General look ups
-			var scenarios = _scenarioRepository.FindEnabledForReportingSorted();
 			var analyticsScenarios = _analyticsScheduleRepository.Scenarios();
 			var analyticsDayOffs = _analyticsScheduleRepository.DayOffs();
 			var analyticsAbsences = _analyticsScheduleRepository.Absences();
@@ -144,7 +160,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			}
 
 			// Delete
-			_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+			if (@event.ScenarioId == Guid.Empty)
+			{
+				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+			}
+			else
+			{
+				var scenarioId = analyticsScenarios.First(a => a.Code == @event.ScenarioId).Id;
+				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId, scenarioId);
+			}
 
 			// Insert
 			foreach (var analyticsFactSchedulePreference in resultFactSchedulePreference)
