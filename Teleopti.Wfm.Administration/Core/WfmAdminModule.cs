@@ -40,7 +40,6 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<SaveTenant>().SingleInstance();
 			builder.RegisterType<DbPathProvider>().As<IDbPathProvider>().SingleInstance();
 			builder.RegisterType<CheckPasswordStrength>().As<ICheckPasswordStrength>().SingleInstance();
-			builder.RegisterType<FindTenantAdminUserByEmail>().SingleInstance();
 			builder.RegisterType<DeleteTenant>().SingleInstance();
 			builder.RegisterType<UpdateCrossDatabaseView>().SingleInstance();
 			builder.RegisterType<DatabaseUpgrader>().SingleInstance();

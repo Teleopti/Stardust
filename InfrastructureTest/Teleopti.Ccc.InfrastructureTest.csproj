@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -206,7 +206,6 @@
     <Compile Include="MessageBroker\MessageBrokerServerTest.cs" />
     <Compile Include="MultiDatabaseTestAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\DeleteTenantTest.cs" />
-    <Compile Include="MultiTenancy\Admin\FindTenantAdminUserByEmailTest.cs" />
     <Compile Include="MultiTenancy\Admin\LoadAllTenantsTest.cs" />
     <Compile Include="MultiTenancy\Admin\RegenerateAllTenantPasswordsTest.cs" />
     <Compile Include="MessageBroker\MessageBrokerUnitOfWorkTestAttribute.cs" />
