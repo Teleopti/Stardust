@@ -150,6 +150,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		}
 
 		[Test]
+	    public void ShouldReturnFalseIfInvalidEndTimeLimitationWhenShiftEndAtMidnigh()
+	    {
+			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), 
+																new EndTimeLimitation(TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(50)), 
+																null),
+																new WorkTimeLimitation(), 
+																null, new DayOffTemplate(), 
+																null,
+																new List<IActivityRestriction>());
+
+			var period = new DateTimePeriod(new DateTime(2014, 3, 19, 16, 0, 0, DateTimeKind.Utc), new DateTime(2014, 3, 20, 0, 0, 0, DateTimeKind.Utc));
+			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(), period);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDay.PersonAssignment()).Return(_personAssignment);
+				Expect.Call(_scheduleDay.TimeZone).Return(TimeZoneInfo.Utc);
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+				Expect.Call(_teamBlockRestrictionAggregator.Aggregate(_personAssignment.Date, _personAssignment.Person, _teamBlockInfo, _schedulingOptions)).Return(effectiveRestriction);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Nudge(_scheduleDay, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _teamBlockInfo, _schedulingResultStateHolder, null, true);
+				Assert.IsFalse(result);
+			}
+		}
+
+		[Test]
 		public void ShouldReturnFalseIfLocked()
 		{
 			var effectiveRestriction = new EffectiveRestriction();
