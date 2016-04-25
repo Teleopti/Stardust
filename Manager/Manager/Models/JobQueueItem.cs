@@ -29,7 +29,7 @@ namespace Stardust.Manager.Models
 
 			if (JobId == Guid.Empty)
 			{
-				list.Add(new ValidationResult("Invalid job id value.", pIncome));
+				list.Add(new ValidationResult("Invalid parameter: Id", pIncome));
 			}
 
 			if (string.IsNullOrEmpty(Name))
@@ -39,7 +39,7 @@ namespace Stardust.Manager.Models
 					"Name"
 				};
 
-				list.Add(new ValidationResult("Invalid job name value.", pIncome));
+				list.Add(new ValidationResult("Invalid parameter: Name", pIncome));
 			}
 
 			if (string.IsNullOrEmpty(Type))
@@ -49,7 +49,7 @@ namespace Stardust.Manager.Models
 					"Type"
 				};
 
-				list.Add(new ValidationResult("Invalid job type value.", pIncome));
+				list.Add(new ValidationResult("Invalid parameter: Type", pIncome));
 			}
 
 			if (string.IsNullOrEmpty(Serialized))
@@ -59,7 +59,7 @@ namespace Stardust.Manager.Models
 					"Serialized"
 				};
 
-				list.Add(new ValidationResult("Invalid job serialized value.", pIncome));
+				list.Add(new ValidationResult("Invalid parameter: Serialized", pIncome));
 			}
 
 			if (string.IsNullOrEmpty(CreatedBy))
@@ -69,7 +69,7 @@ namespace Stardust.Manager.Models
 					"CreatedBy"
 				};
 
-				list.Add(new ValidationResult("Invalid job created by value.", pIncome));
+				list.Add(new ValidationResult("Invalid parameter: CreatedBy", pIncome));
 			}
 
 
