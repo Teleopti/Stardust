@@ -16587,6 +16587,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New activity is not allowed for.
+        /// </summary>
+        public static string NewActivityIsNotAllowedFor {
+            get {
+                return ResourceManager.GetString("NewActivityIsNotAllowedFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New activity name.
         /// </summary>
         public static string NewActivityName {

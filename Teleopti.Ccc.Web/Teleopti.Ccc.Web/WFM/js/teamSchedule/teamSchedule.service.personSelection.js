@@ -181,6 +181,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				if (svc.personInfo[personId].checked === true) {
 					result.push({
 						personId: personId,
+						name: svc.personInfo[personId].name,
 						scheduleEndTime: svc.personInfo[personId].scheduleEndTime
 					});
 				}

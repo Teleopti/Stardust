@@ -19,7 +19,7 @@
 		};
 	}
 
-	function addActivityCtrl(ActivityService, guidgenerator, CommandCommon, personSelectionSvc) {
+	function addActivityCtrl(activityService, guidgenerator, commandCommon, personSelectionSvc) {
 		var vm = this;
 		var startTimeMoment;
 		
@@ -38,9 +38,9 @@
 		vm.isNextDay = false;
 		vm.selectedActivityId = null;
 		vm.disableNextDay = false;	
-		vm.addActivity = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddActivity', addActivity, null, vm.selectedDate());
+		vm.addActivity = commandCommon.wrapPersonWriteProtectionCheck(true, 'AddActivity', addActivity, null, vm.selectedDate());
 
-		ActivityService.fetchAvailableActivities().then(function (activities) {
+		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.activities = activities;
 		});
 		var notAllowed = "";
@@ -54,14 +54,13 @@
 			var ret = true;
 			if (vm.timeRange == undefined || vm.selectedActivityId == undefined)
 				return ret;
-			angular.forEach(vm.selectedAgents, function(schedule) {
-				var isAllowed = isNewActivityAllowed(vm.timeRange.startTime, schedule.scheduleEndTime);
-				if (isAllowed != undefined && !isAllowed) {
+			angular.forEach(vm.selectedAgents, function(selectedAgent) {
+				var isAllowed = isNewActivityAllowed(vm.timeRange.startTime, selectedAgent.scheduleEndTime);
+				if (!isAllowed) {
 					ret = false;
-					if (notAllowed.indexOf(schedule.name) == -1) {
-						notAllowed += schedule.name + ', ';
+					if (notAllowed.indexOf(selectedAgent.name) == -1) {
+						notAllowed += selectedAgent.name + ', ';
 					}
-						
 				}
 			});
 			
@@ -79,7 +78,7 @@
 				
 		function addActivity() {
 			var trackId = guidgenerator.newGuid();
-			ActivityService.addActivity({
+			activityService.addActivity({
 				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
 				BelongsToDate: vm.selectedDate(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
