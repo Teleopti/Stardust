@@ -76,7 +76,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public class FakeHandler : 
 			IHandleEvent<TestEvent>, 
 			IHandleEvent<TestEventTwo>, 
+#pragma warning disable 618
 			IRunOnServiceBus
+#pragma warning restore 618
 		{
 			public Event CalledWithEvent;
 			public Event CalledWithEventTwo;
