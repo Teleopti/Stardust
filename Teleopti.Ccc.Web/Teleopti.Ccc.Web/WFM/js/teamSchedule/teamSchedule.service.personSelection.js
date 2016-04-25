@@ -241,9 +241,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					AbsenceCount: 0
 				}
 			};
-			var absenceCount = 0,
-				activityCount = 0,
-				personIds = [];
+
 			var selectedPersonInfo = svc.getSelectedPersonInfoList();
 			for (var j = 0; j < selectedPersonInfo.length; j++) {
 				var selectedPerson = selectedPersonInfo[j];

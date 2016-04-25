@@ -39,6 +39,12 @@
 				vm.init();
 		});
 
+		vm.totalSelectedProjections = function() {
+			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().checkedPersonCount +
+				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.ActivityCount +
+				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.AbsenceCount;
+		};
+
 		vm.updatePersonSelection = function (personSchedule) {
 			personSelectionSvc.updatePersonSelection(personSchedule);
 			personSelectionSvc.toggleAllPersonProjections(personSchedule);
