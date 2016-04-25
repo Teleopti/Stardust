@@ -8,14 +8,14 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
-	[InfrastructureTest]
+	[PrincipalAndStateTest]
 	[Setting("BehaviorTestServer", true)]
-	public class SyncEventPublisherTest : ISetup
+	public class ServiceBusAsSyncEventPublisherTest : ISetup
 	{
 		public FakeHandler Handler;
 		public FakeHandler1 Handler1;
 		public FakeHandler2 Handler2;
-		public IEventPublisher Target;
+		public IEventPopulatingPublisher Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -55,15 +55,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Handler.CalledWithEventTwo.Should().Be(@event);
 		}
 
-		public class TestEvent : Event
+		public class TestEvent : EventWithInfrastructureContext
 		{
 		}
 
-		public class TestEventTwo : Event
-		{
-		}
-
-		public class TestDomainEvent : EventWithInfrastructureContext
+		public class TestEventTwo : EventWithInfrastructureContext
 		{
 		}
 		
@@ -77,13 +73,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			
 		}
 
-#pragma warning disable 618
 		public class FakeHandler : 
 			IHandleEvent<TestEvent>, 
 			IHandleEvent<TestEventTwo>, 
-			IHandleEvent<TestDomainEvent>,
 			IRunOnServiceBus
-#pragma warning restore 618
 		{
 			public Event CalledWithEvent;
 			public Event CalledWithEventTwo;
@@ -97,10 +90,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			{
 				CalledWithEventTwo = @event;
 			}
-
-			public void Handle(TestDomainEvent @event)
-			{
-			}
+			
 		}
+
 	}
+
 }
