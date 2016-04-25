@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PBI30532LoadTest</RootNamespace>
     <AssemblyName>PBI30532LoadTest</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
@@ -101,7 +101,7 @@
       <Name>Teleopti.Analytics.Etl.TransformerInfrastructure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Analytics\Teleopti.Analytics.Etl.Transformer\Teleopti.Analytics.Etl.Transformer.csproj">
-      <Project>{b94.5.26-1563-4f16-bcd6-353551b0aa20}</Project>
+      <Project>{b94.6.16-1563-4f16-bcd6-353551b0aa20}</Project>
       <Name>Teleopti.Analytics.Etl.Transformer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.ApplicationConfig\Teleopti.Ccc.ApplicationConfig.csproj">
