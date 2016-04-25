@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
-	angular.module('wfm.rta').service('RtaGridService', ['Toggle',
-		function(toggleService) {
+	angular.module('wfm.rta').service('RtaGridService', ['Toggle', 'uiGridConstants',
+		function(toggleService, uiGridConstants) {
 			this.makeAllGrid = function() {
 				var sort = {
 					direction: 'asc'
@@ -44,7 +44,6 @@
 				else
 					return makeGridOptions();
 			};
-
 			function makeGridOptions(args) {
 				args = args || {};
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
@@ -115,7 +114,9 @@
 				columnDefs[6].sortingAlgorithm = args.sortingAlgorithm || null;
 				return {
 					rowTemplate: rowTemplate,
-					columnDefs: columnDefs
+					columnDefs: columnDefs,
+					enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+					enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER
 				};
 			};
 		}

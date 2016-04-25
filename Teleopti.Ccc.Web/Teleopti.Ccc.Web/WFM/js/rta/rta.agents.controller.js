@@ -30,6 +30,15 @@
 				options.data = 'filteredData';
 				$scope.inAlarmGrid = options;
 
+				$scope.getTableHeight = function() {
+						var rowHeight = 30;
+						var headerHeight = 30;
+						var agentMenuHeight = 45;
+						return {
+									height: ($scope.filteredData.length * rowHeight + headerHeight + agentMenuHeight) + "px"
+						};
+			};
+
 				$scope.selectAgent = function(personId) {
 					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
 				};
@@ -57,7 +66,7 @@
 				$scope.agentDetailsUrl = function(personId) {
 					return RtaRouteService.urlForAgentDetails(personId);
 				};
-			
+
 				$scope.$watch('filterText', filterData);
 				$scope.$watch('agentsInAlarm', function(newValue, oldValue) {
 					if (newValue !== oldValue) {
