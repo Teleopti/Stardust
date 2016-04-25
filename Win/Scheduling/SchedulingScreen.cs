@@ -37,7 +37,6 @@ using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Win.Meetings;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
-using Teleopti.Ccc.Win.Scheduling.IslandScheduling;
 using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
@@ -3054,42 +3053,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		//POC that scheduling getting faster if running islands in paralell
-		private async void runIslandScheduling()
-		{
-			var creator = new VirtualSkillGroupsCreator();
-			var skillGroupsCreatorResult = creator.GroupOnDate(_scheduleView.SelectedDateLocal(), _schedulerState.AllPermittedPersons);
-			var skillGroupIslandsAnalyzer = new SkillGroupIslandsAnalyzer();
-			var islandList = skillGroupIslandsAnalyzer.FindIslands(skillGroupsCreatorResult);
-			var factory = new TaskFactory();
-			var tasks = new System.Threading.Tasks.Task[islandList.Count];
-			var selectedSchedules = _scheduleView.SelectedSchedules();
-			for (int i = 0; i < islandList.Count; i++)
-			{
-				var islandLifeTimeScope = new IslandLifeTimeScope(_componentContext);
-				int i1 = i;
-				tasks[i1] = factory.StartNew(
-					y =>
-					{
-						var res = islandLifeTimeScope.ScheduleAsIsland(islandList[i1], _optimizerOriginalPreferences,
-							selectedSchedules,
-							_optimizationPreferences, _schedulerState);
-						new IslandScheduleConsolidater().Consolidate(_schedulerState.Schedules, res);
-					}, TaskCreationOptions.LongRunning);
-			}
-			await System.Threading.Tasks.Task.WhenAll(tasks);
-
-			for (int index = 0; index < tasks.Length; index++)
-			{
-				tasks[index].Dispose();
-			}
-
-			//Next line will start work on another background thread.
-			//No code after next line please.
-			_backgroundWorkerRunning = false;
-			RecalculateResources();
-		}
-
 		private void scheduleHourlyEmployees()
 		{
 			if (_backgroundWorkerScheduling.IsBusy) return;
@@ -3153,7 +3116,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_backgroundWorkerRunning = true;
 			backgroundWorker.RunWorkerAsync(argument);
-			//runIslandScheduling();
 		}
 
 		private void _backgroundWorkerScheduling_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
