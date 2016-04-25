@@ -30,6 +30,16 @@
 			#simple-people-search{
 				width: 316px;
 			}
+            .advanced-search-container{
+                min-width: 316px;
+                
+	            // CSS hack for IE10, IE11 and edge
+	            @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
+		            .con-row {
+			            min-width: 316px;
+		            }
+	            }
+            }
 		}
 
 		.team-schedule-datepicker{
