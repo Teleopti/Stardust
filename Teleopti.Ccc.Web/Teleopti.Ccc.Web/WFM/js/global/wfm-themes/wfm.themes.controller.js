@@ -5,20 +5,19 @@
 	themes.controller('themeController', [
 		'$scope', 'Toggle', 'ThemeService', '$q',
 		function($scope, Toggle, ThemeService, $q) {
-
+			$scope.showOverlay = false;
 			Toggle.togglesLoaded.then(function() {
 				$scope.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
 			});
+
 
 			var focusMenu = function() {
 				document.getElementById("themeMenu").focus();
 			};
 
 			checkThemeState().then(function(result) {
-				$scope.showOverlay = result.data.Overlay;
-				$scope.currentTheme = result.data.Name;
-				replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
-				if ($scope.currentTheme === "dark") {
+				console.log(result);
+				if (result.data.Name === "dark") {
 					$scope.darkTheme = true;
 				} else {
 					$scope.darkTheme = false;
@@ -31,27 +30,24 @@
 					deferred.resolve(response);
 				});
 				return deferred.promise;
-			}
+			};
 
 			$scope.toggleOverlay = function() {
 				$scope.showOverlay = !$scope.showOverlay;
-				replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
 				focusMenu();
 			};
 
-			var replaceCurrentTheme = function(theme, overlay) {
+			var replaceCurrentTheme = function(theme) {
 				ThemeService.setTheme(theme);
-				ThemeService.saveTheme(theme, overlay);
+				ThemeService.saveTheme(theme, $scope.toggleOverlay);
 			};
 
-			$scope.toggleTheme = function() {
+			$scope.toggleDarkTheme = function() {
 				focusMenu();
 				if ($scope.darkTheme) {
-					$scope.currentTheme = 'classic';
-					replaceCurrentTheme('classic',	$scope.showOverlay );
+					replaceCurrentTheme('classic');
 				} else {
-					$scope.currentTheme = 'dark';
-					replaceCurrentTheme('dark', $scope.showOverlay );
+					replaceCurrentTheme('dark');
 				}
 				$scope.darkTheme = !$scope.darkTheme;
 			};

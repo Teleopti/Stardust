@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		{
 			var themeSetting = new ThemeSetting
 			{
-				Name = "dark",
-				Overlay = true
+				Name = "dark"
 			};
 			var repository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var target = new ThemeSettingProvider(repository);
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var result = target.Persist(themeSetting);
 
 			result.Name.Should().Be(themeSetting.Name);
-			result.Overlay.Should().Be(themeSetting.Overlay);
 		}
 
 		[Test]
@@ -32,8 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		{
 			var themeSetting = new ThemeSetting
 			{
-				Name = "dark",
-				Overlay = true
+				Name = "dark"
 			};
 			var repository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
 			var target = new ThemeSettingProvider(repository);
@@ -43,7 +40,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var result = target.Get();
 
 			result.Name.Should().Be(themeSetting.Name);
-			result.Overlay.Should().Be(themeSetting.Overlay);
 		}
 
 		[Test]
@@ -51,8 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		{
 			var themeSetting = new ThemeSetting
 			{
-				Name = "dark",
-				Overlay = true
+				Name = "dark"
 			};
 			var person = new Person();
 			var repository = MockRepository.GenerateMock<IPersonalSettingDataRepository>();
@@ -64,7 +59,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var result = target.GetByOwner(person);
 
 			result.Name.Should().Be(themeSetting.Name);
-			result.Overlay.Should().Be(themeSetting.Overlay);
 		}
 	}
 }

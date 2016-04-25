@@ -25,7 +25,7 @@
 			themeStylesheet.setAttribute("href", "");
 			document.head.appendChild(themeStylesheet);
 			var checkBox = document.createElement("input");
-			checkBox.setAttribute("id","darkTheme");
+			checkBox.setAttribute("id","dark");
 			document.body.appendChild(checkBox);
 		};
 		var teardownTemplate = function() {
@@ -48,13 +48,11 @@
 			inject(function(ThemeService) {
 				$httpBackend.expectGET("../api/Theme")
 					.respond(200, {
-						Name: "light",
-						Overlay: true
+						Name: "light"
 					});
 
 				ThemeService.getTheme().success(function(result) {
 					expect(result.Name).toBe("light");
-					expect(result.Overlay).toBe(true)
 					done();
 				});
 
@@ -65,18 +63,16 @@
 		it('should init theme', inject(function(ThemeService) {
 			$httpBackend.expectGET("../api/Theme")
 				.respond(200, {
-					Name: "light",
-					Overlay: true
+					Name: "light"
 				});
-		 	setUpTemplate();
+			setUpTemplate();
 
-		 ThemeService.init();
+		    ThemeService.init();
 
 			$httpBackend.flush();
 			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_light.min.css');
 			expect(document.getElementById('themeStylesheet').getAttribute('href')).toBe('dist/style_light.min.css');
 			teardownTemplate();
 		}));
-
 	});
 })();

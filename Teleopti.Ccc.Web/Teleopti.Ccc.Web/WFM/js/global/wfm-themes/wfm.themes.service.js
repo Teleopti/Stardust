@@ -6,9 +6,7 @@
 
 		service.setTheme = function(theme) {
 			if (theme === "dark") {
-				document.getElementById('darkTheme').checked = true;
-			}else{
-				document.getElementById('darkTheme').checked = false;
+				document.getElementById(theme).setAttribute("checked", "true");
 			}
 
 			document.getElementById('themeModules').setAttribute('href', 'dist/modules_' + theme + '.min.css');
@@ -21,9 +19,8 @@
 
 		service.init = function() {
 			service.getTheme().success(function(data) {
-				if (data.Name !== null) {
-					service.setTheme(data.Name);
-				}
+				if (data.Name !== null)
+				service.setTheme(data.Name);
 			});
 		};
 
