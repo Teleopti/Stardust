@@ -839,56 +839,64 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public void StartDurationTest()
 		{
-			var mangerUriBuilder = new ManagerUriBuilder();
-			var uri = mangerUriBuilder.GetStartJobUri();
-
-			var httpSender = new HttpSender();
-
-			CancelTaskStartDurationTest = new CancellationTokenSource();
-
-			TaskStartDurationTest = new Task(() =>
+			Task.Factory.StartNew(() =>
 			{
-				Parallel.For(1, NumberOfMessages, (i) =>
+				var mangerUriBuilder = new ManagerUriBuilder();
+				var uri = mangerUriBuilder.GetStartJobUri();
+
+				var httpSender = new HttpSender();
+
+				CancelTaskStartDurationTest = new CancellationTokenSource();
+
+				int loopCounter = 0;
+
+				while (loopCounter <= 500)
 				{
-					var testJobTimerParams =
-						new TestJobTimerParams("Loop " + i, TimeSpan.FromSeconds(DurationPerMessage));
+					loopCounter++;
 
-					var jobParamsToJson = JsonConvert.SerializeObject(testJobTimerParams);
-
-					var jobQueueItem = new JobQueueItem
+					TaskStartDurationTest = new Task(() =>
 					{
-						Name = "Job Name " + i,
-						Serialized = jobParamsToJson,
-						Type = "NodeTest.JobHandlers.TestJobTimerParams",
-						CreatedBy = "WPF Client"
-					};
-
-					Thread.Sleep(TimeSpan.FromSeconds(2));
-
-					HttpResponseMessage response = httpSender.PostAsync(uri, jobQueueItem).Result;
-
-					while (!response.IsSuccessStatusCode)
-					{
-						Thread.Sleep(TimeSpan.FromMilliseconds(300));
-
-						response = httpSender.PostAsync(uri, jobQueueItem).Result;
-
-						if (CancelTaskStartDurationTest.IsCancellationRequested)
+						Parallel.For(1, NumberOfMessages, (i) =>
 						{
-							CancelTaskStartDurationTest.Token.ThrowIfCancellationRequested();
-						}
-					}
+							var testJobTimerParams =
+								new TestJobTimerParams("Loop " + i, TimeSpan.FromSeconds(DurationPerMessage));
 
-					if (CancelTaskStartDurationTest.IsCancellationRequested)
-					{
-						CancelTaskStartDurationTest.Token.ThrowIfCancellationRequested();
-					}
-				});
+							var jobParamsToJson = JsonConvert.SerializeObject(testJobTimerParams);
 
-			}, CancelTaskStartDurationTest.Token);
+							var jobQueueItem = new JobQueueItem
+							{
+								Name = "Job Name " + i,
+								Serialized = jobParamsToJson,
+								Type = "NodeTest.JobHandlers.TestJobTimerParams",
+								CreatedBy = "WPF Client"
+							};
 
+							HttpResponseMessage response = httpSender.PostAsync(uri, jobQueueItem).Result;
 
-			TaskStartDurationTest.Start();
+							while (!response.IsSuccessStatusCode)
+							{
+								response = httpSender.PostAsync(uri, jobQueueItem).Result;
+
+								if (CancelTaskStartDurationTest.IsCancellationRequested)
+								{
+									CancelTaskStartDurationTest.Token.ThrowIfCancellationRequested();
+								}
+							}
+
+							if (CancelTaskStartDurationTest.IsCancellationRequested)
+							{
+								CancelTaskStartDurationTest.Token.ThrowIfCancellationRequested();
+							}
+						});
+
+					}, CancelTaskStartDurationTest.Token);
+
+					TaskStartDurationTest.Start();
+					TaskStartDurationTest.Wait();
+
+					Thread.Sleep(TimeSpan.FromSeconds(30));
+				}
+			});
 		}
 	}
 }
