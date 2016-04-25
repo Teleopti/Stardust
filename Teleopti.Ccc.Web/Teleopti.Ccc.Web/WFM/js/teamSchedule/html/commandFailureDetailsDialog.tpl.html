@@ -19,7 +19,7 @@
                         <tr ng-repeat="detail in details">
                             <td>{{detail.PersonName}}</td>
                             <td>
-                                <div ng-repeat="message in detail.Messages">{{message}}</div>
+                                <div ng-repeat="message in detail.Messages track by $index">{{message}}</div>
                             </td>
                         </tr>
                     </tbody>

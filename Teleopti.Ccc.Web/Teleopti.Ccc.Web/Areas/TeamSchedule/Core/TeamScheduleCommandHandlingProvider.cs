@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				var actionResult = new FailActionResult();
 				actionResult.PersonId = personActivity.PersonId;
+				actionResult.Messages = new List<string>();
 				if (_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveActivity, input.Date,
 					_personRepository.Load(personActivity.PersonId)))
 				{

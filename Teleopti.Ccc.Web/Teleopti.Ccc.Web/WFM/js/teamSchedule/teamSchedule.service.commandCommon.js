@@ -108,9 +108,15 @@
 
 		function init() {
 			angular.forEach(this.details, function (detail) {
+				var uniqueMessages = [];
+				angular.forEach(detail.Messages, function (message) {
+					if (uniqueMessages.indexOf(message) === -1) {
+						uniqueMessages.push(message);
+					}
+				});
 				$scope.details.push({
 					PersonName: PersonSelection.personInfo[detail.PersonId].name,
-					Messages: detail.Message
+					Messages: uniqueMessages
 				});
 			});
 		}
