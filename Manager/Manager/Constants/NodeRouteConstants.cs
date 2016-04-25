@@ -11,5 +11,7 @@
 		public const string UpdateJobByJobId = "job/" + JobIdOptionalParameter;
 
 		public const string IsAlive = "ping";
+
+		public const string IsIdle = "isIdle";
 	}
 }

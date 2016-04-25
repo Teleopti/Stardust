@@ -185,10 +185,25 @@ namespace Stardust.Node.API
 			return NotFound();
 		}
 
+
+
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
 		public IHttpActionResult IsAlive()
 		{
 			return Ok();
+		}
+
+		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
+		public IHttpActionResult IsIdle()
+		{			
+			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
+
+			if (currentJob == null)
+			{
+				return Ok();
+			}
+
+			return Conflict();
 		}
 	}
 }

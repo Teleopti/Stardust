@@ -68,9 +68,11 @@ namespace Manager.Integration.Test.FunctionalTests
 				//-----------------------------------
 				var nodeStartedNotifier =
 					new NodeStatusNotifier(ManagerDbConnectionString);
+
 				nodeStartedNotifier.StartJobDefinitionStatusNotifier(args.Guid,
 				                                                     "Started",
 				                                                     new CancellationTokenSource());
+
 				nodeStartedNotifier.JobDefinitionStatusNotify.Wait(timeout);
 
 				//-----------------------------------

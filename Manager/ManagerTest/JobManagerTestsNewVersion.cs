@@ -94,7 +94,7 @@ namespace ManagerTest
 			//----------------------------------------------
 			// Assign to worker node.
 			//----------------------------------------------
-			JobManager.AssignJobToWorkerNode();
+			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 
 			//----------------------------------------------
 			// Validate.
@@ -201,8 +201,8 @@ namespace ManagerTest
 			// Assign job to worker node.
 			//----------------------------------------------
 			FakeHttpSender.CallToWorkerNodes.Clear();
-			JobManager.AssignJobToWorkerNode();
-			FakeHttpSender.CallToWorkerNodes.Count().Should().Be(2);
+			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			FakeHttpSender.CallToWorkerNodes.Count().Should().Be(3);
 
 			//----------------------------------------------
 			// Check that job started.
@@ -244,7 +244,7 @@ namespace ManagerTest
 
 			JobManager.AddItemToJobQueue(jobQueueItem);
 
-			JobManager.AssignJobToWorkerNode();
+			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 
 			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
 		}
@@ -252,7 +252,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldDoNothing_WhenNoWorkerNodeExists_AndJobQueueIsEmpty()
 		{
-			JobManager.AssignJobToWorkerNode();
+			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 
 			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
 		}
@@ -323,8 +323,8 @@ namespace ManagerTest
 			// Assign job to worker node.
 			//----------------------------------------------
 			FakeHttpSender.CallToWorkerNodes.Clear();
-			JobManager.AssignJobToWorkerNode();
-			FakeHttpSender.CallToWorkerNodes.Count().Should().Be(2);
+			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			FakeHttpSender.CallToWorkerNodes.Count().Should().Be(3);
 
 			//----------------------------------------------
 			// Check that job started.

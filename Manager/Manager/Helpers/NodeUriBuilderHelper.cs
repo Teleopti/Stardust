@@ -39,6 +39,11 @@ namespace Stardust.Manager.Helpers
 			return CreateUri(NodeRouteConstants.IsAlive);
 		}
 
+		public Uri GetIsIdleTemplateUri()
+		{
+			return CreateUri(NodeRouteConstants.IsIdle);
+		}
+
 		public Uri GetJobTemplateUri()
 		{
 			return CreateUri(NodeRouteConstants.Job);

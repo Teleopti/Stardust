@@ -13,10 +13,10 @@ namespace Manager.Integration.Test.WPF
 	    {
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-		    if (ServicePointManager.DefaultConnectionLimit < 10)
-		    {
-				ServicePointManager.DefaultConnectionLimit = 200;
-			}				
+		 //   if (ServicePointManager.DefaultConnectionLimit < 10)
+		 //   {
+			//	ServicePointManager.DefaultConnectionLimit = 200;
+			//}				
 		}
 
 		private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)

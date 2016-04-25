@@ -7,6 +7,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http.Results;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -280,7 +281,8 @@ namespace Stardust.Manager
 			}
 		}
 
-		public virtual void AssignJobToWorkerNode(IHttpSender httpSender)
+		public virtual void AssignJobToWorkerNode(IHttpSender httpSender, 
+												  string useThisWorkerNodeUri)
 		{
 			ThrowArgumentNullExceptionIfHttpSenderIsNull(httpSender);
 
@@ -288,39 +290,44 @@ namespace Stardust.Manager
 			{
 				Monitor.Enter(_lockTryAssignJobToWorkerNode);
 
-				List<Uri> allAliveWorkerNodesUri;
+				List<Uri> allAliveWorkerNodesUri = new List<Uri>();
 
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 
-					// --------------------------------------------------
-					// Get all alive worker nodes.
-					// --------------------------------------------------
-					var selectAllAliveWorkerNodesCommand =
-						CreateSelectAllAliveWorkerNodesSqlCommand(sqlConnection);
-
-					var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader();
-
-					if (!readerAliveWorkerNodes.HasRows)
+					if (string.IsNullOrEmpty(useThisWorkerNodeUri))
 					{
+						// --------------------------------------------------
+						// Get all alive worker nodes.
+						// --------------------------------------------------
+						SqlCommand selectAllAliveWorkerNodesCommand =
+							CreateSelectAllAliveWorkerNodesSqlCommand(sqlConnection);
+
+						var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader();
+
+						if (!readerAliveWorkerNodes.HasRows)
+						{
+							readerAliveWorkerNodes.Close();
+							sqlConnection.Close();
+
+							return;
+						}
+
+						var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
+
+						while (readerAliveWorkerNodes.Read())
+						{
+							allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
+						}
+
 						readerAliveWorkerNodes.Close();
-						sqlConnection.Close();
-
-						return;
+						readerAliveWorkerNodes.Dispose();
 					}
-
-					allAliveWorkerNodesUri = new List<Uri>();
-
-					var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
-
-					while (readerAliveWorkerNodes.Read())
+					else
 					{
-						allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
+						allAliveWorkerNodesUri.Add(new Uri(useThisWorkerNodeUri));
 					}
-
-					readerAliveWorkerNodes.Close();
-					readerAliveWorkerNodes.Dispose();
 
 					sqlConnection.Close();
 				}
@@ -329,7 +336,15 @@ namespace Stardust.Manager
 				{
 					foreach (var uri in allAliveWorkerNodesUri)
 					{
-						AssignJobToWorkerNodeWorker(httpSender, uri);
+						var builderHelper = new NodeUriBuilderHelper(uri);
+						var isIdleUri = builderHelper.GetIsIdleTemplateUri();
+
+						HttpResponseMessage response = httpSender.GetAsync(isIdleUri).Result;
+
+						if (response.IsSuccessStatusCode)
+						{
+							AssignJobToWorkerNodeWorker(httpSender, uri);
+						}						
 					}
 				}
 			}
@@ -972,7 +987,7 @@ namespace Stardust.Manager
 		private SqlCommand CreateSelectAllAliveWorkerNodesSqlCommand()
 		{
 			const string selectAllAliveWorkerNodesCommandText =
-				@"SELECT   
+											  @"SELECT   
 												   [Id]
 												  ,[Url]
 												  ,[Heartbeat]

@@ -7,6 +7,7 @@ using Autofac.Extras.DynamicProxy2;
 using Autofac.Integration.WebApi;
 using Castle.DynamicProxy;
 using log4net;
+using Microsoft.Owin.Host.HttpListener;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Node.API;
@@ -42,7 +43,17 @@ namespace Stardust.Node
 			using (WebApp.Start(nodeAddress,
 			                    appBuilder =>
 			                    {
-				                    var containerBuilder = new ContainerBuilder();
+									string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
+									OwinHttpListener owinListener = (OwinHttpListener)appBuilder.Properties[owinListenerName];
+
+									int maxAccepts;
+									int maxRequests;
+									owinListener.GetRequestProcessingLimits(out maxAccepts, out maxRequests);
+
+									owinListener.SetRequestQueueLimit(int.MaxValue);
+									owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
+
+									var containerBuilder = new ContainerBuilder();
 
 				                    containerBuilder.RegisterType<Log4NetInterceptor>().Named<IInterceptor>("log-calls");
 

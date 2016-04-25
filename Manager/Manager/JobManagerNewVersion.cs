@@ -39,7 +39,7 @@ namespace Stardust.Manager
 			_managerConfiguration = managerConfiguration;
 
 			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			_checkAndAssignNextJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds*1000;
+			_checkAndAssignNextJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds * 1000;
 			_checkAndAssignNextJob.Start();
 
 			_checkHeartbeatsTimer.Elapsed += CheckHeartbeatsOnTimedEvent;
@@ -72,11 +72,17 @@ namespace Stardust.Manager
 
 		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			this.Log().DebugWithLineNumber("Start.");
+			_checkAndAssignNextJob.Stop();
 
-			AssignJobToWorkerNode();
+			try
+			{
+				AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			}
 
-			this.Log().DebugWithLineNumber("CheckAndAssignNextJob on thread id : " + Thread.CurrentThread.ManagedThreadId);
+			finally
+			{
+				_checkAndAssignNextJob.Start();
+			}	
 		}
 
 
@@ -129,7 +135,7 @@ namespace Stardust.Manager
 			this.Log().DebugWithLineNumber("Finished RegisterHeartbeat.");
 		}
 
-		public void AssignJobToWorkerNode()
+		public void AssignJobToWorkerNode(string useThisWorkerNodeUri)
 		{
 			this.Log().DebugWithLineNumber("Start TryAssignJobToWorkerNode.");
 
@@ -137,7 +143,8 @@ namespace Stardust.Manager
 
 			try
 			{
-				_jobRepository.AssignJobToWorkerNode(_httpSender);
+				_jobRepository.AssignJobToWorkerNode(_httpSender, 
+													 useThisWorkerNodeUri);
 
 				this.Log().DebugWithLineNumber("Finished TryAssignJobToWorkerNode.");
 			}

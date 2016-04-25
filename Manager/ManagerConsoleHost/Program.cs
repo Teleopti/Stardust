@@ -7,6 +7,7 @@ using System.Web.Http;
 using Autofac;
 using log4net;
 using log4net.Config;
+using Microsoft.Owin.Host.HttpListener;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Manager;
@@ -74,19 +75,32 @@ namespace ManagerConsoleHost
 
 
 			var container = new ContainerBuilder().Build();
+
 			var config = new HttpConfiguration();
 
 			using (WebApp.Start(managerAddress,
 			                    appBuilder =>
 			                    {
-				                    appBuilder.UseAutofacMiddleware(container);
+									string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
+									OwinHttpListener owinListener = (OwinHttpListener)appBuilder.Properties[owinListenerName];
+
+				                    int maxAccepts;
+				                    int maxRequests;
+				                    owinListener.GetRequestProcessingLimits(out maxAccepts,out maxRequests);
+
+									owinListener.SetRequestQueueLimit(int.MaxValue);
+				                    owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
+
+									appBuilder.UseAutofacMiddleware(container);
+
 				                    // Configure Web API for self-host. 
 				                    appBuilder.UseStardustManager(managerConfiguration,
 				                                                  container);
 
 				                    appBuilder.UseAutofacWebApi(config);
 				                    appBuilder.UseWebApi(config);
-			                    }))
+
+		                    }))
 			{
 				Logger.InfoWithLineNumber(WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
 

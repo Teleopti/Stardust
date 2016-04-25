@@ -79,7 +79,8 @@ namespace ManagerTest
 				Url = _nodeUri1
 			});
 
-			JobRepository.AssignJobToWorkerNode(HttpSender);
+			JobRepository.AssignJobToWorkerNode(HttpSender, 
+												useThisWorkerNodeUri: null);
 
 			ManagerController.WorkerNodeRegisterHeartbeat(_nodeUri1);
 
@@ -129,7 +130,8 @@ namespace ManagerTest
 			};
 			JobRepository.AddItemToJobQueue(jobQueueItem);
 
-			JobRepository.AssignJobToWorkerNode(HttpSender);
+			JobRepository.AssignJobToWorkerNode(HttpSender, useThisWorkerNodeUri: null);
+
 			HttpSender.CallToWorkerNodes.Clear();
 			ManagerController.CancelJobByJobId(jobQueueItem.JobId);
 
@@ -213,7 +215,8 @@ namespace ManagerTest
 
 			JobRepository.AddItemToJobQueue(jobQueueItem);
 
-			JobRepository.AssignJobToWorkerNode(HttpSender);
+			JobRepository.AssignJobToWorkerNode(HttpSender, 
+												useThisWorkerNodeUri: null);
 
 			ManagerController.CancelJobByJobId(jobQueueItem.JobId);
 

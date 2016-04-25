@@ -66,7 +66,7 @@ namespace Stardust.Manager
 			//-----------------------------------------------
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri:null);
 			});
 
 			return Ok(jobQueueItem.JobId);
@@ -154,13 +154,13 @@ namespace Stardust.Manager
 				return BadRequest(isValidRequest.Message);
 			}
 
-
 			//--------------------------------------
 			// Register heartbeat from worker node.
 			//--------------------------------------
 			Task.Factory.StartNew(() =>
 			{
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
+				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
+					": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
 
 				_jobManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
 			});
@@ -168,11 +168,9 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-
-
 		[HttpPost, Route(ManagerRouteConstants.JobSucceed)]
 		public IHttpActionResult JobSucceed(Guid jobId)
-		{
+		{			
 			//--------------------------------------
 			// Validate argument.
 			//--------------------------------------
@@ -187,15 +185,16 @@ namespace Stardust.Manager
 			//--------------------------------------
 			Task.Factory.StartNew(() =>
 			{
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job done from a Node ( jobId ) : ( " + jobId + " )");
+				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
+												": Received job done from a Node ( jobId, Node ) : ( " + jobId + ", " + workerNodeUri  + " )");
 
 				_jobManager.UpdateResultForJob(jobId,
 				                              "Success",
 											  DateTime.UtcNow);
 
-				Thread.Sleep(TimeSpan.FromSeconds(2));
-
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 			});
 
 			return Ok();
@@ -218,8 +217,10 @@ namespace Stardust.Manager
 			//--------------------------------------
 			Task.Factory.StartNew(() =>
 			{
-				this.Log().ErrorWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId ) : ( " +
-				                               jobFailed.JobId + " )");
+				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+				this.Log().ErrorWithLineNumber(WhoAmI(Request) + ": Received job failed from a Node ( jobId, Node ) : ( " +
+				                               jobFailed.JobId + ", " + workerNodeUri + " )");
 
 				var progress = new JobDetail
 				{
@@ -233,10 +234,8 @@ namespace Stardust.Manager
 				_jobManager.UpdateResultForJob(jobFailed.JobId,
 				                              "Failed",
 											  DateTime.UtcNow);
-
-				Thread.Sleep(TimeSpan.FromSeconds(2));
-
-				_jobManager.AssignJobToWorkerNode();
+				
+				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 			});
 
 			return Ok();
@@ -259,15 +258,16 @@ namespace Stardust.Manager
 			//--------------------------------------
 			Task.Factory.StartNew(() =>
 			{
-				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received cancel from a Node ( jobId ) : ( " + jobId + " )");
+				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
+
+				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
+					": Received cancel from a Node ( jobId, Node ) : ( " + jobId + ", " + workerNodeUri +")");
 
 				_jobManager.UpdateResultForJob(jobId,
 				                              "Canceled",
 											  DateTime.UtcNow);
-
-				Thread.Sleep(TimeSpan.FromSeconds(2));
-
-				_jobManager.AssignJobToWorkerNode();
+				
+				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 			});
 
 			return Ok();
@@ -324,7 +324,7 @@ namespace Stardust.Manager
 
 				_nodeManager.AddWorkerNode(workerNodeUri);
 
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 			});
 
 			return Ok();
