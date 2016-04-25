@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IExportToScenarioAccountPersister
 	{
-		void Persist(IScenario exportScenario,
+		bool Persist(IScenario exportScenario,
 			IUnitOfWorkFactory uowFactory,
 			IEnumerable<IPerson> persons,
 			IDictionary<IPerson,
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_personAccountPersister = personAccountPersister;
 		}
 
-		public void Persist(IScenario exportScenario, 
+		public bool Persist(IScenario exportScenario, 
 			IUnitOfWorkFactory uowFactory, 
 			IEnumerable<IPerson> persons, 
 			IDictionary<IPerson, 
@@ -38,7 +38,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			Dictionary<IPerson, HashSet<IAbsence>> involvedAbsences,
 			ICollection<DateOnly> datesToExport)
 		{
-			if (!exportScenario.DefaultScenario) return;
+			if (!exportScenario.DefaultScenario) return false;
+
+			var persisted = false;
 
 			using (var uow = uowFactory.CreateAndOpenUnitOfWork())
 			{
@@ -68,9 +70,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				if (refreshedPersonAbsenceAccounts.Count > 0)
 				{
-					_personAccountPersister.Persist(refreshedPersonAbsenceAccounts);
+					persisted = _personAccountPersister.Persist(refreshedPersonAbsenceAccounts);
 				}
 			}
+
+			return persisted;
 		}	
 	}
 }

@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				involvedAbsences.Add(person, new HashSet<IAbsence> { absence });
 				personAccountCollection.Add(absence, accountDay);
 				allPersonAccounts.Add(person, personAccountCollection);
-				target.Persist(scenario, uowFactory, persons, allPersonAccounts, involvedAbsences, new List<DateOnly> { dateOnly });
+				var result = target.Persist(scenario, uowFactory, persons, allPersonAccounts, involvedAbsences, new List<DateOnly> { dateOnly });
+				Assert.IsTrue(result);
 			}
 		}
 
@@ -88,8 +89,36 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				involvedAbsences.Add(person, new HashSet<IAbsence> { otherAbsence });
 				personAccountCollection.Add(absence, accountDay);
 				allPersonAccounts.Add(person, personAccountCollection);
-				target.Persist(scenario, uowFactory, persons, allPersonAccounts, involvedAbsences, new List<DateOnly> { dateOnly });
+				var result = target.Persist(scenario, uowFactory, persons, allPersonAccounts, involvedAbsences, new List<DateOnly> { dateOnly });
+				Assert.IsFalse(result);
 			}
+		}
+
+		[Test]
+		public void ShouldNotPersistOnNonDefaultScenarios()
+		{
+			var mock = new MockRepository();
+			var personAccountPersister = mock.StrictMock<IPersonAccountPersister>();
+			var scenario = ScenarioFactory.CreateScenario("scenario", false, false);
+			var target = new ExportToScenarioAccountPersister(personAccountPersister);
+			var result = target.Persist(scenario, null, null, null, null, null);
+			Assert.IsFalse(result);	
+		}
+
+		[Test]
+		public void ShouldNotPersistWhenNoPersonAccount()
+		{
+			var mock = new MockRepository();
+			var personAccountPersister = mock.StrictMock<IPersonAccountPersister>();
+			var uowFactory = mock.StrictMock<IUnitOfWorkFactory>();
+			var person = new Person();
+			var persons = new List<IPerson> { person };
+			var allPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
+			var scenario = ScenarioFactory.CreateScenario("scenario", true, false);
+			
+			var target = new ExportToScenarioAccountPersister(personAccountPersister);
+			var result = target.Persist(scenario, uowFactory, persons, allPersonAccounts, null, null);
+			Assert.IsFalse(result);
 		}
 	}
 }
