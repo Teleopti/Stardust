@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 		public FakeMessageSender MessageSender;
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
-		public ILicenseRepository Licenses;
 
 		protected override FakeConfigReader Config()
 		{
