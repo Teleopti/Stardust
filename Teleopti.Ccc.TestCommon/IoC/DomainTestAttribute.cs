@@ -98,9 +98,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
 			system.UseTestDouble<FakeGroupScheduleGroupPageDataProvider>().For<IGroupScheduleGroupPageDataProvider>();
 
-			// licensing
-			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
-
 			// Repositories
 			system.AddService<FakeDatabase>();
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
@@ -139,6 +136,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakePartTimePercentageRepository>().For<IPartTimePercentageRepository>();
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble<FakeIntradayMonitorDataLoader>().For<IIntradayMonitorDataLoader>();
+			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 			system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
 			system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
 			system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();

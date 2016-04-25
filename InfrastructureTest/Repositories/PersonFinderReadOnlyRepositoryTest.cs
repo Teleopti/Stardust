@@ -11,6 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
     [TestFixture, Category("LongRunning")]
+	[InfrastructureTest]
     public class PersonFinderReadOnlyRepositoryTest : DatabaseTest
     {
         private IPersonFinderReadOnlyRepository _target;

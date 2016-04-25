@@ -11,11 +11,9 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -38,7 +36,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 		internal static IPerson loggedOnPerson;
 		internal static IApplicationData ApplicationData;
 		internal static IDataSource DataSource;
-		private static int dataHash = 0;
 
 		[SetUp]
 		public void BeforeTestSuite()
@@ -55,8 +52,6 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), "TestData");
 
-			container.Resolve<IHangfireClientStarter>().Start();
-
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 
 			ApplicationData = new ApplicationData(appSettings, null);
@@ -69,20 +64,19 @@ namespace Teleopti.Ccc.InfrastructureTest
 			persistLoggedOnPerson();
 			persistBusinessUnit();
 			deleteAllAggregates();
-			dataHash = 4565;
 
-			DataSourceHelper.BackupApplicationDatabase(dataHash);
-			DataSourceHelper.BackupAnalyticsDatabase(dataHash);
+			DataSourceHelper.BackupApplicationDatabase(123);
+			DataSourceHelper.BackupAnalyticsDatabase(123);
 		}
 
 		public static void RestoreCcc7Database()
 		{
-			DataSourceHelper.RestoreApplicationDatabase(dataHash);
+			DataSourceHelper.RestoreApplicationDatabase(123);
 		}
 
 		public static void RestoreAnalyticsDatabase()
 		{
-			DataSourceHelper.RestoreAnalyticsDatabase(dataHash);
+			DataSourceHelper.RestoreAnalyticsDatabase(123);
 		}
 
 		private static void persistLoggedOnPerson()
@@ -102,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 				uow.PersistAll();
 			}
 		}
-		
+
 		private static void deleteAllAggregates()
 		{
 			using (var uow = DataSource.Application.CreateAndOpenUnitOfWork())
