@@ -40,12 +40,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Panels
         }
 
         [Test]
-        public void VerifyCanGetDateTimeFromPositionRightToLeft()
-        {
-            Assert.AreEqual(_baseDate.AddDays(3), _target.DateTimeFromPosition(70, true));
-        }
-
-        [Test]
         public void VerifyCanCreateRectangle()
         {
             Rectangle rect = _target.RectangleFromDateTimePeriod(new DateOnlyPeriod(_baseDate.AddDays(1), _baseDate.AddDays(3)),new Point(11, 7), 20, false);

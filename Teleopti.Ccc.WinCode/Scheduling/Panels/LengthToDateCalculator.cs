@@ -46,11 +46,5 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Panels
             double positionNormal = (_length * DiffInDays(_period.StartDate, date)) / DiffInDays(_period.StartDate, _period.EndDate);
             return rightToLeft ? _length - positionNormal : positionNormal;
         }
-
-        public DateOnly DateTimeFromPosition(double position, bool rightToLeft)
-        {
-            int diff = (int) (DiffInDays(_period.StartDate, _period.EndDate) * (position / _length));
-            return rightToLeft ? _period.EndDate.AddDays(-diff) : _period.StartDate.AddDays(diff);
-        }
     }
 }
