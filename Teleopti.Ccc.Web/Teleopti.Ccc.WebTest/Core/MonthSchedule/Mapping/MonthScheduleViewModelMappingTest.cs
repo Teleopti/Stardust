@@ -254,6 +254,25 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 		[Test]
 		[SetCulture("en-US")]
+		public void ShouldMapTimeSpanForWorkingDayExcludingPersonalActivity()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
+			var period = new DateTimePeriod(2011, 5, 18, 7, 2011, 5, 18, 16);
+			personAssignment.AddActivity(new Activity("a") { InWorkTime = true },period);
+			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
+			personAssignment.AddPersonalActivity(new Activity("b") { InWorkTime = true },period.MovePeriod(TimeSpan.FromHours(-2)));
+
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011,5,18),SchedulePartView.MainShift,personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData,MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.Shift.Should().Not.Be.Null();
+			result.Shift.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+		}
+
+		[Test]
+		[SetCulture("en-US")]
 		public void ShouldMapWorkingHoursForWorkingDay()
 		{
 			var contractTime = TimeSpan.FromHours(8);

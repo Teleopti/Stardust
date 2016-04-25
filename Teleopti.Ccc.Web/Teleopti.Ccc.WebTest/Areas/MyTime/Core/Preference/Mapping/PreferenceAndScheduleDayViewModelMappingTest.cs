@@ -193,14 +193,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapTimeSpanInPersonAssignmentDayViewModel()
 		{
 			var stubs = new StubFactory();
-			var period = new DateTimePeriod(new DateTime(2012, 2, 21, 7, 0, 0, DateTimeKind.Utc), new DateTime(2012, 2, 21, 16, 0, 0, DateTimeKind.Utc));
-			var personAssignment = stubs.PersonAssignmentStub(period);
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Today, SchedulePartView.MainShift, personAssignment);
+			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
+			var period = new DateTimePeriod(2011,5,18,7,2011,5,18,16);
+			personAssignment.AddActivity(new Activity("a") { InWorkTime = true },period);
+			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011,5,18),SchedulePartView.MainShift,personAssignment);
 
-			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
-
-			result.PersonAssignment.Should().Not.Be.Null();
-			result.PersonAssignment.TimeSpan.Should().Be(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+			var result = Mapper.Map<IScheduleDay,PreferenceAndScheduleDayViewModel>(scheduleDay);
+			result.PersonAssignment.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
 		}
 
 		[Test]
@@ -317,6 +317,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			result.PersonalShifts.Count().Should().Be(1);
 			result.PersonalShifts.First().Subject.Should().Be("activity");
 			result.PersonalShifts.First().TimeSpan.Should().Be(now.ToShortTimeString() + " - " + now.AddHours(1).ToShortTimeString());
+		}
+
+		[Test]
+		public void ShouldNotMapPersonalShiftsToTime()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
+			var period = new DateTimePeriod(2011,5,18,7,2011,5,18,16);
+			personAssignment.AddActivity(new Activity("a") { InWorkTime = true },period);
+			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
+			personAssignment.AddPersonalActivity(new Activity("b") { InWorkTime = true },period.MovePeriod(TimeSpan.FromHours(-2)));
+
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011,5,18),SchedulePartView.MainShift,personAssignment);
+
+			var result = Mapper.Map<IScheduleDay,PreferenceAndScheduleDayViewModel>(scheduleDay);
+			result.PersonAssignment.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
 		}
 	}
 }

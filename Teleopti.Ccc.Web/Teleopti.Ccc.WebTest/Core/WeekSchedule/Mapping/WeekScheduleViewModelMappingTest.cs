@@ -10,6 +10,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -253,18 +255,20 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public void ShouldMapOvertimeAvailabilityDefaultValuesIfHasShift()
 		{
 			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
-			var personAssignment = MockRepository.GenerateMock<IPersonAssignment>();
-			var startTime = new DateTime(2013, 04, 18, 15, 0, 0, DateTimeKind.Utc);
-			var endTime = new DateTime(2013, 04, 18, 18, 35, 0, DateTimeKind.Utc);
-			personAssignment.Stub(x => x.Period).Return(new DateTimePeriod(startTime, endTime));
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateTime.Now.Date, new Person(), SchedulePartView.MainShift,
-			                                                    personAssignment);
+	
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2011,5,18,6,0,0,DateTimeKind.Utc), new DateTime(2011,5,18,15,0,0,DateTimeKind.Utc));
+			personAssignment.AddActivity(new Activity("a") { InWorkTime = true },dateTimePeriod);
+			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
+
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011,5,18),SchedulePartView.MainShift,personAssignment);
 			domainData.ScheduleDay = scheduleDay;
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(2).TimeOfDay, CultureInfo.CurrentCulture));
-			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(endTime.AddHours(3).TimeOfDay, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultStartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(dateTimePeriod.TimePeriod(scheduleDay.TimeZone).EndTime, CultureInfo.CurrentCulture));
+			result.OvertimeAvailabililty.DefaultEndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(dateTimePeriod.TimePeriod(scheduleDay.TimeZone).EndTime.Add(TimeSpan.FromHours(1)), CultureInfo.CurrentCulture));
 		}
 
 		[Test]
@@ -314,32 +318,92 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapSummaryForMainShift()
 		{
-			var stubs = new StubFactory();
-			var dateTimePeriod = new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
-				new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc));	
-			var personAssignment = stubs.PersonAssignmentStub(dateTimePeriod);
-			personAssignment.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer>());
-			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
-			var projection = stubs.ProjectionStub(dateTimePeriod);
-			loggedOnUser.Stub(s => s.CurrentUser()).Return(new Person());
+			//var stubs = new StubFactory();
+			//var dateTimePeriod = new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
+			//	new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc));	
+			//var personAssignment = stubs.PersonAssignmentStub(dateTimePeriod);
+			//personAssignment.Stub(x => x.ShiftLayers).Return(new List<IShiftLayer>());
+			//var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+			//var projection = stubs.ProjectionStub(dateTimePeriod);
+			//loggedOnUser.Stub(s => s.CurrentUser()).Return(new Person());
 
-			periodViewModelFactory = new PeriodViewModelFactory(Mapper.Engine, new FakeUserTimeZone(TimeZoneInfo.Utc));
+			//periodViewModelFactory = new PeriodViewModelFactory(Mapper.Engine, new FakeUserTimeZone(TimeZoneInfo.Utc));
 			
+			//var domainData = new WeekScheduleDayDomainData
+			//{
+			//	Date = new DateOnly(2011, 05, 18),
+			//	ScheduleDay = scheduleDay,
+			//	Projection = projection,
+			//	MinMaxTime = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(8))
+			//};
+
+			//var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
+			var period = new DateTimePeriod(2011,5,18,7,2011,5,18,16);
+			personAssignment.AddActivity(new Activity("a") { InWorkTime = true },period);
+			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
+		
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011,5,18),SchedulePartView.MainShift,personAssignment);
+
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2011,5,18,6,0,0,DateTimeKind.Utc),
+				new DateTime(2011,5,18,15,0,0,DateTimeKind.Utc));
+
+			var projection = stubs.ProjectionStub(dateTimePeriod);
+			periodViewModelFactory = new PeriodViewModelFactory(Mapper.Engine,new FakeUserTimeZone(TimeZoneInfo.Utc));
+
 			var domainData = new WeekScheduleDayDomainData
 			{
-				Date = new DateOnly(2011, 05, 18),
+				Date = new DateOnly(2011,05,18),
 				ScheduleDay = scheduleDay,
 				Projection = projection,
-				MinMaxTime = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(8))
+				MinMaxTime = new TimePeriod(TimeSpan.FromMinutes(15),TimeSpan.FromHours(8))
 			};
 
-			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+			var result = Mapper.Map<WeekScheduleDayDomainData,DayViewModel>(domainData);
 
-			result.Summary.TimeSpan.Should().Be.EqualTo(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
+			result.Summary.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+
+
+		//	result.Summary.TimeSpan.Should().Be.EqualTo(new TimePeriod(8, 0, 17, 0).ToShortTimeString());
 			result.Summary.Title.Should().Be.EqualTo(scheduleDay.PersonAssignment().ShiftCategory.Description.Name);
 			result.Summary.StyleClassName.Should().Be.EqualTo(scheduleDay.PersonAssignment().ShiftCategory.DisplayColor.ToStyleClass());
 			result.Summary.Summary.Should().Be.EqualTo(TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(), CultureInfo.CurrentUICulture));
 		}
+
+
+		[Test]
+		public void ShouldNotMapPersonalActivityToSummaryTimespan()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(),new Scenario("s"),new DateOnly(2011,5,18));
+			var period = new DateTimePeriod(2011,5,18,7,2011,5,18,16);
+			personAssignment.AddActivity(new Activity("a") { InWorkTime = true },period);
+			personAssignment.SetShiftCategory(new ShiftCategory("sc"));
+			personAssignment.AddPersonalActivity(new Activity("b") { InWorkTime = true },period.MovePeriod(TimeSpan.FromHours(-2)));
+
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011,5,18),SchedulePartView.MainShift,personAssignment);
+
+			var dateTimePeriod = new DateTimePeriod(new DateTime(2011,5,18,6,0,0,DateTimeKind.Utc),
+				new DateTime(2011,5,18,15,0,0,DateTimeKind.Utc));
+			
+			var projection = stubs.ProjectionStub(dateTimePeriod);			
+			periodViewModelFactory = new PeriodViewModelFactory(Mapper.Engine,new FakeUserTimeZone(TimeZoneInfo.Utc));
+
+			var domainData = new WeekScheduleDayDomainData
+			{
+				Date = new DateOnly(2011,05,18),
+				ScheduleDay = scheduleDay,
+				Projection = projection,
+				MinMaxTime = new TimePeriod(TimeSpan.FromMinutes(15),TimeSpan.FromHours(8))
+			};
+
+			var result = Mapper.Map<WeekScheduleDayDomainData,DayViewModel>(domainData);
+
+			result.Summary.TimeSpan.Should().Be.EqualTo(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+		}
+
 
 		[Test]
 		public void ShouldMapSummaryForAbsence()

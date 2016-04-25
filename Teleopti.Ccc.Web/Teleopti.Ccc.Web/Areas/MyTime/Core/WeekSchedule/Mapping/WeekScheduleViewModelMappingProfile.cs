@@ -214,7 +214,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).ShiftCategory.Description.Name))
 				.ForMember(d => d.Summary, c => c.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.Meeting, c => c.Ignore())
-				.ForMember(d => d.TimeSpan, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).Period.TimePeriod(_loggedOnUser.Invoke().CurrentUser().PermissionInformation.DefaultTimeZone()).ToShortTimeString()))
+				.ForMember(d => d.TimeSpan, c => c.ResolveUsing(s => {
+					return
+						s.ScheduleDay.PersonAssignment(false)
+							.PeriodExcludingPersonalActivity()
+							.TimePeriod(s.ScheduleDay.TimeZone)
+							.ToShortTimeString();
+			
+				}))
 				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).ShiftCategory.DisplayColor.ToStyleClass()))
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())

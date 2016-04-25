@@ -56,6 +56,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return mergedMainShiftAndPersonalPeriods(); }
 		}
 
+		public virtual DateTimePeriod PeriodExcludingPersonalActivity()
+		{
+			// Duplicate mergedMainShiftAndPersonalPeriods but exlude PersonalShiftLayer explicitly.
+			DateTimePeriod? mergedPeriod = null;
+			foreach(var shiftLayer in ShiftLayers)
+			{
+				if (shiftLayer.GetType() == typeof (PersonalShiftLayer)) continue;
+				mergedPeriod = DateTimePeriod.MaximumPeriod(shiftLayer.Period,mergedPeriod);
+			}
+			if(mergedPeriod.HasValue)
+				return mergedPeriod.Value;
+
+			var dayOff = DayOff();
+			return dayOff == null ?
+				new DateOnlyPeriod(Date,Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :    //don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
+				new DateTimePeriod(dayOff.Anchor,dayOff.Anchor.AddTicks(1));
+		}
+
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
 			//this is quite strange... probably wrong impl if eg only overtime or personal layer exists together with dayoff

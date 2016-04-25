@@ -38,15 +38,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			//Swedish, vintertid
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-      testPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
+			testPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
 
-			target.AddActivity(new Activity("_"), new TimePeriod(8, 0, 16, 0));
+			target.AddActivity(new Activity("_"),new TimePeriod(8,0,16,0));
 
-			var dateAsDateTimeUTC = DateTime.SpecifyKind(target.Date.Date, DateTimeKind.Utc);
+			var dateAsDateTimeUTC = DateTime.SpecifyKind(target.Date.Date,DateTimeKind.Utc);
 
 			target.Period
 				.Should()
-				.Be.EqualTo(new DateTimePeriod(dateAsDateTimeUTC.AddHours(7), dateAsDateTimeUTC.AddHours(15)));
+				.Be.EqualTo(new DateTimePeriod(dateAsDateTimeUTC.AddHours(7),dateAsDateTimeUTC.AddHours(15)));
 		}
 
 		[Test]
@@ -253,6 +253,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.AreEqual(expectedPeriod, target.Period);
 		}
+
+
+		[Test]
+		public void PeriodExcludingPersonalActivityShouldReturnCorrectly()
+		{
+			DateTime start = new DateTime(2001,1,1,1,0,0,DateTimeKind.Utc);
+			DateTime end = start.AddHours(4);
+			IActivity activity = new Activity("act");
+			
+			DateTimePeriod mainShiftPeriod = new DateTimePeriod(start,end);
+			DateTimePeriod personalPeriod = mainShiftPeriod.MovePeriod(TimeSpan.FromHours(-2));
+
+			target.AddActivity(activity, mainShiftPeriod);
+			target.AddPersonalActivity(activity,personalPeriod);
+			
+			target.PeriodExcludingPersonalActivity()
+				.Should()
+				.Be.EqualTo(mainShiftPeriod);
+		}
+
 
 		/// <summary>
 		/// Verifies the restriction set is checked.
