@@ -24,7 +24,7 @@
 		var vm = this;
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
-		
+
 		vm.selectedAbsenceEndDate = moment(vm.defaultDateTime()).add(1, 'hour').toDate();
 		vm.absencePermissions = {
 			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
@@ -86,8 +86,8 @@
 				if (fail === 0) {
 					NotificationService.notify('success', 'AddAbsenceSuccessedResult');
 				} else {
-					var title = NotificationService.notify('warning', 'AddAbsenceTotalResult', [total - fail, fail]);
-					CommandCommon.showCommandFailureDetailsDialog(title, result);
+					var description = NotificationService.notify('warning', 'AddAbsenceTotalResult', [total - fail, fail]);
+					CommandCommon.showCommandFailureDetailsDialog(description, result);
 				}
 			}
 		}

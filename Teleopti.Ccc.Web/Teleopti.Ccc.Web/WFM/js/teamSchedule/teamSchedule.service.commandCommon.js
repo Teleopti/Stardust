@@ -82,7 +82,7 @@
 			return wrapped;
 		}
 
-		function showCommandFailureDetailsDialog(title, details) {
+		function showCommandFailureDetailsDialog(description, details) {
 			return $mdDialog.show({
 				controller: commandFailureDetailsDialogCtrl,
 				templateUrl: 'js/teamSchedule/html/commandFailureDetailsDialog.tpl.html',
@@ -90,7 +90,7 @@
 				clickOutsideToClose: true,
 				bindToController: true,
 				locals: {
-					dialogTitle: title,
+					description: description,
 					details: details
 				}
 			});
@@ -101,7 +101,7 @@
 	commandFailureDetailsDialogCtrl.$inject = ['$scope', '$mdDialog', 'PersonSelection'];
 	function commandFailureDetailsDialogCtrl($scope, $mdDialog, PersonSelection) {
 		var ctrl = this;
-		$scope.dialogTitle = ctrl.dialogTitle;
+		$scope.description = ctrl.description;
 		$scope.details = [];
 		$scope.cancel = function () { $mdDialog.cancel(); };
 		init.apply(ctrl);

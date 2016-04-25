@@ -98,8 +98,8 @@
 				if (fail === 0) {
 					NotificationSvc.notify('success', 'SuccessfulMessageForAddingActivity');
 				} else {
-					var title = NotificationSvc.notify('warning', 'PartialSuccessMessageForAddingActivity', [total, total - fail, fail]);
-					CommandCommon.showCommandFailureDetailsDialog(title, response.data);
+					var description = NotificationSvc.notify('warning', 'PartialSuccessMessageForAddingActivity', [total, total - fail, fail]);
+					CommandCommon.showCommandFailureDetailsDialog(description, response.data);
 				}
 			}, function (response) {
 				if (vm.actionsAfterActivityApply) {

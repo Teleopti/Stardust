@@ -1,13 +1,14 @@
-<md-dialog aria-label="{{dialogTitle}}" ng-cloak class="team-schedule-command-failure-details-dialog">
+<md-dialog aria-label="Fail Messages" ng-cloak class="team-schedule-command-failure-details-dialog">
 	<form>
-		<md-toolbar>
+		<md-toolbar class="md-warn">
 			<div class="md-toolbar-tools">
-				<h2 translate>{{dialogTitle}}</h2>
+				<h2 translate>Fail</h2>
 				<span flex></span>
 			</div>
 		</md-toolbar>
 		<md-dialog-content>
 			<div class="md-dialog-content">
+				<p>{{description}}</p>
 				<table style="width:100%;">
                     <thead>
                         <tr>

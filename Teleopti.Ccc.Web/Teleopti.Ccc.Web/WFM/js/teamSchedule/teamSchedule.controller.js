@@ -139,7 +139,7 @@
 
 		vm.setEarliestStartOfSelectedSchedule = function() {
 			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
-			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds);		
+			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds);
 		}
 
 		vm.defaultNewActivityStart = function() {
@@ -204,8 +204,8 @@
 					if (fail === 0) {
 						notificationService.notify('success', 'FinishedRemoveAbsence');
 					} else {
-						var title = notificationService.notify('warning', 'PartialSuccessMessageForRemovingAbsence', [total, total - fail, fail]);
-						CommandCommonSvc.showCommandFailureDetailsDialog(title, result);
+						var description = notificationService.notify('warning', 'PartialSuccessMessageForRemovingAbsence', [total, total - fail, fail]);
+						CommandCommonSvc.showCommandFailureDetailsDialog(description, result);
 					}
 				});
 		}
@@ -244,8 +244,8 @@
 				} else {
 					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.PersonCount;
 					var fail = response.data.length;
-					var title = notificationService.notify('warning', 'PartialSuccessMessageForRemovingActivity', [total, total - fail, fail]);
-					CommandCommonSvc.showCommandFailureDetailsDialog(title, response.data);
+					var description = notificationService.notify('warning', 'PartialSuccessMessageForRemovingActivity', [total, total - fail, fail]);
+					CommandCommonSvc.showCommandFailureDetailsDialog(description, response.data);
 				}
 			}, function (error) {
 				vm.afterActionCallback(trackId, personIds);
@@ -381,9 +381,9 @@
 
 			if (vm.toggles.PrepareToRelease) {
 				var template = $translate.instant('WFMReleaseNotification');
-				var message = template.replace('{0}', 'MyTeam').replace('{1}', '../Anywhere#teamschedule').replace('{2}', 'MyTeam');	
+				var message = template.replace('{0}', 'MyTeam').replace('{1}', '../Anywhere#teamschedule').replace('{2}', 'MyTeam');
 				NoticeService.info(message, null, true);
-			}		
+			}
 		};
 		$q.all([
 			teamScheduleSvc.PromiseForloadedPermissions(function (result) {
