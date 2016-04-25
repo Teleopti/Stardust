@@ -121,38 +121,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			unitOfWork.PersistAll();
 		}
 	}
-
-	//[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	//public class OpenAndSplitTargetSkillStardust : OpenAndSplitTargetSkillHandler, IHandleEvent<OpenAndSplitTargetSkillEvent>, IRunOnStardust
-	//{
-	//	public OpenAndSplitTargetSkillStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
-	//		ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
-	//		IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
-	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
-	//		: base(
-	//			unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
-	//			disableBusinessUnitFilter)
-	//	{
-	//	}
-
-	//	public new void Handle(OpenAndSplitTargetSkillEvent  @event)
-	//	{ base.Handle(@event);}
-	//}
-
-	//[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	//public class OpenAndSplitTargetSkillBus : OpenAndSplitTargetSkillHandler, IHandleEvent<OpenAndSplitTargetSkillEvent>, IRunOnServiceBus
-	//{
-	//	public OpenAndSplitTargetSkillBus(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command,
-	//		ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
-	//		IMessageBrokerComposite messageBroker, IEventPublisher eventPublisher,
-	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
-	//		: base(
-	//			unitOfWorkFactory, command, skillRepository, jobResultRepository, feedback, messageBroker, eventPublisher,
-	//			disableBusinessUnitFilter)
-	//	{
-	//	}
-
-	//	public new void Handle(OpenAndSplitTargetSkillEvent @event)
-	//	{ base.Handle(@event); }
-	//}
 }

@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Forecasting.Export;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
@@ -20,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private MockRepository _mocks;
 		private IForecastsAnalyzeQuery _analyzeQuery;
 		private IJobResultFeedback _feedback;
-		private IEventPublisher _serviceBus;
+		private IOpenAndSplitTargetSkillHandler _openAndSplitTarget;
 
 		[SetUp]
 		public void Setup()
@@ -28,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_mocks = new MockRepository();
 			_analyzeQuery = _mocks.DynamicMock<IForecastsAnalyzeQuery>();
 			_feedback = _mocks.DynamicMock<IJobResultFeedback>();
-			_serviceBus = _mocks.StrictMock<IEventPublisher>();
-			_target = new SendImportForecastBusMessage(_analyzeQuery, _feedback, _serviceBus);
+			_openAndSplitTarget = _mocks.StrictMock<IOpenAndSplitTargetSkillHandler>();
+			_target = new SendImportForecastBusMessage(_analyzeQuery, _feedback, _openAndSplitTarget);
 		}
 
 		[Test]
@@ -62,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				Expect.Call(_analyzeQuery.Run(new[] { row }, targetSkill)).Return(queryResult);
 				Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
 				Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
-				Expect.Call(() => _serviceBus.Publish()).Constraints(
-					 Is.Matching<Object[]>(a => ((OpenAndSplitTargetSkillEvent)a[0]).Date == dateOnly.Date));
+				Expect.Call(()=>_openAndSplitTarget.Handle(new OpenAndSplitTargetSkillEvent())).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{

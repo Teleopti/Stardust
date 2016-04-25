@@ -94,41 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private void endProcessing(IUnitOfWork unitOfWork)
 		{
 			unitOfWork.PersistAll();
-			_feedback.Clear();
 		}
 	}
 
-	//[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	//public class ImportForecastsToSkillBusHander: ImportForecastsToSkillHandler, IHandleEvent<ImportForecastsToSkillEvent>, IRunOnServiceBus
-	//{
-	//	public ImportForecastsToSkillBusHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
-	//		ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
-	//		IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
-	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
-	//		: base(
-	//			unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
-	//			disableBusinessUnitFilter)
-	//	{
-	//	}
-
-	//	public new void Handle(ImportForecastsToSkillEvent @event)
-	//	{ base.Handle(@event);}
-	//}
-
-	//[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	//public class ImportForecastsToSkillStardustHander : ImportForecastsToSkillHandler, IHandleEvent<ImportForecastsToSkillEvent>, IRunOnStardust
-	//{
-	//	public ImportForecastsToSkillStardustHander(ICurrentUnitOfWorkFactory unitOfWorkFactory,
-	//		ISaveForecastToSkillCommand saveForecastToSkillCommand, ISkillRepository skillRepository,
-	//		IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
-	//		IDisableBusinessUnitFilter disableBusinessUnitFilter)
-	//		: base(
-	//			unitOfWorkFactory, saveForecastToSkillCommand, skillRepository, jobResultRepository, feedback, messageBroker,
-	//			disableBusinessUnitFilter)
-	//	{
-	//	}
-
-	//	public new void Handle(ImportForecastsToSkillEvent @event)
-	//	{ base.Handle(@event); }
-	//}
 }

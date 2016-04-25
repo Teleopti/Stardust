@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
     {
         private readonly IForecastsAnalyzeQuery _analyzeQuery;
         private readonly IJobResultFeedback _feedback;
-        private readonly IEventPublisher _eventPublisher;
+	    private readonly IOpenAndSplitTargetSkillHandler _openAndSplitTargetSkillHandler;
 
-        public SendImportForecastBusMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IEventPublisher eventPublisher)
+		public SendImportForecastBusMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
         {
             _analyzeQuery = analyzeQuery;
             _feedback = feedback;
-            _eventPublisher = eventPublisher;
+			_openAndSplitTargetSkillHandler = openAndSplitTargetSkillHandler;
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                 listOfMessages.ForEach(m =>
                                            {
                                                currentSendingMsg = m;
-                                               _eventPublisher.Publish(m);
+											   _openAndSplitTargetSkillHandler.Handle(m);
                                            });
             }
             catch (Exception e)

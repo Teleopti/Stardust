@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	public class ImportForecastsFileToSkillTest
 	{
 		private ImportForecastsFileToSkillBase _target;
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWork _unitOfWorkFactory;
 		private ISkillRepository _skillRepository;
 		private IJobResultRepository _jobResultRepository;
 		private IImportForecastsRepository _importForecastsRepository;
@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IOpenAndSplitTargetSkillHandler _openAndSplitTargetSkillHandler;
 		private IForecastsFileContentProvider _contentProvider;
 		private TimeZoneInfo _timeZone;
-		private IUnitOfWork _unitOfWork;
 		private IJobResult _jobResult;
 		private IForecastFile _forecastFile;
 		private IForecastsAnalyzeQuery _analyzeQuery;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		[SetUp]
 		public void Setup()
 		{
-			_unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_jobResultRepository = MockRepository.GenerateMock<IJobResultRepository>();
 			_importForecastsRepository = MockRepository.GenerateMock<IImportForecastsRepository>();
@@ -48,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_openAndSplitTargetSkillHandler = MockRepository.GenerateMock<IOpenAndSplitTargetSkillHandler>();
 			_timeZone = (TimeZoneInfo.Utc);
-			_unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			_jobResult = MockRepository.GenerateMock<IJobResult>();
 			_forecastFile = MockRepository.GenerateMock<IForecastFile>();
 			_analyzeQuery = MockRepository.GenerateMock<IForecastsAnalyzeQuery>();
@@ -92,9 +90,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				ForecastFileContainer = forecasts
 			};
 
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_unitOfWorkFactory.Stub(x => x.Current()).Return(uowFactory);
-			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill).Repeat.Any();
 			_importForecastsRepository.Stub(x => x.Get(jobId)).Return(_forecastFile);
@@ -122,9 +119,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var jobId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
 
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_unitOfWorkFactory.Stub(x => x.Current()).Return(uowFactory);
-			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(null);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 
@@ -148,9 +144,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			var skill = SkillFactory.CreateSkill("test skill");
 			skill.TimeZone = _timeZone;
 
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_unitOfWorkFactory.Stub(x => x.Current()).Return(uowFactory);
-			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_importForecastsRepository.Stub(x => x.Get(jobId)).Return(null);
@@ -177,9 +172,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			skill.TimeZone = _timeZone;
 			var queryResult = MockRepository.GenerateMock<IForecastsAnalyzeQueryResult>();
 
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_unitOfWorkFactory.Stub(x => x.Current()).Return(uowFactory);
-			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_importForecastsRepository.Stub(x => x.Get(jobId)).Return(_forecastFile);

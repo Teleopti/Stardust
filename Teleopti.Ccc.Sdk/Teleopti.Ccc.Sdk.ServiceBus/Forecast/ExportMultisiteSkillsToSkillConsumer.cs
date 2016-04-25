@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
 	public class ExportMultisiteSkillsToSkillConsumer : ConsumerOf<ExportMultisiteSkillsToSkill>
 	{
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
@@ -74,9 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             _feedback.ChangeTotalProgress(progressSteps);
 
 			listOfMessages.ForEach(m=> _serviceBus.Send(m));
-
-            _feedback.Dispose();
-			_unitOfWorkFactory = null;
+			_feedback.Clear();
 		}
 	}
 }

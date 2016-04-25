@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 	public class ImportForecastsFileToSkillBase
 	{
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IImportForecastsRepository _importForecastsRepository;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IOpenAndSplitTargetSkillHandler _openAndSplitTargetSkillHandler;
 
-		public ImportForecastsFileToSkillBase(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public ImportForecastsFileToSkillBase(ICurrentUnitOfWork currentUnitOfWork,
 			ISkillRepository skillRepository,
 			IJobResultRepository jobResultRepository,
 			IImportForecastsRepository importForecastsRepository,
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IMessageBrokerComposite messageBroker,
 			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 			_skillRepository = skillRepository;
 			_jobResultRepository = jobResultRepository;
 			_importForecastsRepository = importForecastsRepository;
@@ -53,72 +53,71 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 		public void Handle(ImportForecastsFileToSkill @event)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			var unitOfWork = _currentUnitOfWork.Current();
+			var jobResult = _jobResultRepository.Get(@event.JobId);
+			var skill = _skillRepository.Get(@event.TargetSkillId);
+			_feedback.SetJobResult(jobResult, _messageBroker);
+			if (skill == null)
 			{
-				var jobResult = _jobResultRepository.Get(@event.JobId);
-				var skill = _skillRepository.Get(@event.TargetSkillId);
-				_feedback.SetJobResult(jobResult, _messageBroker);
-				if (skill == null)
+				logAndReportValidationError(unitOfWork, jobResult, "Skill does not exist.");
+				return;
+			}
+			var timeZone = skill.TimeZone;
+			var forecastFile = _importForecastsRepository.Get(@event.UploadedFileId);
+			if (forecastFile == null)
+			{
+				logAndReportValidationError(unitOfWork, jobResult, "The uploaded file has no content.");
+				return;
+			}
+			_feedback.ReportProgress(2, string.Format(CultureInfo.InvariantCulture, "Validating..."));
+			IForecastsAnalyzeQueryResult queryResult;
+			try
+			{
+				var content = _contentProvider.LoadContent(forecastFile.FileContent, timeZone);
+				queryResult = _analyzeQuery.Run(content, skill);
+				if (!queryResult.Succeeded)
 				{
-					logAndReportValidationError(unitOfWork, jobResult, "Skill does not exist.");
+					logAndReportValidationError(unitOfWork, jobResult, queryResult.ErrorMessage);
 					return;
-				}
-				var timeZone = skill.TimeZone;
-				var forecastFile = _importForecastsRepository.Get(@event.UploadedFileId);
-				if (forecastFile == null)
-				{
-					logAndReportValidationError(unitOfWork, jobResult, "The uploaded file has no content.");
-					return;
-				}
-				_feedback.ReportProgress(2, string.Format(CultureInfo.InvariantCulture, "Validating..."));
-				IForecastsAnalyzeQueryResult queryResult;
-				try
-				{
-					var content = _contentProvider.LoadContent(forecastFile.FileContent, timeZone);
-					queryResult = _analyzeQuery.Run(content, skill);
-					if (!queryResult.Succeeded)
-					{
-						logAndReportValidationError(unitOfWork, jobResult, queryResult.ErrorMessage);
-						return;
-					}
-				}
-				catch (ValidationException exception)
-				{
-					logAndReportValidationError(unitOfWork, jobResult, exception.Message);
-					return;
-				}
-				jobResult.Period = queryResult.Period;
-
-				_feedback.Info(string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...", skill.Name));
-				_feedback.ReportProgress(1,
-					string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}.", skill.Name));
-
-				var listOfMessages = generateMessages(@event, queryResult);
-				_feedback.ChangeTotalProgress(3 + listOfMessages.Count * 4);
-				endProcessing(unitOfWork);
-				var currentSendingMsg = new OpenAndSplitTargetSkillEvent { Date = new DateTime() };
-				try
-				{
-					listOfMessages.ForEach(m =>
-					{
-						currentSendingMsg = m;
-						_openAndSplitTargetSkillHandler.Handle(m);
-					});
-				}
-				catch (SerializationException e)
-				{
-					notifyServiceBusErrors(currentSendingMsg, e);
-				}
-				catch (Exception e)
-				{
-					notifyServiceBusErrors(currentSendingMsg, e);
 				}
 			}
+			catch (ValidationException exception)
+			{
+				logAndReportValidationError(unitOfWork, jobResult, exception.Message);
+				return;
+			}
+			jobResult.Period = queryResult.Period;
+
+			_feedback.Info(string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}...", skill.Name));
+			_feedback.ReportProgress(1,
+				string.Format(CultureInfo.InvariantCulture, "Importing forecasts for skill {0}.", skill.Name));
+
+			var listOfMessages = generateMessages(@event, queryResult);
+			_feedback.ChangeTotalProgress(3 + listOfMessages.Count * 4);
+			endProcessing(unitOfWork);
+			var currentSendingMsg = new OpenAndSplitTargetSkillEvent { Date = new DateTime() };
+			try
+			{
+				listOfMessages.ForEach(m =>
+				{
+					currentSendingMsg = m;
+					_openAndSplitTargetSkillHandler.Handle(m);
+				});
+			}
+			catch (SerializationException e)
+			{
+				notifyServiceBusErrors(currentSendingMsg, e);
+			}
+			catch (Exception e)
+			{
+				notifyServiceBusErrors(currentSendingMsg, e);
+			}
+			
 		}
 
 		private void notifyServiceBusErrors(OpenAndSplitTargetSkillEvent @event, Exception e)
 		{
-			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			var uow = _currentUnitOfWork.Current();
 			{
 				var job = _jobResultRepository.Get(@event.JobId);
 				_feedback.SetJobResult(job, _messageBroker);
@@ -183,7 +182,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IPersonRepository _personRepository;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 
-		public ImportForecastsFileToSkillStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public ImportForecastsFileToSkillStardust(ICurrentUnitOfWork currentUnitOfWork,
 			ISkillRepository skillRepository,
 			IJobResultRepository jobResultRepository,
 			IImportForecastsRepository importForecastsRepository,
@@ -198,7 +197,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IBusinessUnitRepository businessUnitRepository
 			)
 			: base(
-				unitOfWorkFactory, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
+				currentUnitOfWork, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
 				feedback, messageBroker, openAndSplitTargetSkillHandler)
 		{
 			_dataSourceState = dataSourceState;
@@ -218,9 +217,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					var person = _personRepository.Get(@event.OwnerPersonId);
 					var bu = _businessUnitRepository.Get(@event.LogOnBusinessUnitId);
 					Thread.CurrentPrincipal = new TeleoptiPrincipal(new TeleoptiIdentity(person.Name.FirstName, _dataSourceState.Get(), bu, null, @event.LogOnDatasource), person);
+					base.Handle(@event);
 				}
 
-				base.Handle(@event);
+				
 			}
 		}
 	}
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 	public class ImportForecastsFileToSkillBus : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkill>, IRunOnServiceBus
 #pragma warning restore 618
 	{
-		public ImportForecastsFileToSkillBus(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public ImportForecastsFileToSkillBus(ICurrentUnitOfWork currentUnitOfWork,
 			ISkillRepository skillRepository,
 			IJobResultRepository jobResultRepository,
 			IImportForecastsRepository importForecastsRepository,
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IMessageBrokerComposite messageBroker,
 			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
 			: base(
-				unitOfWorkFactory, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
+				currentUnitOfWork, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
 				feedback, messageBroker, openAndSplitTargetSkillHandler)
 		{
 
