@@ -116,7 +116,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			LogMessage("Finished.");
 		}
 
-		[Test,  Ignore]
+		[Test]
 		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
 		{
 			LogMessage("Start.");
@@ -124,7 +124,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(5));
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(10));
 
 			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
 			                                                     2);
@@ -212,7 +212,6 @@ namespace Manager.Integration.Test.FunctionalTests
 			{
 				jobManagerTaskCreator.Dispose();
 			}
-
 
 			var endedTest = DateTime.UtcNow;
 

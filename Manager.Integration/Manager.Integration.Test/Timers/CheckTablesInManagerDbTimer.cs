@@ -92,6 +92,21 @@ namespace Manager.Integration.Test.Timers
 
 		public void Dispose()
 		{
+			JobQueueTimer.Stop();
+			JobQueueTimer.Dispose();
+
+			JobTimer.Stop();
+			JobTimer.Dispose();
+
+			JobDetailTimer.Stop();
+			JobDetailTimer.Dispose();
+
+			LoggingTimer.Stop();
+			LoggingTimer.Dispose();
+
+			WorkerNodeTimer.Stop();
+			WorkerNodeTimer.Dispose();
+
 			ManagerDbEntities.Dispose();
 		}
 	}

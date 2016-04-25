@@ -46,7 +46,8 @@ namespace Manager.Integration.Test.FunctionalTests
 			{
 				checkTablesInManagerDbTimer.JobQueueTimer.Start();
 
-				HttpResponseMessage response = httpSender.PostAsync(uri, jobQueueItem).Result;
+				HttpResponseMessage response = httpSender.PostAsync(uri, 
+																    jobQueueItem).Result;
 
 				while (!response.IsSuccessStatusCode)
 				{
@@ -62,6 +63,8 @@ namespace Manager.Integration.Test.FunctionalTests
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbEntities.JobQueues.Count() == 1);
 
 			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbEntities.Jobs.Any());
+
+			checkTablesInManagerDbTimer.Dispose();
 		}
 	}
 }
