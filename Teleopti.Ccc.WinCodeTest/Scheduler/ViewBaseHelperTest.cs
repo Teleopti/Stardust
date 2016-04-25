@@ -436,25 +436,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreNotEqual(-1, pos);
         }
 
-
-        [Test]
-        public void VerifyMinWidth()
-        {
-            _minutes = 1;
-            _hourWidth = 60;
-            Assert.AreEqual(1,ViewBaseHelper.GetMinWidth(_minutes,_hourWidth));
-
-            _minutes = 30;
-            _hourWidth = 60;
-            Assert.AreEqual(30, ViewBaseHelper.GetMinWidth(_minutes, _hourWidth));
-
-
-            _minutes = 40;
-            _hourWidth = 50;
-            Assert.AreEqual(33, ViewBaseHelper.GetMinWidth(_minutes, _hourWidth));
-            
-        }
-
         [Test]
         public void VerifyGetLayerRectangle()
         {

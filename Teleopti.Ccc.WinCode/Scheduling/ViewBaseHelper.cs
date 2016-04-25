@@ -286,20 +286,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		/// <summary>
-		/// calculate widht for minutes
-		/// </summary>
-		/// <param name="min"></param>
-		/// <param name="hourWidth"></param>
-		/// <returns></returns>
-		public static int GetMinWidth(int min, int hourWidth)
-		{
-			float minPercent = min/(float) 60;
-			float minWidth = minPercent*hourWidth;
-
-			return (int) minWidth;
-		}
-
-		/// <summary>
 		/// Return a rectangle to draw from in a timeline view
 		/// </summary>
 		/// <param name="periodBounds">The period bounds.</param>
