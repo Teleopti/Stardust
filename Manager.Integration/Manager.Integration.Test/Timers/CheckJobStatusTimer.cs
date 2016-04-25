@@ -12,13 +12,13 @@ using Newtonsoft.Json;
 
 namespace Manager.Integration.Test.Timers
 {
-	public class CheckJobHistoryStatusTimer : IDisposable
+	public class CheckJobStatusTimer : IDisposable
 	{
 		public EventHandler<GuidAddedEventArgs> GuidAddedEventHandler;
 
 		public EventHandler<GuidStatusChangedEventArgs> GuidStatusChangedEvent;
 
-		public CheckJobHistoryStatusTimer(int numberOfGuidsToWatch,
+		public CheckJobStatusTimer(int numberOfGuidsToWatch,
 		                                  params string[] statusToLookFor)
 		{
 			if (numberOfGuidsToWatch <= 0)

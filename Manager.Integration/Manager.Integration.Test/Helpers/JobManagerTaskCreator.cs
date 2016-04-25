@@ -12,18 +12,18 @@ namespace Manager.Integration.Test.Helpers
 {
 	public class JobManagerTaskCreator : IDisposable
 	{
-		public JobManagerTaskCreator(CheckJobHistoryStatusTimer checkJobHistoryStatusTimer)
+		public JobManagerTaskCreator(CheckJobStatusTimer checkJobStatusTimer)
 		{
 			CancellationTokenSource = new CancellationTokenSource();
 
 			ManagerUriBuilder = new ManagerUriBuilder();
 
-			CheckJobHistoryStatusTimer = checkJobHistoryStatusTimer;
+			CheckJobStatusTimer = checkJobStatusTimer;
 		}
 
 		public ManagerUriBuilder ManagerUriBuilder { get; set; }
 
-		private CheckJobHistoryStatusTimer CheckJobHistoryStatusTimer { get; set; }
+		private CheckJobStatusTimer CheckJobStatusTimer { get; set; }
 
 		public bool CreateNewJobToManagerSucceeded { get; set; }
 
@@ -130,7 +130,7 @@ namespace Manager.Integration.Test.Helpers
 
 						var jobId = JsonConvert.DeserializeObject<Guid>(str);
 
-						CheckJobHistoryStatusTimer.AddOrUpdateGuidStatus(jobId,
+						CheckJobStatusTimer.AddOrUpdateGuidStatus(jobId,
 						                                                 null);
 
 						this.Log().DebugWithLineNumber(
