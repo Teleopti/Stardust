@@ -16,7 +16,6 @@
 			};
 
 			checkThemeState().then(function(result) {
-				console.log(result);
 				if (result.data.Name === "dark") {
 					$scope.darkTheme = true;
 				} else {
@@ -39,7 +38,7 @@
 
 			var replaceCurrentTheme = function(theme) {
 				ThemeService.setTheme(theme);
-				ThemeService.saveTheme(theme, $scope.toggleOverlay);
+				ThemeService.saveTheme(theme);
 			};
 
 			$scope.toggleDarkTheme = function() {

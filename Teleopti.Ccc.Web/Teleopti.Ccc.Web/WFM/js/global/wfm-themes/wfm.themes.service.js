@@ -24,10 +24,9 @@
 			});
 		};
 
-		service.saveTheme = function(name, overlay) {
+		service.saveTheme = function(name) {
 			$http.post("../api/Theme/Change", {
-				Name: name,
-				Overlay: overlay
+				Name: name
 			});
 		};
 

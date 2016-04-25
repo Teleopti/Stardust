@@ -26,17 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		[UnitOfWork, HttpPost, Route("api/Theme/Change")]
 		public virtual void Change([FromBody]ThemeInput theme)
 		{
-			_themeProvider.Persist(new ThemeSetting
-			{
-				Name = theme.Name,
-				Overlay = theme.Overlay
-			});
+			_themeProvider.Persist(new ThemeSetting {Name = theme.Name});
 		}
 	}
 
 	public class ThemeInput
 	{
 		public string Name { get; set; }
-		public bool Overlay { get; set; }
 	}
 }
