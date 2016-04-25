@@ -41,10 +41,11 @@ namespace Teleopti.Support.Tool.Controls
 
 		private void buttonRefreshThem_Click(object sender, EventArgs e)
 		{
-			var mode = "DEPLOY";
+
+            var mode = "DeployConfigFiles.txt";
 #if (DEBUG)
 			{
-				mode = "DEVELOP";
+				mode = "ConfigFiles.txt";
 			}
 #endif
 			runRefresher(mode);
