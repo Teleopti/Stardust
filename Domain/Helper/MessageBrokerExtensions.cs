@@ -35,12 +35,6 @@ namespace Teleopti.Ccc.Domain.Helper
 			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate, base64BinaryData, mailBox);
 		}
 
-		public static void RegisterEventSubscription(this IMessageListener broker, EventHandler<EventMessageArgs> eventMessageHandler, Guid domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
-		{
-			var detail = getContext();
-			broker.addSubscription(eventMessageHandler, detail.Datasource, detail.BusinessUnitId, null, null, domainObjectId, domainObjectType, startDate, endDate);
-		}
-
 		private class subscriptionContext
 		{
 			public string Datasource { get; set; }
