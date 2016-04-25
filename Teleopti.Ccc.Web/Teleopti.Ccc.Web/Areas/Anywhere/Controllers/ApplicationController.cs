@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				UserTexts.Resources.Schedules,
 				UserTexts.Resources.NoAbsenceToRemoveInCurrentShift,
 				UserTexts.Resources.NoHierarchiesExist,
+				UserTexts.Resources.TryOutTheNewImprovedMyTeam,
 
 				DateAndTimeFormatExtensions.FixedDateFormat,
 				DateAndTimeFormatExtensions.FixedDateTimeFormat,
@@ -183,6 +184,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
 
 				MyTeam_MakeTeamScheduleConsistent_31897 = _toggles.IsEnabled(Toggles.MyTeam_MakeTeamScheduleConsistent_31897),
+				
+
 
 				RTA_AdherenceDetails_34267 = _toggles.IsEnabled(Toggles.RTA_AdherenceDetails_34267),
 				RTA_NotifyViaSMS_31567 = _toggles.IsEnabled(Toggles.RTA_NotifyViaSMS_31567),

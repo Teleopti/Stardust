@@ -10,9 +10,6 @@
 
 		var vm = this;
 
-		var message = "MyTeam has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customer-feedback.aspx'>feedback.</a>\
-				Old <a href='../Anywhere#teamschedule'>MyTeam</a> can be accessed for a limited time.";
-	
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
@@ -383,6 +380,8 @@
 			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled || vm.toggles.RemoveActivityEnabled || vm.toggles.RemoveAbsenceEnabled || vm.toggles.SwapShiftEnabled;
 
 			if (vm.toggles.PrepareToRelease) {
+				var template = $translate.instant('WFMReleaseNotification');
+				var message = template.replace('{0}', 'MyTeam').replace('{1}', '../Anywhere#teamschedule').replace('{2}', 'MyTeam');	
 				NoticeService.info(message, null, true);
 			}		
 		};

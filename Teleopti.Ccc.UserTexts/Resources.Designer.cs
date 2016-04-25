@@ -29974,6 +29974,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Try out the new improved MyTeam!.
+        /// </summary>
+        public static string TryOutTheNewImprovedMyTeam {
+            get {
+                return ResourceManager.GetString("TryOutTheNewImprovedMyTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tuesday.
         /// </summary>
         public static string Tuesday {
@@ -31716,6 +31725,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Welcome {
             get {
                 return ResourceManager.GetString("Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been improved! We appreciate your &lt;a href=&apos;http://www.teleopti.com/wfm/customer-feedback.aspx&apos;&gt;feedback.&lt;/a&gt;Old &lt;a href=&apos;{1}&apos;&gt;{2}&lt;/a&gt; can be accessed for a limited time..
+        /// </summary>
+        public static string WFMReleaseNotification {
+            get {
+                return ResourceManager.GetString("WFMReleaseNotification", resourceCulture);
             }
         }
         

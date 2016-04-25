@@ -91,6 +91,7 @@ define([
 
 			viewModel.SetViewOptions(options);
 			viewModel.WfmTeamSchedule_PrepareForRelease_37752(resources.WfmTeamSchedule_PrepareForRelease_37752);
+			viewModel.TryOutTheNewImprovedMyTeam(resources.TryOutTheNewImprovedMyTeam);
 
 			var groupPagesDeferred = $.Deferred();
 

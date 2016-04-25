@@ -2,7 +2,7 @@
 	<div class="row">
 		<div id="existsWhenLoadingFinishes" data-bind="ifnot: Loading"></div>
 		<!--ko if: WfmTeamSchedule_PrepareForRelease_37752-->
-		<a href="../Web/wfm/#/teamSchedule" class="col-md-12 btn pull-right" style="background: #bada55; text-align: left; color: #333 !important; text-decoration: none !important; margin-bottom: 10px;">Try out the new improved MyTeam!</a>
+		<a href="../Web/wfm/#/teamSchedule" class="col-md-12 btn pull-right" style="background: #bada55; text-align: left; color: #333 !important; text-decoration: none !important; margin-bottom: 10px;" data-bind="{ text: TryOutTheNewImprovedMyTeam}"></a>
 		<!-- /ko -->
         <div class="col-xs-12 col-md-4">
             <select id="group-picker" class="col-xs-12" data-bind="disable: Loading, foreach: GroupPages, select2: { value: GroupId } ">

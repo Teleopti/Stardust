@@ -14378,8 +14378,17 @@ Help us improve your experience by sending an error report</value>
     <value>If you cancel this approved absence request then any absences created from this request will be deleted from the agent's schedule.</value>
     <comment>Used as a description on the confirmation dialog shown when cancelling an absence request in the new Angel project request view</comment>
   </data>
+  <data name="TryOutTheNewImprovedMyTeam" xml:space="preserve">
+    <value>Try out the new improved MyTeam!</value>
+    <comment>Notification message to user in old anywhere to try the new WFM MyTeam.</comment>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>{0} has been improved! We appreciate your &lt;a href='http://www.teleopti.com/wfm/customer-feedback.aspx'&gt;feedback.&lt;/a&gt;Old &lt;a href='{1}'&gt;{2}&lt;/a&gt; can be accessed for a limited time.</value>
+    <comment>Notification message to user in the released WFM about the link to the old modules in case they want to access them.</comment>
+  </data>
   <data name="NewActivityIsNotAllowedFor" xml:space="preserve">
     <value>New activity is not allowed for</value>
     <comment>Alert message when it is not allowed to add new activity for agent in wfm/mytime</comment>
   </data>
+
 </root>
