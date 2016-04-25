@@ -57,14 +57,6 @@ namespace Teleopti.Ccc.WinCode.Payroll
         }
 
         /// <summary>
-        /// Persists all.
-        /// </summary>
-        void IPayrollHelper.PersistAll()
-        {
-            _unitOfWork.PersistAll();
-        }
-
-        /// <summary>
         /// Loads the multiplicators.
         /// </summary>
         /// <returns></returns>

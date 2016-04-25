@@ -28,15 +28,6 @@ namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
         void Delete(IMultiplicatorDefinitionSet definitionSet);
 
         /// <summary>
-        /// Persists all.
-        /// </summary>
-        /// <remarks>
-        /// Created by: VirajS
-        /// Created date: 2009-01-20
-        /// </remarks>
-        void PersistAll();
-
-        /// <summary>
         /// Loads the multiplicators.
         /// </summary>
         /// <returns></returns>

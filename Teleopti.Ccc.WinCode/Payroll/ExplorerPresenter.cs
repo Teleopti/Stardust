@@ -128,14 +128,6 @@ namespace Teleopti.Ccc.WinCode.Payroll
             }
         }
 
-        /// <summary>
-        /// Saves all.
-        /// </summary>
-        public void SaveAll()
-        {
-            _helper.PersistAll();
-        }
-
         #endregion
 
         #endregion

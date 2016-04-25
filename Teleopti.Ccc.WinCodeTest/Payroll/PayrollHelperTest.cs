@@ -35,15 +35,6 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
         }
 
         [Test]
-        public void VerifyPersistAll()
-        {
-            Expect.Call(_unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>());
-            _mockRepository.ReplayAll();
-            _target.PersistAll();
-            _mockRepository.VerifyAll();
-        }
-
-        [Test]
         public void VerifyDelete()
         {
             IMultiplicatorDefinitionSet multiplicatorDefinitionSet =

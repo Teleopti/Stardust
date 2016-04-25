@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
                     .Return(new List<IMultiplicator> { multiplicator1, multiplicator2 })
                     .Repeat.Any();
 
-                _helper.PersistAll();
                 LastCall.IgnoreArguments().Repeat.Any();
             }
             _mockRepository.ReplayAll();
@@ -83,12 +82,6 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
             Assert.IsNotNull(_target.VisualizePresenter);
             Assert.IsNotNull(_target.Helper);
             Assert.IsNotNull(_target.MultiplicatorDefinitionPresenter);
-        }
-
-        [Test]
-        public void VerifyCanCallPersistAll()
-        {
-            _target.SaveAll();
         }
     }
 }

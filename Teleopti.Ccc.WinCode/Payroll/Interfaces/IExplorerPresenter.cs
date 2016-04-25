@@ -22,14 +22,5 @@ namespace Teleopti.Ccc.WinCode.Payroll.Interfaces
         /// </summary>
         /// <value>The visualize presenter.</value>
         IVisualizePresenter VisualizePresenter { get; }
-
-        /// <summary>
-        /// Saves all.
-        /// </summary>
-        /// <remarks>
-        /// Created by: VirajS
-        /// Created date: 2009-01-20
-        /// </remarks>
-        void SaveAll();
     }
 }
