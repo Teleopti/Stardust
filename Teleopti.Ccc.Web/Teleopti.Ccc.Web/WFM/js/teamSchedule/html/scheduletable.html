@@ -19,7 +19,7 @@
 	</thead>
 	<tbody>
 		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules">
-			<td class="person-name person-name-column" ng-click="">
+			<td class="person-name person-name-column">
 				<div class="wfm-checkbox" ng-show="vm.selectMode">
 					<label>
 						<input type="checkbox" ng-model="personSchedule.IsSelected" ng-change="vm.updatePersonSelection(personSchedule)">
