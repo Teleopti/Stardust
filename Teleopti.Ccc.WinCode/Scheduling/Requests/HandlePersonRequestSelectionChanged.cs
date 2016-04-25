@@ -15,13 +15,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             get { return _selectedModels.Count(m => SelectionIsEditableSpecification.IsSatisfiedBy(m)) > 0; }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
-        public IList<PersonRequestViewModel> GetSelectedModels()
-        {
-            return _selectedModels.Where(m => m.IsSelected).ToList(); 
-           
-        }
-
         public HandlePersonRequestSelectionChanged(IList<PersonRequestViewModel> models, IPersonRequestCheckAuthorization authorization):this(models,new PersonRequestViewModelIsEditableSpecification(authorization))
         {
             

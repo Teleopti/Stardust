@@ -51,18 +51,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _personRequestViewModel = new PersonRequestViewModel(_source, _shiftTradeRequestStatusChecker, accountForPersonCollection, _eventAggregator, null);
             
         }
-     
-        [Test]
-        public void VerifySetsAllSelectedModels()
-        {
-            IList<PersonRequestViewModel> targetList = new List<PersonRequestViewModel>();
-            targetList.Add(_personRequestViewModel);
-            _target = new HandlePersonRequestSelectionChanged(targetList, new PersonRequestAuthorizationCheckerForTest());
-            Assert.IsFalse(_target.GetSelectedModels().Contains(_personRequestViewModel));
-            _personRequestViewModel.IsSelected = true;
-            Assert.IsTrue(_target.GetSelectedModels().Contains(_personRequestViewModel));
-
-        }
 
         [Test]
         public void VerifyIsEditableIfContainsAnyEditableViewModels()
