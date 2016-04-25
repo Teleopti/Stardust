@@ -14,6 +14,7 @@ using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.WPF.Annotations;
 using Manager.Integration.Test.WPF.Commands;
 using Manager.Integration.Test.WPF.HttpListeners.Fiddler;
+using Manager.Integration.Test.WPF.Models;
 using Manager.Integration.Test.WPF.Properties;
 using Timer = System.Timers.Timer;
 
@@ -34,7 +35,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		private const string HttpTrafficListenerHeaderConstant = "HTTP Traffic";
 
-		private ClearDatabaseCommand _clearDatabaseCommand;
+		private ClearLoggingTableInDatabaseCommand _clearLoggingTableInDatabaseCommand;
 		private CreateNewJobCommand _create20NewJobCommand;
 		private CreateNewJobCommand _createNewJobCommand;
 		private List<Logging> _errorLoggingData;
@@ -113,7 +114,10 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			//---------------------------------------
 			GetData();
 
-			ClearDatabaseCommand = new ClearDatabaseCommand(this);
+			ClearLoggingTableInDatabaseCommand = new ClearLoggingTableInDatabaseCommand(this);
+
+			ClearManagerTablesInDatabaseCommand = new ClearManagerTablesInDatabaseCommand(this);
+
 			ToggleRefreshCommand = new ToggleRefreshCommand(this);
 
 			CreateNewJobCommand = new CreateNewJobCommand();
@@ -130,6 +134,8 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			RefreshEnabled = true;
 		}
+
+		public ClearManagerTablesInDatabaseCommand ClearManagerTablesInDatabaseCommand { get; set; }
 
 		public ShutDownHostCommand ShutDownHostCommand
 		{
@@ -269,12 +275,12 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public Timer RefreshTimer { get; set; }
 
-		public ClearDatabaseCommand ClearDatabaseCommand
+		public ClearLoggingTableInDatabaseCommand ClearLoggingTableInDatabaseCommand
 		{
-			get { return _clearDatabaseCommand; }
+			get { return _clearLoggingTableInDatabaseCommand; }
 			set
 			{
-				_clearDatabaseCommand = value;
+				_clearLoggingTableInDatabaseCommand = value;
 
 				OnPropertyChanged();
 			}
@@ -757,6 +763,26 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 
 			IsConsoleHostStarted = false;
+		}
+
+		public void ClearAllManagerTablesInDatabase()
+		{
+			Task.Factory.StartNew(() =>
+			{
+				using (var managerDbEntities = new ManagerDbEntities())
+				{
+					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.JobDetail");
+
+					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.Job");
+
+					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.JobQueue");
+
+					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.WorkerNode");
+				}
+
+				GetData();
+			});
+
 		}
 	}
 }
