@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				{
 					actionResult.Messages = new List<string> {Resources.NoPermissionRemoveAgentActivity};
 				}
-				if (actionResult.Messages.Any())
+				if (actionResult.Messages != null &&actionResult.Messages.Any())
 					result.Add(actionResult);
 			}
 
