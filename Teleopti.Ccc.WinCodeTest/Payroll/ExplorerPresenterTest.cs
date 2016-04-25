@@ -67,8 +67,6 @@ namespace Teleopti.Ccc.WinCodeTest.Payroll
                     .Call(_helper.LoadMultiplicatorList())
                     .Return(new List<IMultiplicator> { multiplicator1, multiplicator2 })
                     .Repeat.Any();
-
-                LastCall.IgnoreArguments().Repeat.Any();
             }
             _mockRepository.ReplayAll();
             _target = new ExplorerPresenter(_helper, _explorerView);
