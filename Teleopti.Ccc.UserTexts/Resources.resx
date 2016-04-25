@@ -14353,7 +14353,6 @@ Help us improve your experience by sending an error report</value>
   <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
     <value>Removing absences for {0} agent(s): {1} succeeded, {1} failed.</value>
   </data>
-  </data>
   <data name="CancelRequest" xml:space="preserve">
     <value>Cancel Request</value>
     <comment>Permission to Cancel Absence Requests in the new Angel Web Project.</comment>
