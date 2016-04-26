@@ -9,7 +9,7 @@ using Stardust.Manager.Models;
 namespace ManagerTest
 {
 	[TestFixture]
-	public class WorkerNodeRepositoryTests : DatabaseTest
+	public class WorkerNodeRepositoryTest : DatabaseTest
 	{
 		public WorkerNodeRepository WorkerNodeRepository { get; set; }
 

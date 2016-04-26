@@ -105,8 +105,8 @@
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="ManagerOperationTestsAttribute.cs" />
     <Compile Include="ManagerTestsAttribute.cs" />
-    <Compile Include="WorkerNodeRepositoryTests.cs" />
-    <Compile Include="NodeUriBuilderHelperTests.cs" />
+    <Compile Include="WorkerNodeRepositoryTest.cs" />
+    <Compile Include="NodeUriBuilderHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

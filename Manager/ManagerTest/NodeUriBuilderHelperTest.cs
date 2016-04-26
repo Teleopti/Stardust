@@ -6,7 +6,7 @@ using Stardust.Manager.Helpers;
 namespace ManagerTest
 {
 	[TestFixture]
-	public class NodeUriBuilderHelperTests
+	public class NodeUriBuilderHelperTest
 	{
 		[SetUp]
 		public void Setup()
