@@ -100,11 +100,11 @@
     <Compile Include="Fakes\FakeJobRepository.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
     <Compile Include="JobManagerTest.cs" />
-    <Compile Include="JobTestsAttribute.cs" />
+    <Compile Include="Attributes\JobTestsAttribute.cs" />
     <Compile Include="ManagerModuleTest.cs" />
     <Compile Include="ManagerOperationsTest.cs" />
-    <Compile Include="ManagerOperationTestsAttribute.cs" />
-    <Compile Include="ManagerTestsAttribute.cs" />
+    <Compile Include="Attributes\ManagerOperationTestsAttribute.cs" />
+    <Compile Include="Attributes\ManagerTestsAttribute.cs" />
     <Compile Include="WorkerNodeRepositoryTest.cs" />
     <Compile Include="NodeUriBuilderHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
