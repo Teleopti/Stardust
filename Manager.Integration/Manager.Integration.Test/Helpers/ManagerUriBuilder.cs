@@ -18,7 +18,7 @@ namespace Manager.Integration.Test.Helpers
 			_uriTemplateBuilder = new UriBuilder(managerLocationUri);
 		}
 
-		public Uri GetStartJobUri()
+		public Uri GetAddToJobQueueUri()
 		{
 			return CreateUri(ManagerRouteConstants.Job);
 		}

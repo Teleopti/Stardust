@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Manager.Integration.Test
+namespace Manager.Integration.Test.Models
 {
 	public class Job
 	{
@@ -19,5 +19,9 @@ namespace Manager.Integration.Test
 		public string SentToWorkerNodeUri { get; set; }
 
 		public string Result { get; set; }
+
+		public string Type { get; set; }
+
+		public string Serialized { get; set; }
 	}
 }

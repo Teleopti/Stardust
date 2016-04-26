@@ -1,26 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Timers;
 using Manager.Integration.Test.Data;
+using Manager.Integration.Test.Models;
 
 namespace Manager.Integration.Test.Timers
 {
 	public class CheckTablesInManagerDbTimer : IDisposable
 	{
-		public EventHandler<List<Manager.Integration.Test.Data.JobQueue>> ReceivedJobQueueItem;
+		public EventHandler<ObservableCollection<JobQueueItem>> ReceivedJobQueueItem;
 
-		public EventHandler<List<Manager.Integration.Test.Data.Job>> ReceivedJobItem;
+		public EventHandler<ObservableCollection<Job>> ReceivedJobItem;
 
-		public EventHandler<List<Manager.Integration.Test.Data.JobDetail>> ReceivedJobDetailItem;
+		public EventHandler<ObservableCollection<JobDetail>> ReceivedJobDetailItem;
 
-		public EventHandler<List<Manager.Integration.Test.Data.Logging>> ReceivedLoggingData;
+		public EventHandler<ObservableCollection<Logging>> ReceivedLoggingData;
 
-		public EventHandler<List<Manager.Integration.Test.Data.WorkerNode>> ReceivedWorkerNodesData;
+		public EventHandler<ObservableCollection<WorkerNode>> ReceivedWorkerNodesData;
 
-		public CheckTablesInManagerDbTimer(double interval = 5000)
+		public CheckTablesInManagerDbTimer(string connectionString,double interval = 5000)
 		{
-			ManagerDbEntities = new ManagerDbEntities();
+			ManagerDbRepository = new ManagerDbRepository(connectionString);
 
 			JobQueueTimer = new Timer(interval);
 			JobQueueTimer.Elapsed += JobQueueTimer_Elapsed;
@@ -46,7 +48,7 @@ namespace Manager.Integration.Test.Timers
 
 		public Timer JobTimer { get; set; }
 
-		public ManagerDbEntities ManagerDbEntities { get; set; }
+		public ManagerDbRepository ManagerDbRepository { get; set; }
 
 		public Timer JobQueueTimer { get; private set; }
 
@@ -54,7 +56,7 @@ namespace Manager.Integration.Test.Timers
 		{
 			if (ReceivedWorkerNodesData != null)
 			{
-				ReceivedWorkerNodesData(this, ManagerDbEntities.WorkerNodes.ToList());
+				ReceivedWorkerNodesData(this, ManagerDbRepository.WorkerNodes);
 			}
 		}
 
@@ -62,7 +64,7 @@ namespace Manager.Integration.Test.Timers
 		{
 			if (ReceivedLoggingData != null)
 			{
-				ReceivedLoggingData(this, ManagerDbEntities.Loggings.ToList());
+				ReceivedLoggingData(this, ManagerDbRepository.Loggings);
 			}
 		}
 
@@ -70,7 +72,7 @@ namespace Manager.Integration.Test.Timers
 		{
 			if (ReceivedJobDetailItem != null)
 			{
-				ReceivedJobDetailItem(this, ManagerDbEntities.JobDetails.ToList());
+				ReceivedJobDetailItem(this, ManagerDbRepository.JobDetails);
 			}
 		}
 
@@ -78,7 +80,7 @@ namespace Manager.Integration.Test.Timers
 		{
 			if (ReceivedJobItem != null)
 			{
-				ReceivedJobItem(this, ManagerDbEntities.Jobs.ToList());
+				ReceivedJobItem(this, ManagerDbRepository.Jobs);
 			}
 		}
 
@@ -86,7 +88,7 @@ namespace Manager.Integration.Test.Timers
 		{
 			if (ReceivedJobQueueItem != null)
 			{
-				ReceivedJobQueueItem(this, ManagerDbEntities.JobQueues.ToList());
+				ReceivedJobQueueItem(this, ManagerDbRepository.JobQueueItems);
 			}
 		}
 
@@ -106,8 +108,6 @@ namespace Manager.Integration.Test.Timers
 
 			WorkerNodeTimer.Stop();
 			WorkerNodeTimer.Dispose();
-
-			ManagerDbEntities.Dispose();
 		}
 	}
 }

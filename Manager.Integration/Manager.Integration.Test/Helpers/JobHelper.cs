@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Manager.Integration.Test.Data;
+using Manager.Integration.Test.Models;
 using Newtonsoft.Json;
 
 namespace Manager.Integration.Test.Helpers

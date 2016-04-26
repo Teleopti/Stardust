@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
+using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
+using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
@@ -17,20 +21,82 @@ namespace Manager.Integration.Test.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
+		public ManualResetEventSlim ManualResetEventSlim { get; set; }
+
 		private void LogMessage(string message)
 		{
 			this.Log().DebugWithLineNumber(message);
 		}
 
+		private readonly object _lockSetManualResetEventSlimWhenAllJobsEndedEventHandler = new object();
+
+		public ManagerUriBuilder MangerUriBuilder { get; set; }
+
+		public HttpSender HttpSender { get; set; }
+
+		private readonly object _lockSendHttpCancelJobEventHandler = new object();
+
+		private void SendHttpCancelJobEventHandler(object sender, ObservableCollection<Job> jobs)
+		{
+			if (!jobs.Any())
+			{
+				return;
+			}
+
+			try
+			{
+				Monitor.Enter(_lockSendHttpCancelJobEventHandler);
+
+				foreach (var job in 
+					jobs.Where(job => job.Started != null && job.Ended == null))
+				{
+					var cancelJobUri =
+						MangerUriBuilder.GetCancelJobUri(job.JobId);
+
+					var response =
+						HttpSender.DeleteAsync(cancelJobUri).Result;
+
+					if (response.StatusCode != HttpStatusCode.NotFound)
+					{
+						while (!response.IsSuccessStatusCode)
+						{
+							response = HttpSender.DeleteAsync(cancelJobUri).Result;
+						}
+					}
+				}
+			}
+
+			finally
+			{
+				Monitor.Exit(_lockSendHttpCancelJobEventHandler);
+			}
+		}
+
+		private void SetManualResetEventSlimWhenAllJobsEndedEventHandler(object sender, ObservableCollection<Job> jobs)
+		{
+			if (!jobs.Any())
+			{
+				return;
+			}
+
+			if (jobs.All(job => job.Started != null && job.Ended != null))
+			{
+				if (!ManualResetEventSlim.IsSet)
+				{
+					ManualResetEventSlim.Set();
+				}
+			}
+		}
+
 		[Test]
 		public void CancelWrongJobsTest()
 		{
-			LogMessage("Start.");
+			LogMessage("Start test.");
 
 			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(1,TimeSpan.FromSeconds(30));
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromSeconds(30));
 
 			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
 
@@ -44,10 +110,10 @@ namespace Manager.Integration.Test.FunctionalTests
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
 			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
-			                                                                StatusConstants.SuccessStatus,
-			                                                                StatusConstants.DeletedStatus,
-			                                                                StatusConstants.FailedStatus,
-			                                                                StatusConstants.CanceledStatus);
+			                                                         StatusConstants.SuccessStatus,
+			                                                         StatusConstants.DeletedStatus,
+			                                                         StatusConstants.FailedStatus,
+			                                                         StatusConstants.CanceledStatus);
 			foreach (var jobRequestModel in createNewJobRequests)
 			{
 				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
@@ -113,111 +179,76 @@ namespace Manager.Integration.Test.FunctionalTests
 			                                  startedTest,
 			                                  endedTest);
 
-			LogMessage("Finished.");
+			LogMessage("Finished test.");
 		}
 
 		[Test]
-		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
+		public void CreateRequestShouldReturnCancelStatusWhenJobHasStartedAndBeenCanceled()
 		{
-			LogMessage("Start.");
+			LogMessage("Start test");
 
 			var startedTest = DateTime.UtcNow;
 
-			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(10));
+			HttpSender = new HttpSender();
+			MangerUriBuilder = new ManagerUriBuilder();
 
-			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-			                                                     2);
-			//--------------------------------------------
-			// Start actual test.
-			//--------------------------------------------
-			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
+			ManualResetEventSlim = new ManualResetEventSlim();
+			var timeout = TimeSpan.FromMinutes(5);
 
-			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
-			                                                                StatusConstants.SuccessStatus,
-			                                                                StatusConstants.DeletedStatus,
-			                                                                StatusConstants.FailedStatus,
-			                                                                StatusConstants.CanceledStatus);
-			foreach (var jobRequestModel in createNewJobRequests)
+			//---------------------------------------------------------
+			// Database validator.
+			//---------------------------------------------------------
+			var checkTablesInManagerDbTimer =
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
+
+			checkTablesInManagerDbTimer.ReceivedJobItem +=
+				SetManualResetEventSlimWhenAllJobsEndedEventHandler;
+
+			checkTablesInManagerDbTimer.ReceivedJobItem +=
+				SendHttpCancelJobEventHandler;
+
+			checkTablesInManagerDbTimer.JobTimer.Start();
+
+			//---------------------------------------------------------
+			// HTTP Request.
+			//---------------------------------------------------------
+			var addToJobQueueUri = MangerUriBuilder.GetAddToJobQueueUri();
+
+			var jobQueueItem =
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(5)).First();
+
+			CancellationTokenSource = new CancellationTokenSource();
+
+			var addToJobQueueTask = new Task(() =>
 			{
-				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-				jobManagerTaskCreators.Add(jobManagerTaskCreator);
-			}
+				var response =
+					HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
 
-			Task.Factory.StartNew(() =>
-			{
-				CheckTablesInManagerDbTimer checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(100);
-				checkTablesInManagerDbTimer.JobTimer.Start();
-
-				checkTablesInManagerDbTimer.ReceivedJobItem += (o, jobs) =>
+				while (!response.IsSuccessStatusCode)
 				{
-					if (jobs.Any())
-					{
-						var job = jobs.First();
+					response = HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
+				}
+			}, CancellationTokenSource.Token);
 
-						if (job.Started != null)
-						{
-							checkTablesInManagerDbTimer.JobTimer.Stop();
+			addToJobQueueTask.Start();
+			addToJobQueueTask.Wait(timeout);
 
-							var jobManagerTaskCreator =
-								new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+			ManualResetEventSlim.Wait(timeout);
 
-							jobManagerTaskCreator.CreateDeleteJobToManagerTask(jobs.First().JobId);
-							jobManagerTaskCreator.StartAndWaitDeleteJobToManagerTask(timeout);
+			checkTablesInManagerDbTimer.ReceivedJobItem -=
+				SetManualResetEventSlimWhenAllJobsEndedEventHandler;
 
-							jobManagerTaskCreator.Dispose();
+			checkTablesInManagerDbTimer.ReceivedJobItem -=
+				SendHttpCancelJobEventHandler;
 
-							checkTablesInManagerDbTimer.JobTimer.Dispose();
-						}
-					}
-				};
-			},
-			CancellationTokenSource.Token);
 
-			var startJobTaskHelper = new StartJobTaskHelper();
-
-			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-			                                                          CancellationTokenSource,
-			                                                          timeout);
-
-			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-			var condition =
-				checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count;
-
-			Assert.IsTrue(condition,
-			              "Must have equal number of rows.");
-
-			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.SuccessStatus),
-			               "Invalid SUCCESS status.");
-
-			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.NullStatus),
-			               "Invalid NULL status.");
-
-			Assert.IsFalse(checkJobHistoryStatusTimer.Guids.Any(pair => pair.Value == StatusConstants.EmptyStatus),
-			               "Invalid EMPTY status.");
-
-			var allCancelOrDeleteStatus =
-				checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.CanceledStatus ||
-														     pair.Value.Contains(StatusConstants.CancelingStatus) ||
-				                                             pair.Value == StatusConstants.DeletedStatus);
-
-			Assert.IsTrue(allCancelOrDeleteStatus,
-			              "All rows shall have CANCEL or DELETE status.");
-
-			taskHlp.Dispose();
-
-			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-			{
-				jobManagerTaskCreator.Dispose();
-			}
+			checkTablesInManagerDbTimer.Dispose();
 
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-				string.Format("Creates {0} CANCEL jobs with {1} manager and {2} nodes.",
-				              createNewJobRequests.Count,
+				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
+				              1,
 				              NumberOfManagers,
 				              NumberOfNodes);
 
@@ -226,60 +257,58 @@ namespace Manager.Integration.Test.FunctionalTests
 			                                  startedTest,
 			                                  endedTest);
 
-			LogMessage("Finished.");
+			LogMessage("Finished test.");
 		}
-
 
 		[Test]
 		public void JobShouldHaveStatusFailedIfFailedTest()
 		{
+			LogMessage("Start test.");
+
 			var startedTest = DateTime.UtcNow;
 
-			LogMessage("Start.");
+			var httpSender = new HttpSender();
+			var mangerUriBuilder = new ManagerUriBuilder();
+			var uri = mangerUriBuilder.GetAddToJobQueueUri();
 
-			var createNewJobRequests = JobHelper.GenerateFailingJobParamsRequests(1);
+			var createFailingJobs =
+				JobHelper.GenerateFailingJobParamsRequests(1);
 
 			var timeout =
-				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
+				JobHelper.GenerateTimeoutTimeInMinutes(createFailingJobs.Count,
 				                                       2);
-			//--------------------------------------------
-			// Start actual test.
-			//--------------------------------------------
-			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
-			                                                                StatusConstants.SuccessStatus,
-			                                                                StatusConstants.DeletedStatus,
-			                                                                StatusConstants.FailedStatus,
-			                                                                StatusConstants.CanceledStatus);
-			foreach (var jobRequestModel in createNewJobRequests)
+
+			var checkTablesInManagerDbTimer =
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
+
+			var task1 = new Task(() =>
 			{
-				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-				jobManagerTaskCreators.Add(jobManagerTaskCreator);
-			}
+				foreach (var jobQueueItem in createFailingJobs)
+				{
+					var response = httpSender.PostAsync(uri,
+					                                    jobQueueItem).Result;
 
-			var startJobTaskHelper = new StartJobTaskHelper();
-			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-			                                                          CancellationTokenSource,
-			                                                          timeout);
 
-			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+					while (!response.IsSuccessStatusCode)
+					{
+						response = httpSender.PostAsync(uri, jobQueueItem).Result;
+					}
+				}
+			});
 
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.FailedStatus));
+			task1.Start();
+			task1.Wait();
 
-			taskHlp.Dispose();
-			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
-			{
-				jobManagerTaskCreator.Dispose();
-			}
+			Thread.Sleep(timeout);
+
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Jobs must have been added.");
 
 			var endedTest = DateTime.UtcNow;
 
 			var description =
 				string.Format("Creates {0} FAILED jobs with {1} manager and {2} nodes.",
-				              createNewJobRequests.Count,
+				              createFailingJobs.Count,
 				              NumberOfManagers,
 				              NumberOfNodes);
 
@@ -288,7 +317,10 @@ namespace Manager.Integration.Test.FunctionalTests
 			                                  startedTest,
 			                                  endedTest);
 
-			LogMessage("Finished.");
+
+			checkTablesInManagerDbTimer.Dispose();
+
+			LogMessage("Finished test.");
 		}
 
 		/// <summary>
@@ -300,7 +332,7 @@ namespace Manager.Integration.Test.FunctionalTests
 		{
 			var startedTest = DateTime.UtcNow;
 
-			LogMessage("Start.");
+			LogMessage("Start test.");
 
 			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
 
@@ -314,10 +346,10 @@ namespace Manager.Integration.Test.FunctionalTests
 			//--------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
-			                                                                StatusConstants.SuccessStatus,
-			                                                                StatusConstants.DeletedStatus,
-			                                                                StatusConstants.FailedStatus,
-			                                                                StatusConstants.CanceledStatus);
+			                                                         StatusConstants.SuccessStatus,
+			                                                         StatusConstants.DeletedStatus,
+			                                                         StatusConstants.FailedStatus,
+			                                                         StatusConstants.CanceledStatus);
 			foreach (var jobRequestModel in createNewJobRequests)
 			{
 				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
@@ -347,8 +379,6 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
-			LogMessage("Finished.");
-
 			var endedTest = DateTime.UtcNow;
 
 			var description =
@@ -361,6 +391,8 @@ namespace Manager.Integration.Test.FunctionalTests
 			                                  description,
 			                                  startedTest,
 			                                  endedTest);
+
+			LogMessage("Finished test.");
 		}
 	}
 }

@@ -3,8 +3,10 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
+using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
@@ -23,7 +25,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var httpSender = new HttpSender();
 			var mangerUriBuilder = new ManagerUriBuilder();
-			var uri = mangerUriBuilder.GetStartJobUri();
+			var uri = mangerUriBuilder.GetAddToJobQueueUri();
 
 			this.Log().DebugWithLineNumber("Start.");
 
@@ -40,7 +42,8 @@ namespace Manager.Integration.Test.FunctionalTests
 				CreatedBy = "WPF Client"
 			};
 
-			var checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(100);
+			var checkTablesInManagerDbTimer = 
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString,100);
 
 			var taskCheckData = new Task(() =>
 			{
@@ -60,9 +63,9 @@ namespace Manager.Integration.Test.FunctionalTests
 			taskCheckData.Start();
 			taskCheckData.Wait(TimeSpan.FromMinutes(5));
 
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbEntities.JobQueues.Count() == 1);
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Count() == 1);
 
-			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbEntities.Jobs.Any());
+			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any());
 
 			checkTablesInManagerDbTimer.Dispose();
 		}

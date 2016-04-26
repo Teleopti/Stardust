@@ -6,7 +6,9 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using log4net.Config;
+using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Validators;
@@ -137,7 +139,7 @@ namespace Manager.Integration.Test.LongRunningTests
 			sqlNotifier.Dispose();
 
 			var mangerUriBuilder = new ManagerUriBuilder();
-			var uri = mangerUriBuilder.GetStartJobUri();
+			var uri = mangerUriBuilder.GetAddToJobQueueUri();
 
 			HttpSender httpSender=new HttpSender();
 
@@ -210,7 +212,7 @@ namespace Manager.Integration.Test.LongRunningTests
 			LogMessage("All nodes has started.");
 
 			var mangerUriBuilder = new ManagerUriBuilder();
-			var uri = mangerUriBuilder.GetStartJobUri();
+			var uri = mangerUriBuilder.GetAddToJobQueueUri();
 
 			var createdBy = SecurityHelper.GetLoggedInUser();
 

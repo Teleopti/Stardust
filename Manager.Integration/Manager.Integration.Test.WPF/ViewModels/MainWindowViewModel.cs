@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Net.Http;
+using System.Configuration;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +9,9 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
+using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.WPF.Annotations;
 using Manager.Integration.Test.WPF.Commands;
@@ -19,7 +19,6 @@ using Manager.Integration.Test.WPF.HttpListeners.Fiddler;
 using Manager.Integration.Test.WPF.Properties;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Security;
 using Timer = System.Timers.Timer;
 
 namespace Manager.Integration.Test.WPF.ViewModels
@@ -42,28 +41,32 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private ClearLoggingTableInDatabaseCommand _clearLoggingTableInDatabaseCommand;
 		private CreateNewJobCommand _create20NewJobCommand;
 		private CreateNewJobCommand _createNewJobCommand;
-		private List<Logging> _errorLoggingData;
+
+		private int _durationPerMessage = 2;
+		private ObservableCollection<Logging> _errorLoggingData;
 
 		private string _errorLoggingHeader;
 
 		private string _httpTrafficListenerHeader = HttpTrafficListenerHeaderConstant;
 		private InstallCertificateCommand _installCertificateCommand;
 		private bool _isConsoleHostStarted;
-		private List<JobQueue> _jobDefinitionData;
+		private ObservableCollection<JobQueueItem> _jobDefinitionData;
 		private string _jobDefinitionDataHeader;
 
-		private List<Job> _jobHistoryData;
+		private ObservableCollection<Job> _jobHistoryData;
 		private ListCollectionView _jobHistoryDataGroupBySentToData;
-		private List<JobDetail> _jobHistoryDetailData;
+		private ObservableCollection<JobDetail> _jobHistoryDetailData;
 		private string _jobHistoryDetailHeader;
 		private string _jobHistoryGroupBySentToHeader;
 		private string _jobHistoryHeader;
-		private List<Logging> _loggingData;
+		private ObservableCollection<Logging> _loggingData;
 		private string _loggingHeader;
 
 		private int _numberOfManagers;
+
+		private int _numberOfMessages = 100;
 		private int _numberOfNodes;
-		private List<PerformanceTest> _performanceTestData;
+		private ObservableCollection<PerformanceTest> _performanceTestData;
 		private string _performanceTestHeader;
 		private bool _refreshEnabled;
 		private int _refreshProgressValue;
@@ -79,14 +82,16 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private string _toggleRefreshStatus;
 		private UnInstallCertificateCommand _unInstallCertificateCommand;
 		private string _workerNodeHeader;
-		private List<WorkerNode> _workerNodesData;
-
-		private int _numberOfMessages = 100;
-
-		private int _durationPerMessage = 2;
+		private ObservableCollection<WorkerNode> _workerNodesData;
 
 		public MainWindowViewModel()
 		{
+			ManagerDBConnectionString =
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
+
+			ManagerDbRepository =
+				new ManagerDbRepository(ManagerDBConnectionString);
+
 			//---------------------------------------
 			// Set up Fiddler.
 			//---------------------------------------
@@ -144,6 +149,10 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 			RefreshEnabled = true;
 		}
+
+		public ManagerDbRepository ManagerDbRepository { get; set; }
+
+		public string ManagerDBConnectionString { get; private set; }
 
 		public StartDurationTestCommand StartDurationTestCommand { get; set; }
 
@@ -298,7 +307,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public List<Logging> LoggingData
+		public ObservableCollection<Logging> LoggingData
 		{
 			get { return _loggingData; }
 			set
@@ -376,7 +385,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public List<WorkerNode> WorkerNodesData
+		public ObservableCollection<WorkerNode> WorkerNodesData
 		{
 			get { return _workerNodesData; }
 			set
@@ -387,7 +396,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public List<JobQueue> JobDefinitionData
+		public ObservableCollection<JobQueueItem> JobDefinitionData
 		{
 			get { return _jobDefinitionData; }
 			set
@@ -398,7 +407,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public List<JobDetail> JobHistoryDetailData
+		public ObservableCollection<JobDetail> JobHistoryDetailData
 		{
 			get { return _jobHistoryDetailData; }
 
@@ -412,7 +421,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public ObservableCollection<FiddlerCaptureInformation> FiddlerCaptureInformation { get; set; }
 
-		public List<PerformanceTest> PerformanceTestData
+		public ObservableCollection<PerformanceTest> PerformanceTestData
 		{
 			get { return _performanceTestData; }
 
@@ -425,7 +434,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		}
 
 
-		public List<Job> JobHistoryData
+		public ObservableCollection<Job> JobHistoryData
 		{
 			get { return _jobHistoryData; }
 
@@ -533,7 +542,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		}
 
 
-		public List<Logging> ErrorLoggingData
+		public ObservableCollection<Logging> ErrorLoggingData
 		{
 			get { return _errorLoggingData; }
 			set
@@ -583,6 +592,33 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
+		public int NumberOfMessages
+		{
+			get { return _numberOfMessages; }
+			set
+			{
+				_numberOfMessages = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public int DurationPerMessage
+		{
+			get { return _durationPerMessage; }
+			set
+			{
+				_durationPerMessage = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		private CancellationTokenSource CancelTaskStartDurationTest { get; set; }
+
+
+		private Task TaskStartDurationTest { get; set; }
+
 		public void Dispose()
 		{
 			if (CancelTaskStartDurationTest != null)
@@ -611,7 +647,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 
 
-
 			Settings.Default.NumberOfManagers = NumberOfManagers;
 			Settings.Default.NumberOfNodes = NumberOfNodes;
 
@@ -626,7 +661,10 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			{
 				Application.Current.Dispatcher.Invoke(
 					DispatcherPriority.Normal,
-					(Action) delegate { FiddlerCaptureInformation.Add(fiddlerCaptureInformation); });
+					(Action) delegate
+					{
+						FiddlerCaptureInformation.Add(fiddlerCaptureInformation);
+					});
 			});
 		}
 
@@ -658,81 +696,81 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		private void GetData()
 		{
-			RefreshProgressValue = 0;
-
-			Status = "Refresh started...";
-
-			using (var managerDbEntities = new ManagerDbEntities())
+			Task.Factory.StartNew(() =>
 			{
-				managerDbEntities.Configuration.AutoDetectChangesEnabled = false;
+				Application.Current.Dispatcher.Invoke(
+					DispatcherPriority.Normal,
+					(Action)delegate
+					{
+						RefreshProgressValue = 0;
 
-				PerformanceTestData =
-					managerDbEntities.PerformanceTests.OrderByDescending(test => test.Id).ToList();
+						Status = "Refresh started...";
 
-				PerformanceTestHeader =
-					PerformanceTestHeaderConstant + " ( " + PerformanceTestData.Count + " )";
+						PerformanceTestData =
+							ManagerDbRepository.PerformanceTests;
 
-				LoggingData =
-					managerDbEntities.Loggings.OrderByDescending(logging => logging.Id)
-						.ToList();
+						PerformanceTestHeader =
+							PerformanceTestHeaderConstant + " ( " + PerformanceTestData.Count + " )";
 
-				ErrorLoggingData =
-					managerDbEntities.Loggings.Where(logging => !string.IsNullOrEmpty(logging.Exception)).ToList();
+						LoggingData =
+							ManagerDbRepository.Loggings;
 
-				ErrorLoggingHeader = ErrorLoggingHeaderConstant + " ( " + ErrorLoggingData.Count + " )";
+						ErrorLoggingData =
+							ManagerDbRepository.Loggings;
 
-				++RefreshProgressValue;
+						ErrorLoggingHeader = ErrorLoggingHeaderConstant + " ( " + ErrorLoggingData.Count + " )";
 
-				LoggingHeader = LoggingHeaderConstant + " ( " + LoggingData.Count + " )";
+						++RefreshProgressValue;
 
-				JobHistoryData =
-					managerDbEntities.Jobs.OrderByDescending(history => history.Created)
-						.ToList();
+						LoggingHeader = LoggingHeaderConstant + " ( " + LoggingData.Count + " )";
 
-				JobHistoryDataGroupBySentToData = new ListCollectionView(JobHistoryData);
+						JobHistoryData =
+							ManagerDbRepository.Jobs;
 
-				if (JobHistoryDataGroupBySentToData.GroupDescriptions != null)
-				{
-					JobHistoryDataGroupBySentToData.GroupDescriptions.Add(new PropertyGroupDescription("SentToWorkerNodeUri"));
-				}
+						JobHistoryDataGroupBySentToData = new ListCollectionView(JobHistoryData);
 
-				++RefreshProgressValue;
+						if (JobHistoryDataGroupBySentToData.GroupDescriptions != null)
+						{
+							JobHistoryDataGroupBySentToData.GroupDescriptions.Add(new PropertyGroupDescription("SentToWorkerNodeUri"));
+						}
 
-				JobHistoryHeader =
-					JobHistoryHeaderConstant + " ( " + JobHistoryData.Count + " )";
+						++RefreshProgressValue;
 
-				JobHistoryGroupBySentToHeader =
-					JobHistoryGroupBySentToHeaderConstant + " ( " + JobHistoryData.Count + " )";
+						JobHistoryHeader =
+							JobHistoryHeaderConstant + " ( " + JobHistoryData.Count + " )";
 
-				JobHistoryDetailData =
-					managerDbEntities.JobDetails.OrderByDescending(history => history.Created)
-						.ToList();
+						JobHistoryGroupBySentToHeader =
+							JobHistoryGroupBySentToHeaderConstant + " ( " + JobHistoryData.Count + " )";
 
-				++RefreshProgressValue;
+						JobHistoryDetailData =
+							ManagerDbRepository.JobDetails;
 
-				JobHistoryDetailHeader =
-					JobHistoryDetailHeaderConstant + " ( " + JobHistoryDetailData.Count + " )";
+						++RefreshProgressValue;
 
-				JobDefinitionData =
-					managerDbEntities.JobQueues
-						.OrderBy(queue => queue.Created).ToList();
+						JobHistoryDetailHeader =
+							JobHistoryDetailHeaderConstant + " ( " + JobHistoryDetailData.Count + " )";
 
-				++RefreshProgressValue;
+						JobDefinitionData =
+							ManagerDbRepository.JobQueueItems;
 
-				JobDefinitionDataHeader =
-					JobDefinitionHeaderConstant + " ( " + JobDefinitionData.Count + " )";
+						++RefreshProgressValue;
 
-				WorkerNodesData =
-					managerDbEntities.WorkerNodes
-						.ToList();
+						JobDefinitionDataHeader =
+							JobDefinitionHeaderConstant + " ( " + JobDefinitionData.Count + " )";
 
-				++RefreshProgressValue;
+						WorkerNodesData =
+							ManagerDbRepository.WorkerNodes;
 
-				WorkerNodeHeader =
-					WorkerNodeHeaderConstant + " ( " + WorkerNodesData.Count + " )";
-			}
+						++RefreshProgressValue;
 
-			Status = "Refresh finished.";
+						WorkerNodeHeader =
+							WorkerNodeHeaderConstant + " ( " + WorkerNodesData.Count + " )";
+
+						Status = "Refresh finished.";
+
+					});
+			});
+
 		}
 
 		public bool DatabaseContainsInformation()
@@ -744,10 +782,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		{
 			Task.Factory.StartNew(() =>
 			{
-				using (var managerDbEntities = new ManagerDbEntities())
-				{
-					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.Logging");
-				}
+				ManagerDbRepository.TruncateLoggingTable();
 
 				GetData();
 			});
@@ -757,7 +792,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		{
 			RefreshEnabled = !RefreshEnabled;
 		}
-
 
 		public void StartConsoleHost()
 		{
@@ -795,60 +829,30 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		{
 			Task.Factory.StartNew(() =>
 			{
-				using (var managerDbEntities = new ManagerDbEntities())
-				{
-					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.JobDetail");
+				var managerDbRepository =
+					new ManagerDbRepository(ManagerDBConnectionString);
 
-					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.Job");
-
-					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.JobQueue");
-
-					managerDbEntities.Database.ExecuteSqlCommand("TRUNCATE TABLE Stardust.WorkerNode");
-				}
+				managerDbRepository.TruncateJobDetailTable();
+				managerDbRepository.TruncateJobTable();
+				managerDbRepository.TruncateJobQueueTable();
+				managerDbRepository.TruncateWorkerNodeTable();
 
 				GetData();
 			});
 		}
-
-		public int NumberOfMessages
-		{
-			get { return _numberOfMessages; }
-			set
-			{
-				_numberOfMessages = value;
-
-				OnPropertyChanged();
-			}
-		}
-
-		public int DurationPerMessage
-		{
-			get { return _durationPerMessage; }
-			set
-			{
-				_durationPerMessage = value;
-
-				OnPropertyChanged();
-			}
-		}
-
-		private CancellationTokenSource CancelTaskStartDurationTest { get; set; }
-
-
-		private Task TaskStartDurationTest { get; set; }
 
 		public void StartDurationTest()
 		{
 			Task.Factory.StartNew(() =>
 			{
 				var mangerUriBuilder = new ManagerUriBuilder();
-				var uri = mangerUriBuilder.GetStartJobUri();
+				var uri = mangerUriBuilder.GetAddToJobQueueUri();
 
 				var httpSender = new HttpSender();
 
 				CancelTaskStartDurationTest = new CancellationTokenSource();
 
-				int loopCounter = 0;
+				var loopCounter = 0;
 
 				while (loopCounter <= 500)
 				{
@@ -856,7 +860,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 					TaskStartDurationTest = new Task(() =>
 					{
-						Parallel.For(1, NumberOfMessages, (i) =>
+						Parallel.For(1, NumberOfMessages, i =>
 						{
 							var testJobTimerParams =
 								new TestJobTimerParams("Loop " + i, TimeSpan.FromSeconds(DurationPerMessage));
@@ -871,7 +875,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 								CreatedBy = "WPF Client"
 							};
 
-							HttpResponseMessage response = httpSender.PostAsync(uri, jobQueueItem).Result;
+							var response = httpSender.PostAsync(uri, jobQueueItem).Result;
 
 							while (!response.IsSuccessStatusCode)
 							{
@@ -888,13 +892,12 @@ namespace Manager.Integration.Test.WPF.ViewModels
 								CancelTaskStartDurationTest.Token.ThrowIfCancellationRequested();
 							}
 						});
-
 					}, CancelTaskStartDurationTest.Token);
 
 					TaskStartDurationTest.Start();
 					TaskStartDurationTest.Wait();
 
-					Thread.Sleep(TimeSpan.FromSeconds(30));
+					Thread.Sleep(TimeSpan.FromSeconds(10));
 				}
 			});
 		}

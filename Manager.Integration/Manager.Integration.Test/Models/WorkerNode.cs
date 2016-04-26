@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Manager.Integration.Test.Models
 {
-	class WorkerNode
+	public class WorkerNode
 	{
 		public WorkerNode()
 		{

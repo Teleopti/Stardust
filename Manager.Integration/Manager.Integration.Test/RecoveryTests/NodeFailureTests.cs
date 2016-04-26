@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Models;
@@ -11,6 +12,7 @@ using Manager.IntegrationTest.Console.Host.Interfaces;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using WorkerNode = Manager.Integration.Test.Models.WorkerNode;
 
 namespace Manager.Integration.Test.RecoveryTests
 {
@@ -38,7 +40,7 @@ namespace Manager.Integration.Test.RecoveryTests
 			IHttpSender httpSender = new HttpSender();
 
 			var managerUriBuilder = new ManagerUriBuilder();
-			var uri = managerUriBuilder.GetStartJobUri();
+			var uri = managerUriBuilder.GetAddToJobQueueUri();
 
 			var createNewJobRequests =
 				JobHelper.GenerateTestJobParamsRequests(1);

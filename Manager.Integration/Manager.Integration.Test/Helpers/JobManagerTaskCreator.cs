@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
@@ -78,22 +79,19 @@ namespace Manager.Integration.Test.Helpers
 			NewJobToManagerTask.Wait(timeout);
 		}
 
-		public void CreateNewJobToManagerTask(JobQueueItem jobQueueItem)
+		public void CreateNewJobToManagerTask(JobQueueItem jobQueue)
 		{
-			NewJobToManagerTask = new Task(() =>
-			{
-				CreateNewJobToManager(jobQueueItem);
-			},
-			CancellationTokenSource.Token);
+			NewJobToManagerTask = new Task(() => { CreateNewJobToManager(jobQueue); },
+			                               CancellationTokenSource.Token);
 		}
 
-		public async void CreateNewJobToManager(JobQueueItem jobQueueItem)
+		public async void CreateNewJobToManager(JobQueueItem jobQueue)
 		{
 			CreateNewJobToManagerSucceeded = false;
 
 			IHttpSender httpSender = new HttpSender();
 
-			var uri = ManagerUriBuilder.GetStartJobUri();
+			var uri = ManagerUriBuilder.GetAddToJobQueueUri();
 
 			try
 			{
@@ -102,10 +100,10 @@ namespace Manager.Integration.Test.Helpers
 				while (!CreateNewJobToManagerSucceeded)
 				{
 					this.Log().DebugWithLineNumber(
-						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobQueueItem.Name + " )");
+						"Start calling post async. Uri ( " + uri + " ). Job name : ( " + jobQueue.Name + " )");
 					try
 					{
-						response = await httpSender.PostAsync(uri, jobQueueItem);
+						response = await httpSender.PostAsync(uri, jobQueue);
 
 						CreateNewJobToManagerSucceeded = response.IsSuccessStatusCode;
 					}
@@ -116,7 +114,7 @@ namespace Manager.Integration.Test.Helpers
 
 						this.Log().WarningWithLineNumber(
 							"HttpRequestException when calling post async, will soon try again. Uri ( " + uri + " ). Job name : ( " +
-							jobQueueItem.Name + " ).");
+							jobQueue.Name + " ).");
 
 						Thread.Sleep(TimeSpan.FromSeconds(1));
 					}
@@ -131,11 +129,11 @@ namespace Manager.Integration.Test.Helpers
 						var jobId = JsonConvert.DeserializeObject<Guid>(str);
 
 						CheckJobStatusTimer.AddOrUpdateGuidStatus(jobId,
-						                                                 null);
+						                                          null);
 
 						this.Log().DebugWithLineNumber(
 							"Finished calling post async. Uri : ( " + uri + " ). ( jobId, jobName ) : ( " + jobId + ", " +
-							jobQueueItem.Name + " )");
+							jobQueue.Name + " )");
 					}
 				}
 			}

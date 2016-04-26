@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Models;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Newtonsoft.Json;
 
@@ -32,7 +34,7 @@ namespace Manager.Integration.Test.WPF.Commands
 		{
 			Task.Factory.StartNew(() =>
 			{
-				var uri = ManagerUriBuilder.GetStartJobUri();
+				var uri = ManagerUriBuilder.GetAddToJobQueueUri();
 				var username = SecurityHelper.GetLoggedInUser();
 
 				for (var i = 0; i < NumberOfJobs; i++)

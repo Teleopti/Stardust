@@ -1671,6 +1671,8 @@ namespace Stardust.Manager
 
 			try
 			{
+				Monitor.Enter(_lockTryAssignJobToWorkerNodeWorker);
+
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
@@ -1812,6 +1814,11 @@ namespace Stardust.Manager
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 				throw;
+			}
+
+			finally
+			{
+				Monitor.Exit(_lockTryAssignJobToWorkerNodeWorker);
 			}
 		}
 

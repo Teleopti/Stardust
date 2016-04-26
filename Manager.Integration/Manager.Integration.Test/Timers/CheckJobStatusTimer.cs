@@ -5,8 +5,10 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
+using Manager.Integration.Test.Data;
 using Manager.Integration.Test.EventArgs;
 using Manager.Integration.Test.Helpers;
+using Manager.Integration.Test.Models;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using Newtonsoft.Json;
 
@@ -211,7 +213,7 @@ namespace Manager.Integration.Test.Timers
 								try
 								{
 										var jobHistory =
-										JsonConvert.DeserializeObject<Job>(jobSerialized);
+											JsonConvert.DeserializeObject<Job>(jobSerialized);
 
 									if (jobHistory != null)
 									{
