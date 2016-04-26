@@ -10,26 +10,25 @@
 	}
 	
 	.teamschedule-header{
-		width:100%!important;
-		display:flex;
-		flex-direction:column;
-		flex-wrap:wrap;
-		justify-content:space-between;
+        min-height: 44px;
+        padding: 5px;
 
-		.leftside-part{
-			display:flex;
-			flex-direction:row;
-			flex-wrap:wrap;
-			justify-content:space-between;
-			padding: 5px 45px 5px 5px;
+        .leftside-part{
+			display: flex;
+			flex-direction: row;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+            padding-right: 50px;
 		}
 
 		.people-search-container{
 			display: inline-block;
 			margin: 10px 10px 10px 0;
-			#simple-people-search{
+			
+            #simple-people-search{
 				width: 316px;
 			}
+
             .advanced-search-container{
                 min-width: 316px;
                 
@@ -59,17 +58,21 @@
 		.wfm-switch{
 			display: inline-block;
 			margin: 10px;
-			padding: 0;
+			padding: 0 60px 0 0;
 			min-width: 200px;
+            flex-grow: 1;
+            text-align: right;
+
 			.wfm-switch-toggle{
-				left: 12rem;
+				right: 0;
 			}
 		}
 
-		teamschedule-command{
-			align-self: flex-end;
-			margin-top: -50px;
-		}
+        .teamschedule-command{
+            float: right;
+            text-align: right;
+            margin-top: -45px;
+        }
 
 		.context-menu .context-menu-left{
 			z-index: 1000;
