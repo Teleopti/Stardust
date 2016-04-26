@@ -135,12 +135,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.That(SignificantPartService.CreateService(_source).SignificantPart(), Is.EqualTo(SchedulePartView.ContractDayOff));
         }
 
-        [Test]
-        public void ShouldBeAbleToCreateServiceForDisplay()
-        {
-            Assert.That(SignificantPartService.CreateServiceForDisplay(_source),Is.Not.Null);
-        }
-
         #region helpers
         private class TestSignificantPartSource : ISignificantPartProvider
         {

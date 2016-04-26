@@ -22,10 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return new SignificantPartService(new SchedulePartSignificantPartForDisplayDefinitions(part, new HasContractDayOffDefinition()));
         }
 
-        public static SignificantPartService CreateServiceForDisplay(ISignificantPartProvider source)
-        {
-            return new SignificantPartService(source);
-        }
         private SignificantPartService(ISignificantPartProvider source)
         {
             InParameter.NotNull("source", source);
