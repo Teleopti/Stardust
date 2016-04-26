@@ -99,12 +99,12 @@
 
 			function makeViewValue(startTime, endTime, nextDay) {
 				var viewValue = null;
-				
+
 				if (angular.isDefined(scope.referenceDay)) {
 					viewValue = {
 						startTime: moment(scope.referenceDay()),
 						endTime: moment(scope.referenceDay())
-					}; 
+					};
 				} else {
 					viewValue = {
 						startTime: moment(),
@@ -138,7 +138,7 @@
 					scope.isNextDay = false;
 
 				}
-				
+
 				scope.disableNextDay = scope.startTime > scope.endTime;
 				ngModel.$setViewValue(
                     makeViewValue(scope.startTime, scope.endTime, scope.isNextDay));
@@ -162,10 +162,12 @@
 		return {
 			template: '<uib-timepicker></uib-timepicker>',
 			controller: ['$scope', timepickerWrapCtrl],
-			compile: compileFn
+			compile: function () {
+				return { pre: preLinkFn, post: postLinkFn };
+			},
 		};
 
-		function compileFn(tElement, tAttributes) {
+		function preLinkFn(scope, tElement, tAttributes) {
 			var binding = tAttributes.ngModel;
 			tElement.addClass('wfm-timepicker-wrap');
 
@@ -179,6 +181,10 @@
 			}
 		}
 
+		function postLinkFn(scope, elem, attrs, ctrls) {
+			addFocusListenerToInputs(elem.find('input'));
+		}
+
 		function timepickerWrapCtrl($scope) {
 			$scope.showMeridian = meridianInfo.showMeridian;
 			$scope.minuteStep = 5;
@@ -186,6 +192,14 @@
 			if (meridianInfo.showMeridian) {
 				$scope.meridians = [meridianInfo.am, meridianInfo.pm];
 			}
+		}
+
+		function addFocusListenerToInputs(inputElems) {
+			angular.forEach(inputElems, function (input) {
+				angular.element(input).on('focus', function (event) {
+					event.target.select();
+				});
+			});
 		}
 
 	}
@@ -200,7 +214,7 @@
 			info.pm = $locale.DATETIME_FORMATS.AMPMS[1];
 		} else {
 			info.showMeridian = false;
-		}		
+		}
 		return info;
 	}
 
