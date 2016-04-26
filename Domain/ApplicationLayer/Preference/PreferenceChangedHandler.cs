@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
+using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			}
 		}
 
-		public void Handle(PreferenceChangedEvent @event)
+		[AnalyticsUnitOfWork]
+		public virtual void Handle(PreferenceChangedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
 			{

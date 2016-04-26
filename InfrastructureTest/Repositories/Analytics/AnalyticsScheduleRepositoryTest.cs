@@ -4,9 +4,8 @@ using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure.Analytics;
@@ -20,19 +19,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[AnalyticsDatabaseTest]
 	public class AnalyticsScheduleRepositoryTest
 	{
-		private IAnalyticsScheduleRepository _target;
+		public IAnalyticsScheduleRepository Target;
+		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		private AnalyticsDataFactory analyticsDataFactory;
 		private UtcAndCetTimeZones _timeZones;
 		private ExistingDatasources _datasource;
 		private const int businessUnitId = 12;
-		ICurrentDataSource currentDataSource;
 
 		[SetUp]
 		public void Setup()
 		{
-			currentDataSource = CurrentDataSource.Make();
-			_target = new AnalyticsScheduleRepository(currentDataSource);
-
 			analyticsDataFactory = new AnalyticsDataFactory();
 			_timeZones = new UtcAndCetTimeZones();
 			_datasource = new ExistingDatasources(_timeZones);
@@ -46,7 +42,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Persist();
 
-			var acts = _target.Activities();
+			
+			var acts = WithAnalyticsUnitOfWork.Get(() => Target.Activities());
 			acts.Count.Should().Be.EqualTo(1);
 		}
 
@@ -58,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(overtime);
 			analyticsDataFactory.Persist();
 
-			var overtimes = _target.Overtimes();
+			var overtimes = WithAnalyticsUnitOfWork.Get(() => Target.Overtimes());
 			overtimes.Count.Should().Be.EqualTo(1);
 		}
 
@@ -70,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(abs);
 			analyticsDataFactory.Persist();
 
-			var absences = _target.Absences();
+			var absences = WithAnalyticsUnitOfWork.Get(() => Target.Absences());
 			absences.Count.Should().Be.EqualTo(1);
 		}
 
@@ -82,7 +79,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(sl);
 			analyticsDataFactory.Persist();
 
-			var shiftLengths = _target.ShiftLengths();
+			var shiftLengths = WithAnalyticsUnitOfWork.Get(() => Target.ShiftLengths());
 			shiftLengths.Count.Should().Be.EqualTo(1);
 		}
 
@@ -93,10 +90,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(new ShiftCategory(1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
 			analyticsDataFactory.Persist();
 
-			var scens = _target.Scenarios();
-			scens.Count.Should().Be.EqualTo(1); 
+			var scens = WithAnalyticsUnitOfWork.Get(() => Target.Scenarios());
+			scens.Count.Should().Be.EqualTo(1);
 
-			var cats = _target.ShiftCategories();
+			var cats = WithAnalyticsUnitOfWork.Get(() => Target.ShiftCategories());
 			cats.Count.Should().Be.EqualTo(1);
 		}
 
@@ -108,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 										new DateTime(2059, 12, 31), 0, -2, businessUnitId, Guid.NewGuid(), _datasource, false, _timeZones.UtcTimeZoneId));
 
 			analyticsDataFactory.Persist();
-			var pers = _target.PersonAndBusinessUnit(personPeriodCode);
+			var pers = WithAnalyticsUnitOfWork.Get(() => Target.PersonAndBusinessUnit(personPeriodCode));
 			pers.Should().Not.Be.Null();
 			pers.PersonId.Should().Be.EqualTo(10);
 			pers.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
@@ -183,17 +180,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				BusinessUnitId = businessUnitId,
 				PersonId = 10
 			};
-
-			_target.PersistFactScheduleBatch(new List<IFactScheduleRow>
+			WithAnalyticsUnitOfWork.Do(() =>
 			{
-				new FactScheduleRow
+				Target.PersistFactScheduleBatch(new List<IFactScheduleRow>
 				{
-					PersonPart = personPart, 
-					DatePart = datePart, 
-					TimePart = timePart
-				}
+					new FactScheduleRow
+					{
+						PersonPart = personPart,
+						DatePart = datePart,
+						TimePart = timePart
+					}
+				});
 			});
-
 		}
 
 		[Test]
@@ -220,19 +218,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				AbsenceId = 22,
 				BusinessUnitId = businessUnitId
 			};
-			_target.PersistFactScheduleDayCountRow(dayCount);
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.PersistFactScheduleDayCountRow(dayCount);
+			});
 		}
 
 		[Test]
 		public void ShouldBeAbleToDeleteADay()
 		{
-			_target.DeleteFactSchedule(1, 1, 1);
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.DeleteFactSchedule(1, 1, 1);
+			});
 		}
 
 		[Test]
 		public void ShouldCreateNewShiftLengthIfNotExist()
 		{
-			var shiftLengthId = _target.ShiftLengthId(120);
+			var shiftLengthId = WithAnalyticsUnitOfWork.Get(() => Target.ShiftLengthId(120));
 			shiftLengthId.Should().Be.GreaterThan(0);
 		}
 

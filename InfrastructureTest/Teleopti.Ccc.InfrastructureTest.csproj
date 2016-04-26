@@ -254,7 +254,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\IntradayMonitorDataLoaderTest.cs" />
-    <Compile Include="Repositories\Analytics\AnalyticsPersonRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsPersonPeriodRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTeamRepositoryTest.cs" />

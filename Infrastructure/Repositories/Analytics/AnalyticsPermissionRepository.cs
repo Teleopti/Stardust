@@ -2,60 +2,44 @@ using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsPermissionRepository : IAnalyticsPermissionRepository
 	{
-		private readonly ICurrentDataSource _currentDataSource;
+		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
 
-		public AnalyticsPermissionRepository(ICurrentDataSource currentDataSource)
+		public AnalyticsPermissionRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
 		{
-			_currentDataSource = currentDataSource;
+			_analyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
 		public void DeletePermissions(IEnumerable<AnalyticsPermission> permissions)
 		{
-			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			foreach (var permission in permissions)
 			{
-				using (var transaction = uow.Session().BeginTransaction())
-				{
-					foreach (var permission in permissions)
-					{
-						uow.Session().Delete(permission);
-					}
-					transaction.Commit();
-				}
+				_analyticsUnitOfWork.Current().Session().Delete(permission);
 			}
 		}
 
 		public void InsertPermissions(IEnumerable<AnalyticsPermission> permissions)
 		{
-			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			foreach (var permission in permissions)
 			{
-				using (var transaction = uow.Session().BeginTransaction())
-				{
-					foreach (var permission in permissions)
-					{
-						uow.Session().Insert(permission);
-					}
-					transaction.Commit();
-				}
+				_analyticsUnitOfWork.Current().Session().Save(permission);
 			}
 		}
 
 		public IList<AnalyticsPermission> GetPermissionsForPerson(Guid personId)
 		{
-			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
-			{
-				var query = uow.Session().CreateCriteria<AnalyticsPermission>()
-					.Add(Restrictions.Eq("PersonCode", personId));
 
-				var result = query.List<AnalyticsPermission>();
-				return result;
-			}
+			var query = _analyticsUnitOfWork.Current().Session().CreateCriteria<AnalyticsPermission>()
+				.Add(Restrictions.Eq("PersonCode", personId));
+
+			var result = query.List<AnalyticsPermission>();
+			return result;
 		}
 	}
 }

@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		{
 		}
 
-		public new void Handle(GroupPageCollectionChangedEvent @event)
+		[AnalyticsUnitOfWork]
+		public new virtual void Handle(GroupPageCollectionChangedEvent @event)
 		{
 			base.Handle(@event);
 		}
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		}
 
 		[UnitOfWork]
+		[AnalyticsUnitOfWork]
 		public new virtual void Handle(GroupPageCollectionChangedEvent @event)
 		{
 			base.Handle(@event);

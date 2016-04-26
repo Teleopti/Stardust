@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.Data.SqlClient;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_analyticsScheduleChangeUpdaterFilter = analyticsScheduleChangeUpdaterFilter;
 		}
 
-		public void Handle(ProjectionChangedEvent @event)
+		[AnalyticsUnitOfWork]
+		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(@event))
 				return;

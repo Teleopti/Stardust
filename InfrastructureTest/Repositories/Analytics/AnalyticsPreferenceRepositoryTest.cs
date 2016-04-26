@@ -4,14 +4,12 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
+using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
@@ -20,20 +18,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	[AnalyticsDatabaseTest]
 	public class AnalyticsPreferenceRepositoryTest
 	{
-		private IAnalyticsPreferenceRepository _target;
-		private AnalyticsDataFactory analyticsDataFactory;
+		public IAnalyticsPreferenceRepository Target;
+		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		private UtcAndCetTimeZones _timeZones;
 		private ExistingDatasources _datasource;
 		private const int businessUnitId = 12;
-		ICurrentDataSource currentDataSource;
 
 		[SetUp]
 		public void Setup()
 		{
-			currentDataSource = CurrentDataSource.Make();
-			_target = new AnalyticsPreferenceRepository(currentDataSource);
-
-			analyticsDataFactory = new AnalyticsDataFactory();
+			var analyticsDataFactory = new AnalyticsDataFactory();
 			_timeZones = new UtcAndCetTimeZones();
 			_datasource = new ExistingDatasources(_timeZones);
 
@@ -56,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			var emptyShiftCategory = new ShiftCategory(-1, Guid.Empty, "Not defined", Color.Aqua, _datasource, businessUnitId);
 			var shiftCategory = new ShiftCategory(12, Guid.NewGuid(), "Shift 1", Color.Aqua, _datasource, businessUnitId);
 
-			
+
 
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Setup(actEmpty);
@@ -77,25 +71,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddPreference()
 		{
-			_target.AddPreference(new AnalyticsFactSchedulePreference
+			WithAnalyticsUnitOfWork.Do(() =>
 			{
-				DateId = 1,
-				IntervalId = 0,
-				PersonId = 10,
-				ScenarioId = 10,
-				PreferenceTypeId = 1,
-				ShiftCategoryId = 12,
-				DayOffId = -1,
-				PreferencesRequested = 1,
-				PreferencesFulfilled = 1,
-				PreferencesUnfulfilled = 0,
-				BusinessUnitId = 1,
-				DatasourceId = 1,
-				InsertDate = DateTime.Now,
-				UpdateDate = DateTime.Now,
-				DatasourceUpdateDate = DateTime.Now,
-				MustHaves = 0,
-				AbsenceId = -1
+				Target.AddPreference(new AnalyticsFactSchedulePreference
+				{
+					DateId = 1,
+					IntervalId = 0,
+					PersonId = 10,
+					ScenarioId = 10,
+					PreferenceTypeId = 1,
+					ShiftCategoryId = 12,
+					DayOffId = -1,
+					PreferencesRequested = 1,
+					PreferencesFulfilled = 1,
+					PreferencesUnfulfilled = 0,
+					BusinessUnitId = 1,
+					DatasourceId = 1,
+					InsertDate = DateTime.Now,
+					UpdateDate = DateTime.Now,
+					DatasourceUpdateDate = DateTime.Now,
+					MustHaves = 0,
+					AbsenceId = -1
+				});
 			});
 		}
 
@@ -116,13 +113,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				PreferencesUnfulfilled = 0,
 				BusinessUnitId = 1,
 				DatasourceId = 1,
-				DatasourceUpdateDate = new DateTime(2001, 1, 1, 14, 0,0),
+				DatasourceUpdateDate = new DateTime(2001, 1, 1, 14, 0, 0),
 				MustHaves = 0,
 				AbsenceId = -1
 			};
-			_target.AddPreference(expectedPreference);
 
-			var preferences = _target.PreferencesForPerson(10);
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddPreference(expectedPreference);
+			});
+
+			var preferences = WithAnalyticsUnitOfWork.Get(() => Target.PreferencesForPerson(10));
 			preferences.Count.Should().Be.EqualTo(1);
 
 			var preference = preferences.First();
@@ -146,15 +147,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddAndDeletePreferences()
 		{
-			_target.AddPreference(getTestPreference(1, 10));
-			_target.AddPreference(getTestPreference(2, 10));
-			_target.AddPreference(getTestPreference(3, 10));
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddPreference(getTestPreference(1, 10));
+				Target.AddPreference(getTestPreference(2, 10));
+				Target.AddPreference(getTestPreference(3, 10));
 
-			_target.AddPreference(getTestPreference(3, 20));
+				Target.AddPreference(getTestPreference(3, 20));
+			});
 
-			_target.DeletePreferences(1, 10);
-			_target.PreferencesForPerson(10).Count.Should().Be.EqualTo(2);
-			_target.PreferencesForPerson(20).Count.Should().Be.EqualTo(1);
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.DeletePreferences(1, 10);
+			});
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.PreferencesForPerson(10).Count.Should().Be.EqualTo(2);
+				Target.PreferencesForPerson(20).Count.Should().Be.EqualTo(1);
+			});
 		}
 
 		private AnalyticsFactSchedulePreference getTestPreference(int dateId, int personId, int scenarioId = 10)

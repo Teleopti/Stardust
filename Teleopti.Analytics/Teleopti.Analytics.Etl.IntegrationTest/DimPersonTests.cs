@@ -14,6 +14,9 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
@@ -23,21 +26,31 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
         [SetUp]
         public void Setup()
         {
-            SetupFixtureForAssembly.BeginTest();
-        }
+			SetupFixtureForAssembly.BeginTest();
+
+			var currentAnalyticsUnitOfWorkFactory = CurrentAnalyticsUnitOfWorkFactory.Make();
+			uow = currentAnalyticsUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+			currentAnalyticsUnitOfWork = new CurrentAnalyticsUnitOfWork(currentAnalyticsUnitOfWorkFactory);
+		}
 
         [TearDown]
         public void TearDown()
         {
             SetupFixtureForAssembly.EndTest();
+	        uow.PersistAll();
+			uow.Dispose();
         }
 
         private const string datasourceName = "Teleopti CCC Agg: Default log object";
+		private IUnitOfWork uow;
+		private CurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork;
 
-        [Test]
+		[Test]
         public void AddNewPersonInApp_AfterIntraday_CorrectPersonPeriodInAnalytics()
         {
-            var analyticsDataFactory = new AnalyticsDataFactory();
+			
+
+			var analyticsDataFactory = new AnalyticsDataFactory();
             var dates = new CurrentWeekDates();
 
             analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
@@ -90,8 +103,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             // When Run an Intraday job (or event depending on toggle?)
             StepRunner.RunIntraday(jobParameters);
 
-            // Question which other tables should have been affected as well. Skills? Teams? Sites? bridge_group_page_person?
-            var repo = new AnalyticsPersonPeriodRepository();
+			// Question which other tables should have been affected as well. Skills? Teams? Sites? bridge_group_page_person?
+	        
+			
+			var repo = new AnalyticsPersonPeriodRepository(currentAnalyticsUnitOfWork);
             
             var analyticsPersonPeriods =
                 repo.GetPersonPeriods(personApp.Id.GetValueOrDefault());
@@ -180,7 +195,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             StepRunner.RunIntraday(jobParameters);
 
             // Question which other tables should have been affected as well. Skills? Teams? Sites? bridge_group_page_person?
-            var repo = new AnalyticsPersonPeriodRepository();
+            var repo = new AnalyticsPersonPeriodRepository(currentAnalyticsUnitOfWork);
 
             var analyticsPersonPeriods =
                 repo.GetPersonPeriods(personApp.Id.GetValueOrDefault());
