@@ -4,7 +4,7 @@ Feature: Remove Planned Absence
 	I need to remove or shorten absences for multiple reasons.
 	I want an easy way to find the agents
 	I need to change and make the changes easily. 
-@ignore
+
 Scenario: Could delete absences for agent
 	Given I am american
 	And there is a site named 'The site'
