@@ -495,7 +495,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
 			builder.RegisterType<TeamMatrixChecker>().As<ITeamMatrixChecker>().InstancePerLifetimeScope();
 			//ITeamMatrixChecker
 

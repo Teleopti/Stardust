@@ -854,7 +854,6 @@
     <Compile Include="Scheduling\TeamBlock\Specification\TeamMemberTerminationOnBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockDayOffsInPeriodValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockMissingDaysOffSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptionsTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelectorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecificationTest.cs" />

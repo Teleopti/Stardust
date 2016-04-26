@@ -1469,7 +1469,6 @@
     <Compile Include="Scheduling\TeamBlock\DayOff\SplitSchedulePeriodToWeekPeriod.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\TeamMemberTerminationOnBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockMissingDaysOffScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelector.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryBlockSpecification.cs" />
