@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IRankedPersonBasedOnStartDate
     {
-        IEnumerable<IPerson> GetRankedPersonList(IEnumerable<IPerson> personsToRank);
 		int? GetRankForPerson(IEnumerable<IPerson> personsToCompareWith, IPerson person);
 		IDictionary<IPerson, int> GetRankedPersonDictionary(IEnumerable<IPerson> personsToRank);
     }
@@ -18,12 +17,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         public RankedPersonBasedOnStartDate(IPersonStartDateFromPersonPeriod personStartDateFromPersonPeriod)
         {
             _personStartDateFromPersonPeriod = personStartDateFromPersonPeriod;
-        }
-
-		public IEnumerable<IPerson> GetRankedPersonList(IEnumerable<IPerson> personsToRank)
-		{
-			var personDictionary = getDictionary(personsToRank);
-            return personDictionary.OrderBy(s => s.Value).Select(value => value.Key).ToList();
         }
 
         public int? GetRankForPerson(IEnumerable<IPerson> personsToCompareWith, IPerson person)
