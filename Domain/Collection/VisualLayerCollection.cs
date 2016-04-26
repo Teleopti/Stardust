@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		public bool HasLayers { get; private set; }
 
 		public IPerson Person { get; private set; }
-
+		
 		public IFilterOnPeriodOptimizer PeriodOptimizer
 		{
 			get { return _periodOptimizer.Value; }

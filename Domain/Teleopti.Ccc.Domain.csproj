@@ -1792,7 +1792,6 @@
     <Compile Include="Scheduling\SeatLimitation\MaxSeatSkillCreator.cs" />
     <Compile Include="Scheduling\SeatLimitation\OccupiedSeatCalculator.cs" />
     <Compile Include="Scheduling\SeatLimitation\SeatLimitationWorkShiftCalculator2.cs" />
-    <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionaryCreator.cs" />
     <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionary.cs" />
     <Compile Include="Scheduling\SeatLimitation\SeatImpactOnPeriodForProjection.cs" />
     <Compile Include="Scheduling\ShiftCreator\OperatorLimiter.cs" />
