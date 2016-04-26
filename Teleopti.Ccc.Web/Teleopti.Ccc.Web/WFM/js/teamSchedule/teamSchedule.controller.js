@@ -205,7 +205,6 @@
 						notificationService.notify('success', 'FinishedRemoveAbsence');
 					} else {
 						var description = notificationService.notify('warning', 'PartialSuccessMessageForRemovingAbsence', [total, total - fail, fail]);
-						CommandCommonSvc.showCommandFailureDetailsDialog(description, result);
 					}
 				});
 		}
@@ -245,7 +244,6 @@
 					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.PersonCount;
 					var fail = response.data.length;
 					var description = notificationService.notify('warning', 'PartialSuccessMessageForRemovingActivity', [total, total - fail, fail]);
-					CommandCommonSvc.showCommandFailureDetailsDialog(description, response.data);
 				}
 			}, function (error) {
 				vm.afterActionCallback(trackId, personIds);

@@ -99,7 +99,6 @@
 					NotificationSvc.notify('success', 'SuccessfulMessageForAddingActivity');
 				} else {
 					var description = NotificationSvc.notify('warning', 'PartialSuccessMessageForAddingActivity', [total, total - fail, fail]);
-					CommandCommon.showCommandFailureDetailsDialog(description, response.data);
 				}
 			}, function (response) {
 				if (vm.actionsAfterActivityApply) {

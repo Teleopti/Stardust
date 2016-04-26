@@ -87,7 +87,6 @@
 					NotificationService.notify('success', 'AddAbsenceSuccessedResult');
 				} else {
 					var description = NotificationService.notify('warning', 'AddAbsenceTotalResult', [total - fail, fail]);
-					CommandCommon.showCommandFailureDetailsDialog(description, result);
 				}
 			}
 		}
