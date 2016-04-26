@@ -412,11 +412,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
 			builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();
 			builder.RegisterType<SeniorTeamBlockLocator>().As<ISeniorTeamBlockLocator>().SingleInstance();
-			builder.RegisterType<DescisionMakerToSwapTeamBlock>().As<IDescisionMakerToSwapTeamBlock>();
 			builder.RegisterType<SeniorityCalculatorForTeamBlock>().As<ISeniorityCalculatorForTeamBlock>();
 			builder.RegisterType<TeamBlockLocatorWithHighestPoints>().As<ITeamBlockLocatorWithHighestPoints>().SingleInstance();
 			builder.RegisterType<WeekDayPointCalculatorForTeamBlock>().As<IWeekDayPointCalculatorForTeamBlock>().SingleInstance();
-			builder.RegisterType<TeamBlockDayOffSwapper>().As<ITeamBlockDayOffSwapper>();
 			builder.RegisterType<TeamBlockDayOffDaySwapper>().As<ITeamBlockDayOffDaySwapper>();
 			builder.RegisterType<JuniorTeamBlockExtractor>().As<IJuniorTeamBlockExtractor>().SingleInstance();
 			builder.RegisterType<SuitableDayOffSpotDetector>().As<ISuitableDayOffSpotDetector>().SingleInstance();

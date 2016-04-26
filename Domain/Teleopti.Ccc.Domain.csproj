@@ -1101,7 +1101,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PostSwapValidationForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapper.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapValidator.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DescisionMakerToSwapTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorTeamBlockLocator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SuitableDayOffsToGiveAway.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffDaySwapDecisionMaker.cs" />
