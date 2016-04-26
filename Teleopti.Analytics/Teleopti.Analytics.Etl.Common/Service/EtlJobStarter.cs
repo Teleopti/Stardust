@@ -33,10 +33,10 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private Action _stopService;
 
 		public EtlJobStarter(
-			JobHelper jobHelper,
-			JobExtractor jobExtractor,
-			Tenants tenants,
-			IBaseConfigurationRepository baseConfigurationRepository)
+			 JobHelper jobHelper,
+			 JobExtractor jobExtractor,
+			 Tenants tenants,
+			 IBaseConfigurationRepository baseConfigurationRepository)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
@@ -75,10 +75,10 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			log.Debug("Getting scheduled schedule");
 			var repository = new Repository(_connectionString);
 			var etlJobScheduleCollection =
-				new EtlJobScheduleCollection(
-					repository,
-					new EtlJobLogCollection(repository),
-					_serviceStartTime);
+				 new EtlJobScheduleCollection(
+					  repository,
+					  new EtlJobLogCollection(repository),
+					  _serviceStartTime);
 
 			log.Debug("Getting due schedule");
 			var scheduleToRun = new SchedulePriority().GetTopPriority(etlJobScheduleCollection, DateTime.Now, _serviceStartTime);
@@ -97,15 +97,15 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 			log.Debug("Extracting job to run from schedule");
 			var jobToRun = _jobExtractor.ExtractJobFromSchedule(
-				scheduleToRun,
-				_jobHelper,
-				configHandler.BaseConfiguration.TimeZoneCode,
-				configHandler.BaseConfiguration.IntervalLength.Value,
-				_cube,
-				_pmInstallation,
-				configHandler.BaseConfiguration.RunIndexMaintenance,
-				culture
-				);
+				 scheduleToRun,
+				 _jobHelper,
+				 configHandler.BaseConfiguration.TimeZoneCode,
+				 configHandler.BaseConfiguration.IntervalLength.Value,
+				 _cube,
+				 _pmInstallation,
+				 configHandler.BaseConfiguration.RunIndexMaintenance,
+				 culture
+				 );
 
 			log.DebugFormat("Running job {0}", jobToRun.Name);
 			var success = runEtlJob(jobToRun, scheduleToRun.ScheduleId, repository);
@@ -114,7 +114,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 		private bool runEtlJob(IJob jobToRun, int scheduleId, IJobLogRepository repository)
 		{
-			var jobStepsNotToRun = new List<IJobStep>();
 			var runController = new RunController((IRunControllerRepository)repository);
 
 			log.Debug("Checking if permitted to run");
@@ -130,6 +129,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 						foreach (var tenant in _tenants.EtlTenants())
 						{
+							var jobStepsNotToRun = new List<IJobStep>();
 							jobToRun.StepList[0].JobParameters.SetTenantBaseConfigValues(tenant.EtlConfiguration);
 
 							var jobResultCollection = new List<IJobResult>();
@@ -175,33 +175,33 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private static void logConflictingEtlRun(IJob jobToRun, IEtlRunningInformation etlRunningInformation)
 		{
 			log.InfoFormat(CultureInfo.InvariantCulture,
-				"Scheduled job '{0}' could not start due to another job is running at the moment. (ServerName: {1}; JobName: {2}; StartTime: {3}; IsStartByService: {4})",
-				jobToRun.Name,
-				etlRunningInformation.ComputerName,
-				etlRunningInformation.JobName,
-				etlRunningInformation.StartTime,
-				etlRunningInformation.IsStartedByService);
+				 "Scheduled job '{0}' could not start due to another job is running at the moment. (ServerName: {1}; JobName: {2}; StartTime: {3}; IsStartByService: {4})",
+				 jobToRun.Name,
+				 etlRunningInformation.ComputerName,
+				 etlRunningInformation.JobName,
+				 etlRunningInformation.StartTime,
+				 etlRunningInformation.IsStartedByService);
 		}
 
 		private static void logInvalidLicense(string tenant)
 		{
 			log.WarnFormat(
-				"ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.",
-				tenant);
+				 "ETL Service could not run for tenant {0}. Please log on to that tenant and apply a license in the main client.",
+				 tenant);
 		}
 
 		private static void logInvalidConfiguration(ConfigurationHandler configHandler)
 		{
 			var culture = configHandler.BaseConfiguration.CultureId.HasValue
-				? configHandler.BaseConfiguration.CultureId.Value.ToString(CultureInfo.InvariantCulture)
-				: "null";
+				 ? configHandler.BaseConfiguration.CultureId.Value.ToString(CultureInfo.InvariantCulture)
+				 : "null";
 			var intervalLength = configHandler.BaseConfiguration.IntervalLength.HasValue
-				? configHandler.BaseConfiguration.IntervalLength.Value.ToString(CultureInfo.InvariantCulture)
-				: "null";
+				 ? configHandler.BaseConfiguration.IntervalLength.Value.ToString(CultureInfo.InvariantCulture)
+				 : "null";
 			var timeZone = configHandler.BaseConfiguration.TimeZoneCode ?? "null";
 			log.WarnFormat(CultureInfo.InvariantCulture,
-				"ETL Service was stopped due to invalid base configuration (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'). Please start the manual ETL Tool and configure. Then start the service again.",
-				culture, intervalLength, timeZone);
+				 "ETL Service was stopped due to invalid base configuration (Culture: '{0}'; IntervalLengthMinutes: '{1}; TimeZoneCode: '{2}'). Please start the manual ETL Tool and configure. Then start the service again.",
+				 culture, intervalLength, timeZone);
 		}
 	}
 }
