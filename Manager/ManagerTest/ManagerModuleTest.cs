@@ -21,13 +21,13 @@ namespace ManagerTest
 			_containerBuilder.RegisterType<ManagerConfiguration>().SingleInstance();
 
 			_containerBuilder.RegisterType<NodeManager>().As<INodeManager>();
-			_containerBuilder.RegisterType<JobManagerNewVersion>().SingleInstance();
+			_containerBuilder.RegisterType<JobManager>().SingleInstance();
 			_containerBuilder.RegisterType<Validator>().SingleInstance();
 			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
 			_containerBuilder.RegisterType<ManagerController>();
 
 			_containerBuilder.Register(
-				c => new JobRepositoryWithLock(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
+				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
 				.As<IJobRepository>();
 
 			_containerBuilder.Register(

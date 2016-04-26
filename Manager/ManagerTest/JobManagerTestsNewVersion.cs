@@ -21,7 +21,7 @@ namespace ManagerTest
 			JobManager.Dispose();
 		}
 
-		public JobManagerNewVersion JobManager;
+		public JobManager JobManager;
 		public NodeManager NodeManager;
 		public IHttpSender HttpSender;
 		public IJobRepository JobRepository;

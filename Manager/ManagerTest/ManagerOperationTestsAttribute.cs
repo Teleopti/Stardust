@@ -19,7 +19,7 @@ namespace ManagerTest
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
 
 			builder.Register(
-				c => new JobRepositoryWithLock(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
+				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
 				.As<IJobRepository>();
 
 			builder.Register(
@@ -28,7 +28,7 @@ namespace ManagerTest
 
 			builder.RegisterType<ManagerController>();
 
-			builder.RegisterType<JobManagerNewVersion>().SingleInstance();
+			builder.RegisterType<JobManager>().SingleInstance();
 		}
 	}
 }
