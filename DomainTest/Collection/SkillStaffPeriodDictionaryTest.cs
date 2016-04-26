@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
     [TestFixture]
     public class SkillStaffPeriodDictionaryTest
     {
-        private ISkillStaffPeriodDictionary _target;
+        private SkillStaffPeriodDictionary _target;
         private ISkillStaffPeriod _ssp1;
         private ISkillStaffPeriod _ssp2;
         private DateTimePeriod _dtp1;

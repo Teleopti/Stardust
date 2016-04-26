@@ -19,16 +19,6 @@ namespace Teleopti.Interfaces.Domain
         ReadOnlyCollection<DateTimePeriod> SkillOpenHoursCollection { get; }
 
         /// <summary>
-        /// Adds the specified skill staff period.
-        /// </summary>
-        /// <param name="skillStaffPeriod">The skill staff period.</param>
-        /// <remarks>
-        /// Created by: micke
-        /// Created date: 2009-01-23
-        /// </remarks>
-        void Add(ISkillStaffPeriod skillStaffPeriod);
-
-        /// <summary>
         /// Gets the skill of the skillstaff periods in this collection.
         /// </summary>
         /// <value>The skill.</value>
