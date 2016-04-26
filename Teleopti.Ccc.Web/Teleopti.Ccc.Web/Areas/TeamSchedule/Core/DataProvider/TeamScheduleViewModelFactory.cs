@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				else
 				{
 					var schedulePeriod = personAssignment.Period;
-					var absenceInSchedulePeriod =
-						personAbsences.Any(a => a.Period.Contains(schedulePeriod) || schedulePeriod.Contains(a.Period));
+					var absenceInSchedulePeriod = personAbsences.Any(a => a.Period.Contains(schedulePeriod) || schedulePeriod.Contains(a.Period) || a.Period.Intersect(schedulePeriod));
+
 					if (absenceInSchedulePeriod)
 					{
 						ret.Add(scheduleDay.Person);
