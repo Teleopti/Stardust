@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 
 		public static void AddDayOff(this DataTable dataTable,
 						int dayOffId,
-						Guid dayOffCode,
+						Guid? dayOffCode,
 						string dayOffName,
 						int businessUnitId,
 						int datasourceId,
@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			var row = dataTable.NewRow();
 
 			row["day_off_id"] = dayOffId;
-			row["day_off_code"] = dayOffCode;
+			if (dayOffCode.HasValue)
+				row["day_off_code"] = dayOffCode.Value;
+			else
+				row["day_off_code"] = DBNull.Value;
+
 			row["day_off_name"] = dayOffName;
 			row["display_color"] = -8355712;
 

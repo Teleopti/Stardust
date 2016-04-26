@@ -402,6 +402,7 @@
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsDayOffRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPreferenceRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDateRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepository.cs" />
@@ -575,6 +576,7 @@
     <Compile Include="UnitOfWork\DisableBusinessUnitFilter.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
     <Compile Include="UnitOfWork\MessageBrokerSender.cs" />
+    <Compile Include="UnitOfWork\DayOffTemplateChangedEventPublisher.cs" />
     <Compile Include="UnitOfWork\ScheduleChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\ClearScheduleEvents.cs" />
     <Compile Include="UnitOfWork\CurrentTransactionHooks.cs" />

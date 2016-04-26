@@ -178,6 +178,8 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\DayOffs\DayOffTemplateChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
@@ -248,6 +250,7 @@
     <Compile Include="DayOffPlanning\SkillGroupReducerForCascadingSkills.cs" />
     <Compile Include="Optimization\IScheduleOptimization.cs" />
     <Compile Include="Optimization\ScheduleOptimizationTeamBlock.cs" />
+    <Compile Include="Repositories\IAnalyticsDayOffRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPreferenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsDateRepository.cs" />
     <Compile Include="Repositories\IAnalyticsPermissionExecutionRepository.cs" />

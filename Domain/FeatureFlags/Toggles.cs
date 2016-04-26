@@ -114,6 +114,7 @@
 		ShiftTrade_ToHangfire_38181,
 		GroupPageCollection_ToHangfire_38178,
 		SettingsForPersonPeriodChanged_ToHangfire_38207,
+		ETL_SpeedUpIntradayDayOff_38213,
 		// ReSharper restore InconsistentNaming
 	}
 }

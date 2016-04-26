@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	public class DimDayOff : IAnalyticsDataSetup, IAbsenceData
 	{
 		private readonly int _id;
-		private readonly Guid _code;
+		private readonly Guid? _code;
 		private readonly string _name;
 		private readonly IDatasourceData _datasource;
 		private readonly int _businessUnitId;
 
 		public DimDayOff(
 			int id,
-			Guid code,
+			Guid? code,
 			string name,
 			IDatasourceData datasource,
 			int businessUnitId)
