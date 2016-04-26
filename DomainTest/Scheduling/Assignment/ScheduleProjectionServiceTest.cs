@@ -376,7 +376,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			Assert.AreEqual(1, projection.Count());
 			Assert.AreEqual(new DateTimePeriod(new DateTime(2000, 1, 1, 7, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 17, 0, 0, DateTimeKind.Utc)), projection.Period());
-			Assert.AreEqual(new TimeSpan(0), projection.ReadyTime());
 			Assert.AreEqual(new TimeSpan(10, 0, 0), projection.ContractTime());
 		}
 
@@ -390,7 +389,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var projection = target.CreateProjection();
 			Assert.AreEqual(0, projection.Count());
 			Assert.IsNull(projection.Period());
-			Assert.AreEqual(new TimeSpan(0), projection.ReadyTime());
 			Assert.AreEqual(new TimeSpan(0), projection.ContractTime());
 		}
 
@@ -470,12 +468,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var projection = target.CreateProjection();
 			Assert.AreEqual(0, projection.Count());
 			Assert.AreEqual(TimeSpan.Zero, projection.ContractTime());
-			Assert.AreEqual(TimeSpan.Zero, projection.ReadyTime());
 			scheduleDay.Add(createPersonAbsence(100, createPeriod(2, 22)));
 			projection = target.CreateProjection();
 			Assert.AreEqual(0, projection.Count());
 			Assert.AreEqual(TimeSpan.Zero, projection.ContractTime());
-			Assert.AreEqual(TimeSpan.Zero, projection.ReadyTime());
 		}
 
 	    [Test]

@@ -72,18 +72,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return hasPaidTime() ? Period.ElapsedTime() : TimeSpan.Zero;
 		}
 
-        //tested from VisualLayerCollectionTest
-        public TimeSpan ReadyTime()
-        {
-            return hasReadyTime() ? Period.ElapsedTime() : TimeSpan.Zero;
-        }
-
-        private bool hasReadyTime()
-        {
-            IActivity act = Payload as IActivity;
-            return act != null && act.InReadyTime;
-        }
-
         public TimeSpan WorkTime()
         {
             return hasWorkTime() ? Period.ElapsedTime() : TimeSpan.Zero;

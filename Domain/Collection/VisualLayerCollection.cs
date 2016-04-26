@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Collection
 						ret.WorkTime.Add(layer.WorkTime()),
 						ret.ContractTime.Add(layer.ThisLayerContractTime()),
 						ret.PaidTime.Add(layer.PaidTime()),
-						ret.ReadyTime.Add(layer.ReadyTime()),
 						ret.OverTime.Add((layer.DefinitionSet != null &&
 							layer.HighestPriorityAbsence == null &&
 							layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime) ? layer.WorkTime() : TimeSpan.Zero));
@@ -73,11 +72,6 @@ namespace Teleopti.Ccc.Domain.Collection
 		public bool IsSatisfiedBy(ISpecification<IVisualLayerCollection> specification)
 		{
 			return specification.IsSatisfiedBy(this);
-		}
-
-		public TimeSpan ReadyTime()
-		{
-			return _timeNumbers.Value.ReadyTime;
 		}
 
 		public TimeSpan WorkTime()
@@ -272,12 +266,11 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		private struct LayerCollectionNumbers
 		{
-			public LayerCollectionNumbers(TimeSpan workTime, TimeSpan contractTime, TimeSpan paidTime, TimeSpan readyTime, TimeSpan overTime) : this()
+			public LayerCollectionNumbers(TimeSpan workTime, TimeSpan contractTime, TimeSpan paidTime, TimeSpan overTime) : this()
 			{
 				WorkTime = workTime;
 				ContractTime = contractTime;
 				PaidTime = paidTime;
-				ReadyTime = readyTime;
 				OverTime = overTime;
 			}
 
@@ -285,7 +278,6 @@ namespace Teleopti.Ccc.Domain.Collection
 			public TimeSpan ContractTime { get; private set; }
 			public TimeSpan OverTime { get; private set; }
 			public TimeSpan PaidTime { get; private set; }
-			public TimeSpan ReadyTime { get; private set; }
 		}
 	}
 

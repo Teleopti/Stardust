@@ -26,19 +26,6 @@ namespace Teleopti.Interfaces.Domain
 		TimeSpan ContractTime();
 
 		/// <summary>
-		/// Gets the total ready time for this collection.
-		/// Remember that this might not be the correct result
-		/// if the projection is built by a part of the total
-		/// schedule, eg a personassignment.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2008-08-14
-		/// </remarks>
-		TimeSpan ReadyTime();
-
-		/// <summary>
 		/// Gets the total work time.
 		/// </summary>
 		/// <returns></returns>

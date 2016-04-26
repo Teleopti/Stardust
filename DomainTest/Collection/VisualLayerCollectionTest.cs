@@ -337,62 +337,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			Assert.AreEqual(TimeSpan.FromMinutes(30), target.ContractTime(absence1Period.MovePeriod(TimeSpan.FromMinutes(30))));
 		}
 
-		[Test]
-		public void VerifyReadyTimeReturnsZeroIfNoLayers()
-		{
-			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
-			{
-				PeriodOptimizer = new FilterLayerNoOptimizer()
-			};
-			Assert.AreEqual(new TimeSpan(0), target.ReadyTime());
-		}
-
-		[Test]
-		public void VerifyReadyTimeOneActivityInReadyTime()
-		{
-			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
-			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
-			{
-				PeriodOptimizer = new FilterLayerNoOptimizer()
-			};
-			Assert.AreEqual(new TimeSpan(1, 0, 0, 0), target.ReadyTime());
-		}
-
-		[Test]
-		public void VerifyReadyTimeOneActivityNotInContractTime()
-		{
-			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), false));
-			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
-			{
-				PeriodOptimizer = new FilterLayerNoOptimizer()
-			};
-			Assert.AreEqual(TimeSpan.Zero, target.ReadyTime());
-		}
-
-		[Test]
-		public void VerifyReadyTimeMultipleActivities()
-		{
-			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
-			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), false));
-			internalCollection.Add(createVisualLayerWithActivityForReadyTime(new DateTimePeriod(2000, 1, 3, 2000, 1, 4), true));
-			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
-			{
-				PeriodOptimizer = new FilterLayerNoOptimizer()
-			};
-			Assert.AreEqual(new TimeSpan(2, 0, 0, 0), target.ReadyTime());
-		}
-
-		[Test]
-		public void VerifyReadyTimeWithAbsenceAlwaysZero()
-		{
-			internalCollection.Add(createVisualLayerWithAbsenceForReadyTime(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), true));
-			internalCollection.Add(createVisualLayerWithAbsenceForReadyTime(new DateTimePeriod(2000, 1, 2, 2000, 1, 3), false));
-			var target = new VisualLayerCollection(dummyPerson, internalCollection, new ProjectionPayloadMerger())
-			{
-				PeriodOptimizer = new FilterLayerNoOptimizer()
-			};
-			Assert.AreEqual(TimeSpan.Zero, target.ReadyTime());
-		}
 		
 		[Test]
 		public void VerifyOvertime()
