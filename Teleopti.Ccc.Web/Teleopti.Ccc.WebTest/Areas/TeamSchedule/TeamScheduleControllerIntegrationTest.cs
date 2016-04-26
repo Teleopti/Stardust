@@ -154,10 +154,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var schedule = result.Single();
 			var projectionVm = schedule.Projection.ToList();
-			projectionVm.Count.Should().Be.EqualTo(4);
+			projectionVm.Count.Should().Be.EqualTo(3);
 
-			projectionVm[1].ParentPersonAbsence.Should().Be.EqualTo(personAbsence1.Id);
-			projectionVm[2].ParentPersonAbsence.Should().Be.EqualTo(personAbsence2.Id);
+			projectionVm[0].ParentPersonAbsences.Should().Be.Null();
+			projectionVm[1].ParentPersonAbsences.ToList().Contains(personAbsence1.Id.Value).Should().Be.EqualTo(true);
+			projectionVm[1].ParentPersonAbsences.ToList().Contains(personAbsence2.Id.Value).Should().Be.EqualTo(true);
 		}
 
 		[Test]
@@ -563,9 +564,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var schedule = result.Single();
 			var projectionVm = schedule.Projection.ToList();
 			projectionVm.Count.Should().Be.EqualTo(3);
-			projectionVm[0].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
-			projectionVm[1].ShiftLayerId.Should().Be.EqualTo(shiftLayers[1].Id);
-			projectionVm[2].ShiftLayerId.Should().Be.EqualTo(shiftLayers[0].Id);
+			projectionVm[0].ShiftLayerIds.First().Should().Be.EqualTo(shiftLayers[0].Id);
+			projectionVm[1].ShiftLayerIds.First().Should().Be.EqualTo(shiftLayers[1].Id);
+			projectionVm[2].ShiftLayerIds.First().Should().Be.EqualTo(shiftLayers[0].Id);
 		}
 
 		[Test]

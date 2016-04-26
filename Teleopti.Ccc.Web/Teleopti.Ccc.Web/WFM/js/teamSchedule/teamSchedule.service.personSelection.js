@@ -19,10 +19,18 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				if(shiftsForCurrentDate.length > 0){
 					var projectionsForCurrentDate = shiftsForCurrentDate[0].Projections;
 					angular.forEach(projectionsForCurrentDate, function(projection) {
-						if (projection.ParentPersonAbsence && absences.indexOf(projection.ParentPersonAbsence) === -1) {
-							absences.push(projection.ParentPersonAbsence);
-						} else if (projection.ShiftLayerId && !projection.IsOvertime && activities.indexOf(projection.ShiftLayerId) === -1) {
-							activities.push(projection.ShiftLayerId);
+						if (projection.ParentPersonAbsences && projection.ParentPersonAbsences.length > 0) {
+							angular.forEach(projection.ParentPersonAbsences, function(personAbsId) {
+								if (absences.indexOf(personAbsId) === -1) {
+									absences.push(personAbsId);
+								}
+							});
+						} else if (projection.ShiftLayerIds && !projection.IsOvertime) {
+							angular.forEach(projection.ShiftLayerIds, function(shiftLayer) {
+								if (activities.indexOf(shiftLayer) === -1) {
+									activities.push(shiftLayer);
+								}
+							});
 						}
 					});
 				}
@@ -60,12 +68,26 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 						if (!personSchedule.Shifts[i].Date.isSame(personSchedule.Date, 'day')) {
 							continue;
 						}
-						angular.forEach(personSchedule.Shifts[i].Projections, function(projection) {
-							if (projection.ParentPersonAbsence && selectedPerson.selectedAbsences.indexOf(projection.ParentPersonAbsence) > -1) {
-								projection.Selected = true;
+						angular.forEach(personSchedule.Shifts[i].Projections, function (projection) {
+							if (projection.ParentPersonAbsences && projection.ParentPersonAbsences.length > 0) {
+								var selected = true;
+								for (var i = 0; i < projection.ParentPersonAbsences.length; i++) {
+									if (selectedPerson.selectedAbsences.indexOf(projection.ParentPersonAbsences[i]) === -1) {
+										selected = false;
+										break;
+									}
+								}
+								projection.Selected = selected;
 							}
-							else if (projection.ShiftLayerId && selectedPerson.selectedActivities.indexOf(projection.ShiftLayerId) > -1) {
-								projection.Selected = true;
+							else if (projection.ShiftLayerIds) {
+								var selected = true;
+								for (var i = 0; i < projection.ShiftLayerIds.length; i++) {
+									if (selectedPerson.selectedActivities.indexOf(projection.ShiftLayerIds[i]) === -1) {
+										selected = false;
+										break;
+									}
+								}
+								projection.Selected = selected;
 							}
 						});
 					}
@@ -77,7 +99,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			angular.forEach(personSchedule.Shifts, function (shift) {
 				if (shift.Date.isSame(personSchedule.Date, 'day')) {
 					angular.forEach(shift.Projections, function (projection) {
-						if (projection.ParentPersonAbsence || (!projection.IsOvertime && projection.ShiftLayerId)) {
+						if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
 							projection.Selected = personSchedule.IsSelected;
 						}
 					});
@@ -92,8 +114,8 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			angular.forEach(personSchedule.Shifts, function(shift) {
 				if (shift.Date.isSame(personSchedule.Date, 'day')) {
 					angular.forEach(shift.Projections, function(projection) {
-						var sameActivity = currentProjection.ShiftLayerId && projection.ShiftLayerId === currentProjection.ShiftLayerId;
-						var sameAbsence = currentProjection.ParentPersonAbsence && currentProjection.ParentPersonAbsence === projection.ParentPersonAbsence;
+						var sameActivity = currentProjection.ShiftLayerIds && angular.equals(projection.ShiftLayerIds, currentProjection.ShiftLayerIds);
+						var sameAbsence = currentProjection.ParentPersonAbsences && angular.equals(currentProjection.ParentPersonAbsences, projection.ParentPersonAbsences);
 						if (sameActivity || sameAbsence) {
 							projection.Selected = currentProjection.Selected;
 						}
@@ -111,37 +133,54 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					selectedAbsences: [],
 					selectedActivities: []
 				};
-				if(currentProjection.ParentPersonAbsence !== null){
-					selectedPeople[personId].selectedAbsences.push(currentProjection.ParentPersonAbsence);
-					selectedPeople[personId].personAbsenceCount = 1;
+				if(currentProjection.ParentPersonAbsences !== null){
+					selectedPeople[personId].selectedAbsences = selectedPeople[personId].selectedAbsences.concat(currentProjection.ParentPersonAbsences);
+					selectedPeople[personId].personAbsenceCount = currentProjection.ParentPersonAbsences.length;
 				}
-				if(currentProjection.ShiftLayerId !== null){
-					selectedPeople[personId].selectedActivities.push(currentProjection.ShiftLayerId);
-					selectedPeople[personId].personActivityCount = 1;
+				if(currentProjection.ShiftLayerIds !== null){
+					selectedPeople[personId].selectedActivities = selectedPeople[personId].selectedActivities.concat(currentProjection.ShiftLayerIds);
+					selectedPeople[personId].personActivityCount = currentProjection.ShiftLayerIds.length;
 				}
 
 			}
 			else if (selected && selectedPeople[personId]) {
-				if (currentProjection.ParentPersonAbsence !== null && selectedPeople[personId].selectedAbsences.indexOf(currentProjection.ParentPersonAbsence) === -1) {
-					selectedPeople[personId].selectedAbsences.push(currentProjection.ParentPersonAbsence);
-					selectedPeople[personId].personAbsenceCount++;
+				if (currentProjection.ParentPersonAbsences !== null) {
+					angular.forEach(currentProjection.ParentPersonAbsences, function(personAbs) {
+						if (selectedPeople[personId].selectedAbsences.indexOf(personAbs) === -1) {
+							selectedPeople[personId].selectedAbsences.push(personAbs);
+							selectedPeople[personId].personAbsenceCount++;
+						}
+					});
 				}
-				if(currentProjection.ShiftLayerId !== null && selectedPeople[personId].selectedActivities.indexOf(currentProjection.ShiftLayerId) === -1){
-					selectedPeople[personId].selectedActivities.push(currentProjection.ShiftLayerId);
-					selectedPeople[personId].personActivityCount++;
+				if (currentProjection.ShiftLayerIds !== null) {
+					angular.forEach(currentProjection.ShiftLayerIds, function(shiftLayer) {
+						if (selectedPeople[personId].selectedActivities.indexOf(shiftLayer) === -1) {
+							selectedPeople[personId].selectedActivities.push(shiftLayer);
+							selectedPeople[personId].personActivityCount++;
+						}
+					});
 				}
 			}
-			else if(!selected && selectedPeople[personId]){
-				var absenceIndex = selectedPeople[personId].selectedAbsences.indexOf(currentProjection.ParentPersonAbsence);
-				var activityIndex = selectedPeople[personId].selectedActivities.indexOf(currentProjection.ShiftLayerId);
-				if(currentProjection.ParentPersonAbsence !== null && absenceIndex > -1){
-					selectedPeople[personId].selectedAbsences.splice(absenceIndex, 1);
-					selectedPeople[personId].personAbsenceCount--;
+			else if (!selected && selectedPeople[personId]) {
+				if (currentProjection.ParentPersonAbsences) {
+					angular.forEach(currentProjection.ParentPersonAbsences, function(personAbs) {
+						var absenceIndex = selectedPeople[personId].selectedAbsences.indexOf(personAbs);
+						if (absenceIndex > -1) {
+							selectedPeople[personId].selectedAbsences.splice(absenceIndex, 1);
+							selectedPeople[personId].personAbsenceCount--;
+						}
+					});
 				}
-				if(currentProjection.ShiftLayerId !== null && activityIndex > -1){
-					selectedPeople[personId].selectedActivities.splice(activityIndex,1);
-					selectedPeople[personId].personActivityCount--;
+				if (currentProjection.ShiftLayerIds) {
+					angular.forEach(currentProjection.ShiftLayerIds, function(shiftLayer) {
+						var activityIndex = selectedPeople[personId].selectedActivities.indexOf(shiftLayer);
+						if (activityIndex > -1) {
+							selectedPeople[personId].selectedActivities.splice(activityIndex, 1);
+							selectedPeople[personId].personActivityCount--;
+						}
+					});
 				}
+
 				if (selectedPeople[personId].personAbsenceCount === 0 && selectedPeople[personId].personActivityCount === 0) {
 					delete selectedPeople[personId];
 				}

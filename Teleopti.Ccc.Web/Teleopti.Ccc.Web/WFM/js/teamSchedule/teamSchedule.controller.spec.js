@@ -182,14 +182,14 @@ describe("[Test for TeamScheduleController]:", function() {
 							"Date": today,
 							"Projection": [
 								{
-								    "ShiftLayerId": "activity1",
+								    "ShiftLayerIds": ["activity1"],
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 07:00",
 									"Minutes": 480
 								},
 								{
-								    "ShiftLayerId": "activity2",
+								    "ShiftLayerIds": ["activity2"],
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 15:00",
@@ -205,7 +205,7 @@ describe("[Test for TeamScheduleController]:", function() {
 							"Date": today,
 							"Projection": [
 								{
-								    "ShiftLayerId": "activity1",
+								    "ShiftLayerIds": ["activity1"],
 									"Color": "#80FF80",
 									"Description": "Email",
 									"Start": today + " 08:00",

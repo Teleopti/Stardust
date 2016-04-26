@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			}
 		}
 
-		public IVisualLayer[] UnMergedCollection { get; private set; }
+		internal IVisualLayer[] UnMergedCollection { get; private set; }
 
 
 		public bool IsSatisfiedBy(ISpecification<IVisualLayerCollection> specification)

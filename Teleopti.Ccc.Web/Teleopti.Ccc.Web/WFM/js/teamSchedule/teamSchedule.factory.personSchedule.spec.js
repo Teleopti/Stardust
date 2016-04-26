@@ -324,7 +324,7 @@ describe("test of PersonSchedule", function () {
 			"Date": yesterday,
 			"Projection": [
 			{
-			    "ShiftLayerId": "111",
+			    "ShiftLayerIds": ["111"],
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": yesterday + " 19:00",
@@ -339,14 +339,14 @@ describe("test of PersonSchedule", function () {
 			"Date": queryDate,
 			"Projection": [
 			{
-			    "ShiftLayerId": "222",
+			    "ShiftLayerIds": ["222"],
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 07:00",
 				"Minutes": 240
 			},
 			{
-			    "ShiftLayerId": "333",
+			    "ShiftLayerIds": ["333"],
 				"Color": "#80FF80",
 				"Description": "Email",
 				"Start": queryDate + " 11:00",

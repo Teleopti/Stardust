@@ -494,7 +494,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 								{
 									new GroupScheduleProjectionViewModel
 									{
-										ParentPersonAbsence = personAbsenceId
+										ParentPersonAbsences = new Guid[] { personAbsenceId}
 									}
 								}
 							}

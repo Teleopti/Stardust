@@ -228,19 +228,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds.ToArray(), scheduleDateOnly);
 		}
 
-		private IEnumerable<Guid> getPersonAbsencesForPeople(IList<Guid> personIds, DateTime scheduleDate)
-		{
-			if (personIds == null || !personIds.Any()) return new List<Guid>();
-
-			var schedules = getSchedulesForPeople(personIds, scheduleDate);
-
-			var personAbsenceIds = schedules.Schedules
-				.SelectMany(schedule => schedule.Projection.Where(projection => projection.ParentPersonAbsence.HasValue))
-				.Select(p => p.ParentPersonAbsence.GetValueOrDefault());
-
-			return personAbsenceIds;
-		}
-
 		private IEnumerable<FailActionResult> removeEntirePersonAbsence(DateTime scheduleDate,
 			IEnumerable<IPersonAbsence> personAbsencesForRemove, TrackedCommandInfo trackInfo)
 		{

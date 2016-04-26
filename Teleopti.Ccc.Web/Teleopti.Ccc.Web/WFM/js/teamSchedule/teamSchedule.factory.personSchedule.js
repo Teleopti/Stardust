@@ -10,9 +10,13 @@
 
 		var getPersonAbsencesCount = function() {
 			var personAbsences = [];
-			angular.forEach(this.Projections, function(projection) {
-				if (projection.ParentPersonAbsence != null && personAbsences.indexOf(projection.ParentPersonAbsence) === -1) {
-					personAbsences.push(projection.ParentPersonAbsence);
+			angular.forEach(this.Projections, function (projection) {
+				if (projection.ParentPersonAbsences != null) {
+					angular.forEach(projection.ParentPersonAbsences, function(personAbsId) {
+						if (personAbsences.indexOf(personAbsId) === -1) {
+							personAbsences.push(personAbsId);
+						}
+					});
 				}
 			});
 			return personAbsences.length;
@@ -20,10 +24,15 @@
 
 		var getPersonActivitiesCount = function() {
 			var personActivities =[];
-			angular.forEach(this.Projections, function(projection) {
-			    if (projection.ShiftLayerId != null && !projection.IsOvertime && personActivities.indexOf(projection.ShiftLayerId) === -1) {
-			        personActivities.push(projection.ShiftLayerId);
+			angular.forEach(this.Projections, function (projection) {
+				if (projection.ShiftLayerIds != null && !projection.IsOvertime) {
+					angular.forEach(projection.ShiftLayerIds, function(shiftLayerId) {
+						if (personActivities.indexOf(shiftLayerId) === -1) {
+							personActivities.push(shiftLayerId);
+						}
+					});
 				}
+
 			});
 			return personActivities.length;
 		};
@@ -76,8 +85,8 @@
 					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
 						return this.Date.isSame(shift.Date, 'day');
 					}, this);
-					if(shiftsForCurrentDate.length > 0){
-						return shiftsForCurrentDate[0].AbsenceCount()
+					if(shiftsForCurrentDate.length > 0) {
+						return shiftsForCurrentDate[0].AbsenceCount();
 					}
 					return 0;
 				},
@@ -85,8 +94,8 @@
 					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {
 						return this.Date.isSame(shift.Date, 'day');
 					}, this);
-					if(shiftsForCurrentDate.length > 0){
-						return shiftsForCurrentDate[0].ActivityCount()
+					if(shiftsForCurrentDate.length > 0) {
+						return shiftsForCurrentDate[0].ActivityCount();
 					}
 					return 0;
 				}
@@ -158,8 +167,8 @@
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
 			var shiftProjectionVm = {
-				ParentPersonAbsence: projection.ParentPersonAbsence,
-				ShiftLayerId: projection.ShiftLayerId,
+				ParentPersonAbsences: projection.ParentPersonAbsences,
+				ShiftLayerIds: projection.ShiftLayerIds,
 				StartPosition: startPosition,
 				Length: length,
 				IsOvertime: projection.IsOvertime,

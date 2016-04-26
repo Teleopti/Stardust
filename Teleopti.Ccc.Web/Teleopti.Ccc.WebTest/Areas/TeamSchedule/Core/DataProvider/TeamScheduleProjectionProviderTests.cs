@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 
 			var personAbsenceProjection = vm.Projection.ElementAt(2);
 
-			vm.Projection.First().ParentPersonAbsence.Should().Be(null);
-			vm.Projection.Second().ParentPersonAbsence.Should().Be(null);
-			personAbsenceProjection.ParentPersonAbsence.Should().Be(personAbsence.Id);
-			vm.Projection.Last().ParentPersonAbsence.Should().Be(null);
+			vm.Projection.First().ParentPersonAbsences.Should().Be.Null();
+			vm.Projection.Second().ParentPersonAbsences.Should().Be.Null();
+			personAbsenceProjection.ParentPersonAbsences.First().Should().Be(personAbsence.Id);
+			vm.Projection.Last().ParentPersonAbsences.Should().Be.Null();
 
 			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
 			vm.Projection.Second().Description.Should().Be(lunchActivity.Description.Name);

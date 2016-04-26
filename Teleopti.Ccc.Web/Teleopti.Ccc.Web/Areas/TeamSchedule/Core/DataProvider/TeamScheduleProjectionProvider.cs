@@ -40,12 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 
 			var personAssignment = scheduleDay.PersonAssignment();
-			IList<IShiftLayer> shiftLayersList = null;
-			if (personAssignment != null && personAssignment.ShiftLayers.Any())
-			{
-				shiftLayersList = personAssignment.ShiftLayers.ToList();
-			}
-			
 
 			var overtimeActivities = personAssignment != null
 				? personAssignment.OvertimeActivities().ToArray()
@@ -72,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				scheduleVm.WorkTimeMinutes = visualLayerCollection.WorkTime().TotalMinutes;
 				scheduleVm.ContractTimeMinutes = visualLayerCollection.ContractTime().TotalMinutes;
 
-				foreach (var layer in ((VisualLayerCollection)visualLayerCollection).UnMergedCollection)
+				foreach (var layer in visualLayerCollection)
 				{
 					var isPayloadAbsence = layer.Payload is IAbsence;
 					var isMainShiftLayer = layer.Payload is IActivity;
@@ -86,17 +80,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
 
-					Guid? shiftLayerId = null;
-					if (isMainShiftLayer && shiftLayersList != null)
-					{
-						var matchedShiftLayers = shiftLayersList.Where(x => x.Period.Contains(layer.Period)).ToList();
-						shiftLayerId = matchedShiftLayers.LastOrDefault() != null ? matchedShiftLayers.LastOrDefault().Id: null;
-					}
-					
 					projections.Add(new GroupScheduleProjectionViewModel
 					{
-						ParentPersonAbsence = isPayloadAbsence ? layer.PersonAbsenceId : null,
-						ShiftLayerId = shiftLayerId,
+						ParentPersonAbsences = isPayloadAbsence ? getMatchedAbsenceLayers(scheduleDay, layer).ToArray() : null,
+						ShiftLayerIds = isMainShiftLayer ? getMatchedMainShiftLayers(scheduleDay, layer).ToArray(): null,
 						Description = description.Name,
 						Color = isPayloadAbsence
 							? (isAbsenceConfidential && !canViewConfidential
@@ -220,6 +207,39 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					&& layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime);
 			}
 			return false;
+		}
+
+		private IList<Guid> getMatchedMainShiftLayers(IScheduleDay scheduleDay, IVisualLayer layer)
+		{
+			var matchedLayerIds = new List<Guid>();
+			var personAssignment = scheduleDay.PersonAssignment();
+			var shiftLayersList = new List<IShiftLayer>();
+			if (personAssignment != null && personAssignment.ShiftLayers.Any())
+			{
+				shiftLayersList = personAssignment.ShiftLayers.ToList();
+			}
+			foreach (var shiftLayer in shiftLayersList)
+			{
+				if (layer.Payload.Id.GetValueOrDefault() == shiftLayer.Payload.Id.GetValueOrDefault() && (layer.Period.Contains(shiftLayer.Period) || shiftLayer.Period.Contains(layer.Period)))
+				{
+					matchedLayerIds.Add(shiftLayer.Id.GetValueOrDefault());
+				}
+			}
+			return matchedLayerIds;
+		}
+		private IList<Guid> getMatchedAbsenceLayers(IScheduleDay scheduleDay, IVisualLayer layer)
+		{
+			var matchedLayerIds = new List<Guid>();
+			var personAbsences = scheduleDay.PersonAbsenceCollection().ToList();
+
+			foreach (var personAbs in personAbsences)
+			{
+				if (layer.Payload.Id.GetValueOrDefault() == personAbs.Layer.Payload.Id.GetValueOrDefault() && (layer.Period.Contains(personAbs.Period) || personAbs.Period.Contains(layer.Period)))
+				{
+					matchedLayerIds.Add(personAbs.Id.GetValueOrDefault());
+				}
+			}
+			return matchedLayerIds;
 		}
 	}
 
