@@ -13,7 +13,7 @@ using Stardust.Manager.Models;
 namespace ManagerTest
 {
 	[TestFixture, JobTests]
-	public class JobManagerTestsNewVersion : DatabaseTest
+	public class JobManagerTest : DatabaseTest
 	{
 		[TearDown]
 		public void TearDown()
@@ -33,7 +33,7 @@ namespace ManagerTest
 
 		private FakeHttpSender FakeHttpSender
 		{
-			get { return (FakeHttpSender) HttpSender; }
+			get { return (FakeHttpSender)HttpSender; }
 		}
 
 		[TestFixtureSetUp]
@@ -102,7 +102,7 @@ namespace ManagerTest
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
 			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
-	
+
 
 		[Test]
 		public void ShouldBeAbleToDeleteFromJobQueue()
@@ -337,10 +337,10 @@ namespace ManagerTest
 			//----------------------------------------------
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
-			job.Satisfy(job1 => job1.Ended ==null);
+			job.Satisfy(job1 => job1.Ended == null);
 
 			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(new Uri(job.SentToWorkerNodeUri),
-											    keepJobDetailsIfExists: false);
+												keepJobDetailsIfExists: false);
 
 			JobRepository.GetAllJobs().Count.Should().Be(0);
 

@@ -99,14 +99,12 @@
     <Compile Include="Fakes\FakeHttpSender.cs" />
     <Compile Include="Fakes\FakeJobRepository.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
-    <Compile Include="JobManagerTestsNewVersion.cs" />
-    <Compile Include="JobManagerTests.cs" />
+    <Compile Include="JobManagerTest.cs" />
     <Compile Include="JobTestsAttribute.cs" />
     <Compile Include="ManagerModuleTest.cs" />
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="ManagerOperationTestsAttribute.cs" />
     <Compile Include="ManagerTestsAttribute.cs" />
-    <Compile Include="StressTests\JobManagerStressTests.cs" />
     <Compile Include="WorkerNodeRepositoryTests.cs" />
     <Compile Include="NodeUriBuilderHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -123,7 +121,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="StressTests\WhoLock.sql" />
+    <Content Include="WhoLock.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
