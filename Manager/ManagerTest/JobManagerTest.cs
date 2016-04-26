@@ -1,7 +1,6 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using log4net.Config;
+using ManagerTest.Attributes;
 using ManagerTest.Database;
 using ManagerTest.Fakes;
 using NUnit.Framework;
@@ -26,8 +25,7 @@ namespace ManagerTest
 		public IHttpSender HttpSender;
 		public IJobRepository JobRepository;
 		public IWorkerNodeRepository WorkerNodeRepository;
-
-		private JobQueueItem _jobQueueItem;
+		
 		private WorkerNode _workerNode;
 
 
@@ -39,25 +37,11 @@ namespace ManagerTest
 		[TestFixtureSetUp]
 		public void TextFixtureSetUp()
 		{
-#if DEBUG
-			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
-			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
-#endif
-			_jobQueueItem = new JobQueueItem
-			{
-				JobId = Guid.NewGuid(),
-				Name = "Name Test",
-				CreatedBy = "Created By Test",
-				Serialized = "Serialized Test",
-				Type = "Type Test"
-			};
-
 			_workerNode = new WorkerNode
 			{
 				Id = Guid.NewGuid(),
 				Url = new Uri("http://localhost:9050/")
 			};
-
 		}
 
 		[Test]
@@ -74,9 +58,18 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToSendAQueuedJob()
 		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
 			WorkerNodeRepository.AddWorkerNode(_workerNode);
 			
-			JobManager.AddItemToJobQueue(_jobQueueItem);
+			JobManager.AddItemToJobQueue(jobQueueItem);
 
 			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 
@@ -86,18 +79,36 @@ namespace ManagerTest
 
 		[Test]
 		public void ShouldBeAbleToDeleteFromJobQueue()
-		{		
-			JobManager.AddItemToJobQueue(_jobQueueItem);
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			JobManager.AddItemToJobQueue(jobQueueItem);
 			
-			JobManager.DeleteJobQueueItemByJobId(_jobQueueItem.JobId);
+			JobManager.DeleteJobQueueItemByJobId(jobQueueItem.JobId);
 			
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
 		}
 
 		[Test]
 		public void ShouldBeAbleToAddToJobQueue()
-		{		
-			JobManager.AddItemToJobQueue(_jobQueueItem);
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			JobManager.AddItemToJobQueue(jobQueueItem);
 			
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
 		}
@@ -105,18 +116,27 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToCancelJobIfStarted()
 		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
 			WorkerNodeRepository.AddWorkerNode(_workerNode);
 		
-			JobManager.AddItemToJobQueue(_jobQueueItem);
+			JobManager.AddItemToJobQueue(jobQueueItem);
 			
 			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 			
-			var job = JobManager.GetJobByJobId(_jobQueueItem.JobId);
+			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
 			
-			JobManager.CancelJobByJobId(_jobQueueItem.JobId);
+			JobManager.CancelJobByJobId(jobQueueItem.JobId);
 			
-			job = JobManager.GetJobByJobId(_jobQueueItem.JobId);
+			job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
 			
 			JobRepository.GetAllJobs().Count.Should().Be(1);
@@ -131,7 +151,16 @@ namespace ManagerTest
 		[Test]
 		public void ShouldDoNothing_WhenNoWorkerNodeExists_AndJobQueueHasItems()
 		{
-			JobManager.AddItemToJobQueue(_jobQueueItem);
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
+			JobManager.AddItemToJobQueue(jobQueueItem);
 
 			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 
@@ -158,9 +187,18 @@ namespace ManagerTest
 		[Test]
 		public void ShouldDeleteJobFromJobQueueIfNotAssignedToWorkerNode()
 		{
-			JobManager.AddItemToJobQueue(_jobQueueItem);
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
 
-			JobManager.CancelJobByJobId(_jobQueueItem.JobId);
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			JobManager.CancelJobByJobId(jobQueueItem.JobId);
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
 		}
@@ -169,13 +207,22 @@ namespace ManagerTest
 		[Test]
 		public void ShouldBeAbleToRequeueDeadJob()
 		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test"
+			};
+
 			WorkerNodeRepository.AddWorkerNode(_workerNode);
 		
-			JobManager.AddItemToJobQueue(_jobQueueItem);
+			JobManager.AddItemToJobQueue(jobQueueItem);
 			
 			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
 			
-			var job = JobManager.GetJobByJobId(_jobQueueItem.JobId);
+			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
 			job.Satisfy(job1 => job1.Ended == null);
 

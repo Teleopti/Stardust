@@ -46,8 +46,6 @@ namespace ManagerTest
 
 		private Uri CancelJobUri { get; set; }
 
-		private Uri CancelJobTUri { get; set; }
-
 		[Test]
 		public void ShouldInstantiateWhenConstructorArgumentStringIsIvalidUri()
 		{

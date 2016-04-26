@@ -4,7 +4,7 @@ using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Interfaces;
 
-namespace ManagerTest
+namespace ManagerTest.Attributes
 {
 	public class JobTestsAttribute : BaseTestsAttribute
 	{

@@ -4,7 +4,7 @@ using System.Reflection;
 using Autofac;
 using NUnit.Framework;
 
-namespace ManagerTest
+namespace ManagerTest.Attributes
 {
 	public class BaseTestsAttribute : Attribute, ITestAction
 	{
