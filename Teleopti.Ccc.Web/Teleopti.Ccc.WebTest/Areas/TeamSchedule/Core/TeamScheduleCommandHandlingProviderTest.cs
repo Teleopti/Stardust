@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new AddActivityFormData
 			{
 				ActivityId = Guid.NewGuid(),
-				BelongsToDate = date,
+				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
 				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
 				PersonIds = new [] { person1.Id.Value, person2.Id.Value },
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new AddActivityFormData
 			{
 				ActivityId = Guid.NewGuid(),
-				BelongsToDate = date,
+				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
 				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
 				PersonIds = new[] { person1.Id.Value, person2.Id.Value },

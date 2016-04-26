@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			foreach (var personId in formData.PersonIds)
 			{
 				if (_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddActivity,
-					formData.BelongsToDate, _personRepository.Load(personId)))
+					formData.Date, _personRepository.Load(personId)))
 				{
 					var command = new AddActivityCommand
 					{
 						PersonId = personId,
 						ActivityId = formData.ActivityId,
-						Date = formData.BelongsToDate,
+						Date = formData.Date,
 						StartTime = formData.StartTime,
 						EndTime = formData.EndTime,
 						TrackedCommandInfo =

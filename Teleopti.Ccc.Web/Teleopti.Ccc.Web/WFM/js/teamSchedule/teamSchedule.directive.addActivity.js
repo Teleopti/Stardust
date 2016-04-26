@@ -81,7 +81,7 @@
 			var trackId = guidgenerator.newGuid();
 			activityService.addActivity({
 				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
-				BelongsToDate: vm.selectedDate(),
+				Date: vm.selectedDate(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DD HH:mm"),
 				ActivityId: vm.selectedActivityId,
