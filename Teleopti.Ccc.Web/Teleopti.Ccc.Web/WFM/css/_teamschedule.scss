@@ -131,9 +131,13 @@
         }
 
         .layer.selected{
-            opacity: 1;            
-            border:2px dashed grey;
+            opacity: 1;
+            border: 1px dashed grey;
          }
+
+        .layer.lighterBorder{
+            border-color: aqua;
+        }
 
 		.layer:first-of-type {
 			-webkit-border-radius: 4px 0px 0px 4px;

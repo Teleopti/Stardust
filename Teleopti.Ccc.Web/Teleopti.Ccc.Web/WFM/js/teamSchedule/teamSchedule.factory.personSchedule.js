@@ -177,10 +177,10 @@
 				Start: projection.Start,
 				Selected: false,
 				ToggleSelection: function () {
-					// Select person absence and activity
 					this.Selected = !this.Selected;
 				},
-				Minutes: projection.Minutes
+				Minutes: projection.Minutes,
+				UseLighterBorder: parseInt(projection.Color.slice(1), 16) <= parseInt('888888', 16)
 			};
 
 			return shiftProjectionVm;
