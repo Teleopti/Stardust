@@ -53,7 +53,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
 			set { _itemHidden = value; }
 		}
 
-		public bool Selected()
+	    public string PreviewText { get; set; }
+	    public Uri PreviewUrl { get; set; }
+
+	    public bool Selected()
 		{
 			return _selected;
 		}

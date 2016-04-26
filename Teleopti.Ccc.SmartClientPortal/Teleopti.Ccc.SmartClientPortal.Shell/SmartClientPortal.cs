@@ -19,6 +19,8 @@ using Teleopti.Ccc.Win.Backlog;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -33,6 +35,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms;
+using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.Payroll;
 using Teleopti.Ccc.Win.PeopleAdmin.Controls;
@@ -511,7 +514,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
 						outlookBarSmartPartInfo.Icon = Resources.Intraday_filled_space_32x32;
-						break;
+				        outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
+                        var url = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle") + "wfm/#/intraday";
+                        outlookBarSmartPartInfo.PreviewUrl = new Uri(url);
+                        break;
 					case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
 						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
 						break;
@@ -540,8 +546,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					ItemImage = outlookBarSmartPartInfo.Icon,
 					ItemText = outlookBarSmartPartInfo.Title,
 					ItemEnabled = outlookBarSmartPartInfo.Enable,
-					Tag = outlookBarSmartPartInfo.EventTopicName
-				});
+					Tag = outlookBarSmartPartInfo.EventTopicName,
+                    PreviewText = outlookBarSmartPartInfo.PreviewText,
+                    PreviewUrl = outlookBarSmartPartInfo.PreviewUrl
+                });
 			}
 
 			if (_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
@@ -695,7 +703,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (uc == null)
 				return;
 
-			outlookBarWorkSpace1.SetNavigatorControl(uc);
+			outlookBarWorkSpace1.SetNavigatorControl(uc, modulePanelItem.PreviewText, modulePanelItem.PreviewUrl);
 			
 			var navigator = uc as AbstractNavigator;
 			if (navigator != null)

@@ -14389,4 +14389,8 @@ Help us improve your experience by sending an error report</value>
     <value>New activity is not allowed for</value>
     <comment>Alert message when it is not allowed to add new activity for agent in wfm/mytime</comment>
   </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>Preview the new Intraday tool!</value>
+    <comment>Preview the new Intraday tool!</comment>
+  </data>
 </root>

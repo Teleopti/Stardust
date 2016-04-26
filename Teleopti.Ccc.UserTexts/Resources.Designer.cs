@@ -21068,6 +21068,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview the new Intraday tool!.
+        /// </summary>
+        public static string PreviewTheNewIntradayTool {
+            get {
+                return ResourceManager.GetString("PreviewTheNewIntradayTool", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Previous.
         /// </summary>
         public static string Previous {

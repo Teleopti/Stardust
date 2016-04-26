@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces
         public string Title { get; set; }
 
         public bool Enable { get; set; }
+        public Uri PreviewUrl { get; set; }
+        public string PreviewText { get; set; }
 
         public OutlookBarInfo()
         {
