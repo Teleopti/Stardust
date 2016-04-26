@@ -139,8 +139,6 @@
     <Compile Include="Interfaces\IJobRepository.cs" />
     <Compile Include="Interfaces\INodeManager.cs" />
     <Compile Include="Interfaces\IWorkerNodeRepository.cs" />
-    <Compile Include="JobManagerNewVersion.cs" />
-    <Compile Include="JobRepositoryWithLock.cs" />
     <Compile Include="ManagerStarter.cs" />
     <Compile Include="Models\JobQueueItem.cs" />
     <Compile Include="Models\JobFailed.cs" />
