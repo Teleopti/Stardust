@@ -135,11 +135,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
 			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
 
-
 			filterRequestByPeriod(criteria, filter);
 			filterRequestByPersons(criteria, filter.Persons);
 			filterRequestByRequestType(criteria, filter.RequestTypes);
-
+			filterRequestByRequestFilters(criteria, filter.RequestFilters);
 			if (ignoreCount)
 			{
 				count = -1;
@@ -195,6 +194,53 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			criteria.Add(typeCriterion);
 		}
 
+		private void filterRequestByRequestFilters(ICriteria criteria,
+			IDictionary<RequestFilterField, string> requestFilters)
+		{
+			if (requestFilters == null || !requestFilters.Any()) return;
+
+			const char splitter = ',';
+			foreach (var filter in requestFilters)
+			{
+				switch (filter.Key)
+				{
+					case RequestFilterField.Status:
+						var statusFilters = filter.Value.Split(splitter).Select(x =>
+						{
+							int status;
+							return int.TryParse(x.Trim(), out status) ? status : int.MinValue;
+						}).Where(x => x > int.MinValue);
+
+						var statusCriteria = statusFilters.Select(toStatusCriteria).Aggregate(Restrictions.Or);
+						criteria.Add(statusCriteria);
+						break;
+					case RequestFilterField.AbsenceType:
+						// TODO: How to filter absence types?
+						break;
+					case RequestFilterField.Subject:
+						var subjectKeywords = filter.Value.Split(splitter)
+							.Select(x => x.Trim().ToLower())
+							.Where(x => !string.IsNullOrEmpty(x));
+
+						var subjectCriteria = subjectKeywords
+							.Select(x => (ICriterion) Restrictions.Like("personRequests.Subject", $"%{x}%"))
+							.Aggregate(Restrictions.And);
+						criteria.Add(subjectCriteria);
+						break;
+					case RequestFilterField.Message:
+						var messageKeywords = filter.Value.Split(splitter)
+							.Select(x => x.Trim().ToLower())
+							.Where(x => !string.IsNullOrEmpty(x));
+
+						var messageCriteria = messageKeywords
+							.Select(x => (ICriterion) Restrictions.Eq("personRequests.Message", $"%{x}%"))
+							.Aggregate(Restrictions.And);
+						criteria.Add(messageCriteria);
+						break;
+				}
+			}
+		}
+
 		private ICriterion toRequestClassTypeConstraint(RequestType t)
 		{
 			Type type;
@@ -210,6 +256,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					return null;
 			}
 			return Restrictions.Eq("req.class", type);
+		}
+
+		private ICriterion toStatusCriteria(int status)
+		{
+			return Restrictions.Eq("req.requestStatus", status);
 		}
 
 		private void pagePersonRequests(ICriteria query, IPaging paging)

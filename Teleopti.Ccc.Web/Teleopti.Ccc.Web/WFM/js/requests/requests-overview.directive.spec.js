@@ -16,6 +16,9 @@
 				$provide.service('requestsDataService', function() {
 					return requestsDataService;
 				});
+				$provide.service('Toggle', function() {
+					return new FakeToggleService();
+				});
 			});
 		});
 
@@ -149,6 +152,13 @@
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 
+		beforeEach(function () {
+			module(function ($provide) {
+				$provide.service('Toggle', function () {
+					return new FakeToggleService();
+				});
+			});
+		});
 
 		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDefinitions_, _$filter_) {
 			$compile = _$compile_;
@@ -220,7 +230,6 @@
 
 		function setUpTarget() {
 			var scope = $rootScope.$new();
-
 			var directiveElem = getCompiledElement();
 
 			function getCompiledElement() {
@@ -232,9 +241,7 @@
 
 			return {  scope: scope, target: directiveElem };
 		}
-
 	});
-
 
 	function FakeRequestsDataService() {
 
@@ -281,5 +288,7 @@
 		}
 	}
 
-
+	function FakeToggleService() {
+		this.Wfm_Requests_Filtering_37748 = true;
+	}
 })();

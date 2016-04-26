@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 			var filter = new RequestFilter
 			{
+				RequestFilters = input.Filters,
 				Period = queryDateTimePeriod,
 				Paging = input.Paging,
 				RequestTypes = new List<RequestType> { RequestType.AbsenceRequest, RequestType.TextRequest },

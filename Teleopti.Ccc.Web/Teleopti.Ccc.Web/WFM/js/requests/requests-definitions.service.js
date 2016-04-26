@@ -46,7 +46,8 @@
 				StartDate: moment(filter.period.startDate).format('YYYY-MM-DD'),
 				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),
 				SortingOrders: sortingOrders.join(','),
-				AgentSearchTerm: filter.agentSearchTerm
+				AgentSearchTerm: filter.agentSearchTerm,
+				Filters: filter.filters
 			};
 
 			if (paging != null) {

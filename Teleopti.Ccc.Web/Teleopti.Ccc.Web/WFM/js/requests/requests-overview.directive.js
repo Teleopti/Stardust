@@ -1,4 +1,4 @@
-﻿(function () {
+﻿(function() {
 
 	'use strict';
 
@@ -6,10 +6,9 @@
 		.controller('requestsOverviewCtrl', requestsOverviewController)
 		.directive('requestsOverview', requestsOverviewDirective);
 
+	requestsOverviewController.$inject = ['$scope', 'requestsDataService'];
 
-	requestsOverviewController.$inject = ['$scope','requestsDataService'];
-
-	function requestsOverviewController($scope,requestsDataService) {
+	function requestsOverviewController($scope, requestsDataService) {
 		var vm = this;
 
 		vm.requests = [];
@@ -17,19 +16,17 @@
 			startDate: moment().startOf('week')._d,
 			endDate: moment().endOf('week')._d
 		};
-
 		vm.agentSearchTerm = "";
+		vm.filters = [];
 		vm.period.endDate = moment().endOf('week')._d;
-
 		vm.reload = reload;
 		vm.sortingOrders = [];
-
 
 		function reload(requestsFilter, sortingOrders, paging, done) {
 			vm.loaded = false;
 
 			if (vm.togglePaginationEnabled) {
-				requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
+				requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders, paging).then(function(requests) {
 					vm.requests = requests.data.Requests;
 					if (vm.totalRequestsCount !== requests.data.TotalCount) {
 						vm.totalRequestsCount = requests.data.TotalCount;
@@ -41,11 +38,11 @@
 				});
 
 			} else {
-				requestsDataService.getAllRequestsPromise_old(requestsFilter, sortingOrders).then(function (requests) {
+				requestsDataService.getAllRequestsPromise_old(requestsFilter, sortingOrders).then(function(requests) {
 					vm.requests = requests.data;
 					vm.loaded = true;
 				});
-				if (done != null ) done();
+				if (done != null) done();
 			}
 		}
 	}
@@ -58,6 +55,7 @@
 			scope: {
 				period: '=',
 				agentSearchTerm: '=?',
+				filters: '=?',
 				paging: '=?',
 				onTotalRequestsCountChanges: '&?',
 				togglePaginationEnabled: '=?'
@@ -68,15 +66,15 @@
 		};
 
 		function postlink(scope, elem, attrs, ctrl) {
-
-			scope.$watch(function () {
+			scope.$watch(function() {
 				var target = {
-					startDate: scope.requestsOverview.period? scope.requestsOverview.period.startDate : null,
-					endDate: scope.requestsOverview.period? scope.requestsOverview.period.endDate : null,
-					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : ""
-				}
+					startDate: scope.requestsOverview.period ? scope.requestsOverview.period.startDate : null,
+					endDate: scope.requestsOverview.period ? scope.requestsOverview.period.endDate : null,
+					agentSearchTerm: scope.requestsOverview.agentSearchTerm ? scope.requestsOverview.agentSearchTerm : '',
+					filters: scope.requestsOverview.filters ? scope.requestsOverview.filters : ''
+				};
 				return target;
-			}, function (newValue) {
+			}, function(newValue) {
 				if (newValue.endDate === null || newValue.startDate === null) return;
 				if (moment(newValue.endDate).isBefore(newValue.startDate, 'day')) return;
 				scope.$broadcast('reload.requests.without.selection');
@@ -95,8 +93,9 @@
 			function reload(done) {
 				return function() {
 					ctrl.reload({
-						period:scope.requestsOverview.period,
-						agentSearchTerm:scope.requestsOverview.agentSearchTerm,
+						period: scope.requestsOverview.period,
+						agentSearchTerm: scope.requestsOverview.agentSearchTerm,
+						filters: scope.requestsOverview.filters
 					}, scope.requestsOverview.sortingOrders, scope.requestsOverview.paging, done);
 				};
 			}

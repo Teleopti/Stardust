@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', 'requestsDefinitions', 'requestCommandParamsHolder','CurrentUserInfo'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', "Toggle", 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo'];
 
-	function requestsTableContainerController($scope, $translate, $filter, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo) {
+	function requestsTableContainerController($scope, $translate, $filter, toggleSvc, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo) {
 
 		var vm = this;
 
@@ -18,9 +18,10 @@
 		vm.prepareComputedColumns = prepareComputedColumns;
 		vm.clearSelection = clearSelection;
 		vm.reselectRequests = reselectRequests;
+		vm.enter = enter;
 
 		function getGridOptions(requests) {
-			return {
+			var options = {
 				enableGridMenu: true,
 				enableHorizontalScrollbar: 2,
 				useExternalSorting: true,
@@ -28,31 +29,67 @@
 				gridMenuTitleFilter: $translate,
 				columnDefs: [
 					{ displayName: 'StartTime', field: 'FormatedPeriodStartTime()', headerCellFilter: 'translate', cellClass: 'request-period-start-time', headerCellClass: 'request-period-start-time-header' },
-					{ displayName: 'EndTime', field: 'FormatedPeriodEndTime()', headerCellFilter: 'translate', cellClass: 'request-period-end-time',  headerCellClass: 'request-period-end-time-header' },
-					{ displayName: 'TimeZone', field: 'TimeZone', headerCellFilter: 'translate', cellClass: 'request-time-zone', headerCellClass: 'request-time-zone-header',visible: false, enableSorting: false },
+					{ displayName: 'EndTime', field: 'FormatedPeriodEndTime()', headerCellFilter: 'translate', cellClass: 'request-period-end-time', headerCellClass: 'request-period-end-time-header' },
+					{ displayName: 'TimeZone', field: 'TimeZone', headerCellFilter: 'translate', cellClass: 'request-time-zone', headerCellClass: 'request-time-zone-header', visible: false, enableSorting: false },
 					{ displayName: 'Duration', field: 'GetDuration()', headerCellFilter: 'translate', cellClass: 'request-period-duration', enableSorting: false, visible: false, headerCellClass: 'request-period-duration-header' },
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
 					{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', cellClass: 'request-team', headerCellClass: 'request-team-header' },
-				    { displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header', visible: false },
-					{ displayName: 'Type', field: 'GetType()', headerCellFilter: 'translate', cellClass: 'request-type', headerCellClass: 'request-type-header', enableSorting: false },
-					{ displayName: 'Subject', field: 'Subject', headerCellFilter: 'translate', cellClass: 'request-subject', headerCellClass: 'request-subject-header' },
-					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', headerCellClass: 'request-message-header', visible: false },
+					{ displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header', visible: false },
+					{ displayName: 'Type', field: 'GetType()', headerCellFilter: 'translate', cellClass: 'request-type', headerCellClass: 'request-type-header', enableSorting: false, visible: false },
+					{
+						displayName: 'Subject',
+						field: 'Subject',
+						headerCellFilter: 'translate',
+						cellClass: 'request-subject',
+						headerCellClass: 'request-subject-header',
+						filter: {
+							disableCancelFilterButton: true,
+							placeholder: 'Filter...'
+						},
+						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\"> <input ng-enter=\"enter()\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" xng-keydown=\"$event.which === 13 && filterRequests()\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
+					},
+					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', headerCellClass: 'request-message-header' },
 					{ displayName: 'DenyReason', field: 'DenyReason', headerCellFilter: 'translate', cellClass: 'request-deny-reason', headerCellClass: 'request-deny-reason-header', visible: false },
-					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', headerCellClass: 'request-status-header', enableSorting: false },
+					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', headerCellClass: 'request-status-header', enableSorting: false, visible: false },
 					{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header' },
 					{ displayName: 'Id', field: 'Id', headerCellFilter: 'translate', cellClass: 'request-id', visible: false, headerCellClass: 'request-id-header' },
 					{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
 				],
-				onRegisterApi: function (gridApi) {
+				onRegisterApi: function(gridApi) {
 					vm.gridApi = gridApi;
-					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
-						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function (x) { return x !== null; });
+					gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function(x) { return x !== null; });
 					});
 					gridApi.selection.on.rowSelectionChanged($scope, onSelectionChanged);
 					gridApi.selection.on.rowSelectionChangedBatch($scope, onSelectionChanged);
+
+					gridApi.core.on.filterChanged($scope, function() {
+						console.log('filter changed');
+						var grid = this.grid;
+						vm.filters = [];
+						angular.forEach(grid.columns, function(value, columnIndex) {
+							var filter = {};
+							if (value.filters[0].term) {
+								filter[value.colDef.displayName] = value.filters[0].term;
+								vm.filters.push(filter);
+							}
+						});
+					});
 				}
 			};
+
+			var filteringEnabled = toggleSvc.Wfm_Requests_Filtering_37748;
+			options.enableFiltering = filteringEnabled;
+			options.useExternalFiltering = filteringEnabled;
+			angular.forEach(options.columnDefs, function(col) {
+				var columnsWithFilterEnabled = ["Subject", "Message", "Type", "Status"];
+				col.enableFiltering = filteringEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
+			});
+
+			return options;
 		}
+
+		function enter() {}
 
 		function onSelectionChanged() {
 			var visibleRequestsIds = vm.gridOptions.data.map(function (row) { return row.Id; });		
@@ -171,7 +208,8 @@
 			restrict: 'E',
 			scope: {
 				requests: '=',
-				sortingOrders: '='
+				sortingOrders: '=',
+				filters: '=?'
 			},
 			require: ['requestsTableContainer'],
 			templateUrl: 'js/requests/html/requests-table-container.tpl.html',		

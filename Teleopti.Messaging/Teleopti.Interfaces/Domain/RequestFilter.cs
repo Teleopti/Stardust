@@ -32,11 +32,9 @@ namespace Teleopti.Interfaces.Domain
 		public DateTimePeriod Period;
 		public IEnumerable<IPerson> Persons;
 		public IEnumerable<RequestType> RequestTypes;
+		public IDictionary<RequestFilterField, string> RequestFilters;
 		public IList<RequestsSortingOrder> SortingOrders;
 		public IPaging Paging;
 		public bool ExcludeRequestsOnFilterPeriodEdge;
 	}
-
-
-
 }
