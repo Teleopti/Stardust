@@ -53,7 +53,7 @@
           <Property Name="Exception" Type="varchar" MaxLength="2000" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ManagerDB.Stardust.PerformanceTest' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view 'ManagerDb.Stardust.PerformanceTest' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="PerformanceTest">
           <Key>
             <PropertyRef Name="Id" />
@@ -65,8 +65,8 @@ warning 6002: The table/view 'ManagerDB.Stardust.PerformanceTest' does not have 
             <PropertyRef Name="ElapsedInMinutes" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Started" Type="datetime" Nullable="false" />
           <Property Name="Ended" Type="datetime" Nullable="false" />
           <Property Name="ElapsedInSeconds" Type="float" Nullable="false" />
@@ -178,8 +178,8 @@ warning 6002: The table/view 'ManagerDB.Stardust.PerformanceTest' does not have 
             <PropertyRef Name="ElapsedInMinutes" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Started" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="Ended" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="ElapsedInSeconds" Type="Double" Nullable="false" />

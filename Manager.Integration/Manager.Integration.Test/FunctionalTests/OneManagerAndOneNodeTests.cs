@@ -43,7 +43,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			//--------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
 			                                                                StatusConstants.DeletedStatus,
 			                                                                StatusConstants.FailedStatus,
@@ -116,7 +116,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			LogMessage("Finished.");
 		}
 
-		[Test,  Ignore]
+		[Test]
 		public void CreateRequestShouldReturnCancelOrDeleteStatusesTest()
 		{
 			LogMessage("Start.");
@@ -124,7 +124,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(5));
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(10));
 
 			var timeout = JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
 			                                                     2);
@@ -133,7 +133,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			//--------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
 			                                                                StatusConstants.DeletedStatus,
 			                                                                StatusConstants.FailedStatus,
@@ -213,7 +213,6 @@ namespace Manager.Integration.Test.FunctionalTests
 				jobManagerTaskCreator.Dispose();
 			}
 
-
 			var endedTest = DateTime.UtcNow;
 
 			var description =
@@ -248,7 +247,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			//--------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
 
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
 			                                                                StatusConstants.DeletedStatus,
 			                                                                StatusConstants.FailedStatus,
@@ -314,7 +313,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			// Start actual test.
 			//--------------------------------------------
 			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
 			                                                                StatusConstants.DeletedStatus,
 			                                                                StatusConstants.FailedStatus,

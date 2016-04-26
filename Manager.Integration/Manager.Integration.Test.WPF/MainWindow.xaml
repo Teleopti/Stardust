@@ -684,10 +684,10 @@
                             <RowDefinition Height="19" />
                             <RowDefinition Height="139" />
                             <RowDefinition Height="5" />
-                            <RowDefinition Height="155" />
-                            <RowDefinition Height="5" />
+                            <RowDefinition Height="180" />
+                            <RowDefinition Height="10" />
                             <RowDefinition Height="130" />
-                            <RowDefinition Height="45" />
+                            <RowDefinition Height="15" />
 
                         </Grid.RowDefinitions>
 
@@ -819,7 +819,7 @@
                                         <RowDefinition Height="5" />
                                         <RowDefinition Height="25" />
                                         <RowDefinition Height="5" />
-                                        <RowDefinition />
+                                        <RowDefinition Height="25" />
                                     </Grid.RowDefinitions>
                                     <Button x:Name="button"
                                             Content="Create New Job"
@@ -841,6 +841,11 @@
                                             Style="{DynamicResource ButtonStyle1}"
                                             Command="{Binding StartUpNewNodeCommand}"
                                             Grid.Row="5"
+                                            Grid.Column="1" />
+                                    <Button Content="Clear Manager DB"
+                                            Command="{Binding ClearManagerTablesInDatabaseCommand}"
+                                            Style="{DynamicResource ButtonStyle1}"
+                                            Grid.Row="9"
                                             Grid.Column="1" />
                                 </Grid>
                             </TabItem>
@@ -1089,6 +1094,56 @@
                         </DataGrid>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Tests"
+                         HorizontalAlignment="Left"
+                         Height="20"
+                         VerticalAlignment="Top"
+                         Width="55">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="5" />
+                            <RowDefinition />
+                            <RowDefinition Height="2" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="7" />
+                            <ColumnDefinition Width="125" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition Width="125" />
+                            <ColumnDefinition Width="5" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Label Content="Number of Messages"
+                               Grid.Column="1"
+                               Grid.Row="1"
+                               Style="{DynamicResource LabelStyle1}" />
+                        <Label Content="Message duration sec."
+                               Grid.Column="1"
+                               Grid.Row="3"
+                               Style="{DynamicResource LabelStyle1}" />
+                        <TextBox Grid.Column="3"
+                                 Grid.Row="1"
+                                 TextWrapping="Wrap"
+                                 BorderThickness="0,0,0,1"
+                                 Text="{Binding NumberOfMessages}" />
+                        <TextBox Grid.Column="3"
+                                 Grid.Row="3"
+                                 TextWrapping="Wrap"
+                                 BorderThickness="0,0,0,1"
+                                 Text="{Binding DurationPerMessage}" />
+                        <Button Content="Start"
+                                Grid.Column="3"
+                                Grid.Row="5"
+                                Command="{Binding StartDurationTestCommand}"
+                                Style="{DynamicResource ButtonStyle1}" />
+                    </Grid>
+                </TabItem>
             </TabControl>
 
             <TabControl x:Name="TabControl"
@@ -1280,7 +1335,7 @@
                         <Button x:Name="Button"
                                 Style="{DynamicResource ButtonStyle1}"
                                 Content="Clear Logging Table"
-                                Command="{Binding ClearDatabaseCommand}"
+                                Command="{Binding ClearLoggingTableInDatabaseCommand}"
                                 Grid.Row="1"
                                 Margin="0,0,0,5" />
                     </Grid>

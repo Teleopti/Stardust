@@ -1,11 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using Manager.Integration.Test.Constants;
+using System.Linq;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
-using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
+using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
+using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.FunctionalTests
@@ -16,67 +19,52 @@ namespace Manager.Integration.Test.FunctionalTests
 		[Test]
 		public void JobsShouldJustBeQueuedIfNoNodesTest()
 		{
-			var startedTest = DateTime.UtcNow;
+			Thread.Sleep(TimeSpan.FromSeconds(15));
+
+			var httpSender = new HttpSender();
+			var mangerUriBuilder = new ManagerUriBuilder();
+			var uri = mangerUriBuilder.GetStartJobUri();
 
 			this.Log().DebugWithLineNumber("Start.");
 
-			var createNewJobRequests =
-				JobHelper.GenerateFastJobParamsRequests(1);
+			var testJobTimerParams =
+				new TestJobTimerParams("Loop", TimeSpan.FromSeconds(1));
 
-			this.Log().DebugWithLineNumber("( " + createNewJobRequests.Count + " ) jobs will be created.");
+			var jobParamsToJson = JsonConvert.SerializeObject(testJobTimerParams);
 
-
-			var timeout =
-				JobHelper.GenerateTimeoutTimeInSeconds(createNewJobRequests.Count, 10);
-
-			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
-			                                                                StatusConstants.SuccessStatus,
-			                                                                StatusConstants.DeletedStatus,
-			                                                                StatusConstants.FailedStatus,
-			                                                                StatusConstants.CanceledStatus);
-
-			foreach (var jobRequestModel in createNewJobRequests)
+			var jobQueueItem = new JobQueueItem
 			{
-				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
+				Name = "Job Name",
+				Serialized = jobParamsToJson,
+				Type = "NodeTest.JobHandlers.TestJobTimerParams",
+				CreatedBy = "WPF Client"
+			};
 
-				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
+			var checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(100);
 
-				jobManagerTaskCreators.Add(jobManagerTaskCreator);
-			}
-
-			var startJobTaskHelper = new StartJobTaskHelper();
-
-			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-			                                                          CancellationTokenSource,
-			                                                          timeout);
-
-			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
-
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count);
-
-			taskHlp.Dispose();
-
-			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			var taskCheckData = new Task(() =>
 			{
-				jobManagerTaskCreator.Dispose();
-			}
+				checkTablesInManagerDbTimer.JobQueueTimer.Start();
 
-			var endedTest = DateTime.UtcNow;
+				HttpResponseMessage response = httpSender.PostAsync(uri, 
+																    jobQueueItem).Result;
 
-			string description =
-				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
-								createNewJobRequests.Count,
-								base.NumberOfManagers,
-								base.NumberOfNodes);
+				while (!response.IsSuccessStatusCode)
+				{
+					response = httpSender.PostAsync(uri, jobQueueItem).Result;
 
-			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
+					Thread.Sleep(TimeSpan.FromSeconds(5));
+				}
+			});
 
-			this.Log().DebugWithLineNumber("Finished.");
+			taskCheckData.Start();
+			taskCheckData.Wait(TimeSpan.FromMinutes(5));
+
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbEntities.JobQueues.Count() == 1);
+
+			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbEntities.Jobs.Any());
+
+			checkTablesInManagerDbTimer.Dispose();
 		}
 	}
 }

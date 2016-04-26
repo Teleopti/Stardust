@@ -182,7 +182,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Timers\CheckJobHistoryStatusTimer.cs" />
+    <Compile Include="Timers\CheckJobStatusTimer.cs" />
     <Compile Include="Timers\CheckTablesInManagerDbTimer.cs" />
     <Compile Include="Validators\IntegerValidators.cs" />
   </ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.IO;
 using System.Net;
 using System.Threading;
@@ -102,6 +103,23 @@ namespace Manager.Integration.Test.LongRunningTests
 				this.Log().FatalWithLineNumber(exp.Message,
 											   exp);
 			}
+		}
+
+		[Test]
+		public void TestConnectionString()
+		{
+			var connectionString=
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
+
+			SqlConnection connection;
+
+			using (connection = new SqlConnection(connectionString))
+			{
+				
+			}
+
+			var isOPen = connection.State;
+
 		}
 
 		[Test]

@@ -17,6 +17,10 @@ namespace Stardust.Manager
 {
 	public class JobRepository : IJobRepository
 	{
+		private const string Added = "Added";
+		private const string Started = "Started";
+		private const string Deleted = "Deleted";
+
 		private const string Canceling = "Canceling...";
 
 		private readonly string _connectionString;
@@ -259,7 +263,7 @@ namespace Stardust.Manager
 														  sqlTransaction);
 						}
 
-						sqlTransaction.Commit();
+						Retry(sqlTransaction.Commit);
 					}
 				}
 			}
@@ -280,7 +284,7 @@ namespace Stardust.Manager
 			{
 				Monitor.Enter(_lockTryAssignJobToWorkerNode);
 
-				List<Uri> allAliveWorkerNodesUri = new List<Uri>();
+				var allAliveWorkerNodesUri = new List<Uri>();
 
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
@@ -291,7 +295,7 @@ namespace Stardust.Manager
 						// --------------------------------------------------
 						// Get all alive worker nodes.
 						// --------------------------------------------------
-						SqlCommand selectAllAliveWorkerNodesCommand =
+						var selectAllAliveWorkerNodesCommand =
 							CreateSelectAllAliveWorkerNodesSqlCommand(sqlConnection);
 
 						var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader();
@@ -329,7 +333,7 @@ namespace Stardust.Manager
 						var builderHelper = new NodeUriBuilderHelper(uri);
 						var isIdleUri = builderHelper.GetIsIdleTemplateUri();
 
-						HttpResponseMessage response = httpSender.GetAsync(isIdleUri).Result;
+						var response = httpSender.GetAsync(isIdleUri).Result;
 
 						if (response.IsSuccessStatusCode)
 						{
@@ -411,19 +415,19 @@ namespace Stardust.Manager
 		public bool DoesJobQueueItemExists(Guid jobId)
 		{
 			return DoesItemExistsTemplateMethod(jobId,
-												  DoesJobQueueItemExistsWorker);
+												DoesJobQueueItemExistsWorker);
 		}
 
 		public bool DoesJobItemExists(Guid jobId)
 		{
 			return DoesItemExistsTemplateMethod(jobId,
-												  DoesJobItemExistsWorker);
+												DoesJobItemExistsWorker);
 		}
 
 		public bool DoesJobDetailItemExists(Guid jobId)
 		{
 			return DoesItemExistsTemplateMethod(jobId,
-												  DoesJobDetailItemExistsWorker);
+												DoesJobDetailItemExistsWorker);
 		}
 
 		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
@@ -856,7 +860,7 @@ namespace Stardust.Manager
 		}
 
 		private bool DoesItemExistsTemplateMethod(Guid jobId,
-													Func<Guid, SqlConnection, bool> func)
+												  Func<Guid, SqlConnection, bool> func)
 		{
 			ThrowExceptionIfInvalidGuid(jobId);
 
@@ -977,7 +981,7 @@ namespace Stardust.Manager
 		private SqlCommand CreateSelectAllAliveWorkerNodesSqlCommand()
 		{
 			const string selectAllAliveWorkerNodesCommandText =
-											  @"SELECT   
+				@"SELECT   
 												   [Id]
 												  ,[Url]
 												  ,[Heartbeat]
@@ -1068,7 +1072,11 @@ namespace Stardust.Manager
 
 							updateCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 
-							sqlTransaction.Commit();
+							DeleteItemInJobQueueByJobIdWorker(jobId,
+															  sqlConnection,
+															  sqlTransaction);
+
+							Retry(sqlTransaction.Commit);
 						}
 					}
 
@@ -1078,6 +1086,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 
@@ -1565,7 +1574,11 @@ namespace Stardust.Manager
 
 			return job;
 		}
-		
+
+		/// <summary>
+		///     Get all jobs from table Stardust.Job
+		/// </summary>
+		/// <returns></returns>
 		private IList<Job> GetAllJobsWorker(SqlConnection sqlConnection)
 		{
 			var selectCommandText = @"SELECT  [JobId]
@@ -1600,7 +1613,6 @@ namespace Stardust.Manager
 				sqlDataReader.Close();
 				sqlConnection.Close();
 			}
-
 
 			return jobs;
 		}
@@ -1776,7 +1788,7 @@ namespace Stardust.Manager
 								deleteItemFromJobQueueCommandText.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 							}
 
-							sqlTransaction.Commit();
+							Retry(sqlTransaction.Commit);
 
 							if (sentToWorkerNodeUri != null)
 							{
@@ -1791,20 +1803,10 @@ namespace Stardust.Manager
 				}
 			}
 
-			catch (SqlException exp)
-			{
-				if (exp.Number == -2 || exp.Number == 1205) //Timeout
-				{
-					this.Log().InfoWithLineNumber(exp.Message);
-				}
-				else
-				{
-					this.Log().ErrorWithLineNumber(exp.Message, exp);
-				}
-			}
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 

@@ -6,7 +6,7 @@ using Manager.Integration.Test.Data;
 
 namespace Manager.Integration.Test.Timers
 {
-	public class CheckTablesInManagerDbTimer
+	public class CheckTablesInManagerDbTimer : IDisposable
 	{
 		public EventHandler<List<Manager.Integration.Test.Data.JobQueue>> ReceivedJobQueueItem;
 
@@ -46,7 +46,7 @@ namespace Manager.Integration.Test.Timers
 
 		public Timer JobTimer { get; set; }
 
-		private ManagerDbEntities ManagerDbEntities { get; set; }
+		public ManagerDbEntities ManagerDbEntities { get; set; }
 
 		public Timer JobQueueTimer { get; private set; }
 
@@ -88,6 +88,26 @@ namespace Manager.Integration.Test.Timers
 			{
 				ReceivedJobQueueItem(this, ManagerDbEntities.JobQueues.ToList());
 			}
+		}
+
+		public void Dispose()
+		{
+			JobQueueTimer.Stop();
+			JobQueueTimer.Dispose();
+
+			JobTimer.Stop();
+			JobTimer.Dispose();
+
+			JobDetailTimer.Stop();
+			JobDetailTimer.Dispose();
+
+			LoggingTimer.Stop();
+			LoggingTimer.Dispose();
+
+			WorkerNodeTimer.Stop();
+			WorkerNodeTimer.Dispose();
+
+			ManagerDbEntities.Dispose();
 		}
 	}
 }

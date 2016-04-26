@@ -31,7 +31,7 @@ namespace Manager.Integration.Test.LoadTests
 
 			var createNewJobRequests = JobHelper.GenerateFastJobParamsRequests(50);
 
-			var checkJobHistoryStatusTimer = new CheckJobHistoryStatusTimer(createNewJobRequests.Count,
+			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
 			                                                                StatusConstants.SuccessStatus,
 			                                                                StatusConstants.DeletedStatus,
 			                                                                StatusConstants.FailedStatus,
