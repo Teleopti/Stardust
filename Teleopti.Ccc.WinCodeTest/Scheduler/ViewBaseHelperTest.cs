@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private IScenario _scenario;
         private Rectangle _destRect;
         private Rectangle _expectedRect;
-        private int _minutes;
-        private int _hourWidth;
         private MockRepository _mockRep;
         private ScheduleParameters _param;
         private ScheduleRange _scheduleRange;
