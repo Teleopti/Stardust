@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonAccountCollection Find(IPerson person)
 		{
-			var personAbsenceAccounts  = _absenceAccounts.Where (account => account.Person == person);
-			var personAccountCollection = new PersonAccountCollection (person);
-			personAbsenceAccounts.ForEach (personAccountCollection.Add);
+			var personAbsenceAccounts = _absenceAccounts.Where(account => account.Person == person);
+			var personAccountCollection = new PersonAccountCollection(person);
+			personAbsenceAccounts.ForEach(personAccountCollection.Add);
 			return personAccountCollection;
 		}
 
@@ -70,14 +70,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			foreach (var person in persons)
 			{
-				var personAccountCollection = new PersonAccountCollection (person);
-				var absenceAccountsForPerson = _absenceAccounts.Where (account => account.Person == person);
+				var personAccountCollection = new PersonAccountCollection(person);
+				var absenceAccountsForPerson = _absenceAccounts
+					.Where(account => account.Person == person && personAccountCollection.All(pac => pac.Absence != account.Absence));
+
 				absenceAccountsForPerson.ForEach(personAccountCollection.Add);
 				personAccountCollectionDictionary.Add(person, personAccountCollection);
 			}
 
 			return personAccountCollectionDictionary;
-			
+
 		}
 	}
 }

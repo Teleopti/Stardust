@@ -3,11 +3,11 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -40,15 +40,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[SetUp]
 		public void Setup()
 		{
-
 			_scenario = new FakeCurrentScenario();
 			_requestRepository = new FakePersonRequestRepository();
 			_personAbsenceRepository = new FakePersonAbsenceRepository();
 			_personRequestAuthorizationChecker = new PersonRequestAuthorizationCheckerForTest();
-
 			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder();
-
-
 			_fakeCommonAgentNameProvider = new FakeCommonAgentNameProvider();
 			_loggedOnUser = new FakeLoggedOnUser();
 			_culture = new SwedishCulture();
@@ -61,11 +57,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, _schedulingResultStateHolder);
 
-			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage);
+			var scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleStorage);
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, _personAbsenceAccountRepository);
 			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
-			
-			_personAbsenceRemover = new PersonAbsenceRemover(_scenario, _scheduleStorage,_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, _loggedOnUser, _personRequestAuthorizationChecker);
+			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, _loggedOnUser, _personRequestAuthorizationChecker);
 
 		}
 
@@ -111,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			};
 
 			new CancelAbsenceRequestCommandHandler(_requestRepository, _personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _fakeCommonAgentNameProvider)
+				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario)
 				.Handle(cancelRequestCommand);
 
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
@@ -136,9 +131,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequestId = personRequest.Id.GetValueOrDefault()
 			};
 
-
 			new CancelAbsenceRequestCommandHandler(_requestRepository, _personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _fakeCommonAgentNameProvider)
+				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario)
 				.Handle(cancelRequestCommand);
 
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
@@ -148,25 +142,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				cancelRequestCommand.ErrorMessages[0]);
 		}
 
-		[Test, Ignore] //ROBTODO: fix.
-		public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccountForAllAbsences ()
+		[Test]
+		public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccount ()
 		{
-
-			var accountDay = new AccountDay(new DateOnly(2016, 1, 1))
+			var accountDay = new AccountDay(new DateOnly(2016, 03, 1))
 			{
 				BalanceIn = TimeSpan.FromDays(5),
-				Accrued = TimeSpan.FromDays(15),
-				Extra = TimeSpan.FromDays(0)
+				Accrued = TimeSpan.FromDays(25),
+				Extra = TimeSpan.FromDays(0),
+				LatestCalculatedBalance = TimeSpan.FromDays(8)  // have used 8 days
 			};
 
 			createPersonAbsenceAccount (_person, _absence, accountDay);
-			
+
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-			
-			cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand);
+			cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand, true);
 
 			Assert.AreEqual(30, accountDay.Remaining.TotalDays);
-			
 		}
 
 
@@ -174,21 +166,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
 		{
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-
 			var personRequest = cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand);
 
-			Assert.AreEqual(true, personRequest.IsCancelled);
+			Assert.IsTrue(personRequest.IsCancelled);
 			Assert.IsTrue(_scheduleStorage.LoadAll().IsEmpty());
 			Assert.IsTrue(cancelRequestCommand.ErrorMessages.IsEmpty());
 		}
 
-		private PersonRequest cancelAbsenceRequestWithMultipleAbsences (CancelAbsenceRequestCommand cancelRequestCommand)
+		private PersonRequest cancelAbsenceRequestWithMultipleAbsences (CancelAbsenceRequestCommand cancelRequestCommand, bool checkPersonAccounts = false)
 		{
 			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 14);
-
 			var absenceRequest = createApprovedAbsenceRequest (_absence, dateTimePeriodOfAbsenceRequest, _person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
+			if (checkPersonAccounts)
+			{
+				createShiftsForPeriod(dateTimePeriodOfAbsenceRequest);
+			}
+			
 			createPersonAbsence (_absence, new DateTimePeriod (2016, 03, 05, 2016, 03, 07), _person, absenceRequest);
 			createPersonAbsence (_absence, new DateTimePeriod (2016, 03, 09, 2016, 03, 13), _person, absenceRequest);
 			createPersonAbsence (_absence, new DateTimePeriod (2016, 03, 01, 2016, 03, 03), _person, absenceRequest);
@@ -197,8 +192,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			new CancelAbsenceRequestCommandHandler (_requestRepository, _personRequestAuthorizationChecker,
 				_personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _fakeCommonAgentNameProvider)
+				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario)
 				.Handle (cancelRequestCommand);
+
 			return personRequest;
 		}
 
@@ -227,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			new CancelAbsenceRequestCommandHandler(
 				_requestRepository, personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
-				new FakeLoggedOnUser(), new SwedishCulture(), new FakeCommonAgentNameProvider())
+				new FakeLoggedOnUser(), new SwedishCulture(), new FakeCommonAgentNameProvider(), _scheduleStorage, _scenario)
 				.Handle(cancelRequestCommand);
 			return personRequest;
 		}
@@ -260,6 +256,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personAbsence;
 		}
 
+
+
+		private void createShiftsForPeriod(DateTimePeriod period)
+		{
+			foreach (var day in period.WholeDayCollection(TimeZoneInfo.Utc))
+			{
+				// need to have a shift otherwise personAccount day off will not be affected
+				_scheduleStorage.Add(createAssignment(_person, day.StartDateTime, day.EndDateTime, _scenario));
+			}
+		}
+
+		private static IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
+		{
+			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
+				currentScenario.Current(),
+				person,
+				new DateTimePeriod(startDate, endDate));
+		}
 
 		private class personRequestAuthorizationCheckerConfigurable : IPersonRequestCheckAuthorization
 		{

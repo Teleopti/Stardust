@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -13,24 +12,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class PersonAbsenceRemover : IPersonAbsenceRemover
 	{
-		private readonly ICurrentScenario _scenario;
-		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
-		public PersonAbsenceRemover(
-			ICurrentScenario scenario,
-			IScheduleStorage scheduleStorage,
-			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
+		public PersonAbsenceRemover(IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
-			ILoggedOnUser loggedOnUser, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+			ILoggedOnUser loggedOnUser, 
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
-			_scenario = scenario;
-			_scheduleStorage = scheduleStorage;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 			_personAbsenceCreator = personAbsenceCreator;
@@ -39,16 +32,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 
 		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
-			IEnumerable<IPersonAbsence> personAbsences, TrackedCommandInfo commandInfo = null)
+			IEnumerable<IPersonAbsence> personAbsences, IScheduleRange scheduleRange, TrackedCommandInfo commandInfo = null)
 		{
-			var errors =  removePersonAbsenceFromScheduleDay(scheduleDate, person,personAbsences.ToList(), commandInfo);
+			var errors =  removePersonAbsenceFromScheduleDay(scheduleDate, person,personAbsences.ToList(), commandInfo, scheduleRange);
 			return errors ?? new List<string>();
 		}
 
 		public IEnumerable<string> RemovePartPersonAbsence(DateOnly scheduleDate, IPerson person,
-			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove, TrackedCommandInfo commandInfo = null)
+			IEnumerable<IPersonAbsence> personAbsences, DateTimePeriod periodToRemove, IScheduleRange scheduleRange, TrackedCommandInfo commandInfo = null)
 		{
-			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo, periodToRemove);
+			var errors = removePersonAbsenceFromScheduleDay(scheduleDate, person, personAbsences.ToList(), commandInfo, scheduleRange, periodToRemove);
 			return errors ?? new List<string>();
 		}
 		
@@ -94,24 +87,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		
 		private IEnumerable<string> removePersonAbsenceFromScheduleDay (
 			DateOnly scheduleDate, IPerson person, IList<IPersonAbsence> personAbsences,
-			TrackedCommandInfo commandInfo, DateTimePeriod? periodToRemove = null )
+			TrackedCommandInfo commandInfo, IScheduleRange scheduleRange,  DateTimePeriod? periodToRemove = null )
 		{
 			foreach (var personAbsence in personAbsences)
 			{
 				personAbsence.RemovePersonAbsence (commandInfo);
 			}
 
-			var endDate = scheduleDate.AddDays (1);
-
-			var scheduleDictionary =
-				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod (person,
-					new ScheduleDictionaryLoadOptions (false, false),
-					new DateOnlyPeriod (scheduleDate, endDate),
-					_scenario.Current());
-
-			var scheduleRange = scheduleDictionary[person];
 			var rules = _businessRulesForPersonalAccountUpdate.FromScheduleRange (scheduleRange);
-
 			var scheduleDay = scheduleRange.ScheduledDay (scheduleDate) as ExtractedSchedule;
 
 			if (!canRemovePersonAbsence (person, scheduleDate))

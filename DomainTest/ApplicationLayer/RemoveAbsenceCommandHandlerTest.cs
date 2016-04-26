@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = PersonFactory.CreatePersonWithApplicationRolesAndFunctions();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			_personAbsenceRemover = new PersonAbsenceRemover(_scenario, _scheduleStorage,
-				_businessRulesForAccountUpdate, _saveSchedulePartService, personAbsenceCreator,
+			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, personAbsenceCreator,
 				loggedOnUser, new PersonRequestAuthorizationCheckerForTest());
 		}
 
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_scheduleStorage.Add(personAbsence);
 
-			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover);
+			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover, _scheduleStorage, _scenario);
 
 			var command = new RemovePersonAbsenceCommand
 			{
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_scheduleStorage.Add(personAbsence);
 
-			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover);
+			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover, _scheduleStorage, _scenario);
 
 			var command = new RemovePersonAbsenceCommand
 			{
@@ -143,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_scheduleStorage.Add(personAbsence);
 			_scheduleStorage.Add(personAbsence2);
 
-			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover);
+			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover, _scheduleStorage, _scenario);
 
 			var command = new RemovePersonAbsenceCommand
 			{
@@ -179,10 +178,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				string.Format("Error message {0}", Guid.NewGuid()),
 				string.Format("Error message {0}", Guid.NewGuid())
 			};
-			personAbsenceRemover.Stub(x => x.RemovePersonAbsence(new DateOnly(dateTimePeriod.StartDateTime), person, new[] { personAbsence }))
+			personAbsenceRemover.Stub(x => x.RemovePersonAbsence(new DateOnly(dateTimePeriod.StartDateTime), person, new[] { personAbsence }, null))
 				.IgnoreArguments().Return(errorMessages);
 
-			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRemover);
+			var target = new RemovePersonAbsenceCommandHandler(personAbsenceRemover, _scheduleStorage, _scenario);
 
 			var command = new RemovePersonAbsenceCommand
 			{
@@ -218,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_scheduleStorage.Add(personAbsence);
 
-			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover);
+			var target = new RemovePersonAbsenceCommandHandler(_personAbsenceRemover, _scheduleStorage, _scenario);
 
 			var operatedPersonId = Guid.NewGuid();
 			var trackId = Guid.NewGuid();

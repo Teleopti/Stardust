@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -6,10 +7,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class RemovePersonAbsenceCommandHandler : IHandleCommand<RemovePersonAbsenceCommand>
 	{
 		private readonly IPersonAbsenceRemover _personAbsenceRemover;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ICurrentScenario _currentScenario;
 
-		public RemovePersonAbsenceCommandHandler(IPersonAbsenceRemover personAbsenceRemover)
+		public RemovePersonAbsenceCommandHandler(IPersonAbsenceRemover personAbsenceRemover, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario)
 		{
 			_personAbsenceRemover = personAbsenceRemover;
+			_scheduleStorage = scheduleStorage;
+			_currentScenario = currentScenario;
 		}
 
 		public void Handle(RemovePersonAbsenceCommand command)
@@ -21,9 +26,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var person = command.Person;
+			var scheduleDate = new DateOnly (command.ScheduleDate);
+			var endDate = scheduleDate.AddDays(1);
+
+			var scheduleDictionary =
+				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
+					new ScheduleDictionaryLoadOptions(false, false),
+					new DateOnlyPeriod(scheduleDate, endDate), 
+					_currentScenario.Current());
+
+			var scheduleRange = scheduleDictionary[person];
+
+
 			var errors =
-				_personAbsenceRemover.RemovePersonAbsence(new DateOnly(command.ScheduleDate), person, command.PersonAbsences,
-				command.TrackedCommandInfo).ToList();
+				_personAbsenceRemover.RemovePersonAbsence(scheduleDate, person, command.PersonAbsences, scheduleRange, command.TrackedCommandInfo).ToList();
 			if (!errors.Any())
 			{
 				return;

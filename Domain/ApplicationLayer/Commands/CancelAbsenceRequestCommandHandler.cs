@@ -19,8 +19,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserCulture _userCulture;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
+		private readonly IScheduleStorage _scheduleStorage;
+		private readonly ICurrentScenario _currentScenario;
 
-		public CancelAbsenceRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, IPersonAbsenceRepository personAbsenceRepository, IPersonAbsenceRemover personAbsenceRemover, ILoggedOnUser loggedOnUser, IUserCulture userCulture, ICommonAgentNameProvider commonAgentNameProvider)
+		public CancelAbsenceRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, IPersonAbsenceRepository personAbsenceRepository, IPersonAbsenceRemover personAbsenceRemover, ILoggedOnUser loggedOnUser, IUserCulture userCulture, ICommonAgentNameProvider commonAgentNameProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario)
 		{
 			_personRequestRepository = personRequestRepository;
 			_authorization = authorization;
@@ -29,6 +31,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_loggedOnUser = loggedOnUser;
 			_userCulture = userCulture;
 			_commonAgentNameProvider = commonAgentNameProvider;
+			_scheduleStorage = scheduleStorage;
+			_currentScenario = currentScenario;
 		}
 
 		public void Handle(CancelAbsenceRequestCommand command)
@@ -59,19 +63,50 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				return false;
 			}
-			
+
 			try
 			{
-				var personAbsenceGroups = groupPersonAbsences(personAbsences);
-				// cancellation of the request is handled inside PersonAbsenceRemover, as deleting an absence can also cancel the request
-				return removePersonAbsence(personAbsenceGroups);
-		
+				var person = personRequest.Person;
+				var startDate = personAbsences.Min(pa => pa.Period.StartDateTime);
+				var endDate = personAbsences.Max (pa => pa.Period.EndDateTime);
+				var scheduleRange = getScheduleRange(person, startDate, endDate);
+
+				IList<string> errorMessages = new List<string>();
+
+				foreach (var personAbsence in personAbsences)
+				{
+					errorMessages = _personAbsenceRemover.RemovePersonAbsence (
+						new DateOnly (personAbsence.Period.LocalStartDateTime),
+						personRequest.Person,
+						new[] {personAbsence},
+						scheduleRange).ToList();
+
+					if (errorMessages.Any())
+					{
+						command.ErrorMessages = command.ErrorMessages.Concat (errorMessages).ToList() ;
+						return false;
+					}
+				}
+
+				return true;
 			}
+
 			catch (InvalidRequestStateTransitionException)
 			{
 				return false;
 			}
 
+		}
+
+		private IScheduleRange getScheduleRange (IPerson person, DateTime startDate, DateTime endDate)
+		{
+			var scheduleDictionary =
+				_scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod (person,
+					new ScheduleDictionaryLoadOptions (false, false),
+					new DateTimePeriod (startDate, endDate),
+					_currentScenario.Current());
+
+			return scheduleDictionary[person];
 		}
 
 		private bool validateCancelRequestCommand (IPersonRequest personRequest, CancelAbsenceRequestCommand command, IAbsenceRequest absenceRequest, ICollection<IPersonAbsence> personAbsences)
@@ -143,43 +178,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			}
 			return errorMessage;
-		}
-
-		private static IEnumerable<PersonAbsenceGrouping> groupPersonAbsences(IEnumerable<IPersonAbsence> personAbsences)
-		{
-			var personAbsenceGroups = personAbsences
-				.GroupBy(pa => new PersonAbsenceGroupKey()
-				{
-					Date = new DateOnly(pa.Period.StartDateTime),
-					Person = pa.Person
-				})
-				.Select(group => new PersonAbsenceGrouping()
-				{
-					GroupKey = @group.Key,
-					PersonAbsences = @group.Select(x => x)
-				}
-			);
-			return personAbsenceGroups;
-		}
-
-		private bool removePersonAbsence(IEnumerable<PersonAbsenceGrouping> personAbsencesGrouped)
-		{
-			foreach (var personAbsenceGroup in personAbsencesGrouped)
-			{
-
-				var errorMessages = _personAbsenceRemover.RemovePersonAbsence(
-											personAbsenceGroup.GroupKey.Date,
-											personAbsenceGroup.GroupKey.Person,
-											personAbsenceGroup.PersonAbsences);
-
-				if (errorMessages.Any())
-				{
-					return false;
-				}
-
-			}
-
-			return true;
 		}
 	}
 
