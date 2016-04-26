@@ -103,7 +103,6 @@
     <Compile Include="JobManagerTests.cs" />
     <Compile Include="JobTestsAttribute.cs" />
     <Compile Include="ManagerModuleTest.cs" />
-    <Compile Include="ManagerOperationsTestNewVersion.cs" />
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="ManagerOperationTestsAttribute.cs" />
     <Compile Include="ManagerTestsAttribute.cs" />
@@ -122,9 +121,7 @@
       <Name>Stardust.Manager</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="StressTests\WhoLock.sql" />
   </ItemGroup>
