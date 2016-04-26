@@ -111,7 +111,6 @@
     <Compile Include="Attributes\ManagerOperationTestsAttribute.cs" />
     <Compile Include="Attributes\BaseTestsAttribute.cs" />
     <Compile Include="ManagerControllerValidationTest.cs" />
-    <Compile Include="WorkerNodeRepositoryTest.cs" />
     <Compile Include="NodeUriBuilderHelperTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
