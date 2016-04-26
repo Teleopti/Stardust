@@ -23,7 +23,7 @@
 
 		function addActivity(activity) {
 			var deferred = $q.defer();
-			$http.post(addActivityUrl, normalizeActivity(activity)).then(function (data) {
+			$http.post(addActivityUrl, normalizeInput(activity)).then(function (data) {
 				deferred.resolve(data);
 			}, function (error) {
 				deferred.reject(error);
@@ -31,13 +31,15 @@
 			return deferred.promise;
 		}
 
-		function normalizeActivity(activity) {
-			return activity;
+		function normalizeInput(activity) {
+			var normalized = angular.copy(activity);
+			normalized.Date = moment(activity.Date).format('YYYY-MM-DD');			
+			return normalized;
 		}
 
-		function removeActivity(removeActivityForm) {
+		function removeActivity(removeActivityForm) {			
 			var deffered = $q.defer();
-			$http.post(removeActivityUrl, removeActivityForm).then(function (result) {
+			$http.post(removeActivityUrl, normalizeInput(removeActivityForm)).then(function (result) {
 				deffered.resolve(result);
 			}, function (error) {
 				deffered.reject(error);
