@@ -14242,16 +14242,16 @@ Help us improve your experience by sending an error report</value>
     <value>Deny Reason</value>
     <comment>Used in WFM as a header in the requests table.</comment>
   </data>
-  <data name="ChangeWillAffectAgents" xml:space="preserve">
-    <value>Change will affect {0} agents.</value>
-    <comment>Notification message showing the number of agents to be affected by the command (change).</comment>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>You have selected {0} agent(s).</value>
+    <comment>Notification message showing the number of selected agents</comment>
   </data>
   <data name="RemoveActivity" xml:space="preserve">
     <value>Remove Activity</value>
     <comment>permission name in teamschedule</comment>
   </data>
   <data name="PersonsAreWriteProtected" xml:space="preserve">
-    <value>Found schedule write protection for {0} agents.</value>
+    <value>The schedule is write protected for {0} agent(s).Use the Unselect button to be able to update the agent(s) that is(are) still editable.</value>
     <comment>Notification message showing the number of agents who have schedule write protection.</comment>
   </data>
   <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
@@ -14334,7 +14334,7 @@ Help us improve your experience by sending an error report</value>
     <value>The absence request for {0} from {1} - {2} could not be cancelled as no related absence was found.</value>
     <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Start Date/Time (2) End Date/Time</comment>
   </data>
-   <data name="AddAbsenceFailed" xml:space="preserve">
+  <data name="AddAbsenceFailed" xml:space="preserve">
     <value>Failed to add absence(s)</value>
     <comment>Message for when failing to add absence</comment>
   </data>
@@ -14389,5 +14389,4 @@ Help us improve your experience by sending an error report</value>
     <value>New activity is not allowed for</value>
     <comment>Alert message when it is not allowed to add new activity for agent in wfm/mytime</comment>
   </data>
-
 </root>

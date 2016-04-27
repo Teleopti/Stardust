@@ -5200,15 +5200,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change will affect {0} agents..
-        /// </summary>
-        public static string ChangeWillAffectAgents {
-            get {
-                return ResourceManager.GetString("ChangeWillAffectAgents", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Change your availabilities.
         /// </summary>
         public static string ChangeYourAvailabilities {
@@ -20518,7 +20509,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Found schedule write protection for {0} agents..
+        ///   Looks up a localized string similar to The schedule is write protected for {0} agent(s).Use the Unselect button to be able to update the agent(s) that is(are) still editable..
         /// </summary>
         public static string PersonsAreWriteProtected {
             get {
@@ -32466,6 +32457,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouHaveNotBeenAllocatedSeat {
             get {
                 return ResourceManager.GetString("YouHaveNotBeenAllocatedSeat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have selected {0} agent(s)..
+        /// </summary>
+        public static string YouHaveSelectedXAgent {
+            get {
+                return ResourceManager.GetString("YouHaveSelectedXAgent", resourceCulture);
             }
         }
         

@@ -44,7 +44,7 @@
 		}
 
 		function message(targetsLength) {
-			return $translate.instant('ChangeWillAffectAgents').replace('{0}', targetsLength);
+		    return $translate.instant('YouHaveSelectedXAgent').replace('{0}', targetsLength);
 		}
 
 		function warningMessage(targetsLength) {
