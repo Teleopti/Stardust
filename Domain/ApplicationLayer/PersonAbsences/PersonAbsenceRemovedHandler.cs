@@ -1,5 +1,7 @@
 using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,37 +19,58 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;
 		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
-		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository)
+		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_waitlistProcessor = waitlistProcessor;
 			_personRequestRepository = personRequestRepository;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
 		public void Handle(PersonAbsenceRemovedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.DebugFormat("Consuming event for deleted absence for person with Id = {0}.  Absence Period {1} -{2}. (Message timestamp = {3})",
+				logger.DebugFormat(
+					"Consuming event for deleted absence for person with Id = {0}.  Absence Period {1} -{2}. (Message timestamp = {3})",
 					@event.PersonId, @event.StartDateTime, @event.EndDateTime, @event.Timestamp);
 			}
 
 			var personRequest = _personRequestRepository.FindPersonRequestByRequestId(@event.AbsenceRequestId);
-			if (personRequest == null)
+			var absenceRequest = personRequest?.Request as IAbsenceRequest;
+			if (absenceRequest == null || !shouldProcessPersonRequest(personRequest))
 			{
 				return;
-			};
+			}
+			
+			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			{
+				cancelAbsenceRequest(absenceRequest, personRequest);
 
-			var absenceRequest = personRequest.Request as IAbsenceRequest;
-			if (absenceRequest == null || !shouldUseWaitlisting(absenceRequest))
+				if (shouldUseWaitlisting(absenceRequest))
+				{
+					_waitlistProcessor.ProcessAbsenceRequestWaitlist(unitOfWork, absenceRequest.Period, absenceRequest.Person.WorkflowControlSet);
+				}
+			}
+		}
+
+		private static bool shouldProcessPersonRequest(IPersonRequest personRequest)
+		{
+			return (personRequest.IsApproved || personRequest.IsCancelled);
+		}
+
+		private void cancelAbsenceRequest(IAbsenceRequest absenceRequest, IPersonRequest personRequest)
+		{
+			if (personRequest.IsCancelled)
 			{
 				return;
 			}
 
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			if (absenceRequest.PersonAbsences.IsEmpty())
 			{
-				_waitlistProcessor.ProcessAbsenceRequestWaitlist(unitOfWork, absenceRequest.Period, absenceRequest.Person.WorkflowControlSet);
+				personRequest?.Cancel(_personRequestCheckAuthorization);
 			}
 		}
 
@@ -56,6 +79,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 			var workflowControlSet = absenceRequest.Person.WorkflowControlSet;
 			return workflowControlSet != null && workflowControlSet.WaitlistingIsEnabled(absenceRequest);
 		}
-		
+
 	}
 }

@@ -160,6 +160,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			return errorMessages;
 		}
 
+		//ROBTODO: Wfm_Requests_Cancel_37741 Toggle check.
 		private void cancelAbsenceRequestIfAllPersonAbsenceRemoved (IEnumerable<IPersonAbsence> personAbsences)
 		{
 			foreach (var personAbsence in personAbsences.Where (perAbs => perAbs.AbsenceRequest != null))
