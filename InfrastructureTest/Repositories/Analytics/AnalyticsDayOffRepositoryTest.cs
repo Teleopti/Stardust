@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 					BusinessUnitId = businessUnitId,
 					DayOffName = "Day off",
 					DayOffShortname = "DO",
-					DatasourceUpdateDate = DateTime.UtcNow,
+					DatasourceUpdateDate = DateTime.Today,
 					DisplayColor = -1,
 					DisplayColorHtml = "#808080"
 				};
@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				itemToCompare.BusinessUnitId.Should().Be.EqualTo(item.BusinessUnitId);
 				itemToCompare.DayOffName.Should().Be.EqualTo(item.DayOffName);
 				itemToCompare.DayOffShortname.Should().Be.EqualTo(item.DayOffShortname);
+				itemToCompare.DatasourceUpdateDate.Should().Be.EqualTo(item.DatasourceUpdateDate);
 				itemToCompare.DisplayColor.Should().Be.EqualTo(item.DisplayColor);
 				itemToCompare.DisplayColorHtml.Should().Be.EqualTo(item.DisplayColorHtml);
 			});
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 					BusinessUnitId = businessUnitId,
 					DayOffName = "Day off updated",
 					DayOffShortname = "DO",
-					DatasourceUpdateDate = DateTime.UtcNow,
+					DatasourceUpdateDate = DateTime.Today,
 					DisplayColor = -1,
 					DisplayColorHtml = "#808080"
 				};
@@ -93,6 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				itemToCompare.BusinessUnitId.Should().Be.EqualTo(item.BusinessUnitId);
 				itemToCompare.DayOffName.Should().Be.EqualTo(item.DayOffName);
 				itemToCompare.DayOffShortname.Should().Be.EqualTo(item.DayOffShortname);
+				itemToCompare.DatasourceUpdateDate.Should().Be.EqualTo(item.DatasourceUpdateDate);
 				itemToCompare.DisplayColor.Should().Be.EqualTo(item.DisplayColor);
 				itemToCompare.DisplayColorHtml.Should().Be.EqualTo(item.DisplayColorHtml);
 			});
@@ -115,7 +117,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 					BusinessUnitId = businessUnitId,
 					DayOffName = "DayOff",
 					DayOffShortname = "DO",
-					DatasourceUpdateDate = DateTime.UtcNow,
+					DatasourceUpdateDate = DateTime.Today,
 					DisplayColor = -1,
 					DisplayColorHtml = "#808080"
 				};
@@ -125,6 +127,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				itemToCompare.BusinessUnitId.Should().Be.EqualTo(item.BusinessUnitId);
 				itemToCompare.DayOffName.Should().Be.EqualTo(item.DayOffName);
 				itemToCompare.DayOffShortname.Should().Be.EqualTo(item.DayOffShortname);
+				itemToCompare.DatasourceUpdateDate.Should().Be.EqualTo(item.DatasourceUpdateDate);
 				itemToCompare.DisplayColor.Should().Be.EqualTo(item.DisplayColor);
 				itemToCompare.DisplayColorHtml.Should().Be.EqualTo(item.DisplayColorHtml);
 			});
