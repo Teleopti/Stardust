@@ -3,9 +3,9 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule')
-		.service('CommandCommon', ['$http', '$q', '$filter', '$mdDialog', 'PersonSelection', commandCommon]);
+		.service('CommandCommon', ['$http', '$q', '$filter', '$mdDialog', 'PersonSelection','ScheduleManagement', commandCommon]);
 
-	function commandCommon($http, $q, $filter, $mdDialog, PersonSelection) {
+	function commandCommon($http, $q, $filter, $mdDialog, PersonSelection, ScheduleManagement) {
 
 		var checkPersonWriteProtectionUrl = '../api/TeamScheduleCommand/PersonWriteProtectionCheck';
 
@@ -40,6 +40,7 @@
 						targets: writeProtectedPersons,
 						action: function () {
 							PersonSelection.unselectPersonsWithIds(writeProtectedPersons);
+							ScheduleManagement.resetSchedulesForPeople(writeProtectedPersons);
 						}
 					};
 				else

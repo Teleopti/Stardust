@@ -6,7 +6,8 @@ describe("[Test for TeamScheduleController]:", function() {
 		controller,
 		searchScheduleCalledTimes,
 		mockSignalRBackendServer = {},
-		personSelection;
+		personSelection,
+		scheduleMgmt;
 
 	var nowDate = new Date("2015-10-26 12:16:00");
 
@@ -32,10 +33,11 @@ describe("[Test for TeamScheduleController]:", function() {
 		});
 	});
 
-	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_) {
+	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _TeamSchedule_, _PersonSelection_, _ScheduleManagement_) {
 		$q = _$q_;
 		rootScope = _$rootScope_.$new();
 		personSelection = _PersonSelection_;
+		scheduleMgmt = _ScheduleManagement_;
 		setupMockTeamScheduleService(_TeamSchedule_);
 		controller = setUpController(_$controller_);
 	}));
@@ -48,7 +50,7 @@ describe("[Test for TeamScheduleController]:", function() {
 		controller.loadSchedules();
 		rootScope.$digest();
 
-		var schedules = controller.groupScheduleVm().Schedules;
+		var schedules = scheduleMgmt.groupScheduleVm.Schedules;
 		expect(schedules[2].IsSelected).toEqual(true);
 		expect(schedules[1].IsSelected).toEqual(false);
 		expect(schedules[0].IsSelected).toEqual(false);
@@ -65,7 +67,7 @@ describe("[Test for TeamScheduleController]:", function() {
 
 		controller.loadSchedules();
 		rootScope.$digest();
-		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
+		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 		expect(personSchedule1.Shifts[0].Projections[0].Selected).toEqual(true);
 
 	});
@@ -122,7 +124,7 @@ describe("[Test for TeamScheduleController]:", function() {
 		rootScope.$digest();
 		controller.scheduleDate = new Date("2015-10-26");
 		var selectedPersons = personSelection.personInfo;
-		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
+		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 		selectedPersons[personSchedule1.PersonId] = {checked: true};
 
 		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 12:30:00").format('HH:mm'));
@@ -134,7 +136,7 @@ describe("[Test for TeamScheduleController]:", function() {
 		rootScope.$digest();
 		
 		var selectedPersons = personSelection.personInfo;
-		var personSchedule1 = controller.groupScheduleVm().Schedules[0];
+		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
 		selectedPersons[personSchedule1.PersonId] = {checked: true};
 
 		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 08:00:00").format('HH:mm'));

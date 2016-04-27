@@ -36,7 +36,7 @@
 				<i class='mdi mdi-alert'></i>{{'TooManyResultsForSearchKeywords'|translate}}
 			</div>
 			<md-progress-linear ng-if="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
-			<schedule-table schedule-vm="vm.groupScheduleVm()" select-mode="vm.scheduleTableSelectMode" toggle-all-in-current-page="vm.toggleAllInCurrentPage" />
+			<schedule-table select-mode="vm.scheduleTableSelectMode"/>
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">

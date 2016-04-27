@@ -25,10 +25,6 @@
 			searchKeywordChanged: false
 		};
 
-		vm.groupScheduleVm = function() {
-			return scheduleMgmtSvc.groupScheduleVm;
-		}
-
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 
 		vm.selectorChanged = function() {
@@ -124,7 +120,6 @@
 				var groupSchedule = groupScheduleFactory.Create(result.Schedules, vm.scheduleDateMoment());
 				personSelectionSvc.selectAllPerson(groupSchedule.Schedules);
 				personSelectionSvc.updatePersonInfo(scheduleMgmtSvc.groupScheduleVm.Schedules);
-				vm.toggleAllInCurrentPage = true;
 			});
 		};
 

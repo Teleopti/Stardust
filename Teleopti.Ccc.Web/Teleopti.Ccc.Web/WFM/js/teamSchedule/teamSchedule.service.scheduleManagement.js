@@ -39,6 +39,26 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 			});
 		}
 
+		svc.resetSchedulesForPeople = function (personIds) {
+			angular.forEach(personIds, function (person) {
+				for (var i = 0; i < svc.groupScheduleVm.Schedules.length; i++) {
+					if (person == svc.groupScheduleVm.Schedules[i].PersonId) {
+						svc.groupScheduleVm.Schedules[i].IsSelected = false;
+						var shiftsForSelectedDate = svc.groupScheduleVm.Schedules[i].Shifts.filter(function (shift) {
+							return shift.Date.isSame(svc.groupScheduleVm.Schedules[i].Date, 'day');
+						});
+						if (shiftsForSelectedDate.length > 0) {
+							angular.forEach(shiftsForSelectedDate[0].Projections, function (projection) {
+								projection.Selected = false;
+							})
+						}
+						break;
+					}
+				}
+			});
+		
+		}
+
 		svc.getEarliestStartOfSelectedSchedule = function(scheduleDateMoment, selectedPersonIds) {
 			var startUpdated = false;
 			var earlistStart = new Date("2099-12-31");

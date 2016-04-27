@@ -3,14 +3,12 @@
 (function () {
 	angular.module('wfm.teamSchedule')
 		.directive('scheduleTable', scheduleTableDirective)
-		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope', scheduleTableController]);
+		.controller('scheduleTableCtrl', ['Toggle', 'PersonSelection', '$scope','ScheduleManagement', scheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
 			scope: {
-				scheduleVm: '=',
-				selectMode: '=',
-				toggleAllInCurrentPage: '='
+				selectMode: '='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
@@ -19,7 +17,7 @@
 			templateUrl: "js/teamSchedule/html/scheduletable.html",
 		};
 	};
-	function scheduleTableController(toggleSvc, personSelectionSvc, $scope) {
+	function scheduleTableController(toggleSvc, personSelectionSvc, $scope, ScheduleMgmt) {
 		var vm = this;
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
@@ -33,10 +31,16 @@
 		vm.init = init; 
 		
 		$scope.$watch(function () {
-			return vm.scheduleVm.Schedules;
+			return ScheduleMgmt.groupScheduleVm.Schedules
 		}, function (newVal) {
 			if (newVal)
 				vm.init();
+		});
+		
+		$scope.$watch(function(){
+			return isAllInCurrentPageSelected();
+		}, function(newVal){
+			vm.toggleAllInCurrentPage = newVal;
 		});
 
 		vm.totalSelectedProjections = function() {
@@ -48,7 +52,6 @@
 		vm.updatePersonSelection = function (personSchedule) {
 			personSelectionSvc.updatePersonSelection(personSchedule);
 			personSelectionSvc.toggleAllPersonProjections(personSchedule);
-			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
 		};
 
 		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shiftDate) {
@@ -68,7 +71,7 @@
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;
-			if (!vm.scheduleVm.Schedules) {
+			if (!vm.scheduleVm || !vm.scheduleVm.Schedules) {
 				return false;
 			}
 			for (var i = 0; i < vm.scheduleVm.Schedules.length; i++) {
@@ -84,6 +87,7 @@
 
 		function init() {
 			vm.toggleAllInCurrentPage = isAllInCurrentPageSelected();
+			vm.scheduleVm = ScheduleMgmt.groupScheduleVm;
 		}
 	};
 } ());
