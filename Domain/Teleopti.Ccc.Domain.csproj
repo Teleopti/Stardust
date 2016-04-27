@@ -264,6 +264,7 @@
     <Compile Include="Repositories\IResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\IAnalyticsTeamRepository.cs" />
     <Compile Include="Scheduling\ISchedulingOptionsProvider.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertimeOnNonScheduleDays.cs" />
     <Compile Include="Scheduling\Restrictions\SchedulePreferenceTransformerHelper.cs" />
     <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProvider.cs" />

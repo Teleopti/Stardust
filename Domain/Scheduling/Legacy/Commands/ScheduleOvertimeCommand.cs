@@ -16,14 +16,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerState;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
+		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 
-		public ScheduleOvertimeCommand(Func<ISchedulerStateHolder> schedulerState, Func<ISchedulingResultStateHolder> schedulingResultStateHolder, IScheduleOvertimeService scheduleOvertimeService)
+		public ScheduleOvertimeCommand(Func<ISchedulerStateHolder> schedulerState, 
+																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
+																	IScheduleOvertimeService scheduleOvertimeService,
+																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays)
 		{
 			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
+			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 		}
 
+		//TODO: rename exectue
+		//TODO: change from IScheduleDay to persons and dates?
 		public void Exectue(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
 		{
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
@@ -43,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					var rules = NewBusinessRuleCollection.Minimum();
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, rules, scheduleTagSetter, _schedulerState().TimeZoneInfo);
-
+					_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
 					var progressResult = onDayScheduled(backgroundWorker,new SchedulingServiceSuccessfulEventArgs(scheduleDay,()=>cancel=true));
 					if (progressResult.ShouldCancel) return;
 				}

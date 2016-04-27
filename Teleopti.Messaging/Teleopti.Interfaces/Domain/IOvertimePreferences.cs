@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Interfaces.Domain
+﻿namespace Teleopti.Interfaces.Domain
 {
     public interface IOvertimePreferences 
     {
@@ -14,5 +12,6 @@ namespace Teleopti.Interfaces.Domain
         bool AllowBreakNightlyRest { get; set; }
         bool AllowBreakWeeklyRest { get; set; }
         bool AvailableAgentsOnly { get; set; }
-    }
+		IRuleSetBag ShiftBagOvertimeScheduling { get; set; }
+	}
 }
