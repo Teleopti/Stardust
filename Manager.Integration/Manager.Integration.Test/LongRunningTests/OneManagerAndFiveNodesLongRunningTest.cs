@@ -11,6 +11,7 @@ using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
+using Manager.Integration.Test.TestParams;
 using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;

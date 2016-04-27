@@ -13,6 +13,7 @@ using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Tasks;
+using Manager.Integration.Test.TestParams;
 using Manager.Integration.Test.WPF.Annotations;
 using Manager.Integration.Test.WPF.Commands;
 using Manager.Integration.Test.WPF.HttpListeners.Fiddler;

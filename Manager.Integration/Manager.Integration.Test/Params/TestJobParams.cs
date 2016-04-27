@@ -1,4 +1,4 @@
-﻿namespace Manager.Integration.Test
+﻿namespace Manager.Integration.Test.TestParams
 {
 	public class TestJobParams
 	{
