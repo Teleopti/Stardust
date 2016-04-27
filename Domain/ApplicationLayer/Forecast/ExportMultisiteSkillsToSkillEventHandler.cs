@@ -1,42 +1,41 @@
 ﻿using System.Collections.Generic;
 using log4net;
-using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class ExportMultisiteSkillsToSkillConsumer : ConsumerOf<ExportMultisiteSkillsToSkill>
+#pragma warning disable 618
+	public class ExportMultisiteSkillsToSkillEventHandler : IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnServiceBus
+#pragma warning restore 618
 	{
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IServiceBus _serviceBus;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsToSkillConsumer));
+		private readonly IExportMultisiteSkillProcessor _exportMultisiteSkillProcessor;
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsToSkillEventHandler));
 
-		public ExportMultisiteSkillsToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IServiceBus serviceBus)
+		public ExportMultisiteSkillsToSkillEventHandler(ICurrentUnitOfWork unitOfWork, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IExportMultisiteSkillProcessor exportMultisiteSkillProcessor)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWork = unitOfWork;
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
-			_serviceBus = serviceBus;
+			_exportMultisiteSkillProcessor = exportMultisiteSkillProcessor;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ExportMultisiteSkillsToSkill message)
+		public void Handle(ExportMultisiteSkillsToSkillEvent message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			var unitOfWork = _unitOfWork.Current();
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
-				LazyLoadingManager.Initialize(jobResult.Details);
 
 				if (jobResult.FinishedOk)
 				{
@@ -72,8 +71,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 progressSteps += multisiteSkillSelection.ChildSkillSelections.Count*period.DayCount()*4;
             }
             _feedback.ChangeTotalProgress(progressSteps);
-
-			listOfMessages.ForEach(m=> _serviceBus.Send(m));
+			
+			listOfMessages.ForEach(m=> _exportMultisiteSkillProcessor.Process(m));
 			_feedback.Clear();
 		}
 	}

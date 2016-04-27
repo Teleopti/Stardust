@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
+using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	///<summary>
 	/// Message with details to perform an export of forecasting data from sub skills of multisite skills to a regular skill.
 	///</summary>
-	public class ExportMultisiteSkillsToSkill : MessageWithLogOnContext
+	public class ExportMultisiteSkillsToSkillEvent : EventWithInfrastructureContext
 	{
 		///<summary>
-		/// Creates a new instance of the <see cref="ExportMultisiteSkillsToSkill"/>.
+		/// Creates a new instance of the <see cref="ExportMultisiteSkillsToSkillEvent"/>.
 		///</summary>
-		public ExportMultisiteSkillsToSkill()
+		public ExportMultisiteSkillsToSkillEvent()
 		{
 			MultisiteSkillSelections = new List<MultisiteSkillSelection>();
 		}
@@ -36,7 +37,7 @@ namespace Teleopti.Interfaces.Messages.General
 		/// <summary>
 		/// The identity of this message.
 		/// </summary>
-		public override Guid Identity
+		public Guid Identity
 		{
 			get { return JobId; }
 		}

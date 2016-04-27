@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -10,17 +11,17 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
     public class MultisiteForecastToSkillCommand : IMultisiteForecastToSkillCommand
     {
-        private readonly IImportForecastToSkillCommand _importForecastToSkillCommand;
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IJobResultFeedback _feedback;
+	    private readonly ISendBusMessage _sendBusMessage;
 
-		  public MultisiteForecastToSkillCommand(IImportForecastToSkillCommand importForecastToSkillCommand, ISkillDayLoadHelper skillDayLoadHelper, IScenarioRepository scenarioRepository, IJobResultFeedback feedback)
+	    public MultisiteForecastToSkillCommand( ISkillDayLoadHelper skillDayLoadHelper, IScenarioRepository scenarioRepository, IJobResultFeedback feedback, ISendBusMessage sendBusMessage)
         {
-            _importForecastToSkillCommand = importForecastToSkillCommand;
-            _skillDayLoadHelper = skillDayLoadHelper;
+           _skillDayLoadHelper = skillDayLoadHelper;
             _scenarioRepository = scenarioRepository;
             _feedback = feedback;
+		    _sendBusMessage = sendBusMessage;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "subskill")]
@@ -53,11 +54,34 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                     {
                         _feedback.ReportProgress(0,
 							string.Format(CultureInfo.InvariantCulture, "Saving forecast to {0}.", skillExportCombination.TargetSkill.Name));
-                        _importForecastToSkillCommand.Execute(skillExportCombination.SourceSkill, skillExportCombination.TargetSkill, skillStaffPeriods, skillSelection.Period);
+                        analyzeForecast(skillExportCombination.SourceSkill, skillExportCombination.TargetSkill, skillStaffPeriods, skillSelection.Period);
                     }
                 }
             }
         }
+
+	    private void analyzeForecast(IChildSkill sourceSkill, ISkill targetSkill, ISkillStaffPeriodDictionary skillStaffPeriods, DateOnlyPeriod period)
+	    {
+			var result = new List<IForecastsRow>();
+			foreach (var skillStaffPeriod in skillStaffPeriods.Values)
+			{
+				result.Add(new ForecastsRow
+				{
+					LocalDateTimeFrom = skillStaffPeriod.Period.StartDateTimeLocal(sourceSkill.TimeZone),
+					LocalDateTimeTo = skillStaffPeriod.Period.EndDateTimeLocal(sourceSkill.TimeZone),
+					UtcDateTimeFrom = skillStaffPeriod.Period.StartDateTime,
+					UtcDateTimeTo = skillStaffPeriod.Period.EndDateTime,
+					SkillName = sourceSkill.Name,
+					Tasks = skillStaffPeriod.Payload.TaskData.Tasks,
+					TaskTime = skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds,
+					AfterTaskTime = skillStaffPeriod.Payload.TaskData.AverageAfterTaskTime.TotalSeconds,
+					Agents = skillStaffPeriod.Payload.ForecastedIncomingDemand,
+					Shrinkage = skillStaffPeriod.Payload.Shrinkage.Value
+				});
+			}
+
+			_sendBusMessage.Process(result, targetSkill, period);
+		}
     }
 
     public interface ISendBusMessage

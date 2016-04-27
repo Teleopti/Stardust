@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -72,9 +73,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 			}
 		}
 
-		public ExportMultisiteSkillsToSkill TransformToServiceBusMessage()
+		public ExportMultisiteSkillsToSkillEvent TransformToServiceBusMessage()
 		{
-			var message = new ExportMultisiteSkillsToSkill
+			var message = new ExportMultisiteSkillsToSkillEvent
 			{
 				OwnerPersonId =
 					 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(

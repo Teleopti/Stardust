@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class OpenAndSplitTargetSkillTest
 	{
-		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
-		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWork _currentunitOfWorkFactory;
 		private ISkillRepository _skillRepository;
 		private IJobResultRepository _jobResultRepository;
 		private IJobResultFeedback _feedback;
@@ -32,8 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		[SetUp]
 		public void Setup()
 		{
-			_currentunitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			_currentunitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_jobResultRepository = MockRepository.GenerateMock<IJobResultRepository>();
 			_feedback = MockRepository.GenerateMock<IJobResultFeedback>();
@@ -56,8 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillId = Guid.NewGuid();
 			var skill = SkillFactory.CreateSkill("test skill");
 
-			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
-			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWork);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
 			_command.Stub(x => x.Execute(skill, new DateOnlyPeriod(dateTime, dateTime), new[] { new TimePeriod(8, 0, 17, 0) }));

@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -13,7 +14,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
-                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkill(), true)).IgnoreArguments();
+                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkillEvent(), true)).IgnoreArguments();
             }
 
             using(_mock.Playback())
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
-                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkill(), true)).IgnoreArguments();
+                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkillEvent(), true)).IgnoreArguments();
             }
             using (_mock.Playback())
             {

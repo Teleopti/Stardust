@@ -1416,7 +1416,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 									uow.PersistAll();
 								}
 
-								_messageSender.Send(message, true);
+								_eventInfrastructureInfoPopulator.PopulateEventContext(message);
+								_publisher.Publish(message);
 								try
 								{
 									pages.SaveSettings();

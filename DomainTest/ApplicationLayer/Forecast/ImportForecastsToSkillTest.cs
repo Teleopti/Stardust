@@ -18,25 +18,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	public class ImportForecastsToSkillTest
 	{
 		private ImportForecastsToSkillHandler _target;
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWork _unitOfWorkFactory;
 		private ISkillRepository _skillRepository;
 		private IJobResultRepository _jobResultRepository;
 		private IJobResultFeedback _feedback;
 		private IMessageBrokerComposite _messageBroker;
 		private ISaveForecastToSkillCommand _saveForecastToSkillCommand;
-		private IUnitOfWork _unitOfWork;
 		private IJobResult _jobResult;
 		private IDisableBusinessUnitFilter _disableFilter;
 
 		[SetUp]
 		public void Setup()
 		{
-			_unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			_jobResultRepository = MockRepository.GenerateMock<IJobResultRepository>();
 			_feedback = MockRepository.GenerateMock<IJobResultFeedback>();
 			_messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
-			_unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			_jobResult = MockRepository.GenerateMock<IJobResult>();
 			_disableFilter = MockRepository.GenerateMock<IDisableBusinessUnitFilter>();
 			_saveForecastToSkillCommand = MockRepository.GenerateMock<ISaveForecastToSkillCommand>();
@@ -65,9 +63,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				UtcDateTimeTo = new DateTime(2012, 3, 1, 13, 0, 0, DateTimeKind.Utc)
 			};
 
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			_unitOfWorkFactory.Stub(x => x.Current()).Return(uowFactory);
-			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
 			_saveForecastToSkillCommand.Stub(x => x.Execute(dateTime, skill, new[] { row }, ImportForecastsMode.ImportWorkload));

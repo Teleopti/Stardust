@@ -195,6 +195,7 @@
     <Compile Include="ApplicationLayer\Analytics\AnalyticsScheduleChangeFilterTests.cs" />
     <Compile Include="ApplicationLayer\ApproveRequestCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AbsenceCommandConverterTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsEventHandlerTest.cs" />
@@ -512,7 +513,6 @@
     <Compile Include="Forecasting\DaylightSavingTimeHelperTest.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializerTest.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModelTest.cs" />
-    <Compile Include="Forecasting\Export\ImportForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\MultisiteForecastToSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\OpenAndSplitSkillCommandTest.cs" />
     <Compile Include="Forecasting\Export\SaveForecastToSkillCommandTest.cs" />

@@ -1,42 +1,42 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
 	[TestFixture]
 	public class ExportMultisiteSkillsToSkillTest
 	{
-		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
-		private ExportMultisiteSkillsToSkillConsumer target;
+		private ICurrentUnitOfWork unitOfWorkFactory;
+		private ExportMultisiteSkillsToSkillEventHandler target;
 		private MockRepository mocks;
 		private IJobResultRepository jobResultRepository;
 		private IJobResultFeedback jobResultFeedback;
 		private IMessageBrokerComposite messageBroker;
-		private IServiceBus serviceBus;
 		private readonly Guid firstMultisiteId = Guid.NewGuid();
 		private readonly Guid secondMultisiteId = Guid.NewGuid();
 		private DateOnlyPeriod period = new DateOnlyPeriod(2011, 1, 1, 2011, 1, 31);
+		private IExportMultisiteSkillProcessor _exportMultisiteSkillProcessor;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWork>();
 			jobResultRepository = mocks.DynamicMock<IJobResultRepository>();
 			jobResultFeedback = mocks.DynamicMock<IJobResultFeedback>();
 			messageBroker = mocks.DynamicMock<IMessageBrokerComposite>();
-			serviceBus = mocks.DynamicMock<IServiceBus>();
+			_exportMultisiteSkillProcessor = mocks.DynamicMock<IExportMultisiteSkillProcessor>();
 
-			target = new ExportMultisiteSkillsToSkillConsumer(unitOfWorkFactory, jobResultRepository, jobResultFeedback, messageBroker, serviceBus);
+			target = new ExportMultisiteSkillsToSkillEventHandler(unitOfWorkFactory, jobResultRepository, jobResultFeedback, messageBroker,_exportMultisiteSkillProcessor);
 		}
 
 		[Test]
@@ -47,21 +47,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var jobId = Guid.NewGuid();
 			using (mocks.Record())
 			{
-				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-				Expect.Call(unitOfWorkFactory.Current()).Return(uowFactory);
-				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.Current()).Return(unitOfWork);
 				Expect.Call(jobResult.FinishedOk).Return(false);
 				Expect.Call(jobResultRepository.Get(jobId)).Return(jobResult);
 				Expect.Call(() => jobResultFeedback.SetJobResult(jobResult, messageBroker));
 			}
 			using (mocks.Playback())
 			{
-				var message = new ExportMultisiteSkillsToSkill { JobId = jobId };
+				var message = new ExportMultisiteSkillsToSkillEvent { JobId = jobId };
 				message.PeriodStart = period.StartDate.Date;
 				message.PeriodEnd = period.EndDate.Date;
 				message.MultisiteSkillSelections.Add(new MultisiteSkillSelection { MultisiteSkillId = firstMultisiteId });
 				message.MultisiteSkillSelections.Add(new MultisiteSkillSelection { MultisiteSkillId = secondMultisiteId });
-				target.Consume(message);
+				target.Handle(message);
 			}
 		}
 
@@ -73,16 +71,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var jobId = Guid.NewGuid();
 			using (mocks.Record())
 			{
-				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-				Expect.Call(unitOfWorkFactory.Current()).Return(uowFactory);
-				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.Current()).Return(unitOfWork);
 				Expect.Call(jobResult.FinishedOk).Return(true);
 				Expect.Call(jobResultRepository.Get(jobId)).Return(jobResult);
 			}
 			using (mocks.Playback())
 			{
-				var message = new ExportMultisiteSkillsToSkill { JobId = jobId };
-				target.Consume(message);
+				var message = new ExportMultisiteSkillsToSkillEvent { JobId = jobId };
+				target.Handle(message);
 			}
 		}
 	}

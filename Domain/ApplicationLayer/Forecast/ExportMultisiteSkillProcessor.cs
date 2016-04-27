@@ -3,41 +3,50 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public class ExportMultisiteSkillToSkillConsumer : ConsumerOf<ExportMultisiteSkillToSkill>
+	public interface IExportMultisiteSkillProcessor
 	{
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		void Process(ExportMultisiteSkillToSkill message);
+	}
+
+	public class ExportMultisiteSkillProcessor : IExportMultisiteSkillProcessor
+	{
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IMultisiteForecastToSkillCommand _command;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
+		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public ExportMultisiteSkillToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IMultisiteForecastToSkillCommand command, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker)
+		public ExportMultisiteSkillProcessor(ICurrentUnitOfWork unitOfWork,
+			ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IMultisiteForecastToSkillCommand command,
+			IJobResultFeedback feedback, IMessageBrokerComposite messageBroker,
+			IDisableBusinessUnitFilter disableBusinessUnitFilter)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWork = unitOfWork;
 			_skillRepository = skillRepository;
 			_jobResultRepository = jobResultRepository;
 			_command = command;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
+			_disableBusinessUnitFilter = disableBusinessUnitFilter;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String,System.Exception)")]
-		public void Consume(ExportMultisiteSkillToSkill message)
+		public void Process(ExportMultisiteSkillToSkill message)
 		{
 			var stopwatch = new Stopwatch();
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			var unitOfWork = _unitOfWork.Current();
 			{
 				var period = new DateOnlyPeriod(new DateOnly(message.PeriodStart), new DateOnly(message.PeriodEnd));
 				var jobResult = _jobResultRepository.Get(message.JobId);
@@ -51,9 +60,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
                 _feedback.ReportProgress(1,string.Format(CultureInfo.InvariantCulture, "Export forecasts to target skills for skill {0} period {1}.",
 				                                       multisteSkill.Name, period));
 
-				using (unitOfWork.DisableFilter(QueryFilter.BusinessUnit))
+				using (_disableBusinessUnitFilter.Disable())
 				{
-					
 					stopwatch.Start();
 					var settings = prepareSettingsFromMessage(message);
 					try
@@ -84,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					stopwatch.Stop();
 				}
 			}
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			unitOfWork = _unitOfWork.Current();
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 				_feedback.SetJobResult(jobResult, _messageBroker);
@@ -95,13 +103,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				endProcessing(unitOfWork);
 			}
-			_unitOfWorkFactory = null;
 		}
 
 		private void endProcessing(IUnitOfWork unitOfWork)
 		{
 			unitOfWork.PersistAll();
-			//_feedback.Dispose();
 			
 		}
 

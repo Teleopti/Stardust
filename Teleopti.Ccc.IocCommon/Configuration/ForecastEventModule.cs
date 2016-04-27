@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SaveForecastToSkillCommand>().As<ISaveForecastToSkillCommand>();
 			builder.RegisterType<MultisiteForecastToSkillCommand>().As<IMultisiteForecastToSkillCommand>();
 			builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
-			builder.RegisterType<ImportForecastToSkillCommand>().As<IImportForecastToSkillCommand>();
+			//builder.RegisterType<ImportForecastToSkillCommand>().As<IImportForecastToSkillCommand>();
 			builder.RegisterType<SendImportForecastBusMessage>().As<ISendBusMessage>();
 			builder.RegisterType<ForecastClassesCreator>().As<IForecastClassesCreator>();
 			builder.RegisterType<StatisticLoader>().As<IStatisticLoader>();
@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ImportForecastsToSkillHandler>().As<IImportForecastsToSkillHandler>();
 			builder.RegisterType<StatisticHelper>().As<IStatisticHelper>();
 			builder.RegisterType<OpenAndSplitTargetSkillHandler>().As<IOpenAndSplitTargetSkillHandler>();
+			builder.RegisterType<ExportMultisiteSkillProcessor>().As<IExportMultisiteSkillProcessor>();
 		}
 
 		private static IJobResultFeedback getThreadJobResultFeedback(IComponentContext componentContext)

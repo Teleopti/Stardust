@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 	}
 	public class ImportForecastsToSkillHandler : IImportForecastsToSkillHandler
 	{
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly ISaveForecastToSkillCommand _saveForecastToSkillCommand;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IJobResultRepository _jobResultRepository;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public ImportForecastsToSkillHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public ImportForecastsToSkillHandler(ICurrentUnitOfWork unitOfWork,
 			  ISaveForecastToSkillCommand saveForecastToSkillCommand,
 			  ISkillRepository skillRepository,
 			  IJobResultRepository jobResultRepository,
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			  IMessageBrokerComposite messageBroker,
 			  IDisableBusinessUnitFilter disableBusinessUnitFilter)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWork = unitOfWork;
 			_saveForecastToSkillCommand = saveForecastToSkillCommand;
 			_skillRepository = skillRepository;
 			_jobResultRepository = jobResultRepository;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 		public void Handle(ImportForecastsToSkillEvent message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			var unitOfWork = _unitOfWork.Current();
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 				var skill = _skillRepository.Get(message.TargetSkillId);

@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 	public class OpenAndSplitTargetSkillHandler : IOpenAndSplitTargetSkillHandler
 	{
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IOpenAndSplitSkillCommand _command;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IJobResultRepository _jobResultRepository;
@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IImportForecastsToSkillHandler _importForecastsToSkillHandler;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public OpenAndSplitTargetSkillHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		public OpenAndSplitTargetSkillHandler(ICurrentUnitOfWork unitOfWork,
 			IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository,
 			IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IImportForecastsToSkillHandler importForecastsToSkillHandler,
 			IDisableBusinessUnitFilter disableBusinessUnitFilter)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWork = unitOfWork;
 			_command = command;
 			_skillRepository = skillRepository;
 			_jobResultRepository = jobResultRepository;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 		public void Handle(OpenAndSplitTargetSkillEvent message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			var unitOfWork = _unitOfWork.Current();
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 				var targetSkill = _skillRepository.Get(message.TargetSkillId);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 		private void notifyServiceBusErrors(ImportForecastsToSkillEvent message, Exception e)
 		{
-			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWork.Current())
 			{
 				var job = _jobResultRepository.Get(message.JobId);
 				_feedback.SetJobResult(job, _messageBroker);

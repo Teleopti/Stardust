@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 unitOfWork.PersistAll();
 
                 //Prepare message to send to service bus
-                var message = new ExportMultisiteSkillsToSkill
+                var message = new ExportMultisiteSkillsToSkillEvent
                                   {
                                       OwnerPersonId =
                                           ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(

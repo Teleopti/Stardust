@@ -181,6 +181,9 @@
     <Compile Include="ApplicationLayer\DayOffs\DayOffTemplateChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestCancelService.cs" />
+    <Compile Include="ApplicationLayer\Events\ExportMultisiteSkillsToSkillEvent.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillProcessor.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillEventHandler.cs" />
     <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
@@ -1007,7 +1010,6 @@
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />
     <Compile Include="Forecasting\Export\IExportForecastDataToFileSerializer.cs" />
     <Compile Include="Forecasting\Export\IJobResultFeedback.cs" />
-    <Compile Include="Forecasting\Export\ImportForecastToSkillCommand.cs" />
     <Compile Include="Forecasting\Export\IMultisiteSkillForExport.cs" />
     <Compile Include="Forecasting\Export\IOpenAndSplitSkillCommand.cs" />
     <Compile Include="Forecasting\Export\ISaveForecastToSkillCommand.cs" />
