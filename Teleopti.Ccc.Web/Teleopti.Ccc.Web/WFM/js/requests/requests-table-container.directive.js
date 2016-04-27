@@ -48,9 +48,9 @@
 						},
 						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\"> <input ng-enter=\"enter()\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" xng-keydown=\"$event.which === 13 && filterRequests()\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 					},
-					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', headerCellClass: 'request-message-header' },
+					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', headerCellClass: 'request-message-header', visible: false },
 					{ displayName: 'DenyReason', field: 'DenyReason', headerCellFilter: 'translate', cellClass: 'request-deny-reason', headerCellClass: 'request-deny-reason-header', visible: false },
-					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', headerCellClass: 'request-status-header', enableSorting: false, visible: false },
+					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', headerCellClass: 'request-status-header', enableSorting: false},
 					{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header' },
 					{ displayName: 'Id', field: 'Id', headerCellFilter: 'translate', cellClass: 'request-id', visible: false, headerCellClass: 'request-id-header' },
 					{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
