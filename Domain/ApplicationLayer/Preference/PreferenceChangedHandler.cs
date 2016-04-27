@@ -12,15 +12,14 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
-#pragma warning disable 618
 	[UseOnToggle(Toggles.ETL_SpeedUpIntradayPreference_37124)]
 	public class PreferenceChangedHandler :
 		IHandleEvent<PreferenceChangedEvent>,
-		IRunOnServiceBus
-#pragma warning restore 618
+		IRunOnHangfire
 	{
 		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
 		private readonly IScenarioRepository _scenarioRepository;
@@ -65,7 +64,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			}
 		}
 
+		[AsSystem]
 		[AnalyticsUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PreferenceChangedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
@@ -166,8 +167,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			var scenarioId = analyticsScenarios.First(a => a.Code == scenario.Id.GetValueOrDefault()).Id;
 			var shiftCategory =
 				analyticsShiftCategories.FirstOrDefault(
-					a => a.Code == ((preferenceRestriction.ShiftCategory != null ? preferenceRestriction.ShiftCategory.Id : (Guid?)null) ?? Guid.Empty));
-			var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == ((preferenceRestriction.Absence != null ? preferenceRestriction.Absence.Id : (Guid?)null) ?? Guid.Empty));
+					a => a.Code == ((preferenceRestriction.ShiftCategory != null ? preferenceRestriction.ShiftCategory.Id : null) ?? Guid.Empty));
+			var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == ((preferenceRestriction.Absence != null ? preferenceRestriction.Absence.Id : null) ?? Guid.Empty));
 			var dayOffId = preferenceRestriction.DayOffTemplate == null ? -1 :
 				analyticsDayOffs.First(a => a.DayOffName == preferenceRestriction.DayOffTemplate.Description.Name && a.BusinessUnitId == businessUnitId.BusinessUnitId).DayOffId;
 
