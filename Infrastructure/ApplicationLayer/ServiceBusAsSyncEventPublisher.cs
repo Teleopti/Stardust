@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			try
 			{
 				var exceptions = new List<Exception>();
-				startProcessingThread(() => processQueue(exceptions));
+				onAnotherThread(() => processQueue(exceptions));
 				if (exceptions.Any())
 					throw new AggregateException(exceptions);
 			}
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			}
 		}
 
-		private static void startProcessingThread(ThreadStart run)
+		private static void onAnotherThread(Action action)
 		{
-			var thread = new Thread(run);
+			var thread = new Thread(action.Invoke);
 			thread.Start();
 			thread.Join();
 		}
