@@ -20,14 +20,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_processor = processor;
 		}
 
-#pragma warning disable 618
-
 		public void Publish(params IEvent[] events)
 		{
 			events.ForEach(_queue.Enqueue);
 
-			if (!Monitor.TryEnter(processLock, 0)) return;
+			if (Monitor.TryEnter(processLock, 0))
+				process();
+		}
 
+		private void process()
+		{
 			try
 			{
 				var exceptions = new List<Exception>();
@@ -35,18 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				{
 					try
 					{
-						while (_queue.Count > 0)
-						{
-							try
-							{
-								ProcessLikeTheBus(_queue.Dequeue());
-							}
-							catch (Exception e)
-							{
-								PreserveStack.For(e);
-								exceptions.Add(e);
-							}
-						}
+						processQueue(exceptions);
 					}
 					catch (Exception e)
 					{
@@ -63,7 +54,22 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				Monitor.Exit(processLock);
 			}
+		}
 
+		private void processQueue(ICollection<Exception> exceptions)
+		{
+			while (_queue.Any())
+			{
+				try
+				{
+					ProcessLikeTheBus(_queue.Dequeue());
+				}
+				catch (Exception e)
+				{
+					PreserveStack.For(e);
+					exceptions.Add(e);
+				}
+			}
 		}
 
 		[AsSystem]
@@ -71,8 +77,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			_processor.Process(@event);
 		}
-
-#pragma warning restore 618
 
 	}
 }
