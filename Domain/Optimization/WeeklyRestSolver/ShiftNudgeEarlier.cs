@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var latestEndTime = latestStartDateTime.TimeOfDay;
 				
 			if (shiftEndUserLocalDateTime.AddTicks(-1).Date > shiftStartUserLocalDateTime.Date)
-					latestEndTime = latestEndTime.Add(TimeSpan.FromDays(1));
+				latestEndTime = latestEndTime.Add(TimeSpan.FromDays(1));
 
 			if (optimizationPreferences != null)
 			{

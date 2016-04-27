@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -119,6 +120,48 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest)
 				.Should().Be.True();
+		}
+
+		[Test, Timeout(5000)]
+		public void ShouldFixWeeklyRestWithShiftsEndingAtMidnigth()
+		{
+			var weeklyRest = TimeSpan.FromHours(40).Add(TimeSpan.FromMinutes(15));
+			var firstSunday = new DateOnly(2015, 10, 11); 
+			var monday = new DateOnly(2015, 10, 12); 
+			var tuesday = new DateOnly(2015, 10, 13);
+			var lastSunday = new DateOnly(2015, 10, 18);
+			var planningPeriod = PlanningPeriodRepository.Has(monday, 1);
+			var weekPeriod = new DateOnlyPeriod(monday, monday.AddDays(7));
+			var scenario = ScenarioRepository.Has("some name");
+			var activity = ActivityRepository.Has("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var skill = SkillRepository.Has("skill", activity);
+			var schedulePeriod = new SchedulePeriod(monday, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(2);
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(48), TimeSpan.FromHours(16), weeklyRest) };
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, skill);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(16, 0, 16, 0, 15), new TimePeriodWithSegment(24, 0, 24, 0, 15), shiftCategory));
+			agent.Period(monday).RuleSetBag = new RuleSetBag(ruleSet);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, monday,
+				TimeSpan.FromHours(5),
+				TimeSpan.FromHours(1),
+				TimeSpan.FromHours(5),
+				TimeSpan.FromHours(5),
+				TimeSpan.FromHours(5),
+				TimeSpan.FromHours(5),
+				TimeSpan.FromHours(1))
+				);
+
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstSunday, firstSunday.AddDays(8)), new TimePeriod(16, 0, 24, 0));
+			PersonAssignmentRepository.GetSingle(firstSunday).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(tuesday).SetDayOff(new DayOffTemplate());
+			PersonAssignmentRepository.GetSingle(lastSunday).SetDayOff(new DayOffTemplate());
+
+			Target.Execute(planningPeriod.Id.Value);
+			var agentRange = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false, false), weekPeriod, scenario)[agent];
+			CheckWeeklyRestRule.IsSatisfyBy(agentRange, weekPeriod, weeklyRest).Should().Be.True();
+			Assert.IsTrue(PersonAssignmentRepository.GetSingle(monday).ShiftLayers.IsEmpty());
 		}
 
 		[Test]
