@@ -295,9 +295,9 @@
 									},
 									names: {
 										Forecasted_calls:$translate.instant('ForecastedCalls'),
-										Actual_calls: $translate.instant('OfferedCalls'),
+										Actual_calls: $translate.instant('Calls'),
 										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime'),
-										AHT: $translate.instant('OfferedAverageHandleTime'),
+										AHT: $translate.instant('AverageHandlingTime'),
 									},
 									axes: {
 										AHT: 'y2',
