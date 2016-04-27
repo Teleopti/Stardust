@@ -3440,7 +3440,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var resouceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true);
 
 			_container.Resolve<IScheduleOvertimeCommand>()
-				.Exectue(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
+				.Execute(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
 					scheduleDays, resouceCalculateDelayer, _gridLockManager);
 
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;

@@ -29,9 +29,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 		}
 
-		//TODO: rename exectue
 		//TODO: change from IScheduleDay to persons and dates?
-		public void Exectue(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
+		public void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
 		{
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
