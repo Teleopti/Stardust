@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		}
 
 		[UnitOfWork]
-		[AnalyticsUnitOfWork]
 		public new virtual void Handle(SettingsForPersonPeriodChangedEvent @event)
 		{
 			base.Handle(@event);
@@ -46,8 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		{
 		}
 
-		[AnalyticsUnitOfWork]
-		public new virtual void Handle(SettingsForPersonPeriodChangedEvent @event)
+		public new void Handle(SettingsForPersonPeriodChangedEvent @event)
 		{
 			base.Handle(@event);
 		}

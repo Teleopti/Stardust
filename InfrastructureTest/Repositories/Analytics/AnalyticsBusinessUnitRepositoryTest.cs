@@ -1,8 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -10,14 +10,12 @@ using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
-
 	[TestFixture]
 	[Category("LongRunning")]
-	[AnalyticsUnitOfWorkTest]
+	[AnalyticsDatabaseTest]
 	public class AnalyticsBusinessUnitRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
-		public IAnalyticsBusinessUnitRepository Target;
+		ICurrentDataSource currentDataSource;
 		private BusinessUnit businessUnitInAnalytics;
 		private ExistingDatasources datasourceInAnalytics;
 
@@ -31,12 +29,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			analyticsDataFactory.Setup(businessUnitInAnalytics);
 			analyticsDataFactory.Persist();
+			currentDataSource = CurrentDataSource.Make();
 		}
 
 		[Test]
 		public void ShouldGetBusinessUnitByCode()
 		{
-			var result = Target.Get(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
+			var target = new AnalyticsBusinessUnitRepository(currentDataSource);
+			var result = target.Get(BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault());
 
 			result.BusinessUnitId.Should().Be.EqualTo(businessUnitInAnalytics.BusinessUnitId);
 			result.DatasourceId.Should().Be.EqualTo(datasourceInAnalytics.RaptorDefaultDatasourceId);
@@ -45,7 +45,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldReturnNullForNotExistingBusinessUnit()
 		{
-			var result = Target.Get(Guid.NewGuid());
+			var target = new AnalyticsBusinessUnitRepository(currentDataSource);
+			var result = target.Get(Guid.NewGuid());
 
 			result.Should().Be.Null();
 		}

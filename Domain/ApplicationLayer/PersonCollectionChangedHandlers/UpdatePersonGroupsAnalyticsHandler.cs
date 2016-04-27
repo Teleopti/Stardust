@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -35,9 +34,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
 			_groupPageRepository = groupPageRepository;
 		}
-
-		[AnalyticsUnitOfWork]
-		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
+		
+		public void Handle(AnalyticsPersonCollectionChangedEvent @event)
 		{
 			logger.DebugFormat("Handle AnalyticsPersonCollectionChangedEvent for {0}", @event.SerializedPeople);
 			foreach (var personId in @event.PersonIdCollection)

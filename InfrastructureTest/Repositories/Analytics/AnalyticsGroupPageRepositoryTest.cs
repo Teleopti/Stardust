@@ -3,8 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -12,13 +12,12 @@ using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
-	[Category("LongRunning")]
 	[TestFixture]
-	[AnalyticsUnitOfWorkTest]
+	[Category("LongRunning")]
+	[AnalyticsDatabaseTest]
 	public class AnalyticsGroupPageRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
-		public IAnalyticsGroupPageRepository Target;
+		ICurrentDataSource currentDataSource;
 
 		[SetUp]
 		public void SetUp()
@@ -30,11 +29,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			analyticsDataFactory.Setup(businessUnit);
 			analyticsDataFactory.Persist();
+			currentDataSource = CurrentDataSource.Make();
 		}
 
 		[Test]
 		public void ShouldGetGroupPage()
 		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
 			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			target.AddGroupPageIfNotExisting(groupPage);
 
-			var result = Target.GetGroupPage(groupPage.GroupPageCode).First();
+			var result = target.GetGroupPage(groupPage.GroupPageCode).First();
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldNotAddIfExisting()
 		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
 			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -70,15 +72,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
-			Target.AddGroupPageIfNotExisting(groupPage);
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode);
+			target.AddGroupPageIfNotExisting(groupPage);
+			target.AddGroupPageIfNotExisting(groupPage);
+			var result = target.GetGroupPageByGroupCode(groupPage.GroupCode);
 			result.Should().Not.Be.Null();
 		}
 
 		[Test]
 		public void ShouldGetGroupPageByGroupCode()
 		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
 			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -89,9 +92,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			target.AddGroupPageIfNotExisting(groupPage);
 
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode);
+			var result = target.GetGroupPageByGroupCode(groupPage.GroupCode);
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -104,6 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldUpdateGroupPage()
 		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
 			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -114,13 +118,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			target.AddGroupPageIfNotExisting(groupPage);
 
 			groupPage.GroupPageName = "GroupPageName2";
 
-			Target.UpdateGroupPage(groupPage);
+			target.UpdateGroupPage(groupPage);
 
-			var result = Target.GetGroupPage(groupPage.GroupPageCode).First();
+			var result = target.GetGroupPage(groupPage.GroupPageCode).First();
 			result.GroupPageCode.Should().Be.EqualTo(groupPage.GroupPageCode);
 			result.GroupPageName.Should().Be.EqualTo("GroupPageName2");
 			result.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.GroupPageNameResourceKey);
@@ -133,6 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteGroupPage()
 		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
 			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -143,15 +148,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
-			Target.DeleteGroupPages(new[] { groupPage.GroupPageCode });
+			target.AddGroupPageIfNotExisting(groupPage);
+			target.DeleteGroupPages(new[] { groupPage.GroupPageCode });
 
-			Target.GetGroupPage(groupPage.GroupPageCode).Should().Be.Empty();
+			target.GetGroupPage(groupPage.GroupPageCode).Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldBeAbleToDeleteBasedOnGroupCode()
 		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
 			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -162,7 +168,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			target.AddGroupPageIfNotExisting(groupPage);
 			var groupPage2 = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -173,12 +179,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage2);
+			target.AddGroupPageIfNotExisting(groupPage2);
 
-			Target.DeleteGroupPagesByGroupCodes(new [] { groupPage.GroupCode});
+			target.DeleteGroupPagesByGroupCodes(new [] { groupPage.GroupCode});
 
-			var result = Target.GetGroupPageByGroupCode(groupPage.GroupCode);
-			var result2 = Target.GetGroupPageByGroupCode(groupPage2.GroupCode);
+			var result = target.GetGroupPageByGroupCode(groupPage.GroupCode);
+			var result2 = target.GetGroupPageByGroupCode(groupPage2.GroupCode);
 			result.Should().Be.Null();
 			result2.Should().Not.Be.Null();
 		}
@@ -186,6 +192,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldBeAbleToGetListOfBuildInGroupPages()
 		{
+			var target = new AnalyticsGroupPageRepository(currentDataSource);
 			var groupPage = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -196,7 +203,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage);
+			target.AddGroupPageIfNotExisting(groupPage);
 			var groupPage2 = new AnalyticsGroup
 			{
 				GroupPageCode = Guid.NewGuid(),
@@ -207,9 +214,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				GroupIsCustom = true,
 				BusinessUnitCode = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			Target.AddGroupPageIfNotExisting(groupPage2);
+			target.AddGroupPageIfNotExisting(groupPage2);
 
-			var result = Target.GetBuildInGroupPageBase().FirstOrDefault();
+			var result = target.GetBuildInGroupPageBase().FirstOrDefault();
 
 			result.Should().Not.Be.Null();
 			result.GroupPageName.Should().Be.EqualTo(groupPage.GroupPageName);

@@ -3,7 +3,6 @@ using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -22,8 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsSkillRepository = analyticsSkillRepository;
 		}
 
-		[AnalyticsUnitOfWork]
-		public virtual void Handle(AnalyticsPersonPeriodSkillsChangedEvent @event)
+		public void Handle(AnalyticsPersonPeriodSkillsChangedEvent @event)
 		{
 			var personPeriodId = @event.AnalyticsPersonPeriodId;
 			var businessUnitId = @event.AnalyticsBusinessUnitId;

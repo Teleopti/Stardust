@@ -3,12 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 
@@ -16,18 +14,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	[AnalyticsUnitOfWorkTest]
-	public class AnalyticsPersonPeriodRepositoryTest
+	[AnalyticsDatabaseTest]
+	public class AnalyticsPersonRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
-		public IAnalyticsPersonPeriodRepository Target;
 		AnalyticsPersonPeriod personPeriod1;
 		Guid personId;
 		Guid personId2;
 		ExistingDatasources datasource;
 		BusinessUnit businessUnit;
 		private Guid personPeriodCode1;
-		private IPerson _personWithGuid;
 
 		[SetUp]
 		public void SetUp()
@@ -38,12 +33,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			businessUnit = new BusinessUnit(BusinessUnitFactory.BusinessUnitUsedInTest, datasource);
 
 			analyticsDataFactory.Setup(businessUnit);
-			_personWithGuid = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
+			//var person = new TestDataFactory().Person("Ashley Andeen").Person;
+			var personWithGuid = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
 			var personWithGuid2 = PersonFactory.CreatePersonWithGuid("firstName2", "lastName2");
-			personId = _personWithGuid.Id.GetValueOrDefault();
+			personId = personWithGuid.Id.GetValueOrDefault();
 			personId2 = personWithGuid2.Id.GetValueOrDefault();
 
-			analyticsDataFactory.Setup(new Person(_personWithGuid, datasource, 0, new DateTime(2010, 1, 1),
+			analyticsDataFactory.Setup(new Person(personWithGuid, datasource, 0, new DateTime(2010, 1, 1),
 				new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
 				false, timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Setup(new Person(personWithGuid2, datasource, 1, new DateTime(2010, 1, 1),
@@ -52,43 +48,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			analyticsDataFactory.Persist();
 
+			var analyticsPersonRepository = new AnalyticsPersonPeriodRepository();
 			personPeriodCode1 = Guid.NewGuid();
-		}
-
-		[Test]
-		public void ShouldReturnOnePersonPeriods()
-		{
-			SetUpData();
-
-			var result = Target.GetPersonPeriods(personId2);
-			result.Count.Should().Be.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldReturnTwoPersonPeriods()
-		{
-			SetUpData();
-
-			var result = Target.GetPersonPeriods(personId);
-			result.Count.Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void DeleteOnePersionPeriod_ShouldReturnPersonPeriodDeleted()
-		{
-			SetUpData();
-
-			Target.DeletePersonPeriod(new AnalyticsPersonPeriod
-			{
-				PersonPeriodCode = personPeriodCode1
-			});
-			var result = Target.GetPersonPeriods(personId);
-			result.Count(a => a.ToBeDeleted).Should().Be.EqualTo(1);
-			result.Count(a => !a.ToBeDeleted).Should().Be.EqualTo(1);
-		}
-
-		private void SetUpData()
-		{
 			personPeriod1 = new AnalyticsPersonPeriod
 			{
 				PersonPeriodCode = personPeriodCode1,
@@ -101,19 +62,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				ContractName = "Test contract",
 				DatasourceId = 1,
 				DatasourceUpdateDate = DateTime.Now,
-				Email = _personWithGuid.Email,
+				Email = personWithGuid.Email,
 				EmploymentStartDate = new DateTime(2000, 1, 1),
 				EmploymentEndDate = new DateTime(2059, 12, 31),
 				EmploymentNumber = "",
 				EmploymentTypeCode = 0,
 				EmploymentTypeName = "",
-				FirstName = _personWithGuid.Name.FirstName,
-				LastName = _personWithGuid.Name.LastName,
+				FirstName = personWithGuid.Name.FirstName,
+				LastName = personWithGuid.Name.LastName,
 				IsAgent = true,
 				IsUser = false,
-				Note = _personWithGuid.Note,
-				PersonCode = _personWithGuid.Id.GetValueOrDefault(),
-				PersonName = _personWithGuid.Name.ToString(),
+				Note = personWithGuid.Note,
+				PersonCode = personWithGuid.Id.GetValueOrDefault(),
+				PersonName = personWithGuid.Name.ToString(),
 				ToBeDeleted = false,
 				TeamId = 1,
 				TeamCode = Guid.NewGuid(),
@@ -139,7 +100,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				ValidToDateId = 1
 			};
 
-			Target.AddPersonPeriod(personPeriod1);
+			analyticsPersonRepository.AddPersonPeriod(personPeriod1);
+			//analyticsPersonRepository.SiteId(Guid.NewGuid(), "Site name 1", businessUnit.BusinessUnitId);
+		}
+
+		[Test]
+		public void ShouldReturnOnePersonPeriods()
+		{
+			var target = new AnalyticsPersonPeriodRepository();
+			var result = target.GetPersonPeriods(personId2);
+			result.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldReturnTwoPersonPeriods()
+		{
+			var target = new AnalyticsPersonPeriodRepository();
+			var result = target.GetPersonPeriods(personId);
+			result.Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void DeleteOnePersionPeriod_ShouldReturnPersonPeriodDeleted()
+		{
+			var target = new AnalyticsPersonPeriodRepository();
+			target.DeletePersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonPeriodCode = personPeriodCode1
+			});
+			var result = target.GetPersonPeriods(personId);
+			result.Count(a => a.ToBeDeleted).Should().Be.EqualTo(1);
+			result.Count(a => !a.ToBeDeleted).Should().Be.EqualTo(1);
 		}
 	}
 }

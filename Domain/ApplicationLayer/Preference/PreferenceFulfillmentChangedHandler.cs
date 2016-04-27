@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 		[AsSystem]
 		[UnitOfWork]
-		[AnalyticsUnitOfWork]
 		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			var person = _personRepository.FindPeople(new[] { @event.PersonId }).FirstOrDefault();

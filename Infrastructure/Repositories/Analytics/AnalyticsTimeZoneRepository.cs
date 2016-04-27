@@ -1,28 +1,31 @@
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsTimeZoneRepository : IAnalyticsTimeZoneRepository
 	{
-		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public AnalyticsTimeZoneRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
+		public AnalyticsTimeZoneRepository(ICurrentDataSource currentDataSource)
 		{
-			_analyticsUnitOfWork = analyticsUnitOfWork;
+			_currentDataSource = currentDataSource;
 		}
 
 		public AnalyticsTimeZone Get(string id)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select 
-	                time_zone_id TimeZoneId
-				from mart.dim_time_zone WITH (NOLOCK) where time_zone_code=:TimeZoneCode")
-				.SetString("TimeZoneCode", id)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsTimeZone)))
-				.UniqueResult<AnalyticsTimeZone>();
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					@"select 
+	                    time_zone_id TimeZoneId
+					from mart.dim_time_zone WITH (NOLOCK) where time_zone_code=:TimeZoneCode")
+					.SetString("TimeZoneCode", id)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsTimeZone)))
+					.UniqueResult<AnalyticsTimeZone>();
+			}
 		}
 	}
 }

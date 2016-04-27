@@ -1,31 +1,35 @@
 using System;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsBusinessUnitRepository : IAnalyticsBusinessUnitRepository
 	{
-		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public AnalyticsBusinessUnitRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
+		public AnalyticsBusinessUnitRepository(ICurrentDataSource currentDataSource)
 		{
-			_analyticsUnitOfWork = analyticsUnitOfWork;
+			_currentDataSource = currentDataSource;
 		}
+
 		public AnalyticBusinessUnit Get(Guid businessUnitCode)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(@"
-				select 
-					business_unit_id BusinessUnitId
-					,datasource_id DatasourceId
-				from mart.dim_business_unit WITH (NOLOCK)
-				where business_unit_code=:BusinessUnitCode
-				")
-				.SetGuid("BusinessUnitCode", businessUnitCode)
-				.SetResultTransformer(Transformers.AliasToBean<AnalyticBusinessUnit>())
-				.UniqueResult<AnalyticBusinessUnit>();
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(@"
+					select 
+						business_unit_id BusinessUnitId
+						,datasource_id DatasourceId
+					from mart.dim_business_unit WITH (NOLOCK)
+					where business_unit_code=:BusinessUnitCode
+					")
+					.SetGuid("BusinessUnitCode", businessUnitCode)
+					.SetResultTransformer(Transformers.AliasToBean<AnalyticBusinessUnit>())
+					.UniqueResult<AnalyticBusinessUnit>();
+			}
 		}
 	}
 }

@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -43,8 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
 
-		[AnalyticsUnitOfWork]
-		public virtual void Handle(PersonCollectionChangedEvent @event)
+		public void Handle(PersonCollectionChangedEvent @event)
 		{
 			var personPeriodFilter = new PersonPeriodFilter(
 				_analyticsPersonPeriodRepository.MinDate().DateDate,

@@ -1,34 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsDateRepository : IAnalyticsDateRepository
 	{
-		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public AnalyticsDateRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
+		public AnalyticsDateRepository(ICurrentDataSource currentDataSource)
 		{
-			_analyticsUnitOfWork = analyticsUnitOfWork;
+			_currentDataSource = currentDataSource;
 		}
 
 		public IList<KeyValuePair<DateOnly, int>> Dates()
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select date_id, date_date from mart.dim_date WITH (NOLOCK) where date_date BETWEEN DATEADD(DAY,-365, GETDATE()) AND  DATEADD(DAY, 365, GETDATE())")
-				.SetResultTransformer(new CustomDictionaryTransformer()).List<KeyValuePair<DateOnly, int>>();
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select date_id, date_date from mart.dim_date WITH (NOLOCK) where date_date BETWEEN DATEADD(DAY,-365, GETDATE()) AND  DATEADD(DAY, 365, GETDATE())")
+					.SetResultTransformer(new CustomDictionaryTransformer()).List<KeyValuePair<DateOnly, int>>();
+			}
 		}
 
 		public KeyValuePair<DateOnly, int> Date(DateTime date)
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select date_id, date_date from mart.dim_date WITH (NOLOCK) where date_date=:Date")
-				.SetDateTime("Date", date.Date)
-				.SetResultTransformer(new CustomDictionaryTransformer())
-				.UniqueResult<KeyValuePair<DateOnly, int>>();
+			using (var uow = _currentDataSource.Current().Analytics.CreateAndOpenStatelessUnitOfWork())
+			{
+				return uow.Session().CreateSQLQuery(
+					"select date_id, date_date from mart.dim_date WITH (NOLOCK) where date_date=:Date")
+					.SetDateTime("Date", date.Date)
+					.SetResultTransformer(new CustomDictionaryTransformer())
+					.UniqueResult<KeyValuePair<DateOnly, int>>();
+			}
 		}
 	}
 }

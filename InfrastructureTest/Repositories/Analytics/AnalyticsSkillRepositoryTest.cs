@@ -4,31 +4,29 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
 	[TestFixture]
 	[Category("LongRunning")]
-	[AnalyticsUnitOfWorkTest]
+	[AnalyticsDatabaseTest]
 	public class AnalyticsSkillRepositoryTest
 	{
-		public ICurrentAnalyticsUnitOfWork UnitOfWork;
-		public IAnalyticsPersonPeriodRepository AnalyticsPersonPeriodRepository;
-		public IAnalyticsSkillRepository Target;
-
 		ExistingDatasources datasource;
 		BusinessUnit businessUnit;
+		ICurrentDataSource currentDataSource;
 		private int skillSetId;
 
 		[SetUp]
 		public void SetUp()
 		{
+			currentDataSource = CurrentDataSource.Make();
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
 			datasource = new ExistingDatasources(timeZones);
@@ -39,11 +37,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(threeSkills);
 			analyticsDataFactory.Setup(businessUnit);
 			analyticsDataFactory.Persist();
-		}
 
-		private void SetUpData()
-		{
-			skillSetId = Target.AddSkillSet(new AnalyticsSkillSet
+			var analyticsSkillRepository = new AnalyticsSkillRepository(currentDataSource);
+			skillSetId = analyticsSkillRepository.AddSkillSet(new AnalyticsSkillSet
 			{
 				BusinessUnitId = businessUnit.BusinessUnitId,
 				DatasourceId = 0,
@@ -54,16 +50,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			SetUpPerson();
 
-			Target.AddAgentSkill(1, 0, true, 1);
-			Target.AddAgentSkill(1, 1, false, 1);
-			Target.AddAgentSkill(1, 2, true, 1);
+			analyticsSkillRepository.AddAgentSkill(1, 0, true, 1);
+			analyticsSkillRepository.AddAgentSkill(1, 1, false, 1);
+			analyticsSkillRepository.AddAgentSkill(1, 2, true, 1);
 
-			Target.AddAgentSkill(2, 2, true, 1);
+			analyticsSkillRepository.AddAgentSkill(2, 2, true, 1);
 		}
 
 		private void SetUpPerson()
 		{
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("firstName", "lastName");
+			var analyticsPersonRepository = new AnalyticsPersonPeriodRepository();
 			var personPeriodCode1 = Guid.NewGuid();
 			var personPeriod1 = new AnalyticsPersonPeriod
 			{
@@ -115,52 +112,48 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				ValidToDateId = 1
 			};
 
-			AnalyticsPersonPeriodRepository.AddPersonPeriod(personPeriod1);
+			analyticsPersonRepository.AddPersonPeriod(personPeriod1);
 
 			// Add another person period
 			personPeriod1.PersonPeriodCode = Guid.NewGuid();
-			AnalyticsPersonPeriodRepository.AddPersonPeriod(personPeriod1);
+			analyticsPersonRepository.AddPersonPeriod(personPeriod1);
 		}
 
 		[Test]
 		public void ShouldReturnAllSkillsets()
 		{
-			SetUpData();
-
-			var result = Target.SkillSets();
+			var target = new AnalyticsSkillRepository(currentDataSource);
+			var result = target.SkillSets();
 			result.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldReturnSkillset()
 		{
-			SetUpData();
-
+			var target = new AnalyticsSkillRepository(currentDataSource);
 			var list = new List<AnalyticsSkill> {
 				new AnalyticsSkill { SkillId = 3 },
 				new AnalyticsSkill { SkillId = 1 },
 				new AnalyticsSkill { SkillId = 2 }
 			};
 
-			var result = Target.SkillSetId(list);
+			var result = target.SkillSetId(list);
 			result.Should().Be.EqualTo(skillSetId);
 		}
 
 		[Test]
 		public void ShouldReturnSkills()
 		{
-			SetUpData();
-
-			var result = Target.Skills(businessUnit.BusinessUnitId);
+			var target = new AnalyticsSkillRepository(currentDataSource);
+			var result = target.Skills(businessUnit.BusinessUnitId);
 			result.Count().Should().Be.EqualTo(3);
 		}
 
 		[Test]
 		public void ShouldReturnFactAgentSkills()
 		{
-			SetUpData();
-
-			var result = Target.GetFactAgentSkillsForPerson(1);
+			var target = new AnalyticsSkillRepository(currentDataSource);
+			var result = target.GetFactAgentSkillsForPerson(1);
 			result.Count.Should().Be.EqualTo(3);
 			result.Count(a => a.Active).Should().Be.EqualTo(2);
 			result.Count(a => !a.Active).Should().Be.EqualTo(1);
@@ -169,22 +162,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteAgentSkillsForOnePerson()
 		{
-			SetUpData();
-
-			Target.DeleteAgentSkillForPersonId(1);
-			var result = Target.GetFactAgentSkillsForPerson(1);
+			var target = new AnalyticsSkillRepository(currentDataSource);
+			target.DeleteAgentSkillForPersonId(1);
+			var result = target.GetFactAgentSkillsForPerson(1);
 			result.Count.Should().Be.EqualTo(0);
 
-			var result2 = Target.GetFactAgentSkillsForPerson(2);
+			var result2 = target.GetFactAgentSkillsForPerson(2);
 			result2.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
 		public void ShouldAddBridgeSkillsetSkill()
 		{
-			SetUpData();
-
-			Target.AddBridgeSkillsetSkill(new AnalyticsBridgeSkillsetSkill
+			var target = new AnalyticsSkillRepository(currentDataSource);
+			target.AddBridgeSkillsetSkill(new AnalyticsBridgeSkillsetSkill
 			{
 				BusinessUnitId = businessUnit.BusinessUnitId,
 				DatasourceId = 1,
@@ -197,8 +188,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldAddOrUpdateSkill()
 		{
-			SetUpData();
-
+			var target = new AnalyticsSkillRepository(currentDataSource);
 			var analyticsSkill = new AnalyticsSkill
 			{
 				SkillCode = Guid.NewGuid(),
@@ -210,15 +200,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				SkillName = "skillName",
 				TimeZoneId = 0
 			};
-			Target.AddOrUpdateSkill(analyticsSkill);
+			target.AddOrUpdateSkill(analyticsSkill);
 
-			var result = Target.Skills(businessUnit.BusinessUnitId);
+			var result = target.Skills(businessUnit.BusinessUnitId);
 			result.FirstOrDefault(x => x.SkillCode == analyticsSkill.SkillCode).Should().Not.Be.Null();
 			analyticsSkill.IsDeleted = true;
 
-			Target.AddOrUpdateSkill(analyticsSkill);
+			target.AddOrUpdateSkill(analyticsSkill);
 
-			result = Target.Skills(businessUnit.BusinessUnitId);
+			result = target.Skills(businessUnit.BusinessUnitId);
 			result.FirstOrDefault(x => x.SkillCode == analyticsSkill.SkillCode).IsDeleted.Should().Be.True();
 		}
 	}
