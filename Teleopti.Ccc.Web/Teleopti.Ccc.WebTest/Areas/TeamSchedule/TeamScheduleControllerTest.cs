@@ -26,7 +26,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
 	[TestFixture]
-	internal class TeamScheduleControllerTest
+	public class TeamScheduleControllerTest
 	{
 		[Test]
 		public void ShouldGetFullDayAbsencePermission()
@@ -96,6 +96,20 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var result = target.GetPermissions();
 
 			result.Content.HasRemoveActivityPermission.Should().Be.EqualTo(expectedResult);
+		}
+
+		[Test]
+		public void ShouldGetMoveActivityPermission()
+		{
+			const bool expectedResult = true;
+			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity))
+				.Return(expectedResult);
+
+			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null, null, null, null);
+			var result = target.GetPermissions();
+
+			result.Content.HasMoveActivityPermission.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]
