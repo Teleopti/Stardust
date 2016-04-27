@@ -93,12 +93,7 @@ module.exports = function(grunt) {
 					'dist/style_classic.min.css': ['css/style_classic.css'],
 					'dist/style_dark.min.css': ['css/style_dark.css'],
 					'dist/modules_classic.min.css': ['dist/modules_classic.css'],
-					'dist/modules_dark.min.css': ['dist/modules_dark.css'],
-					'dist/angular-gant.min.css': ['node_modules/angular-gantt/assets/angular-gantt.css',
-						'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
-						'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
-						'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css'
-					]
+					'dist/modules_dark.min.css': ['dist/modules_dark.css']
 				}
 			}
 		},
@@ -158,8 +153,11 @@ module.exports = function(grunt) {
 					'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
 					'node_modules/angular-ui-grid/ui-grid.min.css',
 					'node_modules/angular-material/angular-material.min.css',
+					'node_modules/angular-gantt/assets/angular-gantt.css',
+					'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
+					'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
+					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
 					'vendor/c3/c3.min.css',
-					'dist/angular-gant.min.css',
 					'node_modules/teleopti-styleguide/css/main.min.css'
 				],
 				dest: 'dist/modules_classic.css'
@@ -171,8 +169,11 @@ module.exports = function(grunt) {
 					'node_modules/angular-ui-tree/dist/angular-ui-tree.min.css',
 					'node_modules/angular-ui-grid/ui-grid.min.css',
 					'node_modules/angular-material/angular-material.min.css',
+					'node_modules/angular-gantt/assets/angular-gantt.css',
+					'node_modules/angular-gantt/assets/angular-gantt-plugins.css',
+					'node_modules/angular-gantt/assets/angular-gantt-table-plugin.css',
+					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.css',
 					'vendor/c3/c3.min.css',
-					'dist/angular-gant.min.css',
 					'node_modules/teleopti-styleguide/css/main_dark.min.css'
 				],
 				dest: 'dist/modules_dark.css'
