@@ -162,12 +162,10 @@
 		return {
 			template: '<uib-timepicker></uib-timepicker>',
 			controller: ['$scope', timepickerWrapCtrl],
-			compile: function () {
-				return { pre: preLinkFn, post: postLinkFn };
-			},
+			compile: compileFn,
 		};
 
-		function preLinkFn(scope, tElement, tAttributes) {
+		function compileFn(tElement, tAttributes) {
 			var binding = tAttributes.ngModel;
 			tElement.addClass('wfm-timepicker-wrap');
 
@@ -179,6 +177,10 @@
 			if (meridianInfo.showMeridian) {
 				cellElement.attr('meridians', 'meridians');
 			}
+
+			return {
+				post: postLinkFn
+			};
 		}
 
 		function postLinkFn(scope, elem, attrs, ctrls) {
