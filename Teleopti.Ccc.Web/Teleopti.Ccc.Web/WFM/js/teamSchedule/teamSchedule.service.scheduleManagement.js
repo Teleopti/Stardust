@@ -64,7 +64,7 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 			var earlistStart = new Date("2099-12-31");
 			for (var i = 0; i < svc.groupScheduleVm.Schedules.length; i++) {
 				var schedule = svc.groupScheduleVm.Schedules[i];
-				var scheduleStart = schedule.ScheduleStartTime();
+				var scheduleStart = new Date(schedule.ScheduleStartTime());
 				if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
 					startUpdated = true;
 					earlistStart = scheduleStart;
