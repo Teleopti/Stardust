@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,15 +18,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class ExportMultisiteSkillToSkillCommandHandler : IHandleCommand<ExportMultisiteSkillToSkillCommandDto>
     {
-		private readonly IMessagePopulatingServiceBusSender _busSender;
+		private readonly IEventPublisher _publisher;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
+	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 
-		public ExportMultisiteSkillToSkillCommandHandler(IMessagePopulatingServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public ExportMultisiteSkillToSkillCommandHandler(IEventPublisher publisher, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator)
         {
-            _busSender = busSender;
+            _publisher = publisher;
             _unitOfWorkFactory = unitOfWorkFactory;
             _jobResultRepository = jobResultRepository;
+			_eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
         }
 
 		public void Handle(ExportMultisiteSkillToSkillCommandDto command)
@@ -70,8 +73,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     }
 					message.MultisiteSkillSelections.Add(selection);
                 }
-
-				_busSender.Send(message, true);
+				_eventInfrastructureInfoPopulator.PopulateEventContext(message);
+				_publisher.Publish(message);
             }
 			command.Result = new CommandResultDto { AffectedId = jobId, AffectedItems = 1 };
         }

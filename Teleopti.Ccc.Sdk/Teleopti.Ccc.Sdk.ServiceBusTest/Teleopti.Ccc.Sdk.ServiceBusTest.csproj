@@ -148,10 +148,8 @@
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumerTest.cs" />
     <Compile Include="Diagnostics\ServiceBusHealthCheckEventHandlerTest.cs" />
-    <Compile Include="Forecast\ExportMultisiteSkillToSkillTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryResultTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
-    <Compile Include="Forecast\OpenAndSplitTargetSkillTest.cs" />
     <Compile Include="NoNewConsumersTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />

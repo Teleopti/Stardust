@@ -3,10 +3,11 @@ using System.Collections.ObjectModel;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class ExportMultisiteSkillToSkillCommandHandlerTest
     {
         private MockRepository _mock;
-		private IMessagePopulatingServiceBusSender _busSender;
+		private IEventPublisher _busSender;
         private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IJobResultRepository _jobResultRepository;
         private ExportMultisiteSkillToSkillCommandHandler _target;
@@ -36,15 +37,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private ExportMultisiteSkillToSkillCommandDto _exportMultisiteSkillToSkillCommandDto;
         private IJobResult _jobResult;
         private IActivity _activity;
+	    private IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
-			_busSender = _mock.StrictMock<IMessagePopulatingServiceBusSender>();
+			_busSender = _mock.StrictMock<IEventPublisher>();
             _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _jobResultRepository = _mock.StrictMock<IJobResultRepository>();
-            _target = new ExportMultisiteSkillToSkillCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository);
+		    _eventInfrastructureInfoPopulator = _mock.StrictMock<IEventInfrastructureInfoPopulator>();
+			_target = new ExportMultisiteSkillToSkillCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository,_eventInfrastructureInfoPopulator);
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
             _activity = ActivityFactory.CreateActivity("test activity");
@@ -91,7 +94,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
-                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkillEvent(), true)).IgnoreArguments();
+	            Expect.Call(
+		            () => _eventInfrastructureInfoPopulator.PopulateEventContext(new ExportMultisiteSkillsToSkillEvent()))
+		            .IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ExportMultisiteSkillsToSkillEvent())).IgnoreArguments();
             }
 
             using(_mock.Playback())
@@ -111,7 +117,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
-                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkillEvent(), true)).IgnoreArguments();
+				Expect.Call(
+				   () => _eventInfrastructureInfoPopulator.PopulateEventContext(new ExportMultisiteSkillsToSkillEvent()))
+				   .IgnoreArguments();
+				Expect.Call(() => _busSender.Publish(new ExportMultisiteSkillsToSkillEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

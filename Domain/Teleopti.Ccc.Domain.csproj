@@ -183,7 +183,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestCancelService.cs" />
     <Compile Include="ApplicationLayer\Events\ExportMultisiteSkillsToSkillEvent.cs" />
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillProcessor.cs" />
-    <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillEventServiceBusHandler.cs" />
     <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />

@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
 	[TestFixture]
 	public class ExportMultisiteSkillToSkillTest

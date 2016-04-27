@@ -81,7 +81,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ExportPages
 					 ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
 						  Guid.Empty),
 				PeriodStart = Period.StartDate.Date,
-				PeriodEnd = Period.EndDate.Date
+				PeriodEnd = Period.EndDate.Date,
+				InitiatorId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(
+						  Guid.Empty)
 			};
 
 			foreach (var multisiteSkillSelection in MultisiteSkillSelectionModels)

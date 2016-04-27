@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 
 			builder.RegisterType<StardustHealthCheckHandler>().As<IHandle<StardustHealthCheckEvent>>().SingleInstance();
 			builder.RegisterType<ImportForecastFromFileHandler>().As<IHandle<ImportForecastsFileToSkill>>().SingleInstance();
+			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().As<IHandle<ExportMultisiteSkillsToSkillEvent>>().SingleInstance();
 			builder.RegisterType<RunSchedulingHandler>().As<IHandle<ScheduleOnNode>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AbsenceRequstHandler>().As<IHandle<NewAbsenceRequestCreatedEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<SchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
