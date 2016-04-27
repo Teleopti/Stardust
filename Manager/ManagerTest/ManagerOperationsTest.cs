@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Policy;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -139,10 +140,11 @@ namespace ManagerTest
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be.EqualTo(0);
 		}
-		
 
-		[Test, Ignore]
-		public void ShouldReturnConflictIfNodeIsBusy()
+
+		//We should maybe redesign this to not sleep and wait for the _jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri:null); to be done in the Controller.
+		[Test] 
+		public void ShouldSendTheJobToAnotherNodeIfFirstReturnsConflict()
 		{
 			var jobQueueItem = new JobQueueItem
 			{
@@ -152,13 +154,23 @@ namespace ManagerTest
 				Type = "Type Test"
 			};
 
+			var workerNode2 = new WorkerNode
+			{
+				Id = Guid.NewGuid(),
+				Url = new Uri("http://localhost:9051/")
+			};
+
+			NodeRepository.AddWorkerNode(_workerNode);
+
 			ThisNodeIsBusy(_workerNode.Url);
 
-			ManagerController.WorkerNodeRegisterHeartbeat(_workerNode.Url);
+			NodeRepository.AddWorkerNode(workerNode2);
 
 			ManagerController.AddItemToJobQueue(jobQueueItem);
 
-			HttpSender.CallToWorkerNodes.Count.Should().Be.EqualTo(0);
+			Thread.Sleep(TimeSpan.FromSeconds(1));  //Wait for Assign to Node to finish
+
+			JobRepository.GetAllJobs()[0].SentToWorkerNodeUri.Should().Be.EqualTo(workerNode2.Url.ToString());
 		}
 
 		[Test]

@@ -23,12 +23,12 @@ namespace ManagerTest.Fakes
 		public Task<HttpResponseMessage> PostAsync(Uri url,
 		                                           object data)
 		{
+			CallToWorkerNodes.Add(url.ToString());
+
 			if (BusyNodesUrl.Any(url.ToString().Contains))
 			{
 				return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.Conflict));
 			}
-
-			CallToWorkerNodes.Add(url.ToString());
 
 			var task= new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
 
