@@ -23,36 +23,23 @@ namespace ManagerTest.Fakes
 		public Task<HttpResponseMessage> PostAsync(Uri url,
 		                                           object data)
 		{
-			return ReturnOkOrConflict(url);
+			return ReturnOkOrConflict(url, true);
 		}
 
 		public Task<HttpResponseMessage> PutAsync(Uri url, object data)
 		{
-			CallToWorkerNodes.Add(url.ToString());
-
-			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
-
-			task.Start();
-			task.Wait();
-
-			return task;
+			return ReturnOkOrConflict(url, false);
 		}
 
+		//Should Delete return more than OK?
 		public Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
-			CallToWorkerNodes.Add(url.ToString());
-
-			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
-
-			task.Start();
-			task.Wait();
-
-			return task;
+			return ReturnOkOrConflict(url, false);
 		}
 
 		public Task<HttpResponseMessage> GetAsync(Uri url)
 		{
-			return ReturnOkOrConflict(url);
+			return ReturnOkOrConflict(url, true);
 		}
 
 		public Task<bool> TryGetAsync(Uri url)
@@ -66,21 +53,14 @@ namespace ManagerTest.Fakes
 
 		public Task<HttpResponseMessage> TryPostAsync(Uri url, object data)
 		{
-			CallToWorkerNodes.Add(url.ToString());
-
-			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
-
-			task.Start();
-			task.Wait();
-
-			return task;
+			return ReturnOkOrConflict(url, false);
 		}
 
-		private Task<HttpResponseMessage> ReturnOkOrConflict(Uri url)
+		private Task<HttpResponseMessage> ReturnOkOrConflict(Uri url, bool canReturnConflict)
 		{
 			CallToWorkerNodes.Add(url.ToString());
 			HttpStatusCode statusCode = HttpStatusCode.OK;
-			if (BusyNodesUrl.Any(url.ToString().Contains))
+			if (BusyNodesUrl.Any(url.ToString().Contains) && canReturnConflict)
 			{
 				statusCode = HttpStatusCode.Conflict;
 			}
