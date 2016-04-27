@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
 			builder.RegisterModule<ForecastContainerInstaller>();
-			builder.RegisterModule<RequestModule>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 
