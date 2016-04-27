@@ -1,10 +1,10 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -38,12 +38,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
+			var agent = scheduleDay.Person;
 			if (overtimePreferences.ShiftBagOvertimeScheduling == null)
+				return;
+			//TODO: what if there are multiple?
+			var definitionSet =
+				agent.Period(date)
+					.PersonContract.Contract.MultiplicatorDefinitionSetCollection.FirstOrDefault(
+						x => x.MultiplicatorType == MultiplicatorType.Overtime);
+			if (definitionSet==null)
 				return;
 
 			var stateHolder = _schedulerStateHolder();
-			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			var agent = scheduleDay.Person;
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 
 			//REMOVE
@@ -74,10 +81,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var currScheduleDay = stateHolder.Schedules[agent].ScheduledDay(date);
 			var currLayers = currScheduleDay.PersonAssignment().MainActivities();
 			currScheduleDay.Clear<IPersonAssignment>();
-			//fix multiplicatorset
-			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, new MultiplicatorDefinitionSet("_", MultiplicatorType.OBTime)));
+			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, definitionSet));
 			stateHolder.Schedules.Modify(currScheduleDay);
-
 		}
 	}
 }
