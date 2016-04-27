@@ -34,7 +34,6 @@ Background:
 	| Day   |
 	| Night |
 
-@ignore
 Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -259,7 +258,6 @@ Scenario: Can not approve or deny shift trade request that is already approved
 	Then I should not see the approve button
 	And I should not see the deny button
 
-@ignore
 Scenario: Resend referred shifttrade 
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -387,7 +385,6 @@ Scenario:  Should input comment when seeing a shift trade request from other age
 	When I click on the existing request in the list
 	Then I could edit message for the reason why I approve or deny this request
 
-@ignore
 Scenario:  Should see the updated comment after approved
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
