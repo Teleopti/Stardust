@@ -141,7 +141,8 @@
 			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			
 			function formatedDateTime(dateTime, timezone, displayDateOnly) {
-				var angularTimezone = moment.tz(vm.isUsingRequestSubmitterTimeZone == true ? timezone : vm.userTimeZone).format("Z");
+			    var angularTimezone = moment.tz(vm.isUsingRequestSubmitterTimeZone == true ? timezone : vm.userTimeZone).format("Z");
+			    angularTimezone = angularTimezone.replace(":", "");
 				var _dateTime = moment.tz(dateTime, timezone).toDate();
 				if (displayDateOnly && vm.isUsingRequestSubmitterTimeZone) return $filter('date')(_dateTime, "shortDate", angularTimezone);
 				else return $filter('date')(_dateTime, "short", angularTimezone);
