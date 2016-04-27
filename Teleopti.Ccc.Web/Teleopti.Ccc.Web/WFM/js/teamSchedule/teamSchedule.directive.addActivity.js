@@ -10,16 +10,17 @@
 			scope: {
 				selectedDate: '&',
 				actionsAfterActivityApply: '&?',
-				defaultStart: '&?'
+				defaultStart: '&?',
+				tabindex: '@?'
 			},
 			templateUrl: 'js/teamSchedule/html/addActivityPanel.tpl.html',
-			controller: ['ActivityService', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addActivityCtrl],
+			controller: ['$element', 'ActivityService', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addActivityCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function addActivityCtrl(activityService, guidgenerator, commandCommon, personSelectionSvc, NotificationSvc) {
+	function addActivityCtrl($element, activityService, guidgenerator, commandCommon, personSelectionSvc, NotificationSvc) {
 		var vm = this;
 		var startTimeMoment;
 
@@ -113,6 +114,7 @@
 
 		function init() {
 			vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
+			$element.removeAttr('tabindex');
 		}
 	}
 })();

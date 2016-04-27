@@ -18,13 +18,20 @@
 				referenceDay: '=?',
 				isNextDay: '=?'
 			},
-			controller: ['$scope', '$element', timeRangePickerCtrl],
+			controller: ['$scope', '$element', '$attrs', timeRangePickerCtrl],
 			require: ['ngModel', 'activityTimeRangePicker'],
 			transclude: true,
-			link: postlink
+			compile: compileFn
 		};
 
-		function timeRangePickerCtrl($scope, $element) {
+		function compileFn() {
+			return {
+				pre: prelink,
+				post: postlink
+			};
+		}
+
+		function timeRangePickerCtrl($scope, $element, $attrs) {
 
 			/* jshint validthis: true */
 
@@ -48,6 +55,10 @@
 			function sameDate(date1, date2) {
 				return date1.toLocaleDateString() === date2.toLocaleDateString();
 			}
+		}
+
+		function prelink(scope, elem, attrs) {
+			scope.tabindex = attrs.customTabindex;
 		}
 
 		function postlink(scope, elem, attrs, ctrls) {
@@ -161,7 +172,7 @@
 
 		return {
 			template: '<uib-timepicker></uib-timepicker>',
-			controller: ['$scope', timepickerWrapCtrl],
+			controller: ['$scope', '$element', timepickerWrapCtrl],
 			compile: compileFn,
 		};
 
@@ -184,12 +195,18 @@
 		}
 
 		function postLinkFn(scope, elem, attrs, ctrls) {
-			addFocusListenerToInputs(elem.find('input'));
+			var inputs = elem.find('input');
+			var meridiemButtons = elem.find('button');
+			var tabindex = scope.tabindex;
+			addFocusListenerToInputs(inputs);
+			setTabindexOnElems(inputs, tabindex);
+			setTabindexOnElems(meridiemButtons, tabindex);
 		}
 
-		function timepickerWrapCtrl($scope) {
+		function timepickerWrapCtrl($scope, $element) {
 			$scope.showMeridian = meridianInfo.showMeridian;
 			$scope.minuteStep = 5;
+			$element.removeAttr('tabindex');
 
 			if (meridianInfo.showMeridian) {
 				$scope.meridians = [meridianInfo.am, meridianInfo.pm];
@@ -201,6 +218,12 @@
 				angular.element(input).on('focus', function (event) {
 					event.target.select();
 				});
+			});
+		}
+
+		function setTabindexOnElems(elems, tabindex) {
+			angular.forEach(elems, function (elem) {
+				angular.element(elem).attr('tabindex', tabindex);
 			});
 		}
 

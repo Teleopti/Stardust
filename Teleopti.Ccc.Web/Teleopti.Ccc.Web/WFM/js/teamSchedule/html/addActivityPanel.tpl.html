@@ -4,12 +4,12 @@
 		<form name="newActivityForm">
 			<h3>{{'Activity'|translate}}: </h3>
 			<div class="con-row">
-				<select class="activity-selector" ng-model="vm.selectedActivityId" required>
+				<select class="activity-selector" tabindex="{{::vm.tabindex}}" ng-model="vm.selectedActivityId" required>
 					<option value="" disabled selected="">{{'SelectAnActivity'|translate}}</option>
 					<option value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>
-			<activity-time-range-picker class="activity-time-range" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
+			<activity-time-range-picker class="activity-time-range" custom-tabindex="{{::vm.tabindex}}" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
 			</activity-time-range-picker>
 		</form>
 		<div class="alert-error notice-spacer" ng-if="!vm.isInputValid()">
@@ -17,6 +17,7 @@
 			<span>{{'NewActivityIsNotAllowedFor'|translate}} {{vm.peopleNotAllowed()}}.</span>
 		</div>
 		<button id="applyActivity" class="wfm-btn form-submit"
+				tabindex="{{::vm.tabindex}}"
 				ng-class="{'wfm-btn-primary': newActivityForm.$valid && vm.isInputValid(), 'wfm-btn-primary-disabled': !(newActivityForm.$valid && vm.isInputValid())}"
 				ng-disabled="newActivityForm.$valid && vm.isInputValid()?'':'disabled'"
 				ng-click="vm.addActivity()">
