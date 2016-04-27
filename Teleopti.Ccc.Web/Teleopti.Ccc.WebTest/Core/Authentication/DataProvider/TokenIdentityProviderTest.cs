@@ -1,37 +1,23 @@
 using System.Collections.ObjectModel;
-using System.Web;
 using Microsoft.IdentityModel.Claims;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.TestCommon.Web;
 
 namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 {
 	[TestFixture]
 	public class TokenIdentityProviderTest
 	{
-		private TokenIdentityProvider target;
-
-		private HttpContextBase httpContext;
-
-		[SetUp]
-		public void Setup()
-		{
-			httpContext = MockRepository.GenerateStub<HttpContextBase>();
-
-			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
-			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
-
-			target = new TokenIdentityProvider(currentHttpContext); 
-		}
-
 		[Test]
 		public void ShouldExtractWindowsAccountInformationFromClaimIdentity()
 		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
 			httpContext.User =
 				new ClaimsPrincipal(
 					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
@@ -45,6 +31,9 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		[Test]
 		public void ShouldExtractWindowsAccountInformationFromTeleoptiIdentity()
 		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
 			httpContext.User =
 				new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, "http://fakeschema.com/TOPTINET#kunningm"), null);
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo(@"TOPTINET\kunningm");
@@ -54,6 +43,9 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		[Test]
 		public void ShouldExtractApplicationAccountInformationFromClaimIdentity()
 		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
 			httpContext.User =
 				new ClaimsPrincipal(
 					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
@@ -65,8 +57,22 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		}
 
 		[Test]
+		public void ShouldExtractApplicationAccountInformationFromTeleoptiIdentity()
+		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
+			httpContext.User = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, "http://fakeschema.com/kunningm@"), null);
+			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
+			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier);
+		}
+
+		[Test]
 		public void ShouldExtractIsPersistentFromClaimIdentity()
 		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
 			httpContext.User =
 				new ClaimsPrincipal(
 					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
@@ -83,12 +89,26 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		[Test]
 		public void ShouldReturnNullIfNoNameIdentifier()
 		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
 			httpContext.User =
 				new ClaimsPrincipal(
 					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
 						{
 							new ClaimsIdentity(new[] {new Claim(ClaimTypes.Country, "http://fakeschema.com/kunningm#TOPTINET")})
 						}));
+
+			target.RetrieveToken().Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNoTokenForTeleoptiIdentity()
+		{
+			var httpContext = new FakeHttpContext();
+			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
+
+			httpContext.User = new TeleoptiPrincipal(new TeleoptiIdentity("asdf",null,null,null,null),null);
 
 			target.RetrieveToken().Should().Be.Null();
 		}

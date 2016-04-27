@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			var teleoptiIdentity = httpContext.User.Identity as ITeleoptiIdentity;
 			if (teleoptiIdentity != null)
 			{
-				return getTokenIdentity(teleoptiIdentity.TokenIdentity);
+				return teleoptiIdentity.TokenIdentity != null ? getTokenIdentity(teleoptiIdentity.TokenIdentity) : null;
 			}
 
 			var currentIdentity = httpContext.User.Identity as IClaimsIdentity;
