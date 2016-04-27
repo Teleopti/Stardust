@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
-using Manager.Integration.Test.Data;
+using System.Threading.Tasks;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
-using Manager.Integration.Test.Models;
-using Manager.Integration.Test.Properties;
+using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Helpers;
-using Manager.IntegrationTest.Console.Host.Interfaces;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
-using Newtonsoft.Json;
 using NUnit.Framework;
-using WorkerNode = Manager.Integration.Test.Models.WorkerNode;
 
 namespace Manager.Integration.Test.RecoveryTests
 {
@@ -24,94 +20,150 @@ namespace Manager.Integration.Test.RecoveryTests
 			this.Log().DebugWithLineNumber(message);
 		}
 
-		private void WaitForNodeTimeout()
+		public ManagerUriBuilder MangerUriBuilder { get; set; }
+
+		public HttpSender HttpSender { get; set; }
+
+		public ManualResetEventSlim WaitForJobToStartEvent { get; set; }
+
+		public ManualResetEventSlim WaitForNodeToEndEvent { get; set; }
+
+		public override void SetUp()
 		{
-			Thread.Sleep(TimeSpan.FromSeconds(120));
+			DatabaseHelper.TruncateJobQueueTable(ManagerDbConnectionString);
+			DatabaseHelper.TruncateJobTable(ManagerDbConnectionString);
+			DatabaseHelper.TruncateJobDetailTable(ManagerDbConnectionString);
 		}
 
 		[Test]
-		public async void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResulToFatal()
+		public void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResultToFatal()
 		{
 			LogMessage("Start test.");
 
-			//---------------------------------------------
-			// Send a Job.
-			//---------------------------------------------
-			IHttpSender httpSender = new HttpSender();
+			var startedTest = DateTime.UtcNow;
 
-			var managerUriBuilder = new ManagerUriBuilder();
-			var uri = managerUriBuilder.GetAddToJobQueueUri();
+			var timeout = TimeSpan.FromMinutes(10);
 
-			var createNewJobRequests =
-				JobHelper.GenerateTestJobParamsRequests(1);
-			var response = await httpSender.PostAsync(uri, createNewJobRequests.FirstOrDefault());
+			WaitForJobToStartEvent = new ManualResetEventSlim();
+			WaitForNodeToEndEvent = new ManualResetEventSlim();
 
-			response.EnsureSuccessStatusCode();
-			var ser = await response.Content.ReadAsStringAsync();
+			//---------------------------------------------------------
+			// Database validator.
+			//---------------------------------------------------------
+			var checkTablesInManagerDbTimer =
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
 
-			var jobId = JsonConvert.DeserializeObject<Guid>(ser);
-
-			//Quick Fix. Should wait for job to be started instead (check DB)
-			Thread.Sleep(TimeSpan.FromSeconds(5));
-			//---------------------------------------------
-			// Kill the node.
-			//---------------------------------------------
-			var cancellationTokenSource = new CancellationTokenSource();
-
-			var uriBuilder =
-				new UriBuilder(Settings.Default.ManagerIntegrationTestControllerBaseAddress);
-			uriBuilder.Path += "appdomain/nodes/" + "Node1.config";
-			uri = uriBuilder.Uri;
-
-			LogMessage("Start calling Delete Async ( " + uri + " ) ");
-
-			try
+			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
-				response = await httpSender.DeleteAsync(uriBuilder.Uri,
-				                                        cancellationTokenSource.Token);
-				if (response.IsSuccessStatusCode)
+				if (items.Any() && items.All(job => job.Started != null))
 				{
-					LogMessage("Succeeded calling Delete Async ( " + uri + " ) ");
+					if (!WaitForJobToStartEvent.IsSet)
+					{
+						WaitForJobToStartEvent.Set();
+					}
 				}
-			}
-			catch (Exception exp)
+			};
+
+			checkTablesInManagerDbTimer.JobTimer.Start();
+			checkTablesInManagerDbTimer.WorkerNodeTimer.Start();
+
+			//---------------------------------------------------------
+			// HTTP Request.
+			//---------------------------------------------------------
+			HttpSender = new HttpSender();
+			MangerUriBuilder = new ManagerUriBuilder();
+
+			var addToJobQueueUri = MangerUriBuilder.GetAddToJobQueueUri();
+
+			var jobQueueItem =
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(10)).First();
+
+			CancellationTokenSource = new CancellationTokenSource();
+
+			var addToJobQueueTask = new Task(() =>
 			{
-				this.Log().ErrorWithLineNumber(exp.Message,
-				                               exp);
-			}
+				var numberOfTries = 0;
 
-			cancellationTokenSource.Cancel();
+				while (true)
+				{
+					numberOfTries++;
 
-			//---------------------------------------------
-			// Wait for timeout, node must be considered dead.
-			//---------------------------------------------
-			WaitForNodeTimeout();
-			//---------------------------------------------
-			// Check if node is dead.
-			//---------------------------------------------
+					try
+					{
+						var response =
+							HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
 
-			uri = managerUriBuilder.GetNodesUri();
+						if (response.IsSuccessStatusCode || numberOfTries == 10)
+						{
+							return;
+						}
+					}
 
-			response = await httpSender.GetAsync(uri);
-			response.EnsureSuccessStatusCode();
+					catch (AggregateException aggregateException)
+					{
+						if (aggregateException.InnerException is HttpRequestException)
+						{
+							// try again.
+						}
+					}
 
-			ser = await response.Content.ReadAsStringAsync();
+					Thread.Sleep(TimeSpan.FromSeconds(10));
+				}
+			}, CancellationTokenSource.Token);
 
-			var workerNodes = JsonConvert.DeserializeObject<IList<WorkerNode>>(ser);
-			var node = workerNodes.FirstOrDefault();
+			addToJobQueueTask.Start();
+			addToJobQueueTask.Wait(timeout);
 
-			Assert.NotNull(node);
-			Assert.IsTrue(node.Alive == false);
+			WaitForJobToStartEvent.Wait(timeout);
 
-			uri = managerUriBuilder.GetJobHistoryUri(jobId);
-			response = await httpSender.GetAsync(uri);
-			response.EnsureSuccessStatusCode();
+			Task<string> taskShutDownNode = new Task<string>(() =>
+			{
+				string res = IntegrationControllerApiHelper.ShutDownNode(new IntergrationControllerUriBuilder(),
+																		HttpSender,
+																		"Node1.config").Result;
 
-			ser = await response.Content.ReadAsStringAsync();
-			var jobHistory = JsonConvert.DeserializeObject<Job>(ser);
+				return res;
+			});
 
-			Assert.NotNull(jobHistory);
-			Assert.IsTrue(jobHistory.Result == "Fatal Node Failure");
+			taskShutDownNode.Start();
+			taskShutDownNode.Wait();
+			
+			checkTablesInManagerDbTimer.ReceivedWorkerNodesData += (sender, nodes) =>
+			{
+				if (nodes.Any() && nodes.All(node => node.Alive == false))
+				{
+					if (!WaitForNodeToEndEvent.IsSet)
+					{
+						WaitForNodeToEndEvent.Set();
+					}					
+				}
+			};
+
+			WaitForNodeToEndEvent.Wait(timeout);
+
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.All(node => node.Alive == false), "Worker Nodes should not be alive.");
+			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(),"Job queue should be empty.");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Job should not be empty.");
+
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.All(job => job.Result.StartsWith("Fatal Node Failure",StringComparison.InvariantCultureIgnoreCase)),
+						"All jobs shall have status of Fatal Node Failure.");
+
+			checkTablesInManagerDbTimer.Dispose();
+
+			var endedTest = DateTime.UtcNow;
+
+			var description =
+				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
+							  1,
+							  NumberOfManagers,
+							  NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+											  description,
+											  startedTest,
+											  endedTest);
+
+			this.Log().DebugWithLineNumber("Finished test.");
 		}
 	}
 }

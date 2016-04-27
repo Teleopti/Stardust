@@ -165,15 +165,13 @@ namespace ManagerTest
 			ThisNodeIsBusy(workerNode2.Url);
 
 			ManagerController.AddItemToJobQueue(jobQueueItem);
-
+			
 			while (true)
 			{
 				if (JobRepository.GetAllItemsInJobQueue().Count == 0)
 					break;
 			}
-
-			//Thread.Sleep(TimeSpan.FromSeconds(5));  //Wait for Assign to Node to finish
-
+			
 			JobRepository.GetAllJobs().First().SentToWorkerNodeUri.Should().Be.EqualTo(_workerNode.Url.ToString());
 		}
 
