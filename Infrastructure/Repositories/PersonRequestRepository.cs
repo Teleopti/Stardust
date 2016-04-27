@@ -210,8 +210,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							int status;
 							return int.TryParse(x.Trim(), out status) ? status : int.MinValue;
 						}).Where(x => x > int.MinValue);
-
-						var statusCriteria = statusFilters.Select(toStatusCriteria).Aggregate(Restrictions.Or);
+						
+						var statusCriteria = statusFilters
+							.Select(x => (ICriterion) Restrictions.Eq("personRequests.requestStatus", x))
+							.Aggregate(Restrictions.Or);
 						criteria.Add(statusCriteria);
 						break;
 					case RequestFilterField.AbsenceType:
@@ -256,11 +258,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					return null;
 			}
 			return Restrictions.Eq("req.class", type);
-		}
-
-		private ICriterion toStatusCriteria(int status)
-		{
-			return Restrictions.Eq("req.requestStatus", status);
 		}
 
 		private void pagePersonRequests(ICriteria query, IPaging paging)

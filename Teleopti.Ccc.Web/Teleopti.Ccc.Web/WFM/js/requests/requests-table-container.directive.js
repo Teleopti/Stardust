@@ -64,7 +64,6 @@
 					gridApi.selection.on.rowSelectionChangedBatch($scope, onSelectionChanged);
 
 					gridApi.core.on.filterChanged($scope, function() {
-						console.log('filter changed');
 						var grid = this.grid;
 						vm.filters = [];
 						angular.forEach(grid.columns, function(value, columnIndex) {
