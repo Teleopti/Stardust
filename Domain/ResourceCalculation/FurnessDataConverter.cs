@@ -134,11 +134,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private void convertPersonSkillResourceMatrixBack()
 		{
 			var resourceMatrix = _furnessData.ResourceMatrix();
-            foreach (var personKey in _personIndexRegister.Keys)
+            foreach (var personKey in _personIndexRegister)
             {
-                int producerIndex = _personIndexRegister[personKey];
+                int producerIndex = personKey.Value;
 	            Dictionary<ISkill, double> skillValues;
-	            if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources.TryGetValue(personKey, out skillValues)) continue;
+	            if (!_dividedActivityData.WeightedRelativeKeyedSkillResourceResources.TryGetValue(personKey.Key, out skillValues)) continue;
                 foreach (var skillKeyPair in _skillIndexRegister)
                 {
                     if (skillValues.ContainsKey(skillKeyPair.Key))
