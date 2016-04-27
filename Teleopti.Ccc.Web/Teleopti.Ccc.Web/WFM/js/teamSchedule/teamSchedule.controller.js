@@ -274,38 +274,6 @@
 		vm.toggleErrorDetails = function() {
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};
-
-		function showErrorDetail(error){
-			vm.showErrorDetail = true;
-			vm.errorDetails = error;
-		}
-
-		function handleActionResult(errors, successMessageTemplate, totalFailMessageTemplate, partialSuccessMessageTemplate) {
-			var selectedPersonList = personSelectionSvc.getSelectedPersonIdList();
-			var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().ActivityCount;
-			var _partialSuccessMessageTemplate = partialSuccessMessageTemplate ? partialSuccessMessageTemplate : totalFailMessageTemplate;
-
-			vm.errorTitle = "";
-			vm.errorDetails = [];
-			vm.showErrorDetails = false;
-
-			var message;
-			if (!errors || errors.length === 0) {
-				message = replaceParameters($translate.instant(successMessageTemplate));
-				notificationService.notifySuccess(message);
-			} else if (errors.length) {
-				var successCount = total - errors.length;
-				message = replaceParameters($translate.instant(_partialSuccessMessageTemplate), [errors.length, total]);
-				notificationService.notifyFailure(message);
-				vm.errorTitle = message;
-				vm.errorDetails = errors;
-				vm.showErrorDetails = true;
-			} else if (typeof errors === "string") {
-				message = replaceParameters($translate.instant(totalFailMessageTemplate));
-				notificationService.notifyFailure(message);
-			}
-		}
-
 		vm.afterActionCallback = function (trackId, personIds) {
 			vm.cmdConfigurations.currentCommandName = null;
 			vm.lastCommandTrackId = trackId;
