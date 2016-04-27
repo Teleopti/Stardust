@@ -168,7 +168,7 @@ namespace ManagerTest
 			
 			while (true)
 			{
-				if (JobRepository.GetAllItemsInJobQueue().Count == 0)
+				if (JobRepository.GetAllJobs().Count == 1)
 					break;
 			}
 			
