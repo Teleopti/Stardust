@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IAnalyticsPreferenceRepository _analyticsPreferenceRepository;
 		private readonly IPersonRepository _personRepository;
+		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private readonly RestrictionChecker restrictionChecker;
 		private readonly ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions;
 
@@ -41,7 +42,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
 			IAnalyticsDateRepository analyticsDateRepository,
 			IScheduleStorage scheduleStorage,
-			IAnalyticsPreferenceRepository analyticsPreferenceRepository, IPersonRepository personRepository)
+			IAnalyticsPreferenceRepository analyticsPreferenceRepository, 
+			IPersonRepository personRepository, 
+			IAnalyticsDayOffRepository analyticsDayOffRepository)
 		{
 
 			_scenarioRepository = scenarioRepository;
@@ -53,6 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			_scheduleStorage = scheduleStorage;
 			_analyticsPreferenceRepository = analyticsPreferenceRepository;
 			_personRepository = personRepository;
+			_analyticsDayOffRepository = analyticsDayOffRepository;
 
 
 			restrictionChecker = new RestrictionChecker();
@@ -107,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 			// General look ups
 			var analyticsScenarios = _analyticsScheduleRepository.Scenarios();
-			var analyticsDayOffs = _analyticsScheduleRepository.DayOffs();
+			var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
 			var analyticsAbsences = _analyticsScheduleRepository.Absences();
 			var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
 

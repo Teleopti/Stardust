@@ -246,20 +246,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.List<IAnalyticsShiftLength>();
 		}
 
-		public IList<AnalyticsDayOff> DayOffs()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				@"select 
-						  day_off_id DayOffId
-						, day_off_name DayOffName
-						, business_unit_id BusinessUnitId
-						, day_off_shortname DayOffShortname 
-						from mart.dim_day_off WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsDayOff)))
-				.SetReadOnly(true)
-				.List<AnalyticsDayOff>();
-		}
-
 		public int ShiftLengthId(int shiftLength)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(@"mart.etl_dim_shift_length_id_get @shift_length_m=:ShiftLength")

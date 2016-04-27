@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Analytics;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Interfaces.Domain;
@@ -11,13 +10,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
-		private readonly IList<IAnalyticsGeneric> fakeScenarios; 
+		private readonly IList<IAnalyticsGeneric> fakeScenarios;
+		private readonly IList<IAnalyticsAbsence> fakeAbsences;
+		private readonly IList<IAnalyticsGeneric> fakeShiftCategories;
 		public FakeAnalyticsScheduleRepository()
 		{
 			fakeScenarios = new List<IAnalyticsGeneric>
 			{
 				new AnalyticsGeneric {Code = Guid.Empty, Id = -1},
-				new AnalyticsGeneric {Code = Guid.Empty, Id = 1}
+				new AnalyticsGeneric {Code = Guid.NewGuid(), Id = 1}
+			};
+			fakeAbsences = new List<IAnalyticsAbsence>
+			{
+				new AnalyticsAbsence { AbsenceCode  = Guid.Empty, AbsenceId = -1},
+				new AnalyticsAbsence {AbsenceCode = Guid.NewGuid(), AbsenceId = 1}
+			};
+			fakeShiftCategories = new List<IAnalyticsGeneric>
+			{
+				new AnalyticsGeneric {Code = Guid.Empty, Id = -1},
+				new AnalyticsGeneric {Code = Guid.NewGuid(), Id = 1}
 			};
 		}
 
@@ -50,10 +61,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IAnalyticsAbsence> Absences()
 		{
-			return new IAnalyticsAbsence[] {
-				new AnalyticsAbsence { AbsenceId = -1, AbsenceCode = Guid.Empty },
-				new AnalyticsAbsence { AbsenceId = 1, AbsenceCode = Guid.NewGuid() }
-			};
+			return fakeAbsences;
 		}
 
 		public IList<IAnalyticsGeneric> Scenarios()
@@ -63,10 +71,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IAnalyticsGeneric> ShiftCategories()
 		{
-			return new IAnalyticsGeneric[] {
-				new AnalyticsGeneric { Code = Guid.Empty, Id = -1 },
-				new AnalyticsGeneric { Code = Guid.NewGuid(), Id = 1 }
-			};
+			return fakeShiftCategories;
 		}
 
 		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
@@ -82,14 +87,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
 			throw new NotImplementedException();
-		}
-
-		public IList<AnalyticsDayOff> DayOffs()
-		{
-			return new[] {
-				new AnalyticsDayOff { DayOffName = "Dayoff", BusinessUnitId = 1 },
-				new AnalyticsDayOff { DayOffName = "Dayoff2", BusinessUnitId = 1 }
-			};
 		}
 
 		public int ShiftLengthId(int shiftLength)

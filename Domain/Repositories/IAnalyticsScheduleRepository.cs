@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 		IList<IAnalyticsGeneric> Overtimes();
 		IList<IAnalyticsShiftLength> ShiftLengths();
-		IList<AnalyticsDayOff> DayOffs(); 
 
 		int ShiftLengthId(int shiftLength);
 

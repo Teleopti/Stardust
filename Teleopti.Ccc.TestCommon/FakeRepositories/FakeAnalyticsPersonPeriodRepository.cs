@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -57,6 +58,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void AddPersonPeriod(AnalyticsPersonPeriod personPeriod)
 		{
+			if (personPeriod.PersonId == 0)
+			{
+				if (fakePersonPeriods.IsEmpty())
+					personPeriod.PersonId = 0;
+				else
+					personPeriod.PersonId = fakePersonPeriods.Max(a => a.PersonId) + 1;
+			}
 			fakePersonPeriods.Add(personPeriod);
 		}
 
