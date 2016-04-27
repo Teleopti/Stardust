@@ -236,8 +236,8 @@ namespace NodeTest
 			                                   _sendJobCanceledTimer,
 			                                   _sendJobFaultedTimer,
 											   _trySendJobDetailToManagerTimerFake);
-
-			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity());
+			
+			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity() { JobId = Guid.Empty });
 
 			Assert.IsTrue(actionResult.IsBadRequest);
 		}

@@ -92,7 +92,7 @@ namespace NodeTest
 		private TrySendJobDetailToManagerTimerFake _trySendJobDetailToManagerTimerFake;
 
 		[Test]
-		public void CancelJobShouldReturnNotFoundWhenCancellingJobWhenIdle()
+		public void CancelJobShouldReturnNotFoundWhenNodeIsIdle()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -131,28 +131,12 @@ namespace NodeTest
 			{
 				Request = new HttpRequestMessage()
 			};
-
-			var wrongJobToDo = new JobQueueItemEntity
-			{
-				JobId = Guid.NewGuid(),
-				Name = "Another name",
-				Type = "NodeTest.JobHandlers.TestJobParams",
-				Serialized = "Serialized data"
-			};
-
-			var actionResult = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.OK);
-
-			actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.OK);
-
-			actionResult = _nodeController.TryCancelJob(wrongJobToDo.JobId);
+			
+			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+			_nodeController.StartJob(_jobQueueItemEntity.JobId);
+			
+			var wrongJobId = Guid.NewGuid();
+			var actionResult = _nodeController.TryCancelJob(wrongJobId);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
@@ -177,10 +161,10 @@ namespace NodeTest
 			};
 
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
-
 			_nodeController.StartJob(_jobQueueItemEntity.JobId);
 
-			_trySendJobDetailToManagerTimerFake.WaitHandle.Wait(1500);
+			//is this to make sure the job has started before cancelling?
+			_trySendJobDetailToManagerTimerFake.WaitHandle.Wait(500);
 
 			var actionResult = _nodeController.TryCancelJob(_jobQueueItemEntity.JobId);
 
@@ -190,7 +174,7 @@ namespace NodeTest
 		}
 
 		[Test]
-		public void ShouldReturnBadRequestWhenJobDefinitionIsNullCancelJob()
+		public void ShouldReturnBadRequestWhenCancelJobWithNoId()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -215,7 +199,7 @@ namespace NodeTest
 		}
 
 		[Test]
-		public void ShouldReturnBadRequestWhenJobDefinitionIsNullStartJob()
+		public void ShouldReturnBadRequestWhenPrepareToStartJobWithNoJob()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -240,8 +224,74 @@ namespace NodeTest
 						  HttpStatusCode.BadRequest);
 		}
 
+
 		[Test]
-		public void StartJobShouldReturnConflictWhenAlreadyProcessingJob()
+		public void PrepareToStartJobShouldReturnConflictWhenAlreadyProcessingJob()
+		{
+			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+											   _nodeConfigurationFake,
+											   _nodeStartupNotification,
+											   _pingToManagerFake,
+											   _sendJobDoneTimer,
+											   _sendJobCanceledTimer,
+											   _sendJobFaultedTimer,
+											   _trySendJobDetailToManagerTimerFake);
+
+			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			{
+				Request = new HttpRequestMessage(),
+				Configuration = new HttpConfiguration()
+			};
+
+			var parameters = new TestJobParams("hejhopp",
+											   "i lingonskogen");
+			var ser = JsonConvert.SerializeObject(parameters);
+
+			var jobToDo2 = new JobQueueItemEntity
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Another name",
+				Serialized = ser,
+				Type = "NodeTest.JobHandlers.TestJobParams"
+			};
+
+			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+
+			var actionResult = _nodeController.PrepareToStartJob(jobToDo2);
+
+			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
+							  .Result.StatusCode ==
+						  HttpStatusCode.Conflict);
+		}
+
+		[Test]
+		public void PrepareToStartJobShouldReturnOkIfNotRunningJobAlready()
+		{
+			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
+											   _nodeConfigurationFake,
+											   _nodeStartupNotification,
+											   _pingToManagerFake,
+											   _sendJobDoneTimer,
+											   _sendJobCanceledTimer,
+											   _sendJobFaultedTimer,
+											   _trySendJobDetailToManagerTimerFake);
+
+			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			{
+				Request = new HttpRequestMessage()
+			};
+
+			var actionResult = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
+
+			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
+							  .Result.StatusCode ==
+						  HttpStatusCode.OK);
+
+		}
+
+
+		[Test]
+		public void StartJobShouldReturnBadRequestWhenStartJobIdDoesNotMatchPrepareJobId()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
 			                                   _nodeConfigurationFake,
@@ -258,18 +308,6 @@ namespace NodeTest
 				Configuration = new HttpConfiguration()
 			};
 
-			var parameters = new TestJobParams("hejhopp",
-			                                   "i lingonskogen");
-			var ser = JsonConvert.SerializeObject(parameters);
-
-			var jobToDo2 = new JobQueueItemEntity
-			{
-				JobId = Guid.NewGuid(),
-				Name = "Another name",
-				Serialized = ser,
-				Type = "NodeTest.JobHandlers.TestJobParams"
-			};
-
 			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
 
 			var actionResult = _nodeController.StartJob(Guid.NewGuid());
@@ -279,35 +317,31 @@ namespace NodeTest
 						  HttpStatusCode.BadRequest);
 		}
 
+
 		[Test]
-		public void StartJobShouldReturnOkIfNotRunningJobAlready()
+		public void StartJobShouldReturnOkIfJobIdMatchPrepareJobId()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
-			                                   _nodeConfigurationFake,
-			                                   _nodeStartupNotification,
-			                                   _pingToManagerFake,
-			                                   _sendJobDoneTimer,
-			                                   _sendJobCanceledTimer,
-			                                   _sendJobFaultedTimer,
-			                                   _trySendJobDetailToManagerTimerFake);
+											   _nodeConfigurationFake,
+											   _nodeStartupNotification,
+											   _pingToManagerFake,
+											   _sendJobDoneTimer,
+											   _sendJobCanceledTimer,
+											   _sendJobFaultedTimer,
+											   _trySendJobDetailToManagerTimerFake);
 
 			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
 			{
 				Request = new HttpRequestMessage()
 			};
 
-			var actionResult = _nodeController.PrepareToStartJob(_jobQueueItemEntity);
+			_nodeController.PrepareToStartJob(_jobQueueItemEntity);
+			var actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
 
 			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
 							  .Result.StatusCode ==
 						  HttpStatusCode.OK);
-
-			actionResult = _nodeController.StartJob(_jobQueueItemEntity.JobId);
-
-			Assert.IsTrue(actionResult.ExecuteAsync(new CancellationToken())
-							  .Result.StatusCode ==
-						  HttpStatusCode.OK);
-
 		}
+		
 	}
 }
