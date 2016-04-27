@@ -1,14 +1,15 @@
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+#pragma warning disable 618
 	public class UpdateSkillAnalyticsHandler :
 		IHandleEvent<SkillChangedEvent>,
-		IRunOnHangfire
+		IRunOnServiceBus
+#pragma warning restore 618
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
@@ -23,9 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 		}
 
-		[AnalyticsUnitOfWork]
-		[UnitOfWork]
-		public virtual void Handle(SkillChangedEvent @event)
+		public void Handle(SkillChangedEvent @event)
 		{
 			var skill = _skillRepository.Get(@event.SkillId);
 			var businessUnit = _analyticsBusinessUnitRepository.Get(skill.BusinessUnit.Id.GetValueOrDefault());
