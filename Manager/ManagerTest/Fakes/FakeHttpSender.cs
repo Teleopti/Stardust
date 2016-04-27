@@ -23,19 +23,7 @@ namespace ManagerTest.Fakes
 		public Task<HttpResponseMessage> PostAsync(Uri url,
 		                                           object data)
 		{
-			CallToWorkerNodes.Add(url.ToString());
-
-			if (BusyNodesUrl.Any(url.ToString().Contains))
-			{
-				return new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.Conflict));
-			}
-
-			var task= new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
-
-			task.Start();
-			task.Wait();
-
-			return task;
+			return ReturnOkOrConflict(url);
 		}
 
 		public Task<HttpResponseMessage> PutAsync(Uri url, object data)
@@ -64,14 +52,7 @@ namespace ManagerTest.Fakes
 
 		public Task<HttpResponseMessage> GetAsync(Uri url)
 		{
-			CallToWorkerNodes.Add(url.ToString());
-
-			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
-
-			task.Start();
-			task.Wait();
-
-			return task;
+			return ReturnOkOrConflict(url);
 		}
 
 		public Task<bool> TryGetAsync(Uri url)
@@ -88,6 +69,23 @@ namespace ManagerTest.Fakes
 			CallToWorkerNodes.Add(url.ToString());
 
 			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(HttpStatusCode.OK));
+
+			task.Start();
+			task.Wait();
+
+			return task;
+		}
+
+		private Task<HttpResponseMessage> ReturnOkOrConflict(Uri url)
+		{
+			CallToWorkerNodes.Add(url.ToString());
+			HttpStatusCode statusCode = HttpStatusCode.OK;
+			if (BusyNodesUrl.Any(url.ToString().Contains))
+			{
+				statusCode = HttpStatusCode.Conflict;
+			}
+
+			var task = new Task<HttpResponseMessage>(() => new HttpResponseMessage(statusCode));
 
 			task.Start();
 			task.Wait();

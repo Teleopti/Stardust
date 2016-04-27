@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Policy;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
@@ -159,18 +158,23 @@ namespace ManagerTest
 				Id = Guid.NewGuid(),
 				Url = new Uri("http://localhost:9051/")
 			};
-
+			
 			NodeRepository.AddWorkerNode(_workerNode);
-
-			ThisNodeIsBusy(_workerNode.Url);
-
+			Thread.Sleep(TimeSpan.FromSeconds(1));
 			NodeRepository.AddWorkerNode(workerNode2);
+			ThisNodeIsBusy(workerNode2.Url);
 
 			ManagerController.AddItemToJobQueue(jobQueueItem);
 
-			Thread.Sleep(TimeSpan.FromSeconds(1));  //Wait for Assign to Node to finish
+			while (true)
+			{
+				if (JobRepository.GetAllItemsInJobQueue().Count == 0)
+					break;
+			}
 
-			JobRepository.GetAllJobs()[0].SentToWorkerNodeUri.Should().Be.EqualTo(workerNode2.Url.ToString());
+			//Thread.Sleep(TimeSpan.FromSeconds(5));  //Wait for Assign to Node to finish
+
+			JobRepository.GetAllJobs().First().SentToWorkerNodeUri.Should().Be.EqualTo(_workerNode.Url.ToString());
 		}
 
 		[Test]
