@@ -39,6 +39,12 @@ namespace Stardust.Manager
 			}
 		}
 
+
+		public void WorkerNodeRegisterHeartbeat(string nodeUri)
+		{
+			_nodeRepository.RegisterHeartbeat(nodeUri, true);
+		}
+
 		public void RequeueJobsThatDidNotFinishedByWorkerNodeUri(Uri workerNodeUri, 
 																 bool keepJobDetailsIfExists)
 		{

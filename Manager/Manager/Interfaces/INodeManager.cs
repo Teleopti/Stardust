@@ -7,5 +7,7 @@ namespace Stardust.Manager.Interfaces
 		void AddWorkerNode(Uri workerNodeUri);
 
 		void RequeueJobsThatDidNotFinishedByWorkerNodeUri(Uri workerNodeUri, bool keepJobDetailsIfExists);
+
+		void WorkerNodeRegisterHeartbeat(string nodeUri);
 	}
 }

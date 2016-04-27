@@ -4,11 +4,19 @@ namespace ManagerTest.Database
 {
 	public class DatabaseTest
 	{
-		[SetUp]
-		public void BaseTestSetup()
+		private DatabaseHelper _databaseHelper;
+
+		[TestFixtureSetUp]
+		public void BaseTestTestFixtureSetup()
 		{
-			var databaseHelper = new DatabaseHelper();
-			databaseHelper.Create();
+			_databaseHelper = new DatabaseHelper();
+			_databaseHelper.Create();
+		}
+
+		[SetUp]
+		public void BasteTestSetup()
+		{
+			_databaseHelper.TryClearDatabase();
 		}
 	}
 }

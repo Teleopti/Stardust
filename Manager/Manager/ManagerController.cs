@@ -1,6 +1,5 @@
 using System;
 using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Stardust.Manager.Constants;
@@ -33,7 +32,7 @@ namespace Stardust.Manager
 			//-----------------------------------------------
 			// Assign job id to job queue item if not exists.
 			//-----------------------------------------------
-			if (jobQueueItem != null && jobQueueItem.JobId == Guid.Empty)
+			if (jobQueueItem != null)
 			{
 				jobQueueItem.JobId = Guid.NewGuid();
 			}
@@ -162,7 +161,7 @@ namespace Stardust.Manager
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
 					": Received heartbeat from Node. Node Uri : ( " + workerNodeUri + " )");
 
-				_jobManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
+				_nodeManager.WorkerNodeRegisterHeartbeat(workerNodeUri.ToString());
 			});
 
 			return Ok();

@@ -126,15 +126,6 @@ namespace Stardust.Manager
 			return _workerNodeRepository.GetAllWorkerNodes();
 		}
 
-		public void WorkerNodeRegisterHeartbeat(string nodeUri)
-		{
-			this.Log().DebugWithLineNumber("Start RegisterHeartbeat.");
-
-			_workerNodeRepository.RegisterHeartbeat(nodeUri, true);
-
-			this.Log().DebugWithLineNumber("Finished RegisterHeartbeat.");
-		}
-
 		public void AssignJobToWorkerNode(string useThisWorkerNodeUri)
 		{
 			this.Log().DebugWithLineNumber("Start TryAssignJobToWorkerNode.");
