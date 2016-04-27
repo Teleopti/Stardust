@@ -184,7 +184,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			});
 		}
 
-		public void Handle(PersonDeletedEvent @event)
+		[AnalyticsUnitOfWork]
+		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			Logger.DebugFormat("Removing all person periods with person code {0}", @event.PersonId);
 			var personPeriodsInAnalyticsToBeDeleted = _analyticsPersonPeriodRepository.GetPersonPeriods(@event.PersonId);
