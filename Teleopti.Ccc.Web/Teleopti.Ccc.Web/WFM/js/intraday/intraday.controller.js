@@ -2,8 +2,8 @@
 	'use strict';
 	angular.module('wfm.intraday')
 	.controller('IntradayCtrl', [
-		'$scope', '$state', 'intradayService', 'appInsights', '$filter', 'NoticeService', '$timeout', '$compile', '$translate',
-		function ($scope, $state, intradayService, appInsights, $filter, NoticeService, $timeout, $compile, $translate ) {
+		'$scope', '$state', 'intradayService', '$filter', 'NoticeService', '$timeout', '$compile', '$translate',
+		function ($scope, $state, intradayService, $filter, NoticeService, $timeout, $compile, $translate ) {
 
 			var autocompleteSkill;
 			var autocompleteSkillArea;
@@ -344,8 +344,6 @@
 								}
 							});
 						}
-
-						appInsights.trackPageView('intraday', "/#/intraday");
 
 					}
 				]);

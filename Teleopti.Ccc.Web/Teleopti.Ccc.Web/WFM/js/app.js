@@ -20,7 +20,6 @@ var wfm = angular.module('wfm', [
 	'currentUserInfoService',
 	'toggleService',
 	'shortcutsService',
-    'appInsightsService',
 	'wfm.http',
 	'wfm.exceptionHandler',
 	'wfm.permissions',
