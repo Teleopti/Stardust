@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IPerson _person;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
+		private CancelAbsenceRequestCommandHandler _cancelAbsenceRequestHandler;
 
 		[SetUp]
 		public void Setup()
@@ -61,6 +62,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, _personAbsenceAccountRepository);
 			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, _loggedOnUser, _personRequestAuthorizationChecker);
+
+			_cancelAbsenceRequestHandler = new CancelAbsenceRequestCommandHandler (_requestRepository,
+				_personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
+				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario);
 
 		}
 
@@ -105,9 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequestId = personRequest.Id.GetValueOrDefault()
 			};
 
-			new CancelAbsenceRequestCommandHandler(_requestRepository, _personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario)
-				.Handle(cancelRequestCommand);
+			_cancelAbsenceRequestHandler.Handle(cancelRequestCommand);
 
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
@@ -131,9 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequestId = personRequest.Id.GetValueOrDefault()
 			};
 
-			new CancelAbsenceRequestCommandHandler(_requestRepository, _personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario)
-				.Handle(cancelRequestCommand);
+			_cancelAbsenceRequestHandler.Handle(cancelRequestCommand);
 
 			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest,
@@ -160,8 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Assert.AreEqual(30, accountDay.Remaining.TotalDays);
 		}
-
-
+		
 		[Test] 
 		public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
 		{
@@ -190,10 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
 
-			new CancelAbsenceRequestCommandHandler (_requestRepository, _personRequestAuthorizationChecker,
-				_personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario)
-				.Handle (cancelRequestCommand);
+			_cancelAbsenceRequestHandler.Handle (cancelRequestCommand);
 
 			return personRequest;
 		}
@@ -206,8 +203,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personAbsenceAccount.Add(accountDay);
 
 			_personAbsenceAccountRepository.Add(personAbsenceAccount);
-
-	
 		}
 
 		private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand, IPersonRequestCheckAuthorization personRequestAuthorizationChecker)
@@ -221,10 +216,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
 
-			new CancelAbsenceRequestCommandHandler(
-				_requestRepository, personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
-				new FakeLoggedOnUser(), new SwedishCulture(), new FakeCommonAgentNameProvider(), _scheduleStorage, _scenario)
-				.Handle(cancelRequestCommand);
+			new CancelAbsenceRequestCommandHandler (_requestRepository, personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover, _loggedOnUser, _culture, _fakeCommonAgentNameProvider,
+				_scheduleStorage, _scenario).Handle(cancelRequestCommand);
 			return personRequest;
 		}
 

@@ -75,11 +75,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 				foreach (var personAbsence in personAbsences)
 				{
-					errorMessages = _personAbsenceRemover.RemovePersonAbsence (
-						new DateOnly (personAbsence.Period.LocalStartDateTime),
-						personRequest.Person,
-						new[] {personAbsence},
-						scheduleRange).ToList();
+					errorMessages = _personAbsenceRemover.RemovePersonAbsence (new DateOnly (personAbsence.Period.LocalStartDateTime),
+						personRequest.Person,new[] {personAbsence},scheduleRange).ToList();
 
 					if (errorMessages.Any())
 					{

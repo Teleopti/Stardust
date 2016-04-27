@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				
 				if (absenceRequest.PersonAbsences.IsEmpty())
 				{
-					personRequest.Cancel (_personRequestCheckAuthorization);
+					personRequest?.Cancel (_personRequestCheckAuthorization);
 				}
 			}
 		}
