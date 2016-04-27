@@ -168,7 +168,23 @@ namespace ManagerTest
 
 			ManagerController.AddItemToJobQueue(jobQueueItem);
 
-			Thread.Sleep(TimeSpan.FromSeconds(1));  //Wait for Assign to Node to finish
+			var jobs = JobRepository.GetAllJobs();
+
+			int numberOftries = 0;
+
+			while (!jobs.Any())
+			{
+				numberOftries ++;
+
+				jobs = JobRepository.GetAllJobs();
+
+				Thread.Sleep(TimeSpan.FromSeconds(3));
+
+				if (numberOftries == 10)
+				{
+					break;
+				}
+			}
 
 			JobRepository.GetAllJobs()[0].SentToWorkerNodeUri.Should().Be.EqualTo(workerNode2.Url.ToString());
 		}
