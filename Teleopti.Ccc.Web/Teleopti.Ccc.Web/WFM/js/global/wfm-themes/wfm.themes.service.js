@@ -21,9 +21,10 @@
 
 		service.init = function() {
 			service.getTheme().success(function(data) {
-				if (data.Name !== null) {
+				if (data.Name !== null)
 					service.setTheme(data.Name);
-				}
+				else
+					service.setTheme('classic');
 			});
 		};
 
