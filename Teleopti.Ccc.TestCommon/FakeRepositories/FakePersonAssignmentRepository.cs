@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -115,6 +116,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Clear()
 		{
 			_personAssignments.Clear();
+		}
+
+		public void Has(IPerson agent, IScenario scenario, IDayOffTemplate dayOffTemplate, DateOnly date)
+		{
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.SetDayOff(dayOffTemplate);
+			Add(ass);
 		}
 	}
 }
