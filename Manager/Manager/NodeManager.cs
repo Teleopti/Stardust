@@ -5,7 +5,7 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager
 {
-	public class NodeManager : INodeManager
+	public class NodeManager
 	{
 		private readonly IJobRepository _jobRepository;
 		private readonly IWorkerNodeRepository _nodeRepository;

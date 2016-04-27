@@ -20,7 +20,7 @@ namespace ManagerTest
 
 			_containerBuilder.RegisterType<ManagerConfiguration>().SingleInstance();
 
-			_containerBuilder.RegisterType<NodeManager>().As<INodeManager>();
+			_containerBuilder.RegisterType<NodeManager>().SingleInstance();
 			_containerBuilder.RegisterType<JobManager>().SingleInstance();
 			_containerBuilder.RegisterType<Validator>().SingleInstance();
 			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
@@ -52,18 +52,16 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldResolveNodeManager()
+		public void ShouldResolveStuff()
 		{
 			using (var ioc = _containerBuilder.Build())
 			{
 				using (var scope = ioc.BeginLifetimeScope())
 				{
-					scope.Resolve<INodeManager>();
 					scope.Resolve<IHttpSender>();
 					scope.Resolve<IJobRepository>();
 					scope.Resolve<IWorkerNodeRepository>();
-
-					ioc.IsRegistered<INodeManager>().Should().Be.True();
+					
 					ioc.IsRegistered<IHttpSender>().Should().Be.True();
 					ioc.IsRegistered<IJobRepository>().Should().Be.True();
 					ioc.IsRegistered<IWorkerNodeRepository>().Should().Be.True();

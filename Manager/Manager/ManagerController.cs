@@ -13,11 +13,11 @@ namespace Stardust.Manager
 	public class ManagerController : ApiController
 	{
 		private readonly JobManager _jobManager;
-		private readonly INodeManager _nodeManager;
+		private readonly NodeManager _nodeManager;
 
 		private readonly Validator _validator;
 
-		public ManagerController(INodeManager nodeManager,
+		public ManagerController(NodeManager nodeManager,
 		                         JobManager jobManager,
 		                         Validator validator)
 		{

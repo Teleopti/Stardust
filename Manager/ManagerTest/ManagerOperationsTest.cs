@@ -22,7 +22,7 @@ namespace ManagerTest
 		public ManagerController ManagerController;
 		public IJobRepository JobRepository;
 		public IWorkerNodeRepository NodeRepository;
-		public INodeManager NodeManager;
+		public NodeManager NodeManager;
 		public FakeHttpSender HttpSender;
 		
 		private WorkerNode _workerNode;

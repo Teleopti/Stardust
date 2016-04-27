@@ -14,7 +14,7 @@ namespace Stardust.Manager
 			builder.RegisterInstance(managerConfiguration);
 
 			builder.RegisterType<NodeManager>()
-				.As<INodeManager>();
+				.As<NodeManager>();
 
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
