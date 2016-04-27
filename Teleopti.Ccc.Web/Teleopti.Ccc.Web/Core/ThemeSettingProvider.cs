@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Web.Core
 	public class ThemeSetting : SettingValue
 	{
 		public string Name { get; set; }
+		public bool Overlay { get; set; }
 	}
 
 	public class ThemeSettingProvider : ISettingsPersisterAndProvider<ThemeSetting>
