@@ -4,7 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-#pragma warning disable 618
 	public class ScheduleChangedEventPublisher :
 		IHandleEvent<FullDayAbsenceAddedEvent>,
 		IHandleEvent<PersonAbsenceRemovedEvent>,
@@ -15,8 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<DayOffAddedEvent>,
 		IHandleEvent<DayUnscheduledEvent>,
 		IHandleEvent<PersonAssignmentLayerRemovedEvent>,
-		IRunOnServiceBus
-#pragma warning restore 618
+		IRunOnHangfire
 	{
 		private readonly IEventPublisher _publisher;
 
@@ -163,7 +161,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 		public void Handle(PersonAssignmentLayerRemovedEvent @event)
 		{
-			_publisher.Publish ( new ScheduleChangedEvent
+			_publisher.Publish(new ScheduleChangedEvent
 			{
 				Timestamp = @event.Timestamp,
 				LogOnDatasource = @event.LogOnDatasource,
@@ -174,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				EndDateTime = @event.EndDateTime,
 				InitiatorId = @event.InitiatorId,
 				CommandId = @event.CommandId
-			} );
+			});
 		}
 	}
 }
