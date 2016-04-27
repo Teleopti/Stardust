@@ -73,6 +73,7 @@
 		WfmTeamSchedule_AddActivity_37541,
 		WfmTeamSchedule_RemoveActivity_37743,
 		WfmTeamSchedule_PrepareForRelease_37752,
+		WfmTeamSchedule_MoveActivity_37744,
 
 		ResourcePlanner_WeeklyRestSolver_35043,
 
