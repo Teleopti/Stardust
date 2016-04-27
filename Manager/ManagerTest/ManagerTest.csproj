@@ -98,7 +98,7 @@
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Database\DatabaseSchemaCreator.cs" />
     <Compile Include="Database\DatabaseTasks.cs" />
-    <Compile Include="Database\DatabaseTest.cs" />
+    <Compile Include="DatabaseTest.cs" />
     <Compile Include="Database\ExecuteSql.cs" />
     <Compile Include="Database\SchemaVersionInformation.cs" />
     <Compile Include="Fakes\FakeHttpSender.cs" />
