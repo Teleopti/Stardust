@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Manager.Integration.Test.Constants;
@@ -21,6 +22,13 @@ namespace Manager.Integration.Test.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
+		public override void SetUp()
+		{
+			DatabaseHelper.TruncateJobQueueTable(ManagerDbConnectionString);
+			DatabaseHelper.TruncateJobTable(ManagerDbConnectionString);
+			DatabaseHelper.TruncateJobDetailTable(ManagerDbConnectionString);
+		}
+
 		public ManualResetEventSlim ManualResetEventSlim { get; set; }
 
 		private void LogMessage(string message)
@@ -221,26 +229,40 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var addToJobQueueTask = new Task(() =>
 			{
-				var response =
-					HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
+				var numberOfTries = 0;
 
-				while (!response.IsSuccessStatusCode)
+				while (true)
 				{
-					response = HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
+					numberOfTries++;
+
+					try
+					{
+						var response =
+							HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
+
+						if (response.IsSuccessStatusCode || numberOfTries == 10)
+						{
+							return;
+						}
+					}
+
+					catch (AggregateException aggregateException)
+					{
+						if (aggregateException.InnerException is HttpRequestException)
+						{
+							// try again.
+						}
+					}
+
+					Thread.Sleep(TimeSpan.FromSeconds(10));
 				}
+
 			}, CancellationTokenSource.Token);
 
 			addToJobQueueTask.Start();
 			addToJobQueueTask.Wait(timeout);
 
 			ManualResetEventSlim.Wait(timeout);
-
-			checkTablesInManagerDbTimer.ReceivedJobItem -=
-				SetManualResetEventSlimWhenAllJobsEndedEventHandler;
-
-			checkTablesInManagerDbTimer.ReceivedJobItem -=
-				SendHttpCancelJobEventHandler;
-
 
 			checkTablesInManagerDbTimer.Dispose();
 
@@ -278,21 +300,58 @@ namespace Manager.Integration.Test.FunctionalTests
 				JobHelper.GenerateTimeoutTimeInMinutes(createFailingJobs.Count,
 				                                       2);
 
+			ManualResetEventSlim = new ManualResetEventSlim();
 
+			//---------------------------------------------------------
+			// Database validator.
+			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer =
-				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
+
+			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
+			{
+				if (items.Any() && 
+					items.All(job => job.Started != null && job.Ended != null))
+				{
+					if (!ManualResetEventSlim.IsSet)
+					{
+						ManualResetEventSlim.Set();
+					}
+				}
+			};
+
+			checkTablesInManagerDbTimer.JobTimer.Start();
 
 			var task1 = new Task(() =>
 			{
 				foreach (var jobQueueItem in createFailingJobs)
 				{
-					var response = httpSender.PostAsync(uri,
-					                                    jobQueueItem).Result;
+					var numberOfTries = 0;
 
-
-					while (!response.IsSuccessStatusCode)
+					while (true)
 					{
-						response = httpSender.PostAsync(uri, jobQueueItem).Result;
+						numberOfTries++;
+
+						try
+						{
+							var response = httpSender.PostAsync(uri,
+														jobQueueItem).Result;
+
+							if (response.IsSuccessStatusCode || numberOfTries == 10)
+							{
+								break;
+							}
+
+						}
+						catch (AggregateException aggregateException)
+						{
+							if (aggregateException.InnerException is HttpRequestException)
+							{
+								// try again.
+							}
+						}
+
+						Thread.Sleep(TimeSpan.FromSeconds(10));
 					}
 				}
 			});
@@ -300,9 +359,12 @@ namespace Manager.Integration.Test.FunctionalTests
 			task1.Start();
 			task1.Wait();
 
-			Thread.Sleep(timeout);
+			ManualResetEventSlim.Wait(timeout);
 
+			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue must be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Jobs must have been added.");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.
+								Jobs.All(job => job.Result.StartsWith("fail", StringComparison.InvariantCultureIgnoreCase)));
 
 			var endedTest = DateTime.UtcNow;
 
@@ -330,69 +392,104 @@ namespace Manager.Integration.Test.FunctionalTests
 		[Test]
 		public void ShouldBeAbleToCreateASuccessJobRequestTest()
 		{
+			this.Log().DebugWithLineNumber("Start test.");
+
 			var startedTest = DateTime.UtcNow;
 
-			LogMessage("Start test.");
+			var timeout = TimeSpan.FromMinutes(5);
+			ManualResetEventSlim = new ManualResetEventSlim();
 
-			var createNewJobRequests = JobHelper.GenerateTestJobParamsRequests(1);
+			//---------------------------------------------------------
+			// Database validator.
+			//---------------------------------------------------------
+			var checkTablesInManagerDbTimer =
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
 
-			LogMessage("( " + createNewJobRequests.Count + " ) jobs will be created.");
-
-			var timeout =
-				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-				                                       2);
-			//--------------------------------------------
-			// Start actual test.
-			//--------------------------------------------
-			var jobManagerTaskCreators = new List<JobManagerTaskCreator>();
-			var checkJobHistoryStatusTimer = new CheckJobStatusTimer(createNewJobRequests.Count,
-			                                                         StatusConstants.SuccessStatus,
-			                                                         StatusConstants.DeletedStatus,
-			                                                         StatusConstants.FailedStatus,
-			                                                         StatusConstants.CanceledStatus);
-			foreach (var jobRequestModel in createNewJobRequests)
+			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
-				var jobManagerTaskCreator = new JobManagerTaskCreator(checkJobHistoryStatusTimer);
-				jobManagerTaskCreator.CreateNewJobToManagerTask(jobRequestModel);
-				jobManagerTaskCreators.Add(jobManagerTaskCreator);
-			}
+				if (items.Any() && 
+					items.All(job => job.Started != null && job.Ended != null))
+				{
+					if (!ManualResetEventSlim.IsSet)
+					{
+						ManualResetEventSlim.Set();
+					}
+				}
+			};
 
-			var startJobTaskHelper = new StartJobTaskHelper();
+			checkTablesInManagerDbTimer.JobTimer.Start();
 
-			var taskHlp = startJobTaskHelper.ExecuteCreateNewJobTasks(jobManagerTaskCreators,
-			                                                          CancellationTokenSource,
-			                                                          timeout);
+			//---------------------------------------------------------
+			// HTTP Request.
+			//---------------------------------------------------------
+			HttpSender = new HttpSender();
+			MangerUriBuilder = new ManagerUriBuilder();
 
-			checkJobHistoryStatusTimer.ManualResetEventSlim.Wait(timeout);
+			var addToJobQueueUri = MangerUriBuilder.GetAddToJobQueueUri();
 
+			var jobQueueItem =
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromSeconds(5)).First();
 
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.Count == createNewJobRequests.Count,
-			              "Number of requests must be equal.");
+			CancellationTokenSource = new CancellationTokenSource();
 
-			Assert.IsTrue(checkJobHistoryStatusTimer.Guids.All(pair => pair.Value == StatusConstants.SuccessStatus));
-
-			CancellationTokenSource.Cancel();
-			taskHlp.Dispose();
-
-			foreach (var jobManagerTaskCreator in jobManagerTaskCreators)
+			var addToJobQueueTask = new Task(() =>
 			{
-				jobManagerTaskCreator.Dispose();
-			}
+				var numberOfTries = 0;
+
+				while (true)
+				{
+					numberOfTries++;
+
+					try
+					{
+						var response =
+							HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
+
+						if (response.IsSuccessStatusCode || numberOfTries == 10)
+						{
+							return;
+						}
+					}
+
+					catch (AggregateException aggregateException)
+					{
+						if (aggregateException.InnerException is HttpRequestException)
+						{
+							// try again.
+						}
+					}
+
+					Thread.Sleep(TimeSpan.FromSeconds(10));
+				}
+
+			}, CancellationTokenSource.Token);
+
+			addToJobQueueTask.Start();
+			addToJobQueueTask.Wait(timeout);
+
+			ManualResetEventSlim.Wait(timeout);
+
+			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(),"Should not be any jobs left in queue.");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(),"There should be jobs in jobs table.");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.
+								Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
+
+			checkTablesInManagerDbTimer.Dispose();
 
 			var endedTest = DateTime.UtcNow;
 
 			var description =
-				string.Format("Creates {0} TEST jobs with {1} manager and {2} nodes.",
-				              createNewJobRequests.Count,
-				              NumberOfManagers,
-				              NumberOfNodes);
+				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
+							  1,
+							  NumberOfManagers,
+							  NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-			                                  description,
-			                                  startedTest,
-			                                  endedTest);
+											  description,
+											  startedTest,
+											  endedTest);
 
-			LogMessage("Finished test.");
+			this.Log().DebugWithLineNumber("Finished test.");
 		}
 	}
 }

@@ -68,6 +68,59 @@ namespace Manager.Integration.Test.Helpers
 			}
 		}
 
+		public static void TruncateJobQueueTable(string connectionString)
+		{
+			using (var sqlConnection = new SqlConnection(connectionString))
+			{
+				sqlConnection.Open();
+
+				using (var sqlCommand = new SqlCommand("truncate table [Stardust].[JobQueue]",
+				                                       sqlConnection))
+				{
+					Logger.DebugWithLineNumber("Start: " + sqlCommand.CommandText);
+
+					sqlCommand.ExecuteNonQuery();
+
+					Logger.DebugWithLineNumber("Finished: " + sqlCommand.CommandText);
+				}
+			}
+		}
+
+		public static void TruncateJobTable(string connectionString)
+		{
+			using (var sqlConnection = new SqlConnection(connectionString))
+			{
+				sqlConnection.Open();
+
+				using (var sqlCommand = new SqlCommand("truncate table [Stardust].[Job]",
+													   sqlConnection))
+				{
+					Logger.DebugWithLineNumber("Start: " + sqlCommand.CommandText);
+
+					sqlCommand.ExecuteNonQuery();
+
+					Logger.DebugWithLineNumber("Finished: " + sqlCommand.CommandText);
+				}
+			}
+		}
+
+		public static void TruncateJobDetailTable(string connectionString)
+		{
+			using (var sqlConnection = new SqlConnection(connectionString))
+			{
+				sqlConnection.Open();
+
+				using (var sqlCommand = new SqlCommand("truncate table [Stardust].[JobDetail]",
+													   sqlConnection))
+				{
+					Logger.DebugWithLineNumber("Start: " + sqlCommand.CommandText);
+
+					sqlCommand.ExecuteNonQuery();
+
+					Logger.DebugWithLineNumber("Finished: " + sqlCommand.CommandText);
+				}
+			}
+		}
 
 		public static void TryClearDatabase(string connectionString)
 		{

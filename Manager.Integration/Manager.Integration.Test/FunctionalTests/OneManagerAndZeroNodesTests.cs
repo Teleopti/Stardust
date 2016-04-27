@@ -3,14 +3,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
-using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
-using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.FunctionalTests
@@ -18,56 +15,110 @@ namespace Manager.Integration.Test.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndZeroNodesTests : InitialzeAndFinalizeOneManagerAndZeroNodes
 	{
+		public ManualResetEventSlim ManualResetEventSlim { get; set; }
+
+		public ManagerUriBuilder MangerUriBuilder { get; set; }
+
+		public HttpSender HttpSender { get; set; }
+
 		[Test]
 		public void JobsShouldJustBeQueuedIfNoNodesTest()
 		{
-			Thread.Sleep(TimeSpan.FromSeconds(15));
+			this.Log().DebugWithLineNumber("Start test.");
 
-			var httpSender = new HttpSender();
-			var mangerUriBuilder = new ManagerUriBuilder();
-			var uri = mangerUriBuilder.GetAddToJobQueueUri();
+			var startedTest = DateTime.UtcNow;
 
-			this.Log().DebugWithLineNumber("Start.");
+			var timeout = TimeSpan.FromMinutes(5);
+			ManualResetEventSlim = new ManualResetEventSlim();
 
-			var testJobTimerParams =
-				new TestJobTimerParams("Loop", TimeSpan.FromSeconds(1));
+			//---------------------------------------------------------
+			// Database validator.
+			//---------------------------------------------------------
+			var checkTablesInManagerDbTimer =
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
 
-			var jobParamsToJson = JsonConvert.SerializeObject(testJobTimerParams);
-
-			var jobQueueItem = new JobQueueItem
+			checkTablesInManagerDbTimer.ReceivedJobQueueItem += (sender, items) =>
 			{
-				Name = "Job Name",
-				Serialized = jobParamsToJson,
-				Type = "NodeTest.JobHandlers.TestJobTimerParams",
-				CreatedBy = "WPF Client"
+				if (items.Any())
+				{
+					if (!ManualResetEventSlim.IsSet)
+					{
+						ManualResetEventSlim.Set();
+					}
+				}
 			};
 
-			var checkTablesInManagerDbTimer = 
-				new CheckTablesInManagerDbTimer(ManagerDbConnectionString,100);
+			checkTablesInManagerDbTimer.JobQueueTimer.Start();
 
-			var taskCheckData = new Task(() =>
+			//---------------------------------------------------------
+			// HTTP Request.
+			//---------------------------------------------------------
+			HttpSender = new HttpSender();
+			MangerUriBuilder = new ManagerUriBuilder();
+
+			var addToJobQueueUri = MangerUriBuilder.GetAddToJobQueueUri();
+
+			var jobQueueItem =
+				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromSeconds(5)).First();
+
+			CancellationTokenSource = new CancellationTokenSource();
+
+			var addToJobQueueTask = new Task(() =>
 			{
-				checkTablesInManagerDbTimer.JobQueueTimer.Start();
+				var numberOfTries = 0;
 
-				HttpResponseMessage response = httpSender.PostAsync(uri, 
-																    jobQueueItem).Result;
-
-				while (!response.IsSuccessStatusCode)
+				while (true)
 				{
-					response = httpSender.PostAsync(uri, jobQueueItem).Result;
+					numberOfTries++;
 
-					Thread.Sleep(TimeSpan.FromSeconds(5));
-				}
-			});
+					try
+					{
+						var response =
+							HttpSender.PostAsync(addToJobQueueUri, jobQueueItem).Result;
 
-			taskCheckData.Start();
-			taskCheckData.Wait(TimeSpan.FromMinutes(5));
+						if (response.IsSuccessStatusCode || numberOfTries == 10)
+						{
+							return;
+						}						
+					}
 
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Count() == 1);
+					catch (AggregateException aggregateException)
+					{
+						if (aggregateException.InnerException is HttpRequestException)
+						{
+							// try again.
+						}
+					}
 
+					Thread.Sleep(TimeSpan.FromSeconds(10));
+				}				
+
+			}, CancellationTokenSource.Token);
+
+			addToJobQueueTask.Start();
+			addToJobQueueTask.Wait(timeout);
+
+			ManualResetEventSlim.Wait(timeout);
+
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any());
 			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any());
 
 			checkTablesInManagerDbTimer.Dispose();
+
+			var endedTest = DateTime.UtcNow;
+
+			var description =
+				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
+				              1,
+				              NumberOfManagers,
+				              NumberOfNodes);
+
+			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
+			                                  description,
+			                                  startedTest,
+			                                  endedTest);
+
+			this.Log().DebugWithLineNumber("Finished test.");
 		}
 	}
 }
