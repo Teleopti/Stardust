@@ -1,7 +1,5 @@
 using log4net;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,13 +18,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
+		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
 
-		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IAbsenceRequestCancelService absenceRequestCancelService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_waitlistProcessor = waitlistProcessor;
 			_personRequestRepository = personRequestRepository;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
+			_absenceRequestCancelService = absenceRequestCancelService;
 		}
 
 		public void Handle(PersonAbsenceRemovedEvent @event)
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 			
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				cancelAbsenceRequest(absenceRequest, personRequest);
+				_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
 
 				if (shouldUseWaitlisting(absenceRequest))
 				{
@@ -61,19 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 			return (personRequest.IsApproved || personRequest.IsCancelled);
 		}
 
-		private void cancelAbsenceRequest(IAbsenceRequest absenceRequest, IPersonRequest personRequest)
-		{
-			if (personRequest.IsCancelled)
-			{
-				return;
-			}
-
-			if (absenceRequest.PersonAbsences.IsEmpty())
-			{
-				personRequest?.Cancel(_personRequestCheckAuthorization);
-			}
-		}
-
+		
 		private static bool shouldUseWaitlisting(IAbsenceRequest absenceRequest)
 		{
 			var workflowControlSet = absenceRequest.Person.WorkflowControlSet;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -16,19 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IPersonAbsenceCreator _personAbsenceCreator;
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
+		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
 
 		public PersonAbsenceRemover(IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
 			ISaveSchedulePartService saveSchedulePartService,
 			IPersonAbsenceCreator personAbsenceCreator,
-			ILoggedOnUser loggedOnUser, 
-			IPersonRequestCheckAuthorization personRequestCheckAuthorization)
+			ILoggedOnUser loggedOnUser,
+			IAbsenceRequestCancelService absenceRequestCancelService)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_saveSchedulePartService = saveSchedulePartService;
 			_personAbsenceCreator = personAbsenceCreator;
 			_loggedOnUser = loggedOnUser;
-			_personRequestCheckAuthorization = personRequestCheckAuthorization;
+			_absenceRequestCancelService = absenceRequestCancelService;
 		}
 
 		public IEnumerable<string> RemovePersonAbsence(DateOnly scheduleDate, IPerson person,
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				errorMessages = createNewAbsencesForSplitAbsence(person, personAbsences, periodToRemove.Value, commandInfo, scheduleDay, scheduleRange);
 			}
 
-			cancelAbsenceRequestIfAllPersonAbsenceRemoved(personAbsences);
+			_absenceRequestCancelService.CancelAbsenceRequestsFromPersonAbsences(personAbsences);
 
 			return errorMessages;
 		}
@@ -159,22 +158,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			return errorMessages;
 		}
-
-		//ROBTODO: Wfm_Requests_Cancel_37741 Toggle check.
-		private void cancelAbsenceRequestIfAllPersonAbsenceRemoved (IEnumerable<IPersonAbsence> personAbsences)
-		{
-			foreach (var personAbsence in personAbsences.Where (perAbs => perAbs.AbsenceRequest != null))
-			{
-				var absenceRequest = personAbsence.AbsenceRequest;
-				var personRequest = absenceRequest.Parent as IPersonRequest;
-
-				absenceRequest.PersonAbsences.Remove (personAbsence);
-				
-				if (absenceRequest.PersonAbsences.IsEmpty())
-				{
-					personRequest?.Cancel (_personRequestCheckAuthorization);
-				}
-			}
-		}
+		
 	}
 }
