@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		private IPerson _person;
 		private IAbsence _absence;
+		private IAbsence _anotherAbsence;
 		private IScenario _defaultScenario;
 		private Team _team;
 		private Site _site;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
 			_person = PersonFactory.CreatePerson("sdfoj");
 			_absence = AbsenceFactory.CreateAbsence("Sick leave");
+			_anotherAbsence = AbsenceFactory.CreateAbsence("Illness");
 
 			_team = TeamFactory.CreateSimpleTeam("team");
 			_site = SiteFactory.CreateSimpleSite("site");
@@ -59,10 +61,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_partTimePercentage);
 			PersistAndRemoveFromUnitOfWork(_contractSchedule);
 
-
 			PersistAndRemoveFromUnitOfWork(_defaultScenario);
 			PersistAndRemoveFromUnitOfWork(_person);
 			PersistAndRemoveFromUnitOfWork(_absence);
+			PersistAndRemoveFromUnitOfWork(_anotherAbsence);
 		}
 
 		/// <summary>
@@ -75,20 +77,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return createAbsenceRequestAndBusinessUnit();
 		}
 
-		private IPersonRequest createAbsenceRequestAndBusinessUnit()
+		private IPersonRequest createAbsenceRequestAndBusinessUnit(IAbsence absence = null)
 		{
 			var period = new DateTimePeriod(
 				new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc));
 			IPersonRequest request = new PersonRequest(_person);
-			IAbsenceRequest absenceRequest = new AbsenceRequest(_absence, period);
+			IAbsenceRequest absenceRequest = new AbsenceRequest(absence ?? _absence, period);
 
 			request.Request = absenceRequest;
 			request.Pending();
 
 			return request;
 		}
-
 
 		private IPersonRequest createShiftExchangeOffer(DateTime startDate)
 		{
@@ -105,7 +106,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			return request;
 		}
-
 
 		/// <summary>
 		/// Creates an aggregate using the Bu of logged in user.
@@ -158,7 +158,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new PersonRequestRepository(currentUnitOfWork);
 		}
-
 
 		private void setUpGetRequestsByTypeTests()
 		{
@@ -602,7 +601,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, requestWithinOutsidePeriod.Count());
 		}
 
-
 		[Test]
 		public void VerifyRequestStatusIsNotNew()
 		{
@@ -617,7 +615,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(request);
 			var requestWithStatusNew = new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(request.Request.Period);
 			Assert.IsTrue(requestWithStatusNew.IsEmpty());
-
 		}
 
 		[Test]
@@ -1089,7 +1086,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var resultAsc = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 
 			resultAsc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest1, textRequest2, textRequest3 });
-
 		}
 
 		[Test]
@@ -1122,9 +1118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
 		}
-
-
-
+		
 		[Test]
 		public void ShouldReturnRequestsInAgentNameOrderAsc()
 		{
@@ -1180,7 +1174,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.FindAllRequests (filter).ToArray();
 			return resultDesc;
 		}
-
 
 		[Test]
 		public void ShouldReturnRequestsWithSortingBySubject()
@@ -1238,9 +1231,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1));
 
-			createAndPersistRequest(person1, period);
-			createAndPersistRequest(person2, period);
-			createAndPersistRequest(person3, period);
+			createAndPersistTextRequest(person1, period);
+			createAndPersistTextRequest(person2, period);
+			createAndPersistTextRequest(person3, period);
 
 			var filter = new RequestFilter
 			{
@@ -1251,7 +1244,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new PersonRequestRepository(UnitOfWork)
 				.FindAllRequests(filter).ToArray();
 		}
-
 
 		[Test]
 		public void ShouldReturnRequestsWithSortingByTeam()
@@ -1269,7 +1261,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var personPeriodStartDate = DateOnly.Today.AddDays (-1);
 
-
 			var person1 = PersonFactory.CreatePerson("1");
 			var person2 = PersonFactory.CreatePerson("2");
 
@@ -1281,7 +1272,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(personPeriodStartDate,
 				PersonContractFactory.CreatePersonContract(_contract, _partTimePercentage, _contractSchedule), team3));
-			
 
 			PersistAndRemoveFromUnitOfWork(person1);
 			PersistAndRemoveFromUnitOfWork(person2);
@@ -1303,8 +1293,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest2, textRequest1 });
 		}
-
-
 
 		[Test]
 		public void ShouldReturnRequestsWithMultisorting()
@@ -1339,8 +1327,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.FindAllRequests(filter).ToArray();
 
 			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest1, textRequest2 });
-
-
 		}
 
 		[Test]
@@ -1371,7 +1357,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			result.Count().Should().Be.EqualTo(5);
 			result.Any(request => request.Person.Name.FirstName != "A").Should().Be.EqualTo(false);
-
 		}
 
 		[Test]
@@ -1403,7 +1388,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			result.Count().Should().Be.EqualTo(5);
 			count.Should().Be.EqualTo(20);
-
 		}
 
 		[Test]
@@ -1464,7 +1448,181 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			resultDesc.Should().Have.Count.EqualTo(0);
 		}
 
-		private IPersonRequest createAndPersistRequest(IPerson person, DateTimePeriod period)
+		#region Request filtering test cases
+
+		[Test]
+		public void ShouldFilterRequestOnSubject()
+		{
+			var request1 = CreateAggregateWithCorrectBusinessUnit();
+			request1.Subject = "Abc 123";
+			var request2 = CreateAggregateWithCorrectBusinessUnit();
+			request2.Subject = "Bcd 234";
+			var request3 = CreateShiftTradeRequest("Trade With Me");
+			request3.Subject = "Cde 345";
+
+			PersistAndRemoveFromUnitOfWork(request1);
+			PersistAndRemoveFromUnitOfWork(request2);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.Subject, "a 2"}
+				}
+			};
+			int count;
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(request1));
+		}
+
+		[Test]
+		public void ShouldFilterRequestOnMessage()
+		{
+			var request1 = CreateAggregateWithCorrectBusinessUnit();
+			request1.TrySetMessage("Abc 123");
+			var request2 = CreateAggregateWithCorrectBusinessUnit();
+			request2.TrySetMessage("Bcd 234");
+			var request3 = CreateShiftTradeRequest("Trade With Me");
+			request3.TrySetMessage("Cde 345");
+
+			PersistAndRemoveFromUnitOfWork(request1);
+			PersistAndRemoveFromUnitOfWork(request2);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.Message, "A 2"}
+				}
+			};
+			int count;
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(request1));
+		}
+
+		[Test]
+		public void ShouldFilterRequestOnStatus()
+		{
+			var request1 = CreateShiftTradeRequest("Trade With Me 1");
+			var request2 = CreateShiftTradeRequest("Trade With Me 2");
+			var request3 = CreateAggregateWithCorrectBusinessUnit();
+
+			PersistAndRemoveFromUnitOfWork(request1);
+			PersistAndRemoveFromUnitOfWork(request2);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+			var approvalSvc = new ApprovalServiceForTest();
+			var authChecker = new PersonRequestAuthorizationCheckerForTest();
+			request1.Approve(approvalSvc, authChecker);
+			PersistAndRemoveFromUnitOfWork(request1);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.Status, "2"} // 2: Approved
+				}
+			};
+			int count;
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+			
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(request1));
+		}
+		
+		[Test]
+		[Ignore("Not implemented yet")]
+		public void ShouldFilterRequestOnAbsenceType()
+		{
+			var request1 = createAbsenceRequestAndBusinessUnit(_absence);
+			var request2 = createAbsenceRequestAndBusinessUnit(_anotherAbsence);
+			var request3 = createAbsenceRequestAndBusinessUnit(_anotherAbsence);
+
+			PersistAndRemoveFromUnitOfWork(request1);
+			PersistAndRemoveFromUnitOfWork(request2);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+			var approvalSvc = new ApprovalServiceForTest();
+			var authChecker = new PersonRequestAuthorizationCheckerForTest();
+			request1.Approve(approvalSvc, authChecker);
+			PersistAndRemoveFromUnitOfWork(request1);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.AbsenceType, _absence.Id.ToString()}
+				}
+			};
+			int count;
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(request1));
+		}
+
+		[Test]
+		public void ShouldFilterRequestOnMultipleCriteria()
+		{
+			var request1 = CreateAggregateWithCorrectBusinessUnit();
+			request1.Subject = "Abc 123";
+			request1.TrySetMessage("Bcd 234");
+			var request2 = CreateAggregateWithCorrectBusinessUnit();
+			request2.Subject = "Efg 456";
+			request2.TrySetMessage("Fgh 567");
+			var request3 = CreateShiftTradeRequest("Trade With Me");
+			request3.Subject = "Ijk 789";
+			request3.TrySetMessage("Jkl 890");
+
+			PersistAndRemoveFromUnitOfWork(request1);
+			PersistAndRemoveFromUnitOfWork(request2);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+			var approvalSvc = new ApprovalServiceForTest();
+			var authChecker = new PersonRequestAuthorizationCheckerForTest();
+			request2.Approve(approvalSvc, authChecker);
+			PersistAndRemoveFromUnitOfWork(request2);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.Subject, "e 5"},
+					{RequestFilterField.Message, "g 7"},
+					{RequestFilterField.Status, "2"} // 2: Approved
+				}
+			};
+			int count;
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(request2));
+		}
+
+		#endregion
+
+		private IPersonRequest createAndPersistTextRequest(IPerson person, DateTimePeriod period)
 		{
 			var textRequest = new PersonRequest(person, new TextRequest(period));
 			PersistAndRemoveFromUnitOfWork(textRequest);
@@ -1493,7 +1651,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(textRequest1);
 
 			return new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
-
 		}
 	}
 }

@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			if (requestFilters == null || !requestFilters.Any()) return;
 
-			const char splitter = ',';
+			const char splitter = ' ';
 			foreach (var filter in requestFilters)
 			{
 				switch (filter.Key)
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							.Where(x => !string.IsNullOrEmpty(x));
 
 						var messageCriteria = messageKeywords
-							.Select(x => (ICriterion) Restrictions.Eq("personRequests.Message", $"%{x}%"))
+							.Select(x => (ICriterion) Restrictions.Like("personRequests.Message", $"%{x}%"))
 							.Aggregate(Restrictions.And);
 						criteria.Add(messageCriteria);
 						break;
@@ -710,6 +710,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Projections.SubQuery(personPeriodSubquery);
 
 		}
-
 	}
 }
