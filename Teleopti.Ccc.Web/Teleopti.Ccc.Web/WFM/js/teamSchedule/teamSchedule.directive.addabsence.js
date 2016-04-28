@@ -11,17 +11,19 @@
 				defaultDateTime: '&',
 				actionsAfterAbsenceApply: '&'
 			},
-			controller: ['$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addAbsenceCtrl],
+			controller: ['$element', '$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addAbsenceCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			link: function (scope, element, attr) {
 				scope.vm.init(scope, $locale);
 			}
 		};
-	};
+	}
 
-	function addAbsenceCtrl($translate, personAbsenceSvc, guidgenerator, CommandCommon, personSelectionSvc, NotificationService) {
+	function addAbsenceCtrl($element, $translate, personAbsenceSvc, guidgenerator, CommandCommon, personSelectionSvc, NotificationService) {
 		var vm = this;
+		addTabIndexToControls();
+		removePanelTabIndex();
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
 
@@ -103,5 +105,25 @@
 				vm.AvailableAbsenceTypes = result;
 			});
 		};
-	};
+
+		function addTabIndexToControls() {
+			var panel = $element[0];
+			var controls = [];
+			controls.push(panel.querySelector('select.absence-selector'));
+			controls.push.apply(controls, panel.querySelectorAll('team-schedule-datepicker input'));
+			controls.push.apply(controls, panel.querySelectorAll('.timepicker input'));
+			controls.push(panel.querySelector('#apply-absence-btn'));
+			angular.forEach(controls, addTabIndexToElement);
+		}
+
+		function addTabIndexToElement(element) {
+			var _tabindex = $element.attr('tabIndex');
+			angular.element(element).attr('tabIndex', _tabindex);
+		}
+
+		function removePanelTabIndex() {
+			$element.removeAttr('tabIndex');
+		}
+
+	}
 })();
