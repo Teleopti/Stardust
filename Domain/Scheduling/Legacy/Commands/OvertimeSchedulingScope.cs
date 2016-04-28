@@ -8,10 +8,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public static class OvertimeSchedulingScope
 	{
 		/*
-		 * Temporarly (?) hack to fix...
+		 * Temporarly hack to fix...
 		 * * We need to remove dayoffs otherwise no scheduling will occur
 		 * * Need to "turn off" nightly rest rule if user has checked AllowBreakNightlyRest
 		 * * Change scheduled layers to be overtime layers
+		 * * Change agent's current shift bag
+		 * ...we'll fix these one-by-one later
 		 */
 		public static IDisposable Set(IScheduleDictionary scheduleDictionary, 
 			IScheduleDay scheduleDay, 
@@ -19,9 +21,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IScheduleTagSetter scheduleTagSetter, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
+			var agent = scheduleDay.Person;
+			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var orgPersonAss = scheduleDay.PersonAssignment(true).Clone() as IPersonAssignment;
 			var hasDayOff = false;
-			var oldWorkTimeDirective =scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly).PersonContract.Contract.WorkTimeDirective;
+			var oldWorkTimeDirective = agent.Period(date).PersonContract.Contract.WorkTimeDirective;
+			var personPeriod = agent.Period(date);
+			var oldShiftBag = personPeriod.RuleSetBag;
 			if (scheduleDay.HasDayOff())
 			{
 				scheduleDay.DeleteDayOff();
@@ -30,12 +36,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 			if (overtimePreferences.AllowBreakNightlyRest)
 			{
-				scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly).PersonContract.Contract.WorkTimeDirective = 
+				agent.Period(date).PersonContract.Contract.WorkTimeDirective = 
 					new WorkTimeDirective(oldWorkTimeDirective.MinTimePerWeek, oldWorkTimeDirective.MaxTimePerWeek, TimeSpan.Zero, oldWorkTimeDirective.WeeklyRest);
 			}
+			personPeriod.RuleSetBag = overtimePreferences.ShiftBagOvertimeScheduling;
 			return new GenericDisposable(() =>
 			{
-				var currScheduleDay = scheduleDictionary[scheduleDay.Person].ScheduledDay(scheduleDay.DateOnlyAsPeriod.DateOnly);
+				var currScheduleDay = scheduleDictionary[agent].ScheduledDay(date);
 				var currLayers = currScheduleDay.PersonAssignment(true).MainActivities();
 				currScheduleDay.Clear<IPersonAssignment>();
 
@@ -51,8 +58,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 				}
 				schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, rules);
-				scheduleDay.Person.Period(scheduleDay.DateOnlyAsPeriod.DateOnly).PersonContract.Contract.WorkTimeDirective =
-					oldWorkTimeDirective;
+				scheduleDay.Person.Period(date).PersonContract.Contract.WorkTimeDirective = oldWorkTimeDirective;
+				personPeriod.RuleSetBag = oldShiftBag;
 			});
 		}
 	}
