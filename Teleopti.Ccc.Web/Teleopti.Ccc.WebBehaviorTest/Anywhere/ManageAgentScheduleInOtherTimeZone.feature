@@ -201,7 +201,8 @@ Scenario: Move activity default time for agent in other time zone
 	| Field      | Value |
 	| Start time | 12:00 |
 
-	Scenario: Move activity time changed for agent in other time zone
+@ignore
+Scenario: Move activity time changed for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'John King' is located in Istanbul
