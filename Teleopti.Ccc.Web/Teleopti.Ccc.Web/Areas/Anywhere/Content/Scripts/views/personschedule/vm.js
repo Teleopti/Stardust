@@ -228,7 +228,6 @@ define([
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data);
 			self.MoveActivityForm.SetData(data);
-			$('.time-line-for').attr("data-subscription-done", " ");
 		};
 
 		this.UpdateSchedules = function (data) {
@@ -357,8 +356,7 @@ define([
 		}
 
 		this.initActivityDraggable = function() {
-			$('.time-line-for').attr("data-subscription-done", " ");
-			
+		
 			// bind events
 			var activeLayer = $(".layer.active");
 			if (activeLayer.length !== 0) {

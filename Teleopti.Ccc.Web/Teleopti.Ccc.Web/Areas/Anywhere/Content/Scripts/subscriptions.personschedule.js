@@ -47,7 +47,6 @@ define([
 		subscribePersonSchedule: function (buId, personId, date, callback) {
 			unsubscribePersonSchedule();
 			messagebroker.started.done(function () {
-				loadPersonSchedules(buId, date, personId, callback);
 
 				personScheduleSubscription = messagebroker.subscribe({
 					businessUnitId: buId,
@@ -59,6 +58,10 @@ define([
 							loadPersonSchedules(buId, date, personId, callback);
 						}
 					}
+				});
+
+				personScheduleSubscription.promise.done(function() {
+					loadPersonSchedules(buId, date, personId, callback);
 				});
 
 			});

@@ -252,8 +252,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 					personId,
 					date.Year.ToString("0000"),
 					date.Month.ToString("00"),
-					date.Day.ToString("00")
-					), new WaitUntilSubscriptionIsCompleted());
+					date.Day.ToString("00")));
 		}
 
 		public static void GotoAnywherePersonScheduleFullDayAbsenceForm(Guid buId, Guid groupId, Guid personId, DateTime date)
@@ -302,22 +301,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 					date.Year.ToString("0000"),
 					date.Month.ToString("00"),
 					date.Day.ToString("00"),
-					minutes),
-				 new WaitUntilSubscriptionIsCompleted());
+					minutes));
 		}
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(bool waitUntilSubscriptionIsCompleted)
 		{
 			if (waitUntilSubscriptionIsCompleted)
-			{
-				GoToPage(
-					"Anywhere#realtimeadherencesites",
-					 new WaitUntilSubscriptionIsCompleted());
-			}
+				GoToPage("Anywhere#realtimeadherencesites", new WaitUntilSubscriptionIsCompleted());
 			else
-			{
 				GoToPage("Anywhere#realtimeadherencesites");
-			}
 		}
 
 		public static void GotoResourcePlanner()
@@ -349,8 +341,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)
 		{
-			GoToPage(
-				string.Format("Anywhere#realtimeadherenceteams/{0}/{1}", buId, siteId),
+			GoToPage(string.Format("Anywhere#realtimeadherenceteams/{0}/{1}", buId, siteId),
 				 new WaitUntilSubscriptionIsCompleted());
 		}
 

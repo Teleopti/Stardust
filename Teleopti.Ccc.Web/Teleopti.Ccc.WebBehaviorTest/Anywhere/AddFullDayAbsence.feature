@@ -98,13 +98,18 @@ Scenario: Add on empty day first day
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
-	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
+	Then I should see a scheduled activity with
+	| Field      | Value |
+	| Start time | 08:00 |
+	| End time   | 16:00 |
+	| Color      | Red   |
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
 	| Start time | 2013-04-08 00:00 |
 	| End time   | 2013-04-09 17:00 |
-	
+
 Scenario: Add on empty day last day
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -146,7 +151,12 @@ Scenario: Add on shifts in sequence
 	| Absence  | Vacation   |
 	| End date | 2013-04-09 |
 	And I click 'apply'
-	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
+	Then I should see a scheduled activity with
+	| Field      | Value |
+	| Start time | 08:00 |
+	| End time   | 17:00 |
+	| Color      | Red   |
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
