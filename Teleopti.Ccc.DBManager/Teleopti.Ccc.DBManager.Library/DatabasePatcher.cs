@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Threading;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
@@ -198,6 +199,24 @@ namespace Teleopti.Ccc.DBManager.Library
 		}
 
 		private bool isDbOwner(ExecuteSql executeSql)
+		{
+			// Testing workaround to Internal .Net Framework Data Provider error 6. error
+			bool result = false;
+			for(var attempt=0;attempt<5; attempt++)
+				try
+				{
+					result = _isDbOwner(executeSql);
+					break;
+				}
+				catch (Exception)
+				{
+					Thread.Sleep(TimeSpan.FromSeconds(5));
+					continue;
+				}
+			return result;
+		}
+
+		private bool _isDbOwner(ExecuteSql executeSql)
 		{
 			const string sql = "select IS_MEMBER ('db_owner')";
 			return Convert.ToBoolean(executeSql.ExecuteScalar(sql));
