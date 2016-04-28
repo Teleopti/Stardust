@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var agent = scheduleDay.Person;
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-			var orgPersonAss = scheduleDay.PersonAssignment(true).Clone() as IPersonAssignment;
+			var orgPersonAss = scheduleDay.PersonAssignment(true).EntityClone();
 			var hasDayOff = false;
 			var oldWorkTimeDirective = agent.Period(date).PersonContract.Contract.WorkTimeDirective;
 			var personPeriod = agent.Period(date);
@@ -45,13 +45,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var currScheduleDay = scheduleDictionary[agent].ScheduledDay(date);
 				var currLayers = currScheduleDay.PersonAssignment(true).MainActivities();
 				currScheduleDay.Clear<IPersonAssignment>();
-
 				if (hasDayOff)
 				{
 					orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
 				}
 				currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, overtimePreferences.OvertimeType));
-
 				var rules = NewBusinessRuleCollection.Minimum();
 				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
 				{
