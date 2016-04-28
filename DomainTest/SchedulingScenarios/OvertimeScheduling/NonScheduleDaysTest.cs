@@ -211,10 +211,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
 			//
 			var overtimePreference = new OvertimePreferences {OvertimeType = definitionSet, ShiftBagOvertimeScheduling = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, Enumerable.Empty<IScheduleData>(), skillDay);
-			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
-			scheduleDay.CreateAndAddDayOff(new DayOffTemplate());
-			stateHolder.Schedules.Modify(scheduleDay);
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.SetDayOff(new DayOffTemplate());
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] {ass}, skillDay);
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, new GridlockManager());
 
@@ -250,10 +249,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ScheduleTag = new ScheduleTag(),
 				SelectedTimePeriod = new TimePeriod(0,0,0,0) //to prevent overtime isn't added at beginning and ending of shift
 			};
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, Enumerable.Empty<IScheduleData>(), skillDay);
-			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
-			scheduleDay.CreateAndAddActivity(new Activity("_"), new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()));
-			stateHolder.Schedules.Modify(scheduleDay);
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(new Activity("_"), new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(agent.PermissionInformation.DefaultTimeZone()));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] {ass}, skillDay);
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, new GridlockManager());
 
@@ -286,10 +284,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				ShiftBagOvertimeScheduling = new RuleSetBag(ruleSet),
 				ScheduleTag = new ScheduleTag()
 			};
-			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, Enumerable.Empty<IScheduleData>(), skillDay);
-			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
-			scheduleDay.Add(new PersonAssignment(agent, scenario, dateOnly));
-			stateHolder.Schedules.Modify(scheduleDay);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { new PersonAssignment(agent, scenario, dateOnly)}, skillDay);
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) }, new GridlockManager());
 
