@@ -21,18 +21,17 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 		public static IValidatedRequest BudgetDaysAreNull(CultureInfo culture, DateOnlyPeriod requestedPeriod)
 		{
-
 			var logInfo = string.Format("There is no budget for this period {0}.", requestedPeriod);
-			var errorInfo = string.Format(culture, Resources.ResourceManager.GetString("NoBudgetForThisPeriod",
-				culture) ?? Resources.NoBudgetForThisPeriod, requestedPeriod);
+			var errorInfo = string.Format(Resources.ResourceManager.GetString("NoBudgetForThisPeriod",
+				culture) ?? Resources.NoBudgetForThisPeriod, requestedPeriod.ToShortDateString(culture));
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}
 
 		public static IValidatedRequest BudgetDaysAreNotEqualToRequestedPeriodDays(CultureInfo culture, DateOnlyPeriod requestedPeriod)
 		{
 			var logInfo = string.Format("One or more days during this requested period {0} has no budget.", requestedPeriod);
-			var errorInfo = string.Format(culture, Resources.ResourceManager.GetString("NoBudgetDefineForSomeRequestedDays",
-				culture) ?? Resources.NoBudgetDefineForSomeRequestedDays, requestedPeriod);
+			var errorInfo = string.Format(Resources.ResourceManager.GetString("NoBudgetDefineForSomeRequestedDays",
+				culture) ?? Resources.NoBudgetDefineForSomeRequestedDays, requestedPeriod.ToShortDateString(culture));
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}
 
