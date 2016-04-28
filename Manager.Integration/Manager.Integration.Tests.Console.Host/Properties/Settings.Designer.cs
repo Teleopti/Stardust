@@ -61,7 +61,7 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
         public int NumberOfNodesToStart {
             get {
                 return ((int)(this["NumberOfNodesToStart"]));
@@ -152,7 +152,7 @@ namespace Manager.IntegrationTest.Console.Host.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
         public int NumberOfManagersToStart {
             get {
                 return ((int)(this["NumberOfManagersToStart"]));

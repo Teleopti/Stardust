@@ -1810,7 +1810,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		private void Retry(Action action, int numerOfTries = 3)
+		private void Retry(Action action, int numerOfTries = 10)
 		{
 			var count = numerOfTries;
 

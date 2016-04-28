@@ -1004,7 +1004,7 @@
 
                 <TabItem Header="{Binding PerformanceTestHeader, FallbackValue='Performance Test'}">
                     <Grid Background="#FFE5E5E5">
-                        <DataGrid ItemsSource="{Binding PerformanceTestData}"
+                        <DataGrid ItemsSource="{Binding PerformanceTests}"
                                   AutoGenerateColumns="False"
                                   HorizontalGridLinesBrush="#FFF5EFEF"
                                   VerticalGridLinesBrush="#FFF5EFEF"
@@ -1170,7 +1170,7 @@
                             <RowDefinition Height="30" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <DataGrid ItemsSource="{Binding LoggingData}"
+                        <DataGrid ItemsSource="{Binding Loggings}"
                                   SelectionUnit="Cell"
                                   AutoGenerateColumns="False"
                                   HorizontalGridLinesBrush="#FFF5EFEF"
@@ -1350,7 +1350,7 @@
                             <RowDefinition Height="25" />
                             <RowDefinition />
                         </Grid.RowDefinitions>
-                        <DataGrid ItemsSource="{Binding ErrorLoggingData}"
+                        <DataGrid ItemsSource="{Binding ErrorLoggings}"
                                   SelectionUnit="Cell"
                                   AutoGenerateColumns="False"
                                   HorizontalGridLinesBrush="#FFF5EFEF"
@@ -1485,7 +1485,7 @@
 
                 <TabItem Header="{Binding JobHistoryHeader, FallbackValue='Jobs'}">
                     <Grid Background="#FFE5E5E5">
-                        <DataGrid ItemsSource="{Binding JobHistoryData}"
+                        <DataGrid ItemsSource="{Binding Jobs}"
                                   AutoGenerateColumns="False"
                                   HorizontalGridLinesBrush="#FFF5EFEF"
                                   VerticalGridLinesBrush="#FFF5EFEF"
@@ -1559,6 +1559,10 @@
                                 <DataGridTextColumn Binding="{Binding Type}"
                                                     ClipboardContentBinding="{Binding Type}"
                                                     Header="Type" />
+
+                                <DataGridTextColumn Binding="{Binding Serialized}"
+                                                    ClipboardContentBinding="{Binding Serialized}"
+                                                    Header="Serialized" />
 
                                 <DataGridTextColumn Binding="{Binding CreatedBy}"
                                                     ClipboardContentBinding="{Binding CreatedBy}"
