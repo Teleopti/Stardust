@@ -120,7 +120,6 @@
 
 				$scope.openSkillFromArea = function (item) {
 					autocompleteSkill.selectedSkill = item;
-					$scope.skillSelected(item);
 				};
 
 				var setResult = function(result) {
