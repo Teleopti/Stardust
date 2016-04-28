@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -43,44 +42,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var stateHolder = _schedulerStateHolder();
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
-
-			//hackera hackeri
-			var orgPersonAss = scheduleDay.PersonAssignment(true).Clone() as IPersonAssignment;
-			var addDayOff = false;
-			if (scheduleDay.HasDayOff())
-			{
-				scheduleDay.DeleteDayOff();
-				stateHolder.Schedules.Modify(scheduleDay);
-				addDayOff = true;
-			}
-
-			var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[]{scheduleDay});
-			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
-			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, BlockFinderType.SingleDay, true);
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), scheduleTagSetter);
-			//TODO ???
-			var schedulingOptions = new SchedulingOptions();
-			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, stateHolder.SchedulingResultState, new ShiftNudgeDirective());
-
-			var rules = NewBusinessRuleCollection.Minimum();
-			if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
+			using (OvertimeSchedulingScope.Set(stateHolder.Schedules, scheduleDay, overtimePreferences, scheduleTagSetter, rollbackService))
 			{
-				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+				var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay });
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, BlockFinderType.SingleDay, true);
+
+				//TODO ???
+				var schedulingOptions = new SchedulingOptions();
+				_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, stateHolder.SchedulingResultState, new ShiftNudgeDirective());
 			}
-
-			//hackeri hackera
-			var currScheduleDay = stateHolder.Schedules[agent].ScheduledDay(date);
-			var currLayers = currScheduleDay.PersonAssignment().MainActivities();
-			currScheduleDay.Clear<IPersonAssignment>();
-
-			if (addDayOff)
-				orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
-
-			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, overtimePreferences.OvertimeType));
-
-			//TODO: use correct tag setter
-			rollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, rules);
 		}
 
 		private static bool jumpOutEarly(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IPerson agent, DateOnly date)
