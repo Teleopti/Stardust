@@ -330,14 +330,21 @@ namespace Stardust.Manager
 				{
 					foreach (var uri in allAliveWorkerNodesUri)
 					{
-						var builderHelper = new NodeUriBuilderHelper(uri);
-						var isIdleUri = builderHelper.GetIsIdleTemplateUri();
-
-						var response = httpSender.GetAsync(isIdleUri).Result;
-
-						if (response.IsSuccessStatusCode)
+						try
 						{
-							AssignJobToWorkerNodeWorker(httpSender, uri);
+							var builderHelper = new NodeUriBuilderHelper(uri);
+							var isIdleUri = builderHelper.GetIsIdleTemplateUri();
+
+							var response = httpSender.GetAsync(isIdleUri).Result;
+
+							if (response.IsSuccessStatusCode)
+							{
+								AssignJobToWorkerNodeWorker(httpSender, uri);
+							}
+						}
+						catch
+						{
+							// continue
 						}
 					}
 				}
