@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IJobResultRepository _jobResultRepository;
 		private IJobResultFeedback _feedback;
 		private IMessageBrokerComposite _messageBroker;
-		private IImportForecastsToSkillHandler _importForecastsToSkillHandler;
+		private IImportForecastProcessor _importForecastProcessor;
 		private IOpenAndSplitSkillCommand _command;
-		private OpenAndSplitTargetSkillHandler _target;
+		private OpenAndSplitTargetSkill _target;
 		private IUnitOfWork _unitOfWork;
 		private IJobResult _jobResult;
 		private IDisableBusinessUnitFilter _disableFilter;
@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRepository = MockRepository.GenerateMock<IJobResultRepository>();
 			_feedback = MockRepository.GenerateMock<IJobResultFeedback>();
 			_messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
-			_importForecastsToSkillHandler = MockRepository.GenerateMock<IImportForecastsToSkillHandler>();
+			_importForecastProcessor = MockRepository.GenerateMock<IImportForecastProcessor>();
 			_unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			_jobResult = MockRepository.GenerateMock<IJobResult>();
 			_command = MockRepository.GenerateMock<IOpenAndSplitSkillCommand>();
 			_disableFilter = MockRepository.GenerateMock<IDisableBusinessUnitFilter>();
-			_target = new OpenAndSplitTargetSkillHandler(_currentunitOfWorkFactory, _command, _skillRepository,
+			_target = new OpenAndSplitTargetSkill(_currentunitOfWorkFactory, _command, _skillRepository,
 				_jobResultRepository, _feedback, _messageBroker,
-				_importForecastsToSkillHandler, _disableFilter);
+				_importForecastProcessor, _disableFilter);
 		}
 
 		[Test]
@@ -58,9 +58,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
 			_command.Stub(x => x.Execute(skill, new DateOnlyPeriod(dateTime, dateTime), new[] { new TimePeriod(8, 0, 17, 0) }));
-			_importForecastsToSkillHandler.Stub(x => x.Handle(null)).IgnoreArguments();
+			_importForecastProcessor.Stub(x => x.Process(null)).IgnoreArguments();
 
-			var message = new OpenAndSplitTargetSkillEvent
+			var message = new OpenAndSplitTargetSkillMessage
 			{
 				JobId = jobId,
 				ImportMode = ImportForecastsMode.ImportWorkload,
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				EndOpenHour = TimeSpan.FromHours(17),
 				Timestamp = DateTime.Now
 			};
-			_target.Handle(message);
+			_target.Process(message);
 		}
 	}
 }

@@ -10,12 +10,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public interface IOpenAndSplitTargetSkillHandler
+	public interface IOpenAndSplitTargetSkill
 	{
-		void Handle(OpenAndSplitTargetSkillEvent message);
+		void Process(OpenAndSplitTargetSkillMessage message);
 	}
 
-	public class OpenAndSplitTargetSkillHandler : IOpenAndSplitTargetSkillHandler
+	public class OpenAndSplitTargetSkill : IOpenAndSplitTargetSkill
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IOpenAndSplitSkillCommand _command;
@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IImportForecastsToSkillHandler _importForecastsToSkillHandler;
+		private readonly IImportForecastProcessor _importForecastProcessor;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public OpenAndSplitTargetSkillHandler(ICurrentUnitOfWork unitOfWork,
+		public OpenAndSplitTargetSkill(ICurrentUnitOfWork unitOfWork,
 			IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository,
-			IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IImportForecastsToSkillHandler importForecastsToSkillHandler,
+			IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IImportForecastProcessor importForecastProcessor,
 			IDisableBusinessUnitFilter disableBusinessUnitFilter)
 		{
 			_unitOfWork = unitOfWork;
@@ -37,11 +37,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
-			_importForecastsToSkillHandler = importForecastsToSkillHandler;
+			_importForecastProcessor = importForecastProcessor;
 			_disableBusinessUnitFilter = disableBusinessUnitFilter;
 		}
 
-		public void Handle(OpenAndSplitTargetSkillEvent message)
+		public void Process(OpenAndSplitTargetSkillMessage message)
 		{
 			var unitOfWork = _unitOfWork.Current();
 			{
@@ -75,10 +75,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 																		targetSkill.Name, message.Date));
 					endProcessing(unitOfWork);
 				}
-				var currentSendingMsg = new ImportForecastsToSkillEvent { Date = new DateTime() };
+				var currentSendingMsg = new ImportForecastProcessorMessage { Date = new DateTime() };
 				try
 				{
-					currentSendingMsg = new ImportForecastsToSkillEvent
+					currentSendingMsg = new ImportForecastProcessorMessage
 					{
 						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 						LogOnDatasource = message.LogOnDatasource,
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 						Timestamp = message.Timestamp,
 						ImportMode = message.ImportMode
 					};
-					_importForecastsToSkillHandler.Handle(currentSendingMsg);
+					_importForecastProcessor.Process(currentSendingMsg);
 				}
 				catch (Exception e)
 				{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			}
 		}
 
-		private void notifyServiceBusErrors(ImportForecastsToSkillEvent message, Exception e)
+		private void notifyServiceBusErrors(ImportForecastProcessorMessage message, Exception e)
 		{
 			using (var uow = _unitOfWork.Current())
 			{

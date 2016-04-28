@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IImportForecastsRepository _importForecastsRepository;
 		private IJobResultFeedback _feedback;
 		private IMessageBrokerComposite _messageBroker;
-		private IOpenAndSplitTargetSkillHandler _openAndSplitTargetSkillHandler;
+		private IOpenAndSplitTargetSkill _openAndSplitTargetSkill;
 		private IForecastsFileContentProvider _contentProvider;
 		private TimeZoneInfo _timeZone;
 		private IJobResult _jobResult;
@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_contentProvider = MockRepository.GenerateMock<IForecastsFileContentProvider>();
 			_feedback = MockRepository.GenerateMock<IJobResultFeedback>();
 			_messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
-			_openAndSplitTargetSkillHandler = MockRepository.GenerateMock<IOpenAndSplitTargetSkillHandler>();
+			_openAndSplitTargetSkill = MockRepository.GenerateMock<IOpenAndSplitTargetSkill>();
 			_timeZone = (TimeZoneInfo.Utc);
 			_jobResult = MockRepository.GenerateMock<IJobResult>();
 			_forecastFile = MockRepository.GenerateMock<IForecastFile>();
 			_analyzeQuery = MockRepository.GenerateMock<IForecastsAnalyzeQuery>();
 			_target = new ImportForecastsFileToSkillBase(_unitOfWorkFactory, _skillRepository, _jobResultRepository,
 																			 _importForecastsRepository, _contentProvider, _analyzeQuery, _feedback,
-																			 _messageBroker, _openAndSplitTargetSkillHandler);
+																			 _messageBroker, _openAndSplitTargetSkill);
 		}
 
 		[Test]
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_contentProvider.Stub(x => x.LoadContent(fileContent, _timeZone)).Return(new[] { row });
 			_analyzeQuery.Stub(x => x.Run(new[] { row }, skill)).Return(queryResult);
 			_feedback.Stub(x => x.SetJobResult(_jobResult, _messageBroker));
-			_openAndSplitTargetSkillHandler.Stub(x => x.Handle(null)).IgnoreArguments();
+			_openAndSplitTargetSkill.Stub(x => x.Process(null)).IgnoreArguments();
 
 			var message = new ImportForecastsFileToSkill
 			{

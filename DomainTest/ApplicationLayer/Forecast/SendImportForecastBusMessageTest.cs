@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private MockRepository _mocks;
 		private IForecastsAnalyzeQuery _analyzeQuery;
 		private IJobResultFeedback _feedback;
-		private IOpenAndSplitTargetSkillHandler _openAndSplitTarget;
+		private IOpenAndSplitTargetSkill _openAndSplitTarget;
 
 		[SetUp]
 		public void Setup()
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_mocks = new MockRepository();
 			_analyzeQuery = _mocks.DynamicMock<IForecastsAnalyzeQuery>();
 			_feedback = _mocks.DynamicMock<IJobResultFeedback>();
-			_openAndSplitTarget = _mocks.StrictMock<IOpenAndSplitTargetSkillHandler>();
+			_openAndSplitTarget = _mocks.StrictMock<IOpenAndSplitTargetSkill>();
 			_target = new SendImportForecastBusMessage(_analyzeQuery, _feedback, _openAndSplitTarget);
 		}
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				Expect.Call(_analyzeQuery.Run(new[] { row }, targetSkill)).Return(queryResult);
 				Expect.Call(queryResult.WorkloadDayOpenHours).Return(openHours);
 				Expect.Call(queryResult.ForecastFileContainer).Return(forecasts);
-				Expect.Call(()=>_openAndSplitTarget.Handle(new OpenAndSplitTargetSkillEvent())).IgnoreArguments();
+				Expect.Call(()=>_openAndSplitTarget.Process(new OpenAndSplitTargetSkillMessage())).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{

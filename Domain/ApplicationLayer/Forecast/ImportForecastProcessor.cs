@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
@@ -12,11 +10,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	public interface IImportForecastsToSkillHandler
+	public interface IImportForecastProcessor
 	{
-		void Handle(ImportForecastsToSkillEvent message);
+		void Process(ImportForecastProcessorMessage message);
 	}
-	public class ImportForecastsToSkillHandler : IImportForecastsToSkillHandler
+	public class ImportForecastProcessor : IImportForecastProcessor
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly ISaveForecastToSkillCommand _saveForecastToSkillCommand;
@@ -26,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IMessageBrokerComposite _messageBroker;
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
-		public ImportForecastsToSkillHandler(ICurrentUnitOfWork unitOfWork,
+		public ImportForecastProcessor(ICurrentUnitOfWork unitOfWork,
 			  ISaveForecastToSkillCommand saveForecastToSkillCommand,
 			  ISkillRepository skillRepository,
 			  IJobResultRepository jobResultRepository,
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_disableBusinessUnitFilter = disableBusinessUnitFilter;
 		}
 
-		public void Handle(ImportForecastsToSkillEvent message)
+		public void Process(ImportForecastProcessorMessage message)
 		{
 			var unitOfWork = _unitOfWork.Current();
 			{

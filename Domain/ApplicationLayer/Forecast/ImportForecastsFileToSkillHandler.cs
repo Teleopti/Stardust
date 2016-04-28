@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IForecastsAnalyzeQuery _analyzeQuery;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBrokerComposite _messageBroker;
-		private readonly IOpenAndSplitTargetSkillHandler _openAndSplitTargetSkillHandler;
+		private readonly IOpenAndSplitTargetSkill _openAndSplitTargetSkill;
 
 		public ImportForecastsFileToSkillBase(ICurrentUnitOfWork currentUnitOfWork,
 			ISkillRepository skillRepository,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IForecastsAnalyzeQuery analyzeQuery,
 			IJobResultFeedback feedback,
 			IMessageBrokerComposite messageBroker,
-			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
+			IOpenAndSplitTargetSkill openAndSplitTargetSkill)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_skillRepository = skillRepository;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_analyzeQuery = analyzeQuery;
 			_feedback = feedback;
 			_messageBroker = messageBroker;
-			_openAndSplitTargetSkillHandler = openAndSplitTargetSkillHandler;
+			_openAndSplitTargetSkill = openAndSplitTargetSkill;
 		}
 
 		public void Handle(ImportForecastsFileToSkill @event)
@@ -95,13 +95,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			var listOfMessages = generateMessages(@event, queryResult);
 			_feedback.ChangeTotalProgress(3 + listOfMessages.Count * 4);
 			endProcessing(unitOfWork);
-			var currentSendingMsg = new OpenAndSplitTargetSkillEvent { Date = new DateTime() };
+			var currentSendingMsg = new OpenAndSplitTargetSkillMessage { Date = new DateTime() };
 			try
 			{
 				listOfMessages.ForEach(m =>
 				{
 					currentSendingMsg = m;
-					_openAndSplitTargetSkillHandler.Handle(m);
+					_openAndSplitTargetSkill.Process(m);
 				});
 			}
 			catch (SerializationException e)
@@ -115,14 +115,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			
 		}
 
-		private void notifyServiceBusErrors(OpenAndSplitTargetSkillEvent @event, Exception e)
+		private void notifyServiceBusErrors(OpenAndSplitTargetSkillMessage message, Exception e)
 		{
 			var uow = _currentUnitOfWork.Current();
 			{
-				var job = _jobResultRepository.Get(@event.JobId);
+				var job = _jobResultRepository.Get(message.JobId);
 				_feedback.SetJobResult(job, _messageBroker);
 				var error = string.Format(CultureInfo.InvariantCulture,
-					"Import of {0} is failed due to a service bus error: {1}. ", @event.Date,
+					"Import of {0} is failed due to a service bus error: {1}. ", message.Date,
 					e.Message);
 				_feedback.Error(error);
 				_feedback.ReportProgress(0, error);
@@ -142,14 +142,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			endProcessing(unitOfWork);
 		}
 
-		private static IList<OpenAndSplitTargetSkillEvent> generateMessages(ImportForecastsFileToSkill message,
+		private static IList<OpenAndSplitTargetSkillMessage> generateMessages(ImportForecastsFileToSkill message,
 			IForecastsAnalyzeQueryResult queryResult)
 		{
-			var listOfMessages = new List<OpenAndSplitTargetSkillEvent>();
+			var listOfMessages = new List<OpenAndSplitTargetSkillMessage>();
 			foreach (var date in queryResult.Period.DayCollection())
 			{
 				var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
-				listOfMessages.Add(new OpenAndSplitTargetSkillEvent
+				listOfMessages.Add(new OpenAndSplitTargetSkillMessage
 				{
 					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
 					LogOnDatasource = message.LogOnDatasource,
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IForecastsAnalyzeQuery analyzeQuery,
 			IJobResultFeedback feedback,
 			IMessageBrokerComposite messageBroker,
-			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler,
+			IOpenAndSplitTargetSkill openAndSplitTargetSkill,
 			DataSourceState dataSourceState, 
 			IDataSourceScope dataSourceScope, 
 			IPersonRepository personRepository, 
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			)
 			: base(
 				currentUnitOfWork, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
-				feedback, messageBroker, openAndSplitTargetSkillHandler)
+				feedback, messageBroker, openAndSplitTargetSkill)
 		{
 			_dataSourceState = dataSourceState;
 			_dataSourceScope = dataSourceScope;
@@ -238,10 +238,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			IForecastsAnalyzeQuery analyzeQuery,
 			IJobResultFeedback feedback,
 			IMessageBrokerComposite messageBroker,
-			IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
+			IOpenAndSplitTargetSkill openAndSplitTargetSkill)
 			: base(
 				currentUnitOfWork, skillRepository, jobResultRepository, importForecastsRepository, contentProvider, analyzeQuery,
-				feedback, messageBroker, openAndSplitTargetSkillHandler)
+				feedback, messageBroker, openAndSplitTargetSkill)
 		{
 
 		}

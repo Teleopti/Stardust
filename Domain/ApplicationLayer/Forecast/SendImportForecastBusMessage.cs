@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
     {
         private readonly IForecastsAnalyzeQuery _analyzeQuery;
         private readonly IJobResultFeedback _feedback;
-	    private readonly IOpenAndSplitTargetSkillHandler _openAndSplitTargetSkillHandler;
+	    private readonly IOpenAndSplitTargetSkill _openAndSplitTargetSkill;
 
-		public SendImportForecastBusMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IOpenAndSplitTargetSkillHandler openAndSplitTargetSkillHandler)
+		public SendImportForecastBusMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IOpenAndSplitTargetSkill openAndSplitTargetSkill)
         {
             _analyzeQuery = analyzeQuery;
             _feedback = feedback;
-			_openAndSplitTargetSkillHandler = openAndSplitTargetSkillHandler;
+			_openAndSplitTargetSkill = openAndSplitTargetSkill;
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
             var listOfMessages =
                 generateMessages(
-                    new OpenAndSplitTargetSkillEvent
+                    new OpenAndSplitTargetSkillMessage
                         {
                             ImportMode = ImportForecastsMode.ImportWorkloadAndStaffing,
                             LogOnBusinessUnitId = targetSkill.BusinessUnit.Id.GetValueOrDefault(),
@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                             TargetSkillId = targetSkill.Id.GetValueOrDefault(),
                             JobId = _feedback.JobId()
                         }, result, period);
-            var currentSendingMsg = new OpenAndSplitTargetSkillEvent { Date = new DateTime() };
+            var currentSendingMsg = new OpenAndSplitTargetSkillMessage { Date = new DateTime() };
             try
             {
                 listOfMessages.ForEach(m =>
                                            {
                                                currentSendingMsg = m;
-											   _openAndSplitTargetSkillHandler.Handle(m);
+											   _openAndSplitTargetSkill.Process(m);
                                            });
             }
             catch (Exception e)
@@ -64,14 +64,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
             }
         }
 
-        private static IEnumerable<OpenAndSplitTargetSkillEvent> generateMessages(OpenAndSplitTargetSkillEvent messageTemplate,
+        private static IEnumerable<OpenAndSplitTargetSkillMessage> generateMessages(OpenAndSplitTargetSkillMessage messageTemplate,
                                                                        IForecastsAnalyzeQueryResult queryResult, DateOnlyPeriod period)
         {
-            var listOfMessages = new List<OpenAndSplitTargetSkillEvent>();
+            var listOfMessages = new List<OpenAndSplitTargetSkillMessage>();
             foreach (var date in period.DayCollection())
             {
                 var openHours = queryResult.WorkloadDayOpenHours.GetOpenHour(date);
-                listOfMessages.Add(new OpenAndSplitTargetSkillEvent
+                listOfMessages.Add(new OpenAndSplitTargetSkillMessage
                                        {
                                            LogOnBusinessUnitId = messageTemplate.LogOnBusinessUnitId,
                                            LogOnDatasource = messageTemplate.LogOnDatasource,

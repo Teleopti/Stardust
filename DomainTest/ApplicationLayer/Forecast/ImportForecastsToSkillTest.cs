@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[TestFixture]
 	public class ImportForecastsToSkillTest
 	{
-		private ImportForecastsToSkillHandler _target;
+		private ImportForecastProcessor _target;
 		private ICurrentUnitOfWork _unitOfWorkFactory;
 		private ISkillRepository _skillRepository;
 		private IJobResultRepository _jobResultRepository;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResult = MockRepository.GenerateMock<IJobResult>();
 			_disableFilter = MockRepository.GenerateMock<IDisableBusinessUnitFilter>();
 			_saveForecastToSkillCommand = MockRepository.GenerateMock<ISaveForecastToSkillCommand>();
-			_target = new ImportForecastsToSkillHandler(_unitOfWorkFactory, _saveForecastToSkillCommand,
+			_target = new ImportForecastProcessor(_unitOfWorkFactory, _saveForecastToSkillCommand,
 																		_skillRepository, _jobResultRepository, _feedback,
 																		_messageBroker, _disableFilter);
 		}
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
 			_saveForecastToSkillCommand.Stub(x => x.Execute(dateTime, skill, new[] { row }, ImportForecastsMode.ImportWorkload));
 
-			var message = new ImportForecastsToSkillEvent
+			var message = new ImportForecastProcessorMessage
 			{
 				JobId = jobId,
 				ImportMode = ImportForecastsMode.ImportWorkload,
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 				Forecasts = new[] { row },
 				Timestamp = DateTime.Now
 			};
-			_target.Handle(message);
+			_target.Process(message);
 
 		}
 	}
