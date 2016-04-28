@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -87,6 +88,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
 				stateHolder.SchedulingResultState, new ShiftNudgeDirective());
 
+			var rules = NewBusinessRuleCollection.Minimum();
+			if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
+			{
+				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+			}
 
 			//hackeri hackera
 			var currScheduleDay = stateHolder.Schedules[agent].ScheduledDay(date);
@@ -97,7 +103,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
 
 			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, overtimePreferences.OvertimeType));
-			stateHolder.Schedules.Modify(currScheduleDay);
+
+			rollbackService.ModifyStrictly(currScheduleDay, new ScheduleTagSetter(new ScheduleTag()), rules);
+
+			//stateHolder.Schedules.Modify(currScheduleDay);
 		}
 	}
 }
