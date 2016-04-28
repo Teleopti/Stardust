@@ -76,7 +76,7 @@ namespace Stardust.Manager
 
 			try
 			{
-				AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+				AssignJobToWorkerNode();
 			}
 
 			finally
@@ -126,7 +126,7 @@ namespace Stardust.Manager
 			return _workerNodeRepository.GetAllWorkerNodes();
 		}
 
-		public void AssignJobToWorkerNode(string useThisWorkerNodeUri)
+		public void AssignJobToWorkerNode()
 		{
 			this.Log().DebugWithLineNumber("Start TryAssignJobToWorkerNode.");
 
@@ -134,9 +134,7 @@ namespace Stardust.Manager
 
 			try
 			{
-				_jobRepository.AssignJobToWorkerNode(_httpSender,
-													 useThisWorkerNodeUri);
-
+				_jobRepository.AssignJobToWorkerNode(_httpSender);
 				this.Log().DebugWithLineNumber("Finished TryAssignJobToWorkerNode.");
 			}
 

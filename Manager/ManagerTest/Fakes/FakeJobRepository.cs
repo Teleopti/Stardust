@@ -63,8 +63,7 @@ namespace ManagerTest.Fakes
 			}
 		}
 
-		public void AssignJobToWorkerNode(IHttpSender httpSender, 
-									      string useThisWorkerNodeUri)
+		public void AssignJobToWorkerNode(IHttpSender httpSender)
 		{
 			throw new NotImplementedException();
 		}

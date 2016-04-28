@@ -65,7 +65,7 @@ namespace Stardust.Manager
 			//-----------------------------------------------
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri:null);
+				_jobManager.AssignJobToWorkerNode();
 			});
 
 			return Ok(jobQueueItem.JobId);
@@ -193,7 +193,7 @@ namespace Stardust.Manager
 				                              "Success",
 											  DateTime.UtcNow);
 
-				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+				_jobManager.AssignJobToWorkerNode();
 			});
 
 			return Ok();
@@ -234,7 +234,7 @@ namespace Stardust.Manager
 				                              "Failed",
 											  DateTime.UtcNow);
 				
-				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+				_jobManager.AssignJobToWorkerNode();
 			});
 
 			return Ok();
@@ -266,7 +266,7 @@ namespace Stardust.Manager
 				                              "Canceled",
 											  DateTime.UtcNow);
 				
-				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+				_jobManager.AssignJobToWorkerNode();
 			});
 
 			return Ok();
@@ -323,7 +323,7 @@ namespace Stardust.Manager
 
 				_nodeManager.AddWorkerNode(workerNodeUri);
 
-				_jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+				_jobManager.AssignJobToWorkerNode();
 			});
 
 			return Ok();

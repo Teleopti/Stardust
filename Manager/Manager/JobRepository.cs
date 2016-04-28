@@ -240,8 +240,7 @@ namespace Stardust.Manager
 			}
 		}
 
-		public virtual void AssignJobToWorkerNode(IHttpSender httpSender,
-												  string useThisWorkerNodeUri)
+		public void AssignJobToWorkerNode(IHttpSender httpSender)
 		{
 			ThrowArgumentNullExceptionIfHttpSenderIsNull(httpSender);
 
@@ -255,8 +254,6 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 
-					if (string.IsNullOrEmpty(useThisWorkerNodeUri))
-					{
 						var selectAllAliveWorkerNodesCommand =
 							CreateSelectAllAliveWorkerNodesSqlCommand(sqlConnection);
 
@@ -279,11 +276,6 @@ namespace Stardust.Manager
 
 						readerAliveWorkerNodes.Close();
 						readerAliveWorkerNodes.Dispose();
-					}
-					else
-					{
-						allAliveWorkerNodesUri.Add(new Uri(useThisWorkerNodeUri));
-					}
 
 					sqlConnection.Close();
 				}

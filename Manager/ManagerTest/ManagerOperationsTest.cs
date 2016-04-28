@@ -52,7 +52,7 @@ namespace ManagerTest
 
 			JobRepository.AddItemToJobQueue(jobQueueItem);
 
-			JobRepository.AssignJobToWorkerNode(HttpSender, useThisWorkerNodeUri: null);
+			JobRepository.AssignJobToWorkerNode(HttpSender);
 
 			HttpSender.CallToWorkerNodes.Clear();
 			ManagerController.CancelJobByJobId(jobQueueItem.JobId);
@@ -133,15 +133,14 @@ namespace ManagerTest
 
 			JobRepository.AddItemToJobQueue(jobQueueItem);
 
-			JobRepository.AssignJobToWorkerNode(HttpSender, useThisWorkerNodeUri: null);
+			JobRepository.AssignJobToWorkerNode(HttpSender);
 
 			ManagerController.CancelJobByJobId(jobQueueItem.JobId);
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be.EqualTo(0);
 		}
 
-
-		//We should maybe redesign this to not sleep and wait for the _jobManager.AssignJobToWorkerNode(useThisWorkerNodeUri:null); to be done in the Controller.
+		
 		[Test] 
 		public void ShouldSendTheJobToAnotherNodeIfFirstReturnsConflict()
 		{
