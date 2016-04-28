@@ -167,13 +167,25 @@
 			var selectedPersonIds = personSelectionSvc.getCheckedPersonIds();
 			var personIdFrom = selectedPersonIds[0];
 			var personIdTo = selectedPersonIds[1];
-			swapShiftsSvc.PromiseForSwapShifts(personIdFrom, personIdTo, vm.scheduleDateMoment(), function(result) {
-				vm.afterActionCallback(null, personSelectionSvc.getSelectedPersonIdList());
+			var scheduleDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
+			var trackId = guidgenerator.newGuid();
+			var swapShiftsForm = {
+				PersonIdFrom: personIdFrom,
+				PersonIdTo: personIdTo,
+				ScheduleDate: scheduleDate,
+				TrackedCommandInfo: {
+					TrackId: trackId
+				}
+			};
+			swapShiftsSvc.SwapShifts(swapShiftsForm).then(function onSwapSuccess(result) {
+				vm.afterActionCallback(trackId, personSelectionSvc.getSelectedPersonIdList());
 				if (result.length === 0) {
 					notificationService.notify('success', 'FinishedSwapShifts');
 				} else {
 					notificationService.notify('error', 'FailedToSwapShifts');
 				}
+			}, function onSwapError(error) {
+				notificationService.notify('error', 'FailedToSwapShifts');
 			});
 		}
 

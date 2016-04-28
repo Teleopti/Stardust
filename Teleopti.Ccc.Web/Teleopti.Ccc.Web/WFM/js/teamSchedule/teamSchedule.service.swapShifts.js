@@ -12,19 +12,10 @@ angular.module("wfm.teamSchedule").service("SwapShifts", ["$resource", "guidgene
 			}
 		});
 
-		svc.PromiseForSwapShifts = function(personFrom, personTo, scheduleDate, action) {
-			var trackId = guidgenerator.newGuid();
-			swapShifts.post({
-				PersonIdFrom: personFrom,
-				PersonIdTo: personTo,
-				ScheduleDate: scheduleDate.format("YYYY-MM-DD"),
-				TrackedCommandInfo: { TrackId: trackId }
-			}).$promise.then(function (result) {
-				action({
-					TrackId: trackId,
-					Errors: result
-				});
-			});
+		svc.SwapShifts = SwapShifts;
+
+		function SwapShifts(swapShiftsForm) {
+			return swapShifts.post(swapShiftsForm).$promise;
 		}
 	}
 ]);
