@@ -212,6 +212,7 @@ function global:CopyFilesToOutput {
 
     #Copy PreReq tool to Output folder
     Copy-Item -Path "$MountKDirectory\PreReqsCheck\CheckPreRequisites.exe" -Destination "$OutDir\CheckPreRequisites.exe" -Force -ErrorAction stop
+	Copy-Item -Path "$MountKDirectory\PreReqsCheck\CheckPreRequisites.exe.config" -Destination "$OutDir\CheckPreRequisites.exe.config" -Force -ErrorAction stop
 
     #Create lastchangeset.txt file for Output directory
    
