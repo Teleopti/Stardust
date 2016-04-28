@@ -3437,11 +3437,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
-			var resouceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true);
-
 			_container.Resolve<IScheduleOvertimeCommand>()
 				.Execute(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
-					scheduleDays, resouceCalculateDelayer, _gridLockManager);
+					scheduleDays, _gridLockManager);
 
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 			_undoRedo.CommitBatch();

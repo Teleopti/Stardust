@@ -17,21 +17,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		public ScheduleOvertimeCommand(Func<ISchedulerStateHolder> schedulerState, 
 																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
-																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays)
+																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
+																	IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
 		//TODO: change from IScheduleDay to persons and dates?
-		public void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
+		public void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IGridlockManager gridlockManager)
 		{
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;

@@ -17,15 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
-		private readonly IResourceOptimizationHelper _resoureOptimizationHelper;
 
 		public ScheduleOvertimeOnNonScheduleDays(Func<ISchedulerStateHolder> schedulerStateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
 			IMatrixListFactory matrixListFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamInfoFactory teamInfoFactory,
-			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
-			IResourceOptimizationHelper resoureOptimizationHelper)
+			IGroupPersonBuilderWrapper groupPersonBuilderWrapper)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -33,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamInfoFactory = teamInfoFactory;
 			_groupPersonBuilderWrapper = groupPersonBuilderWrapper;
-			_resoureOptimizationHelper = resoureOptimizationHelper;
 		}
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
@@ -58,9 +55,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var stateHolder = _schedulerStateHolder();
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
-
-			//REMOVE
-			var resDelayerREMOVEME = new ResourceCalculateDelayer(_resoureOptimizationHelper, 1, true);
 
 			//TODO? reuse? slow?
 
@@ -90,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 
 			//TODO: flytta in shiftnudgedirective till metoden istället?
-			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resDelayerREMOVEME,
+			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
 				stateHolder.SchedulingResultState, new ShiftNudgeDirective());
 
 
