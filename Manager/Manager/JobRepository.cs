@@ -1662,8 +1662,8 @@ namespace Stardust.Manager
 								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
 								var urijob = builderHelper.GetUpdateJobUri(jobId);
 
-								var resp =
-									httpSender.PutAsync(urijob, null);
+								//what should happen if the response is not 200? 
+								var resp = httpSender.PutAsync(urijob, null);
 							}
 						}
 					}

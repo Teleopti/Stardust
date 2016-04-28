@@ -42,16 +42,10 @@ namespace Stardust.Manager
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
 												 exp);
-
 				throw;
 			}
 		}
-
-		/// <summary>
-		/// </summary>
-		/// <param name="url"></param>
-		/// <param name="data"></param>
-		/// <returns></returns>
+		
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
                                                          object data)
         {
@@ -82,7 +76,6 @@ namespace Stardust.Manager
             {
                 this.Log().ErrorWithLineNumber(exp.Message,
                                                  exp);
-
                 throw;
             }
         }
