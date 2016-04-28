@@ -29,40 +29,19 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult AddItemToJobQueue([FromBody] JobQueueItem jobQueueItem)
 		{
-			//-----------------------------------------------
-			// Assign job id to job queue item if not exists.
-			//-----------------------------------------------
-			if (jobQueueItem != null)
-			{
-				jobQueueItem.JobId = Guid.NewGuid();
-			}
-
-			//-----------------------------------------------
-			// Validate job queue item.
-			//-----------------------------------------------
 			var isValidRequest = _validator.ValidateObject(jobQueueItem);
-
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//-----------------------------------------------
-			// Add to job queue.
-			//-----------------------------------------------
+			if (!isValidRequest.Success)  return BadRequest(isValidRequest.Message);
+			
+			jobQueueItem.JobId = Guid.NewGuid();
 			_jobManager.AddItemToJobQueue(jobQueueItem);
 
 			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
 			                        WhoAmI(Request),
 			                        jobQueueItem.JobId,
 			                        jobQueueItem.Name);
-
 			this.Log().InfoWithLineNumber(msg);
 
-
-			//-----------------------------------------------
-			// Assign job queue item to a worker node.
-			//-----------------------------------------------
+			
 			Task.Factory.StartNew(() =>
 			{
 				_jobManager.AssignJobToWorkerNode();
@@ -74,20 +53,11 @@ namespace Stardust.Manager
 		[HttpDelete, Route(ManagerRouteConstants.CancelJob)]
 		public IHttpActionResult CancelJobByJobId(Guid jobId)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateJobId(jobId);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received job cancel from client ( jobId ) : ( " + jobId + " )");
-
-			//--------------------------------------
-			// Cancel job.
-			//--------------------------------------
+			
 			_jobManager.CancelJobByJobId(jobId);
 
 			return Ok();
@@ -104,18 +74,9 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.JobByJobId)]
 		public IHttpActionResult GetJobByJobId(Guid jobId)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateJobId(jobId);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Get job.
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			var job = _jobManager.GetJobByJobId(jobId);
 
 			return Ok(job);
@@ -124,18 +85,9 @@ namespace Stardust.Manager
 		[HttpGet, Route(ManagerRouteConstants.JobDetailByJobId)]
 		public IHttpActionResult GetJobDetailsByJobId(Guid jobId)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateJobId(jobId);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Get job details..
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			var jobDetailsByJobId = _jobManager.GetJobDetailsByJobId(jobId);
 
 			return Ok(jobDetailsByJobId);
@@ -144,18 +96,9 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Heartbeat)]
 		public IHttpActionResult WorkerNodeRegisterHeartbeat([FromBody] Uri workerNodeUri)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Register heartbeat from worker node.
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			Task.Factory.StartNew(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + 
@@ -170,18 +113,9 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobSucceed)]
 		public IHttpActionResult JobSucceed(Guid jobId)
 		{			
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateJobId(jobId);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Job done.
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			Task.Factory.StartNew(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
@@ -202,18 +136,9 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobFailed)]
 		public IHttpActionResult JobFailed([FromBody] JobFailed jobFailed)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateObject(jobFailed);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Job failed.
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			Task.Factory.StartNew(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
@@ -243,18 +168,9 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobCanceled)]
 		public IHttpActionResult JobCanceled(Guid jobId)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateJobId(jobId);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Job canceled.
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			Task.Factory.StartNew(() =>
 			{
 				var workerNodeUri = Request.RequestUri.GetLeftPart(UriPartial.Authority);
@@ -276,18 +192,9 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.JobDetail)]
 		public IHttpActionResult AddJobDetail([FromBody] JobDetail jobDetail)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateObject(jobDetail);
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Add job detail.
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			Task.Factory.StartNew(() =>
 			{
 				_jobManager.CreateJobDetail(jobDetail);
@@ -301,19 +208,10 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri workerNodeUri)
 		{
-			//--------------------------------------
-			// Validate argument.
-			//--------------------------------------
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
 
-			if (!isValidRequest.Success)
-			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			//--------------------------------------
-			// Node initialize.
-			//--------------------------------------
+			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
+			
 			Task.Factory.StartNew(() =>
 			{
 				this.Log().InfoWithLineNumber(WhoAmI(Request) + ": Received init from Node. Node Uri : ( " + workerNodeUri + " )");
