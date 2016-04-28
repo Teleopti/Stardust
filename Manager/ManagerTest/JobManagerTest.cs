@@ -71,7 +71,7 @@ namespace ManagerTest
 			
 			JobManager.AddItemToJobQueue(jobQueueItem);
 
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNode();
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
 			JobRepository.GetAllJobs().Count.Should().Be(1);
@@ -129,7 +129,7 @@ namespace ManagerTest
 		
 			JobManager.AddItemToJobQueue(jobQueueItem);
 			
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNode();
 			
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
@@ -162,7 +162,7 @@ namespace ManagerTest
 
 			JobManager.AddItemToJobQueue(jobQueueItem);
 
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNode();
 
 			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
 		}
@@ -170,7 +170,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldDoNothing_WhenNoWorkerNodeExists_AndJobQueueIsEmpty()
 		{
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNode();
 
 			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
 		}
@@ -220,7 +220,7 @@ namespace ManagerTest
 		
 			JobManager.AddItemToJobQueue(jobQueueItem);
 			
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNode();
 			
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
