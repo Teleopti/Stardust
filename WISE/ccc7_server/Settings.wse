@@ -581,6 +581,11 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(DISABLE_SECOND_LEVEL_CACHE)|false
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(SIGNALR_BACKPLANE_TYPE)|%SIGNALR_BACKPLANE_TYPE_TMP%
   Line Number=0
 end
