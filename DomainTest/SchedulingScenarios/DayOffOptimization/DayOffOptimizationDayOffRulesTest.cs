@@ -305,8 +305,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			PersonAssignmentRepository.GetSingle(skillDays[6].CurrentDate, agentWithExplicitFilter).DayOff().Should().Not.Be.Null();
 		}
 
-		public void Setup(ISystem system, IIocConfiguration configuration)
+		public override void Setup(ISystem system, IIocConfiguration configuration)
 		{
+			base.Setup(system, configuration);
 			system.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
 		}
 	}

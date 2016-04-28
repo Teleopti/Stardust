@@ -11,12 +11,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeActivityRepository : IActivityRepository
 	{
 		private readonly IList<IActivity> _activities;
-		private bool withoutAdd = true;
-		private readonly IActivity activity = ActivityFactory.CreateActivity("phone");
 
 		public FakeActivityRepository()
 		{
 			_activities = new List<IActivity>();
+		}
+
+		public void Has(IActivity activity)
+		{
+			Add(activity);
 		}
 
 		public IActivity Has(string name)
@@ -31,15 +34,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_activities.Add(newActivity);
 			return newActivity;
 		}
-
-		public void SetOutboundActivity(bool isOutboundActivity)
-		{
-			activity.IsOutboundActivity = isOutboundActivity;
-		}
-
+		
 		public void Add(IActivity activity)
 		{
-			withoutAdd = false;
 			_activities.Add(activity);
 		}
 
@@ -50,12 +47,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IActivity Get(Guid id)
 		{
-			return withoutAdd ? activity : _activities.FirstOrDefault(a => id == a.Id);
+			return _activities.FirstOrDefault(a => id == a.Id);
 		}
 
 		public IList<IActivity> LoadAll()
 		{
-			return withoutAdd ? new List<IActivity> { activity } : _activities;
+			return _activities;
 		}
 
 		public IActivity Load(Guid id)
@@ -74,9 +71,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
+
 		public IList<IActivity> LoadAllSortByName()
 		{
-			return withoutAdd ? new List<IActivity> { activity } : _activities.OrderBy(x => x.Name).ToList();
+			return _activities.OrderBy(x => x.Name).ToList();
 		}
+
 	}
 }

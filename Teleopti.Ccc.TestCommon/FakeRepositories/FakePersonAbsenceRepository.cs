@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -10,6 +11,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 
 		private List<IPersonAbsence> _personAbsences = new List<IPersonAbsence>();
+
+
+		public void Has(IPersonAbsence personAbsence)
+		{
+			Add(personAbsence);
+		}
 
 		public void Add(IPersonAbsence entity)
 		{
@@ -94,5 +101,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
+
 	}
 }

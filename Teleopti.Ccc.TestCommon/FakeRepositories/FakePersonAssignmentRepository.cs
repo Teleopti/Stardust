@@ -25,6 +25,39 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_personAssignments.Add(personAssignment);
 		}
 
+
+
+
+		public void Has(IPersonAssignment personAssignment)
+		{
+			Add(personAssignment);
+		}
+
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod)
+		{
+			foreach (var date in period.DayCollection())
+			{
+				var ass = new PersonAssignment(agent, scenario, date);
+				ass.AddActivity(activity, timePeriod);
+				ass.SetShiftCategory(shiftCategory);
+				Add(ass);
+			}
+		}
+
+		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod)
+		{
+			Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date), timePeriod);
+		}
+
+		public void Has(IPerson agent, IScenario scenario, IDayOffTemplate dayOffTemplate, DateOnly date)
+		{
+			var ass = new PersonAssignment(agent, scenario, date);
+			ass.SetDayOff(dayOffTemplate);
+			Add(ass);
+		}
+
+
+
 		public void Add(IPersonAssignment entity)
 		{
 			_personAssignments.Add(entity);
@@ -97,32 +130,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _personAssignments.Single(pa => pa.Date == dateOnly && pa.Person.Equals(agent));
 		}
 
-		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod)
-		{
-			foreach (var date in period.DayCollection())
-			{
-				var ass = new PersonAssignment(agent, scenario, date);
-				ass.AddActivity(activity, timePeriod);
-				ass.SetShiftCategory(shiftCategory);
-				Add(ass);
-			}
-		}
-
-		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnly date, TimePeriod timePeriod)
-		{
-			Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(date, date), timePeriod);
-		}
-
 		public void Clear()
 		{
 			_personAssignments.Clear();
 		}
 
-		public void Has(IPerson agent, IScenario scenario, IDayOffTemplate dayOffTemplate, DateOnly date)
-		{
-			var ass = new PersonAssignment(agent, scenario, date);
-			ass.SetDayOff(dayOffTemplate);
-			Add(ass);
-		}
 	}
 }

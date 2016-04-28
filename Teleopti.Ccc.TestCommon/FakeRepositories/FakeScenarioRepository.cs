@@ -21,11 +21,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_scenario.Add(scenario);
 		}
 
+		public void Has(IScenario scenario)
+		{
+			_scenario.Add(scenario);
+		}
+
 		public IScenario Has(string name)
 		{
 			var scenario = new Scenario(name).WithId();
 			scenario.DefaultScenario = true;
-			_scenario.Add(scenario);
+			Has(scenario);
 			return scenario;
 		}
 

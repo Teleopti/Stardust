@@ -11,7 +11,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeDayOffTemplateRepository : IDayOffTemplateRepository
 	{
-		private readonly IList<IDayOffTemplate> _dayOffTemplates = new List<IDayOffTemplate>(); 
+		private readonly IList<IDayOffTemplate> _dayOffTemplates = new List<IDayOffTemplate>();
+
+		public void Has(IDayOffTemplate entity)
+		{
+			Add(entity);
+		}
 
 		public void Add(IDayOffTemplate entity)
 		{
@@ -30,9 +35,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IDayOffTemplate> LoadAll()
 		{
-			if(!_dayOffTemplates.Any())
-				return new List<IDayOffTemplate> { DayOffFactory.CreateDayOff() };
-
 			return _dayOffTemplates;
 		}
 
@@ -56,5 +58,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return new List<IDayOffTemplate>() { new DayOffTemplate() };
 		}
+
 	}
 }

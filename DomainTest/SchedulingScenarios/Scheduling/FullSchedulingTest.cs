@@ -27,10 +27,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
+		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 
 		[Test]
 		public void ShouldNotCreateTags()
 		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
 			var activity = ActivityRepository.Has("_");
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldNotScheduleDaysOffOutsideSelectedDays()
 		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var firstDay = new DateOnly(2015, 10, 12); 
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7)); //12 to 18
 			var activity = ActivityRepository.Has("_");

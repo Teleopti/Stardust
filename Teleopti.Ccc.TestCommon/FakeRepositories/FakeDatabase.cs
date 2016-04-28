@@ -4,6 +4,9 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -101,6 +104,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 	}
 
+	public static class FakeDatabaseScheduleExtensions
+	{
+		public static FakeDatabase WithDayOffTemplate(this FakeDatabase database, Guid? id)
+		{
+			return database.WithDayOffTemplate(id, null, null);
+		}
+
+		public static FakeDatabase WithDayOffTemplate(this FakeDatabase database, string name, string shortName)
+		{
+			return database.WithDayOffTemplate(null, name, shortName);
+		}
+
+		public static FakeDatabase WithAbsence(this FakeDatabase database, Guid? id)
+		{
+			return database.WithAbsence(id, null);
+		}
+	}
+
 	public class FakeDatabase
 	{
 		private readonly FakeTenants _tenants;
@@ -112,9 +133,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakePartTimePercentageRepository _partTimePercentages;
 		private readonly FakeContractScheduleRepository _contractSchedules;
 		private readonly FakeApplicationRoleRepository _applicationRoles;
+		private readonly FakeScenarioRepository _scenarios;
+		private readonly FakeDayOffTemplateRepository _dayOffTemplates;
+		private readonly FakePersonAssignmentRepository _personAssignments;
 		private readonly FakeApplicationFunctionRepository _applicationFunctions;
 		private readonly FakeAvailableDataRepository _availableDatas;
 		private readonly IDefinedRaptorApplicationFunctionFactory _allApplicationFunctions;
+		private readonly FakeAbsenceRepository _absences;
+		private readonly FakePersonAbsenceRepository _personAbsences;
+		private readonly FakeActivityRepository _activities;
 
 		private BusinessUnit _businessUnit;
 		private Site _site;
@@ -123,6 +150,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private Contract _contract;
 		private PartTimePercentage _partTimePercentage;
 		private ContractSchedule _contractSchedule;
+		private Scenario _scenario;
+		private DayOffTemplate _dayOffTemplate;
+		private PersonAssignment _personAssignment;
+		private Absence _absence;
+		private PersonAbsence _personAbsence;
+		private Activity _activity;
 
 		public FakeDatabase(
 			FakeTenants tenants,
@@ -134,9 +167,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakePartTimePercentageRepository partTimePercentages,
 			FakeContractScheduleRepository contractSchedules,
 			FakeApplicationRoleRepository applicationRoles,
+			FakeScenarioRepository scenarios,
+			FakeDayOffTemplateRepository dayOffTemplates,
+			FakePersonAssignmentRepository personAssignments,
 			FakeApplicationFunctionRepository applicationFunctions,
 			FakeAvailableDataRepository availableDatas,
-			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions
+			IDefinedRaptorApplicationFunctionFactory allApplicationFunctions,
+			FakeAbsenceRepository absences,
+			FakePersonAbsenceRepository personAbsences,
+			FakeActivityRepository activities
 			)
 		{
 			_tenants = tenants;
@@ -148,9 +187,15 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_partTimePercentages = partTimePercentages;
 			_contractSchedules = contractSchedules;
 			_applicationRoles = applicationRoles;
+			_scenarios = scenarios;
+			_dayOffTemplates = dayOffTemplates;
+			_personAssignments = personAssignments;
 			_applicationFunctions = applicationFunctions;
 			_availableDatas = availableDatas;
 			_allApplicationFunctions = allApplicationFunctions;
+			_absences = absences;
+			_personAbsences = personAbsences;
+			_activities = activities;
 			createDefaultData();
 		}
 		
@@ -302,7 +347,78 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			return this;
 		}
-		
+
+		public FakeDatabase WithScenario(Guid? id)
+		{
+			_scenario = new Scenario(RandomName.Make("scenario"));
+			_scenario.SetId(id ?? Guid.NewGuid());
+			_scenarios.Has(_scenario);
+			return this;
+		}
+
+		public FakeDatabase WithDayOffTemplate(Guid? id, string name, string shortName)
+		{
+			_dayOffTemplate = new DayOffTemplate(new Description(name ?? RandomName.Make(), shortName));
+			_dayOffTemplate.SetId(id ?? Guid.NewGuid());
+			_dayOffTemplates.Has(_dayOffTemplate);
+			return this;
+		}
+
+		public FakeDatabase WithAssignment(string date, Guid person)
+		{
+			_personAssignment = new PersonAssignment(_person, _scenario, date.Date());
+			_personAssignment.SetId(Guid.NewGuid());
+			_personAssignments.Has(_personAssignment);
+			return this;
+		}
+
+		public FakeDatabase WithDayOff()
+		{
+			ensureExists(_dayOffTemplates, null, () => this.WithDayOffTemplate(null));
+			_personAssignment.SetDayOff(_dayOffTemplate);
+			return this;
+		}
+
+		public FakeDatabase WithAbsence(Guid? id, bool? confidential)
+		{
+			_absence = new Absence();
+			_absence.SetId(id ?? Guid.NewGuid());
+			if (confidential.HasValue)
+				_absence.Confidential = confidential.Value;
+			_absences.Has(_absence);
+			return this;
+		}
+
+		public FakeDatabase WithConfidentialAbsence()
+		{
+			return WithAbsence(null, true);
+		}
+
+		public FakeDatabase WithPersonAbsence(string date)
+		{
+			ensureExists(_absences, null, () => this.WithAbsence(null));
+			_personAbsence = new PersonAbsence(_person, _scenario, new AbsenceLayer(_absence, new DateTimePeriod(date.Utc(), date.Utc().AddHours(24))));
+			_personAbsence.SetId(Guid.NewGuid());
+			_personAbsences.Has(_personAbsence);
+			return this;
+		}
+
+		public FakeDatabase WithActivty2(Guid? id)
+		{
+			_activity = new Activity(RandomName.Make());
+			_activity.SetId(id ?? Guid.NewGuid());
+			_activities.Has(_activity);
+			return this;
+		}
+
+		public FakeDatabase WithActivty(string startTime, string endTime)
+		{
+			ensureExists(_activities, null, () => this.WithActivty2(null));
+			_personAssignment.AddActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
+			return this;
+		}
+
+
 		private static void ensureExists<T>(IRepository<T> loadAggregates, Guid? id, Action createAction)
 			where T : IAggregateRoot
 		{
@@ -317,5 +433,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
+
 	}
 }

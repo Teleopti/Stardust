@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,6 +15,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Add(IAbsence root)
 		{
 			_absences.Add(root);
+		}
+
+		public void Has(IAbsence absence)
+		{
+			Add(absence);
 		}
 
 		public void Remove(IAbsence root)
@@ -61,6 +67,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			throw new NotImplementedException();
 		}
-		
+
 	}
 }
