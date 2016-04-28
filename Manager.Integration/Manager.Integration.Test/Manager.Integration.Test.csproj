@@ -117,13 +117,11 @@
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeSetup.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeWait.cs" />
-    <Compile Include="Initializers\InitialzeAndFinalizeOneManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />
-    <Compile Include="IntegrationControllerTests\IntegrationControllerOneManagerAndOneNodeTests.cs" />
-    <Compile Include="Interceptor\FunctionalTestInterceptor.cs" />
+    <Compile Include="LongRunningTests\OneManagerAndFiveNodesLongRunningTest.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\JobDetail.cs" />
     <Compile Include="Models\JobQueueItem.cs" />
@@ -135,18 +133,13 @@
     <Compile Include="Notifications\SqlNotifier.cs" />
     <Compile Include="LoadTests\OneManagerAndSixNodesLoadTests.cs" />
     <Compile Include="FunctionalTests\OneManagerAndZeroNodesTests.cs" />
-    <Compile Include="LongRunningJobParams.cs" />
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />
-    <Compile Include="FailingJobParams.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RecoveryTests\OneManagerAndOneNodeRecoveryTests.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="LoadTests\SixManagersSixNodesLoadTests.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
     <Compile Include="Tasks\StartJobTaskHelper.cs" />
-    <Compile Include="FastJobParams.cs" />
-    <Compile Include="TestJobTimerParams.cs" />
-    <Compile Include="TestJobParams.cs" />
     <Compile Include="FunctionalTests\OneManagerAndOneNodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -154,9 +147,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Params\FailingJobParams.cs" />
+    <Compile Include="Params\FastJobParams.cs" />
+    <Compile Include="Params\LongRunningJobParams.cs" />
+    <Compile Include="Params\TestJobParams.cs" />
+    <Compile Include="Params\TestJobTimerParams.cs" />
     <Compile Include="Timers\CheckJobStatusTimer.cs" />
     <Compile Include="Timers\CheckTablesInManagerDbTimer.cs" />
-    <Compile Include="Timers\SendJobEveryDurationTimer.cs" />
     <Compile Include="Validators\IntegerValidators.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -169,10 +166,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EventHandlers\" />
-    <Folder Include="LongRunningTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Scripts\CreateLoggingTable.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

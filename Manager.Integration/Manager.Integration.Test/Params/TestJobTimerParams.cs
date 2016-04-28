@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Manager.Integration.Test
+namespace Manager.Integration.Test.TestParams
 {
 	public class TestJobTimerParams
 	{

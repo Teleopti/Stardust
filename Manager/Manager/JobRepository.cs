@@ -342,7 +342,11 @@ namespace Stardust.Manager
 					}
 				}
 			}
-
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
+			}
 			finally
 			{
 				Monitor.Exit(_lockTryAssignJobToWorkerNode);

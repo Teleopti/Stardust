@@ -98,7 +98,7 @@
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Database\DatabaseSchemaCreator.cs" />
     <Compile Include="Database\DatabaseTasks.cs" />
-    <Compile Include="Database\DatabaseTest.cs" />
+    <Compile Include="DatabaseTest.cs" />
     <Compile Include="Database\ExecuteSql.cs" />
     <Compile Include="Database\SchemaVersionInformation.cs" />
     <Compile Include="Fakes\FakeHttpSender.cs" />
@@ -126,7 +126,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <Content Include="WhoLock.sql" />
+    <Content Include="Database\WhoLock.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

@@ -36,8 +36,6 @@ namespace Manager.Integration.Test.FunctionalTests
 			this.Log().DebugWithLineNumber(message);
 		}
 
-		private readonly object _lockSetManualResetEventSlimWhenAllJobsEndedEventHandler = new object();
-
 		public ManagerUriBuilder MangerUriBuilder { get; set; }
 
 		public HttpSender HttpSender { get; set; }

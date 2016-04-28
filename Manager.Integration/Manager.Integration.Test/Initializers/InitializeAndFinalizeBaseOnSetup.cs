@@ -4,10 +4,8 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
-using Castle.DynamicProxy;
 using log4net.Config;
 using Manager.Integration.Test.Helpers;
-using Manager.Integration.Test.Interceptor;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Validators;
@@ -59,9 +57,6 @@ namespace Manager.Integration.Test.Initializers
 		protected virtual void RegisterContainer()
 		{
 			var containerBuilder = new ContainerBuilder();
-
-			containerBuilder.RegisterType<FunctionalTestInterceptor>()
-				.Named<IInterceptor>("FunctionalTestInterceptor");
 
 			Container = containerBuilder.Build();
 		}

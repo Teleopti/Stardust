@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
+using Manager.Integration.Test.TestParams;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Newtonsoft.Json;
 

@@ -14,7 +14,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<ManagerConfiguration>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
 
-			builder.RegisterType<NodeManager>().SingleInstance();
+			
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
 
 			builder.Register(
@@ -28,6 +28,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<ManagerController>();
 
 			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<NodeManager>().SingleInstance();
 		}
 	}
 }
