@@ -273,8 +273,12 @@ describe("[Test for TeamScheduleController]:", function() {
 
 	function setupMockCurrentUserInfoService() {
 		return {
-			DefaultTimeZone: "Etc/UTC",
-			DateFormatLocale: "en-GB"
+			CurrentUserInfo: function() {
+				return {
+					DefaultTimeZone: "Etc/UTC",
+					DateFormatLocale: "en-GB"
+				};
+			}			
 		};
 	}
 
