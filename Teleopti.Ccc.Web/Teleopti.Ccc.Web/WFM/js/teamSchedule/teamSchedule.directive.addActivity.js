@@ -51,31 +51,29 @@
 			return notAllowed.substr(0, notAllowed.length - 2);
 		};
 
-		vm.isInputValid = function () {
-			var ret = true;
-			if (vm.timeRange == undefined || vm.selectedActivityId == undefined)
-				return ret;
-			angular.forEach(vm.selectedAgents, function(selectedAgent) {
-				var isAllowed = isNewActivityAllowed(vm.timeRange.startTime, selectedAgent.scheduleEndTime);
-				if (!isAllowed) {
-					ret = false;
+		vm.isInputValid = function () {						
+			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return true;				
+			var isValid = true;
+			notAllowed = "";
+			var formattedStartTime = moment(vm.timeRange.startTime).format('YYYY-MM-DD HH:mm');
+			angular.forEach(vm.selectedAgents, function (selectedAgent) {
+				if (selectedAgent.scheduleEndTime == undefined) return;			
+				var isAllowed = isNewActivityAllowed(formattedStartTime, selectedAgent.scheduleEndTime);
+				if (!isAllowed) {				
+					isValid = false;
 					if (notAllowed.indexOf(selectedAgent.name) == -1) {
 						notAllowed += selectedAgent.name + ', ';
 					}
-
 				}
 			});
 
-			return ret;
+			return isValid;
 		};
 
-		function isNewActivityAllowed(activityStart, scheduleEnd) {
-			if (activityStart == undefined || scheduleEnd == undefined) {
-				return true;
-			}
+		function isNewActivityAllowed(activityStart, scheduleEnd) {			
 			var mActivityStart = moment(activityStart);
 			var mScheduleEnd = moment(scheduleEnd);
-			return !vm.isNextDay || (vm.isNextDay && mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart)));
+			return !vm.isNextDay ||  mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
 		}
 
 		function addActivity() {
