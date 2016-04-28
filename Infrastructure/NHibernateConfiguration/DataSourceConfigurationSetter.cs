@@ -38,10 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			return new DataSourceConfigurationSetter(true, "Teleopti.Wfm.Web", new ConfigReader());
 		}
-		public static IDataSourceConfigurationSetter ForLoadBalancedWeb()
-		{
-			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.Web", new ConfigReader());
-		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
 			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.SmartClientPortal.Shell", new ConfigReader());
@@ -103,6 +99,5 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			connStringObj.ApplicationName = ApplicationName;
 			nhConfiguration.SetProperty(Environment.ConnectionString, connStringObj.ToString());
 		}
-
 	}
 }
