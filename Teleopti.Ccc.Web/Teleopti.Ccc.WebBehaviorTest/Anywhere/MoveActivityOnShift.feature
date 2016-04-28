@@ -112,6 +112,7 @@ Scenario: The team leader should be able to change the current selected activity
 	| Activity       | Phone            |
 	| Start time     | 2013-11-18 11:00 |
 
+@ignore
 Scenario: Back to viewing schedule after moving an activity
 	Given 'John King' has a person period with
 	| Field      | Value      |
