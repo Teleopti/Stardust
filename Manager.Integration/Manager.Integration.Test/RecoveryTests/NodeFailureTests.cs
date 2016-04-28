@@ -292,7 +292,6 @@ namespace Manager.Integration.Test.RecoveryTests
 			WaitForJobToStartEvent.Wait(TimeSpan.FromSeconds(10));
 
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == 2, "There should be two nodes registered");
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.All(node => node.Alive), "Worker Nodes should be alive.");
 			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue should be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Job should not be empty.");
 
