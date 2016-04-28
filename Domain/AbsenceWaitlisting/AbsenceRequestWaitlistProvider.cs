@@ -40,17 +40,18 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 			var requestTypes = new[] { RequestType.AbsenceRequest };
 			var requestFilter = new RequestFilter() { Period = period, RequestTypes = requestTypes, ExcludeRequestsOnFilterPeriodEdge = true };
 
-			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests(requestFilter)
-									 where requestShouldBeProcessed(request, workflowControlSet)
-									 orderby request.CreatedOn ascending
-									 select request;
 
-			return waitlistedRequests;
+			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests (requestFilter)
+				where requestShouldBeProcessed (request, workflowControlSet)
+				orderby request.CreatedOn ascending
+				select request;
+
+			return waitlistedRequests.ToList();
 		}
 		
-		private static bool requestShouldBeProcessed(IPersonRequest request, IWorkflowControlSet workflowControlSet)
+		private bool requestShouldBeProcessed(IPersonRequest request, IWorkflowControlSet workflowControlSet)
 		{
-			return ( request.IsWaitlisted || request.IsNew ) && request.Person.WorkflowControlSet == workflowControlSet;
+			return ( request.IsWaitlisted || request.IsNew ) && request.Person.WorkflowControlSet.Id == workflowControlSet.Id;
 
 		}
 	}
