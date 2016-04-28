@@ -182,7 +182,7 @@ namespace Manager.Integration.Test.RecoveryTests
 			// Database validators.
 			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer =
-				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
+				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 500);
 
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
@@ -287,9 +287,9 @@ namespace Manager.Integration.Test.RecoveryTests
 			addToJobQueueTask.Start();
 			addToJobQueueTask.Wait();
 
-			//Should not take long time to assign job, if it takes more than a couple of seconds 
+			//Should not take long time to assign job, if it takes more then some seconds 
 			// then it is maybe the background timer who assigned the job
-			WaitForJobToStartEvent.Wait(TimeSpan.FromSeconds(2));
+			WaitForJobToStartEvent.Wait(TimeSpan.FromSeconds(10));
 
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == 2, "There should be two nodes registered");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.All(node => node.Alive), "Worker Nodes should be alive.");
