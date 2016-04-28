@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
+			if(!scheduleDay.PersonAbsenceCollection().IsEmpty())
+				return;
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var agent = scheduleDay.Person;
 			if (overtimePreferences.ShiftBagOvertimeScheduling == null)
@@ -57,10 +59,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var resDelayerREMOVEME = new ResourceCalculateDelayer(_resoureOptimizationHelper, 1, true);
 
 			//TODO? reuse? slow?
-			var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[]{scheduleDay});
 
+			//hackera hackeri
+			var orgPersonAss = scheduleDay.PersonAssignment(true).Clone() as IPersonAssignment;
+			var addDayOff = false;
+			if (scheduleDay.HasDayOff())
+			{
+				scheduleDay.DeleteDayOff();
+				stateHolder.Schedules.Modify(scheduleDay);
+				addDayOff = true;
+			}
+
+			var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[]{scheduleDay});
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, BlockFinderType.SingleDay, true);
+
 			//TODO reuse? slow?
 			var rollbackService =
 				new SchedulePartModifyAndRollbackService(
@@ -81,6 +94,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var currScheduleDay = stateHolder.Schedules[agent].ScheduledDay(date);
 			var currLayers = currScheduleDay.PersonAssignment().MainActivities();
 			currScheduleDay.Clear<IPersonAssignment>();
+
+			if (addDayOff)
+				orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
+
 			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, definitionSet));
 			stateHolder.Schedules.Modify(currScheduleDay);
 		}
