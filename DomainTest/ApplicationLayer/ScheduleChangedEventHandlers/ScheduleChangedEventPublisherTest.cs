@@ -1,21 +1,24 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	[TestFixture]
+	[DomainTest]
 	public class ScheduleChangedEventPublisherTest
 	{
+		public ScheduleChangedEventPublisher Target;
+		public FakeEventPublisher Publisher;
+
 		[Test]
 		public void ShouldPublishScheduleChangedEventOnActivityAssignedEvent()
 		{
-			var publisher = new FakePublishEventsFromEventHandlers();
-			var target = new ScheduleChangedEventPublisher(publisher);
-
 			var @event = new ActivityAddedEvent
 				{
 					Timestamp = new DateTime(2013, 11, 15, 10, 0, 0),
@@ -28,9 +31,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 					StartDateTime = new DateTime(2013, 11, 15, 8, 0, 0),
 					EndDateTime = new DateTime(2013, 11, 15, 9, 0, 0)
 				};
-			target.Handle(@event);
+			Target.Handle(@event);
 
-			var published = publisher.Published<ScheduleChangedEvent>();
+			var published = Publisher.PublishedEvents.OfType<ScheduleChangedEvent>().Single();
 			published.Timestamp.Should().Be(@event.Timestamp);
 			published.LogOnDatasource.Should().Be(@event.LogOnDatasource);
 			published.LogOnBusinessUnitId.Should().Be(@event.LogOnBusinessUnitId);
@@ -43,9 +46,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		[Test]
 		public void ShouldPublishScheduleChangedEventWhenActivityMovedEventHasFired()
 		{
-			var publisher = new FakePublishEventsFromEventHandlers();
-			var target = new ScheduleChangedEventPublisher(publisher);
-
 			var theEvent = new ActivityMovedEvent
 			{
 				Timestamp = DateTime.Now,
@@ -56,10 +56,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				StartDateTime = DateTime.Now,
 				EndDateTime = DateTime.Now.AddHours(2)
 			};
-			target.Handle(theEvent);
+			Target.Handle(theEvent);
 
-
-			var published = publisher.Published<ScheduleChangedEvent>();
+			var published = Publisher.PublishedEvents.OfType<ScheduleChangedEvent>().Single();
 			published.Timestamp.Should().Be(theEvent.Timestamp);
 			published.LogOnDatasource.Should().Be(theEvent.LogOnDatasource);
 			published.LogOnBusinessUnitId.Should().Be(theEvent.LogOnBusinessUnitId);
