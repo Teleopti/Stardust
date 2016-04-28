@@ -22,6 +22,7 @@ Background:
 	| Name  | Lunch  |
 	| Color | Yellow |
 
+@ignore
 Scenario: The team leader should be able to move an activity
 	Given 'John King' has a person period with
 	| Field      | Value      |
@@ -52,6 +53,7 @@ Scenario: The team leader should be able to move an activity
 	| Start time | 13:00 |
 	| End time   | 14:00 |
 
+@ignore
 Scenario: The team leader should be able to move an activity by drag and drop
 	Given 'John King' has a person period with
 	| Field      | Value      |
