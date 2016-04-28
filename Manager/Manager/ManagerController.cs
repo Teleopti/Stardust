@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Stardust.Manager.Constants;
 using Stardust.Manager.Extensions;
-using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 using Stardust.Manager.Validations;
 
@@ -29,10 +28,11 @@ namespace Stardust.Manager
 		[HttpPost, Route(ManagerRouteConstants.Job)]
 		public IHttpActionResult AddItemToJobQueue([FromBody] JobQueueItem jobQueueItem)
 		{
+			jobQueueItem.JobId = Guid.NewGuid();
+
 			var isValidRequest = _validator.ValidateObject(jobQueueItem);
 			if (!isValidRequest.Success)  return BadRequest(isValidRequest.Message);
 			
-			jobQueueItem.JobId = Guid.NewGuid();
 			_jobManager.AddItemToJobQueue(jobQueueItem);
 
 			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
@@ -209,7 +209,6 @@ namespace Stardust.Manager
 		public IHttpActionResult NodeInitialized([FromBody] Uri workerNodeUri)
 		{
 			var isValidRequest = _validator.ValidateUri(workerNodeUri);
-
 			if (!isValidRequest.Success) return BadRequest(isValidRequest.Message);
 			
 			Task.Factory.StartNew(() =>
