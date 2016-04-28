@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Timers;
 using Castle.Core.Internal;
-using Stardust.Manager.Diagnostics;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
-using Timer = System.Timers.Timer;
 
 namespace Stardust.Manager
 {
@@ -23,9 +20,9 @@ namespace Stardust.Manager
 		private readonly IWorkerNodeRepository _workerNodeRepository;
 
 		public JobManager(IJobRepository jobRepository,
-									IWorkerNodeRepository workerNodeRepository,
-									IHttpSender httpSender,
-									ManagerConfiguration managerConfiguration)
+		                  IWorkerNodeRepository workerNodeRepository,
+		                  IHttpSender httpSender,
+		                  ManagerConfiguration managerConfiguration)
 		{
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
@@ -33,11 +30,11 @@ namespace Stardust.Manager
 			_managerConfiguration = managerConfiguration;
 
 			_checkAndAssignJob.Elapsed += AssignJobToWorkerNodes_Elapsed;
-			_checkAndAssignJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds * 1000;
+			_checkAndAssignJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds*1000;
 			_checkAndAssignJob.Start();
 
 			_checkHeartbeatsTimer.Elapsed += CheckHeartbeats_Elapsed;
-			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds * 200;
+			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*200;
 			_checkHeartbeatsTimer.Start();
 
 			var workerNodes = _workerNodeRepository.GetAllWorkerNodes();
@@ -85,11 +82,15 @@ namespace Stardust.Manager
 			//and the second one won't find that job as "executing" and do nothing
 			var deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
 			if (deadNodes.IsNullOrEmpty())
+			{
 				return;
+			}
 
 			var jobs = _jobRepository.GetAllExecutingJobs();
 			if (jobs.IsNullOrEmpty())
+			{
 				return;
+			}
 
 			foreach (var node in deadNodes)
 			{
@@ -145,10 +146,10 @@ namespace Stardust.Manager
 		}
 
 		public void DeleteJobByJobId(Guid jobId,
-									 bool removeJobDetails)
+		                             bool removeJobDetails)
 		{
 			_jobRepository.DeleteJobByJobId(jobId,
-											removeJobDetails);
+			                                removeJobDetails);
 		}
 
 		public bool DoesJobQueueItemExists(Guid jobId)
@@ -159,23 +160,23 @@ namespace Stardust.Manager
 		public void CancelJobByJobId(Guid jobId)
 		{
 			_jobRepository.CancelJobByJobId(jobId,
-											_httpSender);
+			                                _httpSender);
 		}
 
 		public void UpdateResultForJob(Guid jobId,
-									   string result,
-									   DateTime ended)
+		                               string result,
+		                               DateTime ended)
 		{
 			_jobRepository.UpdateResultForJob(jobId,
-											  result,
-											  ended);
+			                                  result,
+			                                  ended);
 		}
 
 		public void CreateJobDetail(JobDetail jobDetail)
 		{
 			_jobRepository.CreateJobDetailByJobId(jobDetail.JobId,
-												  jobDetail.Detail,
-												  jobDetail.Created);
+			                                      jobDetail.Detail,
+			                                      jobDetail.Created);
 		}
 
 		public Job GetJobByJobId(Guid jobId)
