@@ -22,7 +22,7 @@ namespace Stardust.Manager.Interfaces
 
 		void DeleteJobQueueItemByJobId(Guid jobId);
 
-		void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri, bool keepJobDetailsIfExists);
+		void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri);
 
 		void AssignJobToWorkerNode(IHttpSender httpSender);
 

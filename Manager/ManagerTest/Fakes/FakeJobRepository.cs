@@ -53,7 +53,7 @@ namespace ManagerTest.Fakes
 			_jobs.Remove(j);
 		}
 
-		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri, bool keepJobDetails)
+		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri)
 		{
 			var jobs = _jobs.FirstOrDefault(x => x.SentToWorkerNodeUri == workerNodeUri);
 

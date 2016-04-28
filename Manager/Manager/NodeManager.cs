@@ -45,11 +45,9 @@ namespace Stardust.Manager
 			_nodeRepository.RegisterHeartbeat(nodeUri, true);
 		}
 
-		public void RequeueJobsThatDidNotFinishedByWorkerNodeUri(Uri workerNodeUri, 
-																 bool keepJobDetailsIfExists)
+		public void RequeueJobsThatDidNotFinishedByWorkerNodeUri(Uri workerNodeUri)
 		{
-			_jobRepository.RequeueJobThatDidNotEndByWorkerNodeUri(workerNodeUri.ToString(), 
-																  keepJobDetailsIfExists);
+			_jobRepository.RequeueJobThatDidNotEndByWorkerNodeUri(workerNodeUri.ToString());
 		}
 	}
 }
