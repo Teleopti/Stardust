@@ -44,12 +44,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var agent = scheduleDay.Person;
 			if (overtimePreferences.ShiftBagOvertimeScheduling == null)
 				return;
-			//TODO: what if there are multiple?
-			var definitionSet =
-				agent.Period(date)
-					.PersonContract.Contract.MultiplicatorDefinitionSetCollection.FirstOrDefault(
+			
+			var definitionSets = agent.Period(date)
+					.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Where(
 						x => x.MultiplicatorType == MultiplicatorType.Overtime);
-			if (definitionSet==null)
+
+			if(!definitionSets.Contains(overtimePreferences.OvertimeType))
 				return;
 
 			var stateHolder = _schedulerStateHolder();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (addDayOff)
 				orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
 
-			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, definitionSet));
+			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, overtimePreferences.OvertimeType));
 			stateHolder.Schedules.Modify(currScheduleDay);
 		}
 	}
