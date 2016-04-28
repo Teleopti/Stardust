@@ -176,8 +176,7 @@ Scenario: Add intraday absence times not displayed in other time zone
 	When I view person schedules add intraday absence form for 'John King' in 'Team green' on '2013-11-18'
 	Then I should not see add intraday absence times in other time zone
 
-
-
+@ignore
 Scenario: Move activity default time for agent in other time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
