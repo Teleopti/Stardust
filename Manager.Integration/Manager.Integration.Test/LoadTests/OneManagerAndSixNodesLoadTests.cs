@@ -25,6 +25,8 @@ namespace Manager.Integration.Test.LoadTests
 
 		public HttpSender HttpSender { get; set; }
 
+		public ManualResetEventSlim ManualResetEventSlim { get; set; }
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
@@ -37,8 +39,8 @@ namespace Manager.Integration.Test.LoadTests
 			var startedTest = DateTime.UtcNow;
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(50, 
-													   TimeSpan.FromSeconds(1));
+				JobHelper.GenerateTestJobTimerRequests(50,
+				                                       TimeSpan.FromSeconds(1));
 
 			var timeout =
 				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
@@ -52,8 +54,8 @@ namespace Manager.Integration.Test.LoadTests
 
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, jobs) =>
 			{
-				if (jobs.Any() && 
-					jobs.All(job => job.Started != null && job.Ended != null))
+				if (jobs.Any() &&
+				    jobs.All(job => job.Started != null && job.Ended != null))
 				{
 					if (!ManualResetEventSlim.IsSet)
 					{
@@ -63,12 +65,12 @@ namespace Manager.Integration.Test.LoadTests
 			};
 
 			HttpSender = new HttpSender();
-			MangerUriBuilder=new ManagerUriBuilder();
+			MangerUriBuilder = new ManagerUriBuilder();
 			ManualResetEventSlim = new ManualResetEventSlim();
 
 			var addToJobQueueUri = MangerUriBuilder.GetAddToJobQueueUri();
 
-			List<Task> tasks = new List<Task>();
+			var tasks = new List<Task>();
 
 			foreach (var newJobRequest in createNewJobRequests)
 			{
@@ -103,20 +105,16 @@ namespace Manager.Integration.Test.LoadTests
 
 						Thread.Sleep(TimeSpan.FromSeconds(10));
 					}
-
 				}, CancellationTokenSource.Token));
 			}
 
 			checkTablesInManagerDbTimer.JobTimer.Start();
 
-			Parallel.ForEach(tasks,(task) =>
-			{
-				task.Start();
-			});
+			Parallel.ForEach(tasks, task => { task.Start(); });
 
 			ManualResetEventSlim.Wait(timeout);
 
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.All(job => job.Result.StartsWith("success",StringComparison.InvariantCultureIgnoreCase)));
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
 
 			checkTablesInManagerDbTimer.Dispose();
 
@@ -135,7 +133,5 @@ namespace Manager.Integration.Test.LoadTests
 
 			LogMessage("Finished test.");
 		}
-
-		public ManualResetEventSlim ManualResetEventSlim { get; set; }
 	}
 }

@@ -4,13 +4,9 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
-using Manager.Integration.Test.Notifications;
-using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
-using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
@@ -29,6 +25,8 @@ namespace Manager.Integration.Test.LoadTests
 
 		public HttpSender HttpSender { get; set; }
 
+		public ManualResetEventSlim ManualResetEventSlim { get; set; }
+
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
@@ -42,11 +40,11 @@ namespace Manager.Integration.Test.LoadTests
 
 			var createNewJobRequests =
 				JobHelper.GenerateTestJobTimerRequests(50,
-													   TimeSpan.FromSeconds(1));
+				                                       TimeSpan.FromSeconds(1));
 
 			var timeout =
 				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-													   2);
+				                                       2);
 
 			//---------------------------------------------------------
 			// Database validator.
@@ -57,7 +55,7 @@ namespace Manager.Integration.Test.LoadTests
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, jobs) =>
 			{
 				if (jobs.Any() &&
-					jobs.All(job => job.Started != null && job.Ended != null))
+				    jobs.All(job => job.Started != null && job.Ended != null))
 				{
 					if (!ManualResetEventSlim.IsSet)
 					{
@@ -72,7 +70,7 @@ namespace Manager.Integration.Test.LoadTests
 
 			var addToJobQueueUri = MangerUriBuilder.GetAddToJobQueueUri();
 
-			List<Task> tasks = new List<Task>();
+			var tasks = new List<Task>();
 
 			foreach (var newJobRequest in createNewJobRequests)
 			{
@@ -107,16 +105,12 @@ namespace Manager.Integration.Test.LoadTests
 
 						Thread.Sleep(TimeSpan.FromSeconds(10));
 					}
-
 				}, CancellationTokenSource.Token));
 			}
 
 			checkTablesInManagerDbTimer.JobTimer.Start();
 
-			Parallel.ForEach(tasks, (task) =>
-			{
-				task.Start();
-			});
+			Parallel.ForEach(tasks, task => { task.Start(); });
 
 			ManualResetEventSlim.Wait(timeout);
 
@@ -128,18 +122,16 @@ namespace Manager.Integration.Test.LoadTests
 
 			var description =
 				string.Format("Creates {0} FAST = 1 second jobs with {1} manager and {2} nodes.",
-							  createNewJobRequests.Count,
-							  NumberOfManagers,
-							  NumberOfNodes);
+				              createNewJobRequests.Count,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
+			                                  description,
+			                                  startedTest,
+			                                  endedTest);
 
 			LogMessage("Finished test.");
 		}
-
-		public ManualResetEventSlim ManualResetEventSlim { get; set; }
 	}
 }

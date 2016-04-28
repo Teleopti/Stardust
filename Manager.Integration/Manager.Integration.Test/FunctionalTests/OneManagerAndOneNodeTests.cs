@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Manager.Integration.Test.Constants;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Models;
-using Manager.Integration.Test.Notifications;
-using Manager.Integration.Test.Tasks;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
@@ -128,7 +124,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
 				if (items.Any() &&
-					items.All(job => job.Started != null && job.Ended == null))
+				    items.All(job => job.Started != null && job.Ended == null))
 				{
 					if (taskCancelJob == null)
 					{
@@ -143,7 +139,7 @@ namespace Manager.Integration.Test.FunctionalTests
 								HttpSender.DeleteAsync(cancelJobUri).Result;
 
 							while (response.StatusCode != HttpStatusCode.NotFound ||
-									numberOfTries <= 10)
+							       numberOfTries <= 10)
 							{
 								numberOfTries++;
 
@@ -157,14 +153,14 @@ namespace Manager.Integration.Test.FunctionalTests
 						});
 
 						taskCancelJob.Start();
-					}				
+					}
 				}
 			};
 
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
 				if (items.Any() &&
-					items.All(job => job.Started != null && job.Ended != null))
+				    items.All(job => job.Started != null && job.Ended != null))
 				{
 					if (!ManualResetEventSlim.IsSet)
 					{
@@ -206,7 +202,6 @@ namespace Manager.Integration.Test.FunctionalTests
 
 					Thread.Sleep(TimeSpan.FromSeconds(10));
 				}
-
 			}, CancellationTokenSource.Token);
 
 			checkTablesInManagerDbTimer.JobTimer.Start();
@@ -215,7 +210,7 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			ManualResetEventSlim.Wait(timeout);
 
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.All(job => job.Result.StartsWith("success",StringComparison.InvariantCultureIgnoreCase)));
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
 
 			checkTablesInManagerDbTimer.Dispose();
 
@@ -301,7 +296,6 @@ namespace Manager.Integration.Test.FunctionalTests
 
 					Thread.Sleep(TimeSpan.FromSeconds(10));
 				}
-
 			}, CancellationTokenSource.Token);
 
 			addToJobQueueTask.Start();
@@ -355,8 +349,8 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
-				if (items.Any() && 
-					items.All(job => job.Started != null && job.Ended != null))
+				if (items.Any() &&
+				    items.All(job => job.Started != null && job.Ended != null))
 				{
 					if (!ManualResetEventSlim.IsSet)
 					{
@@ -380,13 +374,12 @@ namespace Manager.Integration.Test.FunctionalTests
 						try
 						{
 							var response = httpSender.PostAsync(uri,
-														jobQueueItem).Result;
+							                                    jobQueueItem).Result;
 
 							if (response.IsSuccessStatusCode || numberOfTries == 10)
 							{
 								break;
 							}
-
 						}
 						catch (AggregateException aggregateException)
 						{
@@ -409,7 +402,7 @@ namespace Manager.Integration.Test.FunctionalTests
 			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue must be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Jobs must have been added.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.
-								Jobs.All(job => job.Result.StartsWith("fail", StringComparison.InvariantCultureIgnoreCase)));
+				              Jobs.All(job => job.Result.StartsWith("fail", StringComparison.InvariantCultureIgnoreCase)));
 
 			var endedTest = DateTime.UtcNow;
 
@@ -452,8 +445,8 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
-				if (items.Any() && 
-					items.All(job => job.Started != null && job.Ended != null))
+				if (items.Any() &&
+				    items.All(job => job.Started != null && job.Ended != null))
 				{
 					if (!ManualResetEventSlim.IsSet)
 					{
@@ -506,7 +499,6 @@ namespace Manager.Integration.Test.FunctionalTests
 
 					Thread.Sleep(TimeSpan.FromSeconds(10));
 				}
-
 			}, CancellationTokenSource.Token);
 
 			addToJobQueueTask.Start();
@@ -514,10 +506,10 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			ManualResetEventSlim.Wait(timeout);
 
-			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(),"Should not be any jobs left in queue.");
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(),"There should be jobs in jobs table.");
+			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Should not be any jobs left in queue.");
+			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "There should be jobs in jobs table.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.
-								Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
+				              Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
 
 			checkTablesInManagerDbTimer.Dispose();
 
@@ -525,14 +517,14 @@ namespace Manager.Integration.Test.FunctionalTests
 
 			var description =
 				string.Format("Creates {0} Test Timer jobs with {1} manager and {2} nodes.",
-							  1,
-							  NumberOfManagers,
-							  NumberOfNodes);
+				              1,
+				              NumberOfManagers,
+				              NumberOfNodes);
 
 			DatabaseHelper.AddPerformanceData(ManagerDbConnectionString,
-											  description,
-											  startedTest,
-											  endedTest);
+			                                  description,
+			                                  startedTest,
+			                                  endedTest);
 
 			this.Log().DebugWithLineNumber("Finished test.");
 		}
