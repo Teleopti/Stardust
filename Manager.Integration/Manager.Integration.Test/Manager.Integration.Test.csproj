@@ -117,11 +117,11 @@
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeSetup.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeWait.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeOneManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeNoLoadBalancer.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />
-    <Compile Include="LongRunningTests\OneManagerAndFiveNodesLongRunningTest.cs" />
     <Compile Include="Models\Job.cs" />
     <Compile Include="Models\JobDetail.cs" />
     <Compile Include="Models\JobQueueItem.cs" />
@@ -154,6 +154,7 @@
     <Compile Include="Params\TestJobTimerParams.cs" />
     <Compile Include="Timers\CheckJobStatusTimer.cs" />
     <Compile Include="Timers\CheckTablesInManagerDbTimer.cs" />
+    <Compile Include="Timers\SendJobEveryDurationTimer.cs" />
     <Compile Include="Validators\IntegerValidators.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -166,7 +167,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="EventHandlers\" />
+    <Folder Include="Interceptor\" />
+    <Folder Include="LongRunningTests\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\CreateLoggingTable.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

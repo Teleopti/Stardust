@@ -16,6 +16,7 @@ using Manager.Integration.Test.Data;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Tasks;
+using Manager.Integration.Test.TestParams;
 using Manager.Integration.Test.Timers;
 using Manager.Integration.Test.WPF.Annotations;
 using Manager.Integration.Test.WPF.Commands;
@@ -879,27 +880,27 @@ namespace Manager.Integration.Test.WPF.ViewModels
 					var randomTimeSpan = random.Next(5, 120);
 
 					tasks.Add(new Task<HttpResponseMessage>(() =>
-					{
-						var testJobTimerParams =
+						{
+							var testJobTimerParams =
 							new TestJobTimerParams("Test job name " + i1, 
 													TimeSpan.FromSeconds(randomTimeSpan));
 
 						var jobParamsToJson = 
 							JsonConvert.SerializeObject(testJobTimerParams);
 
-						var jobQueueItem = new JobQueueItem
-						{
+							var jobQueueItem = new JobQueueItem
+							{
 							Name = "Job Name " + i1,
-							Serialized = jobParamsToJson,
-							Type = "NodeTest.JobHandlers.TestJobTimerParams",
-							CreatedBy = "WPF Client"
-						};
+								Serialized = jobParamsToJson,
+								Type = "NodeTest.JobHandlers.TestJobTimerParams",
+								CreatedBy = "WPF Client"
+							};
 
 						return httpSender.PostAsync(addToJobQueueUri, 
 													jobQueueItem).Result;
 
 					}, CancelTaskStartDurationTest.Token));
-				}
+							}
 
 				var sendJobEveryDurationTimer=
 					new SendJobEveryDurationTimer<HttpResponseMessage>(tasks,TimeSpan.FromSeconds(5));
