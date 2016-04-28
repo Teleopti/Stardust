@@ -38,8 +38,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
+			if (!scheduleDay.PersonAssignment(true).ShiftLayers.IsEmpty())
+				return;
+
 			if(!scheduleDay.PersonAbsenceCollection().IsEmpty())
 				return;
+
 			var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			var agent = scheduleDay.Person;
 			if (overtimePreferences.ShiftBagOvertimeScheduling == null)
