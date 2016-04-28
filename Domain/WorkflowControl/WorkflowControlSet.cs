@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private bool _anonymousTrading;
 		private bool _lockTrading;
 		private bool _absenceRequestWaitlistEnabled;
+		private int? _absenceRequestCancellationThreshold;
 		private DateTime? _schedulePublishedToDate;
 		private int? _writeProtection;
 		private TimeSpan _shiftTradeTargetTimeFlexibility;
@@ -328,6 +329,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			get { return _absenceRequestWaitlistEnabled; }
 			set { _absenceRequestWaitlistEnabled = value; }
+		}
+
+		public virtual int? AbsenceRequestCancellationThreshold
+		{
+			get { return _absenceRequestCancellationThreshold; }
+			set { _absenceRequestCancellationThreshold = value; }
 		}
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)

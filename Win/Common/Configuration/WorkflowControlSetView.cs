@@ -51,10 +51,34 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			dateOnlyPeriodsVisualizer1.Culture = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture;
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
-				
+			setAbsenceRequestVisibilityOptions(toggleManager);
+		}
+
+		private void setAbsenceRequestVisibilityOptions (IToggleManager toggleManager)
+		{
+			var allAbsenceRequestMiscOptionsAreHidden = true;
+
 			if (!toggleManager.IsEnabled (Toggles.Wfm_Requests_Waitlist_36232))
 			{
 				hideAbsenceRequestWaitlistingOptions();
+			}
+			else
+			{
+				allAbsenceRequestMiscOptionsAreHidden = false;
+			}
+
+			if (!toggleManager.IsEnabled (Toggles.Wfm_Requests_Cancel_Agent_38055))
+			{
+				hideAbsenceCancellationOptions();
+			}
+			else
+			{
+				allAbsenceRequestMiscOptionsAreHidden = false;
+			}
+
+			if (allAbsenceRequestMiscOptionsAreHidden)
+			{
+				hideMiscAbsenceRequestOptions();
 			}
 		}
 
@@ -62,10 +86,21 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			checkBoxEnableAbsenceRequestWaitlisting.Hide();
 
-			var rowIndex = tableLayoutPanelBasic.GetRow (tableLayoutPanelAbsenceRequestMiscellaneous);
+			var rowIndex = tableLayoutPanelBasic.GetRow (checkBoxEnableAbsenceRequestWaitlisting);
 			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
+		}
 
-			rowIndex = tableLayoutPanelBasic.GetRow (checkBoxEnableAbsenceRequestWaitlisting);
+		private void hideAbsenceCancellationOptions()
+		{
+			txtAbsenceRequestCancellationThreshold.Hide();
+			labelAbsenceRequestCancellationThreshold.Hide();
+			var rowIndex = tableLayoutPanelBasic.GetRow(txtAbsenceRequestCancellationThreshold);
+			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
+		}
+
+		private void hideMiscAbsenceRequestOptions()
+		{
+			var rowIndex = tableLayoutPanelBasic.GetRow(tableLayoutPanelAbsenceRequestMiscellaneous);
 			tableLayoutPanelAbsenceRequestPeriods.RowStyles[rowIndex].Height = 0;
 		}
 
@@ -707,6 +742,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			checkBoxEnableAbsenceRequestWaitlisting.CheckStateChanged += checkBoxEnableAbsenceRequestWaitlisting_CheckStateChanged;
 		}
 
+		public void SetAbsenceRequestCancellation (IWorkflowControlSetModel selectedModel)
+		{
+
+			txtAbsenceRequestCancellationThreshold.Leave -= txtAbsenceRequestCancellationThreshold_Leave;
+			txtAbsenceRequestCancellationThreshold.Text = selectedModel.AbsenceRequestCancellationThreshold.ToString();
+			txtAbsenceRequestCancellationThreshold.Leave += txtAbsenceRequestCancellationThreshold_Leave;
+		}
+
 		public void SetLockTrading(bool lockTrading)
 		{
 			checkBoxAdvLockTrading.CheckStateChanged -= checkBoxAdvLockTrading_CheckStateChanged;
@@ -1092,7 +1135,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			_presenter.SetAbsenceRequestWaitlisting(checkBoxEnableAbsenceRequestWaitlisting.Checked);
 		}
 
-		
-	
+		private void txtAbsenceRequestCancellationThreshold_Leave(object sender, EventArgs e)
+		{
+			_presenter.SetAbsenceRequestCancellationThreshold(txtAbsenceRequestCancellationThreshold.IntegerValue());
+		}
 	}
 }

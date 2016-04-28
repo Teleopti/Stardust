@@ -137,8 +137,10 @@
 	<property name="AnonymousTrading" type="bool" not-null="true"/>
 
 	<property name="AbsenceRequestWaitlistEnabled" type="bool" not-null="true"/>
-		
-	<property name="LockTrading" type="bool" not-null="true"/>
+  
+  <property name="AbsenceRequestCancellationThreshold" type="int" not-null="false"/>
+
+  <property name="LockTrading" type="bool" not-null="true"/>
     
     <filter name="businessUnitFilter"
         condition=":businessUnitParameter = BusinessUnit" />

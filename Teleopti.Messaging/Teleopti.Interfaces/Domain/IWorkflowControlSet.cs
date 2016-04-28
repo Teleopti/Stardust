@@ -263,6 +263,7 @@ namespace Teleopti.Interfaces.Domain
 		bool LockTrading { get; set; }
 
 		bool AbsenceRequestWaitlistEnabled { get; set; }
+		int? AbsenceRequestCancellationThreshold { get; set; }
 
 		/// <summary>
 		/// Adds an absence allowed for report.

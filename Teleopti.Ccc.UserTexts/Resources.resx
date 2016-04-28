@@ -14405,4 +14405,8 @@ Help us improve your experience by sending an error report</value>
     <value>Use Shifts From:</value>
     <comment>Used when scheduling overtime, schedule overtime on non scheduled day</comment>
   </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>Number of days before absence date that requests may be cancelled:</value>
+    <comment>Used in the workflow control set, Absence Request settings page in the Admin Client.</comment>
+  </data>
 </root>

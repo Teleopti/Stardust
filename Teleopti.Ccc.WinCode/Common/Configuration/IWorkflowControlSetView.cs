@@ -165,8 +165,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		void SetAnonymousTrading(bool anonymousTrading);
 
 	    void SetAbsenceRequestWaitlisting (bool absenceRequestWaitlistingEnabled);
-		 
-		 /// <summary>
+
+		void SetAbsenceRequestCancellation(IWorkflowControlSetModel selectedModel);
+
+		/// <summary>
 		/// Sets the lock trading.
 		/// </summary>
 		/// <param name="lockTrading">if set to <c>true</c> [lock trading].</param>

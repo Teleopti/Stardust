@@ -79,7 +79,6 @@
 		}
 
 		function canCancelRequests() {
-			//ROBTODO: implement rule to ensure only enable when at least one accepted request is chosen.
 			return !disableCommands();
 		}
 

@@ -223,6 +223,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Number of days before absence date that requests may be cancelled:.
+        /// </summary>
+        public static string AbsenceRequestCancellationThreshold {
+            get {
+                return ResourceManager.GetString("AbsenceRequestCancellationThreshold", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absence not selected.
         /// </summary>
         public static string AbsenceRequestEmptyAbsenceTypeError {

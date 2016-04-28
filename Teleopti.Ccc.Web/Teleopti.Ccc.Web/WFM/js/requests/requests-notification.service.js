@@ -5,7 +5,6 @@
 		.service('requestsNotificationService', ['NoticeService', '$translate', '$q',  requestsNotificationService]);
 
 	function requestsNotificationService(NoticeService, $translate, $q) {
-		//ROBTODO: instant translation rather than using $q?
 		var displayStandardSuccess = function(changedRequestsCount, requestsCount, affectedResource, notAffectedResource) {
 			
 			$q.all([$translate(affectedResource), $translate(notAffectedResource)]).then(function (texts) {
