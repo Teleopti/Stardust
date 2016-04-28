@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 		}
 
 		[UnitOfWork]
+		[AnalyticsUnitOfWork]
 		public virtual ActionResult Index(Guid? id)
 		{
 			if (id == null)
