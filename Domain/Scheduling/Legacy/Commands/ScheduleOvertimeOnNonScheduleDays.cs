@@ -57,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[]{scheduleDay});
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, BlockFinderType.SingleDay, true);
-			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(overtimePreferences.ScheduleTag));
+			var scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
+			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), scheduleTagSetter);
 			//TODO ???
 			var schedulingOptions = new SchedulingOptions();
 			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, stateHolder.SchedulingResultState, new ShiftNudgeDirective());
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, overtimePreferences.OvertimeType));
 
 			//TODO: use correct tag setter
-			rollbackService.ModifyStrictly(currScheduleDay, new ScheduleTagSetter(new ScheduleTag()), rules);
+			rollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, rules);
 		}
 
 		private static bool jumpOutEarly(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IPerson agent, DateOnly date)
