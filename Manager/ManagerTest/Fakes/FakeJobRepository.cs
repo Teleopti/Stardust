@@ -42,11 +42,6 @@ namespace ManagerTest.Fakes
 			return _jobQueue;
 		}
 
-		public void DeleteJobByJobId(Guid jobId, bool removeJobDetails)
-		{
-			throw new NotImplementedException();
-		}
-
 		public void DeleteJobQueueItemByJobId(Guid jobId)
 		{
 			var j = _jobs.FirstOrDefault(x => x.JobId.Equals(jobId));

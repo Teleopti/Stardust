@@ -77,25 +77,6 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldBeAbleToDeleteFromJobQueue()
-		{
-			var jobQueueItem = new JobQueueItem
-			{
-				JobId = Guid.NewGuid(),
-				Name = "Name Test",
-				CreatedBy = "Created By Test",
-				Serialized = "Serialized Test",
-				Type = "Type Test"
-			};
-
-			JobManager.AddItemToJobQueue(jobQueueItem);
-			
-			JobManager.DeleteJobQueueItemByJobId(jobQueueItem.JobId);
-			
-			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
-		}
-
-		[Test]
 		public void ShouldBeAbleToAddToJobQueue()
 		{
 			var jobQueueItem = new JobQueueItem
