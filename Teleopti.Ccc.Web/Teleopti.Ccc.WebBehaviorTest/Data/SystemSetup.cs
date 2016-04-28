@@ -9,6 +9,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
@@ -36,9 +37,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				AllEventPublishingsAsSync = true,
 				FeatureToggle = TestSiteConfigurationSetup.URL.ToString()
 			};
-			builder.RegisterModule(new CommonModule(new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args))));
+			var iocConfiguration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
+			builder.RegisterModule(new CommonModule(iocConfiguration));
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
 			builder.RegisterType<SyncUnitOfWorkAspect>().As<IUnitOfWorkAspect>();
+			builder.RegisterModule(new TenantServerModule(iocConfiguration));
 
 			_container = builder.Build();
 
