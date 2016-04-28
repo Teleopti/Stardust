@@ -27,13 +27,6 @@ namespace Stardust.Manager
 									IHttpSender httpSender,
 									ManagerConfiguration managerConfiguration)
 		{
-			if (managerConfiguration.AllowedNodeDownTimeSeconds <= 0)
-			{
-				this.Log().ErrorWithLineNumber("AllowedNodeDownTimeSeconds must be greater than zero!");
-
-				throw new ArgumentOutOfRangeException("managerConfiguration.AllowedNodeDownTimeSeconds");
-			}
-
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
 			_httpSender = httpSender;
