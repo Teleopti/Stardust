@@ -34,8 +34,7 @@ namespace Stardust.Manager
 					{
 						Connection = connection,
 						CommandText = "SELECT Id, Url, Heartbeat, Alive " +
-						              "FROM [Stardust].[WorkerNode]",
-						CommandType = CommandType.Text
+						              "FROM [Stardust].[WorkerNode]"
 					};
 
 					connection.OpenWithRetry(_retryPolicy);
@@ -152,7 +151,6 @@ namespace Stardust.Manager
 					workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
 			}
-
 			catch (Exception exp)
 			{
 				if (exp.Message.Contains("UQ_WorkerNodes_Url"))

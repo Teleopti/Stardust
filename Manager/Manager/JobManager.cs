@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Timers;
+using Castle.Core.Internal;
 using Stardust.Manager.Diagnostics;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
@@ -13,7 +14,7 @@ namespace Stardust.Manager
 {
 	public class JobManager : IDisposable
 	{
-		private readonly Timer _checkAndAssignNextJob = new Timer();
+		private readonly Timer _checkAndAssignJob = new Timer();
 		private readonly Timer _checkHeartbeatsTimer = new Timer();
 
 		private readonly IHttpSender _httpSender;
@@ -30,7 +31,7 @@ namespace Stardust.Manager
 			{
 				this.Log().ErrorWithLineNumber("AllowedNodeDownTimeSeconds must be greater than zero!");
 
-				throw new ArgumentOutOfRangeException("AllowedNodeDownTimeSeconds");
+				throw new ArgumentOutOfRangeException("managerConfiguration.AllowedNodeDownTimeSeconds");
 			}
 
 			_jobRepository = jobRepository;
@@ -38,11 +39,11 @@ namespace Stardust.Manager
 			_httpSender = httpSender;
 			_managerConfiguration = managerConfiguration;
 
-			_checkAndAssignNextJob.Elapsed += _checkAndAssignNextJob_Elapsed;
-			_checkAndAssignNextJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds * 1000;
-			_checkAndAssignNextJob.Start();
+			_checkAndAssignJob.Elapsed += AssignJobToWorkerNodes_Elapsed;
+			_checkAndAssignJob.Interval = _managerConfiguration.CheckNewJobIntervalSeconds * 1000;
+			_checkAndAssignJob.Start();
 
-			_checkHeartbeatsTimer.Elapsed += CheckHeartbeatsOnTimedEvent;
+			_checkHeartbeatsTimer.Elapsed += CheckHeartbeats_Elapsed;
 			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds * 200;
 			_checkHeartbeatsTimer.Start();
 
@@ -61,8 +62,8 @@ namespace Stardust.Manager
 		{
 			this.Log().DebugWithLineNumber("Start disposing.");
 
-			_checkAndAssignNextJob.Stop();
-			_checkAndAssignNextJob.Dispose();
+			_checkAndAssignJob.Stop();
+			_checkAndAssignJob.Dispose();
 
 			_checkHeartbeatsTimer.Stop();
 			_checkHeartbeatsTimer.Dispose();
@@ -70,55 +71,48 @@ namespace Stardust.Manager
 			this.Log().DebugWithLineNumber("Finished disposing.");
 		}
 
-		private void _checkAndAssignNextJob_Elapsed(object sender, ElapsedEventArgs e)
+		private void AssignJobToWorkerNodes_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			_checkAndAssignNextJob.Stop();
-
-			try
-			{
-				AssignJobToWorkerNode();
-			}
-
-			finally
-			{
-				_checkAndAssignNextJob.Start();
-			}
+			AssignJobToWorkerNodes();
 		}
 
+		public void AssignJobToWorkerNodes()
+		{
+			_jobRepository.AssignJobToWorkerNode(_httpSender);
+		}
+
+		private void CheckHeartbeats_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			CheckWorkerNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
+		}
 
 		public void CheckWorkerNodesAreAlive(TimeSpan timeSpan)
 		{
+			//If two managers find the same node as dead the first one will update the status 
+			//and the second one won't find that job as "executing" and do nothing
 			var deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
+			if (deadNodes.IsNullOrEmpty())
+				return;
 
 			var jobs = _jobRepository.GetAllExecutingJobs();
+			if (jobs.IsNullOrEmpty())
+				return;
 
-			if (deadNodes != null && deadNodes.Any()
-				&& jobs != null && jobs.Any())
+			foreach (var node in deadNodes)
 			{
-				foreach (var node in deadNodes)
+				foreach (var job in jobs)
 				{
-					foreach (var job in jobs)
+					if (job.SentToWorkerNodeUri == node)
 					{
-						if (job.SentToWorkerNodeUri == node)
-						{
-							this.Log().ErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.JobId +
-														   " , " + job.Name + " )");
+						this.Log().ErrorWithLineNumber("Job ( id , name ) is deleted due to the node executing it died. ( " + job.JobId +
+						                               " , " + job.Name + " )");
 
-							UpdateResultForJob(job.JobId,
-											   "Fatal Node Failure",
-											   DateTime.UtcNow);
-						}
+						UpdateResultForJob(job.JobId,
+						                   "Fatal Node Failure",
+						                   DateTime.UtcNow);
 					}
 				}
 			}
-		}
-
-		private void CheckHeartbeatsOnTimedEvent(object sender,
-												 ElapsedEventArgs e)
-		{
-			CheckWorkerNodesAreAlive(TimeSpan.FromSeconds(_managerConfiguration.AllowedNodeDownTimeSeconds));
-
-			this.Log().DebugWithLineNumber("Check Heartbeat on thread id : " + Thread.CurrentThread.ManagedThreadId);
 		}
 
 		public IList<WorkerNode> GetAllWorkerNodes()
@@ -126,34 +120,6 @@ namespace Stardust.Manager
 			return _workerNodeRepository.GetAllWorkerNodes();
 		}
 
-		public void AssignJobToWorkerNode()
-		{
-			this.Log().DebugWithLineNumber("Start TryAssignJobToWorkerNode.");
-
-			var managerStopWatch = new ManagerStopWatch();
-
-			try
-			{
-				_jobRepository.AssignJobToWorkerNode(_httpSender);
-				this.Log().DebugWithLineNumber("Finished TryAssignJobToWorkerNode.");
-			}
-
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message,
-											   exp);
-
-				throw;
-			}
-
-			finally
-			{
-				var total =
-					managerStopWatch.GetTotalElapsedTimeInMilliseconds();
-
-				this.Log().DebugWithLineNumber("TryAssignJobToWorkerNode: Stop ManagerStopWatch. Took " + total + " milliseconds.");
-			}
-		}
 
 		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
 		{

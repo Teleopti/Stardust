@@ -44,7 +44,7 @@ namespace Stardust.Manager
 			
 			Task.Factory.StartNew(() =>
 			{
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNodes();
 			});
 
 			return Ok(jobQueueItem.JobId);
@@ -127,7 +127,7 @@ namespace Stardust.Manager
 				                              "Success",
 											  DateTime.UtcNow);
 
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNodes();
 			});
 
 			return Ok();
@@ -159,7 +159,7 @@ namespace Stardust.Manager
 				                              "Failed",
 											  DateTime.UtcNow);
 				
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNodes();
 			});
 
 			return Ok();
@@ -182,7 +182,7 @@ namespace Stardust.Manager
 				                              "Canceled",
 											  DateTime.UtcNow);
 				
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNodes();
 			});
 
 			return Ok();
@@ -202,9 +202,7 @@ namespace Stardust.Manager
 
 			return Ok();
 		}
-
-		// to handle that scenario where the node comes up after a crash
-		//this end point should be called when the node comes up
+		
 		[HttpPost, Route(ManagerRouteConstants.NodeHasBeenInitialized)]
 		public IHttpActionResult NodeInitialized([FromBody] Uri workerNodeUri)
 		{
@@ -219,7 +217,7 @@ namespace Stardust.Manager
 
 				_nodeManager.AddWorkerNode(workerNodeUri);
 
-				_jobManager.AssignJobToWorkerNode();
+				_jobManager.AssignJobToWorkerNodes();
 			});
 
 			return Ok();

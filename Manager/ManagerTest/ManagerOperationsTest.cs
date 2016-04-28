@@ -31,7 +31,6 @@ namespace ManagerTest
 		{
 			_workerNode = new WorkerNode
 			{
-				Id = Guid.NewGuid(),
 				Url = new Uri("http://localhost:9050/")
 			};
 		}
@@ -154,7 +153,6 @@ namespace ManagerTest
 
 			var workerNode2 = new WorkerNode
 			{
-				Id = Guid.NewGuid(),
 				Url = new Uri("http://localhost:9051/")
 			};
 			

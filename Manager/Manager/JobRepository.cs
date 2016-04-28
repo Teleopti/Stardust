@@ -222,11 +222,8 @@ namespace Stardust.Manager
 					sqlConnection.Close();
 				}
 
-				if (!allAliveWorkerNodesUri.Any())
-				{
-					return;
-				}
-
+				if (!allAliveWorkerNodesUri.Any()) return;
+				
 				foreach (var uri in allAliveWorkerNodesUri)
 				{
 					try
@@ -250,7 +247,6 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
 			}
 			finally
 			{
