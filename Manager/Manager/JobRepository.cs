@@ -570,7 +570,7 @@ namespace Stardust.Manager
 							if (taskPostJob.Result.IsSuccessStatusCode ||
 							    taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
 							{
-								sentToWorkerNodeUri = taskPostJob.Result.Content.ContentToString();
+								sentToWorkerNodeUri = taskPostJob.Result.Content.ReadAsStringAsync().Result;  
 
 								using (var insertIntoJobCommand = CreateCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
 								{
