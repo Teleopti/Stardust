@@ -31,15 +31,25 @@ namespace Manager.Integration.Test.Data
 		{
 			get
 			{
-				using (var sqlConnection = new SqlConnection(ConnectionString))
+				try
 				{
-					sqlConnection.Open();
+					using (var sqlConnection = new SqlConnection(ConnectionString))
+					{
+						sqlConnection.Open();
 
-					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
-													  FROM [Stardust].[WorkerNode]", sqlConnection);
+						var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[WorkerNode] WITH (NOLOCK)", sqlConnection);
 
-					return (int)sqlCommand.ExecuteScalar();
+						return (int)sqlCommand.ExecuteScalar();
+					}
+
 				}
+				catch (Exception)
+				{
+
+				}
+
+				return 0;
 			}
 		}
 
@@ -47,15 +57,25 @@ namespace Manager.Integration.Test.Data
 		{
 			get
 			{
-				using (var sqlConnection = new SqlConnection(ConnectionString))
+				try
 				{
-					sqlConnection.Open();
+					using (var sqlConnection = new SqlConnection(ConnectionString))
+					{
+						sqlConnection.Open();
 
-					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
-													  FROM [Stardust].[JobQueue]", sqlConnection);
+						var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[JobQueue] WITH (NOLOCK)", sqlConnection);
 
-					return (int)sqlCommand.ExecuteScalar();
+						return (int)sqlCommand.ExecuteScalar();
+					}
+
 				}
+				catch (Exception)
+				{
+
+				}
+
+				return 0;
 			}
 		}
 
@@ -63,15 +83,25 @@ namespace Manager.Integration.Test.Data
 		{
 			get
 			{
-				using (var sqlConnection = new SqlConnection(ConnectionString))
+				try
 				{
-					sqlConnection.Open();
+					using (var sqlConnection = new SqlConnection(ConnectionString))
+					{
+						sqlConnection.Open();
 
-					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
-													  FROM [Stardust].[Job]", sqlConnection);
+						var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[Job] WITH (NOLOCK)", sqlConnection);
 
-					return (int)sqlCommand.ExecuteScalar();
+						return (int)sqlCommand.ExecuteScalar();
+					}
+
 				}
+				catch (Exception)
+				{
+
+				}
+
+				return 0;
 			}
 		}
 
@@ -79,15 +109,25 @@ namespace Manager.Integration.Test.Data
 		{
 			get
 			{
-				using (var sqlConnection = new SqlConnection(ConnectionString))
+				try
 				{
-					sqlConnection.Open();
+					using (var sqlConnection = new SqlConnection(ConnectionString))
+					{
+						sqlConnection.Open();
 
-					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
-													  FROM [Stardust].[JobDetail]", sqlConnection);
+						var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[JobDetail] WITH (NOLOCK)", sqlConnection);
 
-					return (int)sqlCommand.ExecuteScalar();
+						return (int)sqlCommand.ExecuteScalar();
+					}
+
 				}
+				catch (Exception)
+				{
+
+				}
+
+				return 0;
 			}
 		}
 
