@@ -2,11 +2,13 @@ using System;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+	[UseOnToggle(Toggles.ETL_SpeedUpIntradaySkill_37543)]
 	public class UpdateSkillAnalyticsHandler :
 		IHandleEvent<SkillNameChangedEvent>,
 		IHandleEvent<SkillDeletedEvent>,

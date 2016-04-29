@@ -67,11 +67,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<ITransactionHook>();
 			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<ITransactionHook>();
-			//if (_configuration.Toggle(Toggles.ETL_SpeedUpIntradaySkill_37543) ||
-			//	_configuration.Toggle(Toggles.ETL_SpeedUpNightlySkill_37543))
-			//{
-			//	builder.RegisterType<SkillChangedEventPublisher>().As<ITransactionHook>();
-			//}
+
 			if (_configuration.Toggle(Toggles.ETL_SpeedUpIntradayPreference_37124))
 			{
 				builder.RegisterType<PreferenceChangedEventPublisher>().As<ITransactionHook>();
