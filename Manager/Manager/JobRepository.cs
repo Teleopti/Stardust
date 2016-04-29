@@ -455,20 +455,6 @@ namespace Stardust.Manager
 			}
 		}
 	
-		
-		private SqlCommand CreateUpdateCancellingResultCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
-		{
-			var updateJobSetResultCommandText = "UPDATE [Stardust].[Job] " +
-			                                    "SET Result = @Result " +
-			                                    "WHERE JobId = @JobId";
-
-			var updateCommand = new SqlCommand(updateJobSetResultCommandText,sqlConnection);
-			updateCommand.Transaction = sqlTransaction;
-			updateCommand.Parameters.AddWithValue("@JobId", jobId);
-			updateCommand.Parameters.AddWithValue("@Result", "Cancelling...");
-
-			return updateCommand;
-		}
 
 		private void CancelJobByJobIdWorker(Guid jobId, IHttpSender httpSender)
 		{
@@ -510,7 +496,7 @@ namespace Stardust.Manager
 							if (taskSendCancel.IsCompleted &&
 								taskSendCancel.Result.IsSuccessStatusCode)
 							{
-								using (var createUpdateCancellingResultCommand = CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
+								using (var createUpdateCancellingResultCommand = CreateCommandHelper.CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
 								{
 									createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 								}
@@ -555,7 +541,12 @@ namespace Stardust.Manager
 							}
 						}
 
-						if (jobQueueItem == null) return;
+						if (jobQueueItem == null)
+						{
+							sqlTransaction.Dispose();
+							sqlConnection.Close();
+							return;
+						}
 						
 						var taskPostJob = new Task<HttpResponseMessage>(() =>
 						{

@@ -94,6 +94,21 @@ namespace Stardust.Manager.Helpers
 			return selectSqlCommand;
 		}
 
+		public static SqlCommand CreateUpdateCancellingResultCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			var updateJobSetResultCommandText = "UPDATE [Stardust].[Job] " +
+												"SET Result = @Result " +
+												"WHERE JobId = @JobId";
+
+			var updateCommand = new SqlCommand(updateJobSetResultCommandText, sqlConnection);
+			updateCommand.Transaction = sqlTransaction;
+			updateCommand.Parameters.AddWithValue("@JobId", jobId);
+			updateCommand.Parameters.AddWithValue("@Result", "Cancelling...");
+
+			return updateCommand;
+		}
+
+
 		public static SqlCommand CreateInsertIntoJobCommand(JobQueueItem jobQueueItem, string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			var insertIntoJobCommandText = @"INSERT INTO [Stardust].[Job]
