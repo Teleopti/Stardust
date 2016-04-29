@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -67,7 +68,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
 				}
 
-				schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, rules);
+
+				var rollBackOnOvertimeAvailability = false;
+				if (overtimePreferences.AvailableAgentsOnly)
+				{
+					var overtimeAvailability = currScheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
+					if (overtimeAvailability == null || !overtimeAvailability.Period.Contains(currScheduleDay.PersonAssignment(true).Period))
+					{
+						rollBackOnOvertimeAvailability = true;
+					}
+				}
+
+				if (rollBackOnOvertimeAvailability)
+				{
+					schedulePartModifyAndRollbackService.Rollback();
+				}
+				else
+				{
+					schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, rules);
+				}
+				
 				scheduleDay.Person.Period(date).PersonContract.Contract.WorkTimeDirective = oldWorkTimeDirective;
 				personPeriod.RuleSetBag = oldShiftBag;
 			});
