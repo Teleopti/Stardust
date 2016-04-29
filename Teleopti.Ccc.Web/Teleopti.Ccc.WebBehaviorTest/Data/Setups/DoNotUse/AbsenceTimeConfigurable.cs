@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var absenceRepository = new AbsenceRepository(currentUnitOfWork);
 			var absence = absenceRepository.LoadAll().Single(a=>a.Name==Absence);
 
-			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(currentUnitOfWork);
+			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyPersister(currentUnitOfWork);
 
 			var period =
 				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone());

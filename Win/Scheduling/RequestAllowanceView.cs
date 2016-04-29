@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 														   new BudgetDayRepository(currentUnitOfWork),
 														   new BudgetGroupRepository(currentUnitOfWork),
 														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUnitOfWork)), 
-														   new ScheduleProjectionReadOnlyRepository(currentUnitOfWork)));
+														   new ScheduleProjectionReadOnlyPersister(currentUnitOfWork)));
 														   
 			_presenter.Initialize(budgetGroup, defaultDate);
 			initializeGrid();

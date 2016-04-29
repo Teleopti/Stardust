@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest
 {
-	public class UnitOfWorkTestAttribute : InfrastructureTestAttribute
+	public class UnitOfWorkWithLoginTestAttribute : InfrastructureTestAttribute
 	{
 		private IUnitOfWork unitOfWork;
 		private SetupFixtureForAssembly.TestScope _loginWithOpenUnitOfWork;

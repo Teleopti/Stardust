@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public void GetAbsenceTimeForPeriod_WhenNoAbsenceOnAnyday_ShouldReturnAbsenceAgentForEachDayWithZeroUsedAbsence()
 		{
 			var daysWithoutAnyUsedAbsence = createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(0,_period);
-			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 			
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, null, null))
 												.IgnoreArguments()
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void GetAbsenceTimeForPeriod_ShouldUseThePeriodAndTheDefaultScenario()
 		{
-			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, _budgetGroup, _scenario))
 												.Return(new List<PayloadWorkTime>());
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			_personWithPersonPeriod.AddPersonPeriod(personPeriodOutsideThePeriod);
 
-			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateStrictMock<IScheduleProjectionReadOnlyRepository>();
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateStrictMock<IScheduleProjectionReadOnlyPersister>();
 
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, _budgetGroup, _scenario))
 												.Return(new List<PayloadWorkTime>());
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			const int absenceTimeInMinutes = 240;
 
-			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, _budgetGroup, _scenario))
 												.IgnoreArguments()
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			_personWithPersonPeriod.RemoveAllPersonPeriods();
 
-			var target = createTarget(_loggedOnUser, _scenarioRepository, MockRepository.GenerateStub<IScheduleProjectionReadOnlyRepository>(), _absenceTimeProviderCache);
+			var target = createTarget(_loggedOnUser, _scenarioRepository, MockRepository.GenerateStub<IScheduleProjectionReadOnlyPersister>(), _absenceTimeProviderCache);
 			var result = target.GetAbsenceTimeForPeriod(_period);
 
 			verifyThatEachDayHasZeroUsedAbsence(result);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void GetAbsenceTimeForPeriod_WhenNoAbsenceExistInRepository_ShouldCreateAbsenceDaysForEachDayWithZeroAbsence()
 		{
-			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, _budgetGroup, _scenario))
 												.IgnoreArguments()
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var firstExpectedPeriod = new DateOnlyPeriod(_period.StartDate, nextStart.AddDays(-1));
 			var secondExpectedPeriod = new DateOnlyPeriod(nextStart, _period.EndDate);
 
-			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 
 			var target = createTarget(_loggedOnUser, _scenarioRepository, scheduleProjectionReadOnlyRepository, _absenceTimeProviderCache);
 
@@ -188,9 +188,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 		}
 
-		private static IAbsenceTimeProvider createTarget(ILoggedOnUser loggedOnUser,IScenarioRepository scenarioRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IAbsenceTimeProviderCache absenceTimeProviderCache)
+		private static IAbsenceTimeProvider createTarget(ILoggedOnUser loggedOnUser,IScenarioRepository scenarioRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IAbsenceTimeProviderCache absenceTimeProviderCache)
 		{
-			return new AbsenceTimeProvider(loggedOnUser, scenarioRepository, scheduleProjectionReadOnlyRepository, new ExtractBudgetGroupPeriods(), absenceTimeProviderCache);
+			return new AbsenceTimeProvider(loggedOnUser, scenarioRepository, scheduleProjectionReadOnlyPersister, new ExtractBudgetGroupPeriods(), absenceTimeProviderCache);
 		}
 
 		private void verifyThatEachDayHasZeroUsedAbsence(IEnumerable<IAbsenceAgents> agentAbsences)

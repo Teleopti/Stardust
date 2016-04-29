@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		private MockRepository _mocks;
 		private ICurrentScenario _scenarioRepository;
 		private IBudgetDayRepository _budgetDayRepository;
-		private IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private IBudgetGroupAllowanceSpecification _target;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPerson _person;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_mocks = new MockRepository();
 			_scenarioRepository = _mocks.StrictMock<ICurrentScenario>();
 			_budgetDayRepository = _mocks.StrictMock<IBudgetDayRepository>();
-			_scheduleProjectionReadOnlyRepository = _mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
+			_scheduleProjectionReadOnlyPersister = _mocks.StrictMock<IScheduleProjectionReadOnlyPersister>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_scheduleDict = _mocks.StrictMock<IScheduleDictionary>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_defaultDatePeriod = new DateOnlyPeriod();
 
 			_target = new BudgetGroupAllowanceSpecification(_scenarioRepository, _budgetDayRepository,
-																			_scheduleProjectionReadOnlyRepository);
+																			_scheduleProjectionReadOnlyPersister);
 		}
 
 		[Test]
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
 				Expect.Call(budgetDay.IsClosed).Return(false);
 				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
-				Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
+				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
 					 Return(usedAbsenceTime);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
 				Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(budgetDay.Allowance).Return(2d);
 				Expect.Call(budgetDay.IsClosed).Return(false);
 				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
-				Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
+				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
 					 Return(usedAbsenceTime);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
 				Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
@@ -225,8 +225,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 	public class BudgetGroupAllowanceSpecificationForTest : BudgetGroupAllowanceSpecification
 	{
 		public BudgetGroupAllowanceSpecificationForTest(ISchedulingResultStateHolder schedulingResultStateHolder,
-			 ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
-			 : base(scenarioRepository, budgetDayRepository, scheduleProjectionReadOnlyRepository)
+			 ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
+			 : base(scenarioRepository, budgetDayRepository, scheduleProjectionReadOnlyPersister)
 		{
 		}
 

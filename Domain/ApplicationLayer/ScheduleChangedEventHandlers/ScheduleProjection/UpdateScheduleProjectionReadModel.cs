@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	public class UpdateScheduleProjectionReadModel : IUpdateScheduleProjectionReadModel
 	{
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
-		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 
-		public UpdateScheduleProjectionReadModel(IProjectionChangedEventBuilder projectionChangedEventBuilder, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public UpdateScheduleProjectionReadModel(IProjectionChangedEventBuilder projectionChangedEventBuilder, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
 		{
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
-			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 		}
 
 		public void Execute(IScheduleRange scheduleRange, DateOnlyPeriod dateOnlyPeriod)
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				var date = new DateOnly(scheduleDay.Date);
 				if (!message.IsInitialLoad)
 				{
-					_scheduleProjectionReadOnlyRepository.ClearDayForPerson(
+					_scheduleProjectionReadOnlyPersister.ClearDayForPerson(
 						date, message.ScenarioId, message.PersonId, message.ScheduleLoadTimestamp);
 				}
 
 				if (scheduleDay.Shift == null) continue;
 				foreach (var layer in scheduleDay.Shift.Layers)
 				{
-					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer, message.ScheduleLoadTimestamp);
+					_scheduleProjectionReadOnlyPersister.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer, message.ScheduleLoadTimestamp);
 				}
 			}
 		}

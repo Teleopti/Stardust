@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupAllowanceSpecification));
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IBudgetDayRepository _budgetDayRepository;
-		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 
 		public BudgetGroupAllowanceSpecification(ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository,
-			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+			IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
 		{
 			_scenarioRepository = scenarioRepository;
 			_budgetDayRepository = budgetDayRepository;
-			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 		}
 
 		protected static bool IsSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		private double getRemainingAllowanceMinutes(IPersonPeriod personPeriod, IScenario defaultScenario, IBudgetDay budgetDay, DateOnly currentDay)
 		{
 			var allowanceMinutes = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * TimeDefinition.MinutesPerHour;
-			var absenceTimeListForAllBudgetGroup = _scheduleProjectionReadOnlyRepository
+			var absenceTimeListForAllBudgetGroup = _scheduleProjectionReadOnlyPersister
 													.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay), personPeriod.BudgetGroup, defaultScenario);
 
 			var usedAbsenceMinutes = TimeSpan.FromTicks(absenceTimeListForAllBudgetGroup.Sum(p => p.TotalContractTime)).TotalMinutes;

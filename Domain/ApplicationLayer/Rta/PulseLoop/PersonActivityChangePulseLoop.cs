@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 #pragma warning restore 618
 	{
 		private readonly IDelayedMessageSender _serviceBus;
-		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly IPersonRepository _personRepository;
         private readonly INotifyRtaToCheckForActivityChange _teleoptiRtaService;
         private readonly static ILog Logger = LogManager.GetLogger(typeof(PersonActivityChangePulseLoop));
 
 		public PersonActivityChangePulseLoop(
 			IDelayedMessageSender serviceBus, 
-			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
+			IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, 
 			INotifyRtaToCheckForActivityChange teleoptiRtaService, 
 			IPersonRepository personRepository)
 		{
 			_serviceBus = serviceBus;
-			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 	        _teleoptiRtaService = teleoptiRtaService;
 			_personRepository = personRepository;
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 				}
 			});
 			
-			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
+			DateTime? startTime = _scheduleProjectionReadOnlyPersister.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 			if (!startTime.HasValue)
 			{
 				Logger.InfoFormat("No next activity found for Person: {0}. Not putting message on the queue", message.PersonId);
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop
 				}
 			});
 		
-			DateTime? startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
+			DateTime? startTime = _scheduleProjectionReadOnlyPersister.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 			if (!startTime.HasValue || startTime < message.ActivityStartDateTime)
 			{
 				Logger.InfoFormat(

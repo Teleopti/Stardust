@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         private IBudgetDayRepository _budgetDayRepository;
         private IBudgetGroupRepository _budgetGroupRepository;
         private ICurrentScenario _scenarioRepository;
-        private IScheduleProjectionReadOnlyRepository _scheduleProjRepository;
+        private IScheduleProjectionReadOnlyPersister _scheduleProjPersister;
         
         [SetUp]
         public void Setup()
@@ -37,9 +37,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
             _budgetGroupRepository = MockRepository.GenerateMock<IBudgetGroupRepository>();
 			_scenarioRepository = MockRepository.GenerateMock<ICurrentScenario>();
-            _scheduleProjRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+            _scheduleProjPersister = MockRepository.GenerateMock<IScheduleProjectionReadOnlyPersister>();
 
-            _target = new RequestAllowanceModel(_uowFactory, _budgetDayRepository, _budgetGroupRepository, _scenarioRepository, _scheduleProjRepository );
+            _target = new RequestAllowanceModel(_uowFactory, _budgetDayRepository, _budgetGroupRepository, _scenarioRepository, _scheduleProjPersister );
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 
             _uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 
-            _scheduleProjRepository.Stub(x => x.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), budgetGroup, new Scenario("test"))).IgnoreArguments().Return(new List<PayloadWorkTime>());
+            _scheduleProjPersister.Stub(x => x.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), budgetGroup, new Scenario("test"))).IgnoreArguments().Return(new List<PayloadWorkTime>());
 
             _target.Initialize(budgetGroup, new DateOnly(2011, 12, 20));
             _target.ReloadModel(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)), true);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             var budgetGroup = new BudgetGroup {Name = "Test Budget Group"};
             _budgetGroupRepository.Stub(x => x.LoadAll()).Return(null);
             _budgetDayRepository.Stub(x => x.Find(null, null, new DateOnlyPeriod())).IgnoreArguments().Return(new List<IBudgetDay>());
-            _scheduleProjRepository.Stub(
+            _scheduleProjPersister.Stub(
                 x =>
                 x.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)),
                                             budgetGroup, new Scenario("test"))).IgnoreArguments().Return(
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             personPeriod.BudgetGroup = budgetGroup;
 
             _uowFactory.Stub(x => x.CurrentUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
-            _scheduleProjRepository.Stub(
+            _scheduleProjPersister.Stub(
                 x =>
                 x.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(2011, 12, 19), new DateOnly(2011, 12, 25)),
                                             budgetGroup, scenario)).IgnoreArguments().Return(

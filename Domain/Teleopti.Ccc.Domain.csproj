@@ -1388,7 +1388,7 @@
     <Compile Include="Repositories\IPersonalSettingDataRepository.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\IScheduleDayReadModelRepository.cs" />
     <Compile Include="Repositories\IScheduleHistoryReport.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IScheduleProjectionReadOnlyRepository.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IScheduleProjectionReadOnlyPersister.cs" />
     <Compile Include="Repositories\IScheduleTagRepository.cs" />
     <Compile Include="Repositories\ScheduleFilter.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					StartDateTime = "2014-11-07 10:00".Utc(),
 					EndDateTime = "2014-11-07 10:00".Utc()
 				};
-				var repository = new ScheduleProjectionReadOnlyRepository(new ThisUnitOfWork(uow));
+				var repository = new ScheduleProjectionReadOnlyPersister(new ThisUnitOfWork(uow));
 				repository.AddProjectedLayer(new DateOnly("2014-11-07".Utc()), Guid.NewGuid(), personId, layer, DateTime.UtcNow);
 				uow.PersistAll();
 			}

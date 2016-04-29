@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private readonly IBudgetDayRepository _budgetDayRepository;
         private readonly IBudgetGroupRepository _budgetGroupRepository;
         private readonly ICurrentScenario _scenarioRepository;
-        private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+        private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
         private IList<double> _allowanceCollection;
         private IList<double> _totalAllowanceCollection;
         private IEnumerable<PayloadWorkTime> _usedAbsences;
@@ -50,13 +50,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                                     IBudgetDayRepository budgetDayRepository, 
                                     IBudgetGroupRepository budgetGroupRepository,
                                     ICurrentScenario scenarioRepository,
-                                    IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+                                    IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _budgetDayRepository = budgetDayRepository;
             _budgetGroupRepository = budgetGroupRepository;
             _scenarioRepository = scenarioRepository;
-            _scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+            _scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
             VisibleModel = new List<BudgetAbsenceAllowanceDetailModel>();
             BudgetGroups = new List<IBudgetGroup>();
             AbsencesInBudgetGroup = new HashSet<IAbsence>();
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         {
             // Need to check CurrentDateUTC...
             //var currentDateUtc = TimeZoneHelper.ConvertToUtc(currentDate, selectedBudgetGroup.TimeZone);
-            return _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(selectedBudgetGroup.Id.GetValueOrDefault(), currentDate);
+            return _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(selectedBudgetGroup.Id.GetValueOrDefault(), currentDate);
         }
 
         private void loadAbsencesInBudgetGroup()
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private void loadUsedAbsences(DateOnlyPeriod period)
         {
             if (SelectedBudgetGroup is EmptyBudgetGroup) return;
-            _usedAbsences = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(period, SelectedBudgetGroup, DefaultScenario);
+            _usedAbsences = _scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(period, SelectedBudgetGroup, DefaultScenario);
         }
 
         private void loadDefaultScenario()

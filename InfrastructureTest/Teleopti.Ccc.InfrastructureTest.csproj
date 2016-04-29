@@ -189,6 +189,7 @@
     <Compile Include="ApplicationLayer\Events\HangfireRecurringEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\RunInProcessEventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterTest.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />
     <Compile Include="Authentication\LoadUserUnauthorizedTest.cs" />
     <Compile Include="Authentication\NonceInfoRepositoryTest.cs" />
@@ -530,7 +531,7 @@
     <Compile Include="SystemCheck\AgentDayConverter\VerifyAllConvertedTest.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerTest.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidatorTest.cs" />
-    <Compile Include="UnitOfWorkTestAttribute.cs" />
+    <Compile Include="UnitOfWorkWithLoginTestAttribute.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkTest.cs" />
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />

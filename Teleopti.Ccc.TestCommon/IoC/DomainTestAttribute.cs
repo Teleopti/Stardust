@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
 
 			// schedule readmodels
-			system.UseTestDouble<FakeScheduleProjectionReadOnlyRepository>().For<IScheduleProjectionReadOnlyRepository>();
+			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
 			
 
 			fakePrincipal(system);

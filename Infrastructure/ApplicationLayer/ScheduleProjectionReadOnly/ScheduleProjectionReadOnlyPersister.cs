@@ -5,22 +5,23 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories
+namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly
 {
-    public class ScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository
+    public class ScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
     {
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-	    public ScheduleProjectionReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork)
+	    public ScheduleProjectionReadOnlyPersister(ICurrentUnitOfWork currentUnitOfWork)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;
 	    }
 
-	    public ScheduleProjectionReadOnlyRepository(IUnitOfWorkFactory unitOfWorkFactory)
+	    public ScheduleProjectionReadOnlyPersister(IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_currentUnitOfWork = new FromFactory(() =>unitOfWorkFactory);
 		}

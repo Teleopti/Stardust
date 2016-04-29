@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
@@ -178,6 +179,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<PerformanceCounter>().As<IPerformanceCounter>().SingleInstance();
             builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
             builder.RegisterType<DeviceInfoProvider>().As<IDeviceInfoProvider>().SingleInstance();
+
+	        builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
+		        .As<IScheduleProjectionReadOnlyPersister>()
+		        .SingleInstance();
         }
     }
 }

@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Domain.Budgeting
 	{
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IBudgetDayRepository _budgetDayRepository;
-		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 
-		public BudgetGroupHeadCountSpecification(IScenarioRepository scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public BudgetGroupHeadCountSpecification(IScenarioRepository scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
 		{
 			_scenarioRepository = scenarioRepository;
 			_budgetDayRepository = budgetDayRepository;
-			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 		}
 
 		public override IValidatedRequest IsSatisfied(IAbsenceRequest absenceRequest)
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 				var currentDay = budgetDay.Day;
 				var allowance = budgetDay.Allowance;
-				var alreadyUsedAllowance = _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
+				var alreadyUsedAllowance = _scheduleProjectionReadOnlyPersister.GetNumberOfAbsencesPerDayAndBudgetGroup(
 						budgetGroup.Id.GetValueOrDefault(), currentDay);
 
 				if (Math.Floor(allowance) <= alreadyUsedAllowance)

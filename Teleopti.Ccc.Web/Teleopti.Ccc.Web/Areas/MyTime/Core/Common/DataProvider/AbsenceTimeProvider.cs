@@ -12,19 +12,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly IExtractBudgetGroupPeriods _extractBudgetGroupPeriod;
 		private readonly IAbsenceTimeProviderCache _absenceTimeProviderCache;
 
 		public AbsenceTimeProvider(	ILoggedOnUser loggedOnUser, 
 									IScenarioRepository scenarioRepository, 
-									IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
+									IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, 
 									IExtractBudgetGroupPeriods extractBudgetGroupPeriod, 
 									IAbsenceTimeProviderCache absenceTimeProviderCache)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scenarioRepository = scenarioRepository;
-			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 			_extractBudgetGroupPeriod = extractBudgetGroupPeriod;
 			_absenceTimeProviderCache = absenceTimeProviderCache;
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private IEnumerable<PayloadWorkTime> getAbsenceTimeFromRepository(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
-			return _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(period, budgetGroup, scenario);
+			return _scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(period, budgetGroup, scenario);
 		}	
 	}
 }

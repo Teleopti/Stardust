@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble(new FakeSeatBookingRepository()).For<ISeatBookingRepository>();
 			system.UseTestDouble(new FakeScenarioRepository(scenario.Current())).For<IScenarioRepository>();
 			system.UseTestDouble(new FakeBudgetDayRepository()).For<IBudgetDayRepository>();
-			system.UseTestDouble(new FakeScheduleProjectionReadOnlyRepository()).For<IScheduleProjectionReadOnlyRepository>();
+			system.UseTestDouble(new FakeScheduleProjectionReadOnlyPersister()).For<IScheduleProjectionReadOnlyPersister>();
 			system.UseTestDouble<FakePersonScheduleDayReadModelFinder>().For<IPersonScheduleDayReadModelFinder>();
 			system.UseTestDouble<FakePersonForScheduleFinder>().For<IPersonForScheduleFinder>();
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();

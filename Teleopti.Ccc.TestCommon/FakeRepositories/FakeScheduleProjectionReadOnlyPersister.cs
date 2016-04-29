@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 
-	public class FakeScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository
+	public class FakeScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
 	{
 		private class ProjectedShift
 		{

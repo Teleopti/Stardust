@@ -237,7 +237,7 @@
     <Compile Include="FakeRepositories\FakePublicNoteRepository.cs" />
     <Compile Include="FakeRepositories\FakeRepositoryFactory.cs" />
     <Compile Include="FakeRepositories\FakeScheduleStorage.cs" />
-    <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyRepository.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyPersister.cs" />
     <Compile Include="FakeRepositories\FakeScheduleTagRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatBookingRepository.cs" />
     <Compile Include="FakeRepositories\FakeSeatMapRepository.cs" />

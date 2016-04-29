@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		IRunOnServiceBus
 #pragma warning restore 618
 	{
-		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 	    private readonly IEventPublisher _serviceBus;
 		private readonly INow _now;
 
-		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
+		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, 
 																							IEventPublisher serviceBus,
 																							INow now)
 		{
-			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 		    _serviceBus = serviceBus;
 			_now = now;
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				var date = new DateOnly(scheduleDay.Date);
 				if (!@event.IsInitialLoad)
 				{
-					var count =_scheduleProjectionReadOnlyRepository.ClearDayForPerson(
+					var count =_scheduleProjectionReadOnlyPersister.ClearDayForPerson(
 						date, @event.ScenarioId, @event.PersonId, @event.ScheduleLoadTimestamp);
 					if (count > 0)
 						isChanged = true;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					if (isLayerRightNow(layer) ||
 						isCurrentLayerCloser(layer, closestLayerToNow))
 						closestLayerToNow = layer;
-					if(_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer, @event.ScheduleLoadTimestamp) > 0)
+					if(_scheduleProjectionReadOnlyPersister.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer, @event.ScheduleLoadTimestamp) > 0)
 						isChanged = true;
 				}
 			}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private void handleEnqueueRtaMessage(ProjectionChangedEventBase @event, ProjectionChangedEventLayer closestLayer)
 		{
 			var now = _now.UtcDateTime();
-			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(now,
+			var nextActivityStartTime = _scheduleProjectionReadOnlyPersister.GetNextActivityStartTime(now,
 			                                                                                           @event.PersonId);
 			var layerPeriod = new DateTimePeriod(DateTime.SpecifyKind(closestLayer.StartDateTime, DateTimeKind.Utc),
 				DateTime.SpecifyKind(closestLayer.EndDateTime, DateTimeKind.Utc));

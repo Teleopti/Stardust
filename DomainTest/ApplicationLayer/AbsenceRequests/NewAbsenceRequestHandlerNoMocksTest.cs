@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private SchedulingResultStateHolder _schedulingResultStateHolder;
 		readonly FakeCurrentUnitOfWorkFactory _unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
 
-		private FakeScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private FakeScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private LoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private LoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
 		private UpdateScheduleProjectionReadModel _scheduleProjectionReadModel;
@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_fakeBudgetDayRepository = new FakeBudgetDayRepository();
-			_scheduleProjectionReadOnlyRepository = new FakeScheduleProjectionReadOnlyRepository();
+			_scheduleProjectionReadOnlyPersister = new FakeScheduleProjectionReadOnlyPersister();
 
-			_scheduleProjectionReadModel = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), _scheduleProjectionReadOnlyRepository);
+			_scheduleProjectionReadModel = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), _scheduleProjectionReadOnlyPersister);
 
 			_personAccountUpdaterDummy = new PersonAccountUpdaterDummy();
 
@@ -494,10 +494,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new ScheduleIsInvalidSpecification(),
 				new PersonRequestCheckAuthorization(),
 				new BudgetGroupHeadCountSpecification(_scenarioRepository, _fakeBudgetDayRepository,
-					_scheduleProjectionReadOnlyRepository),
+					_scheduleProjectionReadOnlyPersister),
 				null,
 				new BudgetGroupAllowanceSpecification(_currentScenario, _fakeBudgetDayRepository,
-					_scheduleProjectionReadOnlyRepository),
+					_scheduleProjectionReadOnlyPersister),
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
 				_personAccountUpdaterDummy, toggleManager);
 

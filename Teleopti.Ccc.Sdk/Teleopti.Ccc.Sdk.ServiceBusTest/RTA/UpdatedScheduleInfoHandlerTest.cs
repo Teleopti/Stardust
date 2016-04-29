@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 	public class UpdatedScheduleInfoHandlerTest
 	{
 		private FakeRecordingDelayedMessageSender serviceBus;
-		private FakeScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
+		private FakeScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister;
 		private IPersonRepository personRepository;
 		private PersonActivityChangePulseLoop target;
 		private FakeNotifyRtaToCheckForActivityChange teleoptiRtaService;
@@ -27,10 +27,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		public void Setup()
 		{
 			serviceBus = new FakeRecordingDelayedMessageSender();
-			scheduleProjectionReadOnlyRepository = new FakeScheduleProjectionReadOnlyRepository();
+			scheduleProjectionReadOnlyPersister = new FakeScheduleProjectionReadOnlyPersister();
 			teleoptiRtaService = new FakeNotifyRtaToCheckForActivityChange();
 			personRepository = new FakePersonRepository();
-			target = new PersonActivityChangePulseLoop(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService, personRepository);
+			target = new PersonActivityChangePulseLoop(serviceBus, scheduleProjectionReadOnlyPersister, teleoptiRtaService, personRepository);
 		}
 
 		[Test]
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 					LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault(),
 					LogOnDatasource = "DS"
 				};
-			scheduleProjectionReadOnlyRepository.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(3));
+			scheduleProjectionReadOnlyPersister.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(3));
 			
 			target.Handle(personInfoMessage);
 			serviceBus.SendCount.Should().Be.EqualTo(1);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
 
-			scheduleProjectionReadOnlyRepository.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(3));
+			scheduleProjectionReadOnlyPersister.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(3));
 
 			target.Handle(updatedSchduleDay);
 			serviceBus.SendCount.Should().Be.EqualTo(1);
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
 
-			scheduleProjectionReadOnlyRepository.SetNextActivityStartTime(person, DateTime.UtcNow.AddDays(2));
+			scheduleProjectionReadOnlyPersister.SetNextActivityStartTime(person, DateTime.UtcNow.AddDays(2));
 
 			target.Handle(updatedSchduleDay);
 			serviceBus.SendCount.Should().Be.EqualTo(0);
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				PersonId = person.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			scheduleProjectionReadOnlyRepository.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(3));
+			scheduleProjectionReadOnlyPersister.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(3));
 			
 			target.Handle(updatedSchduleDay);
 
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				PersonId = person.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			scheduleProjectionReadOnlyRepository.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(1));
+			scheduleProjectionReadOnlyPersister.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(1));
 			
 			target.Handle(updatedSchduleDay);
 			serviceBus.SendCount.Should().Be.EqualTo(0);
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 				PersonId = person.Id.GetValueOrDefault(),
 				LogOnBusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.GetValueOrDefault()
 			};
-			scheduleProjectionReadOnlyRepository.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(4));
+			scheduleProjectionReadOnlyPersister.SetNextActivityStartTime(person, DateTime.UtcNow.AddHours(4));
 			
 			target.Handle(updatedSchduleDay);
 			serviceBus.SendCount.Should().Be.EqualTo(1);
