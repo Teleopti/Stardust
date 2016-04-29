@@ -24,12 +24,11 @@ namespace Teleopti.Ccc.Domain.Analytics
 				   && TeamId == analyticsPermission.TeamId
 				   && MyOwn == analyticsPermission.MyOwn
 				   && BusinessUnitId == analyticsPermission.BusinessUnitId
-				   && DatasourceId == analyticsPermission.DatasourceId
 				   && ReportId == analyticsPermission.ReportId;
 		}
 		public override int GetHashCode()
 		{
-			return string.Format("{0}|{1}|{2}|{3}|{4}|{5}", PersonCode, TeamId, MyOwn, BusinessUnitId, DatasourceId, ReportId)
+			return string.Format("{0}|{1}|{2}|{3}|{4}", PersonCode, TeamId, MyOwn, BusinessUnitId, ReportId)
 				.GetHashCode();
 		}
 	}
