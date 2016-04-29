@@ -11,6 +11,7 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.TestCommon;
@@ -40,13 +41,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			{
 				AllEventPublishingsAsSync = true,
 			};
-			builder.RegisterModule(new CommonModule(new IocConfiguration(args, new FakeToggleManager())));
+			var configuration = new IocConfiguration(args, new FakeToggleManager());
+			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterType<MutableNow>().AsSelf().As<INow>().SingleInstance();
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
 			builder.RegisterType<TestConfiguration>().SingleInstance();
 			builder.RegisterType<Http>().SingleInstance();
 			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
 			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterModule(new TenantServerModule(configuration));
+
 			var container = builder.Build();
 
 			transactionHooks = container.Resolve<ICurrentTransactionHooks>();
