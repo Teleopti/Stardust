@@ -39,7 +39,6 @@ namespace ManagerTest
 		{
 			_workerNode = new WorkerNode
 			{
-				Id = Guid.NewGuid(),
 				Url = new Uri("http://localhost:9050/")
 			};
 		}
@@ -71,29 +70,10 @@ namespace ManagerTest
 			
 			JobManager.AddItemToJobQueue(jobQueueItem);
 
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNodes();
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
 			JobRepository.GetAllJobs().Count.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldBeAbleToDeleteFromJobQueue()
-		{
-			var jobQueueItem = new JobQueueItem
-			{
-				JobId = Guid.NewGuid(),
-				Name = "Name Test",
-				CreatedBy = "Created By Test",
-				Serialized = "Serialized Test",
-				Type = "Type Test"
-			};
-
-			JobManager.AddItemToJobQueue(jobQueueItem);
-			
-			JobManager.DeleteJobQueueItemByJobId(jobQueueItem.JobId);
-			
-			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
 		}
 
 		[Test]
@@ -129,7 +109,7 @@ namespace ManagerTest
 		
 			JobManager.AddItemToJobQueue(jobQueueItem);
 			
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNodes();
 			
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
@@ -162,7 +142,7 @@ namespace ManagerTest
 
 			JobManager.AddItemToJobQueue(jobQueueItem);
 
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNodes();
 
 			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
 		}
@@ -170,7 +150,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldDoNothing_WhenNoWorkerNodeExists_AndJobQueueIsEmpty()
 		{
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNodes();
 
 			FakeHttpSender.CallToWorkerNodes.Should().Be.Empty();
 		}
@@ -220,19 +200,16 @@ namespace ManagerTest
 		
 			JobManager.AddItemToJobQueue(jobQueueItem);
 			
-			JobManager.AssignJobToWorkerNode(useThisWorkerNodeUri: null);
+			JobManager.AssignJobToWorkerNodes();
 			
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
 			job.Satisfy(job1 => job1.Ended == null);
 
-			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(new Uri(job.SentToWorkerNodeUri),
-												keepJobDetailsIfExists: false);
+			NodeManager.RequeueJobsThatDidNotFinishedByWorkerNodeUri(new Uri(job.SentToWorkerNodeUri));
 
 			JobRepository.GetAllJobs().Count.Should().Be(0);
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
 		}
-
-
 	}
 }

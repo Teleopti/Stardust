@@ -7,9 +7,7 @@ namespace Stardust.Manager.Models
 		public WorkerNode()
 		{
 			Id = Guid.NewGuid();
-
 			Heartbeat = DateTime.UtcNow;
-
 			Alive = true;
 		}
 

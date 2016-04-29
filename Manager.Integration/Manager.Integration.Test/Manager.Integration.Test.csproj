@@ -128,14 +128,14 @@
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\PerformanceTest.cs" />
     <Compile Include="Models\WorkerNode.cs" />
-    <Compile Include="RecoveryTests\NodeFailureTests.cs" />
+    <Compile Include="RecoveryTests\DetectNodeFailureTest.cs" />
     <Compile Include="Notifications\NodeStatusNotifier.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
     <Compile Include="LoadTests\OneManagerAndSixNodesLoadTests.cs" />
     <Compile Include="FunctionalTests\OneManagerAndZeroNodesTests.cs" />
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="RecoveryTests\OneManagerAndOneNodeRecoveryTests.cs" />
+    <Compile Include="RecoveryTests\SendJobToDeadNodeTest.cs" />
     <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="LoadTests\SixManagersSixNodesLoadTests.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
@@ -167,11 +167,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EventHandlers\" />
-    <Folder Include="Interceptor\" />
-    <Folder Include="LongRunningTests\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="Scripts\CreateLoggingTable.sql">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

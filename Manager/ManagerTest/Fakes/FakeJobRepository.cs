@@ -42,18 +42,13 @@ namespace ManagerTest.Fakes
 			return _jobQueue;
 		}
 
-		public void DeleteJobByJobId(Guid jobId, bool removeJobDetails)
-		{
-			throw new NotImplementedException();
-		}
-
 		public void DeleteJobQueueItemByJobId(Guid jobId)
 		{
 			var j = _jobs.FirstOrDefault(x => x.JobId.Equals(jobId));
 			_jobs.Remove(j);
 		}
 
-		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri, bool keepJobDetails)
+		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri)
 		{
 			var jobs = _jobs.FirstOrDefault(x => x.SentToWorkerNodeUri == workerNodeUri);
 
@@ -63,8 +58,7 @@ namespace ManagerTest.Fakes
 			}
 		}
 
-		public void AssignJobToWorkerNode(IHttpSender httpSender, 
-									      string useThisWorkerNodeUri)
+		public void AssignJobToWorkerNode(IHttpSender httpSender)
 		{
 			throw new NotImplementedException();
 		}

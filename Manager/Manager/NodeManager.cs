@@ -18,25 +18,12 @@ namespace Stardust.Manager
 
 		public void AddWorkerNode(Uri workerNodeUri)
 		{
-			try
+			var node = new WorkerNode
 			{
-				var node = new WorkerNode
-				{
-					Url = workerNodeUri
-				};
+				Url = workerNodeUri
+			};
 
-				_nodeRepository.AddWorkerNode(node);
-			}
-
-			catch (SqlException exception)
-			{
-				if (exception.Message.Contains("UQ_WorkerNodes_Url"))
-				{
-					return;
-				}
-					
-				throw;
-			}
+			_nodeRepository.AddWorkerNode(node);
 		}
 
 
@@ -45,11 +32,9 @@ namespace Stardust.Manager
 			_nodeRepository.RegisterHeartbeat(nodeUri, true);
 		}
 
-		public void RequeueJobsThatDidNotFinishedByWorkerNodeUri(Uri workerNodeUri, 
-																 bool keepJobDetailsIfExists)
+		public void RequeueJobsThatDidNotFinishedByWorkerNodeUri(Uri workerNodeUri)
 		{
-			_jobRepository.RequeueJobThatDidNotEndByWorkerNodeUri(workerNodeUri.ToString(), 
-																  keepJobDetailsIfExists);
+			_jobRepository.RequeueJobThatDidNotEndByWorkerNodeUri(workerNodeUri.ToString());
 		}
 	}
 }

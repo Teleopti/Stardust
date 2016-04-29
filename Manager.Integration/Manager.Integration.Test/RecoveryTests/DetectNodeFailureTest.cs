@@ -13,7 +13,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.RecoveryTests
 {
 	[TestFixture]
-	internal class NodeFailureTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
+	internal class DetectNodeFailureTest : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
 		private void LogMessage(string message)
 		{
@@ -163,7 +163,8 @@ namespace Manager.Integration.Test.RecoveryTests
 											  startedTest,
 											  endedTest);
 
-			this.Log().DebugWithLineNumber("Finished test.");
+			LogMessage("Finished test.");
 		}
+		
 	}
 }
