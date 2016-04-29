@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public virtual JsonResult NotificationsTimeToStaySetting()
 		{
-			var notificationsTimeToStay = ConfigurationManager.AppSettings["NotificationsTimeToStay"];
+			var notificationsTimeToStay = ConfigurationManager.AppSettings["NotificationsTimeToStay"] ?? "30";
 			return Json(notificationsTimeToStay, JsonRequestBehavior.AllowGet);
 		}
 	}
