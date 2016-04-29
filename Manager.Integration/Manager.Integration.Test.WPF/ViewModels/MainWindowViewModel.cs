@@ -47,7 +47,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private CreateNewJobCommand _create20NewJobCommand;
 		private CreateNewJobCommand _createNewJobCommand;
 
-		private int _durationPerMessage = 2;
+		private int _messageDurationFrom = 5;
 		private ObservableCollection<Logging> _errorLoggings;
 
 		private string _errorLoggingHeader;
@@ -88,6 +88,11 @@ namespace Manager.Integration.Test.WPF.ViewModels
 		private UnInstallCertificateCommand _unInstallCertificateCommand;
 		private string _workerNodeHeader;
 		private ObservableCollection<WorkerNode> _workerNodesData;
+		private int _currentIndex;
+		private int _totalNumber;
+		private string _statusText;
+		private int _itemsInJobQueue;
+		private int _itemsInJob;
 
 		public MainWindowViewModel()
 		{
@@ -145,6 +150,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			StartUpNewNodeCommand = new StartUpNewNodeCommand();
 
 			StartDurationTestCommand = new StartDurationTestCommand(this);
+			CancelDurationTestCommand = new CancelDurationTestCommand(this);
 
 			RefreshTimer = new Timer(5000);
 
@@ -153,6 +159,25 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			RefreshTimer.Start();
 
 			RefreshEnabled = true;
+
+			CheckManagerDbTimer = new Timer(2000);
+			CheckManagerDbTimer.Elapsed += CheckManagerDbTimer_Elapsed;
+		}
+
+		public CancelDurationTestCommand CancelDurationTestCommand { get; set; }
+
+		private void CheckManagerDbTimer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			Task.Factory.StartNew(() =>
+			{
+				Application.Current.Dispatcher.Invoke(
+					DispatcherPriority.Normal,
+					(Action)delegate
+					{
+						ItemsInJob = ManagerDbRepository.JobCount;
+						ItemsInJobQueue = ManagerDbRepository.JobQueueCount;
+					});
+			});
 		}
 
 		public ManagerDbRepository ManagerDbRepository { get; set; }
@@ -608,27 +633,38 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			}
 		}
 
-		public int DurationPerMessage
+		public int MessageDurationTo
 		{
-			get { return _durationPerMessage; }
+			get { return _messageDurationTo; }
 			set
 			{
-				_durationPerMessage = value;
+				_messageDurationTo = value;
 
 				OnPropertyChanged();
 			}
 		}
 
-		private CancellationTokenSource CancelTaskStartDurationTest { get; set; }
+		public int MessageDurationFrom
+		{
+			get { return _messageDurationFrom; }
+			set
+			{
+				_messageDurationFrom = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		private CancellationTokenSource CancellationTokenSourceDurationTest { get; set; }
 
 
 		private Task TaskStartDurationTest { get; set; }
 
 		public void Dispose()
 		{
-			if (CancelTaskStartDurationTest != null)
+			if (CancellationTokenSourceDurationTest != null)
 			{
-				CancelTaskStartDurationTest.Cancel();
+				CancellationTokenSourceDurationTest.Cancel();
 			}
 
 			if (TaskStartDurationTest != null)
@@ -650,7 +686,6 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			{
 				FiddlerCapture.Dispose();
 			}
-
 
 			Settings.Default.NumberOfManagers = NumberOfManagers;
 			Settings.Default.NumberOfNodes = NumberOfNodes;
@@ -858,28 +893,57 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			});
 		}
 
+		private readonly List<Task<HttpResponseMessage>> _tasks = new List<Task<HttpResponseMessage>>();
+
+		private int _messageDurationTo = 120;
+
 		public void StartDurationTest()
 		{
+			CancellationTokenSourceDurationTest = new CancellationTokenSource();
+
+			Task.Factory.StartNew(() =>
+			{
+				while (true)
+				{
+					var tasksToDispose = _tasks.Where(task => task.IsCompleted);
+
+					foreach (var task in tasksToDispose)
+					{
+						task.Dispose();
+
+						_tasks.Remove(task);
+					}
+
+					if (CancellationTokenSourceDurationTest.Token.IsCancellationRequested)
+					{
+						CancellationTokenSourceDurationTest.Token.ThrowIfCancellationRequested();
+					}
+				}
+
+			}, CancellationTokenSourceDurationTest.Token);
+
 			Task.Factory.StartNew(() =>
 			{
 				var mangerUriBuilder = new ManagerUriBuilder();
 				var addToJobQueueUri = mangerUriBuilder.GetAddToJobQueueUri();
 
-				var httpSender = new HttpSender();
-
-				CancelTaskStartDurationTest = new CancellationTokenSource();
-
-				List<Task<HttpResponseMessage>> tasks = new List<Task<HttpResponseMessage>>();
-
+				var httpSender = new HttpSender();				
+			
 				Random random = new Random();
 
-				for (int i = 0; i < 5000; i++)
+				for (int i = 0; i < NumberOfMessages; i++)
 				{
+
+					if (CancellationTokenSourceDurationTest.Token.IsCancellationRequested)
+					{
+						CancellationTokenSourceDurationTest.Token.ThrowIfCancellationRequested();
+					}
+
 					var i1 = i;
 					
-					var randomTimeSpan = random.Next(5, 120);
+					var randomTimeSpan = random.Next(MessageDurationFrom, MessageDurationTo);
 
-					tasks.Add(new Task<HttpResponseMessage>(() =>
+					_tasks.Add(new Task<HttpResponseMessage>(() =>
 						{
 							var testJobTimerParams =
 							new TestJobTimerParams("Test job name " + i1, 
@@ -899,14 +963,102 @@ namespace Manager.Integration.Test.WPF.ViewModels
 						return httpSender.PostAsync(addToJobQueueUri, 
 													jobQueueItem).Result;
 
-					}, CancelTaskStartDurationTest.Token));
-							}
+					}, CancellationTokenSourceDurationTest.Token));
+				}
 
 				var sendJobEveryDurationTimer=
-					new SendJobEveryDurationTimer<HttpResponseMessage>(tasks,TimeSpan.FromSeconds(5));
+					new SendJobEveryDurationTimer<HttpResponseMessage>(_tasks,
+																	   TimeSpan.FromSeconds(5),
+																	   ProgressAction);
 
+				CheckManagerDbTimer.Start();
 				sendJobEveryDurationTimer.SendTimer.Start();
 			});
+		}
+
+		public void CancelDurationTest()
+		{
+			Task.Factory.StartNew(() =>
+			{
+				CancellationTokenSourceDurationTest.Cancel();
+
+				foreach (var task in _tasks)
+				{
+					task.Dispose();
+				}
+
+				_tasks.Clear();
+			});
+		}
+
+		public int CurrentIndex
+		{
+			get { return _currentIndex; }
+			set
+			{
+				_currentIndex = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public int TotalNumber
+		{
+			get { return _totalNumber; }
+			set
+			{
+				_totalNumber = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public string StatusText
+		{
+			get { return _statusText; }
+			set
+			{
+				_statusText = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public int ItemsInJobQueue
+		{
+			get { return _itemsInJobQueue; }
+
+			set
+			{
+				_itemsInJobQueue = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		public int ItemsInJob
+		{
+			get { return _itemsInJob; }
+
+			set
+			{
+				_itemsInJob = value;
+
+				OnPropertyChanged();
+			}
+		}
+
+		private Timer CheckManagerDbTimer { get; set; }
+
+		private void ProgressAction(int currentIndex, 
+									int totalNumber)
+		{
+			CurrentIndex = currentIndex;
+			TotalNumber = totalNumber;
+
+			StatusText = string.Format("{0} / {1}", 
+									  CurrentIndex, 
+									  TotalNumber);
 		}
 	}
 }

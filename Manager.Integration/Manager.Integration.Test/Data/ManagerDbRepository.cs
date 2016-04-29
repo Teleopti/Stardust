@@ -27,6 +27,71 @@ namespace Manager.Integration.Test.Data
 
 		public string ConnectionString { get; private set; }
 
+		public int WorkerNodeCount
+		{
+			get
+			{
+				using (var sqlConnection = new SqlConnection(ConnectionString))
+				{
+					sqlConnection.Open();
+
+					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[WorkerNode]", sqlConnection);
+
+					return (int)sqlCommand.ExecuteScalar();
+				}
+			}
+		}
+
+		public int JobQueueCount
+		{
+			get
+			{
+				using (var sqlConnection = new SqlConnection(ConnectionString))
+				{
+					sqlConnection.Open();
+
+					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[JobQueue]", sqlConnection);
+
+					return (int)sqlCommand.ExecuteScalar();
+				}
+			}
+		}
+
+		public int JobCount
+		{
+			get
+			{
+				using (var sqlConnection = new SqlConnection(ConnectionString))
+				{
+					sqlConnection.Open();
+
+					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[Job]", sqlConnection);
+
+					return (int)sqlCommand.ExecuteScalar();
+				}
+			}
+		}
+
+		public int JobDetailsCount
+		{
+			get
+			{
+				using (var sqlConnection = new SqlConnection(ConnectionString))
+				{
+					sqlConnection.Open();
+
+					var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
+													  FROM [Stardust].[JobDetail]", sqlConnection);
+
+					return (int)sqlCommand.ExecuteScalar();
+				}
+			}
+		}
+
+
 		public ObservableCollection<JobDetail> JobDetails
 		{
 			get

@@ -13,11 +13,21 @@ namespace Manager.Integration.Test.Timers
 	{
 		private int _currentIndex;
 
+		public int TotalNumberOfTasks
+		{
+			get { return Tasks.Count; }
+		}
+
 		public List<Task<T>> Tasks { get; set; }
 
-		public SendJobEveryDurationTimer(List<Task<T>>  tasks, TimeSpan duration)
+		public Action<int, int> ProgressAction { get; set; }
+
+		public SendJobEveryDurationTimer(List<Task<T>>  tasks, 
+														TimeSpan duration,
+														Action<int,int> progressAction)
 		{
 			Tasks = tasks;
+			ProgressAction = progressAction;
 
 			SendTimer = new Timer
 			{
@@ -31,9 +41,11 @@ namespace Manager.Integration.Test.Timers
 		{
 			Interlocked.Increment(ref _currentIndex);
 
-			if (_currentIndex < Tasks.Count)
+			if (_currentIndex <= Tasks.Count)
 			{
 				Tasks[_currentIndex].Start();
+
+				ProgressAction(_currentIndex, TotalNumberOfTasks);
 			}
 			else
 			{

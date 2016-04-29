@@ -30,6 +30,8 @@ namespace NodeTest.JobHandlers
 
 			int progressCounter = 0;
 
+			var sleep = message.Duration.TotalSeconds / 3;
+
 			while (stopwatch.Elapsed <= message.Duration)
 			{
 				progressCounter++;
@@ -38,14 +40,14 @@ namespace NodeTest.JobHandlers
 				{
 					cancellationTokenSource.Token.ThrowIfCancellationRequested();
 				}
-
+				
 				jobProgress = new TestJobTimerProgress
 				{
-					Text = "Progress loop number :" + progressCounter + ". Will sleep for 500 milliseconds."
+					Text = "Progress loop number :" + progressCounter + ". Will sleep a couple of seconds."
 				};
 				progress(jobProgress.Text);
 
-				Thread.Sleep(TimeSpan.FromMilliseconds(500));
+				Thread.Sleep(TimeSpan.FromSeconds(sleep));
 
 				progressCounter++;
 

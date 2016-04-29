@@ -111,6 +111,7 @@
     <Compile Include="Commands\CreateNewJobCommand.cs" />
     <Compile Include="Commands\InstallCertificateCommand.cs" />
     <Compile Include="Commands\ShutDownHostCommand.cs" />
+    <Compile Include="Commands\CancelDurationTestCommand.cs" />
     <Compile Include="Commands\StartDurationTestCommand.cs" />
     <Compile Include="Commands\StartHostCommand.cs" />
     <Compile Include="Commands\StopFiddlerCaptureCommand.cs" />
