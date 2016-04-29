@@ -9,10 +9,10 @@
               <Width>7.67855cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>14.5601cm</Width>
+              <Width>6.27864cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.84135cm</Width>
+              <Width>4.41802cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -970,20 +970,20 @@
         <Top>0.25cm</Top>
         <Left>0.25cm</Left>
         <Height>7.1cm</Height>
-        <Width>27.08cm</Width>
+        <Width>18.37521cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="table2">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>13.07642cm</Width>
+              <Width>7.64678cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>8.90142cm</Width>
+              <Width>6.0496cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>5.07039cm</Width>
+              <Width>4.67352cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1410,36 +1410,6 @@
               <TablixCells>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox33">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox33</rd:DefaultName>
-                      <ZIndex>23</ZIndex>
-                      <Style>
-                        <VerticalAlign>Bottom</VerticalAlign>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="textbox35">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1455,17 +1425,50 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox35</rd:DefaultName>
                       <ZIndex>22</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox29</ToggleItem>
-                      </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
+                        <VerticalAlign>Bottom</VerticalAlign>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox23">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value />
+                              <Style>
+                                <FontFamily>Segoe UI</FontFamily>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox23</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1498,6 +1501,9 @@
                       <rd:DefaultName>textbox49</rd:DefaultName>
                       <ZIndex>18</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1532,7 +1538,6 @@
                       <rd:DefaultName>textbox16</rd:DefaultName>
                       <ZIndex>7</ZIndex>
                       <Style>
-                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1566,12 +1571,10 @@
                       <rd:DefaultName>textbox40</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
                         <Border />
-                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1603,11 +1606,12 @@
                       </Paragraphs>
                       <ZIndex>2</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
-                        <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1788,7 +1792,7 @@
                       <TablixMembers>
                         <TablixMember>
                           <Visibility>
-                            <Hidden>true</Hidden>
+                            <Hidden>=iif(Parameters!details.Value,False,True)</Hidden>
                             <ToggleItem>textbox29</ToggleItem>
                           </Visibility>
                           <KeepWithGroup>After</KeepWithGroup>
@@ -1801,7 +1805,7 @@
                           <TablixMembers>
                             <TablixMember>
                               <Visibility>
-                                <Hidden>true</Hidden>
+                                <Hidden>=iif(Parameters!details.Value,False,True)</Hidden>
                                 <ToggleItem>textbox35</ToggleItem>
                               </Visibility>
                             </TablixMember>
@@ -1825,18 +1829,18 @@
         <Top>8.04671cm</Top>
         <Left>0.28177cm</Left>
         <Height>4.91984cm</Height>
-        <Width>27.04823cm</Width>
+        <Width>18.3699cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
     </ReportItems>
-    <Height>12.96655cm</Height>
+    <Height>13.26937cm</Height>
     <Style />
   </Body>
-  <Width>27.7cm</Width>
+  <Width>18.86333cm</Width>
   <Page>
     <PageHeader>
-      <Height>2.0675cm</Height>
+      <Height>2.17333cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1861,9 +1865,10 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox4</rd:DefaultName>
+          <Top>0.10583cm</Top>
           <Left>0.25cm</Left>
           <Height>1.50529cm</Height>
-          <Width>23.15361cm</Width>
+          <Width>18.40167cm</Width>
           <Style>
             <Border>
               <Color>#d3e5ef</Color>
@@ -1900,7 +1905,7 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox7</rd:DefaultName>
-          <Left>23.58cm</Left>
+          <Left>14.90167cm</Left>
           <Height>0.5cm</Height>
           <Width>3.75cm</Width>
           <ZIndex>1</ZIndex>
@@ -1932,8 +1937,8 @@
             </Paragraph>
           </Paragraphs>
           <rd:DefaultName>textbox1</rd:DefaultName>
-          <Top>0.5cm</Top>
-          <Left>25.08cm</Left>
+          <Top>0.67639cm</Top>
+          <Left>16.40167cm</Left>
           <Height>0.5cm</Height>
           <Width>2.25cm</Width>
           <ZIndex>2</ZIndex>
@@ -1945,10 +1950,10 @@
           </Style>
         </Textbox>
         <Line Name="line1">
-          <Top>1.75cm</Top>
+          <Top>1.85583cm</Top>
           <Left>0.25cm</Left>
           <Height>0cm</Height>
-          <Width>27.08cm</Width>
+          <Width>18.40167cm</Width>
           <ZIndex>3</ZIndex>
           <Style>
             <Border>
@@ -1962,7 +1967,7 @@
       <Style />
     </PageHeader>
     <PageFooter>
-      <Height>1.45692cm</Height>
+      <Height>0.79546cm</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1987,9 +1992,9 @@
               </Style>
             </Paragraph>
           </Paragraphs>
-          <Top>0.55739cm</Top>
+          <Top>0.17639cm</Top>
           <Height>0.50265cm</Height>
-          <Width>27.33cm</Width>
+          <Width>18.65167cm</Width>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -2000,8 +2005,8 @@
       </ReportItems>
       <Style />
     </PageFooter>
-    <PageHeight>21cm</PageHeight>
-    <PageWidth>29.7cm</PageWidth>
+    <PageHeight>29.7cm</PageHeight>
+    <PageWidth>21cm</PageWidth>
     <InteractiveHeight>21cm</InteractiveHeight>
     <InteractiveWidth>29.7cm</InteractiveWidth>
     <LeftMargin>1cm</LeftMargin>
@@ -2315,6 +2320,11 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="ResOvertimeTypeColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>

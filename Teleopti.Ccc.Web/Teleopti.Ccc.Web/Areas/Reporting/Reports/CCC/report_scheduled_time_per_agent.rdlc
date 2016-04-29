@@ -2160,10 +2160,12 @@
                       <rd:DefaultName>textbox35</rd:DefaultName>
                       <ZIndex>22</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox29</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2195,6 +2197,9 @@
                       </Paragraphs>
                       <ZIndex>21</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2226,6 +2231,9 @@
                       </Paragraphs>
                       <ZIndex>20</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2257,6 +2265,9 @@
                       </Paragraphs>
                       <ZIndex>19</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2352,12 +2363,16 @@
                       </Paragraphs>
                       <ZIndex>16</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2421,10 +2436,12 @@
                       <rd:DefaultName>textbox40</rd:DefaultName>
                       <ZIndex>6</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2457,10 +2474,12 @@
                       </Paragraphs>
                       <ZIndex>5</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2493,10 +2512,12 @@
                       </Paragraphs>
                       <ZIndex>4</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2529,10 +2550,12 @@
                       </Paragraphs>
                       <ZIndex>3</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2565,10 +2588,12 @@
                       </Paragraphs>
                       <ZIndex>2</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2601,10 +2626,12 @@
                       </Paragraphs>
                       <ZIndex>1</ZIndex>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -2636,10 +2663,12 @@
                         </Paragraph>
                       </Paragraphs>
                       <Visibility>
-                        <Hidden>true</Hidden>
                         <ToggleItem>textbox35</ToggleItem>
                       </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <VerticalAlign>Bottom</VerticalAlign>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -3028,7 +3057,7 @@
                       <TablixMembers>
                         <TablixMember>
                           <Visibility>
-                            <Hidden>true</Hidden>
+                            <Hidden>=iif(Parameters!details.Value,false, true)</Hidden>
                             <ToggleItem>textbox29</ToggleItem>
                           </Visibility>
                           <KeepWithGroup>After</KeepWithGroup>
@@ -3041,7 +3070,7 @@
                           <TablixMembers>
                             <TablixMember>
                               <Visibility>
-                                <Hidden>true</Hidden>
+                                <Hidden>=iif(Parameters!details.Value,false, true)</Hidden>
                                 <ToggleItem>textbox35</ToggleItem>
                               </Visibility>
                             </TablixMember>
@@ -3583,6 +3612,11 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="absence_set">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>

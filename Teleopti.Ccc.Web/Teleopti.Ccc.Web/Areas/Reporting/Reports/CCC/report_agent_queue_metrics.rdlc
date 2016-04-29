@@ -2110,14 +2110,10 @@
                       <Group Name="table2_Details_Group">
                         <DataElementName>Detail</DataElementName>
                       </Group>
-                      <TablixMembers>
-                        <TablixMember>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                            <ToggleItem>textbox19</ToggleItem>
-                          </Visibility>
-                        </TablixMember>
-                      </TablixMembers>
+                      <Visibility>
+                        <ToggleItem>textbox19</ToggleItem>
+                        <Hidden>=iif(Parameters!details.Value,false, true)</Hidden>
+                      </Visibility>
                       <DataElementName>Detail_Collection</DataElementName>
                       <DataElementOutput>Output</DataElementOutput>
                       <KeepTogether>true</KeepTogether>
@@ -2136,7 +2132,7 @@
         <Top>6.1053cm</Top>
         <Left>0.02645cm</Left>
         <Height>4.31984cm</Height>
-        <Width>27.28973cm</Width>
+        <Width>27.28974cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <FontFamily>Segoe UI</FontFamily>
@@ -2646,6 +2642,11 @@
     </ReportParameter>
     <ReportParameter Name="ResKpiAverageAfterCallWork">
       <DataType>String</DataType>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

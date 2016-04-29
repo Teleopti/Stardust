@@ -807,7 +807,7 @@
         <Top>0.30292cm</Top>
         <Left>0.27646cm</Left>
         <Height>5.9cm</Height>
-        <Width>26.81272cm</Width>
+        <Width>26.81271cm</Width>
         <Style />
       </Tablix>
       <Tablix Name="table2">
@@ -1930,6 +1930,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2533,14 +2534,10 @@
                       <Group Name="table2_Details_Group">
                         <DataElementName>Detail</DataElementName>
                       </Group>
-                      <TablixMembers>
-                        <TablixMember>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                            <ToggleItem>textbox19</ToggleItem>
-                          </Visibility>
-                        </TablixMember>
-                      </TablixMembers>
+                      <Visibility>
+                        <ToggleItem>textbox19</ToggleItem>
+                        <Hidden>=iif(Parameters!details.Value,false, true)</Hidden>
+                      </Visibility>
                       <DataElementName>Detail_Collection</DataElementName>
                       <DataElementOutput>Output</DataElementOutput>
                       <KeepTogether>true</KeepTogether>
@@ -2558,7 +2555,7 @@
         <Top>6.70792cm</Top>
         <Left>0.32668cm</Left>
         <Height>4.31984cm</Height>
-        <Width>26.7625cm</Width>
+        <Width>26.76251cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
@@ -3027,6 +3024,11 @@
     <ReportParameter Name="group_page_agent_code">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
+      <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>

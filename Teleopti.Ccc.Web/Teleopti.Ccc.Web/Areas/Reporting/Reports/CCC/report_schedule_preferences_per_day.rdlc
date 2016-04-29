@@ -1910,7 +1910,7 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
                   <TablixMembers>
                     <TablixMember>
                       <Visibility>
-                        <Hidden>true</Hidden>
+                        <Hidden>=iif(Parameters!details.Value,False,True)</Hidden>
                         <ToggleItem>textbox54</ToggleItem>
                       </Visibility>
                     </TablixMember>
@@ -2387,6 +2387,11 @@ sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),
     <ReportParameter Name="ResMustHaves">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
+      <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>

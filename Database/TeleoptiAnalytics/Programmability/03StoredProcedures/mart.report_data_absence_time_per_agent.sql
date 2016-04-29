@@ -32,7 +32,8 @@ CREATE PROCEDURE [mart].[report_data_absence_time_per_agent]
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@details int
 AS
 SET NOCOUNT ON 
 

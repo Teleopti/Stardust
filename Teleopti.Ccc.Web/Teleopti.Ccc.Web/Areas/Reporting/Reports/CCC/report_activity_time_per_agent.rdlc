@@ -2690,14 +2690,10 @@
                       <Group Name="table2_Details_Group">
                         <DataElementName>Detail</DataElementName>
                       </Group>
-                      <TablixMembers>
-                        <TablixMember>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                            <ToggleItem>textbox19</ToggleItem>
-                          </Visibility>
-                        </TablixMember>
-                      </TablixMembers>
+                      <Visibility>
+                        <ToggleItem>textbox19</ToggleItem>
+                        <Hidden>=iif(Parameters!details.Value,False,True)</Hidden>
+                      </Visibility>
                       <DataElementName>Detail_Collection</DataElementName>
                       <DataElementOutput>Output</DataElementOutput>
                       <KeepTogether>true</KeepTogether>
@@ -2715,7 +2711,7 @@
         <DataSetName>DataSet1</DataSetName>
         <Top>7.61964cm</Top>
         <Height>3.46734cm</Height>
-        <Width>27.38497cm</Width>
+        <Width>27.38494cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
@@ -3158,6 +3154,11 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="group_page_agent_code">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>

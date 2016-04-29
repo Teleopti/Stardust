@@ -55,7 +55,8 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_result]
 @report_id uniqueidentifier,
 @language_id int,
 @business_unit_code uniqueidentifier,
-@from_matrix bit=1
+@from_matrix bit=1,
+@details int = 0
 AS
 SET NOCOUNT ON
 

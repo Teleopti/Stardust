@@ -39,7 +39,8 @@ CREATE PROCEDURE [mart].[report_data_requests_per_agent]
 @report_id uniqueidentifier,
 @language_id int,
 @request_type_id int,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@details int = 0
 AS
 BEGIN
 SET NOCOUNT ON;

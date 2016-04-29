@@ -1880,11 +1880,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                       </Paragraphs>
                       <rd:DefaultName>textbox12</rd:DefaultName>
                       <ZIndex>8</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1916,11 +1915,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                       </Paragraphs>
                       <rd:DefaultName>textbox31</rd:DefaultName>
                       <ZIndex>7</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1952,11 +1950,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                       </Paragraphs>
                       <rd:DefaultName>textbox39</rd:DefaultName>
                       <ZIndex>6</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>=iif(RowNumber(Nothing) Mod 2, "WhiteSmoke", "White")</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1989,10 +1986,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                       </Paragraphs>
                       <rd:DefaultName>textbox53</rd:DefaultName>
                       <ZIndex>5</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2029,10 +2022,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                       </Paragraphs>
                       <rd:DefaultName>textbox55</rd:DefaultName>
                       <ZIndex>4</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2069,10 +2058,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                       </Paragraphs>
                       <rd:DefaultName>textbox62</rd:DefaultName>
                       <ZIndex>3</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2108,10 +2093,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                         </Paragraph>
                       </Paragraphs>
                       <ZIndex>2</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2148,10 +2129,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                       </Paragraphs>
                       <rd:DefaultName>textbox63</rd:DefaultName>
                       <ZIndex>1</ZIndex>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2187,10 +2164,6 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>textbox43</rd:DefaultName>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -2201,6 +2174,7 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2642,14 +2616,10 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
                   <Group Name="table2_Details_Group">
                     <DataElementName>Detail</DataElementName>
                   </Group>
-                  <TablixMembers>
-                    <TablixMember>
-                      <Visibility>
-                        <Hidden>true</Hidden>
-                        <ToggleItem>textbox65</ToggleItem>
-                      </Visibility>
-                    </TablixMember>
-                  </TablixMembers>
+                  <Visibility>
+                    <Hidden>=iif(Parameters!details.Value,false, true)</Hidden>
+                    <ToggleItem>textbox65</ToggleItem>
+                  </Visibility>
                   <DataElementName>Detail_Collection</DataElementName>
                   <DataElementOutput>Output</DataElementOutput>
                   <KeepTogether>true</KeepTogether>
@@ -3207,6 +3177,11 @@ sum(Fields!handling_time_s.Value)/sum(Fields!ready_time_s.Value),0)</Value>
     <ReportParameter Name="group_page_agent_set">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
+      <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>

@@ -1361,10 +1361,6 @@ Schedule</value>
     <value>Agent Skills</value>
     <comment>Agent Skills</comment>
   </data>
-  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
-    <value>Connection to database timed out, try to limit your search conditions.</value>
-    <comment>Connection to database timed out, try to limit your search conditions.</comment>
-  </data>
   <data name="ResOnlyActiveSkillColon" xml:space="preserve">
     <value>Only active skills:</value>
     <comment>Only active skills:</comment>
@@ -1376,5 +1372,9 @@ Schedule</value>
   <data name="ResStateGroupColon" xml:space="preserve">
     <value>State Groups:</value>
     <comment>State Groups:</comment>
+  </data>
+  <data name="ResIncludeDetails" xml:space="preserve">
+    <value>Include details:</value>
+    <comment>Include details:</comment>
   </data>
 </root>

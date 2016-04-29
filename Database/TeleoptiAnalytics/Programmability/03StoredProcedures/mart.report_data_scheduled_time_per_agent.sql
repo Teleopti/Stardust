@@ -38,7 +38,8 @@ CREATE PROCEDURE [mart].[report_data_scheduled_time_per_agent]
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@details int =0
 AS
 SET NOCOUNT ON
 CREATE TABLE #activities(id int)

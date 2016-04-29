@@ -36,7 +36,8 @@ CREATE PROCEDURE [mart].[report_data_team_metrics]
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@details int=0
 AS
 SET NOCOUNT ON;
 

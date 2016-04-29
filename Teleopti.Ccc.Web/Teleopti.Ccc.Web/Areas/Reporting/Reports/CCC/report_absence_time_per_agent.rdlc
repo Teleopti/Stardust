@@ -637,7 +637,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -825,7 +824,7 @@
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
         <Height>6cm</Height>
-        <Width>27.16143cm</Width>
+        <Width>27.16142cm</Width>
         <Style>
           <FontFamily>Segoe UI</FontFamily>
         </Style>
@@ -2102,6 +2101,7 @@
                             <TextRun>
                               <Value>=Code.TimeString(Fields!scheduled_work_time_absence_m.Value)</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2136,6 +2136,7 @@
                             <TextRun>
                               <Value>=Fields!part_day_count.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2156,6 +2157,7 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2169,6 +2171,7 @@
                             <TextRun>
                               <Value>=Fields!full_day_count.Value</Value>
                               <Style>
+                                <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
                               </Style>
                             </TextRun>
@@ -2189,6 +2192,7 @@
                         <PaddingTop>2pt</PaddingTop>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
@@ -2557,14 +2561,10 @@
                       <Group Name="table2_Details_Group">
                         <DataElementName>Detail</DataElementName>
                       </Group>
-                      <TablixMembers>
-                        <TablixMember>
-                          <Visibility>
-                            <Hidden>true</Hidden>
-                            <ToggleItem>textbox19</ToggleItem>
-                          </Visibility>
-                        </TablixMember>
-                      </TablixMembers>
+                      <Visibility>
+                        <Hidden>=iif(Parameters!details.Value,False,True)</Hidden>
+                        <ToggleItem>textbox19</ToggleItem>
+                      </Visibility>
                       <DataElementName>Detail_Collection</DataElementName>
                       <DataElementOutput>Output</DataElementOutput>
                       <KeepTogether>true</KeepTogether>
@@ -2582,7 +2582,7 @@
         <Top>6.70242cm</Top>
         <Left>0.25cm</Left>
         <Height>4.26984cm</Height>
-        <Width>27.13498cm</Width>
+        <Width>27.135cm</Width>
         <ZIndex>1</ZIndex>
         <Style>
           <FontFamily>Segoe UI</FontFamily>
@@ -3048,6 +3048,11 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="group_page_agent_code">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="details">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
