@@ -28,15 +28,15 @@
 			});
 
 		};
-		vm.init = init; 
-		
+		vm.init = init;
+
 		$scope.$watch(function () {
 			return ScheduleMgmt.groupScheduleVm.Schedules
 		}, function (newVal) {
 			if (newVal)
 				vm.init();
 		});
-		
+
 		$scope.$watch(function(){
 			return isAllInCurrentPageSelected();
 		}, function(newVal){
@@ -54,11 +54,11 @@
 			personSelectionSvc.toggleAllPersonProjections(personSchedule);
 		};
 
-		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shiftDate) {
+		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shiftDateMoment) {
 			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
 				return;
 
-			var isSameDay = moment(shiftDate).isSame(personSchedule.Date, 'day');
+			var isSameDay = shiftDateMoment.isSame(personSchedule.Date, 'day');
 			if (!isSameDay || currentProjection.IsOvertime) {
 				return;
 			}

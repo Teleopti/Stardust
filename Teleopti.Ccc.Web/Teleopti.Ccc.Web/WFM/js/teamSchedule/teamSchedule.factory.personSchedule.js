@@ -41,7 +41,7 @@
 			if (!schedule) schedule = {};
 			var projectionVms = createProjections(schedule.Projection, timeLine);
 			var dayOffVm = createDayOffViewModel(schedule.DayOff, timeLine);
-		
+
 			var personSchedule = {
 				PersonId: schedule.PersonId,
 
@@ -63,12 +63,12 @@
 					return !this.IsFullDayAbsence;
 				},
 				ScheduleStartTime: function () {
-					var start = this.Date.format('YYYY-MM-DD hh:mm');				
+					var start = this.Date.format('YYYY-MM-DD hh:mm');
 					angular.forEach(this.Shifts, function(shift) {
 						if (shift.Date.isSame(start,'day') && shift.Projections.length > 0) {
 							start = shift.Projections[0].Start;
 						}
-					});				
+					});
 					return start;
 				},
 				ScheduleEndTime: function () {
@@ -108,7 +108,7 @@
 			if (projections == undefined || projections == null || projections.length === 0) {
 				return undefined;
 			}
-			
+
 			var projectionVms = [];
 			projections.forEach(function (projection) {
 				var proj = createShiftProjectionViewModel(projection, timeLine);
@@ -190,7 +190,7 @@
 			var otherProjections = createProjections(otherSchedule.Projection, timeLine);
 			if (otherProjections != undefined) {
 				this.Shifts.push({
-					Date: moment.tz(otherSchedule.Date, currentUserInfo.DefaultTimeZone),
+					Date: moment.tz(otherSchedule.Date, currentUserInfo.CurrentUserInfo().DefaultTimeZone),
 					Projections: otherProjections,
 					AbsenceCount: getPersonAbsencesCount,
 					ActivityCount: getPersonActivitiesCount
