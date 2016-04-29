@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -7,7 +8,8 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	public class UpdateSkillAnalyticsHandler :
-		IHandleEvent<SkillChangedEvent>,
+		IHandleEvent<SkillNameChangedEvent>,
+		IHandleEvent<SkillDeletedEvent>,
 		IRunOnHangfire
 	{
 		private readonly ISkillRepository _skillRepository;
@@ -23,11 +25,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 		}
 
-		[AnalyticsUnitOfWork]
-		[UnitOfWork]
-		public virtual void Handle(SkillChangedEvent @event)
+		
+		public virtual void Handle(Guid skillId)
 		{
-			var skill = _skillRepository.Get(@event.SkillId);
+			var skill = _skillRepository.Get(skillId);
 			var businessUnit = _analyticsBusinessUnitRepository.Get(skill.BusinessUnit.Id.GetValueOrDefault());
 			var timezone = _analyticsTimeZoneRepository.Get(skill.TimeZone.Id);
 			if (businessUnit == null) return;
@@ -45,6 +46,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				IsDeleted = deleteTag != null && deleteTag.IsDeleted
 			};
 			_analyticsSkillRepository.AddOrUpdateSkill(analyticsSkill);
+		}
+
+		[AnalyticsUnitOfWork]
+		[UnitOfWork]
+		public virtual void Handle(SkillNameChangedEvent @event)
+		{
+			Handle(@event.SkillId);
+		}
+
+		[AnalyticsUnitOfWork]
+		[UnitOfWork]
+		public virtual void Handle(SkillDeletedEvent @event)
+		{
+			Handle(@event.SkillId);
 		}
 	}
 }

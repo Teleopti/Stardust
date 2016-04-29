@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[Test]
 		public void ShouldAddOrUpdateSkill()
 		{
-			var @event = new SkillChangedEvent
+			var @event = new SkillNameChangedEvent
 			{
 				SkillId = Guid.NewGuid()
 			};

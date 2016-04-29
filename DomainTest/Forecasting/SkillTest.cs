@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             TimeSpan midnightBreakOffset = new TimeSpan(2, 0, 0);
             
             target.DefaultResolution = defaultResolution;
-            target.Name = skillName;
+			target.ChangeName(skillName);
             target.Description = skillDescription;
             target.DisplayColor = skillColor;
             target.SkillType = skillType;
@@ -383,13 +383,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [ExpectedException(typeof (ArgumentException))]
         public void NameCannotBeStringEmpty()
         {
-            target.Name = string.Empty;
-        }
+			target.ChangeName(string.Empty);
+		}
 
         [Test, ExpectedException(typeof(ArgumentException))]
         public void VerifyNameCannotBeTooLong()
         {
-            target.Name = string.Empty.PadRight(51);
+	        target.ChangeName(string.Empty.PadRight(51));
         }
 
         [Test]

@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
 			var text = _editBox.Text.TrimEnd((char)13);
 			if (!string.IsNullOrEmpty(text.Trim()))
 			{
-				((ChildSkill) listBoxChildSkills.Items[_itemSelected]).Name = text;
+				((ChildSkill)listBoxChildSkills.Items[_itemSelected]).ChangeName(text);
 				_childSkillNameUpdated = true;
 			}
 			hideEditBox();

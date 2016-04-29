@@ -143,7 +143,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
 			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
 			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
-			_skillRepository.Stub(r => r.Get(entityId)).Return(new Skill {Name = updateGroupName});
+			var skill = new Skill();
+			skill.ChangeName(updateGroupName);
+			_skillRepository.Stub(r => r.Get(entityId)).Return(skill);
 
 			_target.Handle(@event);
 

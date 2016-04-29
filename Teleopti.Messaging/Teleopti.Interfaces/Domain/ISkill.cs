@@ -32,7 +32,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Name
         /// </summary>
-        string Name { get; set; }
+        string Name { get; }
 
         /// <summary>
         /// Gets the forecast.
@@ -200,5 +200,15 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2013-06-13
 		/// </remarks>
 		int MaxParallelTasks { get; set; }
+
+		/// <summary>
+		/// Changes the name of the skill, also publishes a SkillnameChangedEvent
+		/// </summary>
+		/// <remarks>
+		/// Created by: erikn
+		/// Created date: 2016-04-28
+		/// </remarks>
+		void ChangeName(string name);
+
     }
 }

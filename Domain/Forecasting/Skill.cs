@@ -5,14 +5,15 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public class Skill : VersionedAggregateRootWithBusinessUnit, ISkill, IDeleteTag
-    {
+    public class Skill : VersionedAggregateRootWithBusinessUnit, ISkill, IDeleteTag, IAggregateRootWithEvents
+	{
         private string _name = string.Empty;
         private string _description = string.Empty;
         private Color _displayColor;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             InParameter.StringTooLong("name", name, 50);
             InParameter.StringTooLong("description", description, 1024);
-            _name = name;
+            ChangeName(name);
             _description = description;
             _displayColor = displayColor;
             _defaultResolution = defaultResolution;
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 skillDayTemplate.SetParent(this);
                 _templateWeekCollection.Add((int)dayOfWeek, skillDayTemplate);
             }
-        }
+		}
 
         public virtual ISkillType SkillType
         {
@@ -135,15 +136,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
 
+	    public virtual void ChangeName(string name)
+	    {
+			InParameter.StringTooLong("Name", name, 50);
+			InParameter.NotStringEmptyOrNull("value", name);
+			_name = name;
+			AddEvent(() => new SkillNameChangedEvent { SkillId = Id.GetValueOrDefault() });
+		}
+
         public virtual string Name
         {
             get { return _name; }
-            set
-            {
-                InParameter.StringTooLong("Name", value, 50);
-                InParameter.NotStringEmptyOrNull("value", value);
-                _name = value;
-            }
         }
 
         public virtual StaffingThresholds StaffingThresholds
@@ -680,6 +683,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual void SetDeleted()
         {
             _isDeleted = true;
-        }
+			AddEvent(() => new SkillDeletedEvent { SkillId = Id.GetValueOrDefault() });
+		}
     }
 }

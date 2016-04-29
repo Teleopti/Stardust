@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             var thisSkill = aggregateRoot as ISkill;
             try
             {
-                thisSkill.Name = textBoxName.Text.Trim();
+				thisSkill.ChangeName(textBoxName.Text.Trim());
             }
             catch (ArgumentException)
             {

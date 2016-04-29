@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 			{
 				var skill = (ISkill) AggregateSkillSkill;
-				skill.Name = textBoxSummeryName.Text;
+				skill.ChangeName(textBoxSummeryName.Text);
 				skill.Description = textBoxSummeryName.Text;
 			}
 			AggregateSkillSkill.ClearAggregateSkill();
