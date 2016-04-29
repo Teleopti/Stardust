@@ -21,6 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	/// </summary>
 	public class PersonRequestRepository : Repository<IPersonRequest>, IPersonRequestRepository
 	{
+		const char splitter = ' ';
+
 		public PersonRequestRepository(IUnitOfWork unitOfWork)
 #pragma warning disable 618
 			: base(unitOfWork)
@@ -199,7 +201,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			if (requestFilters == null || !requestFilters.Any()) return;
 
-			const char splitter = ' ';
 			foreach (var filter in requestFilters)
 			{
 				switch (filter.Key)
@@ -209,38 +210,57 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						{
 							int status;
 							return int.TryParse(x.Trim(), out status) ? status : int.MinValue;
-						}).Where(x => x > int.MinValue);
-						
-						var statusCriteria = statusFilters
+						}).Where(x => x > int.MinValue).ToList();
+
+						if (!statusFilters.Any()) continue;
+
+						var statusCriterion = statusFilters
 							.Select(x => (ICriterion) Restrictions.Eq("personRequests.requestStatus", x))
 							.Aggregate(Restrictions.Or);
-						criteria.Add(statusCriteria);
+						criteria.Add(statusCriterion);
 						break;
 					case RequestFilterField.AbsenceType:
-						// TODO: How to filter absence types?
+						var absenceFilters = filter.Value.Split(splitter).Select(x =>
+						{
+							Guid absenceId;
+							return Guid.TryParse(x.Trim(), out absenceId) ? absenceId : Guid.Empty;
+						}).Where(x => x != Guid.Empty).ToList();
+
+						if (!absenceFilters.Any()) continue;
+
+						var absenceCriterion = absenceFilters
+							.Select(x => (ICriterion) Restrictions.Eq("req.Absence.Id", x))
+							.Aggregate(Restrictions.Or);
+
+						criteria.Add(absenceCriterion);
+						criteria.Add(toRequestClassTypeConstraint(RequestType.AbsenceRequest));
 						break;
 					case RequestFilterField.Subject:
-						var subjectKeywords = filter.Value.Split(splitter)
-							.Select(x => x.Trim().ToLower())
-							.Where(x => !string.IsNullOrEmpty(x));
-
-						var subjectCriteria = subjectKeywords
-							.Select(x => (ICriterion) Restrictions.Like("personRequests.Subject", $"%{x}%"))
-							.Aggregate(Restrictions.And);
-						criteria.Add(subjectCriteria);
+						var subjectCriterion = getStringFilterCriteria(filter.Value, "personRequests.Subject");
+						if (subjectCriterion != null) criteria.Add(subjectCriterion);
 						break;
 					case RequestFilterField.Message:
-						var messageKeywords = filter.Value.Split(splitter)
-							.Select(x => x.Trim().ToLower())
-							.Where(x => !string.IsNullOrEmpty(x));
-
-						var messageCriteria = messageKeywords
-							.Select(x => (ICriterion) Restrictions.Like("personRequests.Message", $"%{x}%"))
-							.Aggregate(Restrictions.And);
-						criteria.Add(messageCriteria);
+						var messageCriterion = getStringFilterCriteria(filter.Value, "personRequests.Message");
+						if (messageCriterion != null) criteria.Add(messageCriterion);
 						break;
+					default:
+						continue;
 				}
 			}
+		}
+
+		private static ICriterion getStringFilterCriteria(string filterKeywords, string propertyPath)
+		{
+			var subjectKeywords = filterKeywords.Split(splitter)
+				.Select(x => x.Trim().ToLower())
+				.Where(x => !string.IsNullOrEmpty(x)).ToList();
+
+			if (!subjectKeywords.Any()) return null;
+
+			var criteria = subjectKeywords
+				.Select(x => (ICriterion)Restrictions.Like(propertyPath, $"%{x}%"))
+				.Aggregate(Restrictions.And);
+			return criteria;
 		}
 
 		private ICriterion toRequestClassTypeConstraint(RequestType t)

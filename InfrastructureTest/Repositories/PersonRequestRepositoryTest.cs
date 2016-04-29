@@ -1546,7 +1546,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 		
 		[Test]
-		[Ignore("Not implemented yet")]
 		public void ShouldFilterRequestOnAbsenceType()
 		{
 			var request1 = createAbsenceRequestAndBusinessUnit(_absence);
@@ -1608,6 +1607,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					{RequestFilterField.Subject, "e 5"},
 					{RequestFilterField.Message, "g 7"},
+					{RequestFilterField.AbsenceType, _absence.Id.ToString()},
 					{RequestFilterField.Status, "2"} // 2: Approved
 				}
 			};
