@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _selectedPersons))
 					  .Return(true);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
-					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("") });
+					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("Skill") });
 
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
 					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone, true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());

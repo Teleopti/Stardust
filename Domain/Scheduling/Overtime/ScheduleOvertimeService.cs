@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			if (skills.IsEmpty()) return null;
 
-			var aggregateSkillSkill = new Skill("", "", Color.Pink, 15, skills[0].SkillType);
+			var aggregateSkillSkill = new Skill("Agg", "", Color.Pink, 15, skills[0].SkillType);
 			aggregateSkillSkill.ClearAggregateSkill();
 			foreach (ISkill skill in skills)
 			{
