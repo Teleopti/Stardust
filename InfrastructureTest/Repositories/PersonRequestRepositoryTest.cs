@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		private IPerson _person;
 		private IAbsence _absence;
-		private IAbsence _anotherAbsence;
 		private IScenario _defaultScenario;
 		private Team _team;
 		private Site _site;
@@ -46,7 +45,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
 			_person = PersonFactory.CreatePerson("sdfoj");
 			_absence = AbsenceFactory.CreateAbsence("Sick leave");
-			_anotherAbsence = AbsenceFactory.CreateAbsence("Illness");
 
 			_team = TeamFactory.CreateSimpleTeam("team");
 			_site = SiteFactory.CreateSimpleSite("site");
@@ -64,7 +62,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_defaultScenario);
 			PersistAndRemoveFromUnitOfWork(_person);
 			PersistAndRemoveFromUnitOfWork(_absence);
-			PersistAndRemoveFromUnitOfWork(_anotherAbsence);
 		}
 
 		/// <summary>
@@ -1548,9 +1545,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFilterRequestOnAbsenceType()
 		{
+			var secondAbsence = AbsenceFactory.CreateAbsence("Second Absence");
+			var thirdAbsence = AbsenceFactory.CreateAbsence("Third Absence");
+
+			PersistAndRemoveFromUnitOfWork(secondAbsence);
+			PersistAndRemoveFromUnitOfWork(thirdAbsence);
+
 			var request1 = createAbsenceRequestAndBusinessUnit(_absence);
-			var request2 = createAbsenceRequestAndBusinessUnit(_anotherAbsence);
-			var request3 = createAbsenceRequestAndBusinessUnit(_anotherAbsence);
+			var request2 = createAbsenceRequestAndBusinessUnit(secondAbsence);
+			var request3 = createAbsenceRequestAndBusinessUnit(thirdAbsence);
 
 			PersistAndRemoveFromUnitOfWork(request1);
 			PersistAndRemoveFromUnitOfWork(request2);
@@ -1566,16 +1569,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
 				RequestFilters = new Dictionary<RequestFilterField, string>
 				{
-					{RequestFilterField.AbsenceType, _absence.Id.ToString()}
+					{RequestFilterField.AbsenceType, $"{_absence.Id} {secondAbsence.Id}"}
 				}
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
 				.FindAllRequests(filter, out count).ToList();
 
-			Assert.AreEqual(1, foundRequests.Count);
+			Assert.AreEqual(2, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[1].Request));
 			Assert.IsTrue(foundRequests.Contains(request1));
+			Assert.IsTrue(foundRequests.Contains(request2));
 		}
 
 		[Test]
@@ -1583,17 +1588,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var request1 = CreateAggregateWithCorrectBusinessUnit();
 			request1.Subject = "Abc 123";
-			request1.TrySetMessage("Bcd 234");
+			request1.TrySetMessage("Abc 123");
 			var request2 = CreateAggregateWithCorrectBusinessUnit();
-			request2.Subject = "Efg 456";
-			request2.TrySetMessage("Fgh 567");
+			request2.Subject = "Bcd 234";
+			request2.TrySetMessage("Bcd 234");
 			var request3 = CreateShiftTradeRequest("Trade With Me");
-			request3.Subject = "Ijk 789";
-			request3.TrySetMessage("Jkl 890");
+			request3.Subject = "Cde 234";
+			request3.TrySetMessage("Cde 345");
+			var request4 = new PersonRequest(_person,
+				new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow)))
+			{
+				Subject = "Def 456"
+			};
+			request4.TrySetMessage("Def 456");
 
 			PersistAndRemoveFromUnitOfWork(request1);
 			PersistAndRemoveFromUnitOfWork(request2);
 			PersistAndRemoveFromUnitOfWork(request3);
+			PersistAndRemoveFromUnitOfWork(request4);
 
 			var approvalSvc = new ApprovalServiceForTest();
 			var authChecker = new PersonRequestAuthorizationCheckerForTest();
@@ -1605,8 +1617,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
 				RequestFilters = new Dictionary<RequestFilterField, string>
 				{
-					{RequestFilterField.Subject, "e 5"},
-					{RequestFilterField.Message, "g 7"},
+					{RequestFilterField.Subject, "b 2"},
+					{RequestFilterField.Message, "c 3"},
 					{RequestFilterField.AbsenceType, _absence.Id.ToString()},
 					{RequestFilterField.Status, "2"} // 2: Approved
 				}
