@@ -4773,6 +4773,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot add an activity to {0} for the next day without a shift.
+        /// </summary>
+        public static string CanNotAddActivityToAgentWithoutShift {
+            get {
+                return ResourceManager.GetString("CanNotAddActivityToAgentWithoutShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The preference cannot be added because the selected item is not available anymore..
         /// </summary>
         public static string CannotAddPreferenceSelectedItemNotAvailable {
@@ -16583,15 +16592,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewActivity {
             get {
                 return ResourceManager.GetString("NewActivity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to New activity is not allowed for.
-        /// </summary>
-        public static string NewActivityIsNotAllowedFor {
-            get {
-                return ResourceManager.GetString("NewActivityIsNotAllowedFor", resourceCulture);
             }
         }
         

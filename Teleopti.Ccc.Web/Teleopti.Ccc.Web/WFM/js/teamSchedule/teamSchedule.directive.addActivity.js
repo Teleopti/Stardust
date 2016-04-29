@@ -14,13 +14,13 @@
 				tabindex: '@?'
 			},
 			templateUrl: 'js/teamSchedule/html/addActivityPanel.tpl.html',
-			controller: ['$element', 'ActivityService', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addActivityCtrl],
+			controller: ['$element','$translate', 'ActivityService', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addActivityCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function addActivityCtrl($element, activityService, guidgenerator, commandCommon, personSelectionSvc, NotificationSvc) {
+	function addActivityCtrl($element, $translate, activityService, guidgenerator, commandCommon, personSelectionSvc, NotificationSvc) {
 		var vm = this;
 		var startTimeMoment;
 
@@ -45,10 +45,10 @@
 			vm.activities = activities;
 		});
 		var notAllowed = "";
-		vm.peopleNotAllowed = function () {
+		vm.notAllowedToAddActivityWithoutShift = function () {
 			if (notAllowed == "")
 				return "";
-			return notAllowed.substr(0, notAllowed.length - 2);
+			return $translate.instant('CanNotAddActivityToAgentWithoutShift').replace('{0}', notAllowed.substr(0, notAllowed.length - 2));
 		};
 
 		vm.isInputValid = function () {						
