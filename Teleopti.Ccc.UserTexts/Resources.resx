@@ -14191,7 +14191,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Loaded:</comment>
   </data>
   <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
-    <value>Remove entire multi-day person absence</value>
+    <value>Remove entire multi-day absence</value>
     <comment>Message for user to confirm how to remove multi-day absence in remove absence of team schedule</comment>
   </data>
   <data name="ToggleDarkTheme" xml:space="preserve">

@@ -21957,7 +21957,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove entire multi-day person absence.
+        ///   Looks up a localized string similar to Remove entire multi-day absence.
         /// </summary>
         public static string RemoveEntireAbsenceForMultiDayPersonAbsence {
             get {
