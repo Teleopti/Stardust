@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -86,7 +85,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var sqlCommand = CreateSelectAllItemsInJobQueueSqlCommand(sqlConnection))
+					using (var sqlCommand = CreateCommandHelper.CreateSelectAllItemsInJobQueueCommand(sqlConnection))
 					{
 						using (var sqlDataReader = sqlCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -121,7 +120,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var deleteFromJobQueueCommand = CreateDeleteFromJobQueueCommand(jobId, sqlConnection, null))
+					using (var deleteFromJobQueueCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, null))
 					{
 						deleteFromJobQueueCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
@@ -512,7 +511,7 @@ namespace Stardust.Manager
 							{
 								createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 							}
-							using (var deleteFromJobDefinitionsCommand = CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
+							using (var deleteFromJobDefinitionsCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
 							{
 								deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
@@ -528,151 +527,38 @@ namespace Stardust.Manager
 				throw;
 			}
 		}
-
-		
-
-
-
-
-		private SqlCommand CreateSelectAllItemsInJobQueueSqlCommand(SqlConnection connection)
-		{
-			const string selectAllItemsInJobQueueCommandText =
-				@"SELECT 
-										[JobId],
-										[Name],
-										[Type],
-										[Serialized],
-										[CreatedBy],
-										[Created]
-									FROM [Stardust].[JobQueue]";
-
-			var command = new SqlCommand(selectAllItemsInJobQueueCommandText);
-			command.Connection = connection;
-
-			return command;
-		}
-		
-		private SqlCommand CreateDeleteFromJobQueueCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
-		{
-			const string deleteItemFromJobQueueItemCommandText =
-					"DELETE FROM [Stardust].[JobQueue] " +
-					"WHERE JobId = @JobId";
-
-			var deleteFromJobQueueCommand = new SqlCommand(deleteItemFromJobQueueItemCommandText, sqlConnection);
-			deleteFromJobQueueCommand.Parameters.AddWithValue("@JobId", jobId);
-			deleteFromJobQueueCommand.Transaction = sqlTransaction;
-
-			return deleteFromJobQueueCommand;
-		}
-
-
-		
 		
 
 		private void AssignJobToWorkerNodeWorker(IHttpSender httpSender,
 		                                         Uri availableNode)
 		{
-			if (httpSender == null)
-			{
-				return;
-			}
-
-			if (availableNode == null)
-			{
-				return;
-			}
-
-			var selectOneJobQueueItemCommandText =
-				@"SELECT Top 1  [JobId],
-								[Name],
-								[Created],
-								[Type],
-								[Serialized],
-								[CreatedBy]
-				FROM [Stardust].[JobQueue] 
-				ORDER BY Created";
-
-			var insertIntoJobCommandText = @"INSERT INTO [Stardust].[Job]
-								   ([JobId]
-								   ,[Name]
-								   ,[Created]
-								   ,[CreatedBy]
-								   ,[Started]
-								   ,[Ended]
-								   ,[Serialized]
-								   ,[Type]
-								   ,[SentToWorkerNodeUri]
-								   ,[Result])
-							 VALUES
-								   (@JobId
-								   ,@Name
-								   ,@Created
-								   ,@CreatedBy
-								   ,@Started
-								   ,@Ended
-								   ,@Serialized
-								   ,@Type
-								   ,@SentToWorkerNodeUri
-								   ,@Result)";
-
-
 			try
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
-
 					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
 					{
-						var selectTop1FromJobDefinitionsCommand =
-							new SqlCommand(selectOneJobQueueItemCommandText, sqlConnection)
+						JobQueueItem jobQueueItem = null;
+						using (var selectTop1FromJobDefinitionsCommand = CreateCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
+						{
+							using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
 							{
-								Transaction = sqlTransaction
-							};
+								if (sqlDataReader.HasRows)
+								{
+									sqlDataReader.Read();
 
-						var reader =
-							selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout);
-
-						if (!reader.HasRows)
-						{
-							reader.Close();
-							reader.Dispose();
-
-							sqlConnection.Close();
-
-							return;
+									jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
+								}
+							}
 						}
-
-						reader.Read();
-
-						var jobId = reader.GetGuid(reader.GetOrdinal("JobId"));
-						var name = reader.GetString(reader.GetOrdinal("Name"));
-						var type = reader.GetString(reader.GetOrdinal("Type"));
-						var serialized = reader.GetString(reader.GetOrdinal("Serialized"));
-						var created = reader.GetDateTime(reader.GetOrdinal("Created"));
-						var createdBy = reader.GetString(reader.GetOrdinal("CreatedBy"));
-
-						var jobDefinition = new JobQueueItem
-						{
-							JobId = jobId,
-							Name = name,
-							Serialized = serialized.Replace(@"\", @""),
-							Type = type,
-							CreatedBy = createdBy,
-							Created = created
-						};
-
-						reader.Close();
-						reader.Dispose();
-
+						
 						var taskPostJob = new Task<HttpResponseMessage>(() =>
 						{
 							var builderHelper = new NodeUriBuilderHelper(availableNode);
 							var urijob = builderHelper.GetJobTemplateUri();
 
-							var response =
-								httpSender.PostAsync(urijob, jobDefinition).Result;
-
+							var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
 							response.Content = new StringContent(availableNode.ToString());
 
 							return response;
@@ -691,51 +577,31 @@ namespace Stardust.Manager
 							{
 								sentToWorkerNodeUri = taskPostJob.Result.Content.ContentToString();
 
-								var commandInsertIntoJobHistory = new SqlCommand(insertIntoJobCommandText, sqlConnection)
+								using (var insertIntoJobCommand = CreateCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
 								{
-									Transaction = sqlTransaction
-								};
-
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@JobId", jobId);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@Name", name);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@Type", type);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@Serialized", serialized);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@Started", DateTime.UtcNow);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@SentToWorkerNodeUri", sentToWorkerNodeUri);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@CreatedBy", createdBy);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@Created", created);
-								commandInsertIntoJobHistory.Parameters.AddWithValue("@Ended", DBNull.Value);
-
-								if (taskPostJob.Result.IsSuccessStatusCode)
-								{
-									commandInsertIntoJobHistory.Parameters.AddWithValue("@Result", DBNull.Value);
-								}
-								else
-								{
-									commandInsertIntoJobHistory.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
-								}
-								commandInsertIntoJobHistory.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
-
-								var deleteItemFromJobQueueCommandText =
-									new SqlCommand("DELETE FROM [Stardust].[JobQueue] " +
-									               "WHERE JobId = @JobId", sqlConnection)
+									if (taskPostJob.Result.IsSuccessStatusCode)
 									{
-										Transaction = sqlTransaction
-									};
-
-								deleteItemFromJobQueueCommandText.Parameters.AddWithValue("@JobId", jobId);
-
-								deleteItemFromJobQueueCommandText.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+										insertIntoJobCommand.Parameters.AddWithValue("@Result", DBNull.Value);
+									}
+									else
+									{
+										insertIntoJobCommand.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
+									}
+									insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+								}
+								using (var deleteJobQueueItemCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+								{
+									deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+								}
 							}
-
 							Retry(sqlTransaction.Commit);
 
 							if (sentToWorkerNodeUri != null)
 							{
 								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-								var urijob = builderHelper.GetUpdateJobUri(jobId);
+								var urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 
-								//what should happen if the response is not 200? 
+								//what should happen if this response is not 200? 
 								var resp = httpSender.PutAsync(urijob, null);
 							}
 						}
@@ -759,7 +625,6 @@ namespace Stardust.Manager
 				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
 				Detail = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Detail"))
 			};
-
 			return jobDetail;
 		}
 
@@ -779,7 +644,6 @@ namespace Stardust.Manager
 				Started = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Started")),
 				Ended = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Ended"))
 			};
-
 			return job;
 		}
 
@@ -789,12 +653,11 @@ namespace Stardust.Manager
 			{
 				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
 				Name = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Name")),
-				Serialized = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Serialized")),
+				Serialized = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Serialized")).Replace(@"\", @""),
 				Type = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Type")),
 				CreatedBy = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("CreatedBy")),
 				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created"))
 			};
-
 			return jobQueueItem;
 		}
 

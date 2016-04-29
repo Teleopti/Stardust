@@ -76,6 +76,66 @@ namespace Stardust.Manager.Helpers
 			return selectSqlCommand;
 		}
 
+
+		public static SqlCommand CreateSelect1JobQueueItemCommand(SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			var selectOneJobQueueItemCommandText = @"SELECT Top 1  [JobId],
+								[Name],
+								[Created],
+								[Type],
+								[Serialized],
+								[CreatedBy]
+				FROM [Stardust].[JobQueue] 
+				ORDER BY Created";
+
+			var selectSqlCommand = new SqlCommand(selectOneJobQueueItemCommandText, sqlConnection);
+			selectSqlCommand.Transaction = sqlTransaction;
+			
+			return selectSqlCommand;
+		}
+
+		public static SqlCommand CreateInsertIntoJobCommand(JobQueueItem jobQueueItem, string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			var insertIntoJobCommandText = @"INSERT INTO [Stardust].[Job]
+								   ([JobId]
+								   ,[Name]
+								   ,[Created]
+								   ,[CreatedBy]
+								   ,[Started]
+								   ,[Ended]
+								   ,[Serialized]
+								   ,[Type]
+								   ,[SentToWorkerNodeUri]
+								   ,[Result])
+							 VALUES
+								   (@JobId
+								   ,@Name
+								   ,@Created
+								   ,@CreatedBy
+								   ,@Started
+								   ,@Ended
+								   ,@Serialized
+								   ,@Type
+								   ,@SentToWorkerNodeUri
+								   ,@Result)";
+
+			var insertCommand = new SqlCommand(insertIntoJobCommandText, sqlConnection);
+			insertCommand.Transaction = sqlTransaction;
+
+			insertCommand.Parameters.AddWithValue("@JobId", jobQueueItem.JobId);
+			insertCommand.Parameters.AddWithValue("@Name", jobQueueItem.Name);
+			insertCommand.Parameters.AddWithValue("@Type", jobQueueItem.Type);
+			insertCommand.Parameters.AddWithValue("@Serialized", jobQueueItem.Serialized);
+			insertCommand.Parameters.AddWithValue("@Started", DateTime.UtcNow);
+			insertCommand.Parameters.AddWithValue("@SentToWorkerNodeUri", sentToWorkerNodeUri);
+			insertCommand.Parameters.AddWithValue("@CreatedBy", jobQueueItem.CreatedBy);
+			insertCommand.Parameters.AddWithValue("@Created", jobQueueItem.Created);
+			insertCommand.Parameters.AddWithValue("@Ended", DBNull.Value);
+
+			return insertCommand;
+		}
+
+
 		public static SqlCommand CreateGetAllJobsCommand(SqlConnection sqlConnection)
 		{
 			var selectCommandText = @"SELECT  [JobId]
@@ -224,6 +284,36 @@ namespace Stardust.Manager.Helpers
 
 			selectCommand.Parameters.AddWithValue("@JobId", jobId);
 			return selectCommand;
+		}
+
+		public static SqlCommand CreateSelectAllItemsInJobQueueCommand(SqlConnection connection)
+		{
+			const string selectAllItemsInJobQueueCommandText = @"SELECT 
+										[JobId],
+										[Name],
+										[Type],
+										[Serialized],
+										[CreatedBy],
+										[Created]
+									FROM [Stardust].[JobQueue]";
+
+			var command = new SqlCommand(selectAllItemsInJobQueueCommandText);
+			command.Connection = connection;
+
+			return command;
+		}
+
+		public static SqlCommand CreateDeleteFromJobQueueCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			const string deleteItemFromJobQueueItemCommandText =
+					"DELETE FROM [Stardust].[JobQueue] " +
+					"WHERE JobId = @JobId";
+
+			var deleteFromJobQueueCommand = new SqlCommand(deleteItemFromJobQueueItemCommandText, sqlConnection);
+			deleteFromJobQueueCommand.Parameters.AddWithValue("@JobId", jobId);
+			deleteFromJobQueueCommand.Transaction = sqlTransaction;
+
+			return deleteFromJobQueueCommand;
 		}
 
 
