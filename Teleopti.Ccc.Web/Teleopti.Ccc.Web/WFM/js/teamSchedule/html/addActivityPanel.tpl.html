@@ -14,7 +14,7 @@
 		</form>
 		<div class="alert-error notice-spacer" ng-if="!vm.isInputValid()">
 			<i class="mdi mdi-alert-octagon"></i>
-			<span>{{vm.notAllowedToAddActivityWithoutShift()}}</span>
+			<span>{{vm.notAllowedToAddActivityWithoutShift().Message}}</span>
 		</div>
 		<button id="applyActivity" class="wfm-btn form-submit"
 				tabindex="{{::vm.tabindex}}"

@@ -204,8 +204,7 @@
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 		expect(innerScope.isInputValid()).toBe(false);
-		expect(innerScope.peopleNotAllowed()).toBe("agent1");
-
+		expect(innerScope.notAllowedToAddActivityWithoutShift().AgentName).toBe("agent1");
 	});
 
 	it('should call add activity when click apply with correct data', function () {

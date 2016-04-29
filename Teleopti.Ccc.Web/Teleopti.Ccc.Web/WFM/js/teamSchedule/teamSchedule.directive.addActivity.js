@@ -48,7 +48,11 @@
 		vm.notAllowedToAddActivityWithoutShift = function () {
 			if (notAllowed == "")
 				return "";
-			return $translate.instant('CanNotAddActivityToAgentWithoutShift').replace('{0}', notAllowed.substr(0, notAllowed.length - 2));
+			var agentName = notAllowed.substr(0, notAllowed.length - 2);
+			return {
+				Message: $translate.instant('CanNotAddActivityToAgentWithoutShift').replace('{0}', agentName),
+				AgentName: agentName
+		}
 		};
 
 		vm.isInputValid = function () {						
