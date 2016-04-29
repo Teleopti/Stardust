@@ -11,14 +11,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 	public class FakeScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
 	{
-		private class ProjectedShift
-		{
-			public Guid Person { get; set; }
-			public ProjectionChangedEventLayer Layer { get; set; }
-		}
-
 		private IDictionary<Guid, DateTime> store = new Dictionary<Guid, DateTime>();
-		private IList<ProjectedShift> _data = new List<ProjectedShift>();
+		private IList<ScheduleProjectionReadOnlyModel> _data = new List<ScheduleProjectionReadOnlyModel>();
 
 		public void SetNextActivityStartTime(IPerson person, DateTime time)
 		{
@@ -30,24 +24,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public int AddProjectedLayer(ScheduleProjectionReadOnlyModel model)
+		{
+			_data.Add(model);
+			return 1;
+		}
+
 		public int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
 		{
 			return 1;
 		}
-
-		public int AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId, ProjectionChangedEventLayer layer, DateTime scheduleLoadedTimeStamp)
-		{
-			_data.Add(new ProjectedShift
-			{
-				Person = personId,
-				Layer = layer
-			});
-			return 1;
-		}
-
+		
 		public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
 		{
 			throw new NotImplementedException();
+		}
+
+		public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
+		{
+			return _data.Where(x => x.PersonId == personId).ToArray();
 		}
 
 		public bool IsInitialized()
@@ -62,16 +57,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				return foundStart;
 
 			return null;
-		}
-
-		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
-		{
-			return _data.Where(x => x.Person == personId).Select(x => x.Layer).ToArray();
-		}
-
-		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

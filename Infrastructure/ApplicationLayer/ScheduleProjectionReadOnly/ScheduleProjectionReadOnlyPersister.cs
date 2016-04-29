@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
                                                .SetReadOnly(true)
                                                .List<PayloadWorkTime>();
         }
-
-        public int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
+		
+	    public int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
         {
 	        if (scheduleLoadedTimeStamp.Equals(DateTime.MinValue))
 		        scheduleLoadedTimeStamp = DateTime.UtcNow;
@@ -55,30 +55,42 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 	        return count;
         }
 
-        public int AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId,
-									  ProjectionChangedEventLayer layer, DateTime scheduleLoadedTimeStamp)
-        {
-			if (scheduleLoadedTimeStamp.Equals(DateTime.MinValue))
-				scheduleLoadedTimeStamp = DateTime.UtcNow;
+		public int AddProjectedLayer(ScheduleProjectionReadOnlyModel model)
+		{
+			if (model.ScheduleLoadedTime.Equals(DateTime.MinValue))
+				model.ScheduleLoadedTime = DateTime.UtcNow;
 			return _currentUnitOfWork.Session().CreateSQLQuery(
-				"exec ReadModel.UpdateScheduleProjectionReadOnly @PersonId=:PersonId, @ScenarioId=:ScenarioId, @BelongsToDate=:Date, @PayloadId=:PayloadId, @StartDateTime=:StartDateTime, @EndDateTime=:EndDateTime, @WorkTime=:WorkTime, @ContractTime=:ContractTime, @Name=:Name, @ShortName=:ShortName, @DisplayColor=:DisplayColor, @PayrollCode=:PayrollCode, @InsertedOn=:InsertedOn, @ScheduleLoadedTime=:ScheduleLoadedTime")
-                                        .SetGuid("ScenarioId", scenarioId)
-                                        .SetGuid("PersonId", personId)
-                                        .SetGuid("PayloadId", layer.PayloadId)
-                                        .SetDateTime("StartDateTime", layer.StartDateTime)
-                                        .SetDateTime("EndDateTime", layer.EndDateTime)
-                                        .SetInt64("WorkTime", layer.WorkTime.Ticks)
-                                        .SetInt64("ContractTime", layer.ContractTime.Ticks)
-                                        .SetString("Name", layer.Name)
-                                        .SetString("ShortName", layer.ShortName)
-                                        .SetString("PayrollCode", string.Empty)
-                                        .SetInt32("DisplayColor", layer.DisplayColor)
-										.SetDateOnly("Date", belongsToDate)
-                                        .SetDateTime("InsertedOn", DateTime.UtcNow)
-										.SetDateTime("ScheduleLoadedTime", scheduleLoadedTimeStamp)
-                                        .UniqueResult<int>();
-        }
-
+				@"exec ReadModel.UpdateScheduleProjectionReadOnly 
+					@PersonId=:PersonId,
+					@ScenarioId =:ScenarioId,
+					@BelongsToDate =:Date,
+					@PayloadId =:PayloadId,
+					@StartDateTime =:StartDateTime,
+					@EndDateTime =:EndDateTime,
+					@WorkTime =:WorkTime,
+					@ContractTime =:ContractTime,
+					@Name =:Name,
+					@ShortName =:ShortName,
+					@DisplayColor =:DisplayColor,
+					@PayrollCode = '',
+					@InsertedOn =:InsertedOn,
+					@ScheduleLoadedTime =:ScheduleLoadedTime")
+				.SetGuid("PersonId", model.PersonId)
+				.SetGuid("ScenarioId", model.ScenarioId)
+				.SetDateOnly("Date", model.BelongsToDate)
+				.SetGuid("PayloadId", model.PayloadId)
+				.SetInt64("WorkTime", model.WorkTime.Ticks)
+				.SetInt64("ContractTime", model.ContractTime.Ticks)
+				.SetDateTime("StartDateTime", model.StartDateTime)
+				.SetDateTime("EndDateTime", model.EndDateTime)
+				.SetString("Name", model.Name)
+				.SetString("ShortName", model.ShortName)
+				.SetInt32("DisplayColor", model.DisplayColor)
+				.SetDateTime("InsertedOn", DateTime.UtcNow)
+				.SetDateTime("ScheduleLoadedTime", model.ScheduleLoadedTime)
+				.UniqueResult<int>();
+		}
+		
         public bool IsInitialized()
         {
 			var result = _currentUnitOfWork.Session().CreateSQLQuery(
@@ -87,7 +99,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
             return result.Count > 0;
         }
 
-        public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
+	    public IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
+	    {
+			return _currentUnitOfWork.Session().CreateSQLQuery(
+				   "SELECT PersonId,ScenarioId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate=:Date")
+										   .SetGuid("ScenarioId", scenarioId)
+										   .SetGuid("PersonId", personId)
+										   .SetDateOnly("Date", date)
+										   .SetResultTransformer(new AliasToBeanResultTransformer(typeof(internalModel)))
+										   .List<internalModel>();
+		}
+
+	    public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
            var result = _currentUnitOfWork.Session()
 				.CreateSQLQuery("exec ReadModel.GetNextActivityStartTime @PersonId=:personId, @UtcNow=:dateTime")
@@ -105,95 +128,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				                                 : activityPeriod.EndDateTime;
 	        return nextActivityDateTime;
         }
-
-		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId)
-		{
-			return _currentUnitOfWork.Session().CreateSQLQuery(
-				"SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate=:Date")
-										.SetGuid("ScenarioId", scenarioId)
-										.SetGuid("PersonId", personId)
-										.SetDateOnly("Date", date)
-                                        .SetResultTransformer(new AliasToBeanResultTransformer(typeof(IntermediateProjectionChangedEventLayer)))
-                                        .List<IntermediateProjectionChangedEventLayer>().Select(t => t.ToLayer());
-	    }
-
-        private class IntermediateProjectionChangedEventLayer
-        {
-            /// <summary>
-            /// The payload id
-            /// </summary>
-            public Guid PayloadId { get; set; }
-            /// <summary>
-            /// The layer start time
-            /// </summary>
-            public DateTime StartDateTime { get; set; }
-            /// <summary>
-            /// The layer end time
-            /// </summary>
-            public DateTime EndDateTime { get; set; }
-            /// <summary>
-            /// The layer work time
-            /// </summary>
-            public long WorkTime { get; set; }
-            /// <summary>
-            /// The layer contract time
-            /// </summary>
-            public long ContractTime { get; set; }
-            /// <summary>
-            /// The name of the payload
-            /// </summary>
-            public string Name { get; set; }
-            /// <summary>
-            /// The short name of the payload
-            /// </summary>
-            public string ShortName { get; set; }
-            /// <summary>
-            /// The payroll code of the payload
-            /// </summary>
-            public string PayrollCode { get; set; }
-            /// <summary>
-            /// The display color of the payload
-            /// </summary>
-            public int DisplayColor { get; set; }
-            /// <summary>
-            /// Is this absence
-            /// </summary>
-            public bool IsAbsence { get; set; }
-            /// <summary>
-            /// Requires seat
-            /// </summary>
-            public bool RequiresSeat { get; set; }
-
-            public ProjectionChangedEventLayer ToLayer()
-            {
-                return new ProjectionChangedEventLayer
-                    {
-                        ContractTime = TimeSpan.FromTicks(ContractTime),
-                        WorkTime = TimeSpan.FromTicks(WorkTime),
-                        DisplayColor = DisplayColor,
-                        EndDateTime = DateTime.SpecifyKind(EndDateTime,DateTimeKind.Utc),
-                        IsAbsence = IsAbsence,
-                        Name = Name,
-                        PayloadId = PayloadId,
-                        PayrollCode = PayrollCode,
-                        RequiresSeat = RequiresSeat,
-                        ShortName = ShortName,
-                        StartDateTime = DateTime.SpecifyKind(StartDateTime,DateTimeKind.Utc)
-                    };
-            }
-        }
-
-		public IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId)
-		{
-			return _currentUnitOfWork.Session().CreateSQLQuery(
-                "SELECT PayloadId,StartDateTime,EndDateTime,WorkTime,Name,ShortName,DisplayColor,PayrollCode,ContractTime FROM ReadModel.ScheduleProjectionReadOnly WHERE ScenarioId=:ScenarioId AND PersonId=:PersonId AND BelongsToDate>=:DateFrom AND BelongsToDate<=:DateTo")
-										.SetGuid("ScenarioId", scenarioId)
-										.SetGuid("PersonId", personId)
-										.SetDateOnly("DateFrom", datePeriod.StartDate)
-										.SetDateOnly("DateTo", datePeriod.EndDate)
-										.SetResultTransformer(new AliasToBeanResultTransformer(typeof(IntermediateProjectionChangedEventLayer)))
-										.List<IntermediateProjectionChangedEventLayer>().Select(t => t.ToLayer());
-		}
 
 	    public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
         {
@@ -237,6 +171,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
             return numberOfHeadCounts;
         }
 
+		private class internalModel : ScheduleProjectionReadOnlyModel
+		{
+			public new long WorkTime { set { base.WorkTime = TimeSpan.FromTicks(value); } }
+			public new long ContractTime { set { base.ContractTime = TimeSpan.FromTicks(value); } }
+			public new DateTime BelongsToDate { set { base.BelongsToDate = new DateOnly(value); } }
+		}
 	}
 
 	public class ActivityPeriod

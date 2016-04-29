@@ -57,7 +57,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					if (isLayerRightNow(layer) ||
 						isCurrentLayerCloser(layer, closestLayerToNow))
 						closestLayerToNow = layer;
-					if(_scheduleProjectionReadOnlyPersister.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer, @event.ScheduleLoadTimestamp) > 0)
+					var model = new ScheduleProjectionReadOnlyModel
+					{
+						PersonId = @event.PersonId,
+						ScenarioId = @event.ScenarioId,
+						BelongsToDate = date,
+						PayloadId = layer.PayloadId,
+						WorkTime = layer.WorkTime,
+						ContractTime = layer.ContractTime,
+						StartDateTime = layer.StartDateTime,
+						EndDateTime = layer.EndDateTime,
+						Name = layer.Name,
+						ShortName = layer.ShortName,
+						DisplayColor = layer.DisplayColor,
+						ScheduleLoadedTime = @event.ScheduleLoadTimestamp,
+					};
+					if(_scheduleProjectionReadOnlyPersister.AddProjectedLayer(model) > 0)
 						isChanged = true;
 				}
 			}

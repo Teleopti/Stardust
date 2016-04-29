@@ -4,12 +4,14 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -35,7 +37,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					EndDateTime = "2014-11-07 10:00".Utc()
 				};
 				var repository = new ScheduleProjectionReadOnlyPersister(new ThisUnitOfWork(uow));
-				repository.AddProjectedLayer(new DateOnly("2014-11-07".Utc()), Guid.NewGuid(), personId, layer, DateTime.UtcNow);
+				repository.AddProjectedLayer(new ScheduleProjectionReadOnlyModel
+				{
+					BelongsToDate = "2014-11-07".Date(),
+					ScenarioId = Guid.NewGuid(),
+					PersonId = personId,
+					StartDateTime = "2014-11-07 10:00".Utc(),
+					EndDateTime = "2014-11-07 10:00".Utc(),
+					ScheduleLoadedTime = Now.UtcDateTime()
+				});
 				uow.PersistAll();
 			}
 			

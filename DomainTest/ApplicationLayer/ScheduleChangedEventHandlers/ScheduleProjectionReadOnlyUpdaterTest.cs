@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public FakeScheduleProjectionReadOnlyPersister Persister;
 
 		[Test]
-		public void ShouldDenormalizeProjection()
+		public void ShouldPersistScheduleProjection()
 		{
 			var person = Guid.NewGuid();
 

@@ -5,15 +5,34 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
+	public class ScheduleProjectionReadOnlyModel
+	{
+		public Guid PersonId { get; set; }
+		public Guid ScenarioId { get; set; }
+		public DateOnly BelongsToDate { get; set; }
+		public Guid PayloadId { get; set; }
+		public TimeSpan WorkTime { get; set; }
+		public TimeSpan ContractTime { get; set; }
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public string Name { get; set; }
+		public string ShortName { get; set; }
+		public int DisplayColor { get; set; }
+		public DateTime ScheduleLoadedTime { get; set; }
+	}
+	
 	public interface IScheduleProjectionReadOnlyPersister
 	{
-		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period,IBudgetGroup budgetGroup,IScenario scenario);
-		int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp);
-		int AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId, ProjectionChangedEventLayer layer, DateTime scheduleLoadedTimeStamp);
-	    int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);
 		bool IsInitialized();
-	    DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId);
-		IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnly date, Guid personId, Guid scenarioId);
-		IEnumerable<ProjectionChangedEventLayer> ForPerson(DateOnlyPeriod datePeriod, Guid personId, Guid scenarioId);
+
+		int AddProjectedLayer(ScheduleProjectionReadOnlyModel model);
+		int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp);
+
+		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario);
+		int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);
+		
+		IEnumerable<ScheduleProjectionReadOnlyModel> ForPerson(DateOnly date, Guid personId, Guid scenarioId);
+
+		DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId);
 	}
 }

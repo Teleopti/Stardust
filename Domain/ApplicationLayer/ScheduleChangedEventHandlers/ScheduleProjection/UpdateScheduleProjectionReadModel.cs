@@ -44,7 +44,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				if (scheduleDay.Shift == null) continue;
 				foreach (var layer in scheduleDay.Shift.Layers)
 				{
-					_scheduleProjectionReadOnlyPersister.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer, message.ScheduleLoadTimestamp);
+					var model = new ScheduleProjectionReadOnlyModel
+					{
+						PersonId = message.PersonId,
+						ScenarioId = message.ScenarioId,
+						BelongsToDate = date,
+						PayloadId = layer.PayloadId,
+						WorkTime = layer.WorkTime,
+						ContractTime = layer.ContractTime,
+						StartDateTime = layer.StartDateTime,
+						EndDateTime = layer.EndDateTime,
+						Name = layer.Name,
+						ShortName = layer.ShortName,
+						DisplayColor = layer.DisplayColor,
+						ScheduleLoadedTime = message.ScheduleLoadTimestamp,
+					};
+					_scheduleProjectionReadOnlyPersister.AddProjectedLayer(model);
 				}
 			}
 		}

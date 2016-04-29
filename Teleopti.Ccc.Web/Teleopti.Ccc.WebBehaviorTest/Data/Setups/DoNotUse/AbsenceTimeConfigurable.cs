@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnly;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -31,20 +32,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 			var period =
 				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone());
-
-			var layer = new ProjectionChangedEventLayer
+			
+			var model = new ScheduleProjectionReadOnlyModel
 			{
-				ContractTime = TimeSpan.FromHours(Hours),
+				PersonId = user.Id.GetValueOrDefault(),
+				ScenarioId = scenarioId,
+				BelongsToDate = new DateOnly(Date),
+				PayloadId = absence.Id.GetValueOrDefault(),
 				WorkTime = TimeSpan.FromHours(Hours),
-				DisplayColor = Color.Bisque.ToArgb(),
-				Name = absence.Name,
-				ShortName = "xx",
+				ContractTime = TimeSpan.FromHours(Hours),
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
-				PayloadId = absence.Id.GetValueOrDefault()
+				Name = absence.Name,
+				ShortName = "xx",
+				DisplayColor = Color.Bisque.ToArgb(),
+				ScheduleLoadedTime = DateTime.UtcNow,
 			};
-
-			scheduleProjectionReadOnlyRepository.AddProjectedLayer(new DateOnly(Date), scenarioId, user.Id.GetValueOrDefault(), layer, DateTime.UtcNow);
+			scheduleProjectionReadOnlyRepository.AddProjectedLayer(model);
 		}
 	}
 }
