@@ -390,7 +390,7 @@
     <comment>Can not find the service end point</comment>
   </data>
   <data name="CapitalTo" xml:space="preserve">
-    <value>К</value>
+    <value>По</value>
     <comment>To</comment>
   </data>
   <data name="Category" xml:space="preserve">
@@ -446,7 +446,7 @@
     <comment>Clipboard</comment>
   </data>
   <data name="Close" xml:space="preserve">
-    <value>Закройте</value>
+    <value>Закрыть</value>
     <comment>Close</comment>
   </data>
   <data name="Closed" xml:space="preserve">
@@ -863,7 +863,7 @@
     <comment>&amp;Forward &gt;</comment>
   </data>
   <data name="From" xml:space="preserve">
-    <value>От</value>
+    <value>С</value>
     <comment>From</comment>
   </data>
   <data name="FullName" xml:space="preserve">
@@ -1597,7 +1597,7 @@ Periods</comment>
     <comment>Reports</comment>
   </data>
   <data name="Reset" xml:space="preserve">
-    <value>Сброс</value>
+    <value>Сбросить</value>
     <comment>Reset</comment>
   </data>
   <data name="ResetTrend" xml:space="preserve">
@@ -2055,7 +2055,7 @@ Periods</comment>
     <comment>Time zone</comment>
   </data>
   <data name="To" xml:space="preserve">
-    <value>К</value>
+    <value>По</value>
     <comment>to</comment>
   </data>
   <data name="Today" xml:space="preserve">
@@ -2531,11 +2531,11 @@ Periods</comment>
     <comment>Show/Hide Details</comment>
   </data>
   <data name="FromColon" xml:space="preserve">
-    <value>От:</value>
+    <value>C:</value>
     <comment>From:</comment>
   </data>
   <data name="ToColon" xml:space="preserve">
-    <value>К:</value>
+    <value>По:</value>
     <comment>To:</comment>
   </data>
   <data name="QuestionDeleteTheWorkloadTwoParameters" xml:space="preserve">
@@ -4636,7 +4636,7 @@ Periods</comment>
     <comment>Scheduling Session Options</comment>
   </data>
   <data name="UseConsecutiveDaysOff" xml:space="preserve">
-    <value>Последовательные выходные дни</value>
+    <value>Посл-ные вых. дни</value>
     <comment>Use Consecutive Days Off</comment>
   </data>
   <data name="UseDaysOffPerWeek" xml:space="preserve">
@@ -4672,7 +4672,7 @@ Periods</comment>
     <comment>Schedule Only Rotation Days</comment>
   </data>
   <data name="UseConsecutiveWorkDays" xml:space="preserve">
-    <value>Последовательные рабочие дни</value>
+    <value>Посл-ные раб. дни</value>
     <comment>Use Consecutive Work Days</comment>
   </data>
   <data name="ManageWorkload" xml:space="preserve">
@@ -5033,7 +5033,7 @@ Periods</comment>
     <comment>Search</comment>
   </data>
   <data name="Togt" xml:space="preserve">
-    <value>К - &gt;</value>
+    <value>По - &gt;</value>
     <comment>To - &gt;</comment>
   </data>
   <data name="OpenMyReport" xml:space="preserve">
@@ -8001,7 +8001,7 @@ Teleopti R&amp;D</value>
     <value>Расчеты</value>
   </data>
   <data name="Toggle" xml:space="preserve">
-    <value>Переключить</value>
+    <value>Включая</value>
   </data>
   <data name="Validations" xml:space="preserve">
     <value>Проверка</value>
@@ -9098,7 +9098,7 @@ Teleopti R&amp;D</value>
     <value>Выходные в Сб и Вс</value>
   </data>
   <data name="KeepExistingDaysOff" xml:space="preserve">
-    <value>Сохранять существующие выходные</value>
+    <value>Сохр. существующие выходные</value>
   </data>
   <data name="KeepShiftCategories" xml:space="preserve">
     <value>Сохранять категории смен</value>
@@ -10694,7 +10694,7 @@ Teleopti R&amp;D</value>
     <value>здесь</value>
   </data>
   <data name="LengthOfActivity" xml:space="preserve">
-    <value>Общее время выделенной активности</value>
+    <value>Общее время активности</value>
   </data>
   <data name="PleaseChooseSDK" xml:space="preserve">
     <value>Пожалуйста, выберите SDK</value>
@@ -11680,7 +11680,7 @@ Teleopti R&amp;D</value>
     <value>Проверка требований прогноза</value>
   </data>
   <data name="IssuesText" xml:space="preserve">
-    <value>проблемы</value>
+    <value>проблема(-ы)</value>
   </data>
   <data name="MissingForecastFrom" xml:space="preserve">
     <value>Отсутствует прогноз с</value>
@@ -11905,7 +11905,7 @@ Teleopti R&amp;D</value>
     <value>1 ~ 100</value>
   </data>
   <data name="UseExistingActivity" xml:space="preserve">
-    <value>Использовать существующую активность</value>
+    <value>Исп-ть существующую активность</value>
   </data>
   <data name="ValueRange" xml:space="preserve">
     <value>0 ~ 9999</value>
@@ -12383,5 +12383,386 @@ Teleopti R&amp;D</value>
   </data>
   <data name="LatestAcquiredTime" xml:space="preserve">
     <value>Последнее время</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>Размер страницы</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Всего запросов</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Отсутствия для выбранных операторов успешно добавлены</value>
+  </data>
+  <data name="AddAbsenceTotalResult" xml:space="preserve">
+    <value>{0} отсутствие(-я) успешно добавлено(-ы), невозможно добавить {1} отсутсвие(-й)</value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>Обменять смены</value>
+  </data>
+  <data name="ScheduleHasBeenChanged" xml:space="preserve">
+    <value>Расписание было изменено другим пользователем. Загрузите расписание еще раз.</value>
+  </data>
+  <data name="CommandFailed" xml:space="preserve">
+    <value>Не удалось выполнить запрашиваемую операцию. {0}</value>
+  </data>
+  <data name="RequestsHaveBeenApproved" xml:space="preserve">
+    <value>{0} запроса(-ов) были подверждены.</value>
+  </data>
+  <data name="RequestsHaveBeenDenied" xml:space="preserve">
+    <value>{0} запроса(-ов) были отклонены.</value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>Не удалось изменить смены.</value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>Смены успешно изменены.</value>
+  </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>Удалить отсутствие</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить {0} отсутсвиий у {1} операторов?</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>Не удалось удалить выбранное отсутствие.</value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>Отсутствие успешно удалено.</value>
+  </data>
+  <data name="NoPermisionAddIntradayAbsenceForAgent" xml:space="preserve">
+    <value>У вас нет прав доступа для добавления отсутствия на часть дня для {0}</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>У вас нет прав доступа для добавления отсутствия на полный день для {0}</value>
+  </data>
+  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
+    <value>У вас нет прав доступа для изменения отсутствий. </value>
+  </data>
+  <data name="ConnectionErrorMessage" xml:space="preserve">
+    <value>Сервер недоступен!
+Проверьте интернет-подключение или свяжитесь с администратором.</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Ваш часовой пояс</value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Загрузить изображение</value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>Не JPEG, SVG или PNG!</value>
+  </data>
+  <data name="RequestsHaveNotBeenApproved" xml:space="preserve">
+    <value>{0} запроса(-ов) не были подтверждены.</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} запроса(-ов) не были отклонены.</value>
+  </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+    <value>Планирование</value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>Выбрано запросов {0} из {1}</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Правила выходных дней</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>Новое правило выходных</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>операторов успешно запланированы</value>
+  </data>
+  <data name="CriticalUnderstaffingColon" xml:space="preserve">
+    <value>Критическая нехватка персонала:</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>Некорректный ввод</value>
+  </data>
+  <data name="UnderstaffingColon" xml:space="preserve">
+    <value>Нехватка персонала:</value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>Уикенд </value>
+  </data>
+  <data name="OverstaffingColon" xml:space="preserve">
+    <value>Избыток персонала</value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>Очистить кампанию</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Помните?</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>MyTeam</value>
+  </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>Система лицензирована для "{0}" в соответствии с условиями и положениями лицензионного соглашения и ключ активации продукта истекает {1}.
+
+Ключ активации продукта рассчитан максимум на {2} активных операторов.
+
+Основная версия: {5}
+
+Схема ключа "{3}".
+Активированы следующие опции:
+{4}</value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>Система лицензирована для "{0}" в соответствии с условиями и положениями лицензионного соглашения и ключ активации продукта истекает {1}.
+
+Ключ активации продукта рассчитан максимум на {2} рабочих мест.
+
+Основная версия: {5}
+
+Схема ключа "{3}".
+Активированы следующие опции:
+{4}</value>
+  </data>
+  <data name="CampaignOverstaff" xml:space="preserve">
+    <value>Рано</value>
+  </data>
+  <data name="CampaignUnderSLA" xml:space="preserve">
+    <value>Поздно</value>
+  </data>
+  <data name="ApplicationUserIdShouldBeAValidEmailAddressErrorMsg" xml:space="preserve">
+    <value>ApplicationUserID должен быть корректный email адрес;</value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>Расположить выбранные объекты горизонтально</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>Расположить выбранные объекты вертикально</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Вернуться к последнему сохранению</value>
+  </data>
+  <data name="TooManyResultsForSearchKeywords" xml:space="preserve">
+    <value>Результат поиска по ключевым словам превышает 500, измените условия поиска.</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>Очистить изменения</value>
+  </data>
+  <data name="InternalErrorMessage" xml:space="preserve">
+    <value>В приложении возникла неизвестная ошибка.
+Отправьте нам отчет об ошибке.</value>
+  </data>
+  <data name="RequestSubmitterTimeZone" xml:space="preserve">
+    <value>Часовой пояс запроса</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Фильтр ролей</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Неверные размеры! Предполагается изображение меньше, чем 2000х4000.</value>
+  </data>
+  <data name="CurrentPlanningPeriodMessage" xml:space="preserve">
+    <value>Период планирования будет с</value>
+  </data>
+  <data name="AppliedFilters" xml:space="preserve">
+    <value>Настройки применены для:</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Список брони рабочих мест</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Свойства рабочего места</value>
+  </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>Оптимизация внутри дня</value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>Показать ошибки</value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Анонимный</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Неверный номер</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Показать правую панель</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Показать только отсутствия</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Скрыть панель</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Кликните здесь два раза, чтобы отредактировать текст</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>Включить лист ожидания</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>Запрос на отсутствие для {0} не может быть подтвержден сейчас и был помещен в лист ожидания.</value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>Запрос на отсутствие для {0} на {1} не может быть подтвержден сейчас и был помещен в лист ожидания.</value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>В листе ожидания</value>
+  </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>Добавть пустой период</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>Удалить период</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Подробности оператора</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>Выбрать сайты</value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>Выбрать группы</value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>Настроить</value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>Включить затемненную тему</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>В текущей бизнес-единице не найдена иерархия.</value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>Включая все</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Позиция в листе ожидания:</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Загружено:</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Полностью удалить отсутствие на несколько дней</value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Включить темную тему</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>Вы не можете изменить свою собственную роль</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>Чтобы открыть приложение вам необходим ключ активации продукта Teleopti WFM версия 8, свяжитесь со Службой поддержки или вашим менеджером по работе с клиентами.</value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Перепланировать</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>Это изменит статус всех функций, продолжить?</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>Это очистит функцию и все функции под ней, продолжить?</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Текущий день</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>Невозможно добавить активности для выделенных операторов</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>Активности успешно добавлены для выделенных операторов</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Выбор активности</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>Невозможно удалить отсутствие с защищенного расписания.</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Причина отказа</value>
+  </data>
+  <data name="ChangeWillAffectAgents" xml:space="preserve">
+    <value>Изменение затронет {0} операторов.</value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>Удалить активность</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>Найдено защищенное расписание для {0} операторов.</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>Вы должны выбрать хотя бы одного оператора.</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Необходимо выбрать двух операторов для обмена.</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>Нет прав, чтобы добавить активность для оператора {0}.</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>Нет прав, чтобы удалить активность для оператора {0}.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>Запрос на отсутствие для {0} был отменен и отсутствие было удалено из вашего расписания.</value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>Запрос на отсутствие для {0} - {1} был отменен и отсутствие было удалено из вашего расписания.</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Отменено</value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>Изменить сводку</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Создать сводку</value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>Спрогнозированное среднее время обработки</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Входящий трафик</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Здесь вы отслеживаете текущую ситуацию, выберите навык или сводку</value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Выбор сводки</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить {0} активности у {1} операторов?</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Активности удачно удалены</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>Невозможно удалить активности у выбранных операторов</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>Запрос на отсутствие для {0} на {1} не может быть отменен, так как не найдено запрашиваемое отсутствие. </value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>Запрос на отсутствие для {0} от {1} - {2}  не может быть отменен, так как не найдено запрашиваемое отсутствие. </value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>{0} запрос(-ов) были отменены</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>{0} запрос(-ов) не были отменены</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Отменить запрос</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>Невозможно отменить запрос на отсутствие для {0} на {1}, так как он был подтвержден.</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>Невозможно отменить запрос на отсутствие для {0} от {1} - {2}, так как он был подтвержден.</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Вы уверены, что хотите отменить этот запрос на отсутствие?</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Отменить подтвержденный запрос на отсутствие</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>Если вы отмените подвержденный запрос на отсутствие, то отсутствие из него будет удалено из расписания оператора.</value>
   </data>
 </root>

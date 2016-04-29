@@ -10786,7 +10786,7 @@ Ces options sont actives:
   <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
     <value>Vous n'avez pas la permission d'ajouter des absences journée entière pour {0}</value>
   </data>
-  <data name="NoPermissionToModifyPersonAbsence" xml:space="preserve">
+  <data name="HasNoModifyPersonAbsencePermission" xml:space="preserve">
     <value>Vous n'avez pas la permission de modifier l'absence individuelle!</value>
   </data>
   <data name="ConnectionErrorMessage" xml:space="preserve">
@@ -10939,5 +10939,143 @@ Aidez-nous à améliorer votre expérience en envoyant un rapport d'erreur.</val
   </data>
   <data name="ToggleAll" xml:space="preserve">
     <value>Activer tout</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Position sur liste d'attente:</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Chargé:</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Supprimer absence personnelle multi-journalière </value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Activer thème sombre</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>Vous ne pouvez pas modifier votre propre rôle</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>Une clé d'activation produit Teleopti WFM version 8 est requise pour lancer le système, merci de contacter le Service Desk ou votre Account Manager pour obtenir une nouvelle clé.</value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Re-planifier</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>Ceci va affecter le statut de toutes les fonctions, êtes-vous sûr de vouloir procéder?</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>Ceci va supprimer cette fonction et toutes les fonctions sous-jacentes, êtes-vous sûr de vouloir procéder?</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Même Jour</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>N'a pas pu ajouter d'activité pour les agents sélectionnés</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>A ajouté les activités pour les agents sélectionnés</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Sélectionner une activité</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>N'a pas pu supprimer l'absence du planning protégé.</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Raison de refus</value>
+  </data>
+  <data name="ChangeWillAffectAgents" xml:space="preserve">
+    <value>Le changement va affecter {0} agents.</value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>Supprimer l'activité</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>A trouvé un planning protégé en écriture pour {0} agents.</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>Vous devez sélectionner au moins un agent.</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Doit sélectionner deux agents pour permuter.</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>Pas de permission d'ajout d'activité pour l'agent {0}.</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>Pas de permission de suppression d'activité pour l'agent {0}.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>La demande d'absence pour {0} a été annulée et l'absence a été supprimée de votre planning.</value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>La demande d'absence pour {0} - {1} a été annulée et l'absence a été supprimée de votre planning.</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Annulée</value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>Modifier zone de compétence</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Créer zone de compétence</value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>Temps de traitement moyen prévu</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Traffic entrant</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Vous pouvez ici surveiller les indicateurs d'intrajournalier, commencez par sélectionner une compétence ou une zone</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Temps de traitement moyen offert</value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Sélectionner zone de compétence</value>
+  </data>
+  <data name="ToggleIncludedSkills" xml:space="preserve">
+    <value>Activer les compétences incluses</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir supprimer {0} activités de {1} agents?</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>A supprimé avec succès les activités pour les agents sélectionnés.</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>N'a pas pu supprimer les activités pour les agents sélectionnés.</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>La demande d'absence pour {0} le {1} n'a pas pu être annulée car aucune absence relative n'a été trouvée.</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>La demande d'absence pour {0} du {1} au {2} n'a pas pu être annulée car aucune absence relative n'a été trouvée.</value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>{0} demande(s) a(ont) été annulée(s)</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>{0} demande(s) n'a(ont) pas été annulée(s)</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Annuler demande</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>Ne peut pas annuler l'absence pour {0} le {1} car elle n'a pas été traitée.</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>Ne peut pas annuler l'absence pour {0} du {1} au {2} car elle n'a pas été traitée.</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Êtes-vous sûr de vouloir annuler cette demande d'absence?</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Annuler la demande d'absence approuvée</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>Si vous annulez cette demande d'absence approuvée, alors toutes les absences créées par cette demande vont être supprimées du planning de l'agent.</value>
   </data>
 </root>

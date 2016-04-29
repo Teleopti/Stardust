@@ -13189,4 +13189,82 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="ToggleIncludedSkills" xml:space="preserve">
     <value>Visa inkluderade kompetenser</value>
   </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>Frånvaroförfrågan för {0} avbröts och frånvaron har tagits bort från ditt schema. </value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>Frånvaroförfrågan för {0} - {1} avbröts och frånvaron har tagits bort från ditt schema. </value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Avbruten</value>
+  </data>
+  <data name="ModifySkillArea" xml:space="preserve">
+    <value>Ändra kompetensarea</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Skapa kompetensarea</value>
+  </data>
+  <data name="ForecastedAverageHandleTime" xml:space="preserve">
+    <value>Prognostiserad genomsnittlig behandlingstid</value>
+  </data>
+  <data name="IntradayIntroText" xml:space="preserve">
+    <value>Här kan du kontrollera dina värden inom dagen. Börja genom att välja antingen en kompetens eller din kompetensarea. </value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Välj kompetensarea</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort {0} aktiviteter från {1} agenter?</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Aktiviteter borttagna för valda agenter </value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>Misslyckades med att ta bort aktiviteter för valda agenter</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>Frånvaroförfrågan för {0} {1} kunde inte avbrytas eftersom ingen frånvaro med anknytning till förfrågan kunde hittas. </value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
+    <value>Tar bort aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">
+    <value>Frånvaroförfrågan för {0} från {1} till {2} kunde inte avbrytas eftersom ingen frånvaro med anknytning till förfrågan kunde hittas. </value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>Misslyckades med att lägga till frånvaro</value>
+  </data>
+  <data name="RequestsHaveBeenCancelled" xml:space="preserve">
+    <value>{0} förfrågning(ar) har avbrutits</value>
+  </data>
+  <data name="PartialSuccessMessageForAddingActivity" xml:space="preserve">
+    <value>Lägger till aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades.</value>
+  </data>
+  <data name="RequestsHaveNotBeenCancelled" xml:space="preserve">
+    <value>{0} förfrågning(ar) har inte kunnat avbrytas</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Avbryt förfrågan</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequest" xml:space="preserve">
+    <value>Kan inte avbryta frånvaroförfrågan för {0} {1} då den inte är godkänd. </value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>Kan inte avbryta frånvaroförfrågan för {0} från {1} till {2}, då den inte är godkänd. </value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Är du säker på att du vill avbryta den här frånvaroförfrågan?</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Avbryt godkänd frånvaroförfrågan</value>
+  </data>
+  <data name="CancelAbsenceRequestDescription" xml:space="preserve">
+    <value>Om du avbryter den här frånvaroförfrågan kommer eventuell frånvaro som skapats genom denna förfrågan att tas bort från agentens schema. </value>
+  </data>
+  <data name="TryOutTheNewImprovedMyTeam" xml:space="preserve">
+    <value>Prova nya och förbättrade MyTeam!</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>Ta en förhandstitt på nya Inom dag-verktyget!</value>
+  </data>
 </root>
