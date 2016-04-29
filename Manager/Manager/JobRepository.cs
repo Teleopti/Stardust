@@ -479,7 +479,7 @@ namespace Stardust.Manager
 					sqlConnection.OpenWithRetry(_retryPolicy);
 					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
 					{
-						var sentToWorkerNodeUri = string.Empty;
+						string sentToWorkerNodeUri = null;
 
 						using (var createSelectWorkerNodeUriCommand = CreateCommandHelper.CreateSelectWorkerNodeCommand(jobId, sqlConnection, sqlTransaction))
 						{
@@ -492,7 +492,9 @@ namespace Stardust.Manager
 								}
 							}
 						}
-						
+
+						if (sentToWorkerNodeUri == null) return;
+
 						var taskSendCancel = new Task<HttpResponseMessage>(() =>
 						{
 							var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
