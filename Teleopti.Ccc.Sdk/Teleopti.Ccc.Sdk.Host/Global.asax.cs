@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 				c.Resolve<ICurrentTransactionHooks>(),
 				DataSourceConfigurationSetter.ForSdk(),
 				new CurrentHttpContext(),
-				CurrentTeleoptiPrincipal.Make()
+				UpdatedBy.Make()
 				)).As<IDataSourcesFactory>().SingleInstance();
 			builder.RegisterType<SetNoLicenseActivator>().As<ISetLicenseActivator>().SingleInstance();
 		}

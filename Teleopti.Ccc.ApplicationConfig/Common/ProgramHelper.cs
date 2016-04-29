@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 				new NoTransactionHooks(),
 				DataSourceConfigurationSetter.ForApplicationConfig(),
 				new CurrentHttpContext(),
-				CurrentTeleoptiPrincipal.Make()
+				UpdatedBy.Make()
 				);
 			var dataSource = dataSourcesFactory.Create(DatabaseHandler.DataSourceSettings(argument.DestinationConnectionString), "");
 			
