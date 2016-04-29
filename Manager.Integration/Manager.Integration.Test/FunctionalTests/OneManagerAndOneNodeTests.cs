@@ -58,12 +58,9 @@ namespace Manager.Integration.Test.FunctionalTests
 					var response =
 						HttpSender.DeleteAsync(cancelJobUri).Result;
 
-					if (response.StatusCode != HttpStatusCode.NotFound)
+					while (response.StatusCode != HttpStatusCode.OK)
 					{
-						while (!response.IsSuccessStatusCode)
-						{
-							response = HttpSender.DeleteAsync(cancelJobUri).Result;
-						}
+						response = HttpSender.DeleteAsync(cancelJobUri).Result;
 					}
 				}
 			}
