@@ -12,6 +12,6 @@
         bool AllowBreakNightlyRest { get; set; }
         bool AllowBreakWeeklyRest { get; set; }
         bool AvailableAgentsOnly { get; set; }
-		IRuleSetBag ShiftBagOvertimeScheduling { get; set; }
+		IRuleSetBag ShiftBagToUse { get; set; }
 	}
 }

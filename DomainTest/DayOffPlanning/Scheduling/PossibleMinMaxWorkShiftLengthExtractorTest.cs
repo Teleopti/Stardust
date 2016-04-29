@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 			    new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
 		    _schedulingOptions = new SchedulingOptions();
 
-		    _target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _workShiftWorkTime);
+		    _target = new PossibleMinMaxWorkShiftLengthExtractor(_restrictionExctractor, _workShiftWorkTime, new RuleSetBagExtractorProvider());
 	    }
 
 	    [Test]

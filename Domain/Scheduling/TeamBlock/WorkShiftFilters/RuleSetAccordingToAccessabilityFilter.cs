@@ -6,30 +6,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
     public interface IRuleSetAccordingToAccessabilityFilter
     {
-        IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(ITeamBlockInfo teamBlockInfo, bool useShiftsForRestrictions);
-        IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly dateOnly, bool useShiftsForRestrictions);
+        IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, bool useShiftsForRestrictions);
+        IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly dateOnly, ISchedulingOptions schedulingOptions, bool useShiftsForRestrictions);
     }
 
     public class RuleSetAccordingToAccessabilityFilter : IRuleSetAccordingToAccessabilityFilter
     {
-        private readonly ITeamBlockRuleSetBagExtractor _teamBlockRuleSetBagExtractor;
+        private readonly RuleSetBagExtractorProvider _ruleSetBagExtractorProvider;
         private readonly ITeamBlockIncludedWorkShiftRuleFilter _teamBlockIncludedWorkShiftRuleFilter;
 	    private readonly IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
 	    private readonly IGroupPersonSkillAggregator _skillAggregator;
 
-	    public RuleSetAccordingToAccessabilityFilter(ITeamBlockRuleSetBagExtractor teamBlockRuleSetBagExtractor,
+	    public RuleSetAccordingToAccessabilityFilter(RuleSetBagExtractorProvider ruleSetBagExtractorProvider,
 		    ITeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter,
 		    IRuleSetSkillActivityChecker ruleSetSkillActivityChecker, IGroupPersonSkillAggregator skillAggregator)
 	    {
-		    _teamBlockRuleSetBagExtractor = teamBlockRuleSetBagExtractor;
+			_ruleSetBagExtractorProvider = ruleSetBagExtractorProvider;
 		    _teamBlockIncludedWorkShiftRuleFilter = teamBlockIncludedWorkShiftRuleFilter;
 		    _ruleSetSkillActivityChecker = ruleSetSkillActivityChecker;
 		    _skillAggregator = skillAggregator;
 	    }
 
-	    public IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(ITeamBlockInfo teamBlockInfo, bool useShiftsForRestrictions)
+	    public IEnumerable<IWorkShiftRuleSet> FilterForRoleModel(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, bool useShiftsForRestrictions)
         {
-            IList<IRuleSetBag> extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBag(teamBlockInfo).ToList();
+            IList<IRuleSetBag> extractedRuleSetBags = _ruleSetBagExtractorProvider.Fetch(schedulingOptions).GetRuleSetBag(teamBlockInfo).ToList();
 	        var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(teamBlockInfo.BlockInfo.BlockPeriod,
 	                                                                        extractedRuleSetBags);
 			filteredList = filterForSkillActivity(filteredList, teamBlockInfo);
@@ -51,11 +51,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		    return result;
 	    }
 
-	    public IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly explicitDateToCheck, bool useShiftsForRestrictions)
+	    public IEnumerable<IWorkShiftRuleSet> FilterForTeamMember(IPerson person, DateOnly explicitDateToCheck, ISchedulingOptions schedulingOptions, bool useShiftsForRestrictions)
         {
-	        var extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBagForTeamMember(person, explicitDateToCheck);
-			var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(new DateOnlyPeriod(explicitDateToCheck, explicitDateToCheck),
-	                                                                        extractedRuleSetBags.ToList());
+	        var extractedRuleSetBags = new[] { _ruleSetBagExtractorProvider.Fetch(schedulingOptions).GetRuleSetBagForTeamMember(person, explicitDateToCheck)};
+			var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(new DateOnlyPeriod(explicitDateToCheck, explicitDateToCheck), extractedRuleSetBags);
 			if (!useShiftsForRestrictions)
 				filteredList = filterForShiftsForRestrictions(filteredList);
 

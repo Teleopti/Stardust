@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-    public interface ITeamBlockRuleSetBagExtractor
+    public interface IRuleSetBagExtractor
     {
         IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo);
-        IEnumerable<IRuleSetBag> GetRuleSetBagForTeamMember(IPerson person, DateOnly dateOnly);
+        IRuleSetBag GetRuleSetBagForTeamMember(IPerson person, DateOnly dateOnly);
     }
 
-    public class TeamBlockRuleSetBagExtractor : ITeamBlockRuleSetBagExtractor
+    public class RuleSetBagExtractor : IRuleSetBagExtractor
     {
         public IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo)
         {
@@ -38,15 +39,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
             return possibleWorkShiftRuleSetBagList;
         }
 
-	    public IEnumerable<IRuleSetBag> GetRuleSetBagForTeamMember(IPerson person, DateOnly dateOnly)
+	    public IRuleSetBag GetRuleSetBagForTeamMember(IPerson person, DateOnly dateOnly)
 	    {
-		    var possibleWorkShiftRuleSetBagList = new List<IRuleSetBag>();
-
-		    var tempWorkShiftRuleSetBag = person.Period(dateOnly).RuleSetBag;
-		    if (tempWorkShiftRuleSetBag != null)
-			    possibleWorkShiftRuleSetBagList.Add(tempWorkShiftRuleSetBag);
-
-		    return possibleWorkShiftRuleSetBagList;
+		    return person.Period(dateOnly)?.RuleSetBag;
 	    }
     }
 }

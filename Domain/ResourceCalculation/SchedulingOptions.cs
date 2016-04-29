@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public GroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
 		private BlockFinderType _blockFinderTypeForAdvanceScheduling;
-        public bool BlockSameEndTime { get; set; }
+	    public bool BlockSameEndTime { get; set; }
         public bool BlockSameShiftCategory { get; set; }
         public bool BlockSameStartTime { get; set; }
 		public bool BlockSameShift { get; set; }
@@ -99,6 +99,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    {
 			get { return _notAllowedShiftProjectionCaches; }
 	    }
+
+	    public IRuleSetBag FixedShiftBag { get; set; }
 
 	    public void ClearNotAllowedShiftProjectionCaches()
 	    {

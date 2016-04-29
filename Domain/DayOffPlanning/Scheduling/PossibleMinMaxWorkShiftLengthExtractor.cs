@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
@@ -8,14 +9,17 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
     {
         private readonly IRestrictionExtractor _restrictionExtractor;
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
-        private readonly IDictionary<DateOnly, IWorkTimeMinMax> _extractedLengths = new Dictionary<DateOnly, IWorkTimeMinMax>();
+	    private readonly RuleSetBagExtractorProvider _ruleSetBagExtractorProvider;
+	    private readonly IDictionary<DateOnly, IWorkTimeMinMax> _extractedLengths = new Dictionary<DateOnly, IWorkTimeMinMax>();
 
         public PossibleMinMaxWorkShiftLengthExtractor(
             IRestrictionExtractor restrictionExtractor, 
-            IWorkShiftWorkTime workShiftWorkTime)
+            IWorkShiftWorkTime workShiftWorkTime,
+						RuleSetBagExtractorProvider ruleSetBagExtractorProvider)
         {
             _restrictionExtractor = restrictionExtractor;
         	_workShiftWorkTime = workShiftWorkTime;
+	        _ruleSetBagExtractorProvider = ruleSetBagExtractorProvider;
         }
 
         public void ResetCache()
@@ -53,9 +57,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
                     return new MinMax<TimeSpan>(personPeriod.PersonContract.AverageWorkTimePerDay, personPeriod.PersonContract.AverageWorkTimePerDay);
                 }
-			    IRuleSetBag ruleSetBag = null;
-                if(personPeriod != null)
-			        ruleSetBag = personPeriod.RuleSetBag;
+				var ruleSetBag = _ruleSetBagExtractorProvider.Fetch(schedulingOptions)
+					.GetRuleSetBagForTeamMember(person, dateOnly);
 
                 if (matrix.SchedulePeriod.IsValid && ruleSetBag != null)
 				{

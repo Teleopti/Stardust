@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		 * * We need to remove dayoffs otherwise no scheduling will occur
 		 * * Need to "turn off" nightly rest rule if user has checked AllowBreakNightlyRest
 		 * * Change scheduled layers to be overtime layers
-		 * * Change agent's current shift bag
+		 * * AvailableAgentsOnly handled by "scheduling"
 		 * ...we'll fix these one-by-one later
 		 */
 		public static IDisposable Set(IScheduleDictionary scheduleDictionary, 
@@ -29,8 +29,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var orgPersonAss = scheduleDay.PersonAssignment(true).EntityClone();
 			var hasDayOff = false;
 			var oldWorkTimeDirective = agent.Period(date).PersonContract.Contract.WorkTimeDirective;
-			var personPeriod = agent.Period(date);
-			var oldShiftBag = personPeriod.RuleSetBag;
 			if (scheduleDay.HasDayOff())
 			{
 				scheduleDay.DeleteDayOff();
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					new WorkTimeDirective(oldWorkTimeDirective.MinTimePerWeek, oldWorkTimeDirective.MaxTimePerWeek, TimeSpan.Zero, oldWorkTimeDirective.WeeklyRest);
 			}
 
-			personPeriod.RuleSetBag = overtimePreferences.ShiftBagOvertimeScheduling;
 			return new GenericDisposable(() =>
 			{
 				var currScheduleDay = scheduleDictionary[agent].ScheduledDay(date);
@@ -89,7 +86,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 				
 				scheduleDay.Person.Period(date).PersonContract.Contract.WorkTimeDirective = oldWorkTimeDirective;
-				personPeriod.RuleSetBag = oldShiftBag;
 			});
 		}
 	}

@@ -327,6 +327,7 @@ namespace Teleopti.Interfaces.Domain
 
 	    void AddNotAllowedShiftProjectionCache(IShiftProjectionCache shiftProjectionCache);
 		IList<IShiftProjectionCache> NotAllowedShiftProjectionCaches { get; }
+	    IRuleSetBag FixedShiftBag { get; set; }
 	    void ClearNotAllowedShiftProjectionCaches();
     }
 }

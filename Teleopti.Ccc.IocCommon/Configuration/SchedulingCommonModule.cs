@@ -583,7 +583,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>().InstancePerLifetimeScope();
 			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>().InstancePerLifetimeScope();
 			builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
-			builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>().SingleInstance();
+			builder.RegisterType<RuleSetBagExtractorProvider>().SingleInstance();
 			builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>().SingleInstance();
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>().SingleInstance();
 			builder.RegisterType<PersonalShiftAndMeetingFilter>().As<IPersonalShiftAndMeetingFilter>();

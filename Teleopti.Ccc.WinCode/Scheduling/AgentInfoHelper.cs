@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -241,7 +242,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				var restrictionExtractor = new RestrictionExtractor(new RestrictionCombiner(), new RestrictionRetrievalOperation());
 
 				IPossibleMinMaxWorkShiftLengthExtractor possibleMinMaxWorkShiftLengthExtractor =
-					 new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime);
+					 new PossibleMinMaxWorkShiftLengthExtractor(restrictionExtractor, _workShiftWorkTime, new RuleSetBagExtractorProvider());
 
 				IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
 				IWorkShiftMinMaxCalculator workShiftMinMaxCalculator =

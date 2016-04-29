@@ -15,6 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public bool AllowBreakWeeklyRest { get; set; }
         public bool AvailableAgentsOnly { get; set; }
 
-	    public IRuleSetBag ShiftBagOvertimeScheduling { get; set; }
+	    public IRuleSetBag ShiftBagToUse { get; set; }
     }
 }

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
     [TestFixture]
     public class TeamBlockRuleSetBagExtractorTest
     {
-        private ITeamBlockRuleSetBagExtractor _target;
+        private IRuleSetBagExtractor _target;
         private ITeamBlockInfo _teamBlockInfo;
         private MockRepository _mock;
         private ITeamInfo _teamInfo;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             _ruleSetBag2 = _mock.StrictMock<IRuleSetBag>();
             _ruleSetBag3 = _mock.StrictMock<IRuleSetBag>();
             _ruleSetBag4 = _mock.StrictMock<IRuleSetBag>();
-            _target = new TeamBlockRuleSetBagExtractor();
+            _target = new RuleSetBagExtractor();
         }
 
         [Test]
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             }
             using (_mock.Playback())
             {
-				Assert.AreEqual(1, _target.GetRuleSetBagForTeamMember(_person1, new DateOnly(2014, 03, 10)).Count());
+				Assert.IsNotNull(_target.GetRuleSetBagForTeamMember(_person1, new DateOnly(2014, 03, 10)));
             }
         }
     }

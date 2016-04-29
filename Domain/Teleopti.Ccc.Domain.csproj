@@ -275,6 +275,8 @@
     <Compile Include="Scheduling\Restrictions\SchedulePreferenceTransformerHelper.cs" />
     <Compile Include="Scheduling\ScheduleIsInvalidSpecification.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProvider.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\FixedRuleSetBagExtractor.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetBagExtractorProvider.cs" />
     <Compile Include="Security\Principal\CurrentProcess.cs" />
     <Compile Include="Security\Principal\ThreadPrincipalContext.cs" />
     <Compile Include="Security\Principal\WindowsAppDomainPrincipalContext.cs" />
@@ -1869,7 +1871,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetPersonalSkillsActivityFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilter.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockRuleSetBagExtractor.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetBagExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockIncludedWorkShiftRuleFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ValidDateTimePeriodShiftFilter.cs" />

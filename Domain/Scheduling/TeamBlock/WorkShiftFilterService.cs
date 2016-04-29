@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForRoleModel(teamBlockInfo, useShiftsForRestrictions).ToList();
+			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForRoleModel(teamBlockInfo, schedulingOptions, useShiftsForRestrictions).ToList();
 			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.FilterForRoleModel(filteredRuleSetList,
 				teamBlockInfo.TeamInfo, dateOnly).ToList();
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForTeamMember(person, dateOnly, useShiftsForRestrictions);
+			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.FilterForTeamMember(person, dateOnly, schedulingOptions, useShiftsForRestrictions);
 			filteredRuleSetList = _ruleSetPersonalSkillsActivityFilter.Filter(filteredRuleSetList, person, dateOnly);
 
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSets(dateOnly,

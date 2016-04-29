@@ -50,7 +50,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
 				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, BlockFinderType.SingleDay, true);
 
-				var schedulingOptions = new SchedulingOptions();	//TODO Is this even needed?
+				var schedulingOptions = new SchedulingOptions
+				{
+					FixedShiftBag = overtimePreferences.ShiftBagToUse
+				};
 				_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, stateHolder.SchedulingResultState, new ShiftNudgeDirective());
 			}
 		}
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (!scheduleDay.PersonAbsenceCollection().IsEmpty())
 				return true;
-			if (overtimePreferences.ShiftBagOvertimeScheduling == null)
+			if (overtimePreferences.ShiftBagToUse == null)
 				return true;
 
 			var definitionSets = agent.Period(date)
