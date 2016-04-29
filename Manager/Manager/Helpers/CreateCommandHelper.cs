@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using Stardust.Manager.Models;
 
 namespace Stardust.Manager.Helpers
 {
@@ -19,7 +20,7 @@ namespace Stardust.Manager.Helpers
 			return updateCommand;
 		}
 
-		public static SqlCommand CreateInsertIntoJobDetailSqlCommand(Guid jobId, string detail, DateTime created, SqlConnection sqlConnection)
+		public static SqlCommand CreateInsertIntoJobDetailCommand(Guid jobId, string detail, DateTime created, SqlConnection sqlConnection)
 		{
 			const string insertIntoJobDetailCommandText = @"INSERT INTO [Stardust].[JobDetail]
 																([JobId]
@@ -37,7 +38,7 @@ namespace Stardust.Manager.Helpers
 			return insertCommand;
 		}
 
-		public static SqlCommand CreateGetJobQueueItemByJobIdSqlCommand(Guid jobId, SqlConnection sqlConnection)
+		public static SqlCommand CreateGetJobQueueItemByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
 		{
 			const string selectJobQueueItemCommandText =
 				@"SELECT  [JobId]
@@ -113,7 +114,157 @@ namespace Stardust.Manager.Helpers
 			return selectSqlCommand;
 		}
 
+		public static SqlCommand CreateSelectJobDetailByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
+		{
+			var selectCommandText = @"SELECT  
+											Id, 
+											JobId, 
+											Created, 
+											Detail  
+										FROM [Stardust].[JobDetail] WITH (NOLOCK) 
+										WHERE JobId = @JobId";
+
+			var selectSqlCommand = new SqlCommand(selectCommandText, sqlConnection);
+			selectSqlCommand.Parameters.AddWithValue("@JobId", jobId);
+
+			return selectSqlCommand;
+		}
 
 
+
+		public static SqlCommand CreateSelectJobThatDidNotEndCommand(string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			const string selectJobByJobIdCommandText = @"SELECT [JobId]
+											  ,[Name]
+											  ,[Created]
+											  ,[CreatedBy]
+											  ,[Started]
+											  ,[Ended]
+											  ,[Serialized]
+											  ,[Type]
+											  ,[SentToWorkerNodeUri]
+											  ,[Result]
+										  FROM [Stardust].[Job]
+										  WHERE  SentToWorkerNodeUri = @SentToWorkerNodeUri AND
+												 Started IS NOT NULL AND 
+												 Ended IS NULL";
+
+			var selectCommand = new SqlCommand(selectJobByJobIdCommandText, sqlConnection);
+			selectCommand.Transaction = sqlTransaction;
+			selectCommand.Parameters.AddWithValue("@SentToWorkerNodeUri", sentToWorkerNodeUri);
+
+			return selectCommand;
+		}
+
+		public static SqlCommand CreateInsertIntoJobQueueCommand(JobQueueItem jobQueueItem, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			const string insertIntoJobQueueCommandText = @"INSERT INTO [Stardust].[JobQueue]
+							   ([JobId],
+								[Name],
+								[Type],
+								[Serialized],
+								[CreatedBy],
+								[Created])
+							VALUES 
+								(@JobId,
+								 @Name,
+								 @Type,
+								 @Serialized,
+								 @CreatedBy,
+								 @Created)";
+
+			var insertCommand = new SqlCommand(insertIntoJobQueueCommandText, sqlConnection);
+			insertCommand.Transaction = sqlTransaction;
+
+			insertCommand.Parameters.AddWithValue("@JobId", jobQueueItem.JobId);
+			insertCommand.Parameters.AddWithValue("@Name", jobQueueItem.Name);
+			insertCommand.Parameters.AddWithValue("@Type", jobQueueItem.Type);
+			insertCommand.Parameters.AddWithValue("@Serialized", jobQueueItem.Serialized);
+			insertCommand.Parameters.AddWithValue("@Created", DateTime.UtcNow);
+			insertCommand.Parameters.AddWithValue("@CreatedBy", jobQueueItem.CreatedBy);
+
+			return insertCommand;
+		}
+
+		public static SqlCommand CreateDeleteJobByJobIdCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			var deleteJobByIdSqlCommandText = @"DELETE FROM [Stardust].[Job] 
+												   WHERE JobId = @JobId";
+
+			var deleteCommand = new SqlCommand(deleteJobByIdSqlCommandText, sqlConnection);
+			deleteCommand.Transaction = sqlTransaction;
+
+			deleteCommand.Parameters.AddWithValue("@JobId",jobId);
+
+			return deleteCommand;
+		}
+
+		public static SqlCommand CreateSelectAllAliveWorkerNodesCommand(SqlConnection sqlConnection)
+		{
+			const string selectAllAliveWorkerNodesCommandText = @"SELECT   
+												   [Id]
+												  ,[Url]
+												  ,[Heartbeat]
+												  ,[Alive]
+											  FROM [Stardust].[WorkerNode] WITH (NOLOCK) 
+											  WHERE Alive = 1";
+
+			var sqlCommand = new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection);
+			return sqlCommand;
+		}
+
+		public static SqlCommand CreateSelectWorkerNodeCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			var selectWorkerNodeUriFromJobCommandText = "SELECT SentToWorkerNodeUri " +
+																	"FROM [Stardust].[Job] " +
+																	"WHERE JobId = @JobId";
+
+			var selectCommand = new SqlCommand(selectWorkerNodeUriFromJobCommandText, sqlConnection);
+			selectCommand.Transaction = sqlTransaction;
+
+			selectCommand.Parameters.AddWithValue("@JobId", jobId);
+			return selectCommand;
+		}
+
+
+		public static SqlCommand CreateDoesJobDetailItemExistsCommand(Guid jobId,
+														   SqlConnection sqlConnection)
+		{
+			const string selectCommandText = @"SELECT COUNT(*) 
+											FROM [Stardust].[JobDetail]
+											WHERE JobId = @JobId";
+
+			var command = new SqlCommand(selectCommandText, sqlConnection);
+
+			command.Parameters.AddWithValue("@JobId", jobId);
+
+			return command;
+		}
+
+		public static SqlCommand CreateDoesJobQueueItemExistsCommand(Guid jobId, SqlConnection sqlConnection)
+		{
+			const string selectCommand = @"SELECT COUNT(*) 
+											FROM [Stardust].[JobQueue]
+											WHERE JobId = @JobId";
+
+			var sqlCommand = new SqlCommand(selectCommand, sqlConnection);
+
+			sqlCommand.Parameters.AddWithValue("@JobId", jobId);
+
+			return sqlCommand;
+		}
+
+		public static SqlCommand CreateDoesJobItemExistsCommand(Guid jobId, SqlConnection sqlConnection)
+		{
+			const string selectCommand = @"SELECT COUNT(*) 
+											FROM [Stardust].[Job]
+											WHERE JobId = @JobId";
+
+			var sqlCommand = new SqlCommand(selectCommand, sqlConnection);
+
+			sqlCommand.Parameters.AddWithValue("@JobId", jobId);
+
+			return sqlCommand;
+		}
 	}
 }

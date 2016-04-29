@@ -29,8 +29,6 @@ namespace Stardust.Manager
 		public JobRepository(string connectionString,
 		                     RetryPolicyProvider retryPolicyProvider)
 		{
-			ThrowExceptionIfConnectionStringIsNullOrEmpty(connectionString);
-
 			if (retryPolicyProvider == null)
 			{
 				throw new ArgumentNullException("retryPolicyProvider");
@@ -62,7 +60,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var sqlCommand = CreateInsertIntoJobQueueSqlCommand(jobQueueItem, sqlConnection))
+					using (var sqlCommand =CreateCommandHelper.CreateInsertIntoJobQueueCommand(jobQueueItem, sqlConnection, null))
 					{
 						sqlCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
@@ -148,7 +146,7 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 
-					using (var selectAllAliveWorkerNodesCommand = CreateSelectAllAliveWorkerNodesSqlCommand(sqlConnection))
+					using (var selectAllAliveWorkerNodesCommand = CreateCommandHelper.CreateSelectAllAliveWorkerNodesCommand(sqlConnection))
 					{
 						using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader())
 						{
@@ -228,7 +226,7 @@ namespace Stardust.Manager
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
 
-				using (var insertCommand = CreateCommandHelper.CreateInsertIntoJobDetailSqlCommand(jobId, detail, created, sqlConnection))
+				using (var insertCommand = CreateCommandHelper.CreateInsertIntoJobDetailCommand(jobId, detail, created, sqlConnection))
 				{
 					insertCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
@@ -246,7 +244,7 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
-					using (var sqlSelectCommand = CreateCommandHelper.CreateGetJobQueueItemByJobIdSqlCommand(jobId, sqlConnection))
+					using (var sqlSelectCommand = CreateCommandHelper.CreateGetJobQueueItemByJobIdCommand(jobId, sqlConnection))
 					{
 						using (var sqlDataReader = sqlSelectCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -370,7 +368,7 @@ namespace Stardust.Manager
 		}
 		
 
-		public IList<JobDetail> GetJobDetailsByJobId(Guid id)
+		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)
 		{
 			try
 			{
@@ -379,42 +377,24 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-
-					var selectCommandText = @"SELECT  
-											Id, 
-											JobId, 
-											Created, 
-											Detail  
-										FROM [Stardust].[JobDetail] WITH (NOLOCK) 
-										WHERE JobId = @JobId";
-
-					var sqlCommand = new SqlCommand(selectCommandText);
-
-					sqlCommand.Parameters.AddWithValue("@JobId", id);
-
-
-					using (var sqlDataReader =
-						sqlCommand.ExecuteReaderWithRetry(_retryPolicy))
+					using (var selectJobDetailByJobIdCommand = CreateCommandHelper.CreateSelectJobDetailByJobIdCommand(jobId, sqlConnection))
 					{
-						if (sqlDataReader.HasRows)
+						using (var sqlDataReader = selectJobDetailByJobIdCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
-							while (sqlDataReader.Read())
+							if (sqlDataReader.HasRows)
 							{
-								var jobDetail =
-									CreateJobDetailFromSqlDataReader(sqlDataReader);
-
-								jobDetails.Add(jobDetail);
+								while (sqlDataReader.Read())
+								{
+									var jobDetail = CreateJobDetailFromSqlDataReader(sqlDataReader);
+									jobDetails.Add(jobDetail);
+								}
 							}
 						}
-
-						sqlDataReader.Close();
-						sqlConnection.Close();
 					}
-
+					
 					return jobDetails;
 				}
 			}
-
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
@@ -424,8 +404,6 @@ namespace Stardust.Manager
 
 		public void RequeueJobThatDidNotEndByWorkerNodeUri(string workerNodeUri)
 		{
-			ThrowExceptionIfStringIsNullOrEmpty(workerNodeUri);
-
 			try
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
@@ -434,271 +412,51 @@ namespace Stardust.Manager
 
 					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
 					{
-						var job = GetSelectJobThatDidNotEndByWorkerNodeUriWorker(workerNodeUri,
-						                                                         sqlConnection,
-						                                                         sqlTransaction);
-
-						if (job == null)
+						Job job = null;
+						using (var selectJobThatDidNotEndCommand = CreateCommandHelper.CreateSelectJobThatDidNotEndCommand(workerNodeUri, sqlConnection, sqlTransaction))
 						{
-							sqlTransaction.Dispose();
-							sqlConnection.Close();
-							sqlConnection.Dispose();
-
-							return;
+							using (var sqlDataReader = selectJobThatDidNotEndCommand.ExecuteReaderWithRetry(_retryPolicy))
+							{
+								if (sqlDataReader.HasRows)
+								{
+									sqlDataReader.Read();
+									job = CreateJobFromSqlDataReader(sqlDataReader);
+								}
+							}
 						}
-
-						var jobQueueItem = new JobQueueItem
+						if (job != null)
 						{
-							Created = job.Created,
-							CreatedBy = job.CreatedBy,
-							JobId = job.JobId,
-							Serialized = job.Serialized,
-							Name = job.Name,
-							Type = job.Type
-						};
+							var jobQueueItem = new JobQueueItem
+							{
+								Created = job.Created,
+								CreatedBy = job.CreatedBy,
+								JobId = job.JobId,
+								Serialized = job.Serialized,
+								Name = job.Name,
+								Type = job.Type
+							};
 
-						AddItemToJobQueueWorker(jobQueueItem, sqlConnection, sqlTransaction);
-						DeleteJobByJobIdWorker(jobQueueItem.JobId, sqlConnection, sqlTransaction);
-
-						Retry(sqlTransaction.Commit);
+							using (var insertIntojobQueueCommand = CreateCommandHelper.CreateInsertIntoJobQueueCommand(jobQueueItem, sqlConnection, sqlTransaction))
+							{
+								insertIntojobQueueCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+							}
+							using (var deleteJobByJobIdCommand = CreateCommandHelper.CreateDeleteJobByJobIdCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+							{
+								deleteJobByJobIdCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+							}
+							Retry(sqlTransaction.Commit);
+						}
 					}
 				}
 			}
-
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 				throw;
 			}
 		}
-
-		private SqlCommand CreateDeleteJobByJobIdSqlCommand(Guid jobId,
-		                                                    SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command = CreateDeleteJobByJobIdSqlCommand(jobId);
-
-			command.Connection = sqlConnection;
-
-			return command;
-		}
-
-		private SqlCommand CreateDeleteJobByJobIdSqlCommand(Guid jobId)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-
-			var deleteJobByIdSqlCommandText = @"DELETE FROM [Stardust].[Job] 
-												   WHERE JobId = @JobId";
-
-			var sqlCommand = new SqlCommand(deleteJobByIdSqlCommandText);
-
-			sqlCommand.Parameters.AddWithValue("@JobId", jobId);
-
-			return sqlCommand;
-		}
-
-		private SqlCommand CreateDeleteJobDetailsByJobIdSqlCommand(Guid jobId,
-		                                                           SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command = CreateDeleteJobDetailsByJobIdSqlCommand(jobId);
-
-			command.Connection = sqlConnection;
-
-			return command;
-		}
-
-		private SqlCommand CreateDeleteJobDetailsByJobIdSqlCommand(Guid jobId)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-
-			var deleteCommandText = @"DELETE FROM [Stardust].[JobDetail] 
-												   WHERE JobId = @JobId";
-
-			var sqlCommand = new SqlCommand(deleteCommandText);
-
-			sqlCommand.Parameters.AddWithValue("@JobId", jobId);
-
-			return sqlCommand;
-		}
-
-		private void DeleteJobDetailsByJobIdWorker(Guid jobId,
-		                                           SqlConnection sqlConnection,
-		                                           SqlTransaction sqlTransaction)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var deleteCommand =
-				CreateDeleteJobDetailsByJobIdSqlCommand(jobId, sqlConnection);
-
-			if (sqlTransaction != null)
-			{
-				deleteCommand.Transaction = sqlTransaction;
-			}
-
-			deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-		}
-
-		private void DeleteJobByJobIdWorker(Guid jobId,
-		                                    SqlConnection sqlConnection,
-		                                    SqlTransaction sqlTransaction)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var deleteCommand =
-				CreateDeleteJobByJobIdSqlCommand(jobId, sqlConnection);
-
-			if (sqlTransaction != null)
-			{
-				deleteCommand.Transaction = sqlTransaction;
-			}
-
-			deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-		}
-
-		private bool DoesItemExistsTemplateMethod(Guid jobId,
-		                                          Func<Guid, SqlConnection, bool> func)
-		{
-			try
-			{
-				using (var sqlConnection = new SqlConnection(_connectionString))
-				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
-
-					return func(jobId, sqlConnection);
-				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
-			}
-		}
-
-		private JobDetail CreateJobDetailFromSqlDataReader(SqlDataReader sqlDataReader)
-		{
-			var jobDetail = new JobDetail
-			{
-				Id = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("Id")),
-				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
-				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
-				Detail = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Detail"))
-			};
-
-			return jobDetail;
-		}
-
-		private void ThrowExceptionIfStringIsNullOrEmpty(string value)
-		{
-			if (string.IsNullOrEmpty(value))
-			{
-				throw new ArgumentNullException("value");
-			}
-		}
-
-		private void ThrowArgumentNullExceptionIfHttpSenderIsNull(IHttpSender httpSender)
-		{
-			if (httpSender == null)
-			{
-				throw new ArgumentNullException("httpSender");
-			}
-		}
-
-		private bool DoesJobDetailItemExistsWorker(Guid jobId,
-		                                           SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command =
-				CreateDoesJobDetailItemExistsSqlCommand(jobId,
-				                                        sqlConnection);
-
-			var count = Convert.ToInt32(command.ExecuteScalar());
-
-			return count == 1;
-		}
-
-		private SqlCommand CreateDoesJobDetailItemExistsSqlCommand(Guid jobId,
-		                                                           SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command = CreateDoesJobDetailItemExistsSqlCommand(jobId);
-
-			command.Connection = sqlConnection;
-
-			return command;
-		}
-
-		private SqlCommand CreateDoesJobDetailItemExistsSqlCommand(Guid jobId)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-
-			const string selectCommandText = @"SELECT COUNT(*) 
-											FROM [Stardust].[JobDetail]
-											WHERE JobId = @JobId";
-
-			var command = new SqlCommand(selectCommandText);
-
-			command.Parameters.AddWithValue("@JobId", jobId);
-
-			return command;
-		}
-
-		private void ThrowExceptionIfConnectionStringIsNullOrEmpty(string connectionString)
-		{
-			if (string.IsNullOrEmpty(connectionString))
-			{
-				throw new ArgumentNullException("connectionString");
-			}
-		}
-
-		private static void ThrowExceptionIfJobQueueItemIsNull(JobQueueItem jobQueueItem)
-		{
-			if (jobQueueItem == null)
-			{
-				throw new ArgumentNullException("jobQueueItem");
-			}
-		}
-
-		private SqlCommand CreateSelectAllAliveWorkerNodesSqlCommand(SqlConnection sqlConnection)
-		{
-			const string selectAllAliveWorkerNodesCommandText =
-				@"SELECT   
-												   [Id]
-												  ,[Url]
-												  ,[Heartbeat]
-												  ,[Alive]
-											  FROM [Stardust].[WorkerNode] WITH (NOLOCK) 
-											  WHERE Alive = 1";
-
-			var sqlCommand = new SqlCommand(selectAllAliveWorkerNodesCommandText);
-			sqlCommand.Connection = sqlConnection;
-
-			return sqlCommand;
-		}
-
-		private SqlCommand CreateSelectWorkerNodeUriCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
-		{
-			var selectWorkerNodeUriFromJobCommandText = "SELECT SentToWorkerNodeUri " +
-																	"FROM [Stardust].[Job] " +
-																	"WHERE JobId = @JobId";
-
-			var selectCommand = new SqlCommand(selectWorkerNodeUriFromJobCommandText, sqlConnection);
-			selectCommand.Transaction = sqlTransaction;
-			
-			selectCommand.Parameters.AddWithValue("@JobId", jobId);
-			return selectCommand;
-		}
-
+	
+		
 		private SqlCommand CreateUpdateCancellingResultCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			var updateJobSetResultCommandText = "UPDATE [Stardust].[Job] " +
@@ -724,7 +482,7 @@ namespace Stardust.Manager
 					{
 						var sentToWorkerNodeUri = string.Empty;
 
-						using (var createSelectWorkerNodeUriCommand = CreateSelectWorkerNodeUriCommand(jobId, sqlConnection, sqlTransaction))
+						using (var createSelectWorkerNodeUriCommand = CreateCommandHelper.CreateSelectWorkerNodeCommand(jobId, sqlConnection, sqlTransaction))
 						{
 							using (var selectSqlReader = createSelectWorkerNodeUriCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
 							{
@@ -770,176 +528,7 @@ namespace Stardust.Manager
 				throw;
 			}
 		}
-
-		private void ThrowExceptionIfSqlConnectionIsNull(SqlConnection sqlConnection)
-		{
-			if (sqlConnection == null)
-			{
-				throw new ArgumentNullException("sqlConnection");
-			}
-		}
-
-		private void ThrowExceptionIfSqlTransactionIsNull(SqlTransaction sqlTransaction)
-		{
-			if (sqlTransaction == null)
-			{
-				throw new ArgumentNullException("sqlTransaction");
-			}
-		}
-
-		private SqlCommand CreateDoesJobQueueItemExistsSqlCommand(Guid jobId,
-		                                                          SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var sqlCommand =
-				CreateDoesJobQueueItemExistsSqlCommand(jobId);
-
-			sqlCommand.Connection = sqlConnection;
-
-			return sqlCommand;
-		}
-
-		private SqlCommand CreateDoesJobQueueItemExistsSqlCommand(Guid jobId)
-		{
-			const string selectCommand = @"SELECT COUNT(*) 
-											FROM [Stardust].[JobQueue]
-											WHERE JobId = @JobId";
-
-			var sqlCommand = new SqlCommand(selectCommand);
-
-			sqlCommand.Parameters.AddWithValue("@JobId", jobId);
-
-			return sqlCommand;
-		}
-
-		private SqlCommand CreateDoesJobItemExistsSqlCommand(Guid jobId)
-		{
-			const string selectCommand = @"SELECT COUNT(*) 
-											FROM [Stardust].[Job]
-											WHERE JobId = @JobId";
-
-			ThrowExceptionIfInvalidGuid(jobId);
-
-			var sqlCommand = new SqlCommand(selectCommand);
-
-			sqlCommand.Parameters.AddWithValue("@JobId", jobId);
-
-			return sqlCommand;
-		}
-
-		private void ThrowExceptionIfInvalidGuid(Guid guid)
-		{
-			if (guid == Guid.Empty)
-			{
-				throw new ArgumentException("Invalid guid.");
-			}
-		}
-
-		private bool DoesJobQueueItemExistsWorker(Guid jobId,
-		                                          SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command =
-				CreateDoesJobQueueItemExistsSqlCommand(jobId,
-				                                       sqlConnection);
-
-			var count = Convert.ToInt32(command.ExecuteScalar());
-
-			return count == 1;
-		}
-
-		private bool DoesJobItemExistsWorker(Guid jobId,
-		                                     SqlConnection sqlConnection)
-
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command =
-				CreateDoesJobItemExistsSqlCommand(jobId,
-				                                  sqlConnection);
-
-			var count = Convert.ToInt32(command.ExecuteScalar());
-
-			return count == 1;
-		}
-
-		private SqlCommand CreateDoesJobItemExistsSqlCommand(Guid jobId,
-		                                                     SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfInvalidGuid(jobId);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command = CreateDoesJobItemExistsSqlCommand(jobId);
-
-			command.Connection = sqlConnection;
-
-			return command;
-		}
-
-		private SqlCommand CreateInsertIntoJobQueueSqlCommand(JobQueueItem jobQueueItem,
-		                                                      SqlConnection sqlConnection)
-		{
-			ThrowExceptionIfJobQueueItemIsNull(jobQueueItem);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			var command =
-				CreateInsertIntoJobQueueSqlCommand(jobQueueItem);
-
-			command.Connection = sqlConnection;
-
-			return command;
-		}
-
-		private SqlCommand CreateInsertIntoJobQueueSqlCommand(JobQueueItem jobQueueItem)
-		{
-			const string insertIntoJobQueueCommandText =
-				@"INSERT INTO [Stardust].[JobQueue]
-							   ([JobId],
-								[Name],
-								[Type],
-								[Serialized],
-								[CreatedBy],
-								[Created])
-				 VALUES 
-								(@JobId,
-								 @Name,
-								 @Type,
-								 @Serialized,
-								 @CreatedBy,
-								 @Created)";
-
-			var sqlCommand =
-				new SqlCommand(insertIntoJobQueueCommandText);
-
-			sqlCommand.Parameters.AddWithValue("@JobId", jobQueueItem.JobId);
-			sqlCommand.Parameters.AddWithValue("@Name", jobQueueItem.Name);
-			sqlCommand.Parameters.AddWithValue("@Type", jobQueueItem.Type);
-			sqlCommand.Parameters.AddWithValue("@Serialized", jobQueueItem.Serialized);
-			sqlCommand.Parameters.AddWithValue("@Created", DateTime.UtcNow);
-			sqlCommand.Parameters.AddWithValue("@CreatedBy", jobQueueItem.CreatedBy);
-
-			return sqlCommand;
-		}
-
-		private void AddItemToJobQueueWorker(JobQueueItem jobQueueItem,
-		                                     SqlConnection sqlConnection,
-		                                     SqlTransaction sqlTransaction)
-		{
-			ThrowExceptionIfJobQueueItemIsNull(jobQueueItem);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-			ThrowExceptionIfSqlTransactionIsNull(sqlTransaction);
-
-			var sqlCommand =
-				CreateInsertIntoJobQueueSqlCommand(jobQueueItem, sqlConnection);
-
-			sqlCommand.Transaction = sqlTransaction;
-
-			sqlCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-		}
+		
 
 		private SqlCommand CreateSelectAllItemsInJobQueueSqlCommand(SqlConnection connection)
 		{
@@ -973,70 +562,8 @@ namespace Stardust.Manager
 		}
 
 
-		private SqlCommand CreateSelectJobThatDidNotEndByWorkerNodeUriSqlCommand(string sentToWorkerNodeUri)
-		{
-			if (string.IsNullOrEmpty(sentToWorkerNodeUri))
-			{
-				throw new ArgumentNullException("sentToWorkerNodeUri");
-			}
-
-			const string selectJobByJobIdCommandText = @"SELECT [JobId]
-											  ,[Name]
-											  ,[Created]
-											  ,[CreatedBy]
-											  ,[Started]
-											  ,[Ended]
-											  ,[Serialized]
-											  ,[Type]
-											  ,[SentToWorkerNodeUri]
-											  ,[Result]
-										  FROM [Stardust].[Job]
-										  WHERE  SentToWorkerNodeUri = @SentToWorkerNodeUri AND
-												 Started IS NOT NULL AND 
-												 Ended IS NULL";
-
-			var selectCommand = new SqlCommand(selectJobByJobIdCommandText);
-
-			selectCommand.Parameters.AddWithValue("@SentToWorkerNodeUri", sentToWorkerNodeUri);
-
-			return selectCommand;
-		}
 		
-
-		private Job GetSelectJobThatDidNotEndByWorkerNodeUriWorker(string sentToWorkerNodeUri,
-		                                                           SqlConnection sqlConnection,
-		                                                           SqlTransaction sqlTransaction)
-		{
-			ThrowExceptionIfStringIsNullOrEmpty(sentToWorkerNodeUri);
-			ThrowExceptionIfSqlConnectionIsNull(sqlConnection);
-
-			Job job = null;
-
-			var selectCommand =
-				CreateSelectJobThatDidNotEndByWorkerNodeUriSqlCommand(sentToWorkerNodeUri);
-
-			selectCommand.Connection = sqlConnection;
-
-			if (sqlTransaction != null)
-			{
-				selectCommand.Transaction = sqlTransaction;
-			}
-
-			using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
-			{
-				if (sqlDataReader.HasRows)
-				{
-					sqlDataReader.Read();
-
-					job = CreateJobFromSqlDataReader(sqlDataReader);
-
-					sqlDataReader.Close();
-				}
-			}
-
-			return job;
-		}
-
+		
 
 		private void AssignJobToWorkerNodeWorker(IHttpSender httpSender,
 		                                         Uri availableNode)
@@ -1219,13 +746,22 @@ namespace Stardust.Manager
 		}
 
 
+		private JobDetail CreateJobDetailFromSqlDataReader(SqlDataReader sqlDataReader)
+		{
+			var jobDetail = new JobDetail
+			{
+				Id = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("Id")),
+				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
+				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
+				Detail = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Detail"))
+			};
+
+			return jobDetail;
+		}
+
+
 		private Job CreateJobFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
-			if (sqlDataReader == null || !sqlDataReader.HasRows)
-			{
-				return null;
-			}
-
 			var job = new Job
 			{
 				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
@@ -1274,6 +810,49 @@ namespace Stardust.Manager
 		{
 			return DoesItemExistsTemplateMethod(jobId,
 												DoesJobDetailItemExistsWorker);
+		}
+
+		private bool DoesItemExistsTemplateMethod(Guid jobId,
+										  Func<Guid, SqlConnection, bool> func)
+		{
+			try
+			{
+				using (var sqlConnection = new SqlConnection(_connectionString))
+				{
+					sqlConnection.OpenWithRetry(_retryPolicy);
+
+					return func(jobId, sqlConnection);
+				}
+			}
+			catch (Exception exp)
+			{
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
+			}
+		}
+
+		private bool DoesJobDetailItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
+		{
+			var command = CreateCommandHelper.CreateDoesJobDetailItemExistsCommand(jobId, sqlConnection);
+			var count = Convert.ToInt32(command.ExecuteScalar());
+
+			return count == 1;
+		}
+
+		private bool DoesJobQueueItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
+		{
+			var command = CreateCommandHelper.CreateDoesJobQueueItemExistsCommand(jobId, sqlConnection);
+			var count = Convert.ToInt32(command.ExecuteScalar());
+
+			return count == 1;
+		}
+
+		private bool DoesJobItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
+		{
+			var command = CreateCommandHelper.CreateDoesJobItemExistsCommand(jobId, sqlConnection);
+			var count = Convert.ToInt32(command.ExecuteScalar());
+
+			return count == 1;
 		}
 
 
