@@ -30,7 +30,7 @@ namespace NodeTest.JobHandlers
 
 			int progressCounter = 0;
 
-			var sleep = message.Duration.TotalSeconds / 3;
+			var sleep = 5;
 
 			while (stopwatch.Elapsed <= message.Duration)
 			{
@@ -48,14 +48,6 @@ namespace NodeTest.JobHandlers
 				progress(jobProgress.Text);
 
 				Thread.Sleep(TimeSpan.FromSeconds(sleep));
-
-				progressCounter++;
-
-				jobProgress = new TestJobTimerProgress
-				{
-					Text = "Progress loop number :" + progressCounter + ". Elapsed " + stopwatch.Elapsed.TotalSeconds + "seconds."
-				};
-				progress(jobProgress.Text);
 			}
 
 			// -----------------------------------------------------------
