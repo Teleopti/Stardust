@@ -52,7 +52,7 @@
 			return {
 				Message: $translate.instant('CanNotAddActivityToAgentWithoutShift').replace('{0}', agentName),
 				AgentName: agentName
-		}
+			}
 		};
 
 		vm.isInputValid = function () {						
