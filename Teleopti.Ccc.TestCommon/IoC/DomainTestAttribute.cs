@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DistributedLock;
@@ -144,6 +145,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();
 			system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
 			system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
+
+			// schedule readmodels
+			system.UseTestDouble<FakeScheduleProjectionReadOnlyRepository>().For<IScheduleProjectionReadOnlyRepository>();
+			
 
 			fakePrincipal(system);
 		}

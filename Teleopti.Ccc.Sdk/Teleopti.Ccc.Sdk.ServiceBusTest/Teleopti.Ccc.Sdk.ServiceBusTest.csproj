@@ -146,7 +146,6 @@
     <Compile Include="Denormalizer\ShiftExchangeOfferHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
-    <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumerTest.cs" />
     <Compile Include="Diagnostics\ServiceBusHealthCheckEventHandlerTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryResultTest.cs" />
     <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
