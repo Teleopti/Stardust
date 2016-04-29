@@ -19,6 +19,25 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var currentTimeout = null;
 
+	
+	function loadBeforeAlertTimeSetting(callback) {
+		ajax.Ajax({
+			url: 'Asm/AlertTimeSetting',
+			dataType: "json",
+			type: 'GET',
+			success: callback
+		});
+	}
+
+	function loadAlertNotificationDisplayingTimeSetting(callback) {
+		ajax.Ajax({
+			url: 'Asm/NotificationsTimeToStaySetting',
+			dataType: 'json',
+			type: 'GET',
+			success: callback
+		});
+	}
+
 	function activityLayer(layer) {
 		var self = this;
 
@@ -156,15 +175,6 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			});
 		};
 
-		self.loadSetting = function (callback) {
-			ajax.Ajax({
-				url: 'Asm/AlertTimeSetting',
-				dataType: "json",
-				type: 'GET',
-				success: callback
-			});
-		};
-
 		self._readAlertTimeSetting = function (data) {
 			self.alertTimeSetting = data;
 		};
@@ -202,8 +212,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	function initNotificationViewModel() {
 		alertvm = new notificationActivities();
 
-		var activityData;
-		var alertSetting;
+		var activityData,
+			beforeAlertTimeSetting;
 
 		var dataLoadDeffered = $.Deferred();
 		alertvm.loadViewModel(
@@ -213,20 +223,23 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				dataLoadDeffered.resolve();
 			});
 		var settingLoadDeffered = $.Deferred();
-		alertvm.loadSetting(function (data) {
-			alertSetting = data.SecondsBeforeChange;
-			settingLoadDeffered.resolve();
+		loadBeforeAlertTimeSetting(function (data) {
+			beforeAlertTimeSetting = data.SecondsBeforeChange;
+			loadAlertNotificationDisplayingTimeSetting(function (displayTime) {
+				notifyOptions.timeout = displayTime * 1000;
+				settingLoadDeffered.resolve();
+			});
 		});
+
 		$.when(dataLoadDeffered, settingLoadDeffered).done(function () {
 			alertvm._createLayers(activityData);
-			alertvm._readAlertTimeSetting(alertSetting);
+			alertvm._readAlertTimeSetting(beforeAlertTimeSetting);
 			startAlert();
 		});
 	}
 
 	function alertActivity() {
 		Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage);
-		// Restart alert after delayTime.
 
 		if (currentTimeout !== null) clearTimeout(currentTimeout);
 		currentTimeout = setTimeout(startAlert, alertvm.restartAlertDelayTime * 1000);
@@ -260,22 +273,22 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 			if (currentTimeout !== null) clearTimeout(currentTimeout);
 			currentTimeout = setTimeout(function() {
-				initNotificationViewModel(options);
-				startAlert();
+				initNotificationViewModel();
 			}, intervalForTomorrowInSecond * 1000);
 		}
 	}
 
 	return {
-		StartAlert: function (options) {
-			notifyOptions = options;
-			initNotificationViewModel(options);
+		StartAlertNextActivity: function (notification) {
+			notifyOptions = notification;
+			initNotificationViewModel();
 		},
-		RefreshAlert: function () {
+		RefreshAlertNextActivity: function () {
 			if (notifyOptions) {
-				initNotificationViewModel(notifyOptions);
+				initNotificationViewModel();
 			}			
 		},
+		GetNotificationDisplayTime:loadAlertNotificationDisplayingTimeSetting,
 		AbortAjax: function() {
 			ajax.AbortAll();
 		}

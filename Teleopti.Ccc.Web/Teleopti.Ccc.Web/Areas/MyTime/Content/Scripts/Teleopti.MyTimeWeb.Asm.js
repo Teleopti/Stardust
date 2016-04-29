@@ -18,7 +18,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var pixelPerHours = 40;
 	var timeLineMarkerWidth = 40;
 	var vm;
-	var alertvm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings;
@@ -193,11 +192,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.col-1').hide(); //hide footer that takes "empty" space
 	}
 
-	function _listenForEvents(listeners) {
-		
-		Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
-			successCallback: listeners,
-			domainType: 'IScheduleChangedInDefaultScenario'
+	function _listenForScheduleChanges(options, eventListeners) {
+		Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function(displayTime) {
+			notifyOptions = options;
+			notifyOptions.timeout = displayTime * 1000;
+
+			Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
+				successCallback: eventListeners,
+				domainType: 'IScheduleChangedInDefaultScenario'
+			});
 		});
 	}
 
@@ -240,19 +243,15 @@ Teleopti.MyTimeWeb.Asm = (function () {
     function _startPollingToAvoidLogOut() {
         setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
     }
-	
+
 	return {
-		ShowAsm: function (settings) {
+		ShowAsm: function(settings) {
 			_settings = settings;
 			_showAsm();
-		    _startPollingToAvoidLogOut();
+			_startPollingToAvoidLogOut();
 		},
-		ListenForScheduleChanges: function (options, eventListeners) {
-			notifyOptions = options;
-			_listenForEvents(eventListeners);
-		},
+		ListenForScheduleChanges: _listenForScheduleChanges,
 		NotifyWhenScheduleChangedListener: function (notification) {
-
 			if (_validSchedulePeriod(notification) && _validateNotificationSource(notification)) {
 				var changedDateRange;
 				if (notification.StartDate == notification.EndDate)

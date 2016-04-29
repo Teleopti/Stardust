@@ -25,10 +25,10 @@
 			function (notification) {
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
-				Teleopti.MyTimeWeb.AlertActivity.RefreshAlert();
+				Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
 			});
 
-		Teleopti.MyTimeWeb.AlertActivity.StartAlert({
+    	Teleopti.MyTimeWeb.AlertActivity.StartAlertNextActivity({
 			comingMessageTemplate: '@Resources.NextActivityComingMessage',
 			endingMessageTemplate: '@Resources.ShiftEndingMessage',
 			originalDocumentTitle: document.title,
@@ -36,8 +36,7 @@
 			webNotification: function () {
 				return window.opener == null; //to avoid double messages to web notification if both portal and asm is open
 			},
-			header: '@Resources.Teleopti',
-				timeout: 30000
+			header: '@Resources.Teleopti'
 		});
 	</text>
 	}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
@@ -50,6 +51,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			var asmAlertTime = _globalSettingDataRepository.FindValueByKey("AsmAlertTime", new AsmAlertTime());
 			return Json(asmAlertTime, JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork]
+		[HttpGet]
+		public virtual JsonResult NotificationsTimeToStaySetting()
+		{
+			var notificationsTimeToStay = ConfigurationManager.AppSettings["NotificationsTimeToStay"];
+			return Json(notificationsTimeToStay, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

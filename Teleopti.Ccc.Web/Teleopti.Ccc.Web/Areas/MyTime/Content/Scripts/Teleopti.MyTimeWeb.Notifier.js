@@ -2,7 +2,7 @@
 	var originalDocumentTitle;
 	var baseUrl;
 	var header = '';
-	var autoCloseTimeout = false;
+	var autoCloseTimeout = 10000;
 	var blinkTitleTimer;
 	var webNotification = function() { return true; }; //default also send as web notification if possible
 	var webNotifications = new Array();
@@ -62,17 +62,17 @@
 		}
 		if (window.Notification && Notification.permission === "granted") {
 			if (webNotification() && !isShowing(notifyText)) {
-				var timeout = 5000;
 				var iconUrl = baseUrl + 'content/favicon.ico?v=2';
 				var decodedText = htmlDecode(notifyText);
 				var options = {
 					body: decodedText,
-					icon: iconUrl
+					icon: iconUrl,
+					requireInteraction: true//supported in chrome to keep displaying notification
 				};
 				var notification = new Notification(header, options);
+
 				webNotifications.push({ notification: notification, text: notifyText });
-				
-				setTimeout(closeNotification(notification), timeout);
+				setTimeout(closeNotification(notification), autoCloseTimeout);
 			}
 		}
 	}
