@@ -14294,7 +14294,7 @@ Help us improve your experience by sending an error report</value>
     <comment>legend label in intraday chart</comment>
   </data>
   <data name="IncomingTraffic" xml:space="preserve">
-    <value>Incoming traffic</value>
+    <value>Incoming Traffic</value>
   </data>
   <data name="IntradayIntroText" xml:space="preserve">
     <value>Here you monitor intraday values, start by selecting either a skill or your area</value>

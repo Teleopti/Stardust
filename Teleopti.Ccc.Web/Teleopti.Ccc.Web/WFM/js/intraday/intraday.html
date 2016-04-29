@@ -113,7 +113,7 @@
 <div class="panel material-depth-1" ng-show="HasMonitorData">
 	<div class="con-row">
 		<div class="con-flex">
-			<h2>{{'IncomingTraffic'|translate}}</h2>
+            <h2>{{'IncomingTraffic'|translate}}</h2>
 		</div>
 	</div>
 	<div id="intradayChart"></div>
@@ -144,23 +144,23 @@
 		<table class="wfm-table wfm-filter-options">
 			<thead>
 				<tr>
-					<th>{{'Type'|translate}}</th>
-					<th>{{'Actual'|translate}}</th>
-					<th>{{'Forecasted'|translate}}</th>
+					<th></th>
+				    <th>{{'Forecasted'|translate}}</th>
+                    <th>{{'Actual'|translate}}</th>
 					<th>{{'Difference'|translate}}</th>
 				</tr>
 			</thead>
 			<tbody>
 				<tr>
-					<td>{{'Calls'|translate}}</td>
+				    <td>{{'Calls'|translate}}</td>
+                    <td class="number-cell">{{forecastedCalls}}</td>
 					<td class="number-cell">{{offeredCalls}}</td>
-					<td class="number-cell">{{forecastedCalls}}</td>
 					<td class="number-cell">{{forecastActualCallsDifference}}%</td>
 				</tr>
 				<tr>
-					<td>{{'AverageHandlingTime'|translate}}</td>
+				    <td>{{'AverageHandlingTime'|translate}}</td>
+                    <td class="number-cell">{{forecastedAverageHandleTime}}</td>
 					<td class="number-cell">{{averageHandleTime}}</td>
-					<td class="number-cell">{{forecastedAverageHandleTime}}</td>
 					<td class="number-cell">{{forecastActualAverageHandleTimeDifference}}%</td>
 				</tr>
 			</tbody>

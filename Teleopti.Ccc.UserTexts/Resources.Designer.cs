@@ -12409,7 +12409,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Incoming traffic.
+        ///   Looks up a localized string similar to Incoming Traffic.
         /// </summary>
         public static string IncomingTraffic {
             get {
