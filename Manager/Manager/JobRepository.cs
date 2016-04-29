@@ -529,8 +529,7 @@ namespace Stardust.Manager
 		}
 		
 
-		private void AssignJobToWorkerNodeWorker(IHttpSender httpSender,
-		                                         Uri availableNode)
+		private void AssignJobToWorkerNodeWorker(IHttpSender httpSender, Uri availableNode)
 		{
 			try
 			{
@@ -547,11 +546,12 @@ namespace Stardust.Manager
 								if (sqlDataReader.HasRows)
 								{
 									sqlDataReader.Read();
-
 									jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
 								}
 							}
 						}
+
+						if (jobQueueItem == null) return;
 						
 						var taskPostJob = new Task<HttpResponseMessage>(() =>
 						{
