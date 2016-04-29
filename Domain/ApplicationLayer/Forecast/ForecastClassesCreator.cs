@@ -8,13 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
 	public class ForecastClassesCreator : IForecastClassesCreator
 	{
-		private readonly IRepositoryFactory _repositoryFactory;
-
-		public ForecastClassesCreator(IRepositoryFactory repositoryFactory)
-		{
-			_repositoryFactory = repositoryFactory;
-		}
-
 		public IWorkloadDayTemplateCalculator CreateWorkloadDayTemplateCalculator(IStatisticHelper statisticsHelper,
 																				  IOutlierRepository outlierRepository)
 		{

@@ -9,19 +9,19 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
-    public class MultisiteForecastToSkillCommand : IMultisiteForecastToSkillCommand
+    public class MultisiteForecastToSkillAnalyzer : IMultisiteForecastToSkillCommand
     {
         private readonly ISkillDayLoadHelper _skillDayLoadHelper;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IJobResultFeedback _feedback;
-	    private readonly ISendBusMessage _sendBusMessage;
+	    private readonly ISplitImportForecastMessage _splitImportForecastMessage;
 
-	    public MultisiteForecastToSkillCommand( ISkillDayLoadHelper skillDayLoadHelper, IScenarioRepository scenarioRepository, IJobResultFeedback feedback, ISendBusMessage sendBusMessage)
+	    public MultisiteForecastToSkillAnalyzer( ISkillDayLoadHelper skillDayLoadHelper, IScenarioRepository scenarioRepository, IJobResultFeedback feedback, ISplitImportForecastMessage splitImportForecastMessage)
         {
            _skillDayLoadHelper = skillDayLoadHelper;
             _scenarioRepository = scenarioRepository;
             _feedback = feedback;
-		    _sendBusMessage = sendBusMessage;
+		    _splitImportForecastMessage = splitImportForecastMessage;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "subskill")]
@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 				});
 			}
 
-			_sendBusMessage.Process(result, targetSkill, period);
+			_splitImportForecastMessage.Process(result, targetSkill, period);
 		}
     }
 
-    public interface ISendBusMessage
+    public interface ISplitImportForecastMessage
     {
         void Process(IEnumerable<IForecastsRow> importForecast, ISkill targetSkill, DateOnlyPeriod period);
     }

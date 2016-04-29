@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 		private IMultisiteSkill multisiteSkill;
 		private IChildSkill childSkill;
 		private ISkill targetSkill;
-		private MultisiteForecastToSkillCommand target;
+		private MultisiteForecastToSkillAnalyzer target;
 		private MockRepository mocks;
 		private IJobResultFeedback jobResultFeedback;
-		private ISendBusMessage _sendBusMessage;
+		private ISplitImportForecastMessage _splitImportForecastMessage;
 		private ISkillDayLoadHelper skillDayLoadHelper;
 		private IScenarioRepository scenarioRepository;
 
@@ -35,11 +35,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			targetSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
 
 			jobResultFeedback = mocks.DynamicMock<IJobResultFeedback>();
-			_sendBusMessage = mocks.DynamicMock<ISendBusMessage>();
+			_splitImportForecastMessage = mocks.DynamicMock<ISplitImportForecastMessage>();
 			skillDayLoadHelper = mocks.DynamicMock<ISkillDayLoadHelper>();
 			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 
-			target = new MultisiteForecastToSkillCommand(skillDayLoadHelper, scenarioRepository, jobResultFeedback, _sendBusMessage);
+			target = new MultisiteForecastToSkillAnalyzer(skillDayLoadHelper, scenarioRepository, jobResultFeedback, _splitImportForecastMessage);
 		}
 
 		[Test]
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 																	  sourceScenario)).Return(
 																		  new Dictionary<ISkill, IList<ISkillDay>> { { childSkill, new[] { childSkillDay } } });
 				var forecastcastRow = new[] {new ForecastsRow()};
-				Expect.Call(() => _sendBusMessage.Process(forecastcastRow, targetSkill, selection.Period)).IgnoreArguments();
+				Expect.Call(() => _splitImportForecastMessage.Process(forecastcastRow, targetSkill, selection.Period)).IgnoreArguments();
 				Expect.Call(childSkillDay.SkillStaffPeriodCollection).Return(
 					new ReadOnlyCollection<ISkillStaffPeriod>(new[] { skillStaffPeriod }));
 			}

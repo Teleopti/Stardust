@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	[TestFixture]
 	public class SendImportForecastBusMessageTest
 	{
-		private ISendBusMessage _target;
+		private ISplitImportForecastMessage _target;
 		private MockRepository _mocks;
 		private IForecastsAnalyzeQuery _analyzeQuery;
 		private IJobResultFeedback _feedback;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_analyzeQuery = _mocks.DynamicMock<IForecastsAnalyzeQuery>();
 			_feedback = _mocks.DynamicMock<IJobResultFeedback>();
 			_openAndSplitTarget = _mocks.StrictMock<IOpenAndSplitTargetSkill>();
-			_target = new SendImportForecastBusMessage(_analyzeQuery, _feedback, _openAndSplitTarget);
+			_target = new SplitImportForecastMessage(_analyzeQuery, _feedback, _openAndSplitTarget);
 		}
 
 		[Test]

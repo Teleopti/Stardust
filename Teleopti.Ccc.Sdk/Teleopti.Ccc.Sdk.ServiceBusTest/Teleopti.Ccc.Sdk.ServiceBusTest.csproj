@@ -147,8 +147,6 @@
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Diagnostics\ServiceBusHealthCheckEventHandlerTest.cs" />
-    <Compile Include="Forecast\ForecastsAnalyzeQueryResultTest.cs" />
-    <Compile Include="Forecast\ForecastsAnalyzeQueryTest.cs" />
     <Compile Include="NoNewConsumersTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
@@ -233,7 +231,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ApplicationLayer\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,16 +8,14 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
-	public class SaveForecastToSkillCommand : ISaveForecastToSkillCommand
+	public class SaveForecastToSkill : ISaveForecastToSkill
 	{
-		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly WorkloadDayHelper _workloadDayHelper = new WorkloadDayHelper();
 
-		public SaveForecastToSkillCommand(ISkillDayLoadHelper skillDayLoadHelper, ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository)
+		public SaveForecastToSkill( ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository)
 		{
-			_skillDayLoadHelper = skillDayLoadHelper;
 			_skillDayRepository = skillDayRepository;
 			_scenarioRepository = scenarioRepository;
 		}

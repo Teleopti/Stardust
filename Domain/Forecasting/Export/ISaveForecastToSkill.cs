@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
-    public interface ISaveForecastToSkillCommand
+    public interface ISaveForecastToSkill
     {
         void Execute(DateOnly dateOnly, ISkill targetSkill, ICollection<IForecastsRow> forecasts, ImportForecastsMode importMode);
     }

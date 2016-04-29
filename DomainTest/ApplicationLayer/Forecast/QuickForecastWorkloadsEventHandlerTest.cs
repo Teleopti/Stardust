@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		[Test]
 		public void ShouldUseCreator()
 		{
-			var creator = new ForecastClassesCreator(_repFactory);
+			var creator = new ForecastClassesCreator();
 			var statRep = MockRepository.GenerateMock<IStatisticRepository>();
 			Assert.That(creator.CreateTotalVolume(), Is.Not.Null);
 			Assert.That(creator.CreateSkillDayCalculator(null, new List<ISkillDay>(),new DateOnlyPeriod() ), Is.Not.Null);

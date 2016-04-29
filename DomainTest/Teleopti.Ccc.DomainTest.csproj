@@ -198,6 +198,8 @@
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillTest.cs" />
     <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillToSkillTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ForecastsAnalyzeQueryResultTest.cs" />
+    <Compile Include="ApplicationLayer\Forecast\ForecastsAnalyzeQueryTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsFileToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsToSkillTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkillTest.cs" />

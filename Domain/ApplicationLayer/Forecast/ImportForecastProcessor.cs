@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 	public class ImportForecastProcessor : IImportForecastProcessor
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
-		private readonly ISaveForecastToSkillCommand _saveForecastToSkillCommand;
+		private readonly ISaveForecastToSkill _saveForecastToSkill;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IDisableBusinessUnitFilter _disableBusinessUnitFilter;
 
 		public ImportForecastProcessor(ICurrentUnitOfWork unitOfWork,
-			  ISaveForecastToSkillCommand saveForecastToSkillCommand,
+			  ISaveForecastToSkill saveForecastToSkill,
 			  ISkillRepository skillRepository,
 			  IJobResultRepository jobResultRepository,
 			  IJobResultFeedback feedback,
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			  IDisableBusinessUnitFilter disableBusinessUnitFilter)
 		{
 			_unitOfWork = unitOfWork;
-			_saveForecastToSkillCommand = saveForecastToSkillCommand;
+			_saveForecastToSkill = saveForecastToSkill;
 			_skillRepository = skillRepository;
 			_jobResultRepository = jobResultRepository;
 			_feedback = feedback;
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 					try
 					{
 						if (message.Forecasts != null)
-							_saveForecastToSkillCommand.Execute(new DateOnly(message.Date), skill, message.Forecasts, message.ImportMode);
+							_saveForecastToSkill.Execute(new DateOnly(message.Date), skill, message.Forecasts, message.ImportMode);
 					}
 					catch (Exception exception)
 					{

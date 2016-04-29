@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IJobResultRepository _jobResultRepository;
 		private IJobResultFeedback _feedback;
 		private IMessageBrokerComposite _messageBroker;
-		private ISaveForecastToSkillCommand _saveForecastToSkillCommand;
+		private ISaveForecastToSkill _saveForecastToSkill;
 		private IJobResult _jobResult;
 		private IDisableBusinessUnitFilter _disableFilter;
 
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_messageBroker = MockRepository.GenerateMock<IMessageBrokerComposite>();
 			_jobResult = MockRepository.GenerateMock<IJobResult>();
 			_disableFilter = MockRepository.GenerateMock<IDisableBusinessUnitFilter>();
-			_saveForecastToSkillCommand = MockRepository.GenerateMock<ISaveForecastToSkillCommand>();
-			_target = new ImportForecastProcessor(_unitOfWorkFactory, _saveForecastToSkillCommand,
+			_saveForecastToSkill = MockRepository.GenerateMock<ISaveForecastToSkill>();
+			_target = new ImportForecastProcessor(_unitOfWorkFactory, _saveForecastToSkill,
 																		_skillRepository, _jobResultRepository, _feedback,
 																		_messageBroker, _disableFilter);
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_unitOfWorkFactory.Stub(x => x.Current()).Return(uow);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_skillRepository.Stub(x => x.Get(skillId)).Return(skill);
-			_saveForecastToSkillCommand.Stub(x => x.Execute(dateTime, skill, new[] { row }, ImportForecastsMode.ImportWorkload));
+			_saveForecastToSkill.Stub(x => x.Execute(dateTime, skill, new[] { row }, ImportForecastsMode.ImportWorkload));
 
 			var message = new ImportForecastProcessorMessage
 			{

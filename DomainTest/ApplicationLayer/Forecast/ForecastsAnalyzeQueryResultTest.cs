@@ -2,10 +2,9 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
 using Teleopti.Ccc.Domain.Forecasting.Import;
-using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 {
     [TestFixture]
     public class ForecastsAnalyzeQueryResultTest

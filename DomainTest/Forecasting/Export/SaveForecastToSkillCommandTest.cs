@@ -21,9 +21,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 	public class SaveForecastToSkillCommandTest
 	{
 		private ISkill _targetSkill;
-		private ISaveForecastToSkillCommand _target;
+		private ISaveForecastToSkill _target;
 		private MockRepository _mocks;
-		private ISkillDayLoadHelper _skillDayLoadHelper;
 		private IScenarioRepository _scenarioRepository;
 		private ISkillDayRepository _skillDayRepository;
 
@@ -35,9 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
 			_skillDayRepository = _mocks.DynamicMock<ISkillDayRepository>();
 			_scenarioRepository = _mocks.DynamicMock<IScenarioRepository>();
-			_skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
 
-			_target = new SaveForecastToSkillCommand(_skillDayLoadHelper, _skillDayRepository, _scenarioRepository);
+			_target = new SaveForecastToSkill( _skillDayRepository, _scenarioRepository);
 		}
 
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

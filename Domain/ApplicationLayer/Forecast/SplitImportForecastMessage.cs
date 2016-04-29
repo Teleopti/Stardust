@@ -12,13 +12,13 @@ using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-    public class SendImportForecastBusMessage : ISendBusMessage
+    public class SplitImportForecastMessage : ISplitImportForecastMessage
     {
         private readonly IForecastsAnalyzeQuery _analyzeQuery;
         private readonly IJobResultFeedback _feedback;
 	    private readonly IOpenAndSplitTargetSkill _openAndSplitTargetSkill;
 
-		public SendImportForecastBusMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IOpenAndSplitTargetSkill openAndSplitTargetSkill)
+		public SplitImportForecastMessage(IForecastsAnalyzeQuery analyzeQuery, IJobResultFeedback feedback, IOpenAndSplitTargetSkill openAndSplitTargetSkill)
         {
             _analyzeQuery = analyzeQuery;
             _feedback = feedback;
