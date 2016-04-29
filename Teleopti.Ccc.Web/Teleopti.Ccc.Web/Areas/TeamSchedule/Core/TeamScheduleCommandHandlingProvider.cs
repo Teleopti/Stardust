@@ -31,36 +31,40 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_permissionProvider = permissionProvider;
 		}
 
-		public List<FailActionResult> AddActivity(AddActivityFormData formData)
+		public List<FailActionResult> AddActivity(AddActivityFormData input)
 		{
-			var result = new List<FailActionResult>();
-			foreach (var personId in formData.PersonIds)
+			var permissions = new Dictionary<string,string>
 			{
-				if (_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.AddActivity,
-					formData.Date, _personRepository.Load(personId)))
+				{  DefinedRaptorApplicationFunctionPaths.AddActivity,  Resources.NoPermissionAddAgentActivity}
+			};
+
+			var result = new List<FailActionResult>();
+			foreach (var personId in input.PersonIds)
+			{
+				var actionResult = new FailActionResult();
+				var person = _personRepository.Get(personId);
+				actionResult.PersonId = personId;
+				actionResult.Messages = new List<string>();
+
+				if(checkPermission(permissions,input.Date, person,actionResult.Messages))
 				{
 					var command = new AddActivityCommand
 					{
 						PersonId = personId,
-						ActivityId = formData.ActivityId,
-						Date = formData.Date,
-						StartTime = formData.StartTime,
-						EndTime = formData.EndTime,
+						ActivityId = input.ActivityId,
+						Date = input.Date,
+						StartTime = input.StartTime,
+						EndTime = input.EndTime,
 						TrackedCommandInfo =
-							formData.TrackedCommandInfo != null
-								? formData.TrackedCommandInfo
+							input.TrackedCommandInfo != null
+								? input.TrackedCommandInfo
 								: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
 					};
 					_commandDispatcher.Execute(command);
 				}
-				else
-				{
-					result.Add(new FailActionResult()
-					{
-						PersonId = personId,
-						Messages = new List<string> { Resources.NoPermissionAddAgentActivity}
-					});
-				}
+
+				if( actionResult.Messages.Any())
+					result.Add(actionResult);				
 			}
 
 			return result;
@@ -68,29 +72,27 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds)
 		{
-			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
-			{
-				return new List<Guid>();
-			}
-
 			var agents = _personRepository.FindPeople(agentIds);
-
-			return agents.Where(agent => agent.PersonWriteProtection.IsWriteProtected(date)).Select(agent => agent.Id.GetValueOrDefault()); 		
+			return agents.Where(agent => agentScheduleIsWriteProtected(date, agent)).Select(x => x.Id.GetValueOrDefault()).ToList();
 		}
-
+		
 		public List<FailActionResult> RemoveActivity(RemoveActivityFormData input)
 		{
+			var permissions = new Dictionary<string, string>
+			{
+				{  DefinedRaptorApplicationFunctionPaths.RemoveActivity, Resources.NoPermissionRemoveAgentActivity}
+			};
 
 			var result = new List<FailActionResult>();
 			foreach (var personActivity in input.PersonActivities)
 			{
 				var actionResult = new FailActionResult();
+				var person = _personRepository.Get(personActivity.PersonId);
 				actionResult.PersonId = personActivity.PersonId;
 				actionResult.Messages = new List<string>();
-				if (_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.RemoveActivity, input.Date,
-					_personRepository.Load(personActivity.PersonId)))
+				if (checkPermission(permissions, input.Date, person, actionResult.Messages))				
 				{
-					foreach (var shiftLayerId in personActivity.ShiftLayerIds)
+					foreach(var shiftLayerId in personActivity.ShiftLayerIds)
 					{
 						var command = new RemoveActivityCommand
 						{
@@ -100,26 +102,46 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 							TrackedCommandInfo =
 								input.TrackedCommandInfo != null
 									? input.TrackedCommandInfo
-									: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+									: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 						};
 
 						_commandDispatcher.Execute(command);
-						if (command.ErrorMessages != null && command.ErrorMessages.Any())
+						if(command.ErrorMessages != null && command.ErrorMessages.Any())
 						{
 							actionResult.Messages.AddRange(command.ErrorMessages);
 						}
-							
-					}
+
+					}					
 				}
-				else
-				{
-					actionResult.Messages = new List<string> {Resources.NoPermissionRemoveAgentActivity};
-				}
-				if (actionResult.Messages != null &&actionResult.Messages.Any())
+				if (actionResult.Messages.Any())
 					result.Add(actionResult);
 			}
 
 			return result;
+		}
+
+		private bool agentScheduleIsWriteProtected(DateOnly date,IPerson agent)
+		{
+			return !_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
+				&& agent.PersonWriteProtection.IsWriteProtected(date);
+		}
+
+		private bool checkPermission(Dictionary<string,string> permissions,DateOnly date,IPerson agent,IList<string> messages)
+		{
+			var newMessages = new List<string>();
+
+			if(agentScheduleIsWriteProtected(date,agent))
+			{
+				newMessages.Add(Resources.WriteProtectSchedule);
+			}
+
+			newMessages.AddRange(
+				from permission in permissions.Keys
+				where !_permissionProvider.HasPersonPermission(permission,date,agent)
+				select permissions[permission]);
+
+			messages.AddRange(newMessages);
+			return !newMessages.Any();
 		}
 	}
 

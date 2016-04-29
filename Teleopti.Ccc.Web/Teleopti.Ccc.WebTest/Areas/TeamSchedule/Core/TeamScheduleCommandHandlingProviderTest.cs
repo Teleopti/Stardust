@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
@@ -184,6 +185,73 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var result = Target.CheckWriteProtectedAgents(new DateOnly(2016,3,1),new[] { agenta.Id.Value,agentb.Id.Value });
 			result.ToList().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotRemoveWriteProtectedActivity()
+		{
+			PrincipalAuthorization.SetInstance(PrincipalAuthorizationWithConfigurablePermission);
+			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
+
+			var person = PersonFactory.CreatePersonWithGuid("a","b");
+			PersonRepository.Has(person);
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016,6,1);
+
+			var date = new DateOnly(2016,4,16);
+			var input = new RemoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<RemovePersonActivityItem>
+				{				
+					new RemovePersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {new Guid()}
+					}
+				},
+				Date = date
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.RemoveActivity(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			results.Count.Should().Be.EqualTo(1);
+			results.First().Messages.Count.Should().Be.EqualTo(2);
+			results.First().Messages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+			results.First().Messages[1].Should().Be.EqualTo(Resources.NoPermissionRemoveAgentActivity);
+		}
+
+		[Test]
+		public void ShouldNotAddActivityToWriteProtectedSchedule()
+		{
+
+			PrincipalAuthorization.SetInstance(PrincipalAuthorizationWithConfigurablePermission);
+			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
+
+			var person = PersonFactory.CreatePersonWithGuid("a","b");
+			PersonRepository.Has(person);
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016,6,1);
+
+			var date = new DateOnly(2016,4,16);
+
+			var input = new AddActivityFormData
+			{
+				ActivityId = Guid.NewGuid(),
+				Date = date,
+				StartTime = new DateTime(2016,4,16,8,0,0),
+				EndTime = new DateTime(2016,4,16,17,0,0),
+				PersonIds = new[] { person.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.AddActivity(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+
+			results.Count.Should().Be.EqualTo(1);
+			results.First().Messages.Count.Should().Be.EqualTo(2);
+			results.First().Messages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+			results.First().Messages[1].Should().Be.EqualTo(Resources.NoPermissionAddAgentActivity);
 		}
 	}
 
