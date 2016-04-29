@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						PayloadId = reader.GetGuid(reader.GetOrdinal("PayloadId")),
 						StartDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime")),
 						EndDateTime = reader.GetDateTime(reader.GetOrdinal("EndDateTime")),
-						Name = reader.GetString(reader.GetOrdinal("Name")),
-						ShortName = reader.GetString(reader.GetOrdinal("ShortName")),
+						Name = reader.String("Name"),
+						ShortName = reader.String("ShortName"),
 						DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor")),
 						BelongsToDate = new DateOnly(reader.GetDateTime(reader.GetOrdinal("BelongsToDate")))
 					};
