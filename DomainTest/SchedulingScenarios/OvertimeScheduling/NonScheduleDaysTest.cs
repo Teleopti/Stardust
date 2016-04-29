@@ -399,5 +399,81 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
 				.Should().Not.Be.Empty();
 		}
+
+		[Test]
+		public void ShouldConsiderWeeklyRest()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = new Activity("_") { InWorkTime = true };
+			var dateOnly = new DateOnly(2016, 04, 15);
+			var dateToSchedule = new DateOnly(2016, 04, 20);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(38)) };
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateToSchedule, TimeSpan.FromMinutes(60));
+			var agent = new Person().WithId();
+			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 4));
+			var overtimePreference = new OvertimePreferences { AllowBreakWeeklyRest = false, OvertimeType = definitionSet, ShiftBagOvertimeScheduling = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
+
+			var personAssignments = new List<IPersonAssignment>();
+			for (var i = 0; i < 15; i++)
+			{
+				var date = dateOnly.AddDays(i);
+				if (date == dateToSchedule) continue;
+				var personAss = new PersonAssignment(agent, scenario, date);
+				var period = new DateTimePeriod(date.Year, date.Month, date.Day, 8, date.Year, date.Month, date.Day, 16);
+				personAss.AddActivity(phoneActivity, period);
+				personAssignments.Add(personAss);
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(15)), new[] { agent }, personAssignments, skillDay);
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateToSchedule) }, new GridlockManager());
+
+			stateHolder.Schedules[agent].ScheduledDay(dateToSchedule).PersonAssignment(true).OvertimeActivities()
+				.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShoulNotConsiderWeeklyRest()
+		{
+			var scenario = new Scenario("_");
+			var phoneActivity = new Activity("_") { InWorkTime = true };
+			var dateOnly = new DateOnly(2016, 04, 15);
+			var dateToSchedule = new DateOnly(2016, 04, 20);
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(38)) };
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateToSchedule, TimeSpan.FromMinutes(60));
+			var agent = new Person().WithId();
+			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 4));
+			var overtimePreference = new OvertimePreferences { AllowBreakWeeklyRest = true, OvertimeType = definitionSet, ShiftBagOvertimeScheduling = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
+
+			var personAssignments = new List<IPersonAssignment>();
+			for (var i = 0; i < 15; i++)
+			{
+				var date = dateOnly.AddDays(i);
+				if (date == dateToSchedule) continue;
+				var personAss = new PersonAssignment(agent, scenario, date);
+				var period = new DateTimePeriod(date.Year, date.Month, date.Day, 8, date.Year, date.Month, date.Day, 16);
+				personAss.AddActivity(phoneActivity, period);
+				personAssignments.Add(personAss);
+			}
+
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(15)), new[] { agent }, personAssignments, skillDay);
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateToSchedule) }, new GridlockManager());
+
+			stateHolder.Schedules[agent].ScheduledDay(dateToSchedule).PersonAssignment(true).OvertimeActivities()
+				.Should().Not.Be.Empty();
+		}
 	}
 }

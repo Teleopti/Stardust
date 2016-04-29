@@ -1,5 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				agent.Period(date).PersonContract.Contract.WorkTimeDirective = 
 					new WorkTimeDirective(oldWorkTimeDirective.MinTimePerWeek, oldWorkTimeDirective.MaxTimePerWeek, TimeSpan.Zero, oldWorkTimeDirective.WeeklyRest);
 			}
+
 			personPeriod.RuleSetBag = overtimePreferences.ShiftBagOvertimeScheduling;
 			return new GenericDisposable(() =>
 			{
@@ -55,6 +58,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
 				}
+
+				if (!overtimePreferences.AllowBreakWeeklyRest)
+				{
+					IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+					IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
+					IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
+					rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
+				}
+
 				schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, rules);
 				scheduleDay.Person.Period(date).PersonContract.Contract.WorkTimeDirective = oldWorkTimeDirective;
 				personPeriod.RuleSetBag = oldShiftBag;
