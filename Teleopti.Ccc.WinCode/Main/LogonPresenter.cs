@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Windows.Forms;
+using log4net;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WinCode.Common.ServiceBus;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Main
@@ -27,9 +29,9 @@ namespace Teleopti.Ccc.WinCode.Main
 		private readonly IAuthenticationQuerier _authenticationQuerier;
 		private readonly IWindowsUserProvider _windowsUserProvider;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
+        private static readonly ILog Logger = LogManager.GetLogger(typeof(LogonPresenter));
 
-
-		public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
+        public LogonPresenter(ILogonView view, LogonModel model, ILoginInitializer initializer, ILogOnOff logOnOff,
 			IMessageBrokerComposite messageBroker, ISharedSettingsQuerier sharedSettingsQuerier,
 			IAuthenticationQuerier authenticationQuerier, IWindowsUserProvider windowsUserProvider,
 			IAvailableBusinessUnitsProvider availableBusinessUnitsProvider)
@@ -213,28 +215,40 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public bool webLogin(Guid businessunitId)
 		{
-			var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgentConstant.UserAgentWin);
-			if (!StateHolderReader.IsInitialized)
-			{
-				var settings = _sharedSettingsQuerier.GetSharedSettings();
-				_view.InitStateHolderWithoutDataSource(_messageBroker, settings);
-			}
-			if (authenticationResult.Success)
-			{
-				_model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, authenticationResult.Person);
-				WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
-				using (var uow = _model.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
-				{
-				var businessUnit = new BusinessUnitRepository(uow).Load(businessunitId);
-				_model.SelectedBu = businessUnit;
-				
-				}
-				initApplication();
-				return true;
-			}
-			_model.Warning = authenticationResult.FailReason;
-			_model.AuthenticationType = AuthenticationTypeOption.Application;
-			return false;
+		    try
+		    {
+                var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgentConstant.UserAgentWin);
+                if (!StateHolderReader.IsInitialized)
+                {
+                    var settings = _sharedSettingsQuerier.GetSharedSettings();
+                    _view.InitStateHolderWithoutDataSource(_messageBroker, settings);
+                }
+                if (authenticationResult.Success)
+                {
+                    _model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, authenticationResult.Person);
+                    WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
+                    using (var uow = _model.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
+                    {
+                        var businessUnit = new BusinessUnitRepository(uow).Load(businessunitId);
+                        _model.SelectedBu = businessUnit;
+
+                    }
+                    initApplication();
+                    return true;
+                }
+                _model.Warning = authenticationResult.FailReason;
+                _model.AuthenticationType = AuthenticationTypeOption.Application;
+                return false;
+            }
+		    catch (Exception e)
+		    {
+                Logger.Error(e.Message);
+                _model.Warning = e.Message;
+                MessageBox.Show(e.Message,Resources.ErrorOccuredWhenAccessingTheDataSource);
+                _view.Exit(DialogResult.Cancel);
+                return false;
+		    }
+			
 		}
 		private void initApplication()
 		{
