@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', "Toggle", 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', "Toggle", 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo'];
 
-	function requestsTableContainerController($scope, $translate, $filter, toggleSvc, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo) {
+	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo) {
 
 		var vm = this;
 
@@ -63,16 +63,24 @@
 					gridApi.selection.on.rowSelectionChanged($scope, onSelectionChanged);
 					gridApi.selection.on.rowSelectionChangedBatch($scope, onSelectionChanged);
 
+					var filterHandlingTimeout = null;
 					gridApi.core.on.filterChanged($scope, function() {
 						var grid = this.grid;
-						vm.filters = [];
-						angular.forEach(grid.columns, function(value, columnIndex) {
-							var filter = {};
-							if (value.filters[0].term) {
-								filter[value.colDef.displayName] = value.filters[0].term;
-								vm.filters.push(filter);
-							}
-						});
+
+						if (filterHandlingTimeout != null) {
+							$timeout.cancel(filterHandlingTimeout);
+						}
+
+						filterHandlingTimeout = $timeout(function() {
+							vm.filters = [];
+							angular.forEach(grid.columns, function(column) {
+								if (column.filters[0].term) {
+									var filter = {};
+									filter[column.colDef.displayName] = column.filters[0].term;
+									vm.filters.push(filter);
+								}
+							});
+						}, 500);
 					});
 				}
 			};
