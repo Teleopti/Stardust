@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
@@ -19,10 +21,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			string currentDateFormat = currentDate.ToShortDateString(cultureInfo);
 
             //if new and existing both are OFF days
-            if ((newReadModel == null && existingReadModel == null) || (newReadModel == null && existingReadModel.Workday == false) || (existingReadModel == null && newReadModel.Workday == false))
-                return null;
+		    if ((newReadModel == null && existingReadModel == null) ||
+		        (newReadModel == null && existingReadModel.Workday == false) ||
+		        (existingReadModel == null && newReadModel.Workday == false))
+		        return null;
+		    if ((newReadModel != null && newReadModel.Workday == false) &&
+		        (existingReadModel != null && existingReadModel.Workday == false))
+		        return null;
             
-            //if new ReadModel is NULL and existing Read Model is not NULL  (From Working Day to an OFF Day)
+                //if new ReadModel is NULL and existing Read Model is not NULL  (From Working Day to an OFF Day)
             if(newReadModel==null)
             {
 				message = weekDayName + " " + currentDateFormat + UserTexts.Resources.ResourceManager.GetString("NotWorking", cultureInfo);
@@ -54,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
             }
 
             // If new and existing both are WORKING Days but the shift start or end time is changed.
-            if ((newReadModel.StartDateTime != existingReadModel.StartDateTime) || (newReadModel.EndDateTime != existingReadModel.EndDateTime))
+            if ((newReadModel.StartDateTime.Truncate(TimeSpan.FromMinutes(1)) != existingReadModel.StartDateTime.Truncate(TimeSpan.FromMinutes(1))) || (newReadModel.EndDateTime.Truncate(TimeSpan.FromMinutes(1)) != existingReadModel.EndDateTime.Truncate(TimeSpan.FromMinutes(1))))
             {
                 message = weekDayName + " " + currentDateFormat + " " + startDateTime + "-" + endDateTime;
             }

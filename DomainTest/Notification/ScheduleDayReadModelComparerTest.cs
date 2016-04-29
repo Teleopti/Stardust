@@ -161,5 +161,51 @@ namespace Teleopti.Ccc.DomainTest.Notification
                                                                               DateOnly.Today);
             Assert.IsNotNull(message);
         }
+
+        [Test]
+        public void ShouldNotBotherAboutSecondsOrMilliseconds()
+        {
+            var newReadModel = new ScheduleDayReadModel
+            {
+                StartDateTime = new DateTime(2016, 4, 29, 8, 10, 25, 25),
+                EndDateTime = new DateTime(2016, 4, 29, 16, 20, 25, 25),
+                Workday = true
+            };
+
+            var existingReadModel = new ScheduleDayReadModel
+            {
+                StartDateTime = new DateTime(2016, 4, 29, 8, 10, 26, 111),
+                EndDateTime = new DateTime(2016, 4, 29, 16, 20, 26, 111),
+                Workday = true
+            };
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              DateOnly.Today);
+            Assert.IsNull(message);
+        }
+
+        [Test]
+        public void ShouldBeNoChangeIfBothAreNotWorkdays()
+        {
+            var newReadModel = new ScheduleDayReadModel
+            {
+                StartDateTime = new DateTime(2016, 4, 29, 8, 10,0),
+                EndDateTime = new DateTime(2016, 4, 29, 16, 20, 0),
+                Workday = false
+            };
+
+            var existingReadModel = new ScheduleDayReadModel
+            {
+                StartDateTime = new DateTime(2016, 4, 29, 9, 10, 0),
+                EndDateTime = new DateTime(2016, 4, 29, 17, 20, 0),
+                Workday = false
+            };
+
+            var message = _scheduleDayReadModelComparer.FindSignificantChanges(newReadModel, existingReadModel,
+                                                                              _person.PermissionInformation.Culture(),
+                                                                              DateOnly.Today);
+            Assert.IsNull(message);
+        }
     }
 }
