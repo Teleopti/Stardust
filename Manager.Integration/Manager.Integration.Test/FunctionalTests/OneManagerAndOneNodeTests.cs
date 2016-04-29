@@ -133,22 +133,11 @@ namespace Manager.Integration.Test.FunctionalTests
 							var cancelJobUri =
 								MangerUriBuilder.GetCancelJobUri(Guid.NewGuid());
 
-							var numberOfTries = 1;
-
 							var response =
 								HttpSender.DeleteAsync(cancelJobUri).Result;
 
-							while (response.StatusCode != HttpStatusCode.NotFound ||
-							       numberOfTries <= 10)
-							{
-								numberOfTries++;
-
-								response =
-									HttpSender.DeleteAsync(cancelJobUri).Result;
-
-								Thread.Sleep(TimeSpan.FromMilliseconds(500));
-							}
-
+							Assert.AreEqual(response.StatusCode, HttpStatusCode.OK);
+							
 							return response;
 						});
 
