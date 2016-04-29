@@ -72,6 +72,7 @@ Scenario: View absence ending tomorrow in list
 	| Start time | 2013-05-06 00:00 |
 	| End time   | 2013-05-07 15:00 |
 
+@ignore
 Scenario: Remove absence with confirmation
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
