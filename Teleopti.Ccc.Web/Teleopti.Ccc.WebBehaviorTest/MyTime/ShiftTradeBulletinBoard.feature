@@ -101,6 +101,7 @@ Scenario: Should possible make shift trade in Bulletin board
 	| WishShiftType | WorkingShift     |
 	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'OtherAgent' in agent name area
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
@@ -157,6 +158,7 @@ Scenario: Should possibly make my empty day trade with main shift day in Bulleti
 	| WishShiftType | EmptyDay       |
 	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'OtherAgent' in agent name area
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
@@ -182,6 +184,7 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 	| WishShiftType | EmptyDay         |
 	And the time is '2029-12-27'
 	When I view Shift Trade Bulletin Board for date '2030-01-01'
+	When I see 'OtherAgent' in agent name area
 	And I click agent 'OtherAgent'
 	And I enter subject 'A nice subject'
 	And I enter message 'A cute little message'
