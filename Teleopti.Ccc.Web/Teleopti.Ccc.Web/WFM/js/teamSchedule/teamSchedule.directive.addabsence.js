@@ -24,6 +24,7 @@
 		var vm = this;
 		addTabIndexToControls();
 		removePanelTabIndex();
+		addFocusListenerToInputs();
 
 		vm.selectedAbsenceStartDate = vm.defaultDateTime();
 
@@ -123,6 +124,15 @@
 
 		function removePanelTabIndex() {
 			$element.removeAttr('tabIndex');
+		}
+
+		function addFocusListenerToInputs() {
+			var inputs = $element[0].querySelectorAll('.timepicker input');
+			angular.forEach(inputs, function (input) {
+				angular.element(input).on('focus', function (event) {
+					event.target.select();
+				});
+			});
 		}
 
 	}
