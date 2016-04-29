@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_fakeCampaignRepository = new FakeCampaignRepository();
 			_fakeSkillRepository = new FakeSkillRepository();
 			_fakeActivityRepository = new FakeActivityRepository();
+			_fakeActivityRepository.Add(ActivityFactory.CreateActivity("Phone"));
 			_outboundScheduledResourcesCacher = new FakeOutboundScheduledResourcesCacher();
 			
 			_outboundCampaignPersister = new OutboundCampaignPersister(_fakeCampaignRepository,
@@ -198,7 +199,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		{
 			_outboundCampaignPersister.Persist(_campaignInput);
 
-			_fakeActivityRepository.LoadAll().First().Name.Should().Be.EqualTo(_campaignInput.Activity.Name);
+			_fakeActivityRepository.LoadAll().Last().Name.Should().Be.EqualTo(_campaignInput.Activity.Name);
 		}		
 		
 		[Test]
