@@ -19489,7 +19489,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Removing absences for {0} agent(s): {1} succeeded, {1} failed..
+        ///   Looks up a localized string similar to Removing absences for {0} agent(s): {1} succeeded, {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForRemovingAbsence {
             get {

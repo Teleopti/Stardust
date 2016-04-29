@@ -14351,7 +14351,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Multiple requests have been not been cancelled  - shows the count of the non affected requests.</comment>
   </data>
   <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
-    <value>Removing absences for {0} agent(s): {1} succeeded, {1} failed.</value>
+    <value>Removing absences for {0} agent(s): {1} succeeded, {2} failed.</value>
   </data>
   <data name="CancelRequest" xml:space="preserve">
     <value>Cancel Request</value>
