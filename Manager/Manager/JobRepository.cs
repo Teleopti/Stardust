@@ -493,32 +493,34 @@ namespace Stardust.Manager
 							}
 						}
 
-						if (sentToWorkerNodeUri == null) return;
-
-						var taskSendCancel = new Task<HttpResponseMessage>(() =>
+						if (sentToWorkerNodeUri != null)
 						{
-							var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-							var uriCancel = builderHelper.GetCancelJobUri(jobId);
 
-							return httpSender.DeleteAsync(uriCancel).Result;
-						});
-
-						taskSendCancel.Start();
-						taskSendCancel.Wait();
-
-						if (taskSendCancel.IsCompleted &&
-						    taskSendCancel.Result.IsSuccessStatusCode)
-						{
-							using (var createUpdateCancellingResultCommand = CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
+							var taskSendCancel = new Task<HttpResponseMessage>(() =>
 							{
-								createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
-							}
-							using (var deleteFromJobDefinitionsCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
-							{
-								deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-							}
+								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
+								var uriCancel = builderHelper.GetCancelJobUri(jobId);
 
-							Retry(sqlTransaction.Commit);
+								return httpSender.DeleteAsync(uriCancel).Result;
+							});
+
+							taskSendCancel.Start();
+							taskSendCancel.Wait();
+
+							if (taskSendCancel.IsCompleted &&
+								taskSendCancel.Result.IsSuccessStatusCode)
+							{
+								using (var createUpdateCancellingResultCommand = CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
+								{
+									createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+								}
+								using (var deleteFromJobDefinitionsCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
+								{
+									deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+								}
+
+								Retry(sqlTransaction.Commit);
+							}
 						}
 					}
 				}
