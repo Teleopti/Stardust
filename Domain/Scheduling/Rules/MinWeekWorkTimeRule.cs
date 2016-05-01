@@ -47,16 +47,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 {
                     oldResponses.Remove(createResponse(person, day, "remove", typeof(MinWeekWorkTimeRule)));
                 }
+                TimeSpan minTimePerWeek;
+                if (!setMinTimePerWeekMinutes(out minTimePerWeek, personWeek))
+					continue;
 
-                double minTimePerWeekMinutes;
+				if(minTimePerWeek == TimeSpan.Zero)
+					continue;
 
-                if (!setMinTimePerWeekMinutes(out minTimePerWeekMinutes, personWeek)) continue;
                 bool missingSchedule;
-                var sumWorkTime = getSumContractTime(out missingSchedule, personWeek, currentSchedules);
+                var sumWorkTime = getSumContractTime(out missingSchedule, personWeek, currentSchedules, minTimePerWeek);
+                if ((sumWorkTime >= minTimePerWeek.TotalMinutes) || missingSchedule)
+					continue;
 
-                if ((sumWorkTime >= minTimePerWeekMinutes) || missingSchedule) continue;
                 var sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
-                var minTimePerWeekString = DateHelper.HourMinutesString(minTimePerWeekMinutes);
+                var minTimePerWeekString = DateHelper.HourMinutesString(minTimePerWeek.TotalMinutes);
                 var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, UserTexts.Resources.BusinessRuleMinWeekWorktimeErrorMessage, sumWorkTimeString, minTimePerWeekString);
                 foreach (var dateOnly in personWeek.Week.DayCollection())
                 {
@@ -69,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private static bool setMinTimePerWeekMinutes(out double minTimePerWeek, PersonWeek personWeek)
+        private static bool setMinTimePerWeekMinutes(out TimeSpan minTimePerWeek, PersonWeek personWeek)
         {
             var person = personWeek.Person;
             var min = double.MaxValue;
@@ -78,30 +82,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             foreach (var dateOnly in personWeek.Week.DayCollection())
             {
                 var period = person.Period(dateOnly);
-                if (period == null) continue;
+                if (period == null)
+					continue;
                 var tmpMin = period.PersonContract.Contract.WorkTimeDirective.MinTimePerWeek.TotalMinutes;
-                if (tmpMin < min) min = tmpMin;
-                if (!period.PersonContract.Contract.EmploymentType.Equals(EmploymentType.HourlyStaff)) haveFullTimePersonPeriod = true;
+                if (tmpMin < min)
+					min = tmpMin;
+                if (!period.PersonContract.Contract.EmploymentType.Equals(EmploymentType.HourlyStaff))
+					haveFullTimePersonPeriod = true;
             }
 
             if (!haveFullTimePersonPeriod)
             {
-                minTimePerWeek = 0;
+                minTimePerWeek = TimeSpan.Zero;
                 return false;
             }
 
-            minTimePerWeek = min;
+            minTimePerWeek = TimeSpan.FromMinutes(min);
             return true;
         }
 
-        private static double getSumContractTime(out bool missingSchedule, PersonWeek personWeek, IScheduleRange currentSchedules)
+        private static double getSumContractTime(out bool missingSchedule, PersonWeek personWeek, IScheduleRange currentSchedules, TimeSpan limit)
         {
             double ctrTime = 0;
             var noSchedule = false;
             foreach (var schedule in currentSchedules.ScheduledDayCollection(personWeek.Week))
             {
                 ctrTime += schedule.ProjectionService().CreateProjection().ContractTime().TotalMinutes;
-                if (!schedule.IsScheduled()) noSchedule = true;
+				if(ctrTime >= limit.TotalMinutes)
+					break;
+
+                if (!schedule.IsScheduled())
+                {
+	                noSchedule = true;
+					break;
+                }
             }
 
             missingSchedule = noSchedule;

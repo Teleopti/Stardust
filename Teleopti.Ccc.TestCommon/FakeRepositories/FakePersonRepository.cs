@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var agent = new Person();
 			agent.SetId(Guid.NewGuid());
 			agent.AddPersonPeriod(new PersonPeriod(ppDate, new PersonContract(contract, partTimePercentage, contractSchedule), team));
-			agent.AddSchedulePeriod(schedulePeriod);
+			if(schedulePeriod != null)
+				agent.AddSchedulePeriod(schedulePeriod);
 			agent.AddSkill(skill, ppDate);
 			_persons.Add(agent);
 			return agent;

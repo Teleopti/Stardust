@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -35,6 +36,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeDayOffRulesRepository DayOffRulesRepository;
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
+		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		//public SchedulingOptionsProvider SchedulingOptionsProvider;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 
 		public DayOffOptimizationTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
@@ -51,9 +55,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
-			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site")}, schedulePeriod, skill);
+			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"),
+				new Team {Site = new Site("site")}, schedulePeriod, skill);
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
 			agent.Period(firstDay).RuleSetBag = new RuleSetBag(ruleSet);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
@@ -75,6 +82,170 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.DayOff().Should().Be.Null();
 			PersonAssignmentRepository.GetSingle(skillDays[1].CurrentDate) //tuesday
 				.DayOff().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldCheckMinWeekWorkTimeAndMoveIfCriteriaIsMet()
+		{
+			var firstDay = new DateOnly(2016, 5, 23);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			skill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var scenario = ScenarioRepository.Has("some name");
+			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var site = new Site("site");
+			var team = new Team { Description = new Description("team") };
+			site.AddTeam(team);
+			businessUnit.AddSite(site);
+			BusinessUnitRepository.Has(businessUnit);
+			var contract = new Contract("_");
+			var agent1 = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
+				new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2), skill);
+			var agent2 = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
+				new PartTimePercentage("_"), team, null, skill);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var normalRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSetBag = new RuleSetBag(normalRuleSet);
+			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(8d / 24),
+				TimeSpan.FromHours(1d / 24),
+				TimeSpan.FromHours(1d / 24), // I want 3 DO this week
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(1d / 24),
+				TimeSpan.FromHours(8d / 24))
+				);
+			var dayOffTemplate = new DayOffTemplate(new Description("_"));
+			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(6));
+			dayOffTemplate.Anchor = TimeSpan.FromHours(12);
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			for (int i = 0; i < 5; i++)
+			{
+				PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, firstDay.AddDays(i), new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+				PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, firstDay.AddDays(i), new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+			}
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(5));
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(6));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(5));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(6));
+			for (int i = 7; i < 12; i++)
+			{
+				PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, firstDay.AddDays(i), new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+				PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, firstDay.AddDays(i), new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+			}
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(12));
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(13));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(12));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(13));
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			var assignments =
+				PersonAssignmentRepository.Find(new[] {agent1}, new DateOnlyPeriod(firstDay, firstDay.AddWeeks(2)), scenario)
+					.OrderBy(ass => ass.Date)
+					.ToList();
+
+			assignments[4].DayOff().Should().Not.Be.Null();
+			assignments[5].DayOff().Should().Not.Be.Null();
+			assignments[6].DayOff().Should().Not.Be.Null();
+			assignments[12].DayOff().Should().Not.Be.Null();
+
+		}
+
+		[Test]
+		public void ShouldCheckMinWeekWorkTimeAnNotdMoveIfCriteriaIsNotMet()
+		{
+			var firstDay = new DateOnly(2016, 5, 23);
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			skill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var scenario = ScenarioRepository.Has("some name");
+			var businessUnit = BusinessUnitFactory.BusinessUnitUsedInTest;
+			var site = new Site("site");
+			var team = new Team { Description = new Description("team") };
+			site.AddTeam(team);
+			businessUnit.AddSite(site);
+			BusinessUnitRepository.Has(businessUnit);
+			var contract = new Contract("_");
+			var agent1 = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
+				new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2), skill);
+			var agent2 = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(),
+				new PartTimePercentage("_"), team, null, skill);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var normalRuleSet =
+				new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15),
+					new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSetBag = new RuleSetBag(normalRuleSet);
+			agent1.Period(firstDay).RuleSetBag = ruleSetBag;
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(8d / 24),
+				TimeSpan.FromHours(1d / 24),
+				TimeSpan.FromHours(1d / 24), // I want 3 DO this week but then min week work time will be broken
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(16d / 24),
+				TimeSpan.FromHours(1d / 24),
+				TimeSpan.FromHours(8d / 24))
+				);
+			var dayOffTemplate = new DayOffTemplate(new Description("_"));
+			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(6));
+			dayOffTemplate.Anchor = TimeSpan.FromHours(12);
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			for (int i = 0; i < 5; i++)
+			{
+				PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, firstDay.AddDays(i),
+					new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+				PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, firstDay.AddDays(i),
+					new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+			}
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(5));
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(6));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(5));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(6));
+			for (int i = 7; i < 12; i++)
+			{
+				PersonAssignmentRepository.Has(agent1, scenario, activity, shiftCategory, firstDay.AddDays(i),
+					new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+				PersonAssignmentRepository.Has(agent2, scenario, activity, shiftCategory, firstDay.AddDays(i),
+					new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
+			}
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(12));
+			PersonAssignmentRepository.Has(agent1, scenario, dayOffTemplate, firstDay.AddDays(13));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(12));
+			PersonAssignmentRepository.Has(agent2, scenario, dayOffTemplate, firstDay.AddDays(13));
+
+			agent1.Period(firstDay).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(40),
+				TimeSpan.FromHours(48), TimeSpan.Zero, TimeSpan.Zero); //Min 40 hours per week
+			Target.Execute(planningPeriod.Id.Value);
+
+			var assignments =
+				PersonAssignmentRepository.Find(new[] { agent1 }, new DateOnlyPeriod(firstDay, firstDay.AddWeeks(2)), scenario)
+					.OrderBy(ass => ass.Date)
+					.ToList();
+
+			assignments[5].DayOff().Should().Not.Be.Null();
+			assignments[6].DayOff().Should().Not.Be.Null();
+			assignments[7].DayOff().Should().Not.Be.Null();
+			assignments[12].DayOff().Should().Not.Be.Null();
+
 		}
 
 		[Test]
