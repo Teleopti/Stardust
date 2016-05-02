@@ -216,14 +216,13 @@ namespace ManagerTest
 		public void HeartbeatTimestampShouldBeChangedOnHeartbeat()
 		{
 			NodeRepository.AddWorkerNode(_workerNode);
-			
-			var beforeHeartbeat = NodeRepository.GetWorkerNodeByNodeId(_workerNode.Url).Heartbeat;
 
+			var beforeHeartbeat =  NodeRepository.GetAllWorkerNodes().First(x => x.Url.Equals(_workerNode.Url)).Heartbeat;
 			Thread.Sleep(TimeSpan.FromSeconds(1));
 
 			NodeManager.WorkerNodeRegisterHeartbeat(_workerNode.Url.ToString());
-			
-			var afterHeartbeat = NodeRepository.GetWorkerNodeByNodeId(_workerNode.Url).Heartbeat;
+
+			var afterHeartbeat = NodeRepository.GetAllWorkerNodes().First(x => x.Url.Equals(_workerNode.Url)).Heartbeat;
 
 			Assert.IsTrue(beforeHeartbeat < afterHeartbeat);
 		}

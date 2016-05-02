@@ -76,59 +76,6 @@ namespace Stardust.Manager
 			}
 		}
 
-		public WorkerNode GetWorkerNodeByNodeId(Uri nodeUri)
-		{
-			try
-			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					connection.OpenWithRetry(_retryPolicy);
-
-					var command = new SqlCommand
-					{
-						Connection = connection,
-						CommandText = "SELECT Id, Url, Heartbeat, Alive " +
-						              "FROM [Stardust].[WorkerNode] WHERE Url=@Url",
-					};
-
-					command.Parameters.AddWithValue("@Url", nodeUri.ToString());
-
-					var reader = command.ExecuteReaderWithRetry(_retryPolicy);
-
-					WorkerNode workerNode = null;
-
-					if (reader.HasRows)
-					{
-						var ordinalPositionForIdField = reader.GetOrdinal("Id");
-						var ordinalPositionForUrlField = reader.GetOrdinal("Url");
-						var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
-						var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
-
-						reader.Read();
-
-						workerNode = new WorkerNode
-						{
-							Id = (Guid) reader.GetValue(ordinalPositionForIdField),
-							Url = new Uri((string) reader.GetValue(ordinalPositionForUrlField)),
-							Alive = (bool) reader.GetValue(ordinalPositionForAliveField),
-							Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField)
-						};
-					}
-
-					reader.Close();
-
-					return workerNode;
-				}
-			}
-
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-
-				throw;
-			}
-		}
-
 		public void AddWorkerNode(WorkerNode workerNode)
 		{
 			try
@@ -156,27 +103,6 @@ namespace Stardust.Manager
 				if (exp.Message.Contains("UQ_WorkerNodes_Url"))
 					return;
 
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-			}
-		}
-
-		public void DeleteNodeByNodeId(Guid nodeId)
-		{
-			try
-			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					var deleteCommand = connection.CreateCommand();
-					deleteCommand.CommandText = "DELETE FROM [Stardust].[WorkerNode] WHERE Id = @ID";
-					deleteCommand.Parameters.AddWithValue("@ID", nodeId);
-
-					connection.OpenWithRetry(_retryPolicy);
-
-					deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
-				}
-			}
-			catch (Exception exp)
-			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 			}
 		}
@@ -266,13 +192,8 @@ namespace Stardust.Manager
 			return deadNodes;
 		}
 
-		public void RegisterHeartbeat(string nodeUri, bool updateStatus)
+	public void RegisterHeartbeat(string nodeUri, bool updateStatus)
 		{
-			if (string.IsNullOrEmpty(nodeUri))
-			{
-				return;
-			}
-
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
