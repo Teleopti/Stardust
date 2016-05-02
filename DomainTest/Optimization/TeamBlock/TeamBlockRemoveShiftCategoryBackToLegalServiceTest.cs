@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _scheduleMatrixPros)).Return(_teamInfo);
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, BlockFinderType.BetweenDayOff, true)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, new BetweenDayOffBlockFinder(), true)).IgnoreArguments().Return(_teamBlockInfo);
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
 
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				
 				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _scheduleMatrixPros)).Return(_teamInfo);
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, BlockFinderType.BetweenDayOff, true)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, new BetweenDayOffBlockFinder(), true)).IgnoreArguments().Return(_teamBlockInfo);
 
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				
 				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _scheduleMatrixPros)).Return(_teamInfo);
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, BlockFinderType.BetweenDayOff, true)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, new BetweenDayOffBlockFinder(), true)).IgnoreArguments().Return(_teamBlockInfo);
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
 				
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				
 				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _scheduleMatrixPros)).Return(_teamInfo);
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, BlockFinderType.BetweenDayOff, true)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, new BetweenDayOffBlockFinder(), true)).IgnoreArguments().Return(_teamBlockInfo);
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
 
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 				Expect.Call(_scheduleDayPro.Day).Return(_dateOnly);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _scheduleMatrixPros)).Return(_teamInfo);
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, BlockFinderType.BetweenDayOff, true)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnly, new BetweenDayOffBlockFinder(), true)).IgnoreArguments().Return(_teamBlockInfo);
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false).IgnoreArguments();
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(shiftCategoryLimitationOther, _teamInfo, _dateOnly)).Return(true).IgnoreArguments();

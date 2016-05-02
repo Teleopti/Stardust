@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -78,7 +79,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-        public ISpecification<IEditableShift> MainShiftOptimizeActivitySpecification
+		public IBlockFinder BlockFinder()
+		{
+			switch (BlockFinderTypeForAdvanceScheduling)
+			{
+				case BlockFinderType.SingleDay:
+					return new SingleDayBlockFinder();
+				case BlockFinderType.BetweenDayOff:
+					return new BetweenDayOffBlockFinder();
+				case BlockFinderType.SchedulePeriod:
+					return new SchedulePeriodBlockFinder();
+			}
+			throw new NotSupportedException($"Cannot find block finder for {BlockFinderTypeForAdvanceScheduling}");
+		}
+
+		public ISpecification<IEditableShift> MainShiftOptimizeActivitySpecification
     	{
     		get
     		{

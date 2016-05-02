@@ -686,7 +686,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointsTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockPriorityDefinitionInfoTest.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockLockValidatorTest.cs" />
@@ -704,7 +703,6 @@
     <Compile Include="Optimization\TeamBlock\LocateMissingIntervalsIfMidNightBreakTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\DayValueUnlockedIndexSorterTest.cs" />
-    <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeBetweenDaysServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeDescisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			DateOnlyPeriod selectedPeriod, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var blocksToWorkWith = _constructTeamBlock.Construct(matrixList, selectedPeriod, selectedPersons,
-				optimizerPreferences.Extra.BlockTypeValue,
+				optimizerPreferences.Extra.BlockFinder(),
 				optimizerPreferences.Extra.TeamGroupPage);
 
 			blocksToWorkWith = _filterForTeamBlockInSelection.Filter(blocksToWorkWith, selectedPersons, selectedPeriod);

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				return;
 
 			var blocksToWorkWith = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
-			                                                     schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+			                                                     schedulingOptions.BlockFinder(),
 			                                                     schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 			blocksToWorkWith = _filterForEqualNumberOfCategoryFairness.Filter(blocksToWorkWith);

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
 			{
-                IList<DateOnly> result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.SingleDay,false ).BlockPeriod.DayCollection();
+                IList<DateOnly> result = _target.ExtractBlockInfo(_date, _teamInfo, new SingleDayBlockFinder(), false ).BlockPeriod.DayCollection();
 				Assert.AreEqual(_date, result[0]);
 				Assert.AreEqual(1, result.Count);
 			}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
-                DateOnlyPeriod result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.SchedulePeriod, false).BlockPeriod;
+                DateOnlyPeriod result = _target.ExtractBlockInfo(_date, _teamInfo, new SchedulePeriodBlockFinder(), false).BlockPeriod;
 				Assert.AreEqual(new DateOnlyPeriod(_date, _date), result);
 			}
       
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
-                DateOnlyPeriod result = _target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.SchedulePeriod, false).BlockPeriod;
+                DateOnlyPeriod result = _target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, new SchedulePeriodBlockFinder(), false).BlockPeriod;
 				Assert.AreEqual(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)), result);
 			}
 		}
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 
             }
 
-            var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.SchedulePeriod, false);
+            var result = _target.ExtractBlockInfo(_date, _teamInfo, new SchedulePeriodBlockFinder(), false);
             Assert.IsNull(result);
         } 
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-                Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.BetweenDayOff, false));
+                Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, new BetweenDayOffBlockFinder(), false));
             }
         }
 
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
-				Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.SingleDay, false));
+				Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, new SingleDayBlockFinder(), false));
 			}
 		}
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
-				Assert.IsNotNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.SingleDay, false));
+				Assert.IsNotNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, new SingleDayBlockFinder(), false));
 			}
 		}
         

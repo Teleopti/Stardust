@@ -47,11 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    ITeamBlockInfo teamBlockInfo;
 				if (schedulingOptions.UseBlock)
 			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-				    schedulingOptions
-					    .BlockFinderTypeForAdvanceScheduling,
+						schedulingOptions.BlockFinder(),
 				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
 		    else
-			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, BlockFinderType.SingleDay,
+			    teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer, new SingleDayBlockFinder(), 
 				    _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
 
 		    if (teamBlockInfo == null)

@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay });
 				var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
-				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, BlockFinderType.SingleDay, true);
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, new SingleDayBlockFinder(), true);
 
 				var schedulingOptions = new SchedulingOptions
 				{

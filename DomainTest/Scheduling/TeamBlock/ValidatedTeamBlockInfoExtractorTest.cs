@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(),
-                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(null);
+                                                                      new SingleDayBlockFinder(), false)).IgnoreArguments().Return(null);
             }
             Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), _schedulingOptions, new DateOnlyPeriod()));
         }
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
+																																			new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
+																																			new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-                                                                      BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
+																																			new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
-																	  BlockFinderType.SingleDay, false)).IgnoreArguments().Return(_teamBlockInfo);
+																		new SingleDayBlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 
 				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnNullIfTeamInfoIsNull()
 		{
-			ITeamBlockInfo result = _target.CreateTeamBlockInfo(null, new DateOnly(2013, 2, 27), BlockFinderType.SingleDay, false);
+			ITeamBlockInfo result = _target.CreateTeamBlockInfo(null, new DateOnly(2013, 2, 27), new SingleDayBlockFinder(), false);
 			Assert.IsNull(result);
 		}
 
@@ -39,13 +39,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-                Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, BlockFinderType.SingleDay, false))
-				      .Return(null);
+                Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, new SingleDayBlockFinder(), false)).IgnoreArguments()
+							.Return(null);
 			}
 
 			using (_mocks.Playback())
 			{
-				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, new DateOnly(2013, 2, 27), BlockFinderType.SingleDay, false);
+				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, new DateOnly(2013, 2, 27), new SingleDayBlockFinder(), false);
 				Assert.IsNull(result);
 			}
 		}
@@ -56,14 +56,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var dateOnly = new DateOnly(2013, 2, 27);
 			using (_mocks.Record())
 			{
-                Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, BlockFinderType.SchedulePeriod, false))
-					  .Return(_blockInfo);
+                Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, new SchedulePeriodBlockFinder(), false)).IgnoreArguments()
+
+						.Return(_blockInfo);
                 Expect.Call(()=>_teamMemberTerminationOnBlockSpecification.LockTerminatedMembers(_teamInfo, _blockInfo));
 			}
 
 			using (_mocks.Playback())
 			{
-				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, dateOnly, BlockFinderType.SchedulePeriod, false);
+				ITeamBlockInfo result = _target.CreateTeamBlockInfo(_teamInfo, dateOnly, new SchedulePeriodBlockFinder(), false);
 				Assert.AreSame(_teamInfo, result.TeamInfo);
 				Assert.AreSame(_blockInfo, result.BlockInfo);
 			}

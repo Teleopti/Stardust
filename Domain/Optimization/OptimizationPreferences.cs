@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -97,6 +99,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    public bool UseBlockSameStartTime { get; set; }
 	    public bool UseBlockSameShift { get; set; }
 	    public bool UseTeamBlockOption { get; set; }
+
+		public IBlockFinder BlockFinder()
+		{
+			switch (BlockTypeValue)
+			{
+				case BlockFinderType.SingleDay:
+					return new SingleDayBlockFinder();
+				case BlockFinderType.BetweenDayOff:
+					return new BetweenDayOffBlockFinder();
+				case BlockFinderType.SchedulePeriod:
+					return new SchedulePeriodBlockFinder();
+			}
+			throw new NotSupportedException($"Cannot find block finder for {BlockTypeValue}");
+		}
 	}
 
     public class ShiftPreferences : IShiftPreferences

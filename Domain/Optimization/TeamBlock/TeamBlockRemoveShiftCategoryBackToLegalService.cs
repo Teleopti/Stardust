@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					var dateOnly = removedScheduleDayPro.Day;
 					var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 					var teamInfo = _teamInfoFactory.CreateTeamInfo(person, dateOnlyPeriod, allScheduleMatrixPros);
-					var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, isSingleAgentTeam);
+					var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), isSingleAgentTeam);
 					if (teamBlockInfo == null) continue;
 
 					schedulingOptions.NotAllowedShiftCategories.Clear();

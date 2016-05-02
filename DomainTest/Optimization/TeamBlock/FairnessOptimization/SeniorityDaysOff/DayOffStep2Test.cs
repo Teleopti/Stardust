@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private void commonMocks(IList<ITeamBlockInfo> teamBlockList, IList<ITeamBlockPoints> teamBlockPointList)
         {
             Expect.Call(_constructTeamBlock.Construct(_allPersonMatrixList, _selectedPeriod, _selectedPersons,
-                                                      BlockFinderType.SchedulePeriod, _groupPageLight))
+                                                      new SchedulePeriodBlockFinder(), _groupPageLight))
                   .IgnoreArguments()
                   .Return(teamBlockList);
             Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockList, _selectedPersons, _selectedPeriod))

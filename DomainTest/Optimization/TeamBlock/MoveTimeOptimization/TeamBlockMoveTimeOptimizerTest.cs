@@ -163,10 +163,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 					Expect.Call(() => _rollbackService.ClearModificationCollection());
 					Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 					Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 14),
-						_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+						_schedulingOptions.BlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 					Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 					Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 15),
-						_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+						_schedulingOptions.BlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 					Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 					Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
 					Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });
@@ -197,10 +197,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 14),
-					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+					_schedulingOptions.BlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(2014, 05, 15),
-					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false)).Return(_teamBlockInfo);
+					_schedulingOptions.BlockFinder(), false)).IgnoreArguments().Return(_teamBlockInfo);
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(5);
 				Expect.Call(_decisionMaker.Execute(_matrix1, _optimizationPreferences)).Return(new List<DateOnly> { _today, _today.AddDays(1) });

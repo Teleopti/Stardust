@@ -4,17 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface IBlockInfo
-	{
-		DateOnlyPeriod BlockPeriod { get; }
-		IList<double?> StandardDeviations { get; set; }
-		double SumOfStandardDeviations { get; }
-		double AverageOfStandardDeviations { get; }
-		void LockDate(DateOnly date);
-		IList<DateOnly> UnLockedDates();
-		void ClearLocks();
-	}
-
 	public class BlockInfo : IBlockInfo
 	{
 		private readonly DateOnlyPeriod _blockPeriod;

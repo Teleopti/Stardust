@@ -5,10 +5,10 @@ using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Interfaces.Domain
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public enum ScheduleEmploymentType
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum ScheduleEmploymentType
     {
         /// <summary>
         /// Schedule only Employed on fixed basis
@@ -330,5 +330,6 @@ namespace Teleopti.Interfaces.Domain
 	    IRuleSetBag FixedShiftBag { get; set; }
 	    void ClearNotAllowedShiftProjectionCaches();
 		IMultiplicatorDefinitionSet OvertimeType { get; set; }
-	}
+	    IBlockFinder BlockFinder();
+    }
 }

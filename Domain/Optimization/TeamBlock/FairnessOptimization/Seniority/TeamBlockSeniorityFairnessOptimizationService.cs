@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		    {
 			    var unSuccessfulSwaps = new List<ITeamBlockInfo>();
 			    var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
-				    schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+				    schedulingOptions.BlockFinder(),
 				    schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 				IList<ITeamBlockInfo> filteredTeamBlocks = new List<ITeamBlockInfo>();

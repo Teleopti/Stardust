@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
 			{
-				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinderTypeForAdvanceScheduling, _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
 
 				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
 				{
@@ -540,7 +540,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var dateOnly in movedDaysOff.RemovedDaysOff)
 			{
-				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,schedulingOptions.BlockFinderTypeForAdvanceScheduling,_teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly, schedulingOptions.BlockFinder(), _teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
 
 				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
 				{
@@ -598,8 +598,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
 				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
-				                                                                         schedulingOptions
-					                                                                         .BlockFinderTypeForAdvanceScheduling,
+																																								 schedulingOptions.BlockFinder(),
 				                                                                         _teamBlockSchedulingOptions
 					                                                                         .IsSingleAgentTeam(schedulingOptions));
 				if (teamBlockInfo == null)

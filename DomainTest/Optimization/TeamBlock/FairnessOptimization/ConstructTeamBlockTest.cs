@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, BlockFinderType.BetweenDayOff, _groupOnGroupPageForTeamBlockPer);
+				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, new BetweenDayOffBlockFinder(), _groupOnGroupPageForTeamBlockPer);
 				Assert.AreEqual(0, result.Count);
 			}
 		}
@@ -70,13 +70,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo );
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() {_person2});
 				Expect.Call(()=>_teamInfo.LockMember(_dateOnlyPeriod, _person2));
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, BlockFinderType.BetweenDayOff,
-					false)).Return(null);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
+					false)).IgnoreArguments().Return(null);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, BlockFinderType.BetweenDayOff, _groupOnGroupPageForTeamBlockPer);
+				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, new BetweenDayOffBlockFinder(), _groupOnGroupPageForTeamBlockPer);
 				Assert.AreEqual(0, result.Count);
 			}
 		}
@@ -89,15 +89,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
 				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, BlockFinderType.BetweenDayOff,
-					false)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
+					false)).IgnoreArguments().Return(_teamBlockInfo);
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_blockInfo.BlockPeriod).Return(_dateOnlyPeriod);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, BlockFinderType.BetweenDayOff, _groupOnGroupPageForTeamBlockPer);
+				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, new BetweenDayOffBlockFinder(), _groupOnGroupPageForTeamBlockPer);
 				Assert.AreEqual(1, result.Count);
 			}
 		}
@@ -111,15 +111,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _allPersonMatrixList)).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person2 });
 				Expect.Call(() => _teamInfo.LockMember(_dateOnlyPeriod, _person2));
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, BlockFinderType.BetweenDayOff,
-					true)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, new BetweenDayOffBlockFinder(),
+					true)).IgnoreArguments().Return(_teamBlockInfo);
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_blockInfo.BlockPeriod).Return(_dateOnlyPeriod);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, BlockFinderType.BetweenDayOff, _groupOnGroupPageForTeamBlockPer);
+				var result = _target.Construct(_allPersonMatrixList, _dateOnlyPeriod, _persons, new BetweenDayOffBlockFinder(), _groupOnGroupPageForTeamBlockPer);
 				Assert.AreEqual(1, result.Count);
 			}
 		}

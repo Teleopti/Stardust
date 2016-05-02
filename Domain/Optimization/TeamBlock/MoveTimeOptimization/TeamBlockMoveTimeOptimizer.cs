@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 			//delete schedule on the two days
 			var firstTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, firstDayDate,
-				schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
+				schedulingOptions.BlockFinder(), false);
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, firstTeamBlock);
 
 			var secondTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, secondDayDate,
-				schedulingOptions.BlockFinderTypeForAdvanceScheduling, false);
+				schedulingOptions.BlockFinder(), false);
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, secondTeamBlock);
 																			
 			var shiftNudgeDirective = new ShiftNudgeDirective();

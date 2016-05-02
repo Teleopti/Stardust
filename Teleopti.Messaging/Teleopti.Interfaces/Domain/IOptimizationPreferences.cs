@@ -347,6 +347,8 @@ namespace Teleopti.Interfaces.Domain
         /// This is  used if TeamBlock per is used
         /// </summary>
         bool UseTeamBlockOption { get; set; }
+
+	    IBlockFinder BlockFinder();
     }
 
     /// <summary>

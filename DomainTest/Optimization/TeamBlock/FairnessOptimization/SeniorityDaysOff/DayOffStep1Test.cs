@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 	        Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences))
 	              .Return(_schedulingOptions);
             Expect.Call(_constructTeamBlock.Construct(_matrixList, new DateOnlyPeriod(), _selectedPersons,
-                                                      BlockFinderType.SchedulePeriod,
+                                                      new SchedulePeriodBlockFinder(), 
                                                       _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).IgnoreArguments() 
                   .Return(_teamBlocksFirstLoop);
 	        Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock)).Return(true);

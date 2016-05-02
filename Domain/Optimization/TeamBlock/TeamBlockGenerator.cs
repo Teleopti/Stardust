@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				foreach (var day in daysInSelectedPeriod)
 				{
 					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
-						schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+						schedulingOptions.BlockFinder(),
 						_teamBlockSchedulingOptions.IsSingleAgentTeam(schedulingOptions));
 					
 					if (teamBlock == null) continue;
