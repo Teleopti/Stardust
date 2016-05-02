@@ -703,7 +703,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (uc == null)
 				return;
 
-			outlookBarWorkSpace1.SetNavigatorControl(uc, modulePanelItem.PreviewText, modulePanelItem.PreviewUrl);
+			Uri previewUrl = null;
+			if (_toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074))
+				previewUrl = modulePanelItem.PreviewUrl;
+
+				outlookBarWorkSpace1.SetNavigatorControl(uc, modulePanelItem.PreviewText, previewUrl);
 			
 			var navigator = uc as AbstractNavigator;
 			if (navigator != null)
