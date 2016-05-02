@@ -13,7 +13,8 @@ CREATE TABLE [Stardust].[JobQueue](
 	[Serialized] [nvarchar](max) NULL,
 	[Type] [nvarchar](max) NULL,
 	[CreatedBy] nvarchar(500) NOT NULL,
-	[Created] [datetime] NOT NULL
+	[Created] [datetime] NOT NULL,
+	[Tagged] [nchar](10) NULL,
  CONSTRAINT [PK_JobDefinition] PRIMARY KEY CLUSTERED 
 (
 	[JobId] ASC

@@ -86,6 +86,7 @@ namespace Stardust.Manager.Helpers
 								[Serialized],
 								[CreatedBy]
 				FROM [Stardust].[JobQueue] 
+				where Tagged is null
 				ORDER BY Created";
 
 			var selectSqlCommand = new SqlCommand(selectOneJobQueueItemCommandText, sqlConnection);

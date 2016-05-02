@@ -141,8 +141,6 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				Monitor.Enter(_lockTryAssignJobToWorkerNode);
-
 				var allAliveWorkerNodesUri = new List<Uri>();
 
 				using (var sqlConnection = new SqlConnection(_connectionString))
@@ -191,10 +189,6 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
-			}
-			finally
-			{
-				Monitor.Exit(_lockTryAssignJobToWorkerNode);
 			}
 		}
 
@@ -530,9 +524,9 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
+					JobQueueItem jobQueueItem = null;
 					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
 					{
-						JobQueueItem jobQueueItem = null;
 						using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
 						{
 							using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
@@ -543,14 +537,50 @@ namespace Stardust.Manager
 									jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
 								}
 							}
-						}
 
-						if (jobQueueItem == null)
-						{
-							sqlTransaction.Dispose();
-							sqlConnection.Close();
-							return;
+							if (jobQueueItem == null)
+							{
+								sqlTransaction.Dispose();
+								sqlConnection.Close();
+								return;
+							}
+
+							var updateCommandText = @"UPDATE [Stardust].[JobQueue] SET Tagged = '0'
+											WHERE JobId = @jobId" ;
+
+							using (var command = new SqlCommand(updateCommandText, sqlConnection))
+							{
+								command.Parameters.Add("@jobId", SqlDbType.UniqueIdentifier).Value = jobQueueItem.JobId;
+								command.ExecuteNonQueryWithRetry(_retryPolicy);
+								
+							}
+
 						}
+						sqlTransaction.Commit();
+					}
+
+
+					using (var sqlTransaction = sqlConnection.BeginTransaction())
+					{
+						
+						//using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
+						//{
+						//	using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
+						//	{
+						//		if (sqlDataReader.HasRows)
+						//		{
+						//			sqlDataReader.Read();
+						//			jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
+						//		}
+						//	}
+						//}
+
+						//if (jobQueueItem == null)
+						//{
+						//	sqlTransaction.Dispose();
+						//	sqlConnection.Close();
+						//	return;
+						//}
 						
 						var taskPostJob = new Task<HttpResponseMessage>(() =>
 						{
