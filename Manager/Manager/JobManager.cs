@@ -50,15 +50,11 @@ namespace Stardust.Manager
 
 		public void Dispose()
 		{
-			this.Log().DebugWithLineNumber("Start disposing.");
-
 			_checkAndAssignJob.Stop();
 			_checkAndAssignJob.Dispose();
 
 			_checkHeartbeatsTimer.Stop();
 			_checkHeartbeatsTimer.Dispose();
-
-			this.Log().DebugWithLineNumber("Finished disposing.");
 		}
 
 		private void AssignJobToWorkerNodes_Elapsed(object sender, ElapsedEventArgs e)
