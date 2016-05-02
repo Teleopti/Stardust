@@ -15,16 +15,13 @@ namespace Stardust.Manager.Helpers
 			{
 				throw new UriFormatException();
 			}
-
 			LocationUri = new Uri(locationUri);
 
 			if (string.IsNullOrEmpty(LocationUri.Scheme))
 			{
 				throw new ArgumentNullException();
 			}
-
 			UriTemplateBuilder = new UriBuilder(LocationUri);
-
 			UriBuilder = new UriBuilder(LocationUri);
 		}
 
@@ -34,10 +31,7 @@ namespace Stardust.Manager.Helpers
 
 		private UriBuilder UriTemplateBuilder { get; set; }
 
-		public Uri GetIsAliveTemplateUri()
-		{
-			return CreateUri(NodeRouteConstants.IsAlive);
-		}
+
 
 		public Uri GetIsIdleTemplateUri()
 		{
@@ -49,16 +43,10 @@ namespace Stardust.Manager.Helpers
 			return CreateUri(NodeRouteConstants.Job);
 		}
 
-		public Uri GetCancelJobTemplateUri()
-		{
-			return CreateUri(NodeRouteConstants.CancelJobByJobId);
-		}
-
 		public Uri GetUpdateJobUri(Guid jobId)
 		{
 			var path = NodeRouteConstants.UpdateJobByJobId.Replace(NodeRouteConstants.JobIdOptionalParameter,
 															jobId.ToString());
-
 			return CreateUri(path);
 		}
 
@@ -66,7 +54,6 @@ namespace Stardust.Manager.Helpers
 		{
 			var path = NodeRouteConstants.CancelJobByJobId.Replace(NodeRouteConstants.JobIdOptionalParameter,
 			                                                jobId.ToString());
-
 			return CreateUri(path);
 		}
 
@@ -78,25 +65,6 @@ namespace Stardust.Manager.Helpers
 
 			return UriBuilder.Uri;
 		}
-
-		public string GetHostName()
-		{
-			return UriBuilder.Host;
-		}
-
-		public int GetPort()
-		{
-			return UriBuilder.Port;
-		}
-
-		public string GetScheme()
-		{
-			return UriBuilder.Scheme;
-		}
-
-		public Uri GetLocationUri()
-		{
-			return UriBuilder.Uri;
-		}
+	
 	}
 }

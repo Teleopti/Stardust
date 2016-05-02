@@ -55,14 +55,6 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldReturnCorrectCancelJobTemplateUri()
-		{
-			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
-
-			Assert.IsTrue(NodeUriBuilderHelperToTest.GetCancelJobTemplateUri() == CancelJobTemplateUri);
-		}
-
-		[Test]
 		public void ShouldReturnCorrectCancelJobUri()
 		{
 			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
@@ -76,19 +68,6 @@ namespace ManagerTest
 			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
 
 			Assert.IsTrue(NodeUriBuilderHelperToTest.GetJobTemplateUri() == JobTemplateUri);
-		}
-
-		[Test]
-		public void ShouldReturnCorrectUriInformation()
-		{
-			var uri = new Uri(UriToTest);
-
-			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(UriToTest);
-
-			Assert.IsTrue(NodeUriBuilderHelperToTest.GetHostName() == uri.Host);
-			Assert.IsTrue(NodeUriBuilderHelperToTest.GetScheme() == uri.Scheme);
-			Assert.IsTrue(NodeUriBuilderHelperToTest.GetPort() == uri.Port);
-			Assert.IsTrue(NodeUriBuilderHelperToTest.GetLocationUri() == uri);
 		}
 
 		[Test]
