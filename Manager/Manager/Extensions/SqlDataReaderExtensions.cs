@@ -23,7 +23,6 @@ namespace Stardust.Manager.Extensions
 			{
 				return null;
 			}
-
 			return reader.GetString(ordinalPosition);
 		}
 	}
