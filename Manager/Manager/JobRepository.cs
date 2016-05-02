@@ -151,7 +151,7 @@ namespace Stardust.Manager
 
 					using (var selectAllAliveWorkerNodesCommand = _createSqlCommandHelper.CreateSelectAllAliveWorkerNodesCommand(sqlConnection))
 					{
-						using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader())
+						using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
 						{
 							if (readerAliveWorkerNodes.HasRows)
 							{
@@ -473,7 +473,7 @@ namespace Stardust.Manager
 
 						using (var createSelectWorkerNodeUriCommand = _createSqlCommandHelper.CreateSelectWorkerNodeCommand(jobId, sqlConnection, sqlTransaction))
 						{
-							using (var selectSqlReader = createSelectWorkerNodeUriCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
+							using (var selectSqlReader = createSelectWorkerNodeUriCommand.ExecuteReaderWithRetry(_retryPolicy))
 							{
 								if (selectSqlReader.HasRows)
 								{
@@ -502,7 +502,7 @@ namespace Stardust.Manager
 							{
 								using (var createUpdateCancellingResultCommand = _createSqlCommandHelper.CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
 								{
-									createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+									createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 								}
 								using (var deleteFromJobDefinitionsCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
 								{
