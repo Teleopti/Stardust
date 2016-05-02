@@ -1,6 +1,6 @@
 ﻿namespace Stardust.Manager.Constants
 {
-	public static class ManagerRouteConstants
+	public class ManagerRouteConstants
 	{
 		public const string JobIdOptionalParameter = "{jobId}";
 
