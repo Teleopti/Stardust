@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 			    return false;
 
-		    if (scheduleDay.IsScheduled())
+		    if (schedulingOptions.IsDayScheduled(scheduleDay))
 			    return false;
 
 		    var agentTimeZone = person.PermissionInformation.DefaultTimeZone();

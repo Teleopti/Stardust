@@ -116,8 +116,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
 				Expect.Call(range2.ScheduledDay(_dateOnly)).Return(scheduleDay2);
-				Expect.Call(scheduleDay1.IsScheduled()).Return(false);
-				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.None);
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range1, _dateOnly)).Return(dateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod).Repeat.AtLeastOnce();
 			}
@@ -188,8 +188,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
 				Expect.Call(range2.ScheduledDay(_dateOnly)).Return(scheduleDay2);
-				Expect.Call(scheduleDay1.IsScheduled()).Return(true);
-				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
@@ -197,7 +197,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1).Repeat.AtLeastOnce();
 				Expect.Call(visualLayerCollection1.Period()).Return(period1).Repeat.AtLeastOnce();
-				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
@@ -267,8 +266,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
 				Expect.Call(range2.ScheduledDay(_dateOnly)).Return(scheduleDay2);
-				Expect.Call(scheduleDay1.IsScheduled()).Return(true);
-				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
@@ -277,7 +274,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(visualLayerCollection1.Period()).Return(period1);
 
-				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
 			}
 
 			using (_mocks.Playback())
@@ -348,12 +346,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
 				Expect.Call(range2.ScheduledDay(_dateOnly)).Return(scheduleDay2);
-				Expect.Call(scheduleDay1.IsScheduled()).Return(true);
-				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None).Repeat.Any();
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
-				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(scheduleDay1.GetEditorShift()).Return(mainShift);
 			}
 
@@ -423,8 +420,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
 				Expect.Call(range2.ScheduledDay(_dateOnly)).Return(scheduleDay2);
-				Expect.Call(scheduleDay1.IsScheduled()).Return(true);
-				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
@@ -432,6 +427,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDay1.PersonAssignment()).Return(personAssignment1).Repeat.AtLeastOnce();
 				Expect.Call(personAssignment1.ShiftCategory).Return(shiftCat).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
 			}
 
 			using (_mocks.Playback())
@@ -500,8 +496,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_scheduleMatrixPro2.ActiveScheduleRange).Return(range2).Repeat.AtLeastOnce();
 				Expect.Call(range1.ScheduledDay(_dateOnly)).Return(scheduleDay1);
 				Expect.Call(range2.ScheduledDay(_dateOnly)).Return(scheduleDay2);
-				Expect.Call(scheduleDay1.IsScheduled()).Return(true);
-				Expect.Call(scheduleDay2.IsScheduled()).Return(false);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
 				Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range2, _dateOnly)).Return(dateTimePeriod);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();

@@ -82,9 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public bool IsScheduled()
 		{
-			SchedulePartView partView = SignificantPart();
-			return (partView == SchedulePartView.FullDayAbsence || partView == SchedulePartView.DayOff ||
-					partView == SchedulePartView.ContractDayOff || partView == SchedulePartView.MainShift);
+			return new IsDayScheduled().Check(this);
 		}
 
 			public IPersonAssignment PersonAssignment(bool createIfNotExists = false)

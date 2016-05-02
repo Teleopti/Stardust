@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), dateOnlyList, matrixList,
 		                                              effectiveRestriction);
 
-		    effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule), dateOnlyList, matrixList,
+		    effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule, schedulingOptions), dateOnlyList, matrixList,
 		                                              effectiveRestriction);
 
 		    return effectiveRestriction;

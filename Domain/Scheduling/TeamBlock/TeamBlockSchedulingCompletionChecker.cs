@@ -5,31 +5,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockSchedulingCompletionChecker
 	{
-		bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly);
+		bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions);
 
 		bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
-																		 IList<IPerson> selectedPersons);
+																		 IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockSchedulingCompletionChecker : ITeamBlockSchedulingCompletionChecker
 	{
-		public bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
+		public bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
 		{
 			if (teamBlockInfo == null) return false;
 
 			foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
 			{
-				if (!checkScheduleStatus(dateOnly, matrix)) return false;
+				if (!checkScheduleStatus(dateOnly, matrix, schedulingOptions)) return false;
 			}
 
 			return true;
 		}
 
-	    private bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix)
+	    private bool checkScheduleStatus(DateOnly dateOnly, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 	    {
 	        IScheduleRange rangeForPerson = matrix.ActiveScheduleRange;
 	        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
-	        if (!scheduleDay.IsScheduled())
+	        if (!schedulingOptions.IsDayScheduled(scheduleDay))
 	        {
 	            return false;
 	        }
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    }
 
 	    public bool IsDayScheduledInTeamBlockForSelectedPersons(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly,
-		                                                               IList<IPerson> selectedPersons)
+		                                                               IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions)
 		{
 			if (teamBlockInfo == null) return false;
 
 			foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
 			{
 				if (!selectedPersons.Contains(matrix.Person)) continue;
-                if (!checkScheduleStatus(dateOnly, matrix)) 
+                if (!checkScheduleStatus(dateOnly, matrix, schedulingOptions)) 
 					return false;
 			}
 

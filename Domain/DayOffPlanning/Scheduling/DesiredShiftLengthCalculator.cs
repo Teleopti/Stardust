@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 
 					//ersätt schemalagda dagar och räkna slots
 					IScheduleDay scheduleDay = matrix.GetScheduleDayByKey(keyValuePair.Key).DaySchedulePart();
-					if (scheduleDay.IsScheduled())
+					if (schedulingOptions.IsDayScheduled(scheduleDay))
 					{
 						fixedTime = fixedTime.Add(scheduleDay.ProjectionService().CreateProjection().ContractTime());
 						continue;

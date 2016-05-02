@@ -330,6 +330,8 @@ namespace Teleopti.Interfaces.Domain
 	    IRuleSetBag FixedShiftBag { get; set; }
 	    void ClearNotAllowedShiftProjectionCaches();
 		IMultiplicatorDefinitionSet OvertimeType { get; set; }
+	    bool ScheduleOnDayOffs { get; set; }
 	    IBlockFinder BlockFinder();
+	    bool IsDayScheduled(IScheduleDay scheduleDay);
     }
 }

@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																																			 _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 						.Return(true);
 			}
 			using (_mocks.Playback())
@@ -125,22 +125,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person1 }))
+																											  new List<IPerson> { _person1 }, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person2 }))
+																											  new List<IPerson> { _person2 }, _schedulingOptions))
 					  .Return(false);
 				
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(true);
 			}
 			using (_mocks.Playback())
@@ -167,15 +167,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person1 }))
+																											  new List<IPerson> { _person1 }, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person2 }))
+																											  new List<IPerson> { _person2 }, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(true);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>()).Repeat.Twice();
@@ -225,15 +225,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person1 }))
+																											  new List<IPerson> { _person1 }, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person2 }))
+																											  new List<IPerson> { _person2 }, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 					  .Return(restriction);
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(true);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_teamBlockInfo.TeamInfo.GroupMembers.ToList(),
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill> { SkillFactory.CreateSkill("Skill") });
@@ -283,15 +283,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person1 }))
+																											  new List<IPerson> { _person1 }, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  new List<IPerson> { _person2 }))
+																											  new List<IPerson> { _person2 }, _schedulingOptions))
 					  .Return(false);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 						.Return(restriction);
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _rollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null, null)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
-																											  _selectedPersons))
+																											  _selectedPersons, _schedulingOptions))
 					  .Return(true);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
 					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone,true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>()).Repeat.Twice();

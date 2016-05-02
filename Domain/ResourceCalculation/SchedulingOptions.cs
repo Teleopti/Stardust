@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
@@ -79,12 +80,22 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-		public IBlockFinder BlockFinder()
+			public bool IsDayScheduled(IScheduleDay scheduleDay)
+			{
+				var svc = ScheduleOnDayOffs ? (IIsDayScheduled) 
+					new IsDayScheduledExcludeDayOff() : 
+					new IsDayScheduled();
+				return svc.Check(scheduleDay);
+			}
+
+	    public IBlockFinder BlockFinder()
 		{
 			switch (BlockFinderTypeForAdvanceScheduling)
 			{
 				case BlockFinderType.SingleDay:
-					return new SingleDayBlockFinder();
+					return ScheduleOnDayOffs ? (IBlockFinder) 
+						new ReturnPeriodBasedOnDayBlockFinder() : 
+						new SingleDayBlockFinder();
 				case BlockFinderType.BetweenDayOff:
 					return new BetweenDayOffBlockFinder();
 				case BlockFinderType.SchedulePeriod:
@@ -248,7 +259,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             set { _considerShortBreaks = value; }
         }
 
-        #region ICloneable Members
+	    public bool ScheduleOnDayOffs { get; set; }
+
+	    #region ICloneable Members
 
         public object Clone()
         {

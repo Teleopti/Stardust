@@ -243,8 +243,12 @@
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
+    <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
+    <Compile Include="Scheduling\Assignment\IsDayScheduled.cs" />
+    <Compile Include="Scheduling\Assignment\IsDayScheduledExcludeDayOff.cs" />
     <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />
     <Compile Include="Scheduling\TeamBlock\BetweenDayOffBlockFinder.cs" />
+    <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\SchedulePeriodBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\SingleDayBlockFinder.cs" />
     <Compile Include="Security\Principal\IUpdatedBy.cs" />

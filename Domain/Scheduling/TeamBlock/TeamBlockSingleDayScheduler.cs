@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
-			if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo))
+			if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo, schedulingOptions))
 				return resultList;
 
 			var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person,
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var bestShiftProjectionCache = roleModelShift;
 			var selectedTeamMembers = teamInfo.UnLockedMembers(day).ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
-			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
+			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo, schedulingOptions))
 				return true;
 
 			foreach (var person in selectedTeamMembers)
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (cancelMe)
 					return false;
 
-				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> {person}, day, teamBlockSingleDayInfo))
+				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> {person}, day, teamBlockSingleDayInfo, schedulingOptions))
 					continue;
 
 				var isSingleAgentTeamAndBlockWithSameShift = (!schedulingOptions.UseTeam && schedulingOptions.UseBlock &&
@@ -162,14 +162,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, businessRules, schedulingOptions, dayScheduled);
 			}
 
-			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
+			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo, schedulingOptions);
 		}
 
 		private bool isTeamBlockScheduledForSelectedTeamMembers(IList<IPerson> selectedTeamMembers, DateOnly day,
-			ITeamBlockInfo teamBlockSingleDayInfo)
+			ITeamBlockInfo teamBlockSingleDayInfo, ISchedulingOptions schedulingOptions)
 		{
-			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day,
-				selectedTeamMembers);
+			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day, selectedTeamMembers, schedulingOptions);
 		}
 
 		private IShiftProjectionCache filterAndSelect(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,

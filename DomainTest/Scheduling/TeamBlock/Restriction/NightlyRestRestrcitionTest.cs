@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
         {
             _mock = new MockRepository();
             _nightlyRestRule = _mock.StrictMock<IAssignmentPeriodRule>();
-            _target = new NightlyRestRestrcition(_nightlyRestRule);
+            _target = new NightlyRestRestrcition(_nightlyRestRule, new SchedulingOptions());
             _matrix1 = _mock.StrictMock<IScheduleMatrixPro>();
             _matrix2 = _mock.StrictMock<IScheduleMatrixPro>();
             _range1 = _mock.StrictMock<IScheduleRange>();
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             IScheduleDay scheduleDay = _mock.StrictMock<IScheduleDay>();
             Expect.Call(matrix.ActiveScheduleRange).Return(range);
             Expect.Call(range.ScheduledDay(date)).Return(scheduleDay);
-            Expect.Call(scheduleDay.IsScheduled()).Return(false);
+            Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.None);
             Expect.Call(_nightlyRestRule.LongestDateTimePeriodForAssignment(range, date)).Return(dateTimePeriod);
             Expect.Call(matrix.Person).Return(person);
             Expect.Call(person.PermissionInformation).Return(_permissionInformation);
@@ -171,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 IScheduleDay scheduleDay = _mock.StrictMock<IScheduleDay>();
                 Expect.Call(_matrix1.ActiveScheduleRange).Return(_range1);
                 Expect.Call(_range1.ScheduledDay(date)).Return(scheduleDay);
-                Expect.Call(scheduleDay.IsScheduled()).Return(true);
+                Expect.Call(scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
             }
 
             var aggRestriction = _target.ExtractRestriction(blockInfo.BlockPeriod.DayCollection(), new List<IScheduleMatrixPro> { _matrix1 });

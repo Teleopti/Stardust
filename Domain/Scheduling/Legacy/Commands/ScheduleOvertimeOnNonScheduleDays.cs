@@ -46,17 +46,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), scheduleTagSetter);
-			using (OvertimeSchedulingScope.Set(stateHolder.Schedules, scheduleDay, overtimePreferences, scheduleTagSetter, rollbackService))
+			using (OvertimeSchedulingScope.Set(scheduleDay, overtimePreferences))
 			{
-				var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay });
-				var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
-				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, new SingleDayBlockFinder(), true);
-
 				var schedulingOptions = new SchedulingOptions
 				{
 					FixedShiftBag = overtimePreferences.ShiftBagToUse,
-					OvertimeType = overtimePreferences.OvertimeType
+					OvertimeType = overtimePreferences.OvertimeType,
+					ScheduleOnDayOffs = true
 				};
+				var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay });
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
+				var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
 				var rules = NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState);
 				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
 				{

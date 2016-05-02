@@ -32,14 +32,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
         }
 
         private readonly IAssignmentPeriodRule _nightlyRestRule;
+	    private readonly ISchedulingOptions _schedulingOptions;
 
-        public NightlyRestRestrcition(IAssignmentPeriodRule nightlyRestRule)
-        {
-            _nightlyRestRule = nightlyRestRule;
-        }
+	    public NightlyRestRestrcition(IAssignmentPeriodRule nightlyRestRule, ISchedulingOptions schedulingOptions)
+	    {
+		    _nightlyRestRule = nightlyRestRule;
+		    _schedulingOptions = schedulingOptions;
+	    }
 
 
-        private TimePeriod getTimePeriodForTeam(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList)
+	    private TimePeriod getTimePeriodForTeam(DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> matrixList)
         {
             TimeSpan startTime = TimeSpan.MinValue;
             TimeSpan endTime = TimeSpan.MaxValue;
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
         {
             var range = matrix.ActiveScheduleRange;
             var scheduleDay = range.ScheduledDay(dateOnly);
-            if(scheduleDay.IsScheduled() ) return new TimePeriod(TimeSpan.MinValue,TimeSpan.MaxValue );
+            if(_schedulingOptions.IsDayScheduled(scheduleDay) ) return new TimePeriod(TimeSpan.MinValue,TimeSpan.MaxValue );
             var dateTimePeriod = _nightlyRestRule.LongestDateTimePeriodForAssignment(range, dateOnly);
 
 	        var timeZoneInfo = matrix.Person.PermissionInformation.DefaultTimeZone();

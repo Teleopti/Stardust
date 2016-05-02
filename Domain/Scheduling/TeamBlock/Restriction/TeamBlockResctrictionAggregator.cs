@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 				}
 			}
 
-			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule), dateOnlyList, matrixList,
+			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule, schedulingOptions), dateOnlyList, matrixList,
 			                                          effectiveRestriction);
 
 			return effectiveRestriction;
