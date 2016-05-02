@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		}
 
 		[Test]
-		public void ShoulNotConsiderWeeklyRest()
+		public void ShouldNotConsiderWeeklyRest()
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = new Activity("_") { InWorkTime = true };
