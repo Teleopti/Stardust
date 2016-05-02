@@ -86,8 +86,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			var definitionSets = agent.Period(date)
 				.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Where(
 					x => x.MultiplicatorType == MultiplicatorType.Overtime);
+			if (!definitionSets.Contains(overtimePreferences.OvertimeType))
+				return true;
 
-			return !definitionSets.Contains(overtimePreferences.OvertimeType);
+			if (overtimePreferences.AvailableAgentsOnly)
+			{
+				if (!scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().
+					Any(x => x.Period.Contains(scheduleDay.PersonAssignment(true).Period)))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 }

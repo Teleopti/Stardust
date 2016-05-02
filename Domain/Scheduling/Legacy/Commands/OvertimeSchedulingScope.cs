@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		 * Temporarly hack to fix...
 		 * * We need to remove dayoffs otherwise no scheduling will occur
 		 * * Need to "turn off" nightly rest rule if user has checked AllowBreakNightlyRest
-		 * * AvailableAgentsOnly handled by "scheduling"
 		 * ...we'll fix these one-by-one later
 		 */
 		public static IDisposable Set(IScheduleDictionary scheduleDictionary, 
@@ -44,24 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
 				}
-				var rollBackOnOvertimeAvailability = false;
-				if (overtimePreferences.AvailableAgentsOnly)
-				{
-					var overtimeAvailability = currScheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().FirstOrDefault();
-					if (overtimeAvailability == null || !overtimeAvailability.Period.Contains(currScheduleDay.PersonAssignment(true).Period))
-					{
-						rollBackOnOvertimeAvailability = true;
-					}
-				}
-
-				if (rollBackOnOvertimeAvailability)
-				{
-					schedulePartModifyAndRollbackService.Rollback();
-				}
-				else
-				{
-					schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, NewBusinessRuleCollection.Minimum());
-				}
+				schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, NewBusinessRuleCollection.Minimum());
 				
 				scheduleDay.Person.Period(date).PersonContract.Contract.WorkTimeDirective = oldWorkTimeDirective;
 			});
