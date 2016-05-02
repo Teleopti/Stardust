@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				jobResultId = jobResult.Id.GetValueOrDefault();
 				unitOfWork.PersistAll();
 
-				var message = new ImportForecastsFileToSkill
+				var message = new ImportForecastsFileToSkillEvent
 				{
 					JobId = jobResultId,
 					UploadedFileId = command.UploadedFileId,
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					{
 						Name = "Import forecast from file",
 						Serialized = ser,
-						Type = typeof(ImportForecastsFileToSkill).ToString(),
+						Type = typeof(ImportForecastsFileToSkillEvent).ToString(),
 						UserName = person.Name.FirstName
 					};
 					var mess = _jsonSerializer.SerializeObject(jobModel);

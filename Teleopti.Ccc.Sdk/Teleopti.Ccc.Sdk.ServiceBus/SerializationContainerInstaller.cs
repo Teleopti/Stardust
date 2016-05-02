@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Rhino.ServiceBus.Internal;
-using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -10,7 +9,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			builder.RegisterType<DateOnlyPeriodSerializer>().As<ICustomElementSerializer>();
 			builder.RegisterType<LargeGuidCollectionSerializer>().As<ICustomElementSerializer>();
-            builder.RegisterType<LargeForecastsRowCollectionSerializer>().As<ICustomElementSerializer>();
 		}
     }
 }

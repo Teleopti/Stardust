@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_openAndSplitTargetSkill = openAndSplitTargetSkill;
 		}
 
-		public void Handle(ImportForecastsFileToSkill @event)
+		public void Handle(ImportForecastsFileToSkillEvent @event)
 		{
 			var unitOfWork = _currentUnitOfWork.Current();
 			var jobResult = _jobResultRepository.Get(@event.JobId);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			endProcessing(unitOfWork);
 		}
 
-		private static IList<OpenAndSplitTargetSkillMessage> generateMessages(ImportForecastsFileToSkill message,
+		private static IList<OpenAndSplitTargetSkillMessage> generateMessages(ImportForecastsFileToSkillEvent message,
 			IForecastsAnalyzeQueryResult queryResult)
 		{
 			var listOfMessages = new List<OpenAndSplitTargetSkillMessage>();
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 	}
 
 	[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
-	public class ImportForecastsFileToSkillStardust : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkill>, IRunOnStardust
+	public class ImportForecastsFileToSkillStardust : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkillEvent>, IRunOnStardust
 	{
 		private readonly DataSourceState _dataSourceState;
 		private readonly IDataSourceScope _dataSourceScope;
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_businessUnitRepository = businessUnitRepository;
 		}
 
-		public new void Handle(ImportForecastsFileToSkill @event)
+		public new void Handle(ImportForecastsFileToSkillEvent @event)
 		{
 			//most of this to aspect or attribute later
 			using (_dataSourceScope.OnThisThreadUse(@event.LogOnDatasource))
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 	[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
 #pragma warning disable 618
-	public class ImportForecastsFileToSkillBus : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkill>, IRunOnServiceBus
+	public class ImportForecastsFileToSkillBus : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkillEvent>, IRunOnServiceBus
 #pragma warning restore 618
 	{
 		public ImportForecastsFileToSkillBus(ICurrentUnitOfWork currentUnitOfWork,
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 		}
 
-		public new void Handle(ImportForecastsFileToSkill @event)
+		public new void Handle(ImportForecastsFileToSkillEvent @event)
 		{
 			base.Handle(@event);
 		}

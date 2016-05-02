@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.ImportForecast.Presenters
 				jobResultId = jobResult.Id.GetValueOrDefault();
 				unitOfWork.PersistAll();
 
-				var message = new ImportForecastsFileToSkill
+				var message = new ImportForecastsFileToSkillEvent
 				{
 					JobId = jobResultId,
 					UploadedFileId = _model.FileId,

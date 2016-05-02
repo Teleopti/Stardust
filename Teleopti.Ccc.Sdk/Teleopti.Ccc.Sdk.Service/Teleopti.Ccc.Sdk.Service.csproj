@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -210,7 +210,6 @@
     <Compile Include="Factory\ContractFactory.cs" />
     <Compile Include="Factory\ContractScheduleFactory.cs" />
     <Compile Include="Factory\IAuthorizationProvider.cs" />
-    <Compile Include="Factory\LargeForecastsRowCollectionSerializer.cs" />
     <Compile Include="Factory\PersistPersonRequest.cs" />
     <Compile Include="Factory\PlanningTimeBankFactory.cs" />
     <Compile Include="Factory\PreferenceRestrictionConstructor.cs" />

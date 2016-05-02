@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_feedback.Stub(x => x.SetJobResult(_jobResult, _messageBroker));
 			_openAndSplitTargetSkill.Stub(x => x.Process(null)).IgnoreArguments();
 
-			var message = new ImportForecastsFileToSkill
+			var message = new ImportForecastsFileToSkillEvent
 			{
 				JobId = jobId,
 				ImportMode = ImportForecastsMode.ImportWorkload,
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_skillRepository.Stub(x => x.Get(skillId)).Return(null);
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 
-			var message = new ImportForecastsFileToSkill
+			var message = new ImportForecastsFileToSkillEvent
 			{
 				JobId = jobId,
 				ImportMode = ImportForecastsMode.ImportWorkload,
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRepository.Stub(x => x.Get(jobId)).Return(_jobResult);
 			_importForecastsRepository.Stub(x => x.Get(jobId)).Return(null);
 
-			var message = new ImportForecastsFileToSkill
+			var message = new ImportForecastsFileToSkillEvent
 			{
 				JobId = jobId,
 				ImportMode = ImportForecastsMode.ImportWorkload,
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			queryResult.Stub(x => x.Succeeded).Return(false).Repeat.Any();
 			queryResult.Stub(x => x.ErrorMessage).Return("error occured.");
 
-			var message = new ImportForecastsFileToSkill
+			var message = new ImportForecastsFileToSkillEvent
 			{
 				JobId = jobId,
 				ImportMode = ImportForecastsMode.ImportWorkload,

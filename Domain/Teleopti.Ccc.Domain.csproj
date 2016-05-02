@@ -350,7 +350,7 @@
     <Compile Include="ApplicationLayer\AdherencePercentageReadModelUpdatedMessage.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduledResourcesChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Forecast\IImportForecastsRepository.cs" />
-    <Compile Include="ApplicationLayer\Events\ImportForecastsFileToSkill.cs" />
+    <Compile Include="ApplicationLayer\Events\ImportForecastsFileToSkillEvent.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastsFileToSkillHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastProcessor.cs" />
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkill.cs" />

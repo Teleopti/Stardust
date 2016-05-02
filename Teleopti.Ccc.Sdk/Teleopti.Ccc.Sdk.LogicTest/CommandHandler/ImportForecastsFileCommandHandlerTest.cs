@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_jobResultRepository.Stub(x => x.Add(_jobResult)).IgnoreArguments();
 			unitOfWork.Stub(x => x.PersistAll());
 			unitOfWork.Stub(x => x.Dispose());
-			_busSender.Stub(x => x.Send(new ImportForecastsFileToSkill(), true)).IgnoreArguments();
+			_busSender.Stub(x => x.Send(new ImportForecastsFileToSkillEvent(), true)).IgnoreArguments();
 
 			_target.Handle(_importForecastsFileCommandDto);
 		}
