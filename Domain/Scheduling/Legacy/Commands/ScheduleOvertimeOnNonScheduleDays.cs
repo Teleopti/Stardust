@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -56,6 +57,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					FixedShiftBag = overtimePreferences.ShiftBagToUse
 				};
 				var rules = NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState);
+				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
+				{
+					rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
+				}
+				if (!overtimePreferences.AllowBreakWeeklyRest)
+				{
+					var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+					var dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
+					var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
+					rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
+				}
 				_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, stateHolder.SchedulingResultState, new ShiftNudgeDirective(), rules);
 			}
 		}

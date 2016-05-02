@@ -1,8 +1,6 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -51,21 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
 				}
 				currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, overtimePreferences.OvertimeType));
-				var rules = NewBusinessRuleCollection.Minimum();
-				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
-				{
-					rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
-				}
-
-				if (!overtimePreferences.AllowBreakWeeklyRest)
-				{
-					IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
-					IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
-					IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
-					rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
-				}
-
-
 				var rollBackOnOvertimeAvailability = false;
 				if (overtimePreferences.AvailableAgentsOnly)
 				{
@@ -82,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 				else
 				{
-					schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, rules);
+					schedulePartModifyAndRollbackService.ModifyStrictly(currScheduleDay, scheduleTagSetter, NewBusinessRuleCollection.Minimum());
 				}
 				
 				scheduleDay.Person.Period(date).PersonContract.Contract.WorkTimeDirective = oldWorkTimeDirective;
