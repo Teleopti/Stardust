@@ -168,11 +168,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
 
 			var cancelMe = false;
-			Action thisCancelAction = () =>
-			{
-				cancelMe = true;
-				cancelAction();
-			};
 			for (int dayIndex = 0; dayIndex <= lastIndex; dayIndex++)
 			{
 				var day = selectedBlockDays[dayIndex];

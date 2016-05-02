@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public IScheduleStorage ScheduleStorage;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		//public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 
