@@ -24,11 +24,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			builder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
-			
-
-			builder.Register(
-				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,new RetryPolicyProvider()))
-				.As<IWorkerNodeRepository>();
+			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
 			builder.RegisterType<ManagerController>();
 

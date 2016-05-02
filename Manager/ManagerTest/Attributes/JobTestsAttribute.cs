@@ -24,9 +24,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<NodeManager>();
 
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
-
-			builder.Register(c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,new RetryPolicyProvider()))
-							.As<IWorkerNodeRepository>();
+			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance();
 		}

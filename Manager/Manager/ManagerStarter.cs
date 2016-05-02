@@ -21,10 +21,7 @@ namespace Stardust.Manager
 			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
-
-			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString,
-			                                               new RetryPolicyProvider()))
-				.As<IWorkerNodeRepository>();
+			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
 			builder.RegisterApiControllers(typeof (ManagerController).Assembly);
 

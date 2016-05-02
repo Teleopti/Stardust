@@ -15,10 +15,10 @@ namespace Stardust.Manager
 		private readonly string _connectionString;
 		private readonly RetryPolicy _retryPolicy;
 
-		public WorkerNodeRepository(string connectionString,
+		public WorkerNodeRepository(ManagerConfiguration managerConfiguration,
 		                            RetryPolicyProvider retryPolicyProvider)
 		{
-			_connectionString = connectionString;
+			_connectionString = managerConfiguration.ConnectionString;
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
 

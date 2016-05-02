@@ -33,10 +33,8 @@ namespace ManagerTest
 			_containerBuilder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			_containerBuilder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
 			_containerBuilder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
+			_containerBuilder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
-			_containerBuilder.Register(
-				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
-				.As<IWorkerNodeRepository>();
 		}
 
 		private ContainerBuilder _containerBuilder;
