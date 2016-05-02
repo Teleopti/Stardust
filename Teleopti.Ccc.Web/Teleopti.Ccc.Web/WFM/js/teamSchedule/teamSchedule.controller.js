@@ -353,10 +353,14 @@
 			vm.permissionsAndTogglesLoaded = true;
 
 			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled || vm.toggles.RemoveActivityEnabled || vm.toggles.RemoveAbsenceEnabled || vm.toggles.SwapShiftEnabled;
-
+			
 			if (vm.toggles.PrepareToRelease) {
 				var template = $translate.instant('WFMReleaseNotification');
-				var message = template.replace('{0}', 'MyTeam').replace('{1}', '../Anywhere#teamschedule').replace('{2}', 'MyTeam');
+				var moduleName = $translate.instant('MyTeam');
+				var message = template.replace('{0}', moduleName)
+					.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
+					.replace('{2}', '</a>')
+					.replace('{3}', '<a href="../Anywhere#teamschedule">' + moduleName + '</a>');
 				NoticeService.info(message, null, true);
 			}
 		};

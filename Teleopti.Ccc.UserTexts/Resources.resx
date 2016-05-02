@@ -14382,7 +14382,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Notification message to user in old anywhere to try the new WFM MyTeam.</comment>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
-    <value>{0} has been improved! We appreciate your &lt;a href='http://www.teleopti.com/wfm/customer-feedback.aspx'&gt;feedback.&lt;/a&gt;Old &lt;a href='{1}'&gt;{2}&lt;/a&gt; can be accessed for a limited time.</value>
+    <value>{0} has been improved! We appreciate your {1}feedback.{2} Old {3} can be accessed for a limited time.</value>
     <comment>Notification message to user in the released WFM about the link to the old modules in case they want to access them.</comment>
   </data>
   <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">

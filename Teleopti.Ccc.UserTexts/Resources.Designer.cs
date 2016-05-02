@@ -31729,7 +31729,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} has been improved! We appreciate your &lt;a href=&apos;http://www.teleopti.com/wfm/customer-feedback.aspx&apos;&gt;feedback.&lt;/a&gt;Old &lt;a href=&apos;{1}&apos;&gt;{2}&lt;/a&gt; can be accessed for a limited time..
+        ///   Looks up a localized string similar to {0} has been improved! We appreciate your {1}feedback.{2} Old {3} can be accessed for a limited time..
         /// </summary>
         public static string WFMReleaseNotification {
             get {
