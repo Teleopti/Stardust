@@ -45,7 +45,7 @@ var wfm = angular.module('wfm', [
 
 wfm.config([
 	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider',
-	function($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
+	function ($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
 
 		$urlRouterProvider.otherwise("/#");
 
@@ -97,7 +97,7 @@ wfm.config([
 			templateUrl: 'js/resourceplanner/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
 		}).state('resourceplanner.temp', {
-			url:'/optimize/:id',
+			url: '/optimize/:id',
 			templateUrl: 'js/resourceplanner/temp.html',
 			controller: 'ResourceplannerTempCtrl'
 		}).state('permissions', {
@@ -111,6 +111,9 @@ wfm.config([
 			url: '/intraday',
 			templateUrl: 'js/intraday/intraday.html',
 			controller: 'IntradayCtrl'
+		}).state('intraday.area', {
+			templateUrl: 'js/intraday/intraday-area.html',
+			controller: 'IntradayAreaCtrl'
 		}).state('intraday.config', {
 			url: '/config',
 			templateUrl: 'js/intraday/intraday-config.html',
@@ -185,39 +188,39 @@ wfm.config([
 	}
 ]).run([
 	'$rootScope', '$state', '$translate', 'HelpService', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts',
-	function($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts) {
+	function ($rootScope, $state, $translate, HelpService, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts) {
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
-			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
-				$timeout(function() {
+			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function () {
+				$timeout(function () {
 					$rootScope.$broadcast('sidenav:toggle');
 				}, 500);
 			});
 		})();
 
 		function refreshContext(event, next, toParams) {
-			currentUserInfo.initContext().then(function() {
+			currentUserInfo.initContext().then(function () {
 				$rootScope.isAuthenticated = true;
 				$translate.fallbackLanguage('en');
 
-				$rootScope.$on('$stateChangeSuccess', function(event, next, toParams) {
+				$rootScope.$on('$stateChangeSuccess', function (event, next, toParams) {
 					HelpService.updateState($state);
 				});
 				$state.go(next, toParams);
 			});
 		};
 
-		$rootScope.$on('$stateChangeStart', function(event, next, toParams) {
+		$rootScope.$on('$stateChangeStart', function (event, next, toParams) {
 
-				if (!currentUserInfo.isConnected()) {
+			if (!currentUserInfo.isConnected()) {
 				event.preventDefault();
 				refreshContext(event, next, toParams);
 				return;
 			}
 			if (!toggleService.togglesLoaded.$$state.status) {
 				event.preventDefault();
-				toggleService.togglesLoaded.then(function() {
+				toggleService.togglesLoaded.then(function () {
 					$state.go(next, toParams);
 				});
 				return;

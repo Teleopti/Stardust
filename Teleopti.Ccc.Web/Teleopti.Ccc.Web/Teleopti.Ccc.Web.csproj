@@ -1328,6 +1328,9 @@
     <Content Include="WFM\js\global\wfm.shortcuts.service.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.directive.js" />
     <Content Include="WFM\js\global\wfmrightpanel\wfmrightpanel.html" />
+    <Content Include="WFM\js\intraday\intraday-area.html" />
+    <Content Include="WFM\js\intraday\intraday.area.controller.js" />
+    <Content Include="WFM\js\intraday\intraday.area.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
@@ -1435,7 +1438,6 @@
     <Content Include="WFM\js\intraday\intraday.controller.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.js" />
     <Content Include="WFM\js\intraday\intraday.service.js" />
-    <Content Include="WFM\js\intraday\intraday.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.html" />
     <Content Include="WFM\js\intraday\intraday-config.html" />
     <Content Include="WFM\js\intraday\intraday.service.spec.js" />

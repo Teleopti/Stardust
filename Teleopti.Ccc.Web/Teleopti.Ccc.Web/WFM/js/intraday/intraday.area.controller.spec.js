@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('IntradayCtrl', function () {
+describe('IntradayAreaCtrl', function () {
 	var $httpBackend,
 		$controller,
 		$filter,
@@ -15,7 +15,7 @@ describe('IntradayCtrl', function () {
 	beforeEach(module('wfm.intraday'));
 
 	beforeEach(function () {
-	    
+
 		skills = [
 		{
 			Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
@@ -39,24 +39,24 @@ describe('IntradayCtrl', function () {
 			SkillAreas: skillAreas
 		};
 
-	    monitorData = {
-	            Summary: {
-	                ForecastedCalls: "100.0",
-	                ForecastedAverageHandleTime: "60.0",
-	                OfferedCalls: "50.0",
-	                AverageHandleTime: "30.0",
-	                ForecastedActualCallsDiff: "50.0",
-	                ForecastedActualHandleTimeDiff: "55.0"
-	            },
-	            DataSeries: {
-	                Time: [],
-	                ForecastedCalls: [],
-	                ForecastedAverageHandleTime: [],
-	                OfferedCalls: [],
-	                AverageHandleTime: []
-	            },
-	            LatestStatsTime: new Date(2016, 1, 1, 13, 0, 0, 0)
-	        };
+		monitorData = {
+			Summary: {
+				ForecastedCalls: "100.0",
+				ForecastedAverageHandleTime: "60.0",
+				OfferedCalls: "50.0",
+				AverageHandleTime: "30.0",
+				ForecastedActualCallsDiff: "50.0",
+				ForecastedActualHandleTimeDiff: "55.0"
+			},
+			DataSeries: {
+				Time: [],
+				ForecastedCalls: [],
+				ForecastedAverageHandleTime: [],
+				OfferedCalls: [],
+				AverageHandleTime: []
+			},
+			LatestStatsTime: new Date(2016, 1, 1, 13, 0, 0, 0)
+		};
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$rootScope_, _$filter_, _$translate_) {
@@ -67,36 +67,36 @@ describe('IntradayCtrl', function () {
 		scope = _$rootScope_.$new();
 
 		$httpBackend.whenGET("../api/intraday/skillarea")
-			.respond(function() {
-			return [200, skillAreaInfo];
-		});
+			.respond(function () {
+				return [200, skillAreaInfo];
+			});
 
 		$httpBackend.whenGET("../api/intraday/skills")
-			.respond(function() {
-			return [200, skills];
-		});
+			.respond(function () {
+				return [200, skills];
+			});
 
 		$httpBackend.whenDELETE("../api/intraday/skillarea/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
 			.respond(200, {});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillarea/fa9b5393-ef48-40d1-b7cc-09e797589f81")
-			.respond(function() {
-			return [200, monitorData];
-		});
+			.respond(function () {
+				return [200, monitorData];
+			});
 
 		$httpBackend.whenGET("../api/intraday/monitorskill/5f15b334-22d1-4bc1-8e41-72359805d30f")
-			.respond(function() {
-			return [200, monitorData];
-		});
+			.respond(function () {
+				return [200, monitorData];
+			});
 	}));
 
-	var createController = function(isNewlyCreatedSkillArea) {
-		$controller('IntradayCtrl', {
+	var createController = function (isNewlyCreatedSkillArea) {
+		$controller('IntradayAreaCtrl', {
 			$scope: scope,
 			$translate: $translate
 		});
 
-		scope.onStateChanged(undefined, { name: 'intraday' }, { isNewSkillArea: isNewlyCreatedSkillArea });
+		scope.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillArea });
 		scope.$digest();
 		$httpBackend.flush();
 	};
@@ -117,7 +117,7 @@ describe('IntradayCtrl', function () {
 		expect(scope.skills[0].Name).toEqual("skill x");
 	});
 
-	it('should delete selected skill area', function() {
+	it('should delete selected skill area', function () {
 		createController(false);
 		scope.deleteSkillArea(scope.skillAreas[1]);
 
@@ -129,7 +129,7 @@ describe('IntradayCtrl', function () {
 		expect(scope.skillAreas.length).toEqual(1);
 	});
 
-	it('should monitor first skill if no skill areas', function() {
+	it('should monitor first skill if no skill areas', function () {
 		skillAreaInfo.SkillAreas = [];
 		createController(false);
 
@@ -174,7 +174,7 @@ describe('IntradayCtrl', function () {
 		expect(scope.HasMonitorData).toEqual(true);
 	});
 
-	it('should have permission to modify skill area', function() {
+	it('should have permission to modify skill area', function () {
 		createController(false);
 
 		expect(scope.HasPermissionToModifySkillArea).toEqual(true);
@@ -192,7 +192,7 @@ describe('IntradayCtrl', function () {
 
 	it('should switch active chart tab', function () {
 		createController(false);
-		scope.toggleOthers(1,'staffing');
+		scope.toggleOthers(1, 'staffing');
 
 		expect(scope.showStaffing).toEqual(true);
 		expect(scope.showIncoming).toEqual(false);
