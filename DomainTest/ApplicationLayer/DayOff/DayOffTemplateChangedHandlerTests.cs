@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			_analyticsDayOffRepository.DayOffs().First().DatasourceUpdateDate.Should().Be.EqualTo(DateTime.Today);
 			_analyticsDayOffRepository.DayOffs().First().DisplayColor.Should().Not.Be.EqualTo(null);
 			_analyticsDayOffRepository.DayOffs().First().DisplayColorHtml.Should().Not.Be.EqualTo(null);
+			_analyticsDayOffRepository.DayOffs().First().DatasourceId.Should().Be.EqualTo(1);
 			_analyticsDayOffRepository.DayOffs().First().BusinessUnitId.Should().Be.EqualTo(_analyticsBusinessUnitRepository.Get(businessUnitCode).BusinessUnitId);
 		}
 
@@ -78,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			_analyticsDayOffRepository.DayOffs().First().DatasourceUpdateDate.Should().Be.EqualTo(DateTime.Today);
 			_analyticsDayOffRepository.DayOffs().First().DisplayColor.Should().Not.Be.EqualTo(null);
 			_analyticsDayOffRepository.DayOffs().First().DisplayColorHtml.Should().Not.Be.EqualTo(null);
+			_analyticsDayOffRepository.DayOffs().First().DatasourceId.Should().Be.EqualTo(1);
 			_analyticsDayOffRepository.DayOffs().First().BusinessUnitId.Should().Be.EqualTo(_analyticsBusinessUnitRepository.Get(businessUnitCode).BusinessUnitId);
 		}
 	}

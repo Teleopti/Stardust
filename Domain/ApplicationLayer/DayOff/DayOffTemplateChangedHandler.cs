@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 				DayOffShortname = @event.DayOffShortName,
 				DisplayColor = -8355712,
 				DisplayColorHtml = "#808080",
-				DatasourceUpdateDate = @event.DatasourceUpdateDate
+				DatasourceUpdateDate = @event.DatasourceUpdateDate,
+				DatasourceId = 1
 			};
 			
 			_analyticsDayOffRepository.AddOrUpdate(dayOff);
