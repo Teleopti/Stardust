@@ -12363,6 +12363,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Included skills.
+        /// </summary>
+        public static string IncludedSkills {
+            get {
+                return ResourceManager.GetString("IncludedSkills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Include
         ///Exclude.
         /// </summary>
@@ -29538,15 +29547,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ToggleDateSelection {
             get {
                 return ResourceManager.GetString("ToggleDateSelection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Toggle included skills.
-        /// </summary>
-        public static string ToggleIncludedSkills {
-            get {
-                return ResourceManager.GetString("ToggleIncludedSkills", resourceCulture);
             }
         }
         

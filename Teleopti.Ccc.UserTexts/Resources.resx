@@ -14306,8 +14306,8 @@ Help us improve your experience by sending an error report</value>
   <data name="SelectSkillArea" xml:space="preserve">
     <value>Select skill area</value>
   </data>
-  <data name="ToggleIncludedSkills" xml:space="preserve">
-    <value>Toggle included skills</value>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>Included skills</value>
     <comment>label for toggeling visibility of included skills</comment>
   </data>
   <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
