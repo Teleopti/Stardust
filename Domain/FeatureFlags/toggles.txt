@@ -89,6 +89,8 @@ Wfm_Requests_ApproveDeny_36297 = true
 Wfm_Requests_Waitlist_36232 = true
 Wfm_Requests_Cancel_37741 = DEV
 
+Wfm_Intraday_38074 = RC
+
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 
 WfmIntraday_MonitorActualvsForecasted_35176 = true

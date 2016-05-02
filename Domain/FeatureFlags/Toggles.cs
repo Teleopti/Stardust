@@ -85,7 +85,9 @@
 		Wfm_Requests_Filtering_37748,
 		Wfm_Requests_Cancel_37741,
 
-		Report_UseOpenXmlFormat_35797,
+        Wfm_Intraday_38074,
+            
+        Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_AgentSkillAnalyzer_12345,
 		Wfm_Use_Stardust,
