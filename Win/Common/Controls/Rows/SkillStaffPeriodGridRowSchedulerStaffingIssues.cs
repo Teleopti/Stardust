@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Forecasting;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -14,14 +15,12 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
     /// </remarks>
     public class SkillStaffPeriodGridRowSchedulerStaffingIssues : SkillStaffPeriodGridRowScheduler
     {
-        private readonly ISkill _skill;
         private readonly RowManager<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> _rowManager;
 
-        public SkillStaffPeriodGridRowSchedulerStaffingIssues(RowManager<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> rowManager, string cellType, string displayMember, string rowHeaderText, ISkill skill) 
+        public SkillStaffPeriodGridRowSchedulerStaffingIssues(RowManager<SkillStaffPeriodGridRowScheduler, ISkillStaffPeriod> rowManager, string cellType, string displayMember, string rowHeaderText) 
             : base(rowManager, cellType, displayMember, rowHeaderText)
         {
             _rowManager = rowManager;
-            _skill = skill; //need skill to calculate staffingIssues
         }
 
         public override void QueryCellInfo(CellInfo cellInfo)
@@ -34,7 +33,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 
         private void drawStaffingIssues(CellInfo cellInfo)
         {
-            if (_skill == null)
+	        var skill = _rowManager.DataSource.First().SkillDay.Skill;
+            if (skill == null)
                 return;
 
             ISkillStaffPeriod skillStaffPeriod = GetObjectAtPositionForInterval(_rowManager, cellInfo.ColIndex,
@@ -42,20 +42,20 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             if (skillStaffPeriod == null)
                 return;
 
-            IntervalHasOverstaffing overstaffing = new IntervalHasOverstaffing(_skill);
+            IntervalHasOverstaffing overstaffing = new IntervalHasOverstaffing(skill);
             if (overstaffing.IsSatisfiedBy(skillStaffPeriod))
             {
                 cellInfo.Style.Interior = ColorHelper.OverstaffingBrush;
                 cellInfo.Style.CellTipText = UserTexts.Resources.Overstaffing;
             }
 
-            IntervalHasUnderstaffing understaffing = new IntervalHasUnderstaffing(_skill);
+            IntervalHasUnderstaffing understaffing = new IntervalHasUnderstaffing(skill);
             if (understaffing.IsSatisfiedBy(skillStaffPeriod))
             {
                 cellInfo.Style.Interior = ColorHelper.UnderstaffingBrush;
                 cellInfo.Style.CellTipText = UserTexts.Resources.Understaffing;
             }
-            IntervalHasSeriousUnderstaffing seriousUnderstaffing = new IntervalHasSeriousUnderstaffing(_skill);
+            IntervalHasSeriousUnderstaffing seriousUnderstaffing = new IntervalHasSeriousUnderstaffing(skill);
             if (seriousUnderstaffing.IsSatisfiedBy(skillStaffPeriod))
             {
                 cellInfo.Style.Interior = ColorHelper.SeriousOverstaffingBrush;

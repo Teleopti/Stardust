@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -33,19 +32,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         private  ChartSettings _chartSettings = new ChartSettings();
         private readonly ChartSettings _defaultChartSettings = new ChartSettings();
 
-        private readonly IToggleManager _toggleManager;
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings, IToggleManager toggleManager)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, ChartSettings chartSettings)
         {
             _gridControl = gridControl;
             _chartSettings = chartSettings;
-            _toggleManager = toggleManager;
         }
 
-        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName, IToggleManager toggleManager)
+        public SkillIntradayGridPresenter(TeleoptiGridControl gridControl, string settingName)
         {
             _gridControl = gridControl;
-            _toggleManager = toggleManager;
             setupChartDefault();
 
             //temp
@@ -202,8 +198,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
                 {
                     gridRow = new SkillStaffPeriodGridRowSchedulerStaffingIssues(_rowManager, "PercentReadOnlyCell",
                                                                                  "RelativeDifferenceForDisplayOnly",
-                                                                                 UserTexts.Resources.RelativeDifference,
-                                                                                 _skill);
+                                                                                 UserTexts.Resources.RelativeDifference);
                     gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
                     _gridRows.Add(_rowManager.AddRow(gridRow));
                 }
@@ -274,7 +269,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
 					gridRow = new SkillStaffPeriodGridRowSchedulerStaffingIssues(_rowManager, "PercentReadOnlyCell",
 					                                                             "RelativeDifferenceIncoming",
-					                                                             UserTexts.Resources.RelativeDifferenceIncoming, _skill);
+					                                                             UserTexts.Resources.RelativeDifferenceIncoming);
 					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 

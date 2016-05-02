@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         private const int headerHeight12HourClock = 26;
         private readonly SkillIntradayGridPresenter _presenter;
 
-        public SkillIntradayGridControl(ChartSettings chartSettings, IToggleManager toggleManager)
+        public SkillIntradayGridControl(ChartSettings chartSettings)
         {
-            _presenter = new SkillIntradayGridPresenter(this, chartSettings, toggleManager);
+            _presenter = new SkillIntradayGridPresenter(this, chartSettings);
             QueryCellInfo += gridSkillDataQueryCellInfo;
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
         public SkillIntradayGridControl(string settingName, IToggleManager toggleManager)
         {
-            _presenter = new SkillIntradayGridPresenter(this, settingName, toggleManager);
+            _presenter = new SkillIntradayGridPresenter(this, settingName);
             QueryCellInfo += gridSkillDataQueryCellInfo;
             ColWidths[0] = headerWidth;
             if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
