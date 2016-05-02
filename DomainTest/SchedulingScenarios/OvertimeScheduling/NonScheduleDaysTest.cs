@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		}
 
 
-		[Test, Ignore("Fix soon!")]
+		[Test]
 		public void ShouldNotCreateAnyKindOfLayersIfRollbacked()
 		{
 			var scenario = new Scenario("_");
