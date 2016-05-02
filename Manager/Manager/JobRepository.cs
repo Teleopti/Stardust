@@ -523,115 +523,130 @@ namespace Stardust.Manager
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 					JobQueueItem jobQueueItem = null;
-					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
+					try
 					{
-						using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
+						sqlConnection.OpenWithRetry(_retryPolicyTimeout);
+						using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
 						{
-							using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
+							using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
 							{
-								if (sqlDataReader.HasRows)
+								using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
 								{
-									sqlDataReader.Read();
-									jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
+									if (sqlDataReader.HasRows)
+									{
+										sqlDataReader.Read();
+										jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
+									}
+								}
+
+								if (jobQueueItem == null)
+								{
+									sqlTransaction.Dispose();
+									sqlConnection.Close();
+									return;
+								}
+
+								var updateCommandText = @"UPDATE [Stardust].[JobQueue] SET Tagged = '0'
+											WHERE JobId = @jobId";
+
+								using (var command = new SqlCommand(updateCommandText, sqlConnection, sqlTransaction))
+								{
+									command.Parameters.Add("@jobId", SqlDbType.UniqueIdentifier).Value = jobQueueItem.JobId;
+									command.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 								}
 							}
-
-							if (jobQueueItem == null)
-							{
-								sqlTransaction.Dispose();
-								sqlConnection.Close();
-								return;
-							}
-
-							var updateCommandText = @"UPDATE [Stardust].[JobQueue] SET Tagged = '0'
-											WHERE JobId = @jobId" ;
-
-							using (var command = new SqlCommand(updateCommandText, sqlConnection, sqlTransaction))
-							{
-								command.Parameters.Add("@jobId", SqlDbType.UniqueIdentifier).Value = jobQueueItem.JobId;
-								command.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
-							}
+							sqlTransaction.Commit();
 						}
-						sqlTransaction.Commit();
+					}
+					catch (Exception exp)
+					{
+						this.Log().ErrorWithLineNumber(exp.Message, exp);
+						throw;
 					}
 
-
-					using (var sqlTransaction = sqlConnection.BeginTransaction())
+					try
 					{
-						
-						//using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
-						//{
-						//	using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
-						//	{
-						//		if (sqlDataReader.HasRows)
-						//		{
-						//			sqlDataReader.Read();
-						//			jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
-						//		}
-						//	}
-						//}
-
-						//if (jobQueueItem == null)
-						//{
-						//	sqlTransaction.Dispose();
-						//	sqlConnection.Close();
-						//	return;
-						//}
-						
-						var taskPostJob = new Task<HttpResponseMessage>(() =>
+						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
-							var builderHelper = new NodeUriBuilderHelper(availableNode);
-							var urijob = builderHelper.GetJobTemplateUri();
 
-							var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
-							response.Content = new StringContent(availableNode.ToString());
+							//using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
+							//{
+							//	using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
+							//	{
+							//		if (sqlDataReader.HasRows)
+							//		{
+							//			sqlDataReader.Read();
+							//			jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
+							//		}
+							//	}
+							//}
 
-							return response;
-						});
+							//if (jobQueueItem == null)
+							//{
+							//	sqlTransaction.Dispose();
+							//	sqlConnection.Close();
+							//	return;
+							//}
 
-						taskPostJob.Start();
-						taskPostJob.Wait();
-
-						string sentToWorkerNodeUri = null;
-
-						if (taskPostJob.IsCompleted)
-						{
-							//Should we really ignore all other results?
-							if (taskPostJob.Result.IsSuccessStatusCode ||
-							    taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
+							var taskPostJob = new Task<HttpResponseMessage>(() =>
 							{
-								sentToWorkerNodeUri = taskPostJob.Result.Content.ReadAsStringAsync().Result;  
+								var builderHelper = new NodeUriBuilderHelper(availableNode);
+								var urijob = builderHelper.GetJobTemplateUri();
 
-								using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
-								{
-									if (taskPostJob.Result.IsSuccessStatusCode)
-									{
-										insertIntoJobCommand.Parameters.AddWithValue("@Result", DBNull.Value);
-									}
-									else
-									{
-										insertIntoJobCommand.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
-									}
-									insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
-								}
-								using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
-								{
-									deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
-								}
-							}
-							Retry(sqlTransaction.Commit);
+								var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
+								response.Content = new StringContent(availableNode.ToString());
 
-							if (sentToWorkerNodeUri != null)
+								return response;
+							});
+
+							taskPostJob.Start();
+							taskPostJob.Wait();
+
+							string sentToWorkerNodeUri = null;
+
+							if (taskPostJob.IsCompleted)
 							{
-								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-								var urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
+								//Should we really ignore all other results?
+								if (taskPostJob.Result.IsSuccessStatusCode ||
+								    taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
+								{
+									sentToWorkerNodeUri = taskPostJob.Result.Content.ReadAsStringAsync().Result;
 
-								//what should happen if this response is not 200? 
-								var resp = httpSender.PutAsync(urijob, null);
+									using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
+									{
+										if (taskPostJob.Result.IsSuccessStatusCode)
+										{
+											insertIntoJobCommand.Parameters.AddWithValue("@Result", DBNull.Value);
+										}
+										else
+										{
+											insertIntoJobCommand.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
+										}
+										insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+									}
+									using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+									{
+										deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+									}
+								}
+								Retry(sqlTransaction.Commit);
+
+								if (sentToWorkerNodeUri != null)
+								{
+									var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
+									var urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
+
+									//what should happen if this response is not 200? 
+									var resp = httpSender.PutAsync(urijob, null);
+								}
 							}
 						}
+					}
+					catch (Exception exp)
+					{
+						this.Log().ErrorWithLineNumber(exp.Message, exp);
+						throw;
 					}
 				}
 			}
