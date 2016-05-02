@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 									 IResourceCalculateDelayer resourceCalculateDelayer,
 									 ISchedulingResultStateHolder schedulingResultStateHolder, Func<bool> isCancelled)
 	    {
-		    var cancel = false;
+			var cancel = false;
             foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
             {
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, _schedulingOptions, selectedPeriod);
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
 	                                                          schedulePartModifyAndRollbackService,
-	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
+	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder)))
 		            verifyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo, isCancelled);
 				else

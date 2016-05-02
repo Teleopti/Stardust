@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEffectiveRestriction shiftNudgeRestriction, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
+			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
 
 		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, DateOnly day,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEffectiveRestriction shiftNudgeRestriction, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
+			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 		{
 			var cancelMe = false;
 			if (roleModelShift == null) return false;
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						continue;
 				}
 				cancelMe = _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
-					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, dayScheduled);
+					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, businessRules, dayScheduled);
 			}
 
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);

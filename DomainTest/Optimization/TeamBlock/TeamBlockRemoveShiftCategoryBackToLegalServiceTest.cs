@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_shiftCategoryLimitation = new ShiftCategoryLimitation(_shiftCategory);
 			_scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_scheduleMatrixPros = new List<IScheduleMatrixPro>{_scheduleMatrixPro};
-			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder = _mock.Stub<ISchedulingResultStateHolder>();
 			_rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
 
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).Return(true);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -143,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
 				
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).Return(true);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -177,10 +178,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
 				
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).Return(false);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(false);
 
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).Return(true);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -214,10 +215,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false);
 
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).Return(false);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(false);
 
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).Return(false);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(false);
 
 				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 
@@ -261,7 +262,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(_shiftCategoryLimitation, _teamInfo, _dateOnly)).Return(false).IgnoreArguments();
 				Expect.Call(_shiftCategoryLimitCounter.HaveMaxOfShiftCategory(shiftCategoryLimitationOther, _teamInfo, _dateOnly)).Return(true).IgnoreArguments();
 
-				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective)).Return(true);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder))).IgnoreArguments().Return(true);
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
 				Expect.Call(_scheduleMatrixPro.Person).Return(_person);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());

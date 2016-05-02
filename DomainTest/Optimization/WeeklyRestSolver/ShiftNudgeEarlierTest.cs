@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	        var period = new DateTimePeriod(new DateTime(2014, 3, 19, 8, 0, 0, DateTimeKind.Utc),
 		        new DateTime(2014, 3, 19, 16, 0, 0, DateTimeKind.Utc));
 			_personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(PersonFactory.CreatePerson(), period);
-	        _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+	        _schedulingResultStateHolder = _mocks.Stub<ISchedulingResultStateHolder>();
 			_blockInfo = _mocks.StrictMock<IBlockInfo>();
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder,
-					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left)))
+					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(true);
 			}
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					_rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder,
-					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left)))
+					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder)))
 					.IgnoreArguments()
 					.Return(false);
 				Expect.Call(() => _rollbackService.Rollback());

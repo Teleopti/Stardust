@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -34,8 +35,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 		{
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			var date = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
-			bool success = _teamBlockSingleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, date, roleModelShift,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, null, null);
+			var rules = NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder);
+			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, date, roleModelShift,
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, null, rules, null);
 			if (!success)
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);

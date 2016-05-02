@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.BackToLegalShift;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 			_roleModelShift = _mocks.StrictMock<IShiftProjectionCache>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
-			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_schedulingResultStateHolder = _mocks.Stub<ISchedulingResultStateHolder>();
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 9, 22, 2014, 9, 22));
 		}
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockSingleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions,
 					new DateOnly(2014, 9, 22), _roleModelShift, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, null, null)).Return(true);
+					_schedulingResultStateHolder, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).IgnoreArguments().Return(true);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockSingleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions,
 					new DateOnly(2014, 9, 22), _roleModelShift, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, null, null)).Return(false);
+					_schedulingResultStateHolder, null, NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder), null)).IgnoreArguments().Return(false);
 				Expect.Call(() => _safeRollBackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}

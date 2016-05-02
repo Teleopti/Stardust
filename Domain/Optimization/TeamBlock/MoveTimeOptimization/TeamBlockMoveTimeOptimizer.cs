@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
 			var success = _teamBlockScheduler.ScheduleTeamBlockDay(firstTeamBlock, firstDayDate, schedulingOptions,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 
 			if (!success)
 			{
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 			success = _teamBlockScheduler.ScheduleTeamBlockDay(secondTeamBlock, secondDayDate, schedulingOptions,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
+				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));
 
 			if (!success)
 			{

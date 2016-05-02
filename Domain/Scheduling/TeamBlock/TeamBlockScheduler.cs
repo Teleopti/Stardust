@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								ISchedulePartModifyAndRollbackService rollbackService, 
 								IResourceCalculateDelayer resourceCalculateDelayer,
 								ISchedulingResultStateHolder schedulingResultStateHolder,
-								ShiftNudgeDirective shiftNudgeDirective);
+								ShiftNudgeDirective shiftNudgeDirective,
+								INewBusinessRuleCollection businessRules);
 
 		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
 			ITeamBlockInfo teamBlockInfo,
@@ -81,7 +82,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			ShiftNudgeDirective shiftNudgeDirective)
+			ShiftNudgeDirective shiftNudgeDirective,
+			INewBusinessRuleCollection businessRules)
 
 		{
 			var teamInfo = teamBlockInfo.TeamInfo;
@@ -100,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var selectedBlockDays = teamBlockInfo.BlockInfo.UnLockedDates();
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, () =>
+				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, businessRules, () =>
 				{
 					cancelMe = true;
 				});
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
 						schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
 					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays,
-						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, ()=>
+						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, businessRules, ()=>
 						{
 							cancelMe = true;
 						});
@@ -141,7 +143,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction);		
-				success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, ()=>
+				success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective, businessRules, ()=>
 				{
 					cancelMe = true;
 				});
@@ -160,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return success;
 		}
 
-		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, ShiftNudgeDirective shiftNudgeDirective, Action cancelAction)
+		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, ShiftNudgeDirective shiftNudgeDirective, INewBusinessRuleCollection businessRules, Action cancelAction)
 		{
 			var lastIndex = selectedBlockDays.Count - 1;
 			IEffectiveRestriction shiftNudgeRestriction = new EffectiveRestriction();
@@ -179,7 +181,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				var successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, day,
 					roleModelShift, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction, (e) =>
+					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction, businessRules, (e) =>
 					{
 						if (DayScheduled != null)
 						{
