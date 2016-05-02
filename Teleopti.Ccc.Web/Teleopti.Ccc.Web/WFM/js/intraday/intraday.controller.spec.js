@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('IntradayAreaCtrl', function () {
+describe('IntradayCtrl', function () {
 	var $httpBackend,
 		$controller,
 		$filter,
@@ -15,7 +15,7 @@ describe('IntradayAreaCtrl', function () {
 	beforeEach(module('wfm.intraday'));
 
 	beforeEach(function () {
-
+	    
 		skills = [
 		{
 			Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
@@ -91,7 +91,7 @@ describe('IntradayAreaCtrl', function () {
 	}));
 
 	var createController = function(isNewlyCreatedSkillArea) {
-		$controller('IntradayAreaCtrl', {
+		$controller('IntradayCtrl', {
 			$scope: scope,
 			$translate: $translate
 		});
