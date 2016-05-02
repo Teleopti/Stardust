@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IRequestFactory _factory;
 		private IScheduleDifferenceSaver _scheduleDictionarySaver;
 		private ICurrentScenario _scenarioRepository;
-		private IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
 		private IScheduleRange _scheduleRange;
 		private ILoadSchedulesForRequestWithoutResourceCalculation _loaderWithoutResourceCalculation;
 		private IPersonRepository _personRepository;
@@ -70,10 +69,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			MockRepository.GenerateMock<IBudgetGroupHeadCountSpecification>();
 			var businessRules = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
 
-			_updateScheduleProjectionReadModel = MockRepository.GenerateMock<IUpdateScheduleProjectionReadModel>();
-
 			_target = new NewAbsenceReportBase( _scenarioRepository,
-				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), _factory, _scheduleDictionarySaver, _updateScheduleProjectionReadModel,
+				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), _factory, _scheduleDictionarySaver,
 				_loaderWithoutResourceCalculation, _personRepository, businessRules);
 		}
 
@@ -95,27 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_loaderWithoutResourceCalculation.AssertWasCalled(
 				x => x.Execute(_scenario, expectedPeriod, new List<IPerson> {_person}, _schedulingResultStateHolder));
 		}
-
-		[Test]
-		public void ShouldRecreateScheduleReadModels()
-		{
-			var dateOnlyPeriod = getExpectedPeriod().ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
-			_loaderWithoutResourceCalculation.Execute(_scenario, getExpectedPeriod().ChangeStartTime(TimeSpan.FromDays(-1)),
-				new List<IPerson> {_person}, _schedulingResultStateHolder);
-
-			prepareAbsenceReport();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person))
-				.Return(new List<IBusinessRuleResponse>());
-
-			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
-
-			expectLoadOfSchedules();
-			expectPersistOfDictionary();
-
-			_target.Handle(_message);
-			_updateScheduleProjectionReadModel.AssertWasCalled(x => x.Execute(_scheduleRange, dateOnlyPeriod));
-		}
-
+		
 		[Test]
 		public void VerifyAbsenceReportNotAppliedWhenAbsenceNotReportable()
 		{

@@ -533,7 +533,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ScheduleDayReadModelsCreator.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModel\ShiftExchangeOfferHandler.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\IUpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\ScheduleProjectionReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\ProjectionChangedEvent.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventBase.cs" />
@@ -551,7 +550,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleDay.cs" />
     <Compile Include="ApplicationLayer\Events\ScheduleInitializeTriggeredEventForScheduleProjection.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\SyncPublishTo.cs" />
     <Compile Include="ApplicationLayer\TrackingMessageSender.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />

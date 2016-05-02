@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -42,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private FakeScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private LoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private LoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
-		private UpdateScheduleProjectionReadModel _scheduleProjectionReadModel;
 
 		FakeScheduleDataReadScheduleStorage _scheduleRepository;
 		FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
@@ -61,8 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_fakeBudgetDayRepository = new FakeBudgetDayRepository();
 			_scheduleProjectionReadOnlyPersister = new FakeScheduleProjectionReadOnlyPersister();
-
-			_scheduleProjectionReadModel = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), _scheduleProjectionReadOnlyPersister);
 
 			_personAccountUpdaterDummy = new PersonAccountUpdaterDummy();
 
@@ -501,8 +496,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
 				_personAccountUpdaterDummy, toggleManager);
 
-			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, _scheduleProjectionReadModel, new SchedulingResultStateHolderProvider());
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, new SchedulingResultStateHolderProvider(), _scheduleProjectionReadModel, new AbsenceRequestWaitlistProvider (_personRequestRepository));
+			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, new SchedulingResultStateHolderProvider());
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, new SchedulingResultStateHolderProvider(), new AbsenceRequestWaitlistProvider (_personRequestRepository));
 			
 			var newAbsenceRequestConsumer = new NewAbsenceRequestHandler(
 				_unitOfWorkFactory, _currentScenario,_personRequestRepository, absenceRequestWaitlistProcessor,absenceProcessor);
@@ -516,14 +511,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				person,
 				new DateTimePeriod(startDate, endDate));
 		}
-
-		private IPersonAbsence createPersonAbsence(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
-		{
-			return PersonAbsenceFactory.CreatePersonAbsence(
-				person, 
-				currentScenario.Current(),
-				new DateTimePeriod(startDate, endDate));
-		}
-
+		
 	}
 }

@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
 
 		private readonly IList<LoadDataAction> _loadDataActions;
-		private readonly IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private readonly IPersonRepository _personRepository;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public NewAbsenceReportBase(ICurrentScenario scenarioRepository,
 			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
 			IScheduleDifferenceSaver scheduleDictionarySaver,
-			IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
 			IPersonRepository personRepository,
 			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_schedulingResultStateHolderProvider = schedulingResultStateHolderProvider;
 			_factory = factory;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
-			_updateScheduleProjectionReadModel = updateScheduleProjectionReadModel;
 			_loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
 			_personRepository = personRepository;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
@@ -154,9 +151,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						clearStateHolder();
 						return;
 					}
-
-					_updateScheduleProjectionReadModel.Execute(_schedulingResultStateHolder.Schedules[person], dateOnlyPeriod);
-
 				}
 			}
 
@@ -215,12 +209,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public NewAbsenceReportServiceBusEventHandler(ICurrentScenario scenarioRepository,
 			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
 			IScheduleDifferenceSaver scheduleDictionarySaver,
-			IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
 			IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 			: base(
 				scenarioRepository, schedulingResultStateHolderProvider, factory, scheduleDictionarySaver,
-				updateScheduleProjectionReadModel, loadSchedulesForRequestWithoutResourceCalculation, personRepository,
+				loadSchedulesForRequestWithoutResourceCalculation, personRepository,
 				businessRulesForPersonalAccountUpdate)
 		{
 		}
@@ -240,12 +233,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public NewAbsenceReportHangfireEventHandler(ICurrentScenario scenarioRepository,
 			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
 			IScheduleDifferenceSaver scheduleDictionarySaver,
-			IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
 			IPersonRepository personRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 			: base(
 				scenarioRepository, schedulingResultStateHolderProvider, factory, scheduleDictionarySaver,
-				updateScheduleProjectionReadModel, loadSchedulesForRequestWithoutResourceCalculation, personRepository,
+				loadSchedulesForRequestWithoutResourceCalculation, personRepository,
 				businessRulesForPersonalAccountUpdate)
 		{
 		}

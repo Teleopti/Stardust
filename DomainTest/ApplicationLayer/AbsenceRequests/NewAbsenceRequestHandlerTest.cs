@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private IAlreadyAbsentSpecification _alreadyAbsentSpecification;
 		private IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
 		private IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
-		private IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
 		private ILoadSchedulingStateHolderForResourceCalculation _loader;
 		private IResourceOptimizationHelper _resourceOptimizationHelper;
 		private IScheduleRange _scheduleRange;
@@ -84,7 +83,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_budgetGroupAllowanceSpecification = MockRepository.GenerateMock<IBudgetGroupAllowanceSpecification>();
 			_budgetGroupHeadCountSpecification = MockRepository.GenerateMock<IBudgetGroupHeadCountSpecification>();
 			_resourceOptimizationHelper = MockRepository.GenerateMock<IResourceOptimizationHelper>();
-			_updateScheduleProjectionReadModel = MockRepository.GenerateMock<IUpdateScheduleProjectionReadModel>();
 
 			_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
 
@@ -98,9 +96,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new FalseToggleManager());
 
 
-			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _updateScheduleProjectionReadModel, _schedulingResultStateHolderProvider);
+			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _schedulingResultStateHolderProvider);
 			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater,
-				_schedulingResultStateHolderProvider, _updateScheduleProjectionReadModel,
+				_schedulingResultStateHolderProvider, 
 				new AbsenceRequestWaitlistProvider(_personRequestRepository));
 
 			_target = new NewAbsenceRequestHandler(
@@ -343,48 +341,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 			_loaderWithoutResourceCalculation.AssertWasCalled(x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }, _schedulingResultStateHolder));
 		}
-
-		[Test]
-		public void ShouldOnlyRecreateScheduleReadModelsOnApprove()
-		{
-			var processAbsenceRequest = MockRepository.GenerateMock<IProcessAbsenceRequest>();
-			var absenceRequestValidator = MockRepository.GenerateMock<IAbsenceRequestValidator>();
-
-			var personAbsenceAccount = new PersonAbsenceAccount(_person, _absence);
-			_personAccountCollection.Add(personAbsenceAccount);
-			_loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }, _schedulingResultStateHolder);
-			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
-
-			var absenceRequestOpenDatePeriod = MockRepository.GenerateMock<IAbsenceRequestOpenPeriod>();
-			var openAbsenceRequestPeriodExtractor = MockRepository.GenerateMock<IOpenAbsenceRequestPeriodExtractor>();
-			var openAbsenceRequestPeriodProjection = MockRepository.GenerateMock<IOpenAbsenceRequestPeriodProjection>();
-			var periodList = new List<IAbsenceRequestOpenPeriod> { absenceRequestOpenDatePeriod };
-
-			PrepareAbsenceRequest();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person, _absenceRequest)).Return(new List<IBusinessRuleResponse>());
-			_personAbsenceAccountProvider.Stub(x => x.Find(_person)).Return(_personAccountCollection);
-			_personAccountUpdater.Stub(x => x.UpdateForAbsence(_person, _absence, new DateOnly(_period.StartDateTime)))
-				.Return(true);
-
-			_workflowControlSet.Stub(x => x.GetMergedAbsenceRequestOpenPeriod(_absenceRequest)).Return(absenceRequestOpenDatePeriod);
-			_workflowControlSet.Stub(x => x.GetExtractorForAbsence(_absence)).Return(openAbsenceRequestPeriodExtractor);
-			openAbsenceRequestPeriodExtractor.Stub(x => x.Projection).Return(openAbsenceRequestPeriodProjection);
-			openAbsenceRequestPeriodProjection.Stub(x => x.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).IgnoreArguments().Return(periodList);
-			absenceRequestOpenDatePeriod.Stub(x => x.AbsenceRequestProcess).Return(processAbsenceRequest);
-			absenceRequestOpenDatePeriod.Stub(x => x.GetSelectedValidatorList()).Return(validatorList);
-			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
-			_unitOfWork.Stub(x => x.Merge(personAbsenceAccount)).Return(personAbsenceAccount);
-			_personRequest.Stub(x => x.IsApproved).Return(true);
-			_alreadyAbsentSpecification.Stub(x => x.IsSatisfiedBy(new AbsenceRequstAndSchedules {AbsenceRequest = _absenceRequest, SchedulingResultStateHolder = _schedulingResultStateHolder})).Return(false);
-			ExpectLoadOfSchedules();
-			ExpectPersistOfDictionary();
-
-			_target.Handle(_message);
-			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Twice());
-			_updateScheduleProjectionReadModel.AssertWasCalled(x => x.Execute(_scheduleRange, _dateOnlyPeriod));
-			processAbsenceRequest.AssertWasCalled(x => x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(), new RequiredForHandlingAbsenceRequest(), validatorList), o => o.IgnoreArguments());
-		}
-
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSetRequestToDeniedWhenAlreadyAbsentAndAutoGrantEnabled()
 		{
@@ -504,10 +461,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scheduleIsInvalidSpecification.Stub(x => x.IsSatisfiedBy(_schedulingResultStateHolder)).Return(false);
 
 			_target.Handle(_message);
-			_unitOfWork.AssertWasCalled(x => x.PersistAll(), o => o.Repeat.Times(2));
+			_unitOfWork.AssertWasCalled(x => x.PersistAll());
 			_loaderWithoutResourceCalculation.Stub(
 				x => x.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person }, _schedulingResultStateHolder));
-			_updateScheduleProjectionReadModel.Stub(x => x.Execute(_scheduleRange, _dateOnlyPeriod));
 			processAbsenceRequest.AssertWasCalled(
 				x =>
 				x.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(),

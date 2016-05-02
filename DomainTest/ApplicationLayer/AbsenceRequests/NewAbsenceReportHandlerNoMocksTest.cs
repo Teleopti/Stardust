@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		readonly ICurrentScenario _currentScenario = new FakeCurrentScenario();
 		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
 		private FakeScheduleDataReadScheduleStorage _scheduleRepository;
-		private UpdateScheduleProjectionReadModel _scheduleProjectionReadModel;
 		private FakeScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private LoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder();
 			_scheduleRepository = new FakeScheduleDataReadScheduleStorage();
 			_scheduleProjectionReadOnlyPersister = new FakeScheduleProjectionReadOnlyPersister();
-			_scheduleProjectionReadModel = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), _scheduleProjectionReadOnlyPersister);
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 			_loadSchedulesForRequestWithoutResourceCalculation = new LoadSchedulesForRequestWithoutResourceCalculation(_personAbsenceAccountRepository, _scheduleRepository);
 			_personRepository = new FakePersonRepository();
@@ -121,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				_schedulingResultStateHolder);
 
 			var absenceReportConsumer = new NewAbsenceReportBase( _currentScenario,
-				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), requestFactory, scheduleDictionarySaver, _scheduleProjectionReadModel,
+				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), requestFactory, scheduleDictionarySaver,
 				_loadSchedulesForRequestWithoutResourceCalculation, _personRepository, businessRules);
 			return absenceReportConsumer;
 		}
