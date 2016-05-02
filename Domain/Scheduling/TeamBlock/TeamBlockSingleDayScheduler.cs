@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						continue;
 				}
 				cancelMe = _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
-					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, businessRules, dayScheduled);
+					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, businessRules, schedulingOptions, dayScheduled);
 			}
 
 			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);

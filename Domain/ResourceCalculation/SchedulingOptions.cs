@@ -107,7 +107,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _notAllowedShiftProjectionCaches.Clear();
 	    }
 
-    	public SchedulingOptions()
+	    public IMultiplicatorDefinitionSet OvertimeType { get; set; }
+
+	    public SchedulingOptions()
 		{
 			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
 			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());

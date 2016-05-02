@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AnalyticsScheduleChangeForDefaultScenarioFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			}
-
+			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
 
 			registerForJobs(builder);
 		}

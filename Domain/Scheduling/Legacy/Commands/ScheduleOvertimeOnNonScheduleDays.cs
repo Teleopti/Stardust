@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				var schedulingOptions = new SchedulingOptions
 				{
-					FixedShiftBag = overtimePreferences.ShiftBagToUse
+					FixedShiftBag = overtimePreferences.ShiftBagToUse,
+					OvertimeType = overtimePreferences.OvertimeType
 				};
 				var rules = NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState);
 				if (!overtimePreferences.AllowBreakMaxWorkPerWeek)

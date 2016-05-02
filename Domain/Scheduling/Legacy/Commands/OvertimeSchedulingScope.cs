@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		 * Temporarly hack to fix...
 		 * * We need to remove dayoffs otherwise no scheduling will occur
 		 * * Need to "turn off" nightly rest rule if user has checked AllowBreakNightlyRest
-		 * * Change scheduled layers to be overtime layers
 		 * * AvailableAgentsOnly handled by "scheduling"
 		 * ...we'll fix these one-by-one later
 		 */
@@ -42,13 +40,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return new GenericDisposable(() =>
 			{
 				var currScheduleDay = scheduleDictionary[agent].ScheduledDay(date);
-				var currLayers = currScheduleDay.PersonAssignment(true).MainActivities();
-				currScheduleDay.Clear<IPersonAssignment>();
 				if (hasDayOff)
 				{
 					orgPersonAss.SetThisAssignmentsDayOffOn(currScheduleDay.PersonAssignment(true));
 				}
-				currLayers.ForEach(x => currScheduleDay.CreateAndAddOvertime(x.Payload, x.Period, overtimePreferences.OvertimeType));
 				var rollBackOnOvertimeAvailability = false;
 				if (overtimePreferences.AvailableAgentsOnly)
 				{

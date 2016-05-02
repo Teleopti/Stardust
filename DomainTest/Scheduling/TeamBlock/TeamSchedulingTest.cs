@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_schedulePartModifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_target = new TeamScheduling();
+			_target = new TeamScheduling(new AssignScheduledLayers());
 			_group = new Group(new List<IPerson>{ _person }, "hej");
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
@@ -97,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
 	            _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache,
 		            _schedulePartModifyAndRollbackService,
-		            _resourceCalculateDelayer, false, rules, null);   
+		            _resourceCalculateDelayer, false, rules, new SchedulingOptions(), null);
             }
 
         }
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
 	            _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache,
 		            _schedulePartModifyAndRollbackService,
-		            _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), null);
+		            _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), new SchedulingOptions(), null);
             }
 
         }
@@ -155,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		    using (_mock.Playback())
 		    {
-			    _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), null);
+			    _target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), new SchedulingOptions(), null);
 		    }
 	    }
 
@@ -187,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
-				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), null);
+				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, false, NewBusinessRuleCollection.Minimum(), new SchedulingOptions(), null);
 			}
 		}
     }

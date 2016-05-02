@@ -329,5 +329,6 @@ namespace Teleopti.Interfaces.Domain
 		IList<IShiftProjectionCache> NotAllowedShiftProjectionCaches { get; }
 	    IRuleSetBag FixedShiftBag { get; set; }
 	    void ClearNotAllowedShiftProjectionCaches();
-    }
+		IMultiplicatorDefinitionSet OvertimeType { get; set; }
+	}
 }

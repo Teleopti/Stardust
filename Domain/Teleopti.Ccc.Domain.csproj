@@ -243,6 +243,7 @@
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
+    <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />
     <Compile Include="Security\Principal\IUpdatedBy.cs" />
     <Compile Include="Security\Principal\IUpdatedByScope.cs" />
     <Compile Include="Security\Principal\UpdatedBy.cs" />
