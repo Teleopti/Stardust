@@ -30,48 +30,43 @@ namespace Stardust.Manager
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
-					var command = new SqlCommand
+					using (var command = connection.CreateCommand())
 					{
-						Connection = connection,
-						CommandText = "SELECT Id, Url, Heartbeat, Alive " +
-						              "FROM [Stardust].[WorkerNode]"
-					};
+						command.CommandText = "SELECT Id, Url, Heartbeat, Alive " +
+										 "FROM [Stardust].[WorkerNode]";
 
-					connection.OpenWithRetry(_retryPolicy);
+						connection.OpenWithRetry(_retryPolicy);
 
-					var reader = command.ExecuteReaderWithRetry(_retryPolicy);
-
-					if (reader.HasRows)
-					{
-						var ordinalPositionForIdField = reader.GetOrdinal("Id");
-						var ordinalPositionForUrlField = reader.GetOrdinal("Url");
-						var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
-						var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
-
-						while (reader.Read())
+						using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
 						{
-							var jobDefinition = new WorkerNode
+							if (reader.HasRows)
 							{
-								Id = (Guid) reader.GetValue(ordinalPositionForIdField),
-								Url = new Uri((string) reader.GetValue(ordinalPositionForUrlField)),
-								Alive = (bool) reader.GetValue(ordinalPositionForAliveField),
-								Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField)
-							};
+								var ordinalPositionForIdField = reader.GetOrdinal("Id");
+								var ordinalPositionForUrlField = reader.GetOrdinal("Url");
+								var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
+								var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
 
-							listToReturn.Add(jobDefinition);
+								while (reader.Read())
+								{
+									var workerNode = new WorkerNode
+									{
+										Id = (Guid)reader.GetValue(ordinalPositionForIdField),
+										Url = new Uri((string)reader.GetValue(ordinalPositionForUrlField)),
+										Alive = (bool)reader.GetValue(ordinalPositionForAliveField),
+										Heartbeat = (DateTime)reader.GetValue(ordinalPositionForHeartbeatField)
+									};
+
+									listToReturn.Add(workerNode);
+								}
+							}
 						}
 					}
-
-					reader.Close();
-
-					return listToReturn;
 				}
+				return listToReturn;
 			}
-
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
-
 				throw;
 			}
 		}
@@ -84,18 +79,19 @@ namespace Stardust.Manager
 				{
 					connection.OpenWithRetry(_retryPolicy);
 
-					var workerNodeCommand = connection.CreateCommand();
+					using (var workerNodeCommand = connection.CreateCommand())
+					{
+						workerNodeCommand.CommandText = "INSERT INTO [Stardust].[WorkerNode] " +
+													"(Id, Url, Heartbeat, Alive) " +
+													"VALUES(@Id, @Url, @Heartbeat, @Alive)";
 
-					workerNodeCommand.CommandText = "INSERT INTO [Stardust].[WorkerNode] " +
-					                                "(Id, Url, Heartbeat, Alive) " +
-					                                "VALUES(@Id, @Url, @Heartbeat, @Alive)";
+						workerNodeCommand.Parameters.AddWithValue("@Id", workerNode.Id);
+						workerNodeCommand.Parameters.AddWithValue("@Url", workerNode.Url.ToString());
+						workerNodeCommand.Parameters.AddWithValue("@Heartbeat", workerNode.Heartbeat);
+						workerNodeCommand.Parameters.AddWithValue("@Alive", workerNode.Alive);
 
-					workerNodeCommand.Parameters.AddWithValue("@Id", workerNode.Id);
-					workerNodeCommand.Parameters.AddWithValue("@Url", workerNode.Url.ToString());
-					workerNodeCommand.Parameters.AddWithValue("@Heartbeat", workerNode.Heartbeat);
-					workerNodeCommand.Parameters.AddWithValue("@Alive", workerNode.Alive);
-
-					workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+						workerNodeCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+					}
 				}
 			}
 			catch (Exception exp)
@@ -104,6 +100,7 @@ namespace Stardust.Manager
 					return;
 
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 
@@ -147,7 +144,6 @@ namespace Stardust.Manager
 									listOfObjectArray.Add(temp);
 								}
 							}
-							readAllWorkerNodes.Close();
 						}
 					}
 
@@ -187,6 +183,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 
 			return deadNodes;
@@ -224,6 +221,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 	}
