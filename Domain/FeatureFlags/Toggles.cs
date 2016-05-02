@@ -116,7 +116,8 @@
 		GroupPageCollection_ToHangfire_38178,
 		SettingsForPersonPeriodChanged_ToHangfire_38207,
 		ETL_SpeedUpIntradayDayOff_38213,
-		Wfm_MoveExportMultiSiteSkillOnStardust_38134
+		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
+		Payroll_ToStardust_38204
 		// ReSharper restore InconsistentNaming
 	}
 }
