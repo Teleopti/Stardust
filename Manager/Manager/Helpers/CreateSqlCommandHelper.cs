@@ -4,9 +4,9 @@ using Stardust.Manager.Models;
 
 namespace Stardust.Manager.Helpers
 {
-	public static class CreateCommandHelper
+	public class CreateSqlCommandHelper
 	{
-		public static SqlCommand CreateUpdateResultCommand(Guid jobId, string result, DateTime ended, SqlConnection sqlConnection)
+		public SqlCommand CreateUpdateResultCommand(Guid jobId, string result, DateTime ended, SqlConnection sqlConnection)
 		{
 			var updateJobCommandText = "UPDATE [Stardust].[Job] " +
 			                           "SET Result = @Result," +
@@ -20,7 +20,7 @@ namespace Stardust.Manager.Helpers
 			return updateCommand;
 		}
 
-		public static SqlCommand CreateInsertIntoJobDetailCommand(Guid jobId, string detail, DateTime created, SqlConnection sqlConnection)
+		public SqlCommand CreateInsertIntoJobDetailCommand(Guid jobId, string detail, DateTime created, SqlConnection sqlConnection)
 		{
 			const string insertIntoJobDetailCommandText = @"INSERT INTO [Stardust].[JobDetail]
 																([JobId]
@@ -38,7 +38,7 @@ namespace Stardust.Manager.Helpers
 			return insertCommand;
 		}
 
-		public static SqlCommand CreateGetJobQueueItemByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
+		public SqlCommand CreateGetJobQueueItemByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
 		{
 			const string selectJobQueueItemCommandText =
 				@"SELECT  [JobId]
@@ -55,7 +55,7 @@ namespace Stardust.Manager.Helpers
 			return selectSqlCommand;
 		}
 
-		public static SqlCommand CreateSelectJobByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
+		public SqlCommand CreateSelectJobByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
 		{
 			const string selectJobByJobIdCommandText = @"SELECT [JobId]
 														,[Name]
@@ -77,7 +77,7 @@ namespace Stardust.Manager.Helpers
 		}
 
 
-		public static SqlCommand CreateSelect1JobQueueItemCommand(SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateSelect1JobQueueItemCommand(SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			var selectOneJobQueueItemCommandText = @"SELECT Top 1  [JobId],
 								[Name],
@@ -94,7 +94,7 @@ namespace Stardust.Manager.Helpers
 			return selectSqlCommand;
 		}
 
-		public static SqlCommand CreateUpdateCancellingResultCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateUpdateCancellingResultCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			var updateJobSetResultCommandText = "UPDATE [Stardust].[Job] " +
 												"SET Result = @Result " +
@@ -109,7 +109,7 @@ namespace Stardust.Manager.Helpers
 		}
 
 
-		public static SqlCommand CreateInsertIntoJobCommand(JobQueueItem jobQueueItem, string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateInsertIntoJobCommand(JobQueueItem jobQueueItem, string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			var insertIntoJobCommandText = @"INSERT INTO [Stardust].[Job]
 								   ([JobId]
@@ -151,7 +151,7 @@ namespace Stardust.Manager.Helpers
 		}
 
 
-		public static SqlCommand CreateGetAllJobsCommand(SqlConnection sqlConnection)
+		public SqlCommand CreateGetAllJobsCommand(SqlConnection sqlConnection)
 		{
 			var selectCommandText = @"SELECT  [JobId]
 											  ,[Name]
@@ -169,7 +169,7 @@ namespace Stardust.Manager.Helpers
 			return selectSqlCommand;
 		}
 
-		public static SqlCommand CreateGetAllExecutingJobsCommand(SqlConnection sqlConnection)
+		public SqlCommand CreateGetAllExecutingJobsCommand(SqlConnection sqlConnection)
 		{
 			const string selectCommandText = @"SELECT  [JobId]
 											  ,[Name]
@@ -189,7 +189,7 @@ namespace Stardust.Manager.Helpers
 			return selectSqlCommand;
 		}
 
-		public static SqlCommand CreateSelectJobDetailByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
+		public SqlCommand CreateSelectJobDetailByJobIdCommand(Guid jobId, SqlConnection sqlConnection)
 		{
 			var selectCommandText = @"SELECT  
 											Id, 
@@ -207,7 +207,7 @@ namespace Stardust.Manager.Helpers
 
 
 
-		public static SqlCommand CreateSelectJobThatDidNotEndCommand(string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateSelectJobThatDidNotEndCommand(string sentToWorkerNodeUri, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			const string selectJobByJobIdCommandText = @"SELECT [JobId]
 											  ,[Name]
@@ -231,7 +231,7 @@ namespace Stardust.Manager.Helpers
 			return selectCommand;
 		}
 
-		public static SqlCommand CreateInsertIntoJobQueueCommand(JobQueueItem jobQueueItem, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateInsertIntoJobQueueCommand(JobQueueItem jobQueueItem, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			const string insertIntoJobQueueCommandText = @"INSERT INTO [Stardust].[JobQueue]
 							   ([JobId],
@@ -261,7 +261,7 @@ namespace Stardust.Manager.Helpers
 			return insertCommand;
 		}
 
-		public static SqlCommand CreateDeleteJobByJobIdCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateDeleteJobByJobIdCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			var deleteJobByIdSqlCommandText = @"DELETE FROM [Stardust].[Job] 
 												   WHERE JobId = @JobId";
@@ -274,7 +274,7 @@ namespace Stardust.Manager.Helpers
 			return deleteCommand;
 		}
 
-		public static SqlCommand CreateSelectAllAliveWorkerNodesCommand(SqlConnection sqlConnection)
+		public SqlCommand CreateSelectAllAliveWorkerNodesCommand(SqlConnection sqlConnection)
 		{
 			const string selectAllAliveWorkerNodesCommandText = @"SELECT   
 												   [Id]
@@ -288,7 +288,7 @@ namespace Stardust.Manager.Helpers
 			return sqlCommand;
 		}
 
-		public static SqlCommand CreateSelectWorkerNodeCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateSelectWorkerNodeCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			var selectWorkerNodeUriFromJobCommandText = "SELECT SentToWorkerNodeUri " +
 																	"FROM [Stardust].[Job] " +
@@ -301,7 +301,7 @@ namespace Stardust.Manager.Helpers
 			return selectCommand;
 		}
 
-		public static SqlCommand CreateSelectAllItemsInJobQueueCommand(SqlConnection connection)
+		public SqlCommand CreateSelectAllItemsInJobQueueCommand(SqlConnection connection)
 		{
 			const string selectAllItemsInJobQueueCommandText = @"SELECT 
 										[JobId],
@@ -318,7 +318,7 @@ namespace Stardust.Manager.Helpers
 			return command;
 		}
 
-		public static SqlCommand CreateDeleteFromJobQueueCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		public SqlCommand CreateDeleteFromJobQueueCommand(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction)
 		{
 			const string deleteItemFromJobQueueItemCommandText =
 					"DELETE FROM [Stardust].[JobQueue] " +
@@ -332,7 +332,7 @@ namespace Stardust.Manager.Helpers
 		}
 
 
-		public static SqlCommand CreateDoesJobDetailItemExistsCommand(Guid jobId,
+		public SqlCommand CreateDoesJobDetailItemExistsCommand(Guid jobId,
 														   SqlConnection sqlConnection)
 		{
 			const string selectCommandText = @"SELECT COUNT(*) 
@@ -346,7 +346,7 @@ namespace Stardust.Manager.Helpers
 			return command;
 		}
 
-		public static SqlCommand CreateDoesJobQueueItemExistsCommand(Guid jobId, SqlConnection sqlConnection)
+		public SqlCommand CreateDoesJobQueueItemExistsCommand(Guid jobId, SqlConnection sqlConnection)
 		{
 			const string selectCommand = @"SELECT COUNT(*) 
 											FROM [Stardust].[JobQueue]
@@ -359,7 +359,7 @@ namespace Stardust.Manager.Helpers
 			return sqlCommand;
 		}
 
-		public static SqlCommand CreateDoesJobItemExistsCommand(Guid jobId, SqlConnection sqlConnection)
+		public SqlCommand CreateDoesJobItemExistsCommand(Guid jobId, SqlConnection sqlConnection)
 		{
 			const string selectCommand = @"SELECT COUNT(*) 
 											FROM [Stardust].[Job]

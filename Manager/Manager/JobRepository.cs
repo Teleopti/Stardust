@@ -25,8 +25,11 @@ namespace Stardust.Manager
 		private readonly RetryPolicy _retryPolicy;
 		private readonly RetryPolicy<SqlAzureTransientErrorDetectionStrategyWithTimeouts> _retryPolicyTimeout;
 
-		public JobRepository(string connectionString,
-		                     RetryPolicyProvider retryPolicyProvider)
+		private readonly CreateSqlCommandHelper _createSqlCommandHelper;
+
+		public JobRepository(ManagerConfiguration managerConfiguration,
+		                     RetryPolicyProvider retryPolicyProvider,
+							 CreateSqlCommandHelper createSqlCommandHelper)
 		{
 			if (retryPolicyProvider == null)
 			{
@@ -43,7 +46,8 @@ namespace Stardust.Manager
 				throw new ArgumentNullException("retryPolicyProvider.GetPolicyWithTimeout");
 			}
 
-			_connectionString = connectionString;
+			_connectionString = managerConfiguration.ConnectionString;
+			_createSqlCommandHelper = createSqlCommandHelper;
 
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 
@@ -59,7 +63,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var sqlCommand =CreateCommandHelper.CreateInsertIntoJobQueueCommand(jobQueueItem, sqlConnection, null))
+					using (var sqlCommand = _createSqlCommandHelper.CreateInsertIntoJobQueueCommand(jobQueueItem, sqlConnection, null))
 					{
 						sqlCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
@@ -85,7 +89,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var sqlCommand = CreateCommandHelper.CreateSelectAllItemsInJobQueueCommand(sqlConnection))
+					using (var sqlCommand = _createSqlCommandHelper.CreateSelectAllItemsInJobQueueCommand(sqlConnection))
 					{
 						using (var sqlDataReader = sqlCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -120,7 +124,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var deleteFromJobQueueCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, null))
+					using (var deleteFromJobQueueCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, null))
 					{
 						deleteFromJobQueueCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
@@ -145,7 +149,7 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 
-					using (var selectAllAliveWorkerNodesCommand = CreateCommandHelper.CreateSelectAllAliveWorkerNodesCommand(sqlConnection))
+					using (var selectAllAliveWorkerNodesCommand = _createSqlCommandHelper.CreateSelectAllAliveWorkerNodesCommand(sqlConnection))
 					{
 						using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReader())
 						{
@@ -212,7 +216,7 @@ namespace Stardust.Manager
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
 
-				using (var updateResultCommand = CreateCommandHelper.CreateUpdateResultCommand(jobId, result, ended, sqlConnection))
+				using (var updateResultCommand = _createSqlCommandHelper.CreateUpdateResultCommand(jobId, result, ended, sqlConnection))
 				{
 					updateResultCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
@@ -225,7 +229,7 @@ namespace Stardust.Manager
 			{
 				sqlConnection.OpenWithRetry(_retryPolicy);
 
-				using (var insertCommand = CreateCommandHelper.CreateInsertIntoJobDetailCommand(jobId, detail, created, sqlConnection))
+				using (var insertCommand = _createSqlCommandHelper.CreateInsertIntoJobDetailCommand(jobId, detail, created, sqlConnection))
 				{
 					insertCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
@@ -243,7 +247,7 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
-					using (var sqlSelectCommand = CreateCommandHelper.CreateGetJobQueueItemByJobIdCommand(jobId, sqlConnection))
+					using (var sqlSelectCommand = _createSqlCommandHelper.CreateGetJobQueueItemByJobIdCommand(jobId, sqlConnection))
 					{
 						using (var sqlDataReader = sqlSelectCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -273,7 +277,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var selectJobByJobIdCommand = CreateCommandHelper.CreateSelectJobByJobIdCommand(jobId, sqlConnection))
+					using (var selectJobByJobIdCommand = _createSqlCommandHelper.CreateSelectJobByJobIdCommand(jobId, sqlConnection))
 					{
 						using (var sqlDataReader = selectJobByJobIdCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -305,7 +309,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var getAllJobsCommand = CreateCommandHelper.CreateGetAllJobsCommand(sqlConnection))
+					using (var getAllJobsCommand = _createSqlCommandHelper.CreateGetAllJobsCommand(sqlConnection))
 					{
 						using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -341,7 +345,7 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
-					using (var getAllExecutingJobsCommand = CreateCommandHelper.CreateGetAllExecutingJobsCommand(sqlConnection))
+					using (var getAllExecutingJobsCommand = _createSqlCommandHelper.CreateGetAllExecutingJobsCommand(sqlConnection))
 					{
 						using (var sqlDataReader = getAllExecutingJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -376,7 +380,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					using (var selectJobDetailByJobIdCommand = CreateCommandHelper.CreateSelectJobDetailByJobIdCommand(jobId, sqlConnection))
+					using (var selectJobDetailByJobIdCommand = _createSqlCommandHelper.CreateSelectJobDetailByJobIdCommand(jobId, sqlConnection))
 					{
 						using (var sqlDataReader = selectJobDetailByJobIdCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
@@ -412,7 +416,7 @@ namespace Stardust.Manager
 					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
 					{
 						Job job = null;
-						using (var selectJobThatDidNotEndCommand = CreateCommandHelper.CreateSelectJobThatDidNotEndCommand(workerNodeUri, sqlConnection, sqlTransaction))
+						using (var selectJobThatDidNotEndCommand = _createSqlCommandHelper.CreateSelectJobThatDidNotEndCommand(workerNodeUri, sqlConnection, sqlTransaction))
 						{
 							using (var sqlDataReader = selectJobThatDidNotEndCommand.ExecuteReaderWithRetry(_retryPolicy))
 							{
@@ -435,11 +439,11 @@ namespace Stardust.Manager
 								Type = job.Type
 							};
 
-							using (var insertIntojobQueueCommand = CreateCommandHelper.CreateInsertIntoJobQueueCommand(jobQueueItem, sqlConnection, sqlTransaction))
+							using (var insertIntojobQueueCommand = _createSqlCommandHelper.CreateInsertIntoJobQueueCommand(jobQueueItem, sqlConnection, sqlTransaction))
 							{
 								insertIntojobQueueCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
-							using (var deleteJobByJobIdCommand = CreateCommandHelper.CreateDeleteJobByJobIdCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+							using (var deleteJobByJobIdCommand = _createSqlCommandHelper.CreateDeleteJobByJobIdCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
 							{
 								deleteJobByJobIdCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
@@ -467,7 +471,7 @@ namespace Stardust.Manager
 					{
 						string sentToWorkerNodeUri = null;
 
-						using (var createSelectWorkerNodeUriCommand = CreateCommandHelper.CreateSelectWorkerNodeCommand(jobId, sqlConnection, sqlTransaction))
+						using (var createSelectWorkerNodeUriCommand = _createSqlCommandHelper.CreateSelectWorkerNodeCommand(jobId, sqlConnection, sqlTransaction))
 						{
 							using (var selectSqlReader = createSelectWorkerNodeUriCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
 							{
@@ -496,11 +500,11 @@ namespace Stardust.Manager
 							if (taskSendCancel.IsCompleted &&
 								taskSendCancel.Result.IsSuccessStatusCode)
 							{
-								using (var createUpdateCancellingResultCommand = CreateCommandHelper.CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
+								using (var createUpdateCancellingResultCommand = _createSqlCommandHelper.CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
 								{
 									createUpdateCancellingResultCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 								}
-								using (var deleteFromJobDefinitionsCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
+								using (var deleteFromJobDefinitionsCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobId, sqlConnection, sqlTransaction))
 								{
 									deleteFromJobDefinitionsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 								}
@@ -529,7 +533,7 @@ namespace Stardust.Manager
 					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
 					{
 						JobQueueItem jobQueueItem = null;
-						using (var selectTop1FromJobDefinitionsCommand = CreateCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
+						using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
 						{
 							using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
 							{
@@ -572,7 +576,7 @@ namespace Stardust.Manager
 							{
 								sentToWorkerNodeUri = taskPostJob.Result.Content.ReadAsStringAsync().Result;  
 
-								using (var insertIntoJobCommand = CreateCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
+								using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
 								{
 									if (taskPostJob.Result.IsSuccessStatusCode)
 									{
@@ -584,7 +588,7 @@ namespace Stardust.Manager
 									}
 									insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 								}
-								using (var deleteJobQueueItemCommand = CreateCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+								using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
 								{
 									deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 								}
@@ -695,7 +699,7 @@ namespace Stardust.Manager
 
 		private bool DoesJobDetailItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
 		{
-			var command = CreateCommandHelper.CreateDoesJobDetailItemExistsCommand(jobId, sqlConnection);
+			var command = _createSqlCommandHelper.CreateDoesJobDetailItemExistsCommand(jobId, sqlConnection);
 			var count = Convert.ToInt32(command.ExecuteScalar());
 
 			return count == 1;
@@ -703,7 +707,7 @@ namespace Stardust.Manager
 
 		private bool DoesJobQueueItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
 		{
-			var command = CreateCommandHelper.CreateDoesJobQueueItemExistsCommand(jobId, sqlConnection);
+			var command = _createSqlCommandHelper.CreateDoesJobQueueItemExistsCommand(jobId, sqlConnection);
 			var count = Convert.ToInt32(command.ExecuteScalar());
 
 			return count == 1;
@@ -711,7 +715,7 @@ namespace Stardust.Manager
 
 		private bool DoesJobItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
 		{
-			var command = CreateCommandHelper.CreateDoesJobItemExistsCommand(jobId, sqlConnection);
+			var command = _createSqlCommandHelper.CreateDoesJobItemExistsCommand(jobId, sqlConnection);
 			var count = Convert.ToInt32(command.ExecuteScalar());
 
 			return count == 1;

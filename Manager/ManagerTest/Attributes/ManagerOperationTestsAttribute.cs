@@ -2,6 +2,7 @@ using System.Configuration;
 using Autofac;
 using ManagerTest.Fakes;
 using Stardust.Manager;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Validations;
 
@@ -11,15 +12,19 @@ namespace ManagerTest.Attributes
 	{
 		protected override void SetUp(ContainerBuilder builder)
 		{
-			builder.RegisterType<ManagerConfiguration>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
-
-			
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
 
-			builder.Register(
-				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
-				.As<IJobRepository>();
+			ManagerConfiguration config = new ManagerConfiguration()
+			{
+				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
+			};
+
+			builder.RegisterInstance(config).SingleInstance();
+			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
+			builder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
+			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
+			
 
 			builder.Register(
 				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,new RetryPolicyProvider()))

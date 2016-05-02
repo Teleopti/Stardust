@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Integration.WebApi;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Validations;
 
@@ -11,17 +12,15 @@ namespace Stardust.Manager
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterInstance(managerConfiguration);
+			builder.RegisterInstance(managerConfiguration).SingleInstance();
 
 			builder.RegisterType<NodeManager>().SingleInstance();
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
-
-			builder.RegisterType<HttpSender>().As<IHttpSender>();
-
-			builder.Register(c => new JobRepository(managerConfiguration.ConnectionString,
-															new RetryPolicyProvider()))
-				.As<IJobRepository>();
+			builder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
+			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
+			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
+			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
 
 			builder.Register(c => new WorkerNodeRepository(managerConfiguration.ConnectionString,
 			                                               new RetryPolicyProvider()))

@@ -1,10 +1,10 @@
 ﻿using System.Configuration;
 using Autofac;
 using ManagerTest.Database;
-using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
+using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Validations;
 
@@ -18,17 +18,21 @@ namespace ManagerTest
 		{
 			_containerBuilder = new ContainerBuilder();
 
-			_containerBuilder.RegisterType<ManagerConfiguration>().SingleInstance();
-
 			_containerBuilder.RegisterType<NodeManager>().SingleInstance();
 			_containerBuilder.RegisterType<JobManager>().SingleInstance();
 			_containerBuilder.RegisterType<Validator>().SingleInstance();
 			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
 			_containerBuilder.RegisterType<ManagerController>();
 
-			_containerBuilder.Register(
-				c => new JobRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
-				.As<IJobRepository>();
+			ManagerConfiguration config = new ManagerConfiguration()
+			{
+				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
+			};
+
+			_containerBuilder.RegisterInstance(config).SingleInstance();
+			_containerBuilder.RegisterType<RetryPolicyProvider>().SingleInstance();
+			_containerBuilder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
+			_containerBuilder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
 
 			_containerBuilder.Register(
 				c => new WorkerNodeRepository(ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, new RetryPolicyProvider()))
