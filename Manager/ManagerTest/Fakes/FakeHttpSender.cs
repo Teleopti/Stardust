@@ -42,20 +42,6 @@ namespace ManagerTest.Fakes
 			return ReturnOkOrConflict(url, true);
 		}
 
-		public Task<bool> TryGetAsync(Uri url)
-		{
-			var task = new Task<bool>(() => true);
-			task.Start();
-			task.Wait();
-
-			return task;
-		}
-
-		public Task<HttpResponseMessage> TryPostAsync(Uri url, object data)
-		{
-			return ReturnOkOrConflict(url, false);
-		}
-
 		private Task<HttpResponseMessage> ReturnOkOrConflict(Uri url, bool canReturnConflict)
 		{
 			CallToWorkerNodes.Add(url.ToString());

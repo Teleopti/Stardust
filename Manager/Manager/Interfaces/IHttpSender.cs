@@ -15,7 +15,5 @@ namespace Stardust.Manager.Interfaces
 		Task<HttpResponseMessage> DeleteAsync(Uri url);
 
 		Task<HttpResponseMessage> GetAsync(Uri url);
-
-		Task<bool> TryGetAsync(Uri url);
 	}
 }
