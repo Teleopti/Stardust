@@ -548,13 +548,11 @@ namespace Stardust.Manager
 							var updateCommandText = @"UPDATE [Stardust].[JobQueue] SET Tagged = '0'
 											WHERE JobId = @jobId" ;
 
-							using (var command = new SqlCommand(updateCommandText, sqlConnection))
+							using (var command = new SqlCommand(updateCommandText, sqlConnection, sqlTransaction))
 							{
 								command.Parameters.Add("@jobId", SqlDbType.UniqueIdentifier).Value = jobQueueItem.JobId;
-								command.ExecuteNonQueryWithRetry(_retryPolicy);
-								
+								command.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 							}
-
 						}
 						sqlTransaction.Commit();
 					}
