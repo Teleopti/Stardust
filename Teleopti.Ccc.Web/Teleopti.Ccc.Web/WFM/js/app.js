@@ -111,6 +111,9 @@ wfm.config([
 			url: '/intraday',
 			templateUrl: 'js/intraday/intraday.html',
 			controller: 'IntradayCtrl'
+		}).state('intraday.area', {
+			templateUrl: 'js/intraday/intraday-area.html',
+			controller: 'IntradayAreaCtrl'
 		}).state('intraday.config', {
 			url: '/config',
 			templateUrl: 'js/intraday/intraday-config.html',
