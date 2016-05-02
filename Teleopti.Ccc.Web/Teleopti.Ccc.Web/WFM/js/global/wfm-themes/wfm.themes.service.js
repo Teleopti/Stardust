@@ -20,9 +20,9 @@
 		};
 
 		service.init = function() {
-			service.getTheme().success(function(data) {
-				if (data.Name !== null)
-					service.setTheme(data.Name);
+			service.getTheme().then(function(response) {
+				if (response.data.Name !== null)
+					service.setTheme(response.data.Name);
 				else
 					service.setTheme('classic');
 			});
