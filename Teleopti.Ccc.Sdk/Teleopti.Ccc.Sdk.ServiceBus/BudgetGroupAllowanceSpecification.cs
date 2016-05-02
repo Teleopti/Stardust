@@ -114,7 +114,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return remainingAllowanceMinutes;
 		}
 
-		private static TimeSpan calculateRequestedMinutes(DateOnly currentDay, DateTimePeriod requestedPeriod, IScheduleRange scheduleRange, IPersonPeriod personPeriod)
+		private static TimeSpan calculateRequestedMinutes(DateOnly currentDay, DateTimePeriod requestedPeriod,
+			IScheduleRange scheduleRange, IPersonPeriod personPeriod)
 		{
 			var requestedTime = TimeSpan.Zero;
 			var scheduleDay = scheduleRange.ScheduledDay(currentDay);
@@ -125,15 +126,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			{
 				var absenceTimeWithinSchedule = requestedPeriod.Intersection(visualLayerCollectionPeriod.Value);
 				if (absenceTimeWithinSchedule.HasValue)
-					requestedTime += visualLayerCollection.ContractTime(visualLayerCollectionPeriod.GetValueOrDefault());
+				{
+					requestedTime += visualLayerCollection.ContractTime(absenceTimeWithinSchedule.Value);
+				}
 			}
 			else
 			{
-				var averageContractTimeSpan = TimeSpan.FromMinutes( personPeriod.PersonContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes 
-																  * personPeriod.PersonContract.PartTimePercentage.Percentage.Value);
+				var personContract = personPeriod.PersonContract;
+				var averageWorktimePerDayInMinutes = personContract.Contract.WorkTime.AvgWorkTimePerDay.TotalMinutes;
+				var partTimePercentage = personContract.PartTimePercentage.Percentage.Value;
+				var averageContractTimeSpan = TimeSpan.FromMinutes(averageWorktimePerDayInMinutes*partTimePercentage);
+
 				requestedTime += requestedPeriod.ElapsedTime() < averageContractTimeSpan
-									 ? requestedPeriod.ElapsedTime()
-									 : averageContractTimeSpan;
+					? requestedPeriod.ElapsedTime()
+					: averageContractTimeSpan;
 			}
 			return requestedTime;
 		}
