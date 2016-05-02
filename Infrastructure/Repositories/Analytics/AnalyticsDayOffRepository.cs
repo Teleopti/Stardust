@@ -28,16 +28,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						@display_color_html=:DisplayColorHtml,
 						@day_off_shortname=:DayOffShortName
 					  ")
-				.SetGuid("DayOffCode", analyticsDayOff.DayOffCode)
+				.SetGuid("DayOffCode", analyticsDayOff.DayOffCode.GetValueOrDefault())
 				.SetString("DayOffName", analyticsDayOff.DayOffName)
 				.SetInt32("DisplayColor", analyticsDayOff.DisplayColor)
 				.SetInt32("BusinessUnitId", analyticsDayOff.BusinessUnitId)
-				.SetInt32("DatasourceId", 1)
+				.SetInt32("DatasourceId", analyticsDayOff.DatasourceId)
 				.SetDateTime("DatasourceUpdateDate", analyticsDayOff.DatasourceUpdateDate)
 				.SetString("DisplayColorHtml", analyticsDayOff.DisplayColorHtml)
-				.SetString("DayOffShortName", analyticsDayOff.DayOffShortname)
-				;
+				.SetString("DayOffShortName", analyticsDayOff.DayOffShortname);
 			query.ExecuteUpdate();
+		}
+
+		public void AddNotDefined()
+		{
+			_analyticsUnitOfWork.Current().Session().CreateSQLQuery(@"exec mart.[etl_dim_day_off_insert_not_defined]")
+				.ExecuteUpdate();
 		}
 
 		public IList<AnalyticsDayOff> DayOffs()
@@ -48,6 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						, day_off_code DayOffCode
 						, day_off_name DayOffName
 						, business_unit_id BusinessUnitId
+						, datasource_id DatasourceId
 						, datasource_update_date DatasourceUpdateDate
 						, day_off_shortname DayOffShortname
 						, display_color DisplayColor

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
@@ -31,6 +32,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_fakeAnalyticsDayOffs.RemoveAll(a => a.DayOffCode == analyticsDayOff.DayOffCode);
 			analyticsDayOff.DayOffId = id;
 			_fakeAnalyticsDayOffs.Add(analyticsDayOff);
+		}
+
+		public void AddNotDefined()
+		{
+			if (_fakeAnalyticsDayOffs.Any(a => a.DayOffId == -1))
+				throw new Exception("Could not insert with same id. Sql unique.");
+			_fakeAnalyticsDayOffs.Add(new AnalyticsDayOff
+			{
+				DayOffId = -1,
+				DatasourceId = -1,
+				DayOffCode = null,
+				DatasourceUpdateDate = DateTime.Today,
+				BusinessUnitId = -1,
+				DayOffName = "Not Defined",
+				DayOffShortname = "Not Defined",
+				DisplayColor = -1,
+				DisplayColorHtml = "#FFFFFF"
+			});
 		}
 
 		public IList<AnalyticsDayOff> DayOffs()

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {
@@ -55,6 +56,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new SqlServerUpdateStatistics(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayDayOff_38213))
+			{
+				Add(new DimDayOffJobStep(jobParameters));
+			}
 			Add(new BridgeTimeZoneJobStep(jobParameters));      // BU independent
 			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));

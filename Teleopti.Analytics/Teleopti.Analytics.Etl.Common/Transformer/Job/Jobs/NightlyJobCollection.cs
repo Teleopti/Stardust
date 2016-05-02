@@ -44,6 +44,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new StageScheduleJobStep(jobParameters));
 				Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			}
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayDayOff_38213))
+			{
+				Add(new DimDayOffJobStep(jobParameters));
+			}
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
 			Add(new StageSchedulePreferenceJobStep(jobParameters));
 			Add(new StageAvailabilityJobStep(jobParameters));
