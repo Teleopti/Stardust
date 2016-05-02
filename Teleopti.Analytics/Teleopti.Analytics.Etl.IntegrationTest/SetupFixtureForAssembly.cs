@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -64,6 +63,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		private static void OpenUnitOfWork()
 		{
 			TestState.UnitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().CreateAndOpenUnitOfWork();
+
 		}
 
 		private static void UnitOfWorkAction(Action<ICurrentUnitOfWork> action)
@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public static void BeginTest()
 		{
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
-
+			
 			TestState.TestDataFactory = new TestDataFactory(UnitOfWorkAction,
 					tenantAction =>
 					{

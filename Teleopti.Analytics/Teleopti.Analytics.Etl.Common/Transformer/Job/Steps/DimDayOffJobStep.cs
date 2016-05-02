@@ -8,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Infrastructure;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
@@ -30,8 +29,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			using (var auow = new CurrentAnalyticsUnitOfWork(CurrentAnalyticsUnitOfWorkFactory.Make()).Current())
+			using (JobParameters.Helper.SelectedDataSource.Application.CreateAndOpenUnitOfWork())
+			using (var auow = JobParameters.Helper.SelectedDataSource.Analytics.CreateAndOpenUnitOfWork())
 			{
 				var changedRows = 0;
 				var dayOffs = _dayOffTemplateRepository.FindAllDayOffsSortByDescription();
@@ -61,6 +60,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 				if (analyticsDayOffs.All(a => a.DayOffId != -1))
 				{
+					changedRows++;
 					_analyticsDayOffRepository.AddNotDefined();
 				}
 

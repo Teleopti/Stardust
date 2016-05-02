@@ -45,10 +45,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			_logonService = new LogOnService(logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
 		
-		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender)
+		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants)
 		{
 			_repository = repository;
 			_messageSender = messageSender;
+			_tenants = tenants;
 		}
 
 		public IRaptorRepository Repository
