@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class ScheduleOvertimeCommand
+	public class ScheduleOvertime
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerState;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 
-		public ScheduleOvertimeCommand(Func<ISchedulerStateHolder> schedulerState, 
+		public ScheduleOvertime(Func<ISchedulerStateHolder> schedulerState, 
 																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,

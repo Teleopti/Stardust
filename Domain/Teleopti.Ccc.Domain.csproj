@@ -1312,7 +1312,7 @@
     <Compile Include="Scheduling\Legacy\Commands\OptimizationCommand.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ResourceOptimizationHelperExtended.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleCommand.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertimeCommand.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ScheduleOvertime.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulerGroupPagesProvider.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulerStateScheduleDayChangedCallback.cs" />
