@@ -35,11 +35,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
-		public void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IGridlockManager gridlockManager)
+		public void Execute(IOvertimePreferences overtimePreferences, 
+										ISchedulingProgress backgroundWorker, 
+										IList<IScheduleDay> selectedSchedules, 
+										IGridlockManager gridlockManager,
+										bool startWithFullResourceCalculation)
 		{
-			//currently needed for _scheduleOvertimeOnNonScheduleDays to work - if too slow, refactor!
-			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
-			//
+			if (startWithFullResourceCalculation)
+			{
+				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			}
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
