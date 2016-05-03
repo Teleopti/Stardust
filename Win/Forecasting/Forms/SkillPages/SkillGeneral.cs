@@ -223,6 +223,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SkillPages
             thisSkill.DisplayColor = pictureBoxDisplayColor.BackColor;
             thisSkill.SkillType = (ISkillType)comboBoxSkillType.SelectedItem;
             thisSkill.Activity = activity;
+            var multisiteSkill = thisSkill as IMultisiteSkill;
+            if (multisiteSkill != null)
+            {
+                foreach (var childSkill in multisiteSkill.ChildSkills)
+                {
+                    childSkill.Activity = activity;
+                }
+            }
             thisSkill.TimeZone = (TimeZoneInfo)comboBoxTimeZones.SelectedItem;
             thisSkill.MidnightBreakOffset = office2007OutlookTimePickerMidnightOffsetBreak.TimeValue();
 		    thisSkill.MaxParallelTasks = (int)numericUpDownMaxParallel.Value;
