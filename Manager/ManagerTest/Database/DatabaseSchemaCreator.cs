@@ -50,5 +50,26 @@ namespace ManagerTest.Database
 			script = script.Replace("$(DBNAME)", name);
 			return script;
 		}
+
+		public void ApplyProgramability(string programmabilityPath, string databaseName)
+		{
+			//var programmabilityPath = _databaseFolder.ProgrammabilityPath(databaseType);
+			//var directories = Directory.GetFiles(programmabilityPath);
+			var directories = Directory.GetFiles(programmabilityPath, "*.sql");
+
+			foreach (var scriptFile in directories)
+			{
+				//var scriptsDirectoryInfo = new DirectoryInfo(directory);
+				//var scriptFiles = scriptsDirectoryInfo.GetFiles("*.sql", SearchOption.TopDirectoryOnly);
+				
+
+				//foreach (var scriptFile in scriptFiles)
+				{
+					var sql = File.ReadAllText(scriptFile);
+					sql = ReplaceScriptTags(sql, databaseName);
+					_executeSql.ExecuteNonQuery(sql, 10800);
+				}
+			}
+		}
 	}
 }

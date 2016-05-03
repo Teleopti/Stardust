@@ -13,6 +13,7 @@ namespace ManagerTest.Database
 		private readonly DatabaseSchemaCreator _databaseSchemaCreator;
 		private readonly string _masterDatabaseName;
 		private readonly string _schemaScriptsPath;
+		private readonly string _programabilityPath;
 
 		public DatabaseHelper()
 		{
@@ -20,6 +21,7 @@ namespace ManagerTest.Database
 			_databaseName = ConfigurationManager.AppSettings["TestDb"];
 			_createScriptPath = ConfigurationManager.AppSettings["CreateScriptPath"];
 			_schemaScriptsPath = ConfigurationManager.AppSettings["ReleaseScriptPath"];
+			_programabilityPath = ConfigurationManager.AppSettings["ProgrammibilityPath"];
 			_masterDatabaseName = "master";
 			var executeMaster = new ExecuteSql(() => OpenConnection(true));
 
@@ -31,6 +33,7 @@ namespace ManagerTest.Database
 		{
 			_databaseCreator.CreateDatabase(_createScriptPath, _databaseName);
 			_databaseSchemaCreator.ApplyReleases(_schemaScriptsPath, _databaseName);
+			_databaseSchemaCreator.ApplyProgramability(_programabilityPath, _databaseName);
 		}
 
 		private SqlConnection OpenConnection(bool masterDb = false)
