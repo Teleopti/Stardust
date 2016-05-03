@@ -20,12 +20,12 @@ namespace Stardust.Node.Extensions
 			var nodeName = "Missing Node Name";
 			var machine = "Missing Machine Name";
 
-			if (nodeConfiguration != null && !nodeConfiguration.NodeName.IsNullOrEmpty())
+			if (nodeConfiguration != null && !string.IsNullOrEmpty(nodeConfiguration.NodeName))
 			{
 				nodeName = nodeConfiguration.NodeName;
 			}
 
-			if (!machineName.IsNullOrEmpty())
+			if (!string.IsNullOrEmpty(machineName))
 			{
 				machine = machineName;
 			}
