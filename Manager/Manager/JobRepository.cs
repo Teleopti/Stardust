@@ -526,7 +526,7 @@ namespace Stardust.Manager
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 					JobQueueItem jobQueueItem = null;
 
-					using (var cmd = new SqlCommand("selectQueueItem", sqlConnection))
+					using (var cmd = new SqlCommand("AcquireQueuedJob", sqlConnection))
 					{
 						cmd.CommandType = CommandType.StoredProcedure;
 
