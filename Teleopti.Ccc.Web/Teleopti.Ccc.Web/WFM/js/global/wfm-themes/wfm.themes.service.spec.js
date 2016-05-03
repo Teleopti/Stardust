@@ -15,22 +15,35 @@
 			scope = _$rootScope_.$new();
 		}));
 
-		var setUpTemplate = function() {
-			var themeModules = document.createElement("link");
-			themeModules.setAttribute("id", "themeModules");
-			themeModules.setAttribute("href", "");
-			document.head.appendChild(themeModules);
-			var themeStylesheet = document.createElement("link");
-			themeStylesheet.setAttribute("id", "themeStylesheet");
-			themeStylesheet.setAttribute("href", "");
-			document.head.appendChild(themeStylesheet);
+		var setUpTemplate = function(option) {
+			if (option === "withHash") {
+				var themeModules = document.createElement("link");
+				themeModules.setAttribute("id", "themeModules");
+				themeModules.setAttribute("href", "orig?123");
+				document.head.appendChild(themeModules);
+				var themeStyle = document.createElement("link");
+				themeStyle.setAttribute("id", "themeStyle");
+				themeStyle.setAttribute("href", "orig?123");
+				document.head.appendChild(themeStyle);
+			}
+			else {
+				var themeModules = document.createElement("link");
+				themeModules.setAttribute("id", "themeModules");
+				themeModules.setAttribute("href", "");
+				document.head.appendChild(themeModules);
+				var themeStyle = document.createElement("link");
+				themeStyle.setAttribute("id", "themeStyle");
+				themeStyle.setAttribute("href", "");
+				document.head.appendChild(themeStyle);
+			}
+
 			var checkBox = document.createElement("input");
 			checkBox.setAttribute("id","darkTheme");
 			document.body.appendChild(checkBox);
 		};
 		var teardownTemplate = function() {
 			document.getElementById('themeModules').remove();
-			document.getElementById('themeStylesheet').remove();
+			document.getElementById('themeStyle').remove();
 		};
 
 		it('should set theme', inject(function(ThemeService) {
@@ -39,7 +52,7 @@
 			ThemeService.setTheme("dark");
 
 			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_dark.min.css');
-			expect(document.getElementById('themeStylesheet').getAttribute('href')).toBe('dist/style_dark.min.css');
+			expect(document.getElementById('themeStyle').getAttribute('href')).toBe('dist/style_dark.min.css');
 
 			teardownTemplate();
 		}));
@@ -74,7 +87,22 @@
 
 			$httpBackend.flush();
 			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_light.min.css');
-			expect(document.getElementById('themeStylesheet').getAttribute('href')).toBe('dist/style_light.min.css');
+			expect(document.getElementById('themeStyle').getAttribute('href')).toBe('dist/style_light.min.css');
+			teardownTemplate();
+		}));
+		it('should persist hash', inject(function(ThemeService) {
+			$httpBackend.expectGET("../api/Theme")
+				.respond(200, {
+					Name: "light",
+					Overlay: true
+				});
+			setUpTemplate("withHash");
+
+		 ThemeService.init();
+
+			$httpBackend.flush();
+			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_light.min.css?123');
+			expect(document.getElementById('themeStyle').getAttribute('href')).toBe('dist/style_light.min.css?123');
 			teardownTemplate();
 		}));
 
