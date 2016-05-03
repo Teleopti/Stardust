@@ -261,6 +261,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	    public bool ScheduleOnDayOffs { get; set; }
 
+	    public bool SkipNegativeShiftValues { get; set; }
+
 	    #region ICloneable Members
 
         public object Clone()

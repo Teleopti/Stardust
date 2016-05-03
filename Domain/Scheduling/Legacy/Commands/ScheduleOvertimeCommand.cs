@@ -18,23 +18,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 
 		public ScheduleOvertimeCommand(Func<ISchedulerStateHolder> schedulerState, 
 																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
-																	IResourceOptimizationHelper resourceOptimizationHelper)
+																	IResourceOptimizationHelper resourceOptimizationHelper,
+																	Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
 		{
 			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		}
 
-		//TODO: change from IScheduleDay to persons and dates?
 		public void Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress backgroundWorker, IList<IScheduleDay> selectedSchedules, IGridlockManager gridlockManager)
 		{
+			//currently needed for _scheduleOvertimeOnNonScheduleDays to work - if too slow, refactor!
+			_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
+			//
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();

@@ -197,8 +197,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,
 				schedulingOptions.UseMaximumPersons, schedulingOptions.UserOptionMaxSeatsFeature, hasMaxSeatSkill, maxSeatInfo);
 
-			return _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-				parameters, TimeZoneGuard.Instance.TimeZone);
+			return _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData, parameters, TimeZoneGuard.Instance.TimeZone, schedulingOptions);
 		}
 	}
 }

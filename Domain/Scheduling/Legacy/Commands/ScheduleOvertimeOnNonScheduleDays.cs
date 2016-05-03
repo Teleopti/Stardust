@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				OvertimeType = overtimePreferences.OvertimeType,
 				ScheduleOnDayOffs = true,
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("scheduling overtime", GroupPageType.SingleAgent)
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("scheduling overtime", GroupPageType.SingleAgent),
+				SkipNegativeShiftValues = true
 			};
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);

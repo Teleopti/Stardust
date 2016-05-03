@@ -614,5 +614,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
 				.Should().Not.Be.Empty();
 		}
+
+		[Test]
+		public void ShouldNotPlaceOvertimeWhenResultGetsWorse()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(10));
+			var scheduledAgent = new Person().WithId();
+			scheduledAgent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			scheduledAgent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
+			var agentToSchedule = new Person().WithId();
+			agentToSchedule.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
+			agentToSchedule.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = definitionSet,
+				ShiftBagToUse = new RuleSetBag(ruleSet),
+				ScheduleTag = new ScheduleTag(),
+				SelectedTimePeriod = new TimePeriod(0, 0, 0, 0) //to prevent overtime isn't added at beginning and ending of shift
+			};
+			var ass = new PersonAssignment(scheduledAgent, scenario, dateOnly);
+			ass.AddActivity(activity, new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(scheduledAgent.PermissionInformation.DefaultTimeZone()));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { scheduledAgent, agentToSchedule }, new[] { ass }, skillDay);
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agentToSchedule].ScheduledDay(dateOnly) }, new GridlockManager());
+
+			stateHolder.Schedules[agentToSchedule].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
+				.Should().Be.Empty();
+		}
 	}
 }

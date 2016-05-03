@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, true))
 					  .Return(activityData);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
-																		  , TimeZoneGuard.Instance.TimeZone)).IgnoreArguments()
+																		  , TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
 				Expect.Call(_maxSeatSkillAggregator.GetAggregatedSkills(_groupMembers,
 					new DateOnlyPeriod(_dateOnly, _dateOnly))).Return(new HashSet<ISkill>());
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder, true))
 					  .Return(activityData);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData, _periodValueCalculationParameters
-																		  , TimeZoneGuard.Instance.TimeZone)).IgnoreArguments()
+																		  , TimeZoneGuard.Instance.TimeZone, _schedulingOptions)).IgnoreArguments()
 					  .Return(shiftProjectionCache);
 				Expect.Call(_maxSeatInformationGeneratorBasedOnIntervals.GetMaxSeatInfo(_teamBlockInfo, _dateOnly,
 					_schedulingResultStateHolder, TimeZoneGuard.Instance.TimeZone,true)).Return(new Dictionary<DateTime, IntervalLevelMaxSeatInfo>());

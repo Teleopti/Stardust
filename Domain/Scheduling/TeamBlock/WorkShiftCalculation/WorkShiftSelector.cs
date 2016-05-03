@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
 	public interface IWorkShiftSelector
 	{
-        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo);
+        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo, ISchedulingOptions schedulingOptions);
 
 		IList<IWorkShiftCalculationResultHolder> SelectAllShiftProjectionCaches(IList<IShiftProjectionCache> shiftList,
 			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
@@ -29,14 +29,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 		public IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList,
 			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
-			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
+			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo, ISchedulingOptions schedulingOptions)
 		{
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
 
 			var shiftsWithValue =
 				shiftList.AsParallel()
-					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)});
+					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)})
+					.Where(x => schedulingOptions.SkipNegativeShiftValues);
+
+			if (schedulingOptions.SkipNegativeShiftValues)
+			{
+				shiftsWithValue = shiftsWithValue.Where(x => x.value >= 0);
+			}
 
 			foreach (var item in shiftsWithValue)
 			{
