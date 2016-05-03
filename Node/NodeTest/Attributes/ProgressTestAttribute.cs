@@ -6,7 +6,7 @@ using System.Timers;
 using Autofac;
 using NodeTest.Fakes;
 using NodeTest.Fakes.Timers;
-using Stardust.Node.API;
+using Stardust.Node;
 using Stardust.Node.Interfaces;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;

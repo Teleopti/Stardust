@@ -14,7 +14,6 @@ namespace Stardust.Node.Interfaces
 
 		bool IsCancellationRequested { get; }
 
-		bool IsTaskExecuting { get; }
 		Task Task { get; }
 
 		JobQueueItemEntity GetCurrentMessageToProcess();

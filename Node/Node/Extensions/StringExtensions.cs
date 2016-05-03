@@ -4,13 +4,6 @@ namespace Stardust.Node.Extensions
 {
 	public static class StringExtensions
 	{
-		public static void ThrowArgumentExceptionIfNullOrEmpty(this string stringValue)
-		{
-			if (stringValue.IsNullOrEmpty())
-			{
-				throw new ArgumentException();
-			}
-		}
 
 		public static void ThrowArgumentNullExceptionIfNullOrEmpty(this string stringValue)
 		{

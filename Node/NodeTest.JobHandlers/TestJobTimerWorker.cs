@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using log4net;
+using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 
 namespace NodeTest.JobHandlers
 {

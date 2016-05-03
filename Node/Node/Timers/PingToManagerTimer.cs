@@ -6,7 +6,6 @@ using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
@@ -19,10 +18,6 @@ namespace Stardust.Node.Timers
 		public PingToManagerTimer(NodeConfiguration nodeConfiguration,
 								  IHttpSender httpSender) : base(nodeConfiguration.PingToManagerSeconds*1000)
 		{
-			nodeConfiguration.ThrowArgumentNullException();
-
-			nodeConfiguration.GetManagerNodeHeartbeatUri().ThrowArgumentNullExceptionWhenNull();
-
 			CancellationTokenSource = new CancellationTokenSource();
 
 			NodeConfiguration = nodeConfiguration;

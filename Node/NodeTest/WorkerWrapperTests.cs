@@ -164,68 +164,6 @@ namespace NodeTest
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenInvokeHandlerIsNull()
-		{
-			new WorkerWrapper(null, null, null, null, null, null, null, null);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenJobCanceledTimerIsNull()
-		{
-			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, _nodeStartupNotification,  _pingToManagerFake, _sendJobDoneTimer, null, null, null);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenJobFaultedTimerIsNull()
-		{
-			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, _nodeStartupNotification, _pingToManagerFake,
-				_sendJobDoneTimer, _sendJobCanceledTimer, null, null);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenJodDoneTimerIsNull()
-		{
-			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, _nodeStartupNotification, _pingToManagerFake, null, null, null, null);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenNodeConfigurationIsNull()
-		{
-			new WorkerWrapper(new InvokeHandlerFake(), null, null, null,  null, null, null, null);
-		}
-
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenNodeStartupNotificationToManaagerTimerIsNull()
-		{
-			new WorkerWrapper(new InvokeHandlerFake(), _nodeConfigurationFake, null, null, null, null, null, null);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenPingToManagerTimerIsNull()
-		{
-			var postHttpRequestFake = new FakeHttpSender();
-
-			new WorkerWrapper(new InvokeHandlerFake(),
-				_nodeConfigurationFake,
-				_nodeStartupNotification,
-				null,
-				null,
-				null,
-				null,
-				new TrySendJobDetailToManagerTimerFake(_nodeConfigurationFake,
-					postHttpRequestFake,
-					5000));
-		}
-
-		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIdIsEmptyGuid()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),

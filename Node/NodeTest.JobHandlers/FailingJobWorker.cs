@@ -2,10 +2,7 @@
 using System.Threading;
 using log4net;
 using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net;
-using Stardust.Node.Log4Net.Extensions;
 
 namespace NodeTest.JobHandlers
 {
@@ -16,7 +13,6 @@ namespace NodeTest.JobHandlers
 
 		public FailingJobWorker()
 		{
-			Logger.DebugWithLineNumber("'Failing Job Worker' class constructor called.");
 		}
 
 		public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -25,10 +21,8 @@ namespace NodeTest.JobHandlers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> sendProgress)
 		{
-			Logger.DebugWithLineNumber("'Failing Job Worker' handle method called.");
 
 			CancellationTokenSource = cancellationTokenSource;
-
 			var doTheRealThing = new FailingJobCode();
 
 			doTheRealThing.DoTheThing(parameters,

@@ -10,11 +10,8 @@ using log4net;
 using Microsoft.Owin.Host.HttpListener;
 using Microsoft.Owin.Hosting;
 using Owin;
-using Stardust.Node.API;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
-using Stardust.Node.Log4Net.Interceptors;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
 
@@ -54,8 +51,6 @@ namespace Stardust.Node
 									owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
 
 									var containerBuilder = new ContainerBuilder();
-
-				                    containerBuilder.RegisterType<Log4NetInterceptor>().Named<IInterceptor>("log-calls");
 
 				                    containerBuilder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 

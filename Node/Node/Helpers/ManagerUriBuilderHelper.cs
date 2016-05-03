@@ -25,30 +25,6 @@ namespace Stardust.Node.Helpers
 
 		private UriBuilder UriTemplateBuilder { get; set; }
 
-		public string GetHostName()
-		{
-			return UriBuilder.Host;
-		}
-
-		public int GetPort()
-		{
-			return UriBuilder.Port;
-		}
-
-		public string GetScheme()
-		{
-			return UriBuilder.Scheme;
-		}
-
-		public Uri GetLocationUri()
-		{
-			return UriBuilder.Uri;
-		}
-
-		public Uri GetJobProgressTemplateUri()
-		{
-			return CreateUri(ManagerRouteConstants.JobProgress);
-		}
 
 		public Uri GetHeartbeatTemplateUri()
 		{
@@ -65,38 +41,14 @@ namespace Stardust.Node.Helpers
 			return CreateUri(ManagerRouteConstants.JobFailed);
 		}
 
-		public Uri GetJobHasFailedUri(Guid guid)
-		{
-			var path = ManagerRouteConstants.JobFailed.Replace(ManagerRouteConstants.JobIdOptionalParameter,
-			                                                   guid.ToString());
-
-			return CreateUri(path);
-		}
-
 		public Uri GetJobHasBeenCanceledTemplateUri()
 		{
 			return CreateUri(ManagerRouteConstants.JobHasBeenCanceled);
 		}
 
-		public Uri GetJobHasBeenCanceledUri(Guid guid)
-		{
-			var path = ManagerRouteConstants.JobHasBeenCanceled.Replace(ManagerRouteConstants.JobIdOptionalParameter,
-			                                                            guid.ToString());
-
-			return CreateUri(path);
-		}
-
 		public Uri GetJobDoneTemplateUri()
 		{
 			return CreateUri(ManagerRouteConstants.JobDone);
-		}
-
-		public Uri GetJobDoneUri(Guid guid)
-		{
-			var path = ManagerRouteConstants.JobDone.Replace(ManagerRouteConstants.JobIdOptionalParameter,
-			                                                 guid.ToString());
-
-			return CreateUri(path);
 		}
 
 		public Uri CreateUri(string path)

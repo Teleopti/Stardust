@@ -8,7 +8,6 @@ using Stardust.Node.Diagnostics;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Timers;
 using Timer = System.Timers.Timer;
 
@@ -43,16 +42,6 @@ namespace Stardust.Node.Workers
 		                     TrySendJobFaultedToManagerTimer trySendJobFaultedStatusToManagerTimer,
 		                     TrySendJobDetailToManagerTimer trySendJobDetailToManagerTimer)
 		{
-			invokeHandler.ThrowArgumentNullExceptionWhenNull();
-			nodeConfiguration.ThrowArgumentNullException();
-
-			nodeStartUpNotificationToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-			pingToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-			trySendJobDoneStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-			trySendJobCanceledStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-			trySendJobFaultedStatusToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-			trySendJobDetailToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-
 			Handler = invokeHandler;
 			NodeConfiguration = nodeConfiguration;
 
@@ -99,15 +88,6 @@ namespace Stardust.Node.Workers
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
 		public Task Task { get; private set; }
-
-		public bool IsTaskExecuting
-		{
-			get
-			{
-				return Task.IsNotNull() &&
-				       (Task.Status == TaskStatus.Running || Task.Status == TaskStatus.WaitingForActivation);
-			}
-		}
 
 		public ObjectValidationResult ValidateStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{

@@ -1,6 +1,5 @@
 ﻿using System;
 using Stardust.Node.Helpers;
-using Stardust.Node.Interfaces;
 using Stardust.Node.Workers;
 
 namespace Stardust.Node.Extensions
@@ -34,15 +33,6 @@ namespace Stardust.Node.Extensions
 			return "[" + nodeName.ToUpper() + ", " + machine.ToUpper() + "]";
 		}
 
-		public static Uri GetManagerJobDoneUri(this NodeConfiguration nodeConfiguration,
-		                                       Guid guid)
-		{
-			nodeConfiguration.ThrowArgumentNullException();
-
-			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
-
-			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneUri(guid);
-		}
 
 		public static Uri GetManagerNodeHasBeenInitializedUri(this NodeConfiguration nodeConfiguration)
 		{
@@ -74,16 +64,6 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledTemplateUri();
 		}
 
-		public static Uri GetManagerJobHasBeenCanceledUri(this NodeConfiguration nodeConfiguration,
-		                                                  Guid guid)
-		{
-			nodeConfiguration.ThrowArgumentNullException();
-
-			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
-
-			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledUri(guid);
-		}
-
 		public static Uri GetManagerJobHasFaileTemplatedUri(this NodeConfiguration nodeConfiguration)
 		{
 			nodeConfiguration.ThrowArgumentNullException();
@@ -102,13 +82,5 @@ namespace Stardust.Node.Extensions
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneTemplateUri();
 		}
 
-		public static Uri GetManagerLocationUri(this NodeConfiguration nodeConfiguration)
-		{
-			nodeConfiguration.ThrowArgumentNullException();
-
-			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
-
-			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetLocationUri();
-		}
 	}
 }

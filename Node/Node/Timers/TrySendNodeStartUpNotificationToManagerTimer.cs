@@ -6,7 +6,6 @@ using System.Timers;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
@@ -25,7 +24,6 @@ namespace Stardust.Node.Timers
 			nodeConfiguration.ThrowArgumentNullException();
 
 			var callbackToManagerTemplateUri = nodeConfiguration.GetManagerNodeHasBeenInitializedUri();
-			callbackToManagerTemplateUri.ThrowArgumentNullExceptionWhenNull();
 
 			CancellationTokenSource = new CancellationTokenSource();
 

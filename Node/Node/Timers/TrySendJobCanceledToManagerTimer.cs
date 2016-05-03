@@ -1,7 +1,6 @@
 ﻿using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
 namespace Stardust.Node.Timers

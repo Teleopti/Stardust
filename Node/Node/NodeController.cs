@@ -4,18 +4,15 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
-using System.Web.Http.Results;
-using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Stardust.Node.Constants;
 using Stardust.Node.Entities;
+using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
-namespace Stardust.Node.API
+namespace Stardust.Node
 {
-	[Intercept("log-calls")]
 	public class NodeController : ApiController
 	{
 		private const string JobIdIsInvalid = "Job Id is invalid.";
@@ -100,7 +97,7 @@ namespace Stardust.Node.API
 													currentMessage.JobId,
 													currentMessage.Name);
 
-				Logger.DebugWithLineNumber(startJobMessage);
+				Logger.InfoWithLineNumber(startJobMessage);
 
 				_workerWrapper.StartJob(currentMessage);
 			});

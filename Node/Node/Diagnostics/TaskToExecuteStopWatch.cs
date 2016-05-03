@@ -12,26 +12,12 @@ namespace Stardust.Node.Diagnostics
 			}
 		}
 
-		public double GetTotalElapsedTimeInDays()
-		{
-			StopIfRunning();
-
-			return Elapsed.TotalDays;
-		}
-
 		private void StopIfRunning()
 		{
 			if (IsRunning)
 			{
 				Stop();
 			}
-		}
-
-		public double GetTotalElapsedTimeInHours()
-		{
-			StopIfRunning();
-
-			return Elapsed.TotalHours;
 		}
 
 		public double GetTotalElapsedTimeInMinutes()
@@ -46,13 +32,6 @@ namespace Stardust.Node.Diagnostics
 			StopIfRunning();
 
 			return Elapsed.TotalSeconds;
-		}
-
-		public double GetTotalElapsedTimeInMilliseconds()
-		{
-			StopIfRunning();
-
-			return Elapsed.TotalMilliseconds;
 		}
 	}
 }

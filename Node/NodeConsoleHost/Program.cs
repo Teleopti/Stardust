@@ -9,8 +9,8 @@ using log4net;
 using log4net.Config;
 using NodeTest.JobHandlers;
 using Stardust.Node;
+using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 
 namespace NodeConsoleHost

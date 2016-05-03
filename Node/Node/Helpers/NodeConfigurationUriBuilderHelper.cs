@@ -10,12 +10,8 @@ namespace Stardust.Node.Helpers
 			configuration.ThrowArgumentNullException();
 
 			ManagerUriBuilder = new ManagerUriBuilderHelper(configuration.ManagerLocation);
-
-			NodeUriBuilder = new NodeUriBuilderHelper(configuration.BaseAddress);
 		}
 
 		public ManagerUriBuilderHelper ManagerUriBuilder { get; set; }
-
-		public NodeUriBuilderHelper NodeUriBuilder { get; set; }
 	}
 }
