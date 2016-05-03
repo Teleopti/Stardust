@@ -50,7 +50,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				FixedShiftBag = overtimePreferences.ShiftBagToUse,
 				OvertimeType = overtimePreferences.OvertimeType,
-				ScheduleOnDayOffs = true
+				ScheduleOnDayOffs = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("scheduling overtime", GroupPageType.SingleAgent)
 			};
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
