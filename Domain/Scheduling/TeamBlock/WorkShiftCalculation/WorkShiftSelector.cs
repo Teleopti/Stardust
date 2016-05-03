@@ -36,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 			var shiftsWithValue =
 				shiftList.AsParallel()
-					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)})
-					.Where(x => schedulingOptions.SkipNegativeShiftValues);
+					.Select(s => new {s, value = valueForShift(skillIntervalDataLocalDictionary, s, parameters, timeZoneInfo)});
 
 			if (schedulingOptions.SkipNegativeShiftValues)
 			{
