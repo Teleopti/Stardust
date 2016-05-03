@@ -1405,6 +1405,7 @@
     <Content Include="WFM\js\teamSchedule\html\addActivityPanel.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\moveActivity.html" />
     <Content Include="WFM\js\teamSchedule\html\removeAbsenceConfirmDialog.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduleCommand.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
@@ -1421,6 +1422,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandConfirmDialog.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.moveActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.timeline.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.groupSchedule.js" />

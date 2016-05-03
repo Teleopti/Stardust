@@ -150,8 +150,15 @@
 			}
 		};
 
+		vm.defaultMoveActivityStart = function () {
+			return vm.defaultNewActivityStart();
+		};
+
 		vm.addActivity = function() {
-		}
+		};
+
+		vm.moveActivity = function () {
+		};
 
 		vm.addAbsence = function() {
 			vm.setEarliestStartOfSelectedSchedule();

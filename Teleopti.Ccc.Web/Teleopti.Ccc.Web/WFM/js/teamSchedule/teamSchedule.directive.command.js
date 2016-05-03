@@ -39,6 +39,16 @@
 				visible: function () { return vm.canActiveAddActivity(); }
 			},
 			{
+				label: "MoveActivity",
+				shortcut: "Alt+M",
+				panelName: "move-activity",
+				action: function () {
+					 vm.setCurrentCommand('MoveActivity'); parentVm.moveActivity();
+				},
+				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
+				visible: function () { return vm.canActiveMoveActivity(); }
+			},
+			{
 				label: "SwapShifts",
 				shortcut: "Alt+S",
 				panelName: "", // Leave empty if not creating a mdSidenav panel
@@ -71,6 +81,10 @@
 		vm.canActiveAddAbsence = function() {
 			return vm.toggles.AbsenceReportingEnabled
 				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
+		};
+
+		vm.canActiveMoveActivity = function () {
+			return vm.toggles.MoveActivityEnabled && vm.permissions.HasMoveActivityPermission;
 		};
 
 		vm.canActiveRemoveAbsence = function() {
@@ -154,17 +168,21 @@
 				if (!personSelectionSvc.anyAgentChecked() || !vm.canActiveAddActivity()) return;
 				vm.commands[1].action(); // Alt+T for add activity
 			});
+			shortCuts.registerKeySequence([keyCodes.M], [keyCodes.ALT], function () {
+				if (!personSelectionSvc.anyAgentChecked() || !vm.canActiveAddActivity()) return;
+				vm.commands[2].action(); // Alt+M for move activity
+			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
 				if (!personSelectionSvc.canSwapShifts() || !vm.canActiveSwapShifts()) return;
-				vm.commands[2].action();; // Alt+S for swap shifts
+				vm.commands[3].action();; // Alt+S for swap shifts
 			});
 			shortCuts.registerKeySequence([keyCodes.R], [keyCodes.ALT], function () {
 				if (!vm.canRemoveAbsence() || !vm.canActiveRemoveAbsence()) return;
-				vm.commands[3].action();; // Alt+R for remove absence
+				vm.commands[4].action();; // Alt+R for remove absence
 			});
 			shortCuts.registerKeySequence([keyCodes.X], [keyCodes.ALT], function () {
 				if (!vm.canRemoveActivity() || !vm.canActiveRemoveActivity()) return;
-				vm.commands[4].action();; // Alt+X for remove activity
+				vm.commands[5].action();; // Alt+X for remove activity
 			});
 		}
 
