@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -152,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 														dictionaryPeriod.EndDateTime.AddDays(1));
 
 			var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dictionaryPeriod, people),
-														new DifferenceEntityCollectionService<IPersistableScheduleData>());
+														new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			
 			using (TurnoffPermissionScope.For(retDic))
 			{
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	        var timeZone = person.PermissionInformation.DefaultTimeZone();
 	        var longDateOnlyPeriod = optimizedPeriod.ToDateOnlyPeriod(timeZone);
 			longDateOnlyPeriod = new DateOnlyPeriod(longDateOnlyPeriod.StartDate.AddDays(-1),longDateOnlyPeriod.EndDate.AddDays(1));
-			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
 
             using (TurnoffPermissionScope.For(retDic))
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
-			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
+			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
             IList<IPerson> personsInOrganization = personsProvider.GetPersons();
             
             // ugly to be safe to get all

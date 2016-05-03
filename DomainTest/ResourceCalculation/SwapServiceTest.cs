@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private MockRepository _mocks;
         private IScheduleRange _range;
         private IScheduleDictionary _dic;
+	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
         [SetUp]
         public void Setup()
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _p1D2 = ExtractedSchedule.CreateScheduleDay(_dic, _person1, new DateOnly(2008, 2, 2));
             _p2D1 = ExtractedSchedule.CreateScheduleDay(_dic, _person2, new DateOnly(2008, 1, 1));
             _p2D2 = ExtractedSchedule.CreateScheduleDay(_dic, _person2, new DateOnly(2008, 2, 2));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
         }
 
         [Test]
@@ -138,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _list.Add(_p2D1);
 
             DateTimePeriod period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
-            _dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
+            _dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period), _permissionChecker);
             IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
             assignments.Add(_p1D1.PersonAssignment());
             ((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
@@ -223,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTimePeriod period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
             _dictionary = 
                 new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-                                       new DifferenceEntityCollectionService<IPersistableScheduleData>());
+                                       new DifferenceEntityCollectionService<IPersistableScheduleData>(), _permissionChecker);
             IList<IPersonAssignment> assignments = new List<IPersonAssignment>();
             assignments.Add(_p1D1.PersonAssignment());
             ((ScheduleRange)_dictionary[_person1]).AddRange(assignments);

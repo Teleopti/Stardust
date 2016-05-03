@@ -37,32 +37,34 @@ namespace Teleopti.Ccc.Domain.Collection
         private IUndoRedoContainer _undoRedo;
         private bool _permissionEnabled = true;
         private readonly object _permissionLockObject = new object();
-        private const string SetPermissionExMessage = "Can't reset _permissionEnabled to the same value ({0}). Threading issue?";
+	    private IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
+	    private const string SetPermissionExMessage = "Can't reset _permissionEnabled to the same value ({0}). Threading issue?";
 
         public bool ShowScheduleAfterTerminalDate { get; set; }
         public ICollection<IPersonAbsenceAccount> ModifiedPersonAccounts { get; private set; }
 
         protected ScheduleDictionary(IScenario scenario,
                                     IScheduleDateTimePeriod period,
-                                    IDictionary<IPerson, IScheduleRange> dictionary)
-            : this(scenario, period)
+                                    IDictionary<IPerson, IScheduleRange> dictionary, IPersistableScheduleDataPermissionChecker dataPermissionChecker)
+            : this(scenario, period, dataPermissionChecker)
         {
             _dictionary = dictionary;
         }
 
         public ScheduleDictionary(IScenario scenario, 
                                 IScheduleDateTimePeriod period,
-								IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService)
+								IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IPersistableScheduleDataPermissionChecker dataPermissionChecker)
         {
             ModifiedPersonAccounts = new HashSet<IPersonAbsenceAccount>();
             _scenario = scenario;
             _period = period;
             _dictionary = new Dictionary<IPerson, IScheduleRange>();
             _differenceCollectionService = differenceCollectionService;
+	        _dataPermissionChecker = dataPermissionChecker;
         }
 
-        public ScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod period)
-			: this(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>())
+        public ScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod period, IPersistableScheduleDataPermissionChecker dataPermissionChecker)
+			: this(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker)
         {
         }
 
@@ -122,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Collection
             {
                 dicClone.Add(range.Person, (IScheduleRange)range.Clone());
             }
-            return new ScheduleDictionary(Scenario, Period, dicClone);
+            return new ScheduleDictionary(Scenario, Period, dicClone, _dataPermissionChecker);
         }
 
         /// <summary>
@@ -553,7 +555,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 if (!_dictionary.TryGetValue(key, out scheduleRange))
                 {
                     scheduleRange = new ScheduleRange(this,
-                                                        new ScheduleParameters(Scenario, key, Period.RangeToLoadCalculator.SchedulerRangeToLoad(key)));
+                                                        new ScheduleParameters(Scenario, key, Period.RangeToLoadCalculator.SchedulerRangeToLoad(key)), _dataPermissionChecker);
                     _dictionary.Add(key,scheduleRange);
                 }
                 return scheduleRange;
@@ -679,8 +681,8 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             _editable = true;
         }
-		public ReadOnlyScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod scheduleDateTimePeriod, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService)
-            : base(scenario, scheduleDateTimePeriod, differenceCollectionService)
+		public ReadOnlyScheduleDictionary(IScenario scenario, IScheduleDateTimePeriod scheduleDateTimePeriod, IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService, IPersistableScheduleDataPermissionChecker dataPermissionChecker)
+            : base(scenario, scheduleDateTimePeriod, differenceCollectionService, dataPermissionChecker)
         {
         }
 

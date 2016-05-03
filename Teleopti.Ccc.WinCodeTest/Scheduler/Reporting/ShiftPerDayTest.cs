@@ -8,6 +8,7 @@ using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting;
 using Teleopti.Interfaces.Domain;
@@ -69,8 +70,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _dateTimePeriod = new DateTimePeriod(2009, 2, 2, 2009, 2, 3);
             _parameters = new ScheduleParameters(_scenario, _person1, _dateTimePeriod);
             _parameters2 = new ScheduleParameters(_scenario, _person2, _dateTimePeriod);
-            _scheduleRange = new ScheduleRange(_dic, _parameters);
-            _scheduleRange2 = new ScheduleRange(_dic, _parameters2);
+	        var permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+
+			_scheduleRange = new ScheduleRange(_dic, _parameters, permissionChecker);
+            _scheduleRange2 = new ScheduleRange(_dic, _parameters2, permissionChecker);
 
 						IPersonAssignment ass = new PersonAssignment(_person1, _scenario, new DateOnly(2009, 2, 2));
 

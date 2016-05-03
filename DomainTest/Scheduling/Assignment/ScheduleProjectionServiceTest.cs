@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,13 +23,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private IScheduleDay scheduleDay;
 		private ScheduleProjectionService target;
 	    private ScheduleDictionary dic;
+		private IPersistableScheduleDataPermissionChecker permissionChecker;
 
 	    [SetUp]
 		public void Setup()
 		{
+			permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
-			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)));
+			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), permissionChecker);
 			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1));
 			target = new ScheduleProjectionService(scheduleDay, new ProjectionPayloadMerger());
 		}
@@ -582,7 +585,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			const int nextDay = 24;
 			var scheduleRange = new ScheduleRange(scheduleDay.Owner,
-				new ScheduleParameters(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.Owner.Period.VisiblePeriod));
+				new ScheduleParameters(scheduleDay.Scenario, scheduleDay.Person, scheduleDay.Owner.Period.VisiblePeriod), permissionChecker);
 
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person,
 				createPeriod(20, nextDay + 12));

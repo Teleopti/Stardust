@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private DayOffRule _target;
         private MockRepository _mocks;
         private IScheduleDictionary _dic;
+	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
 		public FullScheduling Target;
 		public FakeActivityRepository ActivityRepository;
@@ -50,8 +52,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _start = new DateTime(2007, 8, 2, 8, 30, 0, DateTimeKind.Utc);
            _end = new DateTime(2007, 8, 2, 17, 30, 0, DateTimeKind.Utc);
             _range = new DateTimePeriod(2007, 8, 1, 2007, 8, 5);
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 
-           _scenario = ScenarioFactory.CreateScenarioAggregate();
+
+		   _scenario = ScenarioFactory.CreateScenarioAggregate();
            _category = ShiftCategoryFactory.CreateShiftCategory("myCategory");
            _activity = ActivityFactory.CreateActivity("Phone");
            _person = PersonFactory.CreatePerson();
@@ -70,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _mocks.Replay(_dic);
            _scheduleRange =
                new ScheduleRange(_dic,
-                   new ScheduleParameters(_scenario, _person, _range));
+                   new ScheduleParameters(_scenario, _person, _range), _permissionChecker);
         }
 
         private void createDayOffRule()
@@ -292,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 						var personDayOff2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(2007, 8, 5), dOff);
             
 
-           _scheduleRange = new ScheduleRange(_dic, new ScheduleParameters(_scenario, _person, _range));
+           _scheduleRange = new ScheduleRange(_dic, new ScheduleParameters(_scenario, _person, _range), _permissionChecker);
 
            ((Schedule)_scheduleRange).Add(personDayOff);
            ((Schedule)_scheduleRange).Add(personDayOff2);

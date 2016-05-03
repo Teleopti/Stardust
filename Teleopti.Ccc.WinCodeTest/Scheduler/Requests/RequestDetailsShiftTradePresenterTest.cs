@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -166,7 +167,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			var endDateTime = startDateTime.AddHours(2);
 			var dateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
 			var scheduleDateTimePeriod = new ScheduleDateTimePeriod(dateTimePeriod);
-			return new ScheduleDictionary(scenario, scheduleDateTimePeriod);
+			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 		}
 
 		private static IPersonRequest CreateShiftTradeRequestObject(int reqeustedDays)

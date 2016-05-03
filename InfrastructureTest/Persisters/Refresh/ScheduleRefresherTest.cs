@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 				MockRepository.GenerateMock<IMessageQueueRemoval>()
 				);
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
-			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period));
+			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			scheduleRange.Add(personAssignment);
 
 			scheduleDictionary.Stub(x => x.Scenario).Return(personAssignment.Scenario);

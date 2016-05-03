@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private MockRepository _mocks;
         private IScheduleRange _range;
         private IScheduleDictionary _dic;
+		private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
         [SetUp]
         public void Setup()
@@ -56,6 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _p1D2 = ExtractedSchedule.CreateScheduleDay(_dic, _person1, new DateOnly(2008, 2, 2));
             _p2D1 = ExtractedSchedule.CreateScheduleDay(_dic, _person2, new DateOnly(2008, 1, 1));
             _p2D2 = ExtractedSchedule.CreateScheduleDay(_dic, _person2, new DateOnly(2008, 2, 2));
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
         }
 
         [Test]
@@ -129,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>(), _permissionChecker);
 			IList<IPersonAssignment> assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
 			assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
@@ -159,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _list.Add(_p2D1);
 
             var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
-            _dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
+            _dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period), _permissionChecker);
             IList<IPersonAssignment> assignments = new List<IPersonAssignment> {_p1D1.PersonAssignment()};
         	((ScheduleRange)_dictionary[_person1]).AddRange(assignments);
             assignments = new List<IPersonAssignment>();
@@ -191,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_list.Add(_p2D1); // empty day
 
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
-			_dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
+			_dictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period), _permissionChecker);
 			((ScheduleRange)_dictionary[_person1]).Add(dayOff);
 			
 			IList<IPersonAssignment> personAssignments = new List<IPersonAssignment>();
@@ -236,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>(), _permissionChecker);
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
@@ -293,7 +296,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>(), _permissionChecker);
 			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1absences);
 
@@ -344,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>(), _permissionChecker);
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAbsence> p1absences = new List<IPersonAbsence> { _p1D1.PersonAbsenceCollection()[0] };
@@ -391,7 +394,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>(), _permissionChecker);
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
@@ -436,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var period = new DateTimePeriod(_d1.StartDateTime, _d2.EndDateTime);
 			_dictionary =
 				new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period),
-									   new DifferenceEntityCollectionService<IPersistableScheduleData>());
+									   new DifferenceEntityCollectionService<IPersistableScheduleData>(), _permissionChecker);
 			IList<IPersonAssignment> p1assignments = new List<IPersonAssignment> { _p1D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person1]).AddRange(p1assignments);
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
