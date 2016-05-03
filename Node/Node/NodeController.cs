@@ -154,9 +154,7 @@ namespace Stardust.Node
 			Logger.InfoWithLineNumber(_workerWrapper.WhoamI +
 			                          " : Received TryCancel request. jobId: " +
 			                          jobId);
-
-			Logger.DebugWithLineNumber(_workerWrapper.WhoamI + ": Try cancel job ( jobId ) : ( " + jobId + " )");
-
+			
 			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
 
 			if (currentJob == null || currentJob.JobId != jobId)

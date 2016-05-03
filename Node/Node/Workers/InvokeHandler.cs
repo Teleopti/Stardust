@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;

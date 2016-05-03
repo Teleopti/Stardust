@@ -18,8 +18,6 @@ namespace Stardust.Node.Workers
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data)
 		{
-			Logger.DebugWithLineNumber("Start.");
-
 			try
 			{
 				using (var client = new HttpClient())
@@ -28,27 +26,17 @@ namespace Stardust.Node.Workers
 
 					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-					Logger.DebugWithLineNumber("Start Post Async: " + url);
-
-					var response =
-						await client.PostAsync(url,
-						                       new StringContent(sez,
-						                                         Encoding.Unicode,
-						                                         "application/json"))
-							.ConfigureAwait(false);
-
-					Logger.DebugWithLineNumber("Finihed Post Async: " + url);
-
-					Logger.DebugWithLineNumber("Finished.");
-
+					var response = await client.PostAsync(url,
+					                                      new StringContent(sez,
+					                                                        Encoding.Unicode,
+					                                                        "application/json"))
+						.ConfigureAwait(false);
 					return response;
 				}
 			}
-
 			catch (Exception exp)
 			{
-				Logger.ErrorWithLineNumber(exp.Message,
-				                           exp);
+				Logger.ErrorWithLineNumber(exp.Message, exp);
 				throw;
 			}
 		}
@@ -57,8 +45,6 @@ namespace Stardust.Node.Workers
 		                                                 object data,
 		                                                 CancellationToken cancellationToken)
 		{
-			Logger.DebugWithLineNumber("Start.");
-
 			try
 			{
 				using (var client = new HttpClient())
@@ -67,8 +53,6 @@ namespace Stardust.Node.Workers
 
 					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-					Logger.DebugWithLineNumber("Start Post Async: " + url);
-
 					var response =
 						await client.PostAsync(url,
 						                       new StringContent(sez,
@@ -76,22 +60,12 @@ namespace Stardust.Node.Workers
 						                                         "application/json"),
 						                       cancellationToken)
 							.ConfigureAwait(false);
-
-					Logger.DebugWithLineNumber("Finished Post Async: " + url + "\n" + "Finished");
-
 					return response;
 				}
 			}
-			catch (HttpRequestException)
-			{
-				//don't log these annoying "errors" when only the node is up
-				throw;
-			}
-
 			catch (Exception exp)
 			{
-				Logger.ErrorWithLineNumber(exp.Message,
-				                           exp);
+				Logger.ErrorWithLineNumber(exp.Message, exp);
 				throw;
 			}
 		}
