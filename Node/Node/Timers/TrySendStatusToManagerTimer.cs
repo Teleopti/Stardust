@@ -7,7 +7,6 @@ using log4net;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Log4Net.Extensions;
 using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
@@ -24,16 +23,6 @@ namespace Stardust.Node.Timers
 		                                   IHttpSender httpSender,
 		                                   double interval = 500) : base(interval)
 		{
-			// Validate arguments.
-			nodeConfiguration.ThrowArgumentNullException();
-			callbackTemplateUri.ThrowArgumentNullExceptionWhenNull();
-			sendJobDetailToManagerTimer.ThrowArgumentNullExceptionWhenNull();
-
-			if (httpSender == null)
-			{
-				throw new ArgumentNullException("httpSender");
-			}
-
 			CancellationTokenSource = new CancellationTokenSource();
 
 			NodeConfiguration = nodeConfiguration;
