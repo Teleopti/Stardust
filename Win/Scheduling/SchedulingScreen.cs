@@ -6796,8 +6796,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IList<IRuleSetBag> ruleSetBags;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var repositoryFactory = _container.Resolve<IRepositoryFactory>();
-				var bags = repositoryFactory.CreateRuleSetBagRepository(uow).LoadAllWithRuleSets();
+				new WorkShiftRuleSetRepository(new ThisUnitOfWork(uow)).FindAllWithLimitersAndExtenders();
+				var bags = new RuleSetBagRepository(new ThisUnitOfWork(uow)).LoadAllWithRuleSets();
 				ruleSetBags = bags.OrderBy(r => r.Description.Name).ToList();
 			}
 
