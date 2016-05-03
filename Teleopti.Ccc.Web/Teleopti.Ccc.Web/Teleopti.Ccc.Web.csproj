@@ -1337,6 +1337,8 @@
     <Content Include="WFM\js\requests\ngEnter.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.js" />
     <Content Include="WFM\js\requests\request-command-params-holder.service.js" />
+    <Content Include="WFM\js\requests\requests-filter.service.js" />
+    <Content Include="WFM\js\requests\requests-filter.service.spec.js" />
     <Content Include="WFM\js\requests\requests-notification.service.js" />
     <Content Include="WFM\js\outbound\outbound.campaign.chart.service.spec.js" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-list-gantt.spec.js" />
