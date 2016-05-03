@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private IScheduleDateTimePeriod _period;
 
 		[SetUp]
-		public void setUp()
+		public void SetUp()
 		{
 			_period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -63,14 +63,77 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			schedule.Add(ass);
 			schedule.Add(abs);
 			
-			var rangeClones = new Dictionary<IPerson, IScheduleRange>();
-			rangeClones.Add(person,(IScheduleRange)target[person].Clone());
-
-			
 
 			var errors = target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
 
 			errors.Count.Should().Be.EqualTo(0);
+			target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void CanModifyExistingPermittedDataThroughByPassingDefaultPermission()
+		{
+			var person = PersonFactory.CreatePerson();
+			var noNewRules = NewBusinessRuleCollection.Minimum();
+			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
+													  new DateTimePeriod(
+													  2000, 6,
+													  1,
+													  2000, 6,
+													  2));
+			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
+											  new DateTimePeriod(2000, 6, 1, 2000, 6,
+													 2));
+
+
+			ass.WithId();
+			abs.WithId();
+			Schedule schedule = (Schedule)part;
+			schedule.Add(ass);
+			schedule.Add(abs);
+
+
+			target = new ScheduleDictionary(_scenario, _period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new ByPassPersistableScheduleDataPermissionChecker());
+			var errors = target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
+
+			errors.Count.Should().Be.EqualTo(0);
+			target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(2);
+		}
+		[Test]
+		public void CanNotModifyExistingDataThroughDefaultPermissionCheckerWhenNoPermisson()
+		{
+			var authorizer = new PrincipalAuthorizationWithConfigurablePermission();
+			
+			PrincipalAuthorization.SetInstance(authorizer);
+			var person = PersonFactory.CreatePerson();
+			var noNewRules = NewBusinessRuleCollection.Minimum();
+			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
+			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
+													  new DateTimePeriod(
+													  2000, 6,
+													  1,
+													  2000, 6,
+													  2));
+			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
+											  new DateTimePeriod(2000, 6, 1, 2000, 6,
+													 2));
+
+
+			ass.WithId();
+			abs.WithId();
+			Schedule schedule = (Schedule)part;
+			schedule.Add(ass);
+			schedule.Add(abs);
+
+			authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+
+
+			target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
+			target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(0);
+			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission()); //restore the setup to avoid impacting other tests.
 		}
 	}
 	[TestFixture]

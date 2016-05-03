@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -724,6 +725,29 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 					.Should()
 					.Not
 					.Contain(typeof(StardustStartupTask));
+			}
+		}
+		[Test]
+		public void ShouldResolveByPassPermissionCheckerIfToggleEnabled()
+		{
+			using (var container = buildContainer(Toggles.WebByPassDefaultPermissionCheck_37984, true))
+			{
+				container.Resolve<IPersistableScheduleDataPermissionChecker>()
+					.GetType()
+					.Should()
+					.Be<ByPassPersistableScheduleDataPermissionChecker>();
+			}
+		}
+
+		[Test]
+		public void ShouldResolvePermissionCheckerIfToggleDisabled()
+		{
+			using (var container = buildContainer(Toggles.WebByPassDefaultPermissionCheck_37984, false))
+			{
+				container.Resolve<IPersistableScheduleDataPermissionChecker>()
+					.GetType()
+					.Should()
+					.Be<PersistableScheduleDataPermissionChecker>();
 			}
 		}
 	}

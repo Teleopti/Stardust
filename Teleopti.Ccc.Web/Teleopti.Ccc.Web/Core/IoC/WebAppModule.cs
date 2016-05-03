@@ -1,6 +1,7 @@
 
 using System.Web.Http;
 using Autofac;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
 
 namespace Teleopti.Ccc.Web.Core.IoC
@@ -24,6 +25,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			base.Load(builder);
+			if (_configuration.Toggle(Toggles.WebByPassDefaultPermissionCheck_37984))
+			{
+				_configuration.Args().WebByPassDefaultPermissionCheck_37984 = true;
+			}
 
 			builder.RegisterModule(new CommonModule(_configuration));
 			builder.RegisterModule(new WebModule(_configuration, _httpConfiguration));
