@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
-using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
@@ -18,16 +19,32 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 	    }
 
 	    [UnitOfWork, HttpGet, Route("api/Absence/GetAvailableAbsences")]
-		public virtual JsonResult<IEnumerable<AbsenceViewModel>> GetAvailableAbsences()
+		public virtual IEnumerable<AbsenceViewModel> GetAvailableAbsences()
 	    {
-		    var absences = _absenceRepository.LoadAllSortByName();
+		    var result = _absenceRepository.LoadAllSortByName()
+			    .Where(x => !((Absence) x).IsDeleted)
+			    .Select(convertToAbsenceViewModel);
 
-		    return Json(absences.Select(x => new AbsenceViewModel
+		    return result;
+	    }
+
+		[UnitOfWork, HttpGet, Route("api/Absence/GetRequestableAbsences")]
+	    public virtual IEnumerable<AbsenceViewModel> GetRequestableAbsences()
+	    {
+		    var result = _absenceRepository.LoadRequestableAbsence()
+			    .Where(x => !((Absence) x).IsDeleted)
+			    .Select(convertToAbsenceViewModel);
+		    return result;
+	    }
+
+	    private static AbsenceViewModel convertToAbsenceViewModel(IAbsence absence)
+	    {
+		    return new AbsenceViewModel
 		    {
-			    Id = x.Id.GetValueOrDefault().ToString(),
-			    Name = x.Description.Name,
-			    ShortName = x.Description.ShortName
-		    }));
+			    Id = absence.Id.ToString(),
+			    Name = absence.Description.Name,
+			    ShortName = absence.Description.ShortName
+		    };
 	    }
     }
 }

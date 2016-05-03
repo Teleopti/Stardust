@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public IEnumerable<IAbsence> LoadAllSortByName()
 		{
-			throw new NotImplementedException();
+			return _absences;
 		}
 
 		public IList<IAbsence> LoadRequestableAbsence()
