@@ -6793,48 +6793,63 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView == null) return;
 			if (_scheduleView.AllSelectedDates().Count == 0) return;
 
-			try
+			IList<IRuleSetBag> ruleSetBags;
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var definitionSets =
-					MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
-				var resolution = 15;
-				IScheduleDay scheduleDay;
-				var selectedSchedules = _scheduleView.SelectedSchedules();
-				if (tryGetFirstSelectedSchedule(selectedSchedules, out scheduleDay))
+				var repositoryFactory = _container.Resolve<IRepositoryFactory>();
+				var bags = repositoryFactory.CreateRuleSetBagRepository(uow).LoadAllWithRuleSets();
+				ruleSetBags = bags.OrderBy(r => r.Description.Name).ToList();
+			}
+
+				try
 				{
-					var person = scheduleDay.Person;
-					if (scheduleDay.DateOnlyAsPeriod.DateOnly < person.TerminalDate)
+					var definitionSets =
+						MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();
+					var resolution = 15;
+					IScheduleDay scheduleDay;
+					var selectedSchedules = _scheduleView.SelectedSchedules();
+					if (tryGetFirstSelectedSchedule(selectedSchedules, out scheduleDay))
 					{
-						var skills = aggregateSkills(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
-						if (skills.Count > 0)
+						var person = scheduleDay.Person;
+						if (scheduleDay.DateOnlyAsPeriod.DateOnly < person.TerminalDate)
 						{
-							var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
-							resolution = skillResolutionProvider.MinimumResolution(skills);
+							var skills = aggregateSkills(person, scheduleDay.DateOnlyAsPeriod.DateOnly).ToList();
+							if (skills.Count > 0)
+							{
+								var skillResolutionProvider = _container.Resolve<ISkillResolutionProvider>();
+								resolution = skillResolutionProvider.MinimumResolution(skills);
+							}
 						}
+
 					}
 
+					var toggleManager = _container.Resolve<IToggleManager>();
+					var scheduleOvetimeOnNonWorkingDays = toggleManager.IsEnabled(Toggles.ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025);
+					using (
+						var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags,
+																	"OvertimePreferences", 
+																	_schedulerState.CommonStateHolder.ActiveActivities, 
+																	resolution, 
+																	definitionSets,
+																	ruleSetBags,
+																	scheduleOvetimeOnNonWorkingDays))
+					{
+						if (options.ShowDialog(this) != DialogResult.OK) return;
+						options.Refresh();
+						startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
+							new SchedulingAndOptimizeArgument(selectedSchedules) { OvertimePreferences = options.Preferences },
+							true);
+					}
 				}
-
-				using (
-					var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags,
-						"OvertimePreferences", _schedulerState.CommonStateHolder.ActiveActivities, resolution, definitionSets))
+				catch (CouldNotCreateTransactionException dataSourceException)
 				{
-					if (options.ShowDialog(this) != DialogResult.OK) return;
-					options.Refresh();
-					startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-						new SchedulingAndOptimizeArgument(selectedSchedules) { OvertimePreferences = options.Preferences },
-						true);
+					using (
+						var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
+							Resources.ServerUnavailable))
+					{
+						view.ShowDialog();
+					}
 				}
-			}
-			catch (CouldNotCreateTransactionException dataSourceException)
-			{
-				using (
-					var view = new SimpleExceptionHandlerView(dataSourceException, Resources.OpenTeleoptiCCC,
-						Resources.ServerUnavailable))
-				{
-					view.ShowDialog();
-				}
-			}
 		}
 
 		private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)

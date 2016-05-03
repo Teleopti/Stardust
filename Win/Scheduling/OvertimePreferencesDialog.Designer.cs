@@ -34,18 +34,21 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
-			this.comboBoxAdvOvertimeType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.comboBoxShiftBags = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.label6 = new System.Windows.Forms.Label();
 			this.label3 = new System.Windows.Forms.Label();
+			this.comboBoxAdvActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.label5 = new System.Windows.Forms.Label();
 			this.fromToTimeDurationPicker1 = new Teleopti.Ccc.Win.Common.Controls.FromToTimeDurationPicker();
-			this.checkBoxOnAvailableAgentsOnly = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxAllowBreakingWeeklyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxAllowBreakingNightlyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxAllowBreakingMaxTimePerWeek = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.labelSpecifiedPeriod = new System.Windows.Forms.Label();
 			this.fromToTimePickerSpecifiedPeriod = new Teleopti.Ccc.Win.Common.Controls.FromToTimePicker();
+			this.label7 = new System.Windows.Forms.Label();
+			this.comboBoxAdvOvertimeType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.checkBoxAllowBreakingMaxTimePerWeek = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAllowBreakingNightlyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAllowBreakingWeeklyRest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxOnAvailableAgentsOnly = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.comboBoxAdvTag = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.tableLayoutPanelButtons = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonOK = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -53,13 +56,14 @@
 			this.tabPageGenaral = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelMain.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxShiftBags)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingMaxTimePerWeek)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).BeginInit();
 			this.tableLayoutPanelButtons.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).BeginInit();
 			this.tabControlTopLevel.SuspendLayout();
@@ -69,35 +73,34 @@
 			// 
 			// label1
 			// 
+			this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label1.AutoSize = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Location = new System.Drawing.Point(6, 3);
+			this.label1.Location = new System.Drawing.Point(6, 366);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(294, 29);
+			this.label1.Size = new System.Drawing.Size(140, 15);
 			this.label1.TabIndex = 5;
 			this.label1.Text = "xxTagChangesWithColon";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label2
 			// 
+			this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label2.AutoSize = true;
-			this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label2.Location = new System.Drawing.Point(6, 60);
+			this.label2.Location = new System.Drawing.Point(6, 38);
 			this.label2.Name = "label2";
-			this.label2.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.label2.Size = new System.Drawing.Size(294, 29);
+			this.label2.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+			this.label2.Size = new System.Drawing.Size(124, 15);
 			this.label2.TabIndex = 6;
 			this.label2.Text = "xxSkillActivityColon";
 			this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// label4
 			// 
+			this.label4.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label4.AutoSize = true;
-			this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label4.Location = new System.Drawing.Point(6, 89);
+			this.label4.Location = new System.Drawing.Point(6, 338);
 			this.label4.Name = "label4";
-			this.label4.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.label4.Size = new System.Drawing.Size(294, 23);
+			this.label4.Size = new System.Drawing.Size(137, 15);
 			this.label4.TabIndex = 10;
 			this.label4.Text = "xxTypeOfOvertimeColon";
 			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -106,193 +109,232 @@
 			// 
 			this.tableLayoutPanelMain.ColumnCount = 2;
 			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 212F));
-			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvOvertimeType, 1, 3);
-			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvActivity, 1, 2);
-			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvTag, 1, 0);
-			this.tableLayoutPanelMain.Controls.Add(this.label1, 0, 0);
-			this.tableLayoutPanelMain.Controls.Add(this.label4, 0, 3);
-			this.tableLayoutPanelMain.Controls.Add(this.label2, 0, 2);
-			this.tableLayoutPanelMain.Controls.Add(this.label3, 0, 1);
-			this.tableLayoutPanelMain.Controls.Add(this.label5, 0, 4);
-			this.tableLayoutPanelMain.Controls.Add(this.fromToTimeDurationPicker1, 0, 5);
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxOnAvailableAgentsOnly, 0, 11);
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingWeeklyRest, 0, 10);
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingNightlyRest, 0, 9);
-			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingMaxTimePerWeek, 0, 8);
-			this.tableLayoutPanelMain.Controls.Add(this.labelSpecifiedPeriod, 0, 6);
-			this.tableLayoutPanelMain.Controls.Add(this.fromToTimePickerSpecifiedPeriod, 0, 7);
+			this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 283F));
+			this.tableLayoutPanelMain.Controls.Add(this.comboBoxShiftBags, 1, 8);
+			this.tableLayoutPanelMain.Controls.Add(this.label6, 0, 6);
+			this.tableLayoutPanelMain.Controls.Add(this.label3, 0, 0);
+			this.tableLayoutPanelMain.Controls.Add(this.label2, 0, 1);
+			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvActivity, 1, 1);
+			this.tableLayoutPanelMain.Controls.Add(this.label5, 0, 2);
+			this.tableLayoutPanelMain.Controls.Add(this.fromToTimeDurationPicker1, 1, 2);
+			this.tableLayoutPanelMain.Controls.Add(this.labelSpecifiedPeriod, 0, 3);
+			this.tableLayoutPanelMain.Controls.Add(this.fromToTimePickerSpecifiedPeriod, 1, 3);
+			this.tableLayoutPanelMain.Controls.Add(this.label7, 0, 8);
+			this.tableLayoutPanelMain.Controls.Add(this.label1, 0, 15);
+			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvTag, 1, 15);
+			this.tableLayoutPanelMain.Controls.Add(this.label4, 0, 14);
+			this.tableLayoutPanelMain.Controls.Add(this.comboBoxAdvOvertimeType, 1, 14);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingMaxTimePerWeek, 0, 10);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingNightlyRest, 0, 11);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxAllowBreakingWeeklyRest, 0, 12);
+			this.tableLayoutPanelMain.Controls.Add(this.checkBoxOnAvailableAgentsOnly, 0, 13);
 			this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelMain.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(7);
 			this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
 			this.tableLayoutPanelMain.Padding = new System.Windows.Forms.Padding(3);
-			this.tableLayoutPanelMain.RowCount = 12;
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
+			this.tableLayoutPanelMain.RowCount = 17;
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 23F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 32F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 42F));
 			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 29F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 37F));
-			this.tableLayoutPanelMain.Size = new System.Drawing.Size(518, 567);
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
+			this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 222F));
+			this.tableLayoutPanelMain.Size = new System.Drawing.Size(576, 429);
 			this.tableLayoutPanelMain.TabIndex = 11;
 			// 
-			// comboBoxAdvOvertimeType
+			// comboBoxShiftBags
 			// 
-			this.comboBoxAdvOvertimeType.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvOvertimeType.BeforeTouchSize = new System.Drawing.Size(206, 23);
-			this.comboBoxAdvOvertimeType.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.comboBoxAdvOvertimeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvOvertimeType.Location = new System.Drawing.Point(306, 92);
-			this.comboBoxAdvOvertimeType.Name = "comboBoxAdvOvertimeType";
-			this.comboBoxAdvOvertimeType.Size = new System.Drawing.Size(206, 23);
-			this.comboBoxAdvOvertimeType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxAdvOvertimeType.TabIndex = 15;
+			this.comboBoxShiftBags.BackColor = System.Drawing.Color.White;
+			this.comboBoxShiftBags.BeforeTouchSize = new System.Drawing.Size(206, 23);
+			this.comboBoxShiftBags.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxShiftBags.Location = new System.Drawing.Point(293, 169);
+			this.comboBoxShiftBags.Name = "comboBoxShiftBags";
+			this.comboBoxShiftBags.Size = new System.Drawing.Size(206, 23);
+			this.comboBoxShiftBags.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxShiftBags.TabIndex = 26;
+			// 
+			// label6
+			// 
+			this.label6.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(6, 145);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(110, 15);
+			this.label6.TabIndex = 27;
+			this.label6.Text = "xxNonWorkingDays";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+			// 
+			// label3
+			// 
+			this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label3.AutoSize = true;
+			this.tableLayoutPanelMain.SetColumnSpan(this.label3, 2);
+			this.label3.Location = new System.Drawing.Point(6, 9);
+			this.label3.Name = "label3";
+			this.label3.Size = new System.Drawing.Size(116, 15);
+			this.label3.TabIndex = 16;
+			this.label3.Text = "xxExtendExistingShift";
+			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
 			// 
 			// comboBoxAdvActivity
 			// 
 			this.comboBoxAdvActivity.BackColor = System.Drawing.Color.White;
 			this.comboBoxAdvActivity.BeforeTouchSize = new System.Drawing.Size(206, 23);
-			this.comboBoxAdvActivity.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxAdvActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvActivity.Location = new System.Drawing.Point(306, 63);
+			this.comboBoxAdvActivity.Location = new System.Drawing.Point(293, 34);
 			this.comboBoxAdvActivity.Name = "comboBoxAdvActivity";
 			this.comboBoxAdvActivity.Size = new System.Drawing.Size(206, 23);
 			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
 			this.comboBoxAdvActivity.TabIndex = 14;
 			// 
-			// comboBoxAdvTag
-			// 
-			this.comboBoxAdvTag.BackColor = System.Drawing.Color.White;
-			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(206, 23);
-			this.comboBoxAdvTag.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAdvTag.Location = new System.Drawing.Point(306, 6);
-			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-			this.comboBoxAdvTag.Size = new System.Drawing.Size(206, 23);
-			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
-			this.comboBoxAdvTag.TabIndex = 12;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.tableLayoutPanelMain.SetColumnSpan(this.label3, 2);
-			this.label3.Dock = System.Windows.Forms.DockStyle.Top;
-			this.label3.Location = new System.Drawing.Point(6, 32);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(506, 15);
-			this.label3.TabIndex = 16;
-			this.label3.Text = "xxAssignmentOptions";
-			this.label3.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
-			// 
 			// label5
 			// 
+			this.label5.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label5.AutoSize = true;
-			this.tableLayoutPanelMain.SetColumnSpan(this.label5, 2);
-			this.label5.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.label5.Location = new System.Drawing.Point(6, 126);
+			this.label5.Location = new System.Drawing.Point(6, 68);
 			this.label5.Name = "label5";
-			this.label5.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.label5.Size = new System.Drawing.Size(506, 15);
+			this.label5.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+			this.label5.Size = new System.Drawing.Size(158, 15);
 			this.label5.TabIndex = 17;
 			this.label5.Text = "xxOvertimeDurationColon";
 			// 
 			// fromToTimeDurationPicker1
 			// 
-			this.tableLayoutPanelMain.SetColumnSpan(this.fromToTimeDurationPicker1, 2);
-			this.fromToTimeDurationPicker1.Location = new System.Drawing.Point(15, 151);
-			this.fromToTimeDurationPicker1.Margin = new System.Windows.Forms.Padding(12, 10, 10, 10);
+			this.fromToTimeDurationPicker1.Location = new System.Drawing.Point(293, 63);
+			this.fromToTimeDurationPicker1.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxEndTime")));
+			this.fromToTimeDurationPicker1.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimeDurationPicker1.MinMaxStartTime")));
 			this.fromToTimeDurationPicker1.Name = "fromToTimeDurationPicker1";
-			this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(289, 31);
+			this.fromToTimeDurationPicker1.Size = new System.Drawing.Size(277, 26);
 			this.fromToTimeDurationPicker1.TabIndex = 18;
 			this.fromToTimeDurationPicker1.WholeDayText = "xxNextDay";
 			// 
-			// checkBoxOnAvailableAgentsOnly
-			// 
-			this.checkBoxOnAvailableAgentsOnly.BeforeTouchSize = new System.Drawing.Size(506, 27);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxOnAvailableAgentsOnly, 2);
-			this.checkBoxOnAvailableAgentsOnly.DrawFocusRectangle = false;
-			this.checkBoxOnAvailableAgentsOnly.Location = new System.Drawing.Point(6, 383);
-			this.checkBoxOnAvailableAgentsOnly.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxOnAvailableAgentsOnly.Name = "checkBoxOnAvailableAgentsOnly";
-			this.checkBoxOnAvailableAgentsOnly.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxOnAvailableAgentsOnly.Size = new System.Drawing.Size(506, 27);
-			this.checkBoxOnAvailableAgentsOnly.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxOnAvailableAgentsOnly.TabIndex = 22;
-			this.checkBoxOnAvailableAgentsOnly.Text = "xxOnAvailableAgentsOnly";
-			this.checkBoxOnAvailableAgentsOnly.ThemesEnabled = false;
-			// 
-			// checkBoxAllowBreakingWeeklyRest
-			// 
-			this.checkBoxAllowBreakingWeeklyRest.BeforeTouchSize = new System.Drawing.Size(506, 22);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingWeeklyRest, 2);
-			this.checkBoxAllowBreakingWeeklyRest.DrawFocusRectangle = false;
-			this.checkBoxAllowBreakingWeeklyRest.Location = new System.Drawing.Point(6, 346);
-			this.checkBoxAllowBreakingWeeklyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAllowBreakingWeeklyRest.Name = "checkBoxAllowBreakingWeeklyRest";
-			this.checkBoxAllowBreakingWeeklyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxAllowBreakingWeeklyRest.Size = new System.Drawing.Size(506, 22);
-			this.checkBoxAllowBreakingWeeklyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAllowBreakingWeeklyRest.TabIndex = 20;
-			this.checkBoxAllowBreakingWeeklyRest.Text = "xxAllowBreakContractWeeklyRest";
-			this.checkBoxAllowBreakingWeeklyRest.ThemesEnabled = false;
-			// 
-			// checkBoxAllowBreakingNightlyRest
-			// 
-			this.checkBoxAllowBreakingNightlyRest.BeforeTouchSize = new System.Drawing.Size(506, 22);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingNightlyRest, 2);
-			this.checkBoxAllowBreakingNightlyRest.DrawFocusRectangle = false;
-			this.checkBoxAllowBreakingNightlyRest.Location = new System.Drawing.Point(6, 309);
-			this.checkBoxAllowBreakingNightlyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAllowBreakingNightlyRest.Name = "checkBoxAllowBreakingNightlyRest";
-			this.checkBoxAllowBreakingNightlyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxAllowBreakingNightlyRest.Size = new System.Drawing.Size(506, 22);
-			this.checkBoxAllowBreakingNightlyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAllowBreakingNightlyRest.TabIndex = 21;
-			this.checkBoxAllowBreakingNightlyRest.Text = "xxAllowBreakContractNightlyRest";
-			this.checkBoxAllowBreakingNightlyRest.ThemesEnabled = false;
-			// 
-			// checkBoxAllowBreakingMaxTimePerWeek
-			// 
-			this.checkBoxAllowBreakingMaxTimePerWeek.BeforeTouchSize = new System.Drawing.Size(506, 23);
-			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingMaxTimePerWeek, 2);
-			this.checkBoxAllowBreakingMaxTimePerWeek.DrawFocusRectangle = false;
-			this.checkBoxAllowBreakingMaxTimePerWeek.Location = new System.Drawing.Point(6, 272);
-			this.checkBoxAllowBreakingMaxTimePerWeek.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAllowBreakingMaxTimePerWeek.Name = "checkBoxAllowBreakingMaxTimePerWeek";
-			this.checkBoxAllowBreakingMaxTimePerWeek.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.checkBoxAllowBreakingMaxTimePerWeek.Size = new System.Drawing.Size(506, 23);
-			this.checkBoxAllowBreakingMaxTimePerWeek.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxAllowBreakingMaxTimePerWeek.TabIndex = 19;
-			this.checkBoxAllowBreakingMaxTimePerWeek.Text = "xxAllowBreakContractMaxWorkTimePerWeek";
-			this.checkBoxAllowBreakingMaxTimePerWeek.ThemesEnabled = false;
-			// 
 			// labelSpecifiedPeriod
 			// 
+			this.labelSpecifiedPeriod.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.labelSpecifiedPeriod.AutoSize = true;
-			this.labelSpecifiedPeriod.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.labelSpecifiedPeriod.Location = new System.Drawing.Point(6, 207);
+			this.labelSpecifiedPeriod.Location = new System.Drawing.Point(6, 100);
 			this.labelSpecifiedPeriod.Name = "labelSpecifiedPeriod";
-			this.labelSpecifiedPeriod.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
-			this.labelSpecifiedPeriod.Size = new System.Drawing.Size(294, 15);
+			this.labelSpecifiedPeriod.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+			this.labelSpecifiedPeriod.Size = new System.Drawing.Size(108, 15);
 			this.labelSpecifiedPeriod.TabIndex = 23;
 			this.labelSpecifiedPeriod.Text = "xxBetweenColon";
 			// 
 			// fromToTimePickerSpecifiedPeriod
 			// 
-			this.tableLayoutPanelMain.SetColumnSpan(this.fromToTimePickerSpecifiedPeriod, 2);
-			this.fromToTimePickerSpecifiedPeriod.Location = new System.Drawing.Point(15, 232);
-			this.fromToTimePickerSpecifiedPeriod.Margin = new System.Windows.Forms.Padding(12, 10, 10, 10);
+			this.fromToTimePickerSpecifiedPeriod.Location = new System.Drawing.Point(293, 95);
+			this.fromToTimePickerSpecifiedPeriod.MinMaxEndTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxEndTime")));
+			this.fromToTimePickerSpecifiedPeriod.MinMaxStartTime = ((Teleopti.Interfaces.Domain.MinMax<System.TimeSpan>)(resources.GetObject("fromToTimePickerSpecifiedPeriod.MinMaxStartTime")));
 			this.fromToTimePickerSpecifiedPeriod.Name = "fromToTimePickerSpecifiedPeriod";
-			this.fromToTimePickerSpecifiedPeriod.Size = new System.Drawing.Size(288, 27);
+			this.fromToTimePickerSpecifiedPeriod.Size = new System.Drawing.Size(277, 26);
 			this.fromToTimePickerSpecifiedPeriod.TabIndex = 24;
+			this.fromToTimePickerSpecifiedPeriod.WholeDayCheckboxVisible = true;
 			this.fromToTimePickerSpecifiedPeriod.WholeDayText = "xxNextDay";
+			// 
+			// label7
+			// 
+			this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(6, 172);
+			this.label7.Name = "label7";
+			this.label7.Padding = new System.Windows.Forms.Padding(14, 0, 0, 0);
+			this.label7.Size = new System.Drawing.Size(110, 15);
+			this.label7.TabIndex = 28;
+			this.label7.Text = "xxUseShiftsFromColon";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBoxAdvOvertimeType
+			// 
+			this.comboBoxAdvOvertimeType.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvOvertimeType.BeforeTouchSize = new System.Drawing.Size(206, 23);
+			this.comboBoxAdvOvertimeType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxAdvOvertimeType.Location = new System.Drawing.Point(293, 334);
+			this.comboBoxAdvOvertimeType.Name = "comboBoxAdvOvertimeType";
+			this.comboBoxAdvOvertimeType.Size = new System.Drawing.Size(206, 23);
+			this.comboBoxAdvOvertimeType.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxAdvOvertimeType.TabIndex = 15;
+			// 
+			// checkBoxAllowBreakingMaxTimePerWeek
+			// 
+			this.checkBoxAllowBreakingMaxTimePerWeek.BeforeTouchSize = new System.Drawing.Size(506, 18);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingMaxTimePerWeek, 2);
+			this.checkBoxAllowBreakingMaxTimePerWeek.DrawFocusRectangle = false;
+			this.checkBoxAllowBreakingMaxTimePerWeek.Location = new System.Drawing.Point(6, 218);
+			this.checkBoxAllowBreakingMaxTimePerWeek.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAllowBreakingMaxTimePerWeek.Name = "checkBoxAllowBreakingMaxTimePerWeek";
+			this.checkBoxAllowBreakingMaxTimePerWeek.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxAllowBreakingMaxTimePerWeek.Size = new System.Drawing.Size(506, 18);
+			this.checkBoxAllowBreakingMaxTimePerWeek.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAllowBreakingMaxTimePerWeek.TabIndex = 19;
+			this.checkBoxAllowBreakingMaxTimePerWeek.Text = "xxAllowBreakContractMaxWorkTimePerWeek";
+			this.checkBoxAllowBreakingMaxTimePerWeek.ThemesEnabled = false;
+			// 
+			// checkBoxAllowBreakingNightlyRest
+			// 
+			this.checkBoxAllowBreakingNightlyRest.BeforeTouchSize = new System.Drawing.Size(506, 19);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingNightlyRest, 2);
+			this.checkBoxAllowBreakingNightlyRest.DrawFocusRectangle = false;
+			this.checkBoxAllowBreakingNightlyRest.Location = new System.Drawing.Point(6, 242);
+			this.checkBoxAllowBreakingNightlyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAllowBreakingNightlyRest.Name = "checkBoxAllowBreakingNightlyRest";
+			this.checkBoxAllowBreakingNightlyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxAllowBreakingNightlyRest.Size = new System.Drawing.Size(506, 19);
+			this.checkBoxAllowBreakingNightlyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAllowBreakingNightlyRest.TabIndex = 21;
+			this.checkBoxAllowBreakingNightlyRest.Text = "xxAllowBreakContractNightlyRest";
+			this.checkBoxAllowBreakingNightlyRest.ThemesEnabled = false;
+			// 
+			// checkBoxAllowBreakingWeeklyRest
+			// 
+			this.checkBoxAllowBreakingWeeklyRest.BeforeTouchSize = new System.Drawing.Size(506, 19);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxAllowBreakingWeeklyRest, 2);
+			this.checkBoxAllowBreakingWeeklyRest.DrawFocusRectangle = false;
+			this.checkBoxAllowBreakingWeeklyRest.Location = new System.Drawing.Point(6, 267);
+			this.checkBoxAllowBreakingWeeklyRest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAllowBreakingWeeklyRest.Name = "checkBoxAllowBreakingWeeklyRest";
+			this.checkBoxAllowBreakingWeeklyRest.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxAllowBreakingWeeklyRest.Size = new System.Drawing.Size(506, 19);
+			this.checkBoxAllowBreakingWeeklyRest.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxAllowBreakingWeeklyRest.TabIndex = 20;
+			this.checkBoxAllowBreakingWeeklyRest.Text = "xxAllowBreakContractWeeklyRest";
+			this.checkBoxAllowBreakingWeeklyRest.ThemesEnabled = false;
+			// 
+			// checkBoxOnAvailableAgentsOnly
+			// 
+			this.checkBoxOnAvailableAgentsOnly.BeforeTouchSize = new System.Drawing.Size(506, 19);
+			this.tableLayoutPanelMain.SetColumnSpan(this.checkBoxOnAvailableAgentsOnly, 2);
+			this.checkBoxOnAvailableAgentsOnly.DrawFocusRectangle = false;
+			this.checkBoxOnAvailableAgentsOnly.Location = new System.Drawing.Point(6, 292);
+			this.checkBoxOnAvailableAgentsOnly.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxOnAvailableAgentsOnly.Name = "checkBoxOnAvailableAgentsOnly";
+			this.checkBoxOnAvailableAgentsOnly.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
+			this.checkBoxOnAvailableAgentsOnly.Size = new System.Drawing.Size(506, 19);
+			this.checkBoxOnAvailableAgentsOnly.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
+			this.checkBoxOnAvailableAgentsOnly.TabIndex = 22;
+			this.checkBoxOnAvailableAgentsOnly.Text = "xxOnAvailableAgentsOnly";
+			this.checkBoxOnAvailableAgentsOnly.ThemesEnabled = false;
+			// 
+			// comboBoxAdvTag
+			// 
+			this.comboBoxAdvTag.BackColor = System.Drawing.Color.White;
+			this.comboBoxAdvTag.BeforeTouchSize = new System.Drawing.Size(206, 23);
+			this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxAdvTag.Location = new System.Drawing.Point(293, 363);
+			this.comboBoxAdvTag.Name = "comboBoxAdvTag";
+			this.comboBoxAdvTag.Size = new System.Drawing.Size(206, 23);
+			this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Metro;
+			this.comboBoxAdvTag.TabIndex = 12;
 			// 
 			// tableLayoutPanelButtons
 			// 
@@ -302,12 +344,12 @@
 			this.tableLayoutPanelButtons.Controls.Add(this.buttonOK, 0, 0);
 			this.tableLayoutPanelButtons.Controls.Add(this.buttonCancel, 1, 0);
 			this.tableLayoutPanelButtons.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanelButtons.Location = new System.Drawing.Point(0, 602);
+			this.tableLayoutPanelButtons.Location = new System.Drawing.Point(0, 464);
 			this.tableLayoutPanelButtons.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelButtons.Name = "tableLayoutPanelButtons";
 			this.tableLayoutPanelButtons.RowCount = 1;
 			this.tableLayoutPanelButtons.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtons.Size = new System.Drawing.Size(532, 46);
+			this.tableLayoutPanelButtons.Size = new System.Drawing.Size(590, 46);
 			this.tableLayoutPanelButtons.TabIndex = 13;
 			// 
 			// buttonOK
@@ -320,7 +362,7 @@
 			this.buttonOK.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonOK.ForeColor = System.Drawing.Color.White;
 			this.buttonOK.IsBackStageButton = false;
-			this.buttonOK.Location = new System.Drawing.Point(315, 9);
+			this.buttonOK.Location = new System.Drawing.Point(373, 9);
 			this.buttonOK.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonOK.Name = "buttonOK";
 			this.buttonOK.Size = new System.Drawing.Size(87, 27);
@@ -338,7 +380,7 @@
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonCancel.IsBackStageButton = false;
-			this.buttonCancel.Location = new System.Drawing.Point(435, 9);
+			this.buttonCancel.Location = new System.Drawing.Point(493, 9);
 			this.buttonCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(87, 27);
@@ -349,7 +391,7 @@
 			// tabControlTopLevel
 			// 
 			this.tabControlTopLevel.ActiveTabColor = System.Drawing.Color.DarkGray;
-			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(526, 596);
+			this.tabControlTopLevel.BeforeTouchSize = new System.Drawing.Size(584, 458);
 			this.tabControlTopLevel.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlTopLevel.Controls.Add(this.tabPageGenaral);
 			this.tabControlTopLevel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -357,7 +399,7 @@
 			this.tabControlTopLevel.ItemSize = new System.Drawing.Size(59, 22);
 			this.tabControlTopLevel.Location = new System.Drawing.Point(3, 3);
 			this.tabControlTopLevel.Name = "tabControlTopLevel";
-			this.tabControlTopLevel.Size = new System.Drawing.Size(526, 596);
+			this.tabControlTopLevel.Size = new System.Drawing.Size(584, 458);
 			this.tabControlTopLevel.TabIndex = 14;
 			this.tabControlTopLevel.TabPanelBackColor = System.Drawing.Color.White;
 			this.tabControlTopLevel.TabStyle = typeof(Syncfusion.Windows.Forms.Tools.TabRendererMetro);
@@ -372,7 +414,7 @@
 			this.tabPageGenaral.Name = "tabPageGenaral";
 			this.tabPageGenaral.Padding = new System.Windows.Forms.Padding(3);
 			this.tabPageGenaral.ShowCloseButton = true;
-			this.tabPageGenaral.Size = new System.Drawing.Size(526, 575);
+			this.tabPageGenaral.Size = new System.Drawing.Size(584, 437);
 			this.tabPageGenaral.TabIndex = 1;
 			this.tabPageGenaral.Text = "xxGeneral";
 			this.tabPageGenaral.ThemesEnabled = false;
@@ -390,7 +432,7 @@
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 46F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(532, 648);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(590, 510);
 			this.tableLayoutPanel3.TabIndex = 15;
 			// 
 			// OvertimePreferencesDialog
@@ -399,7 +441,7 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BorderColor = System.Drawing.Color.Blue;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ClientSize = new System.Drawing.Size(532, 648);
+			this.ClientSize = new System.Drawing.Size(590, 510);
 			this.Controls.Add(this.tableLayoutPanel3);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -414,13 +456,14 @@
 			this.Load += new System.EventHandler(this.overtimePreferencesDialogLoad);
 			this.tableLayoutPanelMain.ResumeLayout(false);
 			this.tableLayoutPanelMain.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxShiftBags)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvActivity)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvOvertimeType)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingMaxTimePerWeek)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingNightlyRest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAllowBreakingWeeklyRest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxOnAvailableAgentsOnly)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdvTag)).EndInit();
 			this.tableLayoutPanelButtons.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).EndInit();
 			this.tabControlTopLevel.ResumeLayout(false);
@@ -445,7 +488,6 @@
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvOvertimeType;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvActivity;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvTag;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label5;
 		private Common.Controls.FromToTimeDurationPicker fromToTimeDurationPicker1;
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAllowBreakingNightlyRest;
@@ -454,5 +496,9 @@
 		  private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxOnAvailableAgentsOnly;
 		  private System.Windows.Forms.Label labelSpecifiedPeriod;
 		  private Common.Controls.FromToTimePicker fromToTimePickerSpecifiedPeriod;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxShiftBags;
+		private System.Windows.Forms.Label label6;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label label7;
 	}
 }

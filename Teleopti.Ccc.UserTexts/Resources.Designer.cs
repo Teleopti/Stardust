@@ -10022,6 +10022,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extend Existing Shift.
+        /// </summary>
+        public static string ExtendExistingShift {
+            get {
+                return ResourceManager.GetString("ExtendExistingShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Extending and reducing days off for flexible agents.
         /// </summary>
         public static string ExtendingAndReducingDaysoff {
@@ -17657,6 +17666,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoNodeSelectedExclamation {
             get {
                 return ResourceManager.GetString("NoNodeSelectedExclamation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Non Working Days.
+        /// </summary>
+        public static string NonWorkingDays {
+            get {
+                return ResourceManager.GetString("NonWorkingDays", resourceCulture);
             }
         }
         
@@ -30798,6 +30816,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UseShiftCategoryRestrictions {
             get {
                 return ResourceManager.GetString("UseShiftCategoryRestrictions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use Shifts From:.
+        /// </summary>
+        public static string UseShiftsFromColon {
+            get {
+                return ResourceManager.GetString("UseShiftsFromColon", resourceCulture);
             }
         }
         

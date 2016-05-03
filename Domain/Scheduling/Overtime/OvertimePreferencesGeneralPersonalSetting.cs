@@ -19,8 +19,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private bool _doNotBreakNightlyRest = false;
         private bool _doNotBreakWeeklyRest =  false;
         private bool _availableAgentsOnly = false ;
+	    private Guid? _ruleSetBagId;
 
-        public void MapTo(IOvertimePreferences overtimePreferences , IEnumerable<IScheduleTag> scheduleTags,IEnumerable<IActivity> activityList,IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets  )
+        public void MapTo(IOvertimePreferences overtimePreferences , 
+						IEnumerable<IScheduleTag> scheduleTags, 
+						IEnumerable<IActivity> activityList,
+						IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets,
+						IList<IRuleSetBag> ruleSetBags )
         {
 			overtimePreferences.ScheduleTag = scheduleTags.FirstOrDefault(scheduleTag => _scheduleTagId == scheduleTag.Id) ??
 			                                  NullScheduleTag.Instance;
@@ -49,6 +54,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                     overtimePreferences.OvertimeType = overtimeType;
             }
 
+	        foreach (var ruleSetBag in ruleSetBags)
+	        {
+		        if (_ruleSetBagId == null)
+		        {
+			        overtimePreferences.ShiftBagToUse = null;
+			        break;
+		        }
+
+		        if (ruleSetBag.Id == _ruleSetBagId)
+		        {
+			        overtimePreferences.ShiftBagToUse = ruleSetBag;
+			        break;
+		        }
+		        
+
+	        }
+
             overtimePreferences.ExtendExistingShift = _extendExistingShifts;
             overtimePreferences.SelectedTimePeriod = _selectTimePeriod;
             overtimePreferences.AllowBreakMaxWorkPerWeek = _doNotBreakMaxSeatPerWeek;
@@ -70,6 +92,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             if(overtimePreferences.ScheduleTag != null)
                 _scheduleTagId = overtimePreferences.ScheduleTag.Id ;
             _skillActivtyId = overtimePreferences.SkillActivity.Id;
+	        if (overtimePreferences.ShiftBagToUse != null)
+		        _ruleSetBagId = overtimePreferences.ShiftBagToUse.Id;
+	        else
+	        {
+		        _ruleSetBagId = null;
+	        }
         }
     }
 }

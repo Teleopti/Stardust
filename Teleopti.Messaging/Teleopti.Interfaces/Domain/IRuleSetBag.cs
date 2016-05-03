@@ -13,6 +13,7 @@ namespace Teleopti.Interfaces.Domain
 	/// </remarks>
 	public interface IRuleSetBag : IAggregateRoot, ICloneableEntity<IRuleSetBag>
 	{
+		string Name { get; }
 		/// <summary>
 		/// Gets or sets the description.
 		/// </summary>

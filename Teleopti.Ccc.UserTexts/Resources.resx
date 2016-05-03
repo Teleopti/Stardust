@@ -14393,4 +14393,16 @@ Help us improve your experience by sending an error report</value>
     <value>Preview the new Intraday tool!</value>
     <comment>Preview the new Intraday tool!</comment>
   </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>Extend Existing Shift</value>
+    <comment>Used when scheduling overtime, add overtime to existing shift</comment>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>Non Working Days</value>
+    <comment>Used when scheduling overtime, schedule overtime on non scheduled day</comment>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>Use Shifts From:</value>
+    <comment>Used when scheduling overtime, schedule overtime on non scheduled day</comment>
+  </data>
 </root>

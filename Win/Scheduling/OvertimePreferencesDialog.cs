@@ -10,6 +10,7 @@ using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -21,10 +22,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private IEnumerable<IActivity> _availableActivity;
 		private readonly int _resolution;
 		private readonly IList<IMultiplicatorDefinitionSet> _definitionSets;
+		private readonly IList<IRuleSetBag> _shiftBags;
+		private readonly bool _scheduleOvetimeOnNonWorkingDays;
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly OvertimePreferencesDialogPresenter _presenter;
+		
 
-		public OvertimePreferencesDialog(IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
+		public OvertimePreferencesDialog(IEnumerable<IScheduleTag> scheduleTags, 
+										string settingValue, 
+										IEnumerable<IActivity> availableActivity, 
+										int resolution, 
+										IList<IMultiplicatorDefinitionSet> definitionSets,
+										IList<IRuleSetBag> shiftBags,
+										bool scheduleOvetimeOnNonWorkingDays)
 			: this()
 		{
 			_scheduleTags = scheduleTags;
@@ -32,13 +42,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_availableActivity = availableActivity;
 			_resolution = resolution;
 			_definitionSets = definitionSets;
-			_overtimePreferences = new OvertimePreferences();
+			_shiftBags = shiftBags;
+			_scheduleOvetimeOnNonWorkingDays = scheduleOvetimeOnNonWorkingDays;
+			_overtimePreferences = new OvertimePreferences();	
 			_presenter = new OvertimePreferencesDialogPresenter(this);
 			
 			loadPersonalSettings();
 			initTags();
 			initActivityList();
 			initOvertimeTypes();
+			initShiftBags();
 			setDefaultTimePeriod();
 			setDefaultSpecificPeriod();
 			setInitialValues();
@@ -55,6 +68,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			comboBoxAdvOvertimeType.DataSource = _definitionSets;
 			comboBoxAdvOvertimeType.DisplayMember = "Name";
 			comboBoxAdvOvertimeType.SelectedItem = _overtimePreferences.OvertimeType;
+		}
+
+		private void initShiftBags()
+		{
+			if (_scheduleOvetimeOnNonWorkingDays)
+			{
+				var noneRuleSetBag = new RuleSetBag {Description = new Description(UserTexts.Resources.None)};
+				_shiftBags.Insert(0, noneRuleSetBag);
+				comboBoxShiftBags.DataSource = _shiftBags;
+				comboBoxShiftBags.DisplayMember = "Name";
+				if (_overtimePreferences.ShiftBagToUse == null)
+					comboBoxShiftBags.SelectedIndex = 0;
+				else
+					comboBoxShiftBags.SelectedItem = _overtimePreferences.ShiftBagToUse;
+			}
+			else
+			{
+				label6.Visible = false;
+				label7.Visible = false;
+				comboBoxShiftBags.Visible = false;
+			}
 		}
 
 		private void overtimePreferencesDialogLoad(object sender, EventArgs e)
@@ -214,7 +248,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 			}
 			if (hasMissedloadingSettings()) return;
-			_defaultOvertimeGeneralSettings.MapTo(_overtimePreferences, _scheduleTags, _availableActivity,_definitionSets );
+			_defaultOvertimeGeneralSettings.MapTo(_overtimePreferences, _scheduleTags, _availableActivity,_definitionSets, _shiftBags );
 		}
 
 		private bool hasMissedloadingSettings()
@@ -248,6 +282,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_overtimePreferences.SelectedSpecificTimePeriod = selectedSpecificPeriod;
 
 			_overtimePreferences.AvailableAgentsOnly = checkBoxOnAvailableAgentsOnly.Checked;
+
+			if (comboBoxShiftBags.Visible && comboBoxShiftBags.SelectedIndex != 0)
+			{
+				_overtimePreferences.ShiftBagToUse = (IRuleSetBag) comboBoxShiftBags.SelectedItem;
+			}
+			else
+			{
+				_overtimePreferences.ShiftBagToUse = null;
+			}
 		}
 
 		public void SetStateOkButtonDisabled()
@@ -256,4 +299,4 @@ namespace Teleopti.Ccc.Win.Scheduling
 			label4.BackColor = Color.Red;
 		}
 	}
-}
+}	
