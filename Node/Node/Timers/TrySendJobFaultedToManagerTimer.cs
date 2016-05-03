@@ -13,17 +13,19 @@ namespace Stardust.Node.Timers
 	public class TrySendJobFaultedToManagerTimer : TrySendStatusToManagerTimer
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (TrySendJobFaultedToManagerTimer));
+		private readonly IHttpSender _httpSender;
 
 		public TrySendJobFaultedToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                       TrySendJobDetailToManagerTimer sendJobDetailToManagerTimer,
-											   IHttpSender httpSender,
+		                                       IHttpSender httpSender,
 		                                       double interval = 500) : base(nodeConfiguration,
-		                                                                      nodeConfiguration
-			                                                                      .GetManagerJobHasFaileTemplatedUri(),
-		                                                                      sendJobDetailToManagerTimer,
-																			  httpSender,
-																			  interval)
+		                                                                     nodeConfiguration
+			                                                                     .GetManagerJobHasFaileTemplatedUri(),
+		                                                                     sendJobDetailToManagerTimer,
+		                                                                     httpSender,
+		                                                                     interval)
 		{
+			_httpSender = httpSender;
 		}
 
 
@@ -36,8 +38,6 @@ namespace Stardust.Node.Timers
 		{
 			try
 			{
-				var httpSender = new HttpSender();
-
 				var payload = new JobFailedEntity
 				{
 					JobId = jobQueueItemEntity.JobId,
@@ -45,28 +45,17 @@ namespace Stardust.Node.Timers
 					Created = ErrorOccured
 				};
 
-				var response =
-					httpSender.PostAsync(CallbackTemplateUri,
-					                     payload,
-					                     cancellationToken);
+				var response = _httpSender.PostAsync(CallbackTemplateUri,
+				                                     payload,
+				                                     cancellationToken);
 				return response;
 			}
 
 			catch (Exception exp)
 			{
-				Logger.ErrorWithLineNumber("Error in TrySendStatus.",
-				                                 exp);
+				Logger.ErrorWithLineNumber("Error in TrySendJobFaultedTimer.", exp);
 				throw;
 			}
-		}
-
-		protected override void Dispose(bool disposing)
-		{
-			Logger.DebugWithLineNumber("Start disposing.");
-
-			base.Dispose(disposing);
-
-			Logger.DebugWithLineNumber("Finished disposing.");
 		}
 	}
 }

@@ -19,8 +19,8 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger =
 			LogManager.GetLogger(typeof (TrySendJobDetailToManagerTimer));
 
+		
 		public EventHandler<IJobDetail> SendJobDetailWithSuccessEventHandler;
-
 
 		private void InvokeSendJobProgressModelWithSuccessEventHandler(IJobDetail jobDetail)
 		{
@@ -32,77 +32,38 @@ namespace Stardust.Node.Timers
 
 		public TrySendJobDetailToManagerTimer(NodeConfiguration nodeConfiguration,
 		                                        IHttpSender httpSender,
-		                                        double interval) : base(interval)
+		                                        double interval = 500) : base(interval)
 		{
-			Logger.DebugWithLineNumber("Start.");
-
-			if (httpSender == null)
-			{
-				throw new ArgumentNullException("httpSender");
-			}
-
-			nodeConfiguration.ThrowArgumentNullException();
-
-			HttpSender = httpSender;
-			NodeConfiguration = nodeConfiguration;
-
-			CancellationTokenSource = new CancellationTokenSource();
-
-			JobDetails =
-				new ConcurrentDictionary<Guid, IJobDetail>();
-
-			WhoamI =
-				NodeConfiguration.CreateWhoIAm(Environment.MachineName);
-
-			UriBuilder =
-				new UriBuilder(NodeConfiguration.ManagerLocation);
-
-			UriBuilder.Path += ManagerRouteConstants.JobProgress;
+			_httpSender = httpSender;
+			_cancellationTokenSource = new CancellationTokenSource();
+			_jobDetails = new ConcurrentDictionary<Guid, IJobDetail>();
+			_uriBuilder = new UriBuilder(nodeConfiguration.ManagerLocation);
+			_uriBuilder.Path += ManagerRouteConstants.JobProgress;
 
 			Elapsed += OnTimedEvent;
-
-			Logger.DebugWithLineNumber("Finished.");
 		}
+		
+		private readonly UriBuilder _uriBuilder;
+		private readonly IHttpSender _httpSender;
+		private readonly ConcurrentDictionary<Guid, IJobDetail> _jobDetails;
+		private readonly CancellationTokenSource _cancellationTokenSource;
 
-
-		private UriBuilder UriBuilder { get; set; }
-
-		public string WhoamI { get; private set; }
-
-		public Guid JobId { get; set; }
-
-		private NodeConfiguration NodeConfiguration { get; set; }
-
-		private IHttpSender HttpSender { get; set; }
-
-		private ConcurrentDictionary<Guid, IJobDetail> JobDetails { get; set; }
-
-		public CancellationTokenSource CancellationTokenSource { get; set; }
 
 		public void ClearAllJobProgresses(Guid jobId)
 		{
-			Logger.DebugWithLineNumber("Start.");
-
-			if (jobId == Guid.Empty)
-			{
-				throw new ArgumentNullException("jobId");
-			}
-
-			if (JobDetails != null)
+			if (_jobDetails != null)
 			{
 				var progressesToRemove =
-					JobDetails.Where(pair => pair.Value.JobId == jobId);
+					_jobDetails.Where(pair => pair.Value.JobId == jobId);
 
 				foreach (var progress in progressesToRemove)
 				{
 					IJobDetail model;
-
-					JobDetails.TryRemove(progress.Key, out model);
+					_jobDetails.TryRemove(progress.Key, out model);
 				}
 			}
-
-			Logger.DebugWithLineNumber("Finished.");
 		}
+
 
 		public int TotalNumberOfJobProgresses(Guid jobId)
 		{
@@ -110,72 +71,48 @@ namespace Stardust.Node.Timers
 			{
 				return 0;
 			}
-
-			return JobDetails.Count(pair => pair.Value.JobId == jobId);
+			return _jobDetails.Count(pair => pair.Value.JobId == jobId);
 		}
+
 
 		private bool IsJobProgressesNullOrEmpty()
 		{
-			return JobDetails == null || JobDetails.Count == 0;
+			return _jobDetails == null || _jobDetails.Count == 0;
 		}
 
-		public void ClearAllJobProgresses()
-		{
-			Logger.DebugWithLineNumber("Start.");
-
-			if (JobDetails != null)
-			{
-				JobDetails.Clear();
-			}
-
-			Logger.DebugWithLineNumber("Finished.");
-		}
 
 		public bool HasAllProgressesBeenSent(Guid jobId)
 		{
-			Logger.DebugWithLineNumber("Start.");
-
-			if (JobDetails == null)
+			if (_jobDetails == null)
 			{
 				return true;
 			}
 
 			var allSent =
-				JobDetails.Values.Count(model => model.JobId == jobId) == 0;
-
-			Logger.DebugWithLineNumber("Finished.");
+				_jobDetails.Values.Count(model => model.JobId == jobId) == 0;
 
 			return allSent;
 		}
 
 		public bool HasAllProgressesBeenSent()
 		{
-			Logger.DebugWithLineNumber("Start.");
 
-			if (JobDetails == null)
+			if (_jobDetails == null)
 			{
 				return true;
 			}
 
-			var allSent = JobDetails.Values.Count == 0;
-
-			Logger.DebugWithLineNumber("Finished.");
-
+			var allSent = _jobDetails.Values.Count == 0;
+			
 			return allSent;
 		}
 
 		protected virtual void TrySendJobProgress()
 		{
-			Logger.DebugWithLineNumber("Start.");
-
-			if (JobDetails != null && JobDetails.Count > 0)
+			if (_jobDetails != null && _jobDetails.Count > 0)
 			{
-				foreach (var sendJobProgressModel in JobDetails)
+				foreach (var sendJobProgressModel in _jobDetails)
 				{
-					Logger.DebugWithLineNumber("Try send job progress ( jobId, progressDetail ) : ( " +
-					                           sendJobProgressModel.Value.JobId +
-					                           ", " + sendJobProgressModel.Value.Detail + " )");
-
 					try
 					{
 						var model = sendJobProgressModel;
@@ -190,7 +127,7 @@ namespace Stardust.Node.Timers
 							};
 
 							var httpResponseMessage =
-								await HttpSender.PostAsync(UriBuilder.Uri,
+								await _httpSender.PostAsync(_uriBuilder.Uri,
 														   jobDetail);
 
 							if (httpResponseMessage.IsSuccessStatusCode)
@@ -198,7 +135,7 @@ namespace Stardust.Node.Timers
 								IJobDetail removedValue;
 
 								var removed =
-									JobDetails.TryRemove(model.Key, out removedValue);
+									_jobDetails.TryRemove(model.Key, out removedValue);
 
 								if (removed)
 								{
@@ -219,14 +156,10 @@ namespace Stardust.Node.Timers
 					}
 				}
 			}
-
-			Logger.DebugWithLineNumber("Finished.");
 		}
 
 		private void OnTimedEvent(object sender, ElapsedEventArgs e)
 		{
-			Logger.DebugWithLineNumber("Start.");
-
 			Stop();
 
 			try
@@ -237,15 +170,12 @@ namespace Stardust.Node.Timers
 			finally
 			{
 				Start();
-
-				Logger.DebugWithLineNumber("Finished.");
 			}
 		}
 
 		public void SendProgress(Guid jobid,
 		                         string progressMessage)
 		{
-			Logger.DebugWithLineNumber("Start.");
 
 			var progressModel = new JobDetailEntity
 			{
@@ -254,29 +184,22 @@ namespace Stardust.Node.Timers
 				Created = DateTime.UtcNow
 			};
 
-			JobDetails.TryAdd(Guid.NewGuid(), progressModel);
-
-			Logger.DebugWithLineNumber("Finished.");
+			_jobDetails.TryAdd(Guid.NewGuid(), progressModel);
 		}
 
 		protected override void Dispose(bool disposing)
 		{
-			Logger.DebugWithLineNumber("Start disposing.");
-
-			if (CancellationTokenSource != null &&
-			    !CancellationTokenSource.IsCancellationRequested)
+			if (_cancellationTokenSource != null &&
+			    !_cancellationTokenSource.IsCancellationRequested)
 			{
-				CancellationTokenSource.Cancel();
+				_cancellationTokenSource.Cancel();
 			}
-
 			base.Dispose(disposing);
-
-			Logger.DebugWithLineNumber("Finished disposing.");
 		}
 
 		public int TotalNumberOfJobProgresses()
 		{
-			return JobDetails.Count;
+			return _jobDetails.Count;
 		}
 	}
 }

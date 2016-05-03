@@ -16,71 +16,54 @@ namespace Stardust.Node.Timers
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (PingToManagerTimer));
 
 		public PingToManagerTimer(NodeConfiguration nodeConfiguration,
-								  IHttpSender httpSender) : base(nodeConfiguration.PingToManagerSeconds*1000)
+		                          IHttpSender httpSender) : base(nodeConfiguration.PingToManagerSeconds*1000)
 		{
-			CancellationTokenSource = new CancellationTokenSource();
+			_cancellationTokenSource = new CancellationTokenSource();
 
-			NodeConfiguration = nodeConfiguration;
-			CallbackToManagerUri = nodeConfiguration.GetManagerNodeHeartbeatUri();
-			HttpSender = httpSender;
-
-			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			_nodeConfiguration = nodeConfiguration;
+			_httpSender = httpSender;
+			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
 			Elapsed += OnTimedEvent;
-
-			AutoReset = true;
 		}
 
-		public string WhoAmI { get; private set; }
-
-		public NodeConfiguration NodeConfiguration { get; private set; }
-
-		public Uri CallbackToManagerUri { get; private set; }
-		public IHttpSender HttpSender { get; set; }
-
-		private CancellationTokenSource CancellationTokenSource { get; set; }
+		private readonly string _whoAmI;
+		private readonly NodeConfiguration _nodeConfiguration;
+		private readonly IHttpSender _httpSender;
+		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		protected override void Dispose(bool disposing)
 		{
-			Logger.DebugWithLineNumber("Start disposing.");
-
-			if (CancellationTokenSource != null &&
-			    !CancellationTokenSource.IsCancellationRequested)
+			if (_cancellationTokenSource != null &&
+			    !_cancellationTokenSource.IsCancellationRequested)
 			{
-				CancellationTokenSource.Cancel();
+				_cancellationTokenSource.Cancel();
 			}
-
 			base.Dispose(disposing);
-
-			Logger.DebugWithLineNumber("Finished disposing.");
 		}
 
 
-		private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,				
-													     Uri callbackToManagerUri,
+		private async Task<HttpResponseMessage> SendPing(Uri nodeAddress,
+		                                                 Uri callbackToManagerUri,
 		                                                 CancellationToken cancellationToken)
 		{
-			var httpResponseMessage =
-				await HttpSender.PostAsync(callbackToManagerUri, 
-										   nodeAddress, 
-										   cancellationToken);
-
+			var httpResponseMessage = await _httpSender.PostAsync(callbackToManagerUri,
+			                                                     nodeAddress,
+			                                                     cancellationToken);
 			return httpResponseMessage;
 		}
 
-		private async void OnTimedEvent(object sender,
-		                                ElapsedEventArgs e)
+		private async void OnTimedEvent(object sender, ElapsedEventArgs e)
 		{
 			try
 			{
-				await SendPing(NodeConfiguration.BaseAddress,
-				               CallbackToManagerUri,
-				               CancellationTokenSource.Token);
+				await SendPing(_nodeConfiguration.BaseAddress,
+							   _nodeConfiguration.GetManagerNodeHeartbeatUri(),
+				               _cancellationTokenSource.Token);
 			}
-
 			catch
 			{
-				Logger.InfoWithLineNumber(WhoAmI + ": Heartbeat failed. Is the manager up and running?");
+				Logger.InfoWithLineNumber(_whoAmI + ": Heartbeat failed. Is the manager up and running?");
 			}
 		}
 	}

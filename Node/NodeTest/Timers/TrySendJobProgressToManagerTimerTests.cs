@@ -39,28 +39,6 @@ namespace NodeTest.Timers
 		}
 
 		[Test]
-		public void ShouldBeAbleToClearAllJobProgresses()
-		{
-			var timer =
-				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
-				                                     _httpSenderFake,
-				                                     1000);
-
-			timer.SendProgress(Guid.NewGuid(), "Progress message");
-			timer.SendProgress(Guid.NewGuid(), "Progress message");
-
-			Assert.IsTrue(timer.TotalNumberOfJobProgresses() == 2,
-			              "Should have 2 job progresses.");
-
-			timer.ClearAllJobProgresses();
-
-			Assert.IsTrue(timer.TotalNumberOfJobProgresses() == 0,
-			              "Should have 0 job progresses after clearing.");
-
-			timer.Dispose();
-		}
-
-		[Test]
 		public void ShouldBeAbleToInstantiateObject()
 		{
 			var timer =

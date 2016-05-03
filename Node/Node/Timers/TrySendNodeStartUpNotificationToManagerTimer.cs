@@ -21,45 +21,33 @@ namespace Stardust.Node.Timers
 		                                                    double interval = 5000,
 		                                                    bool autoReset = true) : base(interval)
 		{
-			nodeConfiguration.ThrowArgumentNullException();
-
 			var callbackToManagerTemplateUri = nodeConfiguration.GetManagerNodeHasBeenInitializedUri();
-
-			CancellationTokenSource = new CancellationTokenSource();
-
-			NodeConfiguration = nodeConfiguration;
-			CallbackToManagerTemplateUri = callbackToManagerTemplateUri;
-			HttpSender = httpSender;
-
-			WhoAmI = NodeConfiguration.CreateWhoIAm(Environment.MachineName);
+			_cancellationTokenSource = new CancellationTokenSource();
+			_nodeConfiguration = nodeConfiguration;
+			_callbackToManagerTemplateUri = callbackToManagerTemplateUri;
+			_httpSender = httpSender;
+			_whoAmI = _nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
 			Elapsed += OnTimedEvent;
-
 			AutoReset = autoReset;
 		}
 
-		public string WhoAmI { get; private set; }
-
-		public NodeConfiguration NodeConfiguration { get; private set; }
+		private readonly string _whoAmI;
+		private readonly NodeConfiguration _nodeConfiguration;
+		private readonly Uri _callbackToManagerTemplateUri;
+		private readonly IHttpSender _httpSender;
+		private readonly CancellationTokenSource _cancellationTokenSource;
 
 		public Uri CallbackToManagerTemplateUri { get; private set; }
-		public IHttpSender HttpSender { get; set; }
-
-		private CancellationTokenSource CancellationTokenSource { get; set; }
 
 		protected override void Dispose(bool disposing)
 		{
-			Logger.DebugWithLineNumber("Start disposing.");
-
 			base.Dispose(disposing);
-
-			if (CancellationTokenSource != null &&
-			    !CancellationTokenSource.IsCancellationRequested)
+			if (_cancellationTokenSource != null &&
+			    !_cancellationTokenSource.IsCancellationRequested)
 			{
-				CancellationTokenSource.Cancel();
+				_cancellationTokenSource.Cancel();
 			}
-
-			Logger.DebugWithLineNumber("Finished disposing.");
 		}
 
 		public event EventHandler TrySendNodeStartUpNotificationSucceded;
@@ -68,8 +56,7 @@ namespace Stardust.Node.Timers
 		                                                                           Uri callbackToManagerUri,
 		                                                                           CancellationToken cancellationToken)
 		{
-			var httpResponseMessage =
-				await HttpSender.PostAsync(callbackToManagerUri,
+			var httpResponseMessage = await _httpSender.PostAsync(callbackToManagerUri,
 				                           nodeAddress,
 				                           cancellationToken);
 
@@ -80,8 +67,7 @@ namespace Stardust.Node.Timers
 		{
 			if (TrySendNodeStartUpNotificationSucceded != null)
 			{
-				TrySendNodeStartUpNotificationSucceded(this,
-				                                       EventArgs.Empty);
+				TrySendNodeStartUpNotificationSucceded(this, EventArgs.Empty);
 			}
 		}
 
@@ -90,28 +76,23 @@ namespace Stardust.Node.Timers
 		{
 			try
 			{
-				Logger.DebugWithLineNumber("Trying to send init to manager. Manager Uri : ( " + CallbackToManagerTemplateUri +
-				                           " )");
-				var httpResponseMessage =
-					await TrySendNodeStartUpToManager(NodeConfiguration.BaseAddress,
-					                                  CallbackToManagerTemplateUri,
-					                                  CancellationTokenSource.Token);
+				var httpResponseMessage = await TrySendNodeStartUpToManager(_nodeConfiguration.BaseAddress,
+					                                  _callbackToManagerTemplateUri,
+					                                  _cancellationTokenSource.Token);
 
 				if (httpResponseMessage.IsSuccessStatusCode)
 				{
-					Logger.DebugWithLineNumber(WhoAmI + ": Node start up notification to manager succeded.");
-
 					TrySendNodeStartUpNotificationSuccededInvoke();
 				}
 				else
 				{
-					Logger.InfoWithLineNumber(WhoAmI + ": Node start up notification to manager failed.");
+					Logger.WarningWithLineNumber(_whoAmI + ": Node start up notification to manager failed.");
 				}
 			}
 
 			catch
 			{
-				Logger.WarningWithLineNumber(WhoAmI + ": Node start up notification to manager failed.");
+				Logger.WarningWithLineNumber(_whoAmI + ": Node start up notification to manager failed.");
 			}
 		}
 	}

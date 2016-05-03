@@ -61,7 +61,7 @@ namespace Stardust.Node
 
 				                    containerBuilder.RegisterInstance(nodeConfiguration);
 									
-									containerBuilder.RegisterType<TrySendJobDetailToManagerTimer>().WithParameter("interval", 5000d).SingleInstance();
+									containerBuilder.RegisterType<TrySendJobDetailToManagerTimer>().SingleInstance();
 									containerBuilder.RegisterType<TrySendNodeStartUpNotificationToManagerTimer>().SingleInstance();
 									containerBuilder.RegisterType<TrySendJobDoneStatusToManagerTimer>().SingleInstance();
 									containerBuilder.RegisterType<PingToManagerTimer>().As<System.Timers.Timer>().SingleInstance();
