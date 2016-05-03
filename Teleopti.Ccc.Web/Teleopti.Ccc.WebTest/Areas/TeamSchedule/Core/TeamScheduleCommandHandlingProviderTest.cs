@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldReturnNoWriteProtectedAgentsIfHasModifyWriteProtectedSchedulePermission()
 		{
-			PrincipalAuthorization.SetInstance(PrincipalAuthorizationWithConfigurablePermission);
+			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
 			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
 			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldReturnWriteProtectedAgentsIfWithoutModifyWriteProtectedSchedulePermission()
 		{
-			PrincipalAuthorization.SetInstance(PrincipalAuthorizationWithConfigurablePermission);
+			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
 			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
 			
 			var agenta = PersonFactory.CreatePersonWithGuid("a","a");
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotRemoveWriteProtectedActivity()
 		{
-			PrincipalAuthorization.SetInstance(PrincipalAuthorizationWithConfigurablePermission);
+			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
 			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
 
 			var person = PersonFactory.CreatePersonWithGuid("a","b");
@@ -224,8 +224,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotAddActivityToWriteProtectedSchedule()
 		{
-
-			PrincipalAuthorization.SetInstance(PrincipalAuthorizationWithConfigurablePermission);
+			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
 			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
 
 			var person = PersonFactory.CreatePersonWithGuid("a","b");

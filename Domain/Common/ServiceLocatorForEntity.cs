@@ -4,13 +4,26 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
+	// these properties are injected by reflection in ServiceLocatorModule
+	// always prefer dependency injection over service locator!
+
+	public static class ServiceLocatorForLegacy
+	{
+		private static ICurrentPrincipalAuthorization _currentPrincipalAuthorization;
+
+		public static ICurrentPrincipalAuthorization CurrentPrincipalAuthorization
+		{
+			get { return _currentPrincipalAuthorization ?? Security.Principal.CurrentPrincipalAuthorization.Make(); }
+			set { _currentPrincipalAuthorization = value; }
+		}
+
+	}
+
 	public static class ServiceLocatorForEntity
 	{
 		private static ICurrentBusinessUnit _currentBusinessUnit;
 		private static IAppliedAlarm _appliedAlarm;
 		private static IUpdatedBy _updatedBy;
-
-		// these properties are injected by reflection in ServiceLocatorModule
 
 		public static ICurrentBusinessUnit CurrentBusinessUnit
 		{

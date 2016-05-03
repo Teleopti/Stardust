@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static void Logout(ICurrentPrincipalContext principalContext)
 		{
 			principalContext.SetCurrentPrincipal(null);
-			PrincipalAuthorization.SetInstance(null);
+			CurrentPrincipalAuthorization.GloballyUse(null);
 	    }
 
         public static void ClearAndInitializeStateHolder(IState stateMock)
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon
 		    var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
 		    principalContext.SetCurrentPrincipal(principal);
 
-		    PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
+			CurrentPrincipalAuthorization.GloballyUse(new PrincipalAuthorizationWithFullPermission());
 			stateMock.SetApplicationData(appData);
 			
 		    ClearAndSetStateHolder(stateMock);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.TestCommon
 			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource, businessUnit, null);
 			principalContext.SetCurrentPrincipal(principal);
 
-			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission());
+			CurrentPrincipalAuthorization.GloballyUse(new PrincipalAuthorizationWithFullPermission());
 		}
 
         public static IPerson CreateLoggedOnPerson()
@@ -133,12 +133,12 @@ namespace Teleopti.Ccc.TestCommon
 		public CustomAuthorizationContext(IPrincipalAuthorization principalAuthorization)
 		{
 			_previousAuthorization = PrincipalAuthorization.Instance();
-			PrincipalAuthorization.SetInstance(principalAuthorization);
+			CurrentPrincipalAuthorization.GloballyUse(principalAuthorization);
 		}
 
 		public void Dispose()
 		{
-			PrincipalAuthorization.SetInstance(_previousAuthorization);
+			CurrentPrincipalAuthorization.GloballyUse(_previousAuthorization);
 			_previousAuthorization = null;
 		}
 	}

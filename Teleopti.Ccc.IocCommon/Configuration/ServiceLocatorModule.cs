@@ -15,38 +15,50 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry, IComponentRegistration registration)
 		{
-			registration.Activated += (o, e) => injectServiceLocatorForEntity(e.Context);
+			registration.Activated += (o, e) => injectServiceLocators(e.Context);
 		}
 
-		private void injectServiceLocatorForEntity(IComponentContext container)
+		private void injectServiceLocators(IComponentContext container)
 		{
 			if (_injecting)
 				return;
 			_injecting = true;
 
-			// set service locators property values
-			var type = typeof (ServiceLocatorForEntity);
-			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(x => x.CanWrite);
-			properties.ForEach(x => x.SetValue(null, container.Resolve(x.PropertyType), null));
+			// set service locators
+			inject(container, typeof (ServiceLocatorForEntity));
+			inject(container, typeof (ServiceLocatorForLegacy));
 
 			// resolve the disposer so that we are sure its dispose method will be called
-			container.Resolve<serviceLocatorForEntityDisposer>();
+			container.Resolve<serviceLocatorDisposer>();
+		}
+
+		private static void inject(IComponentContext container, IReflect type)
+		{
+			// set roperty values
+			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(x => x.CanWrite);
+			properties.ForEach(x => x.SetValue(null, container.Resolve(x.PropertyType), null));
+		}
+
+		private static void clear(Type type)
+		{
+			// clear property values
+			var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(x => x.CanWrite);
+			properties.ForEach(x => x.SetValue(null, null, null));
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<serviceLocatorForEntityDisposer>();
+			builder.RegisterType<serviceLocatorDisposer>();
 		}
 
-		private class serviceLocatorForEntityDisposer : IDisposable
+		private class serviceLocatorDisposer : IDisposable
 		{
 			public void Dispose()
 			{
-				// clear property values
-				var type = typeof(ServiceLocatorForEntity);
-				var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Static).Where(x => x.CanWrite);
-				properties.ForEach(x => x.SetValue(null, null, null));
+				clear(typeof(ServiceLocatorForEntity));
+				clear(typeof(ServiceLocatorForLegacy));
 			}
+
 		}
 	}
 }

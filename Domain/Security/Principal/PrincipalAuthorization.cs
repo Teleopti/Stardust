@@ -3,11 +3,46 @@ using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
+	public interface ICurrentPrincipalAuthorization
+	{
+		IPrincipalAuthorization Current();
+	}
+
+	public class CurrentPrincipalAuthorization : ICurrentPrincipalAuthorization
+	{
+		private readonly IPrincipalAuthorization _principalAuthorization;
+		private static IPrincipalAuthorization _globalPrincipalAuthorization;
+
+		public CurrentPrincipalAuthorization(IPrincipalAuthorization principalAuthorization)
+		{
+			_principalAuthorization = principalAuthorization;
+		}
+
+		public static ICurrentPrincipalAuthorization Make()
+		{
+			return new CurrentPrincipalAuthorization(new PrincipalAuthorization(CurrentTeleoptiPrincipal.Make()));
+		}
+
+		public static void GloballyUse(IPrincipalAuthorization principalAuthorization)
+		{
+			_globalPrincipalAuthorization = principalAuthorization;
+		}
+
+		public IPrincipalAuthorization Current()
+		{
+			if (_globalPrincipalAuthorization != null)
+				return _globalPrincipalAuthorization;
+			return _principalAuthorization;
+		}
+
+	}
+
 	public class PrincipalAuthorization : IPrincipalAuthorization
     {
 		private readonly ICurrentTeleoptiPrincipal _teleoptiPrincipal;
@@ -17,30 +52,63 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             _teleoptiPrincipal = teleoptiPrincipal;
         }
 
-		private static IPrincipalAuthorization _principalAuthorization;
 
+		
 		public static IPrincipalAuthorization Instance()
 		{
-			return _principalAuthorization ?? (_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext())));
+			return ServiceLocatorForLegacy.CurrentPrincipalAuthorization.Current();
 		}
 
-		public static void SetInstance(IPrincipalAuthorization principalAuthorization)
+
+
+		private IEnumerable<ClaimSet> principalClaimsets()
 		{
-			_principalAuthorization = principalAuthorization;
+			return _teleoptiPrincipal.Current() == null ? 
+				Enumerable.Empty<ClaimSet>() : 
+				_teleoptiPrincipal.Current().ClaimSets;
 		}
+
+		private IEnumerable<DateOnlyPeriod> principalPeriods()
+		{
+			return _teleoptiPrincipal.Current() == null ?
+				Enumerable.Empty<DateOnlyPeriod>() :
+				_teleoptiPrincipal.Current().Organisation.Periods();
+		}
+
+
+
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
         {
             return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, person));
         }
 
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+		{
+			return checkPermitted(functionPath, a => a.Check((IOrganisationMembershipWithId)_teleoptiPrincipal.Current().Organisation, dateOnly, authorizeOrganisationDetail));
+		}
+
+        public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
+        {
+            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, team));
+        }
+
+        public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
+        {
+            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, site));
+        }
+
+        public bool IsPermitted(string functionPath)
+        {
+			return checkPermitted(functionPath, a => true); //Ignoring available data!
+        }
+
 		private bool checkPermitted(string functionPath, Func<IAuthorizeAvailableData, bool> availableDataCheck)
 		{
-			var teleoptiPrincipal = _teleoptiPrincipal.Current();
-			if (teleoptiPrincipal == null) return false;
 			var claimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/", functionPath);
 			var dataClaimType = string.Concat(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace, "/AvailableData");
-			foreach (var claimSet in teleoptiPrincipal.ClaimSets)
+
+			foreach (var claimSet in principalClaimsets())
 			{
 				if (claimSet.FindClaims(claimType, Rights.PossessProperty).Any())
 				{
@@ -61,30 +129,11 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return false;
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
-		{
-			var organisation = (IOrganisationMembershipWithId) _teleoptiPrincipal.Current().Organisation;
-			return checkPermitted(functionPath, a => a.Check(organisation, dateOnly, authorizeOrganisationDetail));
-		}
 
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
-        {
-            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, team));
-        }
 
-        public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
-        {
-            return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, site));
-        }
-
-        public bool IsPermitted(string functionPath)
-        {
-			return checkPermitted(functionPath, a => true); //Ignoring available data!
-        }
-		
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
         {
-            var owningPersonPeriods = _teleoptiPrincipal.Current().Organisation.Periods();
+            var owningPersonPeriods = principalPeriods();
             owningPersonPeriods = owningPersonPeriods.Where(p => p.StartDate <= period.EndDate);
 
             var checkPersonPeriods = person.PersonPeriods(period);
@@ -136,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public IEnumerable<IApplicationFunction> GrantedFunctions()
 		{
             var grantedFunctions = new HashSet<IApplicationFunction>();
-            foreach (var claimSet in _teleoptiPrincipal.Current().ClaimSets)
+            foreach (var claimSet in principalClaimsets())
             {
                 foreach (var claim in claimSet)
                 {
@@ -149,16 +198,19 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return grantedFunctions;
         }
 
-        public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
+		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
         {
-			return specification.IsSatisfiedBy(_teleoptiPrincipal.Current().ClaimSets);
+			return specification.IsSatisfiedBy(principalClaimsets());
         }
 		
 		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification)
         {
 			return GrantedFunctions().FilterBySpecification(specification);
         }
+
     }
+
+
 
     public class ModuleSpecification : Specification<IApplicationFunction>
     {
