@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using log4net;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus
+namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
 	public class PayrollDllCopy
 	{

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using Autofac;
 using log4net.Config;
 using Stardust.Node;
@@ -20,6 +21,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Container;
 using Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -72,6 +74,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				nodeThread.Start();
 			}
 
+			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
+
 			var useRhino = true;
 
 			bool.TryParse(ConfigurationManager.AppSettings["UseRhino"], out useRhino);
@@ -90,10 +94,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 				_rtaBus.Start();
 
-				new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
 
-				_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-				_payrollBus.Start();
+				if (!toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
+				{
+					_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+					_payrollBus.Start();
+				}
+				
 			}
 			AppDomain.MonitoringIsEnabled = true;
 		}
@@ -201,6 +208,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule(new NodeHandlersModule(configuration));
 			var container = builder.Build();
+
+			Task.Run(() =>
+			{
+				var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
+					container.Resolve<DataSourceForTenantWrapper>().DataSource()());
+				initializePayrollFormats.Initialize();
+			});
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());

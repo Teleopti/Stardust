@@ -186,6 +186,7 @@
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillEventServiceBusHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastProcessorMessage.cs" />
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkillMessage.cs" />
+    <Compile Include="ApplicationLayer\Payroll\RunPayrollExportEvent.cs" />
     <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />

@@ -235,15 +235,18 @@
     <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="HealthCheck\DeviceInfoProvider.cs" />
     <Compile Include="InternalServiceBusSender.cs" />
+    <Compile Include="NodeHandlers\ExportPayrollHandler.cs" />
     <Compile Include="NodeHandlers\AbsenceRequstHandler.cs" />
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />
     <Compile Include="NodeHandlers\RunSchedulingHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />
     <Compile Include="NodeHandlers\StardustHealthCheckHandler.cs" />
-    <Compile Include="PayrollBusBootStrapper.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="NotificationModule.cs" />
+    <Compile Include="Payroll\PayrollBusBootStrapper.cs" />
+    <Compile Include="Payroll\PayrollContainerInstaller.cs" />
+    <Compile Include="Payroll\PayrollDllCopy.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
@@ -263,8 +266,6 @@
     <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
     <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />
     <Compile Include="LargeGuidCollectionSerializer.cs" />
-    <Compile Include="PayrollContainerInstaller.cs" />
-    <Compile Include="PayrollDllCopy.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
     <Compile Include="Payroll\FormatLoader\AssemblyFileLoader.cs" />
     <Compile Include="Payroll\FormatLoader\DomainAssemblyResolver.cs" />
@@ -280,7 +281,7 @@
     <Compile Include="Payroll\IPersonBusAssembler.cs" />
     <Compile Include="Payroll\IServiceBusPayrollExportFeedback.cs" />
     <Compile Include="Payroll\PayrollDataExtractor.cs" />
-    <Compile Include="Payroll\PayrollExportConsumer.cs" />
+    <Compile Include="Payroll\PayrollExportHandler.cs" />
     <Compile Include="Payroll\FormatLoader\PluginLoader.cs" />
     <Compile Include="Payroll\PayrollExportFeedback.cs" />
     <Compile Include="Payroll\PayrollPeopleLoader.cs" />

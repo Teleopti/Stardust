@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
             _repositoryFactory = repositoryFactory;
         }
 
-        public IPerson GetOwningPerson(RunPayrollExport message, IUnitOfWork unitOfWork)
+        public IPerson GetOwningPerson(RunPayrollExportEvent message, IUnitOfWork unitOfWork)
         {
             var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
             return personRepository.Get(message.OwnerPersonId);
         }
 
-        public IEnumerable<IPerson> GetPeopleForExport(RunPayrollExport message, DateOnlyPeriod payrollExportPeriod, IUnitOfWork unitOfWork)
+        public IEnumerable<IPerson> GetPeopleForExport(RunPayrollExportEvent message, DateOnlyPeriod payrollExportPeriod, IUnitOfWork unitOfWork)
         {
             var personRepository = _repositoryFactory.CreatePersonRepository(unitOfWork);
             var allPeople = personRepository.FindPeopleInOrganizationLight(payrollExportPeriod);

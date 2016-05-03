@@ -4,12 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 {
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             IPerson person = PersonFactory.CreatePerson();
             person.SetId(Guid.NewGuid());
 
-            RunPayrollExport message = new RunPayrollExport {OwnerPersonId = person.Id.GetValueOrDefault()};
+            RunPayrollExportEvent message = new RunPayrollExportEvent {OwnerPersonId = person.Id.GetValueOrDefault()};
 
             using(mocks.Record())
             {
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             IPerson personNotInExport = PersonFactory.CreatePerson();
             personNotInExport.SetId(notInExport);
 
-            RunPayrollExport message = new RunPayrollExport { ExportPersonIdCollection = new Collection<Guid> {includeInExport}};
+            RunPayrollExportEvent message = new RunPayrollExportEvent { ExportPersonIdCollection = new Collection<Guid> {includeInExport}};
             var payrollExportPeriod = new DateOnlyPeriod();
 
             using (mocks.Record())

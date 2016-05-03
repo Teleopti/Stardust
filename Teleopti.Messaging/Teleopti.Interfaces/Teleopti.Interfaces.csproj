@@ -854,7 +854,6 @@
     <Compile Include="Messages\IRunWithPriority.cs" />
     <Compile Include="Messages\ILogOnContext.cs" />
     <Compile Include="Messages\Requests\NewAbsenceRequestCreated.cs" />
-    <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />
     <Compile Include="Messages\MessageWithLogOnContext.cs" />

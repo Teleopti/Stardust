@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.ServiceBus;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {

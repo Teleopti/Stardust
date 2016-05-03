@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Payroll;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
@@ -18,13 +20,19 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		private readonly IPayrollResultRepository _payrollResultRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPayrollExportRepository _payrollExportRepository;
+		private readonly IToggleManager _toggleManager;
+		private readonly IStardustSender _stardustSender;
 
-		public PayrollResultFactory(IMessagePopulatingServiceBusSender serviceBusSender, IPayrollResultRepository payrollResultRepository, IPersonRepository personRepository, IPayrollExportRepository payrollExportRepository)
+		public PayrollResultFactory(IMessagePopulatingServiceBusSender serviceBusSender,
+			IPayrollResultRepository payrollResultRepository, IPersonRepository personRepository,
+			IPayrollExportRepository payrollExportRepository, IToggleManager toggleManager, IStardustSender stardustSender)
 		{
 			_serviceBusSender = serviceBusSender;
 			_payrollResultRepository = payrollResultRepository;
 			_personRepository = personRepository;
 			_payrollExportRepository = payrollExportRepository;
+			_toggleManager = toggleManager;
+			_stardustSender = stardustSender;
 		}
 
 		public Guid RunPayrollOnBus(PayrollExportDto payrollExport)
@@ -32,15 +40,16 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			if (payrollExport == null) throw new ArgumentNullException("payrollExport");
 
 			var payrollResultId = SavePayrollResult(payrollExport);
-
-			var message = new RunPayrollExport
-							  {
-								  PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),
-								  OwnerPersonId = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty),
-								  ExportPeriod = new DateOnlyPeriod(new DateOnly(payrollExport.DatePeriod.StartDate.DateTime), new DateOnly(payrollExport.DatePeriod.EndDate.DateTime)),
-								  PayrollExportFormatId = payrollExport.PayrollFormat.FormatId,
-								  PayrollResultId = payrollResultId
-							  };
+			var personId = ((IUnsafePerson) TeleoptiPrincipal.CurrentPrincipal).Person.Id.GetValueOrDefault(Guid.Empty);
+			var message = new RunPayrollExportEvent
+			{
+				PayrollExportId = payrollExport.Id.GetValueOrDefault(Guid.Empty),
+				OwnerPersonId = personId,
+				ExportStartDate = payrollExport.DatePeriod.StartDate.DateTime, ExportEndDate = payrollExport.DatePeriod.EndDate.DateTime,
+				PayrollExportFormatId = payrollExport.PayrollFormat.FormatId,
+				PayrollResultId = payrollResultId,
+				InitiatorId = personId
+			};
 			if (payrollExport.ExportPersonCollection == null || payrollExport.ExportPersonCollection.Count == 0)
 			{
 				message.ExportPersonIdCollection =
@@ -51,8 +60,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				message.ExportPersonIdCollection =
 					payrollExport.ExportPersonCollection;
 			}
-
-			_serviceBusSender.Send(message, true);
+			if (_toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
+				_stardustSender.Send(message);
+			else
+				_serviceBusSender.Send(message, true);
 
 			return payrollResultId;
 		}

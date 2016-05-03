@@ -1,12 +1,14 @@
 ﻿using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
@@ -30,6 +32,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<AbsenceRequstHandler>().As<IHandle<NewAbsenceRequestCreatedEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<SchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>();
+			builder.RegisterType<ExportPayrollHandler>().As<IHandle<RunPayrollExportEvent>>().SingleInstance().ApplyAspects();
+			builder.RegisterModule<PayrollContainerInstaller>();
 		}
 	}
 }

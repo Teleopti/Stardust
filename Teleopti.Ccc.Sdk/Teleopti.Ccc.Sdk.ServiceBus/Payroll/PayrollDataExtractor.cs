@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.XPath;
-using Teleopti.Interfaces.Messages.Payroll;
 using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 	{
 		private readonly IPlugInLoader _plugInLoader;
 		private readonly IChannelCreator _channelCreator;
-		private readonly static ILog Logger = LogManager.GetLogger(typeof(PayrollExportConsumer));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(PayrollDataExtractor));
 
 		public PayrollDataExtractor(IPlugInLoader plugInLoader, IChannelCreator channelCreator)
 		{
@@ -23,14 +23,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			_channelCreator = channelCreator;
 		}
 
-		public IXPathNavigable Extract(IPayrollExport payrollExport, RunPayrollExport message, IEnumerable<PersonDto> personDtos, IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback)
+		public IXPathNavigable Extract(IPayrollExport payrollExport, RunPayrollExportEvent message,
+			IEnumerable<PersonDto> personDtos, IServiceBusPayrollExportFeedback serviceBusPayrollExportFeedback)
 		{
 			var payrollExportProcessors = _plugInLoader.Load();
-			var selectedProcessor = payrollExportProcessors.FirstOrDefault(p => p.PayrollFormat.FormatId == payrollExport.PayrollFormatId);
+			var selectedProcessor =
+				payrollExportProcessors.FirstOrDefault(p => p.PayrollFormat.FormatId == payrollExport.PayrollFormatId);
 
 			if (selectedProcessor == null)
 			{
-				Logger.ErrorFormat("The selected payroll export processor was not found in the bus. (PayrollFormatId = {0})", payrollExport.PayrollFormatId);
+				Logger.ErrorFormat("The selected payroll export processor was not found in the bus. (PayrollFormatId = {0})",
+					payrollExport.PayrollFormatId);
 				return null;
 			}
 
@@ -44,8 +47,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			var payrollExportDto = CreateDto(payrollExport, message, personDtos);
 
 			var result = selectedProcessor.ProcessPayrollData(_channelCreator.CreateChannel<ITeleoptiSchedulingService>(),
-																		_channelCreator.CreateChannel<ITeleoptiOrganizationService>(),
-																		payrollExportDto);
+				_channelCreator.CreateChannel<ITeleoptiOrganizationService>(),
+				payrollExportDto);
 
 			if (payrollExportProcessorWithFeedback != null)
 			{
@@ -55,26 +58,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 			return result;
 		}
 
-		private static PayrollExportDto CreateDto(IPayrollExport payrollExport, RunPayrollExport message, IEnumerable<PersonDto> personDtos)
+		private static PayrollExportDto CreateDto(IPayrollExport payrollExport, RunPayrollExportEvent @event, IEnumerable<PersonDto> personDtos)
 		{
 			var timeZone = payrollExport.CreatedBy.PermissionInformation.DefaultTimeZone();
-			var period =
-				 message.ExportPeriod.ToDateTimePeriod(timeZone);
+			var origPeriod = new DateOnlyPeriod(new DateOnly(@event.ExportStartDate), new DateOnly(@event.ExportEndDate));
+			var period = origPeriod.ToDateTimePeriod(timeZone);
 			var exportDto = new PayrollExportDto
-									  {
-										  DatePeriod = new DateOnlyPeriodDto { StartDate = new DateOnlyDto { DateTime = message.ExportPeriod.StartDate.Date }, EndDate = new DateOnlyDto { DateTime = message.ExportPeriod.EndDate.Date } },
-										  Id = payrollExport.Id,
-										  PayrollFormat = new PayrollFormatDto(message.PayrollExportFormatId, string.Empty),
-										  Period =
-												new DateTimePeriodDto
-													 {
-														 UtcStartTime = period.StartDateTime,
-														 UtcEndTime = period.EndDateTime,
-														 LocalStartDateTime = period.StartDateTimeLocal(timeZone),
-														 LocalEndDateTime = period.EndDateTimeLocal(timeZone)
-													 },
-										  TimeZoneId = timeZone.Id
-									  };
+			{
+				DatePeriod =
+					new DateOnlyPeriodDto
+					{
+						StartDate = new DateOnlyDto { DateTime = @event.ExportStartDate },
+						EndDate = new DateOnlyDto { DateTime = @event.ExportEndDate }
+					},
+				Id = payrollExport.Id,
+				PayrollFormat = new PayrollFormatDto(@event.PayrollExportFormatId, string.Empty),
+				Period =
+					new DateTimePeriodDto
+					{
+						UtcStartTime = period.StartDateTime,
+						UtcEndTime = period.EndDateTime,
+						LocalStartDateTime = period.StartDateTimeLocal(timeZone),
+						LocalEndDateTime = period.EndDateTimeLocal(timeZone)
+					},
+				TimeZoneId = timeZone.Id
+			};
 			personDtos.ForEach(exportDto.PersonCollection.Add);
 
 			return exportDto;

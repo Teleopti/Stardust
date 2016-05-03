@@ -71,7 +71,7 @@
 //			using (var container = builder.Build())
 //			{
 //				new ContainerConfiguration(container, MockRepository.GenerateMock<IToggleManager>()).Configure();
-//				container.Resolve<ConsumerOf<RunPayrollExport>>().Should().Not.Be.Null();
+//				container.Resolve<ConsumerOf<RunPayrollExportEvent>>().Should().Not.Be.Null();
 //			}
 //		}
 
@@ -103,7 +103,7 @@
 //			builder.RegisterType<EventsConsumer>().As<ConsumerOf<IEvent>>();
 //			builder.RegisterType<ExportMultisiteSkillsToSkillHandler>().As<ConsumerOf<ExportMultisiteSkillsToSkillEvent>>();
 //			builder.RegisterType<ExportMultisiteSkillProcessor>().As<ConsumerOf<ExportMultisiteSkillToSkill>>();
-//			builder.RegisterType<PayrollExportConsumer>().As<ConsumerOf<RunPayrollExport>>();
+//			builder.RegisterType<PayrollExportHandler>().As<ConsumerOf<RunPayrollExportEvent>>();
 
 //		}
 //	}

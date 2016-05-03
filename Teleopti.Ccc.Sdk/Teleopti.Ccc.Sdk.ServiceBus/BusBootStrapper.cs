@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         }		
     }
 
+	// This is needed for payroll so don't remove this completely when (if) we remove rhino
 	public class DataSourceForTenantWrapper
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(BusBootStrapper));

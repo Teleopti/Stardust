@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Repositories;
@@ -14,6 +13,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
+using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 {

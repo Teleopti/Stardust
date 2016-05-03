@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Xml;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
@@ -14,16 +15,15 @@ using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 {
 	[TestFixture]
 	public class PayrollExportConsumerTest
 	{
-		private PayrollExportConsumer target;
+		private PayrollExportHandler target;
 		readonly MockRepository mock = new MockRepository();
-		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWork currentUnitOfWork;
 		private IUnitOfWork unitOfWork;
 		private IPayrollExportRepository payrollExportRepository;
 		private IPayrollPeopleLoader payrollPeopleLoader;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			payrollExportRepository = mock.StrictMock<IPayrollExportRepository>();
 			payrollPeopleLoader = mock.StrictMock<IPayrollPeopleLoader>();
 			payrollResultRepository = mock.StrictMock<IPayrollResultRepository>();
-			unitOfWorkFactory = mock.StrictMock<ICurrentUnitOfWorkFactory>();
+			currentUnitOfWork = mock.StrictMock<ICurrentUnitOfWork>();
 			unitOfWork = mock.StrictMock<IUnitOfWork>();
 			payrollDataExtractor = mock.StrictMock<IPayrollDataExtractor>();
 			personBusAssembler = mock.StrictMock<IPersonBusAssembler>();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			_resolver = mock.DynamicMock<IDomainAssemblyResolver>();
 			_tenantPeopleLoader = mock.DynamicMock<ITenantPeopleLoader>();
 			exportingPerson = new Person { Name = new Name("Ex", "Porter") };
-			target = new PayrollExportConsumer(unitOfWorkFactory, payrollExportRepository, payrollResultRepository,
+			target = new PayrollExportHandler(currentUnitOfWork, payrollExportRepository, payrollResultRepository,
 				payrollDataExtractor, personBusAssembler, serviceBusReportProgress, payrollPeopleLoader, _resolver,
 				_tenantPeopleLoader);
 		}
@@ -81,13 +81,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 
 			using (mock.Record())
 			{
-				prepareUnitOfWork(1, false);
+				prepareUnitOfWork();
 				Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(persons).IgnoreArguments();
 				Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
 				Expect.Call(personBusAssembler.CreatePersonDto(persons, _tenantPeopleLoader)).Return(personDtos);
 				Expect.Call(payrollDataExtractor.Extract(payrollExport, exportMessage, personDtos, serviceBusReportProgress)).Return(document);
 				Expect.Call(payrollResultRepository.Get(resultId)).Return(payrollResult);
-				Expect.Call(() => unitOfWork.PersistAll());
 				Expect.Call(() => serviceBusReportProgress.SetPayrollResult(null)).IgnoreArguments();
 				Expect.Call(() => serviceBusReportProgress.ReportProgress(0, string.Empty)).IgnoreArguments().Repeat.
 					 Twice();
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			}
 			using (mock.Playback())
 			{
-				target.Consume(exportMessage);
+				target.Handle(exportMessage);
 				Assert.IsNotNull(payrollResult.XmlResult);
 			}
 		}
@@ -120,13 +119,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 
 			using (mock.Record())
 			{
-				prepareUnitOfWork(1, false);
+				prepareUnitOfWork();
 				Expect.Call(payrollPeopleLoader.GetPeopleForExport(exportMessage, new DateOnlyPeriod(), unitOfWork)).Return(new List<IPerson>()).IgnoreArguments();
 				Expect.Call(payrollExportRepository.Get(payrollGuid)).Return(payrollExport);
 				Expect.Call(personBusAssembler.CreatePersonDto(new List<IPerson>(), _tenantPeopleLoader)).Return(new List<PersonDto>());
 				Expect.Call(payrollDataExtractor.Extract(payrollExport, exportMessage, new List<PersonDto>(), serviceBusReportProgress)).Throw(new Exception("For test"));
 				Expect.Call(payrollResultRepository.Get(resultId)).Return(payrollResult);
-				Expect.Call(() => unitOfWork.PersistAll());
 				Expect.Call(() => serviceBusReportProgress.SetPayrollResult(null)).IgnoreArguments();
 				Expect.Call(() => serviceBusReportProgress.ReportProgress(0, string.Empty)).IgnoreArguments().Repeat.
 					 Twice();
@@ -135,32 +133,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			}
 			using (mock.Playback())
 			{
-				target.Consume(exportMessage);
+				target.Handle(exportMessage);
 			}
 		}
 
 		[Test]
 		public void ShouldNotConsumePayrollExportIfNull()
 		{
-			target.Consume(null);
+			target.Handle(null);
 		}
 
-		private void prepareUnitOfWork(int times, bool persistAll)
+		private void prepareUnitOfWork()
 		{
-			var uowFactory = mock.DynamicMock<IUnitOfWorkFactory>();
-			Expect.Call(unitOfWorkFactory.Current()).Return(uowFactory);
-			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(times);
-			Expect.Call(unitOfWork.Dispose).Repeat.Times(times);
-			if (persistAll)
-			{
-				Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>()).Repeat.Times(times);
-			}
+			Expect.Call(currentUnitOfWork.Current()).Return(unitOfWork);
 		}
 
 
-		private static RunPayrollExport GetExportMessage(Guid payrollGuid, Guid buGuid, Guid ownerGuid, Guid resultId)
+		private static RunPayrollExportEvent GetExportMessage(Guid payrollGuid, Guid buGuid, Guid ownerGuid, Guid resultId)
 		{
-			return new RunPayrollExport
+			return new RunPayrollExportEvent
 			{
 				LogOnBusinessUnitId = buGuid,
 				LogOnDatasource = "DS",
