@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
-using Castle.Core.Internal;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -77,13 +76,13 @@ namespace Stardust.Manager
 			//If two managers find the same node as dead the first one will update the status 
 			//and the second one won't find that job as "executing" and do nothing
 			var deadNodes = _workerNodeRepository.CheckNodesAreAlive(timeSpan);
-			if (deadNodes.IsNullOrEmpty())
+			if (!deadNodes.Any())
 			{
 				return;
 			}
 
 			var jobs = _jobRepository.GetAllExecutingJobs();
-			if (jobs.IsNullOrEmpty())
+			if (!jobs.Any())
 			{
 				return;
 			}
