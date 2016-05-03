@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class ScheduleOvertimeCommand : IScheduleOvertimeCommand
+	public class ScheduleOvertimeCommand
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerState;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;

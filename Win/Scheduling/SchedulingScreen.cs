@@ -3437,7 +3437,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
-			_container.Resolve<IScheduleOvertimeCommand>()
+			_container.Resolve<ScheduleOvertimeCommand>()
 				.Execute(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
 					scheduleDays, _gridLockManager);
 

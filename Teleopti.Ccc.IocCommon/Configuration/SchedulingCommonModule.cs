@@ -85,7 +85,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
 
-			builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
+			//change to scope?
+			builder.RegisterType<ScheduleOvertimeCommand>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>();
 			builder.RegisterType<MatrixListFactory>().As<IMatrixListFactory>().InstancePerLifetimeScope();
