@@ -4,7 +4,6 @@ using System.Threading;
 using System.Web.Http;
 using System.Web.Http.Results;
 using ManagerTest.Attributes;
-using ManagerTest.Database;
 using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
