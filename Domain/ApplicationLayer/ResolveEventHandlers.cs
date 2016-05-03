@@ -31,5 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					m.GetParameters().Single().ParameterType == @event.GetType()
 				);
 		}
+
 	}
 }

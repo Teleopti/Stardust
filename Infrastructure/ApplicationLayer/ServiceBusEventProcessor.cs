@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -6,6 +8,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
+#pragma warning disable 618
+
 	public class ServiceBusEventProcessor
 	{
 		private readonly CommonEventProcessor _processor;
@@ -28,17 +32,21 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void Process(IEvent @event)
 		{
+			Process(@event, _resolver.HandlerTypesFor<IRunOnServiceBus>(@event));
+		}
+
+		public void Process(IEvent @event, IEnumerable<Type> handlerTypes)
+		{
 			_eventInfrastructureInfoPopulator.PopulateEventContext(@event);
 
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-#pragma warning disable 618
-				foreach (var handler in _resolver.HandlerTypesFor<IRunOnServiceBus>(@event))
-#pragma warning restore 618
+				foreach (var handler in handlerTypes)
 					_processor.Process(@event, handler);
 				unitOfWork.PersistAll(InitiatorIdentifier.FromMessage(@event));
 			}
 		}
-
 	}
+#pragma warning restore 618
+
 }

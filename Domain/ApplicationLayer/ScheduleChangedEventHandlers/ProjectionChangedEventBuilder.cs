@@ -11,49 +11,45 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ProjectionChangedEventBuilder));
 
-		public IEnumerable<T> Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod) 
+		public IEnumerable<T> Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod)
 			where T : ProjectionChangedEventBase, new()
 		{
-			if (Logger.IsDebugEnabled)
-				Logger.Debug("Building ProjectionChangedEvent(s)");
+			Logger.Debug("Building ProjectionChangedEvent(s)");
 
 			foreach (var scheduleDayBatch in range.ScheduledDayCollection(realPeriod).Batch(50))
 			{
 				var scheduleDays = new List<ProjectionChangedEventScheduleDay>();
 				foreach (var scheduleDay in scheduleDayBatch)
 				{
-					if (Logger.IsDebugEnabled)
-						Logger.Debug("Adding a day to ProjectionChangedEvent");
+					Logger.Debug("Adding a day to ProjectionChangedEvent");
 
 					var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
 					var personPeriod = scheduleDay.Person.Period(date);
 					if (personPeriod == null)
 					{
-						if (Logger.IsDebugEnabled)
-							Logger.Debug("Person did not have this day in any person period, skipping that day");
+						Logger.Debug("Person did not have this day in any person period, skipping that day");
 						continue;
 					}
 
 					var projection = scheduleDay.ProjectionService().CreateProjection();
-					
+
 					var significantPart = scheduleDay.SignificantPart();
 					if (emptyScheduleOnInitialLoad(message, significantPart))
 					{
-						if (Logger.IsDebugEnabled)
-							Logger.Debug("Skipping this day for reason: ?emptyScheduleOnInitialLoad?");
+						Logger.Debug("Skipping this day for reason: ?emptyScheduleOnInitialLoad?");
 						continue;
 					}
 
 					var eventScheduleDay = new ProjectionChangedEventScheduleDay
-						{
-							TeamId = personPeriod.Team.Id.GetValueOrDefault(),
-							SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
-							Date = date.Date,
-							WorkTime = projection.WorkTime(),
-							ContractTime = projection.ContractTime(),
-							PersonPeriodId = personPeriod.Id.GetValueOrDefault(),
-							CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
-						};
+					{
+						TeamId = personPeriod.Team.Id.GetValueOrDefault(),
+						SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
+						Date = date.Date,
+						WorkTime = projection.WorkTime(),
+						ContractTime = projection.ContractTime(),
+						PersonPeriodId = personPeriod.Id.GetValueOrDefault(),
+						CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
+					};
 					var layers = new List<ProjectionChangedEventLayer>();
 
 					switch (significantPart)
@@ -77,11 +73,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							eventScheduleDay.ShortName = dayOff.Description.ShortName;
 							eventScheduleDay.Name = dayOff.Description.Name;
 							eventScheduleDay.DayOff = new ProjectionChangedEventDayOff
-								{
-									StartDateTime = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime,
-									EndDateTime = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime,
-									Anchor = dayOff.Anchor
-								};
+							{
+								StartDateTime = scheduleDay.DateOnlyAsPeriod.Period().StartDateTime,
+								EndDateTime = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime,
+								Anchor = dayOff.Anchor
+							};
 							if (projection.HasLayers)
 								eventScheduleDay.IsFullDayAbsence = true;
 							break;
@@ -95,8 +91,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					{
 						var isPayloadAbsence = (layer.Payload is IAbsence);
 						var description = isPayloadAbsence
-							                  ? (layer.Payload as IAbsence).Description
-							                  : layer.DisplayDescription();
+											  ? (layer.Payload as IAbsence).Description
+											  : layer.DisplayDescription();
 						var contractTime = projection.ContractTime(layer.Period);
 						var overTime = projection.Overtime(layer.Period);
 						var paidTime = projection.PaidTime(layer.Period);
@@ -109,23 +105,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						}
 
 						layers.Add(new ProjectionChangedEventLayer
-							{
-								Name = description.Name,
-								ShortName = description.ShortName,
-								ContractTime = contractTime,
-								Overtime = overTime,
-								MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.GetValueOrDefault() : Guid.Empty,
-								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
-								IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-								DisplayColor =
+						{
+							Name = description.Name,
+							ShortName = description.ShortName,
+							ContractTime = contractTime,
+							Overtime = overTime,
+							MultiplicatorDefinitionSetId = layer.DefinitionSet != null ? layer.DefinitionSet.Id.GetValueOrDefault() : Guid.Empty,
+							PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
+							IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
+							DisplayColor =
 									isPayloadAbsence ? (layer.Payload as IAbsence).DisplayColor.ToArgb() : layer.DisplayColor().ToArgb(),
-								RequiresSeat = requiresSeat,
-								WorkTime = workTime,
-								PaidTime = paidTime,
-								StartDateTime = layer.Period.StartDateTime,
-								EndDateTime = layer.Period.EndDateTime,
-								IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
-							});
+							RequiresSeat = requiresSeat,
+							WorkTime = workTime,
+							PaidTime = paidTime,
+							StartDateTime = layer.Period.StartDateTime,
+							EndDateTime = layer.Period.EndDateTime,
+							IsAbsenceConfidential = isPayloadAbsence && (layer.Payload as IAbsence).Confidential
+						});
 					}
 
 					ProjectionChangedEventShift shift = null;
@@ -147,18 +143,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				}
 
 				yield return new T
-					{
-						IsInitialLoad = message.SkipDelete,
-						IsDefaultScenario = range.Scenario.DefaultScenario,
-						LogOnDatasource = message.LogOnDatasource,
-						LogOnBusinessUnitId = message.LogOnBusinessUnitId,
-						Timestamp = message.Timestamp,
-						ScenarioId = message.ScenarioId,
-						PersonId = message.PersonId,
-						ScheduleDays = scheduleDays,
-						CommandId = message.CommandId,
-						
-					};
+				{
+					IsInitialLoad = message.SkipDelete,
+					IsDefaultScenario = range.Scenario.DefaultScenario,
+					LogOnDatasource = message.LogOnDatasource,
+					LogOnBusinessUnitId = message.LogOnBusinessUnitId,
+					Timestamp = message.Timestamp,
+					ScenarioId = message.ScenarioId,
+					PersonId = message.PersonId,
+					ScheduleDays = scheduleDays,
+					CommandId = message.CommandId,
+
+				};
 			}
 		}
 

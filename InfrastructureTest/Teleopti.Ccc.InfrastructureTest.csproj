@@ -157,6 +157,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
+    <Reference Include="System.Linq" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Security" />
@@ -183,11 +184,14 @@
     <Compile Include="Aop\Bug32045.cs" />
     <Compile Include="Aop\OrderedAspectsTest.cs" />
     <Compile Include="Aop\ValidationTest.cs" />
+    <Compile Include="ApplicationLayer\Events\ConfigurableAsyncEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\Events\Database.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventProcessorTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventShortNameSerializationTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireEventPublishingTest.cs" />
     <Compile Include="ApplicationLayer\Events\HangfireRecurringEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\Events\MultiEventPublishingTest.cs" />
+    <Compile Include="ApplicationLayer\Events\ScheduleProjectionReadOnlyConcurrencyTest.cs" />
     <Compile Include="ApplicationLayer\Events\RunInProcessEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleProjectionReadOnly\ScheduleProjectionReadOnlyPersisterTest.cs" />
     <Compile Include="Authentication\CryptoKeyInfoRepositoryTest.cs" />

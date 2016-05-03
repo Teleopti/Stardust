@@ -78,28 +78,26 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private range getData(ScheduleChangedEventBase @event)
 		{
 			var scenario = _scenarioRepository.Get(@event.ScenarioId);
-            if (scenario == null)
-            {
-                Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
-                return null;
-            }
+			if (scenario == null)
+			{
+				Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
+				return null;
+			}
 
 			var period = new DateTimePeriod(@event.StartDateTime.Subtract(TimeSpan.FromDays(1)), @event.EndDateTime);
-			if (Logger.IsDebugEnabled)
+			Logger.DebugFormat("Period start: {0}, end: {1}", period.StartDateTime, period.EndDateTime);
+
+			var person = _personRepository.FindPeople(new[] {@event.PersonId}).FirstOrDefault();
+			if (person == null)
 			{
-				Logger.DebugFormat("Period start: {0}, end: {1}", period.StartDateTime, period.EndDateTime);
+				Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
+				return null;
 			}
-			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
-		    if (person == null)
-		    {
-                Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
-		        return null;
-		    }
 
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
-				                                                   new ScheduleDictionaryLoadOptions(false, false),
-				                                                   period, 
-																   scenario);
+				new ScheduleDictionaryLoadOptions(false, false),
+				period,
+				scenario);
 
 			var range = schedule[person];
 
@@ -109,17 +107,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
-			if (Logger.IsDebugEnabled)
-			{
-				Logger.DebugFormat("RealPeriod start: {0}, end: {1}", realPeriod.StartDate, realPeriod.EndDate);
-			}
-			return new range
-				{
-					ScheduleRange = range,
-					RealPeriod = realPeriod,
-					ScheduleLoadedTime = schedule.ScheduleLoadedTime
-				};
-		}
 
+			Logger.DebugFormat("RealPeriod start: {0}, end: {1}", realPeriod.StartDate, realPeriod.EndDate);
+			return new range
+			{
+				ScheduleRange = range,
+				RealPeriod = realPeriod,
+				ScheduleLoadedTime = schedule.ScheduleLoadedTime
+			};
+		}
 	}
 }

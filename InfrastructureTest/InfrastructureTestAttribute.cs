@@ -10,6 +10,7 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Web;
+using Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events;
 using Teleopti.Ccc.InfrastructureTest.Persisters.Schedules;
 using Teleopti.Ccc.InfrastructureTest.Rta;
 using Teleopti.Ccc.IocCommon;
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			system.UseTestDouble(new FakeSignalR()).For<ISignalR>();
 			system.UseTestDouble<FakeMessageSender>().For<IMessageSender>();
 
+			system.AddService<Database>();
 			system.UseTestDouble<FakeTransactionHook>().For<ITransactionHook>(); // just adds one hook to the list
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
