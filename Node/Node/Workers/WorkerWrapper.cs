@@ -237,11 +237,9 @@ namespace Stardust.Node.Workers
 			//----------------------------------------------------
 			// Define task.
 			//----------------------------------------------------
-			var taskToExecuteStopWatch = new TaskToExecuteStopWatch(false);
 
 			Task = new Task(() =>
 			{
-				taskToExecuteStopWatch.Start();
 
 				Handler.Invoke(deSer,
 				               CancellationTokenSource,
@@ -251,13 +249,6 @@ namespace Stardust.Node.Workers
 
 			Task.ContinueWith(t =>
 			{
-				Logger.DebugWithLineNumber(string.Format(
-					"Job ( id, name, type ) : ( {0}, {1}, {2} ) took ( seconds, minutes ) : ( {3}, {4} )",
-					CurrentMessageToProcess.JobId,
-					CurrentMessageToProcess.Name,
-					CurrentMessageToProcess.Type,
-					taskToExecuteStopWatch.GetTotalElapsedTimeInSeconds(),
-					taskToExecuteStopWatch.GetTotalElapsedTimeInMinutes()));
 
 				string logInfo;
 
