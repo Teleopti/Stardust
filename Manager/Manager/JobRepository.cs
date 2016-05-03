@@ -165,7 +165,7 @@ namespace Stardust.Manager
 				}
 
 				if (!allAliveWorkerNodesUri.Any()) return;
-				
+
 				foreach (var uri in allAliveWorkerNodesUri)
 				{
 					try
@@ -515,7 +515,7 @@ namespace Stardust.Manager
 				throw;
 			}
 		}
-		
+
 
 		private void AssignJobToWorkerNodeWorker(IHttpSender httpSender, Uri availableNode)
 		{
@@ -523,130 +523,97 @@ namespace Stardust.Manager
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
+					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 					JobQueueItem jobQueueItem = null;
-					try
+
+					using (var cmd = new SqlCommand("selectQueueItem", sqlConnection))
 					{
-						sqlConnection.OpenWithRetry(_retryPolicyTimeout);
-						using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
+						cmd.CommandType = CommandType.StoredProcedure;
+
+						SqlParameter retVal = new SqlParameter("@idd", SqlDbType.UniqueIdentifier);
+						retVal.Direction = ParameterDirection.ReturnValue;
+						cmd.Parameters.Add(retVal);
+
+						using (var reader = cmd.ExecuteReader())
 						{
-							using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
+							if (reader.HasRows)
 							{
-								using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
-								{
-									if (sqlDataReader.HasRows)
-									{
-										sqlDataReader.Read();
-										jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
-									}
-								}
-
-								if (jobQueueItem == null)
-								{
-									sqlTransaction.Dispose();
-									sqlConnection.Close();
-									return;
-								}
-
-								var updateCommandText = @"UPDATE [Stardust].[JobQueue] SET Tagged = '0'
-											WHERE JobId = @jobId";
-
-								using (var command = new SqlCommand(updateCommandText, sqlConnection, sqlTransaction))
-								{
-									command.Parameters.Add("@jobId", SqlDbType.UniqueIdentifier).Value = jobQueueItem.JobId;
-									command.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
-								}
+								reader.Read();
+								jobQueueItem = CreateJobQueueItemFromSqlDataReader(reader);
 							}
-							sqlTransaction.Commit();
 						}
 					}
-					catch (Exception exp)
+					if (jobQueueItem == null)
 					{
-						this.Log().ErrorWithLineNumber(exp.Message, exp);
-						throw;
+						sqlConnection.Close();
+						return;
 					}
 
-					try
+					var taskPostJob = new Task<HttpResponseMessage>(() =>
 					{
-						using (var sqlTransaction = sqlConnection.BeginTransaction())
+						var builderHelper = new NodeUriBuilderHelper(availableNode);
+						var urijob = builderHelper.GetJobTemplateUri();
+
+						var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
+						response.Content = new StringContent(availableNode.ToString());
+
+						return response;
+					});
+
+					taskPostJob.Start();
+					taskPostJob.Wait();
+
+					if (taskPostJob.IsCompleted)
+					{
+						if (taskPostJob.Result.IsSuccessStatusCode ||
+						    taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
 						{
-
-							//using (var selectTop1FromJobDefinitionsCommand = _createSqlCommandHelper.CreateSelect1JobQueueItemCommand(sqlConnection, sqlTransaction))
-							//{
-							//	using (var sqlDataReader = selectTop1FromJobDefinitionsCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
-							//	{
-							//		if (sqlDataReader.HasRows)
-							//		{
-							//			sqlDataReader.Read();
-							//			jobQueueItem = CreateJobQueueItemFromSqlDataReader(sqlDataReader);
-							//		}
-							//	}
-							//}
-
-							//if (jobQueueItem == null)
-							//{
-							//	sqlTransaction.Dispose();
-							//	sqlConnection.Close();
-							//	return;
-							//}
-
-							var taskPostJob = new Task<HttpResponseMessage>(() =>
+							string sentToWorkerNodeUri = taskPostJob.Result.Content.ReadAsStringAsync().Result;
+							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
-								var builderHelper = new NodeUriBuilderHelper(availableNode);
-								var urijob = builderHelper.GetJobTemplateUri();
-
-								var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
-								response.Content = new StringContent(availableNode.ToString());
-
-								return response;
-							});
-
-							taskPostJob.Start();
-							taskPostJob.Wait();
-
-							string sentToWorkerNodeUri = null;
-
-							if (taskPostJob.IsCompleted)
-							{
-								//Should we really ignore all other results?
-								if (taskPostJob.Result.IsSuccessStatusCode ||
-								    taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
+								using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
 								{
-									sentToWorkerNodeUri = taskPostJob.Result.Content.ReadAsStringAsync().Result;
-
-									using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
+									if (taskPostJob.Result.IsSuccessStatusCode)
 									{
-										if (taskPostJob.Result.IsSuccessStatusCode)
-										{
-											insertIntoJobCommand.Parameters.AddWithValue("@Result", DBNull.Value);
-										}
-										else
-										{
-											insertIntoJobCommand.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
-										}
-										insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+										insertIntoJobCommand.Parameters.AddWithValue("@Result", DBNull.Value);
 									}
-									using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+									else
 									{
-										deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+										insertIntoJobCommand.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
 									}
+									insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+								}
+								using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+								{
+									deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
 								}
 								Retry(sqlTransaction.Commit);
+							}
 
-								if (sentToWorkerNodeUri != null)
-								{
-									var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-									var urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
+							if (sentToWorkerNodeUri != null)
+							{
+								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
+								var urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 
-									//what should happen if this response is not 200? 
-									var resp = httpSender.PutAsync(urijob, null);
-								}
+								//what should happen if this response is not 200? 
+								var resp = httpSender.PutAsync(urijob, null);
 							}
 						}
-					}
-					catch (Exception exp)
-					{
-						this.Log().ErrorWithLineNumber(exp.Message, exp);
-						throw;
+						else
+						{
+							using (var sqlTransaction = sqlConnection.BeginTransaction())
+							{
+								var commandText = "update [Stardust].[JobQueue] set Tagged = NULL where JobId = @Id";
+
+								using (var cmd = new SqlCommand(commandText, sqlConnection, sqlTransaction))
+								{
+									cmd.Parameters.AddWithValue("@Id", jobQueueItem.JobId);
+									cmd.ExecuteNonQuery();
+								}
+								sqlTransaction.Commit();
+							}
+
+						}
 					}
 				}
 			}
