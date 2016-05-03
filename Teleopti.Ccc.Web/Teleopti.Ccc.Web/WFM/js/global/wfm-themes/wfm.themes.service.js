@@ -13,7 +13,6 @@
 			modifyDOMHeader(theme);
 
 		};
-		//refactorera ^ och skriv tester
 		var modifyDOMHeader = function(theme){
 			var styleElements = ["Modules","Style"];
 			styleElements.forEach(function(element){
