@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             public ForTestDayOffTemplate(string id)
             {
                 _testID = new Guid(id);
-                base.Description =new Description("Very special template", "VS");
+                ChangeDescription("Very special template", "VS");
             }
 
             public override Guid? Id

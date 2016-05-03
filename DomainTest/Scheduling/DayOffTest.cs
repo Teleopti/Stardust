@@ -75,8 +75,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyCanSetDescription()
         {
-            Description newDesc = new Description("New Description");
-            _target.Description = newDesc;
+            var newDesc = new Description("New Description");
+            _target.ChangeDescription(newDesc.Name, newDesc.ShortName);
 
             Assert.AreEqual(newDesc.Name,_target.Description.Name);
         }
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [Test]
         public void VerifyToString()
         {
-            _target.Description = _description;
+            _target.ChangeDescription(_description.Name, _description.ShortName);
             Assert.AreEqual(_description.Name, _target.ToString());
         }
 

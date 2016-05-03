@@ -61,7 +61,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: shirang
         /// Created date: 2008-10-28
         /// </remarks>
-        Description Description { get; set; }
+        Description Description { get; }
 
         /// <summary>
         /// Gets or sets the display color
@@ -73,6 +73,13 @@ namespace Teleopti.Interfaces.Domain
     	///</summary>
     	string PayrollCode	{ get; set; }
 
-    	#endregion
+        /// <summary>
+        /// Changes the description
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="shortName"></param>
+        void ChangeDescription(string name, string shortName);
+
+        #endregion
     }
 }

@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var description = PageHelper.CreateNewName(_dayOffList, "Description.Name", Resources.NewDayOff);
 
-			var newDayOff = new DayOffTemplate(description) {Description = description, Anchor = new TimeSpan(12, 0, 0)};
+			var newDayOff = new DayOffTemplate(description) {Anchor = new TimeSpan(12, 0, 0)};
 
 			// Defaults as ruled by SPI 8807.
 			newDayOff.SetTargetAndFlexibility(new TimeSpan(24, 0, 0), new TimeSpan(6, 0, 0));
@@ -269,12 +269,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    if (SelectedDayOff == null) return;
 		    if (!string.Equals(SelectedDayOff.Description.Name, textBoxDescription.Text, StringComparison.CurrentCulture))
 		    {
-		        SelectedDayOff.Description = new Description(textBoxDescription.Text, SelectedDayOff.Description.ShortName);
+                SelectedDayOff.ChangeDescription(textBoxDescription.Text, SelectedDayOff.Description.ShortName);
 		    }
 
 		    if (!string.Equals(SelectedDayOff.Description.ShortName, textBoxExtShortName.Text, StringComparison.CurrentCulture))
 		    {
-		        SelectedDayOff.Description = new Description(SelectedDayOff.Description.Name, textBoxExtShortName.Text);
+                SelectedDayOff.ChangeDescription(SelectedDayOff.Description.Name, textBoxExtShortName.Text);
 		    }
 
 		    if (SelectedDayOff.Anchor != timeSpanTextBoxAnchor.Value)

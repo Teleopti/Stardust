@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IDayOffTemplate CreateAggregateWithCorrectBusinessUnit()
         {
             DayOffTemplate dayOff = DayOffFactory.CreateDayOff();
-
-            dayOff.Description = _description;
+            dayOff.ChangeDescription(_description.Name, _description.ShortName);
             dayOff.SetTargetAndFlexibility(_timeSpanTargetLength, _timeSpanFlexibility);
             dayOff.Anchor = _timeSpanAnchor;
 

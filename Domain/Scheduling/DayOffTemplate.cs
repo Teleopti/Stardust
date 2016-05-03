@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using System.Drawing;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// Created by: shirang
     /// Created date: 2008-10-28
     /// </remarks>
-    public class DayOffTemplate : VersionedAggregateRootWithBusinessUnit, IDayOffTemplate, IDeleteTag, ICloneableEntity<DayOffTemplate>
+    public class DayOffTemplate : VersionedAggregateRootWithBusinessUnit, IDayOffTemplate, IDeleteTag, ICloneableEntity<DayOffTemplate>, IAggregateRootWithEvents
     {
         private Description _description;
         private TimeSpan _flexibility;
@@ -33,7 +34,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public virtual Description Description
         {
             get { return _description; }
-            set { _description = value; }
+        }
+
+        public virtual void ChangeDescription(string name, string shortName)
+        {
+            _description = new Description(name, shortName);
+
+            AddEvent(() => new DayOffTemplateChangedEvent
+            {
+                DayOffTemplateId = Id.GetValueOrDefault(),
+                DayOffName = Description.Name,
+                DayOffShortName = Description.ShortName,
+                DatasourceUpdateDate = UpdatedOn ?? DateTime.UtcNow,
+                LogOnBusinessUnitId = BusinessUnit.Id.GetValueOrDefault(),
+                Timestamp = DateTime.UtcNow
+            });
         }
 
         /// <summary>
