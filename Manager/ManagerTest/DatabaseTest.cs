@@ -1,6 +1,7 @@
-﻿using NUnit.Framework;
+﻿using ManagerTest.Database;
+using NUnit.Framework;
 
-namespace ManagerTest.Database
+namespace ManagerTest
 {
 	public class DatabaseTest
 	{
