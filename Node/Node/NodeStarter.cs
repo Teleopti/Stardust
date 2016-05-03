@@ -62,6 +62,7 @@ namespace Stardust.Node
 
 				                    containerBuilder.RegisterInstance(nodeConfiguration);
 
+									containerBuilder.RegisterType<Log4NetInterceptor>().Named<IInterceptor>("log-calls");
 									containerBuilder.RegisterType<TrySendJobDetailToManagerTimer>().WithParameter("interval", 5000d).SingleInstance();
 									containerBuilder.RegisterType<TrySendNodeStartUpNotificationToManagerTimer>().SingleInstance();
 									containerBuilder.RegisterType<TrySendJobDoneStatusToManagerTimer>().SingleInstance();
