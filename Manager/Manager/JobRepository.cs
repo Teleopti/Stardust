@@ -526,15 +526,15 @@ namespace Stardust.Manager
 					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
 					JobQueueItem jobQueueItem = null;
 
-					using (var cmd = new SqlCommand("AcquireQueuedJob", sqlConnection))
+					using (var selectJobQueueItemCommand = new SqlCommand("AcquireQueuedJob", sqlConnection))
 					{
-						cmd.CommandType = CommandType.StoredProcedure;
+						selectJobQueueItemCommand.CommandType = CommandType.StoredProcedure;
 
 						SqlParameter retVal = new SqlParameter("@idd", SqlDbType.UniqueIdentifier);
 						retVal.Direction = ParameterDirection.ReturnValue;
-						cmd.Parameters.Add(retVal);
+						selectJobQueueItemCommand.Parameters.Add(retVal);
 
-						using (var reader = cmd.ExecuteReader())
+						using (var reader = selectJobQueueItemCommand.ExecuteReader())
 						{
 							if (reader.HasRows)
 							{
