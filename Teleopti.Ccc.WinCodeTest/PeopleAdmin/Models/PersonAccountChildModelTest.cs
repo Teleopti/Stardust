@@ -5,7 +5,9 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -358,7 +360,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
             _targetDay =
                 new PersonAccountChildModel(
-                    new TraceableRefreshService(scenario, new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory())), _acc, account, null, null);
+                    new TraceableRefreshService(scenario, new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker())), _acc, account, null, null);
         }
 
         private void SetTargetDayWithoutAccount(IUnitOfWork unitOfWork, ICurrentScenario scenario)
@@ -366,7 +368,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
 	        _targetDay =
 		        new PersonAccountChildModel(
-			        new TraceableRefreshService(scenario,new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory())), _acc, account, null, null);
+			        new TraceableRefreshService(scenario,new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(),new PersistableScheduleDataPermissionChecker())), _acc, account, null, null);
         }
 
         [Test]

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void Setup()
         {
             _scenario = new Scenario("default");
-            dic = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            dic = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)), new PersistableScheduleDataPermissionChecker());
             _person = new Person();
             _gridlockManager = new GridlockManager();
             _schedules = new List<IScheduleDay>();

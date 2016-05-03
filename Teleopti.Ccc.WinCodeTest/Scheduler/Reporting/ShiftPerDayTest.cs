@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _dateTimePeriod = new DateTimePeriod(2009, 2, 2, 2009, 2, 3);
             _parameters = new ScheduleParameters(_scenario, _person1, _dateTimePeriod);
             _parameters2 = new ScheduleParameters(_scenario, _person2, _dateTimePeriod);
-	        var permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+	        var permissionChecker = new PersistableScheduleDataPermissionChecker();
 
 			_scheduleRange = new ScheduleRange(_dic, _parameters, permissionChecker);
             _scheduleRange2 = new ScheduleRange(_dic, _parameters2, permissionChecker);

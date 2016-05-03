@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.IslandScheduling
 		private void createScheduleDictionary(ISchedulerStateHolder stateholderToLoad)
 		{
 			var dicToLoadFrom = _stateholderToLoadFrom.Schedules;
-			stateholderToLoad.SchedulingResultState.Schedules = new ScheduleDictionary(dicToLoadFrom.Scenario, dicToLoadFrom.Period, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			stateholderToLoad.SchedulingResultState.Schedules = new ScheduleDictionary(dicToLoadFrom.Scenario, dicToLoadFrom.Period, new PersistableScheduleDataPermissionChecker());
 		}
 
 		private void loadSchedules(ISchedulerStateHolder stateholderToLoad)

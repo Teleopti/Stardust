@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _period = new ScheduleDateTimePeriod(new DateTimePeriod(2001, 1, 1, 2001, 12, 1));
             _person = PersonFactory.CreatePerson("Bosse");
             _date = new DateOnly(2001, 1, 12);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+			_permissionChecker = new PersistableScheduleDataPermissionChecker();
         }
 
 

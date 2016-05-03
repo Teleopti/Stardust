@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var range = new ScheduleRange(scheduleDictionary,
 			                              new ScheduleParameters(_personAssignmentListContainer.Scenario,
 			                                                     _personAssignmentListContainer.ContainedPersons.First().Value,
-			                                                     _inPeriod), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			                                                     _inPeriod), new PersistableScheduleDataPermissionChecker());
 			scheduleDictionary.AddTestItem(_personAssignmentListContainer.ContainedPersons.First().Value,range);
 			range.Add(_personAssignmentListContainer.PersonAssignmentListForActivityDividerTest[0]);
 			

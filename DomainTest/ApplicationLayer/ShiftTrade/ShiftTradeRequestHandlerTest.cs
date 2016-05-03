@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			schedulingResultState = new SchedulingResultStateHolder();
 			var scheduleRanges = new Dictionary<IPerson, IScheduleRange>();
 			schedulingResultState.Schedules = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateTimePeriod()), scheduleRanges);
-			var permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+			var permissionChecker = new PersistableScheduleDataPermissionChecker();
 			scheduleRanges.Add(fromPerson, new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, fromPerson, new DateTimePeriod()), permissionChecker));
 			scheduleRanges.Add(toPerson, new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, toPerson, new DateTimePeriod()), permissionChecker));
 			unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();

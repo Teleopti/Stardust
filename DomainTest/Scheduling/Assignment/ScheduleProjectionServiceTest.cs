@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	    [SetUp]
 		public void Setup()
 		{
-			permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+			permissionChecker = new PersistableScheduleDataPermissionChecker();
 			var person = PersonFactory.CreatePerson();
 			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 			dic = new ScheduleDictionary(new Scenario("sd"), new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), permissionChecker);

@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void VerifyPersistAndClose()
 		{
 			var uow = mocks.DynamicMock<IUnitOfWork>();
-			var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker());
 			target.SetPersistingDic(dic);
 			using (mocks.Record())
 			{
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldCallViewToShowErrorOnDataSourceException()
 		{
-			var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker());
 			target.SetPersistingDic(dic);
 			var err = new DataSourceException();
 

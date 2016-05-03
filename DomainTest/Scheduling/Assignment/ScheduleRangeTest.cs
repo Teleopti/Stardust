@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_parameters = new ScheduleParameters(_scenario,
 								_person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+			_permissionChecker = new PersistableScheduleDataPermissionChecker();
 		}
 
 		[Test, Ignore("This is no longer valid - maybe it will be soon. Remove if still ignored on main")]
@@ -684,7 +684,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 
 			public scheduleExposingInternalCollections(IScheduleDictionary owner, IScheduleParameters parameters)
-				: base(owner, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()))
+				: base(owner, parameters, new PersistableScheduleDataPermissionChecker())
 			{
 			}
 

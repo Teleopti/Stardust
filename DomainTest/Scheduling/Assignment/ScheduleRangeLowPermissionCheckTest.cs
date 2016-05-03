@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
             parameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			dic = MockRepository.GenerateMock<IScheduleDictionary>();
-            target = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            target = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker());
         }
 
         [Test]

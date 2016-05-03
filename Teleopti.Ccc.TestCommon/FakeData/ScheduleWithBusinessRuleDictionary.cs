@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
     {
         private readonly List<IBusinessRuleResponse> _businessRuleReponseCollection = new List<IBusinessRuleResponse>();
 
-        public ScheduleWithBusinessRuleDictionary(IScenario scenario, IScheduleDateTimePeriod period) : base(scenario, period, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()))
+        public ScheduleWithBusinessRuleDictionary(IScenario scenario, IScheduleDateTimePeriod period) : base(scenario, period, new PersistableScheduleDataPermissionChecker())
         {
         }
 
