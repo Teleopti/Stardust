@@ -160,28 +160,6 @@ namespace NodeTest.Timers
 
 			timer.Dispose();
 		}
-
-		[Test, ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenHttpSenderIsNull()
-		{
-			var timer =
-				new TrySendJobDetailToManagerTimer(_nodeConfiguration,
-				                                     null,
-				                                     1000);
-
-			timer.Dispose();
-		}
-
-
-		[Test, ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowArgumentNullExceptionWhenNodeConfigurationIsNull()
-		{
-			var timer =
-				new TrySendJobDetailToManagerTimer(null,
-				                                     null,
-				                                     1000);
-
-			timer.Dispose();
-		}
+		
 	}
 }
