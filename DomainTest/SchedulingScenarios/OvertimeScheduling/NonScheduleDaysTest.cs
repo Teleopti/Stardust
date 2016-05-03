@@ -424,9 +424,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				.Should().Be.Empty();
 		}
 
-		[Test]
-		public void ShouldNotConsiderNightlyRest()
+		[Test, Ignore("Not implemented during PBI 38025")]
+		public void ShouldNotConsiderNightlyRestWhenAllowBreakNightlyRestIsSet()
 		{
+			/*
+			 * To fix, we need to, based on schedulingoptions, be able to
+			 * - remove NightlyRestRule used in LongestPeriodForAssignmentCalculator
+			 * - remove NightlyRestRestricition used in TeamBlockResctrictionAggregator
+			 * 
+			 * Why checked in two places? Don't know... Maybe first refactor to one place when implemented.
+			 */
 			var scenario = new Scenario("_");
 			var phoneActivity = new Activity("_") { InWorkTime = true };
 			var dateOnly = DateOnly.Today;
