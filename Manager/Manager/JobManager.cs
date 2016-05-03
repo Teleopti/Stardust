@@ -8,7 +8,7 @@ using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 
 namespace Stardust.Manager
-{
+{ 
 	public class JobManager : IDisposable
 	{
 		private readonly Timer _checkAndAssignJob = new Timer();
