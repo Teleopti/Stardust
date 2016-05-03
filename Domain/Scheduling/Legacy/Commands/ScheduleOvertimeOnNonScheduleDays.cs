@@ -46,17 +46,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_groupPersonBuilderWrapper.SetSingleAgentTeam();
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), scheduleTagSetter);
-
 			var schedulingOptions = new SchedulingOptions
 			{
 				FixedShiftBag = overtimePreferences.ShiftBagToUse,
 				OvertimeType = overtimePreferences.OvertimeType,
 				ScheduleOnDayOffs = true
 			};
-			var matrixes = _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay });
-			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, matrixes);
+			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
-			var rules = NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState);
+			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, 
+				stateHolder.SchedulingResultState, new ShiftNudgeDirective(), createRules(overtimePreferences));
+		}
+
+		private INewBusinessRuleCollection createRules(IOvertimePreferences overtimePreferences)
+		{
+			var rules = NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState);
 			if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
 			{
 				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
@@ -66,9 +70,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
 				var dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
 				var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
-				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(), new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(), new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
+				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(),
+					new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
+						new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
 			}
-			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, stateHolder.SchedulingResultState, new ShiftNudgeDirective(), rules);
+			return rules;
 		}
 
 		private static bool jumpOutEarly(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IPerson agent, DateOnly date)
