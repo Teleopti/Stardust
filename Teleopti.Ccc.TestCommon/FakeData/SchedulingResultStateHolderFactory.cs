@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static SchedulingResultStateHolder Create(DateTimePeriod period)
         {
             return new SchedulingResultStateHolder(new List<IPerson>(),
-                                                   new ScheduleDictionary(new Scenario("test"), new ScheduleDateTimePeriod(period), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance())),
+                                                   new ScheduleDictionary(new Scenario("test"), new ScheduleDateTimePeriod(period), new PersistableScheduleDataPermissionChecker()),
                                                    new Dictionary<ISkill, IList<ISkillDay>>());
         }
 

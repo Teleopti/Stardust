@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 			var endDateTime = startDateTime.AddHours(2);
 			var dateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
 			var scheduleDateTimePeriod = new ScheduleDateTimePeriod(dateTimePeriod);
-			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker());
 		}
 
 		private static IPersonRequest CreateShiftTradeRequestObject(int reqeustedDays)

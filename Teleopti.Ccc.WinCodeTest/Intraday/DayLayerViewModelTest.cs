@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.BackToRecord();
             var createLayerViewModelService = mocks.DynamicMock<ICreateLayerViewModelService>();
             var range = new ScheduleRange(scheduleDictionary,
-                                          new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person, period), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+                                          new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), person, period), new PersistableScheduleDataPermissionChecker());
             using (mocks.Record())
             {
                 Expect.Call(rtaStateHolder.SchedulingResultStateHolder).Return(schedulingResultStateHolder);

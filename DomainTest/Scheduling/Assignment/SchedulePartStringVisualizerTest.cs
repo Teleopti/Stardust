@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                                                 underlyingDictionary);
             param = new ScheduleParameters(_scenario, _agent,
                                           new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
-            scheduleRange = new ScheduleRange(dic, param, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            scheduleRange = new ScheduleRange(dic, param, new PersistableScheduleDataPermissionChecker());
 
             ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
                              ActivityFactory.CreateActivity("PersonalShiftActivity"),

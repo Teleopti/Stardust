@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void Setup()
         {
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+			_permissionChecker = new PersistableScheduleDataPermissionChecker();
             _person = PersonFactory.CreatePerson();
             var dic = new Dictionary<IPerson, IScheduleRange>();
             _schedulePeriod = new DateTimePeriod(2007, 8, 1, 2007, 9, 1);

@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			IPersonContract personContract = PersonContractFactory.CreatePersonContract();
 
-			IScheduleDictionary dic = new ScheduleDictionary(scDefault, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			IScheduleDictionary dic = new ScheduleDictionary(scDefault, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), new PersistableScheduleDataPermissionChecker());
 
 
 			// create activities

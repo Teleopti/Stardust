@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			_period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			target = new ScheduleDictionary(_scenario, _period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			target = new ScheduleDictionary(_scenario, _period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker());
 		}
 		[Test]
 		public void CanModifyExistingPermittedData()
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
 			period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
-			dataPermissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+			dataPermissionChecker = new PersistableScheduleDataPermissionChecker();
 			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker);
 			dummyPerson = PersonFactory.CreatePerson();
 			IScheduleRange justToCreateTheScheduleRangeForTests = target[dummyPerson];
@@ -722,7 +722,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyFunctionPermission()
 		{
 			//what should happen if no permission on function? Right now - does nothing
-			target = new ScheduleDictionary(scenario, period, diffSvc, new PersistableScheduleDataPermissionChecker(principalAuthorization));
+			target = new ScheduleDictionary(scenario, period, diffSvc, new PersistableScheduleDataPermissionChecker());
 
 			IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
 			dOff1.Anchor = TimeSpan.Zero;

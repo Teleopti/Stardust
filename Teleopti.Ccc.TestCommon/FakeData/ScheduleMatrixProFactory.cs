@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             IScenario scenario = new Scenario("Scenario");
             var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
             IScheduleParameters parameters = new ScheduleParameters(scenario, person, dayPeriod);
-            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            IScheduleRange range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker());
             scheduleDictionary.AddTestItem(person, range);
             stateHolder.Schedules = scheduleDictionary;
 

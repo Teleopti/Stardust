@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [SetUp]
         public void Setup()
         {
-            obj = new ScheduleDictionary(new Scenario("cf"), new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            obj = new ScheduleDictionary(new Scenario("cf"), new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker());
         }
 
         [Test]

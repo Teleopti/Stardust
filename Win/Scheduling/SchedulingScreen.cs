@@ -3813,7 +3813,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+				stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 				_schedulerState.Schedules.SetUndoRedoContainer(_undoRedo);
 			}
 			SchedulerState.Schedules.PartModified += _schedules_PartModified;
@@ -4763,7 +4763,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var allNewRules = _schedulerState.SchedulingResultState.GetRulesToRun();
 			var selectedSchedules = _scheduleView.SelectedSchedules();
 			var uowFactory = UnitOfWorkFactory.Current;
-			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory());
+			var scheduleRepository = new ScheduleStorage(new FromFactory(() => uowFactory), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker());
 			var exportToScenarioAccountPersister = new ExportToScenarioAccountPersister(_container.Resolve<IPersonAccountPersister>());
 			var exportToScenarioAbsenceFinder = new ExportToScenarioAbsenceFinder();
 			using (

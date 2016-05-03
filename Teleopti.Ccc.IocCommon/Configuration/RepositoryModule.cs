@@ -4,6 +4,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 
 			builder.RegisterType<ScheduleStorage>()
-				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory))
+				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker))
 				.AsImplementedInterfaces()
 				.SingleInstance();
 			builder.RegisterType<PushMessagePersister>()

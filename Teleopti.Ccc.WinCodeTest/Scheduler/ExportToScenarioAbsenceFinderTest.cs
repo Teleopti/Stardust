@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(dateTimePeriod);
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
-			var range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			var range = new ScheduleRange(scheduleDictionary, parameters, new PersistableScheduleDataPermissionChecker());
 			range.Add(personAbsence1);
 			scheduleDictionary.AddTestItem(person, range);
 
