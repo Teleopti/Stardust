@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Extras.DynamicProxy2;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Extensions;
@@ -12,7 +11,6 @@ using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Workers
 {
-	[Intercept("log-calls")]
 	public class HttpSender : IHttpSender
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (HttpSender));

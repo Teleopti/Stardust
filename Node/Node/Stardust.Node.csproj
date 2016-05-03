@@ -108,7 +108,6 @@
     <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="Interfaces\IJobDetail.cs" />
     <Compile Include="Interfaces\IJobProgress.cs" />
-    <Compile Include="Log4NetInterceptor.cs" />
     <Compile Include="NodeController.cs" />
     <Compile Include="Workers\NodeConfiguration.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />

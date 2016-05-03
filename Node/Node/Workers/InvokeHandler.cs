@@ -8,7 +8,6 @@ using Stardust.Node.Interfaces;
 
 namespace Stardust.Node.Workers
 {
-	[Intercept("log-calls")]
 	public class InvokeHandler : IInvokeHandler
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (InvokeHandler));
