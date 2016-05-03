@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			gridControl1.CellModels.Add("IntegerReadOnlyCell", initializeNumericNoDecimalsReadOnlyCell());
 		}
 
+		public void DoResizeToFit()
+		{
+			gridControl1.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+		}
+
 		public void SetModel(IShiftCategoryDistributionModel model)
 		{
 			if (_presenter == null)

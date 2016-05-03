@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
@@ -27,8 +24,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		public void EnableViewShiftCategoryDistribution()
 		{
-			if(_model != null)
-				_model.ShouldUpdateViews = true;
+			if (_model == null)
+				return;
+			_model.ShouldUpdateViews = true;
+			foreach (var control in tabControlShiftCategoryDistribution.SelectedTab.Controls)
+			{
+				var child = control as ShiftPerDateControl;
+				child?.DoResizeToFit();
+			}
 		}
 
 		public void SetModel(IShiftCategoryDistributionModel model)
