@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void Execute(IOvertimePreferences overtimePreferences, 
 										ISchedulingProgress backgroundWorker, 
-										IList<IScheduleDay> selectedSchedules, 
-										IGridlockManager gridlockManager,
+										IList<IScheduleDay> selectedSchedules,
 										bool startWithFullResourceCalculation)
 		{
 			if (startWithFullResourceCalculation)
@@ -55,9 +54,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				foreach (var person in persons)
 				{
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
-					
-					var locks = gridlockManager.Gridlocks(person, dateOnly);
-					if (locks != null && locks.Count != 0) continue;
 
 					var scheduleDay = _schedulingResultStateHolder().Schedules[person].ScheduledDay(dateOnly);
 					var rules = NewBusinessRuleCollection.Minimum();
@@ -70,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		private CancelSignal onDayScheduled(ISchedulingProgress backgroundWorker, SchedulingServiceBaseEventArgs args)
+		private static CancelSignal onDayScheduled(ISchedulingProgress backgroundWorker, SchedulingServiceBaseEventArgs args)
 		{
 			if (backgroundWorker.CancellationPending)
 			{
@@ -83,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			return new CancelSignal();
 		}
 
-		private bool checkIfCancelPressed(ISchedulingProgress backgroundWorker)
+		private static bool checkIfCancelPressed(ISchedulingProgress backgroundWorker)
 		{
 			if (backgroundWorker.CancellationPending)
 				return true;
