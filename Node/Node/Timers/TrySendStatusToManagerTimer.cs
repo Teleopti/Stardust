@@ -24,7 +24,7 @@ namespace Stardust.Node.Timers
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
 			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
-			_callbackTemplateUri = callbackTemplateUri;
+			CallbackTemplateUri = callbackTemplateUri;
 			_sendJobDetailToManagerTimer = sendJobDetailToManagerTimer;
 			_httpSender = httpSender;
 
@@ -34,7 +34,6 @@ namespace Stardust.Node.Timers
 
 		private readonly CancellationTokenSource _cancellationTokenSource;
 		private readonly string _whoAmI;
-		private readonly Uri _callbackTemplateUri;
 		private readonly TrySendJobDetailToManagerTimer _sendJobDetailToManagerTimer;
 		private readonly IHttpSender _httpSender;
 
@@ -55,7 +54,7 @@ namespace Stardust.Node.Timers
 		{
 			try
 			{
-				var uri = jobQueueItemEntity.CreateUri(_callbackTemplateUri.ToString());
+				var uri = jobQueueItemEntity.CreateUri(CallbackTemplateUri.ToString());
 
 				var httpResponseMessage = await _httpSender.PostAsync(uri,
 				                                                     null,
