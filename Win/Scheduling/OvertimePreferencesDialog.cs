@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var noneRuleSetBag = new RuleSetBag {Description = new Description(UserTexts.Resources.None)};
 				_shiftBags.Insert(0, noneRuleSetBag);
 				comboBoxShiftBags.DataSource = _shiftBags;
-				comboBoxShiftBags.DisplayMember = "Name";
+				comboBoxShiftBags.DisplayMember = "Description";
 				if (_overtimePreferences.ShiftBagToUse == null)
 					comboBoxShiftBags.SelectedIndex = 0;
 				else

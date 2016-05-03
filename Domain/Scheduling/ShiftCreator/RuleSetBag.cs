@@ -49,11 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 		#region Properties (2) 
 
-	    public virtual string Name
-	    {
-			get { return _description.Name; }
-	    }
-
 	    /// <summary>
         /// Gets or sets the description.
         /// </summary>
