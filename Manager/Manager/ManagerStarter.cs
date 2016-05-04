@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using Autofac.Integration.WebApi;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
@@ -10,6 +11,15 @@ namespace Stardust.Manager
 	{
 		public void Start(ManagerConfiguration managerConfiguration, IComponentContext componentContext)
 		{
+			if (managerConfiguration == null)
+			{
+				throw new ArgumentNullException("nodeConfiguration");
+			}
+			if (componentContext == null)
+			{
+				throw new ArgumentNullException("componentContext");
+			}
+
 			var builder = new ContainerBuilder();
 
 			builder.RegisterInstance(managerConfiguration).SingleInstance();

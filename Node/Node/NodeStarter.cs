@@ -32,6 +32,15 @@ namespace Stardust.Node
 		public void Start(NodeConfiguration nodeConfiguration,
 		                  IContainer container)
 		{
+			if (nodeConfiguration == null)
+			{
+				throw new ArgumentNullException("nodeConfiguration");
+			}
+			if (container == null)
+			{
+				throw new ArgumentNullException("container");
+			}
+
 			var nodeAddress = nodeConfiguration.BaseAddress.Scheme +
 			                  "://+:" +
 			                  nodeConfiguration.BaseAddress.Port + "/";
