@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +33,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"page size picker is filled with '(.*)'")]
 		public void ThenPageSizePickerIsFilledWith(int pageSize)
 		{
-			Browser.Interactions.AssertAnyContains(".page-size-selector option[selected]", pageSize.ToString());
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.paginationOptions.pageSize", 50,
+				() =>
+				{
+					Browser.Interactions.AssertAnyContains(".page-size-selector option[selected]", pageSize.ToString());
+				});
 		}
 	}
 
