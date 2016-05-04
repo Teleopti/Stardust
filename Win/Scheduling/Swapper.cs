@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -103,7 +104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			ISwapServiceNew swapService = new SwapServiceNew();
 			//var swapAndModifyService = new SwapAndModifyService(swapService);
-			var swapAndModifyServiceNew = new SwapAndModifyServiceNew(swapService, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>_schedulerState));
+			var swapAndModifyServiceNew = new SwapAndModifyServiceNew(swapService, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>_schedulerState), new PersistableScheduleDataPermissionChecker());
 
 			IList<IScheduleDay> selectedSchedules = _scheduleView.SelectedSchedules();
 			if (selectedSchedules.Count > 1)

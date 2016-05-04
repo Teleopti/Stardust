@@ -24,6 +24,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return permittedData;
 		}
 
+		public bool IsModifyPersonAssPermitted(DateOnly dateOnly, IPerson person)
+		{
+			var authorization = PrincipalAuthorization.Instance();
+			return authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, dateOnly, person);
+		}
 	}
 
 	public class ByPassPersistableScheduleDataPermissionChecker : IPersistableScheduleDataPermissionChecker
@@ -45,11 +50,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}).ToList();
 			return permittedData;
 		}
+
+		public bool IsModifyPersonAssPermitted(DateOnly dateOnly, IPerson person)
+		{
+			return true;
+		}
 	}
 
 	public interface IPersistableScheduleDataPermissionChecker
 	{
 		IList<IPersistableScheduleData> GetPermittedData(
 		IEnumerable<IPersistableScheduleData> persistableScheduleData);
+
+		bool IsModifyPersonAssPermitted(DateOnly dateOnly, IPerson person);
 	}
 }
