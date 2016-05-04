@@ -10,7 +10,9 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 	    private Guid _guid1;
 	    private Guid _guid2;
 		private Guid _guid3;
+	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
         [SetUp]
         public void Setup()
@@ -58,7 +61,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), schedulingResultStateHolder, new TimeZoneGuardWrapper());
 			target.SetRequestedScenario(scenario);
             mocks = new MockRepository();
-        }
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+
+		}
 
         [Test]
         public void LoadScenarioCanBeRead()
@@ -90,7 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void CanLoadScheduleAndLoadedPeriodIsSet()
         {
             IScheduleDateTimePeriod period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            IScheduleDictionary scheduleDictionary = new ScheduleDictionary(ScenarioFactory.CreateScenarioAggregate(),period);
+            IScheduleDictionary scheduleDictionary = new ScheduleDictionary(ScenarioFactory.CreateScenarioAggregate(),period, _permissionChecker);
             IScheduleStorage scheduleStorage = mocks.StrictMock<IScheduleStorage>();
             IPersonProvider personsProvider = mocks.StrictMock<IPersonProvider>();
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = mocks.StrictMock<IScheduleDictionaryLoadOptions>();
@@ -187,7 +192,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
 							  .IgnoreArguments()
-							  .Return(new ScheduleDictionary(scenario, dtp));
+							  .Return(new ScheduleDictionary(scenario, dtp, _permissionChecker));
 			target.LoadSchedules(scheduleRepository, null, null, dtp);
 
 		    repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
@@ -223,7 +228,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
 							  .IgnoreArguments()
-							  .Return(new ScheduleDictionary(scenario, dtp));
+							  .Return(new ScheduleDictionary(scenario, dtp, _permissionChecker));
 			target.LoadSchedules(scheduleRepository, null, null, dtp);
 
 			repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);
@@ -276,7 +281,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			scheduleRepository.Expect(s => s.FindSchedulesForPersons(null, null, null, null, personList))
 							  .IgnoreArguments()
-							  .Return(new ScheduleDictionary(scenario, dtp));
+							  .Return(new ScheduleDictionary(scenario, dtp, _permissionChecker));
 			target.LoadSchedules(scheduleRepository, null, null, dtp);
 
 			repositoryFactory.Expect(r => r.CreatePersonRequestRepository(unitOfWork)).Return(personRequestRepository);

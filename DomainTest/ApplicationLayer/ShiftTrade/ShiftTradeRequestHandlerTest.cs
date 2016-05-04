@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -61,8 +62,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			schedulingResultState = new SchedulingResultStateHolder();
 			var scheduleRanges = new Dictionary<IPerson, IScheduleRange>();
 			schedulingResultState.Schedules = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateTimePeriod()), scheduleRanges);
-			scheduleRanges.Add(fromPerson, new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, fromPerson, new DateTimePeriod())));
-			scheduleRanges.Add(toPerson, new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, toPerson, new DateTimePeriod())));
+			var permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
+			scheduleRanges.Add(fromPerson, new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, fromPerson, new DateTimePeriod()), permissionChecker));
+			scheduleRanges.Add(toPerson, new ScheduleRange(schedulingResultState.Schedules, new ScheduleParameters(scenario, toPerson, new DateTimePeriod()), permissionChecker));
 			unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 

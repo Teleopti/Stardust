@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 					foreach (var persistableScheduleData in schedulePart.PersistableScheduleDataCollection())
 					{
 						var forAuthorization =
-							new ScheduleRange.PersistableScheduleDataForAuthorization(persistableScheduleData);
+							new PersistableScheduleDataForAuthorization(persistableScheduleData);
 						if (!_principalAuthorization.IsPermitted(forAuthorization.FunctionPath, forAuthorization.DateOnly, forAuthorization.Person))
 						{
 							scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));

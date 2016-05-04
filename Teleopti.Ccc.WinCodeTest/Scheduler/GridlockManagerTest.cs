@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void Setup()
         {
             _scenario = new Scenario("default");
-            dic = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
+            dic = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
             _person = new Person();
             _gridlockManager = new GridlockManager();
             _schedules = new List<IScheduleDay>();

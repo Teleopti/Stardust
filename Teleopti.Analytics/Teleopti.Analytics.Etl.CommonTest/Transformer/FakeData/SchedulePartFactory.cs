@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -58,7 +59,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			RaptorTransformerHelper.SetUpdatedOn(abs2, DateTime.Now);
 			RaptorTransformerHelper.SetUpdatedOn(abs3, DateTime.Now);
 
-			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 1801, 1, 1)));
+			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 1801, 1, 1)), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 
 			IScheduleDay schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 1));
 			IScheduleDay schedulePart11 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 2));

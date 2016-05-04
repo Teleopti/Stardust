@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
@@ -404,7 +405,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var day =
 				ExtractedSchedule.CreateScheduleDay(
 					new ScheduleDictionary(scenario,
-										   new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1))),
+										   new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2002, 1, 1)), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance())),
 					person, new DateOnly(2001, 1, 1));
 			day.Add(personAss);
 			day.Add(personAbsence);

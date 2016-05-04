@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var stateHolderFrom = schedulerStateHolderFrom();
-			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period);
+			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
 				moveSchedules(stateHolderFrom.Schedules, scheduleDictionary, agents,

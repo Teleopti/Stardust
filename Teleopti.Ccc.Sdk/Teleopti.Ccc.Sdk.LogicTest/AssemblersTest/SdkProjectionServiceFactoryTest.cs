@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			target = new SdkProjectionServiceFactory();
 			var person = new Person();
 			var scenario = new Scenario("d");
-			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)));
+			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2200, 1, 1)), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			scheduleDay = ExtractedSchedule.CreateScheduleDay(dic, person, new DateOnly(2000, 1, 1));
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			var abs = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
