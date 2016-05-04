@@ -12,13 +12,8 @@ namespace Stardust.Node.Helpers
 
 		public ManagerUriBuilderHelper(string location)
 		{
-			location.ThrowArgumentNullExceptionIfNullOrEmpty();
-
 			UriBuilder = new UriBuilder(location);
-
 			UriTemplateBuilder = new UriBuilder(location);
-
-			UriBuilder.Scheme.ThrowArgumentNullExceptionIfNullOrEmpty();
 		}
 
 		private UriBuilder UriBuilder { get; set; }

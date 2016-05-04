@@ -116,13 +116,6 @@ namespace NodeTest
 
 		[Test]
 		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
-		{
-			new ManagerUriBuilderHelper(string.Empty);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentIsStringNull()
 		{
 			new ManagerUriBuilderHelper(location: null);

@@ -20,9 +20,9 @@ namespace Stardust.Node.Timers
 			LogManager.GetLogger(typeof (TrySendJobDetailToManagerTimer));
 
 		
-		public EventHandler<IJobDetail> SendJobDetailWithSuccessEventHandler;
+		public EventHandler<JobDetailEntity> SendJobDetailWithSuccessEventHandler;
 
-		private void InvokeSendJobProgressModelWithSuccessEventHandler(IJobDetail jobDetail)
+		private void InvokeSendJobProgressModelWithSuccessEventHandler(JobDetailEntity jobDetail)
 		{
 			if (SendJobDetailWithSuccessEventHandler != null)
 			{
@@ -36,7 +36,7 @@ namespace Stardust.Node.Timers
 		{
 			_httpSender = httpSender;
 			_cancellationTokenSource = new CancellationTokenSource();
-			_jobDetails = new ConcurrentDictionary<Guid, IJobDetail>();
+			_jobDetails = new ConcurrentDictionary<Guid, JobDetailEntity>();
 			_uriBuilder = new UriBuilder(nodeConfiguration.ManagerLocation);
 			_uriBuilder.Path += ManagerRouteConstants.JobProgress;
 
@@ -45,7 +45,7 @@ namespace Stardust.Node.Timers
 		
 		private readonly UriBuilder _uriBuilder;
 		private readonly IHttpSender _httpSender;
-		private readonly ConcurrentDictionary<Guid, IJobDetail> _jobDetails;
+		private readonly ConcurrentDictionary<Guid, JobDetailEntity> _jobDetails;
 		private readonly CancellationTokenSource _cancellationTokenSource;
 
 
@@ -58,7 +58,7 @@ namespace Stardust.Node.Timers
 
 				foreach (var progress in progressesToRemove)
 				{
-					IJobDetail model;
+					JobDetailEntity model;
 					_jobDetails.TryRemove(progress.Key, out model);
 				}
 			}
@@ -132,7 +132,7 @@ namespace Stardust.Node.Timers
 
 							if (httpResponseMessage.IsSuccessStatusCode)
 							{
-								IJobDetail removedValue;
+								JobDetailEntity removedValue;
 
 								var removed =
 									_jobDetails.TryRemove(model.Key, out removedValue);

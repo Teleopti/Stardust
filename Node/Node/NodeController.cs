@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Http;
 using log4net;
@@ -33,13 +30,6 @@ namespace Stardust.Node
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
-			var isJobToDoValidObject = ValidateObject(jobQueueItemEntity);
-
-			if (isJobToDoValidObject.IsBadRequest)
-			{
-				return BadRequest(isJobToDoValidObject.Message);
-			}
-
 			var isValidRequest = _workerWrapper.ValidateStartJob(jobQueueItemEntity);
 			if (isValidRequest.IsBadRequest)
 			{
@@ -73,7 +63,7 @@ namespace Stardust.Node
 		{
 			if (jobId == Guid.Empty)
 			{
-				return BadRequest("Invalid job id.");
+				return BadRequest(JobIdIsInvalid);
 			}
 
 			_workerWrapper.CancelTimeoutCurrentMessageTask();
@@ -105,60 +95,25 @@ namespace Stardust.Node
 			return Ok();
 		}
 
-		private ObjectValidationResult ValidateObject(IValidatableObject validatableObject)
-		{
-			if (validatableObject != null)
-			{
-				var validationResults = 
-					validatableObject.Validate(new ValidationContext(this));
-
-				var enumerable = 
-					validationResults as IList<ValidationResult> ?? validationResults.ToList();
-
-				if (enumerable.Any())
-				{
-					return new ObjectValidationResult
-					{
-						IsBadRequest = true,
-						Message = enumerable.First().ErrorMessage
-					};
-				}				
-			}
-
-			return new ObjectValidationResult();
-		}
-
-		private ObjectValidationResult ValidateJobId(Guid jobId)
-		{
-			if (jobId == Guid.Empty)
-			{
-				return new ObjectValidationResult
-				{
-					IsBadRequest = true,
-					Message = JobIdIsInvalid
-				};
-			}
-
-			return new ObjectValidationResult();
-		}
-
 		[HttpDelete, AllowAnonymous, Route(NodeRouteConstants.CancelJob)]
 		public IHttpActionResult TryCancelJob(Guid jobId)
 		{
-			var isValidRequest = ValidateJobId(jobId);
-			if (isValidRequest.IsBadRequest)
+			if (jobId == Guid.Empty)
 			{
-				return BadRequest(isValidRequest.Message);
+				return BadRequest(JobIdIsInvalid);
 			}
 
 			Logger.InfoWithLineNumber(_workerWrapper.WhoamI +
-			                          " : Received TryCancel request. jobId: " +
-			                          jobId);
+			                          " : Received Cancel request. jobId: " + jobId);
 			
 			var currentJob = _workerWrapper.GetCurrentMessageToProcess();
 
 			if (currentJob == null || currentJob.JobId != jobId)
 			{
+				Logger.WarningWithLineNumber(_workerWrapper.WhoamI +
+							 ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
+							 jobId + " )");
+
 				return NotFound();
 			}
 
@@ -174,12 +129,8 @@ namespace Stardust.Node
 				return Ok();
 			}
 
-			Logger.WarningWithLineNumber(_workerWrapper.WhoamI +
-			                             ": Could not cancel job since job not found on this node. Manager sent job ( jobId ) : ( " +
-			                             jobId + " )");
 			return NotFound();
 		}
-
 
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsAlive)]
@@ -187,6 +138,7 @@ namespace Stardust.Node
 		{
 			return Ok();
 		}
+
 
 		[HttpGet, AllowAnonymous, Route(NodeRouteConstants.IsIdle)]
 		public IHttpActionResult IsIdle()

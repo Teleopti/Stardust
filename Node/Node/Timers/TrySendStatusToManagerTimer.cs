@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using log4net;
+using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
@@ -24,9 +25,9 @@ namespace Stardust.Node.Timers
 		{
 			_cancellationTokenSource = new CancellationTokenSource();
 			_whoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
-			CallbackTemplateUri = callbackTemplateUri;
 			_sendJobDetailToManagerTimer = sendJobDetailToManagerTimer;
 			_httpSender = httpSender;
+			CallbackTemplateUri = callbackTemplateUri;
 
 			Elapsed += OnTimedEvent;
 			AutoReset = true;
@@ -54,7 +55,9 @@ namespace Stardust.Node.Timers
 		{
 			try
 			{
-				var uri = jobQueueItemEntity.CreateUri(CallbackTemplateUri.ToString());
+				//Use ManagerUriBuilderHelper instead?
+				var uri = new Uri(CallbackTemplateUri.ToString().Replace(ManagerRouteConstants.JobIdOptionalParameter,
+														jobQueueItemEntity.JobId.ToString()));
 
 				var httpResponseMessage = await _httpSender.PostAsync(uri,
 				                                                     null,
