@@ -59,7 +59,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			RaptorTransformerHelper.SetUpdatedOn(abs2, DateTime.Now);
 			RaptorTransformerHelper.SetUpdatedOn(abs3, DateTime.Now);
 
-			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 1801, 1, 1)), new PersistableScheduleDataPermissionChecker());
+			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(1800, 1, 1, 1801, 1, 1)), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 
 			IScheduleDay schedulePart1 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 1));
 			IScheduleDay schedulePart11 = ExtractedSchedule.CreateScheduleDay(dic, person1, new DateOnly(1800, 1, 2));

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DateTime endDateTime = startDateTime.AddHours(2);
             _dateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
             _scheduleDateTimePeriod = new ScheduleDateTimePeriod(_dateTimePeriod);
-            _schedules = new ScheduleDictionary(_scenario, _scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker());
+            _schedules = new ScheduleDictionary(_scenario, _scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
             _mocks = new MockRepository();
             _view = _mocks.StrictMock<IViewBase>();
             _handleBusinessRuleResponse = _mocks.DynamicMock<IHandleBusinessRuleResponse>();

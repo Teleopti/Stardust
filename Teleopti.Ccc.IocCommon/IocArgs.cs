@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.IocCommon
 
 		public bool BehaviorTestServer { get; set; }
 		public bool AllEventPublishingsAsSync { get; set; }
-		public bool WebByPassDefaultPermissionCheck_37984 { get; set; }
 
 		public IocArgs(IConfigReader configReader)
 		{

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -186,7 +185,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons) { DoLoadByPerson = true};
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 			unitOfWork.Reassociate(persons);
-			stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+			stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(unitOfWork), new RepositoryFactory()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 		}
 	
 		public static IList<IReportDataParameter> CreateScheduleAuditingParameters(ReportSettingsScheduleAuditingModel model, IFormatProvider culture)

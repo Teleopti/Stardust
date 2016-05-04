@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             CreateRelatedRepositories();
             SetupExpectationsForRelatedRepositories();
 
-            _target = new ScheduleStorage(new ThisUnitOfWork(_unitOfWork),_repositoryFactory, new PersistableScheduleDataPermissionChecker());
+            _target = new ScheduleStorage(new ThisUnitOfWork(_unitOfWork),_repositoryFactory);
 
             CreateBasicStuff();
             CreateEmptyLists();

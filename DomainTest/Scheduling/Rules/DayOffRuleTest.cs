@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
            _start = new DateTime(2007, 8, 2, 8, 30, 0, DateTimeKind.Utc);
            _end = new DateTime(2007, 8, 2, 17, 30, 0, DateTimeKind.Utc);
             _range = new DateTimePeriod(2007, 8, 1, 2007, 8, 5);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 
 
 		   _scenario = ScenarioFactory.CreateScenarioAggregate();

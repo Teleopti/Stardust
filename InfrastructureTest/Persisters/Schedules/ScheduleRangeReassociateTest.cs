@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			PersistAndRemoveFromUnitOfWork(agent);
 			PersistAndRemoveFromUnitOfWork(pa);
 
-			var scheduleDic = new ScheduleStorage(CurrUnitOfWork, new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()).FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000,1,1, 2001,1,1), scenario);
+			var scheduleDic = new ScheduleStorage(CurrUnitOfWork, new RepositoryFactory()).FindSchedulesForPersonOnlyInGivenPeriod(agent, new ScheduleDictionaryLoadOptions(false, false), new DateOnlyPeriod(2000,1,1, 2001,1,1), scenario);
 
 			UnitOfWork.Clear();
 			scheduleDic[agent].Reassociate(UnitOfWork);

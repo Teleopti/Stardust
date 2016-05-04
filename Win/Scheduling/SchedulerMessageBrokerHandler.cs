@@ -10,8 +10,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -313,7 +311,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private IPersonRequest updateInsertOnEventRequests(IEventMessage message)
 		{
-			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, new ScheduleStorage(new FromFactory(() => UnitOfWorkFactory.Current), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()));
+			return _owner.SchedulerState.RequestUpdateFromBroker(new PersonRequestRepository(new FromFactory(() => UnitOfWorkFactory.Current)), message.DomainObjectId, new ScheduleStorage(new FromFactory(() => UnitOfWorkFactory.Current), new RepositoryFactory()));
 		}
 
 		private void NotifySchedulesUpdated()

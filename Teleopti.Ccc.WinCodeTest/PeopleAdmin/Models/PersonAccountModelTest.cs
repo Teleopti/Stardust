@@ -5,9 +5,7 @@ using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
@@ -380,7 +378,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             {
                 IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
                 ICurrentScenario currentScenario = _mocker.DynamicMock<ICurrentScenario>();
-	            var scheduleStorage = new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker());
+	            var scheduleStorage = new ScheduleStorage(new ThisUnitOfWork(unitOfWorkFactory.CreateAndOpenUnitOfWork()), new RepositoryFactory());
 
 								IPersonAccountChildModel adapter1 = new PersonAccountChildModel
                     (new TraceableRefreshService(currentScenario, scheduleStorage), _collection, _account1, null, null);

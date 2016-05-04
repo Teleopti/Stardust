@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _p1D2 = ExtractedSchedule.CreateScheduleDay(_dic, _person1, new DateOnly(2008, 2, 2));
             _p2D1 = ExtractedSchedule.CreateScheduleDay(_dic, _person2, new DateOnly(2008, 1, 1));
             _p2D2 = ExtractedSchedule.CreateScheduleDay(_dic, _person2, new DateOnly(2008, 2, 2));
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
         }
 
         [Test]

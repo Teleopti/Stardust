@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _stateHolder = new SchedulingResultStateHolder();
             _person = PersonFactory.CreatePerson("Testor");
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 
             DateTimePeriod wholePeriod = new DateTimePeriod(1999, 12, 15, 2000, 01, 14);
             IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);

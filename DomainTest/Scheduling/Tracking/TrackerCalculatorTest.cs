@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 	    [SetUp]
         public void Setup()
         {
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
             _target = new TrackerCalculator();
         }
 

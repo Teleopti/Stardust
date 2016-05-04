@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 												TimeZoneInfoFactory.UtcTimeZoneInfo()), selectedPersons, new DisableDeletedFilter(new CurrentUnitOfWork(new FakeCurrentUnitOfWorkFactory())), schedulingResultStateHolder, new TimeZoneGuardWrapper());
 			target.SetRequestedScenario(scenario);
             mocks = new MockRepository();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 
 		}
 

@@ -1,6 +1,5 @@
 using Autofac;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -40,14 +39,6 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule<JsonSerializationModule>();
 			builder.RegisterModule(new ToggleNetModule(_configuration.Args()));
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
-			if (_configuration.Args().WebByPassDefaultPermissionCheck_37984)
-			{
-
-			}
-			else
-			{
-				builder.RegisterType<PersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>();
-			}
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule(new AnalyticsUnitOfWorkModule(_configuration));
 			builder.RegisterModule(new DataSourceModule(_configuration));

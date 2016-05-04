@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Shoveling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
 
-		private IPersistableScheduleDataPermissionChecker permissionChecker = new PersistableScheduleDataPermissionChecker();
+		private IPersistableScheduleDataPermissionChecker permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 
 		[Test]
 		public void ShouldHandleClosedSkillDays()

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         [SetUp]
         public void Setup()
         {
-	        permissionChecker = new PersistableScheduleDataPermissionChecker();
+	        permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 			newRules = NewBusinessRuleCollection.Minimum();
             target = new MoveDataBetweenSchedules(newRules,new ResourceCalculationOnlyScheduleDayChangeCallback());
             destination = new ScheduleDictionary(new Scenario("dest scen"), new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2000, 1, 10)), permissionChecker);
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             IScenario scenario = data.Scenario;
             if (scenario == null)
                 scenario = new Scenario("sdf");
-            IScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(data.Period), new PersistableScheduleDataPermissionChecker());
+            IScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(data.Period), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
             var part = ExtractedSchedule.CreateScheduleDay(dic, data.Person, dateOnly);
             part.Add(data);
             return part;

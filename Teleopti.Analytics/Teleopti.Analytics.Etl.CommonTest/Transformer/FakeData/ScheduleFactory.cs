@@ -47,7 +47,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 		private static ScheduleRange getSheduleRange(DateTimePeriod period, IScenario scenario, IPerson person)
 		{
 			IScheduleParameters scheduleParams = new ScheduleParameters(scenario, person, period);
-            var dataPermissionChecker = new PersistableScheduleDataPermissionChecker();
+            var dataPermissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 			var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(period), dataPermissionChecker);
 			return new ScheduleRange(dic, scheduleParams, dataPermissionChecker);
 		}

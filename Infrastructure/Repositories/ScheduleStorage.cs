@@ -17,14 +17,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     {
 	    private readonly IRepositoryFactory _repositoryFactory;
 	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
-	    private readonly IPersistableScheduleDataPermissionChecker _dataPermissionChecker;
 
-	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory, IPersistableScheduleDataPermissionChecker dataPermissionChecker)
+	    public ScheduleStorage(ICurrentUnitOfWork currentUnitOfWork, IRepositoryFactory repositoryFactory)
 	    {
 		    _currentUnitOfWork = currentUnitOfWork;
 					_repositoryFactory = repositoryFactory;
-		    _dataPermissionChecker = dataPermissionChecker;
-	    }
+				}
 
 		public IUnitOfWork UnitOfWork
 		{
@@ -155,7 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 														dictionaryPeriod.EndDateTime.AddDays(1));
 
 			var retDic = new ReadOnlyScheduleDictionary(scenario, new ScheduleDateTimePeriod(dictionaryPeriod, people),
-														new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker);
+														new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			
 			using (TurnoffPermissionScope.For(retDic))
 			{
@@ -227,7 +225,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	        var timeZone = person.PermissionInformation.DefaultTimeZone();
 	        var longDateOnlyPeriod = optimizedPeriod.ToDateOnlyPeriod(timeZone);
 			longDateOnlyPeriod = new DateOnlyPeriod(longDateOnlyPeriod.StartDate.AddDays(-1),longDateOnlyPeriod.EndDate.AddDays(1));
-			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker());
+			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
 
             using (TurnoffPermissionScope.For(retDic))
@@ -259,7 +257,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
-			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker());
+			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
             IList<IPerson> personsInOrganization = personsProvider.GetPersons();
             
             // ugly to be safe to get all

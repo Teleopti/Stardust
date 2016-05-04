@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
 
             public ScheduleExposingAddRemove(IScheduleDictionary owner, IScheduleParameters parameters)
-                : base(owner, parameters, new PersistableScheduleDataPermissionChecker())
+                : base(owner, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()))
             {
             }
 

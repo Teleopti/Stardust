@@ -9,9 +9,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -142,7 +140,7 @@ namespace Teleopti.Ccc.WinCode.Backlog
 				{
 					LoadDaysAfterLeft = true
 				};
-				stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory(), new PersistableScheduleDataPermissionChecker()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
+				stateHolder.LoadSchedules(new ScheduleStorage(new ThisUnitOfWork(uow), new RepositoryFactory()), personsInOrganizationProvider, scheduleDictionaryLoadOptions, period);
 			}
 		}
 	}

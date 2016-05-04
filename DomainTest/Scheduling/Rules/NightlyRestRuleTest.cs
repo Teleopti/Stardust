@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         public void Setup()
         {
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 
             _person = PersonFactory.CreatePerson();
             _nightlyRest = new TimeSpan(8, 0, 0);

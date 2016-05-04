@@ -118,7 +118,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, ICommonStateHolder stateHolder)
 		{
 			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod());
-			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker());
+			return new ScheduleDictionary(scenario, scheduleDateTimePeriod, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 		}
 
 		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)

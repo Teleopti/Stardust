@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var diffSvc = _mock.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
             var period2 = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             var scenario = ScenarioFactory.CreateScenarioAggregate();
-            _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc, new PersistableScheduleDataPermissionChecker());
+            _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
         }
 
         [Test]

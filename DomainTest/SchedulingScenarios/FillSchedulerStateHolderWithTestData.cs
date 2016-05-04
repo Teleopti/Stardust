@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		{
 			var stateHolder = stateHolderFunc();
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
-			stateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod), new PersistableScheduleDataPermissionChecker());
+			stateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 			foreach (var agent in agents)
 			{
 				stateHolder.AllPermittedPersons.Add(agent);

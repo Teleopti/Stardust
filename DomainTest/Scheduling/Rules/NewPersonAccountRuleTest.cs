@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _stateHolder = new SchedulingResultStateHolder();
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
             _target = new NewPersonAccountRule(_stateHolder, _allAccounts);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker();
+			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
         }
 
         [Test]
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 var otherScenario = ScenarioFactory.CreateScenarioAggregate("what if?", false);
                 _stateHolder.Schedules = new ScheduleDictionary(otherScenario,
-                                                                new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker());
+                                                                new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 
                 _target.Validate(new Dictionary<IPerson, IScheduleRange> { { person, null } }, new[] { scheduleDay }).Should().Be.Empty();
             }

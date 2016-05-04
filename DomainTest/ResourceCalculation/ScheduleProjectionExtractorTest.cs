@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
             DateTimePeriod dtp =  new DateTimePeriod(2000, 1, 1, 2001, 1, 1);
 
-            ScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dtp), new PersistableScheduleDataPermissionChecker());
+            ScheduleDictionary dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dtp), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
             var period = new DateTimePeriod(2000, 6, 1, 2000, 7, 1);
             IPersonAssignment pAss =
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, p1,period);

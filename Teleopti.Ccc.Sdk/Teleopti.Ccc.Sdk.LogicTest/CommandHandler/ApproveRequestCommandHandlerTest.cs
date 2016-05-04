@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
             var request = _mock.StrictMock<IPersonRequest>();
             var dictionary = new ReadOnlyScheduleDictionary(_scenario, new ScheduleDateTimePeriod(_period),
-				new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker());
+				new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
 
             using (_mock.Record())
             {
