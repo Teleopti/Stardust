@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [SetUp]
         public void Setup()
         {
-            obj = new ScheduleDictionary(new Scenario("cf"), new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            obj = new ScheduleDictionary(new Scenario("cf"), new ScheduleDateTimePeriod(new DateTimePeriod()));
         }
 
         [Test]

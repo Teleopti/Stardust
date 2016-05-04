@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		{
 			var stateHolder = stateHolderFunc();
 			var dateTimePeriod = period.ToDateTimePeriod(TimeZoneInfo.Utc);
-			stateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			stateHolder.SchedulingResultState.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(dateTimePeriod));
 			foreach (var agent in agents)
 			{
 				stateHolder.AllPermittedPersons.Add(agent);

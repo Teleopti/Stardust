@@ -66,14 +66,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private VisualLayerFactory _layerFactory;
         private DateOnly _baseDateTime;
         private IDictionary<IPerson, IScheduleRange> _underlyingDictionary;
-	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 			
 		[SetUp]
         public void Setup()
         {
             _layerFactory = new VisualLayerFactory();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
             IPerson person = PersonFactory.CreatePerson();
 			
 						_agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999, 1, 1), new List<ISkill>(), new Contract("ctr"), new PartTimePercentage("ptc"));
@@ -99,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                 _underlyingDictionary);
              _param = new ScheduleParameters(_scenario, _agent,
                                            new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
-             _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+             _scheduleRange = new ScheduleRange(_dic, _param);
         	var act = ActivityFactory.CreateActivity("sdfsdf");
         	act.InWorkTime = true;
 			_ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
@@ -162,7 +160,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyToolTipDayOff()
         {
-			var scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+			var scheduleRange = new ScheduleRange(_dic, _param);
 	        var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _agent,
 	                                                                                  new DateOnly(2001, 1, 1),
 	                                                                                  DayOffFactory.CreateDayOff(new Description("hej", "DÅ")));
@@ -177,7 +175,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             _param = new ScheduleParameters(_scenario, _agent,
                                            new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
-            _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+            _scheduleRange = new ScheduleRange(_dic, _param);
 
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 					ActivityFactory.CreateActivity("sdfsdf"),
@@ -201,7 +199,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0));
 			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0));
 			_param = new ScheduleParameters(_scenario, _agent, new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
-			_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+			_scheduleRange = new ScheduleRange(_dic, _param);
 
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdfsdf"),_agent, dateTimePeriod, ShiftCategoryFactory.CreateShiftCategory("SC"), _scenario);
 			ass.AddPersonalActivity(ActivityFactory.CreateActivity("personal"), dateTimePeriodPersonal);
@@ -220,7 +218,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 5, 0, 0), new DateTime(2001, 1, 1, 13, 0, 0));
 			var dateTimePeriodPersonal = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 3, 0, 0), new DateTime(2001, 1, 1, 4, 0, 0));
 			_param = new ScheduleParameters(_scenario, _agent, new DateTimePeriod(2000, 1, 1, 2001, 1, 5));
-			_scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+			_scheduleRange = new ScheduleRange(_dic, _param);
 
 			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdfsdf"), _agent, dateTimePeriod, ShiftCategoryFactory.CreateShiftCategory("SC"), _scenario);
 			ass.AddPersonalActivity(ActivityFactory.CreateActivity("personal"), dateTimePeriodPersonal);
@@ -308,7 +306,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _param = new ScheduleParameters(_scenario, _agent,
                                new DateTimePeriod(2006, 1, 1, 2006, 1, 10));
 
-            _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+            _scheduleRange = new ScheduleRange(_dic, _param);
 
             _scheduleRange.Add(confidentialPersonAbsence);
 
@@ -396,7 +394,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _param = new ScheduleParameters(_scenario, _agent,
                                            new DateTimePeriod(2000, 12, 31, 2001, 1, 1));
 
-            _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+            _scheduleRange = new ScheduleRange(_dic, _param);
 
             string expected = string.Empty;
 
@@ -410,7 +408,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _param = new ScheduleParameters(_scenario, _agent,
                                            schedulePeriod);
 
-            _scheduleRange = new ScheduleRange(_dic, _param, _permissionChecker);
+            _scheduleRange = new ScheduleRange(_dic, _param);
             _underlyingDictionary[_agent] = _scheduleRange;
             ITeam team = TeamFactory.CreateSimpleTeam();
 
@@ -655,7 +653,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAssignment personAssWholeToday = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario,
                                                     PersonFactory.CreatePerson(), _periodWholeDay);
 
-            IScheduleDictionary scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period), _permissionChecker);
+            IScheduleDictionary scheduleDictionary = new ScheduleDictionary(_scenario, new ScheduleDateTimePeriod(period));
             var schedulePart = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, PersonFactory.CreatePerson(), new DateOnly(2000,1,2));
 
             Assert.AreEqual(DisplayMode.EndsToday, ViewBaseHelper.GetAssignmentDisplayMode(personAssEndsToday, schedulePart));

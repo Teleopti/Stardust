@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private INewBusinessRule _target;
         private ISchedulingResultStateHolder _stateHolder;
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
-	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
 
         [SetUp]
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _stateHolder = new SchedulingResultStateHolder();
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
             _target = new NewPersonAccountRule(_stateHolder, _allAccounts);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
         }
 
         [Test]
@@ -74,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
                 var otherScenario = ScenarioFactory.CreateScenarioAggregate("what if?", false);
                 _stateHolder.Schedules = new ScheduleDictionary(otherScenario,
-                                                                new ScheduleDateTimePeriod(new DateTimePeriod()), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+                                                                new ScheduleDateTimePeriod(new DateTimePeriod()));
 
                 _target.Validate(new Dictionary<IPerson, IScheduleRange> { { person, null } }, new[] { scheduleDay }).Should().Be.Empty();
             }
@@ -101,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             _allAccounts.Add(person, personAccountCollection);
             var scenario = new Scenario("Default") { DefaultScenario = true };
-            _stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range), _permissionChecker);
+            _stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range));
 
             using (mocks.Record())
             {
@@ -119,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                                          {
                                              person,
                                              new ScheduleRange(_stateHolder.Schedules,
-                                                               new ScheduleParameters(scenario, person, range), _permissionChecker)
+                                                               new ScheduleParameters(scenario, person, range))
                                              }
                                      }, new Collection<IScheduleDay> { scheduleDay });
                 Assert.That(responses.Count(), Is.EqualTo(1));
@@ -161,10 +158,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_allAccounts.Add(person2, personAccountCollection2);
 
 			var scenario = new Scenario("Default") { DefaultScenario = true };
-			_stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range), _permissionChecker);
+			_stateHolder.Schedules = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(range));
 
-			var scheduleRange1 = new ScheduleRange(_stateHolder.Schedules, new ScheduleParameters(scenario, person1, range), _permissionChecker);
-			var scheduleRange2 = new ScheduleRange(_stateHolder.Schedules, new ScheduleParameters(scenario, person2, range), _permissionChecker);
+			var scheduleRange1 = new ScheduleRange(_stateHolder.Schedules, new ScheduleParameters(scenario, person1, range));
+			var scheduleRange2 = new ScheduleRange(_stateHolder.Schedules, new ScheduleParameters(scenario, person2, range));
 			var dictionary = new Dictionary<IPerson, IScheduleRange> {{person1, scheduleRange1}, {person2, scheduleRange2}};
 
 			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(new DateOnly(2012, 12, 14),TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));

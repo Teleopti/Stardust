@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -25,20 +24,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private DateTimePeriod _schedulePeriod;
         private IPerson _person;
         private IScheduleDictionary scheduleDic;
-	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
-	    [SetUp]
+        [SetUp]
         public void Setup()
         {
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
             _person = PersonFactory.CreatePerson();
             var dic = new Dictionary<IPerson, IScheduleRange>();
             _schedulePeriod = new DateTimePeriod(2007, 8, 1, 2007, 9, 1);
             scheduleDic = new ScheduleDictionaryForTest(_scenario,
                                                         new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2020,1, 1)),
                                                         dic);
-            _scheduleRange = new ScheduleRange(scheduleDic, new ScheduleParameters(_scenario, _person, _schedulePeriod), _permissionChecker);
+            _scheduleRange = new ScheduleRange(scheduleDic, new ScheduleParameters(_scenario, _person, _schedulePeriod));
             dic[_person] = _scheduleRange;
             _nightlyRest = new TimeSpan(8, 0, 0);
             _contract = 
@@ -66,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
             ScheduleDateTimePeriod per = new ScheduleDateTimePeriod(_schedulePeriod);
 
-            ScheduleDictionary dic = new ScheduleDictionary(_scenario, per, _permissionChecker);
+            ScheduleDictionary dic = new ScheduleDictionary(_scenario, per);
             dic.Modify(ScheduleModifier.Scheduler, schedulePart, NewBusinessRuleCollection.Minimum(), new ResourceCalculationOnlyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 
 

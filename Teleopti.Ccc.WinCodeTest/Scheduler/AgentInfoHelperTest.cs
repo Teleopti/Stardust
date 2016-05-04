@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				new Dictionary<IPerson, IScheduleRange>());
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(dic.Scenario, _person, _dateOnly, new TimeSpan(),
 				new TimeSpan(), new TimeSpan());
-			var range = new ScheduleRange(dic, dayOff, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			var range = new ScheduleRange(dic, dayOff);
 			range.Add(dayOff);
 			dic.AddTestItem(_person, range);
 			_stateHolder.Schedules = dic;
@@ -271,7 +270,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             IPersonAssignment assignment = getPersonAssignment();
 
             //lägg på schemadata på range
-            var range = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            var range = new ScheduleRange(dic, parameters);
             range.Add(assignment);
             return range;
         }

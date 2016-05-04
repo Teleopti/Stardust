@@ -3,8 +3,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static SchedulingResultStateHolder Create(DateTimePeriod period)
         {
             return new SchedulingResultStateHolder(new List<IPerson>(),
-                                                   new ScheduleDictionary(new Scenario("test"), new ScheduleDateTimePeriod(period), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance())),
+                                                   new ScheduleDictionary(new Scenario("test"), new ScheduleDateTimePeriod(period)),
                                                    new Dictionary<ISkill, IList<ISkillDay>>());
         }
 

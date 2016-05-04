@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
@@ -123,7 +122,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         {
 
             public ScheduleExposingAddRemove(IScheduleDictionary owner, IScheduleParameters parameters)
-                : base(owner, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()))
+                : base(owner, parameters)
             {
             }
 

@@ -9,8 +9,6 @@ using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.Job;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using ScenarioFactory = Teleopti.Ccc.TestCommon.FakeData.ScenarioFactory;
 
@@ -29,7 +27,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			var diffSvc = _mock.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
             var period2 = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             var scenario = ScenarioFactory.CreateScenarioAggregate();
-            _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+            _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc);
         }
 
         [Test]

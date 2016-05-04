@@ -276,7 +276,6 @@
     <Compile Include="Repositories\IAnalyticsScheduleRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulingResultStateHolderProvider.cs" />
     <Compile Include="Repositories\IAnalyticsTimeZoneRepository.cs" />
-    <Compile Include="Scheduling\Assignment\PersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffSameDaysOffLockSyncronizer.cs" />
     <Compile Include="Repositories\IAnalyticsBusinessUnitRepository.cs" />

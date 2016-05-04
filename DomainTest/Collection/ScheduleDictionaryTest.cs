@@ -26,54 +26,6 @@ using List = Rhino.Mocks.Constraints.List;
 namespace Teleopti.Ccc.DomainTest.Collection
 {
 	[TestFixture]
-	public class ScheduleDictionaryNoMockTest
-	{
-		private ScheduleDictionary target;
-		private IScenario _scenario;
-		private IScheduleDateTimePeriod _period;
-
-		[SetUp]
-		public void setUp()
-		{
-			_period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			_scenario = ScenarioFactory.CreateScenarioAggregate();
-			target = new ScheduleDictionary(_scenario, _period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
-		}
-		[Test]
-		public void CanModifyExistingPermittedData()
-		{
-			var person = PersonFactory.CreatePerson();
-			var noNewRules = NewBusinessRuleCollection.Minimum();
-			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
-													  new DateTimePeriod(
-													  2000, 6,
-													  1,
-													  2000, 6,
-													  2));
-			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
-											  new DateTimePeriod(2000, 6, 1, 2000, 6,
-													 2));
-
-
-			ass.WithId();
-			abs.WithId();
-			Schedule schedule = (Schedule)part;
-			schedule.Add(ass);
-			schedule.Add(abs);
-			
-			var rangeClones = new Dictionary<IPerson, IScheduleRange>();
-			rangeClones.Add(person,(IScheduleRange)target[person].Clone());
-
-			
-
-			var errors = target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
-
-			errors.Count.Should().Be.EqualTo(0);
-		}
-	}
-	[TestFixture]
 	public class ScheduleDictionaryTest
 	{
 		private IContract _contract;
@@ -91,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private INewBusinessRuleCollection _noNewRules;
 		private IPrincipalAuthorization principalAuthorization;
 		private IScheduleDayChangeCallback scheduleDayChangeCallback;
-		private IPersistableScheduleDataPermissionChecker dataPermissionChecker;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "justToCreateTheScheduleRangeForTests"), SetUp]
 		public void Setup()
@@ -103,13 +54,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
 			period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
-			dataPermissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
-			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			dummyPerson = PersonFactory.CreatePerson();
 			IScheduleRange justToCreateTheScheduleRangeForTests = target[dummyPerson];
 			dummyFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
 			_dummyScheduleRange =
-				new ScheduleRange(target, new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)), dataPermissionChecker);
+			    new ScheduleRange(target, new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
 
 			_noNewRules = NewBusinessRuleCollection.Minimum();
 
@@ -124,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 												_contract,
 												PartTimePercentageFactory.CreatePartTimePercentage("sdf"),
 												ContractScheduleFactory.CreateContractSchedule("sdf")),
-												team));
+											    team));
 			target.PartModified += target_PartModified;
 			eventFired = false;
 		}
@@ -134,8 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyAddKeyValuePairNotSupported()
 		{
 			KeyValuePair<IPerson, IScheduleRange> item =
-				new KeyValuePair<IPerson, IScheduleRange>(dummyPerson,
-				new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker));
+			    new KeyValuePair<IPerson, IScheduleRange>(dummyPerson,
+				new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1))));
 			target.Add(item);
 		}
 
@@ -151,22 +101,22 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IPerson dummyPerson1 = PersonFactory.CreatePerson();
 			IPerson dummyPerson2 = PersonFactory.CreatePerson();
 			IPersonAssignment ass =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson,
+			    PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson,
 										  new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
 										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
 										  scenario);
 			IPersonAssignment ass1 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson,
+			    PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson,
 										  new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
 										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
 										  scenario);
 			IPersonAssignment ass2 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson1,
+			    PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson1,
 										  new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
 										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
 										  scenario);
 			IPersonAssignment ass3 =
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson2,
+			    PersonAssignmentFactory.CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"), dummyPerson2,
 										  new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
 										  ShiftCategoryFactory.CreateShiftCategory("sdf"),
 										  scenario);
@@ -206,17 +156,17 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			DateOnlyPeriod dop = period.VisiblePeriod.ToDateOnlyPeriod(dummyPerson.PermissionInformation.DefaultTimeZone());
 			Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
-				.IgnoreArguments()
-				.Repeat.Any()
-				.Return(new List<DateOnlyPeriod> { dop });
+			    .IgnoreArguments()
+			    .Repeat.Any()
+			    .Return(new List<DateOnlyPeriod> { dop });
 			Expect.Call(principalAuthorization.IsPermitted("Any"))
-				.IgnoreArguments()
-				.Return(true)
-				.Repeat.Any();
+			    .IgnoreArguments()
+			    .Return(true)
+			    .Repeat.Any();
 			Expect.Call(principalAuthorization.IsPermitted("", new DateOnly(), dummyPerson))
-				.IgnoreArguments()
-				.Return(true)
-				.Repeat.Any();
+			    .IgnoreArguments()
+			    .Return(true)
+			    .Repeat.Any();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -234,13 +184,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
 					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															  new DateTimePeriod(
+														      new DateTimePeriod(
 															  2000, 6,
 															  1,
 															  2000, 6,
 															  2));
 					IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
-													  new DateTimePeriod(2000, 6, 1, 2000, 6,
+												      new DateTimePeriod(2000, 6, 1, 2000, 6,
 															 2));
 
 
@@ -276,13 +226,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
 					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															  new DateTimePeriod(
+														      new DateTimePeriod(
 															  2000, 6,
 															  1,
 															  2000, 6,
 															  2));
 					IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
-													  new DateTimePeriod(2000, 6, 1, 2000, 6,
+												      new DateTimePeriod(2000, 6, 1, 2000, 6,
 															 2));
 
 					Guid assId = Guid.NewGuid();
@@ -304,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyCorrectParametersToDifferenceSinceSnapshot()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc);
 			IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 11, 2, 2001, 1, 1));
 			pAss.SetId(Guid.NewGuid());
 
@@ -322,8 +272,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(diffSvc.Difference(null, null))
-					.IgnoreArguments()
-					.Constraints(
+				    .IgnoreArguments()
+				    .Constraints(
 						List.Equal(new List<IPersistableScheduleData> { pAss }),
 						List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs })
 						)
@@ -357,13 +307,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
 					IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															  new DateTimePeriod(
+														      new DateTimePeriod(
 															  2000, 6,
 															  1,
 															  2000, 6,
 															  2));
 					IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
-													  new DateTimePeriod(2000, 6, 1, 2000, 6,
+												      new DateTimePeriod(2000, 6, 1, 2000, 6,
 															 2));
 
 					IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
@@ -406,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			SetAuthorizationServiceExpectations();
 
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-													 new DateTimePeriod(2000, 6, 1,
+												     new DateTimePeriod(2000, 6, 1,
 															2000, 6, 2));
 			ass.SetId(assId);
 
@@ -468,7 +418,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				{
 					//this will happen on scheduleranges not initialized when loading scheduledictionary
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
+														       new DateTimePeriod(
 															   2000,
 															   11, 2,
 															   2001,
@@ -510,7 +460,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyUpdateFromDataSourcePersonWithNoPermission()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc);
 			target.PartModified += target_PartModified;
 			var dummy = target[dummyPerson];
 
@@ -522,11 +472,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(ass);
+				    .Return(ass);
 				Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
-					.IgnoreArguments()
-					.Repeat.Any()
-					.Return(new List<DateOnlyPeriod>());
+				    .IgnoreArguments()
+				    .Repeat.Any()
+				    .Return(new List<DateOnlyPeriod>());
 			}
 			using (mocks.Playback())
 			{
@@ -543,7 +493,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifyMeetingUpdateFromDataSourcePersonWithNoPermission()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc);
 			target.PartModified += target_PartModified;
 			var personAtMeeting = PersonFactory.CreatePerson();
 			var dummy = target[dummyPerson];
@@ -556,11 +506,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(meeting);
+				    .Return(meeting);
 				Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
-					.IgnoreArguments()
-					.Repeat.Any()
-					.Return(new List<DateOnlyPeriod>());
+				    .IgnoreArguments()
+				    .Repeat.Any()
+				    .Return(new List<DateOnlyPeriod>());
 			}
 			using (mocks.Playback())
 			{
@@ -575,7 +525,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private IMeeting CreateMeeting(IPerson personAtMeeting)
 		{
 			IMeeting meeting = new Meeting(dummyPerson, new List<IMeetingPerson> { new MeetingPerson(personAtMeeting, true) }, string.Empty, string.Empty,
-							   string.Empty, ActivityFactory.CreateActivity("d"), scenario);
+						       string.Empty, ActivityFactory.CreateActivity("d"), scenario);
 			meeting.StartDate = new DateOnly(2000, 1, 2);
 			meeting.EndDate = new DateOnly(2000, 1, 3);
 			return meeting;
@@ -593,14 +543,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (new CustomAuthorizationContext(principalAuthorization))
 				{
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
+														       new DateTimePeriod(
 															   2000,
 															   11, 2,
 															   2001,
 															   1, 1));
 
 					IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
-													   new DateTimePeriod(2000, 1, 1, 2001,
+												       new DateTimePeriod(2000, 1, 1, 2001,
 															  1, 1));
 					pAss.SetId(Guid.NewGuid());
 					pAbs.SetId(Guid.NewGuid());
@@ -625,12 +575,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (new CustomAuthorizationContext(principalAuthorization))
 				{
 					IPersonAssignment pAss =
-						PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
+					    PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
 												  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 					pAss.SetId(Guid.NewGuid());
 					IPersonAbsence pAbs =
-						PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), scenario,
-											 new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+					    PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), scenario,
+										     new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 					pAbs.SetId(Guid.NewGuid());
 					extractor extractor = new extractor();
 					((ScheduleRange)target[pAss.Person]).Add(pAss);
@@ -654,13 +604,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (new CustomAuthorizationContext(principalAuthorization))
 				{
 					IPersonAssignment pAss =
-						PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
+					    PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
 												  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 					pAss.SetId(Guid.NewGuid());
 
 					IPersonAbsence pAbs =
-						PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), scenario,
-											 new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+					    PersonAbsenceFactory.CreatePersonAbsence(PersonFactory.CreatePerson(), scenario,
+										     new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 					pAbs.SetId(Guid.NewGuid());
 
 					extractor extractor = new extractor();
@@ -676,7 +626,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void VerifySchedulePeriodWhenPublishingDateAndPreferenceDateDoesNotCorrespond()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc);
 			IPerson person = PersonFactory.CreatePerson();
 			ITeam team = TeamFactory.CreateSimpleTeam("MyTeam");
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
@@ -698,10 +648,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-					.Return(false).Repeat.Any();
+				    .Return(false).Repeat.Any();
 				DateOnlyPeriod dop = period.VisiblePeriod.ToDateOnlyPeriod(timeZone);
 				Expect.Call(principalAuthorization.PermittedPeriods(dummyFunction, dop, person))
-					.Return(new List<DateOnlyPeriod> { dop });
+				    .Return(new List<DateOnlyPeriod> { dop });
 
 			}
 			using (mocks.Playback())
@@ -711,7 +661,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					((ScheduleRange)target[pAss1.Person]).Add(pAss1);
 					((ScheduleRange)target[pAss2.Person]).Add(pAss2);
 					CollectionAssert.Contains(
-						target[person].ScheduledDay(new DateOnly(2000, 1, 1)).PersistableScheduleDataCollection(), pAss1);
+					    target[person].ScheduledDay(new DateOnly(2000, 1, 1)).PersistableScheduleDataCollection(), pAss1);
 					CollectionAssert.DoesNotContain(
 						target[person].ScheduledDay(new DateOnly(2000, 2, 1)).PersistableScheduleDataCollection(), pAss2);
 				}
@@ -722,7 +672,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		public void VerifyFunctionPermission()
 		{
 			//what should happen if no permission on function? Right now - does nothing
-			target = new ScheduleDictionary(scenario, period, diffSvc, new PersistableScheduleDataPermissionChecker(principalAuthorization));
+			target = new ScheduleDictionary(scenario, period, diffSvc);
 
 			IDayOffTemplate dOff1 = DayOffFactory.CreateDayOff(new Description("test"));
 			dOff1.Anchor = TimeSpan.Zero;
@@ -734,15 +684,15 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-					.Return(true).Repeat.Any();
+				    .Return(true).Repeat.Any();
 				var dop = period.VisiblePeriod.ToDateOnlyPeriod(dummyPerson.PermissionInformation.DefaultTimeZone());
 				Expect.Call(principalAuthorization.PermittedPeriods(function, dop, dummyPerson))
-					.Return(new List<DateOnlyPeriod> { dop })
-					.Repeat.AtLeastOnce();
+				    .Return(new List<DateOnlyPeriod> { dop })
+				    .Repeat.AtLeastOnce();
 				Expect.Call(principalAuthorization.IsPermitted("", new DateOnly(), dummyPerson)).IgnoreArguments().Return(false).Repeat
-					.Any();
+				    .Any();
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).
-					Return(false);
+				    Return(false);
 			}
 			using (mocks.Playback())
 			{
@@ -792,7 +742,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				using (new CustomAuthorizationContext(principalAuthorization))
 				{
 					IPersonAssignment ass =
-						PersonAssignmentFactory.CreateAssignmentWithMainShift(
+					    PersonAssignmentFactory.CreateAssignmentWithMainShift(
 						ActivityFactory.CreateActivity("sdf"), dummyPerson,
 						new DateTimePeriod(2000, 1, 1, 2001, 1, 1),
 						ShiftCategoryFactory.CreateShiftCategory("sdf"),
@@ -808,19 +758,19 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyWriteProtection()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc);
 			IPerson per = PersonFactory.CreatePerson();
 			using (mocks.Record())
 			{
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-					.Return(true);
+				    .Return(true);
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
-					.Return(true);
+				    .Return(true);
 				var dop = period.VisiblePeriod.ToDateOnlyPeriod(per.PermissionInformation.DefaultTimeZone());
 				Expect.Call(principalAuthorization.PermittedPeriods(dummyFunction, dop, per))
-					.Return(new List<DateOnlyPeriod> { dop });
+				    .Return(new List<DateOnlyPeriod> { dop });
 				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
-					.Return(false);
+				    .Return(false);
 			}
 			using (mocks.Playback())
 			{
@@ -829,7 +779,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					per.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2001, 1, 1);
 					var part = target[per].ScheduledDay(new DateOnly(2000, 1, 2));
 					part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, per,
-													   new DateTimePeriod(2000, 1, 2, 2000,
+												       new DateTimePeriod(2000, 1, 2, 2000,
 															  1, 3)));
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 				}
@@ -839,7 +789,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldNotModifyWhenNoRightsToModifyCurrentScenario()
 		{
-			target = new ScheduleDictionary(scenario, period, diffSvc, dataPermissionChecker);
+			target = new ScheduleDictionary(scenario, period, diffSvc);
 			var per = PersonFactory.CreatePerson();
 			var dop = period.VisiblePeriod.ToDateOnlyPeriod(per.PermissionInformation.DefaultTimeZone());
 
@@ -856,13 +806,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					var part = target[per].ScheduledDay(new DateOnly(2000, 1, 2));
 					scenario.Restricted = true;
 					part.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, per,
-													   new DateTimePeriod(2000, 1, 2, 2000,
+												       new DateTimePeriod(2000, 1, 2, 2000,
 															  1, 3)));
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
 					Assert.AreEqual(0,
 							target[per].ScheduledDay(new DateOnly(2000, 1, 2)).PersistableScheduleDataCollection
-								().Count());
+							    ().Count());
 				}
 			}
 		}
@@ -881,7 +831,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(abs);
+				    .Return(abs);
 			}
 			using (mocks.Playback())
 			{
@@ -911,7 +861,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(preferenceDay);
+				    .Return(preferenceDay);
 			}
 			using (mocks.Playback())
 			{
@@ -942,7 +892,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(abs);
+				    .Return(abs);
 			}
 			using (mocks.Playback())
 			{
@@ -968,7 +918,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(null);
+				    .Return(null);
 			}
 			using (mocks.Playback())
 			{
@@ -990,7 +940,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(ass);
+				    .Return(ass);
 			}
 			using (mocks.Playback())
 			{
@@ -1014,7 +964,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(ass);
+				    .Return(ass);
 			}
 			using (mocks.Playback())
 			{
@@ -1036,7 +986,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(ass);
+				    .Return(ass);
 			}
 			using (mocks.Playback())
 			{
@@ -1067,7 +1017,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(ass);
+				    .Return(ass);
 			}
 			using (mocks.Playback())
 			{
@@ -1168,7 +1118,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			eventFired = false;
 			IMeeting meeting =
-				new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject", "location", "description", ActivityFactory.CreateActivity("act"), target.Scenario); //outside period
+			    new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject", "location", "description", ActivityFactory.CreateActivity("act"), target.Scenario); //outside period
 			meeting.StartDate = dateOnlyPeriod.StartDate.AddDays(369);
 			meeting.EndDate = meeting.StartDate;
 			meeting.AddMeetingPerson(meetingPerson);
@@ -1177,7 +1127,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(meeting);
+				    .Return(meeting);
 			}
 			using (mocks.Playback())
 			{
@@ -1202,8 +1152,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2);
 			IMeeting meeting = new Meeting(PersonFactory.CreatePerson(), new List<IMeetingPerson>(), "subject",
-							   "location", "description", ActivityFactory.CreateActivity("act"),
-							   theOtherScenario);
+						       "location", "description", ActivityFactory.CreateActivity("act"),
+						       theOtherScenario);
 			meeting.StartDate = dateOnlyPeriod.StartDate;
 			meeting.EndDate = dateOnlyPeriod.EndDate;
 			meeting.AddMeetingPerson(meetingPerson);
@@ -1213,7 +1163,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(meeting);
+				    .Return(meeting);
 			}
 			using (mocks.Playback())
 			{
@@ -1235,7 +1185,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(rep.LoadAggregate(newId))
-					.Return(null);
+				    .Return(null);
 			}
 			using (mocks.Playback())
 			{
@@ -1308,14 +1258,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
+														       new DateTimePeriod(
 															   2000,
 															   11, 2,
 															   2001,
 															   1, 1));
 
 					IPersonAbsence pAbs = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario,
-													   new DateTimePeriod(2000, 1, 1, 2001,
+												       new DateTimePeriod(2000, 1, 1, 2001,
 															  1, 1));
 					((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss });
 					((ScheduleRange)target[dummyPerson]).Add(pAbs);
@@ -1326,7 +1276,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
 					target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
-								PersonAssignment().Should().Be.Null();
+							    PersonAssignment().Should().Be.Null();
 
 					container.Undo();
 					target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).
@@ -1355,14 +1305,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
+														       new DateTimePeriod(
 															   2000, 11, 1, 2000,
 															   11, 2));
 					IPersonAssignment pAss2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,
 															dummyPerson,
 															new DateTimePeriod(
-																2000, 11, 2,
-																2000, 11, 3));
+															    2000, 11, 2,
+															    2000, 11, 3));
 					((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss, pAss2 });
 					Assert.IsFalse(container.CanUndo());
 					Assert.IsFalse(container.CanRedo());
@@ -1408,7 +1358,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
-															   new DateTimePeriod(
+														       new DateTimePeriod(
 															   2000,
 															   11, 2,
 															   2001,
@@ -1451,11 +1401,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario,
-															   dummyPerson,
-															   new DateTimePeriod
+														       dummyPerson,
+														       new DateTimePeriod
 															   (2000, 11,
-																2, 2001,
-																1, 1));
+															    2, 2001,
+															    1, 1));
 					((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss });
 
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
@@ -1485,7 +1435,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(dictionary.ContainsKey(dummyPerson))
-					.Return(true);
+				    .Return(true);
 			}
 			using (mocks.Playback())
 			{
@@ -1500,7 +1450,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(dictionary.TryGetValue(dummyPerson, out _dummyScheduleRange))
-					.Return(true);
+				    .Return(true);
 			}
 			using (mocks.Playback())
 			{
@@ -1515,7 +1465,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(dictionary[dummyPerson])
-					.Return(_dummyScheduleRange);
+				    .Return(_dummyScheduleRange);
 			}
 			using (mocks.Playback())
 			{
@@ -1528,7 +1478,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[ExpectedException(typeof(NotSupportedException))]
 		public void VerifySet()
 		{
-			target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)), dataPermissionChecker);
+			target[dummyPerson] = new ScheduleRange(target, new ScheduleParameters(scenario, dummyPerson, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)));
 		}
 
 
@@ -1598,7 +1548,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(dictionary.Contains(key))
-					.Return(true);
+				    .Return(true);
 			}
 			using (mocks.Playback())
 			{
@@ -1626,7 +1576,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(dictionary.Count)
-					.Return(12);
+				    .Return(12);
 			}
 			using (mocks.Playback())
 			{
@@ -1644,11 +1594,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			target = new ScheduleDictionaryForTest(scenario, period, dictionary);
 			IEnumerator<KeyValuePair<IPerson, IScheduleRange>> enumerator =
-				mocks.StrictMock<IEnumerator<KeyValuePair<IPerson, IScheduleRange>>>();
+			    mocks.StrictMock<IEnumerator<KeyValuePair<IPerson, IScheduleRange>>>();
 			using (mocks.Record())
 			{
 				Expect.Call(dictionary.GetEnumerator())
-					.Return(enumerator);
+				    .Return(enumerator);
 			}
 			using (mocks.Playback())
 			{
@@ -1664,9 +1614,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			using (mocks.Record())
 			{
 				Expect.Call(dictionary.Remove(dummyPerson))
-					.Return(false);
+				    .Return(false);
 				Expect.Call(dictionary.Remove(new KeyValuePair<IPerson, IScheduleRange>(dummyPerson, _dummyScheduleRange)))
-					.Return(true);
+				    .Return(true);
 			}
 			using (mocks.Playback())
 			{

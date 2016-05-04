@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -18,10 +17,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			: this(scenario, new DateTimePeriod(DateTime.SpecifyKind(startDate.Date,DateTimeKind.Utc), DateTime.SpecifyKind(endDate.Date.AddHours(24),DateTimeKind.Utc))) { }
 
 		public ScheduleDictionaryForTest(IScenario scenario, IScheduleDateTimePeriod period, IDictionary<IPerson, IScheduleRange> dictionary)
-			: base(scenario, period, dictionary, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance())) { }
+			: base(scenario, period, dictionary) { }
 
 		public ScheduleDictionaryForTest(IScenario scenario, DateTimePeriod period)
-			: base(scenario, new ScheduleDateTimePeriod(period), new Dictionary<IPerson, IScheduleRange>(), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance())) { }
+			: base(scenario, new ScheduleDateTimePeriod(period), new Dictionary<IPerson, IScheduleRange>()) { }
 
 
 
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 			else
 			{
-				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
 				scheduleRange.Add(personAssignment);
 				BaseDictionary[person] = scheduleRange;
 			}
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 			else
 			{
-				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAbsence.Person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+				var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, personAbsence.Person, Period.VisiblePeriod));
 				scheduleRange.Add(personAbsence);
 				BaseDictionary.Add(personAbsence.Person, scheduleRange);
 				TakeSnapshot();	
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 					 
 		public void AddScheduleData(IPerson person, params IScheduleData[] data)
 		{
-			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			var scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, person, Period.VisiblePeriod));
 			scheduleRange.AddRange(data);
 			BaseDictionary.Add(person, scheduleRange);
 			TakeSnapshot();
@@ -111,7 +110,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 				if (!BaseDictionary.TryGetValue (scheduleData.Person, out scheduleRange))
 				{
-					scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, scheduleData.Person, Period.VisiblePeriod), new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+					scheduleRange = new ScheduleRange(this, new ScheduleParameters(Scenario, scheduleData.Person, Period.VisiblePeriod));
 					BaseDictionary.Add(scheduleData.Person, scheduleRange);
 				}
 

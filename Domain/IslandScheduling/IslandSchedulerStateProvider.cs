@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Domain.IslandScheduling
 		private void createScheduleDictionary(ISchedulerStateHolder stateholderToLoad)
 		{
 			var dicToLoadFrom = _stateholderToLoadFrom.Schedules;
-			stateholderToLoad.SchedulingResultState.Schedules = new ScheduleDictionary(dicToLoadFrom.Scenario, dicToLoadFrom.Period, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()));
+			stateholderToLoad.SchedulingResultState.Schedules = new ScheduleDictionary(dicToLoadFrom.Scenario, dicToLoadFrom.Period);
 		}
 
 		private void loadSchedules(ISchedulerStateHolder stateholderToLoad)

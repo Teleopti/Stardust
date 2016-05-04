@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private scheduleExposingInternalCollections _target;
 		private IScheduleDictionary _dic;
 	    private IPrincipalAuthorization _principalAuthorization;
-		private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
 		[SetUp]
 		public void Setup()
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_parameters = new ScheduleParameters(_scenario,
 								_person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 		}
 
 		[Test, Ignore("This is no longer valid - maybe it will be soon. Remove if still ignored on main")]
@@ -484,7 +482,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyDefaultConstructor()
 		{
-			ScheduleRange targetTemp = new ScheduleRange(_dic, _parameters, _permissionChecker);
+			ScheduleRange targetTemp = new ScheduleRange(_dic, _parameters);
 			Assert.AreEqual(_parameters.Period, targetTemp.Period);
 			Assert.AreSame(_parameters.Person, targetTemp.Person);
 			Assert.AreSame(_parameters.Scenario, targetTemp.Scenario);
@@ -530,7 +528,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyProperties()
 		{
-			ScheduleRange targetTemp = new ScheduleRange(_dic, _parameters, _permissionChecker);
+			ScheduleRange targetTemp = new ScheduleRange(_dic, _parameters);
 			
                     Assert.AreEqual(_parameters.Period, targetTemp.Period);
                     Assert.AreSame(_parameters.Person, targetTemp.Person);
@@ -541,7 +539,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[ExpectedException(typeof(ArgumentNullException))]
 		public void VerifyScheduleParametersIsNotNull()
 		{
-			new ScheduleRange(_dic, null, _permissionChecker);
+			new ScheduleRange(_dic, null);
 		}
 
 		[Test]
@@ -684,7 +682,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 
 			public scheduleExposingInternalCollections(IScheduleDictionary owner, IScheduleParameters parameters)
-				: base(owner, parameters, new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance()))
+				: base(owner, parameters)
 			{
 			}
 

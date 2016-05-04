@@ -14,42 +14,40 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange, IUnvalidatedScheduleRangeUpdate
-	{
-		private readonly IPersistableScheduleDataPermissionChecker _permissionChecker;
-		private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
-		private ScheduleRange _snapshot;
-		private TimeSpan? _calculatedContractTimeHolder;
-		private TimeSpan? _calculatedTargetTimeHolder;
-		private int? _calculatedTargetScheduleDaysOff;
-		private int? _calculatedScheduleDaysOff;
+    public class ScheduleRange : Schedule, IScheduleRange, IValidateScheduleRange, IUnvalidatedScheduleRangeUpdate
+    {
+        private IList<IScheduleData> _scheduleObjectsWithNoPermissions;
+        private ScheduleRange _snapshot;
+        private TimeSpan? _calculatedContractTimeHolder;
+        private TimeSpan? _calculatedTargetTimeHolder;
+        private int? _calculatedTargetScheduleDaysOff;
+        private int? _calculatedScheduleDaysOff;
 		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
-		private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
+        private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 
-		public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters, IPersistableScheduleDataPermissionChecker permissionChecker)
-			: base(owner, parameters)
-		{
-			_permissionChecker = permissionChecker;
-			_scheduleObjectsWithNoPermissions = new List<IScheduleData>();
-			_availablePeriods = new Lazy<IEnumerable<DateOnlyPeriod>>(() =>
-				{
-					var timeZone = Person.PermissionInformation.DefaultTimeZone();
-					var dop = Period.ToDateOnlyPeriod(timeZone);
-					return PrincipalAuthorization.Instance()
-												 .PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop,
-																   Person);
-				});
-		}
+        public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters)
+            : base(owner, parameters)
+        {
+            _scheduleObjectsWithNoPermissions = new List<IScheduleData>();
+	        _availablePeriods = new Lazy<IEnumerable<DateOnlyPeriod>>(() =>
+		        {
+			        var timeZone = Person.PermissionInformation.DefaultTimeZone();
+			        var dop = Period.ToDateOnlyPeriod(timeZone);
+			        return PrincipalAuthorization.Instance()
+			                                     .PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop,
+			                                                       Person);
+		        });
+        }
 
-		public ScheduleRange Snapshot
-		{
-			get { return _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker)); }
-		}
+        public ScheduleRange Snapshot
+        {
+            get { return _snapshot ?? (_snapshot = new ScheduleRange(Owner, this)); }
+        }
 
-		public IEnumerable<DateOnlyPeriod> AvailablePeriods()
-		{
-			return _availablePeriods.Value;
-		}
+        public IEnumerable<DateOnlyPeriod> AvailablePeriods()
+        {
+            return _availablePeriods.Value;
+        }
 
 		public bool Contains(IScheduleData scheduleData, bool includeNonPermitted)
 		{
@@ -89,43 +87,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailablePeriods());
 		}
 
-		public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
-		{
-			var period = Owner.Period.VisiblePeriod.ToDateOnlyPeriod(Person.PermissionInformation.DefaultTimeZone());
+        public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
+        {
+            var period = Owner.Period.VisiblePeriod.ToDateOnlyPeriod(Person.PermissionInformation.DefaultTimeZone());
 
-			BusinessRuleResponseInternalCollection.Clear();
-			IList<IScheduleDay> scheduleDays = ScheduledDayCollection(period).ToList();
+            BusinessRuleResponseInternalCollection.Clear();
+	        IList<IScheduleDay> scheduleDays = ScheduledDayCollection(period).ToList();
 
-			if (newBusinessRuleCollection != null)
-			{
-				IDictionary<IPerson, IScheduleRange> ranges = new Dictionary<IPerson, IScheduleRange>();
-				ranges.Add(Person, this);
-				newBusinessRuleCollection.CheckRules(ranges, scheduleDays);
-			}
-		}
+            if (newBusinessRuleCollection != null)
+            {
+                IDictionary<IPerson, IScheduleRange> ranges = new Dictionary<IPerson, IScheduleRange>();
+                ranges.Add(Person, this);
+                newBusinessRuleCollection.CheckRules(ranges, scheduleDays);
+            }
+        }
 
-		protected override bool CheckPermission(IScheduleData persistableScheduleData)
-		{
-			var hasPermission = false;
-			foreach (var availablePeriod in AvailablePeriods())
-			{
-				if (persistableScheduleData.BelongsToPeriod(availablePeriod))
-				{
-					hasPermission = true;
-					break;
-				}
-			}
+        protected override bool CheckPermission(IScheduleData persistableScheduleData)
+        {
+            var hasPermission = false;
+            foreach (var availablePeriod in AvailablePeriods())
+            {
+                if (persistableScheduleData.BelongsToPeriod(availablePeriod))
+                {
+                    hasPermission = true;
+                    break;
+                }
+            }
 
-			if (!hasPermission)
-			{
-				if (Owner.PermissionsEnabled)
-				{
-					throw new PermissionException("Cannot add " + persistableScheduleData + " to the collection.");
-				}
-				_scheduleObjectsWithNoPermissions.Add(persistableScheduleData);
-			}
-			return hasPermission;
-		}
+            if (!hasPermission)
+            {
+                if (Owner.PermissionsEnabled)
+                {
+                    throw new PermissionException("Cannot add " + persistableScheduleData + " to the collection.");
+                }
+                _scheduleObjectsWithNoPermissions.Add(persistableScheduleData);
+            }
+            return hasPermission;
+        }
 
 		internal IList<IPersonMeeting> DeleteMeetingFromDataSource(Guid id)
 		{
@@ -155,68 +153,90 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		//don't use this from client. use scheduledictionary.modify instead!
 		public void ModifyInternal(IScheduleDay part)
 		{
-			var fullData = PersistableScheduleDataInternalCollection().ToList();
-			var permittedData = _permissionChecker.GetPermittedData(fullData);
-			permittedData
-				.Where(d => d.BelongsToPeriod(part.DateOnlyAsPeriod))
-				.ForEach(Remove);
+		    var authorization = PrincipalAuthorization.Instance();
 
-			AddRange(_permissionChecker.GetPermittedData(part.PersistableScheduleDataCollection()));
+			ICollection<IPersistableScheduleData> permittedData = new List<IPersistableScheduleData>();
+			IEnumerable<IPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
 
-			_calculatedContractTimeHolder = null;
-			_calculatedTargetTimeHolder = null;
-			_calculatedTargetScheduleDaysOff = null;
-			_calculatedScheduleDaysOff = null;
-			_shiftCategoryFairnessHolder = null;
-		}
+			foreach (IPersistableScheduleData persistableScheduleData in fullData)
+		    {
+                var forAuthorization = new PersistableScheduleDataForAuthorization(persistableScheduleData);
+		        if(persistableScheduleData.BelongsToPeriod(part.DateOnlyAsPeriod)
+                    && 
+                   authorization.IsPermitted(forAuthorization.FunctionPath, forAuthorization.DateOnly, forAuthorization.Person))
+                    permittedData.Add(persistableScheduleData);
+                    
+		    }
 
-		//private IList<IPersistableScheduleData> getPermittedData(
-		//	IEnumerable<IPersistableScheduleData> persistableScheduleData)
-		//{
-		//	var authorization = PrincipalAuthorization.Instance();
-		//	var permittedData = persistableScheduleData.Where(d =>
-		//	{
-		//		var forAuthorization =
-		//			new PersistableScheduleDataForAuthorization(d);
-		//		return authorization.IsPermitted(
-		//			forAuthorization.FunctionPath,
-		//			forAuthorization.DateOnly,
-		//			forAuthorization.Person);
-		//	}).ToList();
-		//	return permittedData;
-		//}
+			permittedData.ForEach(Remove);
 
+		    AddRange(part.PersistableScheduleDataCollection().Where(d =>
+		                                                                {
+		                                                                    var forAuthorization =
+		                                                                        new PersistableScheduleDataForAuthorization(d);
+		                                                                    return
+		                                                                        authorization.IsPermitted(
+		                                                                            forAuthorization.FunctionPath,
+		                                                                            forAuthorization.DateOnly,
+		                                                                            forAuthorization.Person);
+		                                                                }));
 
+            _calculatedContractTimeHolder = null;
+            _calculatedTargetTimeHolder = null;
+            _calculatedTargetScheduleDaysOff = null;
+            _calculatedScheduleDaysOff = null;
+            _shiftCategoryFairnessHolder = null;
+        }
 
+        public class PersistableScheduleDataForAuthorization
+        {
+			private readonly IPersistableScheduleData _persistableScheduleData;
 
-		private IFairnessValueResult fairnessValue(DateTimePeriod period)
-		{
-			IFairnessValueResult ret = new FairnessValueResult();
-			foreach (var scheduleData in ScheduleDataInternalCollection())
-			{
-				if (!(scheduleData is PersonAssignment))
-					continue;
+			public PersistableScheduleDataForAuthorization(IPersistableScheduleData persistableScheduleData)
+            {
+                _persistableScheduleData = persistableScheduleData;
+            }
 
-				if (!period.Contains(scheduleData.Period.StartDateTime))
-					continue;
+            public string FunctionPath { get { return _persistableScheduleData.FunctionPath; } }
+
+            public IPerson Person { get { return _persistableScheduleData.Person; } }
+
+            public DateOnly DateOnly { get
+            {
+                return
+                    new DateOnly(
+                        _persistableScheduleData.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
+            } }
+        }
+
+        private IFairnessValueResult fairnessValue(DateTimePeriod period)
+        {
+            IFairnessValueResult ret = new FairnessValueResult();
+            foreach (var scheduleData in ScheduleDataInternalCollection())
+            {
+                if (!(scheduleData is PersonAssignment))
+                    continue;
+
+                if (!period.Contains(scheduleData.Period.StartDateTime))
+                    continue;
 
 				var assignment = (IPersonAssignment)scheduleData;
-				if (assignment.ShiftCategory == null)
-					continue;
+                if (assignment.ShiftCategory == null)
+                    continue;
 
 				ret.TotalNumberOfShifts += 1;
-			}
-			return ret;
-		}
+            }
+            return ret;
+        }
 
-		public IFairnessValueResult FairnessValue()
-		{
-			DateTimePeriod period = VisiblePeriodMinusFourWeeksPeriod();
-			return fairnessValue(period);
-		}
+        public IFairnessValueResult FairnessValue()
+        {
+            DateTimePeriod period = VisiblePeriodMinusFourWeeksPeriod();
+            return fairnessValue(period);
+        }
 
-		public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
-		{
+	    public TimeSpan CalculatedContractTimeHolderOnPeriod(DateOnlyPeriod periodToCheck)
+	    {
 
 			if (!_calculatedContractTimeHolder.HasValue)
 			{
@@ -226,46 +246,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			return _calculatedContractTimeHolder.Value;
-		}
+	    }
 
-		public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
-		{
-			if (!_calculatedTargetTimeHolder.HasValue)
-			{
-				var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
-				_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
-				_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
-			}
+	    public TimeSpan? CalculatedTargetTimeHolder(DateOnlyPeriod periodToCheck)
+	    {
+		    if (!_calculatedTargetTimeHolder.HasValue)
+		    {
+			    var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
+			    _calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
+			    _calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
+		    }
 
-			return _calculatedTargetTimeHolder;
-		}
+		    return _calculatedTargetTimeHolder;
+	    }
 
-		public int CalculatedScheduleDaysOffOnPeriod(DateOnlyPeriod periodToCheck)
-		{
+	    public int CalculatedScheduleDaysOffOnPeriod(DateOnlyPeriod periodToCheck)
+	    {
 
-			if (!_calculatedScheduleDaysOff.HasValue)
-			{
-				var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this, periodToCheck);
-				_calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
-				_calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
-			}
+		    if (!_calculatedScheduleDaysOff.HasValue)
+		    {
+			    var timeAndDaysOffTuple = new CurrentScheduleSummaryCalculator().GetCurrent(this, periodToCheck);
+			    _calculatedContractTimeHolder = timeAndDaysOffTuple.Item1;
+			    _calculatedScheduleDaysOff = timeAndDaysOffTuple.Item2;
+		    }
 
-			return _calculatedScheduleDaysOff.Value;
-		}
+		    return _calculatedScheduleDaysOff.Value;
+	    }
 
-		public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
-		{
-			if (!_calculatedTargetScheduleDaysOff.HasValue)
-			{
-				var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
-				_calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
-				_calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
-			}
+	    public int? CalculatedTargetScheduleDaysOff(DateOnlyPeriod periodToCheck)
+	    {
+		    if (!_calculatedTargetScheduleDaysOff.HasValue)
+		    {
+			    var timeAndDaysOffTuple = new TargetScheduleSummaryCalculator().GetTargets(this, periodToCheck);
+			    _calculatedTargetTimeHolder = timeAndDaysOffTuple.Item1;
+			    _calculatedTargetScheduleDaysOff = timeAndDaysOffTuple.Item2;
+		    }
 
-			return _calculatedTargetScheduleDaysOff;
-		}
+		    return _calculatedTargetScheduleDaysOff;
+	    }
 
-		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
+	    public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
 			var canSeeUnpublished =
 				PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
@@ -284,19 +304,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return getScheduledDayCollection(dateOnlyPeriod, true);
 		}
 
-		public void TakeSnapshot()
-		{
-			_snapshot = (ScheduleRange)Clone();
-			clearSnapshotsSnapshot();
-		}
+        public void TakeSnapshot()
+        {
+            _snapshot = (ScheduleRange)Clone();
+            clearSnapshotsSnapshot();
+        }
 
-		private void clearSnapshotsSnapshot()
-		{
-			if (_snapshot != null)
-			{
-				_snapshot._snapshot = null;
-			}
-		}
+        private void clearSnapshotsSnapshot()
+        {
+            if (_snapshot != null)
+            {
+                _snapshot._snapshot = null;
+            }
+        }
 
 		//TODO only here temporarly, will be solved when refact validations
 		public IList<IBusinessRuleResponse> ExposedBusinessRuleResponseCollection()
@@ -328,8 +348,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		//use this one only if you know what you're doing!
-		//not part of IScheduleRange. Use with care!
+        //use this one only if you know what you're doing!
+        //not part of IScheduleRange. Use with care!
 		public virtual void SolveConflictBecauseOfExternalUpdate(IScheduleData databaseVersion, bool discardMyChanges)
 		{
 			// replace version in snapshot with database version
@@ -358,68 +378,68 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						myVersioned.SetVersion(databaseVersioned.Version.Value);
 				}
 			}
-		}
+        }
 
-		//use this one only if you know what you're doing!
-		//not part of IScheduleRange. Use with care!
-		public IPersistableScheduleData SolveConflictBecauseOfExternalDeletion(Guid id, bool discardMyChanges)
-		{
-			foreach (var scheduleData in Snapshot.ScheduleDataInternalCollection())
-			{
-				var casted = scheduleData as IPersistableScheduleData;
-				if (casted != null && casted.Id == id)
-				{
-					var current = ((IPersistableScheduleData) find(casted));
-					Snapshot.Remove(casted);
-					if (current != null)
-					{
-						Remove(casted);
+        //use this one only if you know what you're doing!
+        //not part of IScheduleRange. Use with care!
+	    public IPersistableScheduleData SolveConflictBecauseOfExternalDeletion(Guid id, bool discardMyChanges)
+	    {
+		    foreach (var scheduleData in Snapshot.ScheduleDataInternalCollection())
+		    {
+			    var casted = scheduleData as IPersistableScheduleData;
+			    if (casted != null && casted.Id == id)
+			    {
+				    var current = ((IPersistableScheduleData) find(casted));
+				    Snapshot.Remove(casted);
+				    if (current != null)
+				    {
+					    Remove(casted);
 
 						// if overwrite other's deletion, mimic an add
-						if (!discardMyChanges)
-						{
-							var transientCurrent = current.CreateTransient();
-							Add(transientCurrent);
-						}
-					}
-					return casted;
-				}
-			}
-			return null;
-		}
+					    if (!discardMyChanges)
+					    {
+						    var transientCurrent = current.CreateTransient();
+						    Add(transientCurrent);
+					    }
+				    }
+				    return casted;
+			    }
+		    }
+		    return null;
+	    }
 
-		private IScheduleData find(IScheduleData scheduleData)
-		{
-			foreach (var data in ScheduleDataInternalCollection())
-			{
-				if (data.Equals(scheduleData))
-					return data;
-			}
-			return null;
-		}
+	    private IScheduleData find(IScheduleData scheduleData)
+        {
+            foreach (var data in ScheduleDataInternalCollection())
+            {
+                if (data.Equals(scheduleData))
+                    return data;
+            }
+            return null;
+        }
 
-		public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
-		{
-			return ((ISchedule) this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
-		}
+        public DateTimePeriod VisiblePeriodMinusFourWeeksPeriod()
+        {
+        	return ((ISchedule) this).Owner.Period.VisiblePeriodMinusFourWeeksPeriod();
+        }
 
-		public IShiftCategoryFairnessHolder CachedShiftCategoryFairness()
-		{
-			if (_shiftCategoryFairnessHolder == null)
-			{
-				ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
-				TimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
-				DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
-				_shiftCategoryFairnessHolder = creator.CreatePersonShiftCategoryFairness(this, period);
-			}
-			return _shiftCategoryFairnessHolder;
-		}
+        public IShiftCategoryFairnessHolder CachedShiftCategoryFairness()
+        {
+            if (_shiftCategoryFairnessHolder == null)
+            {
+                ShiftCategoryFairnessCreator creator = new ShiftCategoryFairnessCreator();
+                TimeZoneInfo timeZoneInfo = this.Person.PermissionInformation.DefaultTimeZone();
+                DateOnlyPeriod period = VisiblePeriodMinusFourWeeksPeriod().ToDateOnlyPeriod(timeZoneInfo);
+                _shiftCategoryFairnessHolder = creator.CreatePersonShiftCategoryFairness(this, period);
+            }
+            return _shiftCategoryFairnessHolder;
+        }
 
 		public void ForceRecalculationOfTargetTimeContractTimeAndDaysOff()
 		{
 			_calculatedContractTimeHolder = null;
 			_calculatedScheduleDaysOff = null;
-			_calculatedTargetTimeHolder = null;
+		    _calculatedTargetTimeHolder = null;
 		}
 
 						public bool IsEmpty()
@@ -427,23 +447,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return !PersistableScheduleDataInternalCollection().Any();
 			}
 
-		public void Reassociate(IUnitOfWork unitOfWork)
-		{
-			unitOfWork.Reassociate(PersistableScheduleDataInternalCollection());
-		}
+	    public void Reassociate(IUnitOfWork unitOfWork)
+	    {
+		    unitOfWork.Reassociate(PersistableScheduleDataInternalCollection());
+	    }
 
-		protected override void CloneDerived(Schedule clone)
-		{
-			var typedClone = (ScheduleRange)clone;
-			typedClone._snapshot = null;
-			typedClone._scheduleObjectsWithNoPermissions = new List<IScheduleData>();
-			typedClone._shiftCategoryFairnessHolder = null;
-		}
+	    protected override void CloneDerived(Schedule clone)
+        {
+            var typedClone = (ScheduleRange)clone;
+            typedClone._snapshot = null;
+            typedClone._scheduleObjectsWithNoPermissions = new List<IScheduleData>();
+            typedClone._shiftCategoryFairnessHolder = null;
+        }
 
 		private IEnumerable<IScheduleDay> getScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod, bool canSeeUnpublished)
-		{
-			var timeZone = Person.PermissionInformation.DefaultTimeZone();
-			var availablePeriods = AvailablePeriods();
+	    {
+		    var timeZone = Person.PermissionInformation.DefaultTimeZone();
+		    var availablePeriods = AvailablePeriods();
 
 			var retList = new List<IScheduleDay>();
 			foreach (var date in dateOnlyPeriod.DayCollection())
@@ -452,34 +472,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
 			}
 			return retList;
-		}
-	}
-	public class PersistableScheduleDataForAuthorization : IPersistableScheduleDataAuthorizer
-	{
-		private readonly IPersistableScheduleData _persistableScheduleData;
-
-		public PersistableScheduleDataForAuthorization(IPersistableScheduleData persistableScheduleData)
-		{
-			_persistableScheduleData = persistableScheduleData;
-		}
-
-		public string FunctionPath { get { return _persistableScheduleData.FunctionPath; } }
-
-		public IPerson Person { get { return _persistableScheduleData.Person; } }
-
-		public DateOnly DateOnly
-		{
-			get
-			{
-				return
-					new DateOnly(
-						_persistableScheduleData.Period.StartDateTimeLocal(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
-			}
-		}
-	}
-
-	public interface IPersistableScheduleDataAuthorizer
-	{
-	}
-
+	    }
+    }
 }

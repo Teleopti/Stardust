@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,13 +21,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private DateTimePeriod _schedulePeriod;
         private IScheduleRange _scheduleRange;
         private NightlyRestRule _target;
-	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
         [SetUp]
         public void Setup()
         {
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-			_permissionChecker = new PersistableScheduleDataPermissionChecker(PrincipalAuthorization.Instance());
 
             _person = PersonFactory.CreatePerson();
             _nightlyRest = new TimeSpan(8, 0, 0);
@@ -39,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _schedulePeriod = new DateTimePeriod(2007, 8, 1, 2007, 9, 1);
             var dic = new ScheduleDictionaryForTest(_scenario, new ScheduleDateTimePeriod(_schedulePeriod),
                                                     new Dictionary<IPerson, IScheduleRange>());
-            _scheduleRange = new ScheduleRange(dic, new ScheduleParameters(_scenario, _person, _schedulePeriod), _permissionChecker);
+            _scheduleRange = new ScheduleRange(dic, new ScheduleParameters(_scenario, _person, _schedulePeriod));
             _target = new NightlyRestRule();
 
         }
