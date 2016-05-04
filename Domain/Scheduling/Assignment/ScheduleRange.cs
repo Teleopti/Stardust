@@ -169,26 +169,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_calculatedScheduleDaysOff = null;
 			_shiftCategoryFairnessHolder = null;
 		}
-
-		//private IList<IPersistableScheduleData> getPermittedData(
-		//	IEnumerable<IPersistableScheduleData> persistableScheduleData)
-		//{
-		//	var authorization = PrincipalAuthorization.Instance();
-		//	var permittedData = persistableScheduleData.Where(d =>
-		//	{
-		//		var forAuthorization =
-		//			new PersistableScheduleDataForAuthorization(d);
-		//		return authorization.IsPermitted(
-		//			forAuthorization.FunctionPath,
-		//			forAuthorization.DateOnly,
-		//			forAuthorization.Person);
-		//	}).ToList();
-		//	return permittedData;
-		//}
-
-
-
-
 		private IFairnessValueResult fairnessValue(DateTimePeriod period)
 		{
 			IFairnessValueResult ret = new FairnessValueResult();

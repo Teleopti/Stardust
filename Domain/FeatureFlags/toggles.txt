@@ -80,6 +80,7 @@ WfmTeamSchedule_RemoveAbsence_36705 = RC
 WfmTeamSchedule_AddActivity_37541 = RC
 WfmTeamSchedule_RemoveActivity_37743 = RC
 WfmTeamSchedule_PrepareForRelease_37752 = DEV
+WebByPassDefaultPermissionCheck_37984 = RC
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Basic_35986 = true

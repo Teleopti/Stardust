@@ -244,6 +244,7 @@
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
+    <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduledExcludeDayOff.cs" />
