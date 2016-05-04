@@ -1,7 +1,16 @@
 ﻿<div class="move-activity">
 	<div class="sidenav-header">{{'MoveActivity'|translate}}</div>
 	<md-content layout-padding>
-
-
+		<form name="moveActivityForm">
+			<activity-time-range-picker class="activity-time-range" custom-tabindex="{{::vm.tabindex}}" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
+			</activity-time-range-picker>
+		</form>
+		<button id="applyActivity" class="wfm-btn form-submit"
+				tabindex="{{::vm.tabindex}}"
+				ng-class="{'wfm-btn-primary': moveActivityForm.$valid && vm.isInputValid(), 'wfm-btn-primary-disabled': !(moveActivityForm.$valid && vm.isInputValid())}"
+				ng-disabled="moveActivityForm.$valid && vm.isInputValid()?'':'disabled'"
+				ng-click="vm.addActivity()">
+			{{'Apply' | translate}}
+		</button>
 	</md-content>
 </div>

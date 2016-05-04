@@ -12,6 +12,11 @@
 
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
+
+		vm.scheduleDateFunction = function () {
+			return vm.scheudleDate;
+		};
+
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;

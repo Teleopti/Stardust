@@ -9,12 +9,14 @@
 			restrict: 'E',
 			scope: {
 				selectedDate: '&',
-				defaultStart:'&?',
-				actionsAfterActivityApply: '&?'
+				defaultStart: '&?',
+				actionsAfterActivityApply: '&?',
+				tabindex: '@?'
 			},
 			templateUrl: 'js/teamSchedule/html/moveActivity.html',
-			controller: moveActivityPanelCtrl,
-			controlerAs: 'vm'
+			controller: [moveActivityPanelCtrl],
+			controllerAs: 'vm',
+			bindToController: true
 		};
 	}
 
