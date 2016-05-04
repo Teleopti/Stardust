@@ -1,7 +1,6 @@
 ﻿using System.Web.Http.ExceptionHandling;
 using log4net;
 using Stardust.Node.Extensions;
-using Stardust.Node.Helpers;
 
 namespace Stardust.Node
 {

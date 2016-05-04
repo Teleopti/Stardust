@@ -90,7 +90,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="JobHandlersTests.cs" />
-    <Compile Include="ManagerUriBuilderTests.cs" />
     <Compile Include="NodeConfigurationTests.cs" />
     <Compile Include="NodeControllerTests.cs" />
     <Compile Include="NodeModuleTest.cs" />

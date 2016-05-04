@@ -24,8 +24,7 @@ namespace Stardust.Node
 		}
 
 		private NodeConfiguration NodeConfiguration { get; set; }
-
-
+		
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{

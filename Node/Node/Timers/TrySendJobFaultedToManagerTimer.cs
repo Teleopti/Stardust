@@ -20,7 +20,7 @@ namespace Stardust.Node.Timers
 		                                       IHttpSender httpSender,
 		                                       double interval = 500) : base(nodeConfiguration,
 		                                                                     nodeConfiguration
-			                                                                     .GetManagerJobHasFaileTemplatedUri(),
+			                                                                     .GetManagerJobHasFailedTemplatedUri(),
 		                                                                     sendJobDetailToManagerTimer,
 		                                                                     httpSender,
 		                                                                     interval)
