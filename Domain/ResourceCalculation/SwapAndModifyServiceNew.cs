@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -13,21 +12,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class SwapAndModifyServiceNew : ISwapAndModifyServiceNew
 	{
 		private readonly ISwapServiceNew _swapService;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly IPersistableScheduleDataPermissionChecker _permissionChecker;
+	    private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 
-		public SwapAndModifyServiceNew(ISwapServiceNew swapService, IScheduleDayChangeCallback scheduleDayChangeCallback, IPersistableScheduleDataPermissionChecker permissionChecker)
-		{
+	    public SwapAndModifyServiceNew(ISwapServiceNew swapService, IScheduleDayChangeCallback scheduleDayChangeCallback)
+        {
 			if(swapService == null)
 				throw new ArgumentNullException("swapService");
 
-			_swapService = swapService;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
-			_permissionChecker = permissionChecker;
-		}
+            _swapService = swapService;
+            _scheduleDayChangeCallback = scheduleDayChangeCallback;
+        }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter, TrackedCommandInfo trackedCommandInfo = null)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        public IEnumerable<IBusinessRuleResponse> Swap(IPerson person1, IPerson person2, IList<DateOnly> dates, IList<DateOnly> lockedDates, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTagSetter scheduleTagSetter, OptionalParamsForSwapShift optionalParams = null)
 		{
 			InParameter.NotNull("person1", person1);
 			InParameter.NotNull("person2", person2);
@@ -41,14 +38,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if(lockedDates == null)
 				throw new ArgumentNullException("lockedDates");
 
+		    var authorizationService = PrincipalAuthorization.Instance();
+            var applicationFunction = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 			var modifiedParts = new List<IScheduleDay>();
-			if (dates.Any(dateOnly => !_permissionChecker.IsModifyPersonAssPermitted(dateOnly, person1) || !_permissionChecker.IsModifyPersonAssPermitted(dateOnly, person2)))
-			{
-				throw new PermissionException("No permission to change the person assignment");
-			}
+	        var trackedCommandInfo = optionalParams == null ? null : optionalParams.TrackedCommandInfo;
+	        var checkModifyAssPermission = optionalParams == null || optionalParams.CheckModifyAssPermission;
 			
 			foreach (var dateOnly in dates)
 			{
+                if (checkModifyAssPermission &&(!authorizationService.IsPermitted(applicationFunction, dateOnly, person1) || !authorizationService.IsPermitted(applicationFunction, dateOnly, person2)))
+					throw new PermissionException("No permission to change the person assignment");
+
 				var part1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
 				var part2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
 
@@ -83,5 +83,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_swapService.Init(selectedSchedules);
 			return _swapService.Swap(scheduleDictionary, trackedCommandInfo);
 		}
+	}
+
+	public class OptionalParamsForSwapShift
+	{
+		public TrackedCommandInfo TrackedCommandInfo { get; set; }
+		public bool CheckModifyAssPermission { get; set; }
 	}
 }
