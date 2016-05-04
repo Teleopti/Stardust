@@ -83,20 +83,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private static bool jumpOutEarly(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IPerson agent, DateOnly date)
 		{
-			if (!scheduleDay.PersonAssignment(true).ShiftLayers.IsEmpty())
-				return true;
-
-			if (!scheduleDay.PersonAbsenceCollection().IsEmpty())
-				return true;
 			if (overtimePreferences.ShiftBagToUse == null)
 				return true;
-
+			if (!scheduleDay.PersonAssignment(true).ShiftLayers.IsEmpty())
+				return true;
+			if (!scheduleDay.PersonAbsenceCollection().IsEmpty())
+				return true;
 			var definitionSets = agent.Period(date)
 				.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Where(
 					x => x.MultiplicatorType == MultiplicatorType.Overtime);
 			if (!definitionSets.Contains(overtimePreferences.OvertimeType))
 				return true;
-
 			if (overtimePreferences.AvailableAgentsOnly)
 			{
 				if (!scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().
