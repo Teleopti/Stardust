@@ -72,7 +72,7 @@
 					}
 					timeout = Date.now();
 					$sessionStorage.$reset();
-					window.location.href = 'Authentication';
+					window.location.href = 'Authentication?redirectUrl='+window.location.hash;
 				};
 
 				return service;
