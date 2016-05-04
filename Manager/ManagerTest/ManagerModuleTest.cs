@@ -15,55 +15,44 @@ namespace ManagerTest
 		[SetUp]
 		public void SetUp()
 		{
-			_containerBuilder = new ContainerBuilder();
-
-			_containerBuilder.RegisterType<NodeManager>().SingleInstance();
-			_containerBuilder.RegisterType<JobManager>().SingleInstance();
-			_containerBuilder.RegisterType<Validator>().SingleInstance();
-			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
-			_containerBuilder.RegisterType<ManagerController>();
+			ContainerBuilder containerBuilder = new ContainerBuilder();
 
 			ManagerConfiguration config = new ManagerConfiguration(
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20);
 
-			_containerBuilder.RegisterInstance(config).SingleInstance();
-			_containerBuilder.RegisterType<RetryPolicyProvider>().SingleInstance();
-			_containerBuilder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
-			_containerBuilder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
-			_containerBuilder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
+			containerBuilder.RegisterModule(new ManagerModule(config));
+			_container = containerBuilder.Build();
 		}
 
-		private ContainerBuilder _containerBuilder;
+		private IContainer _container;
 
 		[Test]
-		public void ShouldResolveManagerController()
+		public void ShouldResolveClasses()
 		{
-			using (var ioc = _containerBuilder.Build())
+			using (var scope = _container.BeginLifetimeScope())
 			{
-				using (var scope = ioc.BeginLifetimeScope())
-				{
-					var controller = scope.Resolve<ManagerController>();
-
-					controller.Should().Not.Be.Null();
-				}
+				scope.Resolve<ManagerController>().Should().Not.Be.Null();
+				scope.Resolve<ManagerConfiguration>().Should().Not.Be.Null();
+				scope.Resolve<NodeManager>().Should().Not.Be.Null();
+				scope.Resolve<JobManager>().Should().Not.Be.Null();
+				scope.Resolve<Validator>().Should().Not.Be.Null();
+				scope.Resolve<CreateSqlCommandHelper>().Should().Not.Be.Null();
+				scope.Resolve<RetryPolicyProvider>().Should().Not.Be.Null();
 			}
 		}
 
 		[Test]
-		public void ShouldResolveStuff()
+		public void ShouldResolveInterfaces()
 		{
-			using (var ioc = _containerBuilder.Build())
+			using (var scope = _container.BeginLifetimeScope())
 			{
-				using (var scope = ioc.BeginLifetimeScope())
-				{
-					scope.Resolve<IHttpSender>();
-					scope.Resolve<IJobRepository>();
-					scope.Resolve<IWorkerNodeRepository>();
-					
-					ioc.IsRegistered<IHttpSender>().Should().Be.True();
-					ioc.IsRegistered<IJobRepository>().Should().Be.True();
-					ioc.IsRegistered<IWorkerNodeRepository>().Should().Be.True();
-				}
+				scope.Resolve<IHttpSender>().Should().Not.Be.Null();
+				scope.Resolve<IJobRepository>().Should().Not.Be.Null();
+				scope.Resolve<IWorkerNodeRepository>().Should().Not.Be.Null();
+
+				_container.IsRegistered<IHttpSender>().Should().Be.True();
+				_container.IsRegistered<IJobRepository>().Should().Be.True();
+				_container.IsRegistered<IWorkerNodeRepository>().Should().Be.True();
 			}
 		}
 	}

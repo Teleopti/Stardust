@@ -18,7 +18,7 @@ namespace Stardust.Node
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
-			builder.RegisterInstance(_nodeConfiguration).As<NodeConfiguration>();
+			builder.RegisterInstance(_nodeConfiguration).As<NodeConfiguration>().SingleInstance();
 			builder.RegisterType<InvokeHandler>().As<IInvokeHandler>().SingleInstance();
 			builder.RegisterApiControllers(typeof (NodeController).Assembly);
 

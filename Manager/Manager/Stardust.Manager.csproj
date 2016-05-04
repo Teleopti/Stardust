@@ -102,6 +102,7 @@
     <Compile Include="Interfaces\IHttpSender.cs" />
     <Compile Include="Interfaces\IJobRepository.cs" />
     <Compile Include="Interfaces\IWorkerNodeRepository.cs" />
+    <Compile Include="ManagerModule.cs" />
     <Compile Include="ManagerStarter.cs" />
     <Compile Include="Models\JobQueueItem.cs" />
     <Compile Include="Models\JobFailed.cs" />
