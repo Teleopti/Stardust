@@ -61,7 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Fakes\InvokeHandlers\InvokeHandlerFake.cs" />
     <Compile Include="Fakes\InvokeHandlers\LongRunningInvokeHandlerFake.cs" />
     <Compile Include="Fakes\InvokeHandlers\ShortRunningInvokeHandlerFake.cs" />
     <Compile Include="Fakes\InvokeHandlers\ThrowExceptionInvokeHandlerFake.cs" />
