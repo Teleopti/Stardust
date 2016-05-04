@@ -1,6 +1,5 @@
 ﻿using System.Configuration;
 using Autofac;
-using ManagerTest.Database;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
@@ -11,7 +10,7 @@ using Stardust.Manager.Validations;
 namespace ManagerTest
 {
 	[TestFixture]
-	public class ManagerModuleTest : DatabaseTest
+	public class ManagerModuleTest
 	{
 		[SetUp]
 		public void SetUp()
@@ -32,7 +31,6 @@ namespace ManagerTest
 			_containerBuilder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
 			_containerBuilder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
 			_containerBuilder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
-
 		}
 
 		private ContainerBuilder _containerBuilder;

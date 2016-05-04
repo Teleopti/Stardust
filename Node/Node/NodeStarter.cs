@@ -3,20 +3,16 @@ using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using Autofac.Integration.WebApi;
 using log4net;
-using Microsoft.Owin.Host.HttpListener;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Timers;
-using Stardust.Node.Workers;
 
 namespace Stardust.Node
 {
-	public class NodeStarter : INodeStarter
+	public class NodeStarter
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStarter));
 
@@ -48,36 +44,22 @@ namespace Stardust.Node
 			using (WebApp.Start(nodeAddress,
 			                    appBuilder =>
 			                    {
-									string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
-									OwinHttpListener owinListener = (OwinHttpListener)appBuilder.Properties[owinListenerName];
+									//string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
+									//OwinHttpListener owinListener = (OwinHttpListener)appBuilder.Properties[owinListenerName];
 
-									int maxAccepts;
-									int maxRequests;
-									owinListener.GetRequestProcessingLimits(out maxAccepts, out maxRequests);
+									//int maxAccepts;
+									//int maxRequests;
+									//owinListener.GetRequestProcessingLimits(out maxAccepts, out maxRequests);
 
-									owinListener.SetRequestQueueLimit(int.MaxValue);
-									owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
+									//owinListener.SetRequestQueueLimit(int.MaxValue);
+									//owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
 
 									var containerBuilder = new ContainerBuilder();
 
-				                    containerBuilder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
+									//containerBuilder.RegisterInstance(nodeConfiguration);
+									containerBuilder.RegisterModule(new NodeModule(nodeConfiguration));
 
-				                    containerBuilder.RegisterType<InvokeHandler>().As<IInvokeHandler>().SingleInstance().EnableClassInterceptors();
-				                    containerBuilder.RegisterType<NodeController>().SingleInstance();
-
-				                    containerBuilder.RegisterApiControllers(typeof (NodeController).Assembly);
-
-				                    containerBuilder.RegisterInstance(nodeConfiguration);
-									
-									containerBuilder.RegisterType<TrySendJobDetailToManagerTimer>().SingleInstance();
-									containerBuilder.RegisterType<TrySendNodeStartUpNotificationToManagerTimer>().SingleInstance();
-									containerBuilder.RegisterType<TrySendJobDoneStatusToManagerTimer>().SingleInstance();
-									containerBuilder.RegisterType<PingToManagerTimer>().As<System.Timers.Timer>().SingleInstance();
-									containerBuilder.RegisterType<TrySendJobFaultedToManagerTimer>().SingleInstance();
-									containerBuilder.RegisterType<TrySendJobCanceledToManagerTimer>().SingleInstance();
-				                    containerBuilder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().SingleInstance();
-
-				                    containerBuilder.Update(container);
+									containerBuilder.Update(container);
 
 				                    //to start it
 				                    container.Resolve<IWorkerWrapper>();

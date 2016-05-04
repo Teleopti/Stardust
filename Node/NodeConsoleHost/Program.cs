@@ -38,7 +38,7 @@ namespace NodeConsoleHost
 
 		private static string WhoAmI { get; set; }
 
-		private static INodeStarter NodeStarter { get; set; }
+		private static NodeStarter NodeStarter { get; set; }
 
 		public static IContainer Container { get; set; }
 
