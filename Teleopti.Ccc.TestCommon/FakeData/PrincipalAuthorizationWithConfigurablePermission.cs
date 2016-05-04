@@ -46,9 +46,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 		{
-			if(_permittedFunctionPaths.Contains(functionPath))
-				return new List<DateOnlyPeriod> {period};
-			return new List<DateOnlyPeriod>();
+			throw new NotImplementedException();
 		}
 
 		public void HasPermission(string functionPath)

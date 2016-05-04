@@ -74,7 +74,6 @@
 		WfmTeamSchedule_RemoveActivity_37743,
 		WfmTeamSchedule_PrepareForRelease_37752,
 		WfmTeamSchedule_MoveActivity_37744,
-		WebByPassDefaultPermissionCheck_37984,
 
 		ResourcePlanner_WeeklyRestSolver_35043,
 
@@ -123,6 +122,5 @@
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204
 		// ReSharper restore InconsistentNaming
-		
 	}
 }

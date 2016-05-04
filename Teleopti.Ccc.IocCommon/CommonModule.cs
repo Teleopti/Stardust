@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.IocCommon
 			builder.RegisterModule(new MessageBrokerModule(_configuration));
 			if (_configuration.Args().WebByPassDefaultPermissionCheck_37984)
 			{
-				builder.RegisterType<ByPassPersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>().SingleInstance();
+
 			}
 			else
 			{
-				builder.RegisterType<PersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>().SingleInstance();
+				builder.RegisterType<PersistableScheduleDataPermissionChecker>().As<IPersistableScheduleDataPermissionChecker>();
 			}
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule(new AnalyticsUnitOfWorkModule(_configuration));
