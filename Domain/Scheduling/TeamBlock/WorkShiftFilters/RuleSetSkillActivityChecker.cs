@@ -1,6 +1,4 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -19,14 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			var skills = skillList as IList<ISkill> ?? skillList.ToList();
 			if (baseActivity.RequiresSkill)
 			{
-				bool found = false;
-				foreach (var skill in skills)
-				{
-					if (skill.Activity == baseActivity)
-						found = true;
-				}
-
-				if (!found)
+				if (!skills.Any(skill => skill.Activity.Equals(baseActivity)))
 					return false;
 			}
 
@@ -34,20 +25,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			{
 				if (workShiftExtender.ExtendWithActivity.RequiresSkill)
 				{
-					bool found = false;
-					foreach (var skill in skills)
-					{
-						if (skill.Activity == workShiftExtender.ExtendWithActivity)
-							found = true;
-					}
-
-					if (!found)
+					if (!skills.Any(skill => skill.Activity.Equals(workShiftExtender.ExtendWithActivity)))
 						return false;
 				}
 			}
 
 			return true;
 		}
-
 	}
 }
