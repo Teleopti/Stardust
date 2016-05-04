@@ -11,10 +11,8 @@ namespace ManagerTest.Attributes
 	{
 		protected override void SetUp(ContainerBuilder builder)
 		{
-			ManagerConfiguration config = new ManagerConfiguration()
-			{
-				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
-			};
+			ManagerConfiguration config = new ManagerConfiguration(
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20);
 
 			builder.RegisterInstance(config).SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();

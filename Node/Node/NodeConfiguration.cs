@@ -44,7 +44,7 @@ namespace Stardust.Node
 			{
 				throw new ArgumentNullException("nodeName");
 			}
-			if (PingToManagerSeconds == 0)
+			if (PingToManagerSeconds <= 0)
 			{
 				throw new ArgumentNullException("pingToManagerSeconds");
 			}

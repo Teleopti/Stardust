@@ -24,10 +24,8 @@ namespace ManagerTest
 			_containerBuilder.RegisterType<HttpSender>().As<IHttpSender>();
 			_containerBuilder.RegisterType<ManagerController>();
 
-			ManagerConfiguration config = new ManagerConfiguration()
-			{
-				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
-			};
+			ManagerConfiguration config = new ManagerConfiguration(
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20);
 
 			_containerBuilder.RegisterInstance(config).SingleInstance();
 			_containerBuilder.RegisterType<RetryPolicyProvider>().SingleInstance();

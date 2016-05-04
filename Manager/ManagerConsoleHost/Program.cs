@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Web.Http;
+using System.Web.Routing;
 using Autofac;
 using log4net;
 using log4net.Config;
@@ -64,34 +65,29 @@ namespace ManagerConsoleHost
 
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			var managerConfiguration = new ManagerConfiguration
-			{
-				ConnectionString =
-					ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-				Route = ConfigurationManager.AppSettings["route"],
-				AllowedNodeDownTimeSeconds = int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
-				CheckNewJobIntervalSeconds = int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"])
-			};
-
-
+			var managerConfiguration = new ManagerConfiguration(
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
+				ConfigurationManager.AppSettings["route"],
+				int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
+				int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"]));
+			
 			var container = new ContainerBuilder().Build();
-
 			var config = new HttpConfiguration();
 
 			using (WebApp.Start(managerAddress,
 			                    appBuilder =>
 			                    {
-									string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
-									OwinHttpListener owinListener = (OwinHttpListener)appBuilder.Properties[owinListenerName];
+				                    string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
+				                    OwinHttpListener owinListener = (OwinHttpListener) appBuilder.Properties[owinListenerName];
 
 				                    int maxAccepts;
 				                    int maxRequests;
-				                    owinListener.GetRequestProcessingLimits(out maxAccepts,out maxRequests);
+				                    owinListener.GetRequestProcessingLimits(out maxAccepts, out maxRequests);
 
-									owinListener.SetRequestQueueLimit(int.MaxValue);
+				                    owinListener.SetRequestQueueLimit(int.MaxValue);
 				                    owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
 
-									appBuilder.UseAutofacMiddleware(container);
+				                    appBuilder.UseAutofacMiddleware(container);
 
 				                    // Configure Web API for self-host. 
 				                    appBuilder.UseStardustManager(managerConfiguration,
@@ -100,7 +96,7 @@ namespace ManagerConsoleHost
 				                    appBuilder.UseAutofacWebApi(config);
 				                    appBuilder.UseWebApi(config);
 
-		                    }))
+			                    }))
 			{
 				Logger.InfoWithLineNumber(WhoAmI + ": Started listening on port : ( " + baseAddress + " )");
 

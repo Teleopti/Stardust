@@ -106,6 +106,7 @@
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
     <Compile Include="JobManagerTest.cs" />
     <Compile Include="Attributes\JobTestsAttribute.cs" />
+    <Compile Include="ManagerConfigurationTest.cs" />
     <Compile Include="ManagerModuleTest.cs" />
     <Compile Include="ManagerOperationsTest.cs" />
     <Compile Include="Attributes\ManagerOperationTestsAttribute.cs" />

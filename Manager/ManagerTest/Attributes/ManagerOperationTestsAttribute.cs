@@ -15,10 +15,8 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<Validator>().SingleInstance();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
 
-			ManagerConfiguration config = new ManagerConfiguration()
-			{
-				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString
-			};
+			ManagerConfiguration config = new ManagerConfiguration(
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20);
 
 			builder.RegisterInstance(config).SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
