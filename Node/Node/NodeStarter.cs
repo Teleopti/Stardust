@@ -32,9 +32,6 @@ namespace Stardust.Node
 		public void Start(NodeConfiguration nodeConfiguration,
 		                  IContainer container)
 		{
-			//validate inside nodeconfig
-			nodeConfiguration.ValidateParameters();
-
 			var nodeAddress = nodeConfiguration.BaseAddress.Scheme +
 			                  "://+:" +
 			                  nodeConfiguration.BaseAddress.Port + "/";

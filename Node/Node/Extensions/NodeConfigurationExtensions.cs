@@ -6,33 +6,6 @@ namespace Stardust.Node.Extensions
 	public static class NodeConfigurationExtensions
 	{
 
-		public static void ValidateParameters(this NodeConfiguration nodeConfiguration)
-		{
-			if (nodeConfiguration == null)
-			{
-				throw new ArgumentNullException("nodeConfiguration");
-			}
-			if (nodeConfiguration.BaseAddress == null)
-			{
-				throw new ArgumentNullException("baseAddress");
-			}
-
-			if (nodeConfiguration.ManagerLocation == null)
-			{
-				throw new ArgumentNullException("managerLocation");
-			}
-
-			if (nodeConfiguration.HandlerAssembly == null)
-			{
-				throw new ArgumentNullException("handlerAssembly");
-			}
-
-			if (string.IsNullOrEmpty(nodeConfiguration.NodeName))
-			{
-				throw new ArgumentNullException("nodeName");
-			}
-		}
-
 		public static string CreateWhoIAm(this NodeConfiguration nodeConfiguration,
 		                                  string machineName)
 		{
