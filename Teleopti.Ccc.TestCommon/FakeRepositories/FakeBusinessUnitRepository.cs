@@ -62,11 +62,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return businessUnit;
 		}
 
-		public IList<Guid> LoadAllPersonsWithExternalLogOn(Guid businessUnitId, DateOnly now)
-		{
-			throw new NotImplementedException();
-		}
-
 		public IEnumerable<TimeZoneInfo> LoadAllTimeZones()
 		{
 			throw new NotImplementedException();

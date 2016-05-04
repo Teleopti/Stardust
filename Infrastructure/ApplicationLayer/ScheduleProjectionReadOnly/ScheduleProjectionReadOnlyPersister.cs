@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -40,26 +39,24 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
                                                .List<PayloadWorkTime>();
         }
 		
-	    public int ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
+	    public void ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
         {
 	        if (scheduleLoadedTimeStamp.Equals(DateTime.MinValue))
 		        scheduleLoadedTimeStamp = DateTime.UtcNow;
-			var count = _currentUnitOfWork.Session().CreateSQLQuery(
+			_currentUnitOfWork.Session().CreateSQLQuery(
 				"exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @ScheduleLoadedTime=:scheduleLoadedTime")
                                         .SetGuid("person", personId)
                                         .SetGuid("scenario", scenarioId)
 										.SetDateOnly("date", date)
 										.SetDateTime("scheduleLoadedTime", scheduleLoadedTimeStamp)
 										.UniqueResult<int>();
-
-	        return count;
         }
 
-		public int AddProjectedLayer(ScheduleProjectionReadOnlyModel model)
+		public void AddProjectedLayer(ScheduleProjectionReadOnlyModel model)
 		{
 			if (model.ScheduleLoadedTime.Equals(DateTime.MinValue))
 				model.ScheduleLoadedTime = DateTime.UtcNow;
-			return _currentUnitOfWork.Session().CreateSQLQuery(
+			_currentUnitOfWork.Session().CreateSQLQuery(
 				@"exec ReadModel.UpdateScheduleProjectionReadOnly 
 					@PersonId=:PersonId,
 					@ScenarioId =:ScenarioId,
@@ -109,25 +106,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 										   .SetResultTransformer(new AliasToBeanResultTransformer(typeof(internalModel)))
 										   .List<internalModel>();
 		}
-
-	    public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
-        {
-           var result = _currentUnitOfWork.Session()
-				.CreateSQLQuery("exec ReadModel.GetNextActivityStartTime @PersonId=:personId, @UtcNow=:dateTime")
-				.SetDateTime("dateTime", dateTime)
-                .SetGuid("personId", personId)
-                .SetResultTransformer(Transformers.AliasToBean(typeof(ActivityPeriod)))
-                .List<ActivityPeriod>();
-
-	        if (result.Count < 1)
-                return null;
-
-	        var activityPeriod = result.First();
-			DateTime nextActivityDateTime = activityPeriod.StartDateTime > dateTime
-				                                 ? activityPeriod.StartDateTime
-				                                 : activityPeriod.EndDateTime;
-	        return nextActivityDateTime;
-        }
 
 	    public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)
         {

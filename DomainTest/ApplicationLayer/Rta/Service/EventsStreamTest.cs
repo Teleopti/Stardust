@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			now.Is("2014-10-20 9:30");
 			Database.ClearSchedule(personId);
 			Database.WithSchedule(personId, admin, "2014-10-20 9:00", "2014-10-20 10:00");
-			target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
 			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.In);

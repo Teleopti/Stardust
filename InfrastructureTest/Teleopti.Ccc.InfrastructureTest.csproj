@@ -330,7 +330,6 @@
     <Compile Include="Rta\Persisters\AgentStateReadModelPersisterTest.cs" />
     <Compile Include="Rta\TestConnectionStrings.cs" />
     <Compile Include="InfrastructureTestAttribute.cs" />
-    <Compile Include="Rta\RtaLoadExternalLogOnProcTest.cs" />
     <Compile Include="Repositories\BusinessUnitFilterOverriderTest.cs" />
     <Compile Include="Rta\AgentStateReadModelReaderTest.cs" />
     <Compile Include="Repositories\RtaStateGroupRepositoryNotSignedInTest.cs" />
@@ -529,7 +528,6 @@
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReaderTest.cs" />
-    <Compile Include="Rta\DatabaseReaderPersonOrganizationDataTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZoneTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterTest.cs" />

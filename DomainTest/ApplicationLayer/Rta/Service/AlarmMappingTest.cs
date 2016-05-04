@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2015-03-12 08:05");
 
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			EventPublisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}

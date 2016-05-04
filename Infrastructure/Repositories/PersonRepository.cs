@@ -566,16 +566,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IPerson LoadAggregate(Guid id) { return Load(id); }
 
-		public bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId)
-		{
-			var result = Session.CreateSQLQuery(
-				"exec dbo.DoesPersonHaveExternalLogOn @now=:now, @person=:person")
-								.SetDateOnly("now", dateTime)
-								.SetGuid("person", personId)
-									  .List();
-			return result.Count > 0;
-		}
-
 		public IPerson LoadPersonAndPermissions(Guid id)
 		{
 			var foundPerson = Session.Get<Person>(id);

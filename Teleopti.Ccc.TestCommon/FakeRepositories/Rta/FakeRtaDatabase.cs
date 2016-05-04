@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private readonly List<KeyValuePair<string, int>> _datasources = new List<KeyValuePair<string, int>>();
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 
-		private readonly List<KeyValuePair<string, IEnumerable<ResolvedPerson>>> _externalLogOns = new List<KeyValuePair<string, IEnumerable<ResolvedPerson>>>();
 		private readonly List<PersonOrganizationData> _personOrganizationData = new List<PersonOrganizationData>();
 		private class userData
 		{
@@ -221,18 +220,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			var dataSource = _datasources.Last().Value;
 			if (_datasources.Any(x => x.Key == source))
 				dataSource = _datasources.Single(x => x.Key == source).Value;
-
-			var lookupKey = string.Format("{0}|{1}", dataSource, userCode).ToUpper(); //putting this logic here is just WRONG
-			_externalLogOns.Add(
-				new KeyValuePair<string, IEnumerable<ResolvedPerson>>(
-					lookupKey, new[]
-					{
-						new ResolvedPerson
-						{
-							PersonId = personId,
-							BusinessUnitId = _businessUnitId
-						}
-					}));
 
 			_personOrganizationData.Add(new PersonOrganizationData
 			{
@@ -418,18 +405,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public ConcurrentDictionary<string, int> Datasources()
 		{
 			return new ConcurrentDictionary<string, int>(_datasources);
-		}
-		
-		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
-		{
-			return new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>(_externalLogOns);
-		}
-
-		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
-		{
-			return _personOrganizationData
-				.Select(m => JsonConvert.DeserializeObject<PersonOrganizationData>(JsonConvert.SerializeObject(m)))
-				.ToArray();
 		}
 
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)

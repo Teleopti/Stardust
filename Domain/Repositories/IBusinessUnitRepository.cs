@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <returns></returns>
         IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit);
 
-	    IList<Guid> LoadAllPersonsWithExternalLogOn(Guid businessUnitId, DateOnly now);
-		/// <summary>
+	    /// <summary>
 		/// Loads all time zones.
 		/// </summary>
 		/// <returns></returns>

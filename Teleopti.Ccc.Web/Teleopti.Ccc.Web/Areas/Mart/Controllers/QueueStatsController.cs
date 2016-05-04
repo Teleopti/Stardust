@@ -1,14 +1,13 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Web.Http;
-using Microsoft.Ajax.Utilities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Messages.Rta;
+using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 
 namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 {
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.Mart.Controllers
 			int latency = 0;
 
 			if (principal != null)
-				claim = principal.Claims.FirstOrDefault(c => c.Type.Equals(System.IdentityModel.Claims.ClaimTypes.Locality));
+				claim = principal.Claims.FirstOrDefault(c => c.Type.Equals(ClaimTypes.Locality));
 			if (claim != null)
 				dataSource = claim.Value;
 

@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp, string tenant)
 		{
-			_rta.ReloadSchedulesOnNextCheckForActivityChanges(tenant, personId);
 		}
 
 		private int handleRtaExceptions(Action rtaCall)

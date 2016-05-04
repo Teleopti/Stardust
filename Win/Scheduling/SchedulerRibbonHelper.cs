@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Media;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -16,13 +15,12 @@ using Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
 	public static class SchedulerRibbonHelper
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static void InstantiateEditControl(EditControl editControl)
 		{
 			editControl.ToolStripButtonNew.Text = Resources.Add;
@@ -34,7 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			editControl.DeleteSpecialItems.Add(new ToolStripButton { Text = Resources.DeleteSpecial, Tag = ClipboardItems.Special });
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static void InstantiateEditControlRestrictions(EditControl editControlRestrictions)
 		{
 			editControlRestrictions.Visible = false;
@@ -49,13 +47,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			clipboardControlBuilder.Build();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static void InstantiateClipboardControlRestrictions(ClipboardControl clipboardControlRestrictions)
 		{
 			clipboardControlRestrictions.SetButtonState(ClipboardAction.Cut, false);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6")]
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6")]
 		public static void EnableRibbonControls(ToolStrip clipboard, ToolStrip edit, Control actions, Control locks, ToolStripItem filterAgents, ToolStripItem lockMenuItem, ToolStripItem loggedOnUserTimeZone, bool restrictionView)
 		{
 			clipboard.Visible = true;

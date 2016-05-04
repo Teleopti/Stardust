@@ -12,22 +12,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public static string LogOutStateCode = "LOGGED-OFF";
 		public static string LogOutBySnapshot = "CCC Logged out";
 
-		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly RtaProcessor _processor;
 		private readonly TenantLoader _tenantLoader;
 		private readonly RtaInitializor _initializor;
 		private readonly ActivityChangeProcessor _activityChangeProcessor;
-		private readonly IContextLoader _contextLoader;
+		private readonly ContextLoader _contextLoader;
 
 		public Rta(
-			ICacheInvalidator cacheInvalidator,
 			RtaProcessor processor,
 			TenantLoader tenantLoader,
 			RtaInitializor initializor,
 			ActivityChangeProcessor activityChangeProcessor,
-			IContextLoader contextLoader)
+			ContextLoader contextLoader)
 		{
-			_cacheInvalidator = cacheInvalidator;
 			_processor = processor;
 			_tenantLoader = tenantLoader;
 			_initializor = initializor;
@@ -155,14 +152,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				_processor.Process(agent);
 			});
 		}
-
-		[InfoLog]
-		[TenantScope]
-		public virtual void ReloadSchedulesOnNextCheckForActivityChanges(string tenant, Guid personId)
-		{
-			_cacheInvalidator.InvalidateSchedules(personId);
-		}
-
+		
 		[InfoLog]
 		[TenantScope]
 		public virtual void CheckForActivityChanges(string tenant)

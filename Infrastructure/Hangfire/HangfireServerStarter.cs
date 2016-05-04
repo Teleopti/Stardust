@@ -17,19 +17,13 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly IConfigReader _config;
-		private readonly ActivityChangesChecker _activityChangesChecker;
-		private readonly IToggleManager _toggleManager;
 
 		public HangfireServerStarter(
 			ILifetimeScope lifetimeScope, 
-			IConfigReader config, 
-			ActivityChangesChecker activityChangesChecker,
-			IToggleManager toggleManager)
+			IConfigReader config)
 		{
 			_lifetimeScope = lifetimeScope;
 			_config = config;
-			_activityChangesChecker = activityChangesChecker;
-			_toggleManager = toggleManager;
 		}
 
 		const int setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully = 4;
@@ -114,10 +108,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully,
 				Queues = QueueNames.From<Priority>()
 			};
-			if (_toggleManager.IsEnabled(Toggles.RTA_ScaleOut_36979))
-				app.UseHangfireServer(options);
-			else
-				app.UseHangfireServer(options, _activityChangesChecker);
+			app.UseHangfireServer(options);
 
 			if (dashboard)
 				app.UseHangfireDashboard();

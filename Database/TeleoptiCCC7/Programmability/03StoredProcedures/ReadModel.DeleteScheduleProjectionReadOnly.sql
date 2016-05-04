@@ -53,5 +53,4 @@ BEGIN
 	AND PersonId = @PersonId
 END
 
-SELECT @updateCount
 GO

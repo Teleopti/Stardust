@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_ScaleOut_36979)]
 	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class ScaleOutTest
 	{

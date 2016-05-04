@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.Sagas.Persisters;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
@@ -64,9 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 			build.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			build.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();
 			build.RegisterType<RunningEtlJobChecker>().As<IRunningEtlJobChecker>();
-
-			build.RegisterType<NotifyTeleoptiRtaServiceToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
-
+			
 			build.Register(c =>
 			{
 				var configReader = c.Resolve<IConfigReader>();

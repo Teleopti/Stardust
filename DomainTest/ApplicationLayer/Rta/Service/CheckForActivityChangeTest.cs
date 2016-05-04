@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.PersistedReadModel.StateCode.Should().Be("phone");
 		}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.PersistedReadModel.StateName.Should().Be("alarm");
 		}
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithBusinessUnit(businessUnitId);
 
-			Assert.DoesNotThrow(() => Target.ReloadAndCheckForActivityChanges(Database.TenantName(), Guid.NewGuid()));
+			Assert.DoesNotThrow(() => Target.CheckForActivityChanges(Database.TenantName(), Guid.NewGuid()));
 		}
 	}
 }

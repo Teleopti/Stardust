@@ -6,7 +6,6 @@ using System.Linq;
 using System.Web.Mvc;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 	{
 		private readonly IMutateNow _mutateNow;
 		private readonly INow _now;
-		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly ISsoAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
@@ -44,16 +42,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISettings _settings;
 		private readonly IPhysicalApplicationPath _physicalApplicationPath;
 		private readonly IFindPersonInfo _findPersonInfo;
-		private readonly ActivityChangesChecker _activityChangesChecker;
 		private readonly HangfireUtilties _hangfire;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
-		private readonly ITriggerHangfireRecurringJobs _hangfireRecurringJobs;
 
 		public TestController(
 			IMutateNow mutateNow,
 			INow now,
-			ICacheInvalidator cacheInvalidator,
 			ISessionSpecificDataProvider sessionSpecificDataProvider,
 			ISsoAuthenticator authenticator,
 			IWebLogOn logon,
@@ -65,15 +60,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			ISettings settings,
 			IPhysicalApplicationPath physicalApplicationPath,
 			IFindPersonInfo findPersonInfo,
-			ActivityChangesChecker activityChangesChecker,
 			HangfireUtilties hangfire,
 			TenantTickEventPublisher tenantTickEventPublisher,
-			Domain.ApplicationLayer.Rta.Service.Rta rta,
-			ITriggerHangfireRecurringJobs hangfireRecurringJobs)
+			Domain.ApplicationLayer.Rta.Service.Rta rta)
 		{
 			_mutateNow = mutateNow;
 			_now = now;
-			_cacheInvalidator = cacheInvalidator;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
@@ -85,17 +77,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_settings = settings;
 			_physicalApplicationPath = physicalApplicationPath;
 			_findPersonInfo = findPersonInfo;
-			_activityChangesChecker = activityChangesChecker;
 			_hangfire = hangfire;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_rta = rta;
-			_hangfireRecurringJobs = hangfireRecurringJobs;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker, string defaultProvider = null, bool usePasswordPolicy = false)
 		{
-			invalidateRtaCache();
-
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
@@ -212,15 +200,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult SetCurrentTime(long ticks, string time)
 		{
-			invalidateRtaCache();
-
 			if (time != null)
 				_mutateNow.Is(time.Utc());
 			else
 				_mutateNow.Is(new DateTime(ticks));
 
-			_activityChangesChecker.ExecuteForTest();
-			_hangfireRecurringJobs.Trigger();
+			_hangfire.TriggerReccuringJobs();
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -245,12 +230,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			SqlConnection.ClearAllPools();
 		}
-
-		private void invalidateRtaCache()
-		{
-			if (_cacheInvalidator != null)
-				_cacheInvalidator.InvalidateAll();
-		}
-
 	}
 }

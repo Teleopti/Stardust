@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -65,47 +63,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return layers.OrderBy(l => l.EndDateTime).ToList();
 		}
 
-		public ConcurrentDictionary<string, IEnumerable<ResolvedPerson>> ExternalLogOns()
-		{
-			var dictionary = new ConcurrentDictionary<string, IEnumerable<ResolvedPerson>>();
-			using (var connection = new SqlConnection(_connectionStrings.Application()))
-			{
-				var command = connection.CreateCommand();
-				command.CommandType = CommandType.StoredProcedure;
-				command.CommandText = "dbo.rta_load_external_logon";
-				command.Parameters.AddWithValue("@now", DateTime.UtcNow.Date);
-				connection.Open();
-				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
-				while (reader.Read())
-				{
-					int loadedDataSourceId = reader.GetInt32(reader.GetOrdinal("datasource_id"));
-					string originalLogOn = reader.GetString(reader.GetOrdinal("acd_login_original_id"));
-					Guid personId = reader.GetGuid(reader.GetOrdinal("person_code"));
-					Guid businessUnitId = reader.GetGuid(reader.GetOrdinal("business_unit_code"));
-
-					var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", loadedDataSourceId, originalLogOn).ToUpper(CultureInfo.InvariantCulture);
-					var personWithBusinessUnit = new ResolvedPerson
-					{
-						PersonId = personId,
-						BusinessUnitId = businessUnitId
-					};
-
-					IEnumerable<ResolvedPerson> list;
-					if (dictionary.TryGetValue(lookupKey, out list))
-					{
-						((ICollection<ResolvedPerson>)list).Add(personWithBusinessUnit);
-					}
-					else
-					{
-						var newCollection = new Collection<ResolvedPerson> { personWithBusinessUnit };
-						dictionary.AddOrUpdate(lookupKey, newCollection, (s, units) => newCollection);
-					}
-				}
-				reader.Close();
-			}
-			return dictionary;
-		}
-
 		public ConcurrentDictionary<string, int> Datasources()
 		{
 			var dictionary = new ConcurrentDictionary<string, int>();
@@ -138,34 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 			return dictionary;
 		}
-
-		private const string loadAllPersonsBuSiteTeam = "exec [dbo].[LoadAllPersonsCurrentBuSiteTeam] @now";
-		public IEnumerable<PersonOrganizationData> PersonOrganizationData()
-		{
-			var ret = new List<PersonOrganizationData>();
-			using (var conn = new SqlConnection(_connectionStrings.Application()))
-			{
-				conn.Open();
-				using (var cmd = new SqlCommand(loadAllPersonsBuSiteTeam, conn))
-				{
-					cmd.Parameters.AddWithValue("@now", _now.UtcDateTime());
-					using (var reader = cmd.ExecuteReader())
-					{
-						while (reader.Read())
-						{
-							ret.Add(new PersonOrganizationData
-							{
-								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
-								TeamId = reader.GetGuid(reader.GetOrdinal("TeamId")),
-								SiteId = reader.GetGuid(reader.GetOrdinal("SiteId"))
-							});
-						}
-					}
-				}
-			}
-			return ret;
-		}
-
+		
 		public IEnumerable<PersonOrganizationData> LoadPersonOrganizationData(int dataSourceId, string externalLogOn)
 		{
 			using (var conn = new SqlConnection(_connectionStrings.Application()))

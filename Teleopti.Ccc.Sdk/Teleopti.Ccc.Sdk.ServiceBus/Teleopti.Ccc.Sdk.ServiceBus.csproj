@@ -254,11 +254,7 @@
     <Compile Include="ConfigFileDefaultHost.cs" />
     <Compile Include="Container\ContainerConfiguration.cs" />
     <Compile Include="GeneralBusBootStrapper.cs" />
-    <Compile Include="NotifyTeleoptiRtaServiceToCheckForActivityChange.cs" />
     <Compile Include="ServiceBusDelayedMessageSender.cs" />
-    <Compile Include="RtaBusBootStrapper.cs" />
-    <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
-    <Compile Include="QueueClearMessages.cs" />
     <Compile Include="Legacy\LegacyMessageTransformer.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
@@ -288,7 +284,6 @@
     <Compile Include="Payroll\PersonBusAssembler.cs" />
     <Compile Include="BusBootStrapper.cs" />
     <Compile Include="ApplicationLogOnMessageModule.cs" />
-    <Compile Include="BusinessUnitStarter.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
     <Compile Include="ServiceBusRunner.cs" />

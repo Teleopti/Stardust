@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<HangfireServerStarter>().SingleInstance();
-			builder.RegisterType<ActivityChangesChecker>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
 
@@ -40,11 +39,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
 
 			builder.RegisterType<HangfireUtilties>().SingleInstance().ApplyAspects();
-
-			if (_configuration.Toggle(Toggles.RTA_ScaleOut_36979))
-				builder.RegisterType<TriggerHangfireRecurringJobs>().As<ITriggerHangfireRecurringJobs>().SingleInstance();
-			else
-				builder.RegisterType<NoTriggerHangfireRecurringJobs>().As<ITriggerHangfireRecurringJobs>().SingleInstance();
 		}
 	}
 }

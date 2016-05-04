@@ -61,5 +61,4 @@ BEGIN
 	VALUES (@ScenarioId,@PersonId,@BelongsToDate,@PayloadId,@StartDateTime,@EndDateTime,@WorkTime,@ContractTime,@Name,@ShortName,@DisplayColor,@PayrollCode,@InsertedOn)
 END
 
-SELECT @updateCount
 GO

@@ -39,9 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private ConfigFileDefaultHost _denormalizeBus;
 		[NonSerialized]
 		private ConfigFileDefaultHost _payrollBus;
-		[NonSerialized]
-		private ConfigFileDefaultHost _rtaBus;
-
+		
 		private IContainer _sharedContainer;
 
 		public ServiceBusRunner(Action<int> requestAdditionalTime)
@@ -88,9 +86,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 				_denormalizeBus.Start();
-
-				_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-				_rtaBus.Start();
 
 				if (!toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
 				{
@@ -173,16 +168,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				try
 				{
 					_payrollBus.Dispose();
-				}
-				catch (Exception)
-				{
-				}
-			}
-			if (_rtaBus != null)
-			{
-				try
-				{
-					_rtaBus.Dispose();
 				}
 				catch (Exception)
 				{

@@ -101,16 +101,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .Concat(personTimeZoneId)
                 .Distinct().Select(TimeZoneInfo.FindSystemTimeZoneById).ToList();
         }
-
-		public IList<Guid> LoadAllPersonsWithExternalLogOn(Guid businessUnitId, DateOnly now)
-		{
-			var result = Session.CreateSQLQuery(
-				"exec dbo.LoadPersonsWithExternalLogOn @businessUnitId=:businessUnitId, @now=:now")
-			                    .SetGuid("businessUnitId", businessUnitId)
-			                    .SetDateTime("now", now.Date)
-			                    .List<Guid>();
-			return result;
-		}
-
     }
 }

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.PersistedReadModel.Should().Not.Be.Null();
 		}

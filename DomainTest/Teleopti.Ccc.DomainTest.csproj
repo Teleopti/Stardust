@@ -340,13 +340,11 @@
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IncorrectOutOfAdherenceCount35829.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\PersonActivityActualStartEventTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ThreadingTests.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailsViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AuthenticationKeyTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BelongsToDateTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\CachingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventsOrderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EventsStreamTest.cs" />

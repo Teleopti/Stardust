@@ -23,35 +23,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<Rta>().SingleInstance().ApplyAspects();
 			builder.RegisterType<RtaInitializor>().SingleInstance();
 			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
-			builder.RegisterType<CacheInvalidator>().As<ICacheInvalidator>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelUpdater>().As<IAgentStateReadModelUpdater>().SingleInstance();
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
 			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
-
-			if (!_config.Toggle(Toggles.RTA_ScaleOut_36979))
-				builder.RegisterType<ActivityChangeProcessor>().SingleInstance();
-
-			if (_config.Toggle(Toggles.RTA_ScaleOut_36979))
-				builder.RegisterType<LoadAllFromDatabase>().As<IContextLoader>().SingleInstance().ApplyAspects();
-			else if (_config.Toggle(Toggles.RTA_DeletedPersons_36041))
-				builder.RegisterType<LoadPersonFromDatabase>().As<IContextLoader>().SingleInstance();
-			else
-				builder.RegisterType<LoadFromCache>().As<IContextLoader>().SingleInstance();
-
-			_config.Cache().This<MappingLoader>((c, b) => b
-				.CacheMethod(x => x.Load())
-				.CacheKey(c.Resolve<CachePerDataSource>())
-				);
-			builder.CacheByClassProxy<MappingLoader>().As<IMappingLoader>().ApplyAspects().SingleInstance();
-
+			
+			builder.RegisterType<ContextLoader>().SingleInstance().ApplyAspects();
+			
 			_config.Cache().This<IDatabaseLoader>((c, b) => b
-				.CacheMethod(x => x.GetCurrentSchedule(Guid.NewGuid()))
 				.CacheMethod(x => x.Datasources())
-				.CacheMethod(x => x.ExternalLogOns())
-				.CacheMethod(x => x.PersonOrganizationData())
 				.CacheKey(c.Resolve<CachePerDataSource>())
 				);
 			builder.CacheByInterfaceProxy<DatabaseLoader, IDatabaseLoader>().SingleInstance();

@@ -9,13 +9,29 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
 	public class HangfireUtilties
 	{
+		private readonly JobStorage _storage;
 		private readonly IBackgroundJobClient _backgroundJobs;
+		private readonly RecurringJobManager _recurringJobs;
 		private readonly IMonitoringApi _monitoring;
 
-		public HangfireUtilties(JobStorage storage, IBackgroundJobClient backgroundJobs)
+		public HangfireUtilties(
+			JobStorage storage,
+			IBackgroundJobClient backgroundJobs,
+			RecurringJobManager recurringJobs)
 		{
+			_storage = storage;
 			_backgroundJobs = backgroundJobs;
+			_recurringJobs = recurringJobs;
 			_monitoring = storage.GetMonitoringApi();
+		}
+
+		public void TriggerReccuringJobs()
+		{
+			var jobs = _storage.GetConnection().GetRecurringJobs();
+			jobs.ForEach(j =>
+			{
+				_recurringJobs.Trigger(j.Id);
+			});
 		}
 
 		public void CancelQueue()

@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Performance;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
@@ -153,8 +152,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<AnalyticsFactScheduleHandler>().As<IAnalyticsFactScheduleHandler>().SingleInstance();
             builder.RegisterType<AnalyticsFactScheduleDayCountHandler>().As<IAnalyticsFactScheduleDayCountHandler>().SingleInstance();
             builder.RegisterType<AnalyticsScheduleRepository>().As<IAnalyticsScheduleRepository>().SingleInstance();
-
-            builder.RegisterType<DontNotifyRtaToCheckForActivityChange>().As<INotifyRtaToCheckForActivityChange>().SingleInstance();
+			
             builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
             _config.Cache().This<IAnalyticsDateRepository>(b => b

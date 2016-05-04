@@ -27,14 +27,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class StateMapper
 	{
-		private readonly ICacheInvalidator _cacheInvalidator;
 		private readonly IStateCodeAdder _stateCodeAdder;
 
-		public StateMapper(
-			ICacheInvalidator cacheInvalidator,
-			IStateCodeAdder stateCodeAdder)
+		public StateMapper(IStateCodeAdder stateCodeAdder)
 		{
-			_cacheInvalidator = cacheInvalidator;
 			_stateCodeAdder = stateCodeAdder;
 		}
 
@@ -75,7 +71,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
 			if (match != null) return match;
 			_stateCodeAdder.AddUnknownStateCode(businessUnitId, platformTypeId, stateCode, stateDescription);
-			_cacheInvalidator.InvalidateState();
 			match = queryState(mappings, businessUnitId, platformTypeId, stateCode);
 			return match ?? new MappedState();
 		}

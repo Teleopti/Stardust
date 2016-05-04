@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Mart.Controllers;
 using Teleopti.Ccc.Web.Areas.Mart.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Models;
-using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.WebTest.Areas.Mart.Controllers
 {

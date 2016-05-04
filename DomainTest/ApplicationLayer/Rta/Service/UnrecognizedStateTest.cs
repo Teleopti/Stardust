@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithDefaultStateGroup()
 				.WithUser("usercode", personId);
 
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.AddedStateCode.Should().Be.Null();
 		}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode", personId, businessUnitId)
 				.WithExistingState(personId, "statecode");
 
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.AddedStateCode.Name.Should().Be("statecode");
 		}

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				StateCode = "ready"
 			});
 			Now.Is("2015-03-31 4:45:10");
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-03-31 5:00:15");
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				StateCode = "ready"
 			});
 			Now.Is("2015-03-31 5:15:28");
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			Details.Details.First().TimeInAdherence.GetValueOrDefault().TotalSeconds.Should().Be(15 * 60);
 			Details.Details.First().TimeOutOfAdherence.GetValueOrDefault().TotalSeconds.Should().Be(0);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				StateCode = "ready"
 			});
 			Now.Is("2015-03-31 4:45:10");
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 			Now.Is("2015-03-31 5:00:15");
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 				StateCode = "ready"
 			});
 			Now.Is("2015-03-31 5:15:28");
-			Target.ReloadAndCheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			DetailsView.Build(personId).First().AdherencePercent.Should().Be(100);
 			PercentageView.Build(personId).AdherencePercent.Should().Be(100);

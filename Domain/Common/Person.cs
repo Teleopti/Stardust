@@ -4,10 +4,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.PulseLoop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Interfaces.Domain;
@@ -176,39 +174,27 @@ namespace Teleopti.Ccc.Domain.Common
 			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
 			if (modify == null) return;
 			modify.AddExternalLogOn(externalLogOn);
-			addPersonActivityStartingEvent();
 		}
 
-		public virtual void ResetExternalLogOn(IPersonPeriod personPeriod)
-	   {
-			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
-			if (modify == null) return;
-			modify.ResetExternalLogOn();
-			addPersonActivityStartingEvent();
-	   }
+	    public virtual void ResetExternalLogOn(IPersonPeriod personPeriod)
+	    {
+		    var modify = personPeriod as IPersonPeriodModifyExternalLogon;
+		    if (modify == null) return;
+		    modify.ResetExternalLogOn();
+	    }
 
-	   public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
-	   {
-			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
-		   if (modify == null) return;
-		   modify.RemoveExternalLogOn(externalLogOn);
-		   addPersonActivityStartingEvent();
-	   }
+	    public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
+	    {
+		    var modify = personPeriod as IPersonPeriodModifyExternalLogon;
+		    if (modify == null) return;
+		    modify.RemoveExternalLogOn(externalLogOn);
+	    }
 
 	    public virtual bool IsTerminated()
 	    {
 				return TerminalDate.HasValue && TerminalDate.Value < DateOnly.Today;
 	    }
-
-	    // adding this event so servicebus and rta do a check if person should be monitored in rta
-		private void addPersonActivityStartingEvent()
-		{
-			AddEvent(new PersonActivityChangePulseEvent
-			{
-				PersonId = Id.GetValueOrDefault()
-			});
-		}
-
+		
 	    public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull("skill", skill);

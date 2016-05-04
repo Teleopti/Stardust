@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Database.ClearSchedule(personId);
-			Target.ReloadSchedulesOnNextCheckForActivityChanges(Database.TenantName(), personId);
 			Target.CheckForActivityChanges(Database.TenantName());
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2016-02-23 08:05".Utc());
