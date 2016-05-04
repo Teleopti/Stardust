@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (finderResult == null) return null;
 			if (matrixList == null) return null;
 			if (shiftList.Count == 0) return shiftList;
+			if (schedulingOptions.AllowBreakContractTime) return shiftList;
 			
 			IList<IShiftProjectionCache> workShifts = new List<IShiftProjectionCache>();
 			MinMax<TimeSpan>? allowedMinMax = null;

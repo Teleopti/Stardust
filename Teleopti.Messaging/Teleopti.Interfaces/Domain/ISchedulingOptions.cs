@@ -331,6 +331,7 @@ namespace Teleopti.Interfaces.Domain
 	    void ClearNotAllowedShiftProjectionCaches();
 		IMultiplicatorDefinitionSet OvertimeType { get; set; }
 	    bool ScheduleOnDayOffs { get; set; }
+		bool AllowBreakContractTime { get; set; }
 	    bool SkipNegativeShiftValues { get; set; }
 	    IBlockFinder BlockFinder();
 	    bool IsDayScheduled(IScheduleDay scheduleDay);
