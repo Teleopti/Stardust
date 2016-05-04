@@ -74,26 +74,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				nodeThread.Start();
 			}
 
-			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
-
 			var useRhino = true;
 
 			bool.TryParse(ConfigurationManager.AppSettings["UseRhino"], out useRhino);
 
 			if (useRhino)
 			{
-				_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-				_requestBus.Start();
-
 				_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 				_generalBus.Start();
+
+				_requestBus = new ConfigFileDefaultHost("RequestQueue.config", new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
+				_requestBus.Start();
 
 				_denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config", new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 				_denormalizeBus.Start();
 
 				_rtaBus = new ConfigFileDefaultHost("RtaQueue.config", new RtaBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 				_rtaBus.Start();
-
 
 				if (!toggleManager.IsEnabled(Toggles.Payroll_ToStardust_38204))
 				{
@@ -103,6 +100,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				
 			}
 			AppDomain.MonitoringIsEnabled = true;
+
+			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
+
+			Task.Run(() =>
+			{
+				var container = makeContainer(toggleManager, _sharedContainer);
+				var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
+					container.Resolve<DataSourceForTenantWrapper>().DataSource()());
+				initializePayrollFormats.Initialize();
+			});
 		}
 
 		private static IContainer makeContainer(IToggleManager toggleManager, IContainer sharedContainer)
@@ -209,12 +216,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterModule(new NodeHandlersModule(configuration));
 			var container = builder.Build();
 
-			Task.Run(() =>
-			{
-				var initializePayrollFormats = new InitializePayrollFormatsToDb(container.Resolve<IPlugInLoader>(),
-					container.Resolve<DataSourceForTenantWrapper>().DataSource()());
-				initializePayrollFormats.Initialize();
-			});
+			
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
