@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 
 			if (schedulingOptions.SkipNegativeShiftValues)
 			{
-				shiftsWithValue = shiftsWithValue.Where(x => x.value >= 0);
+				shiftsWithValue = shiftsWithValue.Where(x => x.value > 0);
 			}
 
 			foreach (var item in shiftsWithValue)

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			foreach (IVisualLayer layer in mainShiftLayers.AsParallel())
 			{
 				var activity = (IActivity) layer.Payload;
-				if (activity != skillActivity)
+				if (!activity.Equals(skillActivity))
 					continue;
 
 				if (!resolution.HasValue) return null;
