@@ -105,9 +105,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\ObjectValidationResult.cs" />
     <Compile Include="Extensions\LoggerExtensions.cs" />
+    <Compile Include="NodeConfiguration.cs" />
     <Compile Include="NodeController.cs" />
-    <Compile Include="Workers\NodeConfiguration.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
     <Compile Include="Constants\NodeRouteConstants.cs" />
     <Compile Include="Entities\JobFailedEntity.cs" />
@@ -152,7 +153,6 @@
     <Compile Include="Workers\HttpSender.cs" />
     <Compile Include="Workers\InvokeHandler.cs" />
     <Compile Include="Entities\JobDetailEntity.cs" />
-    <Compile Include="Workers\ObjectValidationResult.cs" />
     <Compile Include="Workers\WorkerWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

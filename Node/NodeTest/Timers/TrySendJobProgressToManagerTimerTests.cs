@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using NodeTest.Fakes;
 using NUnit.Framework;
+using Stardust.Node;
 using Stardust.Node.Timers;
 using Stardust.Node.Workers;
 

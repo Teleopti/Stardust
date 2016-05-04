@@ -1,4 +1,4 @@
-namespace Stardust.Node.Workers
+namespace Stardust.Node.Entities
 {
 	public struct ObjectValidationResult
 	{

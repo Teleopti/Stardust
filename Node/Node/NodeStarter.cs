@@ -5,7 +5,6 @@ using System.Web.Http.ExceptionHandling;
 using Autofac;
 using Autofac.Extras.DynamicProxy2;
 using Autofac.Integration.WebApi;
-using Castle.DynamicProxy;
 using log4net;
 using Microsoft.Owin.Host.HttpListener;
 using Microsoft.Owin.Hosting;
@@ -33,6 +32,8 @@ namespace Stardust.Node
 		public void Start(NodeConfiguration nodeConfiguration,
 		                  IContainer container)
 		{
+			nodeConfiguration.ValidateParameters();
+
 			var nodeAddress = nodeConfiguration.BaseAddress.Scheme +
 			                  "://+:" +
 			                  nodeConfiguration.BaseAddress.Port + "/";

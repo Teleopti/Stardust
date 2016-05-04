@@ -1,16 +1,35 @@
 ﻿using System;
 using Stardust.Node.Helpers;
-using Stardust.Node.Workers;
 
 namespace Stardust.Node.Extensions
 {
 	public static class NodeConfigurationExtensions
 	{
-		public static void ThrowArgumentNullException(this NodeConfiguration nodeConfiguration)
+
+		public static void ValidateParameters(this NodeConfiguration nodeConfiguration)
 		{
 			if (nodeConfiguration == null)
 			{
 				throw new ArgumentNullException("nodeConfiguration");
+			}
+			if (nodeConfiguration.BaseAddress == null)
+			{
+				throw new ArgumentNullException("baseAddress");
+			}
+
+			if (nodeConfiguration.ManagerLocation == null)
+			{
+				throw new ArgumentNullException("managerLocation");
+			}
+
+			if (nodeConfiguration.HandlerAssembly == null)
+			{
+				throw new ArgumentNullException("handlerAssembly");
+			}
+
+			if (string.IsNullOrEmpty(nodeConfiguration.NodeName))
+			{
+				throw new ArgumentNullException("nodeName");
 			}
 		}
 
@@ -36,7 +55,6 @@ namespace Stardust.Node.Extensions
 
 		public static Uri GetManagerNodeHasBeenInitializedUri(this NodeConfiguration nodeConfiguration)
 		{
-			nodeConfiguration.ThrowArgumentNullException();
 
 			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
@@ -48,7 +66,6 @@ namespace Stardust.Node.Extensions
 
 		public static Uri GetManagerNodeHeartbeatUri(this NodeConfiguration nodeConfiguration)
 		{
-			nodeConfiguration.ThrowArgumentNullException();
 
 			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
@@ -57,8 +74,6 @@ namespace Stardust.Node.Extensions
 
 		public static Uri GetManagerJobHasBeenCanceledTemplateUri(this NodeConfiguration nodeConfiguration)
 		{
-			nodeConfiguration.ThrowArgumentNullException();
-
 			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasBeenCanceledTemplateUri();
@@ -66,8 +81,6 @@ namespace Stardust.Node.Extensions
 
 		public static Uri GetManagerJobHasFaileTemplatedUri(this NodeConfiguration nodeConfiguration)
 		{
-			nodeConfiguration.ThrowArgumentNullException();
-
 			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobHasFailedTemplateUri();
@@ -75,8 +88,6 @@ namespace Stardust.Node.Extensions
 
 		public static Uri GetManagerJobDoneTemplateUri(this NodeConfiguration nodeConfiguration)
 		{
-			nodeConfiguration.ThrowArgumentNullException();
-
 			var nodeConfigurationUriBuilder = new NodeConfigurationUriBuilderHelper(nodeConfiguration);
 
 			return nodeConfigurationUriBuilder.ManagerUriBuilder.GetJobDoneTemplateUri();
