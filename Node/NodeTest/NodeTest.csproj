@@ -61,8 +61,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\BaseTestsAttribute.cs" />
-    <Compile Include="Attributes\ProgressTestAttribute.cs" />
     <Compile Include="Fakes\InvokeHandlers\InvokeHandlerFake.cs" />
     <Compile Include="Fakes\InvokeHandlers\LongRunningInvokeHandlerFake.cs" />
     <Compile Include="Fakes\InvokeHandlers\ShortRunningInvokeHandlerFake.cs" />
@@ -96,7 +94,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Timers\TrySendJobProgressToManagerTimerTests.cs" />
     <Compile Include="WorkerWrapperTests.cs" />
-    <Compile Include="Attributes\WorkerWrapperTestsAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
