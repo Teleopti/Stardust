@@ -6,7 +6,6 @@ using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
 
 namespace Stardust.Node
 {
@@ -31,14 +30,9 @@ namespace Stardust.Node
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
 			var isValidRequest = _workerWrapper.ValidateStartJob(jobQueueItemEntity);
-			if (isValidRequest.IsBadRequest)
+			if (!isValidRequest.IsSuccessStatusCode)
 			{
-				return BadRequest(isValidRequest.Message);
-			}
-
-			if (isValidRequest.IsConflict)
-			{
-				return Conflict();
+				return ResponseMessage(isValidRequest);
 			}
 
 			Task.Factory.StartNew(() =>

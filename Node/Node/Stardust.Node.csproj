@@ -105,7 +105,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\ObjectValidationResult.cs" />
     <Compile Include="Extensions\LoggerExtensions.cs" />
     <Compile Include="NodeConfiguration.cs" />
     <Compile Include="NodeController.cs" />

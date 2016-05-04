@@ -83,7 +83,7 @@ namespace NodeConsoleHost
 			var nodeConfig = new NodeConfiguration(baseAddress,
 			                                       new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
 			                                       Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-			                                      null,// nodeName,
+												   nodeName,
 			                                       int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]));
 
 			var builder = new ContainerBuilder();

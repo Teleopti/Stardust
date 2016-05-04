@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http;
 using Stardust.Node.Entities;
 using Stardust.Node.Workers;
 
@@ -22,7 +24,7 @@ namespace Stardust.Node.Interfaces
 
 		void StartJob(JobQueueItemEntity jobQueueItemEntity);
 
-		ObjectValidationResult ValidateStartJob(JobQueueItemEntity jobQueueItemEntity);
+		HttpResponseMessage ValidateStartJob(JobQueueItemEntity jobQueueItemEntity);
 
 		void CancelTimeoutCurrentMessageTask();
 

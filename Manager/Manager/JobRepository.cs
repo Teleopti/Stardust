@@ -20,10 +20,8 @@ namespace Stardust.Manager
 		private readonly string _connectionString;
 
 		private readonly object _lockAddItemToJobQueue = new object();
-		private readonly object _lockTryAssignJobToWorkerNode = new object();
 
 		private readonly RetryPolicy _retryPolicy;
-		private readonly RetryPolicy<SqlAzureTransientErrorDetectionStrategyWithTimeouts> _retryPolicyTimeout;
 
 		private readonly CreateSqlCommandHelper _createSqlCommandHelper;
 
@@ -50,8 +48,6 @@ namespace Stardust.Manager
 			_createSqlCommandHelper = createSqlCommandHelper;
 
 			_retryPolicy = retryPolicyProvider.GetPolicy();
-
-			_retryPolicyTimeout = retryPolicyProvider.GetPolicyWithTimeout();
 		}
 
 		public void AddItemToJobQueue(JobQueueItem jobQueueItem)
@@ -145,11 +141,11 @@ namespace Stardust.Manager
 
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
+					sqlConnection.OpenWithRetry(_retryPolicy);
 
 					using (var selectAllAliveWorkerNodesCommand = _createSqlCommandHelper.CreateSelectAllAliveWorkerNodesCommand(sqlConnection))
 					{
-						using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicyTimeout))
+						using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
 							if (readerAliveWorkerNodes.HasRows)
 							{
@@ -523,7 +519,7 @@ namespace Stardust.Manager
 			{
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
-					sqlConnection.OpenWithRetry(_retryPolicyTimeout);
+					sqlConnection.OpenWithRetry(_retryPolicy);
 					JobQueueItem jobQueueItem = null;
 
 					using (var selectJobQueueItemCommand = new SqlCommand("AcquireQueuedJob", sqlConnection))
@@ -581,11 +577,11 @@ namespace Stardust.Manager
 									{
 										insertIntoJobCommand.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
 									}
-									insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+									insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 								}
 								using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
 								{
-									deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicyTimeout);
+									deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 								}
 								Retry(sqlTransaction.Commit);
 							}

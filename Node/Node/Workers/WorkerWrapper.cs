@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web.Http;
+using System.Web.Http.Results;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Entities;
@@ -70,70 +74,40 @@ namespace Stardust.Node.Workers
 		public string WhoamI { get; set; }
 		public CancellationTokenSource CancellationTokenSource { get; set; }
 
-		public ObjectValidationResult ValidateStartJob(JobQueueItemEntity jobQueueItemEntity)
+		public HttpResponseMessage ValidateStartJob(JobQueueItemEntity jobQueueItemEntity)
 		{
 			lock (_startJobLock)
 			{
 				if (_currentMessageToProcess != null)
 				{
-					return new ObjectValidationResult
-					{
-						IsConflict = true,
-						Message = WorkerIsAlreadyWorking
-					};
+					var responseMsg = new HttpResponseMessage(HttpStatusCode.Conflict);
+					responseMsg.Content = new StringContent(WorkerIsAlreadyWorking);
+					return responseMsg;
 				}
-
 				if (jobQueueItemEntity == null)
 				{
-					return new ObjectValidationResult
-					{
-						IsBadRequest = true,
-						Message = JobToDoIsNull
-					};
+					return CreateBadRequest(JobToDoIsNull);
 				}
-
 				if (jobQueueItemEntity.JobId == Guid.Empty)
 				{
-					return new ObjectValidationResult
-					{
-						IsBadRequest = true,
-						Message = JobToDoIdIsInvalid
-					};
+					return CreateBadRequest(JobToDoIdIsInvalid);
 				}
-
 				if (string.IsNullOrEmpty(jobQueueItemEntity.Name))
 				{
-					return new ObjectValidationResult
-					{
-						IsBadRequest = true,
-						Message = JobToDoNameIsInvalid
-					};
+					return CreateBadRequest(JobToDoNameIsInvalid);
 				}
-
 				if (string.IsNullOrEmpty(jobQueueItemEntity.Type))
 				{
-					return new ObjectValidationResult
-					{
-						IsBadRequest = true,
-						Message = JobToDoTypeIsNullOrEmpty
-					};
+					return CreateBadRequest(JobToDoTypeIsNullOrEmpty);
 				}
-
-				var type =
-					_nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
+				var type = _nodeConfiguration.HandlerAssembly.GetType(jobQueueItemEntity.Type);
 
 				if (type == null)
 				{
 					Logger.WarningWithLineNumber(string.Format(
-						WhoamI +
-						": The job type [{0}] could not be resolved. The job cannot be started.",
-						jobQueueItemEntity.Type));
+						WhoamI + JobToDoTypeCanNotBeResolved, jobQueueItemEntity.Type));
 
-					return new ObjectValidationResult
-					{
-						IsBadRequest = true,
-						Message = string.Format(JobToDoTypeCanNotBeResolved, jobQueueItemEntity.Type)
-					};
+					return CreateBadRequest(string.Format(JobToDoTypeCanNotBeResolved, jobQueueItemEntity.Type));
 				}
 
 				try
@@ -142,17 +116,18 @@ namespace Stardust.Node.Workers
 				}
 				catch (Exception)
 				{
-					return new ObjectValidationResult
-					{
-						IsBadRequest = true,
-						Message = JobToDoCanNotBeDeserialize
-					};
+					return CreateBadRequest(JobToDoCanNotBeDeserialize);
 				}
-
 				_currentMessageToProcess = jobQueueItemEntity;
-
-				return new ObjectValidationResult();
+				return new HttpResponseMessage(HttpStatusCode.OK);
 			}
+		}
+
+		private HttpResponseMessage CreateBadRequest(string content)
+		{
+			var responseMsg = new HttpResponseMessage(HttpStatusCode.BadRequest);
+			responseMsg.Content = new StringContent(content);
+			return responseMsg;
 		}
 
 		public void CancelTimeoutCurrentMessageTask()
