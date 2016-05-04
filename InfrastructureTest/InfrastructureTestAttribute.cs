@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		{
 			base.AfterTest();
 
-			_transactionHookScope.Dispose();
+			_transactionHookScope?.Dispose();
 		}
 	}
 }
