@@ -106,34 +106,35 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			var authorizer = new PrincipalAuthorizationWithConfigurablePermission();
 			
-			PrincipalAuthorization.SetInstance(authorizer);
-			var person = PersonFactory.CreatePerson();
-			var noNewRules = NewBusinessRuleCollection.Minimum();
-			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-			IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
-			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
-													  new DateTimePeriod(
-													  2000, 6,
-													  1,
-													  2000, 6,
-													  2));
-			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
-											  new DateTimePeriod(2000, 6, 1, 2000, 6,
-													 2));
+			using (new CustomAuthorizationContext(authorizer))
+			{
+				var person = PersonFactory.CreatePerson();
+				var noNewRules = NewBusinessRuleCollection.Minimum();
+				var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+				IScheduleDay part = target[person].ScheduledDay(new DateOnly(2000, 6, 1));
+				IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person,
+														  new DateTimePeriod(
+														  2000, 6,
+														  1,
+														  2000, 6,
+														  2));
+				IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(person, _scenario,
+												  new DateTimePeriod(2000, 6, 1, 2000, 6,
+														 2));
 
 
-			ass.WithId();
-			abs.WithId();
-			Schedule schedule = (Schedule)part;
-			schedule.Add(ass);
-			schedule.Add(abs);
+				ass.WithId();
+				abs.WithId();
+				Schedule schedule = (Schedule)part;
+				schedule.Add(ass);
+				schedule.Add(abs);
 
-			authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+				authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 
 
-			target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
-			target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(0);
-			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission()); //restore the setup to avoid impacting other tests.
+				target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();
+				target.DifferenceSinceSnapshot().Count().Should().Be.EqualTo(0);
+			}
 		}
 	}
 	[TestFixture]

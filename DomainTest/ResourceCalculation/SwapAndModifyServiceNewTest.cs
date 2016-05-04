@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -125,9 +126,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_dates = new List<DateOnly> {new DateOnly(2011, 1, 1)};
 			var authorizer = new PrincipalAuthorizationWithNoPermission();
-			PrincipalAuthorization.SetInstance(authorizer);
-			_swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
-			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission()); //restore the setup to avoid impacting other tests.
+			using (new CustomAuthorizationContext(authorizer))
+			{
+				_swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			}
 		}
 
 
@@ -164,7 +166,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dates.Add(new DateOnly(2009, 02, 01));
 			_dates.Add(new DateOnly(2009, 02, 02));
 			var authorizer = new PrincipalAuthorizationWithNoPermission();
-			PrincipalAuthorization.SetInstance(authorizer);
 			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(_swapService, _scheduleDayChangeCallback, new ByPassPersistableScheduleDataPermissionChecker());
 			using (_mock.Record())
 			{
@@ -182,10 +183,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 			using (_mock.Playback())
 			{
-                _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+				using (new CustomAuthorizationContext(authorizer))
+				{
+					_swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null,
+						new ScheduleTagSetter(NullScheduleTag.Instance));
+				}
 			}
-
-			PrincipalAuthorization.SetInstance(new PrincipalAuthorizationWithFullPermission()); //restore the setup to avoid impacting other tests.
 		}
 
 
@@ -213,6 +216,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mock.Playback())
 			{
 				_p1D1.CreateAndAddAbsence(new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), _d1));
+
                 _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
 			}	
 		}
