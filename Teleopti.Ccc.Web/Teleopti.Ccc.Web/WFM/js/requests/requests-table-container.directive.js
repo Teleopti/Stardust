@@ -7,10 +7,9 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', "Toggle", 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', "Toggle", 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter'];
 
-	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo) {
-
+	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo, requestFilterSvc) {
 		var vm = this;
 
 		vm.gridOptions = getGridOptions([]);
@@ -72,14 +71,14 @@
 						}
 
 						filterHandlingTimeout = $timeout(function() {
-							vm.filters = [];
-							angular.forEach(grid.columns, function(column) {
-								if (column.filters[0].term) {
-									var filter = {};
-									filter[column.colDef.displayName] = column.filters[0].term;
-									vm.filters.push(filter);
+							angular.forEach(grid.columns, function (column) {
+								var term = column.filters[0].term;
+								if (term != undefined) {
+									requestFilterSvc.SetFilter(column.colDef.displayName, term.trim());
 								}
 							});
+
+							vm.filters = requestFilterSvc.Filters;
 						}, 500);
 					});
 				}
@@ -145,7 +144,6 @@
 		}
 
 		function prepareComputedColumns(requests) {
-			
 			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			
 			function formatedDateTime(dateTime, timezone, displayDateOnly) {
@@ -157,7 +155,6 @@
 			}
 
 			angular.forEach(requests, function (row) {
-						
 				row.GetDuration = function () {
 					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
 					return formatToTimespan(length, row.IsFullDay);
@@ -199,13 +196,9 @@
 				vm.gridApi.selection.selectRow(row);
 			});
 
-			if (vm.requests && (vm.requests.length === rows.length) && vm.requests.length > 0) {
-				vm.gridApi.grid.selection.selectAll = true;
-			} else {
-				vm.gridApi.grid.selection.selectAll = false;
-			}
+			vm.gridApi.grid.selection.selectAll =
+				vm.requests && vm.requests.length > 0 && vm.requests.length === rows.length;
 		}
-		
 	}
 
 	function requestsTableContainerDirective() {

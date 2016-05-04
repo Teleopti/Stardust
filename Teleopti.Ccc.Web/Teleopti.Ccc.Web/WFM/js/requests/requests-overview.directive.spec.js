@@ -2,7 +2,6 @@
 	'use strict';
 
 	describe('Requests overview directive', function() {
-
 		var $compile, $rootScope, requestsDataService, requestsDefinitions;
 
 		var targetElement, targetScope;
@@ -30,7 +29,6 @@
 			targetScope = $rootScope.$new();
 		}));
 
-
 		it("show requests table container", function() {
 			requestsDataService.setRequests([]);
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
@@ -55,7 +53,6 @@
 		});
 
 		it("should not request data when filter contains error", function() {
-
 			requestsDataService.setRequests([]);
 
 			targetScope.period = {};
@@ -142,20 +139,22 @@
 			var targets = element.find('requests-table-container');
 			return angular.element(targets[0]).scope();
 		}
-
 	});
 
 	describe('requests table container directive', function() {
-
-		var $compile, $rootScope, requestsDefinitions,$filter;
+		var $compile, $rootScope, requestsDefinitions, $filter;
 
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 
 		beforeEach(function () {
+			var requestsDataService = new FakeRequestsDataService();
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
 					return new FakeToggleService();
+				});
+				$provide.service('requestsDataService', function () {
+					return requestsDataService;
 				});
 			});
 		});
@@ -244,7 +243,6 @@
 	});
 
 	function FakeRequestsDataService() {
-
 		var _requests;
 		var _hasSentRequests;
 		var _lastRequestParameters;
@@ -285,6 +283,26 @@
 					});
 				}
 			}
+		}
+
+		this.getRequestableAbsences = function () {
+			return {
+				then: function (cb) {
+					cb({
+						data: [
+							{ Id: "00", Name: "Absence0" },
+							{ Id: "01", Name: "Absence1" }
+						]
+					});
+				}
+			}
+		}
+
+		this.getAllRequestStatuses = function () {
+			return [
+				{ Id: 0, Name: "Status0" },
+				{ Id: 1, Name: "Status1" }
+			];
 		}
 	}
 
