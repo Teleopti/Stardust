@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 		public void ProcessAsync(Action job)
 		{
-			_jobThreads.Add(Execute.OnAnotherThread(() => tryJob(100, job)));
+			_jobThreads.Add(Execute.OnAnotherThread(() => tryJob(10, job)));
 		}
 
 		private void tryJob(int retriesLeft, Action job)

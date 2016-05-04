@@ -48,12 +48,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 								try
 								{
 									_busProcessor.Process(@event, new[] { handlerType });
-									Debug.WriteLine("done " + retries + " " + @event.GetType().Name + "-> " + handlerType.Name);
+									//Debug.WriteLine("done " + retries + " " + @event.GetType().Name + "-> " + handlerType.Name);
 									break;
 								}
 								catch (Exception)
 								{
-									Debug.WriteLine("retry " + retries + " " + @event.GetType().Name + "-> " + handlerType.Name);
+									//Debug.WriteLine("retry " + retries + " " + @event.GetType().Name + "-> " + handlerType.Name);
 									retries--;
 									if (retries == 0)
 										throw;
