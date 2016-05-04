@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	        var timeZone = person.PermissionInformation.DefaultTimeZone();
 	        var longDateOnlyPeriod = optimizedPeriod.ToDateOnlyPeriod(timeZone);
 			longDateOnlyPeriod = new DateOnlyPeriod(longDateOnlyPeriod.StartDate.AddDays(-1),longDateOnlyPeriod.EndDate.AddDays(1));
-			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker());
+			var retDic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(optimizedPeriod), new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker);
 			var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
 
             using (TurnoffPermissionScope.For(retDic))
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (personsProvider == null) throw new ArgumentNullException("personsProvider");
             if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
-			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), new PersistableScheduleDataPermissionChecker());
+			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker);
             IList<IPerson> personsInOrganization = personsProvider.GetPersons();
             
             // ugly to be safe to get all

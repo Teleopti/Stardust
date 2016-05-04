@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var lockDates = new List<DateOnly>();
 			var businessRules = NewBusinessRuleCollection.Minimum();
 			var scheduleTagSetter = new ScheduleTagSetter(NullScheduleTag.Instance);
-			var optionalParams = new OptionalParamsForSwapShift{TrackedCommandInfo = trackedCommandInfo, CheckModifyAssPermission = false};
-			return _swapAndModifyServiceNew.Swap(people[0], people[1], dates, lockDates, scheduleDictionary, businessRules, scheduleTagSetter, optionalParams)
+			return _swapAndModifyServiceNew.Swap(people[0], people[1], dates, lockDates, scheduleDictionary, businessRules, scheduleTagSetter, trackedCommandInfo)
 										   .Where(r => r.Error)
 										   .ToArray();
 		}

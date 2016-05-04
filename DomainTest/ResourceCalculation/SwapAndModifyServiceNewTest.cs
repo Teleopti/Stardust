@@ -9,6 +9,8 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mock = new MockRepository();
 			_swapService = _mock.StrictMock<ISwapServiceNew>();
             _scheduleDayChangeCallback = _mock.DynamicMock<IScheduleDayChangeCallback>();
-			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(_swapService,_scheduleDayChangeCallback);
+			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(_swapService,_scheduleDayChangeCallback, new PersistableScheduleDataPermissionChecker());
 			_person1 = _mock.StrictMock<IPerson>();
 			_person2 = _mock.StrictMock<IPerson>();
 			_dictionary = _mock.StrictMock<IScheduleDictionary>();
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionWhenSwapServiceIsNull()
 		{
-			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(null,_scheduleDayChangeCallback);	
+			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(null,_scheduleDayChangeCallback, new PersistableScheduleDataPermissionChecker());	
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
@@ -118,6 +120,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dates = new List<DateOnly> { new DateOnly(2011, 1, 1) };
             _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, null, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
+		[Test, ExpectedException(typeof(PermissionException))]
+		public void ShouldThrowExceptionWhenNoPermissionForModifyingPersonAss()
+		{
+			_dates = new List<DateOnly> {new DateOnly(2011, 1, 1)};
+			var authorizer = new PrincipalAuthorizationWithNoPermission();
+			PrincipalAuthorization.SetInstance(authorizer);
+			_swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+		}
 
 
 		[Test]
@@ -126,6 +136,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dates.Clear();
 			_dates.Add(new DateOnly(2009, 02, 01));
 			_dates.Add(new DateOnly(2009, 02, 02));
+			using (_mock.Record())
+			{
+				Expect.Call(_dictionary[_person1]).Return(_range1).Repeat.Twice();
+				Expect.Call(_range1.ScheduledDay(_dates[0])).Return(_p1D1);
+				Expect.Call(_range1.ScheduledDay(_dates[1])).Return(_p1D2);
+				Expect.Call(_dictionary[_person2]).Return(_range2).Repeat.Twice();
+				Expect.Call(_range2.ScheduledDay(_dates[0])).Return(_p2D1);
+				Expect.Call(_range2.ScheduledDay(_dates[1])).Return(_p2D2);
+				_swapService.Init(null);
+				LastCall.IgnoreArguments().Repeat.AtLeastOnce();
+				Expect.Call(_swapService.Swap(_dictionary)).Return(new List<IScheduleDay> { _p1D1, _p2D1 });
+				Expect.Call(_swapService.Swap(_dictionary)).Return(new List<IScheduleDay> { _p1D2, _p2D2 });
+                Expect.Call(_dictionary.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay>(), null, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance))).IgnoreArguments().Return(new List<IBusinessRuleResponse>());
+			}
+			using (_mock.Playback())
+			{
+                _swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
+			}
+		}
+
+		[Test]
+		public void ShouldSwapWithByPassingPersonAssPermissionCheck()
+		{
+			_dates.Clear();
+			_dates.Add(new DateOnly(2009, 02, 01));
+			_dates.Add(new DateOnly(2009, 02, 02));
+			var authorizer = new PrincipalAuthorizationWithNoPermission();
+			PrincipalAuthorization.SetInstance(authorizer);
+			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(_swapService, _scheduleDayChangeCallback, new ByPassPersistableScheduleDataPermissionChecker());
 			using (_mock.Record())
 			{
 				Expect.Call(_dictionary[_person1]).Return(_range1).Repeat.Twice();
