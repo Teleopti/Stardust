@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public CustomAuthorizationContext(IPrincipalAuthorization principalAuthorization)
 		{
-			_previousAuthorization = PrincipalAuthorization.Instance();
+			_previousAuthorization = PrincipalAuthorization.Current();
 			CurrentPrincipalAuthorization.GloballyUse(principalAuthorization);
 		}
 

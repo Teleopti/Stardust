@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (SchedulePart != null)
             {
-                return PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
+                return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
             }
             return true;
         }

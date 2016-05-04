@@ -253,6 +253,7 @@
     <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\SchedulePeriodBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\SingleDayBlockFinder.cs" />
+    <Compile Include="Security\Principal\CurrentPrincipalAuthorization.cs" />
     <Compile Include="Security\Principal\IUpdatedBy.cs" />
     <Compile Include="Security\Principal\IUpdatedByScope.cs" />
     <Compile Include="Security\Principal\UpdatedBy.cs" />

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
         private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)
         {
-            var authorizationInstance = PrincipalAuthorization.Instance();
+            var authorizationInstance = PrincipalAuthorization.Current();
             if (
                 !authorizationInstance.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly,
                                                    person))

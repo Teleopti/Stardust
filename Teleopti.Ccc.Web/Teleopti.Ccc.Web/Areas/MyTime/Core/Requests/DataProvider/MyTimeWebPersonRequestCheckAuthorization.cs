@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private static bool hasPermission(string applicationFunctionPath, IPersonRequest personRequest)
 		{
 			DateOnly dateOnly = new DateOnly(personRequest.RequestedDate);
-			return PrincipalAuthorization.Instance().IsPermitted(applicationFunctionPath, dateOnly, personRequest.Person);
+			return PrincipalAuthorization.Current().IsPermitted(applicationFunctionPath, dateOnly, personRequest.Person);
 		}
 	}
 }

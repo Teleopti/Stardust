@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IMeetingOverviewViewFactory _meetingOverviewViewFactory;
 
         private readonly bool _canExecute =
-            PrincipalAuthorization.Instance().IsPermitted(
+            PrincipalAuthorization.Current().IsPermitted(
                 DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 
         public OpenMeetingsOverviewCommand( IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory,

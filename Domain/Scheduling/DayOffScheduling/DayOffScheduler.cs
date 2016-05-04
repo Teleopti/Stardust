@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 
 							var personAssignment = bestScheduleDay.PersonAssignment();
-							var authorization = PrincipalAuthorization.Instance();
+							var authorization = PrincipalAuthorization.Current();
 							if (!(authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person))) continue;
 
 							rollbackService.Modify(bestScheduleDay);

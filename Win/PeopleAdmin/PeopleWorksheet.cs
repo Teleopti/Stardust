@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			SetColors();
 			setPermissionOnControls();
 
-			_readOnly = !PrincipalAuthorization.Instance().IsPermitted(
+			_readOnly = !PrincipalAuthorization.Current().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 		}
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 		private void setPermissionOnControls()
 		{
-			var optionPagePermission = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			var optionPagePermission = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 			backStageButton3.Enabled = optionPagePermission;
 
 			toolStripButtonContract.Enabled = optionPagePermission;
@@ -883,7 +883,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 			//Set generalToolStripButton to add new person when press CTRL + N.
 			//SetShortcut(generalToolStripButton, ((Keys.Control | Keys.N)));
-			toolStripExEdit.Enabled = PrincipalAuthorization.Instance().IsPermitted(
+			toolStripExEdit.Enabled = PrincipalAuthorization.Current().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 		}
 
@@ -916,7 +916,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_clipboardControl.PasteSpecialClicked += (clipboardControlPasteSpecialClicked);
 			_clipboardControl.PasteClicked += (clipboardControlPasteClicked);
 			//_clipboardControl.SetButtonState(ClipboardAction.Paste, false);
-			toolStripExClipboard.Enabled = PrincipalAuthorization.Instance().IsPermitted(
+			toolStripExClipboard.Enabled = PrincipalAuthorization.Current().IsPermitted(
 					DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
 		}
 
@@ -1055,7 +1055,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				// Configures the find and replace form
 				_findAndReplaceForm.ConfigureSearchFunctionality(_gridConstructor.View.Grid, _domainFinder);
 
-				if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword))
+				if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword))
 				{
 					togglePanelContent(false);
 					splitContainerWorksheet.Panel2Collapsed = false;

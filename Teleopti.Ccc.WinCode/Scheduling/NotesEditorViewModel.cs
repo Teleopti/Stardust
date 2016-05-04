@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (_schedulePart == null) return;
 
             IsEnabled =
-                PrincipalAuthorization.Instance()
+                PrincipalAuthorization.Current()
                                       .IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment,
                                                    _schedulePart.DateOnlyAsPeriod.DateOnly, _schedulePart.Person) &&
                 _schedulePart.FullAccess;

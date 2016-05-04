@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			InitializeComponent();
 
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 			{
 				autoLabelPayrollCodeColon.Visible = false;
 				textBoxExtPayrollCode.Visible = false;

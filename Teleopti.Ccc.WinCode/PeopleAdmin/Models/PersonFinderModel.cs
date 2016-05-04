@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_personFinderReadOnlyRepository.FindPeople(SearchCriteria);
 			var today = DateOnly.Today;
 			var bu = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
-			var auth = PrincipalAuthorization.Instance();
+			var auth = PrincipalAuthorization.Current();
 			foreach (var personFinderDisplayRow in SearchCriteria.DisplayRows)
 			{
 				if (personFinderDisplayRow.PersonId != Guid.Empty)

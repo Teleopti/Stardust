@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             _filteredPeopleHolder = filteredPeopleHolder;
 	        _toggleManager = toggleManager;
             _readOnly =
-                !PrincipalAuthorization.Instance().IsPermitted(
+                !PrincipalAuthorization.Current().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.AllowPersonModifications);
         }
 

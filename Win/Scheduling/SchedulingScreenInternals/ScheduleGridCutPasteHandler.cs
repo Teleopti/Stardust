@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
         public override void DeleteSpecial()
         {
-            var authorization = PrincipalAuthorization.Instance();
+            var authorization = PrincipalAuthorization.Current();
             var options = new PasteOptions();
             var clipboardSpecialOptions = new ClipboardSpecialOptions();
             clipboardSpecialOptions.ShowRestrictions = _scheduleView() is AgentRestrictionsDetailView;

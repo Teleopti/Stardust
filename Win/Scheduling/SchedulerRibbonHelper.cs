@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (teamLeaderMode)
 				return false;
 
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
 				return false;
 
 			if (scheduleView.TheGrid.Selections.Count != 1)

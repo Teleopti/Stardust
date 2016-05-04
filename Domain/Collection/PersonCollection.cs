@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Collection
         {
             get
             {
-                var authorization = PrincipalAuthorization.Instance();
+                var authorization = PrincipalAuthorization.Current();
                 IList<IPerson> tempList = new List<IPerson>();
                 foreach (IPerson person in _wrappedCollection)
                 {

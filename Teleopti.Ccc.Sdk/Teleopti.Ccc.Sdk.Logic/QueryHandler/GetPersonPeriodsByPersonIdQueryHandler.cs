@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					var personPeriods =
 						persons.Where(
 							p =>
-								PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, p))
+								PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, p))
 							.SelectMany(person => person.PersonPeriods(dateOnlyPeriod))
 							.ToList();
 

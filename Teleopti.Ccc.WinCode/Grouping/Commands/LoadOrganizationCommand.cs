@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 
 		public void Execute()
         {
-            var loadUser = PrincipalAuthorization.Instance().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
+            var loadUser = PrincipalAuthorization.Current().EvaluateSpecification(new AllowedToSeeUsersNotInOrganizationSpecification(_applicationFunction.FunctionPath));
             if (!_loadUsers)
                 loadUser = false;
             var dateOnlyPeriod = _view.SelectedPeriod;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 			
             toNodes = removeDuplicates(toNodes);
 			// Permissions
-			var auth = PrincipalAuthorization.Instance();
+			var auth = PrincipalAuthorization.Current();
 
             var toRemove = new List<IPersonSelectorOrganization>();
 			if(_view.VisiblePersonIds != null)

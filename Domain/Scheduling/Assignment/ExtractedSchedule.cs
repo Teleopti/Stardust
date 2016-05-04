@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private void mergeDayOff(IScheduleDay source, bool deleteAbsence)
 		{
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
 				return;
 
@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				}
 			}
 
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) && deleteList.Count > 0)
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence) && deleteList.Count > 0)
 				return;
 
 			//remove absences up for split
@@ -719,7 +719,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void CreateAndAddActivity(IActivity activity, DateTimePeriod period, IShiftCategory shiftCategory)
 		{
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
 				return;
 

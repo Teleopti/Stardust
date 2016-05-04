@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (selectedSchedules.IsEmpty())
 				return;
 
-			ISwapRawService swapRawService = new SwapRawService(PrincipalAuthorization.Instance());
+			ISwapRawService swapRawService = new SwapRawService(PrincipalAuthorization.Current());
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
 														 new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), ()=>_schedulerState), new ScheduleTagSetter(_defaultScheduleTag));
 

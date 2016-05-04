@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
             using (PerformanceOutput.ForOperation("Modifying " + scheduleParts.Count() + " schedule(s)"))
             {
-                var authorization = PrincipalAuthorization.Instance();
+                var authorization = PrincipalAuthorization.Current();
                 if (isScenarioRestrictedAndNotPermitted(authorization))
                     return lstErrors;
 

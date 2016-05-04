@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		public void Handle(ExportMultisiteSkillToSkillCommandDto command)
         {
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit))
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit))
 			{
 				throw new FaultException("You're not authorized to run this command.");
 			}

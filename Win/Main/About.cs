@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Main
 
             SetTexts();
             setColors();
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			buttonAdvViewActive.Visible =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewActiveAgents);
             labelActiveAgentsInUse.Text = getNumberOfActiveAgents();

@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
 				var persons = reloadedMeeting.MeetingPersons.Select(m => m.Person).ToArray();
 
-				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Instance())) return;
+				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Current())) return;
 				reloadedMeeting.Snapshot();
 
 				meetingRepository.Remove(reloadedMeeting);

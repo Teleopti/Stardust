@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		{
 			if (command == null)
 				throw new FaultException("Command is null.");
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile))
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile))
 			{
 				throw new FaultException("You're not authorized to run this command.");
 			}

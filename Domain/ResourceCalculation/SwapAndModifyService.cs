@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             if (person1 == person2)
                 throw new ArgumentException("The Persons must be different");
 
-            var authorizationService = PrincipalAuthorization.Instance();
+            var authorizationService = PrincipalAuthorization.Current();
             var applicationFunction = DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment;
 
             // a list to hold all modified parts

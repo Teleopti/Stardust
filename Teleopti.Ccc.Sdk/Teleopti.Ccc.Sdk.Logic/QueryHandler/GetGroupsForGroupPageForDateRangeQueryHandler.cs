@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 						p.Any(
 							d =>
 							{
-								return daysInRange.Any(date => PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+								return daysInRange.Any(date => PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 									date, d));
 							})).Select(
 										p =>

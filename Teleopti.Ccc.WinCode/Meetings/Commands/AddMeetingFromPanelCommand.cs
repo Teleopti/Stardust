@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IMeetingOverviewViewFactory _meetingOverviewViewFactory;
 
         private readonly bool _canExecute =
-            PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
+            PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyMeetings);
 
         public AddMeetingFromPanelCommand(IRepositoryFactory repositoryFactory, IUnitOfWorkFactory unitOfWorkFactory,
                 IPersonSelectorPresenter personSelectorPresenter, IMeetingOverviewViewFactory meetingOverviewViewFactory)
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         {
             IPerson person = ((IUnsafePerson)TeleoptiPrincipal.CurrentPrincipal).Person;
             ITeam rightClickedPersonsTeam = person.MyTeam(DateOnly.Today);
-            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
+            if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, rightClickedPersonsTeam))
             {
                 return true;
             }

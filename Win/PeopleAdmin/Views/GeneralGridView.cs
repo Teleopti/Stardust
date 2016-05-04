@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		internal override void CreateHeaders()
 		{
-			_hasRights = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword);
+			_hasRights = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword);
 			_gridColumns.Add(new RowHeaderColumn<PersonGeneralModel>());
 
 			createUserInfoHeaders();

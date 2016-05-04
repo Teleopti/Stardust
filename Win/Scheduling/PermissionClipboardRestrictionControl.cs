@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_clipboardControl != null)
 			{
-				var authorization = PrincipalAuthorization.Instance();
+				var authorization = PrincipalAuthorization.Current();
 				_clipboardControl.SetButtonState(ClipboardAction.Paste, authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
 			}
 		}

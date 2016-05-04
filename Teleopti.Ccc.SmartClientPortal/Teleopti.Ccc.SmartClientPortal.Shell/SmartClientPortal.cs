@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void toolStripButtonPermissons_Click(object sender, EventArgs e)
 		{
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
 			{
 				if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
 				{
@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void SetPermissionOnToolStripButtonControls()
 		{
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			backStageButtonPermissions.Enabled =
 				authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage);
 			backStageButtonOptions.Enabled =
@@ -480,7 +480,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void LoadOutLookBar()
 		{
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctionsBySpecification(new ModuleSpecification());
 
 			IList<ModulePanelItem> modulePanelItems = new List<ModulePanelItem>();

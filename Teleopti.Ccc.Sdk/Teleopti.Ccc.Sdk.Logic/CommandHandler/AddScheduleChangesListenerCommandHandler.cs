@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		private static void validatePermissions()
 		{
-			var principalAuthorization = PrincipalAuthorization.Instance();
+			var principalAuthorization = PrincipalAuthorization.Current();
 			if (!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage) &&
 				!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 			{

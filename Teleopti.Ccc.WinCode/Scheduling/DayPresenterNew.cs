@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (!IsInsidePersonPeriod(daySchedule))
                         _lockManager.AddLock(daySchedule, LockType.OutsidePersonPeriod);
 
-                    if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+                    if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
                         if (!daySchedule.IsFullyPublished)
                             _lockManager.AddLock(daySchedule, LockType.UnpublishedSchedule);
 

@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 									{UseDisablePropertyCheck = true};
 			gridColumns.Add(trackerColumn);
 			gridColumns.Add(new SFGridCheckBoxColumn<AbsenceView>("Confidential", Resources.Confidential));
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 			{
 				var payrollColumn = new SFGridEditableTextColumn<AbsenceView>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
 				gridColumns.Add(payrollColumn);

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Win.Intraday
 		    _publisher = publisher;
 		    _eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
 
-		    var authorization = PrincipalAuthorization.Instance();
+		    var authorization = PrincipalAuthorization.Current();
 
 			InitializeComponent();
 			if (DesignMode) return;

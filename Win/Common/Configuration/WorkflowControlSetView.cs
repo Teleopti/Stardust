@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			dateTimePickerAdvViewpoint.Value = DateTime.Today;
 			comboBoxAdvWorkflowControlSet.Focus();
 			// Hide Absence Request tab if no permissions.
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			tabControlAdvArea.TabPages[1].TabVisible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AbsenceRequests);
 			tabControlAdvArea.TabPages[2].TabVisible = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequests);
 		}

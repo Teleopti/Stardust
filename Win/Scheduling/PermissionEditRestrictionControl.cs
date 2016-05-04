@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_editControl != null)
 			{
-				var authorization = PrincipalAuthorization.Instance();
+				var authorization = PrincipalAuthorization.Current();
 
 				_editControl.SetButtonState(EditAction.New, authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));
 				_editControl.SetSpecialItemState(EditAction.New, ClipboardItems.Preference.ToString(), authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction));								

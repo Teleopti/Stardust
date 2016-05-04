@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (SchedulePart != null)
             {
-                return PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
+                return PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence);
             }
             return true;
         }

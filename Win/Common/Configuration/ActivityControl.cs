@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("AllowOverwrite",Resources.AllowMeetings ));
 
 			gridColumns.Add(new SFGridDropDownEnumColumn<IActivity, ReportLevelDetailAdapter, ReportLevelDetail>("ReportLevelDetail", Resources.ReportLevel, reportLevelDetails(), "DisplayName", "ReportLevelDetail"));
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 			{
 				var payrollColumn = new SFGridEditableTextColumn<IActivity>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
 				gridColumns.Add(payrollColumn);

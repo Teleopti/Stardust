@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			IList<IPersonRequest> personRequests = new List<IPersonRequest>();
 
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _requestedScenario.DefaultScenario)
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _requestedScenario.DefaultScenario)
 				if (personRequestRepository != null)
 					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(AllPermittedPersons, period);
 			
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			
 			IPersonRequest updatedRequest = null;
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 				updatedRequest = personRequestRepository.Find(personRequestId);
 
 			if (updatedRequest != null)

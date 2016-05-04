@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IList<IPersistableScheduleData> GetPermittedData(
 			IEnumerable<IPersistableScheduleData> persistableScheduleData)
 		{
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			var permittedData = persistableScheduleData.Where(d =>
 			{
 				var forAuthorization =
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public bool IsModifyPersonAssPermitted(DateOnly dateOnly, IPerson person)
 		{
-			var authorization = PrincipalAuthorization.Instance();
+			var authorization = PrincipalAuthorization.Current();
 			return authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, dateOnly, person);
 		}
 	}

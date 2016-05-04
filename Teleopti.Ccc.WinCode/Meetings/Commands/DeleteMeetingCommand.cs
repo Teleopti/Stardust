@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             {
                 var persons = theMeeting.MeetingPersons.Select(m => m.Person);
                 unitOfWork.Reassociate(persons);
-                if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, theMeeting.StartDate, _meetingOverviewView, PrincipalAuthorization.Instance()))
+                if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, theMeeting.StartDate, _meetingOverviewView, PrincipalAuthorization.Current()))
                     return;
 				theMeeting.Snapshot();
 

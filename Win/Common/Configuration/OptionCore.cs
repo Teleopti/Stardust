@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			
 			allSupportedPages.Add(new SeniorityControl());
 			
-			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
 
 

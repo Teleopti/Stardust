@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		private static void checkIfAuthorized()
 		{
-			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage))
+			if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage))
 			{
 				throw new FaultException("You're not allowed to modify person details.");
 			}

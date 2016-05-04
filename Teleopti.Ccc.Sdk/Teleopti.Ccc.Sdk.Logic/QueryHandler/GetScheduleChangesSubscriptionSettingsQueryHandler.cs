@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		private static void validatePermissions()
 		{
-			var principalAuthorization = PrincipalAuthorization.Instance();
+			var principalAuthorization = PrincipalAuthorization.Current();
 			if (!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage) &&
 				!principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebPermissions))
 			{

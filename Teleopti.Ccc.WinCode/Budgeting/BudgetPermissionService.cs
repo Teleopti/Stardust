@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting
            {
                if (!_isAllowancePermitted.HasValue)
                    _isAllowancePermitted =
-                       PrincipalAuthorization.Instance().IsPermitted(
+                       PrincipalAuthorization.Current().IsPermitted(
                            DefinedRaptorApplicationFunctionPaths.RequestAllowances);
                return _isAllowancePermitted.GetValueOrDefault(false);
            }

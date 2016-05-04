@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		private static void checkIfAuthorized(IEnumerable<IPerson> people, DateOnly dateOnly)
 		{
-			var authorizationInstance = PrincipalAuthorization.Instance();
+			var authorizationInstance = PrincipalAuthorization.Current();
 			foreach (var person in people)
 			{
 				if (!authorizationInstance.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))

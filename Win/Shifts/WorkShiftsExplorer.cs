@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		private void setPermissionOnControls()
 		{
-			backStageButton3.Enabled = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
+			backStageButton3.Enabled = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenOptionsPage);
 		}
 
 		private void workShiftsExplorerFormClosing(object sender, FormClosingEventArgs e)

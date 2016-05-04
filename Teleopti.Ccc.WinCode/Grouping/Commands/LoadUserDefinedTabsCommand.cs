@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             }
             
             // rättigheter
-            var auth = PrincipalAuthorization.Instance();
+            var auth = PrincipalAuthorization.Current();
             var toRemove = new List<IPersonSelectorUserDefined>();
 			if (_personSelectorView.VisiblePersonIds != null)
 			{

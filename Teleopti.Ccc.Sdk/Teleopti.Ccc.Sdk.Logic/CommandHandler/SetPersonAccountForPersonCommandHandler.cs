@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
         private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)
         {
-            if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
+            if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, dateOnly, person))
             {
                 throw new FaultException("You're not allowed to modify person accounts for this person.");
             }

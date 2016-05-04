@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
              return !Confidential ||
                    principal.Organisation.IsUser(assignedPerson) ||
-                   PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, dateOnly, assignedPerson);
+                   PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential, dateOnly, assignedPerson);
 
         }
 
