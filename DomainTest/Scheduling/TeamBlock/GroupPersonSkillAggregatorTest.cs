@@ -1,9 +1,11 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
@@ -50,5 +52,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.AreEqual(1, result.Count);
 		}
 
+		[Test]
+		public void ShouldDisregardDeletedSkills()
+		{
+			var personalSkill = (IPersonSkillModify)_person1.Period(DateOnly.MinValue).PersonSkillCollection.First();
+			personalSkill.Active = true;
+			var skill = _person1.Period(DateOnly.MinValue).PersonSkillCollection.First().Skill;
+			((IDeleteTag)skill).SetDeleted();
+			IList<ISkill> result = new List<ISkill>(_target.AggregatedSkills(new List<IPerson> { _person1 }, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+			Assert.IsTrue(result.Contains(_skill2));
+			Assert.AreEqual(1, result.Count);
+		}
 	}
 }
