@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			IEnumerable<IApplicationFunction> actualMatrixFunctions;
 			using (_mocks.Record())
 			{
-				Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(expectedMatrixFunctions);
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(expectedMatrixFunctions);
 			}
 			using (_mocks.Playback())
 			{
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 					actualMatrixFunctions = _target.PermittedMatrixFunctions;
 				}
 			}
-			Assert.That(actualMatrixFunctions, Is.SameAs(expectedMatrixFunctions));
+			Assert.That(actualMatrixFunctions, Is.Empty);
 		}
 
 		[Test]
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			IEnumerable<IApplicationFunction> acctualFunctions;
 			using (_mocks.Record())
 			{
-				Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(expectedFunctions);
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(expectedFunctions);
 			}
 			using (_mocks.Playback())
 			{
@@ -73,13 +74,13 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
 			var matrixFunctions = new List<IApplicationFunction>
 												  {
-														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54"},
-														new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup"}
+														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},
+														new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup", ForeignSource = DefinedForeignSourceNames.SourceMatrix}
 												  };
 			IEnumerable<IMatrixFunctionGroup> actualMatrixFunctionGroups;
 			using (_mocks.Record())
 			{
-				Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
@@ -100,13 +101,13 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
 			var matrixFunctions = new List<IApplicationFunction>
 												  {
-														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54"},
-														new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup"}
+														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},
+														new ApplicationFunction {ForeignId = "AnIdNotMappedToAGroup", ForeignSource = DefinedForeignSourceNames.SourceMatrix}
 												  };
 			IEnumerable<IApplicationFunction> orphanMatrixFunctions;
 			using (_mocks.Record())
 			{
-				Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+				Expect.Call(authorization.GrantedFunctions()).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		public IEnumerable<IApplicationFunction> GetReports()
 		{
 			return
-				_principalAuthorization.GrantedFunctionsBySpecification(
+				_principalAuthorization.GrantedFunctions().FilterBySpecification(
 					new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)).ToList();
 		}
 	}

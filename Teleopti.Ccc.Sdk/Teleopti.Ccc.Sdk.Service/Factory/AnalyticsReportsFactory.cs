@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         internal static ICollection<MatrixReportInfoDto> Create()
         {
             var dtoList = new List<MatrixReportInfoDto>();
-            var appFuncList = PrincipalAuthorization.Current().GrantedFunctionsBySpecification(new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix));
+            var appFuncList = PrincipalAuthorization.Current().GrantedFunctions().FilterBySpecification(new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix));
 
             IStatisticRepository staticRepository = StatisticRepositoryFactory.Create();
             ICollection<MatrixReportInfo> matrixReportCollection = staticRepository.LoadReports();

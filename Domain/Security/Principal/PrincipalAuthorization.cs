@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
@@ -163,17 +162,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             }
             return grantedFunctions;
         }
-
+		
 		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
         {
 			return specification.IsSatisfiedBy(principalClaimsets());
         }
 		
-		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification)
-        {
-			return GrantedFunctions().FilterBySpecification(specification);
-        }
-
     }
 
 

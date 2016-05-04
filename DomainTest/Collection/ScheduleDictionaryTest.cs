@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				schedule.Add(ass);
 				schedule.Add(abs);
 
-				authorizer.HasPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+				authorizer.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 
 
 				target.Modify(ScheduleModifier.Scheduler, part, noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance)).ToList();

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 			get
 			{
 				return PrincipalAuthorization.Current()
-					.GrantedFunctionsBySpecification(
+					.GrantedFunctions().FilterBySpecification(
 						new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)
 					);
 			}
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.WinCode.Matrix
 			{
 				IEnumerable<IApplicationFunction> onlineReportFunctions =
 					PrincipalAuthorization.Current()
-						.GrantedFunctionsBySpecification(
+						.GrantedFunctions().FilterBySpecification(
 							new IsOnlineReportFunctionSpecification()
 						);
 

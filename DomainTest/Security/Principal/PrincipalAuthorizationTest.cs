@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -244,23 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			var result = principalAuthorization.GrantedFunctions();
             result.Count().Should().Be.EqualTo(1);
         }
-
-        [Test]
-        public void ShouldReturnGrantedFunctionsBasedOnSpecification()
-        {
-			var specification = mocks.StrictMock<ISpecification<IApplicationFunction>>();
-            using (mocks.Record())
-            {
-                Expect.Call(specification.IsSatisfiedBy(applicationFunction)).Return(true);
-            }
-            using (mocks.Playback())
-            {
-                organisationMembership.AddFromPerson(person);
-				var result = principalAuthorization.GrantedFunctionsBySpecification(specification);
-                result.Count().Should().Be.EqualTo(1);
-            }
-        }
-
+		
         [Test]
         public void ShouldEvaluateClaimSetsWithSpecification()
         {

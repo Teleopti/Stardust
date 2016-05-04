@@ -19,6 +19,7 @@ using Teleopti.Ccc.Win.Backlog;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
@@ -481,7 +482,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void LoadOutLookBar()
 		{
 			var authorization = PrincipalAuthorization.Current();
-			IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctionsBySpecification(new ModuleSpecification());
+			IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctions().FilterBySpecification(new ModuleSpecification());
 
 			IList<ModulePanelItem> modulePanelItems = new List<ModulePanelItem>();
 			foreach (IApplicationFunction module in modules.OrderBy(m => m.SortOrder.GetValueOrDefault(1000000)))

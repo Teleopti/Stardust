@@ -30,15 +30,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _permittedFunctionPaths.Contains(functionPath);
 		}
 
-		public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
-
-		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
-
-		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
-		{
-			throw new NotImplementedException();
-		}
-
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
 			return _permittedFunctionPaths.Contains(functionPath);
@@ -46,19 +37,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 		{
-			if(_permittedFunctionPaths.Contains(functionPath))
-				return new List<DateOnlyPeriod> {period};
+			if (_permittedFunctionPaths.Contains(functionPath))
+				return new List<DateOnlyPeriod> { period };
 			return new List<DateOnlyPeriod>();
+		}
+
+		public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
+
+		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void HasPermission(string functionPath)
 		{
 			_permittedFunctionPaths.Add(functionPath);
-		}
-
-		public void Reset()
-		{
-			_permittedFunctionPaths.Clear();
 		}
 	}
 

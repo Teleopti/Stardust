@@ -28,15 +28,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return false;
 		}
 
-		public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
-
-		public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
-
-		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
-		{
-			return false;
-		}
-
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
 			return false;
@@ -46,6 +37,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new List<DateOnlyPeriod>(0);
 		}
+
+		public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
+
+		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
+		{
+			return false;
+		}
+
 	}
 
 }
