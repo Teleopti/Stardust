@@ -39,11 +39,6 @@ namespace Stardust.Manager
 				throw new ArgumentNullException("retryPolicyProvider.GetPolicy");
 			}
 
-			if (retryPolicyProvider.GetPolicyWithTimeout() == null)
-			{
-				throw new ArgumentNullException("retryPolicyProvider.GetPolicyWithTimeout");
-			}
-
 			_connectionString = managerConfiguration.ConnectionString;
 			_createSqlCommandHelper = createSqlCommandHelper;
 
