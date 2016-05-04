@@ -530,7 +530,7 @@ namespace Stardust.Manager
 						retVal.Direction = ParameterDirection.ReturnValue;
 						selectJobQueueItemCommand.Parameters.Add(retVal);
 
-						using (var reader = selectJobQueueItemCommand.ExecuteReader())
+						using (var reader = selectJobQueueItemCommand.ExecuteReaderWithRetry(_retryPolicy))
 						{
 							if (reader.HasRows)
 							{
