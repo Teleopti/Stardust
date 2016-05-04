@@ -14,15 +14,15 @@ namespace Stardust.Node
 {
 	public class NodeStarter
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeStarter));
+		private readonly ILog _logger = LogManager.GetLogger(typeof (NodeStarter));
 
-		private static readonly ManualResetEvent QuitEvent = new ManualResetEvent(false);
+		private readonly ManualResetEvent _quitEvent = new ManualResetEvent(false);
 
 		private string WhoAmI { get; set; }
 
 		public void Stop()
 		{
-			QuitEvent.Set();
+			_quitEvent.Set();
 		}
 
 		public void Start(NodeConfiguration nodeConfiguration,
@@ -82,11 +82,11 @@ namespace Stardust.Node
 			{
 				WhoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
 
-				Logger.InfoWithLineNumber(WhoAmI + ": Node started on machine.");
+				_logger.InfoWithLineNumber(WhoAmI + ": Node started on machine.");
 
-				Logger.InfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
+				_logger.InfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
-				QuitEvent.WaitOne();
+				_quitEvent.WaitOne();
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Net;
 using System.Reflection;
 using Newtonsoft.Json;
 using NodeTest.Fakes;
@@ -164,7 +165,7 @@ namespace NodeTest
 			Assert.IsTrue(_workerWrapper.IsCancellationRequested);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIdIsEmptyGuid()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
@@ -177,11 +178,10 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimerFake);
 			
 			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity() { JobId = Guid.Empty });
-
-		//	Assert.IsTrue(actionResult.IsBadRequest);
+			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIsEmpty()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
@@ -194,11 +194,10 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimerFake);
 
 			var actionResult = _workerWrapper.ValidateStartJob(new JobQueueItemEntity());
-
-		//	Assert.IsTrue(actionResult.IsBadRequest);
+			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void StartJobShouldReturnBadRequestWhenMessageIsNull()
 		{
 			_workerWrapper = new WorkerWrapper(new ShortRunningInvokeHandlerFake(),
@@ -211,8 +210,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimerFake);
 
 			var actionResult = _workerWrapper.ValidateStartJob(null);
-
-		//	Assert.IsTrue(actionResult.IsBadRequest);
+			Assert.IsTrue(actionResult.StatusCode == HttpStatusCode.BadRequest);
 		}
 	}
 }
