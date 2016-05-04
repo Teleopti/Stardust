@@ -70,11 +70,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PersonCollectionChangedEventPublisherForTeamOrSite>().As<ITransactionHook>();
 			builder.RegisterType<PersonCollectionChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<ITransactionHook>();
-
-			if (_configuration.Toggle(Toggles.ETL_SpeedUpIntradayPreference_37124))
-			{
-				builder.RegisterType<PreferenceChangedEventPublisher>().As<ITransactionHook>();
-			}
 			builder.RegisterType<MessageBrokerSender>().As<ITransactionHook>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
 				builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();

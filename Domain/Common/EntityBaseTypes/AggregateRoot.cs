@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
 		private readonly IList<Func<INow, IEvent>> _events = new List<Func<INow, IEvent>>();
 
-		public virtual IEnumerable<IEvent> PopAllEvents(INow now)
+		public virtual IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation=null)
 		{
 			var allEvents = _events.Select(e => e.Invoke(now)).ToArray();
 			_events.Clear();

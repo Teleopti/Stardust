@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
 
-			_target.Handle(new PreferenceChangedEvent
+			_target.Handle(new PreferenceDeletedEvent
 			{
 				PreferenceDayId = Guid.NewGuid(),
 				PersonId = person.Id.GetValueOrDefault(),

@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpIntradayPreference_37124)]
 	public class PreferenceChangedHandler :
+        IHandleEvent<PreferenceCreatedEvent>,
+        IHandleEvent<PreferenceDeletedEvent>,
 		IHandleEvent<PreferenceChangedEvent>,
 		IRunOnHangfire
 	{
@@ -68,100 +70,138 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			}
 		}
 
-		[AsSystem]
+        [AsSystem]
+        [AnalyticsUnitOfWork]
+        [UnitOfWork]
+        public virtual void Handle(PreferenceDeletedEvent @event)
+        {
+            if (logger.IsDebugEnabled)
+            {
+                logger.DebugFormat("Consuming deleted event for preference Id = {0}. (Message timestamp = {1})",
+                                   @event.PreferenceDayId, @event.Timestamp);
+            }
+            var dateId = _analyticsDateRepository.Date(@event.RestrictionDate.Date);
+            var person = _personRepository.FindPeople(new[] { @event.PersonId }).First();
+            var personPeriod = person.Period(new DateOnly(@event.RestrictionDate.Date));
+            var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
+
+            _analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+        }
+
+        [AsSystem]
+        [AnalyticsUnitOfWork]
+        [UnitOfWork]
+        public virtual void Handle(PreferenceCreatedEvent @event)
+        {
+            if (logger.IsDebugEnabled)
+            {
+                logger.DebugFormat("Consuming created event for preference Id = {0}. (Message timestamp = {1})",
+                                   @event.PreferenceDayId, @event.Timestamp);
+            }
+
+            CommonHandle(@event.PreferenceDayId, @event.RestrictionDate.Date, @event.PersonId, @event.ScenarioId);
+        }
+
+        [AsSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		public virtual void Handle(PreferenceChangedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.DebugFormat("Consuming event for preference Id = {0}. (Message timestamp = {1})",
+				logger.DebugFormat("Consuming changed event for preference Id = {0}. (Message timestamp = {1})",
 								   @event.PreferenceDayId, @event.Timestamp);
 			}
 
-			// Preference, person look ups, mapping
-			var preferenceDay = _preferenceDayRepository.Find(@event.PreferenceDayId);
-			var dateId = _analyticsDateRepository.Date(@event.RestrictionDate.Date);
-			var person = _personRepository.FindPeople(new[] { @event.PersonId }).First();
-			var personPeriod = person.Period(new DateOnly(@event.RestrictionDate.Date));
-			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
+            CommonHandle(@event.PreferenceDayId, @event.RestrictionDate.Date, @event.PersonId, @event.ScenarioId);
 
-			if (preferenceDay == null)
-			{
-				// Preference day does not exists anymore so it has been deleted.
-				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
-				return;
-			}
-
-			IList<IScenario> scenarios;
-			if (@event.ScenarioId == Guid.Empty)
-			{
-				scenarios = _scenarioRepository.FindEnabledForReportingSorted();
-			}
-			else
-			{
-				scenarios = _scenarioRepository.FindEnabledForReportingSorted().Where(a => a.Id.Equals(@event.ScenarioId)).ToList();
-				if (scenarios.IsEmpty())
-				{
-					logger.DebugFormat("Nothing to do with preference id {0} because scenario {1} was not found as reportable.",
-						@event.PreferenceDayId, @event.ScenarioId);
-					return;
-				}
-			}
-
-			// General look ups
-			var analyticsScenarios = _analyticsScheduleRepository.Scenarios();
-			var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
-			var analyticsAbsences = _analyticsScheduleRepository.Absences();
-			var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
-
-			var period = new DateOnlyPeriod(new DateOnly(preferenceDay.RestrictionDate.Date), new DateOnly(preferenceDay.RestrictionDate.Date));
-			List<AnalyticsFactSchedulePreference> resultFactSchedulePreference = new List<AnalyticsFactSchedulePreference>();
-
-			foreach (var scenario in scenarios)
-			{
-				var schedulesDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, scheduleDictionaryLoadOptions, period, scenario);
-				var scheduleParts = schedulesDictionary[person].ScheduledDayCollection(period);
-				var businessUnitId = _analyticsBusinessUnitRepository.Get(scenario.BusinessUnit.Id.GetValueOrDefault());
-
-				foreach (var schedulePart in scheduleParts)
-				{
-					var restrictionBases = schedulePart.RestrictionCollection();
-					foreach (var restrictionBase in restrictionBases)
-					{
-						var preferenceRestriction = restrictionBase as IPreferenceRestriction;
-						if (preferenceRestriction == null)
-						{
-							logger.ErrorFormat("Could not get restrictions for preference day id '{0}' for person with person code {1}",
-								@event.PreferenceDayId, person.Id);
-							continue;
-						}
-						if (!SchedulePreferenceTransformerHelper.CheckIfPreferenceIsValid(preferenceRestriction))
-							continue;
-
-						var preferenceItem = mapSchedulePreference(schedulePart, analyticsScenarios, scenario, analyticsShiftCategories, preferenceRestriction, analyticsAbsences, analyticsDayOffs, businessUnitId, dateId, analyticsPersonPeriodId, preferenceDay);
-						resultFactSchedulePreference.Add(preferenceItem);
-					}
-				}
-			}
-
-			// Delete
-			if (@event.ScenarioId == Guid.Empty)
-			{
-				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
-			}
-			else
-			{
-				var scenarioId = analyticsScenarios.First(a => a.Code == @event.ScenarioId).Id;
-				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId, scenarioId);
-			}
-
-			// Insert
-			foreach (var analyticsFactSchedulePreference in resultFactSchedulePreference)
-			{
-				_analyticsPreferenceRepository.AddPreference(analyticsFactSchedulePreference);
-			}
 		}
+
+        private void CommonHandle(Guid preferenceDayId, DateTime restrictionDate, Guid personId, Guid scenarioId)
+	    {
+            // Preference, person look ups, mapping
+            var preferenceDay = _preferenceDayRepository.Find(preferenceDayId);
+            var dateId = _analyticsDateRepository.Date(restrictionDate.Date);
+            var person = _personRepository.FindPeople(new[] { personId }).First();
+            var personPeriod = person.Period(new DateOnly(restrictionDate.Date));
+            var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
+
+            if (preferenceDay == null)
+            {
+                // Preference day does not exists anymore so it has been deleted.
+                //_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+                return;
+            }
+
+            IList<IScenario> scenarios;
+            if (scenarioId == Guid.Empty)
+            {
+                scenarios = _scenarioRepository.FindEnabledForReportingSorted();
+            }
+            else
+            {
+                scenarios = _scenarioRepository.FindEnabledForReportingSorted().Where(a => a.Id.Equals(scenarioId)).ToList();
+                if (scenarios.IsEmpty())
+                {
+                    logger.DebugFormat("Nothing to do with preference id {0} because scenario {1} was not found as reportable.",
+                        preferenceDayId, scenarioId);
+                    return;
+                }
+            }
+
+            // General look ups
+            var analyticsScenarios = _analyticsScheduleRepository.Scenarios();
+            var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
+            var analyticsAbsences = _analyticsScheduleRepository.Absences();
+            var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
+
+            var period = new DateOnlyPeriod(new DateOnly(preferenceDay.RestrictionDate.Date), new DateOnly(preferenceDay.RestrictionDate.Date));
+            List<AnalyticsFactSchedulePreference> resultFactSchedulePreference = new List<AnalyticsFactSchedulePreference>();
+
+            foreach (var scenario in scenarios)
+            {
+                var schedulesDictionary = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, scheduleDictionaryLoadOptions, period, scenario);
+                var scheduleParts = schedulesDictionary[person].ScheduledDayCollection(period);
+                var businessUnitId = _analyticsBusinessUnitRepository.Get(scenario.BusinessUnit.Id.GetValueOrDefault());
+
+                foreach (var schedulePart in scheduleParts)
+                {
+                    var restrictionBases = schedulePart.RestrictionCollection();
+                    foreach (var restrictionBase in restrictionBases)
+                    {
+                        var preferenceRestriction = restrictionBase as IPreferenceRestriction;
+                        if (preferenceRestriction == null)
+                        {
+                            logger.ErrorFormat("Could not get restrictions for preference day id '{0}' for person with person code {1}",
+                                preferenceDayId, person.Id);
+                            continue;
+                        }
+                        if (!SchedulePreferenceTransformerHelper.CheckIfPreferenceIsValid(preferenceRestriction))
+                            continue;
+
+                        var preferenceItem = mapSchedulePreference(schedulePart, analyticsScenarios, scenario, analyticsShiftCategories, preferenceRestriction, analyticsAbsences, analyticsDayOffs, businessUnitId, dateId, analyticsPersonPeriodId, preferenceDay);
+                        resultFactSchedulePreference.Add(preferenceItem);
+                    }
+                }
+            }
+
+            // Delete
+            if (scenarioId == Guid.Empty)
+            {
+                _analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+            }
+            else
+            {
+                var analyticScenarioId = analyticsScenarios.First(a => a.Code == scenarioId).Id;
+                _analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId, analyticScenarioId);
+            }
+
+            // Insert
+            foreach (var analyticsFactSchedulePreference in resultFactSchedulePreference)
+            {
+                _analyticsPreferenceRepository.AddPreference(analyticsFactSchedulePreference);
+            }
+        }
 
 		private AnalyticsFactSchedulePreference mapSchedulePreference(IScheduleDay schedulePart, IList<IAnalyticsGeneric> analyticsScenarios, IScenario scenario, IList<IAnalyticsGeneric> analyticsShiftCategories,
 			IPreferenceRestriction preferenceRestriction, IList<IAnalyticsAbsence> analyticsAbsences, IList<AnalyticsDayOff> analyticsDayOffs,
@@ -196,5 +236,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			};
 			return preferenceItem;
 		}
-	}
+    }
 }

@@ -18,12 +18,22 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
+			//var withEvents = modifiedRoots.Select(m => m.Root).OfType<IAggregateRootWithEvents>();
+		    var withEvents = modifiedRoots.Where(m => m.Root is IAggregateRootWithEvents).Select(m => new EventPublishingRoot
+		    {
+                DomainUpdateType = m.Status,
+                RootWithEvents = m.Root as IAggregateRootWithEvents
+            });
 			if (!withEvents.Any()) return;
 
-			var events = withEvents.SelectMany(e => e.PopAllEvents(_now)).ToArray();
+			var events = withEvents.SelectMany(e => e.RootWithEvents.PopAllEvents(_now, e.DomainUpdateType)).ToArray();
 			_publisher.Publish(events);
 		}
-		
+
+	    private class EventPublishingRoot
+        {
+	        public IAggregateRootWithEvents RootWithEvents { get; set; }
+	        public DomainUpdateType DomainUpdateType { get; set; }
+	    }
 	}
 }
