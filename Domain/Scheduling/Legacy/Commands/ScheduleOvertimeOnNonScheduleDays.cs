@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				stateHolder.SchedulingResultState, new ShiftNudgeDirective(), createRules(overtimePreferences));
 		}
 
-		private INewBusinessRuleCollection createRules(IOvertimePreferences overtimePreferences)
+		private static INewBusinessRuleCollection createRules(IOvertimePreferences overtimePreferences)
 		{
-			var rules = NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState);
+			var rules = NewBusinessRuleCollection.Minimum();
 			if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
 			{
 				rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
