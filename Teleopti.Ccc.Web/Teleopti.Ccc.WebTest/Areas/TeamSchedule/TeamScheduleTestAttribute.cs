@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			system.UseTestDouble<FakeSchedulePersonProvider>().For<ISchedulePersonProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
-			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
+			system.UseTestDouble<Global.FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeCurrentUnitOfWorkFactory>().For<ICurrentUnitOfWorkFactory>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<AddActivityCommand>>();
 			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
-			system.UseTestDouble<PrincipalAuthorizationWithConfigurablePermission>().For<IPrincipalAuthorization>();
+			system.UseTestDouble<PrincipalAuthorizationWithFullPermission>().For<IPrincipalAuthorization>();
 
 		}
 	}

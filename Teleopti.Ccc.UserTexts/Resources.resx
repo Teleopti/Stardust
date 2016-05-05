@@ -14409,4 +14409,8 @@ Help us improve your experience by sending an error report</value>
     <value>Number of days before absence date that requests may be cancelled:</value>
     <comment>Used in the workflow control set, Absence Request settings page in the Admin Client.</comment>
   </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>No permission to move activity for agent {0}.	</value>
+    <comment>Error message to notify missing permission for moving activity</comment>
+  </data>
 </root>

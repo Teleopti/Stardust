@@ -21,7 +21,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
 		{
-			throw new NotImplementedException();
+			if (!enabled) return true;
+			return
+				_personPermissionDatas.Any(
+					x => x.ApplicationFunctionPath == applicationFunctionPath && x.Date == date && x.Person == person);
 		}
 
 		public bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team)

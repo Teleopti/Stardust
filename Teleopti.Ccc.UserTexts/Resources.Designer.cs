@@ -17751,6 +17751,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to move activity for agent {0}.	.
+        /// </summary>
+        public static string NoPermissionMoveAgentActivity {
+            get {
+                return ResourceManager.GetString("NoPermissionMoveAgentActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No permission to remove activities for agent {0}..
         /// </summary>
         public static string NoPermissionRemoveAgentActivity {

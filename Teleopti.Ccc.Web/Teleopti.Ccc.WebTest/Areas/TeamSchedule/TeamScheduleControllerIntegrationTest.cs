@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public TeamScheduleController Target;
 		public FakeSchedulePersonProvider PersonProvider;
 		public FakeScheduleProvider ScheduleProvider;
-		public FakePermissionProvider PermissionProvider;
+		public Global.FakePermissionProvider PermissionProvider;
 		public FakePeopleSearchProvider PeopleSearchProvider;
 		public FakePersonRepository PersonRepository;
 
@@ -379,6 +379,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		[Test]
 		public void ShouldReturnEmptyScheduleWhenScheduleIsUnpublishedAndNoViewUnpublishedSchedulePermissionForScheduleSearch()
 		{
+			PermissionProvider.Enable();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			person.WorkflowControlSet = new WorkflowControlSet("testWCS")
@@ -386,7 +387,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				SchedulePublishedToDate = new DateTime(2019, 12, 30)
 			};
 			PeopleSearchProvider.Add(person);
-			PermissionProvider.PermitApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, false);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var scheduleDay = ScheduleDayFactory.Create(new DateOnly(scheduleDate), person, scenario);
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(scheduleDate));

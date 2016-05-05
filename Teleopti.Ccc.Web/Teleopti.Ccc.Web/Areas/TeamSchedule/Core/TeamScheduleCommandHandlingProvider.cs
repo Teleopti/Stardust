@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
@@ -19,14 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
-		private readonly IPrincipalAuthorization _principalAuthorization;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public TeamScheduleCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, IPrincipalAuthorization principalAuthorization, IPersonRepository personRepository, IPermissionProvider permissionProvider)
+		public TeamScheduleCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository, IPermissionProvider permissionProvider)
 		{
 			_commandDispatcher = commandDispatcher;
-			_loggedOnUser = loggedOnUser;		
-			_principalAuthorization = principalAuthorization;
+			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
 		}
@@ -122,12 +119,28 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public List<FailActionResult> MoveActivity(MoveActivityFormData input)
 		{
-			throw new NotImplementedException();
+			var permission = new Dictionary<string, string>
+			{
+				{DefinedRaptorApplicationFunctionPaths.MoveActivity, Resources.NoPermissionMoveAgentActivity}
+			};
+			var result = new List<FailActionResult>();
+			foreach (var personActivity in input.PersonActivities)
+			{
+				var person = _personRepository.Get(personActivity.PersonId);
+				var personError = new FailActionResult {PersonId = person.Id.GetValueOrDefault(), Messages = new List<string>()};
+				if (!checkPermission(permission, input.Date, person, personError.Messages))
+				{
+					result.Add(personError);
+					continue;
+				}
+			}
+
+			return result;
 		}
 
 		private bool agentScheduleIsWriteProtected(DateOnly date,IPerson agent)
 		{
-			return !_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
+			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
 				&& agent.PersonWriteProtection.IsWriteProtected(date);
 		}
 

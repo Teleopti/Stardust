@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public ITeamScheduleCommandHandlingProvider Target;
 		public FakeActivityCommandHandler ActivityCommandHandler;
 		public FakePersonRepository PersonRepository;
-		public PrincipalAuthorizationWithConfigurablePermission PrincipalAuthorizationWithConfigurablePermission;
-		public FakePermissionProvider PermissionProvider;
+		public Global.FakePermissionProvider PermissionProvider;
 
 		[Test]
 		public void ShouldInvokeAddActivityCommandHandleWithPermission()
@@ -35,8 +34,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			var date = new DateOnly(2016,4,16);
 
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,date,person1);
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,date,person2);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,person1, date);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,person2, date);
 
 			var input = new AddActivityFormData
 			{
@@ -58,6 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotInvokeAddActivityCommandHandleWithoutPermission()
 		{
+			PermissionProvider.Enable();
 			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
 			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
 			PersonRepository.Has(person1);
@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotRemoveActivityWithoutPermission()
 		{
+			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a","b");
 			PersonRepository.Has(person);
 
@@ -116,12 +117,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldRemoveActivityWithPermission()
 		{
+			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
 			PersonRepository.Has(person);
 
 			var date = new DateOnly(2016, 4, 16);
 
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.RemoveActivity,date, person);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.RemoveActivity, person, date);
 
 			var input = new RemoveActivityFormData
 			{
@@ -148,12 +150,37 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
+		public void ShouldNotMoveActivityWhenNoPermission()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+
+			var input = new MoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {new Guid()}
+					}
+				},
+				Date = date,
+				StartTime = new DateTime(2016, 4, 16, 10, 0,0)
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			var result = Target.MoveActivity(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Messages.Contains(Resources.NoPermissionMoveAgentActivity).Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldReturnNoWriteProtectedAgentsIfHasModifyWriteProtectedSchedulePermission()
 		{
-			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
-			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
-			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
-
 			var agenta = PersonFactory.CreatePersonWithGuid("a", "a");
 			var agentb = PersonFactory.CreatePersonWithGuid("b", "b");
 
@@ -171,9 +198,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldReturnWriteProtectedAgentsIfWithoutModifyWriteProtectedSchedulePermission()
 		{
-			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
-			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
-			
+			PermissionProvider.Enable();
 			var agenta = PersonFactory.CreatePersonWithGuid("a","a");
 			var agentb = PersonFactory.CreatePersonWithGuid("b","b");
 
@@ -190,9 +215,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotRemoveWriteProtectedActivity()
 		{
-			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
-			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
-
+			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a","b");
 			PersonRepository.Has(person);
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016,6,1);
@@ -224,9 +247,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		[Test]
 		public void ShouldNotAddActivityToWriteProtectedSchedule()
 		{
-			CurrentPrincipalAuthorization.GloballyUse(PrincipalAuthorizationWithConfigurablePermission);
-			PrincipalAuthorizationWithConfigurablePermission.HasPermission(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
-
+			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a","b");
 			PersonRepository.Has(person);
 			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016,6,1);
@@ -254,7 +275,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 	}
 
-	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>, IHandleCommand<RemoveActivityCommand>
+	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>, IHandleCommand<RemoveActivityCommand>, IHandleCommand<MoveShiftLayerCommand>
 	{
 		private int calledCount;
 		public void Handle(AddActivityCommand command)
@@ -273,6 +294,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(RemoveActivityCommand command)
+		{
+			calledCount++;
+		}
+
+		public void Handle(MoveShiftLayerCommand command)
 		{
 			calledCount++;
 		}
