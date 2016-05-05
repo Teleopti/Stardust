@@ -120,6 +120,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public List<FailActionResult> MoveActivity(MoveActivityFormData input)
+		{
+			throw new NotImplementedException();
+		}
+
 		private bool agentScheduleIsWriteProtected(DateOnly date,IPerson agent)
 		{
 			return !_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
@@ -150,5 +155,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		List<FailActionResult> AddActivity(AddActivityFormData formData);		
 		IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds);
 		List<FailActionResult> RemoveActivity(RemoveActivityFormData input);
+		List<FailActionResult> MoveActivity(MoveActivityFormData input);
 	}
 }

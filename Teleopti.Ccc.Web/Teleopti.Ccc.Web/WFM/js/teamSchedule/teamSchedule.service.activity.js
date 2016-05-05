@@ -8,10 +8,12 @@
 		var getAllActivitiesUrl = '../api/TeamScheduleData/FetchActivities';
 		var addActivityUrl = '../api/TeamScheduleCommand/AddActivity';
 		var removeActivityUrl = '../api/TeamScheduleCommand/RemoveActivity';
+		var moveActivityUrl = '../api/TeamScheduleCommand/MoveActivity';
 
 		this.fetchAvailableActivities = fetchAvailableActivities;
 		this.addActivity = addActivity;
 		this.removeActivity = removeActivity;
+		this.moveActivity = moveActivity;
 
 		function fetchAvailableActivities() {
 			var deferred = $q.defer();
@@ -40,6 +42,16 @@
 		function removeActivity(removeActivityForm) {			
 			var deffered = $q.defer();
 			$http.post(removeActivityUrl, normalizeInput(removeActivityForm)).then(function (result) {
+				deffered.resolve(result);
+			}, function (error) {
+				deffered.reject(error);
+			});
+			return deffered.promise;
+		}
+
+		function moveActivity(moveActivityForm) {
+			var deffered = $q.defer();
+			$http.post(moveActivityUrl, normalizeInput(moveActivityForm)).then(function (result) {
 				deffered.resolve(result);
 			}, function (error) {
 				deffered.reject(error);
