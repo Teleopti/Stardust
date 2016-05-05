@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
 {
 	[PrincipalAndStateTest]
+	[Ignore]
 	public class ScheduleProjectionReadOnlyPersisterConcurrencyTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -31,41 +32,40 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 		public TheService Service;
 
 		[Test]
-		[Ignore]
-		public void ShouldNotRetryWhenMultipleWorkersUpdatesSameModel([Range(0, 0)] int ladfkja)
+		public void ShouldNotRetryWhenMultipleWorkersUpdatesSameDay()
 		{
 			var date = "2016-05-02".Date();
-			var dates = Enumerable.Range(0, 20).Select(i => date.AddDays(i)).ToArray();
+			var dates = Enumerable.Range(0, 75).Select(i => date.AddDays(i)).ToArray();
 			var personId = Guid.NewGuid();
 			var scenarioid = Guid.NewGuid();
 			var simulator = new RetryingQueueSimulator();
 			var time = "2016-05-01 08:00".Utc();
 
-			dates.ForEach(d => simulator.ProcessAsync(() => Service.AddState(d, scenarioid, personId, time = time.AddMinutes(1))));
+			dates.ForEach(d => simulator.ProcessAsync(() => Service.Update(d, scenarioid, personId, time = time.AddMinutes(1))));
 			simulator.WaitForAll();
 
-			dates.ForEach(d => 20.Times(() => simulator.ProcessAsync(() => Service.AddState(d, scenarioid, personId, time = time.AddMinutes(1)))));
+			dates.ForEach(d => 20.Times(() => simulator.ProcessAsync(() => Service.Update(d, scenarioid, personId, time = time.AddMinutes(1)))));
 			simulator.WaitForAll();
 
-			simulator.RetryCount.Should().Be(0);
 			dates.ForEach(d => Service.Get(d, personId, scenarioid).Should().Have.Count.EqualTo(3));
+			simulator.RetryCount.Should().Be(0);
 		}
 
 		[Test]
-		[Ignore]
-		public void ShouldCalculateCorrectlyWhenMultipleWorkersAddTheSameModel([Range(0, 0)] int ladfkja)
+		public void ShouldUpdateCorrectlyWhenMultipleWorkersAddTheSameDay()
 		{
 			var date = "2016-05-02".Date();
-			var dates = Enumerable.Range(0, 20).Select(i => date.AddDays(i)).ToArray();
+			var dates = Enumerable.Range(0, 75).Select(i => date.AddDays(i)).ToArray();
 			var personId = Guid.NewGuid();
 			var scenarioid = Guid.NewGuid();
 			var simulator = new RetryingQueueSimulator();
 			var time = "2016-05-01 08:00".Utc();
 
-			dates.ForEach(d => 20.Times(() => simulator.ProcessAsync(() => Service.AddState(d, scenarioid, personId, time = time.AddMinutes(1)))));
+			dates.ForEach(d => 20.Times(() => simulator.ProcessAsync(() => Service.Update(d, scenarioid, personId, time = time.AddMinutes(1)))));
 			simulator.WaitForAll();
 
 			dates.ForEach(d => Service.Get(d, personId, scenarioid).Should().Have.Count.EqualTo(3));
+			simulator.RetryCount.Should().Be(0);
 		}
 
 		public class TheService
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			}
 
 			[UnitOfWork]
-			public virtual void AddState(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
+			public virtual void Update(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
 			{
 				Enumerable.Range(-1, 2)
 					.Select(date.AddDays)
@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 								EndDateTime = "2016-05-04 08:00".Utc()
 							});
 						});
-						//_persister.GetNextActivityStartTime(scheduleLoadedTimeStamp, personId);
 					});
 			}
 
