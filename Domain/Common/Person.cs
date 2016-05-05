@@ -609,24 +609,6 @@ namespace Teleopti.Ccc.Domain.Common
 			return new VirtualSchedulePeriod(this, date, personPeriod, schedulePeriod, splitChecker);
 	    }
 
-        public virtual IAvailabilityRestriction GetPersonAvailabilityDayRestriction(IEnumerable<IPersonAvailability> personRestrictions, DateOnly currentDate)
-        {
-            // filter on person
-            IEnumerable<IPersonAvailability> filtered = personRestrictions.Where(r => r.Person.Equals(this));
-            // order on startdate, newest first
-            IOrderedEnumerable<IPersonAvailability> sorted = filtered.OrderByDescending(n2 => n2.StartDate);
-
-            foreach (var availability in sorted)
-            {
-                if (availability.StartDate <= currentDate)
-                {
-                    return availability.GetAvailabilityDay(currentDate).Restriction;
-                }
-
-            }
-            return null;
-        }
-
         public virtual int Seniority
         {
             get

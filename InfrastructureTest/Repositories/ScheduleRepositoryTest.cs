@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -12,10 +13,8 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -66,16 +65,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _repositoryFactory = _mocks.DynamicMock<IRepositoryFactory>();
             _unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             
-            CreateRelatedRepositories();
-            SetupExpectationsForRelatedRepositories();
+            createRelatedRepositories();
+            setupExpectationsForRelatedRepositories();
 
             _target = new ScheduleStorage(new ThisUnitOfWork(_unitOfWork),_repositoryFactory, new PersistableScheduleDataPermissionChecker());
 
-            CreateBasicStuff();
-            CreateEmptyLists();
+            createBasicStuff();
+            createEmptyLists();
         }
 
-        private void CreateBasicStuff()
+        private void createBasicStuff()
         {
 					_longPeriod = new DateTimePeriod(1999, 12, 31, 2001, 1, 3);
 					_longDateOnlyPeriod = new DateOnlyPeriod(1999, 12, 31, 2001, 1, 3);
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _scenario = ScenarioFactory.CreateScenarioAggregate();
         }
 
-        private void CreateEmptyLists()
+        private void createEmptyLists()
         {
             _assignments = new List<IPersonAssignment>();
             _absences = new List<IPersonAbsence>();
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _overtimeAvailbilityDays = new List<IOvertimeAvailability>();
         }
 
-        private void CreateRelatedRepositories()
+        private void createRelatedRepositories()
         {
             _absRep = _mocks.StrictMock<IPersonAbsenceRepository>();
             _assRep = _mocks.StrictMock<IPersonAssignmentRepository>();
@@ -119,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _meetingRepository = _mocks.StrictMock<IMeetingRepository>();
         }
 
-        private void SetupExpectationsForRelatedRepositories()
+        private void setupExpectationsForRelatedRepositories()
         {
             Expect.Call(_repositoryFactory.CreatePersonAbsenceRepository(_unitOfWork)).Return(_absRep).Repeat.Any();
             Expect.Call(_repositoryFactory.CreatePersonAssignmentRepository(_unitOfWork)).Return(_assRep).Repeat.Any();
@@ -155,20 +154,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var visiblePeople = new List<IPerson>(persons);
 
             var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-            IPersonAssignment pAss1 = AddPersonAssignment(per1, period);
-            IPersonAssignment pAss2 = AddPersonAssignment(per2, period);
+            IPersonAssignment pAss1 = addPersonAssignment(per1, period);
+            IPersonAssignment pAss2 = addPersonAssignment(per2, period);
 
-            IPersonAbsence pAbs = AddAbsence(per1);
+            IPersonAbsence pAbs = addAbsence(per1);
 
-            AddMeeting(per1);
-            AddPreference(per1);
-            AddNote(per1);
-            AddPublicNote(per1);
-            AddAgentDayScheduleTag(per1);
+            addMeeting(per1);
+            addPreference(per1);
+            addNote(per1);
+            addPublicNote(per1);
+            addAgentDayScheduleTag(per1);
             
             using (_mocks.Record())
             {
-                ExpectScheduleLoadForAll(persons,visiblePeople);
+                expectScheduleLoadForAll(persons,visiblePeople);
             }
             using (_mocks.Playback())
             {
@@ -187,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(retDic[per1].ScheduledDay(new DateOnly(2000,6,1)).PersonMeetingCollection().Count == 1);
         }
 
-        private void AddMeeting(IPerson person)
+        private void addMeeting(IPerson person)
         {
             var activity = ActivityFactory.CreateActivity("for test");
 
@@ -200,7 +199,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _meetings.Add(meeting);
         }
 
-        private IPersonAssignment AddPersonAssignment(IPerson person, DateTimePeriod period)
+        private IPersonAssignment addPersonAssignment(IPerson person, DateTimePeriod period)
         {
             IPersonAssignment pAss1 =
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, person, period);
@@ -208,7 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             return pAss1;
         }
 
-        private IPersonAbsence AddAbsence(IPerson per1)
+        private IPersonAbsence addAbsence(IPerson per1)
         {
             IPersonAbsence pAbs =
                 PersonAbsenceFactory.CreatePersonAbsence(per1, _scenario, new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
@@ -235,20 +234,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
-			var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-            var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 1, 2000, 1, 10, 20));
-			var pAbs = AddAbsence(person1);
+			var pAss1 = addPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+            var pAss2 = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			var pAss3 = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 1, 2000, 1, 10, 20));
+			var pAbs = addAbsence(person1);
 
-            AddMeeting(person1);
-            AddPreference(person1);
-            AddNote(person1);
-            AddPublicNote(person1);
-            AddAgentDayScheduleTag(person1);
+            addMeeting(person1);
+            addPreference(person1);
+            addNote(person1);
+            addPublicNote(person1);
+            addAgentDayScheduleTag(person1);
 
             using (_mocks.Record())
             {
-                ExpectScheduleLoadByPerson(visiblePeople, peopleInOrganization);
+                expectScheduleLoadByPerson(visiblePeople, peopleInOrganization);
             }
             using (_mocks.Playback())
             {
@@ -289,20 +288,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			person3.TerminatePerson(new DateOnly(2000,1,8), new PersonAccountUpdaterDummy());
-			var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-			var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 2000, 1, 10));
-			var pAbs = AddAbsence(person1);
+			var pAss1 = addPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			var pAss2 = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			var pAss3 = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 2000, 1, 10));
+			var pAbs = addAbsence(person1);
 
-			AddMeeting(person1);
-			AddPreference(person1);
-			AddNote(person1);
-			AddPublicNote(person1);
-			AddAgentDayScheduleTag(person1);
+			addMeeting(person1);
+			addPreference(person1);
+			addNote(person1);
+			addPublicNote(person1);
+			addAgentDayScheduleTag(person1);
 
 			using (_mocks.Record())
 			{
-				ExpectScheduleLoadByPerson(visiblePeople, peopleInOrganization);
+				expectScheduleLoadByPerson(visiblePeople, peopleInOrganization);
 			}
 			using (_mocks.Playback())
 			{
@@ -324,7 +323,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyCanLoadLastDaySchduleBasedOnPersonsAndPeriodAndScenario()
 		{
-			IList<IPerson> visiblePeople = new List<IPerson>();
 			IList<IPerson> peopleInOrganization = new List<IPerson>();
 			IScheduleDictionary retDic;
 
@@ -335,17 +333,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 			person3.TerminatePerson(new DateOnly(2000, 1, 8), new PersonAccountUpdaterDummy());
-			var pAss2 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			var pAssLastDay = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 8, 20, 2000, 1, 9, 6));
-			var pAss3 = AddPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 6, 2000, 1, 9, 15));
+			var pAss2 = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			var pAssLastDay = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 8, 20, 2000, 1, 9, 6));
+			var pAss3 = addPersonAssignment(person3, new DateTimePeriod(2000, 1, 9, 6, 2000, 1, 9, 15));
 
 			using (_mocks.Record())
 			{
-				ExpectScheduleLoadByPerson(visiblePeople, peopleInOrganization);
+				expectScheduleLoadByPerson(new List<IPerson>(), peopleInOrganization);
 			}
 			using (_mocks.Playback())
 			{
-				retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePeople);
+				retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, new List<IPerson>());
 			}
 			Assert.AreEqual(1, retDic.Count);
 			Assert.IsTrue(retDic[person3].Contains(pAss2));
@@ -356,47 +354,49 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private void ExpectScheduleLoadByPerson(IEnumerable<IPerson> visiblePeople, IEnumerable<IPerson> peopleInOrganization)
+        private void expectScheduleLoadByPerson(IEnumerable<IPerson> visiblePeople, IEnumerable<IPerson> peopleInOrganization)
         {
-            Expect.Call(_absRep.Find(peopleInOrganization, _longPeriod, _scenario))
+	        var personCollection = peopleInOrganization as IPerson[] ?? peopleInOrganization.ToArray();
+	        Expect.Call(_absRep.Find(personCollection, _longPeriod, _scenario))
                 .Return(_absences);
-						Expect.Call(_assRep.Find(peopleInOrganization, _longDateOnlyPeriod, _scenario))
+						Expect.Call(_assRep.Find(personCollection, _longDateOnlyPeriod, _scenario))
                 .Return(_assignments);
-            Expect.Call(_meetingRepository.Find(peopleInOrganization, _longDateOnlyPeriod, _scenario))
+            Expect.Call(_meetingRepository.Find(personCollection, _longDateOnlyPeriod, _scenario))
                 .Return(_meetings);
-            Expect.Call(_notesRepository.Find(_longDateOnlyPeriod, peopleInOrganization, _scenario))
+            Expect.Call(_notesRepository.Find(_longDateOnlyPeriod, personCollection, _scenario))
                 .Return(_notes);
-            Expect.Call(_publicNoteRepository.Find(_longDateOnlyPeriod, peopleInOrganization, _scenario))
+            Expect.Call(_publicNoteRepository.Find(_longDateOnlyPeriod, personCollection, _scenario))
                 .Return(_publicNotes);
-            Expect.Call(_agentDayScheduleTagRepository.Find(_longDateOnlyPeriod, peopleInOrganization, _scenario)).Return(_agentDayScheduleTags);
-			Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateOnly.MinValue))
-				.Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_longDateOnlyPeriod.StartDate))
+            Expect.Call(_agentDayScheduleTagRepository.Find(_longDateOnlyPeriod, personCollection, _scenario)).Return(_agentDayScheduleTags);
+	        var visiblePeopleCollection = visiblePeople as IPerson[] ?? visiblePeople.ToArray();
+	        Expect.Call(_rotationRep.LoadPersonRotationsWithHierarchyData(null, DateOnly.MinValue))
+				.Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeopleCollection), Rhino.Mocks.Constraints.Is.Equal(_longDateOnlyPeriod.StartDate))
                 .Return(_rotations);
 			Expect.Call(_availabilityRep.LoadPersonAvailabilityWithHierarchyData(null, DateOnly.MinValue))
-				.Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeople), Rhino.Mocks.Constraints.Is.Equal(_longDateOnlyPeriod.StartDate))
+				.Constraints(Rhino.Mocks.Constraints.List.ContainsAll(visiblePeopleCollection), Rhino.Mocks.Constraints.Is.Equal(_longDateOnlyPeriod.StartDate))
                 .Return(_availabilities);
-						Expect.Call(_prefDayRep.Find(_longDateOnlyPeriod, visiblePeople)).Return(_prefDays);
-            Expect.Call(_availabilityDayRep.Find(_longDateOnlyPeriod, visiblePeople)).Return(_studentAvailabilityDays);
-						Expect.Call(_overtimeAvailabilityRepository.Find(_longDateOnlyPeriod, visiblePeople))
+						Expect.Call(_prefDayRep.Find(_longDateOnlyPeriod, visiblePeopleCollection)).Return(_prefDays);
+            Expect.Call(_availabilityDayRep.Find(_longDateOnlyPeriod, visiblePeopleCollection)).Return(_studentAvailabilityDays);
+						Expect.Call(_overtimeAvailabilityRepository.Find(_longDateOnlyPeriod, visiblePeopleCollection))
                   .Return(_overtimeAvailbilityDays);
         }
 
-        private void AddPublicNote(IPerson person)
+        private void addPublicNote(IPerson person)
         {
             _publicNotes.Add(new PublicNote(person, new DateOnly(2000, 1, 2), _scenario, "Public ukhg"));
         }
 
-        private void AddAgentDayScheduleTag(IPerson person)
+        private void addAgentDayScheduleTag(IPerson person)
         {
             _agentDayScheduleTags.Add(new AgentDayScheduleTag(person, new DateOnly(2000, 1, 2),_scenario, new ScheduleTag{Description =  "description"} ));
         }
 
-        private void AddNote(IPerson person1)
+        private void addNote(IPerson person1)
         {
             _notes.Add(new Note(person1, new DateOnly(2000, 1, 2), _scenario, "ukhg"));
         }
 
-        private void AddPreference(IPerson person)
+        private void addPreference(IPerson person)
         {
             _prefDays.Add(new PreferenceDay(person, new DateOnly(2000, 1, 10), new PreferenceRestriction()));
         }
@@ -414,16 +414,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPerson person1 = PersonFactory.CreatePerson("sdvfbvv");
             visiblePeople.Add(person1);
             
-            var pAss1 = AddPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-            var pAbs = AddAbsence(person1);
+            var pAss1 = addPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+            var pAbs = addAbsence(person1);
             
-            AddNote(person1);
-            AddPublicNote(person1);
-            AddAgentDayScheduleTag(person1);
+            addNote(person1);
+            addPublicNote(person1);
+            addAgentDayScheduleTag(person1);
 
             using (_mocks.Record())
             {
-                ExpectScheduleLoadReadOnlyByPerson(visiblePeople, longPeriod);
+                expectScheduleLoadReadOnlyByPerson(visiblePeople, longPeriod);
             }
             using (_mocks.Playback())
             {
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             retDic.GetType().Name.Should().Contain("ReadOnly");
         }
 
-        private void ExpectScheduleLoadReadOnlyByPerson(IList<IPerson> visiblePeople, DateTimePeriod longPeriod)
+        private void expectScheduleLoadReadOnlyByPerson(IList<IPerson> visiblePeople, DateTimePeriod longPeriod)
         {
             Expect.Call(_absRep.Find(visiblePeople, longPeriod, _scenario))
                 .Return(_absences);
@@ -467,51 +467,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyAvailabilityRestrictionOnSchedulePart()
-        {
-            IList<IPerson> persons = new List<IPerson>();
-            
-            IPersonProvider personsProvider = new PersonsInOrganizationProvider(_personRep, _longDateOnlyPeriod);
-            IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-
-            IScheduleDictionary retDic;
-
-            //setup fake objects
-            IPerson per1 = PersonFactory.CreatePerson("wdfsdef");
-            persons.Add(per1);
-
-            AddAvailability(per1);
-            AddPersonAssignment(per1, new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
-            
-            var visiblePeople = new List<IPerson>(persons);
-
-            using (_mocks.Record())
-            {
-                ExpectScheduleLoadForAll(persons,visiblePeople);
-            }
-            using (_mocks.Playback())
-            {
-                retDic = _target.FindSchedulesForPersons(_schedPeriod, _scenario, personsProvider, scheduleDictionaryLoadOptions, visiblePeople);
-            }
-            IAvailabilityRestriction personAvailability = per1.GetPersonAvailabilityDayRestriction(_availabilities,new DateOnly(2000,2,1));
-            var coll = retDic[per1].ScheduledDay(new DateOnly(2000,2,1)).PersonRestrictionCollection();
-
-            Assert.AreSame(personAvailability, ((IScheduleDataRestriction)coll[0]).Restriction);
-        }
-
-        private void AddAvailability(IPerson person)
-        {
-            IAvailabilityRotation rotationBase = new AvailabilityRotation("Availability", 7);
-            IAvailabilityRestriction availabilityDayRestriction = new AvailabilityRestriction();
-            availabilityDayRestriction.StartTimeLimitation = new StartTimeLimitation(new TimeSpan(0, 7, 0, 0), null);
-            rotationBase.AvailabilityDays[0].Restriction = availabilityDayRestriction;
-            var availabilityStartDate = new DateOnly(2000, 2, 1);
-            
-            IPersonAvailability availability = new PersonAvailability(person, rotationBase, availabilityStartDate);
-            _availabilities.Add(availability);
-        }
-
-        [Test]
         public void VerifyRotationRestrictionOnSchedulePart()
         {   
             IList<IPerson> persons = new List<IPerson>();
@@ -525,13 +480,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPerson per1 = PersonFactory.CreatePerson("sdfpojsdpofjk");
             persons.Add(per1);
 
-            AddRotation(per1);
-            AddPersonAssignment(per1, new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
+            addRotation(per1);
+            addPersonAssignment(per1, new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
             
             var visiblePeople = new List<IPerson>(persons);
             using (_mocks.Record())
             {
-                ExpectScheduleLoadForAll(persons, visiblePeople);
+                expectScheduleLoadForAll(persons, visiblePeople);
             }
             using (_mocks.Playback())
             {
@@ -541,7 +496,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, coll.Count);
         }
 
-        private void ExpectScheduleLoadForAll(IList<IPerson> persons, IList<IPerson> visiblePeople)
+        private void expectScheduleLoadForAll(IList<IPerson> persons, IList<IPerson> visiblePeople)
         {
             Expect.Call(_absRep.Find(_longPeriod, _scenario))
                 .Return(_absences);
@@ -568,7 +523,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Return(persons).Repeat.Once();
         }
 
-        private void AddRotation(IPerson per1)
+        private void addRotation(IPerson per1)
         {
             IRotation rotationBase = new Rotation("Rotation", 7);
             var startTimeLimitation = new StartTimeLimitation(new TimeSpan(0, 17, 0, 0), null);
@@ -595,8 +550,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
            
             ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod> {period1,period2};
 
-            IPersonAssignment personAssignment1 = AddPersonAssignment(person,new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
-            IPersonAssignment personAssignment2 = AddPersonAssignment(person,new DateTimePeriod(2000, 3, 2, 2000, 3, 3));
+            IPersonAssignment personAssignment1 = addPersonAssignment(person,new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
+            IPersonAssignment personAssignment2 = addPersonAssignment(person,new DateTimePeriod(2000, 3, 2, 2000, 3, 3));
 
             using (_mocks.Record())
             {
@@ -630,7 +585,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			ICollection<DateTimePeriod> absencePeriods = new List<DateTimePeriod> { period1 };
 
-			AddPersonAssignment(person, new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
+			addPersonAssignment(person, new DateTimePeriod(2000, 2, 1, 2000, 2, 2));
 
 			using (_mocks.Record())
 			{
@@ -840,24 +795,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             var personProvider = _mocks.StrictMock<IPersonProvider>();
             var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-            var persons = new List<IPerson>();
-            _target.FindSchedulesForPersons(null, _scenario, personProvider, scheduleDictionaryLoadOptions, persons);
+			_target.FindSchedulesForPersons(null, _scenario, personProvider, scheduleDictionaryLoadOptions, new List<IPerson>());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionOnNullPersonProvider()
         {
             var scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
-            var persons = new List<IPerson>();
-            _target.FindSchedulesForPersons(_schedPeriod, _scenario, null, scheduleDictionaryLoadOptions, persons);
+			_target.FindSchedulesForPersons(_schedPeriod, _scenario, null, scheduleDictionaryLoadOptions, new List<IPerson>());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowExceptionOnNullScheduleDictionaryLoadOptions()
         {
             var personProvider = _mocks.StrictMock<IPersonProvider>();
-            var persons = new List<IPerson>();
-            _target.FindSchedulesForPersons(_schedPeriod, _scenario, personProvider, null, persons);
+			_target.FindSchedulesForPersons(_schedPeriod, _scenario, personProvider, null, new List<IPerson>());
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]

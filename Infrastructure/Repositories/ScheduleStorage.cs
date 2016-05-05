@@ -372,7 +372,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var people = persons.ToArray();
 			var rotations = _repositoryFactory.CreatePersonRotationRepository(UnitOfWork)
-				.LoadPersonRotationsWithHierarchyData(people, period.StartDate).ToLookup(x => x.Person);
+				.LoadPersonRotationsWithHierarchyData(people, period.StartDate)
+				.ToLookup(x => x.Person);
 
 			foreach (var person in people)
 			{
@@ -391,14 +392,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         private void addPersonAvailabilities(DateOnlyPeriod period, IScheduleDictionary retDic, IEnumerable<IPerson> persons)
         {
 	        var people = persons.ToArray();
-	        var availabilities = _repositoryFactory.CreatePersonAvailabilityRepository(UnitOfWork).LoadPersonAvailabilityWithHierarchyData(people, period.StartDate).ToArray();
+	        var availabilities =
+		        _repositoryFactory.CreatePersonAvailabilityRepository(UnitOfWork)
+			        .LoadPersonAvailabilityWithHierarchyData(people, period.StartDate)
+					.ToLookup(x => x.Person);
 
-            foreach (var person in people)
-            {
-                foreach (var dateTime in period.DayCollection())
+			foreach (var person in people)
+			{
+				var availForPerson = availabilities[person];
+				IOrderedEnumerable<IPersonAvailability> sortedPersonRestrictions = availForPerson.OrderByDescending(n2 => n2.StartDate);
+				if (!sortedPersonRestrictions.Any())
+					continue;
+
+				foreach (var dateTime in period.DayCollection())
                 {
-                    var restriction = person.GetPersonAvailabilityDayRestriction(availabilities, dateTime);
-
+                    var restriction = getPersonAvailabilityDayRestriction(sortedPersonRestrictions, dateTime);
                     if (restriction != null)
                     {
                         var personRestriction = new ScheduleDataRestriction(person, restriction, dateTime);
@@ -407,6 +415,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 }
             }
         }
+
+		private IAvailabilityRestriction getPersonAvailabilityDayRestriction(IOrderedEnumerable<IPersonAvailability> sortedPersonRestrictions, DateOnly currentDate)
+		{
+			foreach (var availability in sortedPersonRestrictions)
+			{
+				if (availability.StartDate <= currentDate)
+				{
+					return availability.GetAvailabilityDay(currentDate).Restriction;
+				}
+			}
+			return null;
+		}
 
 		private static void addPersonMeetings(IScheduleDictionary retDic, IEnumerable<IMeeting> meetings, bool onlyAddPersonsInList, IEnumerable<IPerson> addForThesePersons, bool loadDaysAfterLeft = false)
         {

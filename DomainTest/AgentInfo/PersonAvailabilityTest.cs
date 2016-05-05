@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -108,30 +107,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
             Assert.IsFalse(_target.IsDeleted);
             _target.SetDeleted();
             Assert.IsTrue(_target.IsDeleted);
-        }
-
-        [Test]
-        public void VerifyFilterPersonAvailability()
-        {
-            IPerson person2 = PersonFactory.CreatePerson();
-            DateOnly startDate2 = new DateOnly(2008, 9, 16);
-            IAvailabilityRotation availability2 = new AvailabilityRotation("MyAval2", 4 * 7);
-            PersonAvailability persAvail2 = new PersonAvailability(_person, availability2, startDate2);
-
-            PersonAvailability persAvail3 = new PersonAvailability(person2, availability2, startDate2);
-
-            IList<IPersonAvailability> lst = new List<IPersonAvailability>();
-            lst.Add(_target);
-            lst.Add(persAvail2);
-            lst.Add(persAvail3);
-
-            DateOnly d = new DateOnly(2008, 9, 17);
-
-            IAvailabilityRestriction rest = _person.GetPersonAvailabilityDayRestriction(lst, d);
-            Assert.IsNotNull(rest);
-
-
-
         }
     }
 }

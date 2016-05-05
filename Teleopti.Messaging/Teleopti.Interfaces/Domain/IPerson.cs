@@ -166,15 +166,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="currentDate">The date.</param>
         /// <returns></returns>
         IList<IRotationRestriction> GetPersonRotationDayRestrictions(IEnumerable<IPersonRotation> personRestrictions, DateOnly currentDate);
-
-        /// <summary>
-        /// Gets the person availability day restriction.
-        /// </summary>
-        /// <param name="personRestrictions">The person restrictions.</param>
-        /// <param name="currentDate">The current date.</param>
-        /// <returns></returns>
-		IAvailabilityRestriction GetPersonAvailabilityDayRestriction(IEnumerable<IPersonAvailability> personRestrictions, DateOnly currentDate);
-        
+   
         /// <summary>
         /// Number of months employed
         /// </summary>
