@@ -884,7 +884,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Expect.Call(() => _view.SetLockTrading(false));
                 Expect.Call(() => _view.SetFairnessType(FairnessType.EqualNumberOfShiftCategory));
 				Expect.Call(() => _view.SetAbsenceRequestWaitlisting(false));
-            }
+				Expect.Call(() => _view.SetAbsenceRequestCancellation(null)).IgnoreArguments();
+			}
             using (_mocks.Playback())
             {
                 _target.AddWorkflowControlSet();
@@ -1042,12 +1043,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             if (absences.Count > 0)
             {
                 Expect.Call(() => view.EnableHandlingOfAbsenceRequestPeriods(true));
-            }
+			}
             else
             {
                 Expect.Call(() => view.EnableHandlingOfAbsenceRequestPeriods(false));
-            }
-            Expect.Call(() => view.FillAllowedPreferenceActivityCombo(null, "Name")).IgnoreArguments();
+			}
+			
+
+			Expect.Call(() => view.FillAllowedPreferenceActivityCombo(null, "Name")).IgnoreArguments();
             LastCall.IgnoreArguments();
             if (!workflowControlSets.IsEmpty())
             {
@@ -1079,8 +1082,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => view.SetAnonymousTrading(false)).IgnoreArguments();
             Expect.Call(() => view.SetLockTrading(false)).IgnoreArguments();
 			Expect.Call(() => view.SetFairnessType(FairnessType.EqualNumberOfShiftCategory)).IgnoreArguments();
-	        Expect.Call (() => view.SetAbsenceRequestWaitlisting (false)).IgnoreArguments();
-            Expect.Call(view.EnableAllAuthorized);
+	        Expect.Call(() => view.SetAbsenceRequestWaitlisting (false)).IgnoreArguments();
+			Expect.Call(() => view.SetAbsenceRequestCancellation(null)).IgnoreArguments();
+			Expect.Call(view.EnableAllAuthorized);
         }
     }
 }
