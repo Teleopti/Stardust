@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		public void ShouldNotMoveActivityWhenNoPermission()
+		public void ShouldNotMoveActivityWhenNoMoveActivityPermission()
 		{
 			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
@@ -176,6 +176,36 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Messages.Contains(Resources.NoPermissionMoveAgentActivity).Should().Be.True();
+		}
+		[Test]
+		public void ShouldReturnWriteProtectedMsgWhenWriteProtected()
+		{
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MoveActivity);
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+			person.PersonWriteProtection.PersonWriteProtectedDate = date;
+
+			var input = new MoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {new Guid()}
+					}
+				},
+				Date = date,
+				StartTime = new DateTime(2016, 4, 16, 10, 0,0)
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			var result = Target.MoveActivity(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Messages.Contains(Resources.WriteProtectSchedule).Should().Be.True();
 		}
 
 		[Test]
