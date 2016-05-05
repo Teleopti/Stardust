@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 		ConsumerOf<NewAbsenceReportCreated>,
 		ConsumerOf<AcceptShiftTrade>,
 		ConsumerOf<FullDayAbsenceAddedEvent>,
-		ConsumerOf<PersonAbsenceRemovedEvent>,
 		ConsumerOf<PersonAbsenceAddedEvent>,
 		ConsumerOf<ActivityAddedEvent>,
 		ConsumerOf<ActivityMovedEvent>,
@@ -138,11 +137,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Legacy
 				AcceptingPersonId = message.AcceptingPersonId,
 				Message = message.Message
 			});
-		}
-
-		public void Consume(PersonAbsenceRemovedEvent message)
-		{
-			_publisher.Publish(message);
 		}
 
 		public void Consume(FullDayAbsenceAddedEvent message)

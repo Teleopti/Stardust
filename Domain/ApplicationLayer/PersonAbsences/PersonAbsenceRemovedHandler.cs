@@ -1,34 +1,32 @@
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 {
+	public class PersonAbsenceRemovedHandler : IHandleEvent<PersonAbsenceRemovedEvent>, IRunOnStardust
 
-	//ROBTODO: this will need to be moved to stardust.
-#pragma warning disable 618
-	public class PersonAbsenceRemovedHandler : IHandleEvent<PersonAbsenceRemovedEvent>, IRunOnServiceBus
-#pragma warning restore 618
 	{
 		private readonly static ILog logger = LogManager.GetLogger(typeof(PersonAbsenceRemovedHandler));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
 
-		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IAbsenceRequestCancelService absenceRequestCancelService)
+		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_waitlistProcessor = waitlistProcessor;
 			_personRequestRepository = personRequestRepository;
-			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_absenceRequestCancelService = absenceRequestCancelService;
 		}
 
+		[AsSystem]
 		public void Handle(PersonAbsenceRemovedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
