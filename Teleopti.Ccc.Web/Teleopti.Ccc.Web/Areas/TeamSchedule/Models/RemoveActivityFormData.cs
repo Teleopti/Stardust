@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {
-	public class RemovePersonActivityItem
+	public class PersonActivityItem
 	{
 		public Guid PersonId { get; set; }
 		public List<Guid> ShiftLayerIds { get; set; } 
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 
 	public class RemoveActivityFormData
 	{
-		public List<RemovePersonActivityItem> PersonActivities { get; set; } 
+		public List<PersonActivityItem> PersonActivities { get; set; } 
 		public DateOnly Date { get; set; }
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 	}

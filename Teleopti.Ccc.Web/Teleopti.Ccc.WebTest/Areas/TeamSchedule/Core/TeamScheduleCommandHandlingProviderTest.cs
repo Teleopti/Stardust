@@ -92,14 +92,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
-				PersonActivities = new List<RemovePersonActivityItem>
+				PersonActivities = new List<PersonActivityItem>
 				{
-					new RemovePersonActivityItem
+					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
 						ShiftLayerIds = new List<Guid> {new Guid(), new Guid()}
 					},
-					new RemovePersonActivityItem
+					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
 						ShiftLayerIds = new List<Guid> {new Guid()}
@@ -126,14 +126,14 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
-				PersonActivities = new List<RemovePersonActivityItem>
+				PersonActivities = new List<PersonActivityItem>
 				{
-					new RemovePersonActivityItem
+					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
 						ShiftLayerIds = new List<Guid> {new Guid(), new Guid()}
 					},
-					new RemovePersonActivityItem
+					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
 						ShiftLayerIds = new List<Guid> {new Guid()}
@@ -201,9 +201,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			var input = new RemoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
-				PersonActivities = new List<RemovePersonActivityItem>
+				PersonActivities = new List<PersonActivityItem>
 				{				
-					new RemovePersonActivityItem
+					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
 						ShiftLayerIds = new List<Guid> {new Guid()}
