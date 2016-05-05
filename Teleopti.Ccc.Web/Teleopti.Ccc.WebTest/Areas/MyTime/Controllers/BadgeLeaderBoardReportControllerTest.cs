@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 				teamProvider.Stub(x => x.GetPermittedTeams(date, raptorMytimewebViewbadgeleaderboard)).Return(PermittedTeams(team));
 
-				var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+				var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 				principalAuthorization.Stub(x => x.IsPermitted(raptorMytimewebViewbadgeleaderboard, date, team.Site)).Return(IsSitePermitted);
 
 				var currentLoggedOnUser = new FakeLoggedOnUser(CurrentUser(team)); 

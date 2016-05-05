@@ -106,15 +106,15 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void CannotSetDateIfNoPermission()
         {
             MockRepository mocks = new MockRepository();
-            IPrincipalAuthorization principalAuthorization = mocks.StrictMock<IPrincipalAuthorization>();
+            IAuthorization authorization = mocks.StrictMock<IAuthorization>();
             using(mocks.Record())
             {
-                Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
+                Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
                     .Return(false);
             }
             using(mocks.Playback())
             {
-                using(new CustomAuthorizationContext(principalAuthorization))
+                using(new CustomAuthorizationContext(authorization))
                 {
                     _target.PersonWriteProtectedDate = new DateOnly(2000,1,1);
                 }

@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}).As<ILoadPasswordPolicyService>().SingleInstance();
 
 			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().SingleInstance();
-			builder.RegisterType<PrincipalAuthorization>().As<IPrincipalAuthorization>().SingleInstance();
-			builder.RegisterType<CurrentPrincipalAuthorization>().As<ICurrentPrincipalAuthorization>().SingleInstance();
+			builder.RegisterType<PrincipalAuthorization>().As<IAuthorization>().SingleInstance();
+			builder.RegisterType<CurrentAuthorization>().As<ICurrentAuthorization>().SingleInstance();
 			builder.RegisterType<UserCulture>().As<IUserCulture>().SingleInstance();
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();

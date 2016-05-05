@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 		private IList<IOptionalColumn> _optionalColumns;
 
 		public static IWorkflowControlSet NullWorkflowControlSet = new WorkflowControlSet(string.Empty);
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 		private readonly IPersonAccountUpdater _personAccountUpdater;
 		private readonly IPasswordPolicy _passwordPolicy;
 		private bool _isValid = true;
@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			_optionalColumns = new List<IOptionalColumn>();
 		}
 
-		public PersonGeneralModel(IPerson person,  IPrincipalAuthorization principalAuthorization,
+		public PersonGeneralModel(IPerson person,  IAuthorization authorization,
 			IPersonAccountUpdater personAccountUpdater, LogonInfoModel logonInfoModel, IPasswordPolicy passwordPolicy)
 			: this()
 		{
 			ContainedEntity = person;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 			_personAccountUpdater = personAccountUpdater;
 			_passwordPolicy = passwordPolicy;
 			_tenantData = new TenantAuthenticationData {PersonId = ContainedEntity.Id.GetValueOrDefault()};
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 			if (!_rightsHaveBeenChecked)
 			{
 				_logonDataCanBeChanged =
-					 _principalAuthorization.IsPermitted(
+					 _authorization.IsPermitted(
 						  DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, DateOnly.Today,
 						  ContainedEntity);
 				_rightsHaveBeenChecked = true;

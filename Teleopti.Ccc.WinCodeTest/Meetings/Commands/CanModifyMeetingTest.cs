@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(_model.CurrentScenario).Return(scenario);
             Expect.Call(scenario.Restricted).Return(true);
             _mocks.ReplayAll();
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target.CanExecute.Should().Be.False();
             }
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             Expect.Call(_model.CurrentScenario).Return(scenario);
             Expect.Call(scenario.Restricted).Return(false);
             _mocks.ReplayAll();
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target.CanExecute.Should().Be.False();
             }

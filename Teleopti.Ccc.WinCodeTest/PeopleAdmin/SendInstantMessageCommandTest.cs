@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
         [Test]
         public void ShouldReturnFalseIfNotAllowed()
         {
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 Assert.That(_target.CanExecute(), Is.False);
             }

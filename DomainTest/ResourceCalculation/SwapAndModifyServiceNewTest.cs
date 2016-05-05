@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldThrowExceptionWhenNoPermissionForModifyingPersonAss()
 		{
 			_dates = new List<DateOnly> {new DateOnly(2011, 1, 1)};
-			var authorizer = new PrincipalAuthorizationWithNoPermission();
+			var authorizer = new NoPermission();
 			using (new CustomAuthorizationContext(authorizer))
 			{
 				_swapAndModifyServiceNew.Swap(_person1, _person2, _dates, _lockedDates, _dictionary, null, new ScheduleTagSetter(NullScheduleTag.Instance));
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_dates.Clear();
 			_dates.Add(new DateOnly(2009, 02, 01));
 			_dates.Add(new DateOnly(2009, 02, 02));
-			var authorizer = new PrincipalAuthorizationWithNoPermission();
+			var authorizer = new NoPermission();
 			_swapAndModifyServiceNew = new SwapAndModifyServiceNew(_swapService, _scheduleDayChangeCallback, new ByPassPersistableScheduleDataPermissionChecker());
 			using (_mock.Record())
 			{

@@ -7,31 +7,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 {
 	public class PermissionProvider : IPermissionProvider
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
-		public PermissionProvider(IPrincipalAuthorization principalAuthorization)
+		public PermissionProvider(IAuthorization authorization)
 		{
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 		public bool HasApplicationFunctionPermission(string applicationFunctionPath)
 		{
-			return _principalAuthorization.IsPermitted(applicationFunctionPath);
+			return _authorization.IsPermitted(applicationFunctionPath);
 		}
 
 		public bool HasPersonPermission(string applicationFunctionPath, DateOnly date, IPerson person)
 		{
-			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, person);
+			return _authorization.IsPermitted(applicationFunctionPath, date, person);
 		}
 
 		public bool HasTeamPermission(string applicationFunctionPath, DateOnly date, ITeam team)
 		{
-			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, team);
+			return _authorization.IsPermitted(applicationFunctionPath, date, team);
 		}
 
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
-			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, authorizeOrganisationDetail);
+			return _authorization.IsPermitted(applicationFunctionPath, date, authorizeOrganisationDetail);
 		}
 
 		public bool IsPersonSchedulePublished(DateOnly date,
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		public bool HasSitePermission(string applicationfunctionpath, DateOnly today, ISite site)
 		{
-			return _principalAuthorization.IsPermitted(applicationfunctionpath, today, site);
+			return _authorization.IsPermitted(applicationfunctionpath, today, site);
 		}
 	}
 }

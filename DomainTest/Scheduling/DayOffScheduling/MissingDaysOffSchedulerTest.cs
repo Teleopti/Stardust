@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         private IScheduleDay _scheduleDay;
         private ReadOnlyCollection<IScheduleDayData> _scheduleDayDataCollection;
 		private IPersonAssignment _personAssignment;
-		private IPrincipalAuthorization _principalAuthorization;
+		private IAuthorization _authorization;
 		private IPerson _person;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 	    private DateOnly _dateOnly;
@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             _matrixDataListInSteadyState = _mocks.StrictMock<IMatrixDataListInSteadyState>();
             _matrixDataListCreator = _mocks.StrictMock<IMatrixDataListCreator>();
             _matrixDataWithToFewDaysOff = _mocks.StrictMock<IMatrixDataWithToFewDaysOff>();
-			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			_authorization = _mocks.StrictMock<IAuthorization>();
             _target = new MissingDaysOffScheduler(_bestSpotForAddingDayOffFinder, _matrixDataListInSteadyState,
-                                                  _matrixDataListCreator, _matrixDataWithToFewDaysOff,_principalAuthorization);
+                                                  _matrixDataListCreator, _matrixDataWithToFewDaysOff,_authorization);
             _matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
             _matrixList = new List<IScheduleMatrixPro> { _matrix1 };
             _schedulingOptions = new SchedulingOptions();
@@ -119,12 +119,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _dateOnly, _person)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_authorization.IsPermitted("functionPath", _dateOnly, _person)).Return(true).Repeat.AtLeastOnce();
             }
 
             using (_mocks.Playback())
             {
-	            using (new CustomAuthorizationContext(_principalAuthorization))
+	            using (new CustomAuthorizationContext(_authorization))
 	            {
 		            bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 		            Assert.IsTrue(result);
@@ -158,12 +158,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _dateOnly, _person)).Return(true);
+				Expect.Call(_authorization.IsPermitted("functionPath", _dateOnly, _person)).Return(true);
             }
 
             using (_mocks.Playback())
             {
-	            using (new CustomAuthorizationContext(_principalAuthorization))
+	            using (new CustomAuthorizationContext(_authorization))
 	            {
 		            bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 		            Assert.IsFalse(result);
@@ -196,12 +196,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _dateOnly, _person)).Return(false);
+				Expect.Call(_authorization.IsPermitted("functionPath", _dateOnly, _person)).Return(false);
 			}
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 					Assert.IsFalse(result);
@@ -288,12 +288,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _dateOnly, _person)).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_authorization.IsPermitted("functionPath", _dateOnly, _person)).Return(true).Repeat.AtLeastOnce();
             }
 
             using (_mocks.Playback())
             {
-	            using (new CustomAuthorizationContext(_principalAuthorization))
+	            using (new CustomAuthorizationContext(_authorization))
 	            {
 		            bool result = _target.Execute(_matrixList, _schedulingOptions, _rollbackService);
 		            Assert.IsTrue(result);

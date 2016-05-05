@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly ICampaignPersister _campaignPersister;
 		private readonly IOverridePersister _overridePersister;
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 		private readonly IForecastMisc _forecastMisc;
 
 		public ForecastController(
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			IWorkloadRepository workloadRepository,
 			ICampaignPersister campaignPersister,
 			IOverridePersister overridePersister,
-			IPrincipalAuthorization principalAuthorization,
+			IAuthorization authorization,
 			IForecastMisc forecastMisc)
 		{
 			_forecastCreator = forecastCreator;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_workloadRepository = workloadRepository;
 			_campaignPersister = campaignPersister;
 			_overridePersister = overridePersister;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 			_forecastMisc = forecastMisc;
 		}
 
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			var skillList = _skillRepository.FindSkillsWithAtLeastOneQueueSource();
 			return new SkillsViewModel
 			{
-				IsPermittedToModifySkill = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
+				IsPermittedToModifySkill = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill),
 				Skills = skillList.Select(
 					skill => new SkillAccuracy
 					{

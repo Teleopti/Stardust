@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
         [Test]
         public void  VerifyCanOnlyExecuteIfPermitted()
         {
-            var authorization = _mocker.StrictMock<IPrincipalAuthorization>();
+            var authorization = _mocker.StrictMock<IAuthorization>();
             using(_mocker.Record())
             {
                 Expect.Call(authorization.IsPermitted(_functionPath)).Return(true);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Commands
         [Test]
         public void VerifyCanExecuteHook()
         {
-            var authorization = _mocker.StrictMock<IPrincipalAuthorization>();
+            var authorization = _mocker.StrictMock<IAuthorization>();
             using (_mocker.Record())
             {
                 Expect.Call(authorization.IsPermitted(_functionPath)).Return(true);

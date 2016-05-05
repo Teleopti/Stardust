@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         [Test]
         public void ShouldReturnFalseModifyNotAllowed()
         {
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 Assert.That(_target.CanExecute(), Is.False);
             }

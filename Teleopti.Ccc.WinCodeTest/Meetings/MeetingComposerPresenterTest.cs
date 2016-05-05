@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCannotSaveNewMeetingWithNonPermittedPersons()
         {
-            var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
+            var authorization = _mocks.StrictMock<IAuthorization>();
             var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
             using (_mocks.Record())
             {

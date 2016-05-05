@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class AddAbsenceCommand : AddLayerCommand
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts, IPrincipalAuthorization principalAuthorization)
+		public AddAbsenceCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, ISchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts, IAuthorization authorization)
 			: base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.CurrentColumnSelectedSchedules())
 		{
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							break;
 						}
 
-						if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+						if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
 							continue;
 						keep = false;
 						break;

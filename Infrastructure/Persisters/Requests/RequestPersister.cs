@@ -14,24 +14,24 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Requests
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IClearReferredShiftTradeRequests _clearReferredRequests;
 		private readonly IInitiatorIdentifier _initiatorIdentifier;
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
 		public RequestPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 												IPersonRequestRepository personRequestRepository,
 												IClearReferredShiftTradeRequests clearReferredRequests,
 												IInitiatorIdentifier initiatorIdentifier,
-												IPrincipalAuthorization principalAuthorization)
+												IAuthorization authorization)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_personRequestRepository = personRequestRepository;
 			_clearReferredRequests = clearReferredRequests;
 			_initiatorIdentifier = initiatorIdentifier;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 		public void Persist(IEnumerable<IPersonRequest> requests)
 		{
-			if (!_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
+			if (!_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
 				return;
 
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

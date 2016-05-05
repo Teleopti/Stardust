@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldShowNoPermission()
         {
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 Assert.IsFalse(target.IsAllowancePermitted);
             }
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         [Test]
         public void ShouldShowWithPermission()
         {
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+            using (new CustomAuthorizationContext(new FullPermission()))
             {
                 Assert.IsTrue(target.IsAllowancePermitted);
             }

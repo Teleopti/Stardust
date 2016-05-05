@@ -1978,7 +1978,7 @@
     <Compile Include="Security\Principal\IAuthorizeAvailableData.cs" />
     <Compile Include="Security\Principal\ICurrentTeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\IOrganisationMembership.cs" />
-    <Compile Include="Security\Principal\IPrincipalAuthorization.cs" />
+    <Compile Include="Security\Principal\IAuthorization.cs" />
     <Compile Include="Security\Principal\IRegional.cs" />
     <Compile Include="Security\Principal\ITeleoptiPrincipal.cs" />
     <Compile Include="Security\Principal\LicensedFunctionsProvider.cs" />

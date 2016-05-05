@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyAllPermittedPersons()
         {
             var mocks = new MockRepository();
-            var authorization = mocks.StrictMock<IPrincipalAuthorization>();
+            var authorization = mocks.StrictMock<IAuthorization>();
             using(mocks.Record())
             {
                 Expect.Call(authorization.IsPermitted("func", _dt, _p1)).Return(false);

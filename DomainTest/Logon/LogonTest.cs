@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 
 		public IDataSourceForTenant DataSourceForTenant;
 		public ILogOnOff LogOnOff;
-		public IPrincipalAuthorization PrincipalAuthorization;
+		public IAuthorization Authorization;
 		public ICurrentTeleoptiPrincipal Principal;
 		public ClaimSetForApplicationRole ClaimSetForApplicationRole;
 		public ConcurrencyRunner Run;
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.DomainTest.Logon
 			foreach (var role in person.PermissionInformation.ApplicationRoleCollection)
 				Principal.Current().AddClaimSet(ClaimSetForApplicationRole.Transform(role, "tenant"));
 
-			PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview).Should().Be.True();
-			PrincipalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SeatPlanner).Should().Be.False();
+			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview).Should().Be.True();
+			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SeatPlanner).Should().Be.False();
 		}
 	}
 }

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         [Test]
         public void ShouldRemoveFromListIfNoPermission()
         {
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 var buId = Guid.NewGuid();
                 var stoGuid = Guid.NewGuid();

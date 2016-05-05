@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		private OptionalColumnComparer<PersonGeneralModel> _optionalColumnComparer;
 		private IList<IOptionalColumn> _optionalColumns;
 		private int _result;
-		private PrincipalAuthorization _principalAuthorization;
+		private PrincipalAuthorization _authorize;
 		private IPerson _person1;
 
 
@@ -39,9 +39,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 				 PersonContractFactory.CreatePersonContract("testContract", "TestSchedule", "TestPartTimePercentage"),
 				 team);
 			_person.AddPersonPeriod(_personPeriod);
-			_principalAuthorization = new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
+			_authorize = new PrincipalAuthorization(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()));
 			// Ses the contained entity
-			_target = new PersonGeneralModel(_person, _principalAuthorization,
+			_target = new PersonGeneralModel(_person, _authorize,
 				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
 
 			// Instantiates the person and teh team
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 				 team1);
 			_person.AddPersonPeriod(personPeriod1);
 			// Ses the contained entity
-			_personGeneralModel = new PersonGeneralModel(_person1, _principalAuthorization,
+			_personGeneralModel = new PersonGeneralModel(_person1, _authorize,
 				new PersonAccountUpdaterDummy(), new LogonInfoModel(), new PasswordPolicyFake());
 		}
 

@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var query = new GetPeopleOptionalValuesByPersonIdQueryDto();
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				target.Handle(query);
 			}

@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SwapRawService : ISwapRawService
 	{
-        private readonly IPrincipalAuthorization _authorizationService;
+        private readonly IAuthorization _authorizationService;
 
-        public SwapRawService(IPrincipalAuthorization authorizationService)
+        public SwapRawService(IAuthorization authorizationService)
         {
             _authorizationService = authorizationService;
         }

@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-    public interface IPrincipalAuthorization
+    public interface IAuthorization
     {
         bool IsPermitted(string functionPath);
 		bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person);

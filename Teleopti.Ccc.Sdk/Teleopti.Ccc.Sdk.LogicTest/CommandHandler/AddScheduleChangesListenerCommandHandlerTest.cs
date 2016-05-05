@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 						DaysEndFromCurrentDate = 1
 					}
 			};
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				handler.Handle(commandDto);
 			}

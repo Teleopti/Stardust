@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             Assert.IsFalse(target.Confidential);
             target.Confidential = true;
-            using(new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using(new CustomAuthorizationContext(new NoPermission()))
             {
                 Assert.AreEqual(ConfidentialPayloadValues.Description, target.ConfidentialDescription(null));
                 Assert.AreEqual(ConfidentialPayloadValues.DisplayColor, target.ConfidentialDisplayColor(null));

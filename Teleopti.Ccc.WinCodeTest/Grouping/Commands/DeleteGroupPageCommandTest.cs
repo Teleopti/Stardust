@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 		{
 			var personSelectorView = MockRepository.GenerateMock<IPersonSelectorView>();
 			var target = new DeleteGroupPageCommand(personSelectorView);
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                Assert.That(target.CanExecute(), Is.False);  
             }

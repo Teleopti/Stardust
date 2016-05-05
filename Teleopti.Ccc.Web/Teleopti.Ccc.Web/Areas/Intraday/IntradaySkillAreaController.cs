@@ -18,15 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
         private readonly CreateSkillArea _createSkillArea;
 		private readonly FetchSkillArea _fetchSkillArea;
 		private readonly DeleteSkillArea _deleteSkillArea;
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 		private readonly MonitorSkillsProvider _monitorSkillsProvider;
 
-		public IntradaySkillAreaController(CreateSkillArea createSkillArea, FetchSkillArea fetchSkillArea, DeleteSkillArea deleteSkillArea, IPrincipalAuthorization principalAuthorization, MonitorSkillsProvider monitorSkillsProvider, ISkillAreaRepository skillAreaRepository)
+		public IntradaySkillAreaController(CreateSkillArea createSkillArea, FetchSkillArea fetchSkillArea, DeleteSkillArea deleteSkillArea, IAuthorization authorization, MonitorSkillsProvider monitorSkillsProvider, ISkillAreaRepository skillAreaRepository)
 		{
 			_createSkillArea = createSkillArea;
 			_fetchSkillArea = fetchSkillArea;
 			_deleteSkillArea = deleteSkillArea;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 			_monitorSkillsProvider = monitorSkillsProvider;
 		    _skillAreaRepository = skillAreaRepository;
 		}
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		{
 			return Ok(new SkillAreaInfo
 			{
-				HasPermissionToModifySkillArea = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea),
+				HasPermissionToModifySkillArea = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea),
 				SkillAreas = _fetchSkillArea.GetAll()
 			});
 		}

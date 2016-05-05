@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.Domain.Collection
             return _undoRedo == null || !_undoRedo.InUndoRedo;
         }
 
-        private static bool treatScheduleAsWriteProtected(IEnumerable<IScheduleDay> scheduleParts, IPrincipalAuthorization authorization)
+        private static bool treatScheduleAsWriteProtected(IEnumerable<IScheduleDay> scheduleParts, IAuthorization authorization)
         {
             if (notPermittedToModifyWriteProtectedSchedule(authorization))
             {
@@ -340,12 +340,12 @@ namespace Teleopti.Ccc.Domain.Collection
             return false;
         }
 
-        private static bool notPermittedToModifyWriteProtectedSchedule(IPrincipalAuthorization authorization)
+        private static bool notPermittedToModifyWriteProtectedSchedule(IAuthorization authorization)
         {
             return !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
         }
 
-        private bool isScenarioRestrictedAndNotPermitted(IPrincipalAuthorization authorization)
+        private bool isScenarioRestrictedAndNotPermitted(IAuthorization authorization)
         {
             return _scenario.Restricted && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
         }

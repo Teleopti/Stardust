@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Main
 			loggedOnUnitOfWorkFactory.Expect(l => l.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			_roleToPrincipalCommand.Expect(r => r.Execute(null, null, null)).IgnoreArguments();
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				var result = _target.InitializeApplication(datasourceContainer);
 				result.Should().Be.False();

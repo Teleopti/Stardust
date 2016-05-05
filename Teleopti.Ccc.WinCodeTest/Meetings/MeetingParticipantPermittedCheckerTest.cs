@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private IList<IPerson> _persons;
         private DateOnly _dateOnly;
         private IViewBase _viewBase;
-        private IPrincipalAuthorization _authorization;
+        private IAuthorization _authorization;
         private Person _person;
 
         [SetUp]
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _persons = new List<IPerson>{_person};
             _dateOnly = new DateOnly(2011, 4, 3);
             _viewBase = _mocks.StrictMock<IViewBase>();
-            _authorization = _mocks.StrictMock<IPrincipalAuthorization>();
+            _authorization = _mocks.StrictMock<IAuthorization>();
             _target = new MeetingParticipantPermittedChecker();
         }
 

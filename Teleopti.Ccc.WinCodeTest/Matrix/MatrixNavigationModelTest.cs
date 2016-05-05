@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		[Test]
 		public void ShouldProvidePermittedMatrixFunctions()
 		{
-			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			var authorization = _mocks.StrictMock<IAuthorization>();
 			var expectedMatrixFunctions = new List<IApplicationFunction>();
 			IEnumerable<IApplicationFunction> actualMatrixFunctions;
 			using (_mocks.Record())
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		[Test]
 		public void ShouldProvidePermittedOnlineReportsFunctions()
 		{
-			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			var authorization = _mocks.StrictMock<IAuthorization>();
 			var expectedFunctions = new List<IApplicationFunction>();
 			IEnumerable<IApplicationFunction> acctualFunctions;
 			using (_mocks.Record())
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		[Test]
 		public void ShouldProvideGroupedPermittedMatrixFunctions()
 		{
-			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			var authorization = _mocks.StrictMock<IAuthorization>();
 			var matrixFunctions = new List<IApplicationFunction>
 												  {
 														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
 		public void ShouldProvideOrphanPermittedMatrixFunctions()
 		{
 
-			var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			var authorization = _mocks.StrictMock<IAuthorization>();
 			var matrixFunctions = new List<IApplicationFunction>
 												  {
 														new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},

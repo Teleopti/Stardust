@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				ListenerName = "Facebook"
 			};
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				handler.Handle(commandDto);
 			}

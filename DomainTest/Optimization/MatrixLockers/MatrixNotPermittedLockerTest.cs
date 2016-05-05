@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		private IMatrixNotPermittedLocker _target;
 		private IScheduleMatrixPro _matrix;
 		private IList<IScheduleMatrixPro> _matrixList;
-		private IPrincipalAuthorization _principalAuthorization;
+		private IAuthorization _authorization;
 		private string _function;
 		private IPerson _person;
 		private IScheduleDayPro _scheduleDayPro;
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
-			_target = new MatrixNotPermittedLocker(_principalAuthorization);
+			_authorization = _mocks.StrictMock<IAuthorization>();
+			_target = new MatrixNotPermittedLocker(_authorization);
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrixList = new List<IScheduleMatrixPro>{_matrix};
 			_person = PersonFactory.CreatePerson();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 			{
 				commonMocks();
 
-				Expect.Call(_principalAuthorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(false);
+				Expect.Call(_authorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(false);
 				
 				//Assert
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2000, 1, 2)).Repeat.Twice();
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 			{
 				commonMocks();
 
-				Expect.Call(_principalAuthorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(true);
+				Expect.Call(_authorization.IsPermitted("", DateOnly.Today, _person)).IgnoreArguments().Return(true);
 			}
 
 			using (_mocks.Playback())

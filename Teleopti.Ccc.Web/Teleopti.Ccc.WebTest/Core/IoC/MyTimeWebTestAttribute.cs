@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			var scenario = new FakeCurrentScenario();
-			var principalAuthorization = new PrincipalAuthorizationWithFullPermission();
+			var principalAuthorization = new FullPermission();
 
-			CurrentPrincipalAuthorization.GloballyUse(principalAuthorization);
+			CurrentAuthorization.GloballyUse(principalAuthorization);
 
 			system.AddModule(new WebModule(configuration, null));
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			system.UseTestDouble(new FakePermissionProvider(false)).For<IPermissionProvider>();
 			system.UseTestDouble(new FakeScheduleDataReadScheduleStorage()).For<IScheduleStorage>();
 			system.UseTestDouble(scenario).For<ICurrentScenario>();
-			system.UseTestDouble(principalAuthorization).For<IPrincipalAuthorization>();
+			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
 			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
 			system.UseTestDouble(new FakeSeatBookingRepository()).For<ISeatBookingRepository>();
 			system.UseTestDouble(new FakeScenarioRepository(scenario.Current())).For<IScenarioRepository>();

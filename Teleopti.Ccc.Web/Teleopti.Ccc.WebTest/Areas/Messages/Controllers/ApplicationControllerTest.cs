@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 		private ApplicationController target;
 		private IPersonRepository _personRepository;
 		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private IPrincipalAuthorization _principalAuthorization;
+		private IAuthorization _authorization;
 		private INotifier _notifier;
 
 		[SetUp]
@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 		{
 			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			_authorization = MockRepository.GenerateMock<IAuthorization>();
 			_notifier = MockRepository.GenerateMock<INotifier>();
-			target = new ApplicationController(_personRepository, _currentTeleoptiPrincipal,_principalAuthorization, _notifier);
+			target = new ApplicationController(_personRepository, _currentTeleoptiPrincipal,_authorization, _notifier);
 		}
 
 		[TearDown]
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 			var principal = (ITeleoptiPrincipal)MockRepository.GenerateStrictMock(typeof(ITeleoptiPrincipal), new[] { typeof(IUnsafePerson) });
 			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
 
-			_principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
-			_principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
+			_authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
+			_authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 			_currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
 			principal.Stub(x => x.Identity).Return(identity);
 			identity.Stub(x => x.Name).Return("fake");

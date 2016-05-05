@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             }
             using (_mock.Playback())
             {
-                using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+                using (new CustomAuthorizationContext(new NoPermission()))
                 {
                     _target.Handle(_setPersonAccountForPersonCommandDto);
                 }

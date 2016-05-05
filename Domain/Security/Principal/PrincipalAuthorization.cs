@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class PrincipalAuthorization : IPrincipalAuthorization
+	public class PrincipalAuthorization : IAuthorization
     {
 		private readonly ICurrentTeleoptiPrincipal _teleoptiPrincipal;
 
@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
 
 		
-		public static IPrincipalAuthorization Current()
+		public static IAuthorization Current()
 		{
-			return ServiceLocatorForLegacy.CurrentPrincipalAuthorization.Current();
+			return ServiceLocatorForLegacy.CurrentAuthorization.Current();
 		}
 
 

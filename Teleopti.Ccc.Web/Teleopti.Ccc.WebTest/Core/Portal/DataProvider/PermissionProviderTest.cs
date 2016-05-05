@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnFalseIfNoApplicationFunctionPermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(false);
 
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnTrueIfApplicationFunctionPermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(true);
 
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnFalseIfNoPersonPermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var person = new Person();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, person)).Return(false);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnTrueIfPersonPermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var person = new Person();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, person)).Return(true);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnFalseIfNoTeamPermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var team = new Team();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, team)).Return(false);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnTrueIfTeamPermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var team = new Team();
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, team)).Return(true);
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnFalseIfNoSitePermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var site = new Site(".");
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, site)).Return(false);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnTrueIfSitePermission()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var site = new Site(".");
 
 			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath", DateOnly.Today, site)).Return(true);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnTrueIfScheduleIsPublished()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 
 			var person = new Person();
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		[Test]
 		public void ShouldReturnFalseIfScheduleNotPublished()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 
 			var person = new Person();
 			IWorkflowControlSet workflowControlSet = new WorkflowControlSet("d");

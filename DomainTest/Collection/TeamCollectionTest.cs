@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyAllPermittedTeams()
         {
             var mocks = new MockRepository();
-            var authorization = mocks.StrictMock<IPrincipalAuthorization>();
+            var authorization = mocks.StrictMock<IAuthorization>();
             using (mocks.Record())
             {
                 Expect.Call(authorization.IsPermitted("func", _dt, _team1)).Return(false);
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyAllPermittedSites()
         {
             var mocks = new MockRepository();
-            var authorization = mocks.StrictMock<IPrincipalAuthorization>();
+            var authorization = mocks.StrictMock<IAuthorization>();
             using (mocks.Record())
             {
                 Expect.Call(authorization.IsPermitted("func", _dt, _team1.Site)).Return(false);

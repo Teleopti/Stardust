@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             using (_mockRep.Playback())
             {
-                using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+                using (new CustomAuthorizationContext(new NoPermission()))
                 {
                     _model1 = new NotesEditorViewModel(null);
                     _model1.Load(_part);

@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 {
 	public class ReportsNavigationProvider: IReportsNavigationProvider
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 		private readonly IReportsProvider _reportsProvider;
 		private readonly IReportUrl _reportUrl;
 		private readonly IToggleManager _toggleManager;
 
-		public ReportsNavigationProvider(IPrincipalAuthorization principalAuthorization, IReportsProvider reportsProvider, IReportUrl reportUrl, IToggleManager toggleManager)
+		public ReportsNavigationProvider(IAuthorization authorization, IReportsProvider reportsProvider, IReportUrl reportUrl, IToggleManager toggleManager)
 		{
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 			_reportsProvider = reportsProvider;
 			_toggleManager = toggleManager;
 			_reportUrl = reportUrl;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		public IList<ReportNavigationItem> GetNavigationItems()
 		{
 			var reportsList = new List<ReportNavigationItem>();
-			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb))
+			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb))
 				reportsList.Add(new ReportNavigationItem
 				{
 					Action = "Index",
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 					Title = Resources.MyReport,
 					IsWebReport = true
 				});
-			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
+			if (_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboard))
 			{
 				reportsList.Add(new ReportNavigationItem
 				{

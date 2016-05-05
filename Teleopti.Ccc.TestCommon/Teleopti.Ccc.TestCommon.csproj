@@ -153,7 +153,7 @@
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakeScheduleRangePersister.cs" />
-    <Compile Include="FakeData\PrincipalAuthorizationWithConfigurablePermission.cs" />
+    <Compile Include="FakeData\ConfigurablePermissions.cs" />
     <Compile Include="FakeEventPublisherWithOverwritingHandlers.cs" />
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsDayOffRepository.cs" />
@@ -197,10 +197,10 @@
     <Compile Include="FakeData\FakeUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeWorkloadRepository.cs" />
     <Compile Include="FakeData\LogSpy.cs" />
-    <Compile Include="FakeData\PrincipalAuthorizationWithNoPermission.cs" />
+    <Compile Include="FakeData\NoPermission.cs" />
     <Compile Include="FakeData\NoCurrentIdentity.cs" />
     <Compile Include="FakeData\PersonScheduleDayReadModelFactory.cs" />
-    <Compile Include="FakeData\PrincipalAuthorizationWithFullPermission.cs" />
+    <Compile Include="FakeData\FullPermission.cs" />
     <Compile Include="FakeDistributedLockAcquirer.cs" />
     <Compile Include="FakeEventPublisher.cs" />
     <Compile Include="FakeHangfireEventClient.cs" />

@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldGetFullDayAbsencePermission()
 		{
 			const bool expectedResult = true;
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence))
 				.Return(expectedResult);
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldGetIntradayAbsencePermission()
 		{
 			const bool expectedResult = true;
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence))
 				.Return(expectedResult);
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldGetSwapShiftsPermission()
 		{
 			const bool expectedResult = true;
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts))
 				.Return(expectedResult);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldGetAddingActivityPermission()
 		{
 			const bool expectedResult = true;
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity))
 				.Return(expectedResult);
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldGetRemoveActivityPermission()
 		{
 			const bool expectedResult = true;
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity))
 				.Return(expectedResult);
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldGetMoveActivityPermission()
 		{
 			const bool expectedResult = true;
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity))
 				.Return(expectedResult);
 
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			expectedPerson.SetId(Guid.NewGuid());
 			var loggonUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggonUser.Stub(x => x.CurrentUser()).Return(expectedPerson);
-			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldAddFullDayAbsenceForMoreThanOneAgent()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 			var target = new TeamScheduleController(null, null, null, pricipalAuthorization, absencePersister, null, null, null, null);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldAddFullDayAbsenceThroughInputForm()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 			var target = new TeamScheduleController(null, null, null, pricipalAuthorization, absencePersister, null, null, null, null);
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			expectedPerson.SetId(Guid.NewGuid());
 			var loggonUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggonUser.Stub(x => x.CurrentUser()).Return(expectedPerson);
-			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldAddIntradayAbsenceForMoreThanOneAgent()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 			var target = new TeamScheduleController(null, null, null, pricipalAuthorization, absencePersister, null, null, null, null);
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldAddIntradayAbsenceThroughInputForm()
 		{
 			var absencePersister = MockRepository.GenerateMock<IAbsencePersister>();
-			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 			var target = new TeamScheduleController(null, null, null, pricipalAuthorization, absencePersister, null, null, null, null);
@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		private static TeamScheduleController setupForRemoveAbsence(DateTime scheduleDate, IDictionary<Guid,
 			List<Guid>> personAndAbsences, ICommandDispatcher commandDispatcher)
 		{
-			var pricipalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var pricipalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			pricipalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence))
 				.Return(true);
 

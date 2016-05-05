@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Common
 
 	public static class ServiceLocatorForLegacy
 	{
-		private static ICurrentPrincipalAuthorization _currentPrincipalAuthorization;
+		private static ICurrentAuthorization _currentAuthorization;
 
-		public static ICurrentPrincipalAuthorization CurrentPrincipalAuthorization
+		public static ICurrentAuthorization CurrentAuthorization
 		{
-			get { return _currentPrincipalAuthorization ?? Security.Principal.CurrentPrincipalAuthorization.Make(); }
-			set { _currentPrincipalAuthorization = value; }
+			get { return _currentAuthorization ?? Security.Principal.CurrentAuthorization.Make(); }
+			set { _currentAuthorization = value; }
 		}
 
 	}

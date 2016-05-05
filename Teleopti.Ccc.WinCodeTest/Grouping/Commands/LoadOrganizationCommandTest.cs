@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         [Test]
         public void ShouldRemoveFromListIfNoPermission()
         {
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 var buId = Guid.NewGuid();
                 var date = new DateOnly(2012, 1, 19);

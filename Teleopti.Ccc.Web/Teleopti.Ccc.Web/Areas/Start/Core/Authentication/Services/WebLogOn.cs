@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
 		public WebLogOn(
 			ILogOnOff logOnOff,
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			ISessionSpecificDataProvider sessionSpecificDataProvider,
 			IRoleToPrincipalCommand roleToPrincipalCommand,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
-			IPrincipalAuthorization principalAuthorization
+			IAuthorization authorization
 			)
 		{
 			_logOnOff = logOnOff;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 		public void LogOn(string dataSourceName, Guid businessUnitId, Guid personId, string tenantPassword, bool isPersistent, bool isLogonFromBrowser)
@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				// why just load all but discard any result from the server?
 				_repositoryFactory.CreateApplicationFunctionRepository(uow).LoadAll();
 
-				var allowed =	_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
-								_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
-								_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToReports);
+				var allowed =	_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb) ||
+								_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere) ||
+								_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToReports);
 
 				if (!allowed)
 					throw new PermissionException("You (" + person.Name + ") don't have permission to access the web portal.");

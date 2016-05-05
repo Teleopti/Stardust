@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		private IScheduleDayPro _scheduleDayPro2;
 		private IHasContractDayOffDefinition _hasContractDayOffDefinition;
 		private IPersonAssignment _personAssignment;
-		private IPrincipalAuthorization _principalAuthorization;
+		private IAuthorization _authorization;
 		private IPerson _person;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
 		private IScheduleTagSetter _scheduleTagSetter;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			_authorization = _mocks.StrictMock<IAuthorization>();
 			_person = _mocks.StrictMock<IPerson>();
 			_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 			_scheduleTagSetter = new ScheduleTagSetter(new NullScheduleTag());
@@ -239,12 +239,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(true);
+				Expect.Call(_authorization.IsPermitted("functionPath", _date1, _person)).Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}
@@ -284,13 +284,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(true);
+				Expect.Call(_authorization.IsPermitted("functionPath", _date1, _person)).Return(true);
 			
 			}
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}
@@ -330,12 +330,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(true);
+				Expect.Call(_authorization.IsPermitted("functionPath", _date1, _person)).Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					_target.DayScheduled += _target_DayScheduled;
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
@@ -376,12 +376,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.Any();
 				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Any();
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_principalAuthorization.IsPermitted("functionPath", _date1, _person)).Return(false);
+				Expect.Call(_authorization.IsPermitted("functionPath", _date1, _person)).Return(false);
 			}
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					_target.DayOffScheduling(matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions, _scheduleTagSetter);
 				}

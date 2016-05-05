@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test,ExpectedException(typeof(PermissionException))]
         public void ShouldThrowWhenNoPermissionWhenVerifying()
         {
-            using(new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using(new CustomAuthorizationContext(new NoPermission()))
             {
                 target.VerifyEditRequestPermission(personRequest);
             }

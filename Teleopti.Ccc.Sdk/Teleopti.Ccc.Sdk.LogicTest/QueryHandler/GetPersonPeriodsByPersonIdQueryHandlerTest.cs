@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			};
 			query.PersonIdCollection.Add(person.Id.GetValueOrDefault());
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				var result = target.Handle(query);
 				result.Count.Should().Be.EqualTo(0);

@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			}
 			using (mock.Playback())
 			{
-				using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+				using (new CustomAuthorizationContext(new NoPermission()))
 				{
 					var command = new SetPersonOptionalValuesForPersonCommandDto{PersonId = person.Id.GetValueOrDefault()};
                     command.OptionalValueCollection.Add(new OptionalValueDto { Key = "Shoe size", Value = "42" });

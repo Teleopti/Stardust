@@ -708,7 +708,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 						new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), null));
 			}
 		}
-		private class missingPermissionsOnAgentsOverlappingSchedulePeriod : PrincipalAuthorizationWithFullPermission
+		private class missingPermissionsOnAgentsOverlappingSchedulePeriod : FullPermission
 		{
 			public override IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 			{

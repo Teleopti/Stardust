@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		protected override IPersonRequest Given()
 		{
 			PersonRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			PrincipalAuthorization = new PrincipalAuthorizationWithNoPermission();
+			Authorization = new NoPermission();
 			return new PersonRequest(Person, new TextRequest(new DateTimePeriod(2000, 1, 1, 2000, 1, 2)));
 		}
 

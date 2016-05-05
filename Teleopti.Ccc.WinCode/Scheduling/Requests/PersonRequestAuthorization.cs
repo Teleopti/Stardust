@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 {
     public class PersonRequestAuthorization
     {
-        private readonly IPrincipalAuthorization _authorization;
+        private readonly IAuthorization _authorization;
 
-        public PersonRequestAuthorization(IPrincipalAuthorization authorization)
+        public PersonRequestAuthorization(IAuthorization authorization)
         {
             _authorization = authorization;
         }

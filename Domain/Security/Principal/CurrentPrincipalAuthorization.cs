@@ -1,35 +1,35 @@
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public interface ICurrentPrincipalAuthorization
+	public interface ICurrentAuthorization
 	{
-		IPrincipalAuthorization Current();
+		IAuthorization Current();
 	}
 
-	public class CurrentPrincipalAuthorization : ICurrentPrincipalAuthorization
+	public class CurrentAuthorization : ICurrentAuthorization
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
-		private static IPrincipalAuthorization _globalPrincipalAuthorization;
+		private readonly IAuthorization _authorization;
+		private static IAuthorization _globalAuthorization;
 
-		public CurrentPrincipalAuthorization(IPrincipalAuthorization principalAuthorization)
+		public CurrentAuthorization(IAuthorization authorization)
 		{
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
-		public static ICurrentPrincipalAuthorization Make()
+		public static ICurrentAuthorization Make()
 		{
-			return new CurrentPrincipalAuthorization(new PrincipalAuthorization(CurrentTeleoptiPrincipal.Make()));
+			return new CurrentAuthorization(new PrincipalAuthorization(CurrentTeleoptiPrincipal.Make()));
 		}
 
-		public static void GloballyUse(IPrincipalAuthorization principalAuthorization)
+		public static void GloballyUse(IAuthorization authorization)
 		{
-			_globalPrincipalAuthorization = principalAuthorization;
+			_globalAuthorization = authorization;
 		}
 
-		public IPrincipalAuthorization Current()
+		public IAuthorization Current()
 		{
-			if (_globalPrincipalAuthorization != null)
-				return _globalPrincipalAuthorization;
-			return _principalAuthorization;
+			if (_globalAuthorization != null)
+				return _globalAuthorization;
+			return _authorization;
 		}
 
 	}

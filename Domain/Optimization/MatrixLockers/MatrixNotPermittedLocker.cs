@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 
 	public class MatrixNotPermittedLocker : IMatrixNotPermittedLocker
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
-		public MatrixNotPermittedLocker(IPrincipalAuthorization principalAuthorization)
+		public MatrixNotPermittedLocker(IAuthorization authorization)
 		{
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> matrixList)
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.MatrixLockers
 					{
 						var forAuthorization =
 							new PersistableScheduleDataForAuthorization(persistableScheduleData);
-						if (!_principalAuthorization.IsPermitted(forAuthorization.FunctionPath, forAuthorization.DateOnly, forAuthorization.Person))
+						if (!_authorization.IsPermitted(forAuthorization.FunctionPath, forAuthorization.DateOnly, forAuthorization.Person))
 						{
 							scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(scheduleDayPro.Day, scheduleDayPro.Day));
 							break;

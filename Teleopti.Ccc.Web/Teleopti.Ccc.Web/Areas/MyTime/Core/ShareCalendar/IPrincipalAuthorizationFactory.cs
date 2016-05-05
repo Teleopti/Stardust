@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 {
     public interface IPrincipalAuthorizationFactory
     {
-        IPrincipalAuthorization FromPrincipal(ITeleoptiPrincipal principal);
+        IAuthorization FromPrincipal(ITeleoptiPrincipal principal);
     }
 }

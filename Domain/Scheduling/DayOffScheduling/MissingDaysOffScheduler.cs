@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly IMatrixDataListInSteadyState _matrixDataListInSteadyState;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
-		private readonly IPrincipalAuthorization _authorization;
+		private readonly IAuthorization _authorization;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public MissingDaysOffScheduler(IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder,
 			IMatrixDataListInSteadyState matrixDataListInSteadyState, IMatrixDataListCreator matrixDataListCreator, 
-			IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, IPrincipalAuthorization authorization)
+			IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, IAuthorization authorization)
 		{
 			_bestSpotForAddingDayOffFinder = bestSpotForAddingDayOffFinder;
 			_matrixDataListInSteadyState = matrixDataListInSteadyState;

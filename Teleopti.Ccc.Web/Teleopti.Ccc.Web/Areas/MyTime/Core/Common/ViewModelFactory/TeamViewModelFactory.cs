@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IUserTextTranslator _userTextTranslator;
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
-		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator, IPrincipalAuthorization principalAuthorization)
+		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator, IAuthorization authorization)
 		{
 			_teamProvider = teamProvider;
 			_permissionProvider = permissionProvider;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_userTextTranslator = userTextTranslator;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			});
 			sites.ForEach(s =>
 			{
-				if (_principalAuthorization.IsPermitted(applicationFunctionPath, date, s))
+				if (_authorization.IsPermitted(applicationFunctionPath, date, s))
 				{
 					options.Add(new 
 					{

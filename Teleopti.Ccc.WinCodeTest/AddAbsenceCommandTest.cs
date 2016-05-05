@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest
 		private IScheduleDay _schedulePart;
 		private IScheduleRange _scheduleRange;
 		private DateOnlyPeriod _dateOnlyPeriod;
-		private IPrincipalAuthorization _principalAuthorization;
+		private IAuthorization _authorization;
 		private IScheduleDictionary _scheduleDictionary;
 
 		[SetUp]
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.WinCodeTest
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_dateOnlyPeriod, TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone), new List<IPerson>(), MockRepository.GenerateMock<IDisableDeletedFilter>(), new SchedulingResultStateHolder(), new TimeZoneGuardWrapper());
 			_selectedItem = MockRepository.GenerateMock<IAbsence>();
 			_schedulePresenterBase = MockRepository.GenerateMock<ISchedulePresenterBase>();
-			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			_authorization = MockRepository.GenerateMock<IAuthorization>();
 			
-			_target = new AddAbsenceCommand(_schedulerStateHolder, _viewBase, _schedulePresenterBase, _selectedSchedules,_principalAuthorization);
+			_target = new AddAbsenceCommand(_schedulerStateHolder, _viewBase, _schedulePresenterBase, _selectedSchedules,_authorization);
 			_person = PersonFactory.CreatePerson("person");
 			_gridlockManager = new GridlockManager();
 			_scheduleRange = (IScheduleRange) MockRepository.GenerateMock(typeof (IScheduleRange), new[] {typeof (IValidateScheduleRange)});
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			var period = new DateTimePeriod(_date.AddHours(1), _date.AddHours(22));
 
 			_dialog.Stub(x => x.SelectedPeriod).Return(period);
-			_principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).Return(false);
+			_authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).Return(false);
 			_schedulePresenterBase.Stub(x => x.LockManager).Return(gridLockManager);
 			_scheduleRange.Stub(x => x.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart);
 
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			var schedulePart2 = MockRepository.GenerateMock<IScheduleDay>();
 
 			_dialog.Stub(x => x.SelectedPeriod).Return(period);
-			_principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).Return(true);
+			_authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).Return(true);
 			_schedulePresenterBase.Stub(x => x.LockManager).Return(gridLockManager);
 			_scheduleRange.Stub(x => x.ScheduledDay(new DateOnly(2012, 07, 16))).Return(_schedulePart); 
 			_scheduleRange.Stub(x => x.ScheduledDay(new DateOnly(2012, 07, 17))).Return(schedulePart2);
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			var end = new DateTime(2012, 7, 16, 12, 0, 0, DateTimeKind.Utc);
 			var defaultPeriod = new DateTimePeriod(start, end);
 			var dialog = MockRepository.GenerateMock<IAddLayerViewModel<IAbsence>>();
-			_target = new AddAbsenceCommand(_schedulerStateHolder, viewBase, _schedulePresenterBase, _selectedSchedules, _principalAuthorization);
+			_target = new AddAbsenceCommand(_schedulerStateHolder, viewBase, _schedulePresenterBase, _selectedSchedules, _authorization);
 
 			viewBase.Stub(x => x.SelectedSchedules()).Return(_selectedSchedules);
 			viewBase.Stub(x => x.CreateAddAbsenceViewModel(null, null, TimeZoneInfoFactory.StockholmTimeZoneInfo()))

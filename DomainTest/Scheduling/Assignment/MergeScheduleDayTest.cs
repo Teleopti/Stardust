@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.Add(personAssignmentDest);
 			destination.PersonAssignment().SetDayOff(DayOffFactory.CreateDayOff());
 
-			var authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var authorization = MockRepository.GenerateMock<IAuthorization>();
 
 			authorization.Stub(x => x.IsPermitted("")).Repeat.Once().IgnoreArguments().Return(false);
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(true);
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.Add(personAssignmentDest);
 			destination.PersonAssignment().SetDayOff(DayOffFactory.CreateDayOff());
 
-			using (new CustomAuthorizationContext(MockRepository.GenerateMock<IPrincipalAuthorization>()))
+			using (new CustomAuthorizationContext(MockRepository.GenerateMock<IAuthorization>()))
 			{
 				destination.Merge(source, false);
 				Assert.IsNotNull(destination.PersonAssignment());
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			source.PersonAssignment(true).SetDayOff(DayOffFactory.CreateDayOff());
 			destination.Add(personAbsenceDest);
 
-			var authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var authorization = MockRepository.GenerateMock<IAuthorization>();
 
 			authorization.Stub(x => x.IsPermitted("")).Repeat.Once().IgnoreArguments().Return(true);
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(false);
@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.PersonAssignment(true).SetDayOff(DayOffFactory.CreateDayOff());
 			IShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftCategory");
 
-			var authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var authorization = MockRepository.GenerateMock<IAuthorization>();
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(true);
 			using (new CustomAuthorizationContext(authorization))
 			{
@@ -874,7 +874,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			destination.Add(personAbsenceDest);
 			destination.Add(personAssignmentDest);
 
-			var authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var authorization = MockRepository.GenerateMock<IAuthorization>();
 			authorization.Stub(x => x.IsPermitted("")).Repeat.Once().IgnoreArguments().Return(false);
 			authorization.Stub(x => x.IsPermitted("")).IgnoreArguments().Return(true);
 

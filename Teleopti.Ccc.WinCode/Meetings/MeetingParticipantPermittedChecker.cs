@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.WinCode.Meetings
 {
     public interface IMeetingParticipantPermittedChecker
     {
-        bool ValidatePermittedPersons(IEnumerable<IPerson> persons, DateOnly startDate, IViewBase viewBase, IPrincipalAuthorization authorization);
+        bool ValidatePermittedPersons(IEnumerable<IPerson> persons, DateOnly startDate, IViewBase viewBase, IAuthorization authorization);
     }
 
     public class MeetingParticipantPermittedChecker : IMeetingParticipantPermittedChecker
     {
-        public bool ValidatePermittedPersons(IEnumerable<IPerson> persons, DateOnly startDate, IViewBase viewBase, IPrincipalAuthorization authorization)
+        public bool ValidatePermittedPersons(IEnumerable<IPerson> persons, DateOnly startDate, IViewBase viewBase, IAuthorization authorization)
         {
             var unPermittedPersons = new List<string>();
             foreach (IPerson person in persons)

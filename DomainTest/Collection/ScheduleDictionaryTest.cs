@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void CanNotModifyExistingDataThroughDefaultPermissionCheckerWhenNoPermisson()
 		{
-			var authorizer = new PrincipalAuthorizationWithConfigurablePermission();
+			var authorizer = new ConfigurablePermissions();
 			
 			using (new CustomAuthorizationContext(authorizer))
 			{
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private IScenario scenario;
 		private ScheduleDictionary target;
 		private INewBusinessRuleCollection _noNewRules;
-		private IPrincipalAuthorization principalAuthorization;
+		private IAuthorization authorization;
 		private IScheduleDayChangeCallback scheduleDayChangeCallback;
 		private IPersistableScheduleDataPermissionChecker dataPermissionChecker;
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			mocks = new MockRepository();
 			dictionary = mocks.StrictMock<IDictionary<IPerson, IScheduleRange>>();
 			diffSvc = mocks.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
-			principalAuthorization = mocks.StrictMock<IPrincipalAuthorization>();
+			authorization = mocks.StrictMock<IAuthorization>();
 			scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
 			period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					((ScheduleRange)target[dummyPerson]).Add(ass);
 					((ScheduleRange)target[dummyPerson]).Add(ass1);
@@ -269,15 +269,15 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private void SetAuthorizationServiceExpectations()
 		{
 			DateOnlyPeriod dop = period.VisiblePeriod.ToDateOnlyPeriod(dummyPerson.PermissionInformation.DefaultTimeZone());
-			Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
+			Expect.Call(authorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
 				.IgnoreArguments()
 				.Repeat.Any()
 				.Return(new List<DateOnlyPeriod> { dop });
-			Expect.Call(principalAuthorization.IsPermitted("Any"))
+			Expect.Call(authorization.IsPermitted("Any"))
 				.IgnoreArguments()
 				.Return(true)
 				.Repeat.Any();
-			Expect.Call(principalAuthorization.IsPermitted("", new DateOnly(), dummyPerson))
+			Expect.Call(authorization.IsPermitted("", new DateOnly(), dummyPerson))
 				.IgnoreArguments()
 				.Return(true)
 				.Repeat.Any();
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					//first put something in
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			mocks.ReplayAll();
 
-			using (new CustomAuthorizationContext(principalAuthorization))
+			using (new CustomAuthorizationContext(authorization))
 			{
 				//first put something in
 				IScheduleDay part = target[dummyPerson].ScheduledDay(date);
@@ -528,7 +528,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					//this will happen on scheduleranges not initialized when loading scheduledictionary
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 				}
@@ -587,14 +587,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				Expect.Call(rep.LoadAggregate(newId))
 					.Return(ass);
-				Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
+				Expect.Call(authorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
 					.IgnoreArguments()
 					.Repeat.Any()
 					.Return(new List<DateOnlyPeriod>());
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					Assert.AreSame(ass, target.UpdateFromBroker(rep, newId));
 				}
@@ -621,14 +621,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				Expect.Call(rep.LoadAggregate(newId))
 					.Return(meeting);
-				Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
+				Expect.Call(authorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
 					.IgnoreArguments()
 					.Repeat.Any()
 					.Return(new List<DateOnlyPeriod>());
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					target.MeetingUpdateFromBroker(rep, newId);
 				}
@@ -654,7 +654,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IPersonAssignment pAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson,
 															   new DateTimePeriod(
@@ -686,7 +686,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IPersonAssignment pAss =
 						PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
@@ -715,7 +715,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IPersonAssignment pAss =
 						PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, PersonFactory.CreatePerson(),
@@ -761,16 +761,16 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (mocks.Record())
 			{
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 					.Return(false).Repeat.Any();
 				DateOnlyPeriod dop = period.VisiblePeriod.ToDateOnlyPeriod(timeZone);
-				Expect.Call(principalAuthorization.PermittedPeriods(dummyFunction, dop, person))
+				Expect.Call(authorization.PermittedPeriods(dummyFunction, dop, person))
 					.Return(new List<DateOnlyPeriod> { dop });
 
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					((ScheduleRange)target[pAss1.Person]).Add(pAss1);
 					((ScheduleRange)target[pAss2.Person]).Add(pAss2);
@@ -797,20 +797,20 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (mocks.Record())
 			{
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 					.Return(true).Repeat.Any();
 				var dop = period.VisiblePeriod.ToDateOnlyPeriod(dummyPerson.PermissionInformation.DefaultTimeZone());
-				Expect.Call(principalAuthorization.PermittedPeriods(function, dop, dummyPerson))
+				Expect.Call(authorization.PermittedPeriods(function, dop, dummyPerson))
 					.Return(new List<DateOnlyPeriod> { dop })
 					.Repeat.AtLeastOnce();
-				Expect.Call(principalAuthorization.IsPermitted("", new DateOnly(), dummyPerson)).IgnoreArguments().Return(false).Repeat
+				Expect.Call(authorization.IsPermitted("", new DateOnly(), dummyPerson)).IgnoreArguments().Return(false).Repeat
 					.Any();
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)).
 					Return(false);
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					((ScheduleRange)target[dummyPerson]).Add(pAbs2BeChanged);
 
@@ -853,7 +853,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IPersonAssignment ass =
 						PersonAssignmentFactory.CreateAssignmentWithMainShift(
@@ -876,19 +876,19 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			IPerson per = PersonFactory.CreatePerson();
 			using (mocks.Record())
 			{
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 					.Return(true);
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection))
 					.Return(true);
 				var dop = period.VisiblePeriod.ToDateOnlyPeriod(per.PermissionInformation.DefaultTimeZone());
-				Expect.Call(principalAuthorization.PermittedPeriods(dummyFunction, dop, per))
+				Expect.Call(authorization.PermittedPeriods(dummyFunction, dop, per))
 					.Return(new List<DateOnlyPeriod> { dop });
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
 					.Return(false);
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					per.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2001, 1, 1);
 					var part = target[per].ScheduledDay(new DateOnly(2000, 1, 2));
@@ -909,13 +909,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (mocks.Record())
 			{
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)).Return(true).Repeat.Twice();
-				Expect.Call(principalAuthorization.PermittedPeriods(dummyFunction, dop, per)).Return(new List<DateOnlyPeriod> { dop });
-				Expect.Call(principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario)).Return(false);
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)).Return(true).Repeat.Twice();
+				Expect.Call(authorization.PermittedPeriods(dummyFunction, dop, per)).Return(new List<DateOnlyPeriod> { dop });
+				Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario)).Return(false);
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					var part = target[per].ScheduledDay(new DateOnly(2000, 1, 2));
 					scenario.Restricted = true;
@@ -949,7 +949,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					Assert.AreSame(abs, target.UpdateFromBroker(rep, newId));
 					var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
@@ -979,7 +979,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					Assert.AreSame(preferenceDay, target.UpdateFromBroker(rep, newId));
 					var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 1, 3));
@@ -1010,7 +1010,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					Assert.IsNull(target.UpdateFromBroker(rep, newId));
 					var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
@@ -1104,7 +1104,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					Assert.AreSame(ass, target.UpdateFromBroker(rep, newId));
 					var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
@@ -1135,7 +1135,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					Assert.IsNull(target.UpdateFromBroker(rep, newId));
 					var part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 6, 1));
@@ -1169,7 +1169,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
@@ -1209,7 +1209,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
@@ -1245,7 +1245,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
@@ -1281,7 +1281,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					target.MeetingUpdateFromBroker(rep, newId);
 					var part = target[meetingPerson.Person].ScheduledDay(new DateOnly(2000, 1, 1));
@@ -1367,7 +1367,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);
@@ -1414,7 +1414,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);
@@ -1467,7 +1467,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);
@@ -1510,7 +1510,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			}
 			using (mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(principalAuthorization))
+				using (new CustomAuthorizationContext(authorization))
 				{
 					IUndoRedoContainer container = new UndoRedoContainer(100);
 					target.SetUndoRedoContainer(container);

@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 	public class BadgeLeaderBoardReportOptionFactory :IBadgeLeaderBoardReportOptionFactory
 	{
 		private readonly ITeamProvider _teamProvider;
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 		private readonly ILoggedOnUser _currentLoggedOnUser;
 
-		public BadgeLeaderBoardReportOptionFactory(ITeamProvider teamProvider, IPrincipalAuthorization principalAuthorization, ILoggedOnUser currentLoggedOnUser)
+		public BadgeLeaderBoardReportOptionFactory(ITeamProvider teamProvider, IAuthorization authorization, ILoggedOnUser currentLoggedOnUser)
 		{
 			_teamProvider = teamProvider;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 			_currentLoggedOnUser = currentLoggedOnUser;
 		}
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 			});
 			sites.ForEach(s =>
 			{
-				if (_principalAuthorization.IsPermitted(functionPath, date, s))
+				if (_authorization.IsPermitted(functionPath, date, s))
 				{
 					options.Add(new
 					{

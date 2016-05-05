@@ -10,17 +10,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 {
 	public class ReportsProvider: IReportsProvider
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
-		public ReportsProvider(IPrincipalAuthorization principalAuthorization)
+		public ReportsProvider(IAuthorization authorization)
 		{
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 		public IEnumerable<IApplicationFunction> GetReports()
 		{
 			return
-				_principalAuthorization.GrantedFunctions().FilterBySpecification(
+				_authorization.GrantedFunctions().FilterBySpecification(
 					new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)).ToList();
 		}
 	}

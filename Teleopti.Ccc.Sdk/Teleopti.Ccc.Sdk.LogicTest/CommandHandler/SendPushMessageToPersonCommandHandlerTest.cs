@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			}
 			using (mock.Playback())
 			{
-				using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+				using (new CustomAuthorizationContext(new NoPermission()))
 				{
 					var command = new SendPushMessageToPeopleCommandDto();
 					command.Recipients.Add(person.Id.GetValueOrDefault());

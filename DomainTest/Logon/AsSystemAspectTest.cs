@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public FakeDatabase Database;
 		public Service TheService;
 		public ICurrentTeleoptiPrincipal Principal;
-		public IPrincipalAuthorization PrincipalAuthorization;
+		public IAuthorization Authorization;
 		public IDefinedRaptorApplicationFunctionFactory ApplicationFunctions;
 		public IUserTimeZone TimeZone;
 		public IUserCulture Culture;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				{
 					permitted = ApplicationFunctions.ApplicationFunctions
 						.Select(f => f.FunctionPath)
-						.Where(f => PrincipalAuthorization.IsPermitted(f))
+						.Where(f => Authorization.IsPermitted(f))
 						.ToArray();
 				});
 

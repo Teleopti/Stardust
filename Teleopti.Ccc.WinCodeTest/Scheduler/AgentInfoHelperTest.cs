@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			var gridLockManager = new GridlockManager();
 			var matrixUserLocker = new MatrixUserLockLocker(() => gridLockManager);
-			var notPermittedLocker = new MatrixNotPermittedLocker(new PrincipalAuthorizationWithFullPermission());
+			var notPermittedLocker = new MatrixNotPermittedLocker(new FullPermission());
 			var personListExtraxtor = new PersonListExtractorFromScheduleParts();
 			var periodExtractor = new PeriodExtractorFromScheduleParts();
 			_matrixListFactory = new MatrixListFactory(() => _schedulerStateHolder, matrixUserLocker, notPermittedLocker, personListExtraxtor, periodExtractor);

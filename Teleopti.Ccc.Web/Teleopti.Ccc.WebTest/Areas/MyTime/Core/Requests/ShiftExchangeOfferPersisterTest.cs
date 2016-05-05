@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				MockRepository.GenerateMock<IMappingEngine>(),
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 				MockRepository.GenerateMock<IMappingEngine>(),
 				new ShiftExchangeOfferMapper(new FakeLoggedOnUser(person), scheduleProvider));
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+			using (new CustomAuthorizationContext(new FullPermission()))
 			{
 				target.Persist(
 					new ShiftExchangeOfferForm

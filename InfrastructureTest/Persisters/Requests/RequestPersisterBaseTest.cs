@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		protected abstract IPersonRequest When(IPersonRequest currentRequest);
 		protected abstract void Then(IPersonRequest yourRequest);
 		protected IPersonRequestRepository PersonRequestRepository { get; set; }
-		protected IPrincipalAuthorization PrincipalAuthorization { get; set; }
+		protected IAuthorization Authorization { get; set; }
 		protected bool ClearRefferedRequestsWasCalled { get; private set; }
 
 		private IRequestPersister target;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 		private void setState()
 		{
 			PersonRequestRepository = new PersonRequestRepository(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make()));
-			PrincipalAuthorization = new PrincipalAuthorizationWithFullPermission();
+			Authorization = new FullPermission();
 		}
 
 		private void makeTarget()
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 														PersonRequestRepository,
 														this,
 														MockRepository.GenerateMock<IInitiatorIdentifier>(),
-														PrincipalAuthorization
+														Authorization
 														);
 		}
 

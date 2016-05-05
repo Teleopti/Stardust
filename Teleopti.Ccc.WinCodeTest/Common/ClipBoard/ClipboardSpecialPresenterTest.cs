@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         [Test]
         public void VerifyInitialize()
         {
-            var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
+            var authorization = _mocks.StrictMock<IAuthorization>();
             using (_mocks.Record())
             {
                 _view.SetTexts();

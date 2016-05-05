@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldGetSkillsAndWorkloads()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 			var skill1 = SkillFactory.CreateSkillWithWorkloadAndSources();
 			var forecastMisc = MockRepository.GenerateMock<IForecastMisc>();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Forecasting.Controllers
 		[Test]
 		public void ShouldHavePermissionForModifySkill()
 		{
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			var skillRepository = MockRepository.GenerateMock<ISkillRepository>();
 
 			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkill)).Return(true);

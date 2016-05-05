@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IScenario _scenario;
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private IDictionary<IPerson, IList<DateOnly>> _locks;
-		private IPrincipalAuthorization _authorizationService;
+		private IAuthorization _authorizationService;
 		private TimeZoneInfo _loggedOnPersonTimeZoneInfo;
 
 		[SetUp]
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_loggedOnPersonTimeZoneInfo = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			_mockRepository = new MockRepository();
-			_authorizationService = _mockRepository.StrictMock<IPrincipalAuthorization>();
+			_authorizationService = _mockRepository.StrictMock<IAuthorization>();
 			_swapRawService = new SwapRawService(_authorizationService);
 			_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
 			_personOne = PersonFactory.CreatePerson(new Name("personOne", "GmtTimeZone"), TimeZoneInfoFactory.GmtTimeZoneInfo());

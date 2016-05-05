@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
     {
 	    private readonly IPersonRepository _personRepository;
 	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
-	    private readonly IPrincipalAuthorization _principalAuthorization;
+	    private readonly IAuthorization _authorization;
 	    private readonly INotifier _notifier;
 
-	    public ApplicationController(IPersonRepository personRepository, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IPrincipalAuthorization principalAuthorization, INotifier notifier)
+	    public ApplicationController(IPersonRepository personRepository, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IAuthorization authorization, INotifier notifier)
 	    {
 		    _personRepository = personRepository;
 		    _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
-		    _principalAuthorization = principalAuthorization;
+		    _authorization = authorization;
 		    _notifier = notifier;
 	    }
 
@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 			{
 				UserName = principal.Identity.Name,
 				PersonId = ((IUnsafePerson)principal).Person.Id,
-				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
-				IsAnywhereAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)
+				IsMyTimeAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
+				IsAnywhereAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)
 			}, JsonRequestBehavior.AllowGet);
 		}
 

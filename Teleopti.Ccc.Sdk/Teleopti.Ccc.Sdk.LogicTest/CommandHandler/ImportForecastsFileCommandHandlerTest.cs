@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[ExpectedException(typeof (FaultException))]
 		public void ShouldThrowExceptionIfNotPermitted()
 		{
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				_target.Handle(_importForecastsFileCommandDto);
 			}

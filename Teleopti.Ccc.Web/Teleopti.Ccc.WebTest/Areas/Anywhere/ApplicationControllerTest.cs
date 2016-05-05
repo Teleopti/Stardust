@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 	public class ApplicationControllerTest
 	{
 		private ApplicationController target;
-		private IPrincipalAuthorization authorization;
+		private IAuthorization authorization;
 		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
 		private IIanaTimeZoneProvider ianaTimeZoneProvider;
 		private ICurrentDataSource currentDataSource;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[SetUp]
 		public void Setup()
 		{
-			authorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			authorization = MockRepository.GenerateMock<IAuthorization>();
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
 			currentDataSource = new FakeCurrentDatasource("ds1");

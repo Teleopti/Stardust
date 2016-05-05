@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -6,44 +6,53 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class PrincipalAuthorizationWithFullPermission : IPrincipalAuthorization
+	public class ConfigurablePermissions: IAuthorization
 	{
+		private readonly IList<string> _permittedFunctionPaths = new List<string>(); 
+
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
 		{
-			return true;
+			return _permittedFunctionPaths.Contains(functionPath);
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
 		{
-			return true;
+			return _permittedFunctionPaths.Contains(functionPath);
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
 		{
-			return true;
+			return _permittedFunctionPaths.Contains(functionPath);
 		}
 
 		public bool IsPermitted(string functionPath)
 		{
-			return true;
+			return _permittedFunctionPaths.Contains(functionPath);
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
 		{
-			return true;
+			return _permittedFunctionPaths.Contains(functionPath);
 		}
 
-		public virtual IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
+		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
 		{
-			return new[] { period };
+			if (_permittedFunctionPaths.Contains(functionPath))
+				return new List<DateOnlyPeriod> { period };
+			return new List<DateOnlyPeriod>();
 		}
 
 		public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
 
 		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
 		{
-			return true;
+			throw new NotImplementedException();
 		}
 
+		public void HasPermission(string functionPath)
+		{
+			_permittedFunctionPaths.Add(functionPath);
+		}
 	}
+
 }

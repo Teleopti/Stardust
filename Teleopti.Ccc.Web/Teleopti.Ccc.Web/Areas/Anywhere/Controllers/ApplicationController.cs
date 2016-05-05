@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
 	public class ApplicationController : Controller
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggles;
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly INow _now;
 		private readonly ICurrentDataSource _currentDataSource;
 
-		public ApplicationController(IPrincipalAuthorization principalAuthorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles, IUserTimeZone userTimeZone, INow now, ICurrentDataSource currentDataSource)
+		public ApplicationController(IAuthorization authorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles, IUserTimeZone userTimeZone, INow now, ICurrentDataSource currentDataSource)
 		{
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_toggles = toggles;
@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			{
 				UserName = principal.Identity.Name,
 				PersonId = ((IUnsafePerson)principal).Person.Id,
-				IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
+				IsMyTimeAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 				IsRealTimeAdherenceAvailable =
-					_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
-				IsTeamScheduleAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules),
+					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
+				IsTeamScheduleAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules),
 				IanaTimeZone = _ianaTimeZoneProvider.WindowsToIana(principal.Regional.TimeZone.Id)
 			}, JsonRequestBehavior.AllowGet);
 		}
@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 			return Json(new
 			{
-				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
-				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
-				IsRemoveAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
-				IsAddActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
-				IsMoveActivityAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity),
+				IsAddFullDayAbsenceAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
+				IsAddIntradayAbsenceAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
+				IsRemoveAbsenceAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
+				IsAddActivityAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
+				IsMoveActivityAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity),
 				IsSmsLinkAvailable = isSmsLinkAvailable
 			}, JsonRequestBehavior.AllowGet);
 		}

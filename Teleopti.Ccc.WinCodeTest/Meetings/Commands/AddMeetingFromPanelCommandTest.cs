@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         [Test]
         public void ShouldReturnFalseIfNotAllowed()
         {
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target = new AddMeetingFromPanelCommand(_repositoryFactory, _unitOfWorkFactory, _personSelectorPresenter, _meetingOverviewFactory);
                 Assert.That(_target.CanExecute(), Is.False);

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
     [TestFixture]
     public class PrincipalAuthorizationTest
     {
-        private IPrincipalAuthorization principalAuthorization;
+        private IAuthorization authorization;
         private IPerson person;
         private ITeleoptiPrincipal principal;
         private MockRepository mocks;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             person = PersonFactory.CreatePerson();
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), person);
             organisationMembership = (OrganisationMembership) principal.Organisation;
-			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
+			authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
             applicationFunction = new ApplicationFunction(Function);
             applicationFunction.SetId(Guid.NewGuid());
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Playback())
             {
                 organisationMembership.AddFromPerson(person);
-                Assert.IsTrue(principalAuthorization.IsPermitted(Function, DateOnly.Today, toCheck));
+                Assert.IsTrue(authorization.IsPermitted(Function, DateOnly.Today, toCheck));
             }
         }
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void ShouldCheckPermissionsForFunction()
         {
             organisationMembership.AddFromPerson(person);
-            Assert.IsTrue(principalAuthorization.IsPermitted(Function));
+            Assert.IsTrue(authorization.IsPermitted(Function));
         }
 
         [Test]
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Playback())
             {
                 organisationMembership.AddFromPerson(person);
-                Assert.IsTrue(principalAuthorization.IsPermitted(Function, DateOnly.Today, toCheck));
+                Assert.IsTrue(authorization.IsPermitted(Function, DateOnly.Today, toCheck));
             }
         }
 
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Playback())
             {
                 organisationMembership.AddFromPerson(person);
-                Assert.IsTrue(principalAuthorization.IsPermitted(Function, DateOnly.Today, toCheck));
+                Assert.IsTrue(authorization.IsPermitted(Function, DateOnly.Today, toCheck));
             }
         }
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), person);
 			organisationMembership = (OrganisationMembership)principal.Organisation;
-			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
+			authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
             PrepareClaims();
             
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
             using (mocks.Playback())
             {
-                var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
+                var result = authorization.PermittedPeriods(applicationFunction.FunctionPath,
                                                                      new DateOnlyPeriod(today.AddDays(-20),
                                                                                         today.AddDays(5)), otherPerson);
                 result.Count().Should().Be.EqualTo(2);
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), person);
 			organisationMembership = (OrganisationMembership)principal.Organisation;
-			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
+			authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
             PrepareClaims();
 
@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
             using (mocks.Playback())
             {
-                var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
+                var result = authorization.PermittedPeriods(applicationFunction.FunctionPath,
                                                                      new DateOnlyPeriod(today.AddDays(-20),
                                                                                         today.AddDays(-12)), otherPerson);
                 result.Count().Should().Be.EqualTo(1);
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), person);
 			organisationMembership = (OrganisationMembership) principal.Organisation;
-			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
+			authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
 			PrepareClaims();
 
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			}
 			using (mocks.Playback())
 			{
-				var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
+				var result = authorization.PermittedPeriods(applicationFunction.FunctionPath,
 																	 new DateOnlyPeriod(today.AddDays(-15),
 																						today.AddDays(2)), otherPerson);
 				result.Count().Should().Be.EqualTo(2);
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 
 			principal = new TeleoptiPrincipal(new TeleoptiIdentity("test", null, null, null, null), person);
 			organisationMembership = (OrganisationMembership)principal.Organisation;
-			principalAuthorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
+			authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(principal));
 
 			PrepareClaims();
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			}
 			using (mocks.Playback())
 			{
-				var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
+				var result = authorization.PermittedPeriods(applicationFunction.FunctionPath,
 																	 new DateOnlyPeriod(today,
 																						today.AddDays(2)), otherPerson);
 				result.Count().Should().Be.EqualTo(1);
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
         public void ShouldReturnGrantedFunctions()
         {
             organisationMembership.AddFromPerson(person);
-			var result = principalAuthorization.GrantedFunctions();
+			var result = authorization.GrantedFunctions();
             result.Count().Should().Be.EqualTo(1);
         }
 		
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             using (mocks.Playback())
             {
                 organisationMembership.AddFromPerson(person);
-                var result = principalAuthorization.EvaluateSpecification(specification);
+                var result = authorization.EvaluateSpecification(specification);
                 result.Should().Be.True();
             }
         }

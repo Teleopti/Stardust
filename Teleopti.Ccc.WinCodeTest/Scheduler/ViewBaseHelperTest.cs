@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             string expected = ConfidentialPayloadValues.Description.Name + ": " + absencePeriod;
 
-            var authorization = _mockRep.StrictMock<IPrincipalAuthorization>();
+            var authorization = _mockRep.StrictMock<IAuthorization>();
 
             using(_mockRep.Record())
             {

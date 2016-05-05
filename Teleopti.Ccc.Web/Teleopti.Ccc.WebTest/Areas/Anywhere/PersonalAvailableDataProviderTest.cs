@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		{
 			var site = new Site("NotPermitted").WithId();
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			siteRepository.Stub(x => x.LoadAll()).Return(new[] {site});
 			principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2015-8-12".Date(), site))
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		{
 			var site = new Site("Permitted").WithId();
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
 			siteRepository.Stub(x => x.LoadAll()).Return(new[] {site});
 			principalAuthorization.Stub(
 				x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2015-8-12".Date(), site))

@@ -26,14 +26,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         private IScenario scenario;
         private ScheduleRange target;
         private IScheduleDictionary dic;
-        private IPrincipalAuthorization principalAuthorization;
+        private IAuthorization authorization;
 
         [SetUp]
         public void Setup()
         {
             person = PersonFactory.CreatePerson();
             scenario = new Scenario("sdf");
-            principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+            authorization = MockRepository.GenerateMock<IAuthorization>();
             parameters = new ScheduleParameters(scenario, person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			dic = MockRepository.GenerateMock<IScheduleDictionary>();
             target = new ScheduleRange(dic, parameters, new PersistableScheduleDataPermissionChecker());
@@ -52,14 +52,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             absInside.SetId(Guid.NewGuid());
 
             var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
-            principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+            authorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
                     .IgnoreArguments()
                     .Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15)) })
                     .Repeat.AtLeastOnce();
             dic.Stub(x => x.Scenario).Return(scenario);
             dic.Stub(x => x.PermissionsEnabled).Return(false);
 
-	        using (new CustomAuthorizationContext(principalAuthorization))
+	        using (new CustomAuthorizationContext(authorization))
 	        {
 		        target.AddRange(new List<IPersonAssignment> {assInside, assOutSide});
 		        target.Add(absInside);
@@ -84,14 +84,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		    IPersonAssignment ass2 = createPersonAssignment(new DateTimePeriod(paramStart.AddDays(16), paramStart.AddDays(17)));
 
 		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
-			principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+			authorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
 					.IgnoreArguments()
 					.Return(new List<DateOnlyPeriod> { new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15)) })
 					.Repeat.AtLeastOnce();
 			dic.Stub(x => x.Scenario).Return(scenario);
 			dic.Stub(x => x.PermissionsEnabled).Return(false);
 
-		    using (new CustomAuthorizationContext(principalAuthorization))
+		    using (new CustomAuthorizationContext(authorization))
 		    {
 			    target.AddRange(new List<IPersonAssignment> {ass1, ass2});
 			    target.ExtractAllScheduleData(extractor,
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
 
-		    principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+		    authorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
 			    .IgnoreArguments()
 			    .Return(new List<DateOnlyPeriod> {dop})
 			    .Repeat.AtLeastOnce();
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			inside.Stub(x => x.BelongsToPeriod(new DateOnlyPeriod())).IgnoreArguments().Return(true); //check permission - should be ok
 		    
-		    using (new CustomAuthorizationContext(principalAuthorization))
+		    using (new CustomAuthorizationContext(authorization))
 		    {
 			    target.Add(outside);
 			    target.Add(inside);
@@ -145,15 +145,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		    var paramStartLocal = new DateOnly(parameters.Period.LocalStartDateTime);
 
 		    var dop = new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31);
-		    principalAuthorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
+		    authorization.Stub(x => x.PermittedPeriods(function, new DateOnlyPeriod(), parameters.Person))
 			    .IgnoreArguments()
 			    .Return(new List<DateOnlyPeriod> {new DateOnlyPeriod(dop.StartDate, dop.StartDate.AddDays(15))})
 			    .Repeat.AtLeastOnce();
 		    dic.Stub(x => x.Scenario).Return(scenario);
-		    principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+		    authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
 			    .Return(true);
 
-		    using (new CustomAuthorizationContext(principalAuthorization))
+		    using (new CustomAuthorizationContext(authorization))
 		    {
 			    IScheduleDay part = target.ScheduledDay(paramStartLocal.AddDays(20));
 			    Assert.AreEqual(false, part.FullAccess);

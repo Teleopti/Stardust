@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(_model.CurrentScenario).Return(_scenario3).Repeat.Twice();
             Expect.Call(() => _unitOfWork.Dispose()).Repeat.Twice();
             _mocks.ReplayAll();
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+            using (new CustomAuthorizationContext(new NoPermission()))
             {
                 _target.AllowedScenarios().Count.Should().Be.EqualTo(1);
             }
 
-            using (new CustomAuthorizationContext(new PrincipalAuthorizationWithFullPermission()))
+            using (new CustomAuthorizationContext(new FullPermission()))
             {
                 _target.AllowedScenarios().Count.Should().Be.EqualTo(2);
             }

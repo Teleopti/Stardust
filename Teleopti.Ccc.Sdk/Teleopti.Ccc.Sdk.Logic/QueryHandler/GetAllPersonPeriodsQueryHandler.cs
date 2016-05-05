@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IPersonRepository _personRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IAssembler<IPersonPeriod, PersonPeriodDetailDto> _personPeriodAssembler;
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 
-		public GetAllPersonPeriodsQueryHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPersonPeriod,PersonPeriodDetailDto> personPeriodAssembler, IPrincipalAuthorization principalAuthorization)
+		public GetAllPersonPeriodsQueryHandler(IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPersonPeriod,PersonPeriodDetailDto> personPeriodAssembler, IAuthorization authorization)
 		{
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personPeriodAssembler = personPeriodAssembler;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 		}
 
 #pragma warning disable 618
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					var personPeriods =
 						persons.Where(
 							p =>
-								_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, p))
+								_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, DateOnly.Today, p))
 							.SelectMany(person => person.PersonPeriods(dateOnlyPeriod))
 							.ToList();
 					

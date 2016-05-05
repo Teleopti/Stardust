@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         private string _textRequest;
         private string _shiftTradeRequest;
 
-        private IPrincipalAuthorization _authorizationService;
+        private IAuthorization _authorizationService;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _authorizationService = _mocks.StrictMock<IPrincipalAuthorization>();
+            _authorizationService = _mocks.StrictMock<IAuthorization>();
             _target = new PersonRequestAuthorization(_authorizationService);
             _absenceRequest = Resources.RequestTypeAbsence;
             _textRequest = Resources.RequestTypeText;

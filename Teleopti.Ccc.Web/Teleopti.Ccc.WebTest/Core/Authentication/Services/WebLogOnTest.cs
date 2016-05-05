@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private ISessionSpecificDataProvider sessionSpecificDataProvider;
 		private IRepositoryFactory repositoryFactory;
 		private IUnitOfWorkFactory unitOfWorkFactory;
-		private IPrincipalAuthorization principalAuthorization;
+		private IAuthorization authorization;
 
 		[SetUp]
 		public void Setup()
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			logOnOff = MockRepository.GenerateMock<ILogOnOff>();
 			var ruleToPrincipalCommand = MockRepository.GenerateMock<IRoleToPrincipalCommand>();
-			principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			authorization = MockRepository.GenerateMock<IAuthorization>();
 			ITeleoptiPrincipal principal = new TeleoptiPrincipal(new TeleoptiIdentity("", null, null, null, null), new Person());
 
 			target = new WebLogOn(logOnOff,
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			                      sessionSpecificDataProvider,
 			                      ruleToPrincipalCommand,
 			                      new FakeCurrentTeleoptiPrincipal(principal),
-								  principalAuthorization);
+								  authorization);
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			repositoryFactory.Stub(x => x.CreateApplicationFunctionRepository(uow)).Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
 			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
 			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 
 			target.LogOn(dataSourceName, buId, personId, null, true, false);
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				.Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
 			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
 			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
 
 			target.LogOn(dataSourceName, buId, personId, null, false, false);
 
@@ -131,8 +131,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				.Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
 			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
 			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(false);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(false);
 
 			Assert.Throws<PermissionException>(() => target.LogOn(dataSourceName, buId, personId, null, false, false));
 
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			repositoryFactory.Stub(x => x.CreateApplicationFunctionRepository(uow)).Return(MockRepository.GenerateMock<IApplicationFunctionRepository>());
 			personRepository.Stub(x => x.Get(personId)).Return(logonPerson);
 			businessUnitRepository.Stub(x => x.Get(buId)).Return(choosenBusinessUnit);
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
+			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
 
 			target.LogOn(dataSourceName, buId, personId, null, true, false);
 

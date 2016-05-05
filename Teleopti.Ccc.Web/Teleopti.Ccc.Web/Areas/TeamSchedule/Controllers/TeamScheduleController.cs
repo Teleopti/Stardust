@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 {
 	public class TeamScheduleController : ApiController
 	{
-		private readonly IPrincipalAuthorization _principalAuthorization;
+		private readonly IAuthorization _authorization;
 		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
 		private readonly ILoggedOnUser _loggonUser;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
 			ILoggedOnUser loggonUser,
 			IPersonAbsenceRepository personAbsenceRepository,
-			IPrincipalAuthorization principalAuthorization, IAbsencePersister absencePersister,
+			IAuthorization authorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
 			IPersonNameProvider personNameProvider,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
 			_personAbsenceRepository = personAbsenceRepository;
-			_principalAuthorization = principalAuthorization;
+			_authorization = authorization;
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
@@ -61,14 +61,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			var permissions = new PermissionsViewModel
 			{
-				IsAddFullDayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
-				IsAddIntradayAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
-				IsSwapShiftsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts),
-				IsRemoveAbsenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
-				IsModifyScheduleAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifySchedule),
-				HasAddingActivityPermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
-				HasRemoveActivityPermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity),
-				HasMoveActivityPermission = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity)
+				IsAddFullDayAbsenceAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence),
+				IsAddIntradayAbsenceAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence),
+				IsSwapShiftsAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SwapShifts),
+				IsRemoveAbsenceAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
+				IsModifyScheduleAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifySchedule),
+				HasAddingActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
+				HasRemoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity),
+				HasMoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity)
 			};
 
 			return Json(permissions);

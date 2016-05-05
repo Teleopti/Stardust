@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
 		private IPersonAssignment _personAssignment;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
-		private IPrincipalAuthorization _principalAuthorization;
+		private IAuthorization _authorization;
 		private IGroupPersonBuilderWrapper _groupPersonBuilderWrapper;
 
 		[SetUp]
@@ -65,11 +65,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			_authorization = _mocks.StrictMock<IAuthorization>();
 			_scheduleDayAvailableForDayOffSpecification = _mocks.StrictMock<IScheduleDayAvailableForDayOffSpecification>();
 			_target = new TeamDayOffScheduler(_dayOffsInPeriodCalculator, _effectiveRestrictionCreator,
 			                                  _hasContractDayOffDefinition, _matrixDataListCreator,
-			                                  ()=>_schedulingResultStateHolder, _scheduleDayAvailableForDayOffSpecification,_principalAuthorization);
+			                                  ()=>_schedulingResultStateHolder, _scheduleDayAvailableForDayOffSpecification,_authorization);
 			_person1 = PersonFactory.CreatePerson();
 			_selectedPersons = new List<IPerson>{_person1};
 			_matrixData1 = _mocks.StrictMock<IMatrixData>();
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
 											 _groupPersonBuilderWrapper);
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				using (new CustomAuthorizationContext(_principalAuthorization))
+				using (new CustomAuthorizationContext(_authorization))
 				{
 					_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions,
 											 _groupPersonBuilderWrapper);
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
 			Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(dateOnly);
 			Expect.Call(_scheduleDay.Person).Return(_person1);
-			Expect.Call(_principalAuthorization.IsPermitted("functionPath", dateOnly, _person1)).Return(havePermission);
+			Expect.Call(_authorization.IsPermitted("functionPath", dateOnly, _person1)).Return(havePermission);
 			Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
 
 			if (havePermission)

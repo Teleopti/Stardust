@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static void Logout(ICurrentPrincipalContext principalContext)
 		{
 			principalContext.SetCurrentPrincipal(null);
-			CurrentPrincipalAuthorization.GloballyUse(null);
+			CurrentAuthorization.GloballyUse(null);
 	    }
 
         public static void ClearAndInitializeStateHolder(IState stateMock)
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon
 		    var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, logonDataSource, businessUnit, null);
 		    principalContext.SetCurrentPrincipal(principal);
 
-			CurrentPrincipalAuthorization.GloballyUse(new PrincipalAuthorizationWithFullPermission());
+			CurrentAuthorization.GloballyUse(new FullPermission());
 			stateMock.SetApplicationData(appData);
 			
 		    ClearAndSetStateHolder(stateMock);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.TestCommon
 			var principal = new TeleoptiPrincipalFactory().MakePrincipal(loggedOnPerson, dataSource, businessUnit, null);
 			principalContext.SetCurrentPrincipal(principal);
 
-			CurrentPrincipalAuthorization.GloballyUse(new PrincipalAuthorizationWithFullPermission());
+			CurrentAuthorization.GloballyUse(new FullPermission());
 		}
 
         public static IPerson CreateLoggedOnPerson()
@@ -128,17 +128,17 @@ namespace Teleopti.Ccc.TestCommon
   
 	public class CustomAuthorizationContext : IDisposable
 	{
-		private IPrincipalAuthorization _previousAuthorization;
+		private IAuthorization _previousAuthorization;
 
-		public CustomAuthorizationContext(IPrincipalAuthorization principalAuthorization)
+		public CustomAuthorizationContext(IAuthorization authorization)
 		{
 			_previousAuthorization = PrincipalAuthorization.Current();
-			CurrentPrincipalAuthorization.GloballyUse(principalAuthorization);
+			CurrentAuthorization.GloballyUse(authorization);
 		}
 
 		public void Dispose()
 		{
-			CurrentPrincipalAuthorization.GloballyUse(_previousAuthorization);
+			CurrentAuthorization.GloballyUse(_previousAuthorization);
 			_previousAuthorization = null;
 		}
 	}

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 
 			globalSettingDataRepository.PersistSettingValue(ScheduleChangeSubscriptions.Key, settings);
 
-			using (new CustomAuthorizationContext(new PrincipalAuthorizationWithNoPermission()))
+			using (new CustomAuthorizationContext(new NoPermission()))
 			{
 				target.Handle(new GetScheduleChangesSubscriptionSettingsQueryDto());
 			}
