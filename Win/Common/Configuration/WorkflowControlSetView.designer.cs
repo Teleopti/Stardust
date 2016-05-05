@@ -1783,8 +1783,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// tableLayoutPanelAbsenceRequestCancellation
 			// 
 			this.tableLayoutPanelAbsenceRequestCancellation.ColumnCount = 2;
-			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 46.48972F));
-			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53.51027F));
+			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize, 36.48972F));
+			this.tableLayoutPanelAbsenceRequestCancellation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.AutoSize, 63.51027F));
 			this.tableLayoutPanelAbsenceRequestCancellation.Controls.Add(this.txtAbsenceRequestCancellationThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestCancellation.Controls.Add(this.labelAbsenceRequestCancellationThreshold, 0, 0);
 			this.tableLayoutPanelAbsenceRequestCancellation.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1800,7 +1800,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			this.txtAbsenceRequestCancellationThreshold.Location = new System.Drawing.Point(448, 3);
 			this.txtAbsenceRequestCancellationThreshold.MaxLength = 3;
 			this.txtAbsenceRequestCancellationThreshold.Name = "txtAbsenceRequestCancellationThreshold";
-			this.txtAbsenceRequestCancellationThreshold.Size = new System.Drawing.Size(109, 23);
+			this.txtAbsenceRequestCancellationThreshold.Size = new System.Drawing.Size(70, 23);
 			this.txtAbsenceRequestCancellationThreshold.TabIndex = 6;
 			this.txtAbsenceRequestCancellationThreshold.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			this.txtAbsenceRequestCancellationThreshold.Leave += new System.EventHandler(this.txtAbsenceRequestCancellationThreshold_Leave);
