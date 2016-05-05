@@ -1,11 +1,11 @@
 ﻿<div class="absence-report">
 	<div class="sidenav-header">{{'AddAbsence'|translate}}</div>
-	<md-content layout-padding>
+	<md-content class="command-panel-content" layout-padding>
 		<div>
 			<h3>{{'Absence'|translate}}: </h3>
 			<select class="absence-selector" ng-model="vm.selectedAbsenceId">
-				<option value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
-				<option value={{absence.Id}} ng-repeat="absence in vm.AvailableAbsenceTypes|orderBy: 'Name'">{{absence.Name}}</option>
+				<option class="command-panel-option" value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
+				<option class="command-panel-option" value={{absence.Id}} ng-repeat="absence in vm.AvailableAbsenceTypes|orderBy: 'Name'">{{absence.Name}}</option>
 			</select>
 			<h3>{{'From'|translate}}: </h3>
 			<div class="con-row">
