@@ -1,15 +1,23 @@
 ﻿<div class="move-activity">
 	<div class="sidenav-header">{{'MoveActivity'|translate}}</div>
-	<md-content layout-padding>
+	<md-content class="command-panel-content" layout-padding>
 		<form name="moveActivityForm">
-			<activity-time-range-picker class="activity-time-range" custom-tabindex="{{::vm.tabindex}}" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
-			</activity-time-range-picker>
+			<h3>{{'StartTime' | translate}}:</h3>
+			<div>
+				<uib-timepicker show-meridian="vm.showMeridian" ng-model="vm.defaultStartTime"></uib-timepicker>
+				<div class="wfm-switch">
+					<input type="checkbox" id="mvActNextDay" ng-model="vm.isNextDay" ng-disabled="vm.disableNextDay" />
+					<label for="mvActNextDay">
+						<span class="wfm-switch-label">{{"NextDay" | translate}}</span>
+						<span class="wfm-switch-toggle"></span>
+					</label>
+				</div>
+			</div>
 		</form>
-		<button id="applyActivity" class="wfm-btn form-submit"
-				tabindex="{{::vm.tabindex}}"
+		<button id="applyMoveActivity" class="wfm-btn form-submit"
 				ng-class="{'wfm-btn-primary': moveActivityForm.$valid && vm.isInputValid(), 'wfm-btn-primary-disabled': !(moveActivityForm.$valid && vm.isInputValid())}"
-				ng-disabled="moveActivityForm.$valid && vm.isInputValid()?'':'disabled'"
-				ng-click="vm.addActivity()">
+				ng-disabled="!(moveActivityForm.$valid && vm.isInputValid())"
+				ng-click="vm.applyMoveActivity()">
 			{{'Apply' | translate}}
 		</button>
 	</md-content>

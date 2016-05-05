@@ -45,7 +45,7 @@
 				action: function () {
 					 vm.setCurrentCommand('MoveActivity'); parentVm.moveActivity();
 				},
-				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
+				clickable: function() { return personSelectionSvc.isAnyAgentSelected();},
 				visible: function () { return vm.canActiveMoveActivity(); }
 			},
 			{
@@ -169,7 +169,7 @@
 				vm.commands[1].action(); // Alt+T for add activity
 			});
 			shortCuts.registerKeySequence([keyCodes.M], [keyCodes.ALT], function () {
-				if (!personSelectionSvc.anyAgentChecked() || !vm.canActiveAddActivity()) return;
+				if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddActivity()) return;
 				vm.commands[2].action(); // Alt+M for move activity
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {

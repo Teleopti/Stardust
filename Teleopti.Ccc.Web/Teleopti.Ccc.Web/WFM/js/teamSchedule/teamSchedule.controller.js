@@ -156,7 +156,7 @@
 		};
 
 		vm.defaultMoveActivityStart = function () {
-			return vm.defaultNewActivityStart();
+			return scheduleMgmtSvc.getLatestStartTimeOfSelectedScheduleProjection(vm.scheduleDateMoment(), personSelectionSvc.getSelectedPersonIdList());
 		};
 
 		vm.addActivity = function() {

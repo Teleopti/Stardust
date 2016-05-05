@@ -32,7 +32,7 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 					schedule.WorkTimeMinutes = 0;
 				}
 			});
-		
+
 			teamScheduleSvc.getSchedules(scheduleDateMoment.format('YYYY-MM-DD'), currentPeoples).then(function (result) {
 				svc.mergeSchedules(result.Schedules, scheduleDateMoment);
 				afterLoading();
@@ -56,7 +56,7 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 					}
 				}
 			});
-		
+
 		}
 
 		svc.getEarliestStartOfSelectedSchedule = function(scheduleDateMoment, selectedPersonIds) {
@@ -96,6 +96,33 @@ angular.module("wfm.teamSchedule").service("ScheduleManagement", [
 			}
 
 			return latestStart;
-		}
+		};
+
+		svc.getLatestStartTimeOfSelectedScheduleProjection = function (scheduleDateMoment, selectedPersonIds) {
+			var latestStart = 0;
+			var currentDayShifts = [];
+			svc.groupScheduleVm.Schedules.forEach(function (schedule) {
+				if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
+					currentDayShifts = currentDayShifts.concat(schedule.Shifts.filter(function (shift) {
+						return shift.Date.toDate().toDateString() == scheduleDateMoment.toDate().toDateString();
+					}));
+				}
+			});
+			currentDayShifts.forEach(function (shift) {
+				if (shift.Projections) {
+					var shiftLayerIds = [];
+					shift.Projections.forEach(function (projection) {
+						if (projection.Selected) {
+							var scheduleStart = moment(projection.Start).toDate();
+							if (scheduleStart > latestStart && !angular.equals(shiftLayerIds, projection.ShiftLayerIds)) {
+								latestStart = scheduleStart;
+								shiftLayerIds = projection.ShiftLayerIds;
+							}
+						}
+					});
+				}
+			});
+			return latestStart;
+		};
 	}
 ]);

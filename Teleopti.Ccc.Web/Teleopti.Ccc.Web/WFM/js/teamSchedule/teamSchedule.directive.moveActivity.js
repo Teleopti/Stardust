@@ -1,7 +1,5 @@
-﻿(function() {
-
+﻿(function () {
 	'use strict';
-
 	angular.module('wfm.teamSchedule').directive('moveActivityPanel', moveActivityPanel);
 
 	function moveActivityPanel() {
@@ -10,31 +8,50 @@
 			scope: {
 				selectedDate: '&',
 				defaultStart: '&?',
-				actionsAfterActivityApply: '&?',
-				tabindex: '@?'
+				actionsAfterActivityApply: '&?'
 			},
 			templateUrl: 'js/teamSchedule/html/moveActivity.html',
-			controller: [moveActivityPanelCtrl],
+			controller: ['PersonSelection', moveActivityPanelCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function moveActivityPanelCtrl() {
+	function moveActivityPanelCtrl(personSelectionSvc) {
 		var vm = this;
-		vm.disableNextDay = false;
+		vm.defaultStartTime = moment(vm.defaultStart()).add('hour', 1).toDate();
 		vm.isNextDay = false;
+		vm.disableNextDay = false;
+		vm.disableButton = false;
+		vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
+		vm.applyMoveActivity = applyMoveActivity;
+		vm.isInputValid = isInputValid;
 
-		var startTimeMoment;
-		if (vm.defaultStart) {
-			startTimeMoment = moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart());
-		} else {
-			startTimeMoment = moment();
+		function isInputValid() {
+			var isValid = false,
+			notAllowed = "";
+			var formattedStartTime = moment(vm.defaultStartTime).format('YYYY-MM-DD HH:mm');
+			angular.forEach(vm.selectedAgents, function (selectedAgent) {
+				if (selectedAgent.scheduleEndTime == undefined) return;
+				var isAllowed = isNewActivityAllowed(formattedStartTime, selectedAgent.scheduleEndTime);
+				if (!isAllowed) {
+					isValid = false;
+					if (notAllowed.indexOf(selectedAgent.name) == -1) {
+						notAllowed += selectedAgent.name + ', ';
+					}
+				} else isValid = true;
+			});
+
+			return isValid;
 		}
-		var endTimeMoment = moment(startTimeMoment).add(1, 'hour');
-		vm.timeRange = {
-			startTime: startTimeMoment.toDate(),
-			endTime: endTimeMoment.toDate()
-		};
+
+		function isNewActivityAllowed(activityStart, scheduleEnd) {
+			var mActivityStart = moment(activityStart);
+			var mScheduleEnd = moment(scheduleEnd);
+			return !vm.isNextDay || mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
+		}
+
+		function applyMoveActivity() {
+		}
 	}
 })();
