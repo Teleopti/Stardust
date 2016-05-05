@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FullPermission>().For<IAuthorization>();
 			//
 
+
 			// Rta
 			system.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader>();
 			system.UseTestDouble<FakeMappingReader>().For<IMappingReader>();
