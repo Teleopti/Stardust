@@ -44,7 +44,7 @@
 				absence.Selected = false;
 			});
 		});
-		vm.AllRequestStatuses = requestFilterSvc.RequestStatuses;
+		vm.AllRequestStatuses = requestsDataSvc.getAllRequestStatuses();
 
 		vm.absenceFilterClose = function () {
 			var filters = '';
