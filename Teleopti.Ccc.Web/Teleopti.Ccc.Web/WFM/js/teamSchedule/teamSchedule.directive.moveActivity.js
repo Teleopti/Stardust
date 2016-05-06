@@ -19,7 +19,8 @@
 
 	function moveActivityPanelCtrl(personSelectionSvc) {
 		var vm = this;
-		vm.defaultStartTime = moment(vm.defaultStart()).add('hour', 1).toDate();
+		var ADD_HOURS = 1;
+		vm.defaultStartTime = moment(vm.defaultStart()).add(ADD_HOURS, 'hour').toDate();
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.disableButton = false;
