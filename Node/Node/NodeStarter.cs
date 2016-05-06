@@ -8,7 +8,6 @@ using log4net;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
 
 namespace Stardust.Node
 {
@@ -45,10 +44,7 @@ namespace Stardust.Node
 			                    appBuilder =>
 			                    {
 									var containerBuilder = new ContainerBuilder();
-
-									//containerBuilder.RegisterInstance(nodeConfiguration);
 									containerBuilder.RegisterModule(new NodeModule(nodeConfiguration));
-
 									containerBuilder.Update(container);
 
 				                    // Configure Web API for self-host. 
