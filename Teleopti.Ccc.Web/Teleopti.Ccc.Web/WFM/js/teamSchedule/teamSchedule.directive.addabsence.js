@@ -84,7 +84,7 @@
 					trackId: trackId,
 					personIds: personIds,
 				});
-				var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().checkedPersonCount;
+				var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount;
 				var fail = result.length;
 				if (fail === 0) {
 					NotificationService.notify('success', 'AddAbsenceSuccessedResult');

@@ -44,9 +44,9 @@
 		});
 
 		vm.totalSelectedProjections = function() {
-			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().checkedPersonCount +
-				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.ActivityCount +
-				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.AbsenceCount;
+			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount +
+				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount +
+				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount;
 		};
 
 		vm.updatePersonSelection = function (personSchedule) {
@@ -59,7 +59,7 @@
 				return;
 
 			var isSameDay = shiftDateMoment.isSame(personSchedule.Date, 'day');
-			if (!isSameDay || currentProjection.IsOvertime) {
+			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return;
 			}
 

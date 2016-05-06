@@ -219,7 +219,7 @@
 			personAbsenceSvc.removePersonAbsence(vm.scheduleDateMoment(), selectedPersonAbsences,
 				removeEntireCrossDayAbsence, trackId).then(function (result) {
 					vm.afterActionCallback(trackId, selectedPersonIdList);
-					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.PersonCount;
+					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount;
 					var fail = result.length;
 					if (fail === 0) {
 						notificationService.notify('success', 'FinishedRemoveAbsence');
@@ -231,7 +231,7 @@
 
 		function getRemoveAbsenceMessage() {
 			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
-			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.AbsenceCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.PersonCount]);
+			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount]);
 		}
 
 
@@ -261,7 +261,7 @@
 				if (response.data.length === 0) {
 					notificationService.notify('success', 'SuccessfulMessageForRemovingActivity');
 				} else {
-					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.PersonCount;
+					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount;
 					var fail = response.data.length;
 					var description = notificationService.notify('warning', 'PartialSuccessMessageForRemovingActivity', [total, total - fail, fail]);
 				}
@@ -273,7 +273,7 @@
 
 		function getRemoveActivityMessage() {
 			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedActivity"),
-			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.ActivityCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.PersonCount]);
+			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount]);
 		}
 
 		vm.confirmRemoveActivity = function () {

@@ -45,7 +45,7 @@
 				action: function () {
 					 vm.setCurrentCommand('MoveActivity'); parentVm.moveActivity();
 				},
-				clickable: function() { return personSelectionSvc.isAnyAgentSelected();},
+				clickable: function() { return vm.canMoveActivity(); },
 				visible: function () { return vm.canActiveMoveActivity(); }
 			},
 			{
@@ -96,17 +96,21 @@
 			return vm.toggles.RemoveActivityEnabled && vm.permissions.HasRemoveActivityPermission;
 		};
 
-		vm.canActiveSwapShifts = function () {
+		vm.canActiveSwapShifts = function() {
 			return vm.toggles.SwapShiftEnabled
 				&& vm.permissions.IsSwapShiftsAvailable;
-		}
+		};
+
+		vm.canMoveActivity = function () {
+			return personSelectionSvc.isAnyAgentSelected() && !(personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount > 0);
+		};
 
 		vm.canRemoveAbsence = function () {
-			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedAbsenceInfo.AbsenceCount > 0;
+			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount > 0;
 		};
 
 		vm.canRemoveActivity = function () {
-			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().selectedActivityInfo.ActivityCount > 0;
+			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 
 		vm.toggleCommandState = function (menuName) {
@@ -169,7 +173,7 @@
 				vm.commands[1].action(); // Alt+T for add activity
 			});
 			shortCuts.registerKeySequence([keyCodes.M], [keyCodes.ALT], function () {
-				if (!personSelectionSvc.isAnyAgentSelected() || !vm.canActiveAddActivity()) return;
+				if (!vm.canMoveActivity() || !vm.canActiveMoveActivity()) return;
 				vm.commands[2].action(); // Alt+M for move activity
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
