@@ -17,9 +17,12 @@ namespace Stardust.Node
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterInstance(_nodeConfiguration).As<NodeConfiguration>().SingleInstance();
+
+			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<InvokeHandler>().As<IInvokeHandler>().SingleInstance();
+			builder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().SingleInstance();
+
 			builder.RegisterApiControllers(typeof (NodeController).Assembly);
 
 			builder.RegisterType<TrySendJobDetailToManagerTimer>().SingleInstance();
@@ -28,7 +31,7 @@ namespace Stardust.Node
 			builder.RegisterType<PingToManagerTimer>().As<System.Timers.Timer>().SingleInstance();
 			builder.RegisterType<TrySendJobFaultedToManagerTimer>().SingleInstance();
 			builder.RegisterType<TrySendJobCanceledToManagerTimer>().SingleInstance();
-			builder.RegisterType<WorkerWrapper>().As<IWorkerWrapper>().SingleInstance();
+			
 		}
 	}
 }

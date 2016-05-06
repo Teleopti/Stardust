@@ -1,9 +1,5 @@
 ﻿using System;
 using Autofac;
-using Autofac.Integration.WebApi;
-using Stardust.Manager.Helpers;
-using Stardust.Manager.Interfaces;
-using Stardust.Manager.Validations;
 
 namespace Stardust.Manager
 {
@@ -23,6 +19,9 @@ namespace Stardust.Manager
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new ManagerModule(managerConfiguration));
 			builder.Update(componentContext.ComponentRegistry);
+
+			//to start the timers etc
+			componentContext.Resolve<ManagerController>();
 		}
 	}
 }

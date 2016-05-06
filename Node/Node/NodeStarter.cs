@@ -71,11 +71,9 @@ namespace Stardust.Node
 				_logger.InfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
 				//to start it
-				var workerWrapper = container.Resolve<IWorkerWrapper>();
+				container.Resolve<NodeController>();
 
 				_quitEvent.WaitOne();
-
-				workerWrapper.Dispose();
 			}
 		}
 	}
