@@ -284,7 +284,7 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationScenario.cs" />
     <Compile Include="SchedulingScenarios\FillSchedulerStateHolderWithTestData.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenario.cs" />
-    <Compile Include="SchedulingScenarios\OvertimeScheduling\NonScheduleDaysTest.cs" />
+    <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduledDaysTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackIslandToggleOffTest.cs" />
