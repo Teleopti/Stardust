@@ -15,20 +15,8 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 	[TestFixture]
 	class SendJobToDeadNodeTest : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
-
-		public ManagerUriBuilder MangerUriBuilder { get; set; }
-
-		public HttpSender HttpSender { get; set; }
-
 		public ManualResetEventSlim WaitForJobToStartEvent { get; set; }
 		public ManualResetEventSlim WaitForNodeToStartEvent { get; set; }
-
-		public override void SetUp()
-		{
-			DatabaseHelper.TruncateJobQueueTable(ManagerDbConnectionString);
-			DatabaseHelper.TruncateJobTable(ManagerDbConnectionString);
-			DatabaseHelper.TruncateJobDetailTable(ManagerDbConnectionString);
-		}
 
 		[Test]
 		public void ShouldSendAJobToTheNextNodeIfTheFirstIsNotResponding()

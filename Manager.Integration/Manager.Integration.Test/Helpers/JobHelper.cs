@@ -52,17 +52,13 @@ namespace Manager.Integration.Test.Helpers
 		public static List<JobQueueItem> GenerateTestJobTimerRequests(int numberOfJobRequests,
 		                                                              TimeSpan duration)
 		{
-			List<JobQueueItem> requestModels = null;
+			List<JobQueueItem> jobQueueItems = new List<JobQueueItem>();
 
 			if (numberOfJobRequests > 0)
 			{
-				requestModels = new List<JobQueueItem>();
-
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
-					var testJobTimerParams = new TestJobTimerParams("Name " + i,
-					                                                duration);
-
+					var testJobTimerParams = new TestJobTimerParams("Name " + i, duration);
 					var testJobTimerParamsToJson = JsonConvert.SerializeObject(testJobTimerParams);
 
 					var job = new JobQueueItem
@@ -72,12 +68,10 @@ namespace Manager.Integration.Test.Helpers
 						Type = "NodeTest.JobHandlers.TestJobTimerParams",
 						CreatedBy = "test"
 					};
-
-					requestModels.Add(job);
+					jobQueueItems.Add(job);
 				}
 			}
-
-			return requestModels;
+			return jobQueueItems;
 		}
 	}
 }

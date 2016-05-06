@@ -20,21 +20,9 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 		{
 			this.Log().DebugWithLineNumber(message);
 		}
-
-		public ManagerUriBuilder MangerUriBuilder { get; set; }
-
-		public HttpSender HttpSender { get; set; }
-
 		public ManualResetEventSlim WaitForJobToStartEvent { get; set; }
 
 		public ManualResetEventSlim WaitForNodeToEndEvent { get; set; }
-
-		public override void SetUp()
-		{
-			DatabaseHelper.TruncateJobQueueTable(ManagerDbConnectionString);
-			DatabaseHelper.TruncateJobTable(ManagerDbConnectionString);
-			DatabaseHelper.TruncateJobDetailTable(ManagerDbConnectionString);
-		}
 
 		[Test]
 		public void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResultToFatal()
