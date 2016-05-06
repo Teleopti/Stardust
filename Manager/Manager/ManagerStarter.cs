@@ -9,7 +9,7 @@ namespace Stardust.Manager
 		{
 			if (managerConfiguration == null)
 			{
-				throw new ArgumentNullException("nodeConfiguration");
+				throw new ArgumentNullException("managerConfiguration");
 			}
 			if (componentContext == null)
 			{
