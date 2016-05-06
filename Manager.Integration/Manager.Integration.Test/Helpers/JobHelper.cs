@@ -29,8 +29,6 @@ namespace Manager.Integration.Test.Helpers
 			{
 				requestModels = new List<JobQueueItem>();
 
-				var loggedInUser = SecurityHelper.GetLoggedInUser();
-
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
 					var failingJobParams = new FailingJobParams("Error message " + i);
@@ -42,7 +40,7 @@ namespace Manager.Integration.Test.Helpers
 						Name = "Job Name " + i,
 						Serialized = failingJobParamsJson,
 						Type = "NodeTest.JobHandlers.FailingJobParams",
-						CreatedBy = loggedInUser
+						CreatedBy = "Test"
 					};
 
 					requestModels.Add(job);
@@ -60,8 +58,6 @@ namespace Manager.Integration.Test.Helpers
 			{
 				requestModels = new List<JobQueueItem>();
 
-				var loggedInUser = SecurityHelper.GetLoggedInUser();
-
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
 					var testJobTimerParams = new TestJobTimerParams("Name " + i,
@@ -74,7 +70,7 @@ namespace Manager.Integration.Test.Helpers
 						Name = "Job Name " + i,
 						Serialized = testJobTimerParamsToJson,
 						Type = "NodeTest.JobHandlers.TestJobTimerParams",
-						CreatedBy = loggedInUser
+						CreatedBy = "test"
 					};
 
 					requestModels.Add(job);
