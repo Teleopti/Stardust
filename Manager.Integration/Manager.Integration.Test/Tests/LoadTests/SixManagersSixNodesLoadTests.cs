@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Timers;
-using Manager.IntegrationTest.Console.Host.Helpers;
-using Manager.IntegrationTest.Console.Host.Log4Net;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.Tests.LoadTests
@@ -17,13 +12,6 @@ namespace Manager.Integration.Test.Tests.LoadTests
 	[TestFixture]
 	internal class SixManagersSixNodesLoadTests : InitialzeAndFinalizeSixManagersAndSixNodes
 	{
-		private void LogMessage(string message)
-		{
-			this.Log().DebugWithLineNumber(message);
-		}
-
-		public ManualResetEventSlim ManualResetEventSlim { get; set; }
-
 		/// <summary>
 		///     DO NOT FORGET TO RUN COMMAND BELOW AS ADMINISTRATOR.
 		///     netsh http add urlacl url=http://+:9050/ user=everyone listen=yes
@@ -31,17 +19,11 @@ namespace Manager.Integration.Test.Tests.LoadTests
 		[Test]
 		public void ShouldBeAbleToCreateManySuccessJobRequestTest()
 		{
-			this.Log().DebugWithLineNumber("Start test.");
-
 			var startedTest = DateTime.UtcNow;
+			var manualResetEventSlim = new ManualResetEventSlim();
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(50,
-				                                       TimeSpan.FromSeconds(1));
-
-			var timeout =
-				JobHelper.GenerateTimeoutTimeInMinutes(createNewJobRequests.Count,
-				                                       2);
+				JobHelper.GenerateTestJobTimerRequests(50, TimeSpan.FromSeconds(1));
 
 			//---------------------------------------------------------
 			// Database validator.
@@ -51,67 +33,25 @@ namespace Manager.Integration.Test.Tests.LoadTests
 
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, jobs) =>
 			{
-				if (jobs.Any() &&
+				if (jobs.Count == createNewJobRequests.Count &&
 				    jobs.All(job => job.Started != null && job.Ended != null))
 				{
-					if (!ManualResetEventSlim.IsSet)
-					{
-						ManualResetEventSlim.Set();
-					}
+					manualResetEventSlim.Set();
 				}
 			};
-
-			HttpSender = new HttpSender();
-			MangerUriBuilder = new ManagerUriBuilder();
-			ManualResetEventSlim = new ManualResetEventSlim();
-
-			var addToJobQueueUri = MangerUriBuilder.GetAddToJobQueueUri();
-
-			var tasks = new List<Task>();
-
-			foreach (var newJobRequest in createNewJobRequests)
-			{
-				var request = newJobRequest;
-
-				tasks.Add(new Task(() =>
-				{
-					var numberOfTries = 0;
-
-					while (true)
-					{
-						numberOfTries++;
-
-						try
-						{
-							var response =
-								HttpSender.PostAsync(addToJobQueueUri, request).Result;
-
-							if (response.IsSuccessStatusCode || numberOfTries == 10)
-							{
-								return;
-							}
-						}
-
-						catch (AggregateException aggregateException)
-						{
-							if (aggregateException.InnerException is HttpRequestException)
-							{
-								// try again.
-							}
-						}
-
-						Thread.Sleep(TimeSpan.FromSeconds(10));
-					}
-				}, CancellationTokenSource.Token));
-			}
-
 			checkTablesInManagerDbTimer.JobTimer.Start();
 
-			Parallel.ForEach(tasks, task => { task.Start(); });
+			
+			foreach (var newJobRequest in createNewJobRequests)
+			{
+				var jobId = HttpRequestManager.AddJob(newJobRequest);
+			}
 
-			ManualResetEventSlim.Wait(timeout);
+			manualResetEventSlim.Wait(TimeSpan.FromMinutes(5));
 
-			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.All(job => job.Result.StartsWith("success", StringComparison.InvariantCultureIgnoreCase)));
+			var jobsToAssert = checkTablesInManagerDbTimer.ManagerDbRepository.Jobs;
+			Assert.IsTrue(jobsToAssert.Count == createNewJobRequests.Count);
+			Assert.IsTrue(jobsToAssert.All(job => job.Result.StartsWith("Success", StringComparison.InvariantCultureIgnoreCase)));
 
 			checkTablesInManagerDbTimer.Dispose();
 
@@ -127,8 +67,6 @@ namespace Manager.Integration.Test.Tests.LoadTests
 			                                  description,
 			                                  startedTest,
 			                                  endedTest);
-
-			LogMessage("Finished test.");
 		}
 	}
 }
