@@ -61,9 +61,6 @@ namespace Stardust.Node
 
 									containerBuilder.Update(container);
 
-				                    //to start it
-				                    container.Resolve<IWorkerWrapper>();
-
 				                    // Configure Web API for self-host. 
 				                    var config = new HttpConfiguration
 				                    {
