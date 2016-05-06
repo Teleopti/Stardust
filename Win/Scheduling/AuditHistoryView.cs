@@ -235,6 +235,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			set { linkLabelNext.Enabled = value; }
 		}
 
+		public bool LinkLabelEarlierVisibility
+		{
+			get { return linkLabelNext.Visible; }
+			set { linkLabelNext.Visible = value; }
+		}
+
 		public void SetRestoreButtonStatus()
 		{
 			if (_model.PageRows.Count <= 0 ||!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment)) buttonRestore.Enabled = false;
@@ -246,6 +252,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			get { return linkLabelPrevious.Enabled; }
 			set { linkLabelPrevious.Enabled = value; }
+		}
+
+		public bool LinkLabelLaterVisibility
+		{
+			get { return linkLabelPrevious.Visible; }
+			set { linkLabelPrevious.Visible = value; }
 		}
 
 

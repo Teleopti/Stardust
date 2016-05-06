@@ -152,6 +152,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
         {
             _view.LinkLabelEarlierStatus = new NextPageCommand(Model).CanExecute();
             _view.LinkLabelLaterStatus = new PreviousPageCommand(Model).CanExecute();
+				_view.LinkLabelEarlierVisibility = Model.NumberOfPages > 1;
+				_view.LinkLabelLaterVisibility = Model.NumberOfPages > 1;
             _view.EnableView = true;
             _view.ShowDefaultCursor();
             _view.RefreshGrid();

@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
         void StartBackgroundWork(AuditHistoryDirection direction);
         bool LinkLabelLaterStatus { get; set; }
         bool LinkLabelEarlierStatus { get; set; }
-        void SetRestoreButtonStatus();
+	    bool LinkLabelLaterVisibility { get; set; }
+	    bool LinkLabelEarlierVisibility { get; set; }
+	    void SetRestoreButtonStatus();
         void ShowWaitCursor();
         void ShowDefaultCursor();
         void RefreshGrid();

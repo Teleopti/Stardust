@@ -155,12 +155,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             {
                
                 Expect.Call(_model.CurrentPage).Return(1).Repeat.Twice();
-                Expect.Call(_model.NumberOfPages).Return(1);
+                Expect.Call(_model.NumberOfPages).Return(1).Repeat.Times(3);
                 Expect.Call(() => _view.ShowDefaultCursor());
                 Expect.Call(() => _view.EnableView = true);
                 Expect.Call(() => _view.LinkLabelEarlierStatus = false);
                 Expect.Call(() => _view.LinkLabelLaterStatus = false);
-                Expect.Call(() => _view.RefreshGrid());
+					Expect.Call(() => _view.LinkLabelEarlierVisibility = false);
+					Expect.Call(() => _view.LinkLabelLaterVisibility = false);
+					Expect.Call(() => _view.RefreshGrid());
                 Expect.Call(() => _view.UpdateHeaderText());
                 Expect.Call(() => _view.UpdatePageOfStatusText());
                 Expect.Call(() => _view.SelectFirstRowOnGrid());
@@ -174,7 +176,35 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             }
         }
 
-        [Test]
+		[Test]
+		public void ShouldShowPagingButtonsWhenMoreThanOnePage()
+		{
+			using (_mocks.Record())
+			{
+
+				Expect.Call(_model.CurrentPage).Return(1).Repeat.Twice();
+				Expect.Call(_model.NumberOfPages).Return(3).Repeat.Times(3);
+				Expect.Call(() => _view.ShowDefaultCursor());
+				Expect.Call(() => _view.EnableView = true);
+				Expect.Call(() => _view.LinkLabelEarlierStatus = true);
+				Expect.Call(() => _view.LinkLabelLaterStatus = false);
+				Expect.Call(() => _view.LinkLabelEarlierVisibility = true);
+				Expect.Call(() => _view.LinkLabelLaterVisibility = true);
+				Expect.Call(() => _view.RefreshGrid());
+				Expect.Call(() => _view.UpdateHeaderText());
+				Expect.Call(() => _view.UpdatePageOfStatusText());
+				Expect.Call(() => _view.SelectFirstRowOnGrid());
+				Expect.Call(() => _view.SetRestoreButtonStatus());
+			}
+
+			using (_mocks.Playback())
+			{
+				var args = new RunWorkerCompletedEventArgs(null, null, false);
+				_presenter.WorkCompleted(args);
+			}
+		}
+
+		[Test]
         public void ShouldCloseOnDataSourceException()
         {
             var exception = new DataSourceException();
