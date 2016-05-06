@@ -15,6 +15,9 @@
 			};
 
 			checkThemeState().then(function(result) {
+				if (result.data.Name == null) {
+					result.data.Name = "classic"
+				};
 				$scope.showOverlay = result.data.Overlay;
 				$scope.currentTheme = result.data.Name;
 				replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
