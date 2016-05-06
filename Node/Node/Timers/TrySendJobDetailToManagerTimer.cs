@@ -62,18 +62,7 @@ namespace Stardust.Node.Timers
 				}
 			}
 		}
-
-		//only used by test
-		public int TotalNumberOfJobProgresses(Guid jobId)
-		{
-			if (_jobDetails == null || _jobDetails.Count == 0)
-			{
-				return 0;
-			}
-			return _jobDetails.Count(pair => pair.Value.JobId == jobId);
-		}
 		
-
 		public bool HasAllProgressesBeenSent(Guid jobId)
 		{
 			if (_jobDetails == null)
@@ -84,20 +73,6 @@ namespace Stardust.Node.Timers
 			var allSent =
 				_jobDetails.Values.Count(model => model.JobId == jobId) == 0;
 
-			return allSent;
-		}
-
-		//only used by test
-		public bool HasAllProgressesBeenSent()
-		{
-
-			if (_jobDetails == null)
-			{
-				return true;
-			}
-
-			var allSent = _jobDetails.Values.Count == 0;
-			
 			return allSent;
 		}
 
@@ -155,7 +130,6 @@ namespace Stardust.Node.Timers
 		private void OnTimedEvent(object sender, ElapsedEventArgs e)
 		{
 			Stop();
-
 			try
 			{
 				TrySendJobProgress();
@@ -167,10 +141,8 @@ namespace Stardust.Node.Timers
 			}
 		}
 
-		public void SendProgress(Guid jobid,
-		                         string progressMessage)
+		public void SendProgress(Guid jobid, string progressMessage)
 		{
-
 			var progressModel = new JobDetailEntity
 			{
 				JobId = jobid,
@@ -191,10 +163,33 @@ namespace Stardust.Node.Timers
 			base.Dispose(disposing);
 		}
 
+
+		//-------------------
 		//only used by test
+		//-------------------
+
 		public int TotalNumberOfJobProgresses()
 		{
 			return _jobDetails.Count;
+		}
+		
+		public bool HasAllProgressesBeenSent()
+		{
+			if (_jobDetails == null)
+			{
+				return true;
+			}
+			var allSent = _jobDetails.Values.Count == 0;
+			return allSent;
+		}
+		
+		public int TotalNumberOfJobProgresses(Guid jobId)
+		{
+			if (_jobDetails == null || _jobDetails.Count == 0)
+			{
+				return 0;
+			}
+			return _jobDetails.Count(pair => pair.Value.JobId == jobId);
 		}
 	}
 }
