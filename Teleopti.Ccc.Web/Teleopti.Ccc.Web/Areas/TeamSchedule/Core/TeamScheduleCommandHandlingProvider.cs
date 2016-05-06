@@ -133,6 +133,28 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					result.Add(personError);
 					continue;
 				}
+				foreach (var shiftLayerId in personActivity.ShiftLayerIds)
+				{
+					var command = new MoveShiftLayerCommand
+					{
+						AgentId = personActivity.PersonId,
+						NewStartTimeInUtc = input.StartTime,
+						ScheduleDate = input.Date,
+						ShiftLayerId = shiftLayerId,
+						TrackedCommandInfo =
+							input.TrackedCommandInfo ??
+							new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()}
+					};
+					_commandDispatcher.Execute(command);
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						personError.Messages.AddRange(command.ErrorMessages);
+					}
+				}
+				if (personError.Messages.Any())
+				{
+					result.Add(personError);
+				}
 			}
 
 			return result;

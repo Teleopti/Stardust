@@ -72,6 +72,9 @@ namespace Teleopti.Interfaces.Domain
 		void MoveActivityAndSetHighestPriority(IActivity activity, DateTime currentStartTime, DateTime newStartTime,
 			TimeSpan length, TrackedCommandInfo trackedCommandInfo);
 
+		void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc,
+			TrackedCommandInfo trackedCommandInfo);
+
 		void AddActivity(IActivity activity, TimePeriod period);
 	}
 }

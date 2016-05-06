@@ -440,6 +440,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return activityMovedEvent;
 			});
 		}
+		public virtual void MoveActivityAndKeepOriginalPriority(IShiftLayer shiftLayer, DateTime newStartTimeInUtc, TrackedCommandInfo trackedCommandInfo)
+		{
+			var originalOrderIndex = ShiftLayers.ToList().IndexOf(shiftLayer);
+			if (originalOrderIndex < 0)
+				throw new ArgumentException("No layer(s) found!", "activity");
+			RemoveActivity(shiftLayer);
+
+			var newLayerPeriod = new DateTimePeriod(newStartTimeInUtc, newStartTimeInUtc.Add(shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime)));
+			InsertActivity(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
+
+			var affectedPeriod = shiftLayer.Period.MaximumPeriod(newLayerPeriod);
+			
+			AddEvent(()=>
+			{
+				var activityMovedEvent = new ActivityMovedEvent
+				{
+					PersonId = Person.Id.Value,
+					StartDateTime = affectedPeriod.StartDateTime,
+					EndDateTime =affectedPeriod.EndDateTime,
+					ScenarioId = Scenario.Id.Value,
+					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				};
+				if (trackedCommandInfo != null)
+				{
+					activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+					activityMovedEvent.CommandId = trackedCommandInfo.TrackId;
+				}
+				return activityMovedEvent;
+			});
+		}
 
 		public virtual IDayOff DayOff()
 		{
