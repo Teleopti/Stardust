@@ -44,16 +44,6 @@ namespace Stardust.Node
 			using (WebApp.Start(nodeAddress,
 			                    appBuilder =>
 			                    {
-									//string owinListenerName = "Microsoft.Owin.Host.HttpListener.OwinHttpListener";
-									//OwinHttpListener owinListener = (OwinHttpListener)appBuilder.Properties[owinListenerName];
-
-									//int maxAccepts;
-									//int maxRequests;
-									//owinListener.GetRequestProcessingLimits(out maxAccepts, out maxRequests);
-
-									//owinListener.SetRequestQueueLimit(int.MaxValue);
-									//owinListener.SetRequestProcessingLimits(int.MaxValue, int.MaxValue);
-
 									var containerBuilder = new ContainerBuilder();
 
 									//containerBuilder.RegisterInstance(nodeConfiguration);

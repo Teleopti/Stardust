@@ -9,7 +9,6 @@ using Stardust.Node.Constants;
 using Stardust.Node.Entities;
 using Stardust.Node.Extensions;
 using Stardust.Node.Interfaces;
-using Stardust.Node.Workers;
 using Timer = System.Timers.Timer;
 
 namespace Stardust.Node.Timers
@@ -64,22 +63,16 @@ namespace Stardust.Node.Timers
 			}
 		}
 
-
+		//only used by test
 		public int TotalNumberOfJobProgresses(Guid jobId)
 		{
-			if (IsJobProgressesNullOrEmpty())
+			if (_jobDetails == null || _jobDetails.Count == 0)
 			{
 				return 0;
 			}
 			return _jobDetails.Count(pair => pair.Value.JobId == jobId);
 		}
-
-
-		private bool IsJobProgressesNullOrEmpty()
-		{
-			return _jobDetails == null || _jobDetails.Count == 0;
-		}
-
+		
 
 		public bool HasAllProgressesBeenSent(Guid jobId)
 		{
@@ -94,6 +87,7 @@ namespace Stardust.Node.Timers
 			return allSent;
 		}
 
+		//only used by test
 		public bool HasAllProgressesBeenSent()
 		{
 
@@ -197,6 +191,7 @@ namespace Stardust.Node.Timers
 			base.Dispose(disposing);
 		}
 
+		//only used by test
 		public int TotalNumberOfJobProgresses()
 		{
 			return _jobDetails.Count;
