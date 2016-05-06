@@ -23,6 +23,17 @@
 			angular.forEach(vm.gridApi.grid.columns, function(column) {
 				column.filters[0].term = undefined;
 			});
+
+			angular.forEach(vm.AllRequestableAbsences, function (absence) {
+				absence.Selected = false;
+			});
+			vm.SelectedAbsences = [];
+
+			angular.forEach(vm.AllRequestStatuses, function (status) {
+				status.Selected = false;
+			});
+			vm.SelectedRequestStatuses = [];
+
 			requestFilterSvc.ResetFilter();
 			vm.filters = requestFilterSvc.Filters;
 		}
