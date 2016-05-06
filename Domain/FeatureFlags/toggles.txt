@@ -110,6 +110,7 @@ ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049 = true
 ResourcePlanner_IntradayIslands_36939 = true
 ResourcePlanner_CascadingSkillsPOC_37679 = false
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
+ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025 = RC
 
 Wfm_QuickForecastOnHangfire_35845 = RC
 ETL_SpeedUpPermissionReport_33584 = true
