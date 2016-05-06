@@ -48,9 +48,6 @@ namespace Stardust.Node
 									containerBuilder.RegisterModule(new NodeModule(nodeConfiguration));
 									containerBuilder.Update(container);
 
-									//to start it
-									container.Resolve<IWorkerWrapper>();
-
 									// Configure Web API for self-host. 
 									var config = new HttpConfiguration
 				                    {
@@ -73,10 +70,12 @@ namespace Stardust.Node
 
 				_logger.InfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
+				//to start it
+				var workerWrapper = container.Resolve<IWorkerWrapper>();
+
 				_quitEvent.WaitOne();
 
-				//var workerWrapper = container.Resolve<IWorkerWrapper>();
-				//workerWrapper.Dispose();
+				workerWrapper.Dispose();
 			}
 		}
 	}
