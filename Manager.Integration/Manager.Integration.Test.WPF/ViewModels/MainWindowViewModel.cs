@@ -96,11 +96,11 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public MainWindowViewModel()
 		{
-			ManagerDBConnectionString =
+			ManagerDbConnectionString =
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
 
 			ManagerDbRepository =
-				new ManagerDbRepository(ManagerDBConnectionString);
+				new ManagerDbRepository(ManagerDbConnectionString);
 
 			//---------------------------------------
 			// Set up Fiddler.
@@ -182,7 +182,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 
 		public ManagerDbRepository ManagerDbRepository { get; set; }
 
-		public string ManagerDBConnectionString { get; private set; }
+		public string ManagerDbConnectionString { get; private set; }
 
 		public StartDurationTestCommand StartDurationTestCommand { get; set; }
 
@@ -882,7 +882,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 			Task.Factory.StartNew(() =>
 			{
 				var managerDbRepository =
-					new ManagerDbRepository(ManagerDBConnectionString);
+					new ManagerDbRepository(ManagerDbConnectionString);
 
 				managerDbRepository.TruncateJobDetailTable();
 				managerDbRepository.TruncateJobTable();
