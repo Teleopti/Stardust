@@ -142,8 +142,9 @@ namespace ManagerConsoleHost
 
 			if (exp != null)
 			{
-				Logger.FatalWithLineNumber(exp.Message,
-				                           exp);
+				Logger.FatalWithLineNumber(exp.Message,exp);
+				//should crash integration tests
+				throw exp;
 			}
 		}
 	}

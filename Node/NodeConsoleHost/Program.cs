@@ -99,8 +99,6 @@ namespace NodeConsoleHost
 		private static void CurrentDomain_DomainUnload(object sender,
 		                                               EventArgs e)
 		{
-			Logger.DebugWithLineNumber(WhoAmI + " : CurrentDomain_DomainUnload called.");
-
 			if (NodeStarter != null)
 			{
 				NodeStarter.Stop();
@@ -116,8 +114,9 @@ namespace NodeConsoleHost
 
 			if (exp != null)
 			{
-				Logger.FatalWithLineNumber(exp.Message,
-				                              exp);
+				Logger.FatalWithLineNumber(exp.Message,exp);
+				//Should crash integration tests
+				throw exp;
 			}
 		}
 	}
