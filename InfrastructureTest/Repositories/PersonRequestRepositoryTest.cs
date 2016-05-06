@@ -1569,7 +1569,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
 				RequestFilters = new Dictionary<RequestFilterField, string>
 				{
-					{RequestFilterField.AbsenceType, $"{_absence.Id} {secondAbsence.Id}"}
+					{RequestFilterField.Absence, $"{_absence.Id} {secondAbsence.Id}"}
 				}
 			};
 			int count;
@@ -1619,7 +1619,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					{RequestFilterField.Subject, "b 2"},
 					{RequestFilterField.Message, "c 3"},
-					{RequestFilterField.AbsenceType, _absence.Id.ToString()},
+					{RequestFilterField.Absence, _absence.Id.ToString()},
 					{RequestFilterField.Status, "2"} // 2: Approved
 				}
 			};

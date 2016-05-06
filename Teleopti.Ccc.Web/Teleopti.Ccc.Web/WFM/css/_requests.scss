@@ -110,4 +110,17 @@
 	.wfm-date-range-picker-wrap .inline-datepicker-wrap .start-date-input+.dropdown-menu {
 		margin-left: -180px;
 	}
+
+	.ui-grid-header-viewport {
+		overflow: visible;
+	}
+
+	.ui-grid-top-panel {
+		overflow: visible;
+	}
+
+	.multiSelect>button {
+		max-height: 34px;
+		font-weight: normal;
+	}
 }

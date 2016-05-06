@@ -7,9 +7,9 @@
 		.directive('requestsTableContainer',   requestsTableContainerDirective);
 
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', "Toggle", 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', "Toggle", 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService'];
 
-	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder,CurrentUserInfo, requestFilterSvc) {
+	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions, requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc) {
 		var vm = this;
 
 		vm.gridOptions = getGridOptions([]);
@@ -17,10 +17,48 @@
 		vm.prepareComputedColumns = prepareComputedColumns;
 		vm.clearSelection = clearSelection;
 		vm.reselectRequests = reselectRequests;
-		vm.enter = enter;
+		vm.enter = function() {};
+
+		vm.clearFilters = function() {
+			angular.forEach(vm.gridApi.grid.columns, function(column) {
+				column.filters[0].term = undefined;
+			});
+			requestFilterSvc.ResetFilter();
+			vm.filters = requestFilterSvc.Filters;
+		}
+
+		requestsDataSvc.getRequestableAbsences().then(function (result) {
+			vm.AllRequestableAbsences = result.data;
+			angular.forEach(vm.AllRequestableAbsences, function (absence) {
+				absence.Selected = false;
+			});
+		});
+		vm.AllRequestStatuses = requestFilterSvc.RequestStatuses;
+
+		vm.absenceFilterClose = function () {
+			var filters = '';
+			angular.forEach(vm.SelectedAbsences, function (absence) {
+				filters += absence.Id + ' ';
+			});
+			console.log("filters:", filters);
+			requestFilterSvc.SetFilter("Absence", filters.trim());
+
+			vm.filters = requestFilterSvc.Filters;
+		}
+
+		vm.statusFilterClose = function () {
+			var filters = '';
+			angular.forEach(vm.SelectedRequestStatuses, function(status) {
+				filters += status.Id + ' ';
+			});
+			requestFilterSvc.SetFilter("Status", filters.trim());
+
+			vm.filters = requestFilterSvc.Filters;
+		}
 
 		function getGridOptions(requests) {
 			var options = {
+				appScopeProvider: vm,
 				enableGridMenu: true,
 				enableHorizontalScrollbar: 2,
 				useExternalSorting: true,
@@ -34,7 +72,14 @@
 					{ displayName: 'AgentName', field: 'AgentName', headerCellFilter: 'translate', cellClass: 'request-agent-name', headerCellClass: 'request-agent-name-header' },
 					{ displayName: 'Team', field: 'Team', headerCellFilter: 'translate', cellClass: 'request-team', headerCellClass: 'request-team-header' },
 					{ displayName: 'Seniority', field: 'Seniority', headerCellFilter: 'translate', cellClass: 'request-seniority', headerCellClass: 'request-seniority-header', visible: false },
-					{ displayName: 'Type', field: 'GetType()', headerCellFilter: 'translate', cellClass: 'request-type', headerCellClass: 'request-type-header', enableSorting: false, visible: false },
+					{
+						displayName: 'Type', field: 'GetType()', headerCellFilter: 'translate', cellClass: 'request-type', headerCellClass: 'request-type-header', enableSorting: false, visible: true,
+						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
+							+ '<div isteven-multi-select input-model=\"grid.appScope.AllRequestableAbsences\" output-model=\"grid.appScope.SelectedAbsences\" '
+							+ 'button-label=\"Name\" item-label=\"Name\" on-close=\"grid.appScope.absenceFilterClose()\" '
+							+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"none\"></div>'
+							+ '</div>'
+					},
 					{
 						displayName: 'Subject',
 						field: 'Subject',
@@ -49,8 +94,21 @@
 					},
 					{ displayName: 'Message', field: 'Message', headerCellFilter: 'translate', cellClass: 'request-message', headerCellClass: 'request-message-header', visible: false },
 					{ displayName: 'DenyReason', field: 'DenyReason', headerCellFilter: 'translate', cellClass: 'request-deny-reason', headerCellClass: 'request-deny-reason-header', visible: false },
-					{ displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', headerCellClass: 'request-status-header', enableSorting: false},
-					{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header' },
+					{
+						displayName: 'Status', field: 'StatusText', headerCellFilter: 'translate', cellClass: 'request-status', headerCellClass: 'request-status-header', enableSorting: false,
+						filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
+							+ '<div isteven-multi-select input-model=\"grid.appScope.AllRequestStatuses\" output-model=\"grid.appScope.SelectedRequestStatuses\" '
+							+ 'button-label=\"Name\" item-label=\"Name\" on-close=\"grid.appScope.statusFilterClose()\" ' //output-model="outputBrowsers" 
+							+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"none\"></div>'
+							+ '</div>'
+					},
+					{
+						displayName: 'CreatedOn',
+						field: 'FormatedCreatedTime()',
+						headerCellFilter: 'translate',
+						cellClass: 'request-created-time',
+						headerCellClass: 'request-created-time-header'
+					},
 					{ displayName: 'Id', field: 'Id', headerCellFilter: 'translate', cellClass: 'request-id', visible: false, headerCellClass: 'request-id-header' },
 					{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
 				],
@@ -94,8 +152,6 @@
 
 			return options;
 		}
-
-		function enter() {}
 
 		function onSelectionChanged() {
 			var visibleRequestsIds = vm.gridOptions.data.map(function (row) { return row.Id; });		
@@ -237,6 +293,5 @@
 				requestsTableContainerCtrl.reselectRequests();
 			});
 		}
-	}	
-
+	}
 })();

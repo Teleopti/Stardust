@@ -8,7 +8,8 @@
 		'ui.grid.selection',
 		'pascalprecht.translate',
 		'wfm.notice',
-		'currentUserInfoService'
+		'currentUserInfoService',
+		'isteven-multi-select'
 	]);
 
 })();

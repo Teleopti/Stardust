@@ -2,7 +2,7 @@ namespace Teleopti.Interfaces.Domain
 {
 	public enum RequestFilterField
 	{
-		AbsenceType,
+		Absence,
 		Status,
 		Subject,
 		Message

@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							.Aggregate(Restrictions.Or);
 						criteria.Add(statusCriterion);
 						break;
-					case RequestFilterField.AbsenceType:
+					case RequestFilterField.Absence:
 						var absenceFilters = filter.Value.Split(splitter).Select(x =>
 						{
 							Guid absenceId;
