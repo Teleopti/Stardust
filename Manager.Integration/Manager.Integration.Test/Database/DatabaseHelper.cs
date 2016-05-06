@@ -63,7 +63,7 @@ namespace Manager.Integration.Test.Database
 			}
 		}
 		
-		public static void TryClearDatabase(string connectionString)
+		public static void ClearDatabase(string connectionString)
 		{
 			if (string.IsNullOrEmpty(connectionString))
 			{
@@ -92,6 +92,34 @@ namespace Manager.Integration.Test.Database
 					command.ExecuteNonQuery();
 				}
 
+				sqlConnection.Close();
+			}
+		}
+
+		public static void ClearJobData(string connectionString)
+		{
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				Logger.ErrorWithLineNumber("Invalid connection string value.");
+				throw new ArgumentNullException("connectionString");
+			}
+
+			using (var sqlConnection = new SqlConnection(connectionString))
+			{
+				sqlConnection.Open();
+
+				using (var sqlCommand = new SqlCommand("truncate table [Stardust].[JobQueue]", sqlConnection))
+				{
+					sqlCommand.ExecuteNonQuery();
+				}
+				using (var command = new SqlCommand("truncate table [Stardust].[Job]", sqlConnection))
+				{
+					command.ExecuteNonQuery();
+				}
+				using (var command = new SqlCommand("truncate table [Stardust].[JobDetail]", sqlConnection))
+				{
+					command.ExecuteNonQuery();
+				}
 				sqlConnection.Close();
 			}
 		}

@@ -72,6 +72,7 @@ namespace Manager.Integration.Test.Initializers
 		[SetUp]
 		public virtual void SetUp()
 		{
+			DatabaseHelper.ClearJobData(ManagerDbConnectionString);
 		}
 
 		[TearDown]
@@ -99,7 +100,7 @@ namespace Manager.Integration.Test.Initializers
 
 			if (ClearDatabase)
 			{
-				DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
+				DatabaseHelper.ClearDatabase(ManagerDbConnectionString);
 			}
 
 			CancellationTokenSource = new CancellationTokenSource();
