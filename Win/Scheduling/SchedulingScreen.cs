@@ -2371,7 +2371,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			using (PerformanceOutput.ForOperation("Updating shift editor"))
 			{
-				notesEditor.LoadNote(null);
+                toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXSelectedAgentsColon") + " " +
+                                                      _scheduleView.AllSelectedPersons().Count() + " " + 
+                                                      LanguageResourceHelper.Translate("XXAgentsColon") + " " +
+                                                      _schedulerState.FilteredPersonDictionary.Count + " " +
+                                                      LanguageResourceHelper.Translate("XXLoadedColon") +
+                                                      " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
+
+                notesEditor.LoadNote(null);
 
 				var scheduleDay = getSelectedScheduleDayForShiftEditor();
 

@@ -14413,4 +14413,8 @@ Help us improve your experience by sending an error report</value>
     <value>No permission to move activity for agent {0}.	</value>
     <comment>Error message to notify missing permission for moving activity</comment>
   </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>Selected agents:</value>
+    <comment>Number of selected agents</comment>
+  </data>
 </root>

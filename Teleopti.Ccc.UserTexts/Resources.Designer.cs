@@ -25226,6 +25226,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected agents:.
+        /// </summary>
+        public static string SelectedAgentsColon {
+            get {
+                return ResourceManager.GetString("SelectedAgentsColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected date.
         /// </summary>
         public static string SelectedDate {
