@@ -12,11 +12,6 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
-		public override void SetUp()
-		{
-			DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
-		}
-
 		[Test]
 		public void CancelWrongJobsTest()
 		{
@@ -47,7 +42,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 			
 
-			manualResetEventSlim.Wait(TimeSpan.FromSeconds(10));
+			manualResetEventSlim.Wait(TimeSpan.FromSeconds(20));
 
 			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue must be empty.");
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.Jobs.Any(), "Jobs must have been added.");
