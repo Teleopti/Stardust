@@ -101,7 +101,7 @@
 
 			svc.getLatestStartTimeOfSelectedScheduleProjection = function (scheduleDateMoment, selectedPersonIds) {
 				var latestStart = 0;
-				var latestShiftLayerIds = [];
+				var projectionShiftLayerIds = [];
 				var currentDayShifts = [];
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
@@ -113,12 +113,15 @@
 				currentDayShifts.forEach(function (shift) {
 					if (shift.Projections) {
 						shift.Projections.forEach(function (projection) {
-							if (projection.Selected) {
-								var scheduleStart = moment(projection.Start).toDate();
-								if (scheduleStart >= latestStart && !angular.equals(latestShiftLayerIds, projection.ShiftLayerIds)) {
-									latestStart = scheduleStart;
-									latestShiftLayerIds = projection.ShiftLayerIds;
-								}
+							var scheduleStart = moment(projection.Start).toDate();
+							if (projection.Selected && scheduleStart >= latestStart) {
+								var exist = projection.ShiftLayerIds.some(function (layerId) {
+									return projectionShiftLayerIds.indexOf(layerId) > -1;
+								});
+								if (exist) return;
+
+								latestStart = scheduleStart;
+								projectionShiftLayerIds = projectionShiftLayerIds.concat(projection.ShiftLayerIds);
 							}
 						});
 					}
