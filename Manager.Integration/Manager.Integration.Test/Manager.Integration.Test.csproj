@@ -103,7 +103,6 @@
     <Compile Include="Database\SqlDataReaderExtensions.cs" />
     <Compile Include="Helpers\IntegrationControllerApiHelper.cs" />
     <Compile Include="Helpers\HttpRequestManager.cs" />
-    <Compile Include="Initializers\InitializeAndFinalizeBaseOnSetup.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />

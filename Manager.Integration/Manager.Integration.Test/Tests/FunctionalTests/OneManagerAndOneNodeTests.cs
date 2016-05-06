@@ -12,6 +12,11 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 	[TestFixture]
 	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNodeWait
 	{
+		public override void SetUp()
+		{
+			DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
+		}
+
 		[Test]
 		public void CancelWrongJobsTest()
 		{

@@ -72,7 +72,6 @@ namespace Manager.Integration.Test.Initializers
 		[SetUp]
 		public virtual void SetUp()
 		{
-			DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 		}
 
 		[TearDown]
