@@ -16,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
 {
 	[PrincipalAndStateTest]
+	[Ignore]
 	public class ScheduleProjectionReadOnlyPersisterConcurrencyTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
