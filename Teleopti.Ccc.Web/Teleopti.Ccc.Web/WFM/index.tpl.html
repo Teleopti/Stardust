@@ -32,6 +32,7 @@
 </div>
 	<script type="text/javascript">
 		function iAmCalledFromFatClient() {
+			angular.element(document.getElementById('darkTheme')).scope().toggleTheme('classic');
 			var elementsToRemove = [
 				document.getElementById('nav'),
 				document.getElementById('leftsidenav'),
@@ -58,7 +59,6 @@
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		}
-
 		window.onerror = function (errorMessage, url, line) {
 			var req = new XMLHttpRequest();
 			req.open('POST', '../api/Logging/LogError', true);

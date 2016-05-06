@@ -46,9 +46,7 @@
 				ThemeService.setTheme(theme);
 				ThemeService.saveTheme(theme, overlay);
 			};
-
-			$scope.toggleTheme = function() {
-				focusMenu();
+			var toggleActiveTheme = function(){
 				if ($scope.darkTheme) {
 					$scope.currentTheme = 'classic';
 					replaceCurrentTheme('classic',	$scope.showOverlay );
@@ -56,6 +54,19 @@
 					$scope.currentTheme = 'dark';
 					replaceCurrentTheme('dark', $scope.showOverlay );
 				}
+			};
+
+			$scope.toggleTheme = function(theme) {
+				if (theme === "classic" || theme === "dark") {
+					$scope.currentTheme = theme;
+					replaceCurrentTheme(theme, $scope.showOverlay)
+					return
+				}else {
+					focusMenu();
+					toggleActiveTheme()
+				}
+
+
 				$scope.darkTheme = !$scope.darkTheme;
 			};
 		}
