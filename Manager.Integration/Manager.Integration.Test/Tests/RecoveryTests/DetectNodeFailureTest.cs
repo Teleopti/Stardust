@@ -60,6 +60,8 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			taskShutDownNode.Wait();
 			
 			waitForNodeToEndEvent.Wait(TimeSpan.FromMinutes(1));
+			//Give manager a couple of seconds to set the result to fatal
+			Thread.Sleep(TimeSpan.FromSeconds(2));
 
 			var jobs = checkTablesInManagerDbTimer.ManagerDbRepository.Jobs;
 
