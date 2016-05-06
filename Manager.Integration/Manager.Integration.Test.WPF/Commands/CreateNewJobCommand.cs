@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
-using Manager.Integration.Test.TestParams;
+using Manager.Integration.Test.Params;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Newtonsoft.Json;
 

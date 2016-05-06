@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Manager.Integration.Test.Models;
-using Manager.Integration.Test.TestParams;
+using Manager.Integration.Test.Params;
 using Newtonsoft.Json;
 
 namespace Manager.Integration.Test.Helpers

@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
 using Manager.Integration.Test.Properties;
 
 namespace Manager.Integration.Test.Tasks

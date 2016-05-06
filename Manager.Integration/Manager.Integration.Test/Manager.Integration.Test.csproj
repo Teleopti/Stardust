@@ -109,9 +109,7 @@
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
-    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeSetup.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeWait.cs" />
-    <Compile Include="Initializers\InitialzeAndFinalizeOneManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
     <Compile Include="Models\Job.cs" />
@@ -121,13 +119,11 @@
     <Compile Include="Models\PerformanceTest.cs" />
     <Compile Include="Models\WorkerNode.cs" />
     <Compile Include="RecoveryTests\DetectNodeFailureTest.cs" />
-    <Compile Include="Notifications\NodeStatusNotifier.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
     <Compile Include="FunctionalTests\OneManagerAndZeroNodesTests.cs" />
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="RecoveryTests\SendJobToDeadNodeTest.cs" />
-    <Compile Include="Scripts\ScriptExecuteHelper.cs" />
     <Compile Include="LoadTests\SixManagersSixNodesLoadTests.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
     <Compile Include="FunctionalTests\OneManagerAndOneNodeTests.cs" />
@@ -142,10 +138,8 @@
     <Compile Include="Params\LongRunningJobParams.cs" />
     <Compile Include="Params\TestJobParams.cs" />
     <Compile Include="Params\TestJobTimerParams.cs" />
-    <Compile Include="Timers\CheckJobStatusTimer.cs" />
     <Compile Include="Timers\CheckTablesInManagerDbTimer.cs" />
     <Compile Include="Timers\SendJobEveryDurationTimer.cs" />
-    <Compile Include="Validators\IntegerValidators.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -158,11 +152,6 @@
     </None>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="Scripts\CreateLoggingTable.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Manager.Integration.Tests.Console.Host\Manager.IntegrationTest.Console.Host.csproj">
       <Project>{8FC65E40-C783-48D2-9B50-BAF7A7EC8298}</Project>

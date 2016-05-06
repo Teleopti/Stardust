@@ -1,4 +1,4 @@
-﻿namespace Manager.Integration.Test.TestParams
+﻿namespace Manager.Integration.Test.Params
 {
 	public class FastJobParams
 	{

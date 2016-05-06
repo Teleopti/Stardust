@@ -8,7 +8,6 @@ using log4net.Config;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
-using Manager.Integration.Test.Validators;
 using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
 using NUnit.Framework;
 
@@ -98,8 +97,7 @@ namespace Manager.Integration.Test.Initializers
 				var sqlNotifier = new SqlNotifier(ManagerDbConnectionString);
 
 				var task = sqlNotifier.CreateNotifyWhenNodesAreUpTask(NumberOfNodes,
-																	  sqlNotiferCancellationTokenSource,
-																	  IntegerValidators.Value1IsEqualToValue2Validator);
+																	  sqlNotiferCancellationTokenSource);
 				task.Start();
 
 				sqlNotifier.NotifyWhenAllNodesAreUp.Wait(TimeSpan.FromMinutes(10));

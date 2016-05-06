@@ -43,8 +43,7 @@ namespace Manager.Integration.Test.Notifications
 		}
 
 		public Task CreateNotifyWhenNodesAreUpTask(int numberOfNodes,
-		                                           CancellationTokenSource cancellationTokenSource,
-		                                           Func<int, int, bool> validator)
+		                                           CancellationTokenSource cancellationTokenSource)
 		{
 			if (numberOfNodes <= 0)
 			{
@@ -77,7 +76,7 @@ namespace Manager.Integration.Test.Notifications
 						{
 							var rowCount = (int) command.ExecuteScalar();
 
-							if (validator(rowCount, nodes))
+							if (rowCount == nodes)
 							{
 								NotifyWhenAllNodesAreUp.Set();
 							}
