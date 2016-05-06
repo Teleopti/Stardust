@@ -8,6 +8,7 @@ using log4net;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Node.Extensions;
+using Stardust.Node.Interfaces;
 
 namespace Stardust.Node
 {
@@ -47,8 +48,11 @@ namespace Stardust.Node
 									containerBuilder.RegisterModule(new NodeModule(nodeConfiguration));
 									containerBuilder.Update(container);
 
-				                    // Configure Web API for self-host. 
-				                    var config = new HttpConfiguration
+									//to start it
+									container.Resolve<IWorkerWrapper>();
+
+									// Configure Web API for self-host. 
+									var config = new HttpConfiguration
 				                    {
 					                    DependencyResolver = new AutofacWebApiDependencyResolver(container)
 				                    };
@@ -70,6 +74,9 @@ namespace Stardust.Node
 				_logger.InfoWithLineNumber(WhoAmI + ": Listening on port " + nodeConfiguration.BaseAddress);
 
 				_quitEvent.WaitOne();
+
+				//var workerWrapper = container.Resolve<IWorkerWrapper>();
+				//workerWrapper.Dispose();
 			}
 		}
 	}
