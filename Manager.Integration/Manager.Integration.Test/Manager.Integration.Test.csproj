@@ -99,8 +99,6 @@
   <ItemGroup>
     <Compile Include="Constants\IntegrationControllerRouteConstants.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
-    <Compile Include="Constants\MediaTypeConstants.cs" />
-    <Compile Include="Constants\StatusConstants.cs" />
     <Compile Include="Data\ManagerDbRepository.cs" />
     <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
     <Compile Include="Extensions\SqlDataReaderExtensions.cs" />
@@ -108,7 +106,6 @@
     <Compile Include="Helpers\IntergrationControllerUriBuilder.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnSetup.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />
-    <Compile Include="Helpers\AppDomainHelper.cs" />
     <Compile Include="Helpers\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="Helpers\JobManagerTaskCreator.cs" />
@@ -131,7 +128,6 @@
     <Compile Include="RecoveryTests\DetectNodeFailureTest.cs" />
     <Compile Include="Notifications\NodeStatusNotifier.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
-    <Compile Include="LoadTests\OneManagerAndSixNodesLoadTests.cs" />
     <Compile Include="FunctionalTests\OneManagerAndZeroNodesTests.cs" />
     <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />
     <Compile Include="Properties\Annotations.cs" />

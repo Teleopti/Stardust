@@ -26,33 +26,7 @@ namespace Manager.Integration.Test.Data
 		}
 
 		public string ConnectionString { get; private set; }
-
-		public int WorkerNodeCount
-		{
-			get
-			{
-				try
-				{
-					using (var sqlConnection = new SqlConnection(ConnectionString))
-					{
-						sqlConnection.Open();
-
-						var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
-													  FROM [Stardust].[WorkerNode] WITH (NOLOCK)", sqlConnection);
-
-						return (int)sqlCommand.ExecuteScalar();
-					}
-
-				}
-				catch (Exception)
-				{
-
-				}
-
-				return 0;
-			}
-		}
-
+		
 		public int JobQueueCount
 		{
 			get
@@ -104,34 +78,7 @@ namespace Manager.Integration.Test.Data
 				return 0;
 			}
 		}
-
-		public int JobDetailsCount
-		{
-			get
-			{
-				try
-				{
-					using (var sqlConnection = new SqlConnection(ConnectionString))
-					{
-						sqlConnection.Open();
-
-						var sqlCommand = new SqlCommand(@"SELECT COUNT(*)
-													  FROM [Stardust].[JobDetail] WITH (NOLOCK)", sqlConnection);
-
-						return (int)sqlCommand.ExecuteScalar();
-					}
-
-				}
-				catch (Exception)
-				{
-
-				}
-
-				return 0;
-			}
-		}
-
-
+		
 		public ObservableCollection<JobDetail> JobDetails
 		{
 			get
@@ -414,19 +361,6 @@ namespace Manager.Integration.Test.Data
 			}
 		}
 
-
-		public void TruncatePerformanceTestTable()
-		{
-			using (var sqlConnection = new SqlConnection(ConnectionString))
-			{
-				sqlConnection.Open();
-
-				var sqlCommand =
-					new SqlCommand(@"TRUNCATE TABLE [Stardust].[PerformanceTest]", sqlConnection);
-
-				sqlCommand.ExecuteNonQuery();
-			}
-		}
 		public void TruncateWorkerNodeTable()
 		{
 			using (var sqlConnection = new SqlConnection(ConnectionString))
