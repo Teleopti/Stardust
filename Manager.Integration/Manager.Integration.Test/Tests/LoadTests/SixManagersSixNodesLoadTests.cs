@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Timers;
@@ -11,7 +12,7 @@ using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.LoadTests
+namespace Manager.Integration.Test.Tests.LoadTests
 {
 	[TestFixture]
 	internal class SixManagersSixNodesLoadTests : InitialzeAndFinalizeSixManagersAndSixNodes

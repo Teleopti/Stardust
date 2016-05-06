@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Timers;
-using Manager.Integration.Test.Data;
+using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Models;
 
 namespace Manager.Integration.Test.Timers

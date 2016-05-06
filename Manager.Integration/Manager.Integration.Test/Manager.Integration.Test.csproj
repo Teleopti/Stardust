@@ -99,14 +99,13 @@
   <ItemGroup>
     <Compile Include="Constants\IntegrationControllerRouteConstants.cs" />
     <Compile Include="Constants\ManagerRouteConstants.cs" />
-    <Compile Include="Data\ManagerDbRepository.cs" />
-    <Compile Include="EventArgs\GuidAddedEventArgs.cs" />
-    <Compile Include="Extensions\SqlDataReaderExtensions.cs" />
+    <Compile Include="Database\ManagerDbRepository.cs" />
+    <Compile Include="Database\SqlDataReaderExtensions.cs" />
     <Compile Include="Helpers\IntegrationControllerApiHelper.cs" />
     <Compile Include="Helpers\IntergrationControllerUriBuilder.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnSetup.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />
-    <Compile Include="Helpers\DatabaseHelper.cs" />
+    <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeWait.cs" />
@@ -118,15 +117,14 @@
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\PerformanceTest.cs" />
     <Compile Include="Models\WorkerNode.cs" />
-    <Compile Include="RecoveryTests\DetectNodeFailureTest.cs" />
+    <Compile Include="Tests\RecoveryTests\DetectNodeFailureTest.cs" />
     <Compile Include="Notifications\SqlNotifier.cs" />
-    <Compile Include="FunctionalTests\OneManagerAndZeroNodesTests.cs" />
-    <Compile Include="EventArgs\GuidStatusChangedEventArgs.cs" />
+    <Compile Include="Tests\FunctionalTests\OneManagerAndZeroNodesTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="RecoveryTests\SendJobToDeadNodeTest.cs" />
-    <Compile Include="LoadTests\SixManagersSixNodesLoadTests.cs" />
+    <Compile Include="Tests\RecoveryTests\SendJobToDeadNodeTest.cs" />
+    <Compile Include="Tests\LoadTests\SixManagersSixNodesLoadTests.cs" />
     <Compile Include="Tasks\AppDomainTask.cs" />
-    <Compile Include="FunctionalTests\OneManagerAndOneNodeTests.cs" />
+    <Compile Include="Tests\FunctionalTests\OneManagerAndOneNodeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

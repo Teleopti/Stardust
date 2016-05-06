@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Models;
@@ -13,7 +14,7 @@ using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.FunctionalTests
+namespace Manager.Integration.Test.Tests.FunctionalTests
 {
 	[TestFixture]
 	public class OneManagerAndOneNodeTests : InitialzeAndFinalizeOneManagerAndOneNodeWait

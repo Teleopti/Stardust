@@ -12,7 +12,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Threading;
-using Manager.Integration.Test.Data;
+using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Models;
 using Manager.Integration.Test.Params;

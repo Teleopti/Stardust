@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using NUnit.Framework;
 
-namespace Manager.Integration.Test.RecoveryTests
+namespace Manager.Integration.Test.Tests.RecoveryTests
 {
 	[TestFixture]
 	class SendJobToDeadNodeTest : InitialzeAndFinalizeOneManagerAndOneNodeWait

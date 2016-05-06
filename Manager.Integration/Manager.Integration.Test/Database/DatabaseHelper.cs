@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Log4Net;
 
-namespace Manager.Integration.Test.Helpers
+namespace Manager.Integration.Test.Database
 {
 	public static class DatabaseHelper
 	{

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
-using Manager.Integration.Test.Extensions;
 using Manager.Integration.Test.Models;
 
-namespace Manager.Integration.Test.Data
+namespace Manager.Integration.Test.Database
 {
 	public class ManagerDbRepository
 	{
