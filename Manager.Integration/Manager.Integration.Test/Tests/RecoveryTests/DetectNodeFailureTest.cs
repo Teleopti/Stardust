@@ -119,8 +119,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 
 			Task<string> taskShutDownNode = new Task<string>(() =>
 			{
-				string res = IntegrationControllerApiHelper.ShutDownNode(new IntergrationControllerUriBuilder(),
-																		HttpSender,
+				string res = IntegrationControllerApiHelper.ShutDownNode(HttpSender,
 																		"Node1.config").Result;
 
 				return res;

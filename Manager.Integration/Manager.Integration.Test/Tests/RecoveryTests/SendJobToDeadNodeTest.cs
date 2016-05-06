@@ -76,7 +76,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 
 			Task<string> taskStartNewNode = new Task<string>(() =>
 			{
-				string res = IntegrationControllerApiHelper.StartNewNode(new IntergrationControllerUriBuilder(), HttpSender).Result;
+				string res = IntegrationControllerApiHelper.StartNewNode(HttpSender).Result;
 
 				return res;
 			});
@@ -92,8 +92,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 
 			Task<string> taskShutDownNode = new Task<string>(() =>
 			{
-				string res = IntegrationControllerApiHelper.ShutDownNode(new IntergrationControllerUriBuilder(),
-																		HttpSender,
+				string res = IntegrationControllerApiHelper.ShutDownNode(HttpSender,
 																		"Node2.config").Result;
 
 				return res;

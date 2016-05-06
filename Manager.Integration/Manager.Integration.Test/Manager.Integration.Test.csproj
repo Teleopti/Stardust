@@ -102,7 +102,6 @@
     <Compile Include="Database\ManagerDbRepository.cs" />
     <Compile Include="Database\SqlDataReaderExtensions.cs" />
     <Compile Include="Helpers\IntegrationControllerApiHelper.cs" />
-    <Compile Include="Helpers\IntergrationControllerUriBuilder.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnSetup.cs" />
     <Compile Include="Initializers\InitializeAndFinalizeBaseOnTestFixtureSetup.cs" />
     <Compile Include="Database\DatabaseHelper.cs" />
@@ -118,7 +117,7 @@
     <Compile Include="Models\PerformanceTest.cs" />
     <Compile Include="Models\WorkerNode.cs" />
     <Compile Include="Tests\RecoveryTests\DetectNodeFailureTest.cs" />
-    <Compile Include="Notifications\SqlNotifier.cs" />
+    <Compile Include="Database\SqlNotifier.cs" />
     <Compile Include="Tests\FunctionalTests\OneManagerAndZeroNodesTests.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Tests\RecoveryTests\SendJobToDeadNodeTest.cs" />

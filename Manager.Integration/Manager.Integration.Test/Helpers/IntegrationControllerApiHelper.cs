@@ -1,17 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Manager.Integration.Test.Constants;
+using Manager.Integration.Test.Properties;
 using Manager.IntegrationTest.Console.Host.Helpers;
 
 namespace Manager.Integration.Test.Helpers
 {
 	public static class IntegrationControllerApiHelper
 	{
-
-		public static async Task<string> ShutDownNode(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                              HttpSender httpSender,
+		public static async Task<string> ShutDownNode(HttpSender httpSender,
 		                                              string nodeName)
 		{
-			var deleteUri =
-				intergrationControllerUriBuilder.GetNodeUriByNodeName(nodeName);
+			var deleteUri = CreateUri(IntegrationControllerRouteConstants.NodeById.Replace("{id}", nodeName));
 
 			var httpResponseMessage = httpSender.DeleteAsync(deleteUri);
 
@@ -24,11 +24,9 @@ namespace Manager.Integration.Test.Helpers
 			return content;
 		}
 
-		public static async Task<string> StartNewManager(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                                 HttpSender httpSender)
+		public static async Task<string> StartNewManager(HttpSender httpSender)
 		{
-			var allManagersUri =
-				intergrationControllerUriBuilder.GetAllManagersUri();
+			var allManagersUri = CreateUri(IntegrationControllerRouteConstants.Managers);
 
 			var httpResponseMessage = httpSender.PostAsync(allManagersUri);
 
@@ -41,11 +39,9 @@ namespace Manager.Integration.Test.Helpers
 			return content;
 		}
 
-		public static async Task<string> StartNewNode(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                              HttpSender httpSender)
+		public static async Task<string> StartNewNode(HttpSender httpSender)
 		{
-			var allNodesUri =
-				intergrationControllerUriBuilder.GetAllNodesUri();
+			var allNodesUri = CreateUri(IntegrationControllerRouteConstants.Nodes);
 
 			var httpResponseMessage = httpSender.PostAsync(allNodesUri);
 
@@ -56,6 +52,17 @@ namespace Manager.Integration.Test.Helpers
 			var content = await res.Content.ReadAsStringAsync();
 
 			return content;
+		}
+
+		public static Uri CreateUri(string path)
+		{
+			var uriBuilder = new UriBuilder(new Uri(Settings.Default.IntegrationControllerBaseAddress));
+
+		//	_uriBuilder.Path = _uriTemplateBuilder.Path;
+
+			uriBuilder.Path += path;
+
+			return uriBuilder.Uri;
 		}
 	}
 }

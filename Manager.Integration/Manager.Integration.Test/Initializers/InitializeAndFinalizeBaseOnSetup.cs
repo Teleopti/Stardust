@@ -7,7 +7,6 @@ using Autofac;
 using log4net.Config;
 using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
-using Manager.Integration.Test.Notifications;
 using Manager.Integration.Test.Tasks;
 using Manager.IntegrationTest.Console.Host.Log4Net;
 using NUnit.Framework;

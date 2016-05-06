@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Manager.IntegrationTest.Console.Host.Log4Net;
 
-namespace Manager.Integration.Test.Notifications
+namespace Manager.Integration.Test.Database
 {
 	public class SqlNotifier : IDisposable
 	{

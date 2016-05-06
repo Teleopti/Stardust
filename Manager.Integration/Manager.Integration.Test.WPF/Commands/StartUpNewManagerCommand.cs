@@ -17,11 +17,9 @@ namespace Manager.Integration.Test.WPF.Commands
 		{
 			Task.Factory.StartNew(() =>
 			{
-				var intergrationControllerUriBuilder = new IntergrationControllerUriBuilder();
 				var httpSender = new HttpSender();
 
-				var managerName = IntegrationControllerApiHelper.StartNewManager(intergrationControllerUriBuilder,
-				                                                                 httpSender);
+				var managerName = IntegrationControllerApiHelper.StartNewManager(httpSender);
 
 			});
 		}

@@ -130,6 +130,7 @@
   <ItemGroup>
     <Compile Include="Constants\IntegrationControllerRouteConstants.cs" />
     <Compile Include="Helpers\HttpSender.cs" />
+    <Compile Include="Log4Net\CreateTableIfNotExistsAppender.cs" />
     <Compile Include="Log4Net\LoggerExtensions.cs" />
     <Compile Include="IntegrationController.cs" />
     <Compile Include="Interfaces\IAppDomain.cs" />
