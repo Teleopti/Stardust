@@ -20,10 +20,8 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			
 			var waitForJobToStartEvent = new ManualResetEventSlim();
 			var waitForNodeToEndEvent = new ManualResetEventSlim();
+			
 
-			//---------------------------------------------------------
-			// Database validator.
-			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
 

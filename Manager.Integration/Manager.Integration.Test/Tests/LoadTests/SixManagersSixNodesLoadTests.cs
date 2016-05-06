@@ -24,10 +24,8 @@ namespace Manager.Integration.Test.Tests.LoadTests
 
 			var createNewJobRequests =
 				JobHelper.GenerateTestJobTimerRequests(50, TimeSpan.FromSeconds(1));
+			
 
-			//---------------------------------------------------------
-			// Database validator.
-			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
 

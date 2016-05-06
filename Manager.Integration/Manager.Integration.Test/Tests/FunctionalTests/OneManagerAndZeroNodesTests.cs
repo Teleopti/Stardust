@@ -18,10 +18,8 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var startedTest = DateTime.UtcNow;
 
 			var manualResetEventSlim = new ManualResetEventSlim();
+			
 
-			//---------------------------------------------------------
-			// Database validator.
-			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
 

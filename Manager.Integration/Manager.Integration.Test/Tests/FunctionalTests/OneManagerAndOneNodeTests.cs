@@ -73,10 +73,8 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 		{
 			var startedTest = DateTime.UtcNow;
 			var manualResetEventSlim = new ManualResetEventSlim();
+			
 
-			//---------------------------------------------------------
-			// Database validator.
-			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer = new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
 			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
 			{
@@ -128,9 +126,6 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var manualResetEventSlim = new ManualResetEventSlim();
 
 			
-			//---------------------------------------------------------
-			// Database validator.
-			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
 
@@ -185,10 +180,8 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 		{
 			var startedTest = DateTime.UtcNow;
 			var manualResetEventSlim = new ManualResetEventSlim();
+			
 
-			//---------------------------------------------------------
-			// Database validator.
-			//---------------------------------------------------------
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
 
