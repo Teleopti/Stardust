@@ -8,7 +8,7 @@ using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Initializers;
 using Manager.Integration.Test.Timers;
 using Manager.IntegrationTest.Console.Host.Helpers;
-using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
+using Manager.IntegrationTest.Console.Host.Log4Net;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.LoadTests

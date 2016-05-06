@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using log4net;
 
-namespace Manager.IntegrationTest.Console.Host.Log4Net.Extensions
+namespace Manager.IntegrationTest.Console.Host.Log4Net
 {
 	public static class LoggerExtensions
 	{
@@ -14,12 +14,6 @@ namespace Manager.IntegrationTest.Console.Host.Log4Net.Extensions
 			var log = LogManager.GetLogger(typeof (T));
 
 			return log;
-		}
-
-		public static IDisposable PushActivity(this ILog logger,
-		                                       string activityName)
-		{
-			return ThreadContext.Stacks["activity"].Push(activityName);
 		}
 
 		public static void ErrorWithLineNumber(this ILog logger,

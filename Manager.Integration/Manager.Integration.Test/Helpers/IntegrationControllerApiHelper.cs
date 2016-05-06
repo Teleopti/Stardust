@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Manager.IntegrationTest.Console.Host.Interfaces;
-using Newtonsoft.Json;
+﻿using System.Threading.Tasks;
+using Manager.IntegrationTest.Console.Host.Helpers;
 
 namespace Manager.Integration.Test.Helpers
 {
@@ -9,7 +7,7 @@ namespace Manager.Integration.Test.Helpers
 	{
 
 		public static async Task<string> ShutDownNode(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                              IHttpSender httpSender,
+		                                              HttpSender httpSender,
 		                                              string nodeName)
 		{
 			var deleteUri =
@@ -27,7 +25,7 @@ namespace Manager.Integration.Test.Helpers
 		}
 
 		public static async Task<string> StartNewManager(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                                 IHttpSender httpSender)
+		                                                 HttpSender httpSender)
 		{
 			var allManagersUri =
 				intergrationControllerUriBuilder.GetAllManagersUri();
@@ -44,7 +42,7 @@ namespace Manager.Integration.Test.Helpers
 		}
 
 		public static async Task<string> StartNewNode(IntergrationControllerUriBuilder intergrationControllerUriBuilder,
-		                                              IHttpSender httpSender)
+		                                              HttpSender httpSender)
 		{
 			var allNodesUri =
 				intergrationControllerUriBuilder.GetAllNodesUri();

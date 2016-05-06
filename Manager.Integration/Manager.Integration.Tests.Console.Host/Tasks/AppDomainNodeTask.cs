@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using log4net;
 using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
-using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
+using Manager.IntegrationTest.Console.Host.Log4Net;
 
 namespace Manager.IntegrationTest.Console.Host.Tasks
 {

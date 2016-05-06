@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Manager.IntegrationTest.Console.Host.Constants;
-using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
+using Manager.IntegrationTest.Console.Host.Log4Net;
 
 namespace Manager.IntegrationTest.Console.Host
 {

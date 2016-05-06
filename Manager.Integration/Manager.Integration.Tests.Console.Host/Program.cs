@@ -13,7 +13,7 @@ using Autofac.Integration.WebApi;
 using log4net;
 using log4net.Config;
 using Manager.IntegrationTest.Console.Host.LoadBalancer;
-using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
+using Manager.IntegrationTest.Console.Host.Log4Net;
 using Manager.IntegrationTest.Console.Host.Properties;
 using Manager.IntegrationTest.Console.Host.Tasks;
 using Microsoft.Owin.Hosting;

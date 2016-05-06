@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Manager.IntegrationTest.Console.Host.Log4Net.Extensions;
+using Manager.IntegrationTest.Console.Host.Log4Net;
 
 namespace Manager.IntegrationTest.Console.Host.LoadBalancer
 {
