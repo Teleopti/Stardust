@@ -8,6 +8,7 @@ using log4net.Config;
 using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Tasks;
+using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Log4Net;
 using NUnit.Framework;
 
@@ -62,10 +63,16 @@ namespace Manager.Integration.Test.Initializers
 
 		protected IContainer Container { get; set; }
 
+		public HttpSender HttpSender { get; set; }
+
+		public ManagerUriBuilder MangerUriBuilder { get; set; }
+
+		public HttpRequestManager HttpRequestManager { get; set; }
+
 		[SetUp]
 		public virtual void SetUp()
 		{
-			
+			DatabaseHelper.TryClearDatabase(ManagerDbConnectionString);
 		}
 
 		[TearDown]
@@ -77,6 +84,10 @@ namespace Manager.Integration.Test.Initializers
 		[TestFixtureSetUp]
 		public virtual void TestFixtureSetUp()
 		{
+			HttpSender = new HttpSender();
+			MangerUriBuilder = new ManagerUriBuilder();
+			HttpRequestManager = new HttpRequestManager();
+
 			AppDomain = AppDomain.CurrentDomain;
 
 			AppDomain.UnhandledException += AppDomainUnHandledException;
@@ -101,7 +112,11 @@ namespace Manager.Integration.Test.Initializers
 										   useLoadBalancerIfJustOneManager: UseLoadBalancerIfJustOneManager,
 										   cancellationTokenSource: CancellationTokenSource);
 
-
+			bool managerUp = HttpRequestManager.IsManagerUp();
+			while (!managerUp)
+			{
+				managerUp = HttpRequestManager.IsManagerUp();
+			}
 
 			if (WaitToStartUp)
 			{

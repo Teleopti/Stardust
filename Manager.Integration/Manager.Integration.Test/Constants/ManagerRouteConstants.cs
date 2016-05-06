@@ -11,5 +11,7 @@
 		public const string GetJobHistory = "job/" + JobIdOptionalParameter;
 
 		public const string Nodes = "node/";
+
+		public const string Ping = "ping/";
 	}
 }

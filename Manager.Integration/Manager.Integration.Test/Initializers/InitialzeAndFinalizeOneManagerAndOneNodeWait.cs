@@ -12,19 +12,5 @@ namespace Manager.Integration.Test.Initializers
 		                                                         waitToStartUp: true)
 		{
 		}
-		public HttpSender HttpSender { get; set; }
-		public ManagerUriBuilder MangerUriBuilder { get; set; }
-		public HttpRequestManager HttpRequestManager { get; set; }
-
-		public override void SetUp()
-		{
-			DatabaseHelper.TruncateJobQueueTable(ManagerDbConnectionString);
-			DatabaseHelper.TruncateJobTable(ManagerDbConnectionString);
-			DatabaseHelper.TruncateJobDetailTable(ManagerDbConnectionString);
-
-			HttpSender = new HttpSender();
-			MangerUriBuilder = new ManagerUriBuilder();
-			HttpRequestManager = new HttpRequestManager();
-		}
 	}
 }

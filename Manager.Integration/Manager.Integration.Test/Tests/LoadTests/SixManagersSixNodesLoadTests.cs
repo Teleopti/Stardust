@@ -22,10 +22,6 @@ namespace Manager.Integration.Test.Tests.LoadTests
 			this.Log().DebugWithLineNumber(message);
 		}
 
-		public ManagerUriBuilder MangerUriBuilder { get; set; }
-
-		public HttpSender HttpSender { get; set; }
-
 		public ManualResetEventSlim ManualResetEventSlim { get; set; }
 
 		/// <summary>

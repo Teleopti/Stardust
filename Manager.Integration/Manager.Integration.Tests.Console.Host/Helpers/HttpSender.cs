@@ -13,8 +13,6 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 		public async Task<HttpResponseMessage> PostAsync(Uri url,
 		                                                 object data)
 		{
-			this.Log().DebugWithLineNumber("Start.");
-
 			try
 			{
 				using (var client = new HttpClient())
@@ -22,25 +20,15 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 					var sez = JsonConvert.SerializeObject(data);
 
 					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-					this.Log().DebugWithLineNumber("Start Post Async: " + url);
-
 					var response =
 						await client.PostAsync(url,
 						                       new StringContent(sez,
 						                                         Encoding.Unicode,
 						                                         "application/json"))
 							.ConfigureAwait(false);
-
-
-					this.Log().DebugWithLineNumber("Finihed Post Async: " + url);
-
-					this.Log().DebugWithLineNumber("Finished.");
-
 					return response;
 				}
 			}
-
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
@@ -71,34 +59,33 @@ namespace Manager.IntegrationTest.Console.Host.Helpers
 
 		public async Task<HttpResponseMessage> DeleteAsync(Uri url)
 		{
-			this.Log().DebugWithLineNumber("Start.");
-
 			try
 			{
 				using (var client = new HttpClient())
 				{
 					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-					this.Log().DebugWithLineNumber("Start Delete Async: " + url);
-
 					var response =
 						await client.DeleteAsync(url).ConfigureAwait(false);
-
-
-					this.Log().DebugWithLineNumber("Finished Delete Async: " + url);
-
-					this.Log().DebugWithLineNumber("Finished.");
-
 					return response;
 				}
 			}
-
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message,
 				                               exp);
 
 				throw;
+			}
+		}
+
+		public async Task<HttpResponseMessage> GetAsync(Uri url)
+		{
+			//Only used for ping the manager, don't error log
+			using (var client = new HttpClient())
+			{
+				var response = await client.GetAsync(url).ConfigureAwait(false);
+				return response;
 			}
 		}
 	}

@@ -18,6 +18,11 @@ namespace Manager.Integration.Test.Helpers
 			_uriTemplateBuilder = new UriBuilder(managerLocationUri);
 		}
 
+		public Uri GetPingUri()
+		{
+			return CreateUri(ManagerRouteConstants.Ping);
+		}
+
 		public Uri GetAddToJobQueueUri()
 		{
 			return CreateUri(ManagerRouteConstants.Job);

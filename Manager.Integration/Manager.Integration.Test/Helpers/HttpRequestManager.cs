@@ -35,5 +35,29 @@ namespace Manager.Integration.Test.Helpers
 			var content = await result.Content.ReadAsStringAsync();
 			return content;
 		}
+
+		public bool IsManagerUp()
+		{
+			try
+			{
+				var result = HttpSender.GetAsync(MangerUriBuilder.GetPingUri()).Result;
+				if (result.IsSuccessStatusCode)
+				{
+					return true;
+				}
+				else
+				{
+					//manager did not respond OK on ping
+					return false;
+				}
+				
+			}
+			catch
+			{
+				//manager did not respond
+				return false;
+			}
+			
+		} 
 	}
 }
