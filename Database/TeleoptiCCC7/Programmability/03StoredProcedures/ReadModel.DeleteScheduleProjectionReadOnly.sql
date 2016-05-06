@@ -24,7 +24,7 @@ DECLARE @updateCount int
 SET @updateCount = 0
 
 SELECT @existingScheduleLoadedTime = ScheduleLoadedTime
-FROM ReadModel.PersonScheduleProjectionLoadTime
+FROM ReadModel.PersonScheduleProjectionLoadTime WITH (UPDLOCK)
 WHERE PersonId = @PersonId
 AND BelongsToDate = @BelongsToDate
 
