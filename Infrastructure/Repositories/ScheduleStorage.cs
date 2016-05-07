@@ -333,17 +333,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "ScheduleDictionary")]
         private static void removeSchedulesOfPersonsNotInOrganization(IScheduleDictionary scheduleDictionary, IList<IPerson> personsInOrganization)
         {
-            foreach (var person in personsInOrganization)
-            {
-                if (!scheduleDictionary[person].Person.Equals(person))
-                    throw new InvalidDataException("ScheduleDictionary could not be initiated");
-            }
+			foreach (var person in personsInOrganization)
+			{
+				if (!scheduleDictionary[person].Person.Equals(person))
+					throw new InvalidDataException("ScheduleDictionary could not be initiated");
+			}
 
-            // Clean ScheduleDictionary from all persons not present in PersonsInOrganization
+			// Clean ScheduleDictionary from all persons not present in PersonsInOrganization
+			var personIds = personsInOrganization.ToDictionary(p => p.Id);
             var personsToRemove = new List<IPerson>();
-            foreach (IPerson person in scheduleDictionary.Keys)
+            foreach (var person in scheduleDictionary.Keys)
             {
-                if (!personsInOrganization.Contains(person))
+                if (!personIds.ContainsKey(person.Id))
                     personsToRemove.Add(person);
             }
             foreach (var person in personsToRemove)
