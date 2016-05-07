@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -146,8 +147,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IScheduleDictionary retDic;
 
             //setup fake objects
-            IPerson per1 = PersonFactory.CreatePerson("sdvfbvv");
-            IPerson per2 = PersonFactory.CreatePerson("bdfbvdfbd");
+            IPerson per1 = PersonFactory.CreatePerson("sdvfbvv").WithId();
+            IPerson per2 = PersonFactory.CreatePerson("bdfbvdfbd").WithId();
             persons.Add(per1);
             persons.Add(per2);
 
@@ -223,10 +224,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IScheduleDictionary retDic;
 
             //setup fake objects
-            IPerson person1 = PersonFactory.CreatePerson("sdvfbvv");
+            IPerson person1 = PersonFactory.CreatePerson("sdvfbvv").WithId();
             visiblePeople.Add(person1);
-            IPerson person2 = PersonFactory.CreatePerson("yyyyyy");
-            IPerson person3 = PersonFactory.CreatePerson("xxxxxx");
+            IPerson person2 = PersonFactory.CreatePerson("yyyyyy").WithId();
+            IPerson person3 = PersonFactory.CreatePerson("xxxxxx").WithId();
             peopleInOrganization.Add(person1);
             peopleInOrganization.Add(person2);
             peopleInOrganization.Add(person3);
@@ -274,10 +275,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IScheduleDictionary retDic;
 
 			//setup fake objects
-			IPerson person1 = PersonFactory.CreatePerson("sdvfbvv");
+			IPerson person1 = PersonFactory.CreatePerson("sdvfbvv").WithId();
 			visiblePeople.Add(person1);
-			IPerson person2 = PersonFactory.CreatePerson("yyyyyy");
-			IPerson person3 = PersonFactory.CreatePerson("xxxxxx");
+			IPerson person2 = PersonFactory.CreatePerson("yyyyyy").WithId();
+			IPerson person3 = PersonFactory.CreatePerson("xxxxxx").WithId();
 			peopleInOrganization.Add(person1);
 			peopleInOrganization.Add(person2);
 			peopleInOrganization.Add(person3);
@@ -327,7 +328,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IScheduleDictionary retDic;
 
 			//setup fake objects
-			IPerson person3 = PersonFactory.CreatePerson("xxxxxx");
+			IPerson person3 = PersonFactory.CreatePerson("xxxxxx").WithId();
 			peopleInOrganization.Add(person3);
 			IPersonProvider personsProvider = new PersonsInOrganizationProvider(peopleInOrganization) { DoLoadByPerson = true };
 			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
@@ -411,7 +412,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IScheduleDictionary retDic;
 
             //setup fake objects
-            IPerson person1 = PersonFactory.CreatePerson("sdvfbvv");
+            IPerson person1 = PersonFactory.CreatePerson("sdvfbvv").WithId();
             visiblePeople.Add(person1);
             
             var pAss1 = addPersonAssignment(person1, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
@@ -477,7 +478,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IScheduleDictionary retDic;
 
             //setup fake objects
-            IPerson per1 = PersonFactory.CreatePerson("sdfpojsdpofjk");
+            IPerson per1 = PersonFactory.CreatePerson("sdfpojsdpofjk").WithId();
             persons.Add(per1);
 
             addRotation(per1);
