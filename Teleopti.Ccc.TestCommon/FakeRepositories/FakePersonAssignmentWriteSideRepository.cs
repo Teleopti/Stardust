@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer
+namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonAssignmentWriteSideRepository :
 		IEnumerable<IPersonAssignment>,

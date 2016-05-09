@@ -314,7 +314,6 @@
     <Compile Include="ApplicationLayer\ModifyPersonAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandTest.cs" />
     <Compile Include="ApplicationLayer\EventTrackerTest.cs" />
-    <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\MoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="Logon\DataSourceAspectTest.cs" />

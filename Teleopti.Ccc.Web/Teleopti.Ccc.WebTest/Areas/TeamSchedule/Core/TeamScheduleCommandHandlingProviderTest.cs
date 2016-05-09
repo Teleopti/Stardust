@@ -18,14 +18,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 {
-	[TestFixture, TeamScheduleTest, Ignore]
+	[TestFixture, TeamScheduleTest]
 	public class TeamScheduleCommandHandlingProviderTest
 	{
 		public ITeamScheduleCommandHandlingProvider Target;
 		public FakeActivityCommandHandler ActivityCommandHandler;
 		public FakePersonRepository PersonRepository;
 		public Global.FakePermissionProvider PermissionProvider;
-		//public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
+		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Messages.Contains(Resources.WriteProtectSchedule).Should().Be.True();
 		}
-        /*
+        
 		[Test]
 		public void ShouldInvokeMoveShiftLayerCommandWithPermission()
 		{
@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.ToArray()[1])).NewStartTimeInUtc.Should().Be(TimeZoneHelper.ConvertToUtc(input.StartTime, TimeZoneInfo.Local));
 			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.ToArray()[2])).NewStartTimeInUtc.Should().Be(TimeZoneHelper.ConvertToUtc(input.StartTime, TimeZoneInfo.Local).Add(TimeSpan.FromHours(2)));
 
-		}*/
+		}
 
 		[Test]
 		public void ShouldReturnNoWriteProtectedAgentsIfHasModifyWriteProtectedSchedulePermission()
