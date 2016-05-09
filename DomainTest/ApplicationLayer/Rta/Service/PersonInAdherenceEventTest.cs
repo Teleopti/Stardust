@@ -24,51 +24,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPublishWhenNoStaffingEffect()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode",
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithRule("statecode", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
-			@event.PersonId.Should().Be(personId);
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Single()
+				.PersonId.Should().Be(personId);
 		}
 		
 		[Test]
 		public void ShouldNotPublishIfStillInAdherence()
 		{
-			var state1 = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode1"
-			};
-			var state2 = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode2"
-			};
 			var activityId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state1)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithRule("statecode1", activityId, 0)
 				.WithRule("statecode2", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
-			Target.SaveState(state1);
-			Target.SaveState(state2);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode1"
+			});
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode2"
+			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
@@ -91,8 +87,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "phone"
 			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
-			@event.Timestamp.Should().Be("2014-10-20 9:05".Utc());
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Single()
+				.Timestamp.Should().Be("2014-10-20 9:05".Utc());
 		}
 
 		[Test]
@@ -113,8 +110,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "phone"
 			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
-			@event.Timestamp.Should().Be("2014-10-20 9:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Single()
+				.Timestamp.Should().Be("2014-10-20 9:00".Utc());
 		}
 
 		[Test]
@@ -136,29 +134,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			var @event = Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single();
-			@event.BusinessUnitId.Should().Be(businessUnitId);
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
+				.Single()
+				.BusinessUnitId.Should().Be(businessUnitId);
 		}
 
 		[Test]
 		public void ShouldPublishWithTeamId()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode",
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, teamId, null)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithRule("statecode", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
 				.Single()
@@ -168,22 +165,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPublishWithSiteId()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode",
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId, null, null, siteId)
 				.WithSchedule(personId, activityId, "2014-10-20 8:00", "2014-10-20 10:00")
 				.WithRule("statecode", activityId, 0);
 			Now.Is("2014-10-20 9:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode",
+			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
 				.Single()
@@ -196,10 +191,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var person = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-					.WithUser("usercode", person)
-					.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
-					.WithRule("logged off", phone, -1)
-					.WithRule("logged off", null, 0)
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2015-11-25 8:00", "2015-11-25 12:00")
+				.WithRule("logged off", phone, -1)
+				.WithRule("logged off", null, 0)
 				;
 			Now.Is("2015-11-24 17:00");
 			Target.SaveState(new ExternalUserStateForTest
