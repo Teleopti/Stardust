@@ -5,6 +5,26 @@ using Teleopti.Ccc.Web.TestApplicationsCommon;
 
 namespace Teleopti.Ccc.Web.Loadtest
 {
+	public class SimulateMyTimeScheduleTraffic : TrafficSimulatorBase
+	{
+		public TimeSpan GoToMyTimeScheduleController()
+		{
+			var stopwatch = new Stopwatch();
+			stopwatch.Start();
+			var message = new HttpRequestMessage(HttpMethod.Get, "mytime#Schedule/Week");
+			var response = HttpClient.SendAsync(message).Result;
+			if (!response.IsSuccessStatusCode)
+			{
+				throw new Exception("Unable to go to MyTime Schedule");
+			}
+			var content = response.Content.ReadAsStringAsync().Result;
+			if (!content.Contains("Authentication/SignOut"))
+				throw new Exception("Unable to go to MyTime Schedule");
+			stopwatch.Stop();
+			return stopwatch.Elapsed;
+		}
+	}
+
 	public class SimulateReportsTraffic : TrafficSimulatorBase
 	{
 		public TimeSpan GoToReportsController()
