@@ -179,6 +179,7 @@
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveShiftLayerCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\MoveShiftLayerCommandHandler.cs" />
     <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestCancelService.cs" />

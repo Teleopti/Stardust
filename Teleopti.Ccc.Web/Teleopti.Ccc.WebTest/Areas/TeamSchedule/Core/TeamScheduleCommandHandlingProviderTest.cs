@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.DomainTest.ApplicationLayer;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.UserTexts;
@@ -23,6 +26,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public FakeActivityCommandHandler ActivityCommandHandler;
 		public FakePersonRepository PersonRepository;
 		public Global.FakePermissionProvider PermissionProvider;
+		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
+		public FakeCurrentScenario CurrentScenario;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		[Test]
 		public void ShouldInvokeAddActivityCommandHandleWithPermission()
@@ -214,9 +220,19 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		{
 			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
 			PersonRepository.Has(person);
 			var date = new DateOnly(2016, 4, 16);
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			personAss.ShiftLayers.ForEach(x => x.WithId());
+			PersonAssignmentRepo.Add(personAss);
+			
 			var input = new MoveActivityFormData
 			{
 				TrackedCommandInfo = new TrackedCommandInfo(),
@@ -225,7 +241,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 					new PersonActivityItem
 					{
 						PersonId = person.Id.Value,
-						ShiftLayerIds = new List<Guid> {new Guid()}
+						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value}
 					}
 				},
 				Date = date,
@@ -235,6 +251,91 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			Target.MoveActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.First())).NewStartTimeInUtc.Should().Be(input.StartTime);
+
+		}
+		[Test]
+		public void ShouldCovertNewStartToUTC()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			personAss.ShiftLayers.ForEach(x => x.WithId());
+			PersonAssignmentRepo.Add(personAss);
+			
+			var input = new MoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value}
+					}
+				},
+				Date = date,
+				StartTime = new DateTime(2016, 4, 16, 10, 0, 0)
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			Target.MoveActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.First())).NewStartTimeInUtc.Should().Be(TimeZoneHelper.ConvertToUtc(input.StartTime, TimeZoneInfo.Local));
+
+		}
+		[Test]
+		public void ShouldInvokeCorrectCommandWithMultipleInputLayers()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Local);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			personAss.AddActivity(personAss.ShiftLayers.First().Payload, new DateTimePeriod(2016, 4, 16, 7, 2016, 4, 16, 10));
+			personAss.AddActivity(personAss.ShiftLayers.First().Payload, new DateTimePeriod(2016, 4, 16, 9, 2016, 4, 16, 10));
+			personAss.ShiftLayers.ForEach(x => x.WithId());
+			PersonAssignmentRepo.Add(personAss);
+			
+			var input = new MoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value, personAss.ShiftLayers.ToArray()[1].Id.Value, personAss.ShiftLayers.ToArray()[2].Id.Value}
+					}
+				},
+				Date = date,
+				StartTime = new DateTime(2016, 4, 16, 10, 0, 0)
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			Target.MoveActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(3);
+			
+			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.First())).NewStartTimeInUtc.Should().Be(TimeZoneHelper.ConvertToUtc(input.StartTime, TimeZoneInfo.Local).Add(TimeSpan.FromHours(1)));
+			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.ToArray()[1])).NewStartTimeInUtc.Should().Be(TimeZoneHelper.ConvertToUtc(input.StartTime, TimeZoneInfo.Local));
+			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.ToArray()[2])).NewStartTimeInUtc.Should().Be(TimeZoneHelper.ConvertToUtc(input.StartTime, TimeZoneInfo.Local).Add(TimeSpan.FromHours(2)));
+
 		}
 
 		[Test]
@@ -337,9 +438,11 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>, IHandleCommand<RemoveActivityCommand>, IHandleCommand<MoveShiftLayerCommand>
 	{
 		private int calledCount;
+		private IList<ITrackableCommand> commands = new List<ITrackableCommand>(); 
 		public void Handle(AddActivityCommand command)
 		{
 			calledCount++;
+			commands.Add(command);
 		}
 
 		public int CalledCount
@@ -347,6 +450,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			get { return calledCount; }
 		}
 
+		public IList<ITrackableCommand> CalledCommands
+		{
+			get { return commands; }
+		} 
 		public void ResetCalledCount()
 		{
 			calledCount = 0;
@@ -355,11 +462,13 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		public void Handle(RemoveActivityCommand command)
 		{
 			calledCount++;
+			commands.Add(command);
 		}
 
 		public void Handle(MoveShiftLayerCommand command)
 		{
 			calledCount++;
+			commands.Add(command);
 		}
 	}
 }

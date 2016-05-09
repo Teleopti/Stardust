@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.DomainTest.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -48,6 +49,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FullPermission>().For<IAuthorization>();
+			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
+			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 
 		}
 	}

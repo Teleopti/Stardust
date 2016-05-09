@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Castle.Core.Internal;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -19,13 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonRepository _personRepository;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IMoveShiftLayerCommandHelper _helper;
 
-		public TeamScheduleCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository, IPermissionProvider permissionProvider)
+		public TeamScheduleCommandHandlingProvider(ICommandDispatcher commandDispatcher, ILoggedOnUser loggedOnUser, IPersonRepository personRepository, IPermissionProvider permissionProvider, IMoveShiftLayerCommandHelper helper)
 		{
 			_commandDispatcher = commandDispatcher;
 			_loggedOnUser = loggedOnUser;
 			_personRepository = personRepository;
 			_permissionProvider = permissionProvider;
+			_helper = helper;
 		}
 
 		public List<FailActionResult> AddActivity(AddActivityFormData input)
@@ -123,6 +126,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				{DefinedRaptorApplicationFunctionPaths.MoveActivity, Resources.NoPermissionMoveAgentActivity}
 			};
+			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, userTimezone);
 			var result = new List<FailActionResult>();
 			foreach (var personActivity in input.PersonActivities)
 			{
@@ -133,24 +138,32 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					result.Add(personError);
 					continue;
 				}
-				foreach (var shiftLayerId in personActivity.ShiftLayerIds)
+				var layerToMoveTimeMap = _helper.GetCorrectNewStartForLayersForPerson(person, input.Date, personActivity.ShiftLayerIds,
+					newStartTimeInUtc);
+				if (personActivity.ShiftLayerIds.Any(x => !layerToMoveTimeMap.ContainsKey(x)))
 				{
-					var command = new MoveShiftLayerCommand
-					{
-						AgentId = personActivity.PersonId,
-						NewStartTimeInUtc = input.StartTime,
-						ScheduleDate = input.Date,
-						ShiftLayerId = shiftLayerId,
-						TrackedCommandInfo =
-							input.TrackedCommandInfo ??
-							new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()}
-					};
-					_commandDispatcher.Execute(command);
-					if (command.ErrorMessages != null && command.ErrorMessages.Any())
-					{
-						personError.Messages.AddRange(command.ErrorMessages);
-					}
+					personError.Messages.Add(Resources.NoShiftsFound);
 				}
+				layerToMoveTimeMap
+					.ForEach(
+						pl =>
+						{
+							var command = new MoveShiftLayerCommand
+							{
+								AgentId = personActivity.PersonId,
+								NewStartTimeInUtc = pl.Value,
+								ScheduleDate = input.Date,
+								ShiftLayerId = pl.Key,
+								TrackedCommandInfo =
+									input.TrackedCommandInfo ??
+									new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()}
+							};
+							_commandDispatcher.Execute(command);
+							if (command.ErrorMessages != null && command.ErrorMessages.Any())
+							{
+								personError.Messages.AddRange(command.ErrorMessages);
+							}
+						});
 				if (personError.Messages.Any())
 				{
 					result.Add(personError);
