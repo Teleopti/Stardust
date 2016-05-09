@@ -43,15 +43,16 @@
 			svc.resetSchedulesForPeople = function (personIds) {
 				angular.forEach(personIds, function (person) {
 					for (var i = 0; i < svc.groupScheduleVm.Schedules.length; i++) {
-						if (person == svc.groupScheduleVm.Schedules[i].PersonId) {
-							svc.groupScheduleVm.Schedules[i].IsSelected = false;
-							var shiftsForSelectedDate = svc.groupScheduleVm.Schedules[i].Shifts.filter(function (shift) {
-								return shift.Date.isSame(svc.groupScheduleVm.Schedules[i].Date, 'day');
+						var schedule = svc.groupScheduleVm.Schedules[i];
+						if (person == schedule.PersonId) {
+							schedule.IsSelected = false;
+							var shiftsForSelectedDate = schedule.Shifts.filter(function (shift) {
+								return shift.Date.isSame(schedule.Date, 'day');
 							});
 							if (shiftsForSelectedDate.length > 0) {
 								angular.forEach(shiftsForSelectedDate[0].Projections, function (projection) {
 									projection.Selected = false;
-								})
+								});
 							}
 							break;
 						}
