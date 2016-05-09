@@ -14417,4 +14417,8 @@ Help us improve your experience by sending an error report</value>
     <value>Selected agents:</value>
     <comment>Number of selected agents</comment>
   </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>Can not move multiple acivities for agent {0}.</value>
+    <comment>Can not move multiple activities for agent message in wfm/myteam.</comment>
+  </data>
 </root>

@@ -8,14 +8,14 @@
 			scope: {
 				configurations: '='
 			},
-			controller: ['$scope', '$mdSidenav', '$mdComponentRegistry', 'PersonSelection', 'ShortCuts', 'keyCodes', teamscheduleCommandCtrl],
+			controller: ['$scope', '$mdSidenav', '$mdComponentRegistry', '$translate', 'PersonSelection', 'ShortCuts', 'keyCodes', 'NoticeService', teamscheduleCommandCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/teamscheduleCommand.html'
 		};
 	}
 
-	function teamscheduleCommandCtrl($scope, $mdSidenav, $mdComponentRegistry, personSelectionSvc, shortCuts, keyCodes) {
+	function teamscheduleCommandCtrl($scope, $mdSidenav, $mdComponentRegistry, $translate, personSelectionSvc, shortCuts, keyCodes, noticeService) {
 		var vm = this;
 		var parentVm = $scope.$parent.vm;
 
@@ -24,7 +24,7 @@
 				label: "AddAbsence",
 				shortcut: "Alt+A",
 				panelName: 'report-absence',
-				action: function () {vm.setCurrentCommand('AddAbsence');parentVm.addAbsence();},
+				action: function () { vm.setCurrentCommand('AddAbsence'); parentVm.addAbsence(); },
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
 				visible: function () { return vm.canActiveAddAbsence(); }
 			},
@@ -33,7 +33,7 @@
 				shortcut: "Alt+T",
 				panelName: "add-activity",
 				action: function () {
-					 vm.setCurrentCommand('AddActivity'); parentVm.addActivity();
+					vm.setCurrentCommand('AddActivity'); parentVm.addActivity();
 				},
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
 				visible: function () { return vm.canActiveAddActivity(); }
@@ -42,17 +42,15 @@
 				label: "MoveActivity",
 				shortcut: "Alt+M",
 				panelName: "move-activity",
-				action: function () {
-					 vm.setCurrentCommand('MoveActivity'); parentVm.moveActivity();
-				},
-				clickable: function() { return vm.canMoveActivity(); },
+				action: function () { vm.moveActivityAction(); },
+				clickable: function () { return vm.canMoveActivity(); },
 				visible: function () { return vm.canActiveMoveActivity(); }
 			},
 			{
 				label: "SwapShifts",
 				shortcut: "Alt+S",
 				panelName: "", // Leave empty if not creating a mdSidenav panel
-				action: function() {vm.setCurrentCommand('SwapShifts');parentVm.swapShifts();},
+				action: function () { vm.setCurrentCommand('SwapShifts'); parentVm.swapShifts(); },
 				clickable: function () { return personSelectionSvc.canSwapShifts(); },
 				visible: function () { return vm.canActiveSwapShifts(); }
 			},
@@ -60,7 +58,7 @@
 				label: "RemoveAbsence",
 				shortcut: "Alt+R",
 				panelName: "", // Leave empty if not creating a mdSidenav panel
-				action: function() {vm.setCurrentCommand('RemoveAbsence');parentVm.confirmRemoveAbsence();},
+				action: function () { vm.setCurrentCommand('RemoveAbsence'); parentVm.confirmRemoveAbsence(); },
 				clickable: function () { return vm.canRemoveAbsence(); },
 				visible: function () { return vm.canActiveRemoveAbsence(); }
 			},
@@ -78,7 +76,7 @@
 			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
 		};
 
-		vm.canActiveAddAbsence = function() {
+		vm.canActiveAddAbsence = function () {
 			return vm.toggles.AbsenceReportingEnabled
 				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
 		};
@@ -87,15 +85,15 @@
 			return vm.toggles.MoveActivityEnabled && vm.permissions.HasMoveActivityPermission;
 		};
 
-		vm.canActiveRemoveAbsence = function() {
+		vm.canActiveRemoveAbsence = function () {
 			return vm.toggles.RemoveAbsenceEnabled && vm.permissions.IsRemoveAbsenceAvailable;
 		};
 
-		vm.canActiveRemoveActivity = function() {
+		vm.canActiveRemoveActivity = function () {
 			return vm.toggles.RemoveActivityEnabled && vm.permissions.HasRemoveActivityPermission;
 		};
 
-		vm.canActiveSwapShifts = function() {
+		vm.canActiveSwapShifts = function () {
 			return vm.toggles.SwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
 		};
 
@@ -111,6 +109,26 @@
 
 		vm.canRemoveActivity = function () {
 			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
+		};
+
+		vm.moveActivityAction = function () {
+			var enableMove = true, message, notAllowNameList = '',
+				personList = personSelectionSvc.getSelectedPersonInfoList();
+
+			personList.forEach(function (agent) {
+				if (agent.selectedActivities.length > 1) {
+					enableMove = false;
+					notAllowNameList += agent.name + ', ';
+				}
+			});
+			if (enableMove) {
+				vm.setCurrentCommand('MoveActivity');
+				parentVm.moveActivity();
+			} else {
+				message = $translate.instant('CanNotMoveMultipleAcivitiesForAgent').replace('{0}', notAllowNameList.substring(0, notAllowNameList.length - 2));
+				noticeService.error(message, null, true);
+			}
+			$scope.$apply();
 		};
 
 		vm.toggleCommandState = function (menuName) {
@@ -131,7 +149,7 @@
 			return undefined;
 		};
 
-		$scope.$watch(function() { return vm.configurations.currentCommandName; }, function (newValue, oldValue) {
+		$scope.$watch(function () { return vm.configurations.currentCommandName; }, function (newValue, oldValue) {
 			newValue === null && vm.setCurrentCommand(newValue);
 		});
 

@@ -4971,6 +4971,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not move multiple acivities for agent {0}..
+        /// </summary>
+        public static string CanNotMoveMultipleAcivitiesForAgent {
+            get {
+                return ResourceManager.GetString("CanNotMoveMultipleAcivitiesForAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can not add overtime without multiplicator definition sets.
         /// </summary>
         public static string CanNotOvertimeWithoutMultiplicatorDefinitionSets {
