@@ -11,7 +11,7 @@ namespace Stardust.Node
 {
 	public class NodeController : ApiController
 	{
-		private const string JobIdIsInvalid = "Job Id is invalid.";
+		private const string JobIdIsInvalid = "Job Id is invalid."; 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (NodeController));
 
 		private readonly IWorkerWrapper _workerWrapper;
