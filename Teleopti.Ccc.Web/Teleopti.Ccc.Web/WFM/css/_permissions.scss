@@ -136,6 +136,7 @@
 
 .myRoleLock{
 	cursor: not-allowed;
+	pointer-events: none;
 	i{
 		@extend .option-locked;
 	}
