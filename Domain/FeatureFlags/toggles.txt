@@ -89,6 +89,7 @@ Wfm_Requests_ApproveDeny_36297 = true
 Wfm_Requests_Waitlist_36232 = true
 Wfm_Requests_Cancel_37741 = DEV
 Wfm_Requests_Cancel_Agent_38055 = DEV
+Wfm_Requests_Filtering_37748 = RC
 
 Wfm_Intraday_38074 = RC
 
