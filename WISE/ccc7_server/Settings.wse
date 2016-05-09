@@ -596,6 +596,11 @@ item: Insert Line into Text File
 end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(NEXT_ACTIVITY_TIME_TO_STAY)|30
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(WEB_DEPLOY)|true
   Line Number=0
 end
