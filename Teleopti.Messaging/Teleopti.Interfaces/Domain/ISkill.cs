@@ -210,5 +210,9 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		void ChangeName(string name);
 
+	    void SetCascadingIndex(IList<ISkill> cascadingSkills);
+	    void ClearCascadingIndex();
+		int? CascadingIndex { get; }
+	    bool IsCascading();
     }
 }

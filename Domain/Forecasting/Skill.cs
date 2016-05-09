@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private Percent _overstaffingFactor = new Percent(.5);
 	    private int _maxParallelTasks;
 
-        public Skill()
+	    public Skill()
         {
         }
 
@@ -156,7 +156,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_name = name;
 		}
 
-        public virtual string Name
+	    public void SetCascadingIndex(IList<ISkill> cascadingSkills)
+	    {
+		    CascadingIndex = cascadingSkills.IndexOf(this) + 1;
+	    }
+
+	    public void ClearCascadingIndex()
+	    {
+		    CascadingIndex = null;
+	    }
+
+	    public virtual string Name
         {
             get { return _name; }
         }
@@ -445,7 +455,18 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _isDeleted; }
         }
 
-        #endregion
+	    public int? CascadingIndex { get; private set; }
+	    public bool IsCascading()
+	    {
+		    return CascadingIndex.HasValue;
+	    }
+
+	    public void SetCascadingIndex_UseFromTestOnly(int index)
+	    {
+		    CascadingIndex = index;
+	    }
+
+	    #endregion
 
         #region IForecastTemplateOwner Members
 
