@@ -44,7 +44,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 			
 
 			var jobQueueItem =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(5)).First();
+				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromMinutes(5)).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 			
 			waitForJobToStartEvent.Wait(TimeSpan.FromMinutes(2));

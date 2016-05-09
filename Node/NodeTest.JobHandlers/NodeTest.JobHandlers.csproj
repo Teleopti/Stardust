@@ -51,29 +51,18 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LongRunningJobWorker.cs" />
-    <Compile Include="LongRunningJobCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FailingJobCode.cs" />
     <Compile Include="FailingJobParams.cs" />
-    <Compile Include="LongRunningJobParams.cs" />
-    <Compile Include="FastJobCode.cs" />
-    <Compile Include="FastJobParams.cs" />
-    <Compile Include="TestJobTimerProgress.cs" />
-    <Compile Include="TestJobTimerJobCode.cs" />
-    <Compile Include="TestJobTimerParams.cs" />
-    <Compile Include="TestJobTimerWorker.cs" />
+    <Compile Include="TestJobProgress.cs" />
+    <Compile Include="TestJobCode.cs" />
+    <Compile Include="TestJobParams.cs" />
+    <Compile Include="TestJobWorker.cs" />
     <Compile Include="TestReportProgressJobWorker.cs" />
     <Compile Include="TestReportProgressJobProgress.cs" />
     <Compile Include="TestReportProgressJobParams.cs" />
     <Compile Include="TestReportProgressJobCode.cs" />
-    <Compile Include="TestJobParams.cs" />
-    <Compile Include="FastJobProgress.cs" />
-    <Compile Include="TestJobProgress.cs" />
-    <Compile Include="TestJobCode.cs" />
     <Compile Include="FailingJobWorker.cs" />
-    <Compile Include="FastJobWorker.cs" />
-    <Compile Include="TestJobWorker.cs" />
     <Compile Include="WorkerModule.cs" />
   </ItemGroup>
   <ItemGroup>

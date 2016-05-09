@@ -38,7 +38,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 
 
 			var jobQueueItem =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromSeconds(5)).First();
+				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(5)).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 			
 
@@ -88,7 +88,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			
 
 			var jobQueueItem =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromMinutes(1)).First();
+				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromMinutes(1)).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 
 
@@ -192,7 +192,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 
 
 			var jobQueueItem =
-				JobHelper.GenerateTestJobTimerRequests(1, TimeSpan.FromSeconds(5)).First();
+				JobHelper.GenerateTestJobRequests(1, TimeSpan.FromSeconds(5)).First();
 			var jobId = HttpRequestManager.AddJob(jobQueueItem);
 			
 

@@ -946,7 +946,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 					_tasks.Add(new Task<HttpResponseMessage>(() =>
 						{
 							var testJobTimerParams =
-							new TestJobTimerParams("Test job name " + i1, 
+							new TestJobParams("Test job name " + i1, 
 													TimeSpan.FromSeconds(randomTimeSpan));
 
 						var jobParamsToJson = 
@@ -956,7 +956,7 @@ namespace Manager.Integration.Test.WPF.ViewModels
 							{
 							Name = "Job Name " + i1,
 								Serialized = jobParamsToJson,
-								Type = "NodeTest.JobHandlers.TestJobTimerParams",
+								Type = "NodeTest.JobHandlers.TestJobParams",
 								CreatedBy = "WPF Client"
 							};
 

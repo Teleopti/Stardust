@@ -1,15 +1,17 @@
-﻿namespace Manager.Integration.Test.Params
+﻿using System;
+
+namespace Manager.Integration.Test.Params
 {
 	public class TestJobParams
 	{
-		public TestJobParams(string dummy,
-		                     string name)
+		public TestJobParams(string name,
+								 TimeSpan duration)
 		{
 			Name = name;
-			Dummy = dummy;
+			Duration = duration;
 		}
 
-		public string Dummy { get; private set; }
 		public string Name { get; private set; }
+		public TimeSpan Duration { get; set; }
 	}
 }

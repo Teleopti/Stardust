@@ -24,8 +24,8 @@ namespace NodeTest
 		[SetUp]
 		public void SetUp()
 		{
-			var parameters = new TestJobParams("hejhopp",
-			                                   "i lingonskogen");
+			var parameters = new TestJobParams("Test Job",
+			                                   TimeSpan.FromSeconds(1));
 
 			var ser = JsonConvert.SerializeObject(parameters);
 
@@ -243,8 +243,8 @@ namespace NodeTest
 				Configuration = new HttpConfiguration()
 			};
 
-			var parameters = new TestJobParams("hejhopp",
-											   "i lingonskogen");
+			var parameters = new TestJobParams("Test Job",
+			                                   TimeSpan.FromSeconds(1));
 			var ser = JsonConvert.SerializeObject(parameters);
 
 			var jobToDo2 = new JobQueueItemEntity

@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Autofac;
 using NodeTest.JobHandlers;
 using NUnit.Framework;
@@ -30,8 +31,8 @@ namespace NodeTest
 		{
 			var invokehandler = Container.Resolve<InvokeHandler>();
 
-			invokehandler.Invoke(new TestJobParams("Dummy data",
-			                                       "Name data"),
+			invokehandler.Invoke(new TestJobParams("Test Job",
+			                                       TimeSpan.FromSeconds(1)),
 			                     new CancellationTokenSource(),
 			                     _=>{});
 		}

@@ -1,15 +1,18 @@
-﻿namespace NodeTest.JobHandlers
+﻿using System;
+
+namespace NodeTest.JobHandlers
 {
 	public class TestJobParams
 	{
-		public TestJobParams(string dummy,
-		                     string name)
+		public TestJobParams(string name, 
+								 TimeSpan duration)
 		{
 			Name = name;
-			Dummy = dummy;
+			Duration = duration;
 		}
 
-		public string Dummy { get; private set; }
 		public string Name { get; private set; }
+
+		public TimeSpan Duration { get; set; }
 	}
 }

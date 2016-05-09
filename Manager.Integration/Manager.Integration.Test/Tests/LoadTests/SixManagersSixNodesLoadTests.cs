@@ -23,7 +23,7 @@ namespace Manager.Integration.Test.Tests.LoadTests
 			var manualResetEventSlim = new ManualResetEventSlim();
 
 			var createNewJobRequests =
-				JobHelper.GenerateTestJobTimerRequests(50, TimeSpan.FromSeconds(1));
+				JobHelper.GenerateTestJobRequests(50, TimeSpan.FromSeconds(1));
 			
 
 			var checkTablesInManagerDbTimer =

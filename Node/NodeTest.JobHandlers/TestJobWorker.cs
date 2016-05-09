@@ -16,7 +16,8 @@ namespace NodeTest.JobHandlers
 		public TestJobWorker(TestJobCode testJobCode)
 		{
 			_testJobCode = testJobCode;
-			Logger.DebugWithLineNumber("'Test Job Worker' class constructor called.");
+
+			Logger.DebugWithLineNumber("'Test Job Timer Worker' class constructor called.");
 		}
 
 		public CancellationTokenSource CancellationTokenSource { get; set; }
@@ -25,7 +26,7 @@ namespace NodeTest.JobHandlers
 		                   CancellationTokenSource cancellationTokenSource,
 		                   Action<string> sendProgress)
 		{
-			Logger.DebugWithLineNumber("'Test Job Worker' handle method called.");
+			Logger.DebugWithLineNumber("'Test Job Timer Worker' handle method called.");
 
 			CancellationTokenSource = cancellationTokenSource;
 

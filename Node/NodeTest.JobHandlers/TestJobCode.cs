@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 
 namespace NodeTest.JobHandlers
@@ -16,62 +17,47 @@ namespace NodeTest.JobHandlers
 			{
 				Text = "Starting job: " + message.Name
 			};
-
 			progress(jobProgress.Text);
-			// -----------------------------------------------------------
-			// Simulate execution step 1, will take 10 seconds.
-			// -----------------------------------------------------------
-			if (cancellationTokenSource.IsCancellationRequested)
-			{
-				jobProgress.Text = "Job " + message.Name + " has been cancelled before started.";
-				progress(jobProgress.Text);
-				cancellationTokenSource.Token.ThrowIfCancellationRequested();
-			}
-			else
-			{
-				Thread.Sleep(TimeSpan.FromSeconds(5));
 
-				jobProgress.Text = "(" + message.Name + ") First job step done";
-				progress(jobProgress.Text);
+			jobProgress = new TestJobProgress
+			{
+				Text = "Will execute for : " + message.Duration.TotalSeconds + " seconds."
+			};
+			progress(jobProgress.Text);
+
+			Stopwatch stopwatch = new Stopwatch();
+			stopwatch.Start();
+
+			int progressCounter = 0;
+
+			var sleep = 5;
+
+			while (stopwatch.Elapsed <= message.Duration)
+			{
+				progressCounter++;
 
 				if (cancellationTokenSource.IsCancellationRequested)
 				{
-					jobProgress.Text = "Job " + message.Name + " has been cancelled.";
-					progress(jobProgress.Text);
-
 					cancellationTokenSource.Token.ThrowIfCancellationRequested();
 				}
-				else
+				
+				jobProgress = new TestJobProgress
 				{
-					// -----------------------------------------------------------
-					// Simulate execution step 2.
-					// -----------------------------------------------------------
-					jobProgress.Text = "(" + message.Name + ") Second job step done";
-					progress(jobProgress.Text);
+					Text = "Progress loop number :" + progressCounter + ". Will sleep a couple of seconds."
+				};
+				progress(jobProgress.Text);
 
-					Thread.Sleep(TimeSpan.FromSeconds(5));
-
-					if (cancellationTokenSource.IsCancellationRequested)
-					{
-						jobProgress.Text = "Job " + message.Name + " has been cancelled.";
-						progress(jobProgress.Text);
-
-						cancellationTokenSource.Token.ThrowIfCancellationRequested();
-					}
-					else
-					{
-						// -----------------------------------------------------------
-						// Simulate execution step 3.
-						// -----------------------------------------------------------
-						jobProgress.Text = "(" + message.Name + ") Last job step done";
-						progress(jobProgress.Text);
-
-						// -----------------------------------------------------------
-						// Execution Finished.
-						// -----------------------------------------------------------
-					}
-				}
+				Thread.Sleep(TimeSpan.FromSeconds(sleep));
 			}
+
+			// -----------------------------------------------------------
+			// Finished execution.
+			// -----------------------------------------------------------
+			jobProgress = new TestJobProgress
+			{
+				Text = "Finished job: " + message.Name
+			};
+			progress(jobProgress.Text);
 		}
 	}
 }
