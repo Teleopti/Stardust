@@ -107,7 +107,7 @@
     <Compile Include="Database\DatabaseHelper.cs" />
     <Compile Include="Helpers\JobHelper.cs" />
     <Compile Include="Helpers\ManagerUriBuilder.cs" />
-    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNodeWait.cs" />
+    <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndOneNode.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeSixManagersAndSixNodes.cs" />
     <Compile Include="Initializers\InitialzeAndFinalizeOneManagerAndZeroNodes.cs" />
     <Compile Include="Models\Job.cs" />

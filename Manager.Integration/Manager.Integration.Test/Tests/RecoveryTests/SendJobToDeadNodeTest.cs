@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.Tests.RecoveryTests
 {
 	[TestFixture]
-	class SendJobToDeadNodeTest : InitialzeAndFinalizeOneManagerAndOneNodeWait
+	class SendJobToDeadNodeTest : InitialzeAndFinalizeOneManagerAndOneNode
 	{
 
 		[Test]

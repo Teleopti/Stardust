@@ -11,7 +11,7 @@ using NUnit.Framework;
 namespace Manager.Integration.Test.Tests.RecoveryTests
 {
 	[TestFixture]
-	internal class DetectNodeFailureTest : InitialzeAndFinalizeOneManagerAndOneNodeWait
+	internal class DetectNodeFailureTest : InitialzeAndFinalizeOneManagerAndOneNode
 	{
 		[Test]
 		public void ShouldConsiderNodeAsDeadWhenInactiveAndSetJobResultToFatal()
