@@ -88,8 +88,7 @@
 		};
 
 		vm.canActiveRemoveAbsence = function() {
-			return vm.toggles.RemoveAbsenceEnabled
-				&& vm.permissions.IsRemoveAbsenceAvailable;
+			return vm.toggles.RemoveAbsenceEnabled && vm.permissions.IsRemoveAbsenceAvailable;
 		};
 
 		vm.canActiveRemoveActivity = function() {
@@ -97,12 +96,13 @@
 		};
 
 		vm.canActiveSwapShifts = function() {
-			return vm.toggles.SwapShiftEnabled
-				&& vm.permissions.IsSwapShiftsAvailable;
+			return vm.toggles.SwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
 		};
 
 		vm.canMoveActivity = function () {
-			return personSelectionSvc.isAnyAgentSelected() && !(personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount > 0);
+			return personSelectionSvc.isAnyAgentSelected() &&
+				!(personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount > 0) &&
+				personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
 
 		vm.canRemoveAbsence = function () {
