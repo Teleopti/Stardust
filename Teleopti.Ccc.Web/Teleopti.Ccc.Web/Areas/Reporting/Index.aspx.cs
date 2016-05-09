@@ -1,23 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Threading;
 using System.Web.UI;
-using Microsoft.Reporting.WebForms;
 using Teleopti.Analytics.Parameters;
-using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting
 {
-	public partial class Index :Page
+	public partial class Index : Page
 	{
 		protected Guid ReportId;
 		protected Guid GroupPageCode;
-		protected bool UseOpenXml = false;
+		protected bool UseOpenXml;
 		protected override void OnInit(EventArgs e)
 		{
 			base.OnInit(e);
@@ -52,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				buttonShowExcel.ToolTip = UserTexts.Resources.ShowExcelReport;
 				buttonShowWord.ToolTip = UserTexts.Resources.ShowWordReport;
 				buttonShowPdf.ToolTip = UserTexts.Resources.ShowPDFReport;
-				
+
 			}
 		}
 
@@ -93,25 +88,25 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 		protected void ButtonShowClickPdf(object sender, ImageClickEventArgs e)
 		{
-			doIt("PDF");
+			doIt(ReportGenerator.ReportFormat.Pdf);
 		}
 
 		protected void ButtonShowClickExcel(object sender, ImageClickEventArgs e)
 		{
-			doIt(excelFormat());
-      }
+			doIt(UseOpenXml ? ReportGenerator.ReportFormat.ExcelOpenXml : ReportGenerator.ReportFormat.Excel);
+		}
 
 		protected void ButtonShowClickWord(object sender, ImageClickEventArgs e)
 		{
-			doIt(wordFormat());
+			doIt(UseOpenXml ? ReportGenerator.ReportFormat.WordOpenXml : ReportGenerator.ReportFormat.Word);
 		}
 
 		protected void ButtonShowClickImage(object sender, ImageClickEventArgs e)
 		{
-			doIt("Image");
+			doIt(ReportGenerator.ReportFormat.Image);
 		}
 
-		private void doIt(string format)
+		private void doIt(ReportGenerator.ReportFormat format)
 		{
 			try
 			{
@@ -130,93 +125,39 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			}
 		}
 
-		private void createReport(string format)
+		private void createReport(ReportGenerator.ReportFormat format)
 		{
 			if (!ParameterSelector.IsValid) return;
-			//aspnetForm.Target = "_blank";
-			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
+
+			var generatedReport = ReportGenerator.GenerateReport(ReportId, ParameterSelector.ConnectionString,
+				ParameterSelector.Parameters, ParameterSelector.ParameterTexts, ParameterSelector.UserCode,
+				ParameterSelector.BusinessUnitCode, format);
+
+			Response.Clear();
+			Response.ContentType = generatedReport.MimeType;
+
+			var uniqueFileName = generatedReport.ReportName + Guid.NewGuid();
+			var inlineOrAtt = getInlineOrAttachment(format);
+
+			Response.AddHeader("content-disposition",
+				inlineOrAtt + " filename=" + uniqueFileName + "." + generatedReport.Extension);
+			Response.BinaryWrite(generatedReport.Bytes); // create the file
+			if (Response.IsClientConnected)
 			{
-				var sqlParams = ParameterSelector.Parameters;
-				var texts = ParameterSelector.ParameterTexts;
-				commonReports.LoadReportInfo();
-				DataSet dataset = commonReports.GetReportData(ParameterSelector.UserCode, ParameterSelector.BusinessUnitCode,
-					sqlParams);
-
-				string reportName = commonReports.ReportFileName.Replace("~/", "");
-				string reportPath = Server.MapPath(reportName);
-				IList<ReportParameter> @params = new List<ReportParameter>();
-				var viewer = new ReportViewer {ProcessingMode = ProcessingMode.Local};
-				viewer.LocalReport.ReportPath = reportPath;
-				ReportParameterInfoCollection repInfos = viewer.LocalReport.GetParameters();
-
-				foreach (ReportParameterInfo repInfo in repInfos)
-				{
-					int i = 0;
-					var added = false;
-					foreach (SqlParameter param in sqlParams)
-					{
-						if (repInfo.Name.StartsWith("Res", StringComparison.CurrentCultureIgnoreCase))
-						{
-							@params.Add(new ReportParameter(repInfo.Name, Resources.ResourceManager.GetString(repInfo.Name), false));
-							added = true;
-						}
-						if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) ==
-						    "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
-						{
-							@params.Add(new ReportParameter(repInfo.Name, texts[i], false));
-							added = true;
-						}
-						if (!added && repInfo.Name == "culture")
-							@params.Add(new ReportParameter("culture", Thread.CurrentThread.CurrentCulture.IetfLanguageTag, false));
-						i += 1;
-					}
-				}
-
-				viewer.LocalReport.SetParameters(@params);
-
-				//The first in the report has to have the name DataSet1
-				dataset.Tables[0].TableName = "DataSet1";
-				foreach (DataTable t in dataset.Tables)
-				{
-					viewer.LocalReport.DataSources.Add(new ReportDataSource(t.TableName, t));
-				}
-				var inlineOrAtt = "inline;";
-				if (format.Equals(wordFormat()) || format.Equals(excelFormat()))
-					inlineOrAtt = "attachment;";
-				// Variables
-				Warning[] warnings;
-				string[] streamIds;
-				string mimeType;
-				string encoding;
-				string extension;
-
-				// Setup the report viewer object and get the array of bytes
-				byte[] bytes = viewer.LocalReport.Render(format, "<DeviceInfo><OutputFormat>PNG</OutputFormat></DeviceInfo>", out mimeType, out encoding, out extension, out streamIds,
-					out warnings);
-
-				Response.Clear();
-				Response.ContentType = mimeType;
-				// commonReports + Guid.NewGuid() = to get uniquie name to be able to open more than one with different selections
-				Response.AddHeader("content-disposition",
-					inlineOrAtt + " filename=" + commonReports.Name + Guid.NewGuid() + "." + extension);
-				Response.BinaryWrite(bytes); // create the file
-				if(Response.IsClientConnected)
-				{
-					Response.Flush(); // Sends all currently buffered output to the client.
-					Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
-					Context.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
-				}
+				Response.Flush(); // Sends all currently buffered output to the client.
+				Response.SuppressContent = true;  // Gets or sets a value indicating whether to send HTTP content to the client.
+				Context.ApplicationInstance.CompleteRequest(); // Causes ASP.NET to bypass all events and filtering in the HTTP pipeline chain of execution and directly execute the EndRequest event.
 			}
 		}
-		
-		private string wordFormat()
-		{
-			return UseOpenXml ? "WORDOPENXML" : "WORD";
-		}
 
-		private string excelFormat()
+		private static string getInlineOrAttachment(ReportGenerator.ReportFormat format)
 		{
-			return UseOpenXml ? "EXCELOPENXML" : "EXCEL";
+			if (format == ReportGenerator.ReportFormat.Excel || format == ReportGenerator.ReportFormat.ExcelOpenXml ||
+				format == ReportGenerator.ReportFormat.Word || format == ReportGenerator.ReportFormat.WordOpenXml)
+			{
+				return "attachment;";
+			}
+			return "inline;";
 		}
 	}
 }
