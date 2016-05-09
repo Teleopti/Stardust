@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Teleopti.Wfm.Administration.Models.Stardust;
 
@@ -10,7 +9,6 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 {
 	public class StardustRepository
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(StardustRepository));
 		const int maxRetry = 5;
 		const int delayMs = 100;
 
@@ -23,240 +21,235 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			_retryPolicy = new RetryPolicy<SqlDatabaseTransientErrorDetectionStrategy>(maxRetry, TimeSpan.FromMilliseconds(delayMs));
 		}
 		
-		public IList<JobHistory> HistoryList(Guid nodeId)
+		public IList<Job> GetJobsByNodeId(Guid nodeId)
 		{
-			var selectCommand = @"SELECT * FROM [Stardust].JobHistory
-								WHERE SentTo IN 
-								(SELECT Url FROM [Stardust].WorkerNodes 
+			var selectCommandText = @"SELECT * FROM [Stardust].Job
+								WHERE SentToWorkerNodeUri IN 
+								(SELECT Url FROM [Stardust].WorkerNode 
 									WHERE Id = @NodeId) ORDER by Created desc";
 
-			var returnList = new List<JobHistory>();
+			var returnList = new List<Job>();
 
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				var command = new SqlCommand
-				{
-					Connection = connection,
-					CommandText = selectCommand,
-					CommandType = CommandType.Text
-				};
-				command.Parameters.AddWithValue("@NodeId", nodeId);
-
 				connection.OpenWithRetry(_retryPolicy);
-				using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
+				using (var selectCommand = new SqlCommand(selectCommandText, connection))
 				{
-					if (reader.HasRows)
+					selectCommand.Parameters.AddWithValue("@NodeId", nodeId);
+					using (var reader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
-						while (reader.Read())
+						if (reader.HasRows)
 						{
-							var jobHist = newJobHistoryModel(reader);
-							returnList.Add(jobHist);
-						}
-					}
-					reader.Close();
-				}
-				connection.Close();
-			}
-			return returnList;
-		}
-
-		public IList<JobHistory> HistoryList()
-		{
-			var selectCommand = @"SELECT	JobId
-											, Name
-											, CreatedBy
-											, Created
-											, Started
-											, Ended
-											, SentTo
-											, Result
-										FROM[Stardust].JobHistory ORDER BY Created desc";
-
-			var returnList = new List<JobHistory>();
-
-			using (var connection = new SqlConnection(_connectionString))
-			{
-				var command = new SqlCommand
-				{
-					Connection = connection,
-					CommandText = selectCommand,
-					CommandType = CommandType.Text
-				};
-				connection.OpenWithRetry(_retryPolicy);
-				using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
-				{
-					if (reader.HasRows)
-					{
-						while (reader.Read())
-						{
-							var jobHist = newJobHistoryModel(reader);
-							returnList.Add(jobHist);
-						}
-					}
-					reader.Close();
-				}
-				connection.Close();
-			}
-			return returnList;
-		}
-
-		public IList<JobHistoryDetail> JobHistoryDetails(Guid jobId)
-		{
-			var selectCommand = @"SELECT  Created, Detail FROM [Stardust].JobHistoryDetail 
-									WHERE JobId = @JobId ORDER BY Created desc ";
-
-			var returnList = new List<JobHistoryDetail>();
-
-			using (var connection = new SqlConnection(_connectionString))
-			{
-				var command = new SqlCommand
-				{
-					Connection = connection,
-					CommandText = selectCommand,
-					CommandType = CommandType.Text
-				};
-				command.Parameters.AddWithValue("@JobId", jobId);
-
-				connection.OpenWithRetry(_retryPolicy);
-				using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
-				{
-					if (reader.HasRows)
-					{
-						while (reader.Read())
-						{
-							var detail = new JobHistoryDetail
+							while (reader.Read())
 							{
-								Created = reader.GetDateTime(reader.GetOrdinal("Created")),
-								Detail = reader.GetString(reader.GetOrdinal("Detail")),
-							};
-							returnList.Add(detail);
+								var job = createJobFromSqlDataReader(reader);
+								returnList.Add(job);
+							}
 						}
 					}
-					reader.Close();
 				}
 				connection.Close();
 			}
 			return returnList;
+		}
+
+
+		public IList<Job> GetAllJobs()
+		{
+			var jobs = new List<Job>();
+			
+				using (var sqlConnection = new SqlConnection(_connectionString))
+				{
+					sqlConnection.OpenWithRetry(_retryPolicy);
+					var selectCommandText = @"SELECT  [JobId]
+											  ,[Name]
+											  ,[Created]
+											  ,[CreatedBy]
+											  ,[Started]
+											  ,[Ended]
+											  ,[Serialized]
+											  ,[Type]
+											  ,[SentToWorkerNodeUri]
+											  ,[Result]
+										  FROM [Stardust].[Job] WITH (NOLOCK)";
+				using (var getAllJobsCommand = new SqlCommand(selectCommandText,sqlConnection))
+					{
+					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
+						{
+							if (sqlDataReader.HasRows)
+							{
+								while (sqlDataReader.Read())
+								{
+									var job = createJobFromSqlDataReader(sqlDataReader);
+									jobs.Add(job);
+								}
+							}
+						}
+					}
+				}
+			return jobs;
+		}
+
+		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)
+		{
+			var jobDetails = new List<JobDetail>();
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = @"SELECT  
+											Id, 
+											JobId, 
+											Created, 
+											Detail  
+										FROM [Stardust].[JobDetail] WITH (NOLOCK) 
+										WHERE JobId = @JobId";
+				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					selectCommand.Parameters.AddWithValue("@JobId", jobId);
+					using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
+						{
+							while (sqlDataReader.Read())
+							{
+								var jobDetail = CreateJobDetailFromSqlDataReader(sqlDataReader);
+								jobDetails.Add(jobDetail);
+							}
+						}
+					}
+				}
+				return jobDetails;
+			}
 		}
 
 		public WorkerNode WorkerNode(Guid nodeId)
 		{
-			const string selectCommand = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
-							WHEN AssignedNode IS NULL 
-							THEN CONVERT(bit,0) ELSE CONVERT(bit,1) END AS Running  
-							FROM [Stardust].WorkerNodes w 
-							LEFT JOIN [Stardust].jobDefinitions j ON w.Url=j.AssignedNode
+			const string selectCommandText = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
+							WHEN j.Ended IS NOT NULL AND w.Alive = 1
+							THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running  
+							FROM [Stardust].WorkerNode w 
+							LEFT JOIN [Stardust].[job] j ON w.Url=j.SentToWorkerNodeUri
 							WHERE w.Id = @Id";
 
 			WorkerNode node = null;
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				var command = new SqlCommand
-				{
-					Connection = connection,
-					CommandText = selectCommand,
-					CommandType = CommandType.Text
-				};
-				command.Parameters.AddWithValue("@Id", nodeId);
-
 				connection.OpenWithRetry(_retryPolicy);
-				var reader = command.ExecuteReader();
-				if (reader.HasRows)
+				using (var selectCommand = new SqlCommand(selectCommandText, connection))
 				{
-					while (reader.Read())
+					selectCommand.Parameters.AddWithValue("@Id", nodeId);
+					var reader = selectCommand.ExecuteReader();
+					if (reader.HasRows)
 					{
-						node = new WorkerNode
+						while (reader.Read())
 						{
-							Id = reader.GetGuid(reader.GetOrdinal("Id")),
-							Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
-							Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
-							Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat")),
-							Running = reader.GetBoolean(reader.GetOrdinal("Running"))
-						};
+							node = new WorkerNode
+							{
+								Id = reader.GetGuid(reader.GetOrdinal("Id")),
+								Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
+								Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
+								Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat")),
+								Running = reader.GetBoolean(reader.GetOrdinal("Running"))
+							};
+						}
 					}
+					connection.Close();
 				}
-				reader.Close();
-				connection.Close();
 			}
 			return node;
 		}
 
-		public List<WorkerNode> WorkerNodes()
+		public List<WorkerNode> GetAllWorkerNodes()
 		{
-			const string selectCommand = @"SELECT w.Id, Url, Heartbeat, Alive, CASE 
-							WHEN AssignedNode IS NULL 
-							THEN CONVERT(bit,0) ELSE CONVERT(bit,1) END AS Running  
-							FROM [Stardust].WorkerNodes w 
-							LEFT JOIN [Stardust].jobDefinitions j ON w.Url=j.AssignedNode";
-
 			var listToReturn = new List<WorkerNode>();
-
+			var commandText = "SELECT Id, Url, Heartbeat, Alive " +
+							  "FROM [Stardust].[WorkerNode]";
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				var command = new SqlCommand
-				{
-					Connection = connection,
-					CommandText = selectCommand,
-					CommandType = CommandType.Text
-				};
-
 				connection.OpenWithRetry(_retryPolicy);
-				var reader = command.ExecuteReaderWithRetry(_retryPolicy);
-				if (reader.HasRows)
-				{
-					while (reader.Read())
-					{
-						var node = new WorkerNode
-						{
-							Id = reader.GetGuid(reader.GetOrdinal("Id")),
-							Url = new Uri(reader.GetString(reader.GetOrdinal("Url"))),
-							Alive = reader.GetBoolean(reader.GetOrdinal("Alive")),
-							Heartbeat = reader.GetDateTime(reader.GetOrdinal("Heartbeat")),
-							Running = reader.GetBoolean(reader.GetOrdinal("Running"))
-						};
 
-						listToReturn.Add(node);
+				using (var selectCommand = new SqlCommand(commandText, connection))
+				{
+					using (var reader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (reader.HasRows)
+						{
+							var ordinalPositionForIdField = reader.GetOrdinal("Id");
+							var ordinalPositionForUrlField = reader.GetOrdinal("Url");
+							var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
+							var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
+
+							while (reader.Read())
+							{
+								var workerNode = new WorkerNode
+								{
+									Id = (Guid) reader.GetValue(ordinalPositionForIdField),
+									Url = new Uri((string) reader.GetValue(ordinalPositionForUrlField)),
+									Alive = (bool) reader.GetValue(ordinalPositionForAliveField),
+									Heartbeat = (DateTime) reader.GetValue(ordinalPositionForHeartbeatField)
+								};
+								listToReturn.Add(workerNode);
+							}
+						}
 					}
 				}
-
-				reader.Close();
-				connection.Close();
 			}
 			return listToReturn;
 		}
 
-		private JobHistory newJobHistoryModel(SqlDataReader reader)
-		{
-			try
-			{
-				var jobHist = new JobHistory
-				{
-					Id = reader.GetGuid(reader.GetOrdinal("JobId")),
-					Name = reader.GetString(reader.GetOrdinal("Name")),
-					CreatedBy = reader.GetString(reader.GetOrdinal("CreatedBy")),
-					SentTo = getDBNullSafeValue<string>(reader.GetValue(reader.GetOrdinal("SentTo"))),
-					Result = getDBNullSafeValue<string>(reader.GetValue(reader.GetOrdinal("Result"))),
-					Created = reader.GetDateTime(reader.GetOrdinal("Created")),
-					Started = getValue<DateTime>(reader.GetValue(reader.GetOrdinal("Started"))),
-					Ended = getValue<DateTime>(reader.GetValue(reader.GetOrdinal("Ended")))
-				};
-				return jobHist;
-			}
-			catch (Exception exp)
-			{
-				LogHelper.LogErrorWithLineNumber(Logger, exp.Message, exp);
-			}
-			return null;
-		}
 
 		private T getDBNullSafeValue<T>(object value) where T : class
 		{
 			return value == DBNull.Value ? null : (T)value;
 		}
+		
 
-		private T? getValue<T>(object value) where T : struct
+		private Job createJobFromSqlDataReader(SqlDataReader sqlDataReader)
 		{
-			return value == DBNull.Value ? (T?)null : (T)value;
+			var job = new Job
+			{
+				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
+				Name = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Name")),
+				SentToWorkerNodeUri = getDBNullSafeValue<string>(sqlDataReader.GetValue(sqlDataReader.GetOrdinal("SentToWorkerNodeUri"))),
+				Type = getDBNullSafeValue<string>(sqlDataReader.GetValue(sqlDataReader.GetOrdinal("Type"))),
+				CreatedBy = sqlDataReader.GetString(sqlDataReader.GetOrdinal("CreatedBy")),
+				Result = getDBNullSafeValue<string>(sqlDataReader.GetValue(sqlDataReader.GetOrdinal("Result"))),
+				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
+				Serialized = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Serialized")),
+				Started = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Started")),
+				Ended = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Ended"))
+			};
+			return job;
+		}
+
+		private JobDetail CreateJobDetailFromSqlDataReader(SqlDataReader sqlDataReader)
+		{
+			var jobDetail = new JobDetail
+			{
+				Id = sqlDataReader.GetInt32(sqlDataReader.GetOrdinal("Id")),
+				JobId = sqlDataReader.GetGuid(sqlDataReader.GetOrdinal("JobId")),
+				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
+				Detail = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Detail"))
+			};
+			return jobDetail;
+		}
+	}
+
+	public static class SqlDataReaderExtensions
+	{
+		public static DateTime? GetNullableDateTime(this SqlDataReader reader, int ordinalPosition)
+		{
+			return reader.IsDBNull(ordinalPosition) ? (DateTime?)null : reader.GetDateTime(ordinalPosition);
+		}
+
+		public static string GetNullableString(this SqlDataReader reader, int ordinalPosition)
+		{
+			if (reader.IsDBNull(ordinalPosition))
+			{
+				return null;
+			}
+			return reader.GetString(ordinalPosition);
 		}
 	}
 } 

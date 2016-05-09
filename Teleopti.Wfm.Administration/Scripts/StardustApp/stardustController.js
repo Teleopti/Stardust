@@ -10,7 +10,7 @@
         var vm = this;
         vm.title = 'Stardust Manager';
 
-    	$http.get("./Stardust/JobHistoryList").success(function (data) {
+    	$http.get("./Stardust/Jobs").success(function (data) {
         		vm.Jobs = data;
         	}).error(function (xhr, ajaxOptions, thrownError) {
         		console.log(xhr.Message + ': ' + xhr.ExceptionMessage);

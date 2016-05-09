@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Teleopti.Wfm.Administration.Models.Stardust
 {
@@ -10,9 +7,7 @@ namespace Teleopti.Wfm.Administration.Models.Stardust
 		public WorkerNode()
 		{
 			Id = Guid.NewGuid();
-
-			Heartbeat = DateTime.Now;
-
+			Heartbeat = DateTime.UtcNow;
 			Alive = true;
 		}
 

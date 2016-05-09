@@ -15,7 +15,7 @@
             console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
         });
 
-        $http.get("./Stardust/NodeJobHistoryList/" + vm.NodeId).success(function (data) {
+    	$http.get("./Stardust/JobsByNode/" + vm.NodeId).success(function (data) {
             vm.Jobs = data;
         }).error(function (xhr, ajaxOptions, thrownError) {
             console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
