@@ -643,10 +643,6 @@
     <Compile Include="Filters\TeleoptiPrincipalAuthorizeAttributeTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\DomainTest\Teleopti.Ccc.DomainTest.csproj">
-      <Project>{AB1DB030-A4B3-4BFF-892C-E6FC075C26A5}</Project>
-      <Name>Teleopti.Ccc.DomainTest</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
