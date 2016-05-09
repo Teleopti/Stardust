@@ -76,7 +76,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
 		}
 
-        public virtual ISkillType SkillType
+	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    {
+		    var events =  base.PopAllEvents(now, operation).ToList();
+		    if (operation.HasValue)
+		    {
+			    if (operation.Value == DomainUpdateType.Update)
+				    events.Add(new SkillChangedEvent {SkillId = Id.GetValueOrDefault()});
+				else if (operation.Value == DomainUpdateType.Insert)
+					events.Add(new SkillCreatedEvent { SkillId = Id.GetValueOrDefault() });
+			}
+		    return events;
+	    }
+
+	    public virtual ISkillType SkillType
         {
             get { return _skillType; }
             set { _skillType = value; }
@@ -141,7 +154,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			InParameter.StringTooLong("Name", name, 50);
 			InParameter.NotStringEmptyOrNull("value", name);
 			_name = name;
-			AddEvent(() => new SkillNameChangedEvent { SkillId = Id.GetValueOrDefault() });
 		}
 
         public virtual string Name

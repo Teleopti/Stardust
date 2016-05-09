@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class SkillNameChangedEvent : SkillChangedEvent
+	public class SkillCreatedEvent : SkillChangedEvent
 	{
 	}
 

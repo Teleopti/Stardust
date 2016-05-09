@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpIntradaySkill_37543)]
 	public class UpdateSkillAnalyticsHandler :
-		IHandleEvent<SkillNameChangedEvent>,
+		IHandleEvent<SkillChangedEvent>,
+		IHandleEvent<SkillCreatedEvent>,
 		IHandleEvent<SkillDeletedEvent>,
 		IRunOnHangfire
 	{
@@ -52,7 +53,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
-		public virtual void Handle(SkillNameChangedEvent @event)
+		public virtual void Handle(SkillChangedEvent @event)
+		{
+			Handle(@event.SkillId);
+		}
+
+		[AnalyticsUnitOfWork]
+		[UnitOfWork]
+		public virtual void Handle(SkillCreatedEvent @event)
 		{
 			Handle(@event.SkillId);
 		}

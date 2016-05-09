@@ -30,9 +30,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		}
 
 		[Test]
+		public void ShouldAddSkill()
+		{
+			var @event = new SkillCreatedEvent
+			{
+				SkillId = Guid.NewGuid()
+			};
+			var skill = SkillFactory.CreateSkill("skillName1");
+			skillRepository.Stub(x => x.Get(@event.SkillId)).Return(skill);
+			analyticsTimeZoneRepository.Stub(x => x.Get(skill.TimeZone.Id)).Return(new AnalyticsTimeZone());
+
+			var target = new UpdateSkillAnalyticsHandler(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository, analyticsTimeZoneRepository);
+
+			target.Handle(@event);
+
+			analyticsSkillRepository.Skills(2)
+				.FirstOrDefault(x => x.SkillCode == skill.Id.GetValueOrDefault())
+				.Should()
+				.Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldAddOrUpdateSkill()
 		{
-			var @event = new SkillNameChangedEvent
+			var @event = new SkillChangedEvent
 			{
 				SkillId = Guid.NewGuid()
 			};
