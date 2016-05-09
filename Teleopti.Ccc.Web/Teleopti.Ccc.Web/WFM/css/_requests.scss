@@ -1,130 +1,138 @@
-﻿.wfm-requests {
-	background-color: $white;
-	position: relative;
+﻿﻿.wfm-requests {
+    background-color: $white;
+    position: relative;
+    height: 87vh;
 
-	.advanced-search-container tr td:nth-child(2) div {
-		margin-right: 0 !important;
-	}
+    .advanced-search-container tr td:nth-child(2) div {
+        margin-right: 0 !important;
+    }
 
-	.time-zone-switch {
-		position: absolute;
-		top: 0.8em;
-		left: 47em;
-		display: inline-block;
-		z-index: 100;
-	}
+    #time-zone-switch {
+        position: relative;
+        top: 1em;
+    }
 
-	.inline-block {
-		display: inline-block;
-	}
+    .filter-switch {
+        position: absolute;
+        top: 1rem;
+        left: 65rem;
+    }
 
-	.operation-container {
-		padding-left: 12px;
-		padding-top: 12px;
-		padding-bottom: 12px;
-	}
+    .inline-block {
+        display: inline-block;
+    }
 
-	md-progress-linear {
-		width: 100%;
-	}
+    .operation-container {
+        padding-left: 12px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
 
-	requests-commands-pane {
-		position: absolute;
-		right: 1em;
-		top: 0;
-	}
+    md-progress-linear {
+        width: 100%;
+    }
 
-	.m-r-5 {
-		margin-right: 5px;
-	}
+    requests-commands-pane {
+        position: absolute;
+        right: 1em;
+        top: 0;
+    }
 
-	.m-l-5 {
-		margin-left: 5px;
-	}
+    .m-r-5 {
+        margin-right: 5px;
+    }
 
-	.request-filter {
-		.input-prepend {
-			width: 300px;
-		}
+    .m-l-5 {
+        margin-left: 5px;
+    }
 
-		#simple-people-search {
-			width: 316px;
-		}
-	}
+    .request-filter {
+        .input-prepend {
+            width: 300px;
+        }
 
-	.wfm-date-range-picker-wrap {
-		display: inline-block;
+        #simple-people-search {
+            width: 316px;
+        }
+    }
 
-		.relative {
-			position: relative;
-		}
+    .wfm-date-range-picker-wrap {
+        display: inline-block;
 
-		input {
-			width: 100px !important;
-		}
-	}
+        .relative {
+            position: relative;
+        }
 
-	.ui-grid {
-		height: 77vh;
+        input {
+            width: 100px !important;
+        }
+    }
 
-		.ui-grid-cell-contents {
-			width: 85%;
-			text-align: left;
-		}
+    .ui-grid {
+        height: 77vh;
 
-		.ui-grid-column-menu-button-last-col {
-			margin-right: 0;
-		}
+        .ui-grid-cell-contents {
+            width: 85%;
+            text-align: left;
+        }
 
-		.ui-grid-menu-button {
-			top: 2px;
-			right: -3px;
-		}
-	}
+        .ui-grid-column-menu-button-last-col {
+            margin-right: 0;
+        }
 
-	.paging {
-		position: relative;
-		bottom: -1em;
+        .ui-grid-menu-button {
+            top: 2px;
+            right: -3px;
+        }
+    }
 
-		.total-requests-count {
-			margin-right: 20px;
-			margin-top: 5px;
-		}
+    .paging {
+        position: relative;
+        bottom: 1rem;
 
-		.page-size-selector {
-			width: 60px;
-			margin-top: 5px;
-		}
+        .total-requests-count {
+            margin-right: 20px;
+            margin-top: 5px;
+        }
 
-		.pagination {
-			margin-left: 20px;
-			margin-top: 0;
-			margin-bottom: 0;
-		}
-	}
+        .page-size-selector {
+            width: 60px;
+            margin-top: 5px;
+        }
 
-	requests-commands-pane .wfm-btn-primary-disabled {
-		background-color: transparent;
-	}
+        .pagination {
+            margin-left: 20px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    }
 
-	.wfm-date-range-picker-wrap .inline-datepicker-wrap .start-date-input+.dropdown-menu {
-		margin-left: -180px;
-	}
+    requests-commands-pane .wfm-btn-primary-disabled {
+        background-color: transparent;
+    }
 
-	.ui-grid-header-viewport {
-		overflow: visible;
-	}
+    .wfm-date-range-picker-wrap .inline-datepicker-wrap .start-date-input + .dropdown-menu {
+        margin-left: -180px;
+    }
 
-	.ui-grid-top-panel {
-		overflow: visible;
-	}
+    input.ui-grid-filter-input {
+        text-overflow: ellipsis;
+    }
 
-	.multiSelect>button {
-		max-height: 34px;
-		font-weight: normal;
-	}
+    .ui-grid-header-viewport {
+        overflow: visible;
+    }
 
-	.multiSelect .checkBoxContainer {
-		text-align: left;
-	}
+    .ui-grid-top-panel {
+        overflow: visible;
+    }
+
+    .multiSelect > button {
+        max-height: 34px;
+        font-weight: normal;
+    }
+
+    .multiSelect .checkBoxContainer {
+        text-align: left;
+    }
 }

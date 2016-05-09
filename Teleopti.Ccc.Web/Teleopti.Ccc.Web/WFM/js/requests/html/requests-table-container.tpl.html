@@ -1,10 +1,23 @@
-﻿<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns></div>
-<div class="wfm-switch time-zone-switch">
-	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingRequestSubmitterTimeZone" />
-	<label for="switch1">
-		<span class="wfm-switch-toggle"></span>
-		<span style="width: 55px; display: inline-block;"></span>
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone!=true"><span translate>LogonUserTimeZone</span></span>
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone==true" translate>RequestSubmitterTimeZone</span>
-	</label>
+﻿<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto"  ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns></div>
+
+<div class="wfm-switch time-zone-switch" id="time-zone-switch">
+    <input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingRequestSubmitterTimeZone"/>
+    <label for="switch1">
+        <span class="wfm-switch-toggle"></span>
+        <span style="width: 55px; display: inline-block;"></span>
+        <span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone!=true"><span translate>LogonUserTimeZone</span></span>
+        <span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone==true" translate>RequestSubmitterTimeZone</span>
+    </label>
 </div>
+
+<div class="wfm-switch filter-switch" ng-click="requestsTableContainer.toggleFiltering()">
+    <input type="checkbox" id="filter-switch" ng-model="requestsTableContainer.gridOptions.enableFiltering" />
+    <label for="filter-switch">
+        <span class="wfm-switch-toggle"></span>
+        <span style="width: 55px; display: inline-block;"></span>
+        <span class="wfm-switch-label" ng-show="requestsTableContainer.gridOptions.enableFiltering !== true"><span translate>Filter Off</span></span>
+        <span class="wfm-switch-label" ng-show="requestsTableContainer.gridOptions.enableFiltering === true" translate>Filter On</span>
+    </label>
+</div>
+
+<i ng-if="requestsTableContainer.gridOptions.enableFiltering" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-close" style="cursor: pointer; position: absolute; top: 8rem; left: .6rem;"></i>
