@@ -2,7 +2,6 @@ using System.Configuration;
 using Autofac;
 using Owin;
 using Stardust.Manager;
-using Stardust.Manager.Models;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
@@ -19,12 +18,12 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			var scope = _scope.BeginLifetimeScope();
 			var managerConfiguration = new ManagerConfiguration
-			{
-				ConnectionString = ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
-				Route = ConfigurationManager.AppSettings["RouteName"],
-				AllowedNodeDownTimeSeconds = int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
-				CheckNewJobIntervalSeconds = int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"])
-			};
+			(
+				connectionString : ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
+				route : ConfigurationManager.AppSettings["RouteName"],
+				allowedNodeDownTimeSeconds : int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
+				checkNewJobIntervalSeconds : int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"])
+			);
 			app.UseStardustManager(managerConfiguration, scope);
 			new ManagerStarter().Start(managerConfiguration, scope);
 		}

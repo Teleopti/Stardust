@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				Name = jobName,
 				Serialized = ser,
 				Type = type,
-				UserName = userName
+				CreatedBy = userName
 			};
 			var mess = JsonConvert.SerializeObject(jobModel);
 			if (Logger.IsDebugEnabled)
@@ -78,6 +78,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public string Name { get; set; }
 		public string Serialized { get; set; }
 		public string Type { get; set; }
-		public string UserName { get; set; }
+		public string CreatedBy { get; set; }
 	}
 }
