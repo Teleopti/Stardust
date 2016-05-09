@@ -25,14 +25,14 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
-			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, items) =>
+			checkTablesInManagerDbTimer.GetJobItems += (sender, items) =>
 			{
 				if (items.Any() && items.All(job => job.Started != null))
 				{
 					waitForJobToStartEvent.Set();
 				}
 			};
-			checkTablesInManagerDbTimer.ReceivedWorkerNodesData += (sender, nodes) =>
+			checkTablesInManagerDbTimer.GetWorkerNodes += (sender, nodes) =>
 			{
 				if (nodes.Count == 2)
 				{

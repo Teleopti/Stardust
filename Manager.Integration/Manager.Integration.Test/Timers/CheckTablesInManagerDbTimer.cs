@@ -8,15 +8,15 @@ namespace Manager.Integration.Test.Timers
 {
 	public class CheckTablesInManagerDbTimer : IDisposable
 	{
-		public EventHandler<ObservableCollection<JobQueueItem>> ReceivedJobQueueItem;
+		public EventHandler<ObservableCollection<JobQueueItem>> GetJobQueueItems;
 
-		public EventHandler<ObservableCollection<Job>> ReceivedJobItem;
+		public EventHandler<ObservableCollection<Job>> GetJobItems;
 
-		public EventHandler<ObservableCollection<JobDetail>> ReceivedJobDetailItem;
+		public EventHandler<ObservableCollection<JobDetail>> GetJobDetailItems;
 
-		public EventHandler<ObservableCollection<Logging>> ReceivedLoggingData;
+		public EventHandler<ObservableCollection<Logging>> GetLogging;
 
-		public EventHandler<ObservableCollection<WorkerNode>> ReceivedWorkerNodesData;
+		public EventHandler<ObservableCollection<WorkerNode>> GetWorkerNodes;
 
 		public CheckTablesInManagerDbTimer(string connectionString,double interval = 5000)
 		{
@@ -52,41 +52,41 @@ namespace Manager.Integration.Test.Timers
 
 		private void WorkerNodeTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
 		{
-			if (ReceivedWorkerNodesData != null)
+			if (GetWorkerNodes != null)
 			{
-				ReceivedWorkerNodesData(this, ManagerDbRepository.WorkerNodes);
+				GetWorkerNodes(this, ManagerDbRepository.WorkerNodes);
 			}
 		}
 
 		private void LoggingTimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
 		{
-			if (ReceivedLoggingData != null)
+			if (GetLogging != null)
 			{
-				ReceivedLoggingData(this, ManagerDbRepository.Loggings);
+				GetLogging(this, ManagerDbRepository.Loggings);
 			}
 		}
 
 		private void JobDetailTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if (ReceivedJobDetailItem != null)
+			if (GetJobDetailItems != null)
 			{
-				ReceivedJobDetailItem(this, ManagerDbRepository.JobDetails);
+				GetJobDetailItems(this, ManagerDbRepository.JobDetails);
 			}
 		}
 
 		private void JobTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if (ReceivedJobItem != null)
+			if (GetJobItems != null)
 			{
-				ReceivedJobItem(this, ManagerDbRepository.Jobs);
+				GetJobItems(this, ManagerDbRepository.Jobs);
 			}
 		}
 
 		private void JobQueueTimer_Elapsed(object sender, ElapsedEventArgs e)
 		{
-			if (ReceivedJobQueueItem != null)
+			if (GetJobQueueItems != null)
 			{
-				ReceivedJobQueueItem(this, ManagerDbRepository.JobQueueItems);
+				GetJobQueueItems(this, ManagerDbRepository.JobQueueItems);
 			}
 		}
 

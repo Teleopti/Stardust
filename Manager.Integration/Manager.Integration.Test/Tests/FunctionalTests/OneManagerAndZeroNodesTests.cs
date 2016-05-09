@@ -23,7 +23,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 100);
 
-			checkTablesInManagerDbTimer.ReceivedJobQueueItem += (sender, items) =>
+			checkTablesInManagerDbTimer.GetJobQueueItems += (sender, items) =>
 			{
 				if (items.Any())
 				{

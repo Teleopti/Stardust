@@ -29,7 +29,7 @@ namespace Manager.Integration.Test.Tests.LoadTests
 			var checkTablesInManagerDbTimer =
 				new CheckTablesInManagerDbTimer(ManagerDbConnectionString, 2000);
 
-			checkTablesInManagerDbTimer.ReceivedJobItem += (sender, jobs) =>
+			checkTablesInManagerDbTimer.GetJobItems += (sender, jobs) =>
 			{
 				if (jobs.Count == createNewJobRequests.Count &&
 				    jobs.All(job => job.Started != null && job.Ended != null))
