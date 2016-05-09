@@ -1,43 +1,49 @@
 ﻿namespace Teleopti.Ccc.Win.Common.Controls
 {
-    partial class FindAndReplaceForm
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class FindAndReplaceForm
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (components != null)
-                    components.Dispose();
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (components != null)
+					components.Dispose();
 				if (_findAndReplaceDialog != null)
+				{
 					_findAndReplaceDialog.Dispose();
-                if (gridListControlSearchResults!=null)
-                {
-                    gridListControlSearchResults.Dispose();
-                }
-                _grid = null;
-            }
+					_findAndReplaceDialog = null;
+				}
+				if (gridListControlSearchResults != null)
+				{	
+					gridListControlSearchResults.Dispose();
+					gridListControlSearchResults = null;
+				}
+				_findReplaceEventArguments = null;
+				_domainFinder = null;
+				_grid = null;
+			}
 
-            base.Dispose(disposing);
+			base.Dispose(disposing);
 			//this.findAndReplaceDialog.Dispose();
-        }
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			this.ribbonControlAdvSearch = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
 			this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
@@ -1678,120 +1684,120 @@
 			((System.ComponentModel.ISupportInitialize)(this.comboBoxAdv14)).EndInit();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdvSearch;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTopMain;
-        private System.Windows.Forms.Panel panel1;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvClose;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvFindNext;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvFindAll;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvReplaceAll;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvReplace;
-        private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdvMain;
-        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvReplace;
-        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvFind;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFindTabMain;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFindTabTop;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel1;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboDropDownFindSearchText;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFindTabBottom;
-        private System.Windows.Forms.Panel panel2;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvFindOptions;
-        private System.Windows.Forms.Panel panelFindOptions;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel7;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvFindSearchWithin;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindMatchCase;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindMatchWholeCell;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindSearchUp;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelReplaceMain;
-        //private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv2;
-        private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMain;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv1;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv2;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel4;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
-        private System.Windows.Forms.Panel panel4;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdv2;
-        private System.Windows.Forms.Panel panel5;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv1;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv2;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv3;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv3;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel5;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv4;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv5;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv4;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv5;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel6;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel8;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
-        private System.Windows.Forms.Panel panel6;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdv3;
-        private System.Windows.Forms.Panel panel7;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv6;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv6;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel9;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv7;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv8;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv7;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv8;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel10;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel11;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
-        private System.Windows.Forms.Panel panel8;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdv4;
-        private System.Windows.Forms.Panel panel9;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv9;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv9;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel12;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv10;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv11;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel13;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel14;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
-        private System.Windows.Forms.Panel panel10;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdv5;
-        private System.Windows.Forms.Panel panel11;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv10;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv11;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv12;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv12;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel15;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv13;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv14;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel16;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel15;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboDropDownReplaceReplaceText;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboDropDownReplaceSearchText;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel17;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel18;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Panel panel13;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvReplaceOptions;
-        private System.Windows.Forms.Panel panelReplaceOptions;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvReplaceSearchUp;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvReplaceMatchWholeCell;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvReplaceMatchCase;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvReplaceSearchWithin;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel19;
-        private Syncfusion.Windows.Forms.Grid.GridControl gridListControlSearchResults;
-        private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindSearchInPersistance;
+		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdvSearch;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTopMain;
+		private System.Windows.Forms.Panel panel1;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvClose;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvFindNext;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvFindAll;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvReplaceAll;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvReplace;
+		private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdvMain;
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvReplace;
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvFind;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFindTabMain;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFindTabTop;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel1;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboDropDownFindSearchText;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelFindTabBottom;
+		private System.Windows.Forms.Panel panel2;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvFindOptions;
+		private System.Windows.Forms.Panel panelFindOptions;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel7;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvFindSearchWithin;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindMatchCase;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindMatchWholeCell;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindSearchUp;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelReplaceMain;
+		//private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlAdv2;
+		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageAdvMain;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv1;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv2;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel2;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel4;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
+		private System.Windows.Forms.Panel panel4;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdv2;
+		private System.Windows.Forms.Panel panel5;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv1;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv2;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv3;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv3;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel5;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv4;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv5;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv4;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv5;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel6;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel8;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel7;
+		private System.Windows.Forms.Panel panel6;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdv3;
+		private System.Windows.Forms.Panel panel7;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv6;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv6;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel9;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv7;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv8;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel9;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv7;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv8;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel10;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel11;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel10;
+		private System.Windows.Forms.Panel panel8;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdv4;
+		private System.Windows.Forms.Panel panel9;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv9;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv9;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel12;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel11;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel12;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv10;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv11;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel13;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel14;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel13;
+		private System.Windows.Forms.Panel panel10;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdv5;
+		private System.Windows.Forms.Panel panel11;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv10;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv11;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdv12;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv12;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel15;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel14;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv13;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdv14;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel16;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel15;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboDropDownReplaceReplaceText;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboDropDownReplaceSearchText;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel17;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel18;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.Panel panel13;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvReplaceOptions;
+		private System.Windows.Forms.Panel panelReplaceOptions;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvReplaceSearchUp;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvReplaceMatchWholeCell;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvReplaceMatchCase;
+		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAdvReplaceSearchWithin;
+		private Syncfusion.Windows.Forms.Tools.AutoLabel autoLabel19;
+		private Syncfusion.Windows.Forms.Grid.GridControl gridListControlSearchResults;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvFindSearchInPersistance;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvReplaceSearchInPersistance;
 		private Syncfusion.Windows.Forms.Tools.StatusStripEx statusStripExFindReplace;
 
-    }
+	}
 }

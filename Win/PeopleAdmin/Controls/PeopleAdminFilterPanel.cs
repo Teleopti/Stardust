@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 {
     public partial class PeopleAdminFilterPanel : BaseUserControl
     {
-        private readonly ILifetimeScope _container;
-        private readonly PeopleWorksheet _parentControl;
-        private readonly FilteredPeopleHolder _filteredPeopleHolder;
-        private readonly IApplicationFunction _myApplicationFunction =
+        private  ILifetimeScope _container;
+        private  PeopleWorksheet _parentControl;
+        private  FilteredPeopleHolder _filteredPeopleHolder;
+        private  IApplicationFunction _myApplicationFunction =
             ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctions,
                    DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
-        private readonly IPersonSelectorPresenter _personSelectorPresenter;
+        private  IPersonSelectorPresenter _personSelectorPresenter;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
         public PeopleAdminFilterPanel(FilteredPeopleHolder filteredPeopleHolder, PeopleWorksheet peopleWorksheet,

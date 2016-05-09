@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
 	public class WorksheetStateHolder : IDisposable
 	{
-		private readonly IDictionary<ViewType, IRotationStateHolder> _rotationStateHolderCache = new Dictionary<ViewType, IRotationStateHolder>();
+		private  IDictionary<ViewType, IRotationStateHolder> _rotationStateHolderCache = new Dictionary<ViewType, IRotationStateHolder>();
 
 		private IList<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
 		private readonly TypedBindingCollection<IContractSchedule> _contractScheduleBindingCollection = new TypedBindingCollection<IContractSchedule>();
@@ -79,6 +79,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			if (disposing)
 			{
 				_rotationCollection = null;
+				_rotationStateHolderCache = null;
+				RotationStateHolder = null;
 			}
 		}
 

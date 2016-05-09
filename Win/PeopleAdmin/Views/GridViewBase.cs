@@ -348,6 +348,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			Grid.Dispose();
 			Grid = null;
 			CurrentGrid = null;
+			_filteredPeopleHolder = null;
 		}
 
 		internal virtual void DisposeChildGrids()

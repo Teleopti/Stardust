@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 {
 	public partial class PeopleWorksheet : BaseRibbonForm
 	{       
-		private readonly PeopleAdminFilterPanel _peopleAdminFilterPanel;
+		private PeopleAdminFilterPanel _peopleAdminFilterPanel;
 
 		// Instantiates the find and replace form
 		private FindAndReplaceForm _findAndReplaceForm =
@@ -141,6 +141,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 			_gridConstructor.GridViewChanging -= gridConstructorGridViewChanging;
 			_gridConstructor.GridViewChanged -= gridConstructorGridViewChanged;
 			_panelConstructor.GridViewChanged -= panelConstructorGridViewChanged;
+			_peopleAdminFilterPanel.Leave -= peopleAdminFilterPanelLeave;
 		}
 
 		protected void SetColors()
@@ -1388,6 +1389,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 				_findAndReplaceForm.Dispose();
 				_findAndReplaceForm = null;
 			}
+			if (_peopleAdminFilterPanel != null)
+			{
+				_peopleAdminFilterPanel.Dispose();
+				_peopleAdminFilterPanel = null;
+			}
+			if (_stateHolder != null)
+			{
+				_stateHolder.Dispose();
+				_stateHolder = null;
+			}
+			if (_gridConstructor != null)
+			{
+				_gridConstructor.Dispose();
+				_gridConstructor = null;
+			}
+			_domainFinder = null;
 		}
 
 		private void peopleWorksheetShown(object sender, EventArgs e)

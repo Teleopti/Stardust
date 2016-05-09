@@ -1,33 +1,50 @@
 ﻿namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 {
-    partial class PeopleAdminFilterPanel
-    {
-        /// <summary> 
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class PeopleAdminFilterPanel
+	{
+		/// <summary> 
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary> 
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary> 
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			if (disposing)
+			{
+				if (_parentControl != null)
+					_parentControl = null;
+				if (_container != null)
+					_container = null;
+				if (_filteredPeopleHolder != null)
+					_filteredPeopleHolder = null;
+				if (_myApplicationFunction != null)
+					_myApplicationFunction = null;
+				if (_personSelectorPresenter != null)
+				{
+					_personSelectorPresenter.Dispose();
+					_personSelectorPresenter = null;
+				}
+			}
 
-        #region Component Designer generated code
+			base.Dispose(disposing);
+		}
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		#region Component Designer generated code
+
+		/// <summary> 
+		/// Required method for Designer support - do not modify 
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PeopleAdminFilterPanel));
 			this.ximgBUStructure = new System.Windows.Forms.ImageList(this.components);
@@ -137,17 +154,17 @@
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.ImageList ximgBUStructure;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.ImageList ximgBUStructure;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvCancel;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 
 
 
-    }
+	}
 }
