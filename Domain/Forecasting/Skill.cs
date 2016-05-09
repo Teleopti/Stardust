@@ -156,16 +156,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			_name = name;
 		}
 
-	    public void SetCascadingIndex(IList<ISkill> cascadingSkills)
-	    {
-		    CascadingIndex = cascadingSkills.IndexOf(this) + 1;
-	    }
-
-	    public void ClearCascadingIndex()
-	    {
-		    CascadingIndex = null;
-	    }
-
 	    public virtual string Name
         {
             get { return _name; }
@@ -455,32 +445,42 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _isDeleted; }
         }
 
-	    public int? CascadingIndex { get; private set; }
-	    public bool IsCascading()
-	    {
-		    return CascadingIndex.HasValue;
-	    }
+		public virtual int? CascadingIndex { get; protected set; }
+		public virtual bool IsCascading()
+		{
+			return CascadingIndex.HasValue;
+		}
 
-	    public void SetCascadingIndex_UseFromTestOnly(int index)
-	    {
-		    CascadingIndex = index;
-	    }
+		public virtual void SetCascadingIndex_UseFromTestOnly(int index)
+		{
+			CascadingIndex = index;
+		}
 
-	    #endregion
+		public virtual void SetCascadingIndex(IList<ISkill> cascadingSkills)
+		{
+			CascadingIndex = cascadingSkills.IndexOf(this) + 1;
+		}
 
-        #region IForecastTemplateOwner Members
+		public virtual void ClearCascadingIndex()
+		{
+			CascadingIndex = null;
+		}
 
-        /// <summary>
-        /// Sets a template on a specific key
-        /// First 7 slots are the standard WeekDays
-        /// </summary>
-        /// <param name="templateIndex">Index of the template.</param>
-        /// <param name="dayTemplate">The day template.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-01-24
-        /// </remarks>
-        public virtual void SetTemplateAt(int templateIndex, IForecastDayTemplate dayTemplate)
+		#endregion
+
+		#region IForecastTemplateOwner Members
+
+		/// <summary>
+		/// Sets a template on a specific key
+		/// First 7 slots are the standard WeekDays
+		/// </summary>
+		/// <param name="templateIndex">Index of the template.</param>
+		/// <param name="dayTemplate">The day template.</param>
+		/// <remarks>
+		/// Created by: peterwe
+		/// Created date: 2008-01-24
+		/// </remarks>
+		public virtual void SetTemplateAt(int templateIndex, IForecastDayTemplate dayTemplate)
         {
             SkillDayTemplate newTemplate = dayTemplate as SkillDayTemplate;
             if (newTemplate == null) return;
