@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		{
 		}
 
-		[AsSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
 		public new virtual void Handle(GroupPageCollectionChangedEvent @event)
