@@ -26,8 +26,8 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 				if (items.Any() &&
 				    items.All(job => job.Ended == null) && sentCancel == false)
 				{
-					HttpRequestManager.CancelJob(Guid.NewGuid());
 					sentCancel = true;
+					HttpRequestManager.CancelJob(Guid.NewGuid());
 				}
 				if (items.Any() &&
 					items.All(job => job.Ended != null))
@@ -77,8 +77,8 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 				if (items.Any() &&
 					items.All(job => job.Ended == null) && sentCancel == false)
 				{
-					HttpRequestManager.CancelJob(items.First().JobId);
 					sentCancel = true;
+					HttpRequestManager.CancelJob(items.First().JobId);
 				}
 				if (items.Any() &&
 					items.All(job => job.Ended != null))
