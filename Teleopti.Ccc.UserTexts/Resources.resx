@@ -14383,7 +14383,7 @@ Help us improve your experience by sending an error report</value>
   </data>
   <data name="WFMReleaseNotification" xml:space="preserve">
     <value>{0} has been improved! We appreciate your {1}feedback.{2} Old {3} can be accessed for a limited time.</value>
-    <comment>Notification message to user in the released WFM about the link to the old modules in case they want to access them.</comment>
+    <comment>Notification message to the user in the web released WFM with a link to the old module in case they want to access it. {0} is the module name, like MyTime for example. {1} and {2} are used to embed a link to the customer feedback form. {3} is a link to the old module.</comment>
   </data>
   <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
     <value>You cannot add an activity to {0} for the next day without a shift</value>
