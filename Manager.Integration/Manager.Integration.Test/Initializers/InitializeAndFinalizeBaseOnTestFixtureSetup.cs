@@ -9,7 +9,6 @@ using Manager.Integration.Test.Database;
 using Manager.Integration.Test.Helpers;
 using Manager.Integration.Test.Tasks;
 using Manager.IntegrationTest.Console.Host.Helpers;
-using Manager.IntegrationTest.Console.Host.Log4Net;
 using NUnit.Framework;
 
 namespace Manager.Integration.Test.Initializers
@@ -28,11 +27,9 @@ namespace Manager.Integration.Test.Initializers
 		}
 
 #if (DEBUG)
-		protected const bool ClearDatabase = true;
 		protected const string BuildMode = "Debug";
 
 #else
-		protected  const bool ClearDatabase = true;
 		protected  const string BuildMode = "Release";
 #endif
 
@@ -65,8 +62,6 @@ namespace Manager.Integration.Test.Initializers
 
 		public HttpSender HttpSender { get; set; }
 
-		public ManagerUriBuilder MangerUriBuilder { get; set; }
-
 		public HttpRequestManager HttpRequestManager { get; set; }
 
 		[SetUp]
@@ -85,12 +80,9 @@ namespace Manager.Integration.Test.Initializers
 		public virtual void TestFixtureSetUp()
 		{
 			HttpSender = new HttpSender();
-			MangerUriBuilder = new ManagerUriBuilder();
 			HttpRequestManager = new HttpRequestManager();
 
 			AppDomain = AppDomain.CurrentDomain;
-
-			AppDomain.UnhandledException += AppDomainUnHandledException;
 
 			ManagerDbConnectionString =
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString;
@@ -98,10 +90,7 @@ namespace Manager.Integration.Test.Initializers
 			var configurationFile = AppDomain.CurrentDomain.SetupInformation.ConfigurationFile;
 			XmlConfigurator.ConfigureAndWatch(new FileInfo(configurationFile));
 
-			if (ClearDatabase)
-			{
-				DatabaseHelper.ClearDatabase(ManagerDbConnectionString);
-			}
+			DatabaseHelper.ClearDatabase(ManagerDbConnectionString);
 
 			CancellationTokenSource = new CancellationTokenSource();
 
@@ -138,18 +127,6 @@ namespace Manager.Integration.Test.Initializers
 			if (AppDomainTask != null)
 			{
 				AppDomainTask.Dispose();
-			}
-		}
-
-		protected virtual void AppDomainUnHandledException(object sender,
-		                                                   UnhandledExceptionEventArgs e)
-		{
-			var exp = e.ExceptionObject as Exception;
-
-			if (exp != null)
-			{
-				this.Log().FatalWithLineNumber(exp.Message,
-				                               exp);
 			}
 		}
 	}
