@@ -58,13 +58,13 @@ namespace Manager.Integration.Test.Helpers
 			{
 				for (var i = 1; i <= numberOfJobRequests; i++)
 				{
-					var testJobTimerParams = new TestJobParams("Name " + i, duration);
-					var testJobTimerParamsToJson = JsonConvert.SerializeObject(testJobTimerParams);
+					var testJobParams = new TestJobParams("Name " + i, duration);
+					var testJobParamsToJson = JsonConvert.SerializeObject(testJobParams);
 
 					var job = new JobQueueItem
 					{
 						Name = "Job Name " + i,
-						Serialized = testJobTimerParamsToJson,
+						Serialized = testJobParamsToJson,
 						Type = "NodeTest.JobHandlers.TestJobParams",
 						CreatedBy = "test"
 					};
