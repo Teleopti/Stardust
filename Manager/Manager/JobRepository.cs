@@ -398,7 +398,7 @@ namespace Stardust.Manager
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
 
-					using (var sqlTransaction = sqlConnection.BeginTransaction(IsolationLevel.Serializable))
+					using (var sqlTransaction = sqlConnection.BeginTransaction())
 					{
 						Job job = null;
 						using (var selectJobThatDidNotEndCommand = _createSqlCommandHelper.CreateSelectJobThatDidNotEndCommand(workerNodeUri, sqlConnection, sqlTransaction))
