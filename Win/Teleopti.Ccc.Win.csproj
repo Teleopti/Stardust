@@ -761,6 +761,12 @@
     <Compile Include="Common\PropertyPageAndWizard\WizardNoRoot.designer.cs">
       <DependentUpon>WizardNoRoot.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forecasting\Forms\CascadingSkillsView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\CascadingSkillsView.Designer.cs">
+      <DependentUpon>CascadingSkillsView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\Forms\ExportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -2827,6 +2833,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\ChildSkillDetailView.resx">
       <DependentUpon>ChildSkillDetailView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\CascadingSkillsView.resx">
+      <DependentUpon>CascadingSkillsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\CopyToSkillView.resx">
       <DependentUpon>CopyToSkillView.cs</DependentUpon>
