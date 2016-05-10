@@ -21,7 +21,7 @@ describe('RtaRouteService', function() {
 
 		target.goToTeams('d970a45a-90ff-4111-bfe1-9b5e015ab45c');
 
-		expect($state.go).toHaveBeenCalledWith('rta-teams', {
+		expect($state.go).toHaveBeenCalledWith('rta.teams', {
 			siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c'
 		});
 	});

@@ -8,7 +8,7 @@
 			};
 
 			this.goToTeams = function(siteId) {
-				$state.go('rta-teams', {
+				$state.go('rta.teams', {
 					siteId: siteId
 				});
 			};

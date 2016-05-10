@@ -1,7 +1,7 @@
 (function() {
 	'use strict';
 	angular.module('wfm.rta')
-		.controller('RtaCtrl', [
+		.controller('RtaSitesCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', 'RtaService', 'RtaOrganizationService', 'RtaFormatService', 'NoticeService',
 			function($scope, $filter, $state, $stateParams, $interval, RtaService, RtaOrganizationService, RtaFormatService, NoticeService) {
 
@@ -48,7 +48,7 @@
 				$scope.onSiteSelect = function(site) {
 					if (site.NumberOfAgents < 1)
 						return;
-					$state.go('rta-teams', {
+					$state.go('rta.teams', {
 						siteId: site.Id
 					});
 				};

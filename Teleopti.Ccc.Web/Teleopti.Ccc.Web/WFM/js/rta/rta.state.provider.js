@@ -19,10 +19,13 @@ angular.module('wfm.rta').provider('RtaState', function() {
 	this.config = function($stateProvider) {
 		$stateProvider.state('rta', {
 			url: '/rta',
+			templateUrl: 'js/rta/rta.html'
+		}).state('rta.sites', {
+			url: '/sites',
 			templateUrl: 'js/rta/rta-sites.html',
-			controller: 'RtaCtrl',
-		}).state('rta-teams', {
-			url: '/rta/teams/:siteId',
+			controller: 'RtaSitesCtrl',
+		}).state('rta.teams', {
+			url: '/teams/:siteId',
 			templateUrl: 'js/rta/rta-teams.html',
 			controller: 'RtaTeamsCtrl'
 		}).state('rta-agents', {
