@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 	{
 		IDataSource _dataSource;
 		ReportGenerator _reportGenerator;
-		private const bool saveTestFiles = false; // Always commit variable as false
 
 		[SetUp]
 		public void Setup()
@@ -151,19 +150,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Reporting.Core
 
 		private void SaveTestFile(GeneratedReport report)
 		{
-			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
-			if (saveTestFiles)
-			{
-				var uniqueFilename = $"{report.ReportName}_{DateTime.Now.ToString("yyyyMMdd_HHmmss_fff")}.{report.Extension}";
-				var tempDir = new DirectoryInfo(Path.Combine(Path.GetTempPath(), "WFMTestReports"));
-				tempDir.Create();
-				var path = Path.Combine(tempDir.FullName, uniqueFilename);
-				Console.WriteLine($"Saving report to disk at destination '{path}'");
-				using (var fs = new FileStream(path, FileMode.Create))
-				{
-					fs.Write(report.Bytes, 0, report.Bytes.Length);
-				}
-			}
+			var uniqueFilename = $"{report.ReportName}_{DateTime.Now.ToString("yyyyMMdd_HHmmss_fff")}.{report.Extension}";
+
+			// Uncomment next line when you want to see the generated files.
+			//var tempDir = new DirectoryInfo(Path.Combine(Path.GetTempPath(), "WFMTestReports"));
+			//tempDir.Create();
+			//var path = Path.Combine(tempDir.FullName, uniqueFilename);
+			//Console.WriteLine($"Saving report to disk at destination '{path}'");
+			//using (var fs = new FileStream(path, FileMode.Create))
+			//{
+			//	fs.Write(report.Bytes, 0, report.Bytes.Length);
+			//}
 		}
 
 		private List<SqlParameter> getTestParams()
