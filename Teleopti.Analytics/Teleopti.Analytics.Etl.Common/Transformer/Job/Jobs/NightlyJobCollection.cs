@@ -15,7 +15,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// CLEANUP
 			Add(new DimPersonDeleteJobStep(jobParameters));     // BU independent
 			Add(new DimPersonTrimJobStep(jobParameters));     // BU independent
-			Add(new DimScenarioDeleteJobStep(jobParameters));   // BU independent
 			Add(new MaintenanceJobStep(jobParameters));     // BU independent
 
 			// STAGE TABLES

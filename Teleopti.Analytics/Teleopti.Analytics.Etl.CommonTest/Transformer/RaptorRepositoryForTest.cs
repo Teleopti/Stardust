@@ -516,11 +516,6 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			return 0;
 		}
 
-		public int DimScenarioDeleteData(IBusinessUnit businessUnit)
-		{
-			return 0;
-		}
-
 		public int DimTimeZoneDeleteData(IBusinessUnit businessUnit)
 		{
 			return 0;

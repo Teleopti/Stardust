@@ -999,13 +999,6 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 											  _dataMartConnectionString);
 		}
 
-		public int DimScenarioDeleteData(IBusinessUnit businessUnit)
-		{
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_scenario_delete", null,
-											  _dataMartConnectionString);
-		}
-
 		public int DimTimeZoneDeleteData(IBusinessUnit businessUnit)
 		{
 			return

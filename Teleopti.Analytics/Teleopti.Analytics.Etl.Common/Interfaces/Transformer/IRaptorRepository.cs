@@ -150,7 +150,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		// Cleanup
 		int DimPersonDeleteData(IBusinessUnit businessUnit);
 		int DimPersonTrimData(IBusinessUnit businessUnit);
-		int DimScenarioDeleteData(IBusinessUnit businessUnit);
 		int DimTimeZoneDeleteData(IBusinessUnit businessUnit);
 		int PerformMaintenance();
 		int RunDelayedJob();

@@ -317,7 +317,6 @@
     <Compile Include="Transformer\Job\Steps\DimPersonWindowsLoginJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimQualityQuestLoadJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimQueueJobStep.cs" />
-    <Compile Include="Transformer\Job\Steps\DimScenarioDeleteJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimScenarioJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimScorecardJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\DimShiftCategoryJobStep.cs" />
