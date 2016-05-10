@@ -345,8 +345,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				.Should().Not.Be.Empty();
 		}
 
-		[Test, Ignore("FIX THIS!")]
-		public void ShouldNotConsiderWeeklyMaxWorkTime_OnSpecificDay_INVESTIGATE()
+		[Test]
+		public void ShouldNotConsiderWeeklyMaxWorkTime_OnSpecificDay_UsedToFailButNowGreenLetsKeepItAndSeeIfItIsForeverGreen()
 		{
 			var scenario = new Scenario("_");
 			var phoneActivity = new Activity("_") { InWorkTime = true };
