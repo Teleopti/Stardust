@@ -34,7 +34,7 @@
 		function iAmCalledFromFatClient() {
 			removeElements();
 			expandMaterialContainer();
-			// changeToClassicTheme();
+			changeToClassicTheme();
 		};
 
 		var removeElements = function() {
@@ -59,8 +59,8 @@
 		};
 
 		var changeToClassicTheme = function() {
-			if (typeof angular == null) {
-				setTimeout(changeToClassicTheme, 2000);
+			if (angular.element(document.getElementById('darkTheme')).scope() == null) {
+				return
 			} else {
 				angular.element(document.getElementById('darkTheme')).scope().toggleTheme('classic');
 			}
