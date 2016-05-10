@@ -8,60 +8,62 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 	public class CascadingSkillPresenter
 	{
 		private readonly ISkillRepository _skillRepository;
-		private readonly IList<ISkill> _nonCascadingSkills;
-		private readonly IList<ISkill> _cascadingSkills;
+		private cascadingSkillModel _model;
 
 		public CascadingSkillPresenter(ISkillRepository skillRepository)
 		{
 			_skillRepository = skillRepository;
-			_nonCascadingSkills = new List<ISkill>();
-			_cascadingSkills = new List<ISkill>();
 		}
 
-		public void Init()
+		private cascadingSkillModel model()
 		{
-			var skills = _skillRepository.LoadAll().OrderBy(x => x.CascadingIndex);
-			foreach (var skill in skills)
+			if (_model == null)
 			{
-				if (skill.IsCascading())
+				_model = new cascadingSkillModel();
+				var skills = _skillRepository.LoadAll().OrderBy(x => x.CascadingIndex);
+				foreach (var skill in skills)
 				{
-					_cascadingSkills.Add(skill);
-				}
-				else
-				{
-					_nonCascadingSkills.Add(skill);
+					if (skill.IsCascading())
+					{
+						_model.CascadingSkills.Add(skill);
+					}
+					else
+					{
+						_model.NonCascadingSkills.Add(skill);
+					}
 				}
 			}
+			return _model;
 		}
 
-		public IEnumerable<ISkill> NonCascadingSkills => _nonCascadingSkills;
+		public IEnumerable<ISkill> NonCascadingSkills => model().NonCascadingSkills;
 
-		public IEnumerable<ISkill> CascadingSkills => _cascadingSkills;
+		public IEnumerable<ISkill> CascadingSkills => model().CascadingSkills;
 
 		public void MakeCascading(ISkill skill)
 		{
-			if (_nonCascadingSkills.Remove(skill))
+			if (model().NonCascadingSkills.Remove(skill))
 			{
-				_cascadingSkills.Add(skill);
+				model().CascadingSkills.Add(skill);
 			}
 		}
 
 		public void MakeNonCascading(ISkill skill)
 		{
-			if (_cascadingSkills.Remove(skill))
+			if (model().CascadingSkills.Remove(skill))
 			{
-				_nonCascadingSkills.Add(skill);
+				model().NonCascadingSkills.Add(skill);
 			}
 		}
 
 		public void Confirm()
 		{
-			foreach (var skill in _cascadingSkills)
+			foreach (var skill in model().CascadingSkills)
 			{
-				skill.SetCascadingIndex(_cascadingSkills);
+				skill.SetCascadingIndex(model().CascadingSkills);
 			}
 
-			foreach (var nonCascadingSkill in _nonCascadingSkills)
+			foreach (var nonCascadingSkill in model().NonCascadingSkills)
 			{
 				nonCascadingSkill.ClearCascadingIndex();
 			}
@@ -69,22 +71,34 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 
 		public void MoveUpCascadingSkill(ISkill skill)
 		{
-			var currentIndex = _cascadingSkills.IndexOf(skill);
+			var currentIndex = model().CascadingSkills.IndexOf(skill);
 			if (currentIndex > 0)
 			{
-				_cascadingSkills.RemoveAt(currentIndex);
-				_cascadingSkills.Insert(currentIndex - 1, skill);
+				model().CascadingSkills.RemoveAt(currentIndex);
+				model().CascadingSkills.Insert(currentIndex - 1, skill);
 			}
 		}
 
 		public void MoveDownCascadingSkill(ISkill skill)
 		{
-			var currentIndex = _cascadingSkills.IndexOf(skill);
-			if (currentIndex > -1 && currentIndex < _cascadingSkills.Count - 1)
+			var currentIndex = model().CascadingSkills.IndexOf(skill);
+			if (currentIndex > -1 && currentIndex < model().CascadingSkills.Count - 1)
 			{
-				_cascadingSkills.RemoveAt(currentIndex);
-				_cascadingSkills.Insert(currentIndex + 1, skill);
+				model().CascadingSkills.RemoveAt(currentIndex);
+				model().CascadingSkills.Insert(currentIndex + 1, skill);
 			}
+		}
+
+		private class cascadingSkillModel
+		{
+			public cascadingSkillModel()
+			{
+				NonCascadingSkills = new List<ISkill>();
+				CascadingSkills = new List<ISkill>();
+			}
+
+			public IList<ISkill> NonCascadingSkills { get; private set; }
+			public IList<ISkill> CascadingSkills { get; private set; }
 		}
 	}
 }

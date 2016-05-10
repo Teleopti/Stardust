@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var skill = new Skill();
 			SkillRepository.Add(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.NonCascadingSkills.Should().Have.SameSequenceAs(skill);
 			target.CascadingSkills.Should().Be.Empty();
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill.SetCascadingIndex_UseFromTestOnly(1);
 			SkillRepository.Add(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.CascadingSkills.Should().Have.SameSequenceAs(skill);
 			target.NonCascadingSkills.Should().Be.Empty();
@@ -51,7 +49,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.CascadingSkills.Should().Have.SameSequenceAs(skill1, skill2, skill3);
 		}
@@ -62,7 +59,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var skill = new Skill();
 			SkillRepository.Add(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MakeCascading(skill);
 
@@ -77,7 +73,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill.SetCascadingIndex_UseFromTestOnly(14);
 			SkillRepository.Add(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MakeCascading(skill);
 
@@ -92,7 +87,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill.SetCascadingIndex_UseFromTestOnly(11);
 			SkillRepository.Add(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MakeNonCascading(skill);
 
@@ -106,7 +100,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var skill = new Skill();
 			SkillRepository.Add(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MakeNonCascading(skill);
 
@@ -122,7 +115,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 			target.MakeCascading(skill1);
 			target.MakeCascading(skill2);
 			target.Confirm();
@@ -143,7 +135,6 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 			target.MakeNonCascading(skill1);
 			target.MakeNonCascading(skill2);
 
@@ -162,12 +153,10 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-
 			SkillRepository.Add(skill3);
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MoveUpCascadingSkill(skill3);
 
@@ -181,11 +170,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MoveUpCascadingSkill(skill1);
 
@@ -198,11 +185,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var skill2 = new Skill();
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MoveUpCascadingSkill(skill2);
 
@@ -218,12 +203,10 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-
 			SkillRepository.Add(skill3);
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MoveDownCascadingSkill(skill1);
 
@@ -237,11 +220,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MoveDownCascadingSkill(skill2);
 
@@ -254,11 +235,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var skill2 = new Skill();
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-
 			SkillRepository.Add(skill1);
 			SkillRepository.Add(skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
-			target.Init();
 
 			target.MoveDownCascadingSkill(skill2);
 
