@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// schedule readmodels
 			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
+			system.UseTestDouble<FakeProjectionVersionPersister>().For<IProjectionVersionPersister>();
 			
 
 			fakePrincipal(system);
