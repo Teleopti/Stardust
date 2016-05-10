@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakeSkillRepository : ISkillRepository
 	{
-		private IList<ISkill> _skills;
+		private readonly IList<ISkill> _skills;
  
 		public FakeSkillRepository()
 		{
@@ -24,6 +24,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			skill.SetId(Guid.NewGuid());
 			_skills.Add(skill);
 			return skill;
+		}
+
+		public void Has(params ISkill[] skills)
+		{
+			foreach (var skill in skills)
+			{
+				_skills.Add(skill);
+			}
 		}
 
 		public void Add(ISkill skill)

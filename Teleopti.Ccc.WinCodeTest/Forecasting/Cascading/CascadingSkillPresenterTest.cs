@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 		public void ShouldPlaceNonCascadingSkillInNonCascadingList()
 		{
 			var skill = new Skill();
-			SkillRepository.Add(skill);
+			SkillRepository.Has(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.NonCascadingSkills.Should().Have.SameSequenceAs(skill);
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 		{
 			var skill = new Skill();
 			skill.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill);
+			SkillRepository.Has(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.CascadingSkills.Should().Have.SameSequenceAs(skill);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 		public void MakeSkillCascading()
 		{
 			var skill = new Skill();
-			SkillRepository.Add(skill);
+			SkillRepository.Has(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MakeCascading(skill);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 		{
 			var skill = new Skill();
 			skill.SetCascadingIndex_UseFromTestOnly(14);
-			SkillRepository.Add(skill);
+			SkillRepository.Has(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MakeCascading(skill);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 		{
 			var skill = new Skill();
 			skill.SetCascadingIndex_UseFromTestOnly(11);
-			SkillRepository.Add(skill);
+			SkillRepository.Has(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MakeNonCascading(skill);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 		public void DoNotMakeNonSkillCascadingWhenAlreadyIsNonCascading()
 		{
 			var skill = new Skill();
-			SkillRepository.Add(skill);
+			SkillRepository.Has(skill);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MakeNonCascading(skill);
@@ -94,8 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 		{
 			var skill1 = new Skill();
 			var skill2 = new Skill();
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 			target.MakeCascading(skill1);
 			target.MakeCascading(skill2);
@@ -114,8 +113,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill1.SetCascadingIndex_UseFromTestOnly(13);
 			var skill2 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(57);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 			target.MakeNonCascading(skill1);
 			target.MakeNonCascading(skill2);
@@ -135,9 +133,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill3);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill3, skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MoveUpCascadingSkill(skill3);
@@ -152,8 +148,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MoveUpCascadingSkill(skill1);
@@ -167,8 +162,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var skill2 = new Skill();
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MoveUpCascadingSkill(skill2);
@@ -185,9 +179,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill3);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill3, skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MoveDownCascadingSkill(skill1);
@@ -202,8 +194,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MoveDownCascadingSkill(skill2);
@@ -217,8 +208,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var skill2 = new Skill();
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.MoveDownCascadingSkill(skill2);
@@ -235,9 +225,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.SetCascadingIndex_UseFromTestOnly(2);
 			var skill1 = new Skill();
 			skill1.SetCascadingIndex_UseFromTestOnly(1);
-			SkillRepository.Add(skill3);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill3, skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.CascadingSkills.Should().Have.SameSequenceAs(skill1, skill2, skill3);
@@ -253,9 +241,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			skill2.ChangeName("2");
 			var skill1 = new Skill();
 			skill1.ChangeName("1");
-			SkillRepository.Add(skill3);
-			SkillRepository.Add(skill1);
-			SkillRepository.Add(skill2);
+			SkillRepository.Has(skill3, skill1, skill2);
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.NonCascadingSkills.Should().Have.SameSequenceAs(skill1, skill2, skill3);
