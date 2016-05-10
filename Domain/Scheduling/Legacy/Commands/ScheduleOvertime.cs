@@ -18,32 +18,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
+		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
 		public ScheduleOvertime(Func<ISchedulerStateHolder> schedulerState, 
 																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	IResourceOptimizationHelper resourceOptimizationHelper,
-																	Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended)
+																	DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
 		{
 			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
+			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
 		}
 
 		public void Execute(IOvertimePreferences overtimePreferences, 
 										ISchedulingProgress backgroundWorker, 
-										IList<IScheduleDay> selectedSchedules,
-										bool startWithFullResourceCalculation)
+										IList<IScheduleDay> selectedSchedules)
 		{
-			if (startWithFullResourceCalculation)
-			{
-				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
-			}
+			_doFullResourceOptimizationOneTime.ExecuteIfNecessary(new NoSchedulingProgress(), false);
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();

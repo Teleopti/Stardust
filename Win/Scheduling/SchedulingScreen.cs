@@ -3446,7 +3446,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_container.Resolve<ScheduleOvertime>()
 				.Execute(argument.OvertimePreferences, new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling),
-								_gridLockManager.UnlockedDays(scheduleDays), false);
+								_gridLockManager.UnlockedDays(scheduleDays));
 
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 			_undoRedo.CommitBatch();
