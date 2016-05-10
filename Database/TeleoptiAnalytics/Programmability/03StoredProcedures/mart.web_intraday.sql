@@ -20,9 +20,8 @@ BEGIN
             
 	DECLARE @time_zone_id as int
 	DECLARE @default_scenario_id int
+	DECLARE @bu_id int
 	
-	SELECT @default_scenario_id = scenario_id FROM mart.dim_scenario WHERE default_scenario = 1
-
 	CREATE TABLE #skills(id uniqueidentifier)
 	CREATE TABLE #queues(queue_id int)
 	CREATE TABLE #result(
@@ -36,6 +35,13 @@ BEGIN
 
 	INSERT INTO #skills
 	SELECT * FROM mart.SplitStringGuid(@skill_list)
+
+	SELECT @bu_id = business_unit_id FROM mart.dim_skill WHERE skill_id = (SELECT TOP 1 skill_id FROM #skills)
+
+	SELECT @default_scenario_id = scenario_id 
+	FROM mart.dim_scenario 
+	WHERE business_unit_id = @bu_id
+		AND default_scenario = 1
                          
 	INSERT INTO #queues
 	SELECT DISTINCT qw.queue_id 
@@ -101,6 +107,8 @@ BEGIN
 	FROM #result 
 	ORDER BY interval_id
 END
+
+
 
 GO
 

@@ -20,11 +20,18 @@ BEGIN
             
 	DECLARE @time_zone_id as int
 	DECLARE @default_scenario_id int
+	DECLARE @bu_id int
 	
-	SELECT @default_scenario_id = scenario_id FROM mart.dim_scenario WHERE default_scenario = 1
-	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code
+	SELECT @bu_id = business_unit_id FROM mart.dim_workload WHERE workload_id = @workload_id
 
-	SELECT
+	SELECT @default_scenario_id = scenario_id 
+	FROM mart.dim_scenario 
+	WHERE business_unit_id = @bu_id
+		AND default_scenario = 1
+					
+	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code
+	
+	SELECT 
 		fw.date_id,
 		fw.interval_id,
 		fw.forecasted_calls,
