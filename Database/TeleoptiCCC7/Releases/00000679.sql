@@ -9,19 +9,3 @@ CONSTRAINT [PK_ProjectionVersion] PRIMARY KEY NONCLUSTERED
 	[Date] ASC
 )
 )
-GO
-
-INSERT INTO
-	[dbo].[ProjectionVersion]
-	(
-		[Person],
-		[Date],
-		[Version]
-	)
-SELECT 
-	[Person],
-	[Date],
-	0
-FROM
-	[dbo].[PersonAssignment]
-GO
