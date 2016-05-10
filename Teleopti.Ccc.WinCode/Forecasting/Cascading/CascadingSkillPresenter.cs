@@ -5,13 +5,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 {
-	public class CascadingSkillModel
+	public class CascadingSkillPresenter
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly IList<ISkill> _nonCascadingSkills;
 		private readonly IList<ISkill> _cascadingSkills;
 
-		public CascadingSkillModel(ISkillRepository skillRepository)
+		public CascadingSkillPresenter(ISkillRepository skillRepository)
 		{
 			_skillRepository = skillRepository;
 			_nonCascadingSkills = new List<ISkill>();

@@ -401,7 +401,7 @@
     <Compile Include="Common\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Converters\CustomSorterBlankAlwaysLast.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverter.cs" />
-    <Compile Include="Forecasting\Cascading\CascadingSkillModel.cs" />
+    <Compile Include="Forecasting\Cascading\CascadingSkillPresenter.cs" />
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenter.cs" />
