@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 			if (_internalModel == null)
 			{
 				_internalModel = new cascadingSkillModel();
-				var skills = _skillRepository.LoadAll().OrderBy(x => x.CascadingIndex);
+				var skills = _skillRepository.LoadAll().OrderBy(x => x.Name).ThenBy(x => x.CascadingIndex);
 				foreach (var skill in skills)
 				{
 					if (skill.IsCascading())
