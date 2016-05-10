@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Shoveling;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Shoveling
 	[Toggle(Toggles.ResourcePlanner_CascadingSkillsPOC_37679)]
 	public class ShovelServicePocTest
 	{
-		public ResourceCalculationContextFactory ResourceCalculationContextFactory;
+		public ResourceCalculationContextFactoryPOC ResourceCalculationContextFactory;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public Func<IResourceOptimizationHelperExtended> ResourceOptimizationHelperExtended;
 

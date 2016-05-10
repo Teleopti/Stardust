@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 
 		private void buttonGo_Click(object sender, EventArgs e)
 		{
-			var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactory>());
+			var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactoryPOC>());
 			var orderedSkillList =
 				_schedulerState.SchedulingResultState.Skills.Where(
 					skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).OrderBy(skill => skill.Name).ToList();

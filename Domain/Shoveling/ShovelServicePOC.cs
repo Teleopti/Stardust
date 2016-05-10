@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,9 +12,9 @@ namespace Teleopti.Ccc.Domain.Shoveling
 {
 	public class ShovelServicePoc
 	{
-		private readonly ResourceCalculationContextFactory _resourceCalculationContext;
+		private readonly ResourceCalculationContextFactoryPOC _resourceCalculationContext;
 
-		public ShovelServicePoc(ResourceCalculationContextFactory resourceCalculationContext)
+		public ShovelServicePoc(ResourceCalculationContextFactoryPOC resourceCalculationContext)
 		{
 			_resourceCalculationContext = resourceCalculationContext;
 		}
@@ -298,6 +299,50 @@ namespace Teleopti.Ccc.Domain.Shoveling
 		{
 			if (string.IsNullOrEmpty(value)) return value;
 			return value.Length <= maxLength ? value : value.Substring(0, maxLength);
+		}
+	}
+
+	public class ResourceCalculationContextFactoryPOC
+	{
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly Func<IPersonSkillProvider> _personSkillProvider;
+
+		public ResourceCalculationContextFactoryPOC(Func<ISchedulerStateHolder> schedulerStateHolder, Func<IPersonSkillProvider> personSkillProvider)
+		{
+			_schedulerStateHolder = schedulerStateHolder;
+			_personSkillProvider = personSkillProvider;
+		}
+
+		public IDisposable Create()
+		{
+			var schedulerStateHolder = _schedulerStateHolder();
+			var createResources = new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() =>
+			{
+				var minutesPerInterval = 15;
+
+				if (schedulerStateHolder.SchedulingResultState.Skills.Any())
+				{
+					minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+				}
+				var extractor = new ScheduleProjectionExtractor(_personSkillProvider(), minutesPerInterval);
+				return extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+			});
+
+			return new ResourceCalculationContext(createResources);
+		}
+
+		public IDisposable CreateForShoveling(Func<IPersonSkillProvider> personSkillProvider)
+		{
+			var schedulerStateHolder = _schedulerStateHolder();
+			var minutesPerInterval = 15;
+
+			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
+			{
+				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
+			}
+			var extractor = new ScheduleProjectionExtractor(personSkillProvider(), minutesPerInterval);
+			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
+			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => resources)); //FEL! ska inte exekveras direkt men bara testkod
 		}
 	}
 }

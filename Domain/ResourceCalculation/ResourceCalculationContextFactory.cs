@@ -33,19 +33,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			return new ResourceCalculationContext(createResources);
 		}
-
-		public IDisposable CreateForShoveling(Func<IPersonSkillProvider> personSkillProvider)
-		{
-			var schedulerStateHolder = _schedulerStateHolder();
-			var minutesPerInterval = 15;
-
-			if (schedulerStateHolder.SchedulingResultState.Skills.Any())
-			{
-				minutesPerInterval = schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution);
-			}
-			var extractor = new ScheduleProjectionExtractor(personSkillProvider(), minutesPerInterval);
-			var resources = extractor.CreateRelevantProjectionList(schedulerStateHolder.Schedules);
-			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => resources)); //FEL! ska inte exekveras direkt men bara testkod
-		} 
 	}
 }

@@ -793,7 +793,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
 				{
-					var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactory>());
+					var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactoryPOC>());
 					var orderedSkillList =
 						_schedulerState.SchedulingResultState.Skills.Where(
 							skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).OrderBy(skill => skill.Name).ToList();
