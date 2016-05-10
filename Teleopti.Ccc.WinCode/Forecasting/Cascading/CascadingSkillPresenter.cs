@@ -8,32 +8,11 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 	public class CascadingSkillPresenter
 	{
 		private readonly ISkillRepository _skillRepository;
-		private cascadingSkillModel _model;
+		private cascadingSkillModel _internalModel;
 
 		public CascadingSkillPresenter(ISkillRepository skillRepository)
 		{
 			_skillRepository = skillRepository;
-		}
-
-		private cascadingSkillModel model()
-		{
-			if (_model == null)
-			{
-				_model = new cascadingSkillModel();
-				var skills = _skillRepository.LoadAll().OrderBy(x => x.CascadingIndex);
-				foreach (var skill in skills)
-				{
-					if (skill.IsCascading())
-					{
-						_model.CascadingSkills.Add(skill);
-					}
-					else
-					{
-						_model.NonCascadingSkills.Add(skill);
-					}
-				}
-			}
-			return _model;
 		}
 
 		public IEnumerable<ISkill> NonCascadingSkills => model().NonCascadingSkills;
@@ -89,6 +68,27 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 			}
 		}
 
+		private cascadingSkillModel model()
+		{
+			if (_internalModel == null)
+			{
+				_internalModel = new cascadingSkillModel();
+				var skills = _skillRepository.LoadAll().OrderBy(x => x.CascadingIndex);
+				foreach (var skill in skills)
+				{
+					if (skill.IsCascading())
+					{
+						_internalModel.CascadingSkills.Add(skill);
+					}
+					else
+					{
+						_internalModel.NonCascadingSkills.Add(skill);
+					}
+				}
+			}
+			return _internalModel;
+		}
+
 		private class cascadingSkillModel
 		{
 			public cascadingSkillModel()
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 				CascadingSkills = new List<ISkill>();
 			}
 
-			public IList<ISkill> NonCascadingSkills { get; private set; }
-			public IList<ISkill> CascadingSkills { get; private set; }
+			public IList<ISkill> NonCascadingSkills { get; }
+			public IList<ISkill> CascadingSkills { get; }
 		}
 	}
 }
