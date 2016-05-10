@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
     public partial class CascadingSkillsView : BaseDialogForm
     {
-	    private readonly CascadingSkillModel _model;
+	    private readonly CascadingSkillPresenter _presenter;
 	    private BindingSource _bindingSourceNonCascading;
 	    private BindingSource _bindingSourceCascading;
 
-		public CascadingSkillsView(CascadingSkillModel model)
+		public CascadingSkillsView(CascadingSkillPresenter presenter)
         {
-		    _model = model;
+		    _presenter = presenter;
 		    InitializeComponent();
 				
             if (DesignMode) return;
@@ -27,10 +27,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             base.OnLoad(e);
             if (DesignMode)return;
 			
-			_model.Init();
-
-	        _bindingSourceNonCascading = new BindingSource {DataSource = _model.NonCascadingSkills};
-			_bindingSourceCascading = new BindingSource { DataSource = _model.CascadingSkills};
+	        _bindingSourceNonCascading = new BindingSource {DataSource = _presenter.NonCascadingSkills};
+			_bindingSourceCascading = new BindingSource { DataSource = _presenter.CascadingSkills};
 
 			listBoxNonCascading.DataSource = _bindingSourceNonCascading;
 	        listBoxNonCascading.DisplayMember = "Name";
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				foreach (var selectedItem in listBoxCascading.SelectedItems)
 				{ 
 					var skill = selectedItem as ISkill;
-					_model.MoveUpCascadingSkill(skill);
+					_presenter.MoveUpCascadingSkill(skill);
 				}
 
 				_bindingSourceCascading.ResetBindings(false);
@@ -67,11 +65,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			var selectedIndices = listBoxCascading.SelectedIndices.Cast<int>().ToList();
 			var selectedItems = listBoxCascading.SelectedItems.Cast<ISkill>().ToList();
 
-			if(selectedIndices.Count > 0 && selectedIndices[selectedIndices.Count - 1] < _model.CascadingSkills.Count() - 1)
+			if(selectedIndices.Count > 0 && selectedIndices[selectedIndices.Count - 1] < _presenter.CascadingSkills.Count() - 1)
 			{
 				foreach (var skill in selectedItems.Reverse<ISkill>())
 				{
-					_model.MoveDownCascadingSkill(skill);
+					_presenter.MoveDownCascadingSkill(skill);
 				}
 
 				_bindingSourceCascading.ResetBindings(false);
@@ -90,7 +88,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			foreach (var selectedItem in listBoxNonCascading.SelectedItems)
 			{
 				var skill = selectedItem as ISkill;
-				_model.MakeCascading(skill);
+				_presenter.MakeCascading(skill);
 			}
 
 			_bindingSourceCascading.ResetBindings(false);
@@ -102,7 +100,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			foreach (var selectedItem in listBoxCascading.SelectedItems)
 			{
 				var skill = selectedItem as ISkill;
-				_model.MakeNonCascading(skill);
+				_presenter.MakeNonCascading(skill);
 			}
 
 			_bindingSourceCascading.ResetBindings(false);
