@@ -75,6 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(skill.Activity, loadedAggregateFromDatabase.Activity);
             Assert.AreEqual(skill.StaffingThresholds,loadedAggregateFromDatabase.StaffingThresholds);
             Assert.AreEqual(skill.MidnightBreakOffset, loadedAggregateFromDatabase.MidnightBreakOffset);
+			Assert.IsNull(skill.CascadingIndex);
         }
 
         [Test]
@@ -613,7 +614,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    target.FindSkillsWithAtLeastOneQueueSource().Should().Be.Empty();
 	    }
 
-	    protected override Repository<ISkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		[Test]
+		public void ShouldPersistCascadingIndex()
+		{
+			var index = new Random().Next();
+			var skill = new Skill("_", "_", Color.AliceBlue, 1, _skillType) { Activity = _activity, TimeZone = TimeZoneInfo.Utc };
+			skill.SetCascadingIndex_UseFromTestOnly(index);
+			PersistAndRemoveFromUnitOfWork(skill);
+
+			var target = new SkillRepository(CurrUnitOfWork);
+			target.Get(skill.Id.Value).CascadingIndex
+				.Should().Be.EqualTo(index);
+		}
+
+		protected override Repository<ISkill> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new SkillRepository(currentUnitOfWork);
         }
