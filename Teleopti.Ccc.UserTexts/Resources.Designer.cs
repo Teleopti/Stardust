@@ -4854,6 +4854,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot delete base activity.
+        /// </summary>
+        public static string CannotDeleteBaseActivity {
+            get {
+                return ResourceManager.GetString("CannotDeleteBaseActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot delete default scenario &apos;{0}&apos;..
         /// </summary>
         public static string CannotDeleteDefaultScenario {

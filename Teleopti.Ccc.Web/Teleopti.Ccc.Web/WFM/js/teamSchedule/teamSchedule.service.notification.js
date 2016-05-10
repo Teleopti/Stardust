@@ -7,6 +7,38 @@
 	function teamScheduleNotificationService(NoticeService, $translate) {
 		this.notify = notify;
 
+		this.reportActionResult = reportActionResult;
+
+		function reportActionResult(commandInfo, actionTargets, failActionResults) {
+			
+			var actionInfo = [actionTargets.length, actionTargets.length - failActionResults.length, failActionResults.length];
+			var successMessage = replaceParams($translate.instant(commandInfo.success), actionInfo);
+			var warningMessage = replaceParams($translate.instant(commandInfo.warning), actionInfo);
+			
+			if (failActionResults.length === 0) {
+				NoticeService.success(successMessage, 5000, true);
+				return;
+			} 
+			
+			NoticeService.warning(warningMessage, 5000, true);
+
+			var results = {}
+
+			angular.forEach(failActionResults, function(result) {
+				var messages = result.Messages;
+				var personName = actionTargets.find(function(t) { return t.PersonId === result.PersonId; }).Name;
+				angular.forEach(messages, function(message) {
+					collectResult(message, personName, results);
+				});
+			});
+
+			angular.forEach(results, function (value, key) {
+				var errorMessage = key + " : " + value.join(", ");
+				NoticeService.error(errorMessage, null, true);
+			});
+		}
+
+
 		function notify(type, template, params) {
 			var translatedTemplate = $translate.instant(template);
 			var message = replaceParams(translatedTemplate, params);
@@ -16,7 +48,7 @@
 					break;
 
 				case 'error':
-					NoticeService.error(message, 5000, true);
+					NoticeService.error(message, null, true);
 					break;
 
 				case 'warning':
@@ -28,6 +60,13 @@
 			}
 			return message;
 		}
+
+		function collectResult(key, value, results) {
+			if (results[key] === undefined)
+				results[key] = [value];
+			else if (results[key].indexOf(value) < 0)
+				results[key].push(value);
+		};
 
 		function replaceParams(text, params) {
 			if (params) {

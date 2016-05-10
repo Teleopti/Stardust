@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -25,26 +22,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var personRepository = new FakeWriteSideRepository<IPerson> {PersonFactory.CreatePersonWithId()};
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
-			{
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(
-					mainActivity, personRepository.Single(),
-					new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
-			};
+			var otherActivity = ActivityFactory.CreateActivity("Admin");
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, personRepository.Single(),
+				new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+
+			pa.AddActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository {pa};			
+
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 
-
 			var personAssignment = personAssignmentRepository.Single();
-			var shiftLayer = personAssignment.ShiftLayers.Single();
-			shiftLayer.WithId();
-
-
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
+			
 			var target = new RemoveActivityCommandHandler(personAssignmentRepository, scenario, personRepository);
+
+			var otherActivityLayer = personAssignment.ShiftLayers.First(sl => sl.Payload == otherActivity);
 
 			var command = new RemoveActivityCommand
 			{
 				PersonId = personRepository.Single().Id.Value,
-				ShiftLayerId = shiftLayer.Id.Value,
+				ShiftLayerId = otherActivityLayer.Id.Value,
 				Date = new DateOnly(2013, 11, 14),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
@@ -58,37 +58,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var @event = personAssignment.PopAllEvents(new Now()).OfType<PersonAssignmentLayerRemovedEvent>().Single();
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.Date.Should().Be(new DateTime(2013, 11, 14));
-			@event.StartDateTime.Should().Be(shiftLayer.Period.StartDateTime);
-			@event.EndDateTime.Should().Be(shiftLayer.Period.EndDateTime);
+			@event.StartDateTime.Should().Be(otherActivityLayer.Period.StartDateTime);
+			@event.EndDateTime.Should().Be(otherActivityLayer.Period.EndDateTime);
 
 		}
 
 		[Test]
 		public void ShouldSetupEntityState()
 		{
-			var personRepository = new FakeWriteSideRepository<IPerson> {PersonFactory.CreatePersonWithId()};
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
-			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
-			{
-				PersonAssignmentFactory.CreateAssignmentWithMainShift(
-					mainActivity, personRepository.Single(),
-					new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
-			};
+			var otherActivity = ActivityFactory.CreateActivity("Admin");
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,personRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+
+			pa.AddActivity(otherActivity,new DateTimePeriod(2013,11,14,12,2013,11,14,14));
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
+
 			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
 
-
 			var personAssignment = personAssignmentRepository.Single();
-			var shiftLayer = personAssignment.ShiftLayers.Single();
-			shiftLayer.WithId();
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
 
+			var target = new RemoveActivityCommandHandler(personAssignmentRepository,scenario,personRepository);
 
-			var target = new RemoveActivityCommandHandler(personAssignmentRepository, scenario, personRepository);
+			var otherActivityLayer = personAssignment.ShiftLayers.First(sl => sl.Payload == otherActivity);
 
 			var command = new RemoveActivityCommand
 			{
 				PersonId = personRepository.Single().Id.Value,
-				ShiftLayerId = shiftLayer.Id.Value,
-				Date = new DateOnly(2013, 11, 14),
+				ShiftLayerId = otherActivityLayer.Id.Value,
+				Date = new DateOnly(2013,11,14),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = Guid.NewGuid(),
@@ -98,7 +101,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			target.Handle(command);
 
-			personAssignment.ShiftLayers.Count().Should().Be.EqualTo(0);
+			personAssignment.ShiftLayers.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldReportErrorWhenRemoveBaseShiftLayer()
+		{
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var otherActivity = ActivityFactory.CreateActivity("Admin");
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity,personRepository.Single(),
+				new DateTimePeriod(2013,11,14,8,2013,11,14,16));
+		
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
+
+			var scenario = new ThisCurrentScenario(personAssignmentRepository.Single().Scenario);
+
+			var personAssignment = personAssignmentRepository.Single();
+			personAssignment.ShiftLayers.ForEach(sl => sl.WithId());
+
+			var target = new RemoveActivityCommandHandler(personAssignmentRepository,scenario,personRepository);
+			var shiftLayer = personAssignment.ShiftLayers.First();
+
+			var command = new RemoveActivityCommand
+			{
+				PersonId = personRepository.Single().Id.Value,
+				ShiftLayerId = shiftLayer.Id.Value,
+				Date = new DateOnly(2013,11,14),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = Guid.NewGuid(),
+					TrackId = Guid.NewGuid()
+				}
+			};
+
+			target.Handle(command);
+
+			personAssignment.ShiftLayers.Count().Should().Be.EqualTo(1);
+			command.ErrorMessages.Single().Should().Be.EqualTo(Resources.CannotDeleteBaseActivity);
 		}
 
 		[Test]

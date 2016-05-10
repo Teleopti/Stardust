@@ -36,9 +36,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				Person = person
 			});
 
+			command.ErrorMessages = new List<string>();
+
 			if (personAssignment == null)
 			{
-				command.ErrorMessages = new List<string> {Resources.PersonAssignmentIsNotValidDot};
+				command.ErrorMessages.Add(Resources.PersonAssignmentIsNotValidDot);
 				return;
 			}
 			
@@ -46,10 +48,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (shiftLayer == null)
 			{
-				command.ErrorMessages = new List<string> { Resources.NoShiftsFound };
+				command.ErrorMessages.Add(Resources.NoShiftsFound);
 				return;
 			}
-			
+
+			var mainShiftLayer = shiftLayer as MainShiftLayer;
+
+			if (mainShiftLayer == null)
+			{
+				command.ErrorMessages.Add(Resources.CannotDeleteSelectedActivities);
+				return;
+			}
+
+			var minOrderIndex = personAssignment.ShiftLayers.Min(layer =>
+			{
+				var layerAsMain = layer as MainShiftLayer;
+				return layerAsMain?.OrderIndex ?? int.MaxValue;
+			});
+
+			if (mainShiftLayer.OrderIndex == minOrderIndex)
+			{
+				command.ErrorMessages.Add(Resources.CannotDeleteBaseActivity);
+				return;
+			}
+
 			personAssignment.RemoveActivity(shiftLayer, false, command.TrackedCommandInfo);		
 		}
 	}

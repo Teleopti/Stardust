@@ -211,21 +211,21 @@
 				if (personProjection.personAbsenceCount > 0) {
 					selectedPersonAbsences.push({
 						PersonId: personProjection.personId,
+						Name: personProjection.name,
 						PersonAbsenceIds: personProjection.selectedAbsences
 					});
 				}
 			});
 
+			var commandInfo = {
+				"success": 'FinishedRemoveAbsence',
+				"warning": 'PartialSuccessMessageForRemovingAbsence'
+			};
+
 			personAbsenceSvc.removePersonAbsence(vm.scheduleDateMoment(), selectedPersonAbsences,
 				removeEntireCrossDayAbsence, trackId).then(function (result) {
 					vm.afterActionCallback(trackId, selectedPersonIdList);
-					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount;
-					var fail = result.length;
-					if (fail === 0) {
-						notificationService.notify('success', 'FinishedRemoveAbsence');
-					} else {
-						var description = notificationService.notify('warning', 'PartialSuccessMessageForRemovingAbsence', [total, total - fail, fail]);
-					}
+					notificationService.reportActionResult(commandInfo, selectedPersonAbsences, result);					
 				});
 		}
 
@@ -248,6 +248,7 @@
 			angular.forEach(selectedPersonProjections, function (personProjection) {
 				personActivities.push({
 					PersonId: personProjection.personId,
+					Name: personProjection.name,
 					ShiftLayerIds: personProjection.selectedActivities
 				});
 			});
@@ -256,18 +257,15 @@
 				PersonActivities: personActivities,
 				TrackedCommandInfo: { TrackId: trackId }
 			};
+
+			var commandInfo = {
+				"success": 'SuccessfulMessageForRemovingActivity',
+				"warning": 'PartialSuccessMessageForRemovingActivity'
+			};
+
 			ActivityService.removeActivity(removeActivityForm).then(function (response) {
 				vm.afterActionCallback(trackId, personIds);
-				if (response.data.length === 0) {
-					notificationService.notify('success', 'SuccessfulMessageForRemovingActivity');
-				} else {
-					var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount;
-					var fail = response.data.length;
-					var description = notificationService.notify('warning', 'PartialSuccessMessageForRemovingActivity', [total, total - fail, fail]);
-				}
-			}, function (error) {
-				vm.afterActionCallback(trackId, personIds);
-				notificationService.notify('error', 'FailedMessageForRemovingActivity');
+				notificationService.reportActionResult(commandInfo, personActivities, response.data);			
 			});
 		}
 

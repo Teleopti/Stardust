@@ -14421,4 +14421,8 @@ Help us improve your experience by sending an error report</value>
     <value>Can not move multiple acivities for agent {0}.</value>
     <comment>Can not move multiple activities for agent message in wfm/myteam.</comment>
   </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>Cannot delete base activity</value>
+    <comment>User is not allowed to remove base activity (base layer) in WFM team schedule.</comment>
+  </data>
 </root>
