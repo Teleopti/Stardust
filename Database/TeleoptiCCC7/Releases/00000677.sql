@@ -7,10 +7,11 @@ CREATE TABLE [Stardust].[JobQueue](
 	[CreatedBy] nvarchar(500) NOT NULL,
 	[Created] [datetime] NOT NULL,
 	[Tagged] [nchar](10) NULL,
- CONSTRAINT [PK_JobDefinition] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_JobQueue] PRIMARY KEY CLUSTERED 
 (
 	[JobId] ASC
 ))
+
 GO
 
 CREATE TABLE [Stardust].[WorkerNode](
