@@ -28,8 +28,8 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			url: '/teams/:siteId',
 			templateUrl: 'js/rta/rta-teams.html',
 			controller: 'RtaTeamsCtrl'
-		}).state('rta-agents', {
-			url: '/rta/agents/:siteId/:teamId?showAllAgents',
+		}).state('rta.agents', {
+			url: '/agents/:siteId/:teamId?showAllAgents',
 			templateUrl: rtaAgentsTemplate,
 			controller: 'RtaAgentsCtrl'
 		}).state('rta-agents-teams', {

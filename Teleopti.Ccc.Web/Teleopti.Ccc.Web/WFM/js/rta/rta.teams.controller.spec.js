@@ -193,7 +193,7 @@ describe('RtaTeamsCtrl', function() {
 
 		scope.onTeamSelect(teams[0]);
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			siteId: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c',
 			teamId: '2d45a50e-db48-41db-b771-a53000ef6565'
 		});
