@@ -56,5 +56,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			_skills.Remove(skill);
 		}
+
+		public bool GuessResourceCalculationHasBeenMade()
+		{
+			return false;
+		}
 	}
 }

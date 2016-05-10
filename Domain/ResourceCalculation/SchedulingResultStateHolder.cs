@@ -106,6 +106,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
+		public bool GuessResourceCalculationHasBeenMade()
+		{
+			return _skillStaffPeriodHolder.Value.GuessResourceCalculationHasBeenMade();
+		}
+
 		/// <summary>
 		/// Gets the visible skills.
 		/// </summary>

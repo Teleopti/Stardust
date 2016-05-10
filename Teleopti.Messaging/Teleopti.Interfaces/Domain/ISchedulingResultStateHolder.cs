@@ -135,5 +135,6 @@ namespace Teleopti.Interfaces.Domain
 	    void AddSkills(params ISkill[] skills);
 	    void ClearSkills();
 	    void RemoveSkill(ISkill skill);
+	    bool GuessResourceCalculationHasBeenMade();
     }
 }

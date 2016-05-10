@@ -172,5 +172,7 @@ namespace Teleopti.Interfaces.Domain
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1043:UseIntegralOrStringArgumentForIndexers")]
         ISkillStaffPeriodDictionary this[ISkill key] { get; set; }
 
+	    bool GuessResourceCalculationHasBeenMade();
+
     }
 }

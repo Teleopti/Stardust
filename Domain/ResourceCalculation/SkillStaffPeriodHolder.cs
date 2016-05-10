@@ -432,5 +432,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
             return skillStaffPeriods;
         }
-    }
+
+		public bool GuessResourceCalculationHasBeenMade()
+		{
+			return _internalDictionary.GuessResourceCalculationHasBeenMade();
+		}
+	}
 }

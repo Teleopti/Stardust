@@ -65,5 +65,11 @@ namespace Teleopti.Ccc.Domain.Collection
                                               : new DateTimePeriod(minTime.Value, maxTime.Value);
             return returnValue;
         }
-    }
+
+		public bool GuessResourceCalculationHasBeenMade()
+		{
+			return Values.SelectMany(skillStaffPeriodDic => skillStaffPeriodDic.Values)
+				.Any(skillStaffPeriod => Math.Abs(skillStaffPeriod.CalculatedResource) > 0.00001);
+		}
+	}
 }
