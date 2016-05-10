@@ -1,7 +1,5 @@
 using System;
 using Autofac;
-using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var iocConfiguration = new IocConfiguration(args, CommonModule.ToggleManagerForIoc(args));
 			builder.RegisterModule(new CommonModule(iocConfiguration));
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
-			builder.RegisterType<SyncUnitOfWorkAspect>().As<IUnitOfWorkAspect>();
 			builder.RegisterModule(new TenantServerModule(iocConfiguration));
 
 			_container = builder.Build();
@@ -59,19 +56,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_container.Resolve<ISignalRClient>().StartBrokerService();
 			_container.Resolve<IHangfireClientStarter>().Start();
 			Hangfire = _container.Resolve<HangfireUtilties>();
-		}
-
-		private class SyncUnitOfWorkAspect : IUnitOfWorkAspect
-		{
-			public void OnBeforeInvocation(IInvocationInfo invocation)
-			{
-				
-			}
-
-			public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
-			{
-				
-			}
 		}
 	}
 }
