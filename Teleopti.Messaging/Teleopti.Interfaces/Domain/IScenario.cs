@@ -14,7 +14,9 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the description.
         /// </summary>
         /// <value>The description.</value>
-        Description Description { get; set; }
+        Description Description { get; }
+
+	    void ChangeName(string name);
 
         /// <summary>
         /// Gets if set to default workspace.

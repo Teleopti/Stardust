@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void CanSetWorkspaceName()
         {
-            _scenario.Description = new Description("Dummy");
+            _scenario.ChangeName("Dummy");
             Assert.AreEqual("Dummy", _scenario.Description.Name);
         }
 

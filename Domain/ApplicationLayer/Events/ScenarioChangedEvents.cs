@@ -6,11 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 	}
 
-	public class ScenarioReportableChangeEvent : ScenarioEventBase
-	{
-		public bool Reportable { get; set; }
-	}
-
 	public class ScenarioNameChangeEvent : ScenarioEventBase
 	{
 		public string ScenarioName { get; set; }

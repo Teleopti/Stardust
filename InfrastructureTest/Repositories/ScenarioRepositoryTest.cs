@@ -43,9 +43,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var repository = new ScenarioRepository(UnitOfWork);
 
 			var scenarioA = CreateAggregateWithCorrectBusinessUnit();
-			scenarioA.Description = new Description("A");
+			scenarioA.ChangeName("A");
 			var scenarioX = CreateAggregateWithCorrectBusinessUnit();
-			scenarioX.Description = new Description("X");
+			scenarioX.ChangeName("X");
 			scenarioX.DefaultScenario = true;
 
 			PersistAndRemoveFromUnitOfWork(scenarioX);
@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var repository = new ScenarioRepository(UnitOfWork);
 
 			var scenarioA = CreateAggregateWithCorrectBusinessUnit();
-			scenarioA.Description = new Description("A");
+			scenarioA.ChangeName("A");
 			scenarioA.EnableReporting = false;
 			var scenarioX = CreateAggregateWithCorrectBusinessUnit();
-			scenarioX.Description = new Description("X");
+			scenarioX.ChangeName("X");
 			scenarioX.DefaultScenario = true;
 			scenarioX.EnableReporting = true;
 

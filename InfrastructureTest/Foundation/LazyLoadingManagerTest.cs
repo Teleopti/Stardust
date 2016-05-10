@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IPerson per = PersonFactory.CreatePerson("hola23423423");
             PersistAndRemoveFromUnitOfWork(per);
             IScenario scen = ScenarioFactory.CreateScenarioAggregate();
-            scen.Description = new Description("scen");
+            scen.ChangeName("scen");
             PersistAndRemoveFromUnitOfWork(scen);
             IPersonAssignment pAss =
                 PersonAssignmentFactory.CreateAssignmentWithMainShift(act, per,

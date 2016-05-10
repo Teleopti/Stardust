@@ -1,4 +1,6 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -57,8 +59,19 @@ namespace Teleopti.Ccc.Domain.Common
         public virtual Description Description
         {
             get { return _description; }
-            set { _description = value; }
         }
+
+	    public virtual void ChangeName(string name)
+	    {
+		    _description = new Description(name);
+		    AddEvent(() => new ScenarioNameChangeEvent
+		    {
+			    ScenarioId = Id.GetValueOrDefault(),
+			    BusinessUnitId = BusinessUnit.Id.GetValueOrDefault(),
+				DatasourceUpdateDate = UpdatedOn.GetValueOrDefault(),
+				ScenarioName = _description.Name
+		    });
+	    }
 
 
         /// <summary>

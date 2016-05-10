@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void changeScenarioDescription()
 		{
-			SelectedScenario.Description = new Description(textBoxExtDescription.Text);
+			SelectedScenario.ChangeName(textBoxExtDescription.Text);
 
 			loadScenarios();
 		}
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// Formats the name.
 			Description description = PageHelper.CreateNewName(_scenarioList, "Description.Name", Resources.NewScenario);
 
-			IScenario newScenario = new Scenario(description.Name) { Description = description };
+			IScenario newScenario = new Scenario(description.Name);
 			Repository.Add(newScenario);
 
 			return newScenario;

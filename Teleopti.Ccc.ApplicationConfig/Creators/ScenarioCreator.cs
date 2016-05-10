@@ -10,11 +10,10 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 	public class ScenarioCreator
 	{
 		[SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		public IScenario Create(string name, Description description, bool defaultScenario, bool enableReporting, bool restricted)
+		public IScenario Create(string name, bool defaultScenario, bool enableReporting, bool restricted)
 		{
 			IScenario scenario = new Scenario(name)
 			{
-				Description = description,
 				DefaultScenario = defaultScenario,
 				EnableReporting = enableReporting,
 				Restricted = restricted
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 		{
 			IScenario scenario = new Scenario("Default")
 			{
-				Description = new Description("Default"),
 				DefaultScenario = true,
 				EnableReporting = true,
 				Restricted = false
