@@ -50,8 +50,8 @@ angular.module('wfm.rta').provider('RtaState', function() {
 					array: true
 				}
 			}
-		}).state('rta-agent-details', {
-			url: '/rta/agent-details/:personId',
+		}).state('rta.agent-details', {
+			url: '/agent-details/:personId',
 			templateUrl: 'js/rta/rta-agent-details.html',
 			controller: 'RtaAgentDetailsCtrl'
 		});
