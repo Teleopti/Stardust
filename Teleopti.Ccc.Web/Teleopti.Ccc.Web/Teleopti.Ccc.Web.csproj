@@ -528,6 +528,8 @@
     <Compile Include="Areas\MyTime\Core\WeekScheduleDomainDataProvider.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\PerformanceToolApiController.cs" />
     <Compile Include="Areas\PerformanceTool\Controllers\LocalHostAccessAttribute.cs" />
+    <Compile Include="Areas\Reporting\Core\ServerPathProvider.cs" />
+    <Compile Include="Areas\Reporting\Core\IPathProvider.cs" />
     <Compile Include="Areas\Reporting\Core\CommonReportsFactory.cs" />
     <Compile Include="Areas\Reporting\Core\GeneratedReport.cs" />
     <Compile Include="Areas\Reporting\Core\ICommonReportsFactory.cs" />
@@ -536,6 +538,7 @@
     <Compile Include="Areas\Reporting\Core\IAnalyticsPermissionsUpdater.cs" />
     <Compile Include="Areas\Reporting\Core\IApplicationPermissionProvider.cs" />
     <Compile Include="Areas\Reporting\Core\IPermissionsConverter.cs" />
+    <Compile Include="Areas\Reporting\Core\IReportGenerator.cs" />
     <Compile Include="Areas\Reporting\Core\PermissionsConverter.cs" />
     <Compile Include="Areas\Reporting\Core\ReportGenerator.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />

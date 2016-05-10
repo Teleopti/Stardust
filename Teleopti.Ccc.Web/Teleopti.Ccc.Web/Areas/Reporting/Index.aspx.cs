@@ -129,7 +129,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		{
 			if (!ParameterSelector.IsValid) return;
 
-			var generatedReport = ReportGenerator.GenerateReport(ReportId, ParameterSelector.ConnectionString,
+			var reportGenerator = new ReportGenerator(new ServerPathProvider());
+
+			var generatedReport = reportGenerator.GenerateReport(ReportId, ParameterSelector.ConnectionString,
 				ParameterSelector.Parameters, ParameterSelector.ParameterTexts, ParameterSelector.UserCode,
 				ParameterSelector.BusinessUnitCode, format);
 

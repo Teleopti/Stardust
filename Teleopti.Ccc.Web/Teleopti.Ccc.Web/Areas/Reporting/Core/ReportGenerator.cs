@@ -4,25 +4,28 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Threading;
-using System.Web;
 using Microsoft.Reporting.WebForms;
 using Teleopti.Analytics.ReportTexts;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 {
-	public class ReportGenerator
+	public class ReportGenerator : IReportGenerator
 	{
-		public static GeneratedReport GenerateReport(Guid reportId, string connectionString, IList<SqlParameter> parameters, IList<string> paramtersText, Guid userCode, Guid businessUnitCode, ReportFormat format)
+		private readonly IPathProvider _pathProvider;
+		public ReportGenerator(IPathProvider pathProvider)
+		{
+			_pathProvider = pathProvider;
+		}
+
+		public GeneratedReport GenerateReport(Guid reportId, string connectionString, IList<SqlParameter> parameters, IList<string> paramtersText, Guid userCode, Guid businessUnitCode, ReportFormat format)
 		{
 			using (var commonReports = new CommonReports(connectionString, reportId))
 			{
-				var sqlParams = parameters;
-				var texts = paramtersText;
 				commonReports.LoadReportInfo();
-				var dataset = commonReports.GetReportData(userCode, businessUnitCode, sqlParams);
+				var dataset = commonReports.GetReportData(userCode, businessUnitCode, parameters);
 
 				var reportName = commonReports.ReportFileName.Replace("~/", "");
-				var reportPath = HttpContext.Current.Server.MapPath(reportName);
+				var reportPath = _pathProvider.MapPath(reportName);
 				IList<ReportParameter> @params = new List<ReportParameter>();
 				var viewer = new ReportViewer { ProcessingMode = ProcessingMode.Local };
 				viewer.LocalReport.ReportPath = reportPath;
@@ -32,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				{
 					var i = 0;
 					var added = false;
-					foreach (var param in sqlParams)
+					foreach (var param in parameters)
 					{
 						if (repInfo.Name.StartsWith("Res", StringComparison.CurrentCultureIgnoreCase))
 						{
@@ -41,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 						}
 						if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
 						{
-							@params.Add(new ReportParameter(repInfo.Name, texts[i], false));
+							@params.Add(new ReportParameter(repInfo.Name, paramtersText[i], false));
 							added = true;
 						}
 						if (!added && repInfo.Name == "culture")
