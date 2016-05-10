@@ -133,12 +133,12 @@
 				};
 
 				var setResult = function (result) {
-					if (!result.LatestStatsTime) {
-						$scope.latestStatsTime = '--:--';
+					if (!result.LatestActualInterval) {
+						$scope.latestActualInterval = '--:--';
 						$scope.HasMonitorData = false;
 						return;
 					} else {
-						$scope.latestStatsTime = $filter('date')(result.LatestStatsTime, 'shortTime');
+						$scope.latestActualInterval = $filter('date')(result.LatestActualInterval, 'shortTime');
 						$scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
 						$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
 						$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
@@ -288,7 +288,7 @@
 							}
 						}
 
-						if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestStatsTime === '--:--') {
+						if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
 							$scope.HasMonitorData = false;
 						}
 

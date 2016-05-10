@@ -14425,4 +14425,8 @@ Help us improve your experience by sending an error report</value>
     <value>Cannot delete base activity</value>
     <comment>User is not allowed to remove base activity (base layer) in WFM team schedule.</comment>
   </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>Latest actual interval</value>
+    <comment>Latest actual interval</comment>
+  </data>
 </root>

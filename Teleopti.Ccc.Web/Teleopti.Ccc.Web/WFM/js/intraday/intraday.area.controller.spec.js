@@ -55,7 +55,7 @@ describe('IntradayAreaCtrl', function () {
 				OfferedCalls: [],
 				AverageHandleTime: []
 			},
-			LatestStatsTime: new Date(2016, 1, 1, 13, 0, 0, 0)
+			LatestActualInterval: new Date(2016, 1, 1, 13, 0, 0, 0)
 		};
 	});
 
@@ -137,7 +137,7 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
-		expect(scope.latestStatsTime).toEqual($filter('date')(monitorData.LatestStatsTime, 'shortTime'));
+		expect(scope.latestActualInterval).toEqual($filter('date')(monitorData.LatestActualInterval, 'shortTime'));
 		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
 		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
@@ -159,7 +159,7 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.flush();
 
 		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
-		expect(scope.latestStatsTime).toEqual($filter('date')(monitorData.LatestStatsTime, 'shortTime'));
+		expect(scope.latestActualInterval).toEqual($filter('date')(monitorData.LatestActualInterval, 'shortTime'));
 		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
 		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
@@ -183,11 +183,11 @@ describe('IntradayAreaCtrl', function () {
 	it('should show friendly message if no data for skill area', function () {
 		createController(false);
 		scope.skillAreaSelected(scope.skillAreas[0]);
-		monitorData.LatestStatsTime = null;
+		monitorData.LatestActualInterval = null;
 		$httpBackend.flush();
 
 		expect(scope.HasMonitorData).toEqual(false);
-		expect(scope.latestStatsTime).toEqual('--:--');
+		expect(scope.latestActualInterval).toEqual('--:--');
 	});
 
 	it('should switch active chart tab', function () {

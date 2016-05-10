@@ -13499,6 +13499,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Latest actual interval.
+        /// </summary>
+        public static string LatestActualInterval {
+            get {
+                return ResourceManager.GetString("LatestActualInterval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Late start.
         /// </summary>
         public static string LateStart {

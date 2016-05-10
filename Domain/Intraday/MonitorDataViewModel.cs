@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class MonitorDataViewModel
 	{
-		public DateTime? LatestStatsTime { get; set; }
+		public DateTime? LatestActualInterval { get; set; }
 		public MonitorIntradaySummary Summary { get; set; }
 		public MonitorIntradayDataSeries DataSeries { get; set; }	
 	}
