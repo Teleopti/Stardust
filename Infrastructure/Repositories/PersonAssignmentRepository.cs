@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		public ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
+		public virtual ICollection<IPersonAssignment> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario)
 		{
 			InParameter.NotNull("persons", persons);
 			var retList = new List<IPersonAssignment>();
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						       .UniqueResult<IPersonAssignment>();
 		}
 
-		public DateTime GetScheduleLoadedTime()
+		public virtual DateTime GetScheduleLoadedTime()
 		{
 			return Session.CreateSQLQuery("SELECT GETDATE()").UniqueResult<DateTime>();
 		}

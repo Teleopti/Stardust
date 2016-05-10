@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		private readonly ResolveEventHandlers _resolver;
 		private readonly List<Type> _handlerTypes = new List<Type>();
 		 
-		private readonly Queue<Thread> _threads = new Queue<Thread>();
+		private readonly ConcurrentQueue<Thread> _threads = new ConcurrentQueue<Thread>();
 		private readonly ConcurrentBag<Exception> _exceptions = new ConcurrentBag<Exception>();
 
 		public ConfigurableAsyncEventPublisher(ServiceBusEventProcessor busProcessor, ResolveEventHandlers resolver)
@@ -75,7 +75,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public void Wait()
 		{
 			while (_threads.Count > 0)
-				_threads.Dequeue().Join();
+			{
+				var t = _threads;
+				Thread a;
+				t.TryDequeue(out a);
+				a.Join();
+			}
 			if (_exceptions.Count > 0)
 				throw new AggregateException(_exceptions);
 		}

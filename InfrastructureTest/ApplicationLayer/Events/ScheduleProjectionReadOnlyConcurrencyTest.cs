@@ -4,20 +4,25 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
-	[InfrastructureTest]
+	[DatabaseTest]
 	public class ScheduleProjectionReadOnlyConcurrencyTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ConfigurableAsyncEventPublisher>().For<IEventPublisher>();
+			system.UseTestDouble<FakeRepositoryFactory>().For<IRepositoryFactory>();
+			system.UseTestDouble<PersonAssignmentRepositoryWithRandomLatency>().For<IPersonAssignmentRepository>();
 		}
 
 		public ProjectionChangedEventPublisher Target;
@@ -28,12 +33,12 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		[Test]
 		[Ignore]
-		public void ShouldHandleManyWorkers()
+		public void ShouldHandleManyWorkers([Range(0, 10)] int x)
 		{
 			Publisher.AddHandler(typeof(ScheduleChangedEventPublisher));
 			Publisher.AddHandler(typeof(ProjectionChangedEventPublisher));
 			Publisher.AddHandler(typeof(ScheduleProjectionReadOnlyUpdater));
-			var dates = Enumerable.Range(0, 20)
+			var dates = Enumerable.Range(0, 100)
 				.Select(n => "2016-05-02".Date().AddDays(n))
 				.ToArray();
 			Database

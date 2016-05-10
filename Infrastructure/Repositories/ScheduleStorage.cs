@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -164,8 +165,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 													.Find(people, longDateTimePeriod, scenario));
 				var personAssignmentRepository = _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
 				addPersonAssignments(retDic,
-									 personAssignmentRepository
-													   .Find(people, period, scenario));
+									 personAssignmentRepository.Find(people, period, scenario));
 
 				addPersonMeetings(retDic,
 								  _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, period, scenario),
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						addPersonRotations(period, retDic, people);
 					}
 				}
-
+				
 				retDic.ScheduleLoadedTime = personAssignmentRepository.GetScheduleLoadedTime();
 			}
 			retDic.TakeSnapshot();

@@ -19,6 +19,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+		public PersonAvailabilityRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+
+		}
+
 		public IEnumerable<IPersonAvailability> LoadPersonAvailabilityWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{
 			var rep2 = new AvailabilityRepository(UnitOfWork);

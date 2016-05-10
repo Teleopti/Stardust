@@ -21,7 +21,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             : base(unitOfWork)
 #pragma warning restore 618
         {
-        }
+		}
+
+		public PersonRotationRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+
+		}
 
 		public IEnumerable<IPersonRotation> LoadPersonRotationsWithHierarchyData(IEnumerable<IPerson> persons, DateOnly startDate)
 		{

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly IPersonAvailabilityRepository _personAvailabilityRepository;
 		private readonly IPersonRotationRepository _personRotationRepository;
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
-		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
+		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 
 		public FakeRepositoryFactory(
 			IPersonRepository personRepository,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			IPersonAvailabilityRepository personAvailabilityRepository,
 			IPersonRotationRepository personRotationRepository,
 			IPartTimePercentageRepository partTimePercentageRepository,
-			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository
+			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository
       )
 		{
 			_personRepository = personRepository;
