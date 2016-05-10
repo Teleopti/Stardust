@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private readonly RestrictionChecker restrictionChecker;
 		private readonly ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions;
+		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 
 		public PreferenceChangedHandler(IScenarioRepository scenarioRepository,
 			IPreferenceDayRepository preferenceDayRepository,
@@ -46,7 +47,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			IScheduleStorage scheduleStorage,
 			IAnalyticsPreferenceRepository analyticsPreferenceRepository, 
 			IPersonRepository personRepository, 
-			IAnalyticsDayOffRepository analyticsDayOffRepository)
+			IAnalyticsDayOffRepository analyticsDayOffRepository, 
+			IAnalyticsScenarioRepository analyticsScenarioRepository)
 		{
 
 			_scenarioRepository = scenarioRepository;
@@ -59,6 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			_analyticsPreferenceRepository = analyticsPreferenceRepository;
 			_personRepository = personRepository;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
+			_analyticsScenarioRepository = analyticsScenarioRepository;
 
 
 			restrictionChecker = new RestrictionChecker();
@@ -150,7 +153,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
             }
 
             // General look ups
-            var analyticsScenarios = _analyticsScheduleRepository.Scenarios();
+            var analyticsScenarios = _analyticsScenarioRepository.Scenarios();
             var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
             var analyticsAbsences = _analyticsScheduleRepository.Absences();
             var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
@@ -192,7 +195,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
             }
             else
             {
-                var analyticScenarioId = analyticsScenarios.First(a => a.Code == scenarioId).Id;
+                var analyticScenarioId = analyticsScenarios.First(a => a.ScenarioCode.GetValueOrDefault() == scenarioId).ScenarioId;
                 _analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId, analyticScenarioId);
             }
 
@@ -203,12 +206,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
             }
         }
 
-		private AnalyticsFactSchedulePreference mapSchedulePreference(IScheduleDay schedulePart, IList<IAnalyticsGeneric> analyticsScenarios, IScenario scenario, IList<IAnalyticsGeneric> analyticsShiftCategories,
+		private AnalyticsFactSchedulePreference mapSchedulePreference(IScheduleDay schedulePart, IList<AnalyticsScenario> analyticsScenarios, IScenario scenario, IList<IAnalyticsGeneric> analyticsShiftCategories,
 			IPreferenceRestriction preferenceRestriction, IList<IAnalyticsAbsence> analyticsAbsences, IList<AnalyticsDayOff> analyticsDayOffs,
 			AnalyticBusinessUnit businessUnitId, KeyValuePair<DateOnly, int> dateId, int analyticsPersonPeriodId, IPreferenceDay preferenceDay)
 		{
 			var permissionState = restrictionChecker.CheckPreference(schedulePart);
-			var scenarioId = analyticsScenarios.First(a => a.Code == scenario.Id.GetValueOrDefault()).Id;
+			var scenarioId = analyticsScenarios.First(a => a.ScenarioCode.GetValueOrDefault() == scenario.Id.GetValueOrDefault()).ScenarioId;
 			var shiftCategory =
 				analyticsShiftCategories.FirstOrDefault(
 					a => a.Code == ((preferenceRestriction.ShiftCategory != null ? preferenceRestriction.ShiftCategory.Id : null) ?? Guid.Empty));

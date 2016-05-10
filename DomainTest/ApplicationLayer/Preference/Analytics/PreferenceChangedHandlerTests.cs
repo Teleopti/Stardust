@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Preference;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -31,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		private FakeAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private FakePersonRepository _personRepository;
 		private FakeAnalyticsDayOffRepository _analyticsDayOffRepository;
+		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
 
 		[SetUp]
 		public void Setup()
@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_analyticsScheduleRepository = new FakeAnalyticsScheduleRepository();
 			_personRepository = new FakePersonRepository();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
-			
-
+			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
 
 			_target = new PreferenceChangedHandler(
 				_scenarioRepository,
@@ -61,7 +60,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				_scheduleStorage,
 				_analyticsPreferenceRepository,
 				_personRepository,
-				_analyticsDayOffRepository);
+				_analyticsDayOffRepository,
+				_analyticsScenarioRepository);
 		}
 
 		[Test]
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			{
 				PersonId = 0,
 				DateId = _analyticsDateRepository.Date(date1).Value,
-				ScenarioId = 2 // Matched
+				ScenarioId = 1 // Matched
 			});
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			scenario.DefaultScenario = true;
 			scenario.EnableReporting = true;
 			_scenarioRepository.Add(scenario);
-			_analyticsScheduleRepository.AddScenario(new AnalyticsGeneric { Code = scenario.Id.GetValueOrDefault(), Id = 2 });
+			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault()});
 
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			item.ShiftCategoryId.Should().Be.EqualTo(1);
 			item.DatasourceId.Should().Be.EqualTo(1);
 			item.DateId.Should().Be.EqualTo(_analyticsDateRepository.Date(new DateTime(2001, 1, 1)).Value);
-			item.ScenarioId.Should().Be.EqualTo(2);
+			item.ScenarioId.Should().Be.EqualTo(1);
 			item.BusinessUnitId.Should().Be.EqualTo(1);
 			item.IntervalId.Should().Be.EqualTo(0);
 			item.PersonId.Should().Be.EqualTo(0);
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			scenario.DefaultScenario = true;
 			scenario.EnableReporting = true;
 			_scenarioRepository.Add(scenario);
-			_analyticsScheduleRepository.AddScenario(new AnalyticsGeneric { Code = scenario.Id.GetValueOrDefault(), Id = 2 });
+			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenario.Id.GetValueOrDefault() });
 
 			var preferenceDay = new PreferenceDay(person, new DateOnly(date), preferenceRestriction);
 			preferenceDay.WithId();

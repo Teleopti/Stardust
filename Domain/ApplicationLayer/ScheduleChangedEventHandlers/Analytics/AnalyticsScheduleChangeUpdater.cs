@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private readonly IDelayedMessageSender _serviceBus;
 		private readonly IAnalyticsScheduleChangeUpdaterFilter _analyticsScheduleChangeUpdaterFilter;
+		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 
 		public AnalyticsScheduleChangeUpdater(
 			IAnalyticsFactScheduleHandler factScheduleHandler,
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			IAnalyticsFactScheduleDayCountHandler factScheduleDayCountHandler,
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
 			IDelayedMessageSender serviceBus, 
-			IAnalyticsScheduleChangeUpdaterFilter analyticsScheduleChangeUpdaterFilter)
+			IAnalyticsScheduleChangeUpdaterFilter analyticsScheduleChangeUpdaterFilter, 
+			IAnalyticsScenarioRepository analyticsScenarioRepository)
 
 		{
 			_factScheduleHandler = factScheduleHandler;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			_analyticsScheduleRepository = analyticsScheduleRepository;
 			_serviceBus = serviceBus;
 			_analyticsScheduleChangeUpdaterFilter = analyticsScheduleChangeUpdaterFilter;
+			_analyticsScenarioRepository = analyticsScenarioRepository;
 		}
 
 		[AnalyticsUnitOfWork]
@@ -153,11 +156,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		private int getScenario(Guid scenarioCode)
 		{
-			var scenarios = _analyticsScheduleRepository.Scenarios();
-			var scen = scenarios.FirstOrDefault(x => x.Code.Equals(scenarioCode));
+			var scenarios = _analyticsScenarioRepository.Scenarios();
+			var scen = scenarios.FirstOrDefault(x => x.ScenarioCode == scenarioCode);
 			if (scen == null)
 				return -1;
-			return scen.Id;
+			return scen.ScenarioId;
 		}
 
 		private int getCategory(Guid shiftCategoryCode)

@@ -257,6 +257,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsDateRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDayOffRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPreferenceRepositoryTest.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsScenarioRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsScheduleRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepositoryTest.cs" />

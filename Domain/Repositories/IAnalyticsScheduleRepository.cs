@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<IAnalyticsActivity> Activities();
 		IList<IAnalyticsAbsence> Absences();
-		IList<IAnalyticsGeneric> Scenarios();
 		IList<IAnalyticsGeneric> ShiftCategories();
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 		IList<IAnalyticsGeneric> Overtimes();

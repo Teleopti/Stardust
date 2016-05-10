@@ -1,5 +1,4 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Interfaces.Domain;
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				@event.EndDateTime,
 				@event.InitiatorId,
 				@event.ScenarioId,
-				typeof (Scenario),
+				typeof (Common.Scenario),
 				@event.PersonId,
 				typeof (IScheduleChangedEvent),
 				DomainUpdateType.NotApplicable,

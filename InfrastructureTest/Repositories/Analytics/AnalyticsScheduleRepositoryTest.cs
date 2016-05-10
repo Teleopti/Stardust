@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Persist();
 
-			
+
 			var acts = WithAnalyticsUnitOfWork.Get(() => Target.Activities());
 			acts.Count.Should().Be.EqualTo(1);
 		}
@@ -84,14 +84,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadScenariosAndCategories()
+		public void ShouldLoadCategories()
 		{
 			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(1, Guid.NewGuid()));
 			analyticsDataFactory.Setup(new ShiftCategory(1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
 			analyticsDataFactory.Persist();
-
-			var scens = WithAnalyticsUnitOfWork.Get(() => Target.Scenarios());
-			scens.Count.Should().Be.EqualTo(1);
 
 			var cats = WithAnalyticsUnitOfWork.Get(() => Target.ShiftCategories());
 			cats.Count.Should().Be.EqualTo(1);
@@ -120,12 +117,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			var actEmpty = new Activity(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
 			var act = new Activity(22, Guid.NewGuid(), "Phone", Color.LightGreen, _datasource, businessUnitId);
-			
+
 			var absEmpty = new Absence(-1, Guid.NewGuid(), "Empty", Color.Black, _datasource, businessUnitId);
 			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
 
 			var shiftLength = new ShiftLength(4, 480, _datasource);
-			 
+
 			analyticsDataFactory.Setup(act);
 			analyticsDataFactory.Setup(actEmpty);
 			analyticsDataFactory.Setup(abs);

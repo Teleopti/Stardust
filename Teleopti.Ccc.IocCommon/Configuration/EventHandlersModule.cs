@@ -152,8 +152,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<AnalyticsFactScheduleHandler>().As<IAnalyticsFactScheduleHandler>().SingleInstance();
             builder.RegisterType<AnalyticsFactScheduleDayCountHandler>().As<IAnalyticsFactScheduleDayCountHandler>().SingleInstance();
             builder.RegisterType<AnalyticsScheduleRepository>().As<IAnalyticsScheduleRepository>().SingleInstance();
-			
-            builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
+			builder.RegisterType<AnalyticsScenarioRepository>().As<IAnalyticsScenarioRepository>().SingleInstance();
+
+			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
             _config.Cache().This<IAnalyticsDateRepository>(b => b
                 .CacheMethod(x => x.Dates())
@@ -165,7 +166,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                 _config.Cache().This<IAnalyticsScheduleRepository>(b => b
                     .CacheMethod(x => x.Absences())
                     .CacheMethod(x => x.Activities())
-                    .CacheMethod(x => x.Scenarios())
                     .CacheMethod(x => x.ShiftCategories())
                     .CacheMethod(x => x.Overtimes())
                     .CacheMethod(x => x.ShiftLengths())

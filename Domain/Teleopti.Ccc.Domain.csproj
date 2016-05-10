@@ -154,6 +154,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
+    <Compile Include="Analytics\AnalyticsScenario.cs" />
     <Compile Include="Analytics\AnalyticsDayOff.cs" />
     <Compile Include="Analytics\AnalyticsGroup.cs" />
     <Compile Include="Analytics\AnalyticsGroupPage.cs" />
@@ -185,6 +186,7 @@
     <Compile Include="ApplicationLayer\Commands\MoveShiftLayerCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestCancelService.cs" />
     <Compile Include="ApplicationLayer\Events\ExportMultisiteSkillsToSkillEvent.cs" />
@@ -237,6 +239,7 @@
     <Compile Include="ApplicationLayer\Preference\PreferenceFulfillmentChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Preference\PreferenceChangedHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateSkillAnalyticsHandler.cs" />
+    <Compile Include="ApplicationLayer\Scenario\ScenarioChangedHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />
@@ -251,6 +254,7 @@
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
+    <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduled.cs" />

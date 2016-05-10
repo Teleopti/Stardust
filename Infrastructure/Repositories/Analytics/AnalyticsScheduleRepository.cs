@@ -198,15 +198,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.List<IAnalyticsAbsence>();
 		}
 
-		public IList<IAnalyticsGeneric> Scenarios()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select scenario_id Id, scenario_code Code from mart.dim_scenario WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
-				.SetReadOnly(true)
-				.List<IAnalyticsGeneric>();
-		}
-
 		public IList<IAnalyticsGeneric> ShiftCategories()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
