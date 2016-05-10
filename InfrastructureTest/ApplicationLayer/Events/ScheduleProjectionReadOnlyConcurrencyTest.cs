@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		public WithUnitOfWork UnitOfWork;
 
 		[Test]
-		public void ShouldHandleManyWorkers()
+		[Ignore]
+		public void ShouldHandleManyWorkers([Range(0, 20)]int x)
 		{
 			Publisher.AddHandler(typeof(ScheduleChangedEventPublisher));
 			Publisher.AddHandler(typeof(ProjectionChangedEventPublisher));
