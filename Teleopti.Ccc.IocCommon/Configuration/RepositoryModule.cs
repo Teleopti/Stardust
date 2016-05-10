@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -37,6 +38,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleStorage>()
 				.UsingConstructor(typeof(ICurrentUnitOfWork), typeof(IRepositoryFactory), typeof(IPersistableScheduleDataPermissionChecker))
 				.AsImplementedInterfaces()
+				.SingleInstance();
+			builder.RegisterType<ProjectionVersionPersister>()
+				.As<IProjectionVersionPersister>()
 				.SingleInstance();
 			builder.RegisterType<PushMessagePersister>()
 				.As<IPushMessagePersister>()

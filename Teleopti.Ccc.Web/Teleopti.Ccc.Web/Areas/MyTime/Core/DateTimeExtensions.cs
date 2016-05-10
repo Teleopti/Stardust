@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core
@@ -44,16 +43,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
             return string.Format("{0}", startDateTime.ToShortDateString());
         }
 
-		public static IEnumerable<DateTime> DateRange(this DateTime instance, int days)
-		{
-			return from i in Enumerable.Range(0, days) select instance.AddDays(i);
-		}
-
-		public static IEnumerable<DateOnly> DateRange(this DateOnly instance, int days)
-		{
-			return from i in Enumerable.Range(0, days) select instance.AddDays(i);
-		}
-
 		public static IEnumerable<TimeSpan> TimeRange(this TimeSpan instance, TimeSpan toTime, TimeSpan step)
 		{
 			var time = instance;
@@ -73,6 +62,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				time += step;
 			}
 		}
-
 	}
 }

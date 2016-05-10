@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using log4net;
+using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -27,8 +29,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 		private readonly INow _now;
+		private readonly IProjectionVersionPersister _projectionVersionPersister;
 
-		public ProjectionChangedEventPublisher(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder, INow now)
+		public ProjectionChangedEventPublisher(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder, INow now, IProjectionVersionPersister projectionVersionPersister)
 		{
 			_publisher = publisher;
 			_scenarioRepository = scenarioRepository;
@@ -36,11 +39,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_scheduleStorage = scheduleStorage;
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 			_now = now;
+			_projectionVersionPersister = projectionVersionPersister;
 		}
-
-		public void Handle(ScheduleChangedEvent @event)
+		
+		public virtual void Handle(ScheduleChangedEvent @event)
 		{
+			// select projection version with update lock
+			// OR insert projection version (if duplicate, it will throw and hence retry)
 			publishEvent<ProjectionChangedEvent>(@event);
+			// update the version
+			// optional, if no update lock, will throw because the version changed by someone else
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
@@ -96,6 +104,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				return null;
 			}
 
+			// gets the date period the same way as FindSchedulesForPersonOnlyInGivenPeriod, hence duplication
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()); 
+			var dates = dateOnlyPeriod.StartDate.DateRange(dateOnlyPeriod.EndDate);
+			_projectionVersionPersister.Upsert(@event.PersonId, dates);
+			
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false),
 				period,
