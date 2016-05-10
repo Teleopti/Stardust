@@ -45,6 +45,7 @@
 		public const string ViewActiveAgents = "Raptor/Global/ViewActiveAgents";
 		public const string ModifyAvailabilities = "Raptor/Global/ModifyAvailabilities";
 		public const string PublishSchedule = "Raptor/Global/PublishSchedule";
+		public const string OrganizeCascadingSkills = "Raptor/Global/OrganizeCascadingSkills";
 
 		// PersonAdmin
 		public const string ModifyPersonNameAndPassword = "Raptor/PersonAdmin/ModifyPersonNameAndPassword";

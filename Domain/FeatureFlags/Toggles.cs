@@ -104,6 +104,7 @@
 		ResourcePlanner_CascadingSkillsPOC_37679,
 		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
 		ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025,
+		ResourcePlanner_CascadingSkills_38524,
 
 		Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpPermissionReport_33584,
