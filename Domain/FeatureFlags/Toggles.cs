@@ -122,7 +122,8 @@
 		SettingsForPersonPeriodChanged_ToHangfire_38207,
 		ETL_SpeedUpIntradayDayOff_38213,
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
-		Payroll_ToStardust_38204
+		Payroll_ToStardust_38204,
+		ETL_SpeedUpScenario_38300,
 		// ReSharper restore InconsistentNaming
 		
 	}
