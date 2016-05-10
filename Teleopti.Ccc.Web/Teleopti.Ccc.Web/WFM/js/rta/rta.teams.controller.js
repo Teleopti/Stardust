@@ -66,7 +66,7 @@
 
 			$scope.openSelectedTeams = function() {
 				if (selectedTeamIds.length === 0) return;
-				$state.go('rta-agents-teams', {
+				$state.go('rta.agents-teams', {
 					teamIds: selectedTeamIds
 				});
 			};

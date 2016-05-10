@@ -32,8 +32,8 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			url: '/agents/:siteId/:teamId?showAllAgents',
 			templateUrl: rtaAgentsTemplate,
 			controller: 'RtaAgentsCtrl'
-		}).state('rta-agents-teams', {
-			url: '/rta/agents-teams/?teamIds',
+		}).state('rta.agents-teams', {
+			url: '/agents-teams/?teamIds',
 			templateUrl: rtaAgentsTemplate,
 			controller: 'RtaAgentsCtrl',
 			params: {

@@ -212,7 +212,7 @@ describe('RtaTeamsCtrl', function() {
 		scope.toggleSelection("0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495");
 		scope.openSelectedTeams();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-teams', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
 			teamIds: ['2d45a50e-db48-41db-b771-a53000ef6565',
 				"0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"
 			]
@@ -233,7 +233,7 @@ describe('RtaTeamsCtrl', function() {
 		scope.toggleSelection("2d45a50e-db48-41db-b771-a53000ef6565");
 		scope.openSelectedTeams();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-teams', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents-teams', {
 			teamIds: ["0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495"]
 		});
 	});
