@@ -17,13 +17,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly IMatrixDataListInSteadyState _matrixDataListInSteadyState;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly IMatrixDataWithToFewDaysOff _matrixDataWithToFewDaysOff;
-		private readonly IAuthorization _authorization;
+		private readonly ICurrentAuthorization _authorization;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public MissingDaysOffScheduler(IBestSpotForAddingDayOffFinder bestSpotForAddingDayOffFinder,
 			IMatrixDataListInSteadyState matrixDataListInSteadyState, IMatrixDataListCreator matrixDataListCreator, 
-			IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, IAuthorization authorization)
+			IMatrixDataWithToFewDaysOff matrixDataWithToFewDaysOff, ICurrentAuthorization authorization)
 		{
 			_bestSpotForAddingDayOffFinder = bestSpotForAddingDayOffFinder;
 			_matrixDataListInSteadyState = matrixDataListInSteadyState;
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             scheduleDay.CreateAndAddDayOff(dayOffTemplate);
 
 			var personAssignment = scheduleDay.PersonAssignment();
-			if (!_authorization.IsPermitted(personAssignment.FunctionPath, scheduleDay.DateOnlyAsPeriod.DateOnly, scheduleDay.Person)) return false;
+			if (!_authorization.Current().IsPermitted(personAssignment.FunctionPath, scheduleDay.DateOnlyAsPeriod.DateOnly, scheduleDay.Person)) return false;
 
 			rollbackService.Modify(scheduleDay); var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay,cancelAction);
             OnDayScheduled(eventArgs);
