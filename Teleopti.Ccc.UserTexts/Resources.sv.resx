@@ -13267,4 +13267,66 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="PreviewTheNewIntradayTool" xml:space="preserve">
     <value>Ta en förhandstitt på nya Inom dag-verktyget!</value>
   </data>
+  <data name="ProductActivationKeyV8" xml:space="preserve">
+    <value>Systemet är licensierat till "{0}" enligt villkoren i licensavtalet och produktaktiveringsnyckeln går ut {1}. 
+
+Produktaktiveringsnyckeln täcker maximalt {2} aktiva agenter.
+
+Huvudversion: {5}
+
+Produktaktiveringsnyckeln gäller "{3}".
+Dessa val är aktiverade:
+{4}
+</value>
+  </data>
+  <data name="SeatProductActivationKeyV8" xml:space="preserve">
+    <value>Systemet är licensierat till "{0}" enligt villkoren i licensavtalet och produktaktiveringsnyckeln går ut {1}. 
+
+Produktaktiveringsnyckeln täcker maximalt {2} arbetsplatser.
+
+Huvudversion: {5}
+
+Produktaktiveringsnyckeln gäller "{3}".
+Dessa val är aktiverade:
+{4}</value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>Anpassa</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>Du har valt {0} agent(er). </value>
+  </data>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>Inkluderade kompetenser</value>
+  </data>
+  <data name="PartialSuccessMessageForRemovingAbsence" xml:space="preserve">
+    <value>Tar bort frånvaro för {0} agent(er): {1} lyckades, {2} misslyckades.</value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value>{0} har förbättrats! Vi uppskattar er {1}feedback. {2} Gamla versionen av {3} kan nås en begränsad tid. </value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Du kan inte lägga till en aktivitet för {0} nästa dag utan ett skift</value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>Förläng befintligt skift</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>Icke arbetsdagar</value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>Använd skift från:</value>
+  </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>Antal dagar innan frånvarodatumet som förfrågningar kan avbrytas:</value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>Inga rättigheter att flytta aktivitet för agent {0}.</value>
+  </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>Valda agenter:</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>Kan inte flytta flera aktiviteter för agent {0}.</value>
+  </data>
 </root>
