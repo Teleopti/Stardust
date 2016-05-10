@@ -5,15 +5,17 @@
 			<h3>{{'StartTime' | translate}}:</h3>
 			<move-activity-input
 				name="newStartTime"
+				tabindex="{{::vm.tabindex}}"
 				ng-model="vm.newStartTime"
 				show-meridian="vm.showMeridian"
+				minute-step="vm.minuteStep"
 				allow-next-day="vm.allowNextDay"></move-activity-input>
 		</form>
 		<div ng-if="moveActivityForm.newStartTime.$error.startTime">
 			<i class="mdi mdi-alert-octagon" style="vertical-align:middle;"></i>
 			<span translate>something is wrong with the start time provided.</span>
 		</div>
-		<button id="applyMoveActivity" class="wfm-btn form-submit"
+		<button id="applyMoveActivity" class="wfm-btn form-submit" tabindex="{{::vm.tabindex}}"
 				ng-class="{ 'wfm-btn-primary': moveActivityForm.$valid, 'wfm-btn-primary-disabled': !moveActivityForm.$valid }"
 				ng-disabled="!moveActivityForm.$valid"
 				ng-click="vm.applyMoveActivity()">

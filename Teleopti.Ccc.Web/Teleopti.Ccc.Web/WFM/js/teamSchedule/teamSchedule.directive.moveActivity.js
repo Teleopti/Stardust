@@ -10,17 +10,23 @@
 			require: ['ngModel', 'moveActivityInput'],
 			scope: {
 				newStartTime: '=ngModel',
-				showMeridian: '=',
-				allowNextDay: '='
+				showMeridian: '&',
+				minuteStep: '&',
+				allowNextDay: '&'
 			},
 			bindToController: true,
-			controller: ['$scope', 'PersonSelection', function ($scope, personSelectionSvc) {
+			controller: ['$scope', 'PersonSelection', '$element', '$attrs', function ($scope, personSelectionSvc, $element, $attrs) {
 				var vm = this;
+				vm.showMeridian = vm.showMeridian();
+				vm.allowNextDay = vm.allowNextDay();
+				vm.minuteStep = vm.minuteStep();
 
 				vm.init = init;
 
 				function init(ngModel) {
 					var selectedAgents;
+
+					setTabNavigation();
 
 					$scope.$watch(function () {
 						return vm.newStartTime;
@@ -29,6 +35,26 @@
 						var validity = validateStartTime(newVal.startTime);
 						ngModel.$setValidity('startTime', validity);
 					}, true);
+
+					function addFocusListener(element) {
+						angular.element(element).on('focus', function (event) {
+							event.target.select();
+						});
+					}
+
+					function setTabNavigation() {
+						if (angular.isDefined($attrs.tabindex)) {
+							var timepickerInputs = $element[0].querySelectorAll('input[type=text]');
+							for (var i = 0; i < timepickerInputs.length; i++) {
+								timepickerInputs[i].tabIndex = $attrs.tabindex;
+								addFocusListener(timepickerInputs[i]);
+							}
+						}
+
+						$element.on('focus', function (event) {
+							event.target.querySelector('input').focus();
+						});
+					}
 
 					function validateStartTime(value) {
 						var validity = true;
@@ -56,7 +82,7 @@
 			},
 			controllerAs: 'vm',
 			template: [
-				'<uib-timepicker show-meridian="vm.showMeridian" ng-model="vm.newStartTime.startTime"></uib-timepicker>',
+				'<uib-timepicker show-meridian="vm.showMeridian" minute-step="vm.minuteStep" ng-model="vm.newStartTime.startTime"></uib-timepicker>',
 				'<div class="wfm-switch">',
 					'<input type="checkbox" id="mvActNextDay" ng-model="vm.newStartTime.nextDay" ng-disabled="!vm.allowNextDay" />',
 					'<label for="mvActNextDay">',
@@ -72,22 +98,28 @@
 		return {
 			restrict: 'E',
 			scope: {
+				tabindex: '@tabindex',
 				selectedDate: '&',
 				defaultStart: '&?',
 				actionsAfterActivityApply: '&?'
 			},
 			templateUrl: 'js/teamSchedule/html/moveActivity.html',
-			controller: ['$scope', moveActivityPanelCtrl],
+			link: function (scope, iElement, iAttrs, controller) {
+				iElement.attr('tabIndex', '-1');
+			},
+			controller: ['$scope', '$element', moveActivityPanelCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function moveActivityPanelCtrl($scope) {
+	function moveActivityPanelCtrl($scope, $element) {
 		var vm = this;
 		var ADD_HOURS = 1;
+		var MINUTE_STEP = 5;
 		vm.showMeridian = false;
 		vm.allowNextDay = true;
+		vm.minuteStep = MINUTE_STEP;
 
 		vm.defaultStartTime = moment(vm.defaultStart()).add(ADD_HOURS, 'hour').toDate();
 		vm.newStartTime = {
