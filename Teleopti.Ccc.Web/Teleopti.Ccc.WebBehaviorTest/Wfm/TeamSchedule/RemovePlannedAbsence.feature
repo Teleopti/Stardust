@@ -5,7 +5,7 @@ Feature: Remove Planned Absence
 	I want an easy way to find the agents
 	I need to change and make the changes easily. 
 
-Scenario: Could delete absences for agent
+Background: 
 	Given I am american
 	And there is a site named 'The site'
 	And there is a team named 'Team green' on 'The site'
@@ -30,7 +30,27 @@ Scenario: Could delete absences for agent
 		| Access to team                | Team green |
 		| Access to Wfm MyTeam Schedule | true       |
 	And 'John Smith' has a workflow control set publishing schedules until '2016-12-01'
+	And 'Bill Gates' has a workflow control set publishing schedules until '2016-12-01'
+	And 'Candy Mamer' has a workflow control set publishing schedules until '2016-12-01'
 	And 'John Smith' has a person period with
+		| Field                | Value                |
+		| Shift bag            | A shift bag          |
+		| Skill                | A skill              |
+		| Team                 | Team green           |
+		| Start date           | 2016-01-01           |
+		| Contract             | A contract           |
+		| Contract schedule    | A contract schedule  |
+		| Part time percentage | Part time percentage |
+	And 'Bill Gates' has a person period with
+		| Field                | Value                |
+		| Shift bag            | A shift bag          |
+		| Skill                | A skill              |
+		| Team                 | Team green           |
+		| Start date           | 2016-01-01           |
+		| Contract             | A contract           |
+		| Contract schedule    | A contract schedule  |
+		| Part time percentage | Part time percentage |
+	And 'Candy Mamer' has a person period with
 		| Field                | Value                |
 		| Shift bag            | A shift bag          |
 		| Skill                | A skill              |
@@ -45,17 +65,31 @@ Scenario: Could delete absences for agent
 		| Activity       | Phone            |
 		| Start time     | 2016-10-10 09:00 |
 		| End time       | 2016-10-10 16:00 |
+	And 'Bill Gates' has a shift with
+		| Field          | Value            |
+		| Shift category | Day              |
+		| Activity       | Phone            |
+		| Start time     | 2016-10-10 09:00 |
+		| End time       | 2016-10-10 16:00 |
 	And 'John Smith' has an absence with
 		| Field      | Value            |
 		| Name       | Vacation         |
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
-	When I am view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And 'Bill Gates' has an absence with
+		| Field      | Value            |
+		| Name       | Vacation         |
+		| Start time | 2016-10-10 10:00 |
+		| End time   | 2016-10-10 11:00 |
+
+Scenario: Could delete absences for an agent
+	When I view wfm team schedules
+	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
 	Then I should see schedule with absence for 'John Smith' displayed
 	When I selected the person absence for 'John Smith'
 	And I try to delete selected absence
 	Then I should see a confirm message that will remove 1 absences from 1 person
+	And I should not see remove entire cross days checkbox input
 	When I click apply button
 	Then I should see schedule with no absence for 'John Smith' displayed
 

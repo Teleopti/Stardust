@@ -7,7 +7,6 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -21,15 +20,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenISearchedScheduleWithKeywordAndScheduleDate(string searchkeyword, DateTime scheduleDate)
 		{
 			Browser.Interactions.FillWith("#simple-people-search", string.Format("\"{0}\"", searchkeyword));
+			Browser.Interactions.PressEnter("#simple-people-search");
 
-			// xinfli: Not sure why set date directly not trigged load schedule,
-			// so I set it to previous day and switched to next day by click button.
 			var propertyValues = new Dictionary<string, string>
 			{
-				{"vm.scheduleDate", string.Format("new Date('{0}')", scheduleDate.AddDays(-1).ToShortDateString())}
+				{"vm.scheduleDate", string.Format("new Date('{0}')", scheduleDate.ToShortDateString())}
 			};
 			Browser.Interactions.SetScopeValues(".datepicker-container", propertyValues);
-			Browser.Interactions.ClickUsingJQuery(".datepicker-container button:has('i.mdi-chevron-double-right')");
+			Browser.Interactions.PressEnter("team-schedule-datepicker #teamschedule-datepicker-input");
 		}
 
 		[Then(@"I should see schedule with absence for '(.*)' displayed")]
@@ -42,14 +40,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see schedule with no absence for '(.*)' displayed")]
 		public void ThenIShouldSeeScheduleWithNoAbsenceForDisplayed(string agentName)
 		{
-			Browser.Interactions.AssertAnyContains(".person-name", agentName);
 			Browser.Interactions.AssertNotExists(".person-name", ".schedule div.personAbsence");
 		}
 
 		[When(@"I selected the person absence for '(.*)'")]
 		public void WhenISelectedThePersonAbsenceFor(string agentName)
 		{
-			Browser.Interactions.Click(".schedule div.personAbsence");
+			Browser.Interactions.ClickContaining(".person-name .wfm-checkbox-label", "John Smith");
 		}
 
 		[When(@"I selected agent '(.*)'")]
@@ -122,6 +119,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				string.Format(Resources.AreYouSureToRemoveSelectedAbsence, personAbsenceCount, personCount));
 		}
 
+		[Then(@"I should not see remove entire cross days checkbox input")]
+		public void ThenIShouldNotSeeRemoveEntireCrossDaysCheckboxInput()
+		{
+			Browser.Interactions.AssertNotExists(".team-schedule-command-confirm-dialog", "#checkRemoveEntireAbsence");
+		}
+
 		[When(@"I click apply button")]
 		public void WhenIClickApplyButton()
 		{
@@ -148,6 +151,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public string Activity { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-		public Boolean IsNextDay { get; set; }
+		public bool IsNextDay { get; set; }
 	}
 }
