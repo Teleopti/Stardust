@@ -55,7 +55,7 @@
 
 				$scope.openSelectedSites = function() {
 					if (selectedSiteIds.length === 0) return;
-					$state.go('rta-agents-sites', {
+					$state.go('rta.agents-sites', {
 						siteIds: selectedSiteIds
 					});
 				};

@@ -146,7 +146,7 @@ describe('RtaSitesCtrl', function() {
 		scope.toggleSelection("6a21c802-7a34-4917-8dfd-9b5e015ab461");
 		scope.openSelectedSites();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-sites', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents-sites', {
 			siteIds: ['d970a45a-90ff-4111-bfe1-9b5e015ab45c',
 				"6a21c802-7a34-4917-8dfd-9b5e015ab461"
 			]
@@ -167,7 +167,7 @@ describe('RtaSitesCtrl', function() {
 		scope.toggleSelection("d970a45a-90ff-4111-bfe1-9b5e015ab45c");
 		scope.openSelectedSites();
 
-		expect($state.go).toHaveBeenCalledWith('rta-agents-sites', {
+		expect($state.go).toHaveBeenCalledWith('rta.agents-sites', {
 			siteIds: ["6a21c802-7a34-4917-8dfd-9b5e015ab461"]
 		});
 	});

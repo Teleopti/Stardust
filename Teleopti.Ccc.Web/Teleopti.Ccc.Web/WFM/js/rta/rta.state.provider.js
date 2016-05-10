@@ -41,8 +41,8 @@ angular.module('wfm.rta').provider('RtaState', function() {
 					array: true
 				}
 			}
-		}).state('rta-agents-sites', {
-			url: '/rta/agents-sites/?siteIds',
+		}).state('rta.agents-sites', {
+			url: '/agents-sites/?siteIds',
 			templateUrl: rtaAgentsTemplate,
 			controller: 'RtaAgentsCtrl',
 			params: {
