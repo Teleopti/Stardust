@@ -36,7 +36,7 @@ BEGIN
 	INSERT INTO #skills
 	SELECT * FROM mart.SplitStringGuid(@skill_list)
 
-	SELECT @bu_id = business_unit_id FROM mart.dim_skill WHERE skill_id = (SELECT TOP 1 skill_id FROM #skills)
+	SELECT @bu_id = business_unit_id FROM mart.dim_skill WHERE skill_code = (SELECT TOP 1 id FROM #skills)
 
 	SELECT @default_scenario_id = scenario_id 
 	FROM mart.dim_scenario 
