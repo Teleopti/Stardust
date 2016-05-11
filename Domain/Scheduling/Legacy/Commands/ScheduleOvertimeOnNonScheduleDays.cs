@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private static ShiftNudgeDirective createShiftNudgeDirective(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences)
 		{
-			var shiftNudgeDirective = new ShiftNudgeDirective();
 			if (overtimePreferences.AvailableAgentsOnly)
 			{
 				var avail = scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().First();
@@ -76,15 +75,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					var startTimeLimitation = new StartTimeLimitation(avail.StartTime, null);
 					var endTimeLimitation = new EndTimeLimitation(null, avail.EndTime);
-					var effectiveRestriction = new EffectiveRestriction(startTimeLimitation,
-																		endTimeLimitation,
+					var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,
 																		new WorkTimeLimitation(),
 																		null, null, null, new List<IActivityRestriction>());
-					shiftNudgeDirective = new ShiftNudgeDirective(effectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left);
+					return new ShiftNudgeDirective(effectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left);
 				}
 			}
 
-			return shiftNudgeDirective;
+			return new ShiftNudgeDirective();
 		}
 
 		private static INewBusinessRuleCollection createRules(IOvertimePreferences overtimePreferences)
@@ -98,10 +96,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
 				var dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
-				var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
 				rules.Add(new MinWeeklyRestRule(new WeeksFromScheduleDaysExtractor(),
 					new PersonWeekViolatingWeeklyRestSpecification(new ExtractDayOffFromGivenWeek(),
-						new VerifyWeeklyRestAroundDayOffSpecification(), ensureWeeklyRestRule)));
+						new VerifyWeeklyRestAroundDayOffSpecification(), new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator))));
 			}
 			return rules;
 		}
