@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <scopes>
-  <scope uri="http://sample-with-policyengine/">
+  <scope uri="http://default-with-policyengine/">
     <claimTypes>
       <claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname" displayName="givenname"/>
       <claimType fullName="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" displayName="email"/>
