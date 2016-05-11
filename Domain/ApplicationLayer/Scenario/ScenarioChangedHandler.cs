@@ -30,24 +30,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 			_scenarioRepository = scenarioRepository;
 			_businessUnitRepository = businessUnitRepository;
 
-			logger.Info("New instance of handler was created");
+			logger.Debug($"New instance of {nameof(ScenarioChangedHandler)} was created");
+		}
+		
+		[AnalyticsUnitOfWork]
+		public virtual void Handle(ScenarioNameChangeEvent @event)
+		{
+			logger.Debug($"Consuming {nameof(ScenarioNameChangeEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
+			_analyticsScenarioRepository.SetName(@event.ScenarioId, @event.ScenarioName, @event.LogOnBusinessUnitId);
 		}
 
 		[AsSystem]
 		[AnalyticsUnitOfWork]
-		public void Handle(ScenarioNameChangeEvent @event)
+		[UnitOfWork]
+		public virtual void Handle(ScenarioAddEvent @event)
 		{
-			logger.Debug($"Consuming event for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
-			_analyticsScenarioRepository.SetName(@event.ScenarioId, @event.ScenarioName, @event.BusinessUnitId);
-		}
-
-		[AsSystem]
-		[AnalyticsUnitOfWork]
-		public void Handle(ScenarioAddEvent @event)
-		{
+			logger.Debug($"Consuming {nameof(ScenarioAddEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
 			var scenario = _scenarioRepository.Load(@event.ScenarioId);
-			var businessUnit = _businessUnitRepository.Load(@event.BusinessUnitId);
-			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.BusinessUnitId);
+			var businessUnit = _businessUnitRepository.Load(@event.LogOnBusinessUnitId);
+			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 
 			if (scenario == null || businessUnit == null || analyticsBusinessUnit == null)
 				return;

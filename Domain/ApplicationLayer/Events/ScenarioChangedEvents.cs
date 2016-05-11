@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	public abstract class ScenarioEventBase : EventWithInfrastructureContext
 	{
 		public Guid ScenarioId { get; set; }
-		public Guid BusinessUnitId { get; set; }
 		public DateTime DatasourceUpdateDate { get; set; }
 	}
 }

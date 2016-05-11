@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				@"exec mart.[etl_dim_scenario_update_name]
 						@scenario_code=:ScenarioCode, 
 						@scenario_name=:ScenarioName, 
-						@business_unit_code=:BusinessUnitCode,
+						@business_unit_code=:BusinessUnitCode
 					  ")
 				.SetGuid("ScenarioCode", scenarioCode)
 				.SetString("ScenarioName", name)
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 						@business_unit_code=:BusinessUnitCode,
 						@business_unit_name=:BusinessUnitName,
 						@datasource_id=:DatasourceId,
-						@datasource_update_date=:DatasourceUpdateDate
+						@datasource_update_date=:DatasourceUpdateDate,
 						@is_deleted=:IsDeleted
 					  ")
 				.SetGuid("ScenarioCode", scenario.ScenarioCode.GetValueOrDefault())
