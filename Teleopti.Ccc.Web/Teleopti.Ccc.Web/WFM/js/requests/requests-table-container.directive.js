@@ -26,7 +26,7 @@
             vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
         }
 
-        vm.clearFilters = function () {
+        function clearAllFilters () {
             angular.forEach(vm.gridApi.grid.columns, function (column) {
                 column.filters[0].term = undefined;
             });
@@ -44,6 +44,8 @@
             requestFilterSvc.ResetFilter();
             vm.filters = requestFilterSvc.Filters;
         };
+
+        vm.clearFilters = clearAllFilters;
 
         requestsDataSvc.getRequestableAbsences().then(function (result) {
             vm.AllRequestableAbsences = result.data;
@@ -135,6 +137,7 @@
                     gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
                         vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function (x) { return x !== null; });
                     });
+                    gridApi.grid.clearAllFilters = clearAllFilters;
                     gridApi.selection.on.rowSelectionChanged($scope, onSelectionChanged);
                     gridApi.selection.on.rowSelectionChangedBatch($scope, onSelectionChanged);
 
