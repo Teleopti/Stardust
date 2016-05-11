@@ -96,7 +96,7 @@
 					    filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
 							+ '<div isteven-multi-select input-model=\"grid.appScope.AllRequestableAbsences\" output-model=\"grid.appScope.SelectedAbsences\" '
 							+ 'button-label=\"Name\" item-label=\"Name\" on-close=\"grid.appScope.absenceFilterClose()\" '
-							+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"none\"></div>'
+							+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"\"></div>'
 							+ '</div>'
 					},
 					{
@@ -125,7 +125,7 @@
 					    filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">'
 							+ '<div isteven-multi-select input-model=\"grid.appScope.AllRequestStatuses\" output-model=\"grid.appScope.SelectedRequestStatuses\" '
 							+ 'button-label=\"Name\" item-label=\"Name\" on-close=\"grid.appScope.statusFilterClose()\" '
-							+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"none\"></div>'
+							+ 'tick-property=\"Selected\" max-labels=\"1\" helper-elements=\"\"></div>'
 							+ '</div>'
 					},
 					{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header' },
