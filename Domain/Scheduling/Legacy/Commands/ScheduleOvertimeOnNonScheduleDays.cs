@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -56,10 +58,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				SkipNegativeShiftValues = true,
 				AllowBreakContractTime = true
 			};
+
+			var shiftNudgeDirective = createShiftNudgeDirective(scheduleDay, overtimePreferences);
 			var teamInfo = _teamInfoFactory.CreateTeamInfo(agent, date, _matrixListFactory.CreateMatrixListForSelection(new[] { scheduleDay }));
 			var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, date, schedulingOptions.BlockFinder(), true);
-			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer, 
-				stateHolder.SchedulingResultState, new ShiftNudgeDirective(), createRules(overtimePreferences));
+			_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, date, schedulingOptions, rollbackService, resourceCalculateDelayer,
+				stateHolder.SchedulingResultState, shiftNudgeDirective, createRules(overtimePreferences));
+		}
+
+		private static ShiftNudgeDirective createShiftNudgeDirective(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences)
+		{
+			var shiftNudgeDirective = new ShiftNudgeDirective();
+			if (overtimePreferences.AvailableAgentsOnly)
+			{
+				var avail = scheduleDay.PersistableScheduleDataCollection().OfType<IOvertimeAvailability>().First();
+				if (avail != null)
+				{
+					var startTimeLimitation = new StartTimeLimitation(avail.StartTime, null);
+					var endTimeLimitation = new EndTimeLimitation(null, avail.EndTime);
+					var effectiveRestriction = new EffectiveRestriction(startTimeLimitation,
+																		endTimeLimitation,
+																		new WorkTimeLimitation(),
+																		null, null, null, new List<IActivityRestriction>());
+					shiftNudgeDirective = new ShiftNudgeDirective(effectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left);
+				}
+			}
+
+			return shiftNudgeDirective;
 		}
 
 		private static INewBusinessRuleCollection createRules(IOvertimePreferences overtimePreferences)
