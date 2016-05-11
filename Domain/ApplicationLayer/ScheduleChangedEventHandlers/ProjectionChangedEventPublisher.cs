@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			var data = getData(@event);
 			if (data == null) return;
-			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod)
+			_projectionChangedEventBuilder.Build<T>(@event, data.ScheduleRange, data.RealPeriod, data.Versions)
 				.ForEach(e =>
 				{
 					e.ScheduleLoadTimestamp = data.ScheduleLoadedTime;
@@ -79,6 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			public IScheduleRange ScheduleRange;
 			public DateOnlyPeriod RealPeriod;
 			public DateTime ScheduleLoadedTime;
+			public IEnumerable<ProjectionVersion> Versions;
 		}
 
 		private range getData(ScheduleChangedEventBase @event)
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			// gets the date period the same way as FindSchedulesForPersonOnlyInGivenPeriod, hence duplication
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()); 
 			var dates = dateOnlyPeriod.StartDate.DateRange(dateOnlyPeriod.EndDate);
-			_projectionVersionPersister.Upsert(@event.PersonId, dates);
+			var versions = _projectionVersionPersister.Upsert(@event.PersonId, dates);
 			
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false),
@@ -112,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var range = schedule[person];
 
-			DateTimePeriod? actualPeriod = @event.SkipDelete ? range.TotalPeriod() : period;
+			var actualPeriod = @event.SkipDelete ? range.TotalPeriod() : period;
 
 			if (!actualPeriod.HasValue) return null;
 
@@ -124,7 +126,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			{
 				ScheduleRange = range,
 				RealPeriod = realPeriod,
-				ScheduleLoadedTime = schedule.ScheduleLoadedTime
+				ScheduleLoadedTime = schedule.ScheduleLoadedTime,
+				Versions = versions
 			};
 		}
 	}

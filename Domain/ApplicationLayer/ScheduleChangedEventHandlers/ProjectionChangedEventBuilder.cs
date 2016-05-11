@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ProjectionChangedEventBuilder));
 
-		public IEnumerable<T> Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod)
+		public IEnumerable<T> Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod, IEnumerable<ProjectionVersion> versions)
 			where T : ProjectionChangedEventBase, new()
 		{
 			Logger.Debug("Building ProjectionChangedEvent(s)");
@@ -48,7 +49,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						WorkTime = projection.WorkTime(),
 						ContractTime = projection.ContractTime(),
 						PersonPeriodId = personPeriod.Id.GetValueOrDefault(),
-						CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum()
+						CheckSum = new ShiftTradeChecksumCalculator(scheduleDay).CalculateChecksum(),
+						Version = versions.Single(x => x.Date == date).Version
 					};
 					var layers = new List<ProjectionChangedEventLayer>();
 

@@ -5,6 +5,12 @@ namespace Teleopti.Interfaces.Domain
 {
 	public interface IProjectionVersionPersister 
 	{
-		void Upsert(Guid personId, IEnumerable<DateOnly> dates);
+		IEnumerable<ProjectionVersion> Upsert(Guid personId, IEnumerable<DateOnly> dates);
+	}
+
+	public class ProjectionVersion
+	{
+		public DateOnly Date { get; set; }
+		public int Version { get; set; }
 	}
 }

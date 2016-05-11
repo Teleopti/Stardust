@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = unitOfWork;
 		}
 
-		public void Upsert(Guid personId, IEnumerable<DateOnly> dates)
+		public IEnumerable<ProjectionVersion> Upsert(Guid personId, IEnumerable<DateOnly> dates)
 		{
 			var dateString = string.Join(" UNION ", dates.Select(x=> $"SELECT '{x.Date}'"));
 			_unitOfWork.Session().CreateSQLQuery(
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						; ")
 				.SetGuid("Person", personId)
 				.ExecuteUpdate();
+			return Enumerable.Empty<ProjectionVersion>();
 		}
 	}
 }

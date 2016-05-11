@@ -183,5 +183,109 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			day1.Shift.Layers.Should().Have.Count.EqualTo(1);
 			day2.DayOff.Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldPublishWithVersion()
+		{
+			var person = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			Database
+				.WithAgent(person, "jågej")
+				.WithScenario(scenario)
+				.WithAssignment("2016-10-07", person)
+				.WithActivty("2016-10-07 22:00", "2016-10-08 06:00")
+				;
+
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = "2016-10-08 00:00".Utc(),
+				EndDateTime = "2016-10-08 23:59".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+
+			 Publisher.PublishedEvents.OfType<ProjectionChangedEvent>().Single()
+				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
+				.Version.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldIncrementVersion()
+		{
+			var person = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			Database
+				.WithAgent(person, "jågej")
+				.WithScenario(scenario)
+				.WithAssignment("2016-10-07", person)
+				.WithActivty("2016-10-07 08:00", "2016-10-07 17:00")
+				;
+
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = "2016-10-07 08:00".Utc(),
+				EndDateTime = "2016-10-07 17:00".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = "2016-10-07 08:00".Utc(),
+				EndDateTime = "2016-10-07 17:00".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+
+			Publisher.PublishedEvents.OfType<ProjectionChangedEvent>().Last()
+			   .ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
+			   .Version.Should().Be(2);
+		}
+
+
+		[Test]
+		public void ShouldPublishVersionForEachDayAndPerson()
+		{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			Database
+				.WithAgent(person1, "jågej")
+				.WithAgent(person2, "hejman")
+				.WithScenario(scenario)
+				.WithAssignment("2016-10-07", person1)
+				.WithAssignment("2016-10-08", person2)
+				;
+
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = "2016-10-07 08:00".Utc(),
+				EndDateTime = "2016-10-07 17:00".Utc(),
+				PersonId = person1,
+				ScenarioId = scenario
+			});
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = "2016-10-07 08:00".Utc(),
+				EndDateTime = "2016-10-07 17:00".Utc(),
+				PersonId = person2,
+				ScenarioId = scenario
+			});
+			Target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = "2016-10-07 08:00".Utc(),
+				EndDateTime = "2016-10-07 17:00".Utc(),
+				PersonId = person2,
+				ScenarioId = scenario
+			});
+
+			Publisher.PublishedEvents.OfType<ProjectionChangedEvent>()
+				.Single(x => x.PersonId == person1)
+				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
+				.Version.Should().Be(1);
+			Publisher.PublishedEvents.OfType<ProjectionChangedEvent>()
+				.Last(x => x.PersonId == person2)
+				.ScheduleDays.Single(x => x.Date == "2016-10-07".Utc())
+				.Version.Should().Be(2);
+		}
 	}
 }
