@@ -7,17 +7,22 @@ using Autofac;
 using Microsoft.Practices.Composite;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
+using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Forecasting.Cascading;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Grouping.Events;
 using Teleopti.Ccc.WinCode.Meetings.Events;
@@ -109,6 +114,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_myPresenter = _container.Resolve<IScheduleNavigatorPresenter>();
 				_myPresenter.Init(this);
 				_localEventAggregator.GetEvent<SelectedNodesChanged>().Publish("");
+
+				//temporary, open organize casciding skills will be called from somewhere else
+				enableOrganizeCascadingSkills();
 
 				SetTexts();
 				view.Focus();
@@ -341,9 +349,38 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_localEventAggregator.GetEvent<RefreshGroupPageClicked>().Publish("");
 		}
 
-		  private void toolStripButtonOpen_Click(object sender, EventArgs e)
-		  {
+		private void toolStripButtonOpen_Click(object sender, EventArgs e)
+		{
 
-		  }
+		}
+
+		//temporary, open organize casciding skills will be called from somewhere else
+		private void enableOrganizeCascadingSkills()
+		{
+			var toggleManager = _container.Resolve<IToggleManager>();
+			var toggled = toggleManager.IsEnabled(Toggles.ResourcePlanner_CascadingSkills_38524);
+			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills);
+
+			toolStripButtonOrganizeCascadingSkills.Visible = toggled && permitted;
+		}
+
+		//temporary, open organize casciding skills will be called from somewhere else
+		private void toolStripButtonOrganizeCascadingSkillsClick(object sender, EventArgs e)
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var model = new CascadingSkillPresenter(new SkillRepository(new ThisUnitOfWork(uow)));
+
+				using (var view = new CascadingSkillsView(model))
+				{
+					var result = view.ShowDialog();
+					if (result.Equals(DialogResult.OK))
+					{
+						model.Confirm();
+						uow.PersistAll();
+					}
+				}
+			}
+		}
 	}
 }

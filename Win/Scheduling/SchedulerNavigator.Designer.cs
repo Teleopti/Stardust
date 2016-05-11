@@ -32,6 +32,7 @@
         private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulerNavigator));
 			this.splitContainerAdv1 = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.toolStripPeople = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -47,6 +48,7 @@
 			this.toolStripButtonShowMeetings = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripRefresh = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonOrganizeCascadingSkills = new System.Windows.Forms.ToolStripButton();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainerAdv1)).BeginInit();
 			this.splitContainerAdv1.Panel2.SuspendLayout();
@@ -105,7 +107,8 @@
             this.toolStripButtonAddMeeting,
             this.toolStripButtonShowMeetings,
             this.toolStripSeparator1,
-            this.toolStripRefresh});
+            this.toolStripRefresh,
+            this.toolStripButtonOrganizeCascadingSkills});
 			this.toolStripPeople.LauncherStyle = Syncfusion.Windows.Forms.Tools.LauncherStyle.Metro;
 			this.toolStripPeople.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
 			this.toolStripPeople.Location = new System.Drawing.Point(10, 0);
@@ -186,7 +189,7 @@
 			this.tsEditGroupPage.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.tsEditGroupPage.Name = "tsEditGroupPage";
 			this.tsEditGroupPage.Padding = new System.Windows.Forms.Padding(4);
-			this.tsEditGroupPage.Size = new System.Drawing.Size(136, 29);
+			this.tsEditGroupPage.Size = new System.Drawing.Size(250, 29);
 			this.tsEditGroupPage.Text = "xxEditGroupPage";
 			this.tsEditGroupPage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.tsEditGroupPage.Click += new System.EventHandler(this.tsEditGroupPageClick);
@@ -249,6 +252,17 @@
 			this.toolStripRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripRefresh.Click += new System.EventHandler(this.toolStripRefreshClick);
 			// 
+			// toolStripButtonOrganizeCascadingSkills
+			// 
+			this.toolStripButtonOrganizeCascadingSkills.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButtonOrganizeCascadingSkills.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonOrganizeCascadingSkills.Image")));
+			this.toolStripButtonOrganizeCascadingSkills.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonOrganizeCascadingSkills.Name = "toolStripButtonOrganizeCascadingSkills";
+			this.toolStripButtonOrganizeCascadingSkills.Size = new System.Drawing.Size(165, 21);
+			this.toolStripButtonOrganizeCascadingSkills.Text = "xxOrganizeCascadingSkills";
+			this.toolStripButtonOrganizeCascadingSkills.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripButtonOrganizeCascadingSkills.Click += new System.EventHandler(this.toolStripButtonOrganizeCascadingSkillsClick);
+			// 
 			// imageList1
 			// 
 			this.imageList1.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
@@ -292,5 +306,6 @@
         protected System.Windows.Forms.ToolStripButton toolStripButtonShowMeetings;
         protected System.Windows.Forms.ToolStripButton tsRenameGroupPage;
         protected System.Windows.Forms.ToolStripButton tsDeleteGroupPage;
-    }
+		private System.Windows.Forms.ToolStripButton toolStripButtonOrganizeCascadingSkills;
+	}
 }
