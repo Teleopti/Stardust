@@ -347,8 +347,7 @@ Scenario: Can not edit waitlisted absence requests
 	And I should not be able to edit the values for the existing absence request
 	And I should not be able to submit possible changes for the existing request
 
-
-
+@ignore
 Scenario: Can not delete approved absence request
 	Given I am an agent
 	And I have an approved absence request
