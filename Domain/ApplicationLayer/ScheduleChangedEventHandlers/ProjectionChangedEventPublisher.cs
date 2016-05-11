@@ -44,11 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
-			// select projection version with update lock
-			// OR insert projection version (if duplicate, it will throw and hence retry)
 			publishEvent<ProjectionChangedEvent>(@event);
-			// update the version
-			// optional, if no update lock, will throw because the version changed by someone else
 		}
 
 		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
