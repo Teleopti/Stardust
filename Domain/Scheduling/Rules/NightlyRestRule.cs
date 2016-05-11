@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -25,18 +26,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			foreach (IScheduleDay scheduleDay in partCollection)
 			{
 				var ass = scheduleDay.PersonAssignment();
-				if (ass != null && ass.ShiftCategory!=null)
+				if (ass != null)
 				{
-					if (ass.Period.Contains(approxUtc))
-						return new DateTimePeriod(approxUtc, approxUtc);
+					if (ass.ShiftCategory != null || ass.OvertimeActivities().Any())
+					{
+						if (ass.Period.Contains(approxUtc))
+							return new DateTimePeriod(approxUtc, approxUtc);
 
-					if (ass.Period.EndDateTime < approxUtc)
-					{
-						assBefore = ass;
-					}
-					if (assAfter == null && approxUtc < ass.Period.StartDateTime)
-					{
-						assAfter = ass;
+						if (ass.Period.EndDateTime < approxUtc)
+						{
+							assBefore = ass;
+						}
+						if (assAfter == null && approxUtc < ass.Period.StartDateTime)
+						{
+							assAfter = ass;
+						}
 					}
 				}
             }
