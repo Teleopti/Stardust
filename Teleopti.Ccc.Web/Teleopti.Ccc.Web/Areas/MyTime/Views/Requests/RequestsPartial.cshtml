@@ -120,7 +120,7 @@
 									<button class="request-delete close" data-bind="click: $root.SwitchDeleteConfirmationVisibility, clickBubble: false, disable: IsDeletePending()" title="@Resources.Delete">&times;</button>
 								</div>
 								<div data-bind="if: CanCancel">
-									<button class="request-delete close" data-bind="click: $root.SwitchCancelConfirmationVisibility, clickBubble: false, disable: IsCancelPending()" title="@Resources.Cancel">&times;</button>
+									<button class="request-cancel close" data-bind="click: $root.SwitchCancelConfirmationVisibility, clickBubble: false, disable: IsCancelPending()" title="@Resources.Cancel">&times;</button>
 								</div>
 								<div class="request-subject">
 									<h5 class="request-data-subject" data-bind="text: Subject"></h5>
@@ -138,7 +138,7 @@
 									<span>@Resources.ConfirmCancelRequest</span>
 									<span class="pull-right">
 										<a href="#" class="alert-link" data-bind="click: $root.SwitchCancelConfirmationVisibility, clickBubble: false">@Resources.No</a>
-										<a id="request-list-delete" href="#" class="alert-link" data-bind="click: $root.Cancel, clickBubble: false">@Resources.Yes</a>
+										<a id="request-list-cancel" href="#" class="alert-link" data-bind="click: $root.Cancel, clickBubble: false">@Resources.Yes</a>
 									</span>
 								</div>
 
