@@ -49,7 +49,7 @@ Background:
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Happy Path for add activity
-	When I am view wfm team schedules
+	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
 	And I selected agent 'John Smith'
 	And I open 'AddActivity' panel
@@ -72,7 +72,7 @@ Scenario: Happy Path for remove activity
 	| Activity       | Phone            |
 	| Start time     | 2016-10-10 09:00 |
 	| End time       | 2016-10-10 16:00 |
-	When I am view wfm team schedules
+	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
 	And I apply remove activity
