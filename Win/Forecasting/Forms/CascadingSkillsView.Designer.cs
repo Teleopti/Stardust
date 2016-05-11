@@ -67,13 +67,13 @@
 			this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 569F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(727, 771);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(723, 788);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
@@ -87,12 +87,12 @@
 			this.tableLayoutPanel2.Controls.Add(this.buttonAdvOk, 1, 0);
 			this.tableLayoutPanel2.Controls.Add(this.buttonAdvCancel, 2, 0);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 721);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 738);
 			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
 			this.tableLayoutPanel2.RowCount = 1;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(727, 50);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(723, 50);
 			this.tableLayoutPanel2.TabIndex = 3;
 			// 
 			// buttonAdvOk
@@ -104,7 +104,7 @@
 			this.buttonAdvOk.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonAdvOk.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvOk.IsBackStageButton = false;
-			this.buttonAdvOk.Location = new System.Drawing.Point(525, 13);
+			this.buttonAdvOk.Location = new System.Drawing.Point(521, 13);
 			this.buttonAdvOk.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvOk.Name = "buttonAdvOk";
 			this.buttonAdvOk.Size = new System.Drawing.Size(87, 27);
@@ -121,7 +121,7 @@
 			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonAdvCancel.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvCancel.IsBackStageButton = false;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(630, 13);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(626, 13);
 			this.buttonAdvCancel.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Size = new System.Drawing.Size(87, 27);
@@ -134,10 +134,10 @@
 			this.listBoxCascading.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listBoxCascading.FormattingEnabled = true;
 			this.listBoxCascading.ItemHeight = 15;
-			this.listBoxCascading.Location = new System.Drawing.Point(3, 35);
+			this.listBoxCascading.Location = new System.Drawing.Point(3, 33);
 			this.listBoxCascading.Name = "listBoxCascading";
 			this.listBoxCascading.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listBoxCascading.Size = new System.Drawing.Size(317, 563);
+			this.listBoxCascading.Size = new System.Drawing.Size(315, 582);
 			this.listBoxCascading.TabIndex = 4;
 			// 
 			// listBoxNonCascading
@@ -145,10 +145,10 @@
 			this.listBoxNonCascading.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listBoxNonCascading.FormattingEnabled = true;
 			this.listBoxNonCascading.ItemHeight = 15;
-			this.listBoxNonCascading.Location = new System.Drawing.Point(406, 35);
+			this.listBoxNonCascading.Location = new System.Drawing.Point(404, 33);
 			this.listBoxNonCascading.Name = "listBoxNonCascading";
 			this.listBoxNonCascading.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-			this.listBoxNonCascading.Size = new System.Drawing.Size(318, 563);
+			this.listBoxNonCascading.Size = new System.Drawing.Size(316, 582);
 			this.listBoxNonCascading.TabIndex = 5;
 			// 
 			// tableLayoutPanel3
@@ -158,7 +158,7 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel3.Controls.Add(this.buttonAdvMakeNonCascading, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.buttonAdvMakeCascading, 0, 0);
-			this.tableLayoutPanel3.Location = new System.Drawing.Point(326, 274);
+			this.tableLayoutPanel3.Location = new System.Drawing.Point(324, 281);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 2;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -208,11 +208,11 @@
 			this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
 			this.tableLayoutPanel4.Controls.Add(this.buttonAdvMoveDown, 0, 0);
 			this.tableLayoutPanel4.Controls.Add(this.buttonAdvMoveUp, 0, 0);
-			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 604);
+			this.tableLayoutPanel4.Location = new System.Drawing.Point(3, 621);
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(317, 39);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(315, 39);
 			this.tableLayoutPanel4.TabIndex = 7;
 			// 
 			// buttonAdvMoveDown
@@ -223,7 +223,7 @@
 			this.buttonAdvMoveDown.BeforeTouchSize = new System.Drawing.Size(87, 26);
 			this.buttonAdvMoveDown.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvMoveDown.IsBackStageButton = false;
-			this.buttonAdvMoveDown.Location = new System.Drawing.Point(190, 3);
+			this.buttonAdvMoveDown.Location = new System.Drawing.Point(189, 3);
 			this.buttonAdvMoveDown.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvMoveDown.Name = "buttonAdvMoveDown";
 			this.buttonAdvMoveDown.Size = new System.Drawing.Size(87, 26);
@@ -240,7 +240,7 @@
 			this.buttonAdvMoveUp.BeforeTouchSize = new System.Drawing.Size(87, 26);
 			this.buttonAdvMoveUp.ForeColor = System.Drawing.Color.White;
 			this.buttonAdvMoveUp.IsBackStageButton = false;
-			this.buttonAdvMoveUp.Location = new System.Drawing.Point(32, 3);
+			this.buttonAdvMoveUp.Location = new System.Drawing.Point(31, 3);
 			this.buttonAdvMoveUp.Margin = new System.Windows.Forms.Padding(3, 3, 10, 10);
 			this.buttonAdvMoveUp.Name = "buttonAdvMoveUp";
 			this.buttonAdvMoveUp.Size = new System.Drawing.Size(87, 26);
@@ -261,7 +261,7 @@
 			// labelNonCascadingSkills
 			// 
 			this.labelNonCascadingSkills.AutoSize = true;
-			this.labelNonCascadingSkills.Location = new System.Drawing.Point(406, 0);
+			this.labelNonCascadingSkills.Location = new System.Drawing.Point(404, 0);
 			this.labelNonCascadingSkills.Name = "labelNonCascadingSkills";
 			this.labelNonCascadingSkills.Size = new System.Drawing.Size(114, 15);
 			this.labelNonCascadingSkills.TabIndex = 9;
@@ -275,7 +275,7 @@
 			this.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.CancelButton = this.buttonAdvCancel;
 			this.CaptionFont = new System.Drawing.Font("Segoe UI", 12F);
-			this.ClientSize = new System.Drawing.Size(727, 771);
+			this.ClientSize = new System.Drawing.Size(723, 788);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
