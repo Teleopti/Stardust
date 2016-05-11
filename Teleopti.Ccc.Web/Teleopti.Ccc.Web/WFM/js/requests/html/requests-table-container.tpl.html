@@ -10,7 +10,7 @@
     </label>
 </div>
 
-<div class="wfm-switch filter-switch" ng-click="requestsTableContainer.toggleFiltering()">
+<div class="wfm-switch filter-switch" ng-click="requestsTableContainer.toggleFiltering()" ng-if="requestsTableContainer.filterToggleEnabled">
     <input type="checkbox" id="filter-switch" ng-model="requestsTableContainer.gridOptions.enableFiltering" />
     <label for="filter-switch">
         <span class="wfm-switch-toggle"></span>

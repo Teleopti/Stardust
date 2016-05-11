@@ -18,6 +18,7 @@
         vm.reselectRequests = reselectRequests;
         vm.enter = function () { };
         vm.toggleFiltering = toggleFiltering;
+        vm.filterToggleEnabled = toggleSvc.Wfm_Requests_Filtering_37748;
 
         function toggleFiltering() {
             vm.gridOptions.enableFiltering =
@@ -159,7 +160,7 @@
                 }
             };
 
-            var filteringEnabled = toggleSvc.Wfm_Requests_Filtering_37748;
+            var filteringEnabled = vm.filterToggleEnabled;
             options.enableFiltering = filteringEnabled;
             options.useExternalFiltering = filteringEnabled;
             angular.forEach(options.columnDefs, function (col) {
