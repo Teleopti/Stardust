@@ -56,9 +56,11 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				}
 				
 				time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
-			}
+            }
+            Console.WriteLine("");
+            Console.WriteLine("We're doing stuff. Please hang around...");
 
-			var currentInterval = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, time);
+            var currentInterval = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, time);
 
 
 			var workloads = workloadQueuesProvider.Provide();
