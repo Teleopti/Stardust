@@ -166,6 +166,21 @@
 			var lengthMinutes = startTimeMinutes < 0 ? projection.Minutes - (startTimeMinutes * -1) : projection.Minutes;
 			var length = lengthMinutes * timeLine.LengthPercentPerMinute;
 
+			var borderColorPicker = function (color) {
+				var getLumi = function(cstring) {
+					var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
+					if (!matched) return null;
+					return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
+				}
+				
+				var lightColor = "#00ffff";
+				var darkColor = "#795548";
+
+				var lumi = getLumi(color);
+				if (!lumi) return false;
+				return Math.abs(lumi - getLumi(lightColor)) > Math.abs(lumi - getLumi(darkColor));
+			};
+
 			var shiftProjectionVm = {
 				ParentPersonAbsences: projection.ParentPersonAbsences,
 				ShiftLayerIds: projection.ShiftLayerIds,
@@ -180,7 +195,7 @@
 					this.Selected = !this.Selected;
 				},
 				Minutes: projection.Minutes,
-				UseLighterBorder: parseInt(projection.Color.slice(1), 16) <= parseInt('888888', 16)
+				UseLighterBorder: borderColorPicker(projection.Color)
 			};
 
 			return shiftProjectionVm;

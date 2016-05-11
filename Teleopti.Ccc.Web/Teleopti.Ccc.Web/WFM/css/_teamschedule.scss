@@ -135,11 +135,11 @@
 
         .layer.selected{
             opacity: 1;
-            border: 1px dashed grey;
+            border: 1px dashed #795548;			
          }
 
         .layer.lighterBorder{
-            border-color: aqua;
+            border-color: #00ffff;
         }
 
 		.layer:first-of-type {
