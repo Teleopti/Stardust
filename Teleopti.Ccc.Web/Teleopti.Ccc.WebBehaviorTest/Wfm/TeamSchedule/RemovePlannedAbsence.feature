@@ -104,7 +104,7 @@ Scenario: Absence deletion should only be enabled when when absence selected
 @ignore
 Scenario: Could delete absences for multiple agents
 	Given I am a team leader
-	When I am view wfm team schedules
+	When I view wfm team schedules
 	And I selected absence of agent "Ashley Andeen"
 	And I selected absence of agent "John Smith"
 	And I delete absences for these two agents.

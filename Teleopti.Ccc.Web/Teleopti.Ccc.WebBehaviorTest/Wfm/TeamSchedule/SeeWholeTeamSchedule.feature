@@ -20,13 +20,13 @@ Background:
 
 Scenario: Can see page size dropdown box
 	Given I have the role 'TeamLeader'
-	When I am view wfm team schedules
+	When I view wfm team schedules
 	Then I can see page size picker
 
 @ignore
 Scenario: Can change page size
 	Given I have the role 'TeamLeader'
 	And I have page size '50' in personal setting
-	When I am view wfm team schedules
+	When I view wfm team schedules
 	Then I can see page size picker
 	And page size picker is filled with '50'
