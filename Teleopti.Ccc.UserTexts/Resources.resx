@@ -14429,4 +14429,12 @@ Help us improve your experience by sending an error report</value>
     <value>Latest actual interval</value>
     <comment>Latest actual interval</comment>
   </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>Moving activities for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <comment>Message for when moving activity is not totally successful</comment>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>Successfully moved activities for selected agents	</value>
+    <comment>Success Message for Moving Activity</comment>
+  </data>
 </root>

@@ -128,7 +128,6 @@
 				message = $translate.instant('CanNotMoveMultipleAcivitiesForAgent').replace('{0}', notAllowNameList.substring(0, notAllowNameList.length - 2));
 				noticeService.error(message, null, true);
 			}
-			$scope.$apply();
 		};
 
 		vm.toggleCommandState = function (menuName) {

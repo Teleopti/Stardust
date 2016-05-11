@@ -107,13 +107,13 @@
 			link: function (scope, iElement, iAttrs, controller) {
 				iElement.attr('tabIndex', '-1');
 			},
-			controller: ['$scope', '$element', moveActivityPanelCtrl],
+			controller: ['ActivityService', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', moveActivityPanelCtrl],
 			controllerAs: 'vm',
 			bindToController: true
 		};
 	}
 
-	function moveActivityPanelCtrl($scope, $element) {
+	function moveActivityPanelCtrl(ActivityService, guidgenerator, commandCommon, personSelectionSvc, NotificationSvc) {
 		var vm = this;
 		var ADD_HOURS = 1;
 		var MINUTE_STEP = 5;
@@ -130,6 +130,36 @@
 		vm.applyMoveActivity = applyMoveActivity;
 
 		function applyMoveActivity() {
+			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
+			var trackId = guidgenerator.newGuid();
+			var personActivities = [];
+			angular.forEach(selectedPersonProjections, function (personProjection) {
+				personActivities.push({
+					PersonId: personProjection.personId,
+					ShiftLayerIds: personProjection.selectedActivities
+				});
+			});
+			var moveActivityForm = {
+				Date: vm.selectedDate(),
+				PersonActivities: personActivities,
+				StartTime: moment(vm.newStartTime.startTime).format("YYYY-MM-DD HH:mm"),
+				TrackedCommandInfo: { TrackId: trackId }
+			}
+		    ActivityService.moveActivity( moveActivityForm ).then(function(response) {
+		        if (vm.actionsAfterActivityApply) {
+		    		vm.actionsAfterActivityApply({
+		    			trackId: trackId,
+		    			personIds: personActivities.map(function (agent) { return agent.PersonId; })
+		    		});
+		    	}
+		    	var total = personActivities.length;
+		    	var fail = response.data.length;
+		    	if (fail === 0) {
+		    		NotificationSvc.notify('success', 'SuccessfulMessageForMovingActivity'); 
+		    	} else {
+		    		var description = NotificationSvc.notify('warning', 'PartialSuccessMessageForMovingActivity', [total, total - fail, fail]);
+		    	}
+		    });
 		}
 	}
 })();
