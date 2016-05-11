@@ -8,13 +8,14 @@
 	function scheduleTableDirective() {
 		return {
 			scope: {
-				selectMode: '='
+				selectMode: '=',
+				selectedDate: '='
 			},
 			restrict: 'E',
 			controllerAs: 'vm',
 			bindToController: true,
 			controller: 'scheduleTableCtrl',
-			templateUrl: "js/teamSchedule/html/scheduletable.html",
+			templateUrl: "js/teamSchedule/html/scheduletable.html"
 		};
 	};
 	function scheduleTableController(toggleSvc, personSelectionSvc, $scope, ScheduleMgmt) {
@@ -31,7 +32,7 @@
 		vm.init = init;
 
 		$scope.$watch(function () {
-			return ScheduleMgmt.groupScheduleVm.Schedules
+			return ScheduleMgmt.groupScheduleVm.Schedules;
 		}, function (newVal) {
 			if (newVal)
 				vm.init();
@@ -54,17 +55,17 @@
 			personSelectionSvc.toggleAllPersonProjections(personSchedule);
 		};
 
-		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shiftDateMoment) {
+		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, viewDate) {
 			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
 				return;
 
-			var isSameDay = shiftDateMoment.isSame(personSchedule.Date, 'day');
+			var isSameDay = personSchedule.Date.isSame(viewDate, 'day');
+			
 			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return;
 			}
 
 			currentProjection.ToggleSelection();
-
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
 		};
 
