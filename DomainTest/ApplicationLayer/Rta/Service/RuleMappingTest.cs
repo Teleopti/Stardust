@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	[RtaTest]
 	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
-	public class AlarmMappingTest
+	public class RuleMappingTest
 	{
 		public FakeRtaDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
@@ -83,6 +83,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "AUX1",
 				PlatformTypeId = platform2.ToString()
 			});
+
+			EventPublisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldExcludeMapsWithStateGroupsWithoutStateCode()
+		{
+			var person = Guid.NewGuid();
+			Database
+				.WithUser("usercode", person)
+				.WithMapWithStateGroupWithoutStateCodes()
+				.WithRule(null, null, 0, Adherence.In)
+				;
+
+			Target.CheckForActivityChanges(Database.TenantName());
 
 			EventPublisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}

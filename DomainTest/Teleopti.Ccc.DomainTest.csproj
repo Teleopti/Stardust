@@ -343,7 +343,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\PersonActivityActualStartEventTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherenceDetailsViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\AlarmMappingTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\RuleMappingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AuthenticationKeyTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\BelongsToDateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\CheckForActivityChangeTest.cs" />

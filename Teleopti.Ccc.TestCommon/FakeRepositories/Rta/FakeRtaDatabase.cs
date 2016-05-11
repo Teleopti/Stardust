@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
 		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
+		IFakeDataBuilder WithMapWithStateGroupWithoutStateCodes();
 	}
 
 	public class FakeRtaDatabase : IDatabaseReader, IFakeDataBuilder
@@ -315,7 +317,24 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 			return this;
 		}
-		
+
+		public IFakeDataBuilder WithMapWithStateGroupWithoutStateCodes()
+		{
+			var stateGroup = new RtaStateGroup("Empty", false, true);
+			stateGroup.SetId(Guid.NewGuid());
+			stateGroup.SetBusinessUnit(_businessUnit);
+			stateGroup.IsLogOutState = false;
+			RtaStateGroupRepository.Add(stateGroup);
+	
+			var mapping = new RtaMap(stateGroup, null);
+			mapping.RtaRule = _rtaRule;
+			mapping.SetId(Guid.NewGuid());
+			mapping.SetBusinessUnit(_businessUnit);
+			RtaMapRepository.Add(mapping);
+
+			return this;
+		}
+
 		public IFakeDataBuilder ClearRuleMap()
 		{
 			RtaMapRepository.Clear();
@@ -348,12 +367,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
+		// Implementation details
 		public IFakeDataBuilder WithStateGroup(string statecode, string stateGroupName)
 		{
 			var stateGroup = new RtaStateGroup(stateGroupName, false, false);
 			stateGroup.SetId(Guid.NewGuid());
 			stateGroup.SetBusinessUnit(_businessUnit);
-			stateGroup.AddState(statecode, statecode, Guid.Empty);
+			if (statecode != null)
+				stateGroup.AddState(statecode, statecode, Guid.Empty);
 			RtaStateGroupRepository.Add(stateGroup);
 			return this;
 		}
@@ -363,6 +384,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			WithStateCode(statecode, _platformTypeId);
 			return this;
 		}
+		// End
 
 		public IFakeDataBuilder WithStateCode(string statecode, string platformTypeId)
 		{

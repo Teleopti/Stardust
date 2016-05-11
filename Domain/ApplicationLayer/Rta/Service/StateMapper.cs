@@ -42,10 +42,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return match;
 		}
 
-		private MappedRule queryRule(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, Guid? activityId)
+		private MappedRule queryRule(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode,
+			Guid? activityId)
 		{
 			return (from m in mappings
+				let illegal = m.StateCode == null && m.StateGroupId != Guid.Empty
 				where
+					!illegal &&
 					m.BusinessUnitId == businessUnitId &&
 					m.PlatformTypeId == platformTypeId &&
 					m.StateCode == stateCode &&
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				})
 				.SingleOrDefault();
 		}
-		
+
 		public MappedState StateFor(IEnumerable<Mapping> mappings, Guid businessUnitId, Guid platformTypeId, string stateCode, string stateDescription)
 		{
 			if (stateCode == null)

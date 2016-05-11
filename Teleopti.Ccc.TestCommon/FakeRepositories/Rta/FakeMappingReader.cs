@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -51,13 +52,22 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 						GroupId = m.StateGroup.Id.Value,
 						GroupName = m.StateGroup.Name,
 						IsLogOutState = m.StateGroup.IsLogOutState,
-						StateCodes = (from s in
-							m.StateGroup.StateCollection
-							select new
+						StateCodes = m.StateGroup.StateCollection.IsEmpty()
+							? new[]
 							{
-								StateCode = s.StateCode,
-								PlatformTypeId = s.PlatformTypeId
-							}).ToArray()
+								new
+								{
+									StateCode = null as string,
+									PlatformTypeId = Guid.Empty
+								}
+							}
+							: (from s in
+								m.StateGroup.StateCollection
+								select new
+								{
+									StateCode = s.StateCode,
+									PlatformTypeId = s.PlatformTypeId
+								}).ToArray()
 					}
 				from c in @group.StateCodes
 				let rule = m.RtaRule == null
