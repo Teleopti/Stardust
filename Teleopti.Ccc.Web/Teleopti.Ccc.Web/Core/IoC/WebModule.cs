@@ -31,7 +31,6 @@ using Teleopti.Ccc.Web.Areas.Outbound.core.IoC;
 using Teleopti.Ccc.Web.Areas.People.Core.IoC;
 using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
-using Teleopti.Ccc.Web.Areas.Reporting.Controllers;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
@@ -48,7 +47,6 @@ using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
-using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -132,7 +130,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
 			builder.RegisterType<SessionSpecificForIdentityProviderDataProvider>()
 				.As<ISessionSpecificForIdentityProviderDataProvider>();
-			builder.RegisterType<SessionAuthenticationModule>().As<ISessionAuthenticationModule>();
 			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>()
 				.As<ISessionSpecificCookieDataProviderSettings>();
 			builder.RegisterType<DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings>()
@@ -171,7 +168,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
-			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
 			builder.RegisterType<IanaTimeZoneProvider>().As<IIanaTimeZoneProvider>().SingleInstance();
 			builder.RegisterType<ThemeSettingProvider>().As<ISettingsPersisterAndProvider<ThemeSetting>>().SingleInstance();

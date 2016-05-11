@@ -2,10 +2,8 @@
 using System.Web;
 using System.Web.Security;
 using Common.Logging;
-using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
@@ -65,6 +63,4 @@ namespace Teleopti.Ccc.Web.Core
 			return false;
 		}
 	}
-
-	
 }

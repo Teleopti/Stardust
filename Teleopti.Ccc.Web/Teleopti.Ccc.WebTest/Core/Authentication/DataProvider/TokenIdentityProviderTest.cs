@@ -1,11 +1,10 @@
 using System.Collections.ObjectModel;
-using Microsoft.IdentityModel.Claims;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.Web;
+using System.Security.Claims;
 
 namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 {
@@ -19,11 +18,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
 
 			httpContext.User =
-				new ClaimsPrincipal(
-					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
+				new ClaimsPrincipal(new Collection<ClaimsIdentity>
 						{
 							new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/TOPTINET#kunning$$$m")})
-						}));
+						});
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo(@"TOPTINET\kunning.m");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo(@"http://fakeschema.com/TOPTINET#kunning$$$m");
 		}
@@ -47,11 +45,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
 
 			httpContext.User =
-				new ClaimsPrincipal(
-					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
+				new ClaimsPrincipal(new Collection<ClaimsIdentity>
 						{
 							new ClaimsIdentity(new[] {new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier)})
-						}));
+						});
 			target.RetrieveToken().UserIdentifier.Should().Be.EqualTo("kunningm");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier);
 		}
@@ -74,15 +71,14 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
 
 			httpContext.User =
-				new ClaimsPrincipal(
-					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
+				new ClaimsPrincipal(new Collection<ClaimsIdentity>
 						{
 							new ClaimsIdentity(new[]
 							{
 								new Claim(ClaimTypes.NameIdentifier, "http://fakeschema.com/kunningm" + TokenIdentityProvider.ApplicationIdentifier),
 								new Claim(ClaimTypes.IsPersistent, "true")
 							})
-						}));
+						});
 			target.RetrieveToken().IsPersistent.Should().Be.True();
 		}
 
@@ -93,11 +89,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var target = new TokenIdentityProvider(new FakeCurrentHttpContext(httpContext));
 
 			httpContext.User =
-				new ClaimsPrincipal(
-					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
+				new ClaimsPrincipal(new Collection<ClaimsIdentity>
 						{
 							new ClaimsIdentity(new[] {new Claim(ClaimTypes.Country, "http://fakeschema.com/kunningm#TOPTINET")})
-						}));
+						});
 
 			target.RetrieveToken().Should().Be.Null();
 		}

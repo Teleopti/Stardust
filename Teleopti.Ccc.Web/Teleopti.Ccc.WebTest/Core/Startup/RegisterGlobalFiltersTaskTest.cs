@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[SetUp]
 		public void Setup()
 		{
-			target = new RegisterGlobalFiltersTask(null,null, null, null);
+			target = new RegisterGlobalFiltersTask(null,null);
 			GlobalFilters.Filters.Clear();
 		}
 
