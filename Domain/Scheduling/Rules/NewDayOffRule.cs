@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				dayForValidation.ProjectionStart =
 					new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeStart(projection.Value));
 				dayForValidation.ProjectionEnd = new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeEnd(projection.Value));
-				dayForValidation.HasAssignment = true;
+				dayForValidation.HasAssignment = assignment.MainActivities().Any();
 				dayForValidation.StartDateTime = assignment.Period.StartDateTime;
 				dayForValidation.DayOff = assignment.DayOff();
 			}

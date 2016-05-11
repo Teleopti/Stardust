@@ -4,10 +4,12 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -309,5 +311,65 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var date = new DateTime(2007, 8, 4, 0, 0, 0, DateTimeKind.Utc);
 						Assert.IsFalse(NewDayOffRule.DayOffConflictWithAssignmentBefore(_dayOff1, new DateTimePeriod(date, date.AddHours(8))));
         }
-    }
+
+		[Test]
+		public void ShouldNotConsiderOnlyOvertimeOnSameDayAsDayOff()
+		{
+			var date = new DateOnly(2007, 8, 3);
+			var activity = new Activity("_") {InWorkTime = true};
+
+			var assWithDayOff = new PersonAssignment(_person, _scenario, date);
+			var template = new DayOffTemplate(new Description()) {Anchor = TimeSpan.FromHours(12)};
+			template.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(8));
+			assWithDayOff.SetDayOff(template);
+			assWithDayOff.AddOvertimeActivity(activity, new DateTimePeriod(new DateTime(2007,8,3,11,45,0, DateTimeKind.Utc), 
+				new DateTime(2007, 8, 3, 12, 15, 0, DateTimeKind.Utc)), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
+
+			var assBeforeEndsAt15 = new PersonAssignment(_person, _scenario, date.AddDays(-1));
+			assBeforeEndsAt15.AddActivity(activity, new TimePeriod(8,0,15,0));
+			var assAfterStartsAt12 = new PersonAssignment(_person, _scenario, date.AddDays(1));
+			assAfterStartsAt12.AddActivity(activity, new TimePeriod(12,0,18,0));
+
+			Expect.Call(_day.PersonAssignment()).Return(assWithDayOff).Repeat.Any();
+			Expect.Call(_dayBefore.PersonAssignment()).Return(assBeforeEndsAt15).Repeat.Any();
+			Expect.Call(_dayAfter.PersonAssignment()).Return(assAfterStartsAt12).Repeat.Any();
+
+			_mocks.ReplayAll();
+
+			var target = new NewDayOffRule(new WorkTimeStartEndExtractor());
+
+			target.Validate(_dic, _days).Should().Be.Empty();
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldBreakRuleWhenHavingDayOffAndOvertime()
+		{
+			var date = new DateOnly(2007, 8, 3);
+			var activity = new Activity("_") { InWorkTime = true };
+
+			var assWithDayOff = new PersonAssignment(_person, _scenario, date);
+			var template = new DayOffTemplate(new Description()) { Anchor = TimeSpan.FromHours(12) };
+			template.SetTargetAndFlexibility(TimeSpan.FromHours(24), TimeSpan.FromHours(8));
+			assWithDayOff.SetDayOff(template);
+			assWithDayOff.AddOvertimeActivity(activity, new DateTimePeriod(new DateTime(2007, 8, 3, 11, 45, 0, DateTimeKind.Utc),
+				new DateTime(2007, 8, 3, 12, 15, 0, DateTimeKind.Utc)), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
+
+			var assBeforeEndsAt15 = new PersonAssignment(_person, _scenario, date.AddDays(-1));
+			assBeforeEndsAt15.AddActivity(activity, new TimePeriod(23, 0, 34, 0));
+			var assAfterStartsAt12 = new PersonAssignment(_person, _scenario, date.AddDays(1));
+			assAfterStartsAt12.AddActivity(activity, new TimePeriod(1, 0, 9, 0));
+
+			Expect.Call(_day.PersonAssignment()).Return(assWithDayOff).Repeat.Any();
+			Expect.Call(_dayBefore.PersonAssignment()).Return(assBeforeEndsAt15).Repeat.Any();
+			Expect.Call(_dayAfter.PersonAssignment()).Return(assAfterStartsAt12).Repeat.Any();
+
+			_mocks.ReplayAll();
+
+			var target = new NewDayOffRule(new WorkTimeStartEndExtractor());
+
+			target.Validate(_dic, _days).Should().Not.Be.Empty();
+			_mocks.VerifyAll();
+		}
+	}
 }
