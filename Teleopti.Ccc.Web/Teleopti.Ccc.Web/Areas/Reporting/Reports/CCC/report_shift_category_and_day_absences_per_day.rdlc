@@ -1461,7 +1461,6 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <FixedRowHeaders>true</FixedRowHeaders>
-        <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Top>7.25812cm</Top>
         <Left>0.25cm</Left>
