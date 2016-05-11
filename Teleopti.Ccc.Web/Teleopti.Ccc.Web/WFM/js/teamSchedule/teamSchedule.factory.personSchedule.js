@@ -197,7 +197,7 @@
 				Minutes: projection.Minutes,
 				UseLighterBorder: borderColorPicker(projection.Color)
 			};
-
+			
 			return shiftProjectionVm;
 		}
 

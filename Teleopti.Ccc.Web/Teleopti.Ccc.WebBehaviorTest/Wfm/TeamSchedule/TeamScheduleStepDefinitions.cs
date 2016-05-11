@@ -129,6 +129,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenIClickApplyButton()
 		{
 			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
+		}		
+		
+		[When(@"I selected activity '(.*)'")]
+		public void WhenISelectedActivity(string description)
+		{
+			Browser.Interactions.ClickUsingJQuery($".layer:contains('{description}')");
 		}
 
 		[When(@"I apply remove activity")]

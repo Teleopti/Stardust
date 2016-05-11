@@ -63,18 +63,21 @@ Scenario: Happy Path for add activity
 	When I apply my new activity
 	Then I should see a successful notice
 
-@ignore
+
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Happy Path for remove activity
 	Given 'John Smith' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2016-10-10 09:00 |
-	| End time       | 2016-10-10 16:00 |
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2016-10-10 09:00 |
+	| End time         | 2016-10-10 16:00 |
+	| Lunch Activity   | Lunch            |
+	| Lunch start time | 2016-10-10 12:00 |
+	| Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected agent 'John Smith'
+	And I selected activity 'Lunch'
 	And I apply remove activity
 	Then I should see a successful notice	
 
