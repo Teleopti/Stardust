@@ -56,11 +56,11 @@
 		};
 
 		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, viewDate) {
-			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
+			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743 && !toggleSvc.WfmTeamSchedule_MoveActivity_37744)
 				return;
 
-			var isSameDay = personSchedule.Date.isSame(viewDate, 'day');
-			
+			var isSameDay = personSchedule.Date.format("YYYY-MM-DD") === moment(viewDate).format("YYYY-MM-DD");
+
 			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return;
 			}
