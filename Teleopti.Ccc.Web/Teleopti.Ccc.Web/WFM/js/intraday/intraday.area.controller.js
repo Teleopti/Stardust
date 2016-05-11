@@ -21,6 +21,7 @@
 			$scope.drillable;
 			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>feedback.</a>";
 			var prevSkill = {};
+			$scope.currentInterval = [];
 
 			NoticeService.info(message, null, true);
 
@@ -132,6 +133,18 @@
 					$scope.drillable = false;
 				};
 
+				$scope.findCurrent = function () {
+					for (var i = 0; i < $scope.timeSeries.length; i++) {
+						if ($scope.timeSeries[i] === $scope.latestActualInterval){
+							$scope.currentInterval[i] = 300;
+						}else{
+							if (i > 0) {
+								$scope.currentInterval[i] = null;
+							}
+						}
+					}
+				}
+
 				var setResult = function (result) {
 					if (!result.LatestActualInterval) {
 						$scope.latestActualInterval = '--:--';
@@ -155,6 +168,7 @@
 						$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
 
 						$scope.timeSeries.splice(0, 0, 'x');
+						$scope.currentInterval.splice(0, 0, 'Current');
 						$scope.forecastedCallsSeries.splice(0, 0, 'Forecasted_calls');
 						$scope.actualCallsSeries.splice(0, 0, 'Actual_calls');
 						$scope.forecastedAverageHandleTimeSeries.splice(0, 0, 'Forecasted_AHT');
@@ -294,6 +308,7 @@
 
 						var loadIntradayChart = function () {
 							$scope.chartHiddenLines = $scope.hiddenArray;
+							$scope.findCurrent();
 							var intervalsList = [];
 							for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
 								intervalsList.push(interval);
@@ -307,7 +322,8 @@
 										$scope.forecastedCallsSeries,
 										$scope.actualCallsSeries,
 										$scope.forecastedAverageHandleTimeSeries,
-										$scope.actualAverageHandleTimeSeries
+										$scope.actualAverageHandleTimeSeries,
+										$scope.currentInterval
 									],
 									hide: $scope.chartHiddenLines,
 									colors: {
@@ -315,16 +331,22 @@
 										Actual_calls: '#4DB6AC',
 										Forecasted_AHT: '#F06292',
 										AHT: '#BA68C8',
+										Current:'#cacaca',
+									},
+									type: 'line',
+									types: {
+										Current: 'bar',
 									},
 									names: {
 										Forecasted_calls: $translate.instant('ForecastedCalls'),
 										Actual_calls: $translate.instant('Calls'),
 										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime'),
 										AHT: $translate.instant('AverageHandlingTime'),
+										Current:$translate.instant('latestActualInterval'),
 									},
 									axes: {
 										AHT: 'y2',
-										Forecasted_AHT: 'y2'
+										Forecasted_AHT: 'y2',
 									}
 								},
 								axis: {
