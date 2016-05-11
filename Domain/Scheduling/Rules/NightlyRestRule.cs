@@ -30,14 +30,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				{
 					if (ass.ShiftCategory != null || ass.OvertimeActivities().Any())
 					{
-						if (ass.Period.Contains(approxUtc))
+						var assignmentPeriod = ass.Period;
+						if (assignmentPeriod.Contains(approxUtc))
 							return new DateTimePeriod(approxUtc, approxUtc);
 
-						if (ass.Period.EndDateTime < approxUtc)
+						if (assignmentPeriod.EndDateTime < approxUtc)
 						{
 							assBefore = ass;
 						}
-						if (assAfter == null && approxUtc < ass.Period.StartDateTime)
+						if (assAfter == null && approxUtc < assignmentPeriod.StartDateTime)
 						{
 							assAfter = ass;
 						}
