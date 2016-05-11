@@ -9,6 +9,6 @@ IF EXISTS (SELECT * FROM sys.columns WHERE Name = N'AbsenceRequestCancellationTh
 
 ALTER TABLE dbo.[WorkflowControlSet]
 ADD [AbsenceRequestCancellationThreshold] int NULL
-DEFAULT 0
-
+DEFAULT 21
+WITH VALUES
 GO

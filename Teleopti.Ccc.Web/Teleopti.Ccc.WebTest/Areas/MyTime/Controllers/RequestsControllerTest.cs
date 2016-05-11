@@ -6,13 +6,27 @@ using System.Web.Routing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Web;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
 
@@ -32,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnRequestsPartialView()
 		{
-			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null, null, null, null, new FakePermissionProvider(), null,null,null, null);
+			var target = new RequestsController(MockRepository.GenerateMock<IRequestsViewModelFactory>(), null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
 
 			var result = target.Index();
 
@@ -43,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnViewModelForIndex()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var target = new RequestsController(viewModelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(viewModelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
 
 			viewModelFactory.Stub(x => x.CreatePageViewModel()).Return(new RequestsViewModel());
 
@@ -58,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 
-			var target = new RequestsController(viewModelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(viewModelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
 			var model = new RequestViewModel[] { };
 			var paging = new Paging();
 
@@ -76,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = new TextRequestForm();
 			var resultData = new RequestViewModel();
 
-			var target = new RequestsController(null, textRequestPersister, null, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(null, textRequestPersister, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
 
 			textRequestPersister.Stub(x => x.Persist(form)).Return(resultData);
 
@@ -95,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			shiftTradePersister.Stub(x => x.Persist(form)).Return(resultData);
 
-			using (var target = new RequestsController(null, null, null, shiftTradePersister, null, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(null, null, null, shiftTradePersister, null, new FakePermissionProvider(), null, null, null, null, null))
 			{
 				var result = target.ShiftTradeRequest(form);
 				var data = result.Data as RequestViewModel;
@@ -110,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = new AbsenceRequestForm();
 			var resultData = new RequestViewModel();
 
-			var target = new RequestsController(null, null, absenceRequestPersister, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(null, null, absenceRequestPersister, null, null, new FakePermissionProvider(), null, null, null, null, null);
 
 			absenceRequestPersister.Stub(x => x.Persist(form)).Return(resultData);
 
@@ -127,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var form = new AbsenceRequestForm();
 
-			var target = new RequestsController(null, null, absenceRequestPersister, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(null, null, absenceRequestPersister, null, null, new FakePermissionProvider(), null, null, null, null, null);
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -147,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var form = new AbsenceRequestForm();
 
-			var target = new RequestsController(null, null, absenceRequestPersister, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(null, null, absenceRequestPersister, null, null, new FakePermissionProvider(), null, null, null, null, null);
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -164,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnErrorMessageOnInvalidModelFromTextRequest()
 		{
-			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null,null, null, null, null, null, null,null);
+			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null, null, null, null, null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
@@ -180,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnErrorMessageOnInvalidModelFromShiftTradeRequest()
 		{
-			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null, null, null,null, null, null);
+			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null, null, null, null, null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
@@ -197,7 +211,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldDeleteTextRequest()
 		{
 			var textRequestPersister = MockRepository.GenerateMock<ITextRequestPersister>();
-			using (var target = new RequestsController(null, textRequestPersister, null, null, null, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(null, textRequestPersister, null, null, null, new FakePermissionProvider(), null, null, null, null, null))
 			{
 				var id = Guid.NewGuid();
 
@@ -211,7 +225,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetRequestById()
 		{
 			var modelFactory = MockRepository.GenerateStub<IRequestsViewModelFactory>();
-			using (var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null))
 			{
 				var id = Guid.NewGuid();
 				var viewModel = new RequestViewModel { Id = "b", Status = "c", Subject = "d", Text = "e", Type = "f", UpdatedOnDateTime = "g" };
@@ -232,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
 				HasWorkflowControlSet = true,
-				MiscSetting = new ShiftTradeRequestMiscSetting(){ AnonymousTrading = true, LockTrading = true},
+				MiscSetting = new ShiftTradeRequestMiscSetting() { AnonymousTrading = true, LockTrading = true },
 				OpenPeriodRelativeStart = 2,
 				OpenPeriodRelativeEnd = 30,
 				NowYear = 2013,
@@ -242,9 +256,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel()).Return(model);
 
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
 			var result = target.ShiftTradeRequestPeriod();
-			var data = (ShiftTradeRequestsPeriodViewModel) result.Data;
+			var data = (ShiftTradeRequestsPeriodViewModel)result.Data;
 
 			data.HasWorkflowControlSet.Should().Be.EqualTo(model.HasWorkflowControlSet);
 			data.MiscSetting.AnonymousTrading.Should().Be.EqualTo(model.MiscSetting.AnonymousTrading);
@@ -265,7 +279,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			modelFactory.Stub(x => x.CreateShiftTradeMyTeamSimpleViewModel(givenDate)).Return(myTeamId);
 
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
 			var result = target.ShiftTradeRequestMyTeam(givenDate);
 
 			var data = (string)result.Data;
@@ -281,9 +295,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
 			shiftTradePersister.Expect(a => a.OkByMe(id, "")).Return(resultData);
 
-			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider(), null, null, null, null, null))
 			{
-				var result = target.ApproveShiftTrade(new ShiftTradeRequestReplyForm(){ID = id, Message = ""});
+				var result = target.ApproveShiftTrade(new ShiftTradeRequestReplyForm() { ID = id, Message = "" });
 				var data = result.Data as RequestViewModel;
 				data.Should().Be.SameInstanceAs(resultData);
 			}
@@ -299,9 +313,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
 			shiftTradePersister.Expect(a => a.Deny(id, "")).Return(resultData);
 
-			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider(), null, null, null, null, null))
 			{
-				var result = target.DenyShiftTrade(new ShiftTradeRequestReplyForm(){ID = id, Message = ""});
+				var result = target.DenyShiftTrade(new ShiftTradeRequestReplyForm() { ID = id, Message = "" });
 				var data = result.Data as RequestViewModel;
 				data.Should().Be.SameInstanceAs(resultData);
 			}
@@ -315,33 +329,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var id = Guid.NewGuid();
 			var requestViewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var shiftTradeSwapDetails = new ShiftTradeSwapDetailsViewModel
+			{
+				From = new ShiftTradeEditPersonScheduleViewModel
 				{
-														 From =  new ShiftTradeEditPersonScheduleViewModel
-															 {
-																         ScheduleLayers = new List<ShiftTradeEditScheduleLayerViewModel>(),
-																			DayOffText = "DO",
-																			HasUnderlyingDayOff = false,
-																			MinutesSinceTimeLineStart = 60,
-																			Name="xxx"
-															         },
-														 To =  new ShiftTradeEditPersonScheduleViewModel
-															 {
-																		 ScheduleLayers = new List<ShiftTradeEditScheduleLayerViewModel>(),
-																		 DayOffText = "DO",
-																		 HasUnderlyingDayOff = false,
-																		 MinutesSinceTimeLineStart = 60,
-																		 Name = "yyy"
-															       },
-														
-				                            };
+					ScheduleLayers = new List<ShiftTradeEditScheduleLayerViewModel>(),
+					DayOffText = "DO",
+					HasUnderlyingDayOff = false,
+					MinutesSinceTimeLineStart = 60,
+					Name = "xxx"
+				},
+				To = new ShiftTradeEditPersonScheduleViewModel
+				{
+					ScheduleLayers = new List<ShiftTradeEditScheduleLayerViewModel>(),
+					DayOffText = "DO",
+					HasUnderlyingDayOff = false,
+					MinutesSinceTimeLineStart = 60,
+					Name = "yyy"
+				},
+
+			};
 
 			requestViewModelFactory.Expect(r => r.CreateShiftTradeRequestSwapDetails(id)).Return(new List<ShiftTradeSwapDetailsViewModel> { shiftTradeSwapDetails });
 
-			using (var target = new RequestsController(requestViewModelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(requestViewModelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null))
 			{
-				var result = (IList<ShiftTradeSwapDetailsViewModel>) target.ShiftTradeRequestSwapDetails(id).Data;
-				Assert.That(result.First().From.Name, Is.EqualTo("xxx"));				
-				Assert.That(result.First().To.Name,Is.EqualTo("yyy"));
+				var result = (IList<ShiftTradeSwapDetailsViewModel>)target.ShiftTradeRequestSwapDetails(id).Data;
+				Assert.That(result.First().From.Name, Is.EqualTo("xxx"));
+				Assert.That(result.First().To.Name, Is.EqualTo("yyy"));
 			}
 
 			requestViewModelFactory.VerifyAllExpectations();
@@ -355,7 +369,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
 			shiftTradePersister.Expect(a => a.ResendReferred(id)).Return(resultData);
 
-			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(null, null, null, null, shiftTradePersister, new FakePermissionProvider(), null, null, null, null, null))
 			{
 				var result = target.ResendShiftTrade(id);
 				var data = result.Data as RequestViewModel;
@@ -368,11 +382,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnPersonalAccountPermission()
 		{
-			using (var target = new RequestsController(null, null, null, null, null, new FakePermissionProvider(), null, null, null, null))
+			using (var target = new RequestsController(null, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null))
 			{
 				var result = target.PersonalAccountPermission();
 				result.Data.Should().Be.EqualTo(true);
-			} 
+			}
 		}
 
 		[Test]
@@ -381,31 +395,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
-				MiscSetting = new ShiftTradeRequestMiscSetting{ AnonymousTrading = true }
+				MiscSetting = new ShiftTradeRequestMiscSetting { AnonymousTrading = true }
 			};
 
 			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(Guid.Empty)).IgnoreArguments().Return(model);
 
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null);
-			
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
+
 			var result = target.GetShiftTradeRequestMiscSetting(Guid.Empty);
 			var data = (ShiftTradeRequestMiscSetting)result.Data;
 
 			data.AnonymousTrading.Should().Be.True();
-		}		
-		
+		}
+
 		[Test]
 		public void ShouldGetLockTrading()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
-				MiscSetting = new ShiftTradeRequestMiscSetting{ LockTrading = true }
+				MiscSetting = new ShiftTradeRequestMiscSetting { LockTrading = true }
 			};
 
 			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(Guid.Empty)).IgnoreArguments().Return(model);
 
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null);
+			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
 			var result = target.GetShiftTradeRequestMiscSetting(Guid.Empty);
 			var data = (ShiftTradeRequestMiscSetting)result.Data;
 
@@ -420,9 +434,91 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.Text.Should().Be.EqualTo(expected.Text);
 			target.Type.Should().Be.EqualTo(expected.Type);
 			target.UpdatedOnDateTime.Should().Be.EqualTo(expected.UpdatedOnDateTime);
-			target.DateTimeFrom.Should().Be.EqualTo (expected.DateTimeFrom);
+			target.DateTimeFrom.Should().Be.EqualTo(expected.DateTimeFrom);
 			target.DateTimeTo.Should().Be.EqualTo(expected.DateTimeTo);
 		}
-		
+
+		[Test]
+		public void ShouldAllowCancelAbsenceRequest()
+		{
+			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
+			
+			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03));
+
+			data.ErrorMessages.Should().Be.Empty();
+		}
+
+
+		[Test]
+		public void ShouldValidatePermissionForCancelAbsenceRequest()
+		{
+			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
+			
+			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(2016, 03, 02, 2016, 03, 03), false);
+
+			data.ErrorMessages.Should().Contain(Resources.InsufficientPermission);
+		}
+
+		[Test]
+		public void ShouldValidateCancellationThresholdForCancelAbsenceRequest()
+		{
+
+			setupStateHolderProxy();
+
+			var person = PersonFactory.CreatePerson("Bill", "Bloggins").WithId();
+			var workflowControlSet = new WorkflowControlSet("WorkflowControlSet")
+			{
+				AbsenceRequestCancellationThreshold = 10
+			};
+			person.WorkflowControlSet = workflowControlSet;
+
+			var today = DateTime.Today.ToUniversalTime();
+			var data = doCancelAbsenceRequestMyTimeSpecificValidation(person, new DateTimePeriod(today, today.AddDays (1)));
+
+			data.ErrorMessages.Should().Contain(string.Format(Resources.AbsenceRequestCancellationThresholdExceeded, workflowControlSet.AbsenceRequestCancellationThreshold));
+		}
+
+
+
+		private static RequestCommandHandlingResult doCancelAbsenceRequestMyTimeSpecificValidation(IPerson person,  DateTimePeriod period, bool hasPermission = true)
+		{
+			var fakePersonRequestRepository = new FakePersonRequestRepository();
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var resultData = new RequestViewModel();
+			modelFactory.Stub(x => x.CreateRequestViewModel(Guid.Empty)).IgnoreArguments().Return(resultData);
+
+			var absenceRequest = new AbsenceRequest (AbsenceFactory.CreateAbsence ("Holiday").WithId(), period);
+			var personRequest = new PersonRequest(person, absenceRequest).WithId();
+			
+			fakePersonRequestRepository.Add(personRequest);
+
+
+			var permissionProvider = new FakePermissionProvider();
+			if (hasPermission)
+			{
+				permissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest,new DateOnly(personRequest.RequestedDate), person);
+			}
+			
+
+			var cancelAbsenceRequestCommandHandler = MockRepository.GenerateMock<IHandleCommand<CancelAbsenceRequestCommand>>();
+			cancelAbsenceRequestCommandHandler.Stub(x => x.Handle(null)).IgnoreArguments();
+
+			var requestsController = new RequestsController(modelFactory, null, null, null, null, permissionProvider, null, null,
+				null, null,
+				new CancelAbsenceRequestCommandProvider(cancelAbsenceRequestCommandHandler, fakePersonRequestRepository, permissionProvider));
+
+			var result = requestsController.CancelRequest(personRequest.Id.Value);
+			var data = (RequestCommandHandlingResult)result.Data;
+			return data;
+		}
+
+		private static void setupStateHolderProxy()
+		{
+			var stateMock = new FakeState();
+			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
+		}
 	}
 }

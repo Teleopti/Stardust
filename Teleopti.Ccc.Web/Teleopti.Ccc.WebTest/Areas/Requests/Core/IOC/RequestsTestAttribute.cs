@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -37,6 +38,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(principalAuthorization).For<IAuthorization>();
 			system.UseTestDouble<FakePersonNameProvider>().For<IPersonNameProvider>();
 			system.UseTestDouble(new FakePersonRequestRepository()).For<IPersonRequestRepository>();
+			system.UseTestDouble (new FakePersonAbsenceRepository()).For<IPersonAbsenceRepository>();
+			system.UseTestDouble (new FakePersonAbsenceAccountRepository()).For<IPersonAbsenceAccountRepository>();
 			system.UseTestDouble<FakePeopleSearchProvider>().For<IPeopleSearchProvider>();
 
 			system.UseTestDouble<SyncCommandDispatcher>().For<ICommandDispatcher>();
@@ -45,7 +48,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
+			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
+			system.UseTestDouble (personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
+			system.UseTestDouble (new ConfigurablePermissions()).For<IAuthorization>();
+			system.UseTestDouble (new FakeCommonAgentNameProvider ()).For<ICommonAgentNameProvider>();
+			system.UseTestDouble (new AbsenceRequestCancelService(personRequestCheckAuthorization)).For<IAbsenceRequestCancelService>();
 
+
+			system.UseTestDouble (new FakeLoggedOnUser()).For<ILoggedOnUser>();
+			system.UseTestDouble (new SwedishCulture()).For<IUserCulture>();
 
 		}
 

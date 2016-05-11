@@ -14437,4 +14437,16 @@ Help us improve your experience by sending an error report</value>
     <value>Successfully moved activities for selected agents	</value>
     <comment>Success Message for Moving Activity</comment>
   </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>Unable to change the schedule for {0} on {1} as it is write protected.</value>
+    <comment>Used to display an error when attempting to update a write protected schedule.  Parameters {0} = Agent Name, {1} = Date of attempted update</comment>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>Cancelling this approved request will remove any related absences from your schedule.  Are you sure you wish to continue?</value>
+    <comment>Prompt for the user in MyTimeWeb when cancelling an approved absence request.</comment>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>It is too late to cancel this request.  This request could be cancelled no later than {0} days before its start date.</value>
+    <comment>Error message that is displayed in MyTimeWeb's Request view when an agent attempts to cancel a request later than the threshold allows.  Parameter {0} = the number of days before the request startdate that the request can be cancelled.</comment>
+  </data>
 </root>

@@ -232,6 +232,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is too late to cancel this request.  This request could be cancelled no later than {0} days before its start date..
+        /// </summary>
+        public static string AbsenceRequestCancellationThresholdExceeded {
+            get {
+                return ResourceManager.GetString("AbsenceRequestCancellationThresholdExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Absence not selected.
         /// </summary>
         public static string AbsenceRequestEmptyAbsenceTypeError {
@@ -5882,6 +5891,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Configuration {
             get {
                 return ResourceManager.GetString("Configuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancelling this approved request will remove any related absences from your schedule.  Are you sure you wish to continue?.
+        /// </summary>
+        public static string ConfirmCancelRequest {
+            get {
+                return ResourceManager.GetString("ConfirmCancelRequest", resourceCulture);
             }
         }
         
@@ -24394,6 +24412,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduleIsRunning {
             get {
                 return ResourceManager.GetString("ScheduleIsRunning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to change the schedule for {0} on {1} as it is write protected..
+        /// </summary>
+        public static string ScheduleIsWriteProtected {
+            get {
+                return ResourceManager.GetString("ScheduleIsWriteProtected", resourceCulture);
             }
         }
         

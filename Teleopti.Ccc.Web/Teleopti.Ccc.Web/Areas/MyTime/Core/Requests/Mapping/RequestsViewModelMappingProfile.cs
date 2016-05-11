@@ -3,7 +3,11 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -20,18 +24,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private readonly IPersonNameProvider _personNameProvider;
+		private readonly IToggleManager _toggleManager;
 
 		public RequestsViewModelMappingProfile(IUserTimeZone userTimeZone,
 			ILinkProvider linkProvider,
 			ILoggedOnUser loggedOnUser,
 			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
-			IPersonNameProvider personNameProvider)
+			IPersonNameProvider personNameProvider,
+			IToggleManager toggleManager)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 			_personNameProvider = personNameProvider;
+			_toggleManager = toggleManager;
 		}
 
 
@@ -171,11 +178,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Methods, o => o.ResolveUsing(getAvailableMethods));
 		}
 
-		private static object getAvailableMethods (IPersonRequest personRequest)
+		private object getAvailableMethods (IPersonRequest personRequest)
 		{
-			if (personRequest.Request is ShiftExchangeOffer)
+			var request = personRequest.Request as ShiftExchangeOffer;
+			if (request != null)
 			{
-				var offer = personRequest.Request as IShiftExchangeOffer;
+				var offer = (IShiftExchangeOffer) personRequest.Request;
 				var isRealPending = (offer.Status == ShiftExchangeOfferStatus.Pending) && !offer.IsExpired();
 				return isRealPending ? "GET, DELETE, PUT" : "GET, DELETE";
 			}
@@ -185,7 +193,40 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return "GET, DELETE, PUT";
 			}
 
+			if (canCancelPersonRequest(personRequest))
+			{
+				return "GET, CANCEL";
+			}
+			
 			return personRequest.IsWaitlisted ? "GET, DELETE" : "GET";
+		}
+
+		private bool canCancelPersonRequest (IPersonRequest personRequest)
+		{
+			if (!personRequest.IsApproved || !_toggleManager.IsEnabled (Toggles.Wfm_Requests_Cancel_Agent_38055))
+			{
+				return false;
+			}
+
+
+			if (!(personRequest.Request is AbsenceRequest))
+			{
+				return false;
+			}
+
+
+			var dateforDayCancellationCheck = new DateOnly (personRequest.Request.Period.LocalStartDateTime);
+			if ( dateforDayCancellationCheck >= DateOnly.Today)
+			{
+				if (PrincipalAuthorization.Current().IsPermitted (
+					DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, new DateOnly (personRequest.RequestedDate),
+					personRequest.Person))
+				{
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		private string getStatusText(IPersonRequest s)

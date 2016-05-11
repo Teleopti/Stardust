@@ -72,15 +72,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SettingsForPersonPeriodChangedEventPublisher>().As<ITransactionHook>();
 			builder.RegisterType<MessageBrokerSender>().As<ITransactionHook>().SingleInstance();
 			if (_configuration.Toggle(Toggles.MessageBroker_SchedulingScreenMailbox_32733))
-				builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();
-
-			if (_configuration.Toggle ((Toggles.Wfm_Requests_Cancel_37741)))
-			{
-				if (_configuration.Args().OptimizeScheduleChangedEvents_DontUseFromWeb) 
-				{
-					builder.RegisterType<PersonAbsenceDeletedEventPublisher>().As<ITransactionHook>();
-				}
-			}
+				builder.RegisterType<ScheduleChangedMessageSender>().As<ITransactionHook>();		
 		}
 	}
 }

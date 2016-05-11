@@ -36,8 +36,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.IsSelected = ko.observable(false);
 		self.IsLoading = ko.observable(false);
 		self.CanDelete = ko.observable(true);
+		self.CanCancel= ko.observable(true);
 		self.IsEditable = ko.observable(false);
 		self.IsDeletePending = ko.observable(false);
+		self.IsCancelPending = ko.observable(false);
+		self.ErrorMessage = ko.observable();
+
 		self.StatusClass = ko.observable();
 		self.DetailItem = undefined;
 		self.parent = requestPageViewModel;
@@ -170,19 +174,48 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			});
 		}, null, 'cancel_request');
 
-		self.SwitchDeleteConfirmationVisibility = function (requestItemViewModel) {
-			requestItemViewModel.IsDeletePending(!requestItemViewModel.IsDeletePending());
+
+		self.clearAllPromptsFromOtherRequestItemViewModels = function(requestItemViewModel) {
+			
 
 			ko.utils.arrayForEach(self.Requests(), function (request) {
 				if (request !== requestItemViewModel) {
+					request.IsCancelPending(false);
 					request.IsDeletePending(false);
+					request.ErrorMessage(null);
 				}
 			});
+		}
+
+		self.SwitchDeleteConfirmationVisibility = function (requestItemViewModel) {
+			requestItemViewModel.IsDeletePending(!requestItemViewModel.IsDeletePending());
+			requestItemViewModel.IsCancelPending(false);
+			requestItemViewModel.ErrorMessage(null);
+
+			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
 
 		};
 
+		self.SwitchCancelConfirmationVisibility = function (requestItemViewModel) {
+			requestItemViewModel.IsCancelPending(!requestItemViewModel.IsCancelPending());
+			requestItemViewModel.IsDeletePending(false);
+			requestItemViewModel.ErrorMessage(null);
+
+			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
+
+		};
+
+		self.SwitchErrorMessageVisibility = function (requestItemViewModel) {
+			requestItemViewModel.ErrorMessage(null);
+			requestItemViewModel.IsCancelPending(false);
+			requestItemViewModel.IsDeletePending(false);
+
+			self.clearAllPromptsFromOtherRequestItemViewModels(requestItemViewModel);
+		};
+		
 		self.Delete = function (requestItemViewModel) {
 			var url = requestItemViewModel.Link();
+
 			ajax.Ajax({
 				url: url,
 				dataType: "json",
@@ -196,6 +229,36 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				}
 			});
 		}
+
+		self.Cancel = function (requestItemViewModel) {
+			var selectedViewModel = requestItemViewModel;
+			ajax.Ajax({
+				url: "Requests/CancelRequest/",
+				dataType: "json",
+				contentType: 'application/json; charset=utf-8',
+				type: "PUT",
+				data: JSON.stringify({ id: requestItemViewModel.Id() }),
+				success: function (result) {
+					if (result.Success) {
+						self.Requests.remove(requestItemViewModel);
+						selectedViewModel.Initialize(result.RequestViewModel);
+						self.Requests.unshift(selectedViewModel);
+
+					} else {
+						if (result.ErrorMessages && result.ErrorMessages != null) {
+							requestItemViewModel.ErrorMessage(result.ErrorMessages[0]);
+						}
+
+					}
+					requestItemViewModel.IsCancelPending(false);
+
+				},
+				error: function (jqXHR, textStatus) {
+					Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
+				}
+			});
+		}
+
 
 		self.AddRequest = function (request, isProcessing) {
 			var selectedViewModel = ko.utils.arrayFirst(self.Requests(), function (item) {
@@ -260,6 +323,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		};
 
 		self.CanDelete = ko.observable(true);
+		self.CanCancel = ko.observable(true);
 	}
 
 	_classFromStatus = function (data) {
@@ -319,9 +383,13 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.RequestPayload(data.Payload);
 			self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1);
 			self.IsEditable(data.Link.Methods.indexOf("PUT") != -1);
+			self.CanCancel(data.Link.Methods.indexOf("CANCEL") != -1);
 			self.isCreatedByUser(data.IsCreatedByUser);
 			self.isReferred(data.IsReferred);
 			self.IsSelected(false);
+			self.IsCancelPending(false);
+			self.ErrorMessage(null);
+
 			if (self.IsShiftTradeRequest() && !data.IsCreatedByUser) self.CanDelete(false);
 		}
 	});

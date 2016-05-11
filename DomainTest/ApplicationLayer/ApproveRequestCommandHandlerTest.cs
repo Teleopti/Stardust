@@ -45,13 +45,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				businessRules
 			);
 			
+			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator ( 
+				new ConfigurablePermissions(), new FakeCommonAgentNameProvider(), new FakeLoggedOnUser(), new SwedishCulture());
+
 			_approveRequestCommandHandler = new ApproveRequestCommandHandler(
 				_fakeScheduleStorage, _scheduleDifferenceSaver,
 				new PersonRequestAuthorizationCheckerForTest(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				_personRequestRepository, _requestApprovalServiceFactory,
-				_scenario
-			);
+				_scenario, writeProtectedScheduleCommandValidator );
 		}
 
 		[Test]

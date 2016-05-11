@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -168,6 +169,32 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			AddEvent(personAbsenceModifiedEvent);
 		}
+
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation=null)
+        {
+            var events = base.PopAllEvents(now, operation).ToList();
+            if (!operation.HasValue) return events;
+            if (operation == DomainUpdateType.Delete) {
+					var personAbsenceRemovedEvent = new PersonAbsenceRemovedEvent()
+					{
+						PersonId = Person.Id.GetValueOrDefault(),
+						ScenarioId = Scenario.Id.GetValueOrDefault(),
+						StartDateTime = Period.StartDateTime,
+						EndDateTime = Period.EndDateTime,
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+
+					if (AbsenceRequest != null)
+					{
+						personAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
+					}
+					
+
+					events.Add(personAbsenceRemovedEvent);
+            }
+            return events;
+        }
+		
 
 		/// <summary>
 		/// Constructor for NHibernate

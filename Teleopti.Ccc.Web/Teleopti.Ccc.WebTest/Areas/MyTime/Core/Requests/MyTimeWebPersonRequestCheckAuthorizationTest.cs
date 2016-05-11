@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Requests
 		[Test]
 		public void ShouldHaveCoverage()
 		{
-			var target = new MyTimeWebPersonRequestCheckAuthorization();
+			var target = new WebPersonRequestCheckAuthorization();
 			target.HasEditRequestPermission(null);
 			target.HasViewRequestPermission(null);
 			target.VerifyEditRequestPermission(null);

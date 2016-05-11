@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
 		private CancelAbsenceRequestCommandHandler _cancelAbsenceRequestHandler;
+		private ConfigurablePermissions _configurablePermissions;
 
 		[SetUp]
 		public void Setup()
@@ -64,9 +65,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
 			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, _loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest()));
 
-			_cancelAbsenceRequestHandler = new CancelAbsenceRequestCommandHandler (_requestRepository,
-				_personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _fakeCommonAgentNameProvider, _scheduleStorage, _scenario);
+
+			_configurablePermissions = new ConfigurablePermissions();
+
+			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
+				_configurablePermissions, new FakeCommonAgentNameProvider(), new FakeLoggedOnUser(), new SwedishCulture());
+
+			var cancelAbsenceRequestCommandValidator = new CancelAbsenceRequestCommandValidator ( _personRequestAuthorizationChecker, _fakeCommonAgentNameProvider, _loggedOnUser, _culture);
+			
+			_cancelAbsenceRequestHandler = new CancelAbsenceRequestCommandHandler (_requestRepository, _personAbsenceRepository, _personAbsenceRemover,
+				_loggedOnUser, _culture, _scheduleStorage, _scenario, writeProtectedScheduleCommandValidator, cancelAbsenceRequestCommandValidator);
 
 		}
 
@@ -85,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldNotCancelRequestWhenNoPermission()
 		{
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-			var personRequestAuthorizationChecker = new personRequestAuthorizationCheckerConfigurable()
+			var personRequestAuthorizationChecker = new PersonRequestAuthorizationCheckerConfigurable()
 			{
 				HasCancelPermission = false
 			};
@@ -214,11 +222,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
 			createPersonAbsence(_absence, dateTimePeriodOfAbsenceRequest, _person, absenceRequest);
-
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
 
-			new CancelAbsenceRequestCommandHandler (_requestRepository, personRequestAuthorizationChecker, _personAbsenceRepository, _personAbsenceRemover, _loggedOnUser, _culture, _fakeCommonAgentNameProvider,
-				_scheduleStorage, _scenario).Handle(cancelRequestCommand);
+			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
+				new FullPermission(), new FakeCommonAgentNameProvider(), new FakeLoggedOnUser(), new SwedishCulture());
+
+			var cancelAbsenceRequestCommandValidator = new CancelAbsenceRequestCommandValidator(personRequestAuthorizationChecker, _fakeCommonAgentNameProvider, _loggedOnUser, _culture);
+
+			new CancelAbsenceRequestCommandHandler (_requestRepository, _personAbsenceRepository, _personAbsenceRemover, _loggedOnUser, _culture,
+				_scheduleStorage, _scenario, writeProtectedScheduleCommandValidator, cancelAbsenceRequestCommandValidator).Handle(cancelRequestCommand);
 			return personRequest;
 		}
 
@@ -250,8 +262,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return personAbsence;
 		}
 
-
-
 		private void createShiftsForPeriod(DateTimePeriod period)
 		{
 			foreach (var day in period.WholeDayCollection(TimeZoneInfo.Utc))
@@ -269,36 +279,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new DateTimePeriod(startDate, endDate));
 		}
 
-		private class personRequestAuthorizationCheckerConfigurable : IPersonRequestCheckAuthorization
-		{
-			public bool HasEditPermission { get; set; }
-			public bool HasViewPermission { get; set; }
-			public bool HasCancelPermission { get; set; }
-
-			public personRequestAuthorizationCheckerConfigurable()
-			{
-				HasEditPermission = HasViewPermission = HasCancelPermission = true;
-			}
-			
-			public void VerifyEditRequestPermission(IPersonRequest personRequest)
-			{
-			}
-
-			public bool HasEditRequestPermission(IPersonRequest personRequest)
-			{
-				return HasEditPermission;
-			}
-
-			public bool HasViewRequestPermission(IPersonRequest personRequest)
-			{
-				return HasViewPermission;
-			}
-
-			public bool HasCancelRequestPermission(IPersonRequest personRequest)
-			{
-				return HasCancelPermission;
-			}
-		}
+		
 	}
-
 }

@@ -178,8 +178,12 @@
     <Compile Include="Aop\ReadOnlyUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
+    <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandValidator.cs" />
+    <Compile Include="ApplicationLayer\Commands\ICancelAbsenceRequestCommandValidator.cs" />
+    <Compile Include="ApplicationLayer\Commands\IWriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveShiftLayerCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveShiftLayerCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestCancelService.cs" />

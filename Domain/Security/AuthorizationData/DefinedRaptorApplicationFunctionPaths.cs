@@ -96,6 +96,8 @@
 		public const string TeamSchedule = "Raptor/MyTimeWeb/TeamSchedule";
 		public const string ViewAllGroupPages = "Raptor/MyTimeWeb/TeamSchedule/ViewAllGroupPages";
 		public const string AbsenceRequestsWeb = "Raptor/MyTimeWeb/AbsenceRequests";
+		public const string MyTimeCancelRequest = "Raptor/MyTimeWeb/AbsenceRequests/CancelRequest";
+
 		public const string AgentScheduleMessenger = "Raptor/MyTimeWeb/AgentScheduleMessenger";
 		public const string ExtendedPreferencesWeb = "Raptor/MyTimeWeb/ExtendedPreferences";
 		public const string ShiftTradeRequestsWeb = "Raptor/MyTimeWeb/ShiftTradeRequests";

@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -33,7 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITimeFilterHelper _timeFilterHelper;
 		private readonly IToggleManager _toggleManager;
-		private IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
+		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
+		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
@@ -44,7 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 								ITimeFilterHelper timeFilterHelper,
 								IToggleManager toggleManager, 
 								IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
-								IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory)
+								IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
+								ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
 		{
 			AbsenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
@@ -56,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_timeFilterHelper = timeFilterHelper;
 			_toggleManager = toggleManager;
 			_shiftTradeScheduleViewModelFactory = shiftTradeScheduleViewModelFactory;
+			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
 		}
 
 		[EnsureInPortal]
@@ -167,6 +172,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			_textRequestPersister.Delete(id);
 			return Json("");
+		}
+
+
+		[UnitOfWork]
+		[HttpPostOrPut]
+		public virtual JsonResult CancelRequest(Guid id)
+		{
+			var commandResult = _cancelAbsenceRequestCommandProvider.CancelAbsenceRequest (id);
+			
+			var result = new RequestCommandHandlingResult(
+				commandResult.AffectedRequestId.HasValue ? new List<Guid>() { commandResult.AffectedRequestId.Value } : null, 
+				commandResult.ErrorMessages);
+			
+			if (result.Success)
+			{
+				result.RequestViewModel =  _requestsViewModelFactory.CreateRequestViewModel(id);
+			}
+
+			return Json (result);
 		}
 
 		[UnitOfWork]

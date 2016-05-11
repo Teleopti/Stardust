@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
@@ -29,5 +30,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		public IEnumerable<Guid> AffectedRequestIds { get; set; }
 
 		public IEnumerable<string> ErrorMessages { get; set; }
+
+		//used only in MyTimeWeb
+		public RequestViewModel RequestViewModel { get; set; }
+
 	}
 }

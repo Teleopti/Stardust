@@ -10,47 +10,58 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class ApproveRequestCommandHandler : IHandleCommand<ApproveRequestCommand>
 	{
-		
+
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IRequestApprovalServiceFactory _requestApprovalServiceFactory;
 		private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
-		private readonly IPersonRequestCheckAuthorization _authorization;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly ICurrentScenario _currentScenario;
-
-		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDictionarySaver,  IPersonRequestCheckAuthorization authorization,  IDifferenceCollectionService<IPersistableScheduleData> differenceService,  IPersonRequestRepository personRequestRepository, IRequestApprovalServiceFactory requestApprovalServiceFactory, ICurrentScenario currentScenario)
+		private readonly IWriteProtectedScheduleCommandValidator _writeProtectedScheduleCommandValidator;
+		
+		public ApproveRequestCommandHandler(IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDictionarySaver, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IDifferenceCollectionService<IPersistableScheduleData> differenceService, IPersonRequestRepository personRequestRepository, IRequestApprovalServiceFactory requestApprovalServiceFactory, ICurrentScenario currentScenario, IWriteProtectedScheduleCommandValidator writeProtectedScheduleCommandValidator)
 		{
 			_scheduleStorage = scheduleStorage;
 			_scheduleDictionarySaver = scheduleDictionarySaver;
-
-			_authorization = authorization;
-	
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_differenceService = differenceService;
 
 			_personRequestRepository = personRequestRepository;
 			_requestApprovalServiceFactory = requestApprovalServiceFactory;
 			_currentScenario = currentScenario;
+			_writeProtectedScheduleCommandValidator = writeProtectedScheduleCommandValidator;
+
 		}
 
 		public void Handle(ApproveRequestCommand command)
 		{
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
 
-			if (personRequest != null && approveRequest(personRequest))
+			if (personRequest == null)
+			{
+				return;
+			}
+
+			if (!_writeProtectedScheduleCommandValidator.ValidateCommand(personRequest.RequestedDate, personRequest.Person, command))
+			{
+				return;
+			}
+
+			if (approveRequest(personRequest))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
-			}	
+			}
 		}
 
 		private bool approveRequest(IPersonRequest personRequest)
-		{		
+		{
 			var scheduleDictionary = getSchedules(personRequest);
 			var approvalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(), personRequest.Person);
 
 			try
 			{
-				personRequest.Approve(approvalService, _authorization);
+				personRequest.Approve(approvalService, _personRequestCheckAuthorization);
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
@@ -59,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			foreach (var range in scheduleDictionary.Values)
 			{
-				
+
 				var diff = range.DifferenceSinceSnapshot(_differenceService);
 				_scheduleDictionarySaver.SaveChanges(diff, (IUnvalidatedScheduleRangeUpdate)range);
 			}
@@ -99,5 +110,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			((IReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 			return scheduleDictionary;
 		}
+		
 	}
 }

@@ -2,15 +2,22 @@
 using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
+using log4net.Config;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -29,8 +36,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private IPerson _loggedOnPerson;
 		private IPersonNameProvider _personNameProvider;
-		private IAbsenceRequestWaitlistProvider _absenceRequestWaitlistProvider;
 		private TimeZoneInfo _timeZone;
+		private IToggleManager _toggleManager;
 
 		[SetUp]
 		public void Setup()
@@ -42,8 +49,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_linkProvider = MockRepository.GenerateMock<ILinkProvider>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 
-			_absenceRequestWaitlistProvider = MockRepository.GenerateMock<IAbsenceRequestWaitlistProvider>();
-
 			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
 			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
 			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
@@ -51,13 +56,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("LoggedOn Agent");
 
+			_toggleManager = new TrueToggleManager();
+			
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
 				_userTimeZone,
 				_linkProvider,
 				_loggedOnUser,
 				_shiftTradeRequestStatusChecker,
-				_personNameProvider
+				_personNameProvider,
+				_toggleManager
 				)));
 		}
 
@@ -214,6 +222,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			viewModel.Link.Methods.Should().Contain("GET");
 			viewModel.Link.Methods.Should().Not.Contain("PUT");
 		}
+
+		[Test]
+		public void ShouldNotMapCancelMethodIfToggleOff()
+		{
+			var result = setupForToggleCheckOnApprovedRequest(new FakeToggleManager());
+
+			result.Link.Methods.Should().Not.Contain ("CANCEL");
+		}
+
+		[Test]
+		public void ShouldMapCancelMethodIfToggleOn()
+		{
+			setupStateHolderProxy();
+
+			var toggleManager = new FakeToggleManager(Toggles.Wfm_Requests_Cancel_Agent_38055);
+
+			var result = setupForToggleCheckOnApprovedRequest(toggleManager);
+
+			result.Link.Methods.Should().Contain("CANCEL");
+		}
+
 		
 		[Test]
 		public void ShouldMapId()
@@ -435,7 +464,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				_linkProvider,
 				_loggedOnUser,
 				_shiftTradeRequestStatusChecker,
-				_personNameProvider
+				_personNameProvider,
+				new TrueToggleManager()
 				)));
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
@@ -785,6 +815,53 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			request.Deny(null, null, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>(), true);
 
 			return Mapper.Map<IPersonRequest, RequestViewModel>(request);
+		}
+
+		private static void setupStateHolderProxy()
+		{
+			var stateMock = new FakeState();
+			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
+		}
+
+		private RequestViewModel setupForToggleCheckOnApprovedRequest(FakeToggleManager toggleManager)
+		{
+
+			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(DateTime.Today), new DateOnly(DateTime.Today));
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var person = new Person();
+			var request = createApprovedAbsenceRequest(absence, dateOnlyPeriod, person);
+
+			Mapper.Reset();
+			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
+			   _userTimeZone,
+			   _linkProvider,
+			   _loggedOnUser,
+			   _shiftTradeRequestStatusChecker,
+			   _personNameProvider,
+			   toggleManager
+			   )));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+			return result;
+		}
+
+		private static PersonRequest createApprovedAbsenceRequest(IAbsence absence, DateOnlyPeriod dateOnlyPeriod, IPerson person)
+		{
+			var absenceRequest = new AbsenceRequest(absence,
+				dateOnlyPeriod.ToDateTimePeriod(TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			var request = new PersonRequest(person, absenceRequest).WithId();
+			request.Pending();
+
+			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			approvalService.Stub(x => x.ApproveAbsence(absence, absenceRequest.Period, person))
+				.IgnoreArguments()
+				.Return(new List<IBusinessRuleResponse>());
+
+			request.Approve(approvalService, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
+			return request;
 		}
 
 	}

@@ -518,6 +518,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceNightRestChecker.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceNightRestChecker.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\CommandProvider\CancelAbsenceRequestCommandProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradePersonScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradePersonScheduleProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DateTimeMappingUtils.cs" />
@@ -974,7 +975,7 @@
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestPersister.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\MyTimeWebPersonRequestCheckAuthorization.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\WebPersonRequestCheckAuthorization.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IRespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\RespondToShiftTrade.cs" />

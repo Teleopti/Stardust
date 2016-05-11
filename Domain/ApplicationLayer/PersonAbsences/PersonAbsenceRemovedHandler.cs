@@ -1,6 +1,6 @@
 using log4net;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -8,8 +8,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 {
+	[UseOnToggle(Toggles.Wfm_Requests_Cancel_37741)]
+#pragma warning disable 618
 	public class PersonAbsenceRemovedHandler : IHandleEvent<PersonAbsenceRemovedEvent>, IRunOnStardust
-
+#pragma warning restore 618
 	{
 		private readonly static ILog logger = LogManager.GetLogger(typeof(PersonAbsenceRemovedHandler));
 

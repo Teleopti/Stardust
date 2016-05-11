@@ -496,6 +496,10 @@
 	margin-top: 10px;
 }
 
+.request-body .alert-danger {
+	margin-top: 10px;
+}
+
 .btn-datepicker {
 	border: 0;
 	outline: none;

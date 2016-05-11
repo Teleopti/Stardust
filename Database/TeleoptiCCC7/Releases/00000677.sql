@@ -123,4 +123,3 @@ GO
 
 drop table [Stardust].[WorkerNodes]
 GO
-

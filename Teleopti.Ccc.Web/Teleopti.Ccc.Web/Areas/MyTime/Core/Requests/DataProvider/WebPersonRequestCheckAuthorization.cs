@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
-	public class MyTimeWebPersonRequestCheckAuthorization : IPersonRequestCheckAuthorization
+	public class WebPersonRequestCheckAuthorization : IPersonRequestCheckAuthorization
 	{
 		public void VerifyEditRequestPermission(IPersonRequest personRequest)
 		{
@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public bool HasCancelRequestPermission (IPersonRequest personRequest)
 		{
-			return hasPermission(DefinedRaptorApplicationFunctionPaths.WebCancelRequest, personRequest);
+			return hasPermission (DefinedRaptorApplicationFunctionPaths.WebCancelRequest, personRequest) ||
+				   hasPermission (DefinedRaptorApplicationFunctionPaths.MyTimeCancelRequest, personRequest);
 		}
 
 		private static bool hasPermission(string applicationFunctionPath, IPersonRequest personRequest)

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IPersonAbsence> LoadAll()
 		{
-			throw new NotImplementedException();
+			return _personAbsences;
 		}
 
 		public IPersonAbsence Load(Guid id)

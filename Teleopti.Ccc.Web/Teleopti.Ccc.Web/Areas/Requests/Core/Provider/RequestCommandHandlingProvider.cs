@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
@@ -26,9 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			};
 
 			var affectedRequestIds = new List<Guid>();
+			var errorMessages = new List<string>();
 
 			foreach (var personRequestId in ids)
 			{
+
 				var command = new ApproveRequestCommand
 				{
 					TrackedCommandInfo = trackInfo,
@@ -37,10 +38,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 				_commandDispatcher.Execute(command);
 
+				if (command.ErrorMessages != null)
+				{
+					errorMessages.AddRange(command.ErrorMessages);
+				}
+
 				if (command.AffectedRequestId.HasValue)  affectedRequestIds.Add(command.AffectedRequestId.Value);
 			}
 
-			return new RequestCommandHandlingResult(affectedRequestIds, null);
+			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
 		}
 
 		public RequestCommandHandlingResult DenyRequests(IEnumerable<Guid> ids)
@@ -72,8 +78,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 		public RequestCommandHandlingResult CancelRequests (IEnumerable<Guid> ids)
 		{
-
-
 			var trackInfo = new TrackedCommandInfo
 			{
 				OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value
@@ -105,5 +109,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
 		}
+
+
+
 	}
 }
