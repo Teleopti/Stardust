@@ -63,7 +63,7 @@ Scenario: Happy Path for add activity
 	When I apply my new activity
 	Then I should see a successful notice
 
-
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Happy Path for remove activity
 	Given 'John Smith' has a shift with
