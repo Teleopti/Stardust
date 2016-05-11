@@ -28,7 +28,7 @@ SELECT @ParentForeignId = '0077'	--Parent Foreign id that is hardcoded
 SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
 	
 --insert/modify application function
-SELECT @ForeignId = '0131' --Foreign id of the function > hardcoded	
+SELECT @ForeignId = '0132' --Foreign id of the function > hardcoded	
 SELECT @FunctionCode = 'MyTimeCancelRequest' --Name of the function > hardcoded
 SELECT @FunctionDescription = 'xxCancelRequest' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId
