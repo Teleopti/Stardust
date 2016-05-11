@@ -142,7 +142,7 @@ Scenario: Should be able to move basic activity
     | EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected activity 'Phone'
+	And I selected agent 'John Smith'
 	And I apply move activity
 	Then I should see a successful notice
 
