@@ -263,7 +263,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			//if it disappears again in the designer
 			ribbonControlAdv1.QuickPanelVisible = true;
-
 		}
 
 		private void checkSmsLinkLicense(IToggleManager toggleManager)
@@ -524,6 +523,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				checkPastePermissions, pasteFromClipboard, enablePasteOperation);
 
 			checkSmsLinkLicense(toggleManager);
+
+			toolStripButtonCalculateCascading.Visible = toggleManager.IsEnabled(Toggles.ResourcePlanner_CascadingSkills_38524);
 		}
 
 		private SchedulingScreenSettings loadSchedulingScreenSettings()
@@ -6918,6 +6919,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonRefreshLarge_Click(object sender, EventArgs e)
 		{
 			refreshData();
+		}
+
+		private void toolStripButtonCalculateCascadingClick(object sender, EventArgs e)
+		{
+			toolStripButtonCalculateCascading.Checked = !toolStripButtonCalculateCascading.Checked;
 		}
 	}
 }
