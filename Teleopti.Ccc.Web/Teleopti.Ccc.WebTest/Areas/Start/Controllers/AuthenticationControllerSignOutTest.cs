@@ -8,6 +8,7 @@ using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
@@ -26,8 +27,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			mocks = new MockRepository();
 			_formsAuthentication = mocks.DynamicMock<IFormsAuthentication>();
 			_sessionSpecificDataProvider = mocks.DynamicMock<ISessionSpecificDataProvider>();
-			
-			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider);
+			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
+			authenticationModule.Stub(x => x.Issuer(null)).IgnoreArguments().Return(new Uri("http://issuer"));
+			authenticationModule.Stub(x => x.Realm).Return("testrealm");
+
+			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule, new FakeCurrentHttpContext(new FakeHttpContext()));
 			new TestControllerBuilder().InitializeController(_target);
 		}
 
@@ -37,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			_target.Dispose();
 		}
 
-		[Test, Ignore("Might not be needed any longer")]
+		[Test]
 		public void ShouldSignOut()
 		{
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/TeleoptiCCC/web/"), new Uri("http://localhost/TeleoptiCCC/web/"));

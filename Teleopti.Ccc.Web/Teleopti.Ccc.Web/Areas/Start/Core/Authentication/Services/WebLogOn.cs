@@ -1,9 +1,12 @@
 ﻿using System;
+using Microsoft.IdentityModel.Web;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 

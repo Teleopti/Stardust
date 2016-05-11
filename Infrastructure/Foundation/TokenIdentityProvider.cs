@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using System.Security.Claims;
+using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 
@@ -30,19 +30,19 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				return teleoptiIdentity.TokenIdentity != null ? getTokenIdentity(teleoptiIdentity.TokenIdentity) : null;
 			}
 
-			var currentIdentity = httpContext.User.Identity as ClaimsIdentity;
+			var currentIdentity = httpContext.User.Identity as IClaimsIdentity;
 			if (currentIdentity == null)
 			{
 				return null;
 			}
 
-			var nameClaim = currentIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
-			var isPersistentClaim = currentIdentity.Claims.FirstOrDefault(x => x.Type == ClaimTypes.IsPersistent);
+			var nameClaim = currentIdentity.Claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.NameIdentifier);
+			var isPersistentClaim = currentIdentity.Claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.IsPersistent);
 			if (nameClaim != null)
 			{
 				var nameClaimValue = Uri.UnescapeDataString(nameClaim.Value);
 				var token = getTokenIdentity(nameClaimValue);
-				if (isPersistentClaim != null && bool.Parse(isPersistentClaim.Value))
+				if (isPersistentClaim != null && isPersistentClaim.Value.ToLowerInvariant() == "true")
 					token.IsPersistent = true;
 				else
 					token.IsPersistent = false;

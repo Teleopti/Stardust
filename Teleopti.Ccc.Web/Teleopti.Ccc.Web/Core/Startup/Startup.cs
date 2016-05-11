@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -14,13 +14,14 @@ using Autofac.Integration.WebApi;
 using log4net;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.Cookies;
-using Microsoft.Owin.Security.WsFederation;
+using Microsoft.IdentityModel.Protocols.WSFederation;
+using Microsoft.IdentityModel.Web;
 using Owin;
+using Stardust.Manager;
+using Stardust.Manager.Models;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Web.Areas.Start.Controllers;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -87,97 +88,23 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 				SignalRConfiguration.Configure(SignalRSettings.Load(),
 					() => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
-				
+				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
+				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(
+					new MachineKeySessionSecurityTokenHandler());
+
 				application.UseAutofacMiddleware(container);
 				application.UseAutofacMvc();
 				application.UseAutofacWebApi(config);
 
-				application.SetDefaultSignInAsAuthenticationType(WsFederationAuthenticationDefaults.AuthenticationType);
-				application.UseCookieAuthentication(
-					new CookieAuthenticationOptions
-					{
-						AuthenticationType =
-						   WsFederationAuthenticationDefaults.AuthenticationType
-					});
-				var wreply = ConfigurationManager.AppSettings["ReplyAddress"].ReplaceWithRelativeUriWhenEnabled().ToString();
-				var defaultIdentityProvider = container.Resolve<IIdentityProviderProvider>();
-				application.UseWsFederationAuthentication(
-					new WsFederationAuthenticationOptions
-					{
-						MetadataAddress = ConfigurationManager.AppSettings["AuthenticationBridgeMetadata"].ReplaceWithCustomEndpointHostOrLocalhost().ToString(),
-						Wtrealm = ConfigurationManager.AppSettings["Realm"],
-						Wreply = wreply,
+				//var managerConfiguration = new ManagerConfiguration
+				//{
+				//	ConnectionString =
+				//	ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
+				//	Route = ConfigurationManager.AppSettings["RouteName"]
+				//};
 
-						AuthenticationMode = AuthenticationMode.Active,
-						Notifications = new WsFederationAuthenticationNotifications
-						{
-							RedirectToIdentityProvider = notification =>
-							{
-								notification.ProtocolMessage.IssuerAddress =
-									notification.ProtocolMessage.IssuerAddress.ReplaceWithRelativeUriWhenEnabled().ToString();
-								if (!notification.ProtocolMessage.IsSignOutMessage)
-								{
-									if (!(notification.OwinContext.Request.QueryString.HasValue && notification.OwinContext.Request.QueryString.Value.EndsWith("nowhr")))
-									{
-										notification.ProtocolMessage.Whr = defaultIdentityProvider.DefaultProvider();
-									}
-									notification.ProtocolMessage.Wctx += "&ru=" + Uri.EscapeDataString(notification.OwinContext.Request.Uri.PathAndQuery);
-								}
-								else
-								{
-									notification.ProtocolMessage.Wreply = wreply + "?nowhr";
-								}
-								
-								if (notification.OwinContext.Request.Path.StartsWithSegments(new PathString("/api")) || isAjaxRequest(notification.Request))
-								{
-									notification.HandleResponse();
-									return Task.FromResult(false);
-								}
 
-								notification.Response.Redirect(VirtualPathUtility.ToAbsolute("~/Start/Return/Hash?redirectUrl=" + Uri.EscapeDataString(notification.ProtocolMessage.BuildRedirectUrl())));
-								notification.HandleResponse();
-								return Task.FromResult(false);
-							},
-							SecurityTokenValidated = notification =>
-							{
-								var contextData = notification.ProtocolMessage.Wctx;
-								var items = HttpUtility.ParseQueryString(contextData);
-								var returnUrl = items["ru"];
-								if (!string.IsNullOrEmpty(returnUrl))
-								{
-									notification.AuthenticationTicket.Properties.RedirectUri = returnUrl;
-								}
-								return Task.FromResult(false);
-							}
-						}
-					});
-
-				application.Map("/login", map =>
-				{
-					map.Run(ctx =>
-					{
-						if (ctx.Authentication.User == null ||
-							!ctx.Authentication.User.Identity.IsAuthenticated)
-						{
-							ctx.Response.StatusCode = 401;
-						}
-						else
-						{
-							ctx.Response.Redirect("?done");
-						}
-						return Task.FromResult(true);
-					});
-				});
-
-				application.Map("/logout", map =>
-				{
-					map.Run(ctx =>
-					{
-						ctx.Authentication.SignOut(WsFederationAuthenticationDefaults.AuthenticationType, CookieAuthenticationDefaults.AuthenticationType);
-						ctx.Response.Redirect(VirtualPathUtility.ToAbsolute("~/login?nowhr"));
-						return Task.FromResult(true);
-					});
-				});
+				//new ManagerStarter().Start(managerConfiguration, container);
 			}
 
 			catch (Exception ex)
@@ -192,22 +119,24 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			return inTestEnvironement() ? "inTest" : Path.Combine(HttpContext.Current.Server.MapPath("~/"), ConfigurationManager.AppSettings["FeatureToggle"]);
 		}
 
-		private bool isAjaxRequest(IOwinRequest request)
-		{
-			var query = request.Query;
-
-			if ((query != null) && (query["X-Requested-With"] == "XMLHttpRequest"))
-			{
-				return true;
-			}
-
-			var headers = request.Headers;
-			return ((headers != null) && (headers["X-Requested-With"] == "XMLHttpRequest"));
-		}
-
 		private static bool inTestEnvironement()
 		{
 			return HttpContext.Current == null;
 		}
+
+		void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+		{
+			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromFormPost(HttpContext.Current.Request);
+			if (wsFederationMessage.Context != null)
+			{
+				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
+				string returnUrl = wctx["ru"];
+
+				// TODO: check for absolute url and throw to avoid open redirects
+				HttpContext.Current.Response.Redirect(returnUrl, false);
+				HttpContext.Current.ApplicationInstance.CompleteRequest();
+			}
+		}
+
 	}
 }

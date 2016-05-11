@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Web.Mvc;
+using Microsoft.IdentityModel.Protocols.WSFederation;
+using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {
@@ -12,12 +15,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
 		private readonly IFormsAuthentication _formsAuthentication;
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
+		private readonly IAuthenticationModule _authenticationModule;
+		private readonly ICurrentHttpContext _currentHttpContext;
 
-		public AuthenticationController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IFormsAuthentication formsAuthentication, ISessionSpecificDataProvider sessionSpecificDataProvider)
+		public AuthenticationController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IFormsAuthentication formsAuthentication, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticationModule authenticationModule, ICurrentHttpContext currentHttpContext)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_formsAuthentication = formsAuthentication;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
+			_authenticationModule = authenticationModule;
+			_currentHttpContext = currentHttpContext;
 		}
 
 		public ActionResult Index()
@@ -35,8 +42,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
-			
-			return new RedirectResult("~/logout?nowhr");  
+
+			var url = Request.Url;
+			var issuerUrl = _authenticationModule.Issuer(_currentHttpContext.Current());
+
+			var signInReply = new SignInRequestMessage(issuerUrl, _authenticationModule.Realm)
+			{
+				Context = "ru=" + url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignOut", StringComparison.OrdinalIgnoreCase)),
+			};
+
+			var signOut = new SignOutRequestMessage(issuerUrl, signInReply.WriteQueryString());
+
+			return new RedirectResult(signOut.WriteQueryString());  
 		}
 	}
+
 }

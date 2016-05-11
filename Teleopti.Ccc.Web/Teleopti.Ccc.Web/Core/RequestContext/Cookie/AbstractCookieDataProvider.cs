@@ -2,7 +2,9 @@ using System;
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
+using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Interfaces.Domain;
 
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void RemoveAuthBridgeCookie()
 		{
+			FederatedAuthentication.SessionAuthenticationModule.SignOut();
 		}
 
 		public void RemoveCookie()

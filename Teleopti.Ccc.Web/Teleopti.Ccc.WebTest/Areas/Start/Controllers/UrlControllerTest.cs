@@ -4,12 +4,15 @@ using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Ccc.Web.Filters;
+using Teleopti.Ccc.WebTest.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
@@ -25,9 +28,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			var signatureCreator = new SignatureCreator();
 	        var signed = signatureCreator.Create(url + applicationPath);
-			
+
+			IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
             IIdentityLogon identityLogon = new FakeAuthenticator();
-	        var urlController = new UrlController(CurrentHttpContext(url, applicationPath), identityLogon, signatureCreator);
+	        var urlController = new UrlController(CurrentHttpContext(url, applicationPath),authenticationModule, identityLogon, signatureCreator);
             var result = urlController.Index();
             Assert.AreEqual(url+applicationPath, ((result as JsonResult).Data as dynamic).Url);
             Assert.AreEqual(signed, ((result as JsonResult).Data as dynamic).Signature);
@@ -58,7 +62,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			 const string applicationPath = "/TeleoptiCCC/Web/";
 		    System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
 					 new TeleoptiIdentity("test", null, null, null, null), person );
-             var target = new UrlController(CurrentHttpContext(url, applicationPath), identityLogon, new SignatureCreator());
+			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
+             var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, new SignatureCreator());
 		    target.AuthenticationDetails().Should().Be.Equals(personId);
 	    }
 
@@ -73,7 +78,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			 const string applicationPath = "/TeleoptiCCC/Web/";
 			 System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
 					 new TeleoptiIdentity("test", null, null, null, null), person);
-			 var target = new UrlController(CurrentHttpContext(url, applicationPath), identityLogon, new SignatureCreator());
+			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
+			 var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, new SignatureCreator());
 			 var result = ((RedirectResult) target.RedirectToWebLogin());
 			 result.Url.Should().Not.Contain("start/Url/RedirectToWebLogin");
 		 }
