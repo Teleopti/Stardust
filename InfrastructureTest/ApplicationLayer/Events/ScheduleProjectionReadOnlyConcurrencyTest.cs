@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 		[Test]
 		[Ignore]
-		public void ShouldHandleManyWorkers([Range(0, 20)]int x)
+		public void ShouldHandleManyWorkers()
 		{
 			Publisher.AddHandler(typeof(ScheduleChangedEventPublisher));
 			Publisher.AddHandler(typeof(ProjectionChangedEventPublisher));

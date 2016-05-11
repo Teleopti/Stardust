@@ -269,6 +269,7 @@
     <Compile Include="Repositories\DayOffRulesRepositoryTest.cs" />
     <Compile Include="Repositories\LoadSkillInIntradaysTest.cs" />
     <Compile Include="Repositories\PersonInRoleQuerierTest.cs" />
+    <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Rta\DatabaseManager.cs" />
     <Compile Include="Rta\DatabaseReaderLoadAllPersonOrganizationDataTest.cs" />

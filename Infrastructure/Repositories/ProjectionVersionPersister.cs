@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate.Transform;
+using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					) VALUES(
 						:Person,
 						S.Date,
-						0
+						1
 					)
 					WHEN MATCHED THEN
 					UPDATE SET
@@ -45,7 +47,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						; ")
 				.SetGuid("Person", personId)
 				.ExecuteUpdate();
-			return Enumerable.Empty<ProjectionVersion>();
+
+			var start = dates.Min();
+			var end = dates.Max();
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(
+				$@"SELECT DISTINCT Date, Version 
+					FROM [dbo].ProjectionVersion 
+					WHERE Date BETWEEN '{start}' AND '{end}'
+					AND Person = '{personId}'")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalVersion)))
+				.List<ProjectionVersion>();
+		}
+
+		private class internalVersion : ProjectionVersion
+		{
+			public new DateTime Date
+			{
+				set { base.Date = new DateOnly(value); }
+			}
 		}
 	}
 }
