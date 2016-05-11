@@ -85,7 +85,8 @@
 		Wfm_Requests_Filtering_37748,
 		Wfm_Requests_Cancel_37741,
 		Wfm_Requests_Cancel_Agent_38055,
-		
+		Wfm_Requests_Run_waitlist_38071,
+
 		Wfm_Intraday_38074,
             
         Report_UseOpenXmlFormat_35797,
