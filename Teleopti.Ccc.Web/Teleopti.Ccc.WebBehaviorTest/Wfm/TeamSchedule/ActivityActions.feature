@@ -63,23 +63,36 @@ Scenario: Happy Path for add activity
 	When I apply my new activity
 	Then I should see a successful notice
 
-
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
-Scenario: Happy Path for remove activity
+Scenario: Should be able to remove activity
 	Given 'John Smith' has a shift with
-	| Field            | Value            |
-	| Shift category   | Day              |
-	| Activity         | Phone            |
-	| Start time       | 2016-10-10 09:00 |
-	| End time         | 2016-10-10 16:00 |
-	| Lunch Activity   | Lunch            |
-	| Lunch start time | 2016-10-10 12:00 |
-	| Lunch end time   | 2016-10-10 13:00 |
+	| Field                         | Value            |
+	| Shift category                | Day              |
+	| Activity                      | Phone            |
+	| StartTime                     | 2016-10-10 09:00 |
+	| EndTime                       | 2016-10-10 17:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2016-10-10 11:00 |
+	| Scheduled activity end time   | 2016-10-10 12:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected activity 'Lunch'
 	And I apply remove activity
-	Then I should see a successful notice	
+	Then I should see a successful notice
+
+@OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
+Scenario: Should not remove basic activity
+	Given 'John Smith' has a shift with
+	| Field                         | Value            |
+	| Shift category                | Day              |
+	| Activity                      | Phone            |
+	| StartTime                     | 2016-10-10 09:00 |
+	| EndTime                       | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I apply remove activity
+	Then I should see a failed notice
 
 @ignore
 Scenario: Should not see add activity menu item without permission

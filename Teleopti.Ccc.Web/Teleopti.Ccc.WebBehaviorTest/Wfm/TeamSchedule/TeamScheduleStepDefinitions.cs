@@ -96,9 +96,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see a successful notice")]
 		public void ThenIShouldSeeASuccessfulNotice()
 		{
-			Browser.Interactions.AssertExists(".mdi-thumb-up");
+			Browser.Interactions.AssertExists(".notice-container .notice-success");
 		}
-		
+
+		[Then(@"I should see a warning notice")]
+		public void ThenIShouldSeeAWarningNotice()
+		{
+			Browser.Interactions.AssertExists(".notice-container .notice-warning");
+		}
+
+		[Then(@"I should see a failed notice")]
+		public void ThenIShouldSeeAFailedNotice()
+		{
+			Browser.Interactions.AssertExists(".notice-container .notice-error");
+		}
+
 		[When(@"I try to delete selected absence")]
 		public void WhenITryToDeleteSelectedAbsence()
 		{
