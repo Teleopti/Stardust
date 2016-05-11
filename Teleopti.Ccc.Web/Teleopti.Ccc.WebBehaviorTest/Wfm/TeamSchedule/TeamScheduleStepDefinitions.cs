@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.ClickContaining(".person-name", agentName);
 		}
-		
+
 		[When(@"I open '(.*)' panel")]
 		public void WhenIOpenPanel(string panelName)
 		{
@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertExists(".notice-container .notice-warning");
 		}
 
-		[Then(@"I should see a failed notice")]
-		public void ThenIShouldSeeAFailedNotice()
+		[Then(@"I should see an error notice")]
+		public void ThenIShouldSeeAnErrorNotice()
 		{
 			Browser.Interactions.AssertExists(".notice-container .notice-error");
 		}
@@ -141,27 +141,39 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenIClickApplyButton()
 		{
 			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
-		}		
-		
+		}
+
 		[When(@"I selected activity '(.*)'")]
 		public void WhenISelectedActivity(string description)
 		{
-			Browser.Interactions.ClickUsingJQuery($".layer:contains('{description}')");
+			Browser.Interactions.ClickUsingJQuery($".schedule .layer:contains('{description}')");
+		}
+
+		[When(@"I apply move activity")]
+		public void WhenIApplyMoveActivity()
+		{
+			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
+			Browser.Interactions.ClickUsingJQuery("#menuItemMoveActivity");
+			var newStartTime = new Dictionary<string, string>
+			{
+				{"vm.newStartTime", "{'startTime':'2016-10-10T10:00:00.000Z','nextDay':false}"}
+			};
+			Browser.Interactions.SetScopeValues(".move-activity", newStartTime);
+			Browser.Interactions.ClickUsingJQuery("#applyMoveActivity");
 		}
 
 		[When(@"I apply remove activity")]
 		public void WhenIApplyRemoveActivity()
 		{
-
-			var propertyValues = new Dictionary<string,string>
+			var propertyValues = new Dictionary<string, string>
 			{
 				{"vm.isScenarioTest", "true"}
 			};
-			Browser.Interactions.SetScopeValues(".scenario-test-trick",propertyValues);
+			Browser.Interactions.SetScopeValues(".scenario-test-trick", propertyValues);
 			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
 			Browser.Interactions.ClickUsingJQuery("#menuItemRemoveActivity");
 			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
-		}		
+		}
 	}
 
 	public class AddActivityFormInfo

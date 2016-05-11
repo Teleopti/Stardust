@@ -13,15 +13,14 @@ Background:
 	| Access to Wfm MyTeam Schedule | true           |
 	| Add Activity                  | true           |
 	| Remove Activity               | true           |
+	| Move Activity                 | true           |
 	And there is a shift category named 'Day'
-	And there is an activity with
-	| Field | Value |
-	| Name  | Phone |
-	| Color | Green |
-	And there is an activity with
-	| Field | Value  |
-	| Name  | Lunch  |
-	| Color | Yellow |			
+	And there are activities
+	| Name     | Color    |
+	| Phone    | Green    |
+	| Lunch    | Yellow   |
+	| Sales    | Red      |
+	| Training | Training |
 	And there is a contract named 'A contract'
 	And there is a contract schedule named 'A contract schedule'
 	And there is a part time percentage named 'Part time percentage'
@@ -48,7 +47,7 @@ Background:
 		| Part time percentage | Part time percentage |
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
-Scenario: Happy Path for add activity
+Scenario: Should be able to add activity
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
 	And I selected agent 'John Smith'
@@ -64,35 +63,88 @@ Scenario: Happy Path for add activity
 	Then I should see a successful notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
-Scenario: Should be able to remove activity
+Scenario: Should be able to remove single activity
 	Given 'John Smith' has a shift with
-	| Field                         | Value            |
-	| Shift category                | Day              |
-	| Activity                      | Phone            |
-	| StartTime                     | 2016-10-10 09:00 |
-	| EndTime                       | 2016-10-10 17:00 |
-	| Scheduled activity            | Lunch            |
-	| Scheduled activity start time | 2016-10-10 11:00 |
-	| Scheduled activity end time   | 2016-10-10 12:00 |
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-10-10 09:00 |
+	| EndTime          | 2016-10-10 17:00 |
+	| Lunch Activity   | Lunch            |
+	| Lunch start time | 2016-10-10 12:00 |
+	| Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected activity 'Lunch'
 	And I apply remove activity
 	Then I should see a successful notice
 
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
-Scenario: Should not remove basic activity
+Scenario: Should be able to remove multiple activities
 	Given 'John Smith' has a shift with
 	| Field                         | Value            |
 	| Shift category                | Day              |
 	| Activity                      | Phone            |
-	| StartTime                     | 2016-10-10 09:00 |
+	| StartTime                     | 2016-10-10 08:00 |
 	| EndTime                       | 2016-10-10 17:00 |
+	| Scheduled activity            | Training         |
+	| Scheduled activity start time | 2016-10-10 11:00 |
+	| Scheduled activity end time   | 2016-10-10 13:00 |
+	| Scheduled activity            | Sales            |
+	| Scheduled activity start time | 2016-10-10 14:00 |
+	| Scheduled activity end time   | 2016-10-10 15:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected agent 'John Smith'
+	And I selected activity 'Training'
+	And I selected activity 'Sales'
 	And I apply remove activity
-	Then I should see a failed notice
+	Then I should see a successful notice
+
+@OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
+Scenario: Should not able to remove basic activity
+	Given 'John Smith' has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-10-10 09:00 |
+	| EndTime          | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected activity 'Phone'
+	And I apply remove activity
+	Then I should see an error notice
+
+@OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
+Scenario: Should be able to move activity
+	Given 'John Smith' has a shift with
+    | Field            | Value            |
+    | Shift category   | Day              |
+    | Activity         | Phone            |
+    | StartTime        | 2016-10-10 09:00 |
+    | EndTime          | 2016-10-10 17:00 |
+    | Lunch Activity   | Lunch            |
+    | Lunch start time | 2016-10-10 12:00 |
+    | Lunch end time   | 2016-10-10 13:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected activity 'Lunch'
+	And I apply move activity
+	Then I should see a successful notice
+
+@OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
+Scenario: Should be able to move basic activity
+	Given 'John Smith' has a shift with
+    | Field            | Value            |
+    | Shift category   | Day              |
+    | Activity         | Phone            |
+    | StartTime        | 2016-10-10 09:00 |
+    | EndTime          | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected activity 'Phone'
+	And I apply move activity
+	Then I should see a successful notice
 
 @ignore
 Scenario: Should not see add activity menu item without permission
