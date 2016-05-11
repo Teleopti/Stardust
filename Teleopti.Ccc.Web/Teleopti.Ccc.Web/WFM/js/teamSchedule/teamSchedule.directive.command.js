@@ -128,6 +128,7 @@
 				message = $translate.instant('CanNotMoveMultipleAcivitiesForAgent').replace('{0}', notAllowNameList.substring(0, notAllowNameList.length - 2));
 				noticeService.error(message, null, true);
 			}
+		    $scope.$evalAsync();
 		};
 
 		vm.toggleCommandState = function (menuName) {
@@ -195,15 +196,15 @@
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
 				if (!personSelectionSvc.canSwapShifts() || !vm.canActiveSwapShifts()) return;
-				vm.commands[3].action();; // Alt+S for swap shifts
+				vm.commands[3].action(); // Alt+S for swap shifts
 			});
 			shortCuts.registerKeySequence([keyCodes.R], [keyCodes.ALT], function () {
 				if (!vm.canRemoveAbsence() || !vm.canActiveRemoveAbsence()) return;
-				vm.commands[4].action();; // Alt+R for remove absence
+				vm.commands[4].action(); // Alt+R for remove absence
 			});
 			shortCuts.registerKeySequence([keyCodes.X], [keyCodes.ALT], function () {
 				if (!vm.canRemoveActivity() || !vm.canActiveRemoveActivity()) return;
-				vm.commands[5].action();; // Alt+X for remove activity
+				vm.commands[5].action(); // Alt+X for remove activity
 			});
 		}
 
@@ -211,7 +212,7 @@
 			vm.toggles = vm.configurations.toggles;
 			vm.permissions = vm.configurations.permissions;
 			vm.isMenuVisible = function () {
-				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence() || vm.canActiveAddActivity() || vm.canActiveRemoveActivity();
+				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence() || vm.canActiveAddActivity() || vm.canActiveRemoveActivity() || vm.canActiveMoveActivity();
 			};
 			registerShortCuts();
 		};
