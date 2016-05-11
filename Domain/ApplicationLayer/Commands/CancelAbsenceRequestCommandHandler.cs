@@ -93,9 +93,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			catch (InvalidRequestStateTransitionException)
 			{
-				return false;
+				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransititon, personRequest.StatusText, UserTexts.Resources.Cancelled));
 			}
 
+			return false;
 		}
 
 		private IScheduleRange getScheduleRange (IPerson person, DateTime startDate, DateTime endDate)

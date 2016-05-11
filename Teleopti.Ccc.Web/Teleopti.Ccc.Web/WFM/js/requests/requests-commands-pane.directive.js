@@ -20,11 +20,10 @@
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 
 		function handleErrorMessages(errorMessages) {
-			if (errorMessages && errorMessages.length > 0) {
-				if (vm.onErrorMessages) {
-					vm.onErrorMessages({ errorMessages: errorMessages });
-				}
+			if (vm.onErrorMessages) {
+				vm.onErrorMessages({ errorMessages: errorMessages });
 			}
+			
 		}
 
 		function doStandardCommandHandling(requestType, dataServicePromise) {
@@ -44,7 +43,6 @@
 							requestsCount: selectedRequestIds.length
 						});
 					} else {
-
 						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
 					}
 				});

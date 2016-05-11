@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		{
 			var trackInfo = createTrackedCommandInfo();
 			var affectedRequestIds = new List<Guid>();
+			var errorMessages = new List<string>();
 
 			foreach (var personRequestId in ids)
 			{
@@ -62,9 +63,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				_commandDispatcher.Execute(command);
 
 				if (command.AffectedRequestId.HasValue) affectedRequestIds.Add(command.AffectedRequestId.Value);
+
+				if (command.ErrorMessages != null)
+				{
+					errorMessages.AddRange(command.ErrorMessages);
+				}
+
 			}
 
-			return new RequestCommandHandlingResult (affectedRequestIds, null);
+			return new RequestCommandHandlingResult (affectedRequestIds, errorMessages);
+
 		}
 
 		public RequestCommandHandlingResult CancelRequests (IEnumerable<Guid> ids)

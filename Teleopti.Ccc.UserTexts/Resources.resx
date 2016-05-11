@@ -14461,4 +14461,8 @@ Help us improve your experience by sending an error report</value>
     <value>Load Requests</value>
     <comment>a choice when opening scheduler</comment>
   </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>A request that is {0} cannot be {1}.</value>
+    <comment>Used to display error messages within the Angel project when an action is attempted to be taken on a request where the status of the request prohibits this (an example is trying to deny an approved request).  Parameters: {0} = the current state of the request (e.g Approved), {1} is the state of the request if the desired action succeeded (e.g Denied)</comment>
+  </data>
 </root>
