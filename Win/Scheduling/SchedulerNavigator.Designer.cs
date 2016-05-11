@@ -259,7 +259,7 @@
 			this.toolStripButtonOrganizeCascadingSkills.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonOrganizeCascadingSkills.Name = "toolStripButtonOrganizeCascadingSkills";
 			this.toolStripButtonOrganizeCascadingSkills.Size = new System.Drawing.Size(165, 21);
-			this.toolStripButtonOrganizeCascadingSkills.Text = "xxOrganizeCascadingSkills";
+			this.toolStripButtonOrganizeCascadingSkills.Text = "Organize cascading skills";
 			this.toolStripButtonOrganizeCascadingSkills.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonOrganizeCascadingSkills.Click += new System.EventHandler(this.toolStripButtonOrganizeCascadingSkillsClick);
 			// 

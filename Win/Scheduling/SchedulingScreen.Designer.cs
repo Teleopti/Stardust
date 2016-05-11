@@ -2550,7 +2550,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonCalculateCascading.Name = "toolStripButtonCalculateCascading";
 			this.SetShortcut(this.toolStripButtonCalculateCascading, System.Windows.Forms.Keys.None);
 			this.toolStripButtonCalculateCascading.Size = new System.Drawing.Size(115, 17);
-			this.toolStripButtonCalculateCascading.Text = "xxCascading";
+			this.toolStripButtonCalculateCascading.Text = "Cascading";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonCalculateCascading, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonCalculateCascading, false);
 			this.toolStripButtonCalculateCascading.Click += new System.EventHandler(this.toolStripButtonCalculateCascadingClick);

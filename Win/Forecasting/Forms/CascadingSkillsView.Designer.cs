@@ -254,18 +254,18 @@
 			this.labelCascadingSkills.AutoSize = true;
 			this.labelCascadingSkills.Location = new System.Drawing.Point(3, 0);
 			this.labelCascadingSkills.Name = "labelCascadingSkills";
-			this.labelCascadingSkills.Size = new System.Drawing.Size(98, 15);
+			this.labelCascadingSkills.Size = new System.Drawing.Size(90, 15);
 			this.labelCascadingSkills.TabIndex = 8;
-			this.labelCascadingSkills.Text = "xxCascadingSkills";
+			this.labelCascadingSkills.Text = "Cascading skills";
 			// 
 			// labelNonCascadingSkills
 			// 
 			this.labelNonCascadingSkills.AutoSize = true;
 			this.labelNonCascadingSkills.Location = new System.Drawing.Point(406, 0);
 			this.labelNonCascadingSkills.Name = "labelNonCascadingSkills";
-			this.labelNonCascadingSkills.Size = new System.Drawing.Size(121, 15);
+			this.labelNonCascadingSkills.Size = new System.Drawing.Size(114, 15);
 			this.labelNonCascadingSkills.TabIndex = 9;
-			this.labelNonCascadingSkills.Text = "xxNonCascadingSkills";
+			this.labelNonCascadingSkills.Text = "Non cascading skills";
 			// 
 			// CascadingSkillsView
 			// 
@@ -284,7 +284,7 @@
 			this.MinimizeBox = false;
 			this.Name = "CascadingSkillsView";
 			this.ShowIcon = false;
-			this.Text = "xxCascadingSkills";
+			this.Text = "Organize Cascading Skills";
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.tableLayoutPanel2.ResumeLayout(false);
