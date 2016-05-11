@@ -246,5 +246,25 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 
 			target.NonCascadingSkills.Should().Have.SameSequenceAs(skill1, skill2, skill3);
 		}
+
+		[Test]
+		public void ShouldOrderMixOfSkills()
+		{
+			var nonCascading1 = new Skill();
+			nonCascading1.ChangeName("1");
+			var nonCascading2 = new Skill();
+			nonCascading2.ChangeName("2");
+			var cascading1 = new Skill();
+			cascading1.SetCascadingIndex_UseFromTestOnly(1);
+			cascading1.ChangeName("3");
+			var cascading2 = new Skill();
+			cascading2.SetCascadingIndex_UseFromTestOnly(2);
+			cascading2.ChangeName("0");
+			SkillRepository.Has(cascading2, nonCascading2, nonCascading1, cascading1);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.NonCascadingSkills.Should().Have.SameSequenceAs(nonCascading1, nonCascading2);
+			target.CascadingSkills.Should().Have.SameSequenceAs(cascading1, cascading2);
+		}
 	}
 }
