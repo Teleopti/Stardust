@@ -35,11 +35,18 @@
 				});
 				return deferred.promise;
 			}
-
-			$scope.toggleOverlay = function() {
+			var toggleActiveOverlay = function(){
 				$scope.showOverlay = !$scope.showOverlay;
 				replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
-				focusMenu();
+			};
+			$scope.toggleOverlay = function(state) {
+				if (state === true || state === false) {
+					$scope.showOverlay = state
+					replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
+				}else {
+					toggleActiveOverlay();
+					focusMenu();
+				}
 			};
 
 			var replaceCurrentTheme = function(theme, overlay) {
