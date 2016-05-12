@@ -149,6 +149,10 @@ wfm-notice{
 	top: 0;
 }
 
+.active-context{
+	background: $gray012;
+}
+
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	.container.content{
 		height: 92vh;

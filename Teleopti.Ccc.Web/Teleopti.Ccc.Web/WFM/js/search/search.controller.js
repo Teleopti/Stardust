@@ -19,6 +19,7 @@
 						search('');
 					}
 				};
+
 				var search = function(keyword) {
 					$scope.searchResultGroups = [];
 					$scope.searchResult = [];
