@@ -35,7 +35,7 @@
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 			personSchedule.IsSelected = true;
 			personSelection.updatePersonSelection(personSchedule);
-			personSelection.toggleAllPersonProjections(personSchedule);
+			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
 			var newStartMoment = moment("2016-05-13 2:00");
 
 			var result = target.validateMoveToTime(newStartMoment);
