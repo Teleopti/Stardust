@@ -1447,6 +1447,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.activity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.commandCommon.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.notification.js" />
     <Content Include="WFM\js\global\wfm.i18n.service.js" />
     <Content Include="WFM\js\global\timerangepicker\wfm-time-range-picker.directive.js" />

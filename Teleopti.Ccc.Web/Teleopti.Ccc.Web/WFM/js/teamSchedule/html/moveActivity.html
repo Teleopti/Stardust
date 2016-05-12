@@ -13,7 +13,7 @@
 		</form>
 		<div ng-if="moveActivityForm.newStartTime.$error.startTime">
 			<i class="mdi mdi-alert-octagon" style="vertical-align:middle;"></i>
-			<span translate>something is wrong with the start time provided.</span>
+			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.invalidPeople()}}.</span>
 		</div>
 		<button id="applyMoveActivity" class="wfm-btn form-submit" tabindex="{{::vm.tabindex}}"
 				ng-class="{ 'wfm-btn-primary': moveActivityForm.$valid, 'wfm-btn-primary-disabled': !moveActivityForm.$valid }"

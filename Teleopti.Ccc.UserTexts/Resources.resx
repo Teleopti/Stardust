@@ -14437,6 +14437,10 @@ Help us improve your experience by sending an error report</value>
     <value>Successfully moved activities for selected agents	</value>
     <comment>Success Message for Moving Activity</comment>
   </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>The new time is not allowed for</value>
+    <comment>input validation message for moving activity.</comment>
+  </data>
   <data name="ScheduleIsWriteProtected" xml:space="preserve">
     <value>Unable to change the schedule for {0} on {1} as it is write protected.</value>
     <comment>Used to display an error when attempting to update a write protected schedule.  Parameters {0} = Agent Name, {1} = Date of attempted update</comment>

@@ -29227,6 +29227,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The new time is not allowed for.
+        /// </summary>
+        public static string TheNewTimeIsNotAllowedFor {
+            get {
+                return ResourceManager.GetString("TheNewTimeIsNotAllowedFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The person&apos;s roles.
         /// </summary>
         public static string ThePersonsRoles {
