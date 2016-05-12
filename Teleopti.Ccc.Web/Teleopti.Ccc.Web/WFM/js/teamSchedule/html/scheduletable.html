@@ -36,10 +36,10 @@
 						<md-tooltip ng-if="dayOff.DayOffName !=''"> {{dayOff.DayOffName}} </md-tooltip>
 					</span>
 					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
-						<div class="layer absolute floatleft" ng-repeat="projection in shift.Projections"
+						<div class="layer absolute floatleft selectable" ng-repeat="projection in shift.Projections"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
 							 ng-class="{overtime:projection.IsOvertime, personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime, 
-							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder}"
+							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, shift, vm.selectedDate)}"
 							 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
 							<md-tooltip>{{projection.Description}}</md-tooltip>
 							<span class="hidden-for-test">{{projection.Description}}</span>

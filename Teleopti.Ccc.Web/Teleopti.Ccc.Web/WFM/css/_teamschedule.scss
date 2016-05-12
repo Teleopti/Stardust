@@ -340,6 +340,13 @@
 	.hidden-for-test {
 		display: none;
 	}
+
+	.selectable {
+		cursor: pointer;
+	}
+	.unselectable {
+		cursor: not-allowed !important;
+	}
 }
 
 .team-schedule-command-confirm-dialog {

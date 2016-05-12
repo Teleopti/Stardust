@@ -55,17 +55,22 @@
 			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
 
-		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
-			
+		vm.canToggleSelection = function(currentProjection, shift, viewDate) {
 			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
-				return;
+				return false;
 
 			var isSameDay = shift.Date.format("YYYY-MM-DD") === moment(viewDate).format("YYYY-MM-DD");
-		
+
 			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
-				return;
+				return false;
 			}
 
+			return true;
+		}
+
+
+		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
+			if (!vm.canToggleSelection(currentProjection, shift, viewDate)) return;
 			currentProjection.ToggleSelection();
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
 		};
