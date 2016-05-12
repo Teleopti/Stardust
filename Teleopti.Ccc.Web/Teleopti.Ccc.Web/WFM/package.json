@@ -10,7 +10,7 @@
   "author": "Teleopti",
   "license": "ISC",
   "dependencies": {
-    "angular": "1.4.7",
+    "angular": "1.5.5",
     "angular-mocks": "1.4.7",
     "angular-moment": "0.8.3",
     "angular-resizable": "1.2.0",
