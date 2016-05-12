@@ -10,28 +10,28 @@ namespace Teleopti.Ccc.Domain.Budgeting
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupAllowanceSpecification));
 
-		public static IValidatedRequest PersonPeriodOrBudgetGroupIsNull(CultureInfo culture, Guid? personId)
+		public static IValidatedRequest PersonPeriodOrBudgetGroupIsNull(CultureInfo langauage, Guid? personId)
 		{
 			var logInfo = string.Format("There is no budget group for person: {0}.", personId);
 			var errorInfo = Resources.ResourceManager.GetString("BudgetGroupMissing",
-				culture) ?? Resources.BudgetGroupMissing;
+                langauage) ?? Resources.BudgetGroupMissing;
 
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}
 
-		public static IValidatedRequest BudgetDaysAreNull(CultureInfo culture, DateOnlyPeriod requestedPeriod)
+		public static IValidatedRequest BudgetDaysAreNull(CultureInfo langauage, CultureInfo culture, DateOnlyPeriod requestedPeriod)
 		{
 			var logInfo = string.Format("There is no budget for this period {0}.", requestedPeriod);
 			var errorInfo = string.Format(Resources.ResourceManager.GetString("NoBudgetForThisPeriod",
-				culture) ?? Resources.NoBudgetForThisPeriod, requestedPeriod.ToShortDateString(culture));
+                langauage) ?? Resources.NoBudgetForThisPeriod, requestedPeriod.ToShortDateString(culture));
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}
 
-		public static IValidatedRequest BudgetDaysAreNotEqualToRequestedPeriodDays(CultureInfo culture, DateOnlyPeriod requestedPeriod)
+		public static IValidatedRequest BudgetDaysAreNotEqualToRequestedPeriodDays(CultureInfo langauage, CultureInfo culture, DateOnlyPeriod requestedPeriod)
 		{
 			var logInfo = string.Format("One or more days during this requested period {0} has no budget.", requestedPeriod);
 			var errorInfo = string.Format(Resources.ResourceManager.GetString("NoBudgetDefineForSomeRequestedDays",
-				culture) ?? Resources.NoBudgetDefineForSomeRequestedDays, requestedPeriod.ToShortDateString(culture));
+                langauage) ?? Resources.NoBudgetDefineForSomeRequestedDays, requestedPeriod.ToShortDateString(culture));
 			return logAndReturnValidatedRequest(logInfo, errorInfo);
 		}
 

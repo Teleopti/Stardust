@@ -38,13 +38,15 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		{
 			var timeZone = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.Culture();
-			var requestedPeriod = absenceRequestAndSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
+		    var language = absenceRequestAndSchedules.AbsenceRequest.Person.PermissionInformation.UICulture();
+
+            var requestedPeriod = absenceRequestAndSchedules.AbsenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var personPeriod = absenceRequestAndSchedules.AbsenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
 
 
 			if (personPeriod == null || personPeriod.BudgetGroup == null)
 			{
-				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(culture, absenceRequestAndSchedules.AbsenceRequest.Person.Id);
+				return AbsenceRequestBudgetGroupValidationHelper.PersonPeriodOrBudgetGroupIsNull(language, absenceRequestAndSchedules.AbsenceRequest.Person.Id);
 			}
 
 			var defaultScenario = _scenarioRepository.Current();
@@ -52,18 +54,18 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 			if (budgetDays == null)
 			{
-				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNull(culture, requestedPeriod);
+				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNull(language, culture, requestedPeriod);
 			}
 
 			if (budgetDays.Count != requestedPeriod.DayCollection().Count)
 			{
-				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(culture, requestedPeriod);
+				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture, requestedPeriod);
 			}
 
 			var invalidDays = getInvalidDays(absenceRequestAndSchedules.AbsenceRequest, budgetDays, personPeriod, defaultScenario, culture, absenceRequestAndSchedules.SchedulingResultStateHolder);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
-				var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays", culture);
+				var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays", language);
 				return AbsenceRequestBudgetGroupValidationHelper.InvalidDaysInBudgetDays(invalidDays, underStaffingValidationError);
 			}
 

@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		{
 			var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var culture = absenceRequest.Person.PermissionInformation.Culture();
-			var requestedPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
+		    var language = absenceRequest.Person.PermissionInformation.UICulture();
+            var requestedPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
 			var personPeriod = absenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
 
 			if (personPeriod == null || personPeriod.BudgetGroup == null)
@@ -40,18 +41,18 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var budgetDays = _budgetDayRepository.Find(defaultScenario, personPeriod.BudgetGroup, requestedPeriod);
 			if (budgetDays == null)
 			{
-				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNull(culture, requestedPeriod);
+				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNull(language, culture, requestedPeriod);
 			}
 
 			if (budgetDays.Count != requestedPeriod.DayCollection().Count)
 			{
-				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(culture, requestedPeriod);
+				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture, requestedPeriod);
 			}
 
 			var invalidDays = getInvalidDaysIfExist(budgetDays, personPeriod.BudgetGroup, culture);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
-				var notEnoughAllowance = UserTexts.Resources.ResourceManager.GetString("NotEnoughAllowance", culture);
+				var notEnoughAllowance = UserTexts.Resources.ResourceManager.GetString("NotEnoughAllowance", language);
 				return AbsenceRequestBudgetGroupValidationHelper.InvalidDaysInBudgetDays(invalidDays, notEnoughAllowance);
 			}
 
