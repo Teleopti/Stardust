@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
@@ -24,14 +26,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 			foreach (var person in persons)
 			{
 				var orderedCascadingSkills = person.Period(date).PersonSkillCollection
-					.Where(x => x.Skill.IsCascading() && x.Active).OrderBy(x => x.Skill.CascadingIndex).ToArray();
-				if(!orderedCascadingSkills.Any())
-					continue;
+					.Where(x => x.Skill.IsCascading() && x.Active && !((IDeleteTag)x.Skill).IsDeleted).OrderBy(x => x.Skill.CascadingIndex).ToArray();
 
-				foreach (var cascadingSkill in orderedCascadingSkills)
-				{
-					((IPersonSkillModify)cascadingSkill).Active = false;
-				}
+				orderedCascadingSkills.ForEach(x => ((IPersonSkillModify) x).Active = false);
 				foreach (var activity in orderedCascadingSkills.Select(personSkill => personSkill.Skill.Activity).Distinct())
 				{
 					var prioritizedCascadingSkillForActivity = (IPersonSkillModify)orderedCascadingSkills.First(s => s.Skill.Activity.Equals(activity));
