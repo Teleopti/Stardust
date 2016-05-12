@@ -47,7 +47,7 @@
 
         vm.clearFilters = clearAllFilters;
 
-        requestsDataSvc.getRequestableAbsences().then(function (result) {
+        requestsDataSvc.getAllAbsences().then(function (result) {
             vm.AllRequestableAbsences = result.data;
             angular.forEach(vm.AllRequestableAbsences, function (absence) {
                 absence.Selected = false;

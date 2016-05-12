@@ -9,7 +9,7 @@
 		var approveRequestsUrl = '../api/Requests/approveRequests';
 		var denyRequestsUrl = '../api/Requests/denyRequests';
 		var cancelRequestsUrl = '../api/Requests/cancelRequests';
-		var requestableAbsenceUrl = '../api/Absence/GetRequestableAbsences';
+		var loadAllAbsenceUrl = '../api/Absence/GetAllAbsences';
 
 		this.getAllRequestsPromise_old = function(filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -33,8 +33,8 @@
 			return $http.post(denyRequestsUrl, selectedRequestIds);
 		}
 
-		this.getRequestableAbsences = function() {
-			return $http.get(requestableAbsenceUrl);
+		this.getAllAbsences = function() {
+			return $http.get(loadAllAbsenceUrl);
 		}
 
 		this.getAllRequestStatuses = function() {

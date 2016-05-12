@@ -28,11 +28,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		    return result;
 	    }
 
-		[UnitOfWork, HttpGet, Route("api/Absence/GetRequestableAbsences")]
-	    public virtual IEnumerable<AbsenceViewModel> GetRequestableAbsences()
+		[UnitOfWork, HttpGet, Route("api/Absence/GetAllAbsences")]
+	    public virtual IEnumerable<AbsenceViewModel> GetAllAbsences()
 	    {
-		    var result = _absenceRepository.LoadRequestableAbsence()
-			    .Where(x => !((Absence) x).IsDeleted)
+		    var result = _absenceRepository.LoadAllSortByName()
 			    .Select(convertToAbsenceViewModel);
 		    return result;
 	    }
