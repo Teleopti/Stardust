@@ -70,14 +70,17 @@ Scenario: Default activity start time range should be 08:00-09:00 when agent's s
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Default activity start time should be next quarter time when selected date is today
 	Given 'John Smith' has a shift with
-	| Field            | Value            |
-	| Shift category   | Day              |
-	| Activity         | Phone            |
-	| StartTime        | 2016-10-10 09:00 |
-	| EndTime          | 2016-10-10 17:00 |
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| StartTime      | 2016-10-10 09:00 |
+	| EndTime        | 2016-10-10 17:00 |
+	| Lunch Activity | Lunch            |
+	| Lunch start time | 2016-10-10 12:00 |
+	| Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected activity 'Phone'
+	And I selected agent 'John Smith'
 	And I open 'AddActivity' panel
 	Then I should see the add activity time starts '12:15' and ends '13:15'
 
@@ -130,7 +133,6 @@ Scenario: Should be able to remove single activity
 	And I apply remove activity
 	Then I should see a successful notice
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should be able to remove multiple activities
 	Given 'John Smith' has a shift with
@@ -142,9 +144,9 @@ Scenario: Should be able to remove multiple activities
 	| Scheduled activity            | Training         |
 	| Scheduled activity start time | 2016-10-10 11:00 |
 	| Scheduled activity end time   | 2016-10-10 13:00 |
-	| Scheduled activity            | Sales            |
-	| Scheduled activity start time | 2016-10-10 14:00 |
-	| Scheduled activity end time   | 2016-10-10 15:00 |
+	| Third Activity                | Sales            |
+	| Third activity start time     | 2016-10-10 14:00 |
+	| Third activity end time       | 2016-10-10 15:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected activity 'Training'

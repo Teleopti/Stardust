@@ -97,7 +97,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 
 		svc.toggleAllPersonProjections = function (personSchedule, viewDate) {
 			angular.forEach(personSchedule.Shifts, function (shift) {
-				if (shift.Date.isSame(viewDate, 'day')) {
+				if (shift.Date.format("YYYY-MM-DD") === moment(viewDate).format("YYYY-MM-DD")) {
 					angular.forEach(shift.Projections, function (projection) {
 						if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
 							projection.Selected = personSchedule.IsSelected;
