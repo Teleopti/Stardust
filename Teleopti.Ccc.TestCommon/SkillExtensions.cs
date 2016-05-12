@@ -34,13 +34,14 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 
-		public static ISkillDay CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan demand)
+		public static ISkillDay CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan demandPerInterval)
 		{
+			var manualAgents = (double)demandPerInterval.Ticks/TimeSpan.FromMinutes(skill.DefaultResolution).Ticks;
 			var skillDataPeriods = new List<ISkillDataPeriod>();
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 			var skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(),
 				dateOnlyPeriod.ToDateTimePeriod(skill.TimeZone))
-			{ ManualAgents = demand.TotalHours };
+			{ManualAgents = manualAgents};
 
 			skillDataPeriods.Add(skillDataPeriod);
 
@@ -56,10 +57,10 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 
-		public static IList<ISkillDay> CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnlyPeriod period, TimeSpan demand)
+		public static IList<ISkillDay> CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnlyPeriod period, TimeSpan demandPerInterval)
 		{
 			return period.DayCollection()
-				.Select(dateOnly => CreateSkillDayWithDemand(skill, scenario, dateOnly, demand))
+				.Select(dateOnly => CreateSkillDayWithDemand(skill, scenario, dateOnly, demandPerInterval))
 				.ToList();
 		}
 

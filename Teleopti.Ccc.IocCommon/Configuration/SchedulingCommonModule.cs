@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Backlog;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<CascadingResourceCalculation>().InstancePerLifetimeScope();
+
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
 			builder.RegisterModule(new IntraIntervalOptimizationServiceModule(_configuration));
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
