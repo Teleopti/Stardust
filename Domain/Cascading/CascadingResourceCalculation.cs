@@ -21,13 +21,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public void ForDay(DateOnly date)
 		{
 			//REMOVE LATER ////
-			var persons = _schedulerStateHolder().AllPermittedPersons;
-
-			foreach (var person in persons)
+			var agents = _schedulerStateHolder().AllPermittedPersons;
+			foreach (var orderedCascadingSkills in agents.Select(person => person.Period(date).CascadingSkills().ToArray()))
 			{
-				var orderedCascadingSkills = person.Period(date).PersonSkillCollection
-					.Where(x => x.Skill.IsCascading() && x.Active && !((IDeleteTag)x.Skill).IsDeleted).OrderBy(x => x.Skill.CascadingIndex).ToArray();
-
 				orderedCascadingSkills.ForEach(x => ((IPersonSkillModify) x).Active = false);
 				foreach (var activity in orderedCascadingSkills.Select(personSkill => personSkill.Skill.Activity).Distinct())
 				{

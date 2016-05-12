@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
@@ -97,6 +98,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			{
 				return _personSkillCollection.ToList();
 			}
+		}
+
+		public IEnumerable<IPersonSkill> CascadingSkills()
+		{
+			return _personSkillCollection.Where(x => x.Active && !((IDeleteTag) x.Skill).IsDeleted && x.Skill.IsCascading()).OrderBy(x => x.Skill.CascadingIndex);
 		}
 
 		public virtual IRuleSetBag RuleSetBag

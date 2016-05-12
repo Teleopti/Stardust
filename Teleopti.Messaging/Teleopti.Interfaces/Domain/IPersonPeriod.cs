@@ -66,6 +66,8 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The person skill collection.</value>
         IEnumerable<IPersonSkill> PersonSkillCollection { get; }
 
+	    IEnumerable<IPersonSkill> CascadingSkills();
+
         /// <summary>
         /// Gets or sets the rule set bag.
         /// </summary>
