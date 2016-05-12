@@ -207,7 +207,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(2);
-			viewModel.LatestActualInterval.Should().Be.EqualTo(DateTime.MinValue.AddMinutes((_firstInterval.IntervalId + 1) * minutesPerInterval));
+			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(DateTime.MinValue.AddMinutes(_firstInterval.IntervalId * minutesPerInterval));
+			viewModel.LatestActualIntervalEnd.Should().Be.EqualTo(DateTime.MinValue.AddMinutes((_firstInterval.IntervalId + 1) * minutesPerInterval));
 		}
 
 		[Test]
@@ -218,7 +219,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var viewModel = Target.Load(new[] { Guid.NewGuid() });
 
 			viewModel.DataSeries.AverageHandleTime.Length.Should().Be.EqualTo(0);
-			viewModel.LatestActualInterval.Should().Be.EqualTo(null);
+			viewModel.LatestActualIntervalStart.Should().Be.EqualTo(null);
+			viewModel.LatestActualIntervalEnd.Should().Be.EqualTo(null);
 		}
 
 		[Test]

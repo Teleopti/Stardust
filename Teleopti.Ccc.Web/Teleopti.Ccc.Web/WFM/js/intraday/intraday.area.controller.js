@@ -133,10 +133,12 @@
 					$scope.drillable = false;
 				};
 
-				$scope.findCurrent = function () {
-					for (var i = 0; i < $scope.timeSeries.length; i++) {
-						if ($scope.timeSeries[i] === $scope.latestActualInterval){
-							$scope.currentInterval[i] = 300;
+				$scope.findCurrent = function (callsMax) {
+				    console.log($scope.latestActualInterval.split(' - ')[0]);
+				    console.log($scope.timeSeries);
+				    for (var i = 0; i < $scope.timeSeries.length; i++) {
+						if ($scope.timeSeries[i] === $scope.latestActualInterval.split(' - ')[0]){
+							$scope.currentInterval[i] = callsMax;
 						}else{
 							if (i > 0) {
 								$scope.currentInterval[i] = null;
@@ -146,12 +148,13 @@
 				}
 
 				var setResult = function (result) {
-					if (!result.LatestActualInterval) {
+					if (!result.LatestActualIntervalEnd) {
 						$scope.latestActualInterval = '--:--';
 						$scope.HasMonitorData = false;
 						return;
 					} else {
-						$scope.latestActualInterval = $filter('date')(result.LatestActualInterval, 'shortTime');
+
+					    $scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 						$scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
 						$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
 						$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
@@ -167,6 +170,10 @@
 						$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
 						$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
 
+						var forecastedCallsMax = Math.max.apply(Math, $scope.forecastedCallsSeries);
+						var actualCallsMax = Math.max.apply(Math, $scope.actualCallsSeries);
+						var callsMax = Math.max.apply(Math, [forecastedCallsMax, actualCallsMax]);
+
 						$scope.timeSeries.splice(0, 0, 'x');
 						$scope.currentInterval.splice(0, 0, 'Current');
 						$scope.forecastedCallsSeries.splice(0, 0, 'Forecasted_calls');
@@ -174,7 +181,7 @@
 						$scope.forecastedAverageHandleTimeSeries.splice(0, 0, 'Forecasted_AHT');
 						$scope.actualAverageHandleTimeSeries.splice(0, 0, 'AHT');
 						$scope.HasMonitorData = true;
-						loadIntradayChart();
+						loadIntradayChart(callsMax);
 					}
 				};
 
@@ -306,9 +313,9 @@
 							$scope.HasMonitorData = false;
 						}
 
-						var loadIntradayChart = function () {
+						var loadIntradayChart = function (callsMax) {
 							$scope.chartHiddenLines = $scope.hiddenArray;
-							$scope.findCurrent();
+							$scope.findCurrent(callsMax);
 							var intervalsList = [];
 							for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
 								intervalsList.push(interval);
@@ -342,7 +349,7 @@
 										Actual_calls: $translate.instant('Calls'),
 										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime'),
 										AHT: $translate.instant('AverageHandlingTime'),
-										Current:$translate.instant('latestActualInterval'),
+										Current:$translate.instant('latestActualInterval')
 									},
 									axes: {
 										AHT: 'y2',

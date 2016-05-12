@@ -71,7 +71,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 
             return new MonitorDataViewModel()
 			{
-				LatestActualInterval = latestQueueStatsIntervalId == -1
+				LatestActualIntervalStart = latestQueueStatsIntervalId == -1
+					? null
+					: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength),
+				LatestActualIntervalEnd = latestQueueStatsIntervalId == -1
 					? null
 					: (DateTime?)DateTime.MinValue.AddMinutes(latestQueueStatsIntervalId * intervalLength + intervalLength),
 				Summary = summary,

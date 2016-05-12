@@ -55,7 +55,8 @@ describe('IntradayAreaCtrl', function () {
 				OfferedCalls: [],
 				AverageHandleTime: []
 			},
-			LatestActualInterval: new Date(2016, 1, 1, 13, 0, 0, 0)
+			LatestActualIntervalStart: new Date(2016, 1, 1, 12, 45, 0, 0),
+			LatestActualIntervalEnd: new Date(2016, 1, 1, 13, 0, 0, 0)
 		};
 	});
 
@@ -136,8 +137,10 @@ describe('IntradayAreaCtrl', function () {
 		scope.skillSelected(scope.skills[0]);
 		$httpBackend.flush();
 
+	    var expectedLatestInterval = $filter('date')(monitorData.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(monitorData.LatestActualIntervalEnd, 'shortTime');
+
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
-		expect(scope.latestActualInterval).toEqual($filter('date')(monitorData.LatestActualInterval, 'shortTime'));
+		expect(scope.latestActualInterval).toEqual(expectedLatestInterval);
 		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
 		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
@@ -158,8 +161,10 @@ describe('IntradayAreaCtrl', function () {
 		scope.skillAreaSelected(scope.skillAreas[0]);
 		$httpBackend.flush();
 
+		var expectedLatestInterval = $filter('date')(monitorData.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(monitorData.LatestActualIntervalEnd, 'shortTime');
+
 		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
-		expect(scope.latestActualInterval).toEqual($filter('date')(monitorData.LatestActualInterval, 'shortTime'));
+		expect(scope.latestActualInterval).toEqual(expectedLatestInterval);
 		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
 		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
 		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
@@ -183,7 +188,7 @@ describe('IntradayAreaCtrl', function () {
 	it('should show friendly message if no data for skill area', function () {
 		createController(false);
 		scope.skillAreaSelected(scope.skillAreas[0]);
-		monitorData.LatestActualInterval = null;
+		monitorData.LatestActualIntervalEnd = null;
 		$httpBackend.flush();
 
 		expect(scope.HasMonitorData).toEqual(false);
@@ -197,4 +202,22 @@ describe('IntradayAreaCtrl', function () {
 		expect(scope.showStaffing).toEqual(true);
 		expect(scope.showIncoming).toEqual(false);
 	});
+
+    it('should find max value of data series to apply to latest actual data chart bar', function() {
+        createController(false);
+
+        monitorData.DataSeries.Time = [
+            new Date(2016, 1, 1, 12, 30, 0, 0),
+            monitorData.LatestActualIntervalStart,
+            monitorData.LatestActualIntervalEnd,
+            new Date(2016, 1, 1, 13, 15, 0, 0)];
+        monitorData.DataSeries.ForecastedCalls = [15, 30, 65, 60];
+        monitorData.DataSeries.OfferedCalls = [12, 70, 60, null];
+
+        scope.skillSelected(scope.skills[0]);
+        $httpBackend.flush();
+
+        expect(scope.currentInterval.length).toEqual(scope.timeSeries.length);
+        expect(scope.currentInterval[2]).toEqual(70);
+    });
 });
