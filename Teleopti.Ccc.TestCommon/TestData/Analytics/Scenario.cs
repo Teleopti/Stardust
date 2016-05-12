@@ -18,7 +18,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_scenarioId = scenarioId;
 			_businessUnitCode = businessUnitCode;
 			_defaultScenario = defaultScenario;
+			ScenarioCode = Guid.NewGuid();
 		}
+
+		public Guid ScenarioCode { get; }
 
 		public static Scenario DefaultScenarioFor(int scenarioId, Guid businessUnitCode)
 		{
@@ -30,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			var dummyDate = DateTime.Now;
 			using (var table = dim_scenario.CreateTable())
 			{
-				table.AddScenario(_scenarioId, Guid.NewGuid(), string.Empty, true, 1, _businessUnitCode, string.Empty, 1, dummyDate,
+				table.AddScenario(_scenarioId, ScenarioCode, string.Empty, _defaultScenario, 1, _businessUnitCode, string.Empty, 1, dummyDate,
 					dummyDate, dummyDate, false);
 
 				Bulk.Insert(connection, table);
