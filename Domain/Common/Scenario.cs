@@ -30,10 +30,16 @@ namespace Teleopti.Ccc.Domain.Common
 			switch (operation)
 			{
 				case DomainUpdateType.Insert:
-					events.Add(new ScenarioAddEvent
+				case DomainUpdateType.Update:
+					events.Add(new ScenarioChangeEvent
 					{
-						ScenarioId = Id.GetValueOrDefault(),
-						DatasourceUpdateDate = UpdatedOn.GetValueOrDefault()
+						ScenarioId = Id.GetValueOrDefault()
+					});
+					break;
+				case DomainUpdateType.Delete:
+					events.Add(new ScenarioDeleteEvent
+					{
+						ScenarioId = Id.GetValueOrDefault()
 					});
 					break;
 			}
@@ -81,14 +87,7 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual void ChangeName(string name)
 		{
 			_description = new Description(name);
-			AddEvent(() => new ScenarioNameChangeEvent
-			{
-				ScenarioId = Id.GetValueOrDefault(),
-				DatasourceUpdateDate = UpdatedOn.GetValueOrDefault(),
-				ScenarioName = _description.Name
-			});
 		}
-
 
 		/// <summary>
 		/// Gets if set to default workspace.

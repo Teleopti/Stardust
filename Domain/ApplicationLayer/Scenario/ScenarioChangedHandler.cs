@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
@@ -7,13 +8,14 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Preference;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 {
 	[UseOnToggle(Toggles.ETL_SpeedUpScenario_38300)]
 	public class ScenarioChangedHandler :
-		IHandleEvent<ScenarioNameChangeEvent>,
-		IHandleEvent<ScenarioAddEvent>,
+		IHandleEvent<ScenarioChangeEvent>,
+		IHandleEvent<ScenarioDeleteEvent>,
 		IRunOnHangfire
 	{
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -32,28 +34,60 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 
 			logger.Debug($"New instance of {nameof(ScenarioChangedHandler)} was created");
 		}
-		
+
 		[AnalyticsUnitOfWork]
-		public virtual void Handle(ScenarioNameChangeEvent @event)
+		public virtual void Handle(ScenarioDeleteEvent @event)
 		{
-			logger.Debug($"Consuming {nameof(ScenarioNameChangeEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
-			_analyticsScenarioRepository.SetName(@event.ScenarioId, @event.ScenarioName, @event.LogOnBusinessUnitId);
+			logger.Debug($"Consuming {nameof(ScenarioDeleteEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
+			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(a => a.ScenarioCode == @event.ScenarioId);
+
+			if (analyticsScenario == null)
+				return;
+
+			// Delete
+			_analyticsScenarioRepository.UpdateScenario(new AnalyticsScenario
+			{
+				ScenarioCode = @event.ScenarioId,
+				ScenarioName = analyticsScenario.ScenarioName,
+				BusinessUnitId = analyticsScenario.BusinessUnitId,
+				BusinessUnitCode = analyticsScenario.BusinessUnitCode,
+				BusinessUnitName = analyticsScenario.BusinessUnitName,
+				DatasourceId = analyticsScenario.DatasourceId,
+				DatasourceUpdateDate = analyticsScenario.DatasourceUpdateDate,
+				DefaultScenario = analyticsScenario.DefaultScenario,
+				IsDeleted = true
+			});
 		}
 
 		[AsSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
-		public virtual void Handle(ScenarioAddEvent @event)
+		public virtual void Handle(ScenarioChangeEvent @event)
 		{
-			logger.Debug($"Consuming {nameof(ScenarioAddEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
+			logger.Debug($"Consuming {nameof(ScenarioChangeEvent)} for scenario id = {@event.ScenarioId}. (Message timestamp = {@event.Timestamp})");
 			var scenario = _scenarioRepository.Load(@event.ScenarioId);
 			var businessUnit = _businessUnitRepository.Load(@event.LogOnBusinessUnitId);
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
+			var analyticsScenario = _analyticsScenarioRepository.Scenarios().FirstOrDefault(a => a.ScenarioCode == @event.ScenarioId);
 
 			if (scenario == null || businessUnit == null || analyticsBusinessUnit == null)
 				return;
 
-			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario
+			// Add
+			if (analyticsScenario == null)
+			{
+				_analyticsScenarioRepository.AddScenario(transformToAnalyticsScenario(@event, scenario, businessUnit, analyticsBusinessUnit));
+			}
+			// Update
+			else
+			{
+				_analyticsScenarioRepository.UpdateScenario(transformToAnalyticsScenario(@event, scenario, businessUnit, analyticsBusinessUnit));
+			}
+		}
+
+		private static AnalyticsScenario transformToAnalyticsScenario(ScenarioChangeEvent @event, IScenario scenario, IBusinessUnit businessUnit, AnalyticBusinessUnit analyticsBusinessUnit)
+		{
+			return new AnalyticsScenario
 			{
 				ScenarioCode = @event.ScenarioId,
 				ScenarioName = scenario.Description.Name,
@@ -64,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 				DatasourceUpdateDate = scenario.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
 				DefaultScenario = scenario.DefaultScenario,
 				IsDeleted = false
-			});
+			};
 		}
 	}
 }
