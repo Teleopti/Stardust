@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-fdescribe('[TeamSchedule ScheduleTable ControllerTest]', function () {
+describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 	var controller;
 	var scope, personSelection;
 
@@ -199,7 +199,7 @@ fdescribe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 			},
 			AbsenceCount: function () {
 				return 0;
-			}, 
+			},
 			AllowSwap: function(){
 				return true;
 			}
