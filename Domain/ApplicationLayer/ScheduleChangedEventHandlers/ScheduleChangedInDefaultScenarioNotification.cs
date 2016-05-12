@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	public class ScheduleChangedInDefaultScenarioNotification : ConsumerOf<ProjectionChangedEvent>
+	public class ScheduleChangedInDefaultScenarioNotification : IHandleEvent<MainShiftReplaceNotificationEvent>, IRunOnHangfire
 	{
 		private readonly IMessageBrokerComposite _messageBroker;
 
@@ -18,14 +16,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ProjectionChangedEvent message)
+		public void Handle(MainShiftReplaceNotificationEvent message)
 		{
-			if (!message.IsDefaultScenario) return;
-			if (message.IsInitialLoad) return;
-			if (message.ScheduleDays.Count == 0) return;
-			
-			var firstDate = message.ScheduleDays.Min(d => d.Date).AddDays(1);
-			var lastDate = message.ScheduleDays.Max(d => d.Date);
+			var firstDate = message.StartDateTime;
+			var lastDate = message.EndDateTime;
 			_messageBroker.Send(
 				message.LogOnDatasource, 
 				message.LogOnBusinessUnitId, 

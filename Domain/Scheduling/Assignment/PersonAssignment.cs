@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
@@ -362,6 +363,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				AddActivity(mainLayer.Payload, mainLayer.Period);
 			}
+		}
+
+		public virtual void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment assignment, TimeSpan periodOffset)
+		{
+			ClearMainActivities();
+			SetShiftCategory(assignment.ShiftCategory);
+			foreach (var mainLayer in assignment.MainActivities())
+			{
+				addActivityInternal(mainLayer.Payload, mainLayer.Period.MovePeriod(periodOffset));
+			}
+			var startDate = assignment.MainActivities().Min(x => x.Period.StartDateTime);
+			var endDate = assignment.MainActivities().Max(x => x.Period.EndDateTime);
+			AddEvent(() =>
+			{
+				var someEventForNotification = new MainShiftReplaceNotificationEvent
+				{
+					PersonId = Person.Id.Value,
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					ScenarioId = Scenario.Id.Value,
+					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				};
+				return someEventForNotification;
+			});
 		}
 
 		public virtual void InsertActivity(IActivity activity, DateTimePeriod period, int index)

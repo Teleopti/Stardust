@@ -546,12 +546,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAssignment.Period);
 
 					var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
-					workingCopyOfAssignment.Clear();
-					workingCopyOfAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
-					foreach (var layer in sourceAssignment.MainActivities())
-					{
-						workingCopyOfAssignment.AddActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
-					}
+					workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset);
 
 					var period = source.Period.MovePeriod(periodOffset);
 					if (PersonAssignment()==null && SignificantPart() == SchedulePartView.DayOff)

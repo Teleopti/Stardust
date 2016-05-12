@@ -3,7 +3,9 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -221,4 +223,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			return new DateTime(2013, 11, 14, hourOnDay, 0, 0, 0, DateTimeKind.Utc);
 		}
 	}
+
+	[TestFixture]
+	public class AggregateRootFilterTest : AggregateRoot
+	{
+		[Test]
+		public void ShouldHaveOnlyUniqueEvents()
+		{
+			var @event = new MainShiftReplaceNotificationEvent()
+			{
+				EndDateTime = DateTime.Today.AddDays(2),
+				StartDateTime = DateTime.Today,
+				PersonId = Guid.NewGuid(),
+				Timestamp = DateTime.Now,
+				UserName = "lady gaga",
+				LogOnBusinessUnitId = Guid.NewGuid(),
+				ScenarioId = Guid.NewGuid()
+			};
+			AddEvent(()=> { return @event; } );
+			AddEvent(()=> { return @event; } );
+			PopAllEvents(new Now()).Count().Should().Be.EqualTo(1);
+		}
+	}
+
 }

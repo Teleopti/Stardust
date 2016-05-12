@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
@@ -85,8 +87,21 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 			var allEvents = _events.Select(e => e.Invoke(now)).ToArray();
 			_events.Clear();
-			return allEvents;
+			return filterScheduleMergeEventDuplicate(allEvents.ToList());
 		}
+
+		private IEnumerable<IEvent> filterScheduleMergeEventDuplicate(IList<IEvent> allEvents)
+		{
+			var mergeEvents = allEvents.Where(e => e.GetType() == typeof (MainShiftReplaceNotificationEvent)).ToList();
+			
+			foreach (var item in mergeEvents)
+			{
+				allEvents.Remove(item);
+			}
+			mergeEvents = mergeEvents.GroupBy(x => ((MainShiftReplaceNotificationEvent)x).PersonId).Select(g => g.First()).ToList();
+			return allEvents.Concat(mergeEvents) ;
+		}
+
 
 		protected void AddEvent(Func<INow, IEvent> @event)
 		{
@@ -97,6 +112,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 			_events.Add(n => @event.Invoke());
 		}
+
 
 		protected void AddEvent(IEvent @event)
 		{

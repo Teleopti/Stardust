@@ -76,5 +76,6 @@ namespace Teleopti.Interfaces.Domain
 			TrackedCommandInfo trackedCommandInfo);
 
 		void AddActivity(IActivity activity, TimePeriod period);
+		void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment sourceAssignment, TimeSpan periodOffset);
 	}
 }

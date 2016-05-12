@@ -259,7 +259,6 @@
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
     <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />
     <Compile Include="LargeGuidCollectionSerializer.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
