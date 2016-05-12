@@ -9,14 +9,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleProjectionReadOnlyPersister : IScheduleProjectionReadOnlyPersister
 	{
-		private readonly IDictionary<Guid, DateTime> store = new Dictionary<Guid, DateTime>();
 		private readonly IList<ScheduleProjectionReadOnlyModel> _data = new List<ScheduleProjectionReadOnlyModel>();
-
-		public void SetNextActivityStartTime(IPerson person, DateTime time)
-		{
-			store.Add(person.Id.GetValueOrDefault(),time);
-		}
-
+		
 		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
 			throw new NotImplementedException();
