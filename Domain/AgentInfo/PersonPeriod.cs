@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			}
 		}
 
-		public IEnumerable<IPersonSkill> CascadingSkills()
+		public virtual IEnumerable<IPersonSkill> CascadingSkills()
 		{
 			return _personSkillCollection.Where(x => x.Active && !((IDeleteTag) x.Skill).IsDeleted && x.Skill.IsCascading()).OrderBy(x => x.Skill.CascadingIndex);
 		}
