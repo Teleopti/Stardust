@@ -55,6 +55,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.ClickContaining(".person-name", agentName);
 		}
 
+		[When(@"I selected no ativity '(.*)'")]
+		public void WhenISelectedNoAtivity(string description)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery($".schedule .layer:contains('{description}')");
+		}
+
+		[When(@"I click menu item in team schedule")]
+		public void WhenIClickMenuItemInTeamSchedule()
+		{
+			Browser.Interactions.Click("#scheduleContextMenuButton");
+		}
+
+		[Then(@"I should see '(.*)' menu item is disabled")]
+		public void ThenIShouldSeeMenuItemIsDisabled(string description)
+		{
+			Browser.Interactions.AssertVisibleUsingJQuery($"#menuItem{description}[disabled]");
+		}
+
+		[Then(@"I should not see '(.*)' menu item")]
+		public void ThenIShouldNotSeeMenuItem(string description)
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery("#scheduleContextMenuButton", $"#menuItem{description}");
+		}
+
 		[When(@"I open '(.*)' panel")]
 		public void WhenIOpenPanel(string panelName)
 		{
@@ -85,6 +109,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertScopeValue("#applyActivity", "newActivityForm.$valid", true);
 			Browser.Interactions.AssertExists("#applyActivity.wfm-btn-primary");
+		}
+
+		[Then(@"I should see the add activity time starts '(.*)' and ends '(.*)'")]
+		public void ThenIShouldSeeTheAddActivityTimeStartsAndEnds(string startTime, string endTime)
+		{
+			var startHour = string.Format(startTime).Substring(0, 2);
+			var startMin = string.Format(startTime).Substring(3, 2);
+			var endHour = string.Format(endTime).Substring(0, 2);
+			var endMin = string.Format(endTime).Substring(3, 2);
+			Browser.Interactions.AssertIndexedInputValueUsingJQuery("activity-time-range-picker input", 0, startHour);
+			Browser.Interactions.AssertIndexedInputValueUsingJQuery("activity-time-range-picker input", 1, startMin);
+			Browser.Interactions.AssertIndexedInputValueUsingJQuery("activity-time-range-picker input", 2, endHour);
+			Browser.Interactions.AssertIndexedInputValueUsingJQuery("activity-time-range-picker input", 3, endMin);
 		}
 
 		[When(@"I apply my new activity")]

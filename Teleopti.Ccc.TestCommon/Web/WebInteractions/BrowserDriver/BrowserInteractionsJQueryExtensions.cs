@@ -66,6 +66,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			interactions.AssertJavascriptResultContains("return $('" + selector + "').val();", value);
 		}
 
+		public static void AssertIndexedInputValueUsingJQuery(this IBrowserInteractions interactions, string selector, int index, string value)
+		{
+			interactions.AssertJavascriptResultContains("return $('" + selector + "')["+ index +"].value;", value);
+		}
+
 		public static void AssertVisibleUsingJQuery(this IBrowserInteractions interactions, string selector)
 		{
 
