@@ -7,8 +7,8 @@ using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceExc
 
 namespace Teleopti.Ccc.WinCode.Grouping
 {
-    public interface IPersonSelectorView
-    {
+    public interface IPersonSelectorView: IDisposable
+	{
 		event EventHandler DoFilter;
 
         void ResetTabs(TabPageAdv[] tabs, IExecutableCommand mainTabLoadCommand);

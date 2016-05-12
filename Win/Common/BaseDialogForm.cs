@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Win.Common
 {
     public partial class BaseDialogForm : MetroForm, ILocalized, IHelpForm
     {
-		private readonly IList<ControlHelpContext> _manualHelpContextList = new List<ControlHelpContext>();
+		private IList<ControlHelpContext> _manualHelpContextList = new List<ControlHelpContext>();
 
         public BaseDialogForm()
         {

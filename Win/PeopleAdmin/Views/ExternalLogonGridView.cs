@@ -8,57 +8,57 @@ using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
-    public class ExternalLogOnGridView:GridViewBase
-    {
-        private readonly List<IColumn<ExternalLogOnModel>> _gridColumns = new List<IColumn<ExternalLogOnModel>>();
+	public class ExternalLogOnGridView : GridViewBase
+	{
+		private List<IColumn<ExternalLogOnModel>> _gridColumns = new List<IColumn<ExternalLogOnModel>>();
 
 		private ColumnBase<ExternalLogOnModel> _checkBoxColumn;
 		private ColumnBase<ExternalLogOnModel> _externalLogonColumn;
-        private ColumnBase<ExternalLogOnModel> _acdObjectNameColumn;
+		private ColumnBase<ExternalLogOnModel> _acdObjectNameColumn;
 
-        internal override ViewType Type
-        {
-            get { return ViewType.ExternalLogOnView; }
-        }
+		internal override ViewType Type
+		{
+			get { return ViewType.ExternalLogOnView; }
+		}
 
-        public ExternalLogOnGridView(GridControl view, FilteredPeopleHolder filteredPeopleHolder) : base(view, filteredPeopleHolder)
-        {
-        	if (filteredPeopleHolder == null) throw new ArgumentNullException("filteredPeopleHolder");
-        	filteredPeopleHolder.SetFilteredExternalLogOnCollection(filteredPeopleHolder.ExternalLogOnViewAdapterCollection);
-        }
+		public ExternalLogOnGridView(GridControl view, FilteredPeopleHolder filteredPeopleHolder) : base(view, filteredPeopleHolder)
+		{
+			if (filteredPeopleHolder == null) throw new ArgumentNullException("filteredPeopleHolder");
+			filteredPeopleHolder.SetFilteredExternalLogOnCollection(filteredPeopleHolder.ExternalLogOnViewAdapterCollection);
+		}
 
-    	internal override void CreateHeaders()
-        {
-            _gridColumns.Add(new RowHeaderColumn<ExternalLogOnModel>());
+		internal override void CreateHeaders()
+		{
+			_gridColumns.Add(new RowHeaderColumn<ExternalLogOnModel>());
 
-            _checkBoxColumn = new CheckColumn<ExternalLogOnModel>("TriState", "1", "0", "2", typeof(int), Resources.IsIn);
-            _checkBoxColumn.CellChanged += checkBoxColumn_CellChanged;
-            _gridColumns.Add(_checkBoxColumn);
+			_checkBoxColumn = new CheckColumn<ExternalLogOnModel>("TriState", "1", "0", "2", typeof(int), Resources.IsIn);
+			_checkBoxColumn.CellChanged += checkBoxColumn_CellChanged;
+			_gridColumns.Add(_checkBoxColumn);
 
-            _externalLogonColumn= new ReadOnlyTextColumn<ExternalLogOnModel>("DescriptionText", Resources.ExternalLogOn);
-            _gridColumns.Add(_externalLogonColumn);
+			_externalLogonColumn = new ReadOnlyTextColumn<ExternalLogOnModel>("DescriptionText", Resources.ExternalLogOn);
+			_gridColumns.Add(_externalLogonColumn);
 
-            _acdObjectNameColumn = new ReadOnlyTextColumn<ExternalLogOnModel>("LogObjectName", Resources.LogObject);
-            _gridColumns.Add(_acdObjectNameColumn);
-        }
+			_acdObjectNameColumn = new ReadOnlyTextColumn<ExternalLogOnModel>("LogObjectName", Resources.LogObject);
+			_gridColumns.Add(_acdObjectNameColumn);
+		}
 
-        internal override void PrepareView()
-        {
-            ColCount = _gridColumns.Count;
-           
+		internal override void PrepareView()
+		{
+			ColCount = _gridColumns.Count;
+
 			RowCount = FilteredPeopleHolder.FilteredExternalLogOnCollection.Count;
 
-            Grid.ColCount = ColCount - 1;
-            Grid.RowCount = RowCount;
+			Grid.ColCount = ColCount - 1;
+			Grid.RowCount = RowCount;
 
-            Grid.Cols.HeaderCount = 0;
-            Grid.Rows.HeaderCount = 0;
+			Grid.Cols.HeaderCount = 0;
+			Grid.Rows.HeaderCount = 0;
 
-            Grid.ColWidths[1] = 40;
-            Grid.ColWidths[2] = _gridColumns[2].PreferredWidth + 30;
-            Grid.Name = "ExternalLogOnView";
+			Grid.ColWidths[1] = 40;
+			Grid.ColWidths[2] = _gridColumns[2].PreferredWidth + 30;
+			Grid.Name = "ExternalLogOnView";
 
-            HideRowHeaderColumn();
+			HideRowHeaderColumn();
 			Grid.ClipboardPaste += gridWorksheet_ClipboardPaste;
 		}
 
@@ -67,22 +67,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			Grid.Invalidate();
 		}
 
-        internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
-        {
-            if (ValidCell(e.ColIndex, e.RowIndex))
-            {
-              _gridColumns[e.ColIndex].GetCellInfo(e, FilteredPeopleHolder.FilteredExternalLogOnCollectionCellStages);
-            }
+		internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
+		{
+			if (ValidCell(e.ColIndex, e.RowIndex))
+			{
+				_gridColumns[e.ColIndex].GetCellInfo(e, FilteredPeopleHolder.FilteredExternalLogOnCollectionCellStages);
+			}
 			base.QueryCellInfo(e);
-        }
-       
-        internal override void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
-        {
-            if (ValidCell(e.ColIndex, e.RowIndex))
-            {
+		}
+
+		internal override void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
+		{
+			if (ValidCell(e.ColIndex, e.RowIndex))
+			{
 				_gridColumns[e.ColIndex].SaveCellInfo(e, FilteredPeopleHolder.FilteredExternalLogOnCollectionCellStages);
-            }
-        }
+			}
+		}
 
 		private void gridWorksheet_ClipboardPaste(object sender, GridCutPasteEventArgs e)
 		{
@@ -90,24 +90,37 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			e.Handled = true;
 		}
 
-        private void checkBoxColumn_CellChanged(object sender, ColumnCellChangedEventArgs<ExternalLogOnModel> e)
-        {
-            if (Grid.ReadOnly) 
-            {
-                return;
+		private void checkBoxColumn_CellChanged(object sender, ColumnCellChangedEventArgs<ExternalLogOnModel> e)
+		{
+			if (Grid.ReadOnly)
+			{
+				return;
+			}
 
-            }
-            if (FilteredPeopleHolder.SelectedPeoplePeriodGridCollection == null)
-            {
-                e.DataItem.TriState = 0; return;
-            }
-           
-            if (e.DataItem.TriState == 2) e.DataItem.TriState = 1;
+			if (FilteredPeopleHolder.SelectedPeoplePeriodGridCollection == null)
+			{
+				e.DataItem.TriState = 0; return;
+			}
 
-            if (e.DataItem.TriState == 1)
+			if (e.DataItem.TriState == 2) e.DataItem.TriState = 1;
+
+			if (e.DataItem.TriState == 1)
 				WorksheetStateHolder.SetExternalLogOnForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.ExternalLogOn);
-            else
-                WorksheetStateHolder.RemoveExternalLogOnForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.ExternalLogOn);
-        }
-    }
+			else
+				WorksheetStateHolder.RemoveExternalLogOnForSelectedPersonPeriods(FilteredPeopleHolder.SelectedPeoplePeriodGridCollection, e.DataItem.ExternalLogOn);
+		}
+		protected override void Dispose(bool disposing)
+		{
+			_gridColumns = null;
+			_acdObjectNameColumn = null;
+			_externalLogonColumn = null;
+			if (_checkBoxColumn != null)
+			{
+				_checkBoxColumn.CellChanged -= checkBoxColumn_CellChanged;
+			}
+			_checkBoxColumn = null;
+
+			base.Dispose(disposing);
+		}
+	}
 }

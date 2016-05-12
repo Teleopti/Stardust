@@ -151,6 +151,27 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			GridCreator.DropDownGridClipboardPaste += ChildGridClipboardPaste;
 		}
 
+		protected override void Dispose(bool disposing)
+		{
+			if (GridCreator != null)
+			{
+				GridCreator.DropDownGridQueryCellInfo -= ChildGridQueryCellInfo;
+				GridCreator.DropDownGridQueryRowCount -= ChildGridQueryRowCount;
+				GridCreator.DropDownGridQueryColCount -= ChildGridQueryColCount;
+				GridCreator.DropDownGridQueryRowHeight -= ChildGridQueryRowHeight;
+				GridCreator.DropDownGridQueryColWidth -= ChildGridQueryColWidth;
+				GridCreator.DropDownGridQuerySaveCellInfo -= ChildGridQuerySaveCellInfo;
+				GridCreator.DropDownGridSelectionChanged -= ChildGridSelectionChanged;
+				GridCreator.DropDownGridClipboardCanCopy -= ChildGridClipboardCanCopy;
+				GridCreator.DropDownGridClipboardPaste -= ChildGridClipboardPaste;
+				GridCreator.Dispose();
+				GridCreator = null;
+			}
+			
+			base.Dispose(disposing);
+			
+		}
+
 		public void SetOutOfFocusFromCurrentCell()
 		{
 			int index = (Grid.Model.CurrentCellInfo == null) ? DefaultRowIndex :

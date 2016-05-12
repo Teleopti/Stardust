@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Win.Grouping
 {
 	public partial class PersonSelectorView : BaseUserControl, IPersonSelectorView
 	{
-		private readonly IEventAggregator _eventAggregator;
-		private readonly IGroupPageHelper _groupPageHelper;
+		private  IEventAggregator _eventAggregator;
+		private  IGroupPageHelper _groupPageHelper;
 		private IComponentContext _container;
-		private readonly IEventAggregator _globalEventAggregator;
+		private  IEventAggregator _globalEventAggregator;
 		private DateOnlyPeriod? _selectedPeriod;
 		private readonly Brush _intermediateBrush = Brushes.LightGray;
 

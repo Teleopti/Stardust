@@ -44,6 +44,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_parentAdapterCollection = parentAdapterCollection;
 		}
 
+		protected override void Dispose(bool disposing)
+		{
+			_parentAdapterCollection = null;
+			base.Dispose(disposing);
+		}
 		// This is used to indicate grid in cell column index in parent grid
 		private const int _gridInCellColumnIndex = 2;
 

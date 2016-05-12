@@ -11,13 +11,10 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
-	/// <summary>
-	/// Represents the holder for GroupPage data loadings.
-	/// </summary>
 	public class GroupPageHelper : IGroupPageHelper
 	{
-		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private IRepositoryFactory _repositoryFactory;
+		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IList<IPerson> _personCollection;
 		private IList<IGroupPage> _groupPageCollection;
 		private IList<IContract> _contractCollection;
@@ -136,7 +133,6 @@ namespace Teleopti.Ccc.WinCode.Common
 				_personCollection = rep.LoadAllPeopleWithHierarchyDataSortByName(SelectedPeriod.StartDate).ToList();
 
 				//Clear Collections.
-				//if (_groupPageCollection != null) _groupPageCollection.Clear();
 				_groupPageCollection = new List<IGroupPage>();
 				//Copy Group page list.
 				// bug 34650 Seems like we don't need this
@@ -164,14 +160,6 @@ namespace Teleopti.Ccc.WinCode.Common
 			get { return _ruleSetBagCollection; }
 		}
 
-		/// <summary>
-		/// Removes the group page.
-		/// </summary>
-		/// <param name="groupPage">The group page.</param>
-		/// <remarks>
-		/// Created by: Muhamad Risath
-		/// Created date: 2008-07-10
-		/// </remarks>
 		public IEnumerable<IRootChangeInfo> RemoveGroupPage(IGroupPage groupPage)
 		{
 			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -223,10 +211,6 @@ namespace Teleopti.Ccc.WinCode.Common
 			}
 		}
 
-		/// <summary>
-		/// Adds the or update group page.
-		/// </summary>
-		/// <param name="groupPage">The group page.</param>
 		public IEnumerable<IRootChangeInfo> AddOrUpdateGroupPage(IGroupPage groupPage)
 		{
 			if (groupPage == null) return null;
@@ -244,9 +228,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			return new GroupingsCreator(this);
 		}
 
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
+
 		public void Dispose()
 		{
 			Dispose(true);
@@ -267,6 +249,34 @@ namespace Teleopti.Ccc.WinCode.Common
 					_personCollection.Clear();
 					_personCollection = null;
 				}
+				if (_partTimePercentageCollection != null)
+				{
+					_partTimePercentageCollection.Clear();
+					_partTimePercentageCollection = null;
+				}
+				if (_contractCollection != null)
+				{
+					_contractCollection.Clear();
+					_contractCollection = null;
+				}
+				if (_contractScheduleCollection != null)
+				{
+					_contractScheduleCollection.Clear();
+					_contractScheduleCollection = null;
+				}
+				if (_ruleSetBagCollection != null)
+				{
+					_ruleSetBagCollection.Clear();
+					_ruleSetBagCollection = null;
+				}
+				if (_skillCollection != null)
+				{
+					_skillCollection.Clear();
+					_skillCollection = null;
+				}
+				_repositoryFactory = null;
+				_unitOfWorkFactory = null;
+
 			}
 		}
 	}

@@ -25,13 +25,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
-	/// <summary>
-	/// Schedule period Gird view for presenting schedule periods.
-	/// </summary>
-	/// <remarks>
-	/// Created By: kosalanp
-	/// Created Date: 07-05-2008
-	/// </remarks>
 	public class UpdateClosePreviousEventArgs : EventArgs
 	{
 		public string ProgressStateText { get; set; }
@@ -44,7 +37,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private Rectangle rect;
 
-		private readonly IList<ISchedulePeriod> _selectedSchedulePeriodCollection = new List<ISchedulePeriod>();
+		private IList<ISchedulePeriod> _selectedSchedulePeriodCollection = new List<ISchedulePeriod>();
 
 		private ToolStripMenuItem _addNewSchedulePeriodMenuItem;
 		private ToolStripMenuItem _deleteSchedulePeriodMenuItem;
@@ -52,7 +45,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private ToolStripMenuItem _copySpecialSchedulePeriodMenuItem;
 		private IShiftCategoryLimitationView _shiftCategoryLimitationView;
 
-		#region Parent Columns
 
 		private ColumnBase<SchedulePeriodModel> _fullNameColumn;
 		private ColumnBase<SchedulePeriodModel> _startDateColumn;
@@ -75,10 +67,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private readonly List<ColumnBase<SchedulePeriodModel>> _gridColumns = new
 			List<ColumnBase<SchedulePeriodModel>>();
 
-		#endregion
-
-		#region Child Columns
-
 		private ColumnBase<SchedulePeriodChildModel> _childLineColumn;
 		private ColumnBase<SchedulePeriodChildModel> _childGridStartDateColumn;
 		private ColumnBase<SchedulePeriodChildModel> _childGridNumberColumn;
@@ -97,15 +85,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private readonly IList<IColumn<SchedulePeriodChildModel>> _childGridColumns = new
 			List<IColumn<SchedulePeriodChildModel>>();
 
-		#endregion
 
-		/// <summary>
-		///Gets the view type of the grid view.
-		/// </summary>
-		/// <remarks>
-		/// Created By: kosalanp
-		/// Created Date: 07-05-2008
-		/// </remarks>
 		internal override ViewType Type
 		{
 			get { return ViewType.SchedulePeriodView; }
@@ -826,24 +806,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		/// <summary>
-		/// Adds the schedule period.
-		/// </summary>
-		/// <param name="rowIndex">Index of the row.</param>
-		/// <remarks>
-		/// Created by: Dinesh Ranasinghe
-		/// Created date: 2008-07-18
-		/// </remarks>
 		private void AddSchedulePeriod(int rowIndex)
 		{
 			if (rowIndex == 0)
 				return;
 
-			// Set out of focus form current cell.This helps  to fire save cell info in child grid.
-			//SetOutOfFocusFromCurrentCell();
-
 			FilteredPeopleHolder.AddSchedulePeriod(rowIndex - 1);
-
 
 			GridControl grid =
 				FilteredPeopleHolder.SchedulePeriodGridViewCollection[rowIndex - 1].
@@ -1755,7 +1723,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			if (_copySpecialSchedulePeriodMenuItem != null)
 				_copySpecialSchedulePeriodMenuItem.Dispose();
-
+			_selectedSchedulePeriodCollection = null;
+			_shiftCategoryLimitationView = null;
 			base.Dispose(disposing);
 		}
 	}

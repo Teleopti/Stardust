@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
     {
     }
 
-    public class LoadOrganizationCommand : ILoadOrganizationCommand
+    public class LoadOrganizationCommand : ILoadOrganizationCommand, IDisposable
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
-        private readonly IPersonSelectorView _view;
-        private readonly ICommonNameDescriptionSetting _commonAgentNameSettings;
-        private readonly IApplicationFunction _applicationFunction;
+        private  IUnitOfWorkFactory _unitOfWorkFactory;
+        private  IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
+        private  IPersonSelectorView _view;
+        private  ICommonNameDescriptionSetting _commonAgentNameSettings;
+        private  IApplicationFunction _applicationFunction;
         private readonly bool _showPersons;
         private readonly bool _loadUsers;
 
@@ -178,6 +178,15 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
         {
             get { return "Organization"; }
         }
+
+	    public void Dispose()
+	    {
+		    _view = null;
+			_unitOfWorkFactory = null;
+			_personSelectorReadOnlyRepository = null;
+			_commonAgentNameSettings = null;
+			_applicationFunction = null;
+		}
     }
 
 }

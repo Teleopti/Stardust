@@ -1,4 +1,7 @@
-﻿namespace Teleopti.Ccc.Win.Grouping
+﻿using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.WinCode.Grouping.Commands;
+
+namespace Teleopti.Ccc.Win.Grouping
 {
     partial class PersonSelectorView
     {
@@ -13,15 +16,36 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-			_container = null;
+				_container = null;
+	        if (_groupPageHelper != null)
+	        {
+		        _groupPageHelper.Dispose();
+	        }
+	        _groupPageHelper = null;
+	        _eventAggregator = null;
+	        _globalEventAggregator = null;
+			foreach (TabPageAdv tabPage in tabControlAdv.TabPages)
+			{
+				tabPage.Tag = null;
+			}
+			this.tabControlAdv.SelectedIndexChanged -= new System.EventHandler(this.tabControlAdvSelectedIndexChanged);
+			this.tabControlAdv.KeyDown -= new System.Windows.Forms.KeyEventHandler(this.tabControlAdvKeyDown);
+			this.tabControlAdv.KeyPress -= new System.Windows.Forms.KeyPressEventHandler(this.tabControlAdvKeyPressed);
+			tabControlAdv.TabPages.Clear();
+			tabControlAdv = null;
+			treeViewAdvMainTabTree.AfterCheck -= treeViewAdvMainTabTreeAfterCheck;
+			this.treeViewAdvMainTabTree.AfterSelect -= new System.EventHandler(this.treeViewAdvMainTabTreeAfterSelect);
+			treeViewAdvMainTabTree.Nodes.Clear();
+			treeViewAdvMainTabTree = null;
+			xdtpDate = null;
+			DoFilter = null;
 
-            if (disposing && (components != null))
+			if (disposing && (components != null))
             {
                 components.Dispose();
             }
-
-	        
-            base.Dispose(disposing);
+			
+				base.Dispose(disposing);
         }
 
         #region Component Designer generated code
@@ -116,11 +140,11 @@
 			this.treeViewAdvMainTabTree.ToolTipControl.Size = new System.Drawing.Size(41, 15);
 			this.treeViewAdvMainTabTree.ToolTipControl.TabIndex = 1;
 			this.treeViewAdvMainTabTree.ToolTipControl.Text = "toolTip";
-			this.treeViewAdvMainTabTree.NodeBackgroundPaint += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvPaintBackgroundEventHandler(this.treeViewAdvMainTabTreeNodeBackgroundPaint);
+			//this.treeViewAdvMainTabTree.NodeBackgroundPaint += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvPaintBackgroundEventHandler(this.treeViewAdvMainTabTreeNodeBackgroundPaint);
 			this.treeViewAdvMainTabTree.AfterSelect += new System.EventHandler(this.treeViewAdvMainTabTreeAfterSelect);
-			this.treeViewAdvMainTabTree.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdvMainTabTreeAfterCheck);
-			this.treeViewAdvMainTabTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewAdvMainTabTreeKeyDown);
-			this.treeViewAdvMainTabTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.openModule);
+			//this.treeViewAdvMainTabTree.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdvMainTabTreeAfterCheck);
+			//this.treeViewAdvMainTabTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewAdvMainTabTreeKeyDown);
+			//this.treeViewAdvMainTabTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.openModule);
 			// 
 			// contextMenuStrip
 			// 

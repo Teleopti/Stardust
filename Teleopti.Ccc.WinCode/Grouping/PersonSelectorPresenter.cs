@@ -420,7 +420,13 @@ namespace Teleopti.Ccc.WinCode.Grouping
 				_eventAggregator.GetEvent<RefreshGroupPageClicked>().Unsubscribe(refreshGroupPage);
 				_eventAggregator.GetEvent<GroupPageNodeCheckedChange>().Unsubscribe(nodeCheckChanged);
 
-				_personSelectorView = null;
+				if (_personSelectorView != null)
+				{
+					_personSelectorView.Dispose();
+					_personSelectorView = null;
+				}
+				if (_commandProvider != null)
+					_commandProvider.Dispose();
 				_commandProvider = null;
 				_unitOfWorkFactory = null;
 				_personSelectorReadOnlyRepository = null;

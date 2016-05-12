@@ -30,13 +30,48 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		protected override void Dispose(bool disposing)
 		{
-			base.Dispose(disposing);
 			if (disposing)
 			{
 				if (_addNewPersonMenuItem != null) _addNewPersonMenuItem.Dispose();
 				if (_addNewPersonFromClipboardMenuItem != null) _addNewPersonFromClipboardMenuItem.Dispose();
 				if (_deleteSelectedPeopleMenuItem != null) _deleteSelectedPeopleMenuItem.Dispose();
+				_currentSelectedPersons = null;
 			}
+			_workflowControlSetColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_firstDayOfWeekColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_terminationColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_languageColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_uiCultureColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_timeZoneColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_identityUserColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_applicationUserColumn.CellDisplayChanged -= applicationUsercolumnCellDisplayChanged;
+			_applicationPasswordColumn.CellDisplayChanged -= applicationPasswordColumnCellDisplayChanged;
+			_roleColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_firstNameColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_lastNameColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_emailColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_employeeColumn.CellDisplayChanged -= columnCellDisplayChanged;
+			_noteColumn.CellDisplayChanged -= columnCellDisplayChanged;
+
+			_workflowControlSetColumn = null;
+			_firstDayOfWeekColumn = null;
+			_terminationColumn = null;
+			_languageColumn = null;
+			_uiCultureColumn = null;
+			_timeZoneColumn = null;
+			_identityUserColumn = null;
+			_applicationUserColumn = null;
+			_applicationPasswordColumn = null;
+			_roleColumn = null;
+			_firstNameColumn = null;
+			_lastNameColumn = null;
+			_emailColumn = null;
+			_employeeColumn = null;
+			_noteColumn = null;
+
+			_gridColumns.Clear();
+
+			base.Dispose(disposing);
 		}
 
 		private readonly List<ColumnBase<PersonGeneralModel>> _gridColumns = new List<ColumnBase<PersonGeneralModel>>();

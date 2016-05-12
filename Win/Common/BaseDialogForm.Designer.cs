@@ -15,7 +15,9 @@
         {
             if (disposing && (components != null))
             {
-                components.Dispose();
+	            _manualHelpContextList = null;
+
+					 components.Dispose();
             }
             base.Dispose(disposing);
         }

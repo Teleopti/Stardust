@@ -78,6 +78,45 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private ColumnBase<PersonPeriodChildModel> _childLineColumn;
 		private ColumnBase<PersonPeriodChildModel> _childRowHeaderColumn;
 
+		public PeoplePeriodGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder) :
+			base(grid, filteredPeopleHolder)
+		{
+			initCellModels(grid);
+			Grid.HorizontalScroll += gridHorizontalScroll;
+			_selectedPersonPeriodCollection.Clear();
+		}
+
+		protected override void Dispose(bool disposing)
+		{
+			Grid.HorizontalScroll -= gridHorizontalScroll;
+			_currentSelectedPersonPeriods = null;
+			_addNewPersonPeriodMenuItem.Click -= AddNewGridRow;
+			_addNewPersonPeriodMenuItem = null;
+			_deletePersonPeriodMenuItem.Click -= DeleteSelectedGridRows;
+			_deletePersonPeriodMenuItem = null;
+			_copySpecialPersonPeriodMenuItem.Click -= CopySpecial;
+			_copySpecialPersonPeriodMenuItem = null;
+			_pasteSpecialPersonPeriodMenuItem.Click -= PasteSpecial;
+			_pasteSpecialPersonPeriodMenuItem = null;
+
+			if (GridCreator != null)
+			{
+				GridCreator.DropDownGridQueryCellInfo -= ChildGridQueryCellInfo;
+				GridCreator.DropDownGridQueryRowCount -= ChildGridQueryRowCount;
+				GridCreator.DropDownGridQueryColCount -= ChildGridQueryColCount;
+				GridCreator.DropDownGridQueryRowHeight -= ChildGridQueryRowHeight;
+				GridCreator.DropDownGridQueryColWidth -= ChildGridQueryColWidth;
+				GridCreator.DropDownGridQuerySaveCellInfo -= ChildGridQuerySaveCellInfo;
+				GridCreator.DropDownGridSelectionChanged -= ChildGridSelectionChanged;
+				GridCreator.DropDownGridClipboardCanCopy -= ChildGridClipboardCanCopy;
+				GridCreator.DropDownGridClipboardPaste -= ChildGridClipboardPaste;
+				GridCreator.Dispose();
+				GridCreator = null;
+			}
+			
+			base.Dispose(disposing);
+		}
+
 		internal override ViewType Type
 		{
 			get { return ViewType.PeoplePeriodView; }
@@ -603,12 +642,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			setDataSource(e, FilteredPeopleHolder.RuleSetBagCollection);
 		}
 
-		public PeoplePeriodGridView(GridControl grid, FilteredPeopleHolder filteredPeopleHolder) :
-			base(grid, filteredPeopleHolder)
-		{
-			initCellModels(grid);
-			Grid.HorizontalScroll += gridHorizontalScroll;
-		}
+		
 
 		void gridHorizontalScroll(object sender, ScrollEventArgs e)
 		{

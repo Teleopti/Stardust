@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using System.ComponentModel;
 using Syncfusion.Windows.Forms.Tools;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -68,11 +67,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		public void BuildGridView(ViewType type)
 		{
-			var handlerChanging = GridViewChanging;
-			if (handlerChanging != null)
-			{
-				handlerChanging(_view, EventArgs.Empty);
-			}
+			GridViewChanging?.Invoke(_view, EventArgs.Empty);
 
 			// Sets the current view
 			_currentView = type;
@@ -86,11 +81,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			_view.Grid.Properties.BackgroundColor = ColorHelper.GridControlGridExteriorColor();
 
-			var handlerChanged = GridViewChanged;
-			if (handlerChanged != null)
-			{
-				handlerChanged(_view, EventArgs.Empty);
-			}
+			GridViewChanged?.Invoke(_view, EventArgs.Empty);
 
 			if (!IsCached)
 			{
@@ -172,20 +163,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_viewCache.Add(type, view);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		private GridViewBase _view;
 
 		private readonly bool _readOnly;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <remarks>
-		/// Created By: kosalanp
-		/// Created Date: 07-05-2008
-		/// </remarks>
 		public GridViewBase View
 		{
 			get
@@ -201,16 +182,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 					_filteredPeopleHolder.Dispose();
 					_filteredPeopleHolder = null;
 				}
-				if (_view != null)
-				{
-					_view.Dispose();
-					_view = null;
-				}
+				
 				if (_viewCache != null)
 				{
+					foreach (var gridViewBase in _viewCache.Values)
+					{
+						gridViewBase.Dispose();
+					}
 					_viewCache.Clear();
 					_viewCache = null;
 				}
+				_view = null;
+				
 				_toggleManager = null;
 			}
 		}

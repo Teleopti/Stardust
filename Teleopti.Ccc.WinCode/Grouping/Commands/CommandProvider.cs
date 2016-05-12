@@ -6,8 +6,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Grouping.Commands
 {
-    public interface ICommandProvider
-    {
+	public interface ICommandProvider:  IDisposable
+	{
         ILoadOrganizationCommand GetLoadOrganizationCommand(IApplicationFunction applicationFunction, bool showPersons, bool loadUsers);
         ILoadBuiltInTabsCommand GetLoadBuiltInTabsCommand(PersonSelectorField loadType, IPersonSelectorView personSelectorView, string rootNodeName, IApplicationFunction applicationFunction);
         ILoadUserDefinedTabsCommand GetLoadUserDefinedTabsCommand(IPersonSelectorView personSelectorView, Guid value, IApplicationFunction applicationFunction);
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
-	    private readonly IPersonSelectorView _view;
+	    private IPersonSelectorView _view;
 	    private readonly Lazy<CommonNameDescriptionSetting> _commonAgentNameSettings;
 
         public CommandProvider(IUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, IGlobalSettingDataRepository globalSettingDataRepository, IPersonSelectorView view)
@@ -49,5 +49,10 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
         {
             return new LoadUserDefinedTabsCommand(_unitOfWorkFactory, _personSelectorReadOnlyRepository, personSelectorView, value, _commonAgentNameSettings.Value, applicationFunction);
         }
+
+	    public void Dispose()
+	    {
+		    _view = null;
+	    }
     }
 }

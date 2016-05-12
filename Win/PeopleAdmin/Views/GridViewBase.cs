@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			get { return PeopleAdminHelper.ConvertClipboardToClipHandler(); }
 		}
 
-		private readonly SimpleTextPasteAction _gridPasteAction = new SimpleTextPasteAction();
+		private SimpleTextPasteAction _gridPasteAction = new SimpleTextPasteAction();
 
 		internal SimpleTextPasteAction GridPasteAction
 		{
@@ -345,10 +345,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		protected virtual void Dispose(bool disposing)
 		{
+			Grid.CurrentCellShowingDropDown -= gridCurrentCellShowingDropDown;
 			Grid.Dispose();
 			Grid = null;
 			CurrentGrid = null;
 			_filteredPeopleHolder = null;
+			_gridPasteAction = null;
 		}
 
 		internal virtual void DisposeChildGrids()
