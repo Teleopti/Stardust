@@ -66,39 +66,6 @@ Scenario: Default activity start time range should be 08:00-09:00 when agent's s
 	And I open 'AddActivity' panel
 	Then I should see the add activity time starts '08:00' and ends '09:00'
 
-@ignore
-@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
-Scenario: Default activity start time should be next quarter time when selected date is today
-	Given 'John Smith' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| StartTime      | 2016-10-10 09:00 |
-	| EndTime        | 2016-10-10 17:00 |
-	| Lunch Activity | Lunch            |
-	| Lunch start time | 2016-10-10 12:00 |
-	| Lunch end time   | 2016-10-10 13:00 |
-	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected agent 'John Smith'
-	And I open 'AddActivity' panel
-	Then I should see the add activity time starts '12:15' and ends '13:15'
-
-@ignore
-@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
-Scenario: Default activity start time should be the latest schedule start time of selected agents when selected date is not today
-	Given 'John Smith' has a shift with
-	| Field            | Value            |
-	| Shift category   | Day              |
-	| Activity         | Phone            |
-	| StartTime        | 2016-10-10 09:00 |
-	| EndTime          | 2016-10-10 17:00 |
-	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected activity 'Phone'
-	And I open 'AddActivity' panel
-	Then I should see the add activity time starts '12:15' and ends '13:15'
-
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should see disabled remove activity button when no activity is selected
 	Given 'John Smith' has a shift with
