@@ -1,8 +1,5 @@
-﻿using System;
-using System.Linq;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.Aop.Core;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Logon.Aspects;
@@ -12,7 +9,6 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy;
@@ -21,7 +17,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -84,7 +79,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CurrentTeleoptiPrincipal>().As<ICurrentTeleoptiPrincipal>().SingleInstance();
 			builder.RegisterType<PrincipalAuthorization>().As<IAuthorization>().SingleInstance();
-			builder.RegisterType<CurrentAuthorization>().As<ICurrentAuthorization>().SingleInstance();
+			builder.RegisterType<CurrentAuthorization>()
+				.As<ICurrentAuthorization>()
+				.As<IAuthorizationScope>()
+				.SingleInstance();
 			builder.RegisterType<UserCulture>().As<IUserCulture>().SingleInstance();
 			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
 			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();
@@ -97,67 +95,4 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.SingleInstance();
 		}
 	}
-
-	public class ImpersonateSystemAttribute : AspectAttribute
-	{
-		public ImpersonateSystemAttribute() : base(typeof(ImpersonateSystemAspect))
-		{
-		}
-	}
-
-	public class ImpersonateSystemAspect : IAspect
-	{
-		private readonly TenantFromArguments _tenant;
-		private readonly IDataSourceScope _dataSource;
-		private readonly IBusinessUnitRepository _businessUnits;
-		private readonly IPersonRepository _persons;
-		private readonly WithUnitOfWork _withUnitOfWork;
-		private readonly IBusinessUnitScope _businessUnit;
-		private readonly IUpdatedByScope _updatedBy;
-
-		[ThreadStatic]
-		private static IDisposable _tenantScope;
-
-		public ImpersonateSystemAspect(
-			TenantFromArguments tenant,
-			IDataSourceScope dataSource,
-			IBusinessUnitRepository businessUnits, 
-			IPersonRepository persons,
-			WithUnitOfWork withUnitOfWork,
-			IBusinessUnitScope businessUnit,
-			IUpdatedByScope updatedBy)
-		{
-			_tenant = tenant;
-			_dataSource = dataSource;
-			_businessUnits = businessUnits;
-			_persons = persons;
-			_withUnitOfWork = withUnitOfWork;
-			_businessUnit = businessUnit;
-			_updatedBy = updatedBy;
-		}
-
-		public void OnBeforeInvocation(IInvocationInfo invocation)
-		{
-			var tenant = _tenant.Resolve(invocation.Arguments);
-			_tenantScope = _dataSource.OnThisThreadUse(tenant);
-			_withUnitOfWork.Do(uow =>
-			{
-				var businessUnitId = invocation.Arguments.Cast<ILogOnContext>().First().LogOnBusinessUnitId;
-				var businessUnit = _businessUnits.Load(businessUnitId);
-				_businessUnit.OnThisThreadUse(businessUnit);
-
-				var person = _persons.Load(SystemUser.Id);
-				_updatedBy.OnThisThreadUse(person);
-			});
-		}
-
-		public void OnAfterInvocation(Exception exception, IInvocationInfo invocation)
-		{
-			_updatedBy.OnThisThreadUse(null);
-			_businessUnit.OnThisThreadUse(null);
-			_tenantScope.Dispose();
-		}
-	}
-
-
 }
