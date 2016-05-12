@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class CascadingResourceCalculation
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private Func<ISchedulerStateHolder> _schedulerStateHolder;
+		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 
 		public CascadingResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper, Func<ISchedulerStateHolder> schedulerStateHolder)
 		{
@@ -25,24 +23,21 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			foreach (var person in persons)
 			{
-				var personPeriod = person.Period(date);
-				var orgPersonSkills = personPeriod.PersonSkillCollection.Where(x => x.Active);
-				var prioPersonSkill = orgPersonSkills.OrderBy(x => x.Skill.CascadingIndex)
-					.FirstOrDefault(s => s.Skill.CascadingIndex != null);
+				var orderedCascadingSkills = person.Period(date).PersonSkillCollection
+					.Where(x => x.Skill.IsCascading() && x.Active).OrderBy(x => x.Skill.CascadingIndex).ToArray();
+				if(!orderedCascadingSkills.Any())
+					continue;
 
-				if (prioPersonSkill != null)
+				foreach (var cascadingSkill in orderedCascadingSkills)
 				{
-					var nonCascadingPersonSkills = orgPersonSkills.Where(x => x.Skill.CascadingIndex == null);
-					person.ResetPersonSkills(personPeriod);
-					person.AddSkill(prioPersonSkill.Skill, date);
-
-					foreach (var nonCasdingSkill in nonCascadingPersonSkills)
-					{
-						person.AddSkill(nonCasdingSkill.Skill, date);
-					}
+					((IPersonSkillModify)cascadingSkill).Active = false;
+				}
+				foreach (var activity in orderedCascadingSkills.Select(personSkill => personSkill.Skill.Activity).Distinct())
+				{
+					var prioritizedCascadingSkillForActivity = (IPersonSkillModify)orderedCascadingSkills.First(s => s.Skill.Activity.Equals(activity));
+					prioritizedCascadingSkillForActivity.Active = true;
 				}
 			}
-
 			/////
 
 			_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //check this later
