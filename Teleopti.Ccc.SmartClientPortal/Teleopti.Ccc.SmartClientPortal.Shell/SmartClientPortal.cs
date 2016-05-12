@@ -110,18 +110,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void callScriptToHideNavigation()
 		{
-			JSObject window = wfmWebView.GetDOMWindow();
-			var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
-			if (iAmCalledFromFatClient == null)
-			{
-				setWfmWebUrl(_permissionModule);
-				return;
-			}
 			try
 			{
-				iAmCalledFromFatClient.Invoke(window, new object[] { });
+				JSObject window = wfmWebView.GetDOMWindow();
+				var iAmCalledFromFatClient = (JSFunction) wfmWebView.EvalScript("iAmCalledFromFatClient");
+				if (iAmCalledFromFatClient == null)
+				{
+					setWfmWebUrl(_permissionModule);
+					return;
+				}
+
+				iAmCalledFromFatClient.Invoke(window, new object[] {});
 			}
-			catch (JSException)
+			catch (JSInvokeException)
 			{
 				setWfmWebUrl(_permissionModule);
 			}
