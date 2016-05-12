@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -76,6 +77,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 				var skills = _skillRepository.LoadAll().OrderBy(x => x.CascadingIndex).ThenBy(x => x.Name);
 				foreach (var skill in skills)
 				{
+					if(((Skill)skill).IsDeleted)
+						continue;
+
 					if (skill.IsCascading())
 					{
 						_internalModel.CascadingSkills.Add(skill);

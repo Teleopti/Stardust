@@ -266,5 +266,16 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			target.NonCascadingSkills.Should().Have.SameSequenceAs(nonCascading1, nonCascading2);
 			target.CascadingSkills.Should().Have.SameSequenceAs(cascading1, cascading2);
 		}
+
+		[Test]
+		public void ShouldNotLoadDeletedSkills()
+		{
+			var skill = new Skill();
+			skill.SetDeleted();
+			SkillRepository.Has(skill);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.NonCascadingSkills.Should().Be.Empty();	
+		}
 	}
 }
