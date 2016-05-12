@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,11 +18,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = unitOfWork;
 		}
 
-		public IEnumerable<ProjectionVersion> Upsert(Guid personId, IEnumerable<DateOnly> dates)
+		public IEnumerable<ProjectionVersion> LockAndGetVersions(Guid personId, DateOnly from, DateOnly to)
 		{
-			var dateString = string.Join(" UNION ", dates.Select(x=> $"SELECT '{x.Date}'"));
+			var dates = from.DateRange(to);
+			var dateString = string.Join(" UNION ", dates.Select(x => $"SELECT '{x.Date}'"));
 			_unitOfWork.Session().CreateSQLQuery(
-				$@"MERGE INTO [dbo].ProjectionVersion AS T  
+				$@"MERGE INTO [dbo].ProjectionVersion WITH (XLOCK) AS T  
 						USING (
 						{dateString}
 					) AS S ( 
@@ -48,13 +50,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetGuid("Person", personId)
 				.ExecuteUpdate();
 
-			var start = dates.Min();
-			var end = dates.Max();
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(
-				$@"SELECT DISTINCT Date, Version 
-					FROM [dbo].ProjectionVersion 
-					WHERE Date BETWEEN '{start}' AND '{end}'
+				$@"SELECT Date, Version 
+					FROM [dbo].ProjectionVersion WITH (NOLOCK) 
+					WHERE Date BETWEEN '{from}' AND '{to}'
 					AND Person = '{personId}'")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalVersion)))
 				.List<ProjectionVersion>();

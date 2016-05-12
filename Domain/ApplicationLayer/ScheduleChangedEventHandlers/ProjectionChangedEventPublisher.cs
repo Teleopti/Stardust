@@ -104,8 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			// gets the date period the same way as FindSchedulesForPersonOnlyInGivenPeriod, hence duplication
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()); 
-			var dates = dateOnlyPeriod.StartDate.DateRange(dateOnlyPeriod.EndDate);
-			var versions = _projectionVersionPersister.Upsert(@event.PersonId, dates);
+			var versions = _projectionVersionPersister.LockAndGetVersions(@event.PersonId, dateOnlyPeriod.StartDate, dateOnlyPeriod.EndDate);
 			
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false),

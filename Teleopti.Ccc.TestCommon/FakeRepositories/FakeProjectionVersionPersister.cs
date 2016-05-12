@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Util;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
@@ -12,11 +13,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		private class dataWithPerson : ProjectionVersion
 		{
-			public Guid PersonId{get; set; }
+			public Guid PersonId { get; set; }
 		}
 
-		public IEnumerable<ProjectionVersion> Upsert(Guid personId, IEnumerable<DateOnly> dates)
+		public IEnumerable<ProjectionVersion> LockAndGetVersions(Guid personId, DateOnly from, DateOnly to)
 		{
+			var dates = from.DateRange(to);
 			dates.ForEach(x =>
 			{
 				var existing = _projectionVersions.SingleOrDefault(v => v.PersonId == personId && v.Date.Equals(x));
