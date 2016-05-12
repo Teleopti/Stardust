@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SwapRawService : ISwapRawService
 	{
-        private readonly ICurrentAuthorization _authorizationService;
+        private readonly IAuthorization _authorizationService;
 
-        public SwapRawService(ICurrentAuthorization authorizationService)
+        public SwapRawService(IAuthorization authorizationService)
         {
             _authorizationService = authorizationService;
         }
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var tempDayOne = ExtractedSchedule.CreateScheduleDay(selectionOne[i].Owner, selectionOne[i].Person, selectionOne[i].Period.ToDateOnlyPeriod(selectionOne[i].TimeZone).StartDate);
 				var tempDayTwo = ExtractedSchedule.CreateScheduleDay(selectionTwo[i].Owner, selectionTwo[i].Person, selectionTwo[i].Period.ToDateOnlyPeriod(selectionTwo[i].TimeZone).StartDate);
 
-                if (!_authorizationService.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, tempDayOne.DateOnlyAsPeriod.DateOnly, tempDayOne.Person) || !_authorizationService.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, tempDayTwo.DateOnlyAsPeriod.DateOnly, tempDayTwo.Person))
+                if (!_authorizationService.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, tempDayOne.DateOnlyAsPeriod.DateOnly, tempDayOne.Person) || !_authorizationService.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, tempDayTwo.DateOnlyAsPeriod.DateOnly, tempDayTwo.Person))
                     throw new PermissionException("No permission to change the person assignment");
 
 				IList<DateOnly> lockedDates;

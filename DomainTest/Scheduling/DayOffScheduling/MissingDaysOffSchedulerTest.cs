@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             _matrixDataWithToFewDaysOff = _mocks.StrictMock<IMatrixDataWithToFewDaysOff>();
 			_authorization = _mocks.StrictMock<IAuthorization>();
             _target = new MissingDaysOffScheduler(_bestSpotForAddingDayOffFinder, _matrixDataListInSteadyState,
-                                                  _matrixDataListCreator, _matrixDataWithToFewDaysOff,new ThisAuthorization(_authorization));
+                                                  _matrixDataListCreator, _matrixDataWithToFewDaysOff,_authorization);
             _matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
             _matrixList = new List<IScheduleMatrixPro> { _matrix1 };
             _schedulingOptions = new SchedulingOptions();

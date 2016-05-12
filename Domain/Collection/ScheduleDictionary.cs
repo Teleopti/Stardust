@@ -244,10 +244,11 @@ namespace Teleopti.Ccc.Domain.Collection
 
             using (PerformanceOutput.ForOperation("Modifying " + scheduleParts.Count() + " schedule(s)"))
             {
-                if (isScenarioRestrictedAndNotPermitted())
+                var authorization = PrincipalAuthorization.Current();
+                if (isScenarioRestrictedAndNotPermitted(authorization))
                     return lstErrors;
 
-                if (treatScheduleAsWriteProtected(scheduleParts))
+                if (treatScheduleAsWriteProtected(scheduleParts, authorization))
                     return lstErrors;
 
                 var rangeClones = new Dictionary<IPerson, IScheduleRange>();
@@ -323,9 +324,9 @@ namespace Teleopti.Ccc.Domain.Collection
             return _undoRedo == null || !_undoRedo.InUndoRedo;
         }
 
-        private static bool treatScheduleAsWriteProtected(IEnumerable<IScheduleDay> scheduleParts)
+        private static bool treatScheduleAsWriteProtected(IEnumerable<IScheduleDay> scheduleParts, IAuthorization authorization)
         {
-            if (notPermittedToModifyWriteProtectedSchedule())
+            if (notPermittedToModifyWriteProtectedSchedule(authorization))
             {
                 try
                 {
@@ -339,14 +340,14 @@ namespace Teleopti.Ccc.Domain.Collection
             return false;
         }
 
-        private static bool notPermittedToModifyWriteProtectedSchedule()
+        private static bool notPermittedToModifyWriteProtectedSchedule(IAuthorization authorization)
         {
-            return !PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+            return !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
         }
 
-        private bool isScenarioRestrictedAndNotPermitted()
+        private bool isScenarioRestrictedAndNotPermitted(IAuthorization authorization)
         {
-            return _scenario.Restricted && !PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
+            return _scenario.Restricted && !authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario);
         }
 
         private static void checkWriteProtection(IEnumerable<IScheduleDay> scheduleParts)

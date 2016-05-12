@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class ConfigurablePermissions: IAuthorization, ICurrentAuthorization
+	public class ConfigurablePermissions: IAuthorization
 	{
 		private readonly IList<string> _permittedFunctionPaths = new List<string>(); 
 
@@ -52,11 +52,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public void HasPermission(string functionPath)
 		{
 			_permittedFunctionPaths.Add(functionPath);
-		}
-
-		public IAuthorization Current()
-		{
-			return this;
 		}
 	}
 

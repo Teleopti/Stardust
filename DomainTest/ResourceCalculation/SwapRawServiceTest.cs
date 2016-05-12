@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_loggedOnPersonTimeZoneInfo = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			_mockRepository = new MockRepository();
 			_authorizationService = _mockRepository.StrictMock<IAuthorization>();
-			_swapRawService = new SwapRawService(new ThisAuthorization(_authorizationService));
+			_swapRawService = new SwapRawService(_authorizationService);
 			_scheduleDictionary = _mockRepository.StrictMock<IScheduleDictionary>();
 			_personOne = PersonFactory.CreatePerson(new Name("personOne", "GmtTimeZone"), TimeZoneInfoFactory.GmtTimeZoneInfo());
 			_personTwo = PersonFactory.CreatePerson(new Name("personTwo", "GmtTimeZone"), TimeZoneInfoFactory.GmtTimeZoneInfo());

@@ -8,22 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-
-	public class ThisAuthorization : ICurrentAuthorization
-	{
-		private readonly IAuthorization _authorization;
-
-		public ThisAuthorization(IAuthorization authorization)
-		{
-			_authorization = authorization;
-		}
-
-		public IAuthorization Current()
-		{
-			return _authorization;
-		}
-	}
-
 	public class PrincipalAuthorization : IAuthorization
     {
 		private readonly ICurrentTeleoptiPrincipal _teleoptiPrincipal;

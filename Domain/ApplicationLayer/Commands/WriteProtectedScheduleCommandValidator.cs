@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	public class WriteProtectedScheduleCommandValidator : IWriteProtectedScheduleCommandValidator
 	{
-		private readonly ICurrentAuthorization _authorization;
+		private readonly IAuthorization _authorization;
 		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserCulture _userCulture;
 
-		public WriteProtectedScheduleCommandValidator(ICurrentAuthorization authorization, ICommonAgentNameProvider commonAgentNameProvider, ILoggedOnUser loggedOnUser, IUserCulture userCulture)
+		public WriteProtectedScheduleCommandValidator(IAuthorization authorization, ICommonAgentNameProvider commonAgentNameProvider, ILoggedOnUser loggedOnUser, IUserCulture userCulture)
 		{
 			_authorization = authorization;
 			_commonAgentNameProvider = commonAgentNameProvider;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
 		{
-			return !_authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
+			return !_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
 				   && agent.PersonWriteProtection.IsWriteProtected(date);
 		}
 

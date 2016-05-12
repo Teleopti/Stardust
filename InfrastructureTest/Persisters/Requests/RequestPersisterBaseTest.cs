@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Requests
 														PersonRequestRepository,
 														this,
 														MockRepository.GenerateMock<IInitiatorIdentifier>(),
-														new ThisAuthorization(Authorization)
+														Authorization
 														);
 		}
 

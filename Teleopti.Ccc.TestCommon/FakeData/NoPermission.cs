@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class NoPermission : IAuthorization, ICurrentAuthorization
+	public class NoPermission : IAuthorization
 	{
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
 		{
@@ -45,10 +45,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return false;
 		}
 
-		public IAuthorization Current()
-		{
-			return this;
-		}
 	}
 
 }

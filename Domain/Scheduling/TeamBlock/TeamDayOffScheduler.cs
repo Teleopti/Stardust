@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
-		private readonly ICurrentAuthorization _authorization;
+		private readonly IAuthorization _authorization;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			 IMatrixDataListCreator matrixDataListCreator,
 			 Func<ISchedulingResultStateHolder> schedulingResultStateHolder,
 			IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification,
-			ICurrentAuthorization authorization)
+			IAuthorization authorization)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 
 							var personAssignment = bestScheduleDay.PersonAssignment();
-							if (!_authorization.Current().IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person)) continue;
+							if (!_authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person)) continue;
 
 							rollbackService.Modify(bestScheduleDay);
 							foundSpot = true;

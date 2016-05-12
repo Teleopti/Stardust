@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.MatrixLockers
 		{
 			_mocks = new MockRepository();
 			_authorization = _mocks.StrictMock<IAuthorization>();
-			_target = new MatrixNotPermittedLocker(new ThisAuthorization(_authorization));
+			_target = new MatrixNotPermittedLocker(_authorization);
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrixList = new List<IScheduleMatrixPro>{_matrix};
 			_person = PersonFactory.CreatePerson();

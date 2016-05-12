@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			_schedulePresenterBase = MockRepository.GenerateMock<ISchedulePresenterBase>();
 			_authorization = MockRepository.GenerateMock<IAuthorization>();
 			
-			_target = new AddAbsenceCommand(_schedulerStateHolder, _viewBase, _schedulePresenterBase, _selectedSchedules,new ThisAuthorization(_authorization));
+			_target = new AddAbsenceCommand(_schedulerStateHolder, _viewBase, _schedulePresenterBase, _selectedSchedules,_authorization);
 			_person = PersonFactory.CreatePerson("person");
 			_gridlockManager = new GridlockManager();
 			_scheduleRange = (IScheduleRange) MockRepository.GenerateMock(typeof (IScheduleRange), new[] {typeof (IValidateScheduleRange)});
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.WinCodeTest
 			var end = new DateTime(2012, 7, 16, 12, 0, 0, DateTimeKind.Utc);
 			var defaultPeriod = new DateTimePeriod(start, end);
 			var dialog = MockRepository.GenerateMock<IAddLayerViewModel<IAbsence>>();
-			_target = new AddAbsenceCommand(_schedulerStateHolder, viewBase, _schedulePresenterBase, _selectedSchedules, new ThisAuthorization(_authorization));
+			_target = new AddAbsenceCommand(_schedulerStateHolder, viewBase, _schedulePresenterBase, _selectedSchedules, _authorization);
 
 			viewBase.Stub(x => x.SelectedSchedules()).Return(_selectedSchedules);
 			viewBase.Stub(x => x.CreateAddAbsenceViewModel(null, null, TimeZoneInfoFactory.StockholmTimeZoneInfo()))
