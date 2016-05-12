@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -38,16 +37,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						{
 							StartDateTime = "2016-04-29 08:00".Utc(),
 							EndDateTime = "2016-04-29 17:00".Utc(),
-							Layers =
-								new Collection<ProjectionChangedEventLayer>
+							Layers = new[]
+							{
+								new ProjectionChangedEventLayer
 								{
-									new ProjectionChangedEventLayer
-									{
-										Name = "Phone",
-										StartDateTime = "2016-04-29 08:00".Utc(),
-										EndDateTime = "2016-04-29 17:00".Utc()
-									}
+									Name = "Phone",
+									StartDateTime = "2016-04-29 08:00".Utc(),
+									EndDateTime = "2016-04-29 17:00".Utc()
 								}
+							}
 						}
 					}
 				}

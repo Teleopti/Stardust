@@ -16,13 +16,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddProjectedLayer(ScheduleProjectionReadOnlyModel model)
+		public void AddActivity(ScheduleProjectionReadOnlyModel model)
 		{
 			_data.Add(model);
 		}
 
-		public void ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
+		public bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId, int version)
 		{
+			return true;
 		}
 		
 		public int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate)

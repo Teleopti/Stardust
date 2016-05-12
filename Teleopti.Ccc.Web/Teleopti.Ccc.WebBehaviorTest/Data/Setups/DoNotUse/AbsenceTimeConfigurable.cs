@@ -45,10 +45,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 				EndDateTime = period.EndDateTime,
 				Name = absence.Name,
 				ShortName = "xx",
-				DisplayColor = Color.Bisque.ToArgb(),
-				ScheduleLoadedTime = DateTime.UtcNow,
+				DisplayColor = Color.Bisque.ToArgb()
 			};
-			scheduleProjectionReadOnlyRepository.AddProjectedLayer(model);
+			scheduleProjectionReadOnlyRepository.AddActivity(model);
 		}
 	}
 }

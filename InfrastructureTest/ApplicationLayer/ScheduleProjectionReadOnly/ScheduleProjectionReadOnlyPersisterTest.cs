@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
@@ -13,7 +12,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 	public class ScheduleProjectionReadOnlyPersisterTest
 	{
 		public IScheduleProjectionReadOnlyPersister Persister;
-		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
 		public void ShouldAddLayer()
@@ -21,15 +19,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var scenario = Guid.NewGuid();
 			var person = Guid.NewGuid();
 
-			Persister.AddProjectedLayer(
+			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = "2016-04-29".Date(),
 					ScenarioId = scenario,
 					PersonId = person,
 					StartDateTime = "2016-04-29 8:00".Utc(),
-					EndDateTime = "2016-04-29 17:00".Utc(),
-					ScheduleLoadedTime = "2016-04-29 12:00".Utc()
+					EndDateTime = "2016-04-29 17:00".Utc()
 				});
 
 			Persister.ForPerson("2016-04-29".Date(), person, scenario).Should().Have.Count.EqualTo(1);
@@ -43,7 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var person = Guid.NewGuid();
 			var payloadId = Guid.NewGuid();
 
-			Persister.AddProjectedLayer(
+			Persister.AddActivity(
 				new ScheduleProjectionReadOnlyModel
 				{
 					BelongsToDate = "2016-04-29".Date(),
@@ -51,7 +48,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 					PersonId = person,
 					StartDateTime = "2016-04-29 8:00".Utc(),
 					EndDateTime = "2016-04-29 17:00".Utc(),
-					ScheduleLoadedTime = "2016-04-29 12:00".Utc(),
 					PayloadId = payloadId,
 					WorkTime = "4".Hours(),
 					ContractTime = "3".Hours(),

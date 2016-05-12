@@ -18,15 +18,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public string Name { get; set; }
 		public string ShortName { get; set; }
 		public int DisplayColor { get; set; }
-		public DateTime ScheduleLoadedTime { get; set; }
 	}
 	
 	public interface IScheduleProjectionReadOnlyPersister
 	{
 		bool IsInitialized();
 
-		void AddProjectedLayer(ScheduleProjectionReadOnlyModel model);
-		void ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp);
+		bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId, int version);
+		void AddActivity(ScheduleProjectionReadOnlyModel model);
 
 		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario);
 		int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);

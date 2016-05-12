@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -21,41 +22,39 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 	    }
 
 	    public ScheduleProjectionReadOnlyPersister(IUnitOfWorkFactory unitOfWorkFactory)
-		{
-			_currentUnitOfWork = new FromFactory(() =>unitOfWorkFactory);
-		}
+	    {
+		    _currentUnitOfWork = new FromFactory(() => unitOfWorkFactory);
+	    }
 
         public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period, IBudgetGroup budgetGroup,
                                                                       IScenario scenario)
         {
-            return _currentUnitOfWork.Session().CreateSQLQuery(
-                "exec ReadModel.LoadBudgetAllowanceReadModel @BudgetGroupId	= :budgetGroupId, @ScenarioId = :scenarioId, @DateFrom = :StartDate, @DateTo = :EndDate")
-											   .SetDateOnly("StartDate", period.StartDate)
-											   .SetDateOnly("EndDate", period.EndDate)
-                                               .SetGuid("budgetGroupId", budgetGroup.Id.GetValueOrDefault())
-                                               .SetGuid("scenarioId", scenario.Id.GetValueOrDefault())
-                                               .SetResultTransformer(Transformers.AliasToBean(typeof (PayloadWorkTime)))
-                                               .SetReadOnly(true)
-                                               .List<PayloadWorkTime>();
+	        return _currentUnitOfWork.Session().CreateSQLQuery(
+		        "exec ReadModel.LoadBudgetAllowanceReadModel @BudgetGroupId	= :budgetGroupId, @ScenarioId = :scenarioId, @DateFrom = :StartDate, @DateTo = :EndDate")
+		        .SetDateOnly("StartDate", period.StartDate)
+		        .SetDateOnly("EndDate", period.EndDate)
+		        .SetGuid("budgetGroupId", budgetGroup.Id.GetValueOrDefault())
+		        .SetGuid("scenarioId", scenario.Id.GetValueOrDefault())
+		        .SetResultTransformer(Transformers.AliasToBean(typeof (PayloadWorkTime)))
+		        .SetReadOnly(true)
+		        .List<PayloadWorkTime>();
         }
 		
-	    public void ClearDayForPerson(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
+	    public bool BeginAddingSchedule(DateOnly date, Guid scenarioId, Guid personId,  int version)
         {
-	        if (scheduleLoadedTimeStamp.Equals(DateTime.MinValue))
-		        scheduleLoadedTimeStamp = DateTime.UtcNow;
-			_currentUnitOfWork.Session().CreateSQLQuery(
-				"exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @ScheduleLoadedTime=:scheduleLoadedTime")
-                                        .SetGuid("person", personId)
-                                        .SetGuid("scenario", scenarioId)
-										.SetDateOnly("date", date)
-										.SetDateTime("scheduleLoadedTime", scheduleLoadedTimeStamp)
-										.UniqueResult<int>();
+
+		    return _currentUnitOfWork.Session().CreateSQLQuery(
+			    "exec ReadModel.DeleteScheduleProjectionReadOnly @PersonId=:person, @ScenarioId=:scenario, @BelongsToDate=:date, @Version=:version")
+			    .SetGuid("person", personId)
+			    .SetGuid("scenario", scenarioId)
+			    .SetDateOnly("date", date)
+				.SetInt32("version", version)
+			    .UniqueResult<bool>();
         }
 
-		public void AddProjectedLayer(ScheduleProjectionReadOnlyModel model)
+		public void AddActivity(ScheduleProjectionReadOnlyModel model)
 		{
-			if (model.ScheduleLoadedTime.Equals(DateTime.MinValue))
-				model.ScheduleLoadedTime = DateTime.UtcNow;
+			
 			_currentUnitOfWork.Session().CreateSQLQuery(
 				@"exec ReadModel.UpdateScheduleProjectionReadOnly 
 					@PersonId=:PersonId,
@@ -70,8 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 					@ShortName =:ShortName,
 					@DisplayColor =:DisplayColor,
 					@PayrollCode = '',
-					@InsertedOn =:InsertedOn,
-					@ScheduleLoadedTime =:ScheduleLoadedTime")
+					@InsertedOn =:InsertedOn")
 				.SetGuid("PersonId", model.PersonId)
 				.SetGuid("ScenarioId", model.ScenarioId)
 				.SetDateOnly("Date", model.BelongsToDate)
@@ -84,7 +82,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer.ScheduleProjectionReadOnl
 				.SetString("ShortName", model.ShortName)
 				.SetInt32("DisplayColor", model.DisplayColor)
 				.SetDateTime("InsertedOn", DateTime.UtcNow)
-				.SetDateTime("ScheduleLoadedTime", model.ScheduleLoadedTime)
 				.UniqueResult<int>();
 		}
 		

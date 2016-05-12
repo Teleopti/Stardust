@@ -25,17 +25,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private void handleProjectionChanged(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
+
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				var date = new DateOnly(scheduleDay.Date);
-				if (!@event.IsInitialLoad)
-					_scheduleProjectionReadOnlyPersister.ClearDayForPerson(date, @event.ScenarioId, @event.PersonId,
-						@event.ScheduleLoadTimestamp);
 
+				var add = @event.IsInitialLoad ||
+							 _scheduleProjectionReadOnlyPersister.BeginAddingSchedule(
+								 date,
+								 @event.ScenarioId,
+								 @event.PersonId,
+								 scheduleDay.Version);
+					
+				if (!add) continue;
 				if (scheduleDay.Shift == null) continue;
+
 				foreach (var layer in scheduleDay.Shift.Layers)
 				{
-					_scheduleProjectionReadOnlyPersister.AddProjectedLayer(
+					_scheduleProjectionReadOnlyPersister.AddActivity(
 						new ScheduleProjectionReadOnlyModel
 						{
 							PersonId = @event.PersonId,
@@ -48,8 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 							EndDateTime = layer.EndDateTime,
 							Name = layer.Name,
 							ShortName = layer.ShortName,
-							DisplayColor = layer.DisplayColor,
-							ScheduleLoadedTime = @event.ScheduleLoadTimestamp,
+							DisplayColor = layer.DisplayColor
 						});
 				}
 			}

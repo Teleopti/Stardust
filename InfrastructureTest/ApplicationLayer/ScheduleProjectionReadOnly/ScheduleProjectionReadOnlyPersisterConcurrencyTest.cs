@@ -37,20 +37,21 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var scenarioid = Guid.NewGuid();
 			var simulator = new RetryingQueueSimulator();
 			var timestamp = "2016-05-01 08:00".Utc();
-			
+			var version = 0;
+
 			dates.ForEach(d =>
 			{
-				Service.Update(d, scenarioid, personId, timestamp);
+				Service.Update(d, scenarioid, personId, timestamp, version);
 			});
 
 			dates.ForEach(d =>
 				20.Times(() =>
 				{
-					timestamp = timestamp.AddMinutes(1);
-					var ts = timestamp;
+					var ts = timestamp = timestamp.AddMinutes(1);
+					var v = version = version++;
 					simulator.ProcessAsync(() =>
 					{
-						Service.Update(d, scenarioid, personId, ts);
+						Service.Update(d, scenarioid, personId, ts, v);
 					});
 				})
 				);
@@ -72,15 +73,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			var scenarioid = Guid.NewGuid();
 			var simulator = new RetryingQueueSimulator();
 			var timestamp = "2016-05-01 08:00".Utc();
+			var version = 0;
 
 			dates.ForEach(d =>
 				20.Times(() =>
 				{
-					timestamp = timestamp.AddMinutes(1);
-					var ts = timestamp;
+					var ts = timestamp = timestamp.AddMinutes(1);
+					var v = version = version++;
 					simulator.ProcessAsync(() =>
 					{
-						Service.Update(d, scenarioid, personId, ts);
+						Service.Update(d, scenarioid, personId, ts, v);
 					});
 				})
 				);
@@ -102,17 +104,16 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 			}
 
 			[UnitOfWork]
-			public virtual void Update(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp)
+			public virtual void Update(DateOnly date, Guid scenarioId, Guid personId, DateTime scheduleLoadedTimeStamp, int version)
 			{
-				_persister.ClearDayForPerson(date, scenarioId, personId, scheduleLoadedTimeStamp);
+				_persister.BeginAddingSchedule(date, scenarioId, personId, version);
 				3.Times(() =>
 				{
-					_persister.AddProjectedLayer(new ScheduleProjectionReadOnlyModel
+					_persister.AddActivity(new ScheduleProjectionReadOnlyModel
 					{
 						PersonId = personId,
 						ScenarioId = scenarioId,
 						BelongsToDate = date,
-						ScheduleLoadedTime = scheduleLoadedTimeStamp,
 						StartDateTime = "2016-05-04 08:00".Utc(),
 						EndDateTime = "2016-05-04 08:00".Utc()
 					});
