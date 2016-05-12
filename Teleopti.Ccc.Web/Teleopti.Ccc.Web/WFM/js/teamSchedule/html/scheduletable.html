@@ -40,7 +40,7 @@
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
 							 ng-class="{overtime:projection.IsOvertime, personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime, 
 							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder}"
-							 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, vm.selectedDate)">
+							 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
 							<md-tooltip>{{projection.Description}}</md-tooltip>
 							<span class="hidden-for-test">{{projection.Description}}</span>
 						</div>

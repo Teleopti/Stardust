@@ -61,6 +61,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 								: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
 					};
 					_commandDispatcher.Execute(command);
+					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.Messages.AddRange(command.ErrorMessages);
+					}
 				}
 
 				if( actionResult.Messages.Any())

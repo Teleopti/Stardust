@@ -82,6 +82,14 @@
 
 		function addActivity() {
 			var trackId = guidgenerator.newGuid();
+
+			var commandInfo = {
+				success: 'SuccessfulMessageForAddingActivity',
+				warning: 'PartialSuccessMessageForAddingActivity'
+			};
+
+			var actionTargets = vm.selectedAgents.map(function(agent) { return { Name: agent.name, PersonId : agent.personId}; });
+
 			activityService.addActivity({
 				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
 				Date: vm.selectedDate(),
@@ -96,21 +104,7 @@
 						personIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
 					});
 				}
-				var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().checkedPersonCount;
-				var fail = response.data.length;
-				if (fail === 0) {
-					NotificationSvc.notify('success', 'SuccessfulMessageForAddingActivity');
-				} else {
-					var description = NotificationSvc.notify('warning', 'PartialSuccessMessageForAddingActivity', [total, total - fail, fail]);
-				}
-			}, function (response) {
-				if (vm.actionsAfterActivityApply) {
-					vm.actionsAfterActivityApply({
-						trackId: trackId,
-						personIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
-					});
-				}
-				NotificationSvc.notify('error', 'FailedMessageForAddingActivity');
+				NotificationSvc.reportActionResult(commandInfo, actionTargets, response.data);
 			});
 		}
 

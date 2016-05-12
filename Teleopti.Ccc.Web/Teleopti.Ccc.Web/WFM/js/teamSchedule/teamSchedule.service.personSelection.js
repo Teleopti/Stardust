@@ -95,9 +95,9 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			});
 		};
 
-		svc.toggleAllPersonProjections = function (personSchedule) {
+		svc.toggleAllPersonProjections = function (personSchedule, viewDate) {
 			angular.forEach(personSchedule.Shifts, function (shift) {
-				if (shift.Date.isSame(personSchedule.Date, 'day')) {
+				if (shift.Date.isSame(viewDate, 'day')) {
 					angular.forEach(shift.Projections, function (projection) {
 						if (projection.ParentPersonAbsences || (!projection.IsOvertime && projection.ShiftLayerIds)) {
 							projection.Selected = personSchedule.IsSelected;

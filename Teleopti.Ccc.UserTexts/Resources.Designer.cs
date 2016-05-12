@@ -592,6 +592,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Activity conflicts with overnight shifts.
+        /// </summary>
+        public static string ActivityConflictsWithOvernightShiftsFromPreviousDay {
+            get {
+                return ResourceManager.GetString("ActivityConflictsWithOvernightShiftsFromPreviousDay", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Activity.
         /// </summary>
         public static string ActivityGrid {
@@ -18012,7 +18021,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No shifts could be found..
+        ///   Looks up a localized string similar to No shifts could be found.
         /// </summary>
         public static string NoShiftsFound {
             get {
@@ -20364,7 +20373,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Person assignment is not valid. {0}.
+        ///   Looks up a localized string similar to Person assignment is not valid.
         /// </summary>
         public static string PersonAssignmentIsNotValidDot {
             get {

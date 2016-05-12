@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -38,11 +40,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					Person = person
 				});
 			
+			command.ErrorMessages = new List<string>();
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
+
+			var personAssignmentOfPreviousDay = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Date = command.Date.AddDays(-1),
+				Scenario = scenario,
+				Person = person
+			});
+
+			if (personAssignmentOfPreviousDay != null && personAssignmentOfPreviousDay.Period.EndDateTime >= period.StartDateTime)
+			{
+				command.ErrorMessages.Add(Resources.ActivityConflictsWithOvernightShiftsFromPreviousDay);
+				return;
+			}
 
 			if (personAssignment == null)
 			{
-				var newPersonAssignment = new PersonAssignment(person, scenario, command.Date);
+				var newPersonAssignment = new PersonAssignment(person, scenario, command.Date);			
 				newPersonAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
 				shiftCategories.Sort(new ShiftCategorySorter());

@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -162,5 +163,43 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAssignmentRepository.Single().MainActivities().Single().Payload.Name.Should().Be("Added activity");
 			personAssignmentRepository.Single().ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
 		}
+
+		[Test]
+		public void ShouldReportErrorIfActivityConflictsWithOvernightShiftsFromPreviousDay()
+		{
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var addedActivity = ActivityFactory.CreateActivity("Added activity");
+			var activityRepository = new FakeWriteSideRepository<IActivity> { addedActivity };			
+			var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
+			var shiftCategory = new ShiftCategory("Day");
+			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> { shiftCategory });
+
+			var mainActivity = ActivityFactory.CreateActivity("Phone");
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				mainActivity, personRepository.Single(),
+				new DateTimePeriod(2013,11,13,23,2013,11,14,8));
+
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
+
+			var target = new AddActivityCommandHandler(personAssignmentRepository,
+								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
+								   activityRepository,personRepository,
+								   new UtcTimeZone(),shiftCategoryRepository
+								   );
+			
+			var command = new AddActivityCommand
+			{
+				PersonId = personRepository.Single().Id.Value,
+				Date = new DateOnly(2013,11,14),
+				ActivityId = addedActivity.Id.Value,
+				StartTime = new DateTime(2013, 11, 14, 5, 0, 0),
+				EndTime = new DateTime(2013,11,14,8,0,0),
+			};
+			target.Handle(command);
+
+			command.ErrorMessages.First().Should().Be.EqualTo(Resources.ActivityConflictsWithOvernightShiftsFromPreviousDay);
+		}
+
+
 	}
 }

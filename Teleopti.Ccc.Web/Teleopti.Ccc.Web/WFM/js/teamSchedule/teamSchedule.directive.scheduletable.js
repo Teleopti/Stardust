@@ -52,15 +52,16 @@
 
 		vm.updatePersonSelection = function (personSchedule) {
 			personSelectionSvc.updatePersonSelection(personSchedule);
-			personSelectionSvc.toggleAllPersonProjections(personSchedule);
+			personSelectionSvc.toggleAllPersonProjections(personSchedule, vm.selectedDate);
 		};
 
-		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, viewDate) {
-			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743 && !toggleSvc.WfmTeamSchedule_MoveActivity_37744)
+		vm.ToggleProjectionSelection = function (currentProjection, personSchedule, shift, viewDate) {
+			
+			if (!toggleSvc.WfmTeamSchedule_RemoveAbsence_36705 && !toggleSvc.WfmTeamSchedule_RemoveActivity_37743)
 				return;
 
-			var isSameDay = personSchedule.Date.format("YYYY-MM-DD") === moment(viewDate).format("YYYY-MM-DD");
-
+			var isSameDay = shift.Date.format("YYYY-MM-DD") === moment(viewDate).format("YYYY-MM-DD");
+		
 			if (!isSameDay || currentProjection.IsOvertime || (currentProjection.ParentPersonAbsences == null && currentProjection.ShiftLayerIds == null)) {
 				return;
 			}

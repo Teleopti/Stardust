@@ -3224,7 +3224,7 @@ Replace</value>
     <comment>Enter name on the new grouping</comment>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Person assignment is not valid. {0}</value>
+    <value>Person assignment is not valid</value>
     <comment>Person assignment is not valid.</comment>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
@@ -10388,7 +10388,7 @@ These options are activated:
     <comment>Meeting Activity validation message</comment>
   </data>
   <data name="NoShiftsFound" xml:space="preserve">
-    <value>No shifts could be found.</value>
+    <value>No shifts could be found</value>
     <comment>No shifts could be found.</comment>
   </data>
   <data name="FindThreeDots" xml:space="preserve">
@@ -14448,5 +14448,9 @@ Help us improve your experience by sending an error report</value>
   <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
     <value>It is too late to cancel this request.  This request could be cancelled no later than {0} days before its start date.</value>
     <comment>Error message that is displayed in MyTimeWeb's Request view when an agent attempts to cancel a request later than the threshold allows.  Parameter {0} = the number of days before the request startdate that the request can be cancelled.</comment>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>Activity conflicts with overnight shifts</value>
+    <comment>Error for adding new activity due to conflicting with the overnight shifts from the previous day.</comment>
   </data>
 </root>
