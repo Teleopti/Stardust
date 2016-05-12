@@ -54,6 +54,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 		public Guid ShiftCategoryId { get; set; }
 		public long CheckSum { get; set; }
-		public int Version { get; set; } = 1;
+		public int Version { get; set; }
 	}
 }
