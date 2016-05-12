@@ -26,12 +26,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 			foreach (var person in persons)
 			{
 				var personPeriod = person.Period(date);
-				var prioPersonSkill = personPeriod.PersonSkillCollection.OrderBy(x => x.Skill.CascadingIndex)
+				var orgPersonSkills = personPeriod.PersonSkillCollection.Where(x => x.Active);
+				var prioPersonSkill = orgPersonSkills.OrderBy(x => x.Skill.CascadingIndex)
 					.FirstOrDefault(s => s.Skill.CascadingIndex != null);
 
 				if (prioPersonSkill != null)
 				{
-					var nonCascadingPersonSkills = personPeriod.PersonSkillCollection.Where(x => x.Skill.CascadingIndex == null);
+					var nonCascadingPersonSkills = orgPersonSkills.Where(x => x.Skill.CascadingIndex == null);
 					person.ResetPersonSkills(personPeriod);
 					person.AddSkill(prioPersonSkill.Skill, date);
 
