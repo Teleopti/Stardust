@@ -102,7 +102,7 @@ Scenario: Should be able to remove multiple activities
 	Then I should see a successful notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
-Scenario: Should not able to remove basic activity
+Scenario: Should not be able to remove basic activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
