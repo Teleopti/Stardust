@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 {
 	[DomainTest]
-	public class CascadingResourceCalculationTest
+	public class CascadingResourceCalculationNotOverstaffedTest
 	{
 		public CascadingResourceCalculation Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
