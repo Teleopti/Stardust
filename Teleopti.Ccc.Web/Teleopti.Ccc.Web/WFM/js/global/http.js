@@ -4,7 +4,7 @@
 	angular
 		.module('wfm.http', ['currentUserInfoService', 'wfm.notice', 'pascalprecht.translate'])
 		.factory('httpInterceptor', [
-			'$q', 'NoticeService', '$injector', '$timeout', '$translate', function($q, NoticeService, $injector, $timeout, $translate) {
+			'$q', '$injector', '$timeout', '$translate', function($q, $injector, $timeout, $translate) {
 				var connected = true;
 
 				function request(config) {
@@ -19,6 +19,7 @@
 				}
 
 				function reject(rejection) {
+					var NoticeService = $injector.get('NoticeService');
 					switch (true) {
 						case (rejection.status === 0):
 							//don't remove class test-alert - used in perf tests
