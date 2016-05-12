@@ -21,7 +21,6 @@ angular.module('wfm.rta').provider('RtaState', function() {
 			url: '/rta',
 			templateUrl: 'js/rta/rta.html'
 		}).state('rta.sites', {
-			url: '/sites',
 			templateUrl: 'js/rta/rta-sites.html',
 			controller: 'RtaSitesCtrl',
 		}).state('rta.teams', {
