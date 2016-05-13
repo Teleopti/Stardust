@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().As<IHandle<ExportMultisiteSkillsToSkillEvent>>().SingleInstance();
 			builder.RegisterType<RunSchedulingHandler>().As<IHandle<ScheduleOnNode>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AbsenceRequstHandler>().As<IHandle<NewAbsenceRequestCreatedEvent>>().SingleInstance().ApplyAspects();
-			builder.RegisterType<RunRequestWaitlistStardustHandler>().As<IHandle<RunRequestWaitlistEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<SchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>();
 			builder.RegisterType<ExportPayrollHandler>().As<IHandle<RunPayrollExportEvent>>().SingleInstance().ApplyAspects();
