@@ -58,6 +58,7 @@ Scenario: Should be able to add activity
 	When I apply my new activity
 	Then I should see a successful notice
 
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Default activity start time range should be 08:00-09:00 when agent's schedule is empty
 	When I view wfm team schedules
