@@ -38,8 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.BeforeScenario();
 
 			TestDataSetup.RestoreCcc7Data();
-			TestDataSetup.RestoreAnalyticsData();
-			//TestDataSetup.ClearAnalyticsData();
+			TestDataSetup.ClearAnalyticsData();
 
 			TestControllerMethods.ClearConnections();
 
