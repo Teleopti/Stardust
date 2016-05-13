@@ -194,5 +194,32 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			nonHighestPrioSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldNotRemoveAnyPersonSkillFromPersonEntity()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var prioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			prioritizedSkill.SetCascadingIndex_UseFromTestOnly(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(prioritizedSkill, new TimePeriod(8, 0, 9, 0));
+			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(15)); //1 agents needed per interval
+			var nonPrioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(8, 0, 9, 0));
+			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(15)); //1 agents needed per interval
+			var agent = new Person();
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
+
+			Target.ForDay(dateOnly);
+
+			agent.Period(dateOnly).PersonSkillCollection.Count(x => x.Active)
+				.Should().Be.EqualTo(2);
+		}
 	}
 }

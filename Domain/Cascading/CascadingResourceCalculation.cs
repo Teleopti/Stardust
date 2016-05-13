@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,20 +21,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public void ForDay(DateOnly date)
 		{
-			//REMOVE LATER ////
-			var agents = _schedulerStateHolder().AllPermittedPersons;
-			foreach (var orderedCascadingSkills in agents.Select(person => person.Period(date).CascadingSkills().ToArray()))
+			using (PersonSkillReducerContext.SetReducer(new CascadingPersonSkillReducer()))
 			{
-				orderedCascadingSkills.ForEach(x => ((IPersonSkillModify) x).Active = false);
-				foreach (var activity in orderedCascadingSkills.Select(personSkill => personSkill.Skill.Activity).Distinct())
-				{
-					var prioritizedCascadingSkillForActivity = (IPersonSkillModify)orderedCascadingSkills.First(s => s.Skill.Activity.Equals(activity));
-					prioritizedCascadingSkillForActivity.Active = true;
-				}
+				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //check this later
 			}
-			/////
-
-			_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //check this later
 		}
 	}
 }

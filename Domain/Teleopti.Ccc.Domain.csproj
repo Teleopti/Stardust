@@ -260,6 +260,10 @@
     <Compile Include="Common\IBusinessUnitScope.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
+    <Compile Include="ResourceCalculation\CascadingPersonSkillReducer.cs" />
+    <Compile Include="ResourceCalculation\IPersonSkillReducer.cs" />
+    <Compile Include="ResourceCalculation\NonDeletedPersonSkillReducer.cs" />
+    <Compile Include="ResourceCalculation\PersonSkillReducerContext.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduled.cs" />

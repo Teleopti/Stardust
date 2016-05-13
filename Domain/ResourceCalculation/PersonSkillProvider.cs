@@ -1,9 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IPersonPeriod personPeriod = person.Period(date);
 			if (personPeriod == null) return new SkillCombination(new ISkill[0], new DateOnlyPeriod(), new SkillEffiencyResource[]{});
 
-			var personSkillCollection =
-				personPeriod.PersonSkillCollection.Where(personSkill => !((IDeleteTag) personSkill.Skill).IsDeleted).ToArray();
+			var personSkillCollection = PersonSkillReducerContext.Fetch().Reduce(personPeriod).ToArray();
 
 			var skills = personSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0)
 				.Concat(personPeriod.PersonMaxSeatSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
