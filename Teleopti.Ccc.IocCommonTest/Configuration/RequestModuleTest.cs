@@ -7,19 +7,24 @@ using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
 	[TestFixture]
 	public class RequestModuleTest
 	{
-
 		[Test]
 		public void ShouldResolveNewAbsenceRequestHandler()
 		{
 			var builder = buildContainer();
 			builder.Resolve<IHandleEvent<NewAbsenceRequestCreatedEvent>>().Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveRunRequestWaitlistStartdustHandler()
+		{
+			var builder = buildContainer();
+			builder.Resolve<IHandleEvent<RunRequestWaitlistEvent>>().Should().Not.Be.Null();
 		}
 
 		private static ILifetimeScope buildContainer()
