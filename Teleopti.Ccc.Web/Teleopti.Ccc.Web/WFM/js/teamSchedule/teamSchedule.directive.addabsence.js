@@ -33,8 +33,7 @@
 			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
 			IsAddFullDayAbsenceAvailable: vm.permissions().IsAddFullDayAbsenceAvailable
 		};
-		vm.isFullDayAbsence = vm.absencePermissions.IsAddFullDayAbsenceAvailable
-				&& !vm.absencePermissions.IsAddIntradayAbsenceAvailable;
+		vm.isFullDayAbsence = vm.absencePermissions.IsAddFullDayAbsenceAvailable;
 
 		vm.isDataChangeValid = function () {
 			return vm.selectedAbsenceId !== undefined && (vm.isAbsenceTimeValid() || vm.isAbsenceDateValid());
