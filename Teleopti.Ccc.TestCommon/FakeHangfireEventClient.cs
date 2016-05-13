@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public bool WasEnqueued { get { return _enqueuedJobs.Any(); } }
 
-		public void Enqueue(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void Enqueue(string displayName, string tenant, string queueName, string eventType, string serializedEvent, string handlerType)
 		{
 			_enqueuedJobs.Add(new JobInfo
 			{

@@ -22,25 +22,15 @@ namespace Teleopti.Interfaces.Messages
 	{
 	}
 
-	public enum Priority
-	{
-		High,
-		Default,
-		Low
-	}
-
 	public class QueueName
 	{
+		public const string HighPriority = "high";
+		public const string DefaultPriority = "default";
+		public const string LowPriority = "low";
+
 		public static string[] All()
 		{
-			var values = from Priority e in Enum.GetValues(typeof (Priority))
-				select For(e);
-			return values.ToArray();
-		}
-
-		public static string For(Priority e)
-		{
-			return e.ToString().ToLower();
+			return new[] {HighPriority, DefaultPriority, LowPriority};
 		}
 	}
 }

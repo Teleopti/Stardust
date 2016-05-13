@@ -25,20 +25,20 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_storage = storage;
 		}
 
-		public void Enqueue(string displayName, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void Enqueue(string displayName, string tenant, string queueName, string eventType, string serializedEvent, string handlerType)
 		{
-			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType));
+			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, queueName, eventType, serializedEvent, handlerType));
 		}
 
 		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType);
+			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, eventType, serializedEvent, handlerType);
 			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Hourly());
 		}
 
 		public void AddOrUpdateMinutely(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{
-			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, eventType, serializedEvent, handlerType);
+			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, eventType, serializedEvent, handlerType);
 			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Minutely());
 		}
 

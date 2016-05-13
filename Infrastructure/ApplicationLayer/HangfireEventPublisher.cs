@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Hangfire.States;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				jobsFor(e).ForEach(j =>
 				{
-					_client.Enqueue(j.DisplayName, j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+					_client.Enqueue(j.DisplayName, j.Tenant, j.QueueName, j.EventTypeName, j.Event, j.HandlerTypeName);
 				});
 			});
 		}
@@ -88,6 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			public string Event;
 			public Type HandlerType;
 			public string HandlerTypeName;
+			public string QueueName { get; set; }
 		}
 
 		private IEnumerable<jobInfo> jobsFor(IEvent @event)
@@ -112,8 +115,19 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					Event = serialized,
 					HandlerType = handlerType,
 					HandlerTypeName = handlerTypeName,
+					QueueName = queueName(handlerType)
 				};
 			}
+		}
+
+		private static string queueName(Type handlerType)
+		{
+			var interfaces = handlerType.GetInterfaces();
+			if (interfaces.Any(i => i == typeof(IRunWithHighPriority)))
+				return QueueName.HighPriority;
+			if (interfaces.Any(i => i == typeof(IRunWithLowPriority)))
+				return QueueName.LowPriority;
+			return QueueName.DefaultPriority;
 		}
 
 		public IEnumerable<string> TenantsWithRecurringJobs()

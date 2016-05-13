@@ -29,8 +29,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new NormalPriorityEvent());
 
-			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.Default)).Should().Be(1);
-			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.High)).Should().Be(0);
+			Hangfire.NumberOfJobsInQueue(QueueName.DefaultPriority).Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(QueueName.HighPriority).Should().Be(0);
 		}
 
 		[Test]
@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Publisher.Publish(new HighPriorityEvent());
 
-			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.Default)).Should().Be(0);
-			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.High)).Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(QueueName.DefaultPriority).Should().Be(0);
+			Hangfire.NumberOfJobsInQueue(QueueName.HighPriority).Should().Be(1);
 		}
 
 		public class HighPriorityEvent : IEvent
@@ -69,7 +69,5 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			{
 			}
 		}
-
-
 	}
 }

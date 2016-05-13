@@ -24,14 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			if (enqueuedState == null)
 				return;
 
-			var handlerType = (string)context.BackgroundJob.Job.Args[4];
-			var interfaces = Type.GetType(handlerType).GetInterfaces();
-			if (interfaces.Any(i => i == typeof(IRunWithHighPriority)))
-				enqueuedState.Queue = Priority.High.ToString().ToLower();
-			else if (interfaces.Any(i => i == typeof(IRunWithDefaultPriority)))
-				enqueuedState.Queue = Priority.Default.ToString().ToLower();
-			else if (interfaces.Any(i => i == typeof(IRunWithLowPriority)))
-				enqueuedState.Queue = Priority.Low.ToString().ToLower();
+			var queueName = (string)context.BackgroundJob.Job.Args[2];
+			enqueuedState.Queue = queueName;
 		}
 	}
 }
