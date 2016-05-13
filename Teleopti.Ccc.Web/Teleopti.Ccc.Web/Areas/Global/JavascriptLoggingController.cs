@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		public void LogError(JavascriptLog javascriptLog)
 		{
 			_logManagerWrapper.GetLogger("Teleopti.Javascript")
-				.Error(string.Format(logOutput, javascriptLog.Message, javascriptLog.Url, javascriptLog.LineNumber, javascriptLog.ParentUrl, javascriptLog.UserAgent));
+				.Warn(string.Format(logOutput, javascriptLog.Message, javascriptLog.Url, javascriptLog.LineNumber, javascriptLog.ParentUrl, javascriptLog.UserAgent));
 		}
 	}
 }

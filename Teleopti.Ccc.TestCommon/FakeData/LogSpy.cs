@@ -11,12 +11,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			DebugMessages = new List<string>();
 			ErrorMessages = new List<string>();
+			WarningMessages = new List<string>();
 		}
 
 		public ILogger Logger { get; private set; }
 		public string InfoMessage { get; private set; }
 		public IList<string> DebugMessages { get; private set; }
 		public IList<string> ErrorMessages { get; private set; }
+		public IList<string>WarningMessages { get; private set; }
 		public string LastLoggerName { get; set; }
 
 		public void Debug(object message)
@@ -91,30 +93,37 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Warn(object message)
 		{
+			WarningMessages.Add(message.ToString());
 		}
 
 		public void Warn(object message, Exception exception)
 		{
+			WarningMessages.Add(message.ToString());
 		}
 
 		public void WarnFormat(string format, params object[] args)
 		{
+			WarningMessages.Add(string.Format(format, args));
 		}
 
 		public void WarnFormat(string format, object arg0)
 		{
+			WarningMessages.Add(string.Format(format, arg0));
 		}
 
 		public void WarnFormat(string format, object arg0, object arg1)
 		{
+			WarningMessages.Add(string.Format(format, arg0, arg1));
 		}
 
 		public void WarnFormat(string format, object arg0, object arg1, object arg2)
 		{
+			WarningMessages.Add(string.Format(format, arg0, arg1, arg2));
 		}
 
 		public void WarnFormat(IFormatProvider provider, string format, params object[] args)
 		{
+			WarningMessages.Add(string.Format(format, args));
 		}
 
 		public void Error(object message)

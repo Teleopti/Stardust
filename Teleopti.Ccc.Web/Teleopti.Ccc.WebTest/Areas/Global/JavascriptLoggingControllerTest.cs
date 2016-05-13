@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			target.LogError(new JavascriptLog());
 
-			logSpy.ErrorMessages.Single()
+			logSpy.WarningMessages.Single()
 				.Should().Not.Be.Empty();
 		}
 
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			target.LogError(content);
 
-			logSpy.ErrorMessages.Single()
+			logSpy.WarningMessages.Single()
 				.Should().Contain(content.Message);
 		}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			target.LogError(content);
 
-			logSpy.ErrorMessages.Single()
+			logSpy.WarningMessages.Single()
 				.Should().Contain(content.LineNumber.ToString());
 		}
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			target.LogError(content);
 
-			logSpy.ErrorMessages.Single()
+			logSpy.WarningMessages.Single()
 				.Should().Contain(content.ParentUrl);
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			target.LogError(content);
 
-			logSpy.ErrorMessages.Single()
+			logSpy.WarningMessages.Single()
 				.Should().Contain(content.Url);
 		}
 
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			target.LogError(content);
 
-			logSpy.ErrorMessages.Single()
+			logSpy.WarningMessages.Single()
 				.Should().Contain(content.Url);
 		}
 
