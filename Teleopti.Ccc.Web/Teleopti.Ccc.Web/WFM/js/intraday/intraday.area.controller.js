@@ -134,8 +134,6 @@
 				};
 
 				$scope.findCurrent = function (callsMax) {
-				    console.log($scope.latestActualInterval.split(' - ')[0]);
-				    console.log($scope.timeSeries);
 				    for (var i = 0; i < $scope.timeSeries.length; i++) {
 						if ($scope.timeSeries[i] === $scope.latestActualInterval.split(' - ')[0]){
 							$scope.currentInterval[i] = callsMax;
@@ -390,7 +388,7 @@
 											} else {
 												$scope.chartHiddenLines.push(id);
 											}
-											loadIntradayChart();
+											loadIntradayChart(callsMax);
 										}
 									}
 								}
