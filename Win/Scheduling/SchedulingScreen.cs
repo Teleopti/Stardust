@@ -52,6 +52,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Logging;
@@ -6929,6 +6930,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonCalculateCascadingClick(object sender, EventArgs e)
 		{
 			toolStripButtonCalculateCascading.Checked = !toolStripButtonCalculateCascading.Checked;
+
+			if (toolStripButtonCalculateCascading.Checked)
+			{
+				var cascadingCalc = _container.Resolve<CascadingResourceCalculation>();
+
+				foreach (var dateOnly in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
+				{
+					cascadingCalc.ForDay(dateOnly);
+				}
+
+				drawSkillGrid();
+				Refresh();
+			}		
 		}
 	}
 }
