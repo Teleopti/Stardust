@@ -45,17 +45,17 @@
 					var result = $scope.roles.map(function(e){
 						return e.Id;
 					}).indexOf(target);
-					return result
+					return result;
 				}
 				$scope.removeRole = function(role) {
 					var currentSelected = getIndexInRoles($scope.selectedRole);
 					var roleToBeDeleted = getIndexInRoles(role.Id);
-					var isSelected = role.Id === $scope.selectedRole;
+
 					Roles.removeRole(role).then(function(){
-						if (isSelected) {
+						if (role.Id === $scope.selectedRole) {
 							$scope.showRole($scope.roles[0]);
 						}else if (currentSelected > roleToBeDeleted) {
-							$scope.showRole($scope.roles[currentSelected-1])
+							$scope.showRole($scope.roles[currentSelected - 1]);
 						}else {
 							$scope.showRole($scope.roles[currentSelected]);
 						}
@@ -67,7 +67,7 @@
 				};
 
 				$scope.submitRole = function(role, tempName){
-					if (tempName != '') {
+					if (tempName !== '') {
 						Permissions.manageRole.update({ Id: role.Id, newDescription: tempName });
 						role.DescriptionText = tempName;
 					}
@@ -101,7 +101,7 @@
 				};
 
 				$scope.cancelEdit = function (role) {
-					if (role.DescriptionText != '') {
+					if (role.DescriptionText !== '') {
 						role.editing = false;
 					}
 					else{
@@ -110,12 +110,12 @@
 				};
 
 
-				Roles.refresh().$promise.then(function (result) {
+				Roles.list.$promise.then(function (result) {
 					$scope.roles = result;
 
 					if ($stateParams.id != null) { //FIXME is it needed?
 						for (var i = 0; i < result.length; i++) {
-							if ($stateParams.id == result[i].Id) {
+							if ($stateParams.id === result[i].Id) {
 								$scope.showRole(result[i]);
 							}
 						}

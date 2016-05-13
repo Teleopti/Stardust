@@ -51,6 +51,8 @@
 				roles.selectedRole = role;
 			};
 
+			roles.refresh();
+
 			return roles;
 		}
 	]);
