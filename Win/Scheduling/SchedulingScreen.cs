@@ -162,6 +162,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly bool _shrinkage;
 		private bool _validation;
 		private readonly bool _teamLeaderMode;
+		private readonly bool _loadRequsts;
 		private bool _showEditor = true;
 		private bool _showResult = true;
 		private bool _showGraph = true;
@@ -363,7 +364,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		public SchedulingScreen(IComponentContext componentContext, DateOnlyPeriod loadingPeriod, IScenario loadScenario,
-			bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, IList<IEntity> allSelectedEntities,
+			bool shrinkage, bool calculation, bool validation, bool teamLeaderMode, bool loadRequsts, IList<IEntity> allSelectedEntities,
 			Form ownerWindow)
 			: this()
 		{
@@ -442,6 +443,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.SchedulingResultState.UseMinWeekWorkTime =
 				_container.Resolve<IToggleManager>().IsEnabled(Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
 			_teamLeaderMode = teamLeaderMode;
+			_loadRequsts = loadRequsts;
 			_schedulerState.SchedulingResultState.TeamLeaderMode = teamLeaderMode;
 
 			toolStripProgressBar1.Visible = true;
@@ -2534,7 +2536,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripStatusLabelNumberOfAgents.Visible = true;
 
 
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
 			{
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
 				{
@@ -2548,6 +2550,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 			{
 				toolStripTabItem1.Visible = false;
+			    toolStripButtonRequestView.Visible = false;
 			}
 
 			_grid.VScrollPixel = false;
@@ -3572,7 +3575,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				methods.Add(new LoaderMethod(loadPeople, LanguageResourceHelper.Translate("XXLoadingPeopleTreeDots")));
 				methods.Add(new LoaderMethod(filteringPeopleAndSkills, null));
 				methods.Add(new LoaderMethod(loadSchedules, LanguageResourceHelper.Translate("XXLoadingSchedulesTreeDots")));
-				methods.Add(new LoaderMethod(loadRequests, null));
+                if(PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
+				    methods.Add(new LoaderMethod(loadRequests, null));
+
 				methods.Add(new LoaderMethod(loadSkillDays, LanguageResourceHelper.Translate("XXLoadingSkillDataTreeDots")));
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));
 				methods.Add(new LoaderMethod(loadContractSchedule, null));

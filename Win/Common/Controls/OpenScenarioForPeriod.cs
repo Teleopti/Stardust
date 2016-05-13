@@ -4,10 +4,12 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using log4net;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -24,6 +26,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 		private bool _shrinkage;
 		private bool _calculation;
 		private bool _validation;
+		private bool _requests;
 		private IList<IScenario> _scenarios;
 		private bool _forceClose;
 		private readonly IOpenPeriodMode _openMode;
@@ -43,12 +46,15 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			}
 
 			groupBox1.Visible = !_openMode.ForecasterStyle;
+			
 		}
 
-		public OpenScenarioForPeriod(IOpenPeriodMode openMode, IList<IEntity> selectedEntityList)
-			: this(openMode)
+		public OpenScenarioForPeriod(IOpenPeriodMode openMode, IList<IEntity> selectedEntityList, IToggleManager toggleManager)
+			:this(openMode)
 		{
 			_selectedEntityList = new List<IEntity>(selectedEntityList);
+			checkBoxRequests.Visible = toggleManager.IsEnabled(Toggles.Scheduler_LoadWithoutRequests_38567) &&
+												PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler);
 		}
 
 		private bool validateSelectedDatesControl(ICollection<DateOnlyPeriod> periods)
@@ -127,6 +133,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 					_setting.NoShrinkage = !_shrinkage;
 					_setting.NoCalculation = !_calculation;
 					_setting.NoValidation = !_validation;
+					_setting.NoRequests = !_requests;
 					_setting.TeamLeaderMode = _teamLeaderMode;
 					try
 					{
@@ -161,6 +168,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
 		public bool Calculation
 		{
 			get { return _calculation; }
+		}
+
+		public bool Requests
+		{
+			get { return _requests; }
 		}
 
 		public IScenario Scenario
@@ -227,6 +239,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
 			checkBoxAdvShrinkage.Checked = !_setting.NoShrinkage;
 			checkBoxAdvCalculation.Checked = !_setting.NoCalculation;
 			checkBoxAdvValidation.Checked = !_setting.NoValidation;
+			checkBoxRequests.Checked = !_setting.NoRequests;
 
 			_teamLeaderMode = _setting.TeamLeaderMode;
 			checkBoxAdvLeaderMode.Checked = !_teamLeaderMode;
@@ -370,6 +383,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
 				return;
 			if (hasScenarioDataChanged(permittedScenarios))
 				bindScenarioCombo(permittedScenarios);
+		}
+
+		private void checkBoxRequestsCheckStateChanged(object sender, EventArgs e)
+		{
+			_requests = checkBoxRequests.Checked;
 		}
 	}
 }

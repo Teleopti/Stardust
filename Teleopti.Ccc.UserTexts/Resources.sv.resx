@@ -13329,4 +13329,8 @@ Dessa val är aktiverade:
   <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
     <value>Kan inte flytta flera aktiviteter för agent {0}.</value>
   </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>Ladda önskemål</value>
+    <comment>a choice when opening scheduler</comment>
+  </data>
 </root>

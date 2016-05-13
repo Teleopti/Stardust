@@ -56,5 +56,6 @@ namespace Teleopti.Ccc.Win.Common.Controls
         }
 
     	public bool TeamLeaderMode { get; set; }
+	    public bool NoRequests { get; set; }
     }
 }

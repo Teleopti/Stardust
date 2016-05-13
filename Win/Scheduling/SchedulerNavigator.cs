@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IPersonRepository _personRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
+		private readonly IToggleManager _toggleManager;
 		private IScheduleNavigatorPresenter _myPresenter;
 		private readonly IEventAggregator _localEventAggregator;
 		private Form _mainWindow;
@@ -51,7 +52,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			InitializeComponent();
 		}
 
-		public SchedulerNavigator(IComponentContext componentContext, PortalSettings portalSettings, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
+		public SchedulerNavigator(IComponentContext componentContext, PortalSettings portalSettings,
+			IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory,
+			IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler, IToggleManager toggleManager)
 			: this()
 		{
 			var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
@@ -61,6 +64,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_personRepository = personRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_gracefulDataSourceExceptionHandler = gracefulDataSourceExceptionHandler;
+			_toggleManager = toggleManager;
 			SetTexts();
 			toolStripButtonOpen.Click += onOpenScheduler;
 		}
@@ -166,12 +170,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 			}
 
-			using (var openSchedule = new OpenScenarioForPeriod(OpenPeriodMode, entityList))
+			using (var openSchedule = new OpenScenarioForPeriod(OpenPeriodMode, entityList, _toggleManager))
 			{
 				if (openSchedule.ShowDialog() != DialogResult.Cancel)
 				{
 					LogPointOutput.LogInfo("Scheduler.LoadAndOptimizeData:openWizard", "Started");
-					StartModule(openSchedule.SelectedPeriod, openSchedule.Scenario, openSchedule.Shrinkage, openSchedule.Calculation, openSchedule.Validation, openSchedule.TeamLeaderMode, entityList, _mainWindow);
+					StartModule(openSchedule.SelectedPeriod, openSchedule.Scenario, openSchedule.Shrinkage, openSchedule.Calculation, openSchedule.Validation, openSchedule.TeamLeaderMode, openSchedule.Requests, entityList, _mainWindow);
 				}
 			}
 
@@ -209,7 +213,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		protected virtual void StartModule(DateOnlyPeriod selectedPeriod, IScenario scenario, bool shrinkage,
-			bool calculation, bool validation, bool teamLeaderMode, Collection<IEntity> entityCollection, Form ownerWindow)
+			bool calculation, bool validation, bool teamLeaderMode, bool loadRequests, Collection<IEntity> entityCollection, Form ownerWindow)
 		{
 			_gracefulDataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(()=>{
 				var sc = new SchedulingScreen(_container,
@@ -219,7 +223,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 														   calculation,
 														   validation,
 														   teamLeaderMode,
-														   entityCollection,
+															loadRequests,
+															entityCollection,
 														   ownerWindow);
 				sc.Show();
 			});

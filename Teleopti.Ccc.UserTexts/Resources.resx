@@ -14457,4 +14457,8 @@ Help us improve your experience by sending an error report</value>
     <value>Activity conflicts with overnight shifts</value>
     <comment>Error for adding new activity due to conflicting with the overnight shifts from the previous day.</comment>
   </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>Load Requests</value>
+    <comment>a choice when opening scheduler</comment>
+  </data>
 </root>

@@ -13940,6 +13940,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Load Requests.
+        /// </summary>
+        public static string LoadRequests {
+            get {
+                return ResourceManager.GetString("LoadRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load staff employed.
         /// </summary>
         public static string LoadStaffEmployed {
