@@ -32,11 +32,9 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		[Test]
 		public void ShouldHavePermissionsOfRole()
 		{
-			var businessUnid = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			Database
 				.WithTenant("tenant")
-				.WithBusinessUnit(businessUnid)
 				.WithPerson(personId, "roger")
 				.WithRole(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 			var person = Persons.Load(personId);

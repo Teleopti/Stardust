@@ -98,14 +98,12 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		[Test]
 		public void ShouldFindTenantWhenAuthenticationKeyIsSentInWrongEncoding()
 		{
-			Database.WithTenant("tenant", LegacyAuthenticationKey.TheKey);
-
 			TheService.Does(new Input
 			{
 				AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
 			});
 
-			TheService.RanWithDataSource.DataSourceName.Should().Be("tenant");
+			TheService.RanWithDataSource.DataSourceName.Should().Be(FakeDatabase.DefaultTenantName);
 		}
 
 	}

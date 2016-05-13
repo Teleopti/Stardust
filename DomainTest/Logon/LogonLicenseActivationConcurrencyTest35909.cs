@@ -32,11 +32,9 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		[Test]
 		public void ShouldHandleConcurrency()
 		{
-			var businessUnid = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			100.Times(i => Database.WithTenant("tenant" + i));
 			Database
-				.WithBusinessUnit(businessUnid)
 				.WithPerson(personId, "roger")
 				.WithRole(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
 
