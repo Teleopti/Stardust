@@ -1,12 +1,10 @@
 using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -23,8 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public Service TheService;
 		public ICurrentTeleoptiPrincipal Principal;
 		public IScenarioRepository Scenarios;
-		public ICurrentAuthorization PrincipalAuthorization;
-		public IDefinedRaptorApplicationFunctionFactory ApplicationFunctions;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -86,44 +82,6 @@ namespace Teleopti.Ccc.DomainTest.Logon
 
 			entityGotBusinessUnit.Id.Should().Be(businessUnid);
 		}
-
-		[Test]
-		public void ShouldBePermittedAllFunctions()
-		{
-			var permitted = Enumerable.Empty<string>();
-			var businessUnid = Guid.NewGuid();
-			Database
-				.WithTenant("tenant")
-				.WithBusinessUnit(businessUnid);
-
-			TheService.Do(new Input { LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid },
-				() =>
-				{
-					permitted = ApplicationFunctions.ApplicationFunctions
-						.Select(f => f.FunctionPath)
-						.Where(f => PrincipalAuthorization.Current().IsPermitted(f))
-						.ToArray();
-				});
-
-			permitted.Should().Have.SameValuesAs(ApplicationFunctions.ApplicationFunctions.Select(x => x.FunctionPath));
-		}
-
-		[Test]
-		public void ShouldBeGrantedAllFunctions()
-		{
-			var grantedFunctions = Enumerable.Empty<IApplicationFunction>();
-			var businessUnid = Guid.NewGuid();
-			Database
-				.WithTenant("tenant")
-				.WithBusinessUnit(businessUnid);
-
-			TheService.Do(new Input { LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid },
-				() =>
-				{
-					grantedFunctions = PrincipalAuthorization.Current().GrantedFunctions();
-				});
-
-			grantedFunctions.Should().Have.SameValuesAs(ApplicationFunctions.ApplicationFunctions);
-		}
+		
 	}
 }

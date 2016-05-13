@@ -3,59 +3,24 @@ using System.Collections.Generic;
 using System.IdentityModel.Claims;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Security.Principal
 {
-	public class SystemUserAuthorization : IAuthorization
+
+	public class ThisAuthorization : ICurrentAuthorization
 	{
-		private readonly IDefinedRaptorApplicationFunctionFactory _applicationFunctions;
+		private readonly IAuthorization _authorization;
 
-		public SystemUserAuthorization(IDefinedRaptorApplicationFunctionFactory applicationFunctions)
+		public ThisAuthorization(IAuthorization authorization)
 		{
-			_applicationFunctions = applicationFunctions;
+			_authorization = authorization;
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
+		public IAuthorization Current()
 		{
-			return true;
-		}
-
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
-		{
-			return true;
-		}
-
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
-		{
-			return true;
-		}
-
-		public bool IsPermitted(string functionPath)
-		{
-			return true;
-		}
-
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
-		{
-			return true;
-		}
-
-		public virtual IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
-		{
-			return new[] { period };
-		}
-
-		public IEnumerable<IApplicationFunction> GrantedFunctions()
-		{
-			return _applicationFunctions.ApplicationFunctions;
-		}
-
-		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
-		{
-			return true;
+			return _authorization;
 		}
 	}
 

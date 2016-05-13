@@ -82,9 +82,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			//
 
 			// Permissions
-			if (QueryAllAttributes<RealPermissionsAttribute>().Any())
-				CurrentAuthorization.GloballyUse(null);
-			else
+			if (QueryAllAttributes<RealPermissionsAttribute>().IsEmpty())
 				system.UseTestDouble<FullPermission>().For<IAuthorization>();
 			//
 
