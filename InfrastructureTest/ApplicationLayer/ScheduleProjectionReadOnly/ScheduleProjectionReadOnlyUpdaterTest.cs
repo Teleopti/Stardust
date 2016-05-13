@@ -5,15 +5,17 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionReadOnly
 {
-	[UnitOfWorkWithLoginTest]
+	[DatabaseTest]
 	public class ScheduleProjectionReadOnlyUpdaterTest
 	{
 		public ScheduleProjectionReadOnlyUpdater Target;
 		public IScheduleProjectionReadOnlyPersister Persister;
+		public WithUnitOfWork WithUnitOfWork;
 
 		[Test]
 		public void ShouldNotPersistOldSchedule()
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleProjectionRea
 				}
 			});
 
-			Persister.ForPerson("2016-04-29".Date(), person, Guid.Empty)
+			WithUnitOfWork.Get(() => Persister.ForPerson("2016-04-29".Date(), person, Guid.Empty))
 				.Should().Have.Count.EqualTo(2);
 		}
 	}
