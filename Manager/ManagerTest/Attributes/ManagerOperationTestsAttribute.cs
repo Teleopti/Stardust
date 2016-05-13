@@ -29,7 +29,7 @@ namespace ManagerTest.Attributes
 
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
-			builder.RegisterType<PurgeTimer>().As<Timer>().SingleInstance();
+			builder.RegisterType<PurgeTimerFake>().As<Timer>().SingleInstance();
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Timers;
 using Autofac;
 using ManagerTest.Fakes;
 using Stardust.Manager;
@@ -12,7 +13,7 @@ namespace ManagerTest.Attributes
 		protected override void SetUp(ContainerBuilder builder)
 		{
 			ManagerConfiguration config = new ManagerConfiguration(
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20, 10,1,24);
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20, 10, 1, 24);
 
 			builder.RegisterInstance(config).SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
@@ -25,6 +26,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();
 
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance();
+			builder.RegisterType<PurgeTimerFake>().As<Timer>().SingleInstance();
 		}
 	}
 }

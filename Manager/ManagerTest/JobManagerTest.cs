@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using ManagerTest.Attributes;
-using ManagerTest.Database;
 using ManagerTest.Fakes;
 using NUnit.Framework;
 using SharpTestsEx;
