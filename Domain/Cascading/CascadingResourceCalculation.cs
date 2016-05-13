@@ -10,10 +10,25 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class CascadingResourceCalculation
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		//private readonly IPersonSkillProvider _personSkillProvider;
+
+		//public CascadingResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper, IPersonSkillProvider personSkillProvider)
+		//{
+		//	_resourceOptimizationHelper = resourceOptimizationHelper;
+		//	_personSkillProvider = personSkillProvider;
+		//}
+
+		//public void ForDay(DateOnly date)
+		//{
+		//	using (PersonSkillReducerContext.SetReducer(new CascadingPersonSkillReducer(), _personSkillProvider))
+		//	{
+		//		_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //check this later
+		//	}
+		//}
 
 		public CascadingResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper)
 		{
-			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_resourceOptimizationHelper = resourceOptimizationHelper;	
 		}
 
 		public void ForDay(DateOnly date)

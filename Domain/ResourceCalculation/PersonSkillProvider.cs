@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PersonSkillProvider : IPersonSkillProvider
 	{
-		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
+		private ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
 		public SkillCombination SkillsOnPersonDate(IPerson person, DateOnly date)
 		{
@@ -44,6 +44,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			
 			return combination;
 		}
+
+		//public void ResetSkillCombinations()
+		//{
+		//	_personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
+		//}
 	}
 
 	public class SkillCombination
