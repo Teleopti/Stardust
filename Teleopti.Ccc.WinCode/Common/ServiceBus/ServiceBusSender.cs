@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Autofac;
 using log4net;
+using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ServiceBusSender));
 		private IContainer _customHost;
 		private static readonly object LockObject = new object();
-        private bool _isRunning; 
+		private bool _isRunning; 
 		
 		private void MoveThatBus()
 		{
@@ -65,27 +66,50 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 					throw new ApplicationException("The outgoing queue for the service bus is not available. Cannot send the message " + message.GetType().Name);
 				return;
 			}
+		    try
+		    {
+                makeRetryPolicy().ExecuteAction(() =>
+                {
+                    var bus = _customHost.Resolve<IOnewayBus>();
+                    if (Logger.IsDebugEnabled)
+                    {
+                        var identity = "<unknown>";
+                        var datasource = "<unknown>";
+                        var raptorDomainMessage = message.First() as ILogOnContext;
+                        if (raptorDomainMessage != null)
+                        {
+                            datasource = raptorDomainMessage.LogOnDatasource;
+                        }
+                        Logger.Debug(string.Format(CultureInfo.InvariantCulture,
+                            "Sending messages with identity: {0} (Data source = {1})",
+                            identity, datasource));
+                    }
+                    bus.Send(message);
+                });
+            }
+		    catch (Exception ex)
+		    {
+                Logger.Error("Server unavailable: Cannot send message to service bus.", ex);
+                throw new ApplicationException("Server unavailable: Cannot send message to service bus.");
+            }
+            
+            
+        }
 
-			var bus = _customHost.Resolve<IOnewayBus>();
+	    private RetryPolicy makeRetryPolicy()
+        {
+            var policy = new RetryPolicy<ServiceBusSenderRetryStrategy>(new ExponentialBackoff(100, TimeSpan.FromMilliseconds(500),
+                    TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(2)));
 
-			if (Logger.IsDebugEnabled)
-			{
-				var identity = "<unknown>";
-				var datasource = "<unknown>";
-				var raptorDomainMessage = message.First() as ILogOnContext;
-				if (raptorDomainMessage != null)
-				{
-					datasource = raptorDomainMessage.LogOnDatasource;
-				}
-				Logger.Debug(string.Format(CultureInfo.InvariantCulture,
-										   "Sending messages with identity: {0} (Data source = {1})",
-										   identity, datasource));
-			}
+            policy.Retrying += (sender, args) =>
+            {
+                Logger.InfoFormat("Retry - Count:{0}, Delay:{1}, Exception:{2}", args.CurrentRetryCount, args.Delay, args.LastException);
+            };
 
-			bus.Send(message);
-		}
+            return policy;
+        }
 
-		private bool EnsureBus()
+        private bool EnsureBus()
 		{
 			if (!_isRunning) MoveThatBus();
 			return _isRunning;
@@ -131,4 +155,12 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 			Logger.Info("Transport disposed");
 		}
 	}
+
+    public class ServiceBusSenderRetryStrategy : ITransientErrorDetectionStrategy
+    {
+        public bool IsTransient(Exception ex)
+        {
+            return true;
+        }
+    }
 }
