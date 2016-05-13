@@ -18,10 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I initiate '([a-z|\s]*)'")]
 		public void WhenIClickButtonWithClass(CssClass cssClass)
 		{
-			// enforcing button because of :enabled selector.
-			// if its clickable, it has to be enabled after initialization for robustness
-			// probably have to reevaluate this decision later
-			Browser.Interactions.ClickVisibleOnly(string.Format("button.{0}:enabled", cssClass.Name));
+			Browser.Interactions.ClickUsingJQuery(string.Format("button.{0}", cssClass.Name));
 		}
 
 
