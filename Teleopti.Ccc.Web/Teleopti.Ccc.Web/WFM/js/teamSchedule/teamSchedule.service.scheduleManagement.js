@@ -84,8 +84,10 @@
 			svc.getLatestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
 				var startUpdated = false;
 				var latestStart = scheduleDateMoment.toDate();
+				
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
-					var scheduleStart = schedule.ScheduleStartTime();
+					var scheduleStart = moment(schedule.ScheduleStartTime());
+				
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
 						startUpdated = true;
 						latestStart = scheduleStart;
