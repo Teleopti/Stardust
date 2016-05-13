@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		    result.AddRange(rootGroups.Select(rootGroup => (IGroupPage) rootGroup.Parent));
 
-		    return CollectionHelper.ToDistinctGenericCollection<IGroupPage>(result).ToArray();
+		    return CollectionHelper.ToDistinctGenericCollection<IGroupPage>(result).Where(x=> !((IDeleteTag)x).IsDeleted).ToArray();
 	    }
 
 		private void initializeChildGroups(IChildPersonGroup childPersonGroup, IMultiCriteria multiCriteria)
