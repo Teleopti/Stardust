@@ -4,12 +4,15 @@ namespace Stardust.Manager
 {
 	public class ManagerConfiguration
 	{
-		public ManagerConfiguration(string connectionString, string route, int allowedNodeDownTimeSeconds, int checkNewJobIntervalSeconds)
+		public ManagerConfiguration(string connectionString, string route, int allowedNodeDownTimeSeconds, int checkNewJobIntervalSeconds, int purgeBadgeSize, int purgeIntervalHours, int purgeJobsOlderThanHours)
 		{
 			ConnectionString = connectionString;
 			Route = route;
 			AllowedNodeDownTimeSeconds = allowedNodeDownTimeSeconds;
 			CheckNewJobIntervalSeconds = checkNewJobIntervalSeconds;
+			PurgeBadgeSize = purgeBadgeSize;
+			PurgeIntervalHours = purgeIntervalHours;
+			PurgeJobsOlderThanHours = purgeJobsOlderThanHours;
 			ValidateParameters();
 		}
 
@@ -31,11 +34,26 @@ namespace Stardust.Manager
 			{
 				throw new ArgumentNullException("CheckNewJobIntervalSeconds");
 			}
+			if (PurgeBadgeSize <= 0)
+			{
+				throw new ArgumentNullException("PurgeBadgeSize");
+			}
+			if (PurgeIntervalHours <= 0)
+			{
+				throw new ArgumentNullException("PurgeIntervalHours");
+			}
+			if (PurgeJobsOlderThanHours <= 0)
+			{
+				throw new ArgumentNullException("PurgeJobsOlderThanHours");
+			}
 		}
 
 		public string ConnectionString { get; private set; }
 		public string Route { get; private set; }
 		public int AllowedNodeDownTimeSeconds { get; private set; }
 		public int CheckNewJobIntervalSeconds { get; private set; }
+		public int PurgeBadgeSize { get; private set; }
+		public int PurgeIntervalHours { get; private set; }
+		public int PurgeJobsOlderThanHours { get; private set; }
 	}
 }

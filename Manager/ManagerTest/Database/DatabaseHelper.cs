@@ -50,67 +50,26 @@ namespace ManagerTest.Database
 
 		public void TryClearDatabase()
 		{
-			this.Log().DebugWithLineNumber("Start truncating database tables.");
-
 			using (var connection = new SqlConnection(_connectionString))
 			{
 				connection.Open();
 
-				//-------------------------------------------------
-				// Truncate table Stardust.JobQueue.
-				//-------------------------------------------------
-				using (var command = new SqlCommand("TRUNCATE TABLE [Stardust].[JobQueue]",
-				                                    connection))
+				using (var command = new SqlCommand("DELETE FROM [Stardust].[JobQueue]", connection))
 				{
-					this.Log().DebugWithLineNumber("Start: " + command.CommandText);
-
 					command.ExecuteNonQuery();
-
-					this.Log().DebugWithLineNumber("Finished: " + command.CommandText);
 				}
-
-				//-------------------------------------------------
-				// Truncate table Stardust.Job.
-				//-------------------------------------------------
-				using (var command = new SqlCommand("TRUNCATE TABLE [Stardust].[Job]",
-				                                    connection))
+				using (var command = new SqlCommand("DELETE FROM  [Stardust].[JobDetail]", connection))
 				{
-					this.Log().DebugWithLineNumber("Start: " + command.CommandText);
-
 					command.ExecuteNonQuery();
-
-					this.Log().DebugWithLineNumber("Finished: " + command.CommandText);
 				}
-
-				//-------------------------------------------------
-				// Truncate table Stardust.Job Detail.
-				//-------------------------------------------------
-				using (var command = new SqlCommand("TRUNCATE TABLE [Stardust].[JobDetail]",
-				                                    connection))
+				using (var command = new SqlCommand("DELETE FROM [Stardust].[Job]", connection))
 				{
-					this.Log().DebugWithLineNumber("Start: " + command.CommandText);
-
 					command.ExecuteNonQuery();
-
-					this.Log().DebugWithLineNumber("Finished: " + command.CommandText);
 				}
-
-				//-------------------------------------------------
-				// Truncate table Stardust.WorkerNode.
-				//-------------------------------------------------
-				using (var command = new SqlCommand("TRUNCATE TABLE [Stardust].[WorkerNode]",
-				                                    connection))
+				using (var command = new SqlCommand("DELETE FROM [Stardust].[WorkerNode]", connection))
 				{
-					this.Log().DebugWithLineNumber("Start: " + command.CommandText);
-
 					command.ExecuteNonQuery();
-
-					this.Log().DebugWithLineNumber("Finished: " + command.CommandText);
 				}
-
-				connection.Close();
-
-				this.Log().DebugWithLineNumber("Finished truncating database tables.");
 			}
 		}
 	}

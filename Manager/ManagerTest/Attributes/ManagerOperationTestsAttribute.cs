@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Timers;
 using Autofac;
 using ManagerTest.Fakes;
 using Stardust.Manager;
@@ -16,7 +17,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();
 
 			ManagerConfiguration config = new ManagerConfiguration(
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20);
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20, 10, 1, 24);
 
 			builder.RegisterInstance(config).SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
@@ -28,6 +29,7 @@ namespace ManagerTest.Attributes
 
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
+			builder.RegisterType<PurgeTimer>().As<Timer>().SingleInstance();
 		}
 	}
 }

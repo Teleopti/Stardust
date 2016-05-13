@@ -69,7 +69,10 @@ namespace ManagerConsoleHost
 				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString,
 				ConfigurationManager.AppSettings["route"],
 				int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
-				int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"]));
+				int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"]),
+				int.Parse(ConfigurationManager.AppSettings["PurgeBadgeSize"]),
+				int.Parse(ConfigurationManager.AppSettings["PurgeIntervalHours"]),
+				int.Parse(ConfigurationManager.AppSettings["PurgeJobsOlderThanHours"]));
 			
 			var container = new ContainerBuilder().Build();
 			var config = new HttpConfiguration();

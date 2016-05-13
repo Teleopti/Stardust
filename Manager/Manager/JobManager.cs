@@ -21,7 +21,8 @@ namespace Stardust.Manager
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  IHttpSender httpSender,
-		                  ManagerConfiguration managerConfiguration)
+		                  ManagerConfiguration managerConfiguration,
+						  Timer purgeTimer)
 		{
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
@@ -35,6 +36,8 @@ namespace Stardust.Manager
 			_checkHeartbeatsTimer.Elapsed += CheckHeartbeats_Elapsed;
 			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*200;
 			_checkHeartbeatsTimer.Start();
+
+			purgeTimer.Start();
 
 			var workerNodes = _workerNodeRepository.GetAllWorkerNodes();
 

@@ -10,7 +10,7 @@ namespace ManagerTest.Attributes
 	{
 		protected override void SetUp(ContainerBuilder builder)
 		{
-			ManagerConfiguration managerConfiguration = new ManagerConfiguration("connectionstring", "route", 60, 20);
+			ManagerConfiguration managerConfiguration = new ManagerConfiguration("connectionstring", "route", 60, 20, 10, 1, 24);
 			builder.RegisterInstance(managerConfiguration).As<ManagerConfiguration>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
 			builder.RegisterType<FakeHttpSender>().As<IHttpSender>().SingleInstance().AsSelf();

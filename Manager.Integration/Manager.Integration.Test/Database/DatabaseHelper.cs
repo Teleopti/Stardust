@@ -75,19 +75,19 @@ namespace Manager.Integration.Test.Database
 			{
 				sqlConnection.Open();
 
-				using (var sqlCommand = new SqlCommand("truncate table [Stardust].[JobQueue]",sqlConnection))
+				using (var sqlCommand = new SqlCommand("delete from [Stardust].[JobQueue]",sqlConnection))
 				{
 					sqlCommand.ExecuteNonQuery();
 				}
-				using (var command = new SqlCommand("truncate table [Stardust].[Job]", sqlConnection))
+				using (var command = new SqlCommand("delete from [Stardust].[Job]", sqlConnection))
 				{
 					command.ExecuteNonQuery();
 				}
-				using (var command = new SqlCommand("truncate table [Stardust].[JobDetail]", sqlConnection))
+				using (var command = new SqlCommand("delete from [Stardust].[JobDetail]", sqlConnection))
 				{
 					command.ExecuteNonQuery();
 				}
-				using (var command = new SqlCommand("truncate table [Stardust].[WorkerNode]", sqlConnection))
+				using (var command = new SqlCommand("delete from [Stardust].[WorkerNode]", sqlConnection))
 				{
 					command.ExecuteNonQuery();
 				}
@@ -108,15 +108,15 @@ namespace Manager.Integration.Test.Database
 			{
 				sqlConnection.Open();
 
-				using (var sqlCommand = new SqlCommand("truncate table [Stardust].[JobQueue]", sqlConnection))
+				using (var sqlCommand = new SqlCommand("delete from [Stardust].[JobQueue]", sqlConnection))
 				{
 					sqlCommand.ExecuteNonQuery();
 				}
-				using (var command = new SqlCommand("truncate table [Stardust].[Job]", sqlConnection))
+				using (var command = new SqlCommand("delete from [Stardust].[Job]", sqlConnection))
 				{
 					command.ExecuteNonQuery();
 				}
-				using (var command = new SqlCommand("truncate table [Stardust].[JobDetail]", sqlConnection))
+				using (var command = new SqlCommand("delete from [Stardust].[JobDetail]", sqlConnection))
 				{
 					command.ExecuteNonQuery();
 				}

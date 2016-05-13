@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Timers;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -18,7 +19,7 @@ namespace ManagerTest
 			ContainerBuilder containerBuilder = new ContainerBuilder();
 
 			ManagerConfiguration config = new ManagerConfiguration(
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20);
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20, 1, 1, 1);
 
 			containerBuilder.RegisterModule(new ManagerModule(config));
 			_container = containerBuilder.Build();
@@ -38,6 +39,7 @@ namespace ManagerTest
 				scope.Resolve<Validator>().Should().Not.Be.Null();
 				scope.Resolve<CreateSqlCommandHelper>().Should().Not.Be.Null();
 				scope.Resolve<RetryPolicyProvider>().Should().Not.Be.Null();
+				scope.Resolve<Timer>().Should().Not.Be.Null();
 			}
 		}
 
