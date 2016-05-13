@@ -379,9 +379,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         {
             if (e.Key == Key.LeftShift || e.Key == Key.RightShift)
                 SelectGroupMoveLayers(_model.SelectedLayer);
-            if (e.Key == Key.Z && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            if ((e.Key == Key.Z && e.KeyboardDevice.Modifiers == ModifierKeys.Control) )
             {
                 OnUndo(null);
+                e.Handled = true;
+            }
+            if (e.Key == Key.Return)
+            {
                 e.Handled = true;
             }
         }
