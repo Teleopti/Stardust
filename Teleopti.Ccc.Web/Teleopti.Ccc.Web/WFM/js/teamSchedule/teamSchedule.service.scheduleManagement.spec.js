@@ -62,6 +62,6 @@ describe("[ScheduleManagement Service Test]", function() {
 	it("Should get latest shift start in given schedules", function() {
 		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
 
-		expect(target.getLatestStartOfSelectedSchedule(scheduleDateMoment, [schedule1.PersonId,schedule2.PersonId])).toEqual(moment(schedule2.Projection[0].Start).toDate());
+		expect(target.getLatestStartOfSelectedSchedule(scheduleDateMoment, [schedule1.PersonId,schedule2.PersonId])).toEqual(moment(schedule2.Projection[0].Start));
 	});
 });
