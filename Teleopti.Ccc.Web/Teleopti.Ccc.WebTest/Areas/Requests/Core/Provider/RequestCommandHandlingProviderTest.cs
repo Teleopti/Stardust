@@ -34,12 +34,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public IPersonAbsenceRepository PersonAbsenceRepository;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public Global.FakePermissionProvider PermissionProvider;
-		public IAuthorization Authorization;
+		public ConfigurablePermissions Authorization;
 		public IPersonRequestCheckAuthorization PersonRequestCheckAuthorization;
 		public ICommonAgentNameProvider CommonAgentNameProvider;
 		public ILoggedOnUser LoggedOnUser;
 		public IUserCulture UserCulture;
-		
 		
 		[Test]
 		public void TargetShouldNotBeNull()
@@ -223,7 +222,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var dateTimePeriod =  new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var writeProtectErrorMessage = getWriteProtectMessage (person, dateTimePeriod.StartDateTime);
 
-			((ConfigurablePermissions)Authorization).HasPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+			Authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
 			var result = doApproveAbsenceWriteProtectedTest(person, dateTimePeriod);
 			result.ErrorMessages.Contains(writeProtectErrorMessage).Should().Be.False();
 		}
@@ -248,7 +247,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var dateTimePeriod = new DateTimePeriod(2015, 10, 3, 2015, 10, 9);
 			var writeProtectErrorMessage = getWriteProtectMessage(person, dateTimePeriod.StartDateTime);
 
-			((ConfigurablePermissions)Authorization).HasPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
+			Authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule);
 			((PersonRequestAuthorizationCheckerConfigurable) PersonRequestCheckAuthorization).HasCancelPermission = false;
 
 			var result = doCancelAbsenceWriteProtectedTest(person, dateTimePeriod);
