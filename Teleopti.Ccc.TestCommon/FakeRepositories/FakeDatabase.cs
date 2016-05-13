@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -157,6 +158,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private PersonAbsence _personAbsence;
 		private Activity _activity;
 
+		public static string DefaultTenantName = "default";
+		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
+
 		public FakeDatabase(
 			FakeTenants tenants,
 			FakePersonRepository persons,
@@ -225,6 +229,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				CultureInfoFactory.CreateEnglishCulture(),
 				CultureInfoFactory.CreateEnglishCulture());
 			_person.PermissionInformation.AddApplicationRole(role);
+
+			WithTenant(DefaultTenantName, LegacyAuthenticationKey.TheKey);
+			WithBusinessUnit(DefaultBusinessUnitId);
 		}
 
 		public FakeDatabase WithTenant(string tenant, string rtaKey)

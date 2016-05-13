@@ -9,10 +9,20 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	public class ScheduleChangedEventForTest : ScheduleChangedEvent
+	{
+		public ScheduleChangedEventForTest()
+		{
+			LogOnDatasource = FakeDatabase.DefaultTenantName;
+			LogOnBusinessUnitId = FakeDatabase.DefaultBusinessUnitId;
+		}
+	}
+
 	[TestFixture]
 	[DomainTest]
 	public class ProjectionChangedEventPublisherTest
@@ -21,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public FakeDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
-		
 
 		[Test]
 		public void ShouldPublishWithDayOffData3()
@@ -36,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithDayOff()
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-02 00:00".Utc(),
 				EndDateTime = "2016-10-02 23:59".Utc(),
@@ -65,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithDayOff()
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-08 00:00".Utc(),
 				EndDateTime = "2016-10-08 23:59".Utc(),
@@ -90,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithPersonAbsence("2016-10-08")
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-08 00:00".Utc(),
 				EndDateTime = "2016-10-08 23:59".Utc(),
@@ -115,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithPersonAbsence("2016-10-08")
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-08 00:00".Utc(),
 				EndDateTime = "2016-10-08 23:59".Utc(),
@@ -141,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithPersonAbsence("2016-10-08")
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-08 00:00".Utc(),
 				EndDateTime = "2016-10-08 23:59".Utc(),
@@ -168,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithDayOff()
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-08 00:00".Utc(),
 				EndDateTime = "2016-10-08 23:59".Utc(),
@@ -196,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithActivty("2016-10-07 22:00", "2016-10-08 06:00")
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-08 00:00".Utc(),
 				EndDateTime = "2016-10-08 23:59".Utc(),
@@ -221,14 +230,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithActivty("2016-10-07 08:00", "2016-10-07 17:00")
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-07 08:00".Utc(),
 				EndDateTime = "2016-10-07 17:00".Utc(),
 				PersonId = person,
 				ScenarioId = scenario
 			});
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-07 08:00".Utc(),
 				EndDateTime = "2016-10-07 17:00".Utc(),
@@ -256,21 +265,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				.WithAssignment("2016-10-08", person2)
 				;
 
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-07 08:00".Utc(),
 				EndDateTime = "2016-10-07 17:00".Utc(),
 				PersonId = person1,
 				ScenarioId = scenario
 			});
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-07 08:00".Utc(),
 				EndDateTime = "2016-10-07 17:00".Utc(),
 				PersonId = person2,
 				ScenarioId = scenario
 			});
-			Target.Handle(new ScheduleChangedEvent
+			Target.Handle(new ScheduleChangedEventForTest
 			{
 				StartDateTime = "2016-10-07 08:00".Utc(),
 				EndDateTime = "2016-10-07 17:00".Utc(),
