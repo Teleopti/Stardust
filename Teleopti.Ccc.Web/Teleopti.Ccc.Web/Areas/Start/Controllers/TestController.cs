@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					"Cancelling and waiting for hangfire jobs to finish",
 					"Clearing all connection pools",
 					"Restoring Ccc7 database",
-					"Restoring Analytics database"
+					"Clearing Analytics database"
 				}
 			});
 		}

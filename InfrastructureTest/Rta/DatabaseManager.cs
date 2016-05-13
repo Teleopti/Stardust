@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using BusinessUnit = Teleopti.Ccc.Domain.Common.BusinessUnit;
 using Person = Teleopti.Ccc.Domain.Common.Person;
-using Team = Teleopti.Ccc.Domain.AgentInfo.Team;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {

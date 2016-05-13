@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			return table;
 		}
 
-		public static DataRow AddDate(
+		public static void AddDate(
 			this DataTable dataTable,
 			int date_id,
 			DateTime date_date,
@@ -69,17 +69,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["quarter"] = quarter;
 			row["insert_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);
-			return row;
 		}
 
-		public static DataRow AddDate(
+		public static void AddDate(
 			this DataTable dataTable,
 			int date_id,
 			DateTime date_date,
 			CultureInfo culture
 			)
 		{
-			return dataTable.AddDate(
+			dataTable.AddDate(
 				date_id,
 				date_date.Date,
 				date_date.Year,

@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 		public static void AddPerson(
 			this DataTable dataTable,
 			int personId,
-			Guid? personCode,
+			Guid personCode,
 			string firstName,
 			string lastName,
 			DateTime validFrom,
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int validToDateId,
 			int validToIntervalId,
 			int businessUnitId,
-			Guid? businessUnitCode,
+			Guid businessUnitCode,
 			string businessUnitName,
 			int datasourceId,
 			bool toBeDeleted,
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			var row = dataTable.NewRow();
 
 			row["person_id"] = personId;
-			row["person_code"] = personCode ?? (object) DBNull.Value;
+			row["person_code"] = personCode;
 			row["valid_from_date"] = validFrom;
 			row["valid_to_date"] = validTo;
 			row["valid_from_date_id"] = validFromDateId;
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["first_name"] = firstName;
 			row["last_name"] = lastName ;
 			row["business_unit_id"] = businessUnitId;
-			row["business_unit_code"] = businessUnitCode ?? (object) DBNull.Value;
+			row["business_unit_code"] = businessUnitCode;
 			row["business_unit_name"] = businessUnitName;
 			row["datasource_id"] = datasourceId;
 			row["insert_date"] = DateTime.Now;

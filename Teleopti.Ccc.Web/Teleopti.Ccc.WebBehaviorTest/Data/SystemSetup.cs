@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static ICurrentUnitOfWorkFactory UnitOfWorkFactory;
 		public static ICurrentUnitOfWork UnitOfWork;
 		public static DefaultDataCreator DefaultDataCreator;
-		public static DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
 		public static HangfireUtilties Hangfire;
 		public static MutableNow Now;
 
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			UnitOfWorkFactory = _container.Resolve<ICurrentUnitOfWorkFactory>();
 			UnitOfWork = _container.Resolve<ICurrentUnitOfWork>();
 			DefaultDataCreator = _container.Resolve<DefaultDataCreator>();
-			DefaultAnalyticsDataCreator = new DefaultAnalyticsDataCreator();
 		}
 
 		public static void Start()

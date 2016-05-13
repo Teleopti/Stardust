@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class Person : IAnalyticsDataSetup, IPersonData
 	{
-		private readonly Guid? _personCode;
+		private readonly Guid _personCode;
 		private readonly IDatasourceData _datasource;
 		private readonly DateTime _validFrom;
 		private readonly DateTime _validTo;
 		private readonly int _validFromId;
 		private readonly int _validToId;
 		private readonly int _businessUnitId;
-		private readonly Guid? _businessUnitCode;
+		private readonly Guid _businessUnitCode;
 		private readonly bool _toBeDeleted;
 		private readonly int _timeZoneId;
 		private readonly Guid? _personPeriodCode;
@@ -47,15 +47,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		}
 
-		public static Person NotDefinedPerson(IDatasourceData datasource)
-		{
-			return new Person(-1, null, null, "Not Defined", "Not Defined", new DateTime(1900, 1, 1),
-				new DateTime(2059, 12, 31), -1, -2, -1, null, datasource, false, -1);
-		}
-
 		public Person(
-			int personId, Guid? personCode, Guid? personPeriodCode, string firstName, string lastName, DateTime validFrom, DateTime validTo, int validFromId,
-			int validToId, int businessUnitId, Guid? businessUnitCode, IDatasourceData datasource, bool toBeDeleted, int timeZoneId)
+			int personId, Guid personCode, Guid? personPeriodCode, string firstName, string lastName, DateTime validFrom, DateTime validTo, int validFromId,
+			int validToId, int businessUnitId, Guid businessUnitCode, IDatasourceData datasource, bool toBeDeleted, int timeZoneId)
 		{
 			PersonId = personId;
 			_personCode = personCode;

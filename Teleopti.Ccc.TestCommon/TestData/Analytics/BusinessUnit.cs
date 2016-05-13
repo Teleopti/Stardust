@@ -13,19 +13,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	{
 		private readonly IBusinessUnit _businessUnit;
 		private readonly IDatasourceData _datasource;
-		public static int IdCounter = 0;
+
 		public int BusinessUnitId { get; set; }
 		public IEnumerable<DataRow> Rows { get; set; }
 
-		public BusinessUnit(IBusinessUnit businessUnit, IDatasourceData datasource) : this (businessUnit, datasource, 0)
-		{
-		}
-
-		public BusinessUnit(IBusinessUnit businessUnit, IDatasourceData datasource, int businessUnitId)
-		{
+		public BusinessUnit(IBusinessUnit businessUnit, IDatasourceData datasource) {
 			_businessUnit = businessUnit;
 			_datasource = datasource;
-			BusinessUnitId = businessUnitId;
+			BusinessUnitId = 0;
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)

@@ -31,6 +31,7 @@ Scenario: Show MyReport menu
 #position 1 is MyReport, position 2 is Badge Leader Board, position 3 is divider by default
 
 Scenario: Open standard report new 
+	Given there is a business unit in analytics
 	When I am viewing an application page
 	And I click reports menu
 	And I click the report at position '4' in the list
