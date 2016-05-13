@@ -45,10 +45,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return combination;
 		}
 
-		//public void ResetSkillCombinations()
-		//{
-		//	_personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
-		//}
+		public void ResetSkillCombinations()
+		{
+			_personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
+		}
 	}
 
 	public class SkillCombination
