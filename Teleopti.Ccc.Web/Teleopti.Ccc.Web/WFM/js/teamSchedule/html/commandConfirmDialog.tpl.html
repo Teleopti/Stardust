@@ -36,10 +36,10 @@
 					class="wfm-btn"
 					ng-class="{'wfm-btn-primary': !(needFix || hasError) , 'wfm-btn-primary-disabled': needFix || hasError}"
 					ng-disabled="(needFix || hasError) ?'disabled':''">
-				Apply
+				{{'Apply' | translate}}
 			</button>
-			<button ng-click="cancel()" style="margin-right:20px;" class="wfm-btn wfm-btn-default">
-				Cancel
+			<button ng-click="cancel()" class="wfm-btn wfm-btn-default">
+				{{'Cancel' | translate}}
 			</button>
 		</md-dialog-actions>
 	</form>
