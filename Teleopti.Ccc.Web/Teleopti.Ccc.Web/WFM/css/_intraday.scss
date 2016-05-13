@@ -21,8 +21,6 @@
 	background: $blue-300;
 }
 
-.c3-tooltip-name--Current > td.value{
-	color:transparent!important;
-	background:$gray-300;
-	border-left:0 solid transparent;
+.c3-tooltip-name--Current,.c3-legend-item-Current{
+	display:none!important;
 }
