@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var options = new BackgroundJobServerOptions
 			{
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully,
-				Queues = QueueNames.From<Priority>()
+				Queues = QueueName.All()
 			};
 			app.UseHangfireServer(options);
 

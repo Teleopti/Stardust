@@ -29,18 +29,18 @@ namespace Teleopti.Interfaces.Messages
 		Low
 	}
 
-	public class QueueNames
+	public class QueueName
 	{
-		public static string[] From<T>()
+		public static string[] All()
 		{
-			Type t = typeof (T);
-			if (t.IsEnum)
-			{
-				var values = from Enum e in Enum.GetValues(t)
-					select e.ToString().ToLower();
-				return values.ToArray();
-			}
-			return null;
+			var values = from Priority e in Enum.GetValues(typeof (Priority))
+				select For(e);
+			return values.ToArray();
+		}
+
+		public static string For(Priority e)
+		{
+			return e.ToString().ToLower();
 		}
 	}
 }

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 		public void CancelQueue()
 		{
-			foreach (var queueName in QueueNames.From<Priority>())
+			foreach (var queueName in QueueName.All())
 			{
 				_monitoring
 				.EnqueuedJobs(queueName, 0, 100)
@@ -48,6 +48,11 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
 
+		public long NumberOfJobsInQueue(string name)
+		{
+			return _monitoring.EnqueuedCount(name);
+		}
+
 		[LogTime]
 		public virtual void WaitForQueue()
 		{
@@ -55,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			{
 				long enqueuedCount = 0;
 				long fetchedCount = 0;
-				foreach (var queueName in QueueNames.From<Priority>())
+				foreach (var queueName in QueueName.All())
 				{
 					enqueuedCount += _monitoring.EnqueuedCount(queueName);
 					fetchedCount += _monitoring.FetchedCount(queueName);

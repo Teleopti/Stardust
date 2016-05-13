@@ -1,0 +1,75 @@
+﻿using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
+
+namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
+{
+	[TestFixture]
+	[AnalyticsDatabaseTest]
+	public class HangfireQueueSelectionEventPublishingTest : ISetup
+	{
+		public HangfireUtilties Hangfire;
+		public IEventPublisher Publisher;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.AddService<HangfireEventClient>();// register over the fake, which already registeres over the common registration ;)
+			system.AddService<NormalPriorityHandler>();
+			system.AddService<HighPriorityHandler>();
+		}
+
+		[Test]
+		public void ShouldEnqueueOnDefaultQueue()
+		{
+			Publisher.Publish(new NormalPriorityEvent());
+
+			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.Default)).Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.High)).Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldEnqueueOnHighPriority()
+		{
+			Publisher.Publish(new HighPriorityEvent());
+
+			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.Default)).Should().Be(0);
+			Hangfire.NumberOfJobsInQueue(QueueName.For(Priority.High)).Should().Be(1);
+		}
+
+		public class HighPriorityEvent : IEvent
+		{
+		}
+
+		public class HighPriorityHandler : 
+			IHandleEvent<HighPriorityEvent>, 
+			IRunOnHangfire,
+			IRunWithHighPriority
+		{
+			public void Handle(HighPriorityEvent @event)
+			{
+			}
+		}
+
+		public class NormalPriorityEvent : IEvent
+		{
+		}
+
+		public class NormalPriorityHandler :
+			IHandleEvent<NormalPriorityEvent>,
+			IRunOnHangfire,
+			IRunWithDefaultPriority
+		{
+			public void Handle(NormalPriorityEvent @event)
+			{
+			}
+		}
+
+
+	}
+}
