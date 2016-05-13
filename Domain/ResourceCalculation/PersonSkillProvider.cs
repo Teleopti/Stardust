@@ -1,31 +1,27 @@
-using System;
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PersonSkillProvider : IPersonSkillProvider
 	{
-		private ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
+		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
 		public SkillCombination SkillsOnPersonDate(IPerson person, DateOnly date)
 		{
-			ConcurrentBag<SkillCombination> foundCombinations = _personCombination.GetOrAdd(person, _ => new ConcurrentBag<SkillCombination>());
-			foreach (var foundCombination in foundCombinations)
+			var foundCombinations = _personCombination.GetOrAdd(person, _ => new ConcurrentBag<SkillCombination>());
+			foreach (var foundCombination in foundCombinations.Where(foundCombination => foundCombination.IsValidForDate(date)))
 			{
-				if (foundCombination.IsValidForDate(date))
-				{
-					return foundCombination;
-				}
+				return foundCombination;
 			}
 
-			IPersonPeriod personPeriod = person.Period(date);
+			var personPeriod = person.Period(date);
 			if (personPeriod == null) return new SkillCombination(new ISkill[0], new DateOnlyPeriod(), new SkillEffiencyResource[]{});
 
-			var personSkillCollection = PersonSkillReducerContext.Fetch().Reduce(personPeriod).ToArray();
+			var personSkillCollection = PersonSkills(personPeriod).ToArray();
 
 			var skills = personSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0)
 				.Concat(personPeriod.PersonMaxSeatSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
@@ -45,43 +41,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return combination;
 		}
 
-		public void ResetSkillCombinations()
+		protected virtual IEnumerable<IPersonSkill> PersonSkills(IPersonPeriod personPeriod)
 		{
-			_personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
+			return personPeriod.PersonSkillCollection.Where(personSkill => !((IDeleteTag)personSkill.Skill).IsDeleted);
 		}
-	}
-
-	public class SkillCombination
-	{
-		private readonly DateOnlyPeriod _period;
-		private readonly IList<Guid> _skillKeys;
-
-		public SkillCombination(ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies)
-		{
-			_period = period;
-			SkillEfficiencies = skillEfficiencies;
-			Skills = skills;
-			_skillKeys = Skills.Select(s => s.Id.GetValueOrDefault()).ToList();
-			Key = toKey(_skillKeys);
-		}
-
-		public bool IsValidForDate(DateOnly date)
-		{
-			return _period.Contains(date);
-		}
-
-		private static string toKey(IEnumerable<Guid> idCollection)
-		{
-			return string.Join("_", idCollection.OrderBy(s => s));
-		}
-
-		public bool HasSkill(Guid skill)
-		{
-			return _skillKeys.Contains(skill);
-		}
-
-		public string Key { get; private set; }
-		public ISkill[] Skills { get; private set; }
-		public SkillEffiencyResource[] SkillEfficiencies { get; private set; }
 	}
 }
