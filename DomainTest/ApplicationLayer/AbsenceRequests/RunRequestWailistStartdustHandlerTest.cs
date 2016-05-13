@@ -42,7 +42,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void ShouldTriggerWaitlistProcessing()
 		{
 			var period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow);
-			target.Handle(new RunRequestWaitlistEvent(period));
+			target.Handle(new RunRequestWaitlistEvent
+			{
+				Period = period
+			});
 			processor.AssertWasCalled(x=>x.ProcessAbsenceRequestWaitlist(uow, period, wcs1));
 			processor.AssertWasCalled(x=>x.ProcessAbsenceRequestWaitlist(uow, period, wcs2));
 		}
