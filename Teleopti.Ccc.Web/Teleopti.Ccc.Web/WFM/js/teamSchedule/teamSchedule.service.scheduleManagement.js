@@ -116,7 +116,7 @@
 						shift.Projections.forEach(function (projection) {
 							var scheduleStart = moment(projection.Start).toDate();
 							if (projection.Selected && scheduleStart >= latestStart) {
-								var exist = projection.ShiftLayerIds.some(function (layerId) {
+							    var exist =  projection.ShiftLayerIds && projection.ShiftLayerIds.some(function (layerId) {
 									return projectionShiftLayerIds.indexOf(layerId) > -1;
 								});
 								if (exist) return;

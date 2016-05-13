@@ -33,9 +33,9 @@
 			var shiftOnCurrentDate = personSchedule.Shifts.filter(function (shift) {
 				return shift.Date.isSame(personSchedule.Date, 'day');
 			});
-			var unselectedLayers = shiftOnCurrentDate[0].Projections.filter(function (projection) {
+			var unselectedLayers = shiftOnCurrentDate.length > 0 ? shiftOnCurrentDate[0].Projections.filter(function (projection) {
 				return !projection.Selected;
-			});
+			}) : [];
 			return newStartMoment.isBefore(personSchedule.ScheduleStartTime()) || unselectedLayers.length == 0 ? newStartMoment :
 						unselectedLayers.length > 0 && newStartMoment.isAfter(unselectedLayers[0].Start) ? moment(unselectedLayers[0].Start) : moment(personSchedule.ScheduleStartTime());
 		};
@@ -43,15 +43,18 @@
 			var shiftOnCurrentDate = personSchedule.Shifts.filter(function (shift) {
 				return shift.Date.isSame(personSchedule.Date, 'day');
 			});
+		    
 
-			var selectedLayers = shiftOnCurrentDate[0].Projections.filter(function (projection) {
+			var selectedLayers = shiftOnCurrentDate.length > 0 ? shiftOnCurrentDate[0].Projections.filter(function (projection) {
 				return projection.Selected;
-			});
-			var unselectedLayers = shiftOnCurrentDate[0].Projections.filter(function (projection) {
+			}):[];
+			var unselectedLayers = shiftOnCurrentDate.length > 0 ? shiftOnCurrentDate[0].Projections.filter(function (projection) {
 				return !projection.Selected;
-			});
+			}) : [];
+			if (shiftOnCurrentDate.length == 0 || selectedLayers.length == 0)
+			    return moment(personSchedule.ScheduleEndTime());
 			var newLayerEnd = moment(selectedLayers[selectedLayers.length - 1].Start).add(selectedLayers[selectedLayers.length - 1].Minutes, 'minutes').add(newStartMoment.diff(selectedLayers[0].Start, 'minutes'), 'minutes');
-			return newLayerEnd.isAfter(personSchedule.ScheduleStartTime()) || unselectedLayers.length == 0 ? newLayerEnd : unselectedLayers.length > 0 && newLayerEnd.isBefore(moment(unselectedLayers[unselectedLayers.length -1].Start).add(unselectedLayers[unselectedLayers.length -1].Minutes,'minutes')) ? 
+			return newLayerEnd.isAfter(personSchedule.ScheduleEndTime()) || unselectedLayers.length == 0 ? newLayerEnd : unselectedLayers.length > 0 && newLayerEnd.isBefore(moment(unselectedLayers[unselectedLayers.length -1].Start).add(unselectedLayers[unselectedLayers.length -1].Minutes,'minutes')) ? 
 				moment(unselectedLayers[unselectedLayers.length -1].Start).add(unselectedLayers[unselectedLayers.length -1].Minutes,'minutes') : moment(personSchedule.ScheduleEndTime());
 		};
 		this.getInvalidPeople = function() {
