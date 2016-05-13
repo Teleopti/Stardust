@@ -131,7 +131,7 @@ describe("[Test for TeamScheduleController]:", function() {
 	});
 
 	it("should get correct new activity start for selected date", function () {
-		controller.scheduleDate = new Date("2015-10-26");
+		controller.scheduleDate = new Date("2015-10-26T12:00:00Z");
 		nowDate = new Date("2015-10-25 12:16:00");
 		rootScope.$digest();
 		
