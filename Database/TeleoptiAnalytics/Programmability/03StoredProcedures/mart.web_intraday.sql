@@ -23,7 +23,14 @@ BEGIN
 	DECLARE @bu_id int
 	
 	CREATE TABLE #skills(id uniqueidentifier)
+	
 	CREATE TABLE #queues(queue_id int)
+	
+	CREATE TABLE #queue_stats(
+	date_id int,
+	interval_id smallint,offered_calls decimal(19,0), 
+	handle_time_s decimal(19,0))
+
 	CREATE TABLE #result(
 	interval_id smallint,
 	forecasted_calls decimal(28,4), 
@@ -69,6 +76,25 @@ BEGIN
 	GROUP BY
 		i.interval_id
 
+	-- Prepare Queue stats
+	DECLARE @current_date_id int
+	SELECT @current_date_id = date_id FROM mart.dim_date WHERE date_date = @today
+
+	INSERT INTO #queue_stats
+	SELECT
+		date_id,
+		interval_id,
+		offered_calls,
+		handle_time_s
+	FROM 
+		#queues q
+		INNER JOIN mart.fact_queue fq ON q.queue_id = fq.queue_id
+	WHERE
+		date_id between @current_date_id - 1 and @current_date_id + 1
+	order by date_id,
+		interval_id,
+		fq.queue_id
+	
 
 	-- Queue stats - update result
 	UPDATE r
@@ -76,8 +102,17 @@ BEGIN
 		offered_calls = fq.offered_calls,
 		handle_time_s = fq.handle_time_s
 	FROM 
-		mart.fact_queue fq
-		INNER JOIN #queues q ON fq.queue_id = q.queue_id
+			(SELECT 
+				date_id,
+				interval_id,
+				SUM(ISNULL(offered_calls, 0)) as offered_calls,
+				SUM(ISNULL(handle_time_s, 0)) as handle_time_s
+			FROM 
+				#queue_stats
+			GROUP BY
+				date_id,
+				interval_id
+		) AS fq
 		INNER JOIN mart.bridge_time_zone bz ON fq.date_id = bz.date_id AND fq.interval_id = bz.interval_id
 		INNER JOIN mart.dim_date d ON bz.local_date_id = d.date_id
 		INNER JOIN mart.dim_interval i ON bz.local_interval_id = i.interval_id
