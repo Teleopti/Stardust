@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 					{
 						AcdLogOnName = ExternalLogon,// is not used?
 						DataSourceId = ExternalLogonDataSourceId,
-						AcdLogOnOriginalId = ExternalLogon // this is what the rta receives
-
+						AcdLogOnOriginalId = ExternalLogon, // this is what the rta receives
+						AcdLogOnMartId = -1
 					};
 					externalLogonRepository.Add(logon);
 				}
