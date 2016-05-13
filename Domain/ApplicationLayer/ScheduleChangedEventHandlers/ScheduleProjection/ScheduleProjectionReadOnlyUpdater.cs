@@ -1,14 +1,13 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-#pragma warning disable 618
-	public class ScheduleProjectionReadOnlyUpdater : 
-		IHandleEvent<ProjectionChangedEvent>, 
+	public class ScheduleProjectionReadOnlyUpdater :
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
-		IRunOnServiceBus
-#pragma warning restore 618
+		IHandleEvent<ProjectionChangedEvent>, 
+		IRunOnHangfire
 	{
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 	    
@@ -16,8 +15,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		{
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 		}
-		
-		public void Handle(ProjectionChangedEvent @event)
+
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEventForScheduleProjection @event)
+		{
+			handleProjectionChanged(@event);
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			handleProjectionChanged(@event);
 		}
@@ -59,11 +65,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						});
 				}
 			}
-		}
-		
-		public void Handle(ProjectionChangedEventForScheduleProjection @event)
-		{
-			handleProjectionChanged(@event);
 		}
 	}
 }
