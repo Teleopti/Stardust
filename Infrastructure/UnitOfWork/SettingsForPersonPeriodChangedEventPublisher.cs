@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				foreach (var notpersonList in notPerson.Batch(25))
 				{
 					var idsChanged = notpersonList.Select(p => ((IAggregateRoot) p).Id.GetValueOrDefault()).ToArray();
-                    var personPeriodCollectionChangedEvent = new SettingsForPersonPeriodChangedEvent();
-					personPeriodCollectionChangedEvent.SetIdCollection(idsChanged);
-					_eventsPublisher.Publish(personPeriodCollectionChangedEvent);
+                    var settingsForPersonPeriodChangedEvent = new SettingsForPersonPeriodChangedEvent();
+					settingsForPersonPeriodChangedEvent.SetIdCollection(idsChanged);
+					_eventsPublisher.Publish(settingsForPersonPeriodChangedEvent);
 				}
             }
         }
