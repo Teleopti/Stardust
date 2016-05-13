@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 					oldResponses.Remove(createResponse(scheduleDay.Key, checkDay.Date, "remove"));
 					var dayOff = checkDay.DayOff;
 					if (dayOff != null)
-					{
+					{					
 						DateTimePeriod layerAfterPeriod = periodOfLayerAfter(dayOff, schedules);
 						DateTimePeriod layerBeforePeriod = periodOfLayerBefore(dayOff, schedules);
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				dayForValidation.ProjectionStart =
 					new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeStart(projection.Value));
 				dayForValidation.ProjectionEnd = new Lazy<DateTime?>(() => _workTimeStartEndExtractor.WorkTimeEnd(projection.Value));
-				dayForValidation.HasAssignment = assignment.MainActivities().Any();
+				dayForValidation.HasAssignment = true;
 				dayForValidation.StartDateTime = assignment.Period.StartDateTime;
 				dayForValidation.DayOff = assignment.DayOff();
 			}
@@ -247,6 +247,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				if (day.HasAssignment)
 				{
+					if(day.Date.Date >= dayOff.Anchor.Date)
+						continue;
+
 					if (day.StartDateTime < dayOff.Anchor && (returnVal==null || returnVal.StartDateTime<day.StartDateTime))
 					{
 						returnVal = day;
@@ -281,6 +284,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			{
 				if (day.HasAssignment)
 				{
+					if (day.Date.Date <= dayOff.Anchor.Date)
+						continue;
+
 					if (day.StartDateTime > dayOff.Anchor)
 						return day;
 				}

@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_mocks.VerifyAll();
 		}
 
-		[Test, Ignore("Exposing bug")]
+		[Test]
 		public void ShouldBreakRuleWhenHavingDayOffAndOvertimeIfDayBeforeAndDayAfterIsAssignedWithOvertime()
 		{
 			var date = new DateOnly(2007, 8, 3);
@@ -401,7 +401,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			_mocks.VerifyAll();
 		}
 
-		[Test, Ignore("Exposing bug")]
+		[Test]
 		public void ShouldBreakRuleWhenHavingDayOffAndOvertimeIfDayBeforeAndDayAfterIsAssignedWithOvertimeAgain()
 		{
 			var date = new DateOnly(2007, 8, 3);
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			var template = new DayOffTemplate(new Description()) { Anchor = TimeSpan.FromHours(12) };
 			template.SetTargetAndFlexibility(TimeSpan.FromHours(36), TimeSpan.FromHours(8));
 			assWithDayOff.SetDayOff(template);
-			// Irrelevant
+			// Not relevant
 			//assWithDayOff.AddOvertimeActivity(activity, new DateTimePeriod(new DateTime(2007, 8, 3, 11, 45, 0, DateTimeKind.Utc),
 			//	new DateTime(2007, 8, 3, 12, 15, 0, DateTimeKind.Utc)), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
 
