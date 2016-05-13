@@ -25,4 +25,4 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 		}
 	}
-}
+} 
