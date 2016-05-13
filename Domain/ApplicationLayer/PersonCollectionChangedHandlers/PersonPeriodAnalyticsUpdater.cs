@@ -7,16 +7,62 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
+    [UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439), UseNotOnToggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
 #pragma warning disable 618
 	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
-	public class PersonPeriodAnalyticsUpdater :
-		IHandleEvent<PersonCollectionChangedEvent>,
-		IHandleEvent<PersonDeletedEvent>,
-		IRunOnServiceBus
+        IHandleEvent<PersonCollectionChangedEvent>,
+        IHandleEvent<PersonDeletedEvent>,
+        IRunOnServiceBus
 #pragma warning restore 618
+    {
+        public PersonPeriodAnalyticsUpdaterBus(IPersonRepository personRepository,
+            IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
+            IAnalyticsSkillRepository analyticsSkillRepository,
+            IEventPublisher eventPublisher,
+            IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
+            IAnalyticsTeamRepository analyticsTeamRepository)
+            : base(
+                personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
+                analyticsBusinessUnitRepository, analyticsTeamRepository)
+        {}
+
+        [AnalyticsUnitOfWork]
+       public new virtual void Handle(PersonCollectionChangedEvent @event)
+        {
+            base.Handle(@event);
+        }
+    }
+
+    [UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
+    public class PersonPeriodAnalyticsUpdaterHangfire : PersonPeriodAnalyticsUpdater,
+       IHandleEvent<PersonCollectionChangedEvent>,
+       IHandleEvent<PersonDeletedEvent>,
+       IRunOnHangfire
+    {
+        public PersonPeriodAnalyticsUpdaterHangfire(IPersonRepository personRepository,
+            IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
+            IAnalyticsSkillRepository analyticsSkillRepository,
+            IEventPublisher eventPublisher,
+            IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
+            IAnalyticsTeamRepository analyticsTeamRepository)
+            : base(
+                personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
+                analyticsBusinessUnitRepository, analyticsTeamRepository)
+        {}
+
+        [AnalyticsUnitOfWork]
+        [UnitOfWork]
+        public new virtual void Handle(PersonCollectionChangedEvent @event)
+        {
+            base.Handle(@event);
+        }
+    }
+
+    public class PersonPeriodAnalyticsUpdater 
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(PersonPeriodAnalyticsUpdater));
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
@@ -43,8 +89,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
 
-		[AnalyticsUnitOfWork]
-		public virtual void Handle(PersonCollectionChangedEvent @event)
+		
+        public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
 			var personPeriodFilter = new PersonPeriodFilter(
 				_analyticsPersonPeriodRepository.MinDate().DateDate,

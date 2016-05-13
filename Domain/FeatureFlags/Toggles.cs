@@ -126,7 +126,8 @@
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204,
 		ETL_SpeedUpScenario_38300,
-		Scheduler_LoadWithoutRequests_38567
-		// ReSharper restore InconsistentNaming
-	}
+		Scheduler_LoadWithoutRequests_38567,
+        PersonCollectionChanged_ToHangfire_38420
+        // ReSharper restore InconsistentNaming
+    }
 }

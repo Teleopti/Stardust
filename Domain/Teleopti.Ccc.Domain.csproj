@@ -416,7 +416,7 @@
     <Compile Include="Analytics\Transformer\PersonPeriodTransformer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonFinderReadOnlyUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonPeriodAnalyticsUpdater.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelConsumer.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
