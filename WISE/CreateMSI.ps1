@@ -1,5 +1,6 @@
 ﻿Framework "4.0"
 
+
 properties {
 	#$MSBuildPath = "C:\Program Files (x86)\MSBuild\12.0\bin\amd64\MSBuild.exe"
     $base_dir = resolve-path .\
