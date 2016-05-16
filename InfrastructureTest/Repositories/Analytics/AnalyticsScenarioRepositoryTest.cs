@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {
@@ -19,15 +18,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public IAnalyticsScenarioRepository Target;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		private AnalyticsDataFactory analyticsDataFactory;
-		private UtcAndCetTimeZones _timeZones;
-		private ExistingDatasources _datasource;
 
 		[SetUp]
 		public void Setup()
 		{
 			analyticsDataFactory = new AnalyticsDataFactory();
-			_timeZones = new UtcAndCetTimeZones();
-			_datasource = new ExistingDatasources(_timeZones);
 		}
 
 		[Test]
@@ -90,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				DatasourceId = 1,
 				DatasourceUpdateDate = new DateTime(2001, 1, 1),
 				DefaultScenario = false,
-				IsDeleted = false
+				IsDeleted = true
 			};
 
 			WithAnalyticsUnitOfWork.Do(() => Target.UpdateScenario(analyticsScenario));
