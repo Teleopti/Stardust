@@ -523,7 +523,6 @@
     <Compile Include="Foundation\MatrixRaptorExternalLogOnSynchronization.cs" />
     <Compile Include="Foundation\MatrixRaptorQueueSynchronization.cs" />
     <Compile Include="Foundation\MatrixSync.cs" />
-    <Compile Include="Foundation\NotifyMessageBroker.cs" />
     <Compile Include="Foundation\OptimisticLockException.cs" />
     <Compile Include="Foundation\RootChangeInfo.cs" />
     <Compile Include="Foundation\State.cs" />

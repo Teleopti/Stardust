@@ -4,11 +4,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages;
@@ -22,8 +23,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Logon
 		public IPrincipalAndStateContext Context;
 		public IBusinessUnitRepository BusinessUnits;
 		public IScenarioRepository Scenarios;
-		public IPersonAssignmentRepository Assignments;
 		public WithUnitOfWork UnitOfWork;
+		public FakeMessageSender Messages;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -105,6 +106,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Logon
 				});
 
 			entityFound.Should().Be(entityAdded);
+		}
+
+		[Test]
+		public void ShouldSendMessageWithValues()
+		{
+			var businessUnit = UnitOfWork.Get(() => BusinessUnits.LoadAll().First());
+			Context.Logout();
+
+			TheService.Do(
+				new Input { LogOnDatasource = SetupFixtureForAssembly.DataSource.DataSourceName, LogOnBusinessUnitId = businessUnit.Id.Value },
+				() =>
+				{
+					Scenarios.Add(new Domain.Common.Scenario("s"));
+				});
+
+			var message = Messages.NotificationsOfDomainType<IScenario>().Single();
+			message.DataSource.Should().Be(SetupFixtureForAssembly.DataSource.DataSourceName);
+			message.BusinessUnitId.Should().Be(businessUnit.Id.Value.ToString());
 		}
 	}
 }
