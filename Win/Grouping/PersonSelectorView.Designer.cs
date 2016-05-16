@@ -34,8 +34,12 @@ namespace Teleopti.Ccc.Win.Grouping
 			tabControlAdv.TabPages.Clear();
 			tabControlAdv = null;
 			treeViewAdvMainTabTree.AfterCheck -= treeViewAdvMainTabTreeAfterCheck;
-			this.treeViewAdvMainTabTree.AfterSelect -= new System.EventHandler(this.treeViewAdvMainTabTreeAfterSelect);
-			treeViewAdvMainTabTree.Nodes.Clear();
+			this.treeViewAdvMainTabTree.AfterSelect -= treeViewAdvMainTabTreeAfterSelect;
+            this.treeViewAdvMainTabTree.NodeBackgroundPaint -= treeViewAdvMainTabTreeNodeBackgroundPaint;
+            this.treeViewAdvMainTabTree.AfterSelect -= treeViewAdvMainTabTreeAfterSelect;
+            this.treeViewAdvMainTabTree.KeyDown -= treeViewAdvMainTabTreeKeyDown;
+            this.treeViewAdvMainTabTree.MouseDoubleClick -= openModule;
+            treeViewAdvMainTabTree.Nodes.Clear();
 			treeViewAdvMainTabTree = null;
 			xdtpDate = null;
 			DoFilter = null;
@@ -140,11 +144,11 @@ namespace Teleopti.Ccc.Win.Grouping
 			this.treeViewAdvMainTabTree.ToolTipControl.Size = new System.Drawing.Size(41, 15);
 			this.treeViewAdvMainTabTree.ToolTipControl.TabIndex = 1;
 			this.treeViewAdvMainTabTree.ToolTipControl.Text = "toolTip";
-			//this.treeViewAdvMainTabTree.NodeBackgroundPaint += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvPaintBackgroundEventHandler(this.treeViewAdvMainTabTreeNodeBackgroundPaint);
+			this.treeViewAdvMainTabTree.NodeBackgroundPaint += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvPaintBackgroundEventHandler(this.treeViewAdvMainTabTreeNodeBackgroundPaint);
 			this.treeViewAdvMainTabTree.AfterSelect += new System.EventHandler(this.treeViewAdvMainTabTreeAfterSelect);
-			//this.treeViewAdvMainTabTree.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdvMainTabTreeAfterCheck);
-			//this.treeViewAdvMainTabTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewAdvMainTabTreeKeyDown);
-			//this.treeViewAdvMainTabTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.openModule);
+			this.treeViewAdvMainTabTree.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdvMainTabTreeAfterCheck);
+			this.treeViewAdvMainTabTree.KeyDown += new System.Windows.Forms.KeyEventHandler(this.treeViewAdvMainTabTreeKeyDown);
+			this.treeViewAdvMainTabTree.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.openModule);
 			// 
 			// contextMenuStrip
 			// 
