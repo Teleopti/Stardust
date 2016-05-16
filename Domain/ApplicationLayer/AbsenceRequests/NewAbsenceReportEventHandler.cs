@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private delegate bool LoadDataAction(NewAbsenceReportCreatedEvent message);
 	}
 
-	[UseNotOnToggle(Toggles.Wfm_MoveNewAbsenceReportOnHangfire_38203)]
+	[DisabledBy(Toggles.Wfm_MoveNewAbsenceReportOnHangfire_38203)]
 #pragma warning disable 618
 	public class NewAbsenceReportServiceBusEventHandler : NewAbsenceReportBase, IHandleEvent<NewAbsenceReportCreatedEvent>,IRunOnServiceBus
 #pragma warning restore 618
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 	}
 
-	[UseOnToggle(Toggles.Wfm_MoveNewAbsenceReportOnHangfire_38203)]
+	[EnabledBy(Toggles.Wfm_MoveNewAbsenceReportOnHangfire_38203)]
 	public class NewAbsenceReportHangfireEventHandler : NewAbsenceReportBase, IHandleEvent<NewAbsenceReportCreatedEvent>,
 		IRunOnHangfire
 	{

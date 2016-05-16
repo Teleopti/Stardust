@@ -5,9 +5,9 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 namespace Teleopti.Ccc.Domain
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
-	public sealed class UseNotOnToggle : Attribute
+	public sealed class DisabledBy : Attribute
 	{
-		public UseNotOnToggle(params Toggles[] toggles)
+		public DisabledBy(params Toggles[] toggles)
 		{
 			Toggles = toggles;
 		}

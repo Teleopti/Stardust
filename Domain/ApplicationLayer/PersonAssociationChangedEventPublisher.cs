@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
+	[EnabledBy(Toggles.RTA_TerminatedPersons_36042)]
 	public class PersonAssociationChangedEventPublisher : 
 		IHandleEvent<TenantHourTickEvent>,
 		IHandleEvent<PersonTerminalDateChangedEvent>,
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				: DateTime.MaxValue;
 		}
 
-		[UseOnToggle(Toggles.RTA_TeamChanges_36043)]
+		[EnabledBy(Toggles.RTA_TeamChanges_36043)]
 		public void Handle(PersonTeamChangedEvent @event)
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			});
 		}
 
-		[UseOnToggle(Toggles.RTA_TeamChanges_36043)]
+		[EnabledBy(Toggles.RTA_TeamChanges_36043)]
 		public void Handle(PersonPeriodChangedEvent @event)
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent

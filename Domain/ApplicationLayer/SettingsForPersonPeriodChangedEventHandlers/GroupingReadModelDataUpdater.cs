@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
-	[UseOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+	[EnabledBy(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class GroupingReadModelDataUpdaterHangfire : 
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>, 
 		IRunOnHangfire
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 	}
 
 #pragma warning disable 618
-	[UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+	[DisabledBy(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class GroupingReadModelDataUpdaterServiceBus :
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
 		IRunOnServiceBus

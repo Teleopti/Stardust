@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpIntradayDayOff_38213)]
+	[EnabledBy(Toggles.ETL_SpeedUpIntradayDayOff_38213)]
 	public class DayOffTemplateChangedHandler :
 		IHandleEvent<DayOffTemplateChangedEvent>,
 		IRunOnHangfire

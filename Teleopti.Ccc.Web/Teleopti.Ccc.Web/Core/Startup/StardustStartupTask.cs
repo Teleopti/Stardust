@@ -6,7 +6,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
-	[UseOnToggle(Toggles.Wfm_Use_Stardust)]
+	[EnabledBy(Toggles.Wfm_Use_Stardust)]
 	[TaskPriority(100)]
 	public class StardustStartupTask : IBootstrapperTask
 	{

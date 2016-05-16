@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpIntradaySkill_37543)]
+	[EnabledBy(Toggles.ETL_SpeedUpIntradaySkill_37543)]
 	public class UpdateSkillAnalyticsHandler :
 		IHandleEvent<SkillChangedEvent>,
 		IHandleEvent<SkillCreatedEvent>,

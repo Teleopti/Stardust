@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Messages.General;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
 #pragma warning disable 618
-	[UseNotOnToggle(Toggles.Wfm_MoveExportMultiSiteSkillOnStardust_38134)]
+	[DisabledBy(Toggles.Wfm_MoveExportMultiSiteSkillOnStardust_38134)]
 	public class ExportMultisiteSkillsToSkillEventServiceBusHandler : ExportMultisiteSkillsToSkillBase, IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnServiceBus
 #pragma warning restore 618
 	{
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
 	}
 
-	[UseOnToggle(Toggles.Wfm_MoveExportMultiSiteSkillOnStardust_38134)]
+	[EnabledBy(Toggles.Wfm_MoveExportMultiSiteSkillOnStardust_38134)]
 	public class ExportMultisiteSkillsToSkillEventStardustHandler : ExportMultisiteSkillsToSkillBase, IHandleEvent<ExportMultisiteSkillsToSkillEvent>, IRunOnStardust
 	{
 		public ExportMultisiteSkillsToSkillEventStardustHandler(ICurrentUnitOfWork unitOfWork, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBrokerComposite messageBroker, IExportMultisiteSkillProcessor exportMultisiteSkillProcessor) : base(unitOfWork, jobResultRepository, feedback, messageBroker, exportMultisiteSkillProcessor)

@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 			Assert.That(typeof(targetWithAttrib).TypeEnabledByToggle(iocConfig), Is.False);
 		}
 
-		[UseOnToggle(Toggles.TestToggle, Toggles.TestToggle2)]
+		[EnabledBy(Toggles.TestToggle, Toggles.TestToggle2)]
 		private class targetWithMultiAttrib
 		{
 		}
 
-		[UseOnToggle(Toggles.TestToggle)]
+		[EnabledBy(Toggles.TestToggle)]
 		private class targetWithAttrib
 		{
 		}

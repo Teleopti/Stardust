@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				notOutPerson);
 		}
 
-		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
+		[EnabledBy(Toggles.RTA_DeletedPersons_36041)]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				deletePerson);
 		}
 
-		[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
+		[EnabledBy(Toggles.RTA_TerminatedPersons_36042)]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{

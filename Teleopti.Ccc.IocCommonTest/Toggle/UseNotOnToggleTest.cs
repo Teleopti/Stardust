@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.IocCommonTest.Toggle
 		}
 		
 
-		[UseNotOnToggle(Toggles.TestToggle)]
+		[DisabledBy(Toggles.TestToggle)]
 		private class targetWithAttribNotOn
 		{
 		}
 
-		[UseNotOnToggle(Toggles.TestToggle, Toggles.TestToggle2)]
+		[DisabledBy(Toggles.TestToggle, Toggles.TestToggle2)]
 		private class targetWithMultiAttribNotOn
 		{
 		}

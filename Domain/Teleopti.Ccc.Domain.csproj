@@ -2272,8 +2272,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="UnitOfWork\WithUnitOfWork.cs" />
-    <Compile Include="UseNotOnToggle.cs" />
-    <Compile Include="UseOnToggle.cs" />
+    <Compile Include="DisabledBy.cs" />
+    <Compile Include="EnabledBy.cs" />
     <Compile Include="WebReport\ReportDataForecastVersusActualWorkload.cs" />
     <Compile Include="WebReport\ReportDataQueueStatAbandoned.cs" />
     <Compile Include="WebReport\ReportDataServiceLevelAgentsReady.cs" />

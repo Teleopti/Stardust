@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				m => m.ShiftHasEnded = true);
 		}
 
-		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
+		[EnabledBy(Toggles.RTA_DeletedPersons_36041)]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{

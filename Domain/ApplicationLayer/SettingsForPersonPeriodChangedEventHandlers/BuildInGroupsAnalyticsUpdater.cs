@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
+	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 		Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439,
 		Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class BuildInGroupsAnalyticsUpdaterHangfire : BuildInGroupsAnalyticsUpdaterBase,
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 	}
 
 #pragma warning disable 618
-	[UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
+	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 		Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
-	 UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+	 DisabledBy(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class BuildInGroupsAnalyticsUpdaterServiceBus : BuildInGroupsAnalyticsUpdaterBase,
 		IHandleEvent<SettingsForPersonPeriodChangedEvent>,
 		IRunOnServiceBus

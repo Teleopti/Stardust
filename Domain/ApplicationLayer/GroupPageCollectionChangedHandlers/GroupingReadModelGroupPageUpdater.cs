@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandlers
 {
-	[UseOnToggle(Toggles.GroupPageCollection_ToHangfire_38178)]
+	[EnabledBy(Toggles.GroupPageCollection_ToHangfire_38178)]
 	public class GroupingReadModelGroupPageUpdaterHangfire : 
 		IHandleEvent<GroupPageCollectionChangedEvent>, 
 		IRunOnHangfire
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 	}
 
 #pragma warning disable 618
-	[UseNotOnToggle(Toggles.GroupPageCollection_ToHangfire_38178)]
+	[DisabledBy(Toggles.GroupPageCollection_ToHangfire_38178)]
 	public class GroupingReadModelGroupPageUpdaterServicebus :
 		IHandleEvent<GroupPageCollectionChangedEvent>,
 		IRunOnServiceBus

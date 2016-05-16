@@ -320,7 +320,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		}
 	}
 
-	[UseOnToggle(Toggles.ShiftTrade_ToHangfire_38181)]
+	[EnabledBy(Toggles.ShiftTrade_ToHangfire_38181)]
 	public class ShiftTradeRequestHandlerHangfire : ShiftTradeRequestHandler, IHandleEvent<NewShiftTradeRequestCreatedEvent>, IHandleEvent<AcceptShiftTradeEvent>, IRunOnHangfire
 	{
 		public ShiftTradeRequestHandlerHangfire(ICurrentUnitOfWork currentUnitOfWork,
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		}
 	}
 
-	[UseNotOnToggle(Toggles.ShiftTrade_ToHangfire_38181)]
+	[DisabledBy(Toggles.ShiftTrade_ToHangfire_38181)]
 #pragma warning disable 618
 	public class ShiftTradeRequestHandlerBus : ShiftTradeRequestHandler, IHandleEvent<NewShiftTradeRequestCreatedEvent>, IHandleEvent<AcceptShiftTradeEvent>, IRunOnServiceBus
 #pragma warning restore 618

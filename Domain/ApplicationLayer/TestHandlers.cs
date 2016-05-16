@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	[UseOnToggle(Toggles.TestToggle)]
+	[EnabledBy(Toggles.TestToggle)]
 	public class HandlerUsedOnTestToggle : 
 		IHandleEvent<TestToggleEvent>,
 		IRunOnHangfire,
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 	}
 
-	[UseOnToggle(Toggles.TestToggle)]
+	[EnabledBy(Toggles.TestToggle)]
 	public class HandlerUsedOnTestToggle_WithMethodUsedOnTestToggle2 : 
 		IHandleEvent<TestToggleEvent>,
 		IHandleEvent<TestToggle2Event>,
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 		}
 
-		[UseOnToggle(Toggles.TestToggle2)]
+		[EnabledBy(Toggles.TestToggle2)]
 		public void Handle(TestToggle2Event @event)
 		{
 		}
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	{
 	}
 
-	[UseNotOnToggle(Toggles.TestToggle)]
+	[DisabledBy(Toggles.TestToggle)]
 	public class HandlerNotUsedOnTestToggle :
 		IHandleEvent<TestToggleEvent>,
 		IRunOnHangfire,
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		IRecreatable,
 		IInitializeble
 	{
-		[UseNotOnToggle(Toggles.TestToggle)]
+		[DisabledBy(Toggles.TestToggle)]
 		public void Handle(TestToggleEvent @event)
 		{
 		}

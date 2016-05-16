@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
 {
-	[UseOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+	[EnabledBy(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 	public class UpdateFindPersonDataHandlerHangfire : IHandleEvent<SettingsForPersonPeriodChangedEvent>, IRunOnHangfire
 	{
 		private readonly IPersonFinderReadOnlyRepository _personFinderReadOnlyRepository;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		}
 	}
 
-	[UseNotOnToggle(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
+	[DisabledBy(Toggles.SettingsForPersonPeriodChanged_ToHangfire_38207)]
 #pragma warning disable 618
 	public class UpdateFindPersonDataHandlerServiceBus : IHandleEvent<SettingsForPersonPeriodChangedEvent>, IRunOnServiceBus
 #pragma warning restore 618

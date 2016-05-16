@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	[UseOnToggle(Toggles.RTA_AdherenceDetails_34267)]
+	[EnabledBy(Toggles.RTA_AdherenceDetails_34267)]
 	public class AdherenceDetailsReadModelUpdater :
 		IRunOnHangfire,
 		IHandleEvent<PersonActivityStartEvent>,
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				});
 		}
 
-		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
+		[EnabledBy(Toggles.RTA_DeletedPersons_36041)]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{

@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpIntradayPreference_37124)]
+	[EnabledBy(Toggles.ETL_SpeedUpIntradayPreference_37124)]
 	public class PreferenceFulfillmentChangedHandler :
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire

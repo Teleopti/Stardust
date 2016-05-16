@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 {
-	[UseOnToggle(Toggles.Wfm_Requests_Cancel_37741)]
+	[EnabledBy(Toggles.Wfm_Requests_Cancel_37741)]
 #pragma warning disable 618
 	public class PersonAbsenceRemovedHandler : IHandleEvent<PersonAbsenceRemovedEvent>, IRunOnStardust
 #pragma warning restore 618

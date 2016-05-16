@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 	}
 
-	[UseOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	[EnabledBy(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
 	public class ImportForecastsFileToSkillStardust : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkillEvent>, IRunOnStardust
 	{
 		private readonly DataSourceState _dataSourceState;
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
 	}
 
-	[UseNotOnToggle(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
+	[DisabledBy(Toggles.Wfm_ForecastFileImportOnStardust_37047)]
 #pragma warning disable 618
 	public class ImportForecastsFileToSkillBus : ImportForecastsFileToSkillBase, IHandleEvent<ImportForecastsFileToSkillEvent>, IRunOnServiceBus
 #pragma warning restore 618

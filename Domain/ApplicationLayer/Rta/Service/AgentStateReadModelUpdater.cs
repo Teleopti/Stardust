@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelPersister = agentStateReadModelPersister;
 		}
 
-		[UseOnToggle(Toggles.RTA_DeletedPersons_36041)]
+		[EnabledBy(Toggles.RTA_DeletedPersons_36041)]
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			_agentStateReadModelPersister.Delete(@event.PersonId);
 		}
 
-		[UseOnToggle(Toggles.RTA_TerminatedPersons_36042)]
+		[EnabledBy(Toggles.RTA_TerminatedPersons_36042)]
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{

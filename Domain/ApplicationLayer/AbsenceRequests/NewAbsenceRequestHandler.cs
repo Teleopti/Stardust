@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private delegate bool LoadDataAction(NewAbsenceRequestCreatedEvent @event);
 	}
 
-	[UseOnToggle(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
+	[EnabledBy(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
 	public class NewAbsenceRequestHandlerStardust : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnStardust
 	{
 		public NewAbsenceRequestHandlerStardust(ICurrentUnitOfWorkFactory unitOfWorkFactory, ICurrentScenario scenarioRepository,
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 	}
 
-	[UseNotOnToggle(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
+	[DisabledBy(Toggles.Stardust_MoveAbsenceRequestTo_37941)]
 #pragma warning disable 618
 	public class NewAbsenceRequestHandlerBus : NewAbsenceRequestHandler, IHandleEvent<NewAbsenceRequestCreatedEvent>, IRunOnServiceBus
 #pragma warning restore 618

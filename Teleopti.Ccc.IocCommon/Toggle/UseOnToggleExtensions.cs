@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 	{
 		public static bool TypeEnabledByToggle(this Type type, IIocConfiguration iocConfiguration)
 		{
-			var attributesOn = type.GetCustomAttributes(typeof(UseOnToggle), false);
-			var attributesOff = type.GetCustomAttributes(typeof(UseNotOnToggle), false);
+			var attributesOn = type.GetCustomAttributes(typeof(EnabledBy), false);
+			var attributesOff = type.GetCustomAttributes(typeof(DisabledBy), false);
 
 			if (attributesOn.IsEmpty() && attributesOff.IsEmpty()) return true;
 
@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			if (attributesOn.Any())
 			{
-				var togglesOn = ((UseOnToggle)attributesOn.First()).Toggles;
+				var togglesOn = ((EnabledBy)attributesOn.First()).Toggles;
 				resultOn = togglesOn.All(iocConfiguration.Toggle);
 			}
 			if (attributesOff.Any())
 			{
-				var togglesOff = ((UseNotOnToggle)attributesOff.First()).Toggles;
+				var togglesOff = ((DisabledBy)attributesOff.First()).Toggles;
 				resultOff = !togglesOff.Any(iocConfiguration.Toggle); 
 			}
 			
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 		public static bool MethodEnabledByToggle(this MethodInfo method, IIocConfiguration iocConfiguration)
 		{
-			var attributesOn = method.GetCustomAttributes(typeof(UseOnToggle), false);
-			var attributesOff = method.GetCustomAttributes(typeof(UseNotOnToggle), false);
+			var attributesOn = method.GetCustomAttributes(typeof(EnabledBy), false);
+			var attributesOff = method.GetCustomAttributes(typeof(DisabledBy), false);
 
 			if (attributesOn.IsEmpty() && attributesOff.IsEmpty()) return true;
 
@@ -44,12 +44,12 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 
 			if (attributesOn.Any())
 			{
-				var togglesOn = ((UseOnToggle)attributesOn.First()).Toggles;
+				var togglesOn = ((EnabledBy)attributesOn.First()).Toggles;
 				resultOn = togglesOn.All(iocConfiguration.Toggle);
 			}
 			if (attributesOff.Any())
 			{
-				var togglesOff = ((UseNotOnToggle)attributesOff.First()).Toggles;
+				var togglesOff = ((DisabledBy)attributesOff.First()).Toggles;
 				resultOff = !togglesOff.Any(iocConfiguration.Toggle);
 			}
 

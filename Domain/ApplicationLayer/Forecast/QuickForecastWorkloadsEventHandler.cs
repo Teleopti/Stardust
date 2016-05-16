@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	[UseNotOnToggle(Toggles.Wfm_QuickForecastOnHangfire_35845)]
+	[DisabledBy(Toggles.Wfm_QuickForecastOnHangfire_35845)]
 #pragma warning disable 618
 	public class QuickForecastWorkloadsEventHandlerServiceBus : QuickForecastWorkloadsEventHandlerBase, IHandleEvent<QuickForecastWorkloadsEvent>, IRunOnServiceBus
 #pragma warning restore 618
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		}
 	}
 
-	[UseOnToggle(Toggles.Wfm_QuickForecastOnHangfire_35845)]
+	[EnabledBy(Toggles.Wfm_QuickForecastOnHangfire_35845)]
 	public class QuickForecastWorkloadsEventHandlerHangfire : QuickForecastWorkloadsEventHandlerBase, IHandleEvent<QuickForecastWorkloadsEvent>, IRunOnHangfire
 	{
 		public QuickForecastWorkloadsEventHandlerHangfire(IWorkloadRepository workloadRepository, IMultisiteDayRepository multisiteDayRepository, IOutlierRepository outlierRepository, ISkillDayRepository skillDayRepository,

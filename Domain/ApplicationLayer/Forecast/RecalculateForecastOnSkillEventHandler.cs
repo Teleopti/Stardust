@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-    [UseNotOnToggle(Toggles.Wfm_RecalculateForecastOnHangfire_37971)]
+    [DisabledBy(Toggles.Wfm_RecalculateForecastOnHangfire_37971)]
 #pragma warning disable 618
     public class RecalculateForecastOnSkillEventHandlerOnServiceBus : RecalculateForecastOnSkillEventHandlerBase, IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnServiceBus
 #pragma warning restore 618
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
         }
     }
 
-    [UseOnToggle(Toggles.Wfm_RecalculateForecastOnHangfire_37971)]
+    [EnabledBy(Toggles.Wfm_RecalculateForecastOnHangfire_37971)]
     public class RecalculateForecastOnSkillEventHandlerOnHangfire : RecalculateForecastOnSkillEventHandlerBase, IHandleEvent<RecalculateForecastOnSkillCollectionEvent>, IRunOnHangfire
     {
         public RecalculateForecastOnSkillEventHandlerOnHangfire(IScenarioRepository scenarioRepository, ISkillDayRepository skillDayRepository,

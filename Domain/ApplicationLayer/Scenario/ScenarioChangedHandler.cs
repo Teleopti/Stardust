@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 {
-	[UseOnToggle(Toggles.ETL_SpeedUpScenario_38300)]
+	[EnabledBy(Toggles.ETL_SpeedUpScenario_38300)]
 	public class ScenarioChangedHandler :
 		IHandleEvent<ScenarioChangeEvent>,
 		IHandleEvent<ScenarioDeleteEvent>,

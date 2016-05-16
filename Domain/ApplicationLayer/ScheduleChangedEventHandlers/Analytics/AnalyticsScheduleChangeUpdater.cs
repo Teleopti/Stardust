@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
 {
 #pragma warning disable 618
-	[UseOnToggle(Toggles.ETL_SpeedUpETL_30791)]
+	[EnabledBy(Toggles.ETL_SpeedUpETL_30791)]
 	public class AnalyticsScheduleChangeUpdater :
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnServiceBus
