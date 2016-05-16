@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -10,18 +11,20 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 {
 	public class PersonPeriodTransformer
 	{
-		private static readonly DateTime Eternity = new DateTime(2059, 12, 31);
+		private static readonly DateTime eternity = new DateTime(2059, 12, 31);
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
+		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 
-		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository)
+		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsTeamRepository = analyticsTeamRepository;
+			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
@@ -34,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 				personPeriod.Team.Description.Name, businessUnitId);
 			var skillsetId = MapSkillsetId(
 				personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
-				businessUnitId, out analyticsSkills);
+				businessUnitId, _analyticsPersonPeriodMapNotDefined, out analyticsSkills);
 
 
 			var windowsDomain = "";
@@ -77,7 +80,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 			analyticsPersonPeriod = FixDatesAndInterval(
 				analyticsPersonPeriod,
-				_analyticsPersonPeriodRepository,
 				personPeriod.Period.StartDate.Date,
 				personPeriod.Period.EndDate.Date,
 				person.PermissionInformation.DefaultTimeZone());
@@ -86,7 +88,6 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		}
 
 		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod,
-			IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository,
 			DateTime personPeriodStartDate, DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo)
 		{
 			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public static DateTime ValidToDateLocal(DateTime personPeriodEndDate, IAnalyticsDate maxDate)
 		{
-			if (personPeriodEndDate.Equals(Eternity))
+			if (personPeriodEndDate.Equals(eternity))
 				return maxDate.DateDate;
 			return personPeriodEndDate;
 		}
@@ -170,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		private static DateTime getPeriodIntervalEndDate(DateTime endDate, int intervalsPerDay)
 		{
-			if (endDate.Equals(Eternity))
+			if (endDate.Equals(eternity))
 			{
 				return endDate;
 			}
@@ -182,15 +183,15 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		public static int GetValidToDateIdMaxDate(DateTime validToDate, IAnalyticsDate maxDate, int validToDateId)
 		{
 			// Samma som ValidToDateId om inte eternity då ska vara näst sista dagen i dim_date
-			return validToDate.Equals(Eternity)
+			return validToDate.Equals(eternity)
 				? maxDate.DateId - 1
 				: validToDateId;
 		}
 
 		public static DateTime ValidToDate(DateTime personPeriodEndDate, TimeZoneInfo timeZoneInfo, DateTime maxDate)
 		{
-			var validToDate = personPeriodEndDate.Equals(Eternity) || personPeriodEndDate > maxDate
-				? Eternity
+			var validToDate = personPeriodEndDate.Equals(eternity) || personPeriodEndDate > maxDate
+				? eternity
 				: timeZoneInfo.SafeConvertTimeToUtc(personPeriodEndDate.AddDays(1));
 			// Add one days because there is no end time in app database but it is in analytics and we do not want gap between person periods end and start date.
 			return validToDate;
@@ -201,8 +202,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			if (personPeriodStartDate < minDate)
 				return minDate;
 			var validFromDate = timeZoneInfo.SafeConvertTimeToUtc(personPeriodStartDate);
-			if (validFromDate >= Eternity)
-				validFromDate = Eternity;
+			if (validFromDate >= eternity)
+				validFromDate = eternity;
 			return validFromDate;
 		}
 
@@ -256,42 +257,43 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			return newSkillSet;
 		}
 
-		public int MapSkillsetId(List<Guid> skillCodes, int businessUnitId)
+		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
 		{
 			List<AnalyticsSkill> listOfSkills;
-			return MapSkillsetId(skillCodes, businessUnitId, out listOfSkills);
+			return MapSkillsetId(applicationSkillCodes, businessUnitId, analyticsPersonPeriodMapNotDefined, out listOfSkills);
 		}
 
 		// Map skills to skillset. If not exists it will create it.
-		public int MapSkillsetId(List<Guid> skillCodes, int businessUnitId, out List<AnalyticsSkill> listOfSkills)
+		public int MapSkillsetId(List<Guid> applicationSkillCodes, int businessUnitId, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, out List<AnalyticsSkill> mappedAnalyticsSkills)
 		{
-			listOfSkills = null;
-			if (skillCodes.IsEmpty())
+			mappedAnalyticsSkills = null;
+			if (applicationSkillCodes.IsEmpty())
 				return -1;
 
-			var allAnalyticsSkills = _analyticsSkillRepository.Skills(businessUnitId);
-			listOfSkills = allAnalyticsSkills.Where(a => skillCodes.Contains(a.SkillCode)).ToList();
+			var allAnalyticsSkills = _analyticsSkillRepository.Skills(businessUnitId).ToList();
+			mappedAnalyticsSkills = allAnalyticsSkills.Where(a => applicationSkillCodes.Contains(a.SkillCode)).ToList();
 
-			if (allAnalyticsSkills.Count(a => skillCodes.Contains(a.SkillCode)) != skillCodes.Count)
+			if (allAnalyticsSkills.Count(a => applicationSkillCodes.Contains(a.SkillCode)) != applicationSkillCodes.Count)
 			{
 				// Skill exists in app but not yet in analytics
-				return -1;
+				return analyticsPersonPeriodMapNotDefined.MaybeThrowErrorOrNotDefined(
+					$"Some skill missing in analytics = [{string.Join(", ", applicationSkillCodes.Where(a => allAnalyticsSkills.All(b => a != b.SkillCode)))}]");
 			}
 			
-			var skillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
+			var skillSetId = _analyticsSkillRepository.SkillSetId(mappedAnalyticsSkills);
 
 			if (skillSetId.HasValue)
 				return skillSetId.Value;
 
 			// Create new skill set (combination of skills)
-			var newSkillSet = NewSkillSetFromSkills(listOfSkills);
+			var newSkillSet = NewSkillSetFromSkills(mappedAnalyticsSkills);
 			_analyticsSkillRepository.AddSkillSet(newSkillSet);
-			var newSkillSetId = _analyticsSkillRepository.SkillSetId(listOfSkills);
+			var newSkillSetId = _analyticsSkillRepository.SkillSetId(mappedAnalyticsSkills);
 
 			if (!newSkillSetId.HasValue) // If something got wrong anyways
-				return -1;
+				return analyticsPersonPeriodMapNotDefined.MaybeThrowErrorOrNotDefined("Error when creating new skills set");
 
-			var newBridgeSkillSetSkills = NewBridgeSkillSetSkillsFromSkills(listOfSkills, newSkillSetId.Value);
+			var newBridgeSkillSetSkills = NewBridgeSkillSetSkillsFromSkills(mappedAnalyticsSkills, newSkillSetId.Value);
 			foreach (var bridgeSkillSetSkill in newBridgeSkillSetSkills)
 			{
 				_analyticsSkillRepository.AddBridgeSkillsetSkill(bridgeSkillSetSkill);

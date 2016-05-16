@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			fakeAnalyticsTeamRepository = new FakeAnalyticsTeamRepository();
 
 			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository);
+				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository, new ReturnNotDefined());
 		}
 
 
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void NoSkills_MapSkillSet_NotDefined()
 		{
 			var skillsList = new List<Guid>();
-			var skillSet = personPeriodTransformer.MapSkillsetId(skillsList, 0);
+			var skillSet = personPeriodTransformer.MapSkillsetId(skillsList, 0, new ReturnNotDefined());
 			Assert.AreEqual(-1, skillSet);
 		}
 
@@ -133,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void OneSkill_MapSkillSet_GotCorrectSkillSet()
 		{
 			var skills = new List<Guid> { fakeSkill1.SkillCode };
-			var skillSet = personPeriodTransformer.MapSkillsetId(skills, 0);
+			var skillSet = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(3, skillSet);
 		}
 
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeSkill1.SkillCode,
 				fakeSkill2.SkillCode
 			};
-			var skillSet = personPeriodTransformer.MapSkillsetId(skills, 0);
+			var skillSet = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(2, skillSet);
 		}
 
@@ -153,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void OneSkill_MapSkillSet_NewSkillSet()
 		{
 			var skills = new List<Guid> { fakeSkill2.SkillCode };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
+			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(4, newSkillSetId);
 		}
 
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void OneNewSkillNotYetInAnalytics_MapSkillSet_NotDefinedSkillset()
 		{
 			var skills = new List<Guid> { Guid.NewGuid() };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
+			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 			Assert.AreEqual(-1, newSkillSetId);
 		}
 
@@ -170,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			var nrOfBridgeRows = fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
 			var skills = new List<Guid> { fakeSkill2.SkillCode };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
+			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
 			Assert.AreEqual(nrOfBridgeRows + 1, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 		}
@@ -182,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var nrOfSkillSets = fakeAnalyticsSkillRepository.SkillSets().Count;
 
 			var skills = new List<Guid> { fakeSkill1.SkillCode };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
+			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
 			Assert.AreEqual(nrOfBridgeRows, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 			Assert.AreEqual(nrOfSkillSets, fakeAnalyticsSkillRepository.SkillSets().Count);
@@ -200,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeSkill3.SkillCode
 			};
 
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0);
+			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
 			Assert.AreEqual(nrOfBridgeRows + 2, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 			Assert.AreEqual(nrOfSkillSets + 1, fakeAnalyticsSkillRepository.SkillSets().Count);

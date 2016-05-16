@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Add(p2);
 			_personRepository.Add(p3);
 
-			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository);
+			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined());
 		}
 
 		[Test]
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			{
 				PersonIdCollection = { testPerson1Id }
 			});
-			
+
 			Assert.AreEqual(0, _personPeriodRepository.GetPersonPeriods(testPerson1Id).Count);
 			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonCollectionChangedEvent)).Should().Be.EqualTo(1);
 			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(0);
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			skill.SetId(fakeSkill3.SkillCode);
 			skill.Activity = act;
 			skill.TimeZone = (TimeZoneInfo.Local);
-			
+
 			ISkill skill2 = new Skill("for test2", "sdf2", Color.Blue, 3, skType);
 			skill.Activity = act;
 			skill.TimeZone = (TimeZoneInfo.Local);
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_eventPublisher.PublishedEvents.Count(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)).Should().Be.EqualTo(1);
 
 			var skillEvent = ((AnalyticsPersonPeriodSkillsChangedEvent)
-				_eventPublisher.PublishedEvents.First(a => a.GetType() == typeof (AnalyticsPersonPeriodSkillsChangedEvent)));
+				_eventPublisher.PublishedEvents.First(a => a.GetType() == typeof(AnalyticsPersonPeriodSkillsChangedEvent)));
 
 			skillEvent.AnalyticsActiveSkillsId.Count.Should().Be.EqualTo(1);
 			skillEvent.AnalyticsInactiveSkillsId.Count.Should().Be.EqualTo(0);
@@ -339,6 +339,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			return personPeriod;
 		}
 
-		
+
 	}
 }

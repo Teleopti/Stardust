@@ -3,6 +3,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Backlog;
@@ -113,7 +114,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IslandScheduler>().As<IslandScheduler>().InstancePerLifetimeScope();
 			builder.RegisterModule<WeeklyRestSolverModule>();
 			builder.RegisterModule<EqualNumberOfCategoryFairnessModule>();
-			
+
 			builder.RegisterType<SchedulerStateHolder>()
 				.As<ISchedulerStateHolder>()
 				.As<IClearReferredShiftTradeRequests>()
@@ -309,7 +310,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<OvertimePeriodValueMapper>().InstancePerLifetimeScope();
 			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>().InstancePerLifetimeScope();
-			
+
 			builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
 			builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
 			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>().InstancePerLifetimeScope();
@@ -398,6 +399,17 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<AnalyticsScheduleChangeForDefaultScenarioFilter>().As<IAnalyticsScheduleChangeUpdaterFilter>().SingleInstance();
 			}
+
+			// Analytics skill updater on person when skills not exists in analytics failure
+			if (_configuration.Toggle(Toggles.ETL_SpeedUpNightlySkill_37543))
+			{
+				builder.RegisterType<ThrowExceptionOnSkillMapError>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<ReturnNotDefined>().As<IAnalyticsPersonPeriodMapNotDefined>().SingleInstance();
+			}
+
 			builder.RegisterType<AssignScheduledLayers>().SingleInstance();
 
 			registerForJobs(builder);
@@ -606,9 +618,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CreateOrUpdateSkillDays>().As<ICreateOrUpdateSkillDays>().SingleInstance();
 			builder.RegisterType<OutboundPeriodMover>().As<IOutboundPeriodMover>().SingleInstance();
 			builder.RegisterType<OutboundCampaignRepository>().As<IOutboundCampaignRepository>().SingleInstance();
-		
-		    builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
-		 			
+
+			builder.RegisterType<OutboundScheduledResourcesProvider>().As<IOutboundScheduledResourcesProvider>().SingleInstance();
+
 		}
 
 		private static void registerForJobs(ContainerBuilder builder)
