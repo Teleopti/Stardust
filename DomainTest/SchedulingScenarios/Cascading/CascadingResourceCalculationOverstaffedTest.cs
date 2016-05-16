@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 		}
 
 		[Test]
-		public void ShouldNotMoveResourceWhenMaxSeatSkillInvolved()
+		public void ShouldNotMoveResourceWhenNonPrioritizedSkillIsMaxSeat()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");

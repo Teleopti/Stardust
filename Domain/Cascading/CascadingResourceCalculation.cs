@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 										if (!skillToMoveFrom.Activity.Equals(skillToMoveTo.Activity))
 											continue;
 
-										if (skillToMoveFrom.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill) || skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill))
+										if (skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill)) //lägg till även för "skillfrom"
 											continue;
 
 										ISkillStaffPeriod skillStaffPeriodTo;
