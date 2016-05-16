@@ -1,8 +1,5 @@
-using System;
-using System.Linq;
 using Hangfire.Common;
 using Hangfire.States;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
@@ -25,7 +22,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				return;
 
 			var queueName = (string)context.BackgroundJob.Job.Args[2];
-			enqueuedState.Queue = queueName;
+			if (queueName != null)
+				enqueuedState.Queue = queueName;
 		}
 	}
 }
