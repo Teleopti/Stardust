@@ -26,7 +26,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldDeleteOldJobOnPurge()
 		{
-			InsertJobRecords(1, 2); //two hour old job
+			InsertJobRecords(1, 2); //add a two hours old job
 			PurgeTimer purgeTimer = new PurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1));
 
 			NumberOfJobsInDatabase().Should().Be.EqualTo(1);
@@ -36,7 +36,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldDeleteOldJobDetailOnPurge()
 		{
-			InsertJobRecords(1, 2); //two hour old job
+			InsertJobRecords(1, 2); //add a two hours old job
 			PurgeTimer purgeTimer = new PurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1));
 
 			NumberOfDetailsInDatabase().Should().Be.EqualTo(1);
@@ -46,7 +46,7 @@ namespace ManagerTest
 		[Test]
 		public void ShouldOnlyDeleteBadgeSizeNumberOfJobs()
 		{
-			InsertJobRecords(2, 2); //two hour old job
+			InsertJobRecords(2, 2); //add a two hours old job
 			PurgeTimer purgeTimer = new PurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1));
 
 			NumberOfDetailsInDatabase().Should().Be.EqualTo(2);
