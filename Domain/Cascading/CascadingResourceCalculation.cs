@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				//just hack for now
 				var stateHolder = _stateHolder();
 				var skills = stateHolder.SchedulingResultState.Skills;
-				var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex).ToList(); //lägg nån annanstans
+				var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex); //lägg nån annanstans
 				foreach (var skillToMoveFrom in stateHolder.SchedulingResultState.Skills)
 				{
 					if (skillToMoveFrom.IsCascading())
@@ -47,12 +47,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 									var calcStaffFrom = skillStaffPeriodFrom.CalculatedResource;
 									var overstaffedValue = calcStaffFrom - skillToMoveFromAbsoluteDifference;
 
+									//bara flytta till cascading skills som agent X kan?
 									foreach (var skillToMoveTo in cascadingSkills)
 									{
 										if (!skillToMoveFrom.Activity.Equals(skillToMoveTo.Activity))
 											continue;
 
-										if (skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill)) //lägg till även för "skillfrom"
+										if (skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill)) //lägg till även för "skillfrom" alt se till att maxseat skills aldrig hamnar i kedjan
 											continue;
 
 										ISkillStaffPeriod skillStaffPeriodTo;
