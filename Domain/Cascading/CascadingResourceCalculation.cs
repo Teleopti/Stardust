@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //check this later
 
-
 				//just hack for now
 				var stateHolder = _stateHolder();
 				var skills = stateHolder.SchedulingResultState.Skills;
@@ -48,9 +47,19 @@ namespace Teleopti.Ccc.Domain.Cascading
 									var overstaffedValue = calcStaffFrom - skillStaffPeriodFrom.AbsoluteDifference;
 									//temp
 									var lastCascadingSkill = cascadingSkills.Last();
-									var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[lastCascadingSkill][interval]; //kolla om öppet
-									skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + overstaffedValue);
-									skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - overstaffedValue);
+									if(!skill.Activity.Equals(lastCascadingSkill.Activity))
+										continue;
+
+									if(skill.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill) || lastCascadingSkill.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill))
+										continue;
+
+									ISkillStaffPeriod skillStaffPeriodTo;
+									var skillstafPeriodDicLastCascadingSkill = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[lastCascadingSkill];
+									if (skillstafPeriodDicLastCascadingSkill.TryGetValue(interval, out skillStaffPeriodTo))
+									{
+										skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + overstaffedValue);
+										skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - overstaffedValue);
+									}	
 								}
 							}
 						}
