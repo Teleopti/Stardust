@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 {
@@ -17,11 +18,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 	{
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly IRequestCommandHandlingProvider _commandHandlingProvider;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, IRequestCommandHandlingProvider commandHandlingProvider)
+		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
+			IRequestCommandHandlingProvider commandHandlingProvider,
+			ILoggedOnUser loggedOnUser)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		[HttpPost, Route("api/Requests/loadTextAndAbsenceRequests"), UnitOfWork]
@@ -30,10 +35,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			return _requestsViewModelFactory.Create(input);
 		}
 
-
 		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests([ModelBinder(typeof(AllRequestsFormDataConverter))] AllRequestsFormData input)
-		{			
+		public virtual RequestListViewModel GetRequests(
+			[ModelBinder(typeof (AllRequestsFormDataConverter))] AllRequestsFormData input)
+		{
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
 		}
 
@@ -52,8 +57,17 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[HttpPost, Route("api/Requests/cancelRequests"), UnitOfWork]
 		public virtual RequestCommandHandlingResult CancelRequests(IEnumerable<Guid> ids)
 		{
-			return _commandHandlingProvider.CancelRequests (ids);
+			return _commandHandlingProvider.CancelRequests(ids);
 		}
 
+		[HttpGet, Route("api/Requests/runWaitlist"), UnitOfWork]
+		public virtual RequestCommandHandlingResult RunRequestWaitlist(DateTime startTime, DateTime endTime)
+		{
+			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var startTimeUtc = timezone.SafeConvertTimeToUtc(startTime);
+			var endTimeUtc = timezone.SafeConvertTimeToUtc(endTime);
+			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
+			return _commandHandlingProvider.RunWaitlist(period);
+		}
 	}
 }
