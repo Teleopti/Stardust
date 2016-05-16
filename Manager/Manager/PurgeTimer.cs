@@ -34,7 +34,7 @@ namespace Stardust.Manager
 				using (var deleteCommand = new SqlCommand(deleteCommandText, connection))
 				{
 					deleteCommand.Parameters.AddWithValue("@hours", _managerConfiguration.PurgeJobsOlderThanHours);
-					deleteCommand.Parameters.AddWithValue("@batchsize", _managerConfiguration.Purgebatchsize);
+					deleteCommand.Parameters.AddWithValue("@batchsize", _managerConfiguration.PurgeBatchSize);
 
 					deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}

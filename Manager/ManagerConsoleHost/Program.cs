@@ -4,7 +4,6 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Web.Http;
-using System.Web.Routing;
 using Autofac;
 using log4net;
 using log4net.Config;
@@ -70,7 +69,7 @@ namespace ManagerConsoleHost
 				ConfigurationManager.AppSettings["route"],
 				int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
 				int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"]),
-				int.Parse(ConfigurationManager.AppSettings["Purgebatchsize"]),
+				int.Parse(ConfigurationManager.AppSettings["PurgeBatchSize"]),
 				int.Parse(ConfigurationManager.AppSettings["PurgeIntervalHours"]),
 				int.Parse(ConfigurationManager.AppSettings["PurgeJobsOlderThanHours"]));
 			
