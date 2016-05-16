@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -28,37 +29,39 @@ namespace Teleopti.Ccc.Domain.Cascading
 				//just hack for now
 				var stateHolder = _stateHolder();
 				var skills = stateHolder.SchedulingResultState.Skills;
-				var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex); //lägg nån annanstans
-				foreach (var skill in stateHolder.SchedulingResultState.Skills)
+				var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex).ToList(); //lägg nån annanstans
+				foreach (var skillToMoveFrom in stateHolder.SchedulingResultState.Skills)
 				{
-					if (skill.IsCascading())
+					if (skillToMoveFrom.IsCascading())
 					{
-						var datetimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(date, date.AddDays(1), skill.TimeZone);
-						var intervals = datetimePeriod.Intervals(TimeSpan.FromMinutes(skill.DefaultResolution));
-						var skillStaffPeriodDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill];
+						var datetimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(date, date.AddDays(1), skillToMoveFrom.TimeZone);
+						var intervals = datetimePeriod.Intervals(TimeSpan.FromMinutes(skillToMoveFrom.DefaultResolution));
+						var skillStaffPeriodDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveFrom];
 						foreach (var interval in intervals)
 						{
 							ISkillStaffPeriod skillStaffPeriodFrom;
 							if(skillStaffPeriodDic.TryGetValue(interval, out skillStaffPeriodFrom))
 							{
-								if (skillStaffPeriodFrom.AbsoluteDifference > 0)
+								var skillToMoveFromAbsoluteDifference = skillStaffPeriodFrom.AbsoluteDifference;
+								if (skillToMoveFromAbsoluteDifference > 0)
 								{
 									var calcStaffFrom = skillStaffPeriodFrom.CalculatedResource;
-									var overstaffedValue = calcStaffFrom - skillStaffPeriodFrom.AbsoluteDifference;
-									//temp
-									var lastCascadingSkill = cascadingSkills.Last();
-									if(!skill.Activity.Equals(lastCascadingSkill.Activity))
+									var overstaffedValue = calcStaffFrom - skillToMoveFromAbsoluteDifference;
+
+									var currentSkillIndex = cascadingSkills.IndexOf(skillToMoveFrom);
+									var skillToMoveTo = cascadingSkills[currentSkillIndex + 1]; //fix - only understaffed + not last
+									if(!skillToMoveFrom.Activity.Equals(skillToMoveTo.Activity))
 										continue;
 
-									if(skill.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill) || lastCascadingSkill.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill))
+									if(skillToMoveFrom.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill) || skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill))
 										continue;
 
 									ISkillStaffPeriod skillStaffPeriodTo;
-									var skillstafPeriodDicLastCascadingSkill = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[lastCascadingSkill];
+									var skillstafPeriodDicLastCascadingSkill = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo];
 									if (skillstafPeriodDicLastCascadingSkill.TryGetValue(interval, out skillStaffPeriodTo))
 									{
 										skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + overstaffedValue);
-										skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - overstaffedValue);
+										skillStaffPeriodFrom.SetCalculatedResource65(calcStaffFrom - overstaffedValue);
 									}	
 								}
 							}
