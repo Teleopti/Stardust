@@ -112,8 +112,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 
 			if (dashboard)
 				app.UseHangfireDashboard();
-
-			GlobalJobFilters.Filters.Add(new InterfacedPriorityJobFilter());
 		}
 
 		private class emptyHandler : IStateHandler
