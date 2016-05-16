@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		public FakeDatabase Database;
 		public Service TheService;
 		public ICurrentTeleoptiPrincipal Principal;
-		public IAuthorization Authorization;
+		public ICurrentAuthorization Authorization;
 		public IDefinedRaptorApplicationFunctionFactory ApplicationFunctions;
 		public IUserTimeZone TimeZone;
 		public IUserCulture Culture;
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Logon
 		}
 
 		[Test]
-		public void ShouldHaveAllPermissions()
+		public void ShouldBePermittedAllFunctions()
 		{
 			var permitted = Enumerable.Empty<string>();
 			var businessUnid = Guid.NewGuid();
@@ -118,11 +118,29 @@ namespace Teleopti.Ccc.DomainTest.Logon
 				{
 					permitted = ApplicationFunctions.ApplicationFunctions
 						.Select(f => f.FunctionPath)
-						.Where(f => Authorization.IsPermitted(f))
+						.Where(f => Authorization.Current().IsPermitted(f))
 						.ToArray();
 				});
 
 			permitted.Should().Have.SameValuesAs(ApplicationFunctions.ApplicationFunctions.Select(x => x.FunctionPath));
+		}
+
+		[Test]
+		public void ShouldBeGrantedAllFunctions()
+		{
+			var grantedFunctions = Enumerable.Empty<IApplicationFunction>();
+			var businessUnid = Guid.NewGuid();
+			Database
+				.WithTenant("tenant")
+				.WithBusinessUnit(businessUnid);
+
+			TheService.Do(new Input { LogOnDatasource = "tenant", LogOnBusinessUnitId = businessUnid },
+				() =>
+				{
+					grantedFunctions = Authorization.Current().GrantedFunctions();
+				});
+
+			grantedFunctions.Should().Have.SameValuesAs(ApplicationFunctions.ApplicationFunctions);
 		}
 
 		[Test, Ignore("todo")]
