@@ -21,6 +21,11 @@
 	background: $blue-300;
 }
 
+.c3-shapes-Current > path{
+	fill:$gray012!important;
+	stroke:$gray012!important;
+}
+
 .c3-tooltip-name--Current,.c3-legend-item-Current{
 	display:none!important;
 }
