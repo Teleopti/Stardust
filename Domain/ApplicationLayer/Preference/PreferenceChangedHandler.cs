@@ -37,18 +37,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly RestrictionChecker restrictionChecker;
 		private readonly ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions;
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
+		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 
-		public PreferenceChangedHandler(IScenarioRepository scenarioRepository,
+		public PreferenceChangedHandler
+			(IScenarioRepository scenarioRepository,
 			IPreferenceDayRepository preferenceDayRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsScheduleRepository analyticsScheduleRepository,
 			IAnalyticsDateRepository analyticsDateRepository,
 			IScheduleStorage scheduleStorage,
-			IAnalyticsPreferenceRepository analyticsPreferenceRepository, 
-			IPersonRepository personRepository, 
-			IAnalyticsDayOffRepository analyticsDayOffRepository, 
-			IAnalyticsScenarioRepository analyticsScenarioRepository)
+			IAnalyticsPreferenceRepository analyticsPreferenceRepository,
+			IPersonRepository personRepository,
+			IAnalyticsDayOffRepository analyticsDayOffRepository,
+			IAnalyticsScenarioRepository analyticsScenarioRepository,
+			IAnalyticsAbsenceRepository analyticsAbsenceRepository)
 		{
 
 			_scenarioRepository = scenarioRepository;
@@ -62,6 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			_personRepository = personRepository;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
 			_analyticsScenarioRepository = analyticsScenarioRepository;
+			_analyticsAbsenceRepository = analyticsAbsenceRepository;
 
 
 			restrictionChecker = new RestrictionChecker();
@@ -155,8 +159,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
             // General look ups
             var analyticsScenarios = _analyticsScenarioRepository.Scenarios();
             var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
-            var analyticsAbsences = _analyticsScheduleRepository.Absences();
-            var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
+	        var analyticsAbsences = _analyticsAbsenceRepository.Absences();
+			var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
 
             var period = new DateOnlyPeriod(new DateOnly(preferenceDay.RestrictionDate.Date), new DateOnly(preferenceDay.RestrictionDate.Date));
             List<AnalyticsFactSchedulePreference> resultFactSchedulePreference = new List<AnalyticsFactSchedulePreference>();

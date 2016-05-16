@@ -155,6 +155,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
+    <Compile Include="Analytics\AnalyticsAbsence.cs" />
     <Compile Include="Analytics\AnalyticsScenario.cs" />
     <Compile Include="Analytics\AnalyticsDayOff.cs" />
     <Compile Include="Analytics\AnalyticsGroup.cs" />
@@ -194,6 +195,7 @@
     <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\DayOff\AnalyticsDayOffUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\PersonalActivityAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\AbsenceTypeChangeEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
@@ -271,6 +273,7 @@
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
+    <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
     <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />

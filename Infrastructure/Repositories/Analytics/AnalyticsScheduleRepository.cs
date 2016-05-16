@@ -190,15 +190,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.List<AnalyticsActivity>();
 		}
 
-		public IList<IAnalyticsAbsence> Absences()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select absence_id AbsenceId, absence_code AbsenceCode, in_paid_time InPaidTime from mart.dim_absence WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsAbsence)))
-				.SetReadOnly(true)
-				.List<IAnalyticsAbsence>();
-		}
-
 		public IList<IAnalyticsGeneric> ShiftCategories()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
@@ -258,11 +249,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public Guid Code { get; set; }
 	}
 
-	public class AnalyticsAbsence : IAnalyticsAbsence
-	{
-		public int AbsenceId { get; set; }
-		public Guid AbsenceCode { get; set; }
-		public bool InPaidTime { get; set; }
 	}
 
 	public class AnalyticsShiftLength : IAnalyticsShiftLength

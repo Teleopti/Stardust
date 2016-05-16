@@ -138,5 +138,6 @@ GroupPageCollection_ToHangfire_38178 = true
 SettingsForPersonPeriodChanged_ToHangfire_38207 = true 
 Wfm_MoveExportMultiSiteSkillOnStardust_38134 = RC
 Payroll_ToStardust_38204 = RC
+ETL_SpeedUpAbsence_38301 = false
 Scheduler_LoadWithoutRequests_38567 = RC
 PersonCollectionChanged_ToHangfire_38420 = false

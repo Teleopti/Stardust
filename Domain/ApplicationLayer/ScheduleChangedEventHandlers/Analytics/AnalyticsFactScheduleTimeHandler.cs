@@ -9,10 +9,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	public class AnalyticsFactScheduleTimeHandler : IAnalyticsFactScheduleTimeHandler
 	{
 		private readonly IAnalyticsScheduleRepository _repository;
+		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 
-		public AnalyticsFactScheduleTimeHandler(IAnalyticsScheduleRepository repository)
+		public AnalyticsFactScheduleTimeHandler(IAnalyticsScheduleRepository repository, IAnalyticsAbsenceRepository analyticsAbsenceRepository)
 		{
 			_repository = repository;
+			_analyticsAbsenceRepository = analyticsAbsenceRepository;
 		}
 
 		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId, int shiftLength)
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public IAnalyticsAbsence MapAbsenceId(Guid absenceCode)
 		{
-			var absences = _repository.Absences();
+			var absences = _analyticsAbsenceRepository.Absences();
 			var abs = absences.FirstOrDefault(a => a.AbsenceCode.Equals(absenceCode));
 			return abs ?? null;
 		}

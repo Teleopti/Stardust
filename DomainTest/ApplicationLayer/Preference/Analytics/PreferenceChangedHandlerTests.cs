@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
@@ -31,6 +33,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		private FakePersonRepository _personRepository;
 		private FakeAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
+		private FakeAnalyticsAbsenceRepository _fakeAnalyticsAbsenceRepository;
+		
 
 		[SetUp]
 		public void Setup()
@@ -49,6 +53,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_personRepository = new FakePersonRepository();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
+			_fakeAnalyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository(
+				new List<IAnalyticsAbsence>
+				{
+					new AnalyticsAbsence {AbsenceCode = Guid.Empty, AbsenceId = -1},
+					new AnalyticsAbsence {AbsenceCode = Guid.NewGuid(), AbsenceId = 1}
+				});
 
 			_target = new PreferenceChangedHandler(
 				_scenarioRepository,
@@ -61,7 +71,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				_analyticsPreferenceRepository,
 				_personRepository,
 				_analyticsDayOffRepository,
-				_analyticsScenarioRepository);
+				_analyticsScenarioRepository,
+				_fakeAnalyticsAbsenceRepository);
 		}
 
 		[Test]

@@ -60,18 +60,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadAbsences()
-		{
-			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
-
-			analyticsDataFactory.Setup(abs);
-			analyticsDataFactory.Persist();
-
-			var absences = WithAnalyticsUnitOfWork.Get(() => Target.Absences());
-			absences.Count.Should().Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldLoadShiftLengths()
 		{
 			var sl = new ShiftLength(33, 240, _datasource);

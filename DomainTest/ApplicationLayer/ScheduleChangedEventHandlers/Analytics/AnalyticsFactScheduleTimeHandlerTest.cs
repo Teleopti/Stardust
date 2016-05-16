@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -35,7 +35,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void Setup()
 		{
 			_rep = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
-			_target = new AnalyticsFactScheduleTimeHandler(_rep);
+			_absences = new List<IAnalyticsAbsence>
+			{
+				new AnalyticsAbsence {AbsenceCode = _guidAbsInPaid, AbsenceId = 1, InPaidTime = true},
+				new AnalyticsAbsence {AbsenceCode = _guidAbsNotPaid, AbsenceId = 2, InPaidTime = false}
+			};
+			_target = new AnalyticsFactScheduleTimeHandler(_rep, new FakeAnalyticsAbsenceRepository(_absences));
 
 			_activities = new List<AnalyticsActivity>
 			{
@@ -45,11 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				new AnalyticsActivity {ActivityCode = _guidActInNone, ActivityId = 4, InPaidTime = false, InReadyTime = false}
 			};
 
-			_absences = new List<IAnalyticsAbsence>
-			{
-				new AnalyticsAbsence {AbsenceCode = _guidAbsInPaid, AbsenceId = 1, InPaidTime = true},
-				new AnalyticsAbsence {AbsenceCode = _guidAbsNotPaid, AbsenceId = 2, InPaidTime = false}
-			};
+			
 			_overtimes = new List<IAnalyticsGeneric>
 			{
 				new AnalyticsGeneric { Id = 3, Code = Guid.NewGuid() }
@@ -141,7 +142,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = start.AddMinutes(10)
 			};
 			_rep.Stub(x => x.Overtimes()).Return(_overtimes);
-			_rep.Stub(x => x.Absences()).Return(_absences);
 			_rep.Stub(x => x.ShiftLengths()).Return(_shiftLengths);
 			var result = _target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength);
 
@@ -188,7 +188,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldMapAbsenceId()
 		{
-			_rep.Stub(x => x.Absences()).Return(_absences);
 			var absence =_target.MapAbsenceId(_absences[0].AbsenceCode);
 			absence.AbsenceId.Should().Be.EqualTo(_absences[0].AbsenceId);
 		}
@@ -196,7 +195,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		[Test]
 		public void ShouldFailToMapAbsenceId()
 		{
-			_rep.Stub(x => x.Absences()).Return(_absences);
 			var absence = _target.MapAbsenceId(Guid.NewGuid());
 			absence.Should().Be.Null();
 		}

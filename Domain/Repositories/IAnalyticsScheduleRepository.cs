@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void DeleteFactSchedule(int date, int personId, int scenarioId);
 
 		IList<AnalyticsActivity> Activities();
-		IList<IAnalyticsAbsence> Absences();
 		IList<IAnalyticsGeneric> ShiftCategories();
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 		IList<IAnalyticsGeneric> Overtimes();

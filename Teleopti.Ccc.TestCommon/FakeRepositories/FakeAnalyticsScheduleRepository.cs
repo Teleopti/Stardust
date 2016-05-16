@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Interfaces.Domain;
@@ -10,15 +11,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsScheduleRepository : IAnalyticsScheduleRepository
 	{
-		private readonly IList<IAnalyticsAbsence> fakeAbsences;
 		private readonly IList<IAnalyticsGeneric> fakeShiftCategories;
 		public FakeAnalyticsScheduleRepository()
-		{
-			fakeAbsences = new List<IAnalyticsAbsence>
-			{
-				new AnalyticsAbsence { AbsenceCode  = Guid.Empty, AbsenceId = -1},
-				new AnalyticsAbsence {AbsenceCode = Guid.NewGuid(), AbsenceId = 1}
-			};
+		{		
 			fakeShiftCategories = new List<IAnalyticsGeneric>
 			{
 				new AnalyticsGeneric {Code = Guid.Empty, Id = -1},
@@ -47,12 +42,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				new AnalyticsActivity { ActivityCode = Guid.NewGuid(), ActivityId = 1, InPaidTime = true, InReadyTime = true }
 			};
 		}
-
-		public IList<IAnalyticsAbsence> Absences()
-		{
-			return fakeAbsences;
-		}
-		
 
 		public IList<IAnalyticsGeneric> ShiftCategories()
 		{
