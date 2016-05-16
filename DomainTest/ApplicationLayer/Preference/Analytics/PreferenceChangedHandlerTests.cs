@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
 			_analyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository(
-				new List<IAnalyticsAbsence>
+				new List<AnalyticsAbsence>
 				{
 					new AnalyticsAbsence {AbsenceCode = Guid.Empty, AbsenceId = -1},
 					new AnalyticsAbsence {AbsenceCode = Guid.NewGuid(), AbsenceId = 1}

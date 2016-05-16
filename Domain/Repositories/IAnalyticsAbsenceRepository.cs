@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces.Infrastructure.Analytics;
+using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsAbsenceRepository
 	{
-		IList<IAnalyticsAbsence> Absences();
+		IList<AnalyticsAbsence> Absences();
 	}
 }

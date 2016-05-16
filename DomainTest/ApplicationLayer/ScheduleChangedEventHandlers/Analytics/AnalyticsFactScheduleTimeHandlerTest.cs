@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 
 		private readonly Guid _guidAbsInPaid = Guid.NewGuid();
 		private readonly Guid _guidAbsNotPaid = Guid.NewGuid();
-		private List<IAnalyticsAbsence> _absences;
+		private List<AnalyticsAbsence> _absences;
 		private List<IAnalyticsGeneric> _overtimes;
 		private List<IAnalyticsShiftLength> _shiftLengths;
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 		public void Setup()
 		{
 			_rep = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
-			_absences = new List<IAnalyticsAbsence>
+			_absences = new List<AnalyticsAbsence>
 			{
 				new AnalyticsAbsence {AbsenceCode = _guidAbsInPaid, AbsenceId = 1, InPaidTime = true},
 				new AnalyticsAbsence {AbsenceCode = _guidAbsNotPaid, AbsenceId = 2, InPaidTime = false}

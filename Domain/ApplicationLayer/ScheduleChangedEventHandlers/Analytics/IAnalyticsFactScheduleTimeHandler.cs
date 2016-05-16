@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	public interface IAnalyticsFactScheduleTimeHandler
 	{
 		IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId, int shiftLength);
-		IAnalyticsAbsence MapAbsenceId(Guid absenceCode);
+		AnalyticsAbsence MapAbsenceId(Guid absenceCode);
 		int MapOvertimeId(Guid overtimeCode);
 	}
 }

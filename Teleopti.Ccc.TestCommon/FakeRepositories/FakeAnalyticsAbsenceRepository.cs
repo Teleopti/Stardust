@@ -1,23 +1,23 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsAbsenceRepository : IAnalyticsAbsenceRepository
 	{
-		private readonly List<IAnalyticsAbsence> fakeAbsences;
+		private readonly List<AnalyticsAbsence> fakeAbsences;
 
 		public FakeAnalyticsAbsenceRepository()
 		{
-			fakeAbsences = new List<IAnalyticsAbsence>();
+			fakeAbsences = new List<AnalyticsAbsence>();
 		}
 
-		public FakeAnalyticsAbsenceRepository(List<IAnalyticsAbsence> absences)
+		public FakeAnalyticsAbsenceRepository(List<AnalyticsAbsence> absences)
 		{
 			fakeAbsences = absences;
 		}
-		public IList<IAnalyticsAbsence> Absences()
+		public IList<AnalyticsAbsence> Absences()
 		{
 			return fakeAbsences;
 		}

@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
         }
 
 		private AnalyticsFactSchedulePreference mapSchedulePreference(IScheduleDay schedulePart, IList<AnalyticsScenario> analyticsScenarios, IScenario scenario, IList<IAnalyticsGeneric> analyticsShiftCategories,
-			IPreferenceRestriction preferenceRestriction, IList<IAnalyticsAbsence> analyticsAbsences, IList<AnalyticsDayOff> analyticsDayOffs,
+			IPreferenceRestriction preferenceRestriction, IList<AnalyticsAbsence> analyticsAbsences, IList<AnalyticsDayOff> analyticsDayOffs,
 			AnalyticBusinessUnit businessUnitId, KeyValuePair<DateOnly, int> dateId, int analyticsPersonPeriodId, IPreferenceDay preferenceDay)
 		{
 			var permissionState = restrictionChecker.CheckPreference(schedulePart);
