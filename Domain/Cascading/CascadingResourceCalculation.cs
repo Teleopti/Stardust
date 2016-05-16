@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 				var stateHolder = _stateHolder();
 				var skills = stateHolder.SchedulingResultState.Skills;
 				var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex); //lägg nån annanstans
+				//TODO: hantera deletade skills
+				//TODO: nåt rörande skillgrupper
 				foreach (var skillToMoveFrom in stateHolder.SchedulingResultState.Skills)
 				{
 					if (skillToMoveFrom.IsCascading())
@@ -44,25 +46,18 @@ namespace Teleopti.Ccc.Domain.Cascading
 								var skillToMoveFromAbsoluteDifference = skillStaffPeriodFrom.AbsoluteDifference;
 								if (skillToMoveFromAbsoluteDifference > 0)
 								{
-									var calculatedResourceFrom = skillStaffPeriodFrom.CalculatedResource;
-									var overstaffedValue = calculatedResourceFrom - skillToMoveFromAbsoluteDifference;
-
 									//bara flytta till cascading skills som agent X kan?
-									foreach (var skillToMoveTo in cascadingSkills)
+									foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity)))
 									{
-										if (!skillToMoveFrom.Activity.Equals(skillToMoveTo.Activity))
-											continue;
-
 										ISkillStaffPeriod skillStaffPeriodTo;
 										var skillStaffPeriodToDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo];
 										if (skillStaffPeriodToDic.TryGetValue(interval, out skillStaffPeriodTo))
 										{
-											//TODO: bara flytta upp till 0
-											if (skillStaffPeriodTo.AbsoluteDifference < 0)
+											var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
+											if (skillToMoveToAbsoluteDifference < 0)
 											{
-												//TODO: vi räknar fel här. funkar bara för att resurserna slutar vid 0 tror jag...
-												skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + overstaffedValue);
-												skillStaffPeriodFrom.SetCalculatedResource65(calculatedResourceFrom - overstaffedValue);
+												skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + skillToMoveFromAbsoluteDifference);
+												skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - skillToMoveFromAbsoluteDifference);
 												break;
 											}
 										}
