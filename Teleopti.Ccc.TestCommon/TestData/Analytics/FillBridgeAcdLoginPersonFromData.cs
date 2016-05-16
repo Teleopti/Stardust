@@ -8,12 +8,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class FillBridgeAcdLoginPersonFromData : IAnalyticsDataSetup
 	{
-		private readonly IPersonData _personData;
+		private readonly int _personId;
 		private readonly int _acdId;
 
-		public FillBridgeAcdLoginPersonFromData(IPersonData personData, int acdId)
+		public FillBridgeAcdLoginPersonFromData(IPersonData personData, int acdId) : this(personData.PersonId, acdId)
 		{
-			_personData = personData;
+		}
+
+		public FillBridgeAcdLoginPersonFromData(int personId, int acdId)
+		{
+			_personId = personId;
 			_acdId = acdId;
 		}
 
@@ -21,7 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = bridge_acd_login_person.CreateTable())
 			{
-				table.AddAcdLogin(_acdId, _personData.PersonId, 1, 1, 1);
+				table.AddAcdLogin(_acdId, _personId, 1, 1, 1);
 
 				Bulk.Insert(connection, table);
 			}

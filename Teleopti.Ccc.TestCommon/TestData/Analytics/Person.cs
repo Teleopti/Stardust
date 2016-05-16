@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -47,6 +49,32 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		}
 
+		public static int FindPersonIdByPersonCode(Guid person_code)
+		{
+			var personTable = new Person();
+			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
+			{
+				var culture = Thread.CurrentThread.CurrentCulture;
+				connection.Open();
+				personTable.List(connection, culture, CultureInfo.GetCultureInfo("sv-SE"));
+			}
+			var personRow = personTable.Rows.FirstOrDefault(p =>
+			{
+				var item = p["person_code"];
+				if (item == DBNull.Value) return false;
+
+				return (Guid) item == person_code;
+			});
+
+			return personRow != null ? (int) personRow["person_id"] : -1;
+		}
+
+		private Person()
+		{
+			
+		}
+
+
 		public static Person NotDefinedPerson(IDatasourceData datasource)
 		{
 			return new Person(-1, null, null, "Not Defined", "Not Defined", new DateTime(1900, 1, 1),
@@ -84,6 +112,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 				Bulk.Insert(connection, table);
 
+				Rows = table.AsEnumerable();
+			}
+		}
+
+		public void List(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
+		{
+			using (var table = dim_person.CreateTable())
+			{
+				using (var adapter = new SqlDataAdapter($"select * from {table.TableName}", connection))
+				{
+					adapter.Fill(table);
+				}
 				Rows = table.AsEnumerable();
 			}
 		}

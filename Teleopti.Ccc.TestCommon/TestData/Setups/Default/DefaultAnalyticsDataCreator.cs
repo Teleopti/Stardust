@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 			var existingDatasources = new ExistingDatasources(utcAndCetTimeZones);
 			var quarterOfAnHourInterval = new QuarterOfAnHourInterval();
 			var datesFromPeriod = new DatesFromPeriod(new DateTime(2001, 1, 1), new DateTime(2035, 1, 1));
+			var sysConfiguration = new SysConfiguration("IntervalLengthMinutes", "15");
+			sysConfiguration.AddConfiguration("TimeZoneCode", "W. Europe Standard Time");
 			return new IAnalyticsDataSetup[]
 			{
 				utcAndCetTimeZones,
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 				datesFromPeriod,
 				new BusinessUnit(DefaultBusinessUnit.BusinessUnit, existingDatasources),
 				new EternityAndNotDefinedDate(),
+				sysConfiguration,
 				quarterOfAnHourInterval,
 				new DefaultSkillset(),
 				new DefaultAcdLogin(),

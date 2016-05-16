@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
@@ -41,20 +40,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 			var timeZones = DefaultAnalyticsDataCreator.GetTimeZones();
-			const int personId = 76;
+
+			var personId = Person.FindPersonIdByPersonCode(DataMaker.Me().Person.Id.GetValueOrDefault());
+			if (personId == -1)
+			{
+				var agent = new Person(DataMaker.Me().Person, datasourceData, 76, new DateTime(2010, 1, 1),
+							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+				DataMaker.Data().Analytics().Setup(agent);
+				personId = agent.PersonId;
+			};
+
 			const int acdLoginId = 123;
 			const int scenarioId = 12;
 
-			var agent = new Person(DataMaker.Me().Person, datasourceData, personId, new DateTime(2010, 1, 1),
-						 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
-
 			//common analytics data
-			DataMaker.Data().Analytics().Setup(agent);
-			DataMaker.Data().Analytics().Setup(new FillBridgeAcdLoginPersonFromData(agent, acdLoginId));
+			DataMaker.Data().Analytics().Setup(new FillBridgeAcdLoginPersonFromData(personId, acdLoginId));
 
 			//some report data
 			const int intervalId = 32;
-			//var dataSource = DataMaker.Data().UserData<IDatasourceData>();
 			var queues = new AQueue(datasourceData);
 		    queues.QueueId = 5;
 			
@@ -77,17 +80,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var intervals = DefaultAnalyticsDataCreator.GetInterval();
 			var datasource = DefaultAnalyticsDataCreator.GetDataSources();
 
-			const int personId = 76;
+			var personId = Person.FindPersonIdByPersonCode(DataMaker.Me().Person.Id.GetValueOrDefault());
+			if (personId == -1)
+			{
+				var agent = new Person(DataMaker.Me().Person, datasource, 76, new DateTime(2010, 1, 1),
+							 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+				DataMaker.Data().Analytics().Setup(agent);
+				personId = agent.PersonId;
+			};
 			const int acdLoginId = 123;
 			const int scenarioId = 12;
 
-			var agent = new Person(DataMaker.Me().Person, datasource, personId, new DateTime(2010, 1, 1),
-						 new DateTime(2059, 12, 31), 0, -2, 0, DefaultBusinessUnit.BusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
 
 			//common analytics data
 			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, intervals, timeZones, datasource));
-			DataMaker.Data().Analytics().Setup(agent);
-			DataMaker.Data().Analytics().Setup(new FillBridgeAcdLoginPersonFromData(agent, acdLoginId));
+			DataMaker.Data().Analytics().Setup(new FillBridgeAcdLoginPersonFromData(personId, acdLoginId));
 
 			//some report data
 			var intervalId = 2;
