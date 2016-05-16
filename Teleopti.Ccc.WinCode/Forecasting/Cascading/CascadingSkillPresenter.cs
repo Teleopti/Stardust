@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 {
@@ -75,20 +76,18 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 			{
 				_internalModel = new cascadingSkillModel();
 				var skills = _skillRepository.LoadAll().OrderBy(x => x.CascadingIndex).ThenBy(x => x.Name);
-				foreach (var skill in skills)
+				foreach (var skill in skills.Where(skill => !((IDeleteTag)skill).IsDeleted))
 				{
-					if(((Skill)skill).IsDeleted)
-						continue;
-					if(skill.SkillType != null && skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
-						continue;
-
 					if (skill.IsCascading())
 					{
 						_internalModel.CascadingSkills.Add(skill);
 					}
 					else
 					{
-						_internalModel.NonCascadingSkills.Add(skill);
+						if (skill.CanBeCascading())
+						{
+							_internalModel.NonCascadingSkills.Add(skill);
+						}
 					}
 				}
 			}

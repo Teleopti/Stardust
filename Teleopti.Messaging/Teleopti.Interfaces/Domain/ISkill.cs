@@ -214,5 +214,6 @@ namespace Teleopti.Interfaces.Domain
 	    void ClearCascadingIndex();
 		int? CascadingIndex { get; }
 	    bool IsCascading();
+	    bool CanBeCascading();
     }
 }

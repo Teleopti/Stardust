@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				var stateHolder = _stateHolder();
 				var skills = stateHolder.SchedulingResultState.Skills;
 				var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex); //lägg nån annanstans
-				//TODO: hantera deletade skills
+				//TODO: hantera deletade skills?? (kanske inte behövs här)
 				//TODO: nåt rörande skillgrupper
 				foreach (var skillToMoveFrom in cascadingSkills)
 				{
