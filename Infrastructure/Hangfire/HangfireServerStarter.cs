@@ -7,8 +7,6 @@ using Hangfire.States;
 using Hangfire.Storage;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire

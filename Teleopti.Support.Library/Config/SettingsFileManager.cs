@@ -8,12 +8,13 @@ namespace Teleopti.Support.Library.Config
 	public class SettingsFileManager
 	{
 		private readonly string settingsFileName = "settings.txt";
+		private string _settingsFile;
 
 		public SearchReplaceCollection ReadFile()
 		{
 			var collection = new Parser()
 				.ParseText(
-					File.ReadAllText(findSettingsFileByBlackMagic(settingsFileName))
+					File.ReadAllText(settingsFile())
 				);
 			// this cant be good, but I wont change the behavior
 			collection.FixSomeValuesAfterReading();
@@ -22,13 +23,12 @@ namespace Teleopti.Support.Library.Config
 
 		public void SaveFile(IEnumerable<SearchReplace> collection)
 		{
-			var path = findSettingsFileByBlackMagic(settingsFileName);
 			var text = "";
 			foreach (var searchReplace in collection)
 			{
 				text = text + searchReplace.SearchFor + "|" + searchReplace.ReplaceWith + Environment.NewLine;
 			}
-			File.WriteAllText(path, text);
+			File.WriteAllText(settingsFile(), text);
 		}
 
 		public void UpdateFileByName(string name, string replaceWith)
@@ -43,6 +43,13 @@ namespace Teleopti.Support.Library.Config
 			var collection = ReadFile();
 			collection.Set(searchFor, replaceWith);
 			SaveFile(collection.ForDisplay());
+		}
+
+		private string settingsFile()
+		{
+			if (_settingsFile != null)
+				return _settingsFile;
+			return _settingsFile = findSettingsFileByBlackMagic(settingsFileName);
 		}
 
 		private static string findSettingsFileByBlackMagic(string fileName)
@@ -65,9 +72,11 @@ namespace Teleopti.Support.Library.Config
 				@"..\..\..\Teleopti.Support.Tool\bin\Release\",
 				@"..\..\..\..\Teleopti.Support.Tool\bin\Release\",
 			};
-			return paths
+			var found = paths
 				.Select(x => Path.Combine(x, fileName))
 				.First(File.Exists);
+			return Path.GetFullPath(found);
+
 		}
 
 	}

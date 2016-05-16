@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 		private static IISExpress _server;
 		private static IDisposable _portsConfiguration;
 
+		private static readonly SettingsFileManager settingsFile = new SettingsFileManager();
+
 		public static void Setup()
 		{
 			_portsConfiguration = RandomPortsAndUrls();
@@ -153,34 +155,32 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 
 		private static SearchReplaceCollection searchReplaces()
 		{
-			var tags = new SettingsFileManager();
-
 			// behavior test
-			tags.UpdateFileByName("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
-			tags.UpdateFileByName("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
-			tags.UpdateFileByName("BehaviorTestServer", "true");
-			tags.UpdateFileByName("HangfireDashboard", "true");
-			tags.UpdateFileByName("HangfireDashboardStatistics", "true");
-			tags.UpdateFileByName("HangfireDashboardCounters", "true");
-			tags.UpdateFileByName("HangfireDashboardDisplayNames", "true");
-			tags.UpdateFileByName("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
+			settingsFile.UpdateFileByName("MachineKey", CryptoCreator.MachineKeyCreator.StaticMachineKeyForBehaviorTest());
+			settingsFile.UpdateFileByName("TimeLoggerConfiguration", "<logger name='Teleopti.LogTime'><level value='DEBUG'/></logger>");
+			settingsFile.UpdateFileByName("BehaviorTestServer", "true");
+			settingsFile.UpdateFileByName("HangfireDashboard", "true");
+			settingsFile.UpdateFileByName("HangfireDashboardStatistics", "true");
+			settingsFile.UpdateFileByName("HangfireDashboardCounters", "true");
+			settingsFile.UpdateFileByName("HangfireDashboardDisplayNames", "true");
+			settingsFile.UpdateFileByName("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
 
 			// iisexpress
-			tags.UpdateFileByName("Port", TestSiteConfigurationSetup.Port.ToString());
-			tags.UpdateFileByName("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
-			tags.UpdateFileByName("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
-			tags.UpdateFileByName("SitePath", Paths.WebPath());
-			tags.UpdateFileByName("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
-			tags.UpdateFileByName("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
+			settingsFile.UpdateFileByName("Port", TestSiteConfigurationSetup.Port.ToString());
+			settingsFile.UpdateFileByName("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
+			settingsFile.UpdateFileByName("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
+			settingsFile.UpdateFileByName("SitePath", Paths.WebPath());
+			settingsFile.UpdateFileByName("SitePathAuthenticationBridge", Paths.WebAuthenticationBridgePath());
+			settingsFile.UpdateFileByName("SitePathWindowsIdentityProvider", Paths.WebWindowsIdentityProviderPath());
 
 			// settings.txt
-			tags.UpdateFileByName("URL", TestSiteConfigurationSetup.URL.ToString());
-			tags.UpdateFileByName("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
-			tags.UpdateFileByName("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
-			tags.UpdateFileByName("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
-			tags.UpdateFileByName("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
+			settingsFile.UpdateFileByName("URL", TestSiteConfigurationSetup.URL.ToString());
+			settingsFile.UpdateFileByName("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
+			settingsFile.UpdateFileByName("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.URL.ToString());
+			settingsFile.UpdateFileByName("WindowsClaimProvider", TestSiteConfigurationSetup.WindowsClaimProvider);
+			settingsFile.UpdateFileByName("TeleoptiClaimProvider", TestSiteConfigurationSetup.TeleoptiClaimProvider);
 
-			return tags.ReadFile();
+			return settingsFile.ReadFile();
 		}
 
 	}
