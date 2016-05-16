@@ -7,7 +7,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Sql;
 using Teleopti.Ccc.TestCommon.TestData.Analytics.Tables;
-using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
