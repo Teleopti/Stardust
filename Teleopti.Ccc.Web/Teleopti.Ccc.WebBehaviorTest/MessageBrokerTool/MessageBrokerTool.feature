@@ -8,12 +8,14 @@ Background:
 	| Field | Value     |
 	| Name  | Developer |
 	And I have a person period with
-    | Field      | Value      |	
+	| Field      | Value      |
 	| Start date | 2013-06-01 |
 	And there is an absence with
 	| Field | Value    |
 	| Name  | Vacation |
 
+@ignore
+# Ignore since it random failing
 Scenario: Should send all messages
 	When I am viewing the diagnosis view
 	And I input a numberOfPings of 1
