@@ -49,20 +49,23 @@ namespace Teleopti.Ccc.Domain.Cascading
 									var overstaffedValue = calcStaffFrom - skillToMoveFromAbsoluteDifference;
 
 									var currentSkillIndex = cascadingSkills.IndexOf(skillToMoveFrom);
-									var skillToMoveTo = cascadingSkills[currentSkillIndex + 1]; //fix - only understaffed + not last
-									if(!skillToMoveFrom.Activity.Equals(skillToMoveTo.Activity))
-										continue;
-
-									if(skillToMoveFrom.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill) || skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill))
-										continue;
-
-									ISkillStaffPeriod skillStaffPeriodTo;
-									var skillstafPeriodDicLastCascadingSkill = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo];
-									if (skillstafPeriodDicLastCascadingSkill.TryGetValue(interval, out skillStaffPeriodTo))
+									if (currentSkillIndex < cascadingSkills.Count - 1)
 									{
-										skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + overstaffedValue);
-										skillStaffPeriodFrom.SetCalculatedResource65(calcStaffFrom - overstaffedValue);
-									}	
+										var skillToMoveTo = cascadingSkills[currentSkillIndex + 1]; //fix - only understaffed + not last
+										if (!skillToMoveFrom.Activity.Equals(skillToMoveTo.Activity))
+											continue;
+
+										if (skillToMoveFrom.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill) || skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill))
+											continue;
+
+										ISkillStaffPeriod skillStaffPeriodTo;
+										var skillstafPeriodDicLastCascadingSkill = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo];
+										if (skillstafPeriodDicLastCascadingSkill.TryGetValue(interval, out skillStaffPeriodTo))
+										{
+											skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + overstaffedValue);
+											skillStaffPeriodFrom.SetCalculatedResource65(calcStaffFrom - overstaffedValue);
+										}
+									}
 								}
 							}
 						}
