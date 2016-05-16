@@ -36,19 +36,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			SystemSetup.DefaultAnalyticsDataCreator.Create();
 
 			DataSourceHelper.BackupApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);			
-			DataSourceHelper.BackupAnalyticsDatabase(SystemSetup.DefaultAnalyticsDataCreator.HashValue);			
 		}
 
 		public static void ClearAnalyticsData()
 		{
 			DataSourceHelper.ClearAnalyticsData();
-		}
-
-		public static void RestoreAnalyticsData()
-		{
-			DataSourceHelper.RestoreAnalyticsDatabase(SystemSetup.DefaultAnalyticsDataCreator.HashValue);
+			SystemSetup.DefaultAnalyticsDataCreator.Create();
 			TestCommon.TestData.Analytics.BusinessUnit.IdCounter = 0;
 		}
+
 		public static void RestoreCcc7Data()
 		{
 			DataSourceHelper.RestoreApplicationDatabase(SystemSetup.DefaultDataCreator.HashValue);
