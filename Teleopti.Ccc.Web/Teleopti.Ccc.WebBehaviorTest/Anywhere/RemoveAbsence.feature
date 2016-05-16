@@ -72,7 +72,6 @@ Scenario: View absence ending tomorrow in list
 	| Start time | 2013-05-06 00:00 |
 	| End time   | 2013-05-07 15:00 |
 
-@ignore
 Scenario: Remove absence with confirmation
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
@@ -84,7 +83,8 @@ Scenario: Remove absence with confirmation
 	And I click 'remove' on absence named 'Vacation'
 	Then I should see 1 absences in the absence list
 	And I should see a shift
-	When I click 'confirm removal' on absence named 'Vacation'
+	When I click 'confirm-removal' on absence named 'Vacation'
+	And I am viewing team schedule for '2013-05-06'
 	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see 0 absences in the absence list
 	And I should not see any shift

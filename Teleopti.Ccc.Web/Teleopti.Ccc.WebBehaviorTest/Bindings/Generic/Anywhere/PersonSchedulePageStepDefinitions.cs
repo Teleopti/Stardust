@@ -208,9 +208,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeAbsencesInTheAbsenceList(int count)
 		{
 			if (count == 0)
-				Browser.Interactions.AssertNotExists(".absence-list", ".absence-list .absence");
+			{
+				Browser.Interactions.AssertNotExists(".absence-list", ".absence");
+			}
 			else
-				Browser.Interactions.AssertNotExists(".absence-list .absence:nth-child(" + count + ")", ".absence-list .absence:nth-child(" + (count + 1) + ")");
+				Browser.Interactions.AssertNotExists(".absence-list .absence:nth-child(" + count + ")",
+					".absence:nth-child(" + (count + 1) + ")");
 		}
 
 		[Then(@"I should see a day off")]
@@ -293,6 +296,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I click '(.*)' on absence named '(.*)'")]
 		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
 		{
+			Browser.Interactions.AssertExistsUsingJQuery(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
 			Browser.Interactions.ClickUsingJQuery(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
 		}
 
