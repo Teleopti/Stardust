@@ -80,12 +80,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			//system.UseTestDouble<ActionImmediate>().For<IActionScheduler>();
 			system.UseTestDouble<FakeMailboxRepository>().For<IMailboxRepository>();
 			//
-
-			// Permissions
-			if (QueryAllAttributes<RealPermissionsAttribute>().IsEmpty())
-				system.UseTestDouble<FullPermission>().For<IAuthorization>();
-			//
-
+			
 			// Rta
 			system.UseTestDouble<FakeRtaDatabase>().For<IDatabaseReader>();
 			system.UseTestDouble<FakeMappingReader>().For<IMappingReader>();
@@ -154,6 +149,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			fakePrincipal(system);
 		}
 
+
 		private void fakePrincipal(ISystem system)
 		{
 			var context = new FakeThreadPrincipalContext();
@@ -175,5 +171,34 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble(context).For<IThreadPrincipalContext>();
 		}
 
+
+
+		private bool realPermissions()
+		{
+			return QueryAllAttributes<RealPermissionsAttribute>().Any();
+		}
+
+		public IAuthorizationScope AuthorizationScope;
+		public ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
+
+		protected override void BeforeTest()
+		{
+			base.BeforeTest();
+
+			// because DomainTest project has a SetupFixtureForAssembly that sets FullPermissions globally... 
+			if (realPermissions())
+				AuthorizationScope.OnThisThreadUse(new PrincipalAuthorization(CurrentTeleoptiPrincipal));
+			else
+				AuthorizationScope.OnThisThreadUse(new FullPermission());
+		}
+
+		protected override void AfterTest()
+		{
+			base.AfterTest();
+
+			// because DomainTest project has a SetupFixtureForAssembly that sets FullPermissions globally... 
+			if (realPermissions())
+				AuthorizationScope.OnThisThreadUse(null);
+		}
 	}
 }
