@@ -29,12 +29,12 @@ namespace Stardust.Manager
 		{
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				string deleteCommandText = "DELETE TOP(@badgeSize) FROM [Stardust].[Job] WHERE Created < DATEADD(HOUR, -@hours, GETDATE())";
+				string deleteCommandText = "DELETE TOP(@batchsize) FROM [Stardust].[Job] WHERE Created < DATEADD(HOUR, -@hours, GETDATE())";
 				connection.OpenWithRetry(_retryPolicy);
 				using (var deleteCommand = new SqlCommand(deleteCommandText, connection))
 				{
 					deleteCommand.Parameters.AddWithValue("@hours", _managerConfiguration.PurgeJobsOlderThanHours);
-					deleteCommand.Parameters.AddWithValue("@badgeSize", _managerConfiguration.PurgeBadgeSize);
+					deleteCommand.Parameters.AddWithValue("@batchsize", _managerConfiguration.Purgebatchsize);
 
 					deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}

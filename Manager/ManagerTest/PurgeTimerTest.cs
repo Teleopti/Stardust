@@ -44,7 +44,7 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldOnlyDeleteBadgeSizeNumberOfJobs()
+		public void ShouldOnlyDeletebatchsizeNumberOfJobs()
 		{
 			InsertJobRecords(2, 2); //add a two hours old job
 			PurgeTimer purgeTimer = new PurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1));
