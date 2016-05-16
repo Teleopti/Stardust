@@ -3,7 +3,6 @@ using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
@@ -14,15 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	[MyReportPermission]
 	public class MyReportController : Controller
 	{
-	    private readonly IToggleManager _toggleManager;
-	    private readonly IMyReportViewModelFactory _myReportViewModelFactory;
+		private readonly IMyReportViewModelFactory _myReportViewModelFactory;
 		private readonly IUserCulture _userCulture;
 
-        public MyReportController(IMyReportViewModelFactory myReportViewModelFactory, IUserCulture userCulture, IToggleManager toggleManager)
+        public MyReportController(IMyReportViewModelFactory myReportViewModelFactory, IUserCulture userCulture)
 		{
 			_myReportViewModelFactory = myReportViewModelFactory;
 			_userCulture = userCulture;
-            _toggleManager = toggleManager;
 		}
 
 		[EnsureInPortal]

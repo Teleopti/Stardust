@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
 			var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-			var target = new MyReportController(viewModelFactory, null, toggleManager);
+			var target = new MyReportController(viewModelFactory, null);
 			var model = new DailyMetricsViewModel();
 			var date = DateOnly.Today;
 
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
             var toggleManager = MockRepository.GenerateMock<IToggleManager>();
-            var target = new MyReportController(viewModelFactory, null, toggleManager);
+            var target = new MyReportController(viewModelFactory, null);
 			var date = DateOnly.Today;
 			var model = new DetailedAdherenceViewModel();
 			viewModelFactory.Stub(x => x.CreateDetailedAherenceViewModel(date)).Return(model);
@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void AdherenceShouldReturnPartialView()
 		{
-			var controller = new MyReportController(null, null, null);
+			var controller = new MyReportController(null, null);
 			controller.Adherence().Should().Be.OfType<ViewResult>();
 		}
 
 		[Test]
 		public void IndexShouldReturnPartialView()
 		{
-			var controller = new MyReportController(null, null, null);
+			var controller = new MyReportController(null, null);
 			controller.Index().Should().Be.OfType<ViewResult>();
 		}
 	}
