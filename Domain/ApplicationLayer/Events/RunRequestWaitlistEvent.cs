@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public RunRequestWaitlistEvent()
 		{
-			Identity = Guid.NewGuid();
+			Id = Guid.NewGuid();
 		}
 
-		public Guid Identity { get; private set; }
+		public Guid Id { get; private set; }
 
 		public DateTimePeriod Period { get; set; }
 	}

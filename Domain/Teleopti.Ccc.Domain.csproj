@@ -185,6 +185,8 @@
     <Compile Include="ApplicationLayer\Commands\IWriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveShiftLayerCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\MoveShiftLayerCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\RunWaitlistCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\RunWaitlistCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />

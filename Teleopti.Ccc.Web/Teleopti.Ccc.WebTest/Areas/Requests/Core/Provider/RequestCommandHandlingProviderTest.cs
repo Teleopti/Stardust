@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -283,7 +282,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			result.Success.Should().Be.True();
 			result.AffectedRequestIds.ToList().Contains (personRequest.Id.Value).Should().Be.True();
 			personRequest.IsCancelled.Should().Be.True();
-			
+		}
+
+		[Test]
+		public void ShouldRunRequestWaitlist()
+		{
+			var period = new DateTimePeriod(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
+			var result = Target.RunWaitlist(period);
+
+			result.Success.Should().Be.True();
+			result.AffectedRequestIds.Any().Should().Be.False();
 		}
 
 		private static void setupStateHolderProxy()

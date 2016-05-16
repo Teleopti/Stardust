@@ -110,7 +110,27 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			return new RequestCommandHandlingResult(affectedRequestIds, errorMessages);
 		}
 
+		public RequestCommandHandlingResult RunWaitlist(DateTimePeriod period)
+		{
+			var trackInfo = new TrackedCommandInfo
+			{
+				OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value
+			};
+			var errorMessages = new List<string>();
+			var command = new RunWaitlistCommand()
+			{
+				TrackedCommandInfo = trackInfo,
+				Period = period
+			};
 
+			_commandDispatcher.Execute(command);
+			
+			if (command.ErrorMessages != null)
+			{
+				errorMessages.AddRange(command.ErrorMessages);
+			}
 
+			return new RequestCommandHandlingResult(new Guid[] {}, errorMessages);
+		}
 	}
 }

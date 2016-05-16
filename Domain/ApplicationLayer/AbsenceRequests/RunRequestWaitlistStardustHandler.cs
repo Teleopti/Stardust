@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class RunRequestWaitlistStardustHandler : IHandleEvent<RunRequestWaitlistEvent>, IRunOnStardust
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private IAbsenceRequestWaitlistProcessor _processor;
+		private readonly IAbsenceRequestWaitlistProcessor _processor;
 		private readonly IWorkflowControlSetRepository _wcsRepository;
 
 		public RunRequestWaitlistStardustHandler(ICurrentUnitOfWork currentUnitOfWork,
