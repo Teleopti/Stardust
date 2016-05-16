@@ -1,28 +1,63 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
+	[EnabledBy(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
 	public class ScheduleProjectionReadOnlyUpdater :
+		ScheduleProjectionReadOnlyUpdaterBase,
 		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
-		IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire
+	{
+		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
+			: base(scheduleProjectionReadOnlyPersister)
+		{
+		}
+
+		[UnitOfWork]
+		public override void Handle(ProjectionChangedEvent @event)
+		{
+			base.Handle(@event);
+		}
+
+		[UnitOfWork]
+		public override void Handle(ProjectionChangedEventForScheduleProjection @event)
+		{
+			base.Handle(@event);
+		}
+	}
+
+	[DisabledBy(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
+	public class ScheduleProjectionReadOnlyUpdaterBus:
+		ScheduleProjectionReadOnlyUpdaterBase,
+		IHandleEvent<ProjectionChangedEventForScheduleProjection>,
+		IHandleEvent<ProjectionChangedEvent>,
+#pragma warning disable 618
+		IRunOnServiceBus
+#pragma warning restore 618
+	{
+		public ScheduleProjectionReadOnlyUpdaterBus(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister) : base(scheduleProjectionReadOnlyPersister)
+		{
+		}
+	}
+
+	public class ScheduleProjectionReadOnlyUpdaterBase
 	{
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 	    
-		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
+		public ScheduleProjectionReadOnlyUpdaterBase(IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister)
 		{
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 		}
 
-		[UnitOfWork]
 		public virtual void Handle(ProjectionChangedEventForScheduleProjection @event)
 		{
 			handleProjectionChanged(@event);
 		}
 
-		[UnitOfWork]
 		public virtual void Handle(ProjectionChangedEvent @event)
 		{
 			handleProjectionChanged(@event);

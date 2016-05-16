@@ -8,16 +8,71 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	[EnabledBy(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
 	public class ProjectionChangedEventPublisher : 
-		IHandleEvent<ScheduleChangedEvent>, 
+		ProjectionChangedEventPublisherBase,
+		IHandleEvent<ScheduleChangedEvent>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
 		IRunOnHangfire
+	{
+		public ProjectionChangedEventPublisher(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder, IProjectionVersionPersister projectionVersionPersister) : base(publisher, scenarioRepository, personRepository, scheduleStorage, projectionChangedEventBuilder, projectionVersionPersister)
+		{
+		}
+
+		[AsSystem]
+		[UnitOfWork]
+		public override void Handle(ScheduleChangedEvent @event)
+		{
+			base.Handle(@event);
+		}
+
+		[AsSystem]
+		[UnitOfWork]
+		public override void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
+		{
+			base.Handle(@event);
+		}
+
+		[AsSystem]
+		[UnitOfWork]
+		public override void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
+		{
+			base.Handle(@event);
+		}
+
+		[AsSystem]
+		[UnitOfWork]
+		public override void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
+		{
+			base.Handle(@event);
+		}
+
+	}
+
+	[DisabledBy(Toggles.RTA_ScheduleProjectionReadOnlyHangfire_35703)]
+	public class ProjectionChangedEventPublisherBus : 
+		ProjectionChangedEventPublisherBase,
+		IHandleEvent<ScheduleChangedEvent>,
+		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
+		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
+		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
+#pragma warning disable 618
+		IRunOnServiceBus
+#pragma warning restore 618
+	{
+		public ProjectionChangedEventPublisherBus(IEventPublisher publisher, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleStorage scheduleStorage, IProjectionChangedEventBuilder projectionChangedEventBuilder, IProjectionVersionPersister projectionVersionPersister) : base(publisher, scenarioRepository, personRepository, scheduleStorage, projectionChangedEventBuilder, projectionVersionPersister)
+		{
+		}
+	}
+
+	public class ProjectionChangedEventPublisherBase
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ProjectionChangedEventPublisher));
 
@@ -28,12 +83,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 		private readonly IProjectionVersionPersister _projectionVersionPersister;
 
-		public ProjectionChangedEventPublisher(
-			IEventPublisher publisher, 
-			IScenarioRepository scenarioRepository, 
-			IPersonRepository personRepository, 
-			IScheduleStorage scheduleStorage, 
-			IProjectionChangedEventBuilder projectionChangedEventBuilder, 
+		public ProjectionChangedEventPublisherBase(
+			IEventPublisher publisher,
+			IScenarioRepository scenarioRepository,
+			IPersonRepository personRepository,
+			IScheduleStorage scheduleStorage,
+			IProjectionChangedEventBuilder projectionChangedEventBuilder,
 			IProjectionVersionPersister projectionVersionPersister)
 		{
 			_publisher = publisher;
@@ -44,29 +99,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_projectionVersionPersister = projectionVersionPersister;
 		}
 
-		[AsSystem]
-		[UnitOfWork]
 		public virtual void Handle(ScheduleChangedEvent @event)
 		{
 			publishEvent<ProjectionChangedEvent>(@event);
 		}
 
-		[AsSystem]
-		[UnitOfWork]
 		public virtual void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
 		{
 			publishEvent<ProjectionChangedEventForPersonScheduleDay>(@event);
 		}
 
-		[AsSystem]
-		[UnitOfWork]
 		public virtual void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
 		{
 			publishEvent<ProjectionChangedEventForScheduleDay>(@event);
 		}
 
-		[AsSystem]
-		[UnitOfWork]
 		public virtual void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
 		{
 			publishEvent<ProjectionChangedEventForScheduleProjection>(@event);
@@ -104,7 +151,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var period = new DateTimePeriod(@event.StartDateTime.Subtract(TimeSpan.FromDays(1)), @event.EndDateTime);
 			Logger.DebugFormat("Period start: {0}, end: {1}", period.StartDateTime, period.EndDateTime);
 
-			var person = _personRepository.FindPeople(new[] {@event.PersonId}).FirstOrDefault();
+			var person = _personRepository.FindPeople(new[] { @event.PersonId }).FirstOrDefault();
 			if (person == null)
 			{
 				Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
@@ -112,9 +159,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			}
 
 			// gets the date period the same way as FindSchedulesForPersonOnlyInGivenPeriod, hence duplication
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()); 
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
 			var versions = _projectionVersionPersister.LockAndGetVersions(@event.PersonId, dateOnlyPeriod.StartDate, dateOnlyPeriod.EndDate);
-			
+
 			var schedule = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person,
 				new ScheduleDictionaryLoadOptions(false, false),
 				period,
