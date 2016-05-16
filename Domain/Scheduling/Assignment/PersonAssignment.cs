@@ -305,6 +305,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Add(layer);
 		}
 
+		public virtual void AddActivity(IActivity activity, DateTime start, DateTime end)
+		{
+			AddActivity(activity, new DateTimePeriod(start, end), null);
+		}
+
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period)
 		{
 			AddActivity(activity, period, null);

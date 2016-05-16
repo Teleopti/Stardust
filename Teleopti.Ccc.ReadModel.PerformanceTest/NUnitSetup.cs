@@ -4,28 +4,24 @@ using log4net.Config;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.Rta.PerformanceTest.Code;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.Client;
 
-namespace Teleopti.Ccc.Rta.PerformanceTest
+namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {
 	[SetUpFixture]
 	public class NUnitSetup
 	{
-		private ICurrentTransactionHooks transactionHooks;
 		private DefaultDataCreator defaultDataCreator;
 		private DataCreator dataCreator;
+		private ICurrentPrincipalContext principalContext;
 
 		[SetUp]
 		public void Setup()
@@ -45,18 +41,18 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			builder.RegisterType<DefaultDataCreator>().SingleInstance();
 			builder.RegisterType<TestConfiguration>().SingleInstance();
 			builder.RegisterType<Http>().SingleInstance();
+			builder.RegisterType<Database>().SingleInstance().ApplyAspects();
 			builder.RegisterType<DataCreator>().SingleInstance().ApplyAspects();
-			builder.RegisterType<NoMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterModule(new TenantServerModule(configuration));
 
 			var container = builder.Build();
-
-			transactionHooks = container.Resolve<ICurrentTransactionHooks>();
+			
+			principalContext = container.Resolve<ICurrentPrincipalContext>();
 			defaultDataCreator = container.Resolve<DefaultDataCreator>();
 			dataCreator = container.Resolve<DataCreator>();
 
 			var dataHash = defaultDataCreator.HashValue ^ TestConfiguration.HashValue;
-			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "Rta");
+			var path = Path.Combine(InfraTestConfigReader.DatabaseBackupLocation, "ReadModel");
 
 			var haveDatabases =
 				DataSourceHelper.TryRestoreApplicationDatabaseBySql(path, dataHash) &&
@@ -72,10 +68,10 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			DataSourceHelper.CreateDatabases();
 
 			StateHolderProxyHelper.SetupFakeState(
-				DataSourceHelper.CreateDataSource(transactionHooks),
+				DataSourceHelper.CreateDataSource(null),
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
 				DefaultBusinessUnit.BusinessUnit,
-				new ThreadPrincipalContext()
+				principalContext
 				);
 
 			defaultDataCreator.Create();
@@ -84,7 +80,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
 			DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 
-			StateHolderProxyHelper.Logout(new ThreadPrincipalContext());
+			StateHolderProxyHelper.Logout(principalContext);
 		}
 
 		[TearDown]

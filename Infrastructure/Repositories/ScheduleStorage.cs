@@ -248,75 +248,103 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retDic[person];
         }
 
-        public IScheduleDictionary FindSchedulesForPersons(
-            IScheduleDateTimePeriod period, 
-            IScenario scenario, 
-            IPersonProvider personsProvider,
-            IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
-						IEnumerable<IPerson> visiblePersons)
-        {
-            if(period == null) throw new ArgumentNullException("period");
-            if (personsProvider == null) throw new ArgumentNullException("personsProvider");
-            if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
+	    public IScheduleDictionary FindSchedulesForPersons(
+		    DateTimePeriod period,
+			    IScenario scenario,
+			    IPersonProvider personsProvider,
+			    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			    IEnumerable<IPerson> visiblePersons)
+	    {
+		    return FindSchedulesForPersons(
+			    new ScheduleDateTimePeriod(period),
+			    scenario,
+			    personsProvider,
+			    scheduleDictionaryLoadOptions,
+			    visiblePersons);
+	    }
 
-			var scheduleDictionary = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker);
-            IList<IPerson> personsInOrganization = personsProvider.GetPersons();
-            
-            // ugly to be safe to get all
-            var loadedPeriod = period.LoadedPeriod();
-            var longDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(loadedPeriod.StartDateTime.AddDays(-1)), new DateOnly(loadedPeriod.EndDateTime.AddDays(1)));
-	        var longPeriod = new DateTimePeriod(loadedPeriod.StartDateTime.AddDays(-1), loadedPeriod.EndDateTime.AddDays(1));
+	    public IScheduleDictionary FindSchedulesForPersons(
+		    IScheduleDateTimePeriod period,
+			    IScenario scenario,
+			    IPersonProvider personsProvider,
+			    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
+			    IEnumerable<IPerson> visiblePersons)
+	    {
+		    if (period == null) throw new ArgumentNullException("period");
+		    if (personsProvider == null) throw new ArgumentNullException("personsProvider");
+		    if (scheduleDictionaryLoadOptions == null) throw new ArgumentNullException("scheduleDictionaryLoadOptions");
 
-            using(TurnoffPermissionScope.For(scheduleDictionary))
-            {
-                if (personsProvider.DoLoadByPerson)
-                {
-					loadScheduleByPersons(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, personsInOrganization, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
-                    
-                    if(scheduleDictionaryLoadOptions.LoadNotes)
-                    {
-                        addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(longDateOnlyPeriod, personsInOrganization, scenario));
-                        addPublicNotes(scheduleDictionary, _repositoryFactory.CreatePublicNoteRepository(UnitOfWork).Find(longDateOnlyPeriod, personsInOrganization, scenario));
-                    }
+		    var scheduleDictionary = new ScheduleDictionary(scenario, period,
+			    new DifferenceEntityCollectionService<IPersistableScheduleData>(), _dataPermissionChecker);
+		    IList<IPerson> personsInOrganization = personsProvider.GetPersons();
 
-                    addAgentDayScheduleTags(scheduleDictionary, _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longDateOnlyPeriod, personsInOrganization, scenario));
-                }
-                else
-                {
-					loadScheduleForAll(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
+		    // ugly to be safe to get all
+		    var loadedPeriod = period.LoadedPeriod();
+		    var longDateOnlyPeriod = new DateOnlyPeriod(new DateOnly(loadedPeriod.StartDateTime.AddDays(-1)),
+			    new DateOnly(loadedPeriod.EndDateTime.AddDays(1)));
+		    var longPeriod = new DateTimePeriod(loadedPeriod.StartDateTime.AddDays(-1), loadedPeriod.EndDateTime.AddDays(1));
 
-                    if(scheduleDictionaryLoadOptions.LoadNotes)
-                    {
-                        addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(longPeriod, scenario));
-                        addPublicNotes(scheduleDictionary, _repositoryFactory.CreatePublicNoteRepository(UnitOfWork).Find(longPeriod, scenario));
-                    }
+		    using (TurnoffPermissionScope.For(scheduleDictionary))
+		    {
+			    if (personsProvider.DoLoadByPerson)
+			    {
+				    loadScheduleByPersons(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod, personsInOrganization,
+					    scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 
-                    addAgentDayScheduleTags(scheduleDictionary, _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longPeriod, scenario));
-                }
+				    if (scheduleDictionaryLoadOptions.LoadNotes)
+				    {
+					    addNotes(scheduleDictionary,
+						    _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(longDateOnlyPeriod, personsInOrganization, scenario));
+					    addPublicNotes(scheduleDictionary,
+						    _repositoryFactory.CreatePublicNoteRepository(UnitOfWork)
+							    .Find(longDateOnlyPeriod, personsInOrganization, scenario));
+				    }
 
-                if(scheduleDictionaryLoadOptions.LoadRestrictions)
-                {
-                    addPreferencesDays(scheduleDictionary, _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
-					addStudentAvailabilityDays(scheduleDictionary,
-													_repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
-																	.Find(longDateOnlyPeriod, visiblePersons));
-                    addOvertimeAvailability(scheduleDictionary, _repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
-	                if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
-	                {
-						addPersonAvailabilities(longDateOnlyPeriod, scheduleDictionary, personsInOrganization);
-						addPersonRotations(longDateOnlyPeriod, scheduleDictionary, visiblePersons);
-	                }
-                }                              
-            }
+				    addAgentDayScheduleTags(scheduleDictionary,
+					    _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork)
+						    .Find(longDateOnlyPeriod, personsInOrganization, scenario));
+			    }
+			    else
+			    {
+				    loadScheduleForAll(scenario, scheduleDictionary, longPeriod, longDateOnlyPeriod,
+					    scheduleDictionaryLoadOptions.LoadDaysAfterLeft);
 
-            // do we need this if personsProvider.DoLoadByPerson???
-            removeSchedulesOfPersonsNotInOrganization(scheduleDictionary, personsInOrganization);
+				    if (scheduleDictionaryLoadOptions.LoadNotes)
+				    {
+					    addNotes(scheduleDictionary, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(longPeriod, scenario));
+					    addPublicNotes(scheduleDictionary,
+						    _repositoryFactory.CreatePublicNoteRepository(UnitOfWork).Find(longPeriod, scenario));
+				    }
 
-            scheduleDictionary.TakeSnapshot();
-            return scheduleDictionary;
-        }
+				    addAgentDayScheduleTags(scheduleDictionary,
+					    _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longPeriod, scenario));
+			    }
 
-		private void loadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft)
+			    if (scheduleDictionaryLoadOptions.LoadRestrictions)
+			    {
+				    addPreferencesDays(scheduleDictionary,
+					    _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
+				    addStudentAvailabilityDays(scheduleDictionary,
+					    _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
+						    .Find(longDateOnlyPeriod, visiblePersons));
+				    addOvertimeAvailability(scheduleDictionary,
+					    _repositoryFactory.CreateOvertimeAvailabilityRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
+				    if (!scheduleDictionaryLoadOptions.LoadOnlyPreferensesAndHourlyAvailability)
+				    {
+					    addPersonAvailabilities(longDateOnlyPeriod, scheduleDictionary, personsInOrganization);
+					    addPersonRotations(longDateOnlyPeriod, scheduleDictionary, visiblePersons);
+				    }
+			    }
+		    }
+
+		    // do we need this if personsProvider.DoLoadByPerson???
+		    removeSchedulesOfPersonsNotInOrganization(scheduleDictionary, personsInOrganization);
+
+		    scheduleDictionary.TakeSnapshot();
+		    return scheduleDictionary;
+	    }
+
+	    private void loadScheduleForAll(IScenario scenario, ScheduleDictionary scheduleDictionary, DateTimePeriod longPeriod, DateOnlyPeriod dateOnlyPeriod, bool loadDaysAfterLeft)
         {
 			addPersonAbsences(scheduleDictionary, _repositoryFactory.CreatePersonAbsenceRepository(UnitOfWork).Find(longPeriod, scenario), loadDaysAfterLeft);
 			addPersonAssignments(scheduleDictionary, _repositoryFactory.CreatePersonAssignmentRepository(UnitOfWork).Find(dateOnlyPeriod, scenario));

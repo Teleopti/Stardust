@@ -1,18 +1,20 @@
 using Autofac;
+using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
+using Teleopti.Messaging.Client;
 
-namespace Teleopti.Ccc.Rta.PerformanceTest.Code
+namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {
-	public class RtaPerformanceTestAttribute : IoCTestAttribute
+	public class PerformanceTestAttribute : IoCTestAttribute
 	{
 		protected override FakeConfigReader Config()
 		{
 			var config = base.Config();
-			config.FakeConnectionString("MessageBroker", InfraTestConfigReader.AnalyticsConnectionString);
 			config.FakeConnectionString("Tenancy", InfraTestConfigReader.ConnectionString);
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
@@ -25,10 +27,13 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 			system.AddService<TestConfiguration>();
 			system.AddService<Http>();
 			system.AddService<DataCreator>();
-			system.AddService<StatesSender>();
-			system.AddService<StatesArePersisted>();
+			system.AddService<Database>();
+			system.AddModule(new TenantServerModule(configuration));
+
+			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
+
 		}
-		
+
 		protected override void Startup(IComponentContext container)
 		{
 			base.Startup(container);

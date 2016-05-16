@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using System;
+
+namespace Teleopti.Interfaces.Domain
 {
 	public static class DateOnlyExtensions
 	{
@@ -17,6 +19,11 @@
 				toReturn = maxDateOnly;
 			}
 			return toReturn;
+		}
+
+		public static DateTime Utc(this DateOnly dateTime)
+		{
+			return DateTime.SpecifyKind(dateTime.Date, DateTimeKind.Utc);
 		}
 	}
 }

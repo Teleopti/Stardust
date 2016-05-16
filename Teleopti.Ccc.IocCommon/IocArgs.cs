@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.IocCommon
 			MessagesPerSecond = configReader.ReadValue("MessagesPerSecond", 80);
 			BehaviorTestServer = configReader.ReadValue("BehaviorTestServer", false);
 			AllEventPublishingsAsSync = configReader.ReadValue("AllEventPublishingsAsSync", false);
+			OptimizeScheduleChangedEvents_DontUseFromWeb = configReader.ReadValue("OptimizeScheduleChangedEvents_DontUseFromWeb", false);
 			DataSourceConfigurationSetter = Infrastructure.NHibernateConfiguration.DataSourceConfigurationSetter.ForDesktop();
 			ImplementationTypeForCurrentUnitOfWork = typeof(CurrentUnitOfWork);
 		}

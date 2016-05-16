@@ -149,6 +149,7 @@
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="CatalanCulture.cs" />
     <Compile Include="ConcurrencyRunner.cs" />
+    <Compile Include="Database.cs" />
     <Compile Include="FakeData\FakeAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeData\FakeIntervalLengthFetcher.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />

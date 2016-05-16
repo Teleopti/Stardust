@@ -10,7 +10,6 @@ using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
-using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code
@@ -19,19 +18,16 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 	{
 		private readonly MutableNow _now;
 		private readonly TestConfiguration _testConfiguration;
-		private readonly Http _http;
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
 		public DataCreator(
 			MutableNow now,
 			TestConfiguration testConfiguration,
-			Http http,
 			ICurrentUnitOfWork unitOfWork
 			)
 		{
 			_now = now;
 			_testConfiguration = testConfiguration;
-			_http = http;
 			_unitOfWork = unitOfWork;
 		}
 
@@ -40,8 +36,6 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		public virtual void Create()
 		{
 			_now.Is("2016-02-25 08:00".Utc());
-
-			_http.Get("/Test/SetCurrentTime?ticks=" + _now.UtcDateTime().Ticks);
 
 			var data = new TestDataFactory(action =>
 			{

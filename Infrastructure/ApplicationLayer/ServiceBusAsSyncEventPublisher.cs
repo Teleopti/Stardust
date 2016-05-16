@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using NHibernate.Util;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		private readonly ServiceBusEventProcessor _processor;
 		private readonly ResolveEventHandlers _resolver;
-		private readonly Queue<IEvent> _queue = new Queue<IEvent>();
+		private readonly ConcurrentQueue<IEvent> _queue = new ConcurrentQueue<IEvent>();
 		private readonly object processLock = new object();
 
 		public ServiceBusAsSyncEventPublisher(
@@ -69,7 +70,10 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			{
 				try
 				{
-					ProcessLikeTheBus(_queue.Dequeue());
+					IEvent @event;
+					_queue.TryDequeue(out @event);
+					if (@event != null)
+						ProcessLikeTheBus(@event);
 				}
 				catch (Exception e)
 				{

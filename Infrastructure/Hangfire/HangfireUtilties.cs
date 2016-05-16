@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				if (failedCount > 0)
 					throw new Exception("Hangfire job has failed!");
 
-				// requeue any scheduled retries
-				if (scheduledCount > 0)
+				// requeue any scheduled retries if queue is empty
+				if (enqueuedCount == 0 && scheduledCount > 0)
 				{
 					_monitoring
 						.ScheduledJobs(0, 100)

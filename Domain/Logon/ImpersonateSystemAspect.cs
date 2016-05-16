@@ -6,6 +6,7 @@ using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.Logon
 {
+
 	public class ImpersonateSystemAspect : IAspect
 	{
 		private readonly TenantFromArguments _tenant;

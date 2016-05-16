@@ -39,7 +39,12 @@ namespace Teleopti.Ccc.Domain.Helper
             if (timeSpan == TimeSpan.Zero) return dateTime; // Or could throw an ArgumentException
             return dateTime.AddTicks(-(dateTime.Ticks % timeSpan.Ticks));
         }
-    }
+		
+		public static DateTime Utc(this DateTime dateTime)
+		{
+			return DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+		}
+	}
 
 	public static class CalendarExtensions
 	{

@@ -93,6 +93,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
+		public IScheduleDictionary FindSchedulesForPersons(DateTimePeriod period, IScenario scenario, IPersonProvider personsProvider,
+			IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons)
+		{
+			return null;
+		}
+
 		public IScheduleDictionary FindSchedulesForPersons(IScheduleDateTimePeriod period, IScenario scenario, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IEnumerable<IPerson> visiblePersons)
 		{
 			throw new NotImplementedException();
