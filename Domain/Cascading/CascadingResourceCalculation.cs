@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 
-		public CascadingResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper, 
+		public CascadingResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
@@ -31,35 +31,32 @@ namespace Teleopti.Ccc.Domain.Cascading
 				var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex); //lägg nån annanstans
 				//TODO: hantera deletade skills
 				//TODO: nåt rörande skillgrupper
-				foreach (var skillToMoveFrom in stateHolder.SchedulingResultState.Skills)
+				foreach (var skillToMoveFrom in cascadingSkills)
 				{
-					if (skillToMoveFrom.IsCascading())
+					var datetimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(date, date.AddDays(1), skillToMoveFrom.TimeZone);
+					var intervals = datetimePeriod.Intervals(TimeSpan.FromMinutes(skillToMoveFrom.DefaultResolution));
+					var skillStaffPeriodFromDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveFrom];
+					foreach (var interval in intervals)
 					{
-						var datetimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(date, date.AddDays(1), skillToMoveFrom.TimeZone);
-						var intervals = datetimePeriod.Intervals(TimeSpan.FromMinutes(skillToMoveFrom.DefaultResolution));
-						var skillStaffPeriodFromDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveFrom];
-						foreach (var interval in intervals)
+						ISkillStaffPeriod skillStaffPeriodFrom;
+						if (skillStaffPeriodFromDic.TryGetValue(interval, out skillStaffPeriodFrom))
 						{
-							ISkillStaffPeriod skillStaffPeriodFrom;
-							if(skillStaffPeriodFromDic.TryGetValue(interval, out skillStaffPeriodFrom))
+							var skillToMoveFromAbsoluteDifference = skillStaffPeriodFrom.AbsoluteDifference;
+							if (skillToMoveFromAbsoluteDifference > 0)
 							{
-								var skillToMoveFromAbsoluteDifference = skillStaffPeriodFrom.AbsoluteDifference;
-								if (skillToMoveFromAbsoluteDifference > 0)
+								//bara flytta till cascading skills som agent X kan?
+								foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity)))
 								{
-									//bara flytta till cascading skills som agent X kan?
-									foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity)))
+									ISkillStaffPeriod skillStaffPeriodTo;
+									var skillStaffPeriodToDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo];
+									if (skillStaffPeriodToDic.TryGetValue(interval, out skillStaffPeriodTo))
 									{
-										ISkillStaffPeriod skillStaffPeriodTo;
-										var skillStaffPeriodToDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo];
-										if (skillStaffPeriodToDic.TryGetValue(interval, out skillStaffPeriodTo))
+										var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
+										if (skillToMoveToAbsoluteDifference < 0)
 										{
-											var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
-											if (skillToMoveToAbsoluteDifference < 0)
-											{
-												skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + skillToMoveFromAbsoluteDifference);
-												skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - skillToMoveFromAbsoluteDifference);
-												break;
-											}
+											skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + skillToMoveFromAbsoluteDifference);
+											skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - skillToMoveFromAbsoluteDifference);
+											break;
 										}
 									}
 								}
