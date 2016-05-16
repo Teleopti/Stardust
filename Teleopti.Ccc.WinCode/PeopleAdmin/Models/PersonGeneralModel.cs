@@ -220,8 +220,8 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
 				if (string.IsNullOrEmpty(value))
 				{
 					_isValid = true;
-					_tenantData.ApplicationLogonName = "";
-					_tenantData.Password = "";
+					_tenantData.ApplicationLogonName = null;
+					_tenantData.Password = null;
 					_tenantData.Changed = true;
 					return;
 				}
