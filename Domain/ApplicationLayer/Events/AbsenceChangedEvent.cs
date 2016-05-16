@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class AbsenceTypeChangeEvent : EventWithInfrastructureContext
+	public class AbsenceChangedEvent : EventWithInfrastructureContext
 	{
 		public Guid AbsenceId { get; set; }
 	}

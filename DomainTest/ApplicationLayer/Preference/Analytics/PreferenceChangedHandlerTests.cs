@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		private FakePersonRepository _personRepository;
 		private FakeAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
-		private FakeAnalyticsAbsenceRepository _fakeAnalyticsAbsenceRepository;
+		private FakeAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 		
 
 		[SetUp]
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_personRepository = new FakePersonRepository();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
-			_fakeAnalyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository(
+			_analyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository(
 				new List<IAnalyticsAbsence>
 				{
 					new AnalyticsAbsence {AbsenceCode = Guid.Empty, AbsenceId = -1},
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				_personRepository,
 				_analyticsDayOffRepository,
 				_analyticsScenarioRepository,
-				_fakeAnalyticsAbsenceRepository);
+				_analyticsAbsenceRepository);
 		}
 
 		[Test]
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			var preferenceRestriction = new PreferenceRestriction
 			{
 				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej").WithId(_analyticsScheduleRepository.ShiftCategories().First(a => a.Id == 1).Code),
-				Absence = AbsenceFactory.CreateAbsence("Absence").WithId(_analyticsScheduleRepository.Absences().First(a => a.AbsenceId == 1).AbsenceCode),
+				Absence = AbsenceFactory.CreateAbsence("Absence").WithId(_analyticsAbsenceRepository.Absences().First(a => a.AbsenceId == 1).AbsenceCode),
 				DayOffTemplate = DayOffFactory.CreateDayOff().WithId(),
 				MustHave = true
 			};

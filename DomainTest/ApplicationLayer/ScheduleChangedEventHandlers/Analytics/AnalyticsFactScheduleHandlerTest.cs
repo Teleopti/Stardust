@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
@@ -75,10 +76,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
                 Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(new AnalyticsFactScheduleDate());
 
             var repoMock = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
-            _timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock);
+            _timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock, new FakeAnalyticsAbsenceRepository());
 	        repoMock.Stub(x => x.Overtimes()).Return(new List<IAnalyticsGeneric>());
             repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
-	        repoMock.Stub(x => x.Absences()).Return(new List<IAnalyticsAbsence>());
 	        repoMock.Stub(x => x.Activities()).Return(new List<AnalyticsActivity>());
 
             _target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler);
