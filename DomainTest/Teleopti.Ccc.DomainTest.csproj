@@ -285,6 +285,7 @@
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="Optimization\IntradayOptimizationContextHandleNestedResourcesTest.cs" />
+    <Compile Include="SchedulingScenarios\Cascading\CascadingResourceCalculationOverstaffedTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationScenario.cs" />
     <Compile Include="SchedulingScenarios\FillSchedulerStateHolderWithTestData.cs" />
