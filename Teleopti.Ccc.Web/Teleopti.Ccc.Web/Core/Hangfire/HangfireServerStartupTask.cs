@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Infrastructure.Hangfire;

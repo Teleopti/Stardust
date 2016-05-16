@@ -25,7 +25,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				builder.RegisterModule(new EtlAppModule());
 				_container = builder.Build();
 
-				_container.Resolve<IHangfireClientStarter>().Start();
+				_container.Resolve<HangfireClientStarter>().Start();
 
 				var service = _container.Resolve<EtlService>();
 				service.Start(serviceStartTime, stopService);

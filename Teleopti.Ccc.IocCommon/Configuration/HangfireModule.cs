@@ -1,6 +1,5 @@
 using Autofac;
 using Hangfire;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
@@ -18,10 +17,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<HangfireStarter>().SingleInstance();
 			builder.RegisterType<HangfireServerStarter>().SingleInstance();
+			builder.RegisterType<HangfireClientStarter>().SingleInstance();
 
 			builder.RegisterType<HangfireEventServer>().SingleInstance();
-
 			builder.RegisterType<HangfireEventClient>().As<IHangfireEventClient>().SingleInstance();
 
 			builder.Register(c => JobStorage.Current).SingleInstance();
@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					))
 				.As<RecurringJobManager>()
 				.SingleInstance();
-
-			builder.RegisterType<HangfireClientStarter>().As<IHangfireClientStarter>().SingleInstance();
 
 			builder.RegisterType<HangfireUtilties>().SingleInstance().ApplyAspects();
 		}

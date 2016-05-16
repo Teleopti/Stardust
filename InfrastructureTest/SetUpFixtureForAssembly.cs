@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 
 			DataSource = DataSourceHelper.CreateDatabasesAndDataSource(container.Resolve<ICurrentTransactionHooks>(), "TestData");
 
-			container.Resolve<IHangfireClientStarter>().Start();
+			container.Resolve<HangfireClientStarter>().Start();
 
 			loggedOnPerson = PersonFactory.CreatePerson("logged on person");
 

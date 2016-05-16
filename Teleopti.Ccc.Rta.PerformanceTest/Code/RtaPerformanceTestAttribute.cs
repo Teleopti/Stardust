@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 		protected override void Startup(IComponentContext container)
 		{
 			base.Startup(container);
-			container.Resolve<IHangfireClientStarter>().Start();
+			container.Resolve<HangfireClientStarter>().Start();
 		}
 		
 		protected override void Setup(ISystem system, IIocConfiguration configuration)

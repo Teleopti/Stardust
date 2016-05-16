@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var toggleManager = CommonModule.ToggleManagerForIoc(new IocArgs(new ConfigReader()));
 			_sharedContainer = new ContainerBuilder().Build();
 			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
-			_sharedContainer.Resolve<IHangfireClientStarter>().Start();
+			_sharedContainer.Resolve<HangfireClientStarter>().Start();
 
 			if (toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
 			{

@@ -1,19 +1,15 @@
-using Hangfire;
 using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public interface IHangfireClientStarter
+	public class HangfireClientStarter
 	{
-		void Start();
-	}
-	
-	public class HangfireClientStarter : IHangfireClientStarter
-	{
+		private readonly HangfireStarter _starter;
 		private readonly IConfigReader _config;
 
-		public HangfireClientStarter(IConfigReader config)
+		public HangfireClientStarter(HangfireStarter starter, IConfigReader config)
 		{
+			_starter = starter;
 			_config = config;
 		}
 
@@ -22,7 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var connectionString = _config.ConnectionString("Hangfire");
 			if (string.IsNullOrEmpty(connectionString))
 				connectionString = _config.AppConfig("Hangfire"); //WHA..t?
-			GlobalConfiguration.Configuration.UseSqlServerStorage(connectionString);
+
+			_starter.Start(connectionString);
 		}
 	}
 }

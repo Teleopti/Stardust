@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
 			_container.Resolve<ISignalRClient>().StartBrokerService();
-			_container.Resolve<IHangfireClientStarter>().Start();
+			_container.Resolve<HangfireClientStarter>().Start();
 			Hangfire = _container.Resolve<HangfireUtilties>();
 		}
 	}
