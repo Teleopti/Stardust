@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 #pragma warning disable 618
-    [UseNotOnToggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
+    [DisabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
     public class UpdateGroupingReadModelConsumer :
 		IHandleEvent<PersonCollectionChangedEvent>,
 		IRunOnServiceBus
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 	}
 
-    [UseOnToggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
+    [EnabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
     public class UpdateGroupingReadModelHandler :
         IHandleEvent<PersonCollectionChangedEvent>,
         IRunOnHangfire

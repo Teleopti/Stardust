@@ -11,15 +11,18 @@ using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
-    [UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439), UseNotOnToggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
+
 #pragma warning disable 618
-	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439)]
+	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
+                  Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
+        DisabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
+    public class PersonPeriodAnalyticsUpdaterBus: PersonPeriodAnalyticsUpdater,
         IHandleEvent<PersonCollectionChangedEvent>,
         IHandleEvent<PersonDeletedEvent>,
         IRunOnServiceBus
 #pragma warning restore 618
-    {
-        public PersonPeriodAnalyticsUpdaterBus(IPersonRepository personRepository,
+    { 
+    public PersonPeriodAnalyticsUpdaterBus(IPersonRepository personRepository,
             IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
             IAnalyticsSkillRepository analyticsSkillRepository,
             IEventPublisher eventPublisher,
@@ -37,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
         }
     }
 
-    [UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
+    [EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
     public class PersonPeriodAnalyticsUpdaterHangfire : PersonPeriodAnalyticsUpdater,
        IHandleEvent<PersonCollectionChangedEvent>,
        IHandleEvent<PersonDeletedEvent>,

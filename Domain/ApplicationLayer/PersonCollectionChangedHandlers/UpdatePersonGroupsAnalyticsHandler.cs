@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 #pragma warning disable 618
 	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, 
-        Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439), UseNotOnToggle(Toggles.PersonCollectionChanged_ToHangfire_38420)]
+        Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439), DisabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
     public class UpdatePersonGroupsAnalyticsHandlerBus : UpdatePersonGroupsAnalyticsHandler,
         IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
         IRunOnServiceBus
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
         }
     }
 
-    [UseOnToggle(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
+    [EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
         Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
     public class UpdatePersonGroupsAnalyticsHandlerHangfire : UpdatePersonGroupsAnalyticsHandler,
         IHandleEvent<AnalyticsPersonCollectionChangedEvent>,

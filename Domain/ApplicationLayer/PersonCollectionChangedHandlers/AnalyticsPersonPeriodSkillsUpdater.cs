@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
         }
     }
 
-    [UseOnToggle(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
+    [EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
     public class AnalyticsPersonPeriodSkillsUpdaterHangfire : AnalyticsPersonPeriodSkillsUpdater,
        IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
        IRunOnHangfire
