@@ -53,9 +53,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 										if (!skillToMoveFrom.Activity.Equals(skillToMoveTo.Activity))
 											continue;
 
-										if (skillToMoveTo.SkillType.ForecastSource.Equals(ForecastSource.MaxSeatSkill)) //lägg till även för "skillfrom" alt se till att maxseat skills aldrig hamnar i kedjan
-											continue;
-
 										ISkillStaffPeriod skillStaffPeriodTo;
 										var skillStaffPeriodToDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo];
 										if (skillStaffPeriodToDic.TryGetValue(interval, out skillStaffPeriodTo))

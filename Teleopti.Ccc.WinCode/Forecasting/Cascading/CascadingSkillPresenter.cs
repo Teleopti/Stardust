@@ -79,6 +79,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting.Cascading
 				{
 					if(((Skill)skill).IsDeleted)
 						continue;
+					if(skill.SkillType != null && skill.SkillType.ForecastSource == ForecastSource.MaxSeatSkill)
+						continue;
 
 					if (skill.IsCascading())
 					{

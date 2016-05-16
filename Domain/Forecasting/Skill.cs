@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		public virtual int? CascadingIndex { get; protected set; }
 		public virtual bool IsCascading()
 		{
-			return CascadingIndex.HasValue;
+			return CascadingIndex.HasValue && SkillType.ForecastSource != ForecastSource.MaxSeatSkill;
 		}
 
 		public virtual void SetCascadingIndex_UseFromTestOnly(int index)

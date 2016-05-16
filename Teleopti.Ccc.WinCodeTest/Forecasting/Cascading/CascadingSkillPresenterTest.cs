@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.WinCode.Forecasting.Cascading;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 {
@@ -20,6 +21,29 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.Cascading
 			var target = new CascadingSkillPresenter(SkillRepository);
 
 			target.NonCascadingSkills.Should().Have.SameSequenceAs(skill);
+			target.CascadingSkills.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotPlaceMaxSeatSkillInAnyList()
+		{
+			var skill = new Skill {SkillType = new SkillTypePhone(new Description("_"), ForecastSource.MaxSeatSkill)};
+			SkillRepository.Has(skill);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.NonCascadingSkills.Should().Be.Empty();
+			target.CascadingSkills.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotPlaceMaxSeatSkillWithOrderIndexInAnyList()
+		{
+			var skill = new Skill { SkillType = new SkillTypePhone(new Description("_"), ForecastSource.MaxSeatSkill) };
+			skill.SetCascadingIndex_UseFromTestOnly(1);
+			SkillRepository.Has(skill);
+			var target = new CascadingSkillPresenter(SkillRepository);
+
+			target.NonCascadingSkills.Should().Be.Empty();
 			target.CascadingSkills.Should().Be.Empty();
 		}
 
