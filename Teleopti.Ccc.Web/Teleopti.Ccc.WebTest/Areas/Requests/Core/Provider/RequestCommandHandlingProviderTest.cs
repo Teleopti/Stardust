@@ -300,7 +300,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		}
 
 		[Test]
-		[Ignore("Ignore temporary to fix build")]
 		public void ShouldRunRequestWaitlist()
 		{
 			setupStateHolderProxy();
