@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using NHibernate;
 using NHibernate.Engine;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
@@ -87,10 +88,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private IUnitOfWork createAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel, IQueryFilter businessUnitFilter)
 		{
-			var businessUnitId = getBusinessUnitId();
 			var session = _factory.OpenSession(new AggregateRootInterceptor(_updatedBy));
 
-			businessUnitFilter.Enable(session, businessUnitId);
+			businessUnitFilter.Enable(session, businessUnitId());
 			QueryFilter.Deleted.Enable(session, null);
 			QueryFilter.DeletedPeople.Enable(session, null);
 
@@ -103,15 +103,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return CurrentUnitOfWork();
 		}
 
-		private static Guid getBusinessUnitId()
+		private static Guid businessUnitId()
 		{
-			var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
-			var buId = (identity != null && identity.BusinessUnit != null)
-				? identity.BusinessUnit.Id.GetValueOrDefault()
+			return ServiceLocatorForEntity.CurrentBusinessUnit.Current() != null
+				? ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault()
 				: Guid.Empty;
-			return buId;
 		}
-		
+
 		public void Dispose()
 		{
 			_factory.Dispose();
