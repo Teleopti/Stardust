@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
@@ -31,13 +31,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			{
 				((ScheduleRange)stateHolder.Schedules[scheduleData.Person]).Add(scheduleData);
 			}
+			var uniqueSkills = new HashSet<ISkill>();
 			stateHolder.SchedulingResultState.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>();
 			foreach (var skillDay in skillDays)
 			{
-				//currently wrong if multiple skilldays for one specific skill
-				stateHolder.SchedulingResultState.AddSkills(skillDay.Skill);
+				uniqueSkills.Add(skillDay.Skill);
 				stateHolder.SchedulingResultState.SkillDays[skillDay.Skill] = new List<ISkillDay> { skillDay };
 			}
+			stateHolder.SchedulingResultState.AddSkills(uniqueSkills.ToArray());
+
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneInfo.Utc);
 			return stateHolder;
 		}

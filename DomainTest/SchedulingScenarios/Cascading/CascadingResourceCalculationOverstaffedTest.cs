@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 		public CascadingResourceCalculation Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 
-		[Test, Ignore("Fix this soon")]
+		[Test]
 		public void ShouldMoveResourceToSecondarySkill()
 		{
 			var scenario = new Scenario("_");
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			var prioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			prioritizedSkill.SetCascadingIndex_UseFromTestOnly(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(prioritizedSkill, new TimePeriod(8, 0, 9, 0));
-			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 2);
+			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var nonPrioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(8, 0, 9, 0));
@@ -45,16 +45,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			var agent2 = new Person();
 			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			agent2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
-			var ass2 = new PersonAssignment(agent1, scenario, dateOnly);
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
 			ass2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
-			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
+			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] {  ass1, ass2 }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
 			Target.ForDay(dateOnly);
+
+			Console.WriteLine(prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
+			Console.WriteLine(nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 			nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(-1);
+				.Should().Be.EqualTo(0);
 		}
 	}
 }
