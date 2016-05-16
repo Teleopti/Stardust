@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			//TODO - we don't want to do this for every day, need a DateOnlyPeriod method as well?
 			using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //check this later
+				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //ska vara true, true - fixa och lägg på test senare
 
 				//just hack for now
 				var stateHolder = _stateHolder();
