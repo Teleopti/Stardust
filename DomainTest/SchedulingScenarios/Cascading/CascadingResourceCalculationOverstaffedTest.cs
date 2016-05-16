@@ -51,9 +51,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 
 			Target.ForDay(dateOnly);
 
-			Console.WriteLine(prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
-			Console.WriteLine(nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
-
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 			nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
@@ -88,9 +85,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
 			Target.ForDay(dateOnly);
-
-			Console.WriteLine(prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
-			Console.WriteLine(nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(1);
@@ -127,9 +121,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 
 			Target.ForDay(dateOnly);
 
-			Console.WriteLine(prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
-			Console.WriteLine(nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
-
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(1);
 			nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
@@ -163,9 +154,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
 			Target.ForDay(dateOnly);
-
-			Console.WriteLine(prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
-			Console.WriteLine(nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference);
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(1);
