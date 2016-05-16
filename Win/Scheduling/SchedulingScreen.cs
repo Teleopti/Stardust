@@ -6933,6 +6933,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (toolStripButtonCalculateCascading.Checked)
 			{
+				// ReSharper disable once LocalizableElement
+				toolStripStatusLabelStatus.Text = "Calculating...";
+				disableForCascading();
+				toolStripButtonCalculateCascading.Enabled = true;
+
 				var cascadingCalc = _container.Resolve<CascadingResourceCalculation>();
 
 				foreach (var dateOnly in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
@@ -6940,9 +6945,77 @@ namespace Teleopti.Ccc.Win.Scheduling
 					cascadingCalc.ForDay(dateOnly);
 				}
 
-				drawSkillGrid();
+				ribbonControlAdv1.Cursor = Cursors.Default;
+				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
+				// ReSharper disable once LocalizableElement
+				toolStripStatusLabelStatus.Text = "Cascading";
 				Refresh();
+			}
+
+			else
+			{
+				enableForCascading();
 			}		
+		}
+
+		private void enableForCascading()
+		{
+			releaseUserInterface(false);
+
+			toolStripExClipboard.Enabled = true;
+			toolStripExEdit2.Enabled = true;
+			toolStripExScheduleViews.Enabled = true;
+			toolStripExActions.Enabled = true;
+			toolStripExLocks.Enabled = true;
+			toolStripExTags.Enabled = true;
+			toolStripExLoadOptions.Enabled = true;
+			toolStripExFilter.Enabled = true;
+
+			foreach (var date in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
+			{
+				_schedulerState.MarkDateToBeRecalculated(date);
+			}
+
+			RecalculateResources();
+		}
+
+		private void disableForCascading()
+		{
+			_uIEnabled = false;
+			using (PerformanceOutput.ForOperation("disableAllExceptCancelInRibbon"))
+			{
+				toolStripExClipboard.Enabled = false;
+				toolStripExEdit2.Enabled = false;
+				toolStripExScheduleViews.Enabled = false;
+				toolStripExActions.Enabled = false;
+				toolStripExLocks.Enabled = false;
+				toolStripExTags.Enabled = false;
+				toolStripExLoadOptions.Enabled = false;
+				toolStripExFilter.Enabled = false;
+
+
+				toolStripTabItemChart.Panel.Enabled = false;
+				toolStripTabItem1.Panel.Enabled = false;
+				toolStripMenuItemQuickAccessUndo.ShortcutKeys = Keys.None;
+				ControlBox = false;
+				toggleQuickButtonEnabledState(false);
+				contextMenuViews.Enabled = false;
+				toolStripButtonShrinkage.Enabled = false;
+				toolStripButtonValidation.Enabled = false;
+				toolStripButtonCalculation.Enabled = false;
+				_grid.Cursor = Cursors.WaitCursor;
+				_grid.Enabled = false;
+				_grid.Cursor = Cursors.WaitCursor;
+				schedulerSplitters1.DisableViewShiftCategoryDistribution();
+				schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
+				toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
+				ribbonControlAdv1.Cursor = Cursors.AppStarting;
+				if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
+					toolStripSpinningProgressControl1 = new Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
+				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
+				disableSave();
+				toolStripStatusLabelContractTime.Enabled = false;
+			}
 		}
 	}
 }
