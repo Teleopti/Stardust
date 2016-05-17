@@ -194,8 +194,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected activity '(.*)'")]
 		public void WhenISelectedActivity(string description)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery($".schedule .layer:contains('{description}')");
-			Browser.Interactions.ClickUsingJQuery($".schedule .layer:contains('{description}')");
+			Browser.Interactions.ClickUsingJQuery($".schedule .layer[projection-name={description}]");
 		}
 
 		[When(@"I apply move activity")]
