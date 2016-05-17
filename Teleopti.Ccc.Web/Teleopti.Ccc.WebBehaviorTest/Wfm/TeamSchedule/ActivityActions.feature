@@ -12,6 +12,7 @@ Background:
 	| Access to everyone            | True           |
 	| Access to Wfm MyTeam Schedule | true           |
 	| Add Activity                  | true           |
+	| Add Personal Activity         | true           |
 	| Remove Activity               | true           |
 	| Move Activity                 | true           |
 	And there is a shift category named 'Day'
@@ -69,8 +70,8 @@ Scenario: Default activity start time range should be 08:00-09:00 when agent's s
 	Then I should see the add activity time starts '08:00' and ends '09:00'
 
 @ignore
-@OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
-Scenario: Should see enabled add personal activity button
+@OnlyRunIfEnabled('WfmTeamSchedule_AddPersonActivity_37742')
+Scenario: Should see enabled add person activity button
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
@@ -84,8 +85,8 @@ Scenario: Should see enabled add personal activity button
 	Then I should see 'AddPersonActivity' menu is enabled
 
 @ignore
-@OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
-Scenario: Should be able to add personal activity
+@OnlyRunIfEnabled('WfmTeamSchedule_AddPersonActivity_37742')
+Scenario: Should be able to add person activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
@@ -96,8 +97,8 @@ Scenario: Should be able to add personal activity
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
 	And I click menu button in team schedule
-	And I click menu item 'AddPersonalActivity' in team schedule
-	And I apply add personal activity
+	And I click menu item 'AddPersonActivity' in team schedule
+	And I apply add person activity
 	Then I should see a successful notice
 	
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
