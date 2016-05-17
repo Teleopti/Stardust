@@ -47,7 +47,7 @@ namespace Stardust.Manager.Helpers
 								  ,[Type]
 								  ,[CreatedBy]
 								  ,[Created]
-						  FROM [ManagerDb].[Stardust].[JobQueue]
+						  FROM [Stardust].[JobQueue]
 						  WHERE JobId = @JobId";
 			var selectSqlCommand = new SqlCommand(selectJobQueueItemCommandText, sqlConnection);
 
@@ -182,7 +182,7 @@ namespace Stardust.Manager.Helpers
 											  ,[Type]
 											  ,[SentToWorkerNodeUri]
 											  ,[Result]
-										  FROM [ManagerDB].[Stardust].[Job] WITH (NOLOCK)
+										  FROM [Stardust].[Job] WITH (NOLOCK)
 										  WHERE [Started] IS NOT NULL AND [Ended] IS NULL";
 
 			var selectSqlCommand = new SqlCommand(selectCommandText, sqlConnection);
