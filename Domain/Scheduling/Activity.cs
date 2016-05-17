@@ -1,14 +1,16 @@
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using System.Drawing;
+using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
     [Serializable]
-    public class Activity : Payload, IActivity
+    public class Activity : Payload, IActivity, IAggregateRootWithEvents
     {
         private Description _description;
         private Color _displayColor;
@@ -51,7 +53,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
         {
         }
 
-	    public virtual Description Description
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		{
+			var events = base.PopAllEvents(now, operation).ToList();
+			if (!operation.HasValue) return events;
+			switch (operation)
+			{
+				case DomainUpdateType.Insert:
+				case DomainUpdateType.Update:
+					events.Add(new ActivityChangedEvent
+					{
+						ActivityId = Id.GetValueOrDefault()
+					});
+					break;
+				case DomainUpdateType.Delete:
+					events.Add(new ActivityDeleteEvent
+					{
+						ActivityId = Id.GetValueOrDefault()
+					});
+					break;
+			}
+			return events;
+		}
+
+		public virtual Description Description
 		{
             get
             {

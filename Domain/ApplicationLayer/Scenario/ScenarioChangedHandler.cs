@@ -4,7 +4,6 @@ using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Preference;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 
-		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(ScenarioChangedHandler));
 
 		public ScenarioChangedHandler(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsScenarioRepository analyticsScenarioRepository, IScenarioRepository scenarioRepository, IBusinessUnitRepository businessUnitRepository)
 		{
