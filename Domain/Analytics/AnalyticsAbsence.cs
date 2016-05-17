@@ -4,6 +4,13 @@ namespace Teleopti.Ccc.Domain.Analytics
 {
 	public class AnalyticsAbsence
 	{
+		public static readonly string InContractTimeString = "In Contract Time";
+		public static readonly string NotInContractTimeString = "Not In Contract Time";
+		public static readonly string InPaidTimeTimeString = "In Paid Time";
+		public static readonly string NotInPaidTimeTimeString = "Not In Paid Time";
+		public static readonly string InWorkTimeTimeString = "In Work Time";
+		public static readonly string NotInWorkTimeTimeString = "Not In Work Time";
+
 		public int AbsenceId { get; set; }
 		public Guid AbsenceCode { get; set; }
 		public string AbsenceName { get; set; }

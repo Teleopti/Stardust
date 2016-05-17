@@ -228,6 +228,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodAnalyticsUpdaterHandlerTests.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Absence\AbsenceAnalyticsUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ScenarioTests\Analytics\ScenarioChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjectionReadOnlyUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdaterTest.cs" />

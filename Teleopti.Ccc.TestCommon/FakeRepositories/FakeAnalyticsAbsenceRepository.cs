@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 
@@ -20,6 +21,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IList<AnalyticsAbsence> Absences()
 		{
 			return fakeAbsences;
+		}
+
+		public void AddAbsence(AnalyticsAbsence analyticsAbsence)
+		{
+			analyticsAbsence.AbsenceId = fakeAbsences.Any() ? fakeAbsences.Max(a => a.AbsenceId) + 1 : 1;
+			fakeAbsences.Add(analyticsAbsence);
+		}
+
+		public void UpdateAbsence(AnalyticsAbsence analyticsAbsence)
+		{
+			analyticsAbsence.AbsenceId = fakeAbsences.First(a => a.AbsenceCode == analyticsAbsence.AbsenceCode).AbsenceId;
+			fakeAbsences.RemoveAll(a => a.AbsenceCode == analyticsAbsence.AbsenceCode);
+			fakeAbsences.Add(analyticsAbsence);
 		}
 	}
 }

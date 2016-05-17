@@ -6,5 +6,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	public interface IAnalyticsAbsenceRepository
 	{
 		IList<AnalyticsAbsence> Absences();
+		void AddAbsence(AnalyticsAbsence analyticsAbsence);
+		void UpdateAbsence(AnalyticsAbsence analyticsAbsence);
 	}
 }

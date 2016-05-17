@@ -41,5 +41,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetReadOnly(true)
 				.List<AnalyticsAbsence>();
 		}
+
+		public void AddAbsence(AnalyticsAbsence analyticsAbsence)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public void UpdateAbsence(AnalyticsAbsence analyticsAbsence)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }
