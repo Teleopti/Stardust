@@ -47,7 +47,8 @@ Scenario: Should be able to add activity
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
 	And I selected agent 'John Smith'
-	And I open 'AddActivity' panel
+	And I click menu button in team schedule
+	And I click menu item 'AddActivity' in team schedule
 	And I set new activity as
 	| Field       | Value |
 	| Activity    | Phone |
@@ -64,9 +65,41 @@ Scenario: Default activity start time range should be 08:00-09:00 when agent's s
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
-	And I open 'AddActivity' panel
+	And I click menu item 'AddActivity' in team schedule
 	Then I should see the add activity time starts '08:00' and ends '09:00'
 
+@ignore
+@OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
+Scenario: Should see enabled add personal activity button
+	Given 'John Smith' has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-10-10 09:00 |
+	| EndTime          | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I click menu button in team schedule
+	Then I should see 'AddPersonActivity' menu is enabled
+
+@ignore
+@OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
+Scenario: Should be able to add personal activity
+	Given 'John Smith' has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-10-10 09:00 |
+	| EndTime          | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I click menu button in team schedule
+	And I click menu item 'AddPersonalActivity' in team schedule
+	And I apply add personal activity
+	Then I should see a successful notice
+	
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should see disabled remove activity button when no activity is selected
 	Given 'John Smith' has a shift with
@@ -81,7 +114,7 @@ Scenario: Should see disabled remove activity button when no activity is selecte
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected no ativity 'Lunch'
-	And I click menu item in team schedule
+	And I click menu button in team schedule
 	Then I should see 'RemoveActivity' menu item is disabled
 
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')

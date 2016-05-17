@@ -61,16 +61,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertExistsUsingJQuery($".schedule .layer:contains('{description}')");
 		}
 
-		[When(@"I click menu item in team schedule")]
-		public void WhenIClickMenuItemInTeamSchedule()
+		[When(@"I click menu button in team schedule")]
+		public void WhenIClickMenuButtonInTeamSchedule()
 		{
 			Browser.Interactions.Click("#scheduleContextMenuButton");
 		}
 
 		[Then(@"I should see '(.*)' menu item is disabled")]
-		public void ThenIShouldSeeMenuItemIsDisabled(string description)
+		public void ThenIShouldSeeMenuItemIsDisabled(string menuName)
 		{
-			Browser.Interactions.AssertVisibleUsingJQuery($"#menuItem{description}[disabled]");
+			Browser.Interactions.AssertVisibleUsingJQuery($"#menuItem{menuName}[disabled]");
+		}
+
+		[Then(@"I should see '(.*)' menu is enabled")]
+		public void ThenIShouldSeeMenuIsEnabled(string menuName)
+		{
+			Browser.Interactions.AssertVisibleUsingJQuery($"#menuItem{menuName}:not(:disabled)");
 		}
 
 		[Then(@"I should not see '(.*)' menu item")]
@@ -79,11 +85,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.AssertNotExistsUsingJQuery("#scheduleContextMenuButton", $"#menuItem{description}");
 		}
 
-		[When(@"I open '(.*)' panel")]
-		public void WhenIOpenPanel(string panelName)
+		[When(@"I click menu item '(.*)' in team schedule")]
+		public void WhenIClickMenuItemInTeamSchedule(string menuItem)
 		{
-			Browser.Interactions.Click("#scheduleContextMenuButton");
-			Browser.Interactions.Click("#menuItem" + panelName);
+			Browser.Interactions.Click("#menuItem" + menuItem);
 		}
 
 		[When(@"I set new activity as")]
@@ -128,6 +133,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenIApplyMyNewActivity()
 		{
 			Browser.Interactions.Click("#applyActivity");
+		}
+
+		[When(@"I apply add personal activity")]
+		public void WhenIApplyAddPersonalActivity()
+		{
+			Browser.Interactions.Click("#applyPersonalActivity");
 		}
 
 		[Then(@"I should see a successful notice")]
