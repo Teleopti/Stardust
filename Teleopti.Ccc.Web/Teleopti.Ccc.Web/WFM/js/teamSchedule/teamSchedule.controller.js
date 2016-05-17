@@ -351,7 +351,7 @@
 				PrepareToRelease: toggleSvc.WfmTeamSchedule_PrepareForRelease_37752,
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
 				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
-				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742
+				AddPersonActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonActivity_37742
 			};
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
