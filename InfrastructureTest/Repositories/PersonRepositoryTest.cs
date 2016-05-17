@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(ctr);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
 			ITeam teamBu = TeamFactory.CreateSimpleTeam();
 			ISite siteBu = SiteFactory.CreateSimpleSite("sdf");
@@ -1387,7 +1387,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			((BusinessUnit)buTemp).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 			Assert.AreEqual(1, target.NumberOfActiveAgents());
 
 			addPersonAssignmentInAnotherBu(act, shiftCategory);
@@ -1413,7 +1413,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
 			addPersonAssignmentInAnotherBu(act, shiftCategory);
 			Assert.AreEqual(2, target.NumberOfActiveAgents());
@@ -1452,7 +1452,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IBusinessUnit buTemp = BusinessUnitFactory.CreateSimpleBusinessUnit("dummy");
 			PersistAndRemoveFromUnitOfWork(buTemp);
 
-			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp, StateHolderProxyHelper.DefaultPrincipalContext);
+			StateHolderProxyHelper.SetupFakeState(SetupFixtureForAssembly.DataSource, LoggedOnPerson, buTemp);
 
 			addPersonAssignmentInAnotherBu(act, shiftCategory);
 			Assert.AreEqual(2, target.NumberOfActiveAgents());

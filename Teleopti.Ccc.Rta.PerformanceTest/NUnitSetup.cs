@@ -74,8 +74,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			StateHolderProxyHelper.SetupFakeState(
 				DataSourceHelper.CreateDataSource(transactionHooks),
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-				DefaultBusinessUnit.BusinessUnit,
-				new ThreadPrincipalContext()
+				DefaultBusinessUnit.BusinessUnit
 				);
 
 			defaultDataCreator.Create();
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Rta.PerformanceTest
 			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
 			DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 
-			StateHolderProxyHelper.Logout(new ThreadPrincipalContext());
+			StateHolderProxyHelper.Logout();
 		}
 
 		[TearDown]

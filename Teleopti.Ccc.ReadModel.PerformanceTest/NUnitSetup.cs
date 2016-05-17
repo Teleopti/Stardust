@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 	{
 		private DefaultDataCreator defaultDataCreator;
 		private DataCreator dataCreator;
-		private ICurrentPrincipalContext principalContext;
 
 		[SetUp]
 		public void Setup()
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 
 			var container = builder.Build();
 			
-			principalContext = container.Resolve<ICurrentPrincipalContext>();
 			defaultDataCreator = container.Resolve<DefaultDataCreator>();
 			dataCreator = container.Resolve<DataCreator>();
 
@@ -70,8 +68,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			StateHolderProxyHelper.SetupFakeState(
 				DataSourceHelper.CreateDataSource(null),
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-				DefaultBusinessUnit.BusinessUnit,
-				principalContext
+				DefaultBusinessUnit.BusinessUnit
 				);
 
 			defaultDataCreator.Create();
@@ -80,7 +77,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			DataSourceHelper.BackupApplicationDatabaseBySql(path, dataHash);
 			DataSourceHelper.BackupAnalyticsDatabaseBySql(path, dataHash);
 
-			StateHolderProxyHelper.Logout(principalContext);
+			StateHolderProxyHelper.Logout();
 		}
 
 		[TearDown]

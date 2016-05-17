@@ -246,13 +246,12 @@ you have to manually clean up or call CleanUpAfterTest() to restore the database
 			StateHolderProxyHelper.SetupFakeState(
 				DataSource, 
 				person, 
-				BusinessUnitFactory.BusinessUnitUsedInTest,
-				new ThreadPrincipalContext());
+				BusinessUnitFactory.BusinessUnitUsedInTest);
 		}
 
 		public static void Logout()
 		{
-			StateHolderProxyHelper.Logout(new ThreadPrincipalContext());
+			StateHolderProxyHelper.Logout();
 		}
 
 		private static void saveBusinessUnitAndPerson(IPerson person, IUnitOfWork uow)

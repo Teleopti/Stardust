@@ -17,16 +17,14 @@ namespace Teleopti.Ccc.TestCommon
 {
     public static class StateHolderProxyHelper
     {
-		public static WindowsAppDomainPrincipalContext DefaultPrincipalContext { get; set; }
+	    private static readonly SelectivePrincipalContext principalContext;
 
-		static StateHolderProxyHelper() { DefaultPrincipalContext = new WindowsAppDomainPrincipalContext(new ThreadPrincipalContext(), new ThreadPrincipalContext()); }
+	    static StateHolderProxyHelper()
+	    {
+		    principalContext = SelectivePrincipalContext.Make();
+	    }
 
-		public static void SetupFakeState(
-			IDataSource dataSource, 
-			IPerson person, 
-			IBusinessUnit businessUnit,
-			ICurrentPrincipalContext principalContext
-			)
+	    public static void SetupFakeState(IDataSource dataSource, IPerson person, IBusinessUnit businessUnit)
 		{
 			var appSettings = new Dictionary<string, string>();
 			ConfigurationManager.AppSettings.AllKeys.ToList().ForEach(
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon
 			ClearAndSetStateHolder(state);
 		}
 
-		public static void Logout(ICurrentPrincipalContext principalContext)
+		public static void Logout()
 		{
 			principalContext.SetCurrentPrincipal(null);
 			CurrentAuthorization.GloballyUse(null);

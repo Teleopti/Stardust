@@ -12,6 +12,18 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		private readonly IThreadPrincipalContext _thread;
 		private readonly CurrentProcess _currentProcess;
 
+		public static SelectivePrincipalContext Make()
+		{
+			var httpContext = new CurrentHttpContext();
+			var threadContext = new ThreadPrincipalContext();
+			return new SelectivePrincipalContext(
+				httpContext,
+				new WebRequestPrincipalContext(httpContext, threadContext),
+				new WindowsAppDomainPrincipalContext(CurrentTeleoptiPrincipal.Make(), threadContext),
+				threadContext,
+				new CurrentProcess());
+		}
+
 		public SelectivePrincipalContext(
 			ICurrentHttpContext httpContext,
 			WebRequestPrincipalContext web,

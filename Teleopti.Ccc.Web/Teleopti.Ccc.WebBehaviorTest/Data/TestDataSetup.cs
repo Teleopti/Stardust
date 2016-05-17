@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			StateHolderProxyHelper.SetupFakeState(
 				datasource,
 				DefaultPersonThatCreatesData.PersonThatCreatesDbData,
-				DefaultBusinessUnit.BusinessUnit,
-				new ThreadPrincipalContext()
+				DefaultBusinessUnit.BusinessUnit
 				);
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
 
