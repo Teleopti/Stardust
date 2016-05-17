@@ -26,28 +26,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public override void Handle(ScheduleChangedEvent @event)
 		{
 			base.Handle(@event);
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public override void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
 		{
 			base.Handle(@event);
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public override void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
 		{
 			base.Handle(@event);
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public override void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
 		{
