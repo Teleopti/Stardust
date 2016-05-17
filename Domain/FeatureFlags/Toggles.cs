@@ -127,6 +127,8 @@
 		PersonCollectionChanged_ToHangfire_38420,
 		ETL_SpeedUpIntradayActivity_38303,
 		ETL_SpeedUpNightlyActivity_38303
+		ETL_SpeedUpIntradayOvertime_38304,
+		ETL_SpeedUpNightlyOvertime_38304
 		// ReSharper restore InconsistentNaming
 	}
 }
