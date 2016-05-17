@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (personAssignment == null)
 			{
-				command.ErrorMessages.Add(Resources.PersonAssignmentIsNotValidDot);
+				command.ErrorMessages.Add(Resources.PersonAssignmentIsNotValid);
 				return;
 			}
 			

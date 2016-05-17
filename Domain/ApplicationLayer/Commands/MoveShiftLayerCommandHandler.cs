@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (personAssignment == null)
 			{
-				command.ErrorMessages = new List<string> { Resources.PersonAssignmentIsNotValidDot };
+				command.ErrorMessages = new List<string> { Resources.PersonAssignmentIsNotValid };
 				return;
 			}
 

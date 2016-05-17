@@ -3224,7 +3224,7 @@ Replace</value>
     <comment>Enter name on the new grouping</comment>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Person assignment is not valid</value>
+    <value>Person assignment is not valid.</value>
     <comment>Person assignment is not valid.</comment>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
@@ -14464,5 +14464,9 @@ Help us improve your experience by sending an error report</value>
   <data name="RequestInvalidStateTransition" xml:space="preserve">
     <value>A request that is {0} cannot be {1}.</value>
     <comment>Used to display error messages within the Angel project when an action is attempted to be taken on a request where the status of the request prohibits this (an example is trying to deny an approved request).  Parameters: {0} = the current state of the request (e.g Approved), {1} is the state of the request if the desired action succeeded (e.g Denied)</comment>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>Person assignment is not valid</value>
+    <comment>Person assignment is not valid  (differ with PersonAssignmentIsNotValidDot by a dot...)</comment>
   </data>
 </root>

@@ -20384,6 +20384,15 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to Person assignment is not valid.
         /// </summary>
+        public static string PersonAssignmentIsNotValid {
+            get {
+                return ResourceManager.GetString("PersonAssignmentIsNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Person assignment is not valid..
+        /// </summary>
         public static string PersonAssignmentIsNotValidDot {
             get {
                 return ResourceManager.GetString("PersonAssignmentIsNotValidDot", resourceCulture);
