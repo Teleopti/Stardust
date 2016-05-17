@@ -1,7 +1,7 @@
 ----------------  
 --Name: Jianfeng
 --Date: 2016-05-17
---Desc: Add new application function "Add Person Activity"
+--Desc: Add new application function "Add Personal Activity"
 ----------------  
 SET NOCOUNT ON
 	
@@ -29,8 +29,8 @@ SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND 
 	
 --insert/modify application function
 SELECT @ForeignId = '0133' --Foreign id of the function > hardcoded	
-SELECT @FunctionCode = 'AddPersonActivity' --Name of the function > hardcoded
-SELECT @FunctionDescription = 'xxAddPersonActivity' --Description of the function > hardcoded
+SELECT @FunctionCode = 'AddPersonalActivity' --Name of the function > hardcoded
+SELECT @FunctionDescription = 'xxAddPersonalActivity' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId
 
 IF  (NOT EXISTS (SELECT Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ForeignId + '%')))

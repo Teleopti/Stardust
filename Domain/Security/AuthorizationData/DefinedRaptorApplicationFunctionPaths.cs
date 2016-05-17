@@ -117,7 +117,7 @@
 		public const string AddIntradayAbsence = "Raptor/Anywhere/Schedules/AddIntradayAbsence";
 		public const string RemoveAbsence = "Raptor/Anywhere/Schedules/RemoveAbsence";
 		public const string AddActivity = "Raptor/Anywhere/Schedules/AddActivity";
-		public const string AddPersonActivity = "Raptor/Anywhere/Schedules/AddPersonActivity";
+		public const string AddPersonalActivity = "Raptor/Anywhere/Schedules/AddPersonalActivity";
 		public const string MoveActivity = "Raptor/Anywhere/Schedules/MoveActivity";
 		public const string RemoveActivity = "Raptor/Anywhere/Schedules/RemoveActivity";
 		public const string SwapShifts = "Raptor/Anywhere/Schedules/SwapShifts";

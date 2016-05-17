@@ -135,10 +135,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#applyActivity");
 		}
 
-		[When(@"I apply add person activity")]
-		public void WhenIApplyAddPersonActivity()
+		[When(@"I apply add personal activity")]
+		public void WhenIApplyAddPersonalActivity()
 		{
-			Browser.Interactions.Click("#applyPersonActivity");
+			Browser.Interactions.Click("#applyPersonalActivity");
 		}
 
 		[Then(@"I should see a successful notice")]

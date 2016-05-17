@@ -85,17 +85,17 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldGetAddingPersonActivityPermission()
+		public void ShouldGetAddingPersonalActivityPermission()
 		{
 			const bool expectedResult = true;
 			var principalAuthorization = MockRepository.GenerateMock<IAuthorization>();
-			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPersonActivity))
+			principalAuthorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity))
 				.Return(expectedResult);
 
 			var target = new TeamScheduleController(null, null, null, principalAuthorization, null, null, null, null, null);
 			var result = target.GetPermissions();
 
-			result.Content.HasAddingPersonActivityPermission.Should().Be.EqualTo(expectedResult);
+			result.Content.HasAddingPersonalActivityPermission.Should().Be.EqualTo(expectedResult);
 		}
 
 		[Test]

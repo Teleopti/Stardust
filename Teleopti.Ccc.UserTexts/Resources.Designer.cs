@@ -1258,15 +1258,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add Person Activity.
-        /// </summary>
-        public static string AddPersonActivity {
-            get {
-                return ResourceManager.GetString("AddPersonActivity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add Personal Activity.
         /// </summary>
         public static string AddPersonalActivity {

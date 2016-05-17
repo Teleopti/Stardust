@@ -75,7 +75,7 @@
 		WfmTeamSchedule_PrepareForRelease_37752,
 		WfmTeamSchedule_MoveActivity_37744,
 		WfmTeamSchedule_ShowContractTime_38509,
-		WfmTeamSchedule_AddPersonActivity_37742,
+		WfmTeamSchedule_AddPersonalActivity_37742,
 		WebByPassDefaultPermissionCheck_37984,
 
 		ResourcePlanner_WeeklyRestSolver_35043,

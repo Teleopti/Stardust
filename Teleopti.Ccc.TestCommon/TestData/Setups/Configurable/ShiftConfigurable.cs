@@ -61,10 +61,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public DateTime ThirdActivityStartTime { get { return getActivity(2).StartTime; } set { getActivity(2).StartTime = value; } }
 		public DateTime ThirdActivityEndTime { get { return getActivity(2).EndTime; } set { getActivity(2).EndTime = value; } }
 
-		public string PersonActivity { get { return getActivity(1).Activity; } set { getActivity(1).Activity = value; } }
-		public bool IsPersonActivityBool { get { return getActivity(1).IsPersonal; } set { getActivity(1).IsPersonal = value; } }
-		public DateTime PersonActivityStartTime { get { return getActivity(1).StartTime; } set { getActivity(1).StartTime = value; } }
-		public DateTime PersonActivityEndTime { get { return getActivity(1).EndTime; } set { getActivity(1).EndTime = value; } }
+		public string PersonalActivity { get { return getActivity(1).Activity; } set { getActivity(1).Activity = value; } }
+		public bool IsPersonalActivityBool { get { return getActivity(1).IsPersonal; } set { getActivity(1).IsPersonal = value; } }
+		public DateTime PersonalActivityStartTime { get { return getActivity(1).StartTime; } set { getActivity(1).StartTime = value; } }
+		public DateTime PersonalActivityEndTime { get { return getActivity(1).EndTime; } set { getActivity(1).EndTime = value; } }
 
 		// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string ShiftColor { get; set; }
