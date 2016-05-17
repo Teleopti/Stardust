@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 	[EnabledBy(Toggles.ETL_SpeedUpIntradayActivity_38303)]
 	public class ActivityChangedHandler :
 		IHandleEvent<ActivityChangedEvent>,
-		IHandleEvent<ActivityDeleteEvent>,
 		IRunOnHangfire
 	{
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 			var analyticsActivity =
 				_analyticsActivityRepository.Activities().FirstOrDefault(a => a.ActivityCode == @event.ActivityId);
 
-			var applicationActivity = _activityRepository.Load(@event.ActivityId);
+			var applicationActivity = _activityRepository.Get(@event.ActivityId);
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 
 			// Add
@@ -80,34 +79,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 					IsDeleted = applicationActivity.IsDeleted
 				});
 			}
-		}
-
-		[AsSystem]
-		[AnalyticsUnitOfWork]
-		[UnitOfWork]
-		public virtual void Handle(ActivityDeleteEvent @event)
-		{
-			logger.Debug($"Consuming {nameof(ActivityDeleteEvent)} for event id = {@event.ActivityId}.");
-			var analyticsActivity = _analyticsActivityRepository.Activities().FirstOrDefault(a => a.ActivityCode == @event.ActivityId);
-
-			if (analyticsActivity == null)
-				return;
-
-			_analyticsActivityRepository.UpdateActivity(new AnalyticsActivity
-			{
-				ActivityCode = @event.ActivityId,
-				ActivityName = analyticsActivity.ActivityName,
-				DisplayColor = analyticsActivity.DisplayColor,
-				DisplayColorHtml = analyticsActivity.DisplayColorHtml,
-				InReadyTime = analyticsActivity.InReadyTime,
-				InContractTime = analyticsActivity.InContractTime,
-				InPaidTime = analyticsActivity.InPaidTime,
-				InWorkTime = analyticsActivity.InWorkTime,
-				BusinessUnitId = analyticsActivity.BusinessUnitId,
-				DatasourceId = analyticsActivity.DatasourceId,
-				DatasourceUpdateDate = analyticsActivity.DatasourceUpdateDate,
-				IsDeleted = true
-			});
 		}
 	}
 }

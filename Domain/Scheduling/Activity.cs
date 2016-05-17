@@ -61,13 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				case DomainUpdateType.Insert:
 				case DomainUpdateType.Update:
-					events.Add(new ActivityChangedEvent
-					{
-						ActivityId = Id.GetValueOrDefault()
-					});
-					break;
 				case DomainUpdateType.Delete:
-					events.Add(new ActivityDeleteEvent
+					events.Add(new ActivityChangedEvent
 					{
 						ActivityId = Id.GetValueOrDefault()
 					});

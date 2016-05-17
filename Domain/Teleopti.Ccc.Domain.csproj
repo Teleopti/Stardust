@@ -194,7 +194,6 @@
     <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonalActivityAddedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\ActivityDeleteEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
