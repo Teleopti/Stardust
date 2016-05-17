@@ -212,6 +212,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.ClickUsingJQuery("#menuItemRemoveActivity");
 			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
 		}
+
+		[Then(@"I should see contract time of '(.*)'")]
+		public void ThenIShouldSeeContractTimeOf(string contractTime)
+		{
+			Browser.Interactions.AssertExists(".contract-time", contractTime);
+		}
 	}
 
 	public class AddActivityFormInfo
