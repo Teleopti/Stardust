@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
-				command.ErrorMessages.Add (string.Format(UserTexts.Resources.RequestInvalidStateTransititon, personRequest.StatusText, UserTexts.Resources.RequestStatusDenied));
+				command.ErrorMessages.Add (string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.RequestStatusDenied));
 			}
 
 			return false;

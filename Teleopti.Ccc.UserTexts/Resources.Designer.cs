@@ -22735,9 +22735,9 @@ namespace Teleopti.Ccc.UserTexts {
         /// <summary>
         ///   Looks up a localized string similar to A request that is {0} cannot be {1}..
         /// </summary>
-        public static string RequestInvalidStateTransititon {
+        public static string RequestInvalidStateTransition {
             get {
-                return ResourceManager.GetString("RequestInvalidStateTransititon", resourceCulture);
+                return ResourceManager.GetString("RequestInvalidStateTransition", resourceCulture);
             }
         }
         

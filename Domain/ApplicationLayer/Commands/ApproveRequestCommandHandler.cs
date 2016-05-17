@@ -36,6 +36,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(ApproveRequestCommand command)
 		{
+
+			command.ErrorMessages = new List<string>();
+
 			var personRequest = _personRequestRepository.Get(command.PersonRequestId);
 
 			if (personRequest == null)
@@ -48,13 +51,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return;
 			}
 
-			if (approveRequest(personRequest))
+			if (approveRequest(personRequest, command))
 			{
 				command.AffectedRequestId = command.PersonRequestId;
 			}
 		}
 
-		private bool approveRequest(IPersonRequest personRequest)
+		private bool approveRequest(IPersonRequest personRequest, ApproveRequestCommand command)
 		{
 			var scheduleDictionary = getSchedules(personRequest);
 			var approvalService = _requestApprovalServiceFactory.MakeRequestApprovalServiceScheduler(scheduleDictionary, _currentScenario.Current(), personRequest.Person);
@@ -65,6 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 			catch (InvalidRequestStateTransitionException)
 			{
+				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText, UserTexts.Resources.Approved));
 				return false;
 			}
 
