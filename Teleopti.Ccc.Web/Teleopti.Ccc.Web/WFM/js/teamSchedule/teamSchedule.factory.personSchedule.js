@@ -62,6 +62,7 @@
 				AllowSwap: function() {
 					return !this.IsFullDayAbsence;
 				},
+				ContractTime: formatContractTimeMinutes(schedule.ContractTimeMinutes),
 				ScheduleStartTime: function () {
 					var start = this.Date.format('YYYY-MM-DD hh:mm');
 					angular.forEach(this.Shifts, function(shift) {
@@ -172,7 +173,7 @@
 					if (!matched) return null;
 					return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
 				}
-				
+
 				var lightColor = "#00ffff";
 				var darkColor = "#795548";
 
@@ -197,7 +198,7 @@
 				Minutes: projection.Minutes,
 				UseLighterBorder: borderColorPicker(projection.Color)
 			};
-			
+
 			return shiftProjectionVm;
 		}
 
@@ -219,6 +220,11 @@
 			} else {
 				this.DayOffs = [];
 			}
+		}
+
+		function formatContractTimeMinutes(minutes) {
+			var time = moment().startOf('day').add(minutes, 'minutes');
+			return time.format("H:mm");
 		}
 
 		return personScheduleFactory;

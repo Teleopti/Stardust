@@ -19,23 +19,23 @@
 			};
 
 			svc.mergeSchedules = function (schedules, scheduleDateMoment) {
-				svc.rawSchedules = svc.rawSchedules.concat(schedules);
 				recreateScheduleVm(scheduleDateMoment);
 			}
 
 			svc.updateScheduleForPeoples = function (personIdList, scheduleDateMoment, afterLoading) {
-				var currentPeoples = [];
-				angular.forEach(svc.rawSchedules, function (schedule) {
-					if (personIdList.indexOf(schedule.PersonId) > -1) {
-						currentPeoples.push(schedule.PersonId);
-						schedule.ContractTimeMinutes = 0;
-						schedule.Projection = null;
-						schedule.WorkTimeMinutes = 0;
-					}
-				});
+				teamScheduleSvc.getSchedules(scheduleDateMoment.format('YYYY-MM-DD'), personIdList).then(function (result) {
 
-				teamScheduleSvc.getSchedules(scheduleDateMoment.format('YYYY-MM-DD'), currentPeoples).then(function (result) {
-					svc.mergeSchedules(result.Schedules, scheduleDateMoment);
+					angular.forEach(result.Schedules, function (schedule) {
+						var personId = schedule.PersonId;
+						for (var i = 0; i < svc.rawSchedules.length; i++) {
+							if (personId === svc.rawSchedules[i].PersonId) {
+								svc.rawSchedules[i] = schedule;
+								break;
+							}
+						}
+					});
+
+					svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment);
 					afterLoading();
 				});
 			}
@@ -84,10 +84,10 @@
 			svc.getLatestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
 				var startUpdated = false;
 				var latestStart = scheduleDateMoment.toDate();
-				
+
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					var scheduleStart = moment(schedule.ScheduleStartTime());
-				
+
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
 						startUpdated = true;
 						latestStart = scheduleStart;

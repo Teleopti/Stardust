@@ -45,14 +45,14 @@ describe("[ScheduleManagement Service Test]", function() {
 	};
 
 	it("Can create group schedule", inject(function () {
-		target.mergeSchedules([schedule1, schedule2], scheduleDateMoment);
+		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
 
 		var schedules = target.groupScheduleVm.Schedules;
 		expect(schedules.length).toEqual(2);
 	}));
 
 	it("Should reset group schedule", inject(function () {
-		target.mergeSchedules([schedule1, schedule2], scheduleDateMoment);
+		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
 		expect(target.groupScheduleVm.Schedules.length).toEqual(2);
 
 		target.resetSchedules([schedule1], scheduleDateMoment);

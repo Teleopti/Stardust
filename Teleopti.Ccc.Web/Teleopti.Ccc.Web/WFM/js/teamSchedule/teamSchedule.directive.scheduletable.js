@@ -20,6 +20,7 @@
 	};
 	function scheduleTableController(toggleSvc, personSelectionSvc, $scope, ScheduleMgmt) {
 		var vm = this;
+		vm.ShowContractTimeEnabled = toggleSvc.WfmTeamSchedule_ShowContractTime_38509;
 		vm.updateAllSelectionInCurrentPage = function (isAllSelected) {
 			vm.scheduleVm.Schedules.forEach(function (personSchedule) {
 				personSchedule.IsSelected = isAllSelected;

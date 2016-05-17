@@ -349,8 +349,7 @@
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
 				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
 				PrepareToRelease: toggleSvc.WfmTeamSchedule_PrepareForRelease_37752,
-				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
-				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509
+				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744
 			};
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();

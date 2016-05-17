@@ -70,7 +70,7 @@
 				"IsFullDayAbsence": false,
 				"DayOff": null
 			}
-			scheduleMgmt.mergeSchedules([schedule], moment(scheduleDate));
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
 			personSchedule.Shifts[0].Projections[1].Selected = true;
 			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1], personSchedule);

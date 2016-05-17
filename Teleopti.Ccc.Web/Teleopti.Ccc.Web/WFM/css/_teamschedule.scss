@@ -141,7 +141,7 @@
 
         .layer.selected{
             opacity: 1;
-            border: 1px dashed #795548;			
+            border: 1px dashed #795548;
          }
 
         .layer.lighterBorder{
@@ -206,6 +206,12 @@
 		width: 2%;
 	}
 
+	th.contract-time-header {
+		font-weight: 400;
+		width: 5%;
+		white-space: nowrap;
+	}
+
 	.timepicker {
 		height: 48px;
 
@@ -238,6 +244,12 @@
 
 			tr:hover{
 				background: $gray012;
+			}
+
+			.contract-time-column {
+				padding-left: 8px;
+				padding-right: 8px;
+				text-align: center;
 			}
 		}
 	}
