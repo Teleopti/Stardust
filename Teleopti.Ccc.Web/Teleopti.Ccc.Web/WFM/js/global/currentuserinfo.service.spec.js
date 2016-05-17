@@ -29,8 +29,11 @@
 
 		it('should get the current user from the server', function(done) {
 			inject(function (CurrentUserInfo) {
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
+				
+
 				var request = CurrentUserInfo.getCurrentUserFromServer();
 
 				request.success(function (result) {
@@ -44,7 +47,9 @@
 
 		it('should return an error if the user is not logged on', function (done) {
 			inject(function (CurrentUserInfo) {
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(401);
+
 				var request = CurrentUserInfo.getCurrentUserFromServer();
 
 				$httpBackend.flush();
@@ -55,9 +60,11 @@
 
 		it('should init the user context', function (done) {
 			inject(function (CurrentUserInfo) {
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
-				$httpBackend.expectGET("../api/Theme").respond(200, {Name:'light'});
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+				//$httpBackend.expectGET("../api/Theme").respond(200, {Name:'light'});
 
 				CurrentUserInfo.initContext().then(function() {
 					var result = CurrentUserInfo.isConnected();

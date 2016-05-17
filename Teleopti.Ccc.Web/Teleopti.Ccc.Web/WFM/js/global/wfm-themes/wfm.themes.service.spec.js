@@ -58,7 +58,10 @@
 		}));
 
 		it('should get theme', function(done) {
-			inject(function(ThemeService) {
+			inject(function (ThemeService) {
+				$httpBackend.expectGET("../ToggleHandler/AllToggles")
+					.respond(200, { WfmGlobalLayout_personalOptions_37114: true });
+
 				$httpBackend.expectGET("../api/Theme")
 					.respond(200, {
 						Name: "light",
@@ -67,15 +70,18 @@
 
 				ThemeService.getTheme().success(function(result) {
 					expect(result.Name).toBe("light");
-					expect(result.Overlay).toBe(true)
+					expect(result.Overlay).toBe(true);
 					done();
 				});
 
 				$httpBackend.flush();
-			})
+			});
 		});
 
-		it('should init theme', inject(function(ThemeService) {
+		it('should init theme', inject(function (ThemeService) {
+			$httpBackend.expectGET("../ToggleHandler/AllToggles")
+					.respond(200, { WfmGlobalLayout_personalOptions_37114: true });
+
 			$httpBackend.expectGET("../api/Theme")
 				.respond(200, {
 					Name: "light",
@@ -83,14 +89,32 @@
 				});
 		 	setUpTemplate();
 
-		 ThemeService.init();
+			ThemeService.init();
 
 			$httpBackend.flush();
 			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_light.min.css');
 			expect(document.getElementById('themeStyle').getAttribute('href')).toBe('dist/style_light.min.css');
 			teardownTemplate();
 		}));
-		it('should persist hash', inject(function(ThemeService) {
+
+		it('should init classic theme if the feature is not available', inject(function (ThemeService) {
+			$httpBackend.expectGET("../ToggleHandler/AllToggles")
+					.respond(200, { WfmGlobalLayout_personalOptions_37114: false });
+
+			
+			setUpTemplate();
+
+			ThemeService.init();
+
+			$httpBackend.flush();
+			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_classic.min.css');
+			expect(document.getElementById('themeStyle').getAttribute('href')).toBe('dist/style_classic.min.css');
+			teardownTemplate();
+		}));
+
+		it('should persist hash', inject(function (ThemeService) {
+			$httpBackend.expectGET("../ToggleHandler/AllToggles")
+					.respond(200, { WfmGlobalLayout_personalOptions_37114: true });
 			$httpBackend.expectGET("../api/Theme")
 				.respond(200, {
 					Name: "light",
@@ -98,7 +122,7 @@
 				});
 			setUpTemplate("withHash");
 
-		 ThemeService.init();
+			ThemeService.init();
 
 			$httpBackend.flush();
 			expect(document.getElementById('themeModules').getAttribute('href')).toBe('dist/modules_light.min.css?123');

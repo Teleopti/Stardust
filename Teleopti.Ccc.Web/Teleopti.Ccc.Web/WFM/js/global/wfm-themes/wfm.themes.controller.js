@@ -16,7 +16,7 @@
 
 			checkThemeState().then(function(result) {
 				if (result.data.Name == null) {
-					result.data.Name = "classic"
+					result.data.Name = "classic";
 				};
 				$scope.showOverlay = result.data.Overlay;
 				$scope.currentTheme = result.data.Name;
@@ -41,7 +41,7 @@
 			};
 			$scope.toggleOverlay = function(state) {
 				if (state === true || state === false) {
-					$scope.showOverlay = state
+					$scope.showOverlay = state;
 					replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
 				}else {
 					toggleActiveOverlay();
@@ -66,11 +66,11 @@
 			$scope.toggleTheme = function(theme) {
 				if (theme === "classic" || theme === "dark") {
 					$scope.currentTheme = theme;
-					replaceCurrentTheme(theme, $scope.showOverlay)
-					return
+					replaceCurrentTheme(theme, $scope.showOverlay);
+					return;
 				}else {
 					focusMenu();
-					toggleActiveTheme()
+					toggleActiveTheme();
 				}
 
 

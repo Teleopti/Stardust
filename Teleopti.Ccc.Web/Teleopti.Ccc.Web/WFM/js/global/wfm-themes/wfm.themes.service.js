@@ -1,34 +1,35 @@
 ﻿
 (function() {﻿
 	'use strict';﻿
-	angular﻿.module('wfm.themes')﻿.service('ThemeService', ['$http','$q', function($http,$q) {
+	angular.module('wfm.themes').service('ThemeService', ['$http', '$q', 'Toggle', function ($http, $q, Toggle) {
 		var service = {};
 
-		service.setTheme = function(theme) {
-			if (theme === "dark") {
-				document.getElementById('darkTheme').checked = true;
-			}else{
-				document.getElementById('darkTheme').checked = false;
+
+		service.setTheme = function (theme) {
+			var darkThemeElement = document.getElementById('darkTheme');
+			if (darkThemeElement) {
+				darkThemeElement.checked = (theme === "dark");
 			}
+
 			modifyDOMHeader(theme);
 
 		};
 		var modifyDOMHeader = function(theme){
 			var styleElements = ["Modules","Style"];
-			styleElements.forEach(function(element){
-				var themeComponent = document.getElementById('theme'+element);
+			styleElements.forEach(function (element) {
+				var themeComponent = document.getElementById('theme' + element);
 				var hash = extractHash(themeComponent);
-				themeComponent.setAttribute('href','dist/'+element.toLowerCase()+'_'+ theme +'.min.css'+hash);
-			})
+				themeComponent.setAttribute('href', 'dist/' + element.toLowerCase() + '_' + theme + '.min.css' + hash);
+			});
 
 		}
 		var extractHash = function(element){
 			var href = element.href;
 			var hashvalue = href.match("\\?(.*)")//[^\\?]*$
 			if (hashvalue == null)
-				return ""
+				return "";
 			else
-				return hashvalue[0]
+				return hashvalue[0];
 
 		};
 
@@ -36,16 +37,20 @@
 			return $http.get('../api/Theme');
 		};
 
-		service.init = function() {
-			var deferred = $q.defer();
-			service.getTheme().then(function(response) {
-				if (response.data.Name !== null)
-					service.setTheme(response.data.Name);
-				else
-					service.setTheme('classic');
-				deferred.resolve(response);
+		service.init = function () {
+			var themeToggle = Toggle.togglesLoaded.then(function() {
+				if (Toggle.WfmGlobalLayout_personalOptions_37114) {
+					return service.getTheme();
+				} else {
+					return $q.reject();
+				}
 			});
-			return deferred.promise;
+			themeToggle.then(function(response) {
+				var theme = response.data.Name ? response.data.Name : 'classic';
+				service.setTheme(theme);
+			}, function() {
+				service.setTheme('classic');
+			});
 		};
 
 		service.saveTheme = function(name, overlay) {
