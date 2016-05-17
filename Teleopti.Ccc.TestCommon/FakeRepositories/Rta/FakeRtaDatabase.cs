@@ -330,20 +330,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_rtaRule.ThresholdTime = threshold;
 			return this;
 		}
-
-		// Implementation details
-		public FakeRtaDatabase WithStateGroup(string statecode, string stateGroupName)
-		{
-			var stateGroup = new RtaStateGroup(stateGroupName, false, false);
-			stateGroup.SetId(Guid.NewGuid());
-			stateGroup.SetBusinessUnit(_businessUnit);
-			if (statecode != null)
-				stateGroup.AddState(statecode, statecode, Guid.Empty);
-			RtaStateGroupRepository.Add(stateGroup);
-			return this;
-		}
-		// End
-
+		
 		public FakeRtaDatabase WithExistingAgentState(Guid personId, string stateCode)
 		{
 			AgentStateReadModels.Has(new AgentStateReadModel

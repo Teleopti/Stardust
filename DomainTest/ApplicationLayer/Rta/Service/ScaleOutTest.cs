@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
-				.WithStateGroup("phone", "Ready")
+				.WithRule("phone", null, "Ready")
 				;
 			Now.Is("2016-03-04 9:00");
 			Target.SaveState(new ExternalUserStateForTest
@@ -102,7 +102,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Database
 				.ClearStates()
-				.WithStateGroup("phone", "InCall");
+				.ClearRuleMap()
+				.WithRule("phone", null, "InCall")
+				;
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
