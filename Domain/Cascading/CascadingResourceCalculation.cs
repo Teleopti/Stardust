@@ -35,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					var stateHolder = _stateHolder();
 					var skills = stateHolder.SchedulingResultState.Skills;
 					var cascadingSkills = skills.Where(x => x.IsCascading()).OrderBy(x => x.CascadingIndex); //lägg nån annanstans
-																																																	 //TODO: hantera deletade skills?? (kanske inte behövs här)
-																																																	 //TODO: nåt rörande skillgrupper
+					//TODO: hantera deletade skills?? (kanske inte behövs här)
 					foreach (var skillToMoveFrom in cascadingSkills)
 					{
 						var datetimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(date, date.AddDays(1), skillToMoveFrom.TimeZone);
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 								var skillToMoveFromAbsoluteDifference = skillStaffPeriodFrom.AbsoluteDifference;
 								if (skillToMoveFromAbsoluteDifference > 0)
 								{
-									//bara flytta till cascading skills som agent X kan?
 									foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity)))
 									{
 										var skillsInSameGroup = VirtualSkillContext.VirtualSkillGroupResult.SkillsInSameGroupAs(skillToMoveFrom);
