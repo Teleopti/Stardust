@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 	[TestFixture]
 	public class DayOffTemplateChangedHandlerTests
 	{
-		private DayOffTemplateChangedHandler _target;
+		private AnalyticsDayOffUpdater _target;
 		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private IAnalyticsDayOffRepository _analyticsDayOffRepository;
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
 
-			_target = new DayOffTemplateChangedHandler(_analyticsBusinessUnitRepository, _analyticsDayOffRepository);
+			_target = new AnalyticsDayOffUpdater(_analyticsBusinessUnitRepository, _analyticsDayOffRepository);
 		}
 
 		[Test]

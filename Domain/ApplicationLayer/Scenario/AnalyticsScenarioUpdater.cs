@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 {
 	[EnabledBy(Toggles.ETL_SpeedUpScenario_38300)]
-	public class ScenarioChangedHandler :
+	public class AnalyticsScenarioUpdater :
 		IHandleEvent<ScenarioChangeEvent>,
 		IHandleEvent<ScenarioDeleteEvent>,
 		IRunOnHangfire
@@ -22,16 +22,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Scenario
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IBusinessUnitRepository _businessUnitRepository;
 
-		private readonly static ILog logger = LogManager.GetLogger(typeof(ScenarioChangedHandler));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsScenarioUpdater));
 
-		public ScenarioChangedHandler(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsScenarioRepository analyticsScenarioRepository, IScenarioRepository scenarioRepository, IBusinessUnitRepository businessUnitRepository)
+		public AnalyticsScenarioUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsScenarioRepository analyticsScenarioRepository, IScenarioRepository scenarioRepository, IBusinessUnitRepository businessUnitRepository)
 		{
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsScenarioRepository = analyticsScenarioRepository;
 			_scenarioRepository = scenarioRepository;
 			_businessUnitRepository = businessUnitRepository;
 
-			logger.Debug($"New instance of {nameof(ScenarioChangedHandler)} was created");
+			logger.Debug($"New instance of {nameof(AnalyticsScenarioUpdater)} was created");
 		}
 
 		[AnalyticsUnitOfWork]

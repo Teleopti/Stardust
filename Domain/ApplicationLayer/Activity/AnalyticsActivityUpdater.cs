@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradayActivity_38303)]
-	public class ActivityChangedHandler :
+	public class AnalyticsActivityUpdater :
 		IHandleEvent<ActivityChangedEvent>,
 		IRunOnHangfire
 	{
@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 		private readonly IActivityRepository _activityRepository;
 		private readonly IAnalyticsActivityRepository _analyticsActivityRepository;
 
-		private readonly static ILog logger = LogManager.GetLogger(typeof(ActivityChangedHandler));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsActivityUpdater));
 
-		public ActivityChangedHandler(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IActivityRepository activityRepository, IAnalyticsActivityRepository analyticsActivityRepository)
+		public AnalyticsActivityUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IActivityRepository activityRepository, IAnalyticsActivityRepository analyticsActivityRepository)
 		{
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_activityRepository = activityRepository;
 			_analyticsActivityRepository = analyticsActivityRepository;
-			logger.Debug($"New instance of {nameof(ActivityChangedHandler)} was created");
+			logger.Debug($"New instance of {nameof(AnalyticsActivityUpdater)} was created");
 		}
 
 		[AsSystem]

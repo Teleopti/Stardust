@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	[TestFixture]
 	public class PersonPeriodAnalyticsUpdaterHandlerTests
 	{
-		private PersonPeriodAnalyticsUpdater _target;
+		private AnalyticsPersonPeriodUpdater _target;
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		private FakeAnalyticsSkillRepository _analyticsSkillRepository;
 		private IPersonRepository _personRepository;
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Add(p2);
 			_personRepository.Add(p3);
 
-			_target = new PersonPeriodAnalyticsUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined());
+			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined());
 		}
 
 		[Test]

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			skillRepository.Stub(x => x.Get(@event.SkillId)).Return(skill);
 			analyticsTimeZoneRepository.Stub(x => x.Get(skill.TimeZone.Id)).Return(new AnalyticsTimeZone());
 
-			var target = new UpdateSkillAnalyticsHandler(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository, analyticsTimeZoneRepository);
+			var target = new AnalyticsSkillUpdater(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository, analyticsTimeZoneRepository);
 
 			target.Handle(@event);
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			skillRepository.Stub(x => x.Get(@event.SkillId)).Return(skill);
 			analyticsTimeZoneRepository.Stub(x => x.Get(skill.TimeZone.Id)).Return(new AnalyticsTimeZone());
 
-			var target = new UpdateSkillAnalyticsHandler(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository, analyticsTimeZoneRepository);
+			var target = new AnalyticsSkillUpdater(skillRepository, analyticsSkillRepository, analyticsBusinessUnitRepository, analyticsTimeZoneRepository);
 
 			target.Handle(@event);
 

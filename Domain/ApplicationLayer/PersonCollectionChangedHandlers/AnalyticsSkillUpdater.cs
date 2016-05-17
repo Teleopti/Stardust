@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradaySkill_37543)]
-	public class UpdateSkillAnalyticsHandler :
+	public class AnalyticsSkillUpdater :
 		IHandleEvent<SkillChangedEvent>,
 		IHandleEvent<SkillCreatedEvent>,
 		IHandleEvent<SkillDeletedEvent>,
@@ -20,14 +20,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 
-		public UpdateSkillAnalyticsHandler(ISkillRepository skillRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
+		public AnalyticsSkillUpdater(ISkillRepository skillRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 		{
 			_skillRepository = skillRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 		}
-
 		
 		public virtual void Handle(Guid skillId)
 		{

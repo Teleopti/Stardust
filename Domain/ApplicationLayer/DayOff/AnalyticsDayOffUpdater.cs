@@ -2,7 +2,6 @@
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Preference;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,22 +9,22 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradayDayOff_38213)]
-	public class DayOffTemplateChangedHandler :
+	public class AnalyticsDayOffUpdater :
 		IHandleEvent<DayOffTemplateChangedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
 
-		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsDayOffUpdater));
 
-		public DayOffTemplateChangedHandler(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsDayOffRepository analyticsDayOffRepository)
+		public AnalyticsDayOffUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsDayOffRepository analyticsDayOffRepository)
 		{
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
 			if (logger.IsInfoEnabled)
 			{
-				logger.Info("New instance of handler was created");
+				logger.Info($"New instance of {nameof(AnalyticsDayOffUpdater)} was created");
 			}
 		}
 
@@ -35,8 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 		{
 			if (logger.IsDebugEnabled)
 			{
-				logger.DebugFormat("Consuming event for day off template id = {0}. (Message timestamp = {1})",
-								   @event.DayOffTemplateId, @event.Timestamp);
+				logger.Debug($"Consuming {nameof(DayOffTemplateChangedEvent)} for day off template id = {@event.DayOffTemplateId}.");
 			}
 
 			var businessUnitId = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId).BusinessUnitId;

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
     public class AnalyticsPersonPeriodSkillsUpdater 
 	
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(PersonPeriodAnalyticsUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodUpdater));
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 
 		public AnalyticsPersonPeriodSkillsUpdater(IAnalyticsSkillRepository analyticsSkillRepository)

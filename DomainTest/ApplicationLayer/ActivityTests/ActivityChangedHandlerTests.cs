@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ActivityTests
 	[TestFixture]
 	public class ActivityChangedHandlerTests
 	{
-		private ActivityChangedHandler _target;
+		private AnalyticsActivityUpdater _target;
 		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private FakeActivityRepository _activityRepository;
 		private FakeAnalyticsActivityRepository _analyticsActivityRepository;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ActivityTests
 			_activityRepository = new FakeActivityRepository();
 			_analyticsActivityRepository = new FakeAnalyticsActivityRepository();
 
-			_target = new ActivityChangedHandler(_analyticsBusinessUnitRepository, _activityRepository, _analyticsActivityRepository);
+			_target = new AnalyticsActivityUpdater(_analyticsBusinessUnitRepository, _activityRepository, _analyticsActivityRepository);
 		}
 
 		[Test]

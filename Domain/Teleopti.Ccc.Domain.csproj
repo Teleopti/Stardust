@@ -182,7 +182,7 @@
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommand.cs" />
-    <Compile Include="ApplicationLayer\Activity\ActivityChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\Activity\AnalyticsActivityUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\ICancelAbsenceRequestCommandValidator.cs" />
@@ -192,7 +192,7 @@
     <Compile Include="ApplicationLayer\Commands\RunWaitlistCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\RunWaitlistCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
-    <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\DayOff\AnalyticsDayOffUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\PersonalActivityAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
@@ -247,8 +247,8 @@
     <Compile Include="Analytics\AnalyticsFactAgentSkill.cs" />
     <Compile Include="ApplicationLayer\Preference\PreferenceFulfillmentChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Preference\PreferenceChangedHandler.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateSkillAnalyticsHandler.cs" />
-    <Compile Include="ApplicationLayer\Scenario\ScenarioChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsSkillUpdater.cs" />
+    <Compile Include="ApplicationLayer\Scenario\AnalyticsScenarioUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotification.cs" />
@@ -258,7 +258,7 @@
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandler.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandler.cs" />
     <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdatePersonGroupsAnalyticsHandler.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonGroupsHandler.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdater.cs" />
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
@@ -424,7 +424,7 @@
     <Compile Include="Analytics\Transformer\PersonPeriodFilter.cs" />
     <Compile Include="Analytics\Transformer\PersonPeriodTransformer.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonFinderReadOnlyUpdater.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\PersonPeriodAnalyticsUpdater.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
     <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />

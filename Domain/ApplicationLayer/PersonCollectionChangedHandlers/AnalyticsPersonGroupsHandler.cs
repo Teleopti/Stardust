@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 #pragma warning disable 618
 	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, 
         Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439), DisabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
-    public class UpdatePersonGroupsAnalyticsHandlerBus : UpdatePersonGroupsAnalyticsHandler,
+    public class AnalyticsPersonGroupsHandlerBus : AnalyticsPersonGroupsHandler,
         IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
         IRunOnServiceBus
 #pragma warning restore 618
     {
-        public UpdatePersonGroupsAnalyticsHandlerBus(IPersonRepository personRepository,
+        public AnalyticsPersonGroupsHandlerBus(IPersonRepository personRepository,
             IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
             IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
             :base(personRepository,analyticsBridgeGroupPagePersonRepository, analyticsGroupPageRepository, groupPageRepository)
@@ -39,12 +39,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
     [EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
         Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
-    public class UpdatePersonGroupsAnalyticsHandlerHangfire : UpdatePersonGroupsAnalyticsHandler,
+    public class AnalyticsPersonGroupsHandlerHangfire : AnalyticsPersonGroupsHandler,
         IHandleEvent<AnalyticsPersonCollectionChangedEvent>,
         IRunOnHangfire
 
     {
-        public UpdatePersonGroupsAnalyticsHandlerHangfire(IPersonRepository personRepository,
+        public AnalyticsPersonGroupsHandlerHangfire(IPersonRepository personRepository,
             IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
             IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
             : base(personRepository, analyticsBridgeGroupPagePersonRepository, analyticsGroupPageRepository, groupPageRepository)
@@ -59,15 +59,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
         }
     }
 
-    public class UpdatePersonGroupsAnalyticsHandler
+    public class AnalyticsPersonGroupsHandler
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdatePersonGroupsAnalyticsHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonGroupsHandler));
 		private readonly IPersonRepository _personRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IGroupPageRepository _groupPageRepository;
 
-		public UpdatePersonGroupsAnalyticsHandler(IPersonRepository personRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
+		public AnalyticsPersonGroupsHandler(IPersonRepository personRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsBridgeGroupPagePersonRepository = analyticsBridgeGroupPagePersonRepository;

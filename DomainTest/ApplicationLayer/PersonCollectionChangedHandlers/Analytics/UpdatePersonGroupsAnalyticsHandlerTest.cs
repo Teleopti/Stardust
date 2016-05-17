@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 	[TestFixture]
 	public class UpdatePersonGroupsAnalyticsHandlerTest
 	{
-		private UpdatePersonGroupsAnalyticsHandler _target;
+		private AnalyticsPersonGroupsHandler _target;
 		private IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 		private IPersonRepository _personRepository;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsBridgeGroupPagePersonRepository = MockRepository.GenerateMock<IAnalyticsBridgeGroupPagePersonRepository>();
 			_groupPageRepository = MockRepository.GenerateMock<IGroupPageRepository>();
 			_groupPageRepository.Stub(r => r.GetGroupPagesForPerson(Arg<Guid>.Is.Anything)).Return(new IGroupPage[] { });
-			_target = new UpdatePersonGroupsAnalyticsHandler(_personRepository, _analyticsBridgeGroupPagePersonRepository, _analyticsGroupPageRepository, _groupPageRepository);
+			_target = new AnalyticsPersonGroupsHandler(_personRepository, _analyticsBridgeGroupPagePersonRepository, _analyticsGroupPageRepository, _groupPageRepository);
 		}
 
 		[Test]

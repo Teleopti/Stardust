@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 	[TestFixture]
 	public class ScenarioChangedHandlerTests
 	{
-		private ScenarioChangedHandler _target;
+		private AnalyticsScenarioUpdater _target;
 		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private FakeScenarioRepository _scenarioRepository;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScenarioTests.Analytics
 
 			_businessUnitRepository.Add(BusinessUnitFactory.BusinessUnitUsedInTest);
 
-			_target = new ScenarioChangedHandler(_analyticsBusinessUnitRepository, _analyticsScenarioRepository, _scenarioRepository, _businessUnitRepository);
+			_target = new AnalyticsScenarioUpdater(_analyticsBusinessUnitRepository, _analyticsScenarioRepository, _scenarioRepository, _businessUnitRepository);
 		}
 
 		[Test]

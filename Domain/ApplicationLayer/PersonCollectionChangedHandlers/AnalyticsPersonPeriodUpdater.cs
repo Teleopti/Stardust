@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 				  Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
 		DisabledBy(Toggles.PersonCollectionChanged_ToHangfire_38420)]
-	public class PersonPeriodAnalyticsUpdaterBus : PersonPeriodAnalyticsUpdater,
+	public class AnalyticsPersonPeriodUpdaterBus : AnalyticsPersonPeriodUpdater,
 		IHandleEvent<PersonCollectionChangedEvent>,
 		IHandleEvent<PersonDeletedEvent>,
 		IRunOnServiceBus
 #pragma warning restore 618
 	{
-		public PersonPeriodAnalyticsUpdaterBus(IPersonRepository personRepository,
+		public AnalyticsPersonPeriodUpdaterBus(IPersonRepository personRepository,
 				IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 				IAnalyticsSkillRepository analyticsSkillRepository,
 				IEventPublisher eventPublisher,
@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 	}
 
 	[EnabledBy(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439, Toggles.PersonCollectionChanged_ToHangfire_38420)]
-	public class PersonPeriodAnalyticsUpdaterHangfire : PersonPeriodAnalyticsUpdater,
+	public class AnalyticsPersonPeriodUpdaterHangfire : AnalyticsPersonPeriodUpdater,
 	   IHandleEvent<PersonCollectionChangedEvent>,
 	   IHandleEvent<PersonDeletedEvent>,
 	   IRunOnHangfire
 	{
-		public PersonPeriodAnalyticsUpdaterHangfire(IPersonRepository personRepository,
+		public AnalyticsPersonPeriodUpdaterHangfire(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 			IAnalyticsSkillRepository analyticsSkillRepository,
 			IEventPublisher eventPublisher,
@@ -67,9 +67,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		}
 	}
 
-	public class PersonPeriodAnalyticsUpdater
+	public class AnalyticsPersonPeriodUpdater
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(PersonPeriodAnalyticsUpdater));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsPersonPeriodUpdater));
 		private readonly AcdLoginPersonTransformer _analyticsAcdLoginPerson;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 
-		public PersonPeriodAnalyticsUpdater(IPersonRepository personRepository,
+		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 			IAnalyticsSkillRepository analyticsSkillRepository,
 			IEventPublisher eventPublisher,
