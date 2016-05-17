@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadScenarios()
+		public void ShouldLoadAbsences()
 		{
 			var abs = new Absence(22, Guid.NewGuid(), "Freee", Color.LightGreen, _datasource, businessUnitId);
 			analyticsDataFactory.Setup(abs);

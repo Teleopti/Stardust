@@ -18,7 +18,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public IList<AnalyticsAbsence> Absences()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select absence_id AbsenceId, absence_code AbsenceCode, in_paid_time InPaidTime from mart.dim_absence WITH (NOLOCK)")
+				@"select [absence_id] AbsenceId
+					,[absence_code] AbsenceCode
+					,[absence_name] AbsenceName
+					,[display_color] DisplayColor
+					,[in_contract_time] InContractTime
+					,[in_contract_time_name] InContractTimeName
+					,[in_paid_time] InPaidTime
+					,[in_paid_time_name] InPaidTimeName
+					,[in_work_time] InWorkTime
+					,[in_work_time_name] InWorkTimeName
+					,[business_unit_id] BusinessUnitId
+					,[datasource_id] DatasourceId
+					,[insert_date] InsertDate
+					,[update_date] UpdateDate
+					,[datasource_update_date] DatasourceUpdateDate
+					,[is_deleted] IsDeleted
+					,[display_color_html] DisplayColorHtml
+					,[absence_shortname] AbsenceShortName
+					from [mart].[dim_absence] WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsAbsence)))
 				.SetReadOnly(true)
 				.List<AnalyticsAbsence>();
