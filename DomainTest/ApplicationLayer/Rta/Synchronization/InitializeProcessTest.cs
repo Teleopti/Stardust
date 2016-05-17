@@ -51,21 +51,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Synchronization
 		public void ShouldNotAddExistingStateCode()
 		{
 			var personId = Guid.NewGuid();
-			var platformId = Guid.NewGuid();
-			var businessUnit = Guid.NewGuid();
 			Now.Is("2015-10-01 08:00");
 			Database
-				.WithBusinessUnit(businessUnit)
 				.WithUser("user", personId)
-				.WithDefaultStateGroup()
-				.WithStateCode("statecode", platformId.ToString())
-				.WithExistingState(personId, "statecode")
+				.WithRule("statecode")
+				.WithExistingAgentState(personId, "statecode")
 				;
 
 			Context.SimulateRestart();
 			Rta.Touch(Database.TenantName());
 
-			Database.AddedStateCodes.Should().Have.Count.EqualTo(1);
+			Database.StateCodes.Should().Have.Count.EqualTo(1);
 		}
 	}
 }

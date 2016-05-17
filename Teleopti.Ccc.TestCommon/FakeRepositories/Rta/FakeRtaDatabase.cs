@@ -44,11 +44,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IFakeDataBuilder WithSchedule(Guid personId, Guid activityId, string name, DateOnly date, string start, string end);
 		IFakeDataBuilder WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, bool isLoggedOutState, Adherence? adherence);
 		IFakeDataBuilder WithAlarm(TimeSpan threshold);
-		IFakeDataBuilder WithDefaultStateGroup();
 		IFakeDataBuilder WithStateGroup(string statecode, string stateGroupName);
 		IFakeDataBuilder WithStateCode(string statecode);
 		IFakeDataBuilder WithStateCode(string statecode, string platformTypeId);
-		IFakeDataBuilder WithExistingState(Guid personId, string stateCode);
+		IFakeDataBuilder WithExistingAgentState(Guid personId, string stateCode);
 		IFakeDataBuilder WithMapWithStateGroupWithoutStateCodes();
 	}
 
@@ -135,12 +134,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return new StoredStateInfo(personId, AgentStateReadModels.Get(personId));
 		}
 
-		public IRtaState AddedStateCode
-		{
-			get { return RtaStateGroupRepository.LoadAll().Single(x => x.DefaultStateGroup).StateCollection.SingleOrDefault(); }
-		}
-
-		public IEnumerable<IRtaState> AddedStateCodes
+		public IEnumerable<IRtaState> StateCodes
 		{
 			get { return RtaStateGroupRepository.LoadAll().Single().StateCollection; }
 		}
@@ -357,19 +351,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		}
 
 		// Implementation details
-		public IFakeDataBuilder WithDefaultStateGroup()
-		{
-			var defaultStateGroup = RtaStateGroupRepository.LoadAll().SingleOrDefault(x => x.DefaultStateGroup);
-			if (defaultStateGroup == null)
-			{
-				defaultStateGroup = new RtaStateGroup(".", true, true);
-				defaultStateGroup.SetId(Guid.NewGuid());
-				defaultStateGroup.SetBusinessUnit(_businessUnit);
-				RtaStateGroupRepository.Add(defaultStateGroup);
-			}
-			return this;
-		}
-
 		public IFakeDataBuilder WithStateGroup(string statecode, string stateGroupName)
 		{
 			var stateGroup = new RtaStateGroup(stateGroupName, false, false);
@@ -397,7 +378,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public IFakeDataBuilder WithExistingState(Guid personId, string stateCode)
+		public IFakeDataBuilder WithExistingAgentState(Guid personId, string stateCode)
 		{
 			AgentStateReadModels.Has(new AgentStateReadModel
 			{
@@ -497,9 +478,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			return fakeDataBuilder.WithSchedule(personId, activityId, null, belongsToDate, start, end);
 		}
-		
 
 
+
+		public static IFakeDataBuilder WithRule(this IFakeDataBuilder fakeDataBuilder)
+		{
+			return fakeDataBuilder.WithRule(null, "", null, null, 0, null, false, null);
+		}
+
+		public static IFakeDataBuilder WithRule(this IFakeDataBuilder fakeDataBuilder, string stateCode)
+		{
+			return fakeDataBuilder.WithRule(null, stateCode, null, null, 0, null, false, null);
+		}
 
 		public static IFakeDataBuilder WithRule(this IFakeDataBuilder fakeDataBuilder, string stateCode, Guid? activityId)
 		{

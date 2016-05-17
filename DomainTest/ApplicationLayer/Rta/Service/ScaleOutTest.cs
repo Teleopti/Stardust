@@ -116,8 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldNotSendDuplicateEvents()
 		{
 			Database
-				.WithDefaultStateGroup()
-				.WithStateCode("AUX1");
+				.WithRule("AUX1");
 			var tasks = new List<Task>();
 			100.Times(i =>
 			{
