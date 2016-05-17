@@ -53,8 +53,8 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="CreateReadModelOptimizedTest.cs" />
-    <Compile Include="CreateReadModelTest.cs" />
+    <Compile Include="SaveSchedulesOptimizedEventsTest.cs" />
+    <Compile Include="SaveSchedulesTest.cs" />
     <Compile Include="DataCreator.cs" />
     <Compile Include="NUnitSetup.cs" />
     <Compile Include="PerformanceTestAttribute.cs" />
