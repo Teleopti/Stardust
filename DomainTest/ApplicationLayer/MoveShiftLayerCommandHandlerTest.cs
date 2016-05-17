@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 
 			target.Handle(cmd);
-			cmd.ErrorMessages.Should().Contain(Resources.PersonAssignmentIsNotValidDot);
+			cmd.ErrorMessages.Should().Contain(Resources.PersonAssignmentIsNotValid);
 		}
 		[Test]
 		public void ShouldReturnShiftLayerNotExistErrorIfShiftLayerNotExists()
