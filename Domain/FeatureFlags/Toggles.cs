@@ -91,8 +91,8 @@
 		Wfm_Requests_Run_waitlist_38071,
 
 		Wfm_Intraday_38074,
-            
-        Report_UseOpenXmlFormat_35797,
+
+		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_AgentSkillAnalyzer_12345,
 		Wfm_Use_Stardust,
@@ -129,7 +129,9 @@
 		Payroll_ToStardust_38204,
 		ETL_SpeedUpScenario_38300,
 		Scheduler_LoadWithoutRequests_38567,
-        PersonCollectionChanged_ToHangfire_38420
-        // ReSharper restore InconsistentNaming
-    }
+		PersonCollectionChanged_ToHangfire_38420,
+		ETL_SpeedUpIntradayActivity_38303,
+		ETL_SpeedUpNightlyActivity_38303
+		// ReSharper restore InconsistentNaming
+	}
 }
