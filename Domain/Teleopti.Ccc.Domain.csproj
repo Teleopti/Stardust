@@ -270,6 +270,7 @@
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\SkillCombination.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
