@@ -70,7 +70,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         ISkill[] Skills { get; }
 
-        /// <summary>
+	    IEnumerable<ISkill> CascadingSkills();
+
+			/// <summary>
         /// Gets the visible skills.
         /// </summary>
         /// <value>The visible skills.</value>

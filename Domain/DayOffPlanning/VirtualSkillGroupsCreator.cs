@@ -130,6 +130,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				int.MaxValue;
 		}
 
+		//TODO: not correct ATM
 		public IEnumerable<ISkill> SkillsInSameGroupAs(ISkill skill)
 		{
 			var ret = new List<ISkill>();
