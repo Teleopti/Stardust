@@ -20,13 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddActivity")]
 		public virtual List<FailActionResult> AddActivityCommand([FromBody]AddActivityFormData input)
 		{
-			return _commandHandlingProvider.AddActivity(input, false);
-		}
-
-		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddPersonalActivity")]
-		public virtual List<FailActionResult> AddPersonalActivityCommand([FromBody]AddActivityFormData input)
-		{
-			return _commandHandlingProvider.AddActivity(input, true);
+			return _commandHandlingProvider.AddActivity(input);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveActivity")]

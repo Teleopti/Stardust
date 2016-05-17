@@ -54,37 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			ActivityCommandHandler.ResetCalledCount();
 
-			Target.AddActivity(input, false);
-
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldInvokeAddPersonActivityCommandHandleWithPermission()
-		{
-			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
-			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
-			PersonRepository.Has(person1);
-			PersonRepository.Has(person2);
-
-			var date = new DateOnly(2016,05,17);
-
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,person1, date);
-			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddActivity,person2, date);
-
-			var input = new AddActivityFormData
-			{
-				ActivityId = Guid.NewGuid(),
-				Date = date,
-				StartTime = new DateTime(2016, 05, 17, 8, 0, 0),
-				EndTime = new DateTime(2016, 05, 17, 17, 0, 0),
-				PersonIds = new [] { person1.Id.Value, person2.Id.Value },
-				TrackedCommandInfo = new TrackedCommandInfo()
-			};
-
-			ActivityCommandHandler.ResetCalledCount();
-
-			Target.AddActivity(input, false);
+			Target.AddActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
 		}
@@ -112,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 			ActivityCommandHandler.ResetCalledCount();
 
-			Target.AddActivity(input, false);
+			Target.AddActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 		}
@@ -454,7 +424,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			};
 
 			ActivityCommandHandler.ResetCalledCount();
-			var results = Target.AddActivity(input, false);
+			var results = Target.AddActivity(input);
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 
 			results.Count.Should().Be.EqualTo(1);

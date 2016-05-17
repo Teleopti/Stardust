@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_helper = helper;
 		}
 
-		public List<FailActionResult> AddActivity(AddActivityFormData input, bool isPersonalActivity)
+		public List<FailActionResult> AddActivity(AddActivityFormData input)
 		{
 			var permissions = new Dictionary<string,string>
 			{
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 	public interface ITeamScheduleCommandHandlingProvider
 	{
-		List<FailActionResult> AddActivity(AddActivityFormData formData, bool isPersonalActivity);		
+		List<FailActionResult> AddActivity(AddActivityFormData formData);		
 		IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds);
 		List<FailActionResult> RemoveActivity(RemoveActivityFormData input);
 		List<FailActionResult> MoveActivity(MoveActivityFormData input);
