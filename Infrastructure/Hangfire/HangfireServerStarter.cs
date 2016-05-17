@@ -1,3 +1,4 @@
+using System.Linq;
 using Hangfire;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			var options = new BackgroundJobServerOptions
 			{
 				WorkerCount = setThisToOneAndErikWillHuntYouDownAndKillYouSlowlyAndPainfully,
-				Queues = QueueName.All()
+				Queues = QueueName.All().ToArray()
 			};
 			app.UseHangfireServer(options);
 

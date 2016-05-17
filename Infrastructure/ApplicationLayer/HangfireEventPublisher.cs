@@ -114,19 +114,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 					Event = serialized,
 					HandlerType = handlerType,
 					HandlerTypeName = handlerTypeName,
-					QueueName = queueName(handlerType)
+					QueueName = QueueName.Default
 				};
 			}
-		}
-
-		private static string queueName(Type handlerType)
-		{
-			var interfaces = handlerType.GetInterfaces();
-			if (interfaces.Any(i => i == typeof(IRunWithHighPriority)))
-				return QueueName.HighPriority;
-			if (interfaces.Any(i => i == typeof(IRunWithLowPriority)))
-				return QueueName.LowPriority;
-			return QueueName.DefaultPriority;
 		}
 
 		public IEnumerable<string> TenantsWithRecurringJobs()

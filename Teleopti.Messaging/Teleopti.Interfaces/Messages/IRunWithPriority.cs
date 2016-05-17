@@ -1,36 +1,17 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Messages
 {
-	/// <summary>
-	/// Inherit on your Hangfire event handler to set high priority
-	/// </summary>
-	public interface IRunWithHighPriority
-	{
-	}
-	/// <summary>
-	/// Inherit on your Hangfire event handler to set default priority
-	/// </summary>
-	public interface IRunWithDefaultPriority
-	{
-	}
-	/// <summary>
-	/// Inherit on your Hangfire event handler to set low priority
-	/// </summary>
-	public interface IRunWithLowPriority
-	{
-	}
-
 	public class QueueName
 	{
-		public const string HighPriority = "high";
-		public const string DefaultPriority = "default";
-		public const string LowPriority = "low";
+		// suggestion:
+		// default queue = low priority
+		// create seperate queues (maybe even with dedicates workers) for features that requires it
+		public const string Default = "default";
 
-		public static string[] All()
+		public static IEnumerable<string> All()
 		{
-			return new[] {HighPriority, DefaultPriority, LowPriority};
+			yield return Default;
 		}
 	}
 }
