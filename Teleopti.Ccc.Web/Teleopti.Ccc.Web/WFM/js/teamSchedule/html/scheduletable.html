@@ -19,7 +19,7 @@
 		</tr>
 	</thead>
 	<tbody>
-		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules">
+		<tr ng-repeat="personSchedule in vm.scheduleVm.Schedules" ng-click="vm.togglePerson(personSchedule, $event)">
 			<td class="person-name person-name-column">
 				<div class="wfm-checkbox" ng-show="vm.selectMode">
 					<label>

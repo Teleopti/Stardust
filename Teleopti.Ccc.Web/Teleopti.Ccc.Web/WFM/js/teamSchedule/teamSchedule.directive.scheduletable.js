@@ -76,6 +76,15 @@
 			personSelectionSvc.updatePersonProjectionSelection(currentProjection, personSchedule);
 		};
 
+		vm.togglePerson = togglePerson;
+
+		function togglePerson(personSchedule, $event) {
+			if ($event.target instanceof HTMLTableCellElement) {
+				personSchedule.IsSelected = !personSchedule.IsSelected;
+				vm.updatePersonSelection(personSchedule);
+			}
+		}
+
 		function isAllInCurrentPageSelected() {
 			var isAllSelected = true;
 			var selectedPeople = personSelectionSvc.personInfo;
