@@ -117,9 +117,9 @@ ResourcePlanner_CascadingSkillsPOC_37679 = false
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = false # needs to be false until we get further....
 ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025 = RC
 
-Wfm_QuickForecastOnHangfire_35845 = RC
+Wfm_QuickForecastOnHangfire_35845 = true
 ETL_SpeedUpPermissionReport_33584 = true
-Wfm_RecalculateForecastOnHangfire_37971 = RC
+Wfm_RecalculateForecastOnHangfire_37971 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = false
 Stardust_MoveAbsenceRequestTo_37941 = RC
@@ -129,11 +129,11 @@ ETL_SpeedUpIntradayPreference_37124 = RC # not to be released until pbi 38304 is
 ETL_SpeedUpIntradayDayOff_38213 = RC # not to be released until pbi 38304 is done 
 ETL_SpeedUpScenario_38300 = RC # not to be released until pbi 38304 is done 
 ShiftTrade_ToHangfire_38181 = RC
-Wfm_MoveNewAbsenceReportOnHangfire_38203 = RC
+Wfm_MoveNewAbsenceReportOnHangfire_38203 = true
 ETL_SpeedUpIntradaySkill_37543 = RC
 ETL_SpeedUpNightlySkill_37543 = RC
-GroupPageCollection_ToHangfire_38178 = RC
-SettingsForPersonPeriodChanged_ToHangfire_38207 = RC 
+GroupPageCollection_ToHangfire_38178 = true
+SettingsForPersonPeriodChanged_ToHangfire_38207 = true 
 Wfm_MoveExportMultiSiteSkillOnStardust_38134 = RC
 Payroll_ToStardust_38204 = RC
 Scheduler_LoadWithoutRequests_38567 = RC
