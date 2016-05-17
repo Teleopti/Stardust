@@ -258,8 +258,10 @@
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
+    <Compile Include="Cascading\CascadeResources.cs" />
     <Compile Include="Cascading\CascadingResourceCalculation.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
+    <Compile Include="Forecasting\SkillStaffPeriodExtensions.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />

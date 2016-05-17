@@ -53,7 +53,6 @@ using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Persisters.Outbound;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces;
@@ -74,6 +73,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<CascadingResourceCalculation>().InstancePerLifetimeScope();
+			builder.RegisterType<CascadeResources>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
 			builder.RegisterModule(new IntraIntervalOptimizationServiceModule(_configuration));
