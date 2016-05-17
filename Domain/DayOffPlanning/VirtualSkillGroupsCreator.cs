@@ -14,18 +14,19 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			var skillKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
 			var skillGroupKeyUniqueNameDic = new Dictionary<string, string>();
 			var personSkillGroupDic = new Dictionary<IPerson, string>();
+			var allInvolvedSkills = new HashSet<ISkill>();
 
 			foreach (var person in personList)
 			{
-				addPerson(person, dateOnly, skillGroupKeyPersonListDic, skillKeyPersonListDic, skillGroupKeyUniqueNameDic, personSkillGroupDic);
+				addPerson(person, dateOnly, skillGroupKeyPersonListDic, skillKeyPersonListDic, skillGroupKeyUniqueNameDic, personSkillGroupDic, allInvolvedSkills);
 			}
 
-			return new VirtualSkillGroupsCreatorResult(skillGroupKeyPersonListDic, skillKeyPersonListDic, skillGroupKeyUniqueNameDic, personSkillGroupDic);
+			return new VirtualSkillGroupsCreatorResult(skillGroupKeyPersonListDic, skillKeyPersonListDic, skillGroupKeyUniqueNameDic, personSkillGroupDic, allInvolvedSkills);
 		}
 
 		private static void addPerson(IPerson person, DateOnly date, IDictionary<string, IList<IPerson>> skillGroupKeyPersonListDic,
 			IDictionary<string, IList<IPerson>> skillKeyPersonListDic, IDictionary<string, string> skillGroupKeyUniqueNameDic,
-			IDictionary<IPerson, string> personSkillGroupDic)
+			IDictionary<IPerson, string> personSkillGroupDic, ISet<ISkill> allSkills)
 		{
 			var personPeriod = person.Period(date);
 			if (personPeriod == null)
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 					{
 						skillKeyPersonListDic.Add(thisId, new List<IPerson> {person});
 					}
+					allSkills.Add(personSkill.Skill);
 				}
 			}
 
@@ -78,15 +80,17 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 		private readonly IDictionary<string, IList<IPerson>> _skillKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
 		private readonly IDictionary<string, string> _skillGroupKeyUniqueNameDic = new Dictionary<string, string>();
 		private readonly IDictionary<IPerson, string> _personSkillGroupDic;
+		private readonly IEnumerable<ISkill> _allInvolvedSkills;
 
 		public VirtualSkillGroupsCreatorResult(IDictionary<string, IList<IPerson>> skillGroupKeyPersonListDic,
 			IDictionary<string, IList<IPerson>> skillKeyPersonListDic, IDictionary<string, string> skillGroupKeyUniqueNameDic,
-			IDictionary<IPerson, string> personSkillGroupDic)
+			IDictionary<IPerson, string> personSkillGroupDic, IEnumerable<ISkill> allInvolvedSkills)
 		{
 			_skillGroupKeyPersonListDic = skillGroupKeyPersonListDic;
 			_skillKeyPersonListDic = skillKeyPersonListDic;
 			_skillGroupKeyUniqueNameDic = skillGroupKeyUniqueNameDic;
 			_personSkillGroupDic = personSkillGroupDic;
+			_allInvolvedSkills = allInvolvedSkills;
 		}
 
 		public IEnumerable<string> GetKeys()
@@ -124,6 +128,20 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return _personSkillGroupDic.TryGetValue(person, out key) ?
 				GetPersonsForSkillGroupKey(key).Count() : 
 				int.MaxValue;
+		}
+
+		public IEnumerable<ISkill> SkillsInSameGroupAs(ISkill skill)
+		{
+			var ret = new List<ISkill>();
+			foreach (var key in _skillGroupKeyUniqueNameDic.Keys)
+			{
+				if (key.Contains(skill.Id.Value.ToString()))
+				{
+					var ids = key.Split('|');
+					ret.AddRange(_allInvolvedSkills.Where(x => ids.Contains(x.Id.Value.ToString())));
+				}
+			}
+			return ret;
 		}
 	}
 }

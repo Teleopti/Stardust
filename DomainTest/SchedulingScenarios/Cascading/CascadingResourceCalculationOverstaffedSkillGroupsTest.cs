@@ -23,21 +23,21 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 		public CascadingResourceCalculation Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 
-		[Test, Ignore("To be fixed")]
+		[Test]
 		public void ShouldMoveResourceOnlyWithinSkillGroup()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var skillA = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			skillA.SetCascadingIndex_UseFromTestOnly(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
 			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillB = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			var skillB = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			skillB.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var skillC = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			var skillC = new Skill("C", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			skillC.SetCascadingIndex_UseFromTestOnly(3);
 			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 9, 0));
 			var skillCDay = skillC.CreateSkillDayWithDemand(scenario, dateOnly, 1);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 				.Should().Be.EqualTo(0);
 			skillBDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
-			skillBDay.SkillStaffPeriodCollection.First().AbsoluteDifference
+			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
 	}
