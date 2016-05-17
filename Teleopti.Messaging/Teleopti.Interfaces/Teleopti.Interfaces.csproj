@@ -674,7 +674,6 @@
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsAbsence.cs" />
-    <Compile Include="Infrastructure\Analytics\IAnalyticsActivity.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsFactScheduleDate.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsFactScheduleDayCount.cs" />
     <Compile Include="Infrastructure\Analytics\IAnalyticsFactSchedulePerson.cs" />

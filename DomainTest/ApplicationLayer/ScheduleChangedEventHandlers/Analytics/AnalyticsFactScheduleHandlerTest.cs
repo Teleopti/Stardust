@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	        repoMock.Stub(x => x.Overtimes()).Return(new List<IAnalyticsGeneric>());
             repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
 	        repoMock.Stub(x => x.Absences()).Return(new List<IAnalyticsAbsence>());
-	        repoMock.Stub(x => x.Activities()).Return(new List<IAnalyticsActivity>());
+	        repoMock.Stub(x => x.Activities()).Return(new List<AnalyticsActivity>());
 
             _target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler);
 

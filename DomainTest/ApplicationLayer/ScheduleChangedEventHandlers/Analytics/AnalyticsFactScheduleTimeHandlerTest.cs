@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	{
 		private AnalyticsFactScheduleTimeHandler _target;
 		private IAnalyticsScheduleRepository _rep;
-		private IList<IAnalyticsActivity> _activities;
+		private IList<AnalyticsActivity> _activities;
 		private readonly Guid _guidActInPaid = Guid.NewGuid();
 		private readonly Guid _guidActInReady = Guid.NewGuid();
 		private readonly Guid _guidActInBoth = Guid.NewGuid();
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_rep = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
 			_target = new AnalyticsFactScheduleTimeHandler(_rep);
 
-			_activities = new List<IAnalyticsActivity>
+			_activities = new List<AnalyticsActivity>
 			{
 				new AnalyticsActivity {ActivityCode = _guidActInPaid, ActivityId = 1, InPaidTime = true, InReadyTime = false},
 				new AnalyticsActivity {ActivityCode = _guidActInReady, ActivityId = 2, InPaidTime = false, InReadyTime = true},

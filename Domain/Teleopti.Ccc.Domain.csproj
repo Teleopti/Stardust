@@ -154,6 +154,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
+    <Compile Include="Analytics\AnalyticsActivity.cs" />
     <Compile Include="Analytics\AnalyticsScenario.cs" />
     <Compile Include="Analytics\AnalyticsDayOff.cs" />
     <Compile Include="Analytics\AnalyticsGroup.cs" />

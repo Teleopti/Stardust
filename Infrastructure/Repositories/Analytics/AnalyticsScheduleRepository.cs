@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
@@ -180,13 +181,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
-		public IList<IAnalyticsActivity> Activities()
+		public IList<AnalyticsActivity> Activities()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				"select activity_id ActivityId, activity_code ActivityCode, in_paid_time InPaidTime, in_ready_time InReadyTime from mart.dim_activity WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
 				.SetReadOnly(true)
-				.List<IAnalyticsActivity>();
+				.List<AnalyticsActivity>();
 		}
 
 		public IList<IAnalyticsAbsence> Absences()
@@ -255,27 +256,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 	{
 		public int Id { get; set; }
 		public Guid Code { get; set; }
-	}
-
-	public class AnalyticsActivity : IAnalyticsActivity
-	{
-		public int ActivityId { get; set; }
-		public Guid ActivityCode { get; set; }
-		public string ActivityName { get; set; }
-		public int DisplayColor { get; set; }
-		public bool InReadyTime { get; set; }
-		public string InReadyTimeName { get; set; }
-		public bool InContractTime { get; set; }
-		public string InContractTimeName { get; set; }
-		public bool InPaidTime { get; set; }
-		public string InPaidTimeName { get; set; }
-		public bool InWorkTime { get; set; }
-		public string InWorkTimeName { get; set; }
-		public int BusinessUnitId { get; set; }
-		public int DatasourceId { get; set; }
-		public DateTime DatasourceUpdateDate { get; set; }
-		public bool IsDeleted { get; set; }
-		public string DisplayColorHtml { get; set; }
 	}
 
 	public class AnalyticsAbsence : IAnalyticsAbsence

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 			return sl == null ? _repository.ShiftLengthId(shiftLength) : sl.Id;
 		}
 
-		private IAnalyticsActivity mapActivityId(Guid activityCode)
+		private AnalyticsActivity mapActivityId(Guid activityCode)
 		{
 			var activities = _repository.Activities();
 			var act = activities.FirstOrDefault(a => a.ActivityCode.Equals(activityCode));

@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Infrastructure.Analytics;
+using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsActivityRepository
 	{
-		IList<IAnalyticsActivity> Activities();
-		void AddActivity(IAnalyticsActivity activity);
-		void UpdateActivity(IAnalyticsActivity activity);
+		IList<AnalyticsActivity> Activities();
+		void AddActivity(AnalyticsActivity activity);
+		void UpdateActivity(AnalyticsActivity activity);
 	}
 }

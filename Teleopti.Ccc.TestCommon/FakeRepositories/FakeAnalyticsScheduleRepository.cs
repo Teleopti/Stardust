@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Interfaces.Domain;
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IList<IAnalyticsActivity> Activities()
+		public IList<AnalyticsActivity> Activities()
 		{
-			return new IAnalyticsActivity[] {
+			return new AnalyticsActivity[] {
 				new AnalyticsActivity { ActivityCode = Guid.NewGuid(), ActivityId = 1, InPaidTime = true, InReadyTime = true }
 			};
 		}
