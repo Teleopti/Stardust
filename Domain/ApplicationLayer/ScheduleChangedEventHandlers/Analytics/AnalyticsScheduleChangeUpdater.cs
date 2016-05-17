@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		IRunOnServiceBus
 #pragma warning restore 618
 	{
-		private readonly static ILog Logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsScheduleChangeUpdater));
 		private readonly IAnalyticsFactScheduleHandler _factScheduleHandler;
 		private readonly IAnalyticsFactSchedulePersonHandler _factSchedulePersonHandler;
 		private readonly IAnalyticsFactScheduleDateHandler _factScheduleDateHandler;
@@ -54,13 +54,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		{
 			if (!_analyticsScheduleChangeUpdaterFilter.ContinueProcessingEvent(@event))
 				return;
-
+			
 			var scenarioId = getScenario(@event.ScenarioId);
 
 			if (scenarioId == -1)
 			{
-				Logger.DebugFormat("Scenario with code {0} has not been inserted in analytics yet. Schedule changes for agent {1} is not saved into Analytics database.", 
-					@event.ScenarioId, @event.PersonId);
+				logger.Warn($"Scenario with code {@event.ScenarioId} has not been inserted in analytics yet. " +
+							$"Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 				return;
 			}
 
@@ -69,21 +69,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				int dateId;
 				if (!_factScheduleDateHandler.MapDateId(new DateOnly(scheduleDay.Date), out dateId))
 				{
-					//Log that schedule id could not be mapped = Schedule changes is not saved in analytics db.
-					Logger.DebugFormat(
-						"Date {0} could not be mapped to Analytics date_id. Schedule changes for agent {1} is not saved into Analytics database.",
-						scheduleDay.Date,
-						@event.PersonId);
+					logger.Warn($"Date {scheduleDay.Date} could not be mapped to Analytics date_id. " +
+								$"Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 					continue;
 				}
 				
 				var personPart = _factSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
 				if (personPart.PersonId == -1)
 				{
-					Logger.DebugFormat(
-						"PersonPeriodId {0} could not be found. Schedule changes for agent {1} is not saved into Analytics database.",
-						scheduleDay.PersonPeriodId,
-						@event.PersonId);
+					logger.Debug($"PersonPeriodId {scheduleDay.PersonPeriodId} could not be found. " +
+								 $"Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 					continue;
 				}
 				try
@@ -124,16 +119,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					//timeout = -2
 					if (ex.Number != -2)
 					{
-						Logger.Error(ex.Message);
+						logger.Error(ex.Message);
 						throw;
 					}
 					var numOfRetry = @event.RetriesCount += 1;
 					if (numOfRetry > 5)
 					{
-						Logger.ErrorFormat("Timeout when handling ProjectionChangedEvent on day {0}. Maximim number of retries reached, giving up.", scheduleDay.Date);
+						logger.ErrorFormat("Timeout when handling ProjectionChangedEvent on day {0}. Maximim number of retries reached, giving up.", scheduleDay.Date);
 						return;
 					}
-					Logger.WarnFormat("Timeout when handling ProjectionChangedEvent on day {0}. Resending the event for processing later. Retry number {1}", scheduleDay.Date, numOfRetry);
+					logger.WarnFormat("Timeout when handling ProjectionChangedEvent on day {0}. Resending the event for processing later. Retry number {1}", scheduleDay.Date, numOfRetry);
 					var processTime = DateTime.Now.AddSeconds(30 * numOfRetry);
 					var @newEvent = new ProjectionChangedEvent
 					{
