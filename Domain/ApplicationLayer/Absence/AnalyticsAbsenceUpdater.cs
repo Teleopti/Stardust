@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 		[AsSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
-		public void Handle(AbsenceChangedEvent @event)
+		public virtual void Handle(AbsenceChangedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(AbsenceChangedEvent)} for absence id = {@event.AbsenceId}. (Message timestamp = {@event.Timestamp})");
 			var absence = _absenceRepository.Load(@event.AbsenceId);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 		}
 
 		[AnalyticsUnitOfWork]
-		public void Handle(AbsenceDeletedEvent @event)
+		public virtual void Handle(AbsenceDeletedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(AbsenceDeletedEvent)} for absence id = {@event.AbsenceId}. (Message timestamp = {@event.Timestamp})");
 			var analyticsAbsence = _analyticsAbsenceRepository.Absences().FirstOrDefault(a => a.AbsenceCode == @event.AbsenceId);

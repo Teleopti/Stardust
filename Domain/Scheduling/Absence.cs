@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// Represents when an agent is not present due to illnes or vacation e.g
     /// </summary>
-    public class Absence : Payload, IAbsence
-    {
+    public class Absence : Payload, IAbsence, IAggregateRootWithEvents
+	{
         private byte _priority = 100;
         private bool _requestable;
         private string _payrollCode;
