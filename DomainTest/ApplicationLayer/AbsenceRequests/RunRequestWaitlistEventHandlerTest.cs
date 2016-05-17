@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
@@ -12,14 +12,13 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[TestFixture]
-	public class RunRequestWailistStartdustHandlerTest
+	public class RunRequestWaitlistEventHandlerTest
 	{
 		private IWorkflowControlSet wcs1;
 		private IWorkflowControlSet wcs2;
 		private IUnitOfWork uow;
-		private ICurrentUnitOfWork currentUnitOfWork;
 		private IAbsenceRequestWaitlistProcessor processor;
-		private RunRequestWaitlistStardustHandler target;
+		private RunRequestWaitlistEventHandler target;
 		private IWorkflowControlSetRepository wcsRepository;
 
 		[SetUp]
@@ -31,11 +30,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			wcsRepository.Stub(x => x.LoadAll()).Return(new[] {wcs1, wcs2});
 
 			uow = new FakeUnitOfWork();
-			currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			currentUnitOfWork.Stub(x => x.Current()).Return(uow);
 
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(unitOfWorkFactory);
+
 			processor = MockRepository.GenerateMock<IAbsenceRequestWaitlistProcessor>();
-			target = new RunRequestWaitlistStardustHandler(currentUnitOfWork, processor, wcsRepository);
+			target = new RunRequestWaitlistEventHandler(currentUnitOfWorkFactory, processor, wcsRepository);
 		}
 
 		[Test]
@@ -46,8 +51,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			{
 				Period = period
 			});
-			processor.AssertWasCalled(x=>x.ProcessAbsenceRequestWaitlist(uow, period, wcs1));
-			processor.AssertWasCalled(x=>x.ProcessAbsenceRequestWaitlist(uow, period, wcs2));
+			processor.AssertWasCalled(x => x.ProcessAbsenceRequestWaitlist(uow, period, wcs1));
+			processor.AssertWasCalled(x => x.ProcessAbsenceRequestWaitlist(uow, period, wcs2));
 		}
 	}
 }

@@ -129,6 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		{
 			return new TrackedCommandInfo
 			{
+				TrackId = Guid.NewGuid(),
 				OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()
 			};
 		}

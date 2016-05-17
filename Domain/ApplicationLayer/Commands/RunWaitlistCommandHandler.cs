@@ -23,15 +23,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		public void Handle(RunWaitlistCommand command)
 		{
+			var trackInfo = command.TrackedCommandInfo;
+
+			if (logger.IsDebugEnabled)
+			{
+				logger.Debug($"Handle RunWaitlistCommand with TrackId=\"{trackInfo.TrackId}\", "
+					+ $"OperatedPersonId=\"{trackInfo.OperatedPersonId}\", Period=\"{command.Period}\"");
+			}
+
 			var @event = new RunRequestWaitlistEvent
 			{
-				InitiatorId = command.TrackedCommandInfo.TrackId,
-				JobName = "",
+				InitiatorId = trackInfo.OperatedPersonId,
+				JobName = "Run Request Waitlist",
 				Period = command.Period,
 				LogOnBusinessUnitId = _currentBusinessUnit.Current().Id.GetValueOrDefault(),
 				LogOnDatasource = _currentDataSource.Current().DataSourceName,
 				Timestamp = DateTime.UtcNow
 			};
+
 			try
 			{
 				_publisher.Publish(@event);
@@ -39,7 +48,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			catch (Exception ex)
 			{
 				logger.Error("Failed to publish event for RunWaitlistCommand with TrackId=\""
-					+ $"{command.TrackedCommandInfo.TrackId}\", Period=\"{command.Period}\"");
+					+ $"{command.TrackedCommandInfo.TrackId}\", InitiatorId=\"{@event.InitiatorId}\", "
+					+ $"Period=\"{command.Period}\"", ex);
 				command.ErrorMessages = new[] {ex.Message};
 			}
 		}
