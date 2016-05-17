@@ -1,6 +1,6 @@
 a{
 	color: $text-color-standard;
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 .layout-fill {
@@ -64,6 +64,15 @@ a{
 		position: fixed;
 		right: 0;
 		top: 0;
+	}
+
+	.nav-tools{
+		a:hover i {
+			color:$text-color-standard;
+		}
+		.context-menu:focus i {
+			color:$text-color-standard;
+		}
 	}
 
 	.navbar-right .card-context{
@@ -150,11 +159,15 @@ wfm-notice{
 }
 
 .nav-context-menu .arrow-up{
-	border-bottom: 15px solid $white; 
+	border-bottom: 15px solid $white;
 }
 
 .active-context{
 	background: $gray012;
+}
+
+.active-context i{
+	color: $text-color-standard;
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
