@@ -225,7 +225,7 @@
 			personAbsenceSvc.removePersonAbsence(vm.scheduleDateMoment(), selectedPersonAbsences,
 				removeEntireCrossDayAbsence, trackId).then(function (result) {
 					vm.afterActionCallback(trackId, selectedPersonIdList);
-					notificationService.reportActionResult(commandInfo, selectedPersonAbsences, result);					
+					notificationService.reportActionResult(commandInfo, selectedPersonAbsences, result);
 				});
 		}
 
@@ -265,7 +265,7 @@
 
 			ActivityService.removeActivity(removeActivityForm).then(function (response) {
 				vm.afterActionCallback(trackId, personIds);
-				notificationService.reportActionResult(commandInfo, personActivities, response.data);			
+				notificationService.reportActionResult(commandInfo, personActivities, response.data);
 			});
 		}
 
@@ -349,7 +349,8 @@
 				SelectAgentsPerPageEnabled: toggleSvc.WfmTeamSchedule_SetAgentsPerPage_36230,
 				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
 				PrepareToRelease: toggleSvc.WfmTeamSchedule_PrepareForRelease_37752,
-				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744
+				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
+				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509
 			};
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
@@ -363,7 +364,7 @@
 			vm.permissionsAndTogglesLoaded = true;
 
 			vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled || vm.toggles.AddActivityEnabled || vm.toggles.RemoveActivityEnabled || vm.toggles.RemoveAbsenceEnabled || vm.toggles.SwapShiftEnabled;
-			
+
 			if (vm.toggles.PrepareToRelease) {
 				var template = $translate.instant('WFMReleaseNotification');
 				var moduleName = $translate.instant('MyTeam');
