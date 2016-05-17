@@ -13,17 +13,17 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 {
 	[EnabledBy(Toggles.ETL_SpeedUpAbsence_38301)]
-	public class AbsenceAnalyticsUpdater:
+	public class AnalyticsAbsenceUpdater:
 		IHandleEvent<AbsenceChangedEvent>,
 		IHandleEvent<AbsenceDeletedEvent>,
 		IRunOnHangfire
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(AbsenceAnalyticsUpdater));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsAbsenceUpdater));
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 
-		public AbsenceAnalyticsUpdater(IAbsenceRepository absenceRepository, IAnalyticsAbsenceRepository analyticsAbsenceRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository)
+		public AnalyticsAbsenceUpdater(IAbsenceRepository absenceRepository, IAnalyticsAbsenceRepository analyticsAbsenceRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository)
 		{
 			_absenceRepository = absenceRepository;
 			_analyticsAbsenceRepository = analyticsAbsenceRepository;

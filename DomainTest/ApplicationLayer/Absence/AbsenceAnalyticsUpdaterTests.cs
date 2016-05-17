@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Absence
 	[TestFixture]
 	public class AbsenceAnalyticsUpdaterTests
 	{
-		private AbsenceAnalyticsUpdater _target;
+		private AnalyticsAbsenceUpdater _target;
 		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private FakeAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 		private FakeAbsenceRepository _absenceRepository;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Absence
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_absenceRepository = new FakeAbsenceRepository();
 			_analyticsAbsenceRepository = new FakeAnalyticsAbsenceRepository();
-			_target = new AbsenceAnalyticsUpdater(_absenceRepository, _analyticsAbsenceRepository,  _analyticsBusinessUnitRepository);
+			_target = new AnalyticsAbsenceUpdater(_absenceRepository, _analyticsAbsenceRepository,  _analyticsBusinessUnitRepository);
 		}
 
 		[Test]

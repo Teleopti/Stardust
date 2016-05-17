@@ -251,7 +251,7 @@
     <Compile Include="ApplicationLayer\Preference\PreferenceChangedHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsSkillUpdater.cs" />
     <Compile Include="ApplicationLayer\Scenario\AnalyticsScenarioUpdater.cs" />
-    <Compile Include="ApplicationLayer\Absence\AbsenceAnalyticsUpdater.cs" />
+    <Compile Include="ApplicationLayer\Absence\AnalyticsAbsenceUpdater.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForAllReportableScenariosFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotification.cs" />

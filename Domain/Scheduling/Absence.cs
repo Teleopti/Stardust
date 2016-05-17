@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -54,9 +56,32 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _payrollCode = value; }
         }
 
-        #endregion
+		#endregion
 
-        public Absence()
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		{
+			var events = base.PopAllEvents(now, operation).ToList();
+			if (!operation.HasValue) return events;
+			switch (operation)
+			{
+				case DomainUpdateType.Insert:
+				case DomainUpdateType.Update:
+					events.Add(new AbsenceChangedEvent
+					{
+						AbsenceId = Id.GetValueOrDefault()
+					});
+					break;
+				case DomainUpdateType.Delete:
+					events.Add(new AbsenceDeletedEvent
+					{
+						AbsenceId = Id.GetValueOrDefault()
+					});
+					break;
+			}
+			return events;
+		}
+
+		public Absence()
             : base(false)
         {
         }
