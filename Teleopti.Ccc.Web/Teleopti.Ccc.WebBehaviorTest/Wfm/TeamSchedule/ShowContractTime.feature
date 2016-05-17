@@ -48,7 +48,8 @@ Scenario: Should be able to see contract time
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
 	And I selected agent 'John Smith'
-	And I open 'AddActivity' panel
+	And I click menu button in team schedule
+	And I click menu item 'AddActivity' in team schedule
 	And I set new activity as
 	| Field       | Value |
 	| Activity    | Phone |
