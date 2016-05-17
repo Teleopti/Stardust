@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tmpTimer.Enabled = false;
 
 			//if it disappears again in the designer
-			ribbonControlAdv1.QuickPanelVisible = true;
+			ribbonControlAdv1.QuickPanelVisible = true;	
 		}
 
 		private void checkSmsLinkLicense(IToggleManager toggleManager)
@@ -526,8 +526,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				checkPastePermissions, pasteFromClipboard, enablePasteOperation);
 
 			checkSmsLinkLicense(toggleManager);
-
-			toolStripButtonCalculateCascading.Visible = toggleManager.IsEnabled(Toggles.ResourcePlanner_CascadingSkills_38524);
 		}
 
 		private SchedulingScreenSettings loadSchedulingScreenSettings()
@@ -2573,6 +2571,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setupRequestPresenter();
 			setupRequestViewButtonStates();
 			releaseUserInterface(e.Cancelled);
+			toolStripButtonCalculateCascading.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_38524);
 			ResumeLayout(true);
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;

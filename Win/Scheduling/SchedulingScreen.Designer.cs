@@ -2558,10 +2558,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonCalculateCascading, true);
             this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonCalculateCascading, false);
             this.toolStripButtonCalculateCascading.Click += new System.EventHandler(this.toolStripButtonCalculateCascadingClick);
-            // 
-            // toolStripExLoadOptions
-            // 
-            this.ribbonControlAdv1.SetDescription(this.toolStripExLoadOptions, "");
+	        this.toolStripButtonCalculateCascading.Visible = false;
+			// 
+			// toolStripExLoadOptions
+			// 
+			this.ribbonControlAdv1.SetDescription(this.toolStripExLoadOptions, "");
             this.toolStripExLoadOptions.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStripExLoadOptions.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
             this.toolStripExLoadOptions.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
