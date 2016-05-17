@@ -1,9 +1,10 @@
-﻿using log4net;
-using Rhino.ServiceBus;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
+using log4net;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,13 +12,13 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.General;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
-	public class CalculateBadgeConsumer : ConsumerOf<CalculateBadgeMessage>
+#pragma warning disable 618
+	public class CalculateBadgeConsumer : IHandleEvent<CalculateBadgeMessage>, IRunOnServiceBus
+#pragma warning restore 618
 	{
-		private readonly IServiceBus _serviceBus;
 		private readonly ITeamGamificationSettingRepository _teamSettingsRepository;
 		private readonly IPushMessagePersister _msgPersister;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -30,8 +31,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 		private static readonly ILog logger = LogManager.GetLogger(typeof(CalculateBadgeConsumer));
 		private readonly IGlobalSettingDataRepository _globalSettingRep;
 		private readonly IPersonRepository _personRepository;
+		private readonly IEventPublisher _publisher;
 
-		public CalculateBadgeConsumer(IServiceBus serviceBus,
+		public CalculateBadgeConsumer(
 			ITeamGamificationSettingRepository teamSettingsRepository,
 			IPushMessagePersister msgRepository,
 			ICurrentUnitOfWorkFactory unitOfWorkFactory,
@@ -42,10 +44,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			INow now,
 			IRunningEtlJobChecker runningEtlJobChecker,
 			IGlobalSettingDataRepository globalSettingRep,
-			IPersonRepository personRepository
-			)
+			IPersonRepository personRepository, IEventPublisher publisher)
 		{
-			_serviceBus = serviceBus;
 			_teamSettingsRepository = teamSettingsRepository;
 			_msgPersister = msgRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -57,10 +57,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 			_runningEtlJobChecker = runningEtlJobChecker;
 			_globalSettingRep = globalSettingRep;
 			_personRepository = personRepository;
+			_publisher = publisher;
 		}
 
-		public void Consume(CalculateBadgeMessage message)
-		{			
+		public void Handle(CalculateBadgeMessage message)
+		{
+			var today = _now.LocalDateOnly();
+			var min = new DateTime(today.Date.Ticks, DateTimeKind.Unspecified).AddHours(5);
+			var max = new DateTime(today.Date.Ticks, DateTimeKind.Unspecified).AddHours(6);
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
+			var convertedTimeZone = TimeZoneInfo.ConvertTime(_now.LocalDateTime(), TimeZoneInfo.Local, timeZone );
+			if (!(convertedTimeZone >= min && convertedTimeZone <= max))
+			{
+				return;
+			}
+
+
+
 			if (logger.IsDebugEnabled)
 			{
 				logger.DebugFormat(
@@ -85,7 +98,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					TimeZoneCode = message.TimeZoneCode,
 					CalculationDate = message.CalculationDate
 				};
-				resendMessage(delayedMessage, utcNow.AddMinutes(5));
+				tryLater(delayedMessage);
 				return;
 			}
 
@@ -96,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				{
 					//error happens
 					logger.Info("No gamification setting applied to any team, no badge calculation will be done");
-					resendMessage(message);
+					//resendMessage(message);
 					return;
 				}
 				var settings = teamSettings.Select(t => t.GamificationSetting).Distinct();
@@ -137,8 +150,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						if (isRuleWithDifferentThreshold)
 						{
 							var newAwardedBadgesWithRankForAdherence =
-								_badgeWithRankCalculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-									adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId).ToList();
+								Enumerable.ToList<IAgentBadgeWithRankTransaction>(_badgeWithRankCalculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
+										adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId));
 							if (logger.IsDebugEnabled)
 							{
 								logger.DebugFormat("Total {0} agents will get new badge for adherence",
@@ -149,8 +162,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						else
 						{
 							var newAwardedBadgesForAdherence =
-								_calculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-									adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId).ToList();
+								Enumerable.ToList<IAgentBadgeTransaction>(_calculator.CalculateAdherenceBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
+										adherenceReportSetting.CalculationMethod, setting, message.LogOnBusinessUnitId));
 							if (logger.IsDebugEnabled)
 							{
 								logger.DebugFormat("Total {0} agents will get new badge for adherence", newAwardedBadgesForAdherence.Count);
@@ -164,8 +177,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						if (isRuleWithDifferentThreshold)
 						{
 							var newAwardedBadgesWithRankForAht =
-								_badgeWithRankCalculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
-									message.LogOnBusinessUnitId).ToList();
+								Enumerable.ToList<IAgentBadgeWithRankTransaction>(_badgeWithRankCalculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
+										message.LogOnBusinessUnitId));
 							if (logger.IsDebugEnabled)
 							{
 								logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesWithRankForAht.Count);
@@ -176,8 +189,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						else
 						{
 							var newAwardedBadgesForAht =
-								_calculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
-									message.LogOnBusinessUnitId).ToList();
+								Enumerable.ToList<IAgentBadgeTransaction>(_calculator.CalculateAHTBadges(agentsWithSetting, message.TimeZoneCode, calculateDate, setting,
+										message.LogOnBusinessUnitId));
 							if (logger.IsDebugEnabled)
 							{
 								logger.DebugFormat("Total {0} agents will get new badge for AHT", newAwardedBadgesForAht.Count);
@@ -191,9 +204,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						if (isRuleWithDifferentThreshold)
 						{
 							var newAwardedBadgesWithRankForAnsweredCalls =
-								_badgeWithRankCalculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
-									setting, message.LogOnBusinessUnitId)
-									.ToList();
+								Enumerable.ToList<IAgentBadgeWithRankTransaction>(_badgeWithRankCalculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode, calculateDate,
+										setting, message.LogOnBusinessUnitId));
 							if (logger.IsDebugEnabled)
 							{
 								logger.DebugFormat("Total {0} agents will get new badge for answered calls",
@@ -205,8 +217,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 						else
 						{
 							var newAwardedBadgesForAnsweredCalls =
-								_calculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode,
-									calculateDate, setting, message.LogOnBusinessUnitId).ToList();
+								Enumerable.ToList<IAgentBadgeTransaction>(_calculator.CalculateAnsweredCallsBadges(agentsWithSetting, message.TimeZoneCode,
+										calculateDate, setting, message.LogOnBusinessUnitId));
 							if (logger.IsDebugEnabled)
 							{
 								logger.DebugFormat("Total {0} agents will get new badge for answered calls",
@@ -218,13 +230,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 					uow.PersistAll();
 				}
 
-				if (_serviceBus == null) return;
-				resendMessage(message);
-
 			}
 		}
 
-		private void resendMessage(CalculateBadgeMessage message, DateTime resendTime)
+		private void tryLater(CalculateBadgeMessage message)
 		{
 			var newMessage = new CalculateBadgeMessage
 			{
@@ -234,29 +243,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 				TimeZoneCode = message.TimeZoneCode,
 				CalculationDate = message.CalculationDate.AddDays(1)
 			};
+			//**********************could be something or i dont know
+			//**************** need to fix it some other way
+			Thread.Sleep(5000);
 
-			_serviceBus.DelaySend(resendTime, newMessage);
+			_publisher.Publish(newMessage);
 
-			if (logger.IsDebugEnabled)
-			{
-				logger.DebugFormat(
-					"Delay Sending CalculateBadgeMessage (Id=\"{0}\") to Service Bus for Timezone=\"{1}\" on next calculation time={2:yyyy-MM-dd HH:mm:ss}",
-					newMessage.Identity, newMessage.TimeZoneCode, resendTime);
-			}
 		}
 
-		private void resendMessage(CalculateBadgeMessage message)
-		{
-			var today = _now.LocalDateOnly();
-			var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
+		//private void resendMessage1(CalculateBadgeMessage message)
+		//{
+		//	var today = _now.LocalDateOnly();
+		//	var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
+		//	var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
 
-			// Set badge calculation start at 5:00 AM
-			// Just hard code it now, the best solution is to trigger it from ETL
-			var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
+		//	// Set badge calculation start at 5:00 AM
+		//	// Just hard code it now, the best solution is to trigger it from ETL
+		//	var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
 
-			resendMessage(message, nextMessageShouldBeProcessed);
-		}
+		//	tryLater(message);
+		//}
 
 		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges,
 			IGamificationSetting setting, DateOnly calculateDate, BadgeType badgeType)

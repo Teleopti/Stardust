@@ -1,18 +1,18 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BadgeCalculationInitMessage : MessageWithLogOnContext
+	public class BadgeCalculationInitEvent :  EventWithInfrastructureContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 
 		///<summary>
 		/// Definies an identity for this message (typically the Id of the root this message refers to.
 		///</summary>
-		public override Guid Identity
+		public Guid Identity
 		{
 			get { return _messageId; }
 		}

@@ -1,13 +1,13 @@
 using System;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
-namespace Teleopti.Interfaces.Messages.General
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class CalculateBadgeMessage : MessageWithLogOnContext
+	public class CalculateBadgeMessage : EventWithInfrastructureContext
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 
-		public override Guid Identity
+		public Guid Identity
 		{
 			get { return _messageId; }
 		}

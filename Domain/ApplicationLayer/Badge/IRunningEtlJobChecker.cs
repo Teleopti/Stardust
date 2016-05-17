@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
+﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
 	public interface IRunningEtlJobChecker
 	{

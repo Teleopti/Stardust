@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
 	public interface IAgentBadgeCalculator
 	{

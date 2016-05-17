@@ -1,8 +1,8 @@
-﻿using Common.Logging;
-using System.Linq;
+﻿using System.Linq;
+using log4net;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
 	public class RunningEtlJobChecker : IRunningEtlJobChecker
 	{
