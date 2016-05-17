@@ -31,31 +31,24 @@ namespace Teleopti.Ccc.Domain.Cascading
 				{
 					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //ska vara true, true - fixa och lägg på test senare
 
-					//just hack for now
-					var stateHolder = _stateHolder();
-					var cascadingSkills = stateHolder.SchedulingResultState.CascadingSkills().ToArray();
+					var schedulingResult = _stateHolder().SchedulingResultState;
+					var cascadingSkills = schedulingResult.CascadingSkills().ToArray();
 					//TODO: hantera deletade skills?? (kanske inte behövs här)
 					foreach (var skillToMoveFrom in cascadingSkills)
 					{
-						var datetimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDate(date, date.AddDays(1), skillToMoveFrom.TimeZone);
-						var intervals = datetimePeriod.Intervals(TimeSpan.FromMinutes(skillToMoveFrom.DefaultResolution));
-						var skillStaffPeriodFromDic = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveFrom];
-						foreach (var interval in intervals)
+						var skillStaffPeriodFromDic = schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveFrom];
+						foreach (var interval in date.ToDateTimePeriod(skillToMoveFrom.TimeZone).Intervals(TimeSpan.FromMinutes(skillToMoveFrom.DefaultResolution)))
 						{
 							ISkillStaffPeriod skillStaffPeriodFrom;
 							if (!skillStaffPeriodFromDic.TryGetValue(interval, out skillStaffPeriodFrom))
 								continue;
-							var skillToMoveFromAbsoluteDifference = skillStaffPeriodFrom.AbsoluteDifference;
-							if (skillToMoveFromAbsoluteDifference <= 0)
+							var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
+							if (remainingOverstaff <= 0)
 								continue;
-							var remainingOverstaff = skillToMoveFromAbsoluteDifference;
-							foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity)))
+							foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && VirtualSkillContext.VirtualSkillGroupResult.BelongsToSameSkillGroup(skillToMoveFrom, x)))
 							{
-								var skillsInSameGroup = VirtualSkillContext.VirtualSkillGroupResult.SkillsInSameGroupAs(skillToMoveFrom);
-								if(!skillsInSameGroup.Contains(skillToMoveTo))
-									continue;
 								ISkillStaffPeriod skillStaffPeriodTo;
-								if (!stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo].TryGetValue(interval, out skillStaffPeriodTo))
+								if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo].TryGetValue(interval, out skillStaffPeriodTo))
 									continue;
 								var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 								if (skillToMoveToAbsoluteDifference >= 0)
