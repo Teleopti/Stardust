@@ -359,5 +359,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			lastSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
+
+
+		[Test]
+		public void ShouldNotMakeLowPrioSkillOverstaffed()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex_UseFromTestOnly(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillADay = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var skillB = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex_UseFromTestOnly(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 9, 0));
+			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var agent1 = new Person();
+			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { skillA, skillB });
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
+			ass1.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var agent2 = new Person();
+			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			agent2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] { skillA, skillB });
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
+			ass2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { skillADay, skillBDay });
+
+			Target.ForDay(dateOnly);
+
+			skillADay.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0.5);
+			skillBDay.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+		}
 	}
 }

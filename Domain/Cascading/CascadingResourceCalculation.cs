@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 								var skillToMoveFromAbsoluteDifference = skillStaffPeriodFrom.AbsoluteDifference;
 								if (skillToMoveFromAbsoluteDifference > 0)
 								{
+									var remainingOverstaff = skillToMoveFromAbsoluteDifference;
 									foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity)))
 									{
 										var skillsInSameGroup = VirtualSkillContext.VirtualSkillGroupResult.SkillsInSameGroupAs(skillToMoveFrom);
@@ -63,9 +64,15 @@ namespace Teleopti.Ccc.Domain.Cascading
 											var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 											if (skillToMoveToAbsoluteDifference < 0)
 											{
-												skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + skillToMoveFromAbsoluteDifference);
-												skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - skillToMoveFromAbsoluteDifference);
-												break;
+											
+												var maxResourceToMove = Math.Min(Math.Abs(skillToMoveToAbsoluteDifference), remainingOverstaff);
+												remainingOverstaff -= maxResourceToMove;
+
+												skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + maxResourceToMove);
+												skillStaffPeriodFrom.SetCalculatedResource65(skillStaffPeriodFrom.CalculatedResource - maxResourceToMove);
+
+												if (Math.Abs(remainingOverstaff) < 0.0000000000000001d)
+													break;
 											}
 										}
 									}
