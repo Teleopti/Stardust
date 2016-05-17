@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
@@ -35,6 +36,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 		public virtual void Handle(ActivityChangedEvent @event)
 		{
 			logger.Debug($"Consuming {nameof(ActivityChangedEvent)} for event id = {@event.ActivityId}.");
+			if (@event.ActivityId == Guid.Empty)
+				return;
 			var analyticsActivity =
 				_analyticsActivityRepository.Activities().FirstOrDefault(a => a.ActivityCode == @event.ActivityId);
 
