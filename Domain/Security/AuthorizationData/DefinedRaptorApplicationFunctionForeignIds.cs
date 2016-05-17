@@ -119,6 +119,7 @@
 		public const string AddIntradayAbsence = "0097";
 		public const string RemoveAbsence = "0098";
 		public const string AddActivity = "0099";
+		public const string AddPersonActivity = "0133";
 		public const string MoveActivity = "0100";
 		public const string SwapShifts = "0108";
 		public const string RemoveActivity = "0109";

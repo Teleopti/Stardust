@@ -14469,4 +14469,8 @@ Help us improve your experience by sending an error report</value>
     <value>Person assignment is not valid</value>
     <comment>Person assignment is not valid  (differ with PersonAssignmentIsNotValidDot by a dot...)</comment>
   </data>
+  <data name="AddPersonActivity" xml:space="preserve">
+    <value>Add Person Activity</value>
+    <comment>Add person activity permission name title</comment>
+  </data>
 </root>
