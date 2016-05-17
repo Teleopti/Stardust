@@ -1,5 +1,7 @@
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
@@ -52,6 +54,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var versions = Persister.LockAndGetVersions(person, "2016-05-11".Date(), "2016-05-11".Date());
 
 			versions.Single().Version.Should().Be(2);
+		}
+
+		[Test]
+		[SetCulture("fr-FR")]
+		public void ShouldWorkInFrance()
+		{
+			var date = new DateOnly(new DateTime(2016, 05, 17));
+			var versions = Persister.LockAndGetVersions(Guid.NewGuid(), date, date);
+
+			versions.Single().Version.Should().Be(1);
 		}
 	}
 }

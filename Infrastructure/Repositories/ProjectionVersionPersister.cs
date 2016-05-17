@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ProjectionVersion> LockAndGetVersions(Guid personId, DateOnly from, DateOnly to)
 		{
-			var dates = from.DateRange(to);
-			var dateString = string.Join(" UNION ", dates.Select(x => $"SELECT '{x.Date}'"));
+			var dates = from.DateRange(to).Select(x => x.Date.ToString("yyyy-MM-dd"));
+			var dateString = string.Join(" UNION ", dates.Select(x => $"SELECT '{x}'"));
 			_unitOfWork.Session().CreateSQLQuery(
 				$@"MERGE INTO [dbo].ProjectionVersion WITH (XLOCK) AS T  
 						USING (
@@ -50,11 +50,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetGuid("Person", personId)
 				.ExecuteUpdate();
 
+			var formattedFrom = from.Date.ToString("yyyy-MM-dd");
+			var formattedTo = from.Date.ToString("yyyy-MM-dd");
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(
 				$@"SELECT Date, Version 
 					FROM [dbo].ProjectionVersion WITH (NOLOCK) 
-					WHERE Date BETWEEN '{from}' AND '{to}'
+					WHERE Date BETWEEN '{formattedFrom}' AND '{formattedTo}'
 					AND Person = '{personId}'")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalVersion)))
 				.List<ProjectionVersion>();
