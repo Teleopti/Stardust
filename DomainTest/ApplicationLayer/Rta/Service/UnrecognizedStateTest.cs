@@ -1,9 +1,7 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -15,7 +13,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
-		public void ShouldAddStateCodeToDatabaseWhenNotRecognized()
+		public void ShouldAddStateCodeToDatabase()
 		{
 			var businesUnitId = Guid.NewGuid();
 			Database
@@ -32,12 +30,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.AddedStateCode.StateCode.Should().Be("newStateCode");
 		}
 
-		[Test, Ignore]
-		public void ShouldUseDefaultStateGroupIfStateCodeIsNotRecognized()
-		{
-			Assert.Fail();
-		}
+		[Test]
+		public void ShouldMapToDefaults()
+		{	
+			var inAdherence = Guid.NewGuid();
+			Database
+				.WithUser("usercode")
+				.WithRule(inAdherence, "logged out", Guid.Empty)
+				;
+			
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "new logged out state code"
+			});
 
+			Database.PersistedReadModel.RuleId.Should().Be(inAdherence);
+		}
+		
 		[Test]
 		public void ShouldAddStateCodeWithDescription()
 		{

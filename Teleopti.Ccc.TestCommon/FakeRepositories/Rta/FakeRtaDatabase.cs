@@ -5,6 +5,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -292,7 +293,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					).FirstOrDefault();
 				if (stateGroup == null)
 				{
-					stateGroup = new RtaStateGroup(name, false, true);
+					var isDefaultStateGroup = RtaStateGroupRepository.LoadAll().IsEmpty();
+					stateGroup = new RtaStateGroup(name, isDefaultStateGroup, true);
 					stateGroup.SetId(Guid.NewGuid());
 					stateGroup.SetBusinessUnit(_businessUnit);
 					stateGroup.IsLogOutState = isLoggedOutState;
@@ -354,6 +356,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
+		// Implementation details
 		public IFakeDataBuilder WithDefaultStateGroup()
 		{
 			var defaultStateGroup = RtaStateGroupRepository.LoadAll().SingleOrDefault(x => x.DefaultStateGroup);
@@ -367,7 +370,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		// Implementation details
 		public IFakeDataBuilder WithStateGroup(string statecode, string stateGroupName)
 		{
 			var stateGroup = new RtaStateGroup(stateGroupName, false, false);
@@ -403,7 +405,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				BusinessUnitId = _businessUnitId,
 				PlatformTypeId = new Guid(_platformTypeId),
 				StateCode = stateCode,
-				StaffingEffect = 0
+				StaffingEffect = 0,
+				OriginalDataSourceId = new ExternalUserStateForTest().SourceId
 			});
 			return this;
 		}
