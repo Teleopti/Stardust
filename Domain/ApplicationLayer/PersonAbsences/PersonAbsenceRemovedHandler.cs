@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 		}
 
 		[AsSystem]
-		public void Handle(PersonAbsenceRemovedEvent @event)
+		public virtual void Handle(PersonAbsenceRemovedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
 			{
@@ -38,17 +38,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 					@event.PersonId, @event.StartDateTime, @event.EndDateTime, @event.Timestamp);
 			}
 
-			var personRequest = _personRequestRepository.FindPersonRequestByRequestId(@event.AbsenceRequestId);
-			var absenceRequest = personRequest?.Request as IAbsenceRequest;
-			if (absenceRequest == null || !shouldProcessPersonRequest(personRequest))
-			{
-				return;
-			}
-			
 			using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
 
+				var personRequest = _personRequestRepository.FindPersonRequestByRequestId(@event.AbsenceRequestId);
+				var absenceRequest = personRequest?.Request as IAbsenceRequest;
+				if (absenceRequest == null || !shouldProcessPersonRequest(personRequest))
+				{
+					return;
+				}
+
+				_absenceRequestCancelService.CancelAbsenceRequest(absenceRequest);
+				unitOfWork.PersistAll();
+				
 				if (shouldUseWaitlisting(absenceRequest))
 				{
 					_waitlistProcessor.ProcessAbsenceRequestWaitlist(unitOfWork, absenceRequest.Period, absenceRequest.Person.WorkflowControlSet);
