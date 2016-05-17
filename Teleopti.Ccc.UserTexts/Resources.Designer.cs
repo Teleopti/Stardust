@@ -30423,6 +30423,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Unselect.
+        /// </summary>
+        public static string Unselect {
+            get {
+                return ResourceManager.GetString("Unselect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Unselected items.
         /// </summary>
         public static string UnselectedItems {
