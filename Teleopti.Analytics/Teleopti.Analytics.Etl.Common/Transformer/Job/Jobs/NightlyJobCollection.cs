@@ -74,7 +74,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new StagePermissionJobStep(jobParameters));
 			}
 			Add(new StageGroupPagePersonJobStep(jobParameters));
-			Add(new StageOvertimeJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyOvertime_38304))
+			{
+				Add(new StageOvertimeJobStep(jobParameters));
+			}
 			Add(new StageRequestJobStep(jobParameters));
 			Add(new SqlServerUpdateStatistics(jobParameters));
 
@@ -128,7 +131,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new BridgeQueueWorkloadJobStep(jobParameters));
 			Add(new DimGroupPageJobStep(jobParameters));
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
-			Add(new DimOvertimeJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyOvertime_38304))
+			{
+				Add(new DimOvertimeJobStep(jobParameters));
+			}
 
 			// FACT TABLES
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))

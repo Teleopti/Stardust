@@ -19,7 +19,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));          // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new StagePersonJobStep(jobParameters));
@@ -64,7 +63,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new StageGroupPagePersonJobStep(jobParameters));
 			}
-			Add(new StageOvertimeJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayOvertime_38304))
+			{
+				Add(new StageOvertimeJobStep(jobParameters));
+			}
+			
 			Add(new IntradayStageRequestJobStep(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
@@ -107,7 +110,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			}
 			Add(new DimWorkloadJobStep(jobParameters));
 			Add(new DimKpiJobStep(jobParameters));
-			Add(new DimOvertimeJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayOvertime_38304))
+			{
+				Add(new DimOvertimeJobStep(jobParameters));
+			}
 			Add(new ScorecardKpiJobStep(jobParameters));
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
