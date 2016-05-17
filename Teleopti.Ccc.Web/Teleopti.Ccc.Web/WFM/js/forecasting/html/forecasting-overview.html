@@ -94,59 +94,53 @@
 	</wfm-card>
 </wfm-card-list>
 
-<div ng-cloak class="modal-box">
-	<div ng-cloak ng-if="modalForecastingLaunch">
-		<div class="modalbg">
-			<div class="dialog">
-				<h1 class="modal-title" ng-if="modalForecastingInfo.forecastForAll">
-					{{ 'ForecastAll' | translate }}
-				</h1>
-				<h1 class="modal-title" ng-if="modalForecastingInfo.forecastForOneWorkload">
-					{{ 'ForecastDo' | translate }} <b>{{modalForecastingInfo.selectedWorkload.Name}}</b>
-				</h1>
-				<div class="modal-inner-content">
-					<div class="con-row">
-						<div class="con-flex"  ng-if="modalForecastingInfo.forecastForAll">
-							<label>{{ 'Scenario' | translate }}:</label>
-							<select class="scenario-select" ng-model="modalForecastingInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
-						</div>
-						<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>{{ 'ForecastPeriodLength' | translate }}.</div>
+<modal-dialog ng-cloak show="modalForecastingLaunch">
+	<h1 class="modal-title" ng-if="modalForecastingInfo.forecastForAll">
+		{{ 'ForecastAll' | translate }}
+	</h1>
+	<h1 class="modal-title" ng-if="modalForecastingInfo.forecastForOneWorkload">
+		{{ 'ForecastDo' | translate }} <b>{{modalForecastingInfo.selectedWorkload.Name}}</b>
+	</h1>
+	<div class="modal-inner-content">
+		<div class="con-row">
+			<div class="con-flex"  ng-if="modalForecastingInfo.forecastForAll">
+				<label>{{ 'Scenario' | translate }}:</label>
+				<select class="scenario-select" ng-model="modalForecastingInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
+			</div>
+			<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>{{ 'ForecastPeriodLength' | translate }}.</div>
 
-						<div ng-if="modalForecastingInfo.forecastForOneWorkload">
-							<div class="con-flex">
-								<label>{{ 'Scenario' | translate }}:</label>
-								<b> {{modalForecastingInfo.selectedScenario.Name}}</b>
-							</div>
-						</div>
-						<div class="con-flex"  ng-if="modalForecastingInfo.forecastForOneWorkload"></div>
-						<div class="con-flex split-3-1">
-							<label>{{'ForecastPeriod' | translate}}:</label><br/>
-							<div class="wfm-datepicker-wrap">
-								<div class="sub-header">
-									{{'From' | translate}}: <span class="startDate">{{period.startDate | date: "shortDate"}}</span>
-								</div>
-								<datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></datepicker>
-							</div>
-							<div class="wfm-datepicker-wrap">
-								<div class="sub-header">
-									{{'To' | translate}}: <span class="endDate">{{period.endDate | date: "shortDate"}}</span>
-								</div>
-								<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
-							</div>
-						</div>
-					</div>
-
+			<div ng-if="modalForecastingInfo.forecastForOneWorkload">
+				<div class="con-flex">
+					<label>{{ 'Scenario' | translate }}:</label>
+					<b> {{modalForecastingInfo.selectedScenario.Name}}</b>
 				</div>
-				<div class="modal-actions">
-					<aside>
-						<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</button>
-						<button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'ForecastDo' | translate }}</button>
-					</aside>
+			</div>
+			<div class="con-flex"  ng-if="modalForecastingInfo.forecastForOneWorkload"></div>
+			<div class="con-flex split-3-1">
+				<label>{{'ForecastPeriod' | translate}}:</label><br/>
+				<div class="wfm-datepicker-wrap">
+					<div class="sub-header">
+						{{'From' | translate}}: <span class="startDate">{{period.startDate | date: "shortDate"}}</span>
+					</div>
+					<datepicker ng-model="period.startDate" show-weeks="true" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateEndDate()"></datepicker>
+				</div>
+				<div class="wfm-datepicker-wrap">
+					<div class="sub-header">
+						{{'To' | translate}}: <span class="endDate">{{period.endDate | date: "shortDate"}}</span>
+					</div>
+					<datepicker ng-model="period.endDate" show-weeks="true" min-date="period.startDate" custom-class="setRangeClass(date, mode)" class="wfm-datepicker" ng-change="updateStartDate()"></datepicker>
 				</div>
 			</div>
 		</div>
+
 	</div>
-</div>
+	<div class="modal-actions">
+		<aside>
+			<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</button>
+			<button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(period)">{{ 'ForecastDo' | translate }}</button>
+		</aside>
+	</div>
+</modal-dialog>
 
 <modal-dialog show='modalModifyLaunch' infos='modalsInfos' ng-cloak>
 	<h1 class="modal-title">{{ 'Modify' | translate }}</h1>

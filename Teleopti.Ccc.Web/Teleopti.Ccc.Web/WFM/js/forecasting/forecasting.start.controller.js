@@ -498,7 +498,7 @@
 				        if (returnValue) return true;
 
 				        return !$scope.modalModifyInfo.shouldSetOverrideTasks
-                            && !$scope.modalModifyInfo.shouldSetOverrideTalkTime 
+                            && !$scope.modalModifyInfo.shouldSetOverrideTalkTime
                             && !$scope.modalModifyInfo.shouldSetOverrideAfterCallWork;
 				    } else {
 				        return true;
