@@ -257,8 +257,8 @@ define([
 	function _initSignalR() {
 		signalrhubs
 			.start()
-			.fail(function() {
-				errorview.display("SignalR failed to start");
+			.fail(function(error) {
+				errorview.display("SignalR failed to start. Error message: " + error);
 			});
 	}
 
