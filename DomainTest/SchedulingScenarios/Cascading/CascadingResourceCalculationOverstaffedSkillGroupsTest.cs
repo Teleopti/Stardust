@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMoveResourceFromLowestSkillGroupFirst()
 		{
 			var scenario = new Scenario("_");

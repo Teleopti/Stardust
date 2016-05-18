@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			var schedulingResult = _stateHolder().SchedulingResultState;
 			var cascadingSkills = schedulingResult.CascadingSkills().ToArray();
-			foreach (var skillToMoveFrom in cascadingSkills)
+			foreach (var skillToMoveFrom in cascadingSkills.Reverse())
 			{
 				var skillStaffPeriodFromDic = schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveFrom];
 				foreach (var interval in date.ToDateTimePeriod(skillToMoveFrom.TimeZone).Intervals(TimeSpan.FromMinutes(skillToMoveFrom.DefaultResolution)))
