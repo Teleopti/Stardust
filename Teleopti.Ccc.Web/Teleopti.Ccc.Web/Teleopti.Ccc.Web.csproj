@@ -670,6 +670,7 @@
     <Compile Include="Areas\People\Core\Providers\IPeopleSearchProvider.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
     <Compile Include="Areas\TeamSchedule\Core\MoveShiftLayerCommandHelper.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\AddPersonalActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\GetSchedulesForPeopleFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\MoveActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />

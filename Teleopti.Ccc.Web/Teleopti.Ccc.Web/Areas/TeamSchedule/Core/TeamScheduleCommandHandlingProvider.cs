@@ -74,6 +74,49 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public List<FailActionResult> AddPersonalActivity(AddPersonalActivityFormData input)
+		{
+			var permissions = new Dictionary<string, string>
+			{
+				{  DefinedRaptorApplicationFunctionPaths.AddPersonalActivity,  Resources.NoPermissionAddPersonalActivity}
+			};
+
+			var result = new List<FailActionResult>();
+			foreach (var personId in input.PersonIds)
+			{
+				var actionResult = new FailActionResult();
+				var person = _personRepository.Get(personId);
+				actionResult.PersonId = personId;
+				actionResult.Messages = new List<string>();
+
+				if (checkPermission(permissions, input.Date, person, actionResult.Messages))
+				{
+					var command = new AddPersonalActivityCommand
+					{
+						PersonId = personId,
+						PersonalActivityId = input.PersonalActivityId,
+						Date = input.Date,
+						StartTime = input.StartTime,
+						EndTime = input.EndTime,
+						TrackedCommandInfo =
+							input.TrackedCommandInfo != null
+								? input.TrackedCommandInfo
+								: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
+					};
+					_commandDispatcher.Execute(command);
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.Messages.AddRange(command.ErrorMessages);
+					}
+				}
+
+				if (actionResult.Messages.Any())
+					result.Add(actionResult);
+			}
+
+			return result;
+		}
+
 		public IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds)
 		{
 			var agents = _personRepository.FindPeople(agentIds);
@@ -205,6 +248,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 	public interface ITeamScheduleCommandHandlingProvider
 	{
 		List<FailActionResult> AddActivity(AddActivityFormData formData);		
+		List<FailActionResult> AddPersonalActivity(AddPersonalActivityFormData formData);		
 		IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds);
 		List<FailActionResult> RemoveActivity(RemoveActivityFormData input);
 		List<FailActionResult> MoveActivity(MoveActivityFormData input);

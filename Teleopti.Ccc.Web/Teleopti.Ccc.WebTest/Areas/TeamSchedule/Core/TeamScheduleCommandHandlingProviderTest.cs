@@ -7,7 +7,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -83,6 +82,62 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.ResetCalledCount();
 
 			Target.AddActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldInvokeAddPersonalActivityCommandHandleWithPermission()
+		{
+			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
+			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person2);
+
+			var date = new DateOnly(2016,4,16);
+
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity, person1, date);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity, person2, date);
+
+			var input = new AddPersonalActivityFormData
+			{
+				PersonIds = new[] { person1.Id.Value, person2.Id.Value },
+				PersonalActivityId = Guid.NewGuid(),
+				Date = date,
+				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0)
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			Target.AddPersonalActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldNotInvokeAddPersonalActivityCommandHandleWithoutPermission()
+		{
+			PermissionProvider.Enable();
+			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
+			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
+			PersonRepository.Has(person1);
+			PersonRepository.Has(person2);
+
+			var date = new DateOnly(2016,4,16);
+
+			var input = new AddPersonalActivityFormData
+			{
+				PersonIds = new[] { person1.Id.Value, person2.Id.Value },
+				PersonalActivityId = Guid.NewGuid(),
+				Date = date,
+				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0)
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+
+			Target.AddPersonalActivity(input);
 
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 		}
@@ -434,7 +489,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 	}
 
-	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>, IHandleCommand<RemoveActivityCommand>, IHandleCommand<MoveShiftLayerCommand>
+	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>, IHandleCommand<AddPersonalActivityCommand>, IHandleCommand<RemoveActivityCommand>, IHandleCommand<MoveShiftLayerCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>(); 
@@ -465,6 +520,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(MoveShiftLayerCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(AddPersonalActivityCommand command)
 		{
 			calledCount++;
 			commands.Add(command);

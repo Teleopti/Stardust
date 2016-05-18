@@ -23,6 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _commandHandlingProvider.AddActivity(input);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/AddPersonalActivity")]
+		public virtual List<FailActionResult> AddPersonalActivityCommand([FromBody]AddPersonalActivityFormData input)
+		{
+			return _commandHandlingProvider.AddPersonalActivity(input);
+		}
+
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/RemoveActivity")]
 		public virtual List<FailActionResult> RemoveActivityCommand([FromBody]RemoveActivityFormData input)
 		{
