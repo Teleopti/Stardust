@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Analytics;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
@@ -80,7 +82,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_personRepository.Add(p2);
 			_personRepository.Add(p3);
 
-			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined());
+			var auow = MockRepository.GenerateMock<ICurrentAnalyticsUnitOfWork>();
+			auow.Stub(a => a.Current()).Return(new FakeUnitOfWork());
+
+			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined(), auow);
 		}
 
 		[Test]

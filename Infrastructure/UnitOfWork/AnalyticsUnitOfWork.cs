@@ -20,17 +20,23 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly AnalyticsUnitOfWorkContext _context;
 		private readonly ISession _session;
 		private readonly NHibernateFilterManager _filterManager;
+		protected readonly Lazy<AggregateRootInterceptor> Interceptor;
 		private ITransaction _transaction;
 		private IInitiatorIdentifier _initiator;
+		private readonly ICurrentTransactionHooks _transactionHooks;
+		private TransactionSynchronization _transactionSynchronization;
 
 		protected internal AnalyticsUnitOfWork(
 			AnalyticsUnitOfWorkContext context,
-			ISession session)
+			ISession session,
+			ICurrentTransactionHooks transactionHooks)
 		{
 			_context = context;
 			_context.Set(this);
 			_session = session;
 			_session.FlushMode = FlushMode.Never;
+			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
+			Interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor)_session.GetSessionImplementation().Interceptor);
 			_filterManager = new NHibernateFilterManager(session);
 		}
 
@@ -87,6 +93,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void AfterSuccessfulTx(Action func)
 		{
 			transactionEnsure();
+			_transactionSynchronization.RegisterForAfterCompletion(func);
 		}
 
 		public IEnumerable<IRootChangeInfo> PersistAll()
@@ -98,9 +105,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_initiator = initiator;
 
+			IEnumerable<IRootChangeInfo> modifiedRoots;
 			try
 			{
 				Flush();
+				modifiedRoots = Interceptor.Value.ModifiedRoots.ToList();
 				transactionCommit();
 			}
 			catch (TooManyActiveAgentsException exception)
@@ -119,7 +128,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				PreserveStack.ForInnerOf(ex);
 				throw new DataSourceException("Cannot commit transaction! ", ex);
 			}
-			return Enumerable.Empty<IRootChangeInfo>();
+			finally
+			{
+				Interceptor.Value.Clear();
+			}
+			return modifiedRoots;
 		}
 
 		private void persistExceptionHandler(Exception ex)
@@ -142,6 +155,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				throw new CouldNotCreateTransactionException("Cannot start transaction", transactionException);
 			}
+
+			_transactionSynchronization = new TransactionSynchronization(_transactionHooks, Interceptor);
+			_transaction.RegisterSynchronization(_transactionSynchronization);
 		}
 
 		private void transactionCommit()
@@ -208,6 +224,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				transactionRollback();
 				_session.Dispose();
 			}
+
+			if (Interceptor.IsValueCreated)
+				Interceptor.Value.Clear();
 		}
 
 		public override bool Equals(object obj)

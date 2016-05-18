@@ -686,6 +686,7 @@
     <Compile Include="Infrastructure\DomainObjectNotInFilterException.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
     <Compile Include="Infrastructure\IAnalyticsUnitOfWorkFactory.cs" />
+    <Compile Include="Infrastructure\ICurrentAnalyticsUnitOfWork.cs" />
     <Compile Include="Infrastructure\ICurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\ICurrentUnitOfWork.cs" />
     <Compile Include="Infrastructure\IDeleteTag.cs" />

@@ -10,6 +10,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {

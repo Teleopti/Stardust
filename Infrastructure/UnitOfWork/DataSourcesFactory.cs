@@ -89,7 +89,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				statFactory = new AnalyticsUnitOfWorkFactory(
 					buildSessionFactory(statConfiguration),
 					statConfiguration.Properties[Environment.ConnectionString], 
-					tenant);
+					tenant, 
+					_transactionHooks, 
+					_updatedBy);
 			}
 
 			var readModel = new ReadModelUnitOfWorkFactory(_httpContext, applicationConnectionString);

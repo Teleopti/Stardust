@@ -432,7 +432,6 @@
     <Compile Include="Repositories\SkillAreaRepository.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Analytics\CurrentAnalyticsUnitOfWork.cs" />
-    <Compile Include="Analytics\ICurrentAnalyticsUnitOfWork.cs" />
     <Compile Include="Rta\MappingReader.cs" />
     <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />
     <Compile Include="Repositories\PlanningPeriodRepository.cs" />

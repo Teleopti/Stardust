@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -28,10 +29,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				IEventPublisher eventPublisher,
 				IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 				IAnalyticsTeamRepository analyticsTeamRepository,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
 				: base(
 					personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
-					analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined)
+					analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined, currentAnalyticsUnitOfWork)
 		{ }
 
 		[AnalyticsUnitOfWork]
@@ -53,10 +54,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IEventPublisher eventPublisher,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsTeamRepository analyticsTeamRepository,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
-				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined)
+				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined, currentAnalyticsUnitOfWork)
 		{ }
 
 		[AnalyticsUnitOfWork]
@@ -78,6 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
+		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
@@ -85,7 +87,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IEventPublisher eventPublisher,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, 
 			IAnalyticsTeamRepository analyticsTeamRepository, 
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -94,6 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsTeamRepository = analyticsTeamRepository;
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
+			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -208,14 +212,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					}
 				}
 			}
-			_eventPublisher.Publish(new AnalyticsPersonCollectionChangedEvent
+			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
-				InitiatorId = @event.InitiatorId,
-				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
-				LogOnDatasource = @event.LogOnDatasource,
-				SerializedPeople = @event.SerializedPeople,
-				Timestamp = @event.Timestamp
+				_eventPublisher.Publish(new AnalyticsPersonCollectionChangedEvent
+				{
+					InitiatorId = @event.InitiatorId,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
+					SerializedPeople = @event.SerializedPeople,
+					Timestamp = @event.Timestamp
+				});
 			});
+			
 		}
 
 		private void publishSkillChangeEvent(PersonCollectionChangedEvent @event, Interfaces.Domain.IPersonPeriod personPeriod, List<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)

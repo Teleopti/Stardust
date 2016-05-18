@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void AfterSuccessfulTx(Action func)
 		{
-			throw new NotImplementedException();
+			func();
 		}
 	}
 }

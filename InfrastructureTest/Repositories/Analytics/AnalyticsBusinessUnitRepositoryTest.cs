@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Infrastructure;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
