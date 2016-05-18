@@ -53,9 +53,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyDivideActivity()
         {
-            DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
             IDividedActivityData dividedActivity = 
-                _target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+                _target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 
             VerifyPersonSkillResourcesData(dividedActivity);
 
@@ -92,8 +91,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					{skill, SkillDayFactory.PrepareSkillDay(skill, periodToCalculate.StartDateTime, 0)}
 				};
 			var dividedActivity = _target.DivideActivity(skillStaffPeriods,
-			                       new AffectedPersonSkillService(new DateOnlyPeriod(personPeriodStart, personPeriodStart),
-			                                                      new[] {skill}), skill.Activity, _resources,
+			                       new AffectedPersonSkillService(new[] {skill}), skill.Activity, _resources,
 								   periodToCalculate);
 
 			var resourceMatrix = dividedActivity.KeyedSkillResourceEfficiencies;
@@ -113,35 +111,31 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(_testContainer.AllSkills[0],
                           new SkillStaffPeriodDictionary(_testContainer.AllSkills[0]) { { period, SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), ServiceAgreement.DefaultValues()) } });
 
-            DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
             _target = new ActivityDivider();
 
             mocks.ReplayAll();
 
-			_target.DivideActivity(skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+			_target.DivideActivity(skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
         }
 
         [Test]
         public void VerifyWithoutClosedSkillStaffPeriod()
         {
-            DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
-
             _target = new ActivityDivider();
 
             IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(3, result.TargetDemands.Count);
         }
 
         [Test]
         public void VerifyWithClosedSkillStaffPeriod()
         {
-            DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
             ISkillStaffPeriodDictionary dictionary = _skillStaffPeriods[_testContainer.AllSkills[0]];
             dictionary.Clear();
             _target = new ActivityDivider();
             IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
             Assert.AreEqual(2, result.TargetDemands.Count);
         }
 
@@ -171,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 
 			IDividedActivityData result =
-				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(datePeriod, _testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
+				_target.DivideActivity(_skillStaffPeriods, new AffectedPersonSkillService(_testContainer.AllSkills), _testContainer.ContainedActivities["Phone"], _resources, _inPeriod);
 			Assert.AreEqual(2, result.TargetDemands.Count);
 		}
 

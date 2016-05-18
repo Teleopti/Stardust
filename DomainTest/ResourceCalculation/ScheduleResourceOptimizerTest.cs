@@ -32,9 +32,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
             _startTime = new DateTime(2008, 1, 2, 10, 00, 00, DateTimeKind.Utc);
             _inPeriod = DateTimeFactory.CreateDateTimePeriod(_startTime, new DateTime(2008, 1, 2, 10, 15, 00, DateTimeKind.Utc));
-            DateOnlyPeriod datePeriod = new DateOnlyPeriod(new DateOnly(_inPeriod.StartDateTime), new DateOnly(_inPeriod.EndDateTime));
             _personAssignmentListContainer = PersonAssignmentFactory.CreatePersonAssignmentListForActivityDividerTest();
-            _personSkillService = new AffectedPersonSkillService(datePeriod, _personAssignmentListContainer.AllSkills);
+            _personSkillService = new AffectedPersonSkillService(_personAssignmentListContainer.AllSkills);
             _skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills);
             _activityDivider = _mocks.StrictMock<IActivityDivider>();
 			_personSkillProvider = new PersonSkillProvider();
