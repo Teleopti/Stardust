@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 		public CascadingResourceCalculation Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMoveResourceOnlyWithinSkillGroup()
 		{
 			var scenario = new Scenario("_");
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldMoveResourceFromLowestSkillGroupFirst()
 		{
 			var scenario = new Scenario("_");
