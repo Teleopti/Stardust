@@ -48,6 +48,7 @@ Scenario: See adherence percentage when call center is in Hawaii
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
 
+@OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
 Scenario: See adherence details when call center is in Hawaii
 	Given the time is '2014-10-07 13:00'
 	And rta is ready
