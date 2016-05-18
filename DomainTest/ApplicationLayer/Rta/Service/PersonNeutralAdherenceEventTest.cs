@@ -143,7 +143,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Have.Count.EqualTo(1);
 		}
 
-
 		[Test]
 		public void ShouldPublishWhenAlarmMappingIsMissing()
 		{
@@ -152,6 +151,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-19 8:00", "2015-03-19 9:00")
+				.WithRule()
+				.WithRule("phone", phone, 0, Adherence.In)
+				;
+			Now.Is("2015-03-19 8:01");
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "someOtherCode"
+			});
+
+			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>()
+				.Where(x => x.Timestamp == "2015-03-19 8:01".Utc()).Should().Have.Count.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldPublishForUnrecognizedState()
+		{
+			var personId = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			Database
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, phone, "2015-03-19 8:00", "2015-03-19 9:00")
+				.WithRule("admin", phone, 0, Adherence.Neutral)
 				.WithRule("phone", phone, 0, Adherence.In)
 				;
 			Now.Is("2015-03-19 8:01");
