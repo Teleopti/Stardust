@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AddPersonalActivityCommand : IErrorAttachedCommand
+	public class AddPersonalActivityCommand : IErrorAttachedCommand, ITrackableCommand
 	{
 		public Guid PersonId { get; set; }
 		public DateOnly Date { get; set; }
