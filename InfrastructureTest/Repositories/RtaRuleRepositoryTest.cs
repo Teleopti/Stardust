@@ -42,14 +42,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 	    [Test]
-	    public void ShouldBeAlarmByDefault()
+	    public void ShouldNotBeAlarmByDefault()
 	    {
 		    var rule = new RtaRule(new Description("."), Color.AliceBlue, TimeSpan.Zero, 0);
 			PersistAndRemoveFromUnitOfWork(rule);
 			
 			var loaded = new RtaRuleRepository(UnitOfWork).LoadAll().Single();
 
-			loaded.IsAlarm.Should().Be.True();
+			loaded.IsAlarm.Should().Be.False();
 	    }
 
 	    [Test]
