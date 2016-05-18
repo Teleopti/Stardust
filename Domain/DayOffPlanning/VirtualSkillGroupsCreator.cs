@@ -125,11 +125,5 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				GetPersonsForSkillGroupKey(key).Count() : 
 				int.MaxValue;
 		}
-
-		public bool BelongsToSameSkillGroup(ISkill skill1, ISkill skill2)
-		{
-			return _skillGroupKeyUniqueNameDic.Keys
-				.Any(skillGroupKey => skillGroupKey.Contains(skill1.Id.Value.ToString()) && skillGroupKey.Contains(skill2.Id.Value.ToString()));
-		}
 	}
 }

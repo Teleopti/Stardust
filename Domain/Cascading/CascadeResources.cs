@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -33,8 +32,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 					if (remainingOverstaff <= 0)
 						continue;
 					foreach (var skillToMoveTo in cascadingSkills
-						.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && !skillToMoveFrom.Equals(x) && VirtualSkillContext.VirtualSkillGroupResult.BelongsToSameSkillGroup(skillToMoveFrom, x)))
+						.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && !skillToMoveFrom.Equals(x)))
 					{
+						var resourcesInGroup = resourcesInSkillGroup(skillToMoveFrom.Activity, skillToMoveTo, skillToMoveFrom, interval);
+						//TODO: perf: hoppa ur ifall resourceingroup är 0. fixar sen
 						ISkillStaffPeriodDictionary skillStaffPeriodToDic;
 						if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveTo, out skillStaffPeriodToDic))
 							continue;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 						if (skillToMoveToAbsoluteDifference >= 0)
 							continue;
-						var resourcesToMove = Math.Min(Math.Abs(skillToMoveToAbsoluteDifference), remainingOverstaff);
+						var resourcesToMove = Math.Min(Math.Min(Math.Abs(skillToMoveToAbsoluteDifference), remainingOverstaff), resourcesInGroup);
 						skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, resourcesToMove);
 
 						remainingOverstaff -= resourcesToMove;
@@ -52,6 +53,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 					}
 				}
 			}
+		}
+
+		private static double resourcesInSkillGroup(IActivity activity, ISkill skill1, ISkill skill2, DateTimePeriod period)
+		{
+			//TODO: Fix better and put it elsewhere! No need to do "full" affectedResources call
+			return ResourceCalculationContext.Fetch()
+				.AffectedResources(activity, period).Where(x => x.Key.Contains(skill1.Id.Value.ToString()) && x.Key.Contains(skill2.Id.Value.ToString()))
+				.Sum(x => x.Value.Resource);
 		}
 	}
 }

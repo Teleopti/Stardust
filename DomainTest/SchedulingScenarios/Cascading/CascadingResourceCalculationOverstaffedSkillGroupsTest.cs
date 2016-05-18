@@ -166,34 +166,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore]
-		public void ShouldOnlyMoveResourcesToSkillsInSameSkillGroup()
+		[Test]
+		public void ShouldNotMoveMoreResourcesThanAvailableInSameSkillGroup()
 		{
-			/*   Skill A, B
-			 *   
-			 *   Agent1: A, B
-			 *   Agent2: A
-			 *   Agent3: A
-			 *  
-			 *   Behov a: 1
-			 *   behov b: 2
-			 *  
-			 *   -> efter resursberäkning primary 
-			 *   
-			 *   a: 2
-			 *   b: -2
-			 *   
-			 *   -> efter snurr innan fix
-			 *   
-			 *   a: 0
-			 *   b: 0
-			 *   
-			 *   -> efer snurr efter fix
-			 *   
-			 *   a: 1
-			 *   b: -1
-			 */
-
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;

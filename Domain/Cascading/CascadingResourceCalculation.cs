@@ -44,6 +44,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 					{
 						//ska vara true, true (?) - fixa och lägg på test senare
 						_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
+					}
+				}
+				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider()).Create())
+				{
+					foreach (var date in period.DayCollection())
+					{
 						_cascadeResources.Execute(date);
 					}
 				}
