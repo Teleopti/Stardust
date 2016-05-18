@@ -33,21 +33,21 @@
 						isArray: true
 					}
 				}).query({
-					alarmTimeDesc: data.alarmTimeDesc,
 					ids: data.siteIds,
+					alarmTimeDesc: data.alarmTimeDesc,
 					inAlarmOnly: data.inAlarmOnly
 				}).$promise;
 			};
 
-			this.getStatesForTeams = function(data) {
+			this.getStatesForTeams = function (data) {
 				return $resource('../api/Agents/GetStatesForTeams', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
 					}
 				}).query({
-					alarmTimeDesc: data.alarmTimeDesc,
 					ids: data.teamIds,
+					alarmTimeDesc: data.alarmTimeDesc,
 					inAlarmOnly: data.inAlarmOnly
 				}).$promise;
 			};

@@ -99,18 +99,28 @@ describe('RtaAgentsCtrl for teams', function() {
 			.respond(function() {
 				return [200, agents]
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495")
+		$httpBackend.whenGET("../api/Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
 			.respond(function() {
 				return [200, states]
 			});
-		$httpBackend.whenGET("../api/Agents/GetStates?teamId=34590a63-6331-4921-bc9f-9b5e015ab495")
-			.respond(function() {
+
+		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495")
+			.respond(function () {
+				return [200, states]
+			});
+		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?alarmTimeDesc=true&ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
+			.respond(function () {
 				return [200, states]
 			});
 		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?ids=34590a63-6331-4921-bc9f-9b5e015ab495&ids=103afc66-2bfa-45f4-9823-9e06008d5062")
 			.respond(function() {
 				return [200, states]
 			});
+		$httpBackend.whenGET("../api/Agents/GetStatesForTeams?alarmTimeDesc=true&ids=34590a63-6331-4921-bc9f-9b5e015ab495&ids=103afc66-2bfa-45f4-9823-9e06008d5062&inAlarmOnly=true")
+			.respond(function() {
+				return [200, states]
+			});
+
 		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
 			return [200, {
 				IsEnabled: false
@@ -235,6 +245,7 @@ describe('RtaAgentsCtrl for teams', function() {
 		states[1].State = "In Call";
 
 		createController();
+		scope.$apply("agentsInAlarm = false");
 		scope.$apply("filterText = 'Caper'");
 		states[1].State = "Ready";
 		$interval.flush(5000);
@@ -304,10 +315,6 @@ describe('RtaAgentsCtrl for teams', function() {
 
 	it('should poll states in alarm only', function() {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
-		$httpBackend.expectGET("../api/Agents/GetStatesForTeams?alarmTimeDesc=true&ids=34590a63-6331-4921-bc9f-9b5e015ab495&inAlarmOnly=true")
-			.respond(function() {
-				return [200, states]
-			});
 		$controller('RtaAgentsCtrl', {
 			$scope: scope
 		});

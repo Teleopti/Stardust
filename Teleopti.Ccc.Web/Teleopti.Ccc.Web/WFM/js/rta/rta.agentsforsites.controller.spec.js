@@ -91,10 +91,6 @@ describe('RtaAgentsCtrl for sites', function() {
 			.respond(function() {
 				return [200, agents];
 			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-			.respond(function() {
-				return [200, states];
-			});
 		$httpBackend.whenGET("../api/Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(function() {
 				return [200, [agents[0]]];
@@ -103,12 +99,29 @@ describe('RtaAgentsCtrl for sites', function() {
 			.respond(function() {
 				return [200, agents];
 			});
+
 		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
 			.respond(function() {
 				return [200, [states[0]]];
 			});
+		$httpBackend.whenGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&inAlarmOnly=true")
+			.respond(function () {
+				return [200, [states[0]]];
+			});
 		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=6a21c802-7a34-4917-8dfd-9b5e015ab461")
 			.respond(function() {
+				return [200, states];
+			});
+		$httpBackend.whenGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461&inAlarmOnly=true")
+			.respond(function() {
+				return [200, states];
+			});
+		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461")
+			.respond(function () {
+				return [200, states];
+			});
+		$httpBackend.whenGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461&inAlarmOnly=true")
+			.respond(function () {
 				return [200, states];
 			});
 		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
@@ -253,6 +266,7 @@ describe('RtaAgentsCtrl for sites', function() {
 		}];
 
 		createController();
+		scope.$apply("agentsInAlarm = false");
 		scope.$apply("filterText = 'Ashley'");
 
 		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
@@ -278,10 +292,6 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	it('should poll states in alarm only for sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
-		$httpBackend.expectGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&inAlarmOnly=true")
-			.respond(function() {
-				return [200, states]
-			});
 		$controller('RtaAgentsCtrl', {
 			$scope: scope
 		});

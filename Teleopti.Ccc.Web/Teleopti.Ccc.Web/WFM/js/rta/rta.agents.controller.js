@@ -68,7 +68,7 @@
 				};
 
 				$scope.$watch('filterText', filterData);
-				$scope.$watch('agentsInAlarm', function(newValue, oldValue) {
+				$scope.$watch('agentsInAlarm', function (newValue, oldValue) {
 					if (newValue !== oldValue) {
 						updateStates();
 						filterData();
