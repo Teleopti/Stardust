@@ -27,9 +27,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldEnqueueOnDefaultQueue()
 		{
+			var before = Hangfire.NumberOfJobsInQueue(QueueName.Default);
 			Publisher.Publish(new NormalPriorityEvent());
 
-			Hangfire.NumberOfJobsInQueue(QueueName.Default).Should().Be(1);
+			Hangfire.NumberOfJobsInQueue(QueueName.Default).Should().Be(before+1);
 			//Hangfire.NumberOfJobsInQueue(QueueName.HighPriority).Should().Be(0);
 		}
 
