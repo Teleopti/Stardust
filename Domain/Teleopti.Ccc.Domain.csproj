@@ -268,6 +268,7 @@
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Cascading\CascadeResources.cs" />
     <Compile Include="Cascading\CascadingResourceCalculation.cs" />
+    <Compile Include="Collection\SkillStaffPeriodDictionaryExtensions.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
     <Compile Include="Forecasting\SkillStaffPeriodExtensions.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
