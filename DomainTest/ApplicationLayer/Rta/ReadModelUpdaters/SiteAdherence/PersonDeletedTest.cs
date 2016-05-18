@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 {
 	[ReadModelUpdaterTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_DeletedPersons_36041)]
 	public class PersonDeletedTest
 	{
 		public FakeSiteOutOfAdherenceReadModelPersister Persister;

@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 {
 	[TestFixture]
 	[ReadModelUpdaterTest]
-	[Toggle(Toggles.RTA_DeletedPersons_36041)]
 	public class DeletedPersonTest
 	{
 		public AgentStateReadModelUpdater Target;

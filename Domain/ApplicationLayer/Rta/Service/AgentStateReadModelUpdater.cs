@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelPersister = agentStateReadModelPersister;
 		}
 
-		[EnabledBy(Toggles.RTA_DeletedPersons_36041)]
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{

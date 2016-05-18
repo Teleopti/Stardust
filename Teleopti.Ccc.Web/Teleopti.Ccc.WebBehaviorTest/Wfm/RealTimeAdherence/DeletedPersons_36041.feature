@@ -27,7 +27,6 @@ Background:
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 
-@OnlyRunIfEnabled('RTA_DeletedPersons_36041')
 Scenario: Exclude deleted agents
 	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
