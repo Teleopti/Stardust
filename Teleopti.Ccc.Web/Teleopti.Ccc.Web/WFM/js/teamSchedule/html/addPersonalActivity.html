@@ -1,0 +1,15 @@
+﻿<div class="add-personal-activity">
+	<div class="sidenav-header">{{'AddActivity'|translate}}</div>
+	<md-content class="command-panel-content" layout-padding>
+		<form name="newPersonalActivityForm">
+			<h3>{{'PersonalActivity'|translate}}: </h3>
+			<div class="con-row">
+				<select class="activity-selector" ng-model="vm.selectedActivityId" required>
+					<option class="activity-option" value="" disabled selected="">{{'SelectAnActivity'|translate}}</option>
+					<option class="activity-option-item" value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
+				</select>
+			</div>
+		</form>
+	</md-content>
+</div>
+

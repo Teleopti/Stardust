@@ -39,10 +39,17 @@
 			<schedule-table select-mode="vm.scheduleTableSelectMode" selected-date="vm.scheduleDate"/>
 		</div>
 
+		<md-sidenav>
+			<teamschedule-command-container></teamschedule-command-container>
+		</md-sidenav>
+
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">
 			<add-absence ng-if="vm.toggleCurrentSidenav()" default-date-time="vm.earliestStartTime" permissions="vm.permissions" actions-after-absence-apply="vm.afterActionCallback(trackId, personIds)" tabindex="100"></add-absence>
 		</md-sidenav>
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-activity">
+			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" tabindex="101" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()" actions-after-activity-apply="vm.afterActionCallback(trackId, personIds)"></add-activity-panel>
+		</md-sidenav>
+		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-personal-activity">
 			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" tabindex="101" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()" actions-after-activity-apply="vm.afterActionCallback(trackId, personIds)"></add-activity-panel>
 		</md-sidenav>
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="move-activity">

@@ -1425,11 +1425,13 @@
     <Content Include="WFM\js\teamSchedule\html\addabsencepanel.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityPanel.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\moveActivity.html" />
     <Content Include="WFM\js\teamSchedule\html\removeAbsenceConfirmDialog.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduleCommand.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
+    <Content Include="WFM\js\teamSchedule\html\teamscheduleCommandContainer.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
     <Content Include="WFM\js\teamSchedule\html\time-range-picker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.removeAbsenceConfirmDialog.js" />
@@ -1439,9 +1441,13 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addPersonalActivity.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addPersonalActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandConfirmDialog.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.moveActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
