@@ -53,6 +53,7 @@ Scenario: Should adherence percentage with neutral adherence
 	And I click on an agent state
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 100%
 
+@ignore
 Scenario: Should see adherence details with neutral adherence
 	Given the time is '2015-03-02 00:00:00'
 	And rta is ready
