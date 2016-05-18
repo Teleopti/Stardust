@@ -12,6 +12,7 @@ Background:
 	And there is queue statistics for 'Queue1'
 	And there is a workload 'TheWorkload1' with skill 'TheSkill1' and queue 'Queue1'
 
+@ignore
 Scenario: Forecast all
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
@@ -21,6 +22,7 @@ Scenario: Forecast all
 	Then there is forecast data for default period for 'TheWorkload1'
 	And there is forecast data for default period for 'TheWorkload2'
 
+@ignore
 Scenario: Forecast one workload
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data
@@ -59,6 +61,7 @@ Scenario: Keep campaigns when reforecasting
 	And forecast result has loaded
 	And I should see that the total calls for the first day has the double forecasted value 
 
+@ignore
 Scenario: Save forecast to scenario
 	Given there is a scenario
 	| Field         | Value        |
