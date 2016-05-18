@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {

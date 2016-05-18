@@ -236,17 +236,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				personPeriod.PersonSkillCollection.Where(
 					a => !a.Active && analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id)))
 					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId).ToList();
-
-			_eventPublisher.Publish(new AnalyticsPersonPeriodSkillsChangedEvent
+			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
-				AnalyticsPersonPeriodId = updatedAnalyticsPersonPeriod.PersonId,
-				AnalyticsBusinessUnitId = updatedAnalyticsPersonPeriod.BusinessUnitId,
-				AnalyticsActiveSkillsId = activeSkills,
-				AnalyticsInactiveSkillsId = inactiveSkills,
-				InitiatorId = @event.InitiatorId,
-				LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
-				LogOnDatasource = @event.LogOnDatasource,
-				Timestamp = @event.Timestamp
+				_eventPublisher.Publish(new AnalyticsPersonPeriodSkillsChangedEvent
+				{
+					AnalyticsPersonPeriodId = updatedAnalyticsPersonPeriod.PersonId,
+					AnalyticsBusinessUnitId = updatedAnalyticsPersonPeriod.BusinessUnitId,
+					AnalyticsActiveSkillsId = activeSkills,
+					AnalyticsInactiveSkillsId = inactiveSkills,
+					InitiatorId = @event.InitiatorId,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
+					Timestamp = @event.Timestamp
+				});
 			});
 		}
 

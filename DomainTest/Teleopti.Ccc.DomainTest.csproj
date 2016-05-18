@@ -226,7 +226,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\UpdatePersonGroupsAnalyticsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\UpdateSkillAnalyticsHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\PersonPeriodAnalyticsUpdaterHandlerTests.cs" />
+    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceTests\AnalyticsAbsenceUpdaterTests.cs" />
