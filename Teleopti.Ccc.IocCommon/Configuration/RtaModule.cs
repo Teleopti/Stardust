@@ -61,19 +61,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateEventPublisher>().SingleInstance().As<IStateEventPublisher>();
 			builder.RegisterType<ActivityEventPublisher>().SingleInstance().As<IActivityEventPublisher>();
 
-			if (_config.Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236))
-			{
-				builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
-				builder.RegisterType<CurrentBelongsToDateFromPersonsCurrentTime>()
-					.As<ICurrentBelongsToDate>()
-					.SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<CurrentBelongsToDateFromUtcNow>()
-					.As<ICurrentBelongsToDate>()
-					.SingleInstance();
-			}
+			builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
+			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 
 			if (_config.Toggle(Toggles.RTA_NeutralAdherence_30930))
 				builder.RegisterType<BySetting>().As<IAppliedAdherence>().SingleInstance();

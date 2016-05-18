@@ -4,32 +4,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	public interface ICurrentBelongsToDate
-	{
-		DateOnly ForPerson(Guid personId);
-	}
-
-	public class CurrentBelongsToDateFromUtcNow : ICurrentBelongsToDate
-	{
-		private readonly INow _now;
-
-		public CurrentBelongsToDateFromUtcNow(INow now)
-		{
-			_now = now;
-		}
-
-		public DateOnly ForPerson(Guid personId)
-		{
-			return new DateOnly(_now.UtcDateTime());
-		}
-	}
-
-	public class CurrentBelongsToDateFromPersonsCurrentTime : ICurrentBelongsToDate
+	public class CurrentBelongsToDate 
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _now;
 
-		public CurrentBelongsToDateFromPersonsCurrentTime(IPersonRepository personRepository, INow now)
+		public CurrentBelongsToDate(IPersonRepository personRepository, INow now)
 		{
 			_personRepository = personRepository;
 			_now = now;

@@ -481,7 +481,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
-		[Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236)]
 		public void ShouldBuildForAgentsDate()
 		{
 			var person = new Person();

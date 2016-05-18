@@ -9,7 +9,6 @@ Background:
 @ignore
 #Random faliure, probably because of rare anywhere issue
 #Not worth investigating according to Anders
-@OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence percentage when call center is in Hawaii
 	Given the time is '2014-10-07 00:00:00'
 	And rta is ready
@@ -56,7 +55,6 @@ Scenario: Should see adherence percentage when call center is in Hawaii
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
 
 @ignore
-@OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence details when call center is in Hawaii
 	Given the time is '2014-10-07 00:00:00'
 	And rta is ready

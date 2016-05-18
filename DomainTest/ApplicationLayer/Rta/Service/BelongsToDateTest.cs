@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_CalculatePercentageInAgentTimezone_31236)]
 	public class BelongsToDateTest
 	{
 		public FakeRtaDatabase Database;

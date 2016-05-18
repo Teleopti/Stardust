@@ -41,8 +41,6 @@ Portal_DifferentiateBadgeSettingForAgents_31318 = true
 Backlog_Module_23980 = DEV
 MyTeam_MakeTeamScheduleConsistent_31897 = true
 #Cannot be relreased yet because it depends on 34267 #
-RTA_CalculatePercentageInAgentTimezone_31236 = RC
-#Cannot be relreased yet because it depends on 34267 #
 RTA_NeutralAdherence_30930 = RC
 MyTimeWeb_SortSchedule_32092 = true
 MyTimeWeb_EnhanceTeamSchedule_32580 = true

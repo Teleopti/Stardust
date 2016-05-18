@@ -7,7 +7,6 @@ Background:
 	Given there is a switch
 
 @ignore
-@OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence percentage for night shift agents
 	Given the time is '2014-10-06 00:00:00'
 	And rta is ready
@@ -52,7 +51,6 @@ Scenario: Should see adherence percentage for night shift agents
 	Then I should see historical adherence for 'Pierre Baldi' with adherence of 50%
 
 @ignore
-@OnlyRunIfEnabled('RTA_CalculatePercentageInAgentTimezone_31236')
 Scenario: Should see adherence details for night shift agents
 	Given the time is '2014-10-06 00:00:00'
 	And rta is ready
