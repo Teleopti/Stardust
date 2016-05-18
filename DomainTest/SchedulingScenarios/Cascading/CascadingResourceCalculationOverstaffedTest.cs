@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			ass2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 			var agent3 = new Person();
 			agent3.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			agent3.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, secondarySkill });
+			agent3.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, secondarySkill, lastSkill });
 			var ass3 = new PersonAssignment(agent3, scenario, dateOnly);
 			ass3.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2, agent3 }, new[] { ass1, ass2, ass3 }, new[] { prioritizedSkillDay, secondarySkillDay, lastSkillDay });
