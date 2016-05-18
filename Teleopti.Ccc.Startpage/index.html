@@ -60,14 +60,6 @@
 					}
 				});
 
-				loadToggle('Wfm_RTA_ProperReleaseToggle_36750', function (value) {
-					if (value) {
-						document.getElementById("webrta").href = "/TeleoptiWFM/Web/Wfm/#/rta";
-					} else {
-						document.getElementById("webrta").href = "/TeleoptiWFM/Web/Anywhere#realtimeadherencesites";
-					}
-				});
-
 				loadToggle('WfmTeamSchedule_PrepareForRelease_37752', function (value) {
 					if (value) {
 						document.getElementById("webteamschedule").href = "/TeleoptiWFM/Web/Anywhere";
@@ -96,7 +88,7 @@
 				</a>
 			</div>
 			<div class="col-md-3">
-				<a id="webrta" class="block pink" href="">
+				<a id="webrta" class="block pink" href="/TeleoptiWFM/Web/Wfm/#/rta">
 					<span>Real-time Analysts</span>
 				</a>
 			</div>
