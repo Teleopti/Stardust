@@ -55,12 +55,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.ClickContaining(".person-name", agentName);
 		}
 
-		[When(@"I selected no ativity '(.*)'")]
-		public void WhenISelectedNoAtivity(string description)
-		{
-			Browser.Interactions.AssertExistsUsingJQuery($".schedule .layer:contains('{description}')");
-		}
-
 		[When(@"I click menu button in team schedule")]
 		public void WhenIClickMenuButtonInTeamSchedule()
 		{

@@ -114,7 +114,6 @@ Scenario: Should see disabled remove activity button when no activity is selecte
 	| Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I selected no ativity 'Lunch'
 	And I click menu button in team schedule
 	Then I should see 'RemoveActivity' menu item is disabled
 
