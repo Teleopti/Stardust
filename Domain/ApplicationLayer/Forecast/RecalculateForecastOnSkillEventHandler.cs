@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
                                                                 : base(scenarioRepository, skillDayRepository, skillRepository,  statisticLoader, reforecastPercentCalculator)
         {
         }
-        [AsSystem, UnitOfWork]
+        [ImpersonateSystem ,UnitOfWork]
         public new virtual void Handle(RecalculateForecastOnSkillCollectionEvent @event)
         {
             base.Handle(@event);
