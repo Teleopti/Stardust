@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		{
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
         [UnitOfWork]
 		public new virtual void Handle(QuickForecastWorkloadsEvent @event)
 		{
