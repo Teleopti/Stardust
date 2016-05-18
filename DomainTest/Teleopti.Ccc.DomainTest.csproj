@@ -213,6 +213,7 @@
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\MoveShiftLayerCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\MultiplicatorDefinitionSetHandlers\AnalyticsOvertimeUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\MyTeamRemovePersonAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PeriodChangesTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\PersonPeriodChangedTest.cs" />
