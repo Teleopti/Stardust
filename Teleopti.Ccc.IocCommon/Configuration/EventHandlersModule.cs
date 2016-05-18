@@ -27,7 +27,6 @@ using Teleopti.Ccc.Infrastructure.Rta.Persisters;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
@@ -165,7 +164,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             if (!_config.Toggle(Toggles.ETL_SpeedUpIntradayPreference_37124))
             {
                 _config.Cache().This<IAnalyticsScheduleRepository>(b => b
-                    .CacheMethod(x => x.Activities())
                     .CacheMethod(x => x.ShiftCategories())
                     .CacheMethod(x => x.ShiftLengths())
                     );

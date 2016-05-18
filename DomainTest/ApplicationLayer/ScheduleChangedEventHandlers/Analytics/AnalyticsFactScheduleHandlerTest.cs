@@ -56,42 +56,43 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			_intervalLengthFetcher.AssertWasCalled(x => x.IntervalLength);
 		}
 
-	    [Test]
-	    public void ShouldReturnCorrectSchemaWithBrokenInterval() // PBI 37562
-	    {
-            var shiftStart = new DateTime(2015, 1, 1, 8, 10, 0, DateTimeKind.Utc);
-            var scheduleDay = new ProjectionChangedEventScheduleDay
-            {
-                Shift = new ProjectionChangedEventShift
-                {
-                    StartDateTime = shiftStart,
-                    EndDateTime = shiftStart.AddHours(1)
-                }
-            };
-            scheduleDay.Shift.Layers = createLayers(shiftStart, new[] { 60 });
+		[Test]
+		public void ShouldReturnCorrectSchemaWithBrokenInterval() // PBI 37562
+		{
+			var shiftStart = new DateTime(2015, 1, 1, 8, 10, 0, DateTimeKind.Utc);
+			var scheduleDay = new ProjectionChangedEventScheduleDay
+			{
+				Shift = new ProjectionChangedEventShift
+				{
+					StartDateTime = shiftStart,
+					EndDateTime = shiftStart.AddHours(1)
+				}
+			};
+			scheduleDay.Shift.Layers = createLayers(shiftStart, new[] { 60 });
 
-            _intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
+			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 
-            _dateHandler.Stub(x => x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
-                Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(new AnalyticsFactScheduleDate());
+			_dateHandler.Stub(x => x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,
+				Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(new AnalyticsFactScheduleDate());
 
-            var repoMock = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
-		    var overtimeRepository = MockRepository.GenerateMock<IAnalyticsOvertimeRepository>();
-            _timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock, new FakeAnalyticsAbsenceRepository(), overtimeRepository);
-		    overtimeRepository.Stub(x => x.Overtimes()).Return(new List<AnalyticsOvertime>());
+			var repoMock = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
+			var analyticsActivityMock = MockRepository.GenerateMock<IAnalyticsActivityRepository>();
+			var overtimeRepository = MockRepository.GenerateMock<IAnalyticsOvertimeRepository>();
+			_timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock, new FakeAnalyticsAbsenceRepository(), overtimeRepository, analyticsActivityMock);
+			overtimeRepository.Stub(x => x.Overtimes()).Return(new List<AnalyticsOvertime>());
 
-            repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
-	        repoMock.Stub(x => x.Activities()).Return(new List<AnalyticsActivity>());
+			repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
+			analyticsActivityMock.Stub(x => x.Activities()).Return(new List<AnalyticsActivity>());
 
-            _target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler);
+			_target = new AnalyticsFactScheduleHandler(_intervalLengthFetcher, _dateHandler, _timeHandler);
 
-            var result = _target.AgentDaySchedule(scheduleDay, null, DateTime.Now, 1, 1);
+			var result = _target.AgentDaySchedule(scheduleDay, null, DateTime.Now, 1, 1);
 
-	        result.First().TimePart.ScheduledMinutes.Should().Be.EqualTo(5);
-            result.Last().TimePart.ScheduledMinutes.Should().Be.EqualTo(10);
-            result.Sum(a => a.TimePart.ScheduledMinutes).Should().Be.EqualTo(60);
-	        result.Count.Should().Be.EqualTo(5);
-	    }
+			result.First().TimePart.ScheduledMinutes.Should().Be.EqualTo(5);
+			result.Last().TimePart.ScheduledMinutes.Should().Be.EqualTo(10);
+			result.Sum(a => a.TimePart.ScheduledMinutes).Should().Be.EqualTo(60);
+			result.Count.Should().Be.EqualTo(5);
+		}
 
 		[Test]
 		public void ShouldReturnNullWhenDateCouldNotBeHandled()
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 					EndDateTime = shiftStart.AddHours(1)
 				}
 			};
-			scheduleDay.Shift.Layers = createLayers(shiftStart, new[] {60});
+			scheduleDay.Shift.Layers = createLayers(shiftStart, new[] { 60 });
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
 			_dateHandler.Stub(
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			scheduleDay.Shift.Layers = createLayers(shiftStart, new[] { 60 });
 
 			_intervalLengthFetcher.Stub(x => x.IntervalLength).Return(15);
-			
+
 			_dateHandler.Stub(
 				x =>
 					x.Handle(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<DateOnly>.Is.Anything,

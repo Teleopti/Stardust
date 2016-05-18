@@ -8,14 +8,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 {
 	public class AnalyticsFactScheduleTimeHandler : IAnalyticsFactScheduleTimeHandler
 	{
-		private readonly IAnalyticsScheduleRepository _repository;
+		private readonly IAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
+		private readonly IAnalyticsActivityRepository _analyticsActivityRepository;
 		private readonly IAnalyticsOvertimeRepository _analyticsOvertimeRepository;
 
-		public AnalyticsFactScheduleTimeHandler(IAnalyticsScheduleRepository repository, IAnalyticsAbsenceRepository analyticsAbsenceRepository, IAnalyticsOvertimeRepository analyticsOvertimeRepository)
+		public AnalyticsFactScheduleTimeHandler(IAnalyticsScheduleRepository analyticsScheduleRepository, 
+			IAnalyticsAbsenceRepository analyticsAbsenceRepository, 
+			IAnalyticsOvertimeRepository analyticsOvertimeRepository,
+			IAnalyticsActivityRepository analyticsActivityRepository)
 		{
-			_repository = repository;
+			_analyticsScheduleRepository = analyticsScheduleRepository;
 			_analyticsAbsenceRepository = analyticsAbsenceRepository;
+			_analyticsActivityRepository = analyticsActivityRepository;
 			_analyticsOvertimeRepository = analyticsOvertimeRepository;
 		}
 
@@ -29,7 +34,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				OverTimeId = MapOvertimeId(layer.MultiplicatorDefinitionSetId),
 				ScenarioId = scenarioId,
 				ShiftLengthId = MapShiftLengthId(shiftLength)
-				
 			};
 			var layerMinutes = (int)(layer.EndDateTime - layer.StartDateTime).TotalMinutes;
 			ret.ScheduledMinutes = layerMinutes;
@@ -68,30 +72,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public int MapShiftLengthId(int shiftLength)
 		{
-			var shiftLengths = _repository.ShiftLengths();
+			var shiftLengths = _analyticsScheduleRepository.ShiftLengths();
 			var sl = shiftLengths.FirstOrDefault(a => a.ShiftLength.Equals(shiftLength));
-			return sl == null ? _repository.ShiftLengthId(shiftLength) : sl.Id;
+			return sl?.Id ?? _analyticsScheduleRepository.ShiftLengthId(shiftLength);
 		}
 
 		private AnalyticsActivity mapActivityId(Guid activityCode)
 		{
-			var activities = _repository.Activities();
+			var activities = _analyticsActivityRepository.Activities();
 			var act = activities.FirstOrDefault(a => a.ActivityCode.Equals(activityCode));
-			return act ?? null;
+			return act;
 		}
 
 		public AnalyticsAbsence MapAbsenceId(Guid absenceCode)
 		{
 			var absences = _analyticsAbsenceRepository.Absences();
 			var abs = absences.FirstOrDefault(a => a.AbsenceCode.Equals(absenceCode));
-			return abs ?? null;
+			return abs;
 		}
 
 		public int MapOvertimeId(Guid overtimeCode)
 		{
 			var overtimes = _analyticsOvertimeRepository.Overtimes();
 			var overtime = overtimes.FirstOrDefault(a => a.OvertimeCode.Equals(overtimeCode));
-			return overtime != null ? overtime.OvertimeId : -1;
+			return overtime?.OvertimeId ?? -1;
 		}
 	}
 }

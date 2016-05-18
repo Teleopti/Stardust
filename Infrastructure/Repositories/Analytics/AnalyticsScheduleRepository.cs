@@ -4,11 +4,9 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics.Tables;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
@@ -182,15 +180,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
-		public IList<AnalyticsActivity> Activities()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select activity_id ActivityId, activity_code ActivityCode, in_paid_time InPaidTime, in_ready_time InReadyTime from mart.dim_activity WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsActivity)))
-				.SetReadOnly(true)
-				.List<AnalyticsActivity>();
-		}
-
 		public IList<IAnalyticsGeneric> ShiftCategories()
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
@@ -210,16 +199,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				//.SetTimeout(120)
 				.UniqueResult<IAnalyticsPersonBusinessUnit>();
 		}
-
-
-		//public IList<IAnalyticsGeneric> Overtimes()
-		//{
-		//	return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-		//		"select overtime_id Id, overtime_code Code from mart.dim_overtime WITH (NOLOCK)")
-		//		.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
-		//		.SetReadOnly(true)
-		//		.List<IAnalyticsGeneric>();
-		//}
 
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{
