@@ -134,3 +134,5 @@ Wfm_MoveExportMultiSiteSkillOnStardust_38134 = RC
 Payroll_ToStardust_38204 = RC
 Scheduler_LoadWithoutRequests_38567 = RC
 PersonCollectionChanged_ToHangfire_38420 = false
+ETL_SpeedUpIntradayOvertime_38304 = RC
+ETL_SpeedUpNightlyOvertime_38304 = RC
