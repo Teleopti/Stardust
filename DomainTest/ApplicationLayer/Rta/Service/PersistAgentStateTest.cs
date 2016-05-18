@@ -18,15 +18,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersist()
 		{
-			var state = new ExternalUserStateForTest
+			Database
+				.WithUser("usercode")
+				;
+			Now.Is("2014-10-20 10:00");
+
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
-			};
-			Database.WithDataFromState(state);
-			Now.Is("2014-10-20 10:00");
-
-			Target.SaveState(state);
+			});
 
 			Database.PersistedReadModel.Should().Not.Be.Null();
 		}
@@ -46,16 +47,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistWhenNotifiedOfPossibleScheduleChange()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			};
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database 
-				.WithDefaultsFromState(state)
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -67,16 +61,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistWithReceivedSystemTime()
 		{
-			var state = new ExternalUserStateForTest
+			Database
+				.WithUser("usercode")
+				;
+			Now.Is("2014-10-20 10:00");
+
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
-			};
-			Database
-				.WithDataFromState(state);
-			Now.Is("2014-10-20 10:00");
-
-			Target.SaveState(state);
+			});
 
 			Database.PersistedReadModel.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
@@ -84,21 +78,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistWithCurrentActivity()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
 
 			Database.PersistedReadModel.ScheduledId.Should().Be(activityId);
 		}
@@ -106,16 +98,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotPersistWithCurrentActivityIfNoSchedule()
 		{
-			var state = new ExternalUserStateForTest
+			Database
+				.WithUser("usercode")
+				;
+			Now.Is("2014-10-20 10:00");
+
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
-			};
-			Database
-				.WithDataFromState(state);
-			Now.Is("2014-10-20 10:00");
-
-			Target.SaveState(state);
+			});
 
 			Database.PersistedReadModel.ScheduledId.Should().Be(null);
 		}
@@ -131,7 +123,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 12:00")
 				;
@@ -145,22 +136,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistWithNextActivity()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
 
 			Database.PersistedReadModel.ScheduledNextId.Should().Be(activityId);
 		}
@@ -168,21 +157,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotPersistWithNextActivityFromNextShift()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			};
 			var personId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithSchedule(personId, Guid.NewGuid(), "2014-10-21 10:00", "2014-10-21 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
 
 			Database.PersistedReadModel.ScheduledNextId.Should().Be(null);
 		}
@@ -190,21 +177,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistWithNextActivityFromFutureShift()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(state)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 12:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
 
 			Database.PersistedReadModel.ScheduledNextId.Should().Be(activityId);
 		}
@@ -213,11 +198,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistWithAlarm()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			var alarmId = Guid.NewGuid();
@@ -228,7 +208,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				;
 			Now.Is("2014-10-20 10:00");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
 
 			Database.PersistedReadModel.RuleId.Should().Be(alarmId);
 		}
@@ -256,11 +240,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistWithStateStartTimeFromSystemTime()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "statecode"
-			};
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
@@ -269,7 +248,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00");
 			Now.Is("2014-10-20 10:01");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "statecode"
+			});
 			
 			Database.PersistedReadModel.StateStartTime.Should().Be.EqualTo("2014-10-20 10:01".Utc());
 		}

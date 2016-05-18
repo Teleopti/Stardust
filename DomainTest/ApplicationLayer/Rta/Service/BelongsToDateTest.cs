@@ -4,10 +4,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -189,7 +187,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPublishShiftStartEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "2015-02-19".Date(), "2015-02-20 1:00", "2015-02-20 7:00")
@@ -207,9 +204,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPublishShiftEndEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "2015-02-19".Date(), "2015-02-20 1:00", "2015-02-20 7:00")
 				;
 
@@ -227,7 +223,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPublishActivityStartEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "2015-02-19".Date(), "2015-02-20 1:00", "2015-02-20 7:00")
@@ -246,7 +241,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPublishActivityActualStartEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
@@ -294,10 +288,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2015-07-05 10:00", "2015-07-05 11:00")
 				.WithSchedule(personId, activityId, "2015-07-06 10:00", "2015-07-06 11:00");
 

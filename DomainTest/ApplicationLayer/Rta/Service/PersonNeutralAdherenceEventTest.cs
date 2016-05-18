@@ -222,13 +222,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPublishWithPersonTeamSiteIds()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId, businessUnitId, teamId, siteId)
+				.WithUser("usercode", personId, null, teamId, siteId)
 				.WithSchedule(personId, admin, "2015-03-10 8:00", "2015-03-10 10:00")
 				.WithRule("admin", admin, 0, Adherence.Neutral)
 				;

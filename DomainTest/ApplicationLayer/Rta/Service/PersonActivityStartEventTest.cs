@@ -4,11 +4,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -27,11 +25,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
+				;
 			Now.Is("2014-10-20 10:00");
 			
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -46,12 +43,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var activityId1 = Guid.NewGuid();
 			var activityId2 = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId1, "2014-10-20 10:00", "2014-10-20 10:15")
-				.WithSchedule(personId, activityId2, "2014-10-20 10:15", "2014-10-20 11:00");
+				.WithSchedule(personId, activityId2, "2014-10-20 10:15", "2014-10-20 11:00")
+				;
 			Now.Is("2014-10-20 10:00");
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -69,11 +65,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00");
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
+				;
 			Now.Is("2014-10-20 10:02");
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -88,12 +83,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("phone", phone, 0);
+				.WithRule("phone", phone, 0)
+				;
 			Now.Is("2014-10-20 09:50");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -113,12 +107,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("statecode", activityId, 1);
+				.WithRule("statecode", activityId, 1)
+				;
 			Now.Is("2014-10-20 09:50");
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -138,10 +131,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "phone", "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithRule("admin", phone, 1, Adherence.Neutral)
 				.WithRule("phone", phone, 0, Adherence.In);

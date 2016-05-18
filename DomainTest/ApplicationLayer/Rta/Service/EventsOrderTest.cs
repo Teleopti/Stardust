@@ -3,13 +3,10 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -17,29 +14,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[RtaTest]
 	public class EventsOrderTest
 	{
-		public FakeRtaDatabase database;
-		public FakeEventPublisher publisher;
-		public MutableNow now;
-		public Domain.ApplicationLayer.Rta.Service.Rta target;
+		public FakeRtaDatabase Database;
+		public FakeEventPublisher Publisher;
+		public MutableNow Now;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldPublishShiftStartBeforeActivityStart()
 		{
 			var personId = Guid.NewGuid();
-			database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
+			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00");
-			now.Is("2014-10-20 10:00");
+			Now.Is("2014-10-20 10:00");
 
-			target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "statecode"
 			});
 
-			var before = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single());
-			var after = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single());
+			var before = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonShiftStartEvent>().Single());
+			var after = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single());
 			before.Should().Be.LessThan(after);
 		}
 
@@ -48,21 +44,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
+			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithRule("phone", phone, 0);
-			now.Is("2014-10-20 10:00");
+			Now.Is("2014-10-20 10:00");
 
-			target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
 
-			var before = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single());
-			var after = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single());
+			var before = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single());
+			var after = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single());
 			before.Should().Be.LessThan(after);
 		}
 
@@ -71,21 +66,20 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
+			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithRule("phone", activityId, 1);
-			now.Is("2014-10-20 10:00");
+			Now.Is("2014-10-20 10:00");
 
-			target.SaveState(new ExternalUserStateForTest
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
 
-			var before = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single());
-			var after = publisher.PublishedEvents.IndexOf(publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single());
+			var before = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single());
+			var after = Publisher.PublishedEvents.IndexOf(Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single());
 			before.Should().Be.LessThan(after);
 		}
 	}

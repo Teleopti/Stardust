@@ -1,9 +1,7 @@
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -33,12 +31,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptAuthenticationKeyWithoutTenant()
 		{
-			var state = new ExternalUserStateForTest
-			{
-				AuthenticationKey = "key"
-			};
-
-			Assert.Throws(typeof(InvalidAuthenticationKeyException), () => Target.SaveState(state));
+			Assert.Throws(typeof (InvalidAuthenticationKeyException),
+				() => Target.SaveState(new ExternalUserStateForTest
+				{
+					AuthenticationKey = "key"
+				}));
 
 			Database.StoredState.Should().Be.Null();
 		}
@@ -62,14 +59,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotAcceptLegacyAuthenticationKeyIf2Tenants()
 		{
-			Database.WithTenant(LegacyAuthenticationKey.TheKey);
-			Database.WithTenant("key");
-			var state = new ExternalUserStateForTest
-			{
-				AuthenticationKey = LegacyAuthenticationKey.TheKey
-			};
+			Database
+				.WithTenant(LegacyAuthenticationKey.TheKey)
+				.WithTenant("key");
 
-			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));
+			Assert.Throws(typeof (LegacyAuthenticationKeyException),
+				() => Target.SaveState(new ExternalUserStateForTest
+				{
+					AuthenticationKey = LegacyAuthenticationKey.TheKey
+				}));
 
 			Database.StoredState.Should().Be.Null();
 		}
@@ -91,18 +89,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		public void ShouldNotAcceptIfThirdAndFourthLetterOfAuthenticationKeyIsCorrupted_BecauseOfEncodingIssuesWithThe3rdLetterOfTheDefaultKeyAndWeAreNotAllowedToChangeTheDefault()
+		public void ShouldThrowIfMultipleTenantsAndLegacyAuthenticationKeyIsUsed()
 		{
 			Database.WithTenant(LegacyAuthenticationKey.TheKey);
 			Database.WithTenant("key");
 
-			var state = new ExternalUserStateForTest
-			{
-				UserCode = "user",
-				AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
-			};
-
-			Assert.Throws(typeof(LegacyAuthenticationKeyException), () => Target.SaveState(state));
+			Assert.Throws(typeof (LegacyAuthenticationKeyException),
+				() => Target.SaveState(new ExternalUserStateForTest
+				{
+					UserCode = "user",
+					AuthenticationKey = LegacyAuthenticationKey.TheKey.Remove(2, 2).Insert(2, "_")
+				}));
 			Database.StoredState.Should().Be.Null();
 		}
 

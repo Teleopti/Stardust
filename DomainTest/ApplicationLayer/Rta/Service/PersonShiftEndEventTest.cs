@@ -4,11 +4,9 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
@@ -26,11 +24,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
+				;
 
 			Now.Is("2014-10-20 10:01");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -46,11 +43,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
+				.WithUser("usercode", personId)
+				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
+				;
 
 			Now.Is("2014-10-20 10:01");
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
@@ -65,10 +61,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
 
 			Now.Is("2014-10-20 10:01");
@@ -86,10 +80,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 09:00", "2014-10-20 10:00")
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
 
@@ -107,10 +99,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
 				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 12:00");
 
@@ -128,10 +118,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 8:00", "2014-10-20 10:00")
 				;
 
@@ -150,10 +138,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
 
 			Now.Is("2014-10-20 10:01");
@@ -173,10 +159,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-19 10:00", "2014-10-19 11:00")
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00");
 

@@ -20,9 +20,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		public void ShouldHaveStateStartTimeWhenANewStateArrived()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId);
+				.WithUser("usercode", personId);
 
 			Now.Is("2015-12-10 8:00");
 			Target.SaveState(new ExternalUserStateForTest
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithRule("stateone", Guid.NewGuid());
 
@@ -66,7 +64,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithRule("stateone", Guid.NewGuid())
 				.WithRule("statetwo", Guid.NewGuid());

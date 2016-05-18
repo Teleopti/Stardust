@@ -1,7 +1,6 @@
 using System;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -16,21 +15,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistReadModel()
 		{
-			var state = new ExternalUserStateForTest();
-			Database.WithDataFromState(state);
+			Database
+				.WithUser("usercode");
 
-			Target.SaveState(state);
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "phone"
+			});
 
-			Database.StoredState.StateCode.Should().Be(state.StateCode);
+			Database.StoredState.StateCode.Should().Be("phone");
 		}
 
 		[Test]
 		public void ShouldCutStateCodeIfToLong()
 		{
-			var state = new ExternalUserStateForTest();
-			Database.WithDataFromState(state);
+			Database
+				.WithUser("usercode");
 
-			state.StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason";
+			var state = new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "a really really really really looooooooong statecode that should be trimmed somehow for whatever reason"
+			};
 			Target.SaveState(state);
 
 			Database.StoredState.StateCode.Should().Be(state.StateCode.Substring(0, 25));
@@ -39,24 +46,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldPersistStateCodeToLoggedOutIfNotLoggedIn()
 		{
-			var state = new ExternalUserStateForTest {IsLoggedOn = false};
-			Database.WithDataFromState(state);
-
-			state.IsLoggedOn = false;
-			Target.SaveState(state);
+			Database
+				.WithUser("usercode");
+			
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				IsLoggedOn = false
+			});
 
 			Database.StoredState.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutStateCode);
 		}
 
 		[Test]
+		// no schedule == schedule is updated? :-)
 		public void ShouldPersistWhenScheduleIsUpdated()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			var state = new ExternalUserStateForTest();
 			Database
-				.WithSource(state.SourceId)
-				.WithUser(state.UserCode, personId, businessUnitId);
+				.WithUser("usercode", personId);
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
@@ -67,11 +75,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldPersistNextStartWithNullWhenNoActivity()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			var state = new ExternalUserStateForTest();
 			Database
-				.WithSource(state.SourceId)
-				.WithUser(state.UserCode, personId, businessUnitId);
+				.WithUser("usercode", personId);
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
@@ -87,8 +92,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
-				StateCode = "state",
-				UserCode = "user"
+				UserCode = "user",
+				StateCode = "state"
 			});
 
 			Database.PersistedReadModel.TeamId.Should().Be(teamId);
@@ -103,8 +108,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.SaveState(new ExternalUserStateForTest
 			{
+				UserCode = "user",
 				StateCode = "state",
-				UserCode = "user"
 			});
 
 			Database.PersistedReadModel.SiteId.Should().Be(siteId);

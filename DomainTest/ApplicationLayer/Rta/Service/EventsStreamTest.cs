@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	public class EventsStreamTest
 	{
 		public FakeRtaDatabase Database;
-		public FakeEventPublisher publisher;
-		public MutableNow now;
-		public Domain.ApplicationLayer.Rta.Service.Rta target;
+		public FakeEventPublisher Publisher;
+		public MutableNow Now;
+		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 
 		[Test]
 		public void ShouldPublishAdherenceEventsForBothCausesInASingleTrigger()
@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var phone = Guid.NewGuid();
 			var brejk = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
 				.WithSchedule(personId, brejk, "2014-10-20 10:00", "2014-10-20 10:15")
@@ -37,59 +36,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithRule("phone", brejk, 1)
 				.WithRule("break", brejk, 0)
 				.WithRule("break", phone, 1);
-			now.Is("2014-10-20 9:00");
-			target.SaveState(new ExternalUserStateForTest
+			Now.Is("2014-10-20 9:00");
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "phone"
 			});
-			publisher.Clear();
+			Publisher.Clear();
 
-			now.Is("2014-10-20 10:02");
-			target.SaveState(new ExternalUserStateForTest
+			Now.Is("2014-10-20 10:02");
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "break"
 			});
 
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 10:00".Utc());
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.Out);
-			publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:00".Utc());
-			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
-			publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Adherence.Should().Be(EventAdherence.In);
-			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
+			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 10:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.Out);
+			Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:00".Utc());
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
+			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Single().Adherence.Should().Be(EventAdherence.In);
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 10:02".Utc());
 		}
 
 		[Test]
 		public void ShouldPublishActivityAndAdherenceEventsFromLastStateChangeWhenRewritingHistory()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
-				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2014-10-20 9:00", "2014-10-20 10:00")
 				.WithRule("admin", phone, 1)
 				.WithRule("admin", admin, 0);
-			now.Is("2014-10-20 9:15");
-			target.SaveState(new ExternalUserStateForTest
+			Now.Is("2014-10-20 9:15");
+			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
 				StateCode = "admin"
 			});
-			publisher.Clear();
+			Publisher.Clear();
 
-			now.Is("2014-10-20 9:30");
+			Now.Is("2014-10-20 9:30");
 			Database.ClearSchedule(personId);
 			Database.WithSchedule(personId, admin, "2014-10-20 9:00", "2014-10-20 10:00");
-			target.CheckForActivityChanges(Database.TenantName(), personId);
+			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
-			publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.In);
-			publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:15".Utc());
+			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().StartTime.Should().Be("2014-10-20 9:15".Utc());
+			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Single().Adherence.Should().Be(EventAdherence.In);
+			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Single().Timestamp.Should().Be("2014-10-20 9:15".Utc());
 		}
 
 	}

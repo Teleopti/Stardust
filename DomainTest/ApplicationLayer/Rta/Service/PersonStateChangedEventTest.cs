@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId);
 
 			Target.SaveState(new ExternalUserStateForTest
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId)
 				.WithRule("stateone", Guid.NewGuid())
 				.WithRule("statetwo", Guid.NewGuid());
@@ -75,7 +73,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		{
 			var personId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest())
 				.WithUser("usercode", personId);
 			Now.Is("2014-10-20 10:00");
 

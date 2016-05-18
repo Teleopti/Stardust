@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -194,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", user2)
 				.WithRule("statecode", Guid.Empty)
-				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, true);
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty);
 
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
@@ -232,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			var platformTypeId = Guid.NewGuid();
 			Database
-				.WithDefaultsFromState(new ExternalUserStateForTest { PlatformTypeId = platformTypeId.ToString() })
+				.WithPlatform(platformTypeId)
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
 				.WithRule("statecode", Guid.Empty)

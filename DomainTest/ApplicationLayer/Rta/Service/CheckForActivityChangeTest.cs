@@ -20,9 +20,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldKeepPreviousStateCodeWhenNotifiedOfActivityChange()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId);
+				.WithUser("usercode", personId);
 			Now.Is("2014-10-20 10:00");
 			
 			Target.SaveState(new ExternalUserStateForTest
@@ -39,10 +38,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public void ShouldKeepPreviousStateWhenNotifiedOfActivityChange()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var activityId = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 9:00", "2014-10-20 11:00")
 				.WithRule("phone", activityId, "alarm")
@@ -61,10 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldHandleUnrecognizedPersonId()
 		{
-			var businessUnitId = Guid.NewGuid();
-			Database
-				.WithBusinessUnit(businessUnitId);
-
 			Assert.DoesNotThrow(() => Target.CheckForActivityChanges(Database.TenantName(), Guid.NewGuid()));
 		}
 	}

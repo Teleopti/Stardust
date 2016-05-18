@@ -78,31 +78,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_tenants = tenants;
 			_dataSourceForTenant = dataSourceForTenant;
 
+			withTenant("default", LegacyAuthenticationKey.TheKey);
 			WithBusinessUnit(Guid.NewGuid());
-			WithDefaultsFromState(new ExternalUserStateForTest());
-			WithTenant("default", LegacyAuthenticationKey.TheKey);
+			WithSource(new ExternalUserStateForTest().SourceId);
+			withPlatform(new Guid(new ExternalUserStateForTest().PlatformTypeId));
 		}
 
-		public StoredStateInfo StoredState => _agentStateReadModels
-			.Models
-			.Select(x => new StoredStateInfo(x.PersonId, x))
-			.SingleOrDefault();
+		public StoredStateInfo StoredState => _agentStateReadModels.Models.Select(x => new StoredStateInfo(x.PersonId, x)).SingleOrDefault();
 		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
 		public IEnumerable<IRtaState> StateCodes => _rtaStateGroupRepository.LoadAll().Single().StateCollection;
 		public StoredStateInfo StoredStateFor(Guid personId) => new StoredStateInfo(personId, _agentStateReadModels.Get(personId));
-
-		public FakeRtaDatabase WithDefaultsFromState(ExternalUserStateForTest state)
+		
+		public FakeRtaDatabase WithPlatform(Guid platformTypeId)
 		{
-			WithSource(state.SourceId);
-			withPlatform(state.PlatformTypeId);
+			withPlatform(platformTypeId);
 			return this;
 		}
-
-		private Guid withPlatform(string platformTypeId)
-		{
-			return withPlatform(new Guid(platformTypeId));
-		}
-
+		
 		private Guid withPlatform(Guid? platformTypeId)
 		{
 			if (!platformTypeId.HasValue)
@@ -110,14 +102,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_platformTypeId = platformTypeId.Value.ToString();
 			return platformTypeId.Value;
 		}
-
-		public FakeRtaDatabase WithDataFromState(ExternalUserStateForTest state)
+		
+		public FakeRtaDatabase WithTenant(string key)
 		{
-			WithDefaultsFromState(state);
-			return this.WithUser(state.UserCode, Guid.NewGuid());
+			return withTenant(key, key);
 		}
 
-		public FakeRtaDatabase WithTenant(string name, string key)
+		private FakeRtaDatabase withTenant(string name, string key)
 		{
 			// only required without multi-tenancy I think...
 			// because then the rta requires all tenants to be loaded at startup to find the datasource from a connection string
@@ -202,7 +193,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public FakeRtaDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, bool isLoggedOutState, Adherence? adherence)
+		public FakeRtaDatabase WithRule(Guid? ruleId, string stateCode, Guid? platformTypeId, Guid? activityId, int staffingEffect, string name, Adherence? adherence)
 		{
 			_rtaRule = null;
 			if (ruleId != null)
@@ -346,11 +337,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return fakeDataBuilder.WithUser(userCode, personId, null, null, null, null);
 		}
 
-		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, Guid personId, Guid businessUnitId)
-		{
-			return fakeDataBuilder.WithUser(userCode, personId, null, businessUnitId, null, null);
-		}
-
 		public static FakeRtaDatabase WithUser(this FakeRtaDatabase fakeDataBuilder, string userCode, string source, Guid personId)
 		{
 			return fakeDataBuilder.WithUser(userCode, personId, source, null, null, null);
@@ -384,65 +370,52 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder)
 		{
-			return fakeDataBuilder.WithRule(null, "", null, null, 0, null, false, null);
+			return fakeDataBuilder.WithRule(null, "", null, null, 0, null, null);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode)
 		{
-			return fakeDataBuilder.WithRule(null, stateCode, null, null, 0, null, false, null);
+			return fakeDataBuilder.WithRule(null, stateCode, null, null, 0, null, null);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId)
 		{
-			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, null, false, null);
+			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, null, null);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, int staffingEffect)
 		{
-			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, false, null);
+			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, null);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, Guid? alarmId)
 		{
-			return fakeDataBuilder.WithRule(alarmId, stateCode, null, activityId, 0, null, false, null);
+			return fakeDataBuilder.WithRule(alarmId, stateCode, null, activityId, 0, null, null);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, string name)
 		{
-			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, name, false, null);
+			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, name, null);
 		}
-
-		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, bool isLoggedOutState)
-		{
-			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, 0, null, isLoggedOutState, null);
-		}
-
+		
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid platformTypeId, Guid activityId, int staffingEffect, Adherence adherence)
 		{
-			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, platformTypeId, activityId, staffingEffect, null, false, adherence);
+			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, platformTypeId, activityId, staffingEffect, null, adherence);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, int staffingEffect, Adherence adherence)
 		{
-			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, false, adherence);
+			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, adherence);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, Guid ruleId, string stateCode, Guid? activityId)
 		{
-			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, null, false, null);
+			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, null, null);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, Guid ruleId, string stateCode, Guid? activityId, string name)
 		{
-			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, name, false, null);
-		}
-	}
-
-	public static class FakeDatabaseBuilderExtensions
-	{
-		public static FakeRtaDatabase WithTenant(this FakeRtaDatabase fakeDataBuilder, string key)
-		{
-			return fakeDataBuilder.WithTenant(key, key);
+			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, name, null);
 		}
 	}
 }

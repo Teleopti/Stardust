@@ -43,12 +43,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		public void TestReadModels()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-					.WithBusinessUnit(businessUnitId)
-					.WithUser("user", personId, businessUnitId)
+					.WithUser("user", personId)
 					.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
 					.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
 					.WithRule("ready", phone, 0, Adherence.In)
@@ -88,12 +86,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 		public void TestViewModels()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			var admin = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
-				.WithUser("user", personId, businessUnitId)
+				.WithUser("user", personId)
 				.WithSchedule(personId, phone, "2015-03-31 4:45", "2015-03-31 5:00")
 				.WithSchedule(personId, admin, "2015-03-31 5:00", "2015-03-31 5:15")
 				.WithRule("ready", phone, 0, Adherence.In)

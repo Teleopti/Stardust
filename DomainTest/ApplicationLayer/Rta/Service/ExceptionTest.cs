@@ -52,9 +52,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var externalStates = new Collection<ExternalUserStateForTest>();
 			for (var i = 0; i < tooManyStates; i++)
 				externalStates.Add(new ExternalUserStateForTest());
-			var state = new ExternalUserStateForTest();
 			Database
-				.WithDataFromState(state);
+				.WithUser(new ExternalUserStateForTest().UserCode);
 
 			Assert.Throws(typeof(BatchTooBigException), () => Target.SaveStateBatch(externalStates));
 		}

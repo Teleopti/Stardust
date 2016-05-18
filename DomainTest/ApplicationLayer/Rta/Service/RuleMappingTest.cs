@@ -22,11 +22,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldMapAlarmWithoutStateGroup()
 		{
-			var businessUnitId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithBusinessUnit(businessUnitId)
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-03-12 8:00", "2015-03-12 9:00")
 				.WithRule(null, phone, 0, Adherence.Out)

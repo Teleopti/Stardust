@@ -20,10 +20,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		public void ShouldHaveRuleStartTimeWhenHavingAdherence()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
 				.WithRule("phone", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
@@ -43,10 +42,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		public void ShouldNotChangeRuleStartTimeWhenStillInSameRule()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
 				.WithRule("phone", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5));
@@ -72,10 +70,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service.StartTime
 		public void ShouldUpdateRuleStartTimeWhenChangingRule()
 		{
 			var personId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
 			var phone = Guid.NewGuid();
 			Database
-				.WithUser("usercode", personId, businessUnitId)
+				.WithUser("usercode", personId)
 				.WithSchedule(personId, phone, "2015-12-10 8:00", "2015-12-10 9:00")
 				.WithRule("phone", phone, 0, Adherence.In)
 				.WithAlarm(TimeSpan.FromMinutes(5))
