@@ -76,7 +76,8 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentInterval);
 
-				if (forecastIntervals.Count == 0)
+
+				if (forecastIntervals.Count == 0 || Math.Abs(forecastIntervals.Sum(x => x.Calls)) < 0.001)
 					continue;
 
 				queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
