@@ -290,11 +290,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return Person; }
 		}
 
-		public virtual void AddPersonalActivity(IActivity activity, DateTimePeriod period)
+		public virtual void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
+			
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
+
+			if (!muteEvent)
+			{
+				AddEvent(() =>
+				{
+					var personalActivityAddedEvent = new PersonalActivityAddedEvent()
+					{
+						Date = Date.Date,
+						PersonId = Person.Id.Value,
+						ActivityId = activity.Id.Value,
+						StartDateTime = period.StartDateTime,
+						EndDateTime = period.EndDateTime,
+						ScenarioId = Scenario.Id.Value,
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if (trackedCommandInfo != null)
+					{
+						personalActivityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						personalActivityAddedEvent.CommandId = trackedCommandInfo.TrackId;
+					}
+
+					return personalActivityAddedEvent;
+				});
+			}
 		}
 
 		public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)

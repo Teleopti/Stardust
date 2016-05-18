@@ -192,6 +192,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AddPersonalActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Analytics\AnalyticsScheduleChangeFilterTests.cs" />
     <Compile Include="ApplicationLayer\ApproveRequestCommandHandlerTest.cs" />

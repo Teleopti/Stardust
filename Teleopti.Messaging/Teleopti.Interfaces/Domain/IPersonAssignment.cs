@@ -47,7 +47,7 @@ namespace Teleopti.Interfaces.Domain
 		IEnumerable<IShiftLayer> ShiftLayers { get; }
 		DateTimePeriod PeriodExcludingPersonalActivity();
 		bool RemoveActivity(IShiftLayer layer, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
-		void AddPersonalActivity(IActivity activity, DateTimePeriod period);
+		void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null);
 
 		void AddOvertimeActivity(IActivity activity, DateTimePeriod period,
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet);

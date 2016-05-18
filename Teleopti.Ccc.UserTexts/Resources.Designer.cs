@@ -4809,6 +4809,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You cannot add a personal activity to {0} without a shift.
+        /// </summary>
+        public static string CanNotAddPersonalActivityToAgentWithoutShift {
+            get {
+                return ResourceManager.GetString("CanNotAddPersonalActivityToAgentWithoutShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The preference cannot be added because the selected item is not available anymore..
         /// </summary>
         public static string CannotAddPreferenceSelectedItemNotAvailable {
@@ -17810,6 +17819,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoPermissionAddFullDayAbsenceForAgent {
             get {
                 return ResourceManager.GetString("NoPermissionAddFullDayAbsenceForAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No permission to add personal activity for agent {0}..
+        /// </summary>
+        public static string NoPermissionAddPersonalActivity {
+            get {
+                return ResourceManager.GetString("NoPermissionAddPersonalActivity", resourceCulture);
             }
         }
         

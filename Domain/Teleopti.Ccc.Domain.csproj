@@ -180,6 +180,8 @@
     <Compile Include="Aop\UnitOfWorkAttribute.cs" />
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\ICancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\IWriteProtectedScheduleCommandValidator.cs" />
@@ -189,6 +191,7 @@
     <Compile Include="ApplicationLayer\Commands\RunWaitlistCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\DayOff\DayOffTemplateChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\Events\PersonalActivityAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
     <Compile Include="ApplicationLayer\Events\DayOffTemplateChangedEvent.cs" />
