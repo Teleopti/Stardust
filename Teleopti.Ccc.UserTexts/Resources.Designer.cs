@@ -592,7 +592,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Activity conflicts with overnight shifts.
+        ///   Looks up a localized string similar to Can&apos;t add an activity within a shift that belongs to the day before.
         /// </summary>
         public static string ActivityConflictsWithOvernightShiftsFromPreviousDay {
             get {

@@ -14454,7 +14454,7 @@ Help us improve your experience by sending an error report</value>
     <comment>Error message that is displayed in MyTimeWeb's Request view when an agent attempts to cancel a request later than the threshold allows.  Parameter {0} = the number of days before the request startdate that the request can be cancelled.</comment>
   </data>
   <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
-    <value>Activity conflicts with overnight shifts</value>
+    <value>Can't add an activity within a shift that belongs to the day before</value>
     <comment>Error for adding new activity due to conflicting with the overnight shifts from the previous day.</comment>
   </data>
   <data name="LoadRequests" xml:space="preserve">
