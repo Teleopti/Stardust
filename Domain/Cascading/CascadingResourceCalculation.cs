@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -10,17 +9,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
-		private readonly VirtualSkillContext _virtualSkillContext;
 		private readonly CascadeResources _cascadeResources;
 
 		public CascadingResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder,
-																VirtualSkillContext virtualSkillContext,
 																CascadeResources cascadeResources)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_stateHolder = stateHolder;
-			_virtualSkillContext = virtualSkillContext;
 			_cascadeResources = cascadeResources;
 		}
 
@@ -36,22 +32,19 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private void doForPeriod(DateOnlyPeriod period)
 		{
-			using (_virtualSkillContext.Create(period))
+			using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
 			{
-				using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
+				foreach (var date in period.DayCollection())
 				{
-					foreach (var date in period.DayCollection())
-					{
-						//ska vara true, true (?) - fixa och lägg på test senare
-						_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
-					}
+					//ska vara true, true (?) - fixa och lägg på test senare
+					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 				}
-				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider()).Create())
+			}
+			using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider()).Create())
+			{
+				foreach (var date in period.DayCollection())
 				{
-					foreach (var date in period.DayCollection())
-					{
-						_cascadeResources.Execute(date);
-					}
+					_cascadeResources.Execute(date);
 				}
 			}
 		}
