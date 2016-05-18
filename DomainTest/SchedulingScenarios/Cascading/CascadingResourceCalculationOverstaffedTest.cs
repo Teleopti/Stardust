@@ -275,15 +275,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
-			var prioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			var prioritizedSkill = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			prioritizedSkill.SetCascadingIndex_UseFromTestOnly(1);
 			WorkloadFactory.CreateWorkloadWithOpenHours(prioritizedSkill, new TimePeriod(8, 0, 9, 0));
 			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var secondarySkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			var secondarySkill = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			secondarySkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(secondarySkill, new TimePeriod(8, 0, 9, 0));
 			var secondarySkillDay = secondarySkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var lastSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			var lastSkill = new Skill("C", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			lastSkill.SetCascadingIndex_UseFromTestOnly(3);
 			WorkloadFactory.CreateWorkloadWithOpenHours(lastSkill, new TimePeriod(8, 0, 9, 0));
 			var lastSkillDay = lastSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);

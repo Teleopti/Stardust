@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 					var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
 					if (remainingOverstaff <= 0)
 						continue;
-					foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && VirtualSkillContext.VirtualSkillGroupResult.BelongsToSameSkillGroup(skillToMoveFrom, x)))
+					foreach (var skillToMoveTo in cascadingSkills
+						.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && !skillToMoveFrom.Equals(x) && VirtualSkillContext.VirtualSkillGroupResult.BelongsToSameSkillGroup(skillToMoveFrom, x)))
 					{
 						ISkillStaffPeriod skillStaffPeriodTo;
 						if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo].TryGetValue(interval, out skillStaffPeriodTo))
