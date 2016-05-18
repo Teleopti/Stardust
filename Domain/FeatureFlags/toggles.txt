@@ -57,7 +57,6 @@ MyTimeWeb_PreferenceShowNightViolation_33152 = true
 MessageBroker_SchedulingScreenMailbox_32733 = true
 WfmPeople_ImportUsers_33665 = true
 RTA_ScheduleProjectionReadOnlyHangfire_35703 = RC
-Wfm_RTA_ProperAlarm_34975 = true
 Wfm_RTA_ProperReleaseToggle_36750 = true
 WfmPeople_AdjustSkill_34138 = true
 ResourcePlanner_WeeklyRestSolver_35043 = true

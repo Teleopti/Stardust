@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly WithAnalyticsUnitOfWork _withAnalytics;
 		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly AppliedAdherence _appliedAdherence;
-		private readonly IAppliedAlarm _appliedAlarm;
+		private readonly ProperAlarm _appliedAlarm;
 
 		public ContextLoader(
 			IDatabaseLoader databaseLoader,
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			WithAnalyticsUnitOfWork withAnalytics,
 			WithUnitOfWork withUnitOfWork,
 			AppliedAdherence appliedAdherence,
-			IAppliedAlarm appliedAlarm
+			ProperAlarm appliedAlarm
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);

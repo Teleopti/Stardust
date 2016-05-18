@@ -180,8 +180,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 											new SystemSettingControl(_toggleManager),
 											new RotationPage(),
 											new DaysOffControl(),
-											new AlarmControl(alarmControlPresenterDecorators(), alarmControlNamer()),
-											new ManageAlarmSituations(mapNamer()),
+											new AlarmControl(alarmControlPresenterDecorators()),
+											new ManageAlarmSituations(),
 											new DefinitionSetSettings(),
 											new WorkflowControlSetView(_toggleManager),
 											new AuditingPage(),
@@ -211,30 +211,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 			return allSupportedPages;
 		}
-
-		private IRtaControlNamer mapNamer()
-		{
-			if (_toggleManager.IsEnabled(Toggles.Wfm_RTA_ProperAlarm_34975))
-				return new RtaMapNamer();
-			return new AlarmsNamer();
-		}
-
-		private IRtaControlNamer alarmControlNamer()
-		{
-			if (_toggleManager.IsEnabled(Toggles.Wfm_RTA_ProperAlarm_34975))
-				return new RtaRuleNamer();
-			return new AlarmTypeNamer();
-		}
-
+		
 		private IEnumerable<IAlarmControlPresenterDecorator> alarmControlPresenterDecorators()
 		{
 			yield return new AdherenceColumn();
-			if (_toggleManager.IsEnabled(Toggles.Wfm_RTA_ProperAlarm_34975))
-			{
-				yield return new ThresholdColumn();
-				yield return new IsAlarmColumn();
-				yield return new AlarmColorColumn();
-			}
+			yield return new ThresholdColumn();
+			yield return new IsAlarmColumn();
+			yield return new AlarmColorColumn();
 		}
 	}
 

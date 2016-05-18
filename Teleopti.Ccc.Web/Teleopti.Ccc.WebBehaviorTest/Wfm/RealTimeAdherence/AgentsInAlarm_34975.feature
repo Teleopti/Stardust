@@ -46,7 +46,6 @@ Background:
 	| Alarm threshold | 00:01:00     |
 	| Alarm color     | Red          |
 
-@OnlyRunIfEnabled('Wfm_RTA_ProperAlarm_34975')
 Scenario: See agents with the highest alarm time first
 	Given the time is '2015-11-23 08:00:00'
 	And I am viewing real time adherence for agents on team 'Red'

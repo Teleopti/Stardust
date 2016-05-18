@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly AppliedAdherence _appliedAdherence;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
-		private readonly IAppliedAlarm _appliedAlarm;
+		private readonly ProperAlarm _appliedAlarm;
 
 		public RtaProcessor(
 			StateMapper stateMapper,
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			AppliedAdherence appliedAdherence,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher eventPublisher,
-			IAppliedAlarm appliedAlarm)
+			ProperAlarm appliedAlarm)
 		{
 			_stateMapper = stateMapper;
 			_shiftEventPublisher = shiftEventPublisher;

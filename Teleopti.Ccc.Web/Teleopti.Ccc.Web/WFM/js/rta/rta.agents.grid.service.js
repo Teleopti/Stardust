@@ -8,41 +8,28 @@
 				};
 				var sortingAlgorithm = function(a, b) {
 					if ((a === null||a === undefined) && (b === null||b === undefined))
-							return 0;
+						return 0;
 					if (a === null||a === undefined)
-							return -1;
+						return -1;
 					if (b === null||b === undefined)
-							return 1;
+						return 1;
 					if (a > b)
 						return 1;
 					if (a < b)
-							return -1;
+						return -1;
 					return 0;
 				};
-				if (toggleService.Wfm_RTA_ProperAlarm_34975)
-					return makeGridOptions({
-						headerCellTemplate: 'js/rta/rta-agents-headercelltemplate-ProperAlarm_34975.html',
-						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
-						timeInAlarmField: 'TimeInAlarm',
-						sort: sort,
-						sortingAlgorithm: sortingAlgorithm
-					});
-				else
-					return makeGridOptions({
-						sort: sort,
-						sortingAlgorithm: sortingAlgorithm
-					});
+				return makeGridOptions({
+					headerCellTemplate: 'js/rta/rta-agents-headercelltemplate.html',
+					sort: sort,
+					sortingAlgorithm: sortingAlgorithm
+				});
 			};
 
 			this.makeInAlarmGrid = function() {
-				if (toggleService.Wfm_RTA_ProperAlarm_34975)
-					return makeGridOptions({
-						headerCellTemplate: '<div></div>',
-						alarmDurationCellTemplate: '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>',
-						timeInAlarmField: 'TimeInAlarm'
-					});
-				else
-					return makeGridOptions();
+				return makeGridOptions({
+					headerCellTemplate: '<div></div>'
+				});
 			};
 			function makeGridOptions(args) {
 				args = args || {};
@@ -52,11 +39,11 @@
 
 				var nextActivityCellTemplate = '<div class="ui-grid-cell-contents"><span class="mdi mdi-arrow-right"></span>{{row.entity.NextActivityStartTime}} {{row.entity.NextActivity}}</div>';
 				var alarmCellTemplate = coloredCellTemplate;
-				var alarmDurationCellTemplate = args.alarmDurationCellTemplate || coloredWithDurationCellTemplate;
+				var alarmDurationCellTemplate = '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
 				var headerCellTemplate = args.headerCellTemplate || null;
 				var rowTemplate = args.rowTemplate || 'js/rta/rta-agents-rowtemplate.html';
-				var timeInAlarmField = args.timeInAlarmField || 'TimeInState';
+				var timeInAlarmField = 'TimeInAlarm';
 
 				if (toggleService.RTA_AdherenceDetails_34267)
 					rowTemplate = 'js/rta/rta-agents-rowtemplate-AdherenceDetails_34267.html';

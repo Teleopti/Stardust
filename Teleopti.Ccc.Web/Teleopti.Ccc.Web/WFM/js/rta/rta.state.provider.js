@@ -1,18 +1,12 @@
 'use strict';
 
 angular.module('wfm.rta').provider('RtaState', function() {
-	var toggles = {
-		Wfm_RTA_ProperAlarm_34975: false
-	};
 	var rtaAgentsTemplate = function(elem, attr) {
-		if (toggles.Wfm_RTA_ProperAlarm_34975)
-			return 'js/rta/rta-agents-ProperAlarm_34975.html';
 		return 'js/rta/rta-agents.html';
 	};
 	this.$get = function() {
 		return function(toggleService) {
 			toggleService.togglesLoaded.then(function() {
-				toggles.Wfm_RTA_ProperAlarm_34975 = toggleService.Wfm_RTA_ProperAlarm_34975
 			});
 		};
 	};

@@ -54,7 +54,6 @@
 		Wfm_Outbound_Campaign_32696,
 		Wfm_Outbound_Campaign_GanttChart_Navigation_34924,
 		WfmPermission_ReplaceOldPermission_34671,
-		Wfm_RTA_ProperAlarm_34975,
 		Wfm_RTA_ProperReleaseToggle_36750,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		WfmTeamSchedule_AbsenceReporting_35995,

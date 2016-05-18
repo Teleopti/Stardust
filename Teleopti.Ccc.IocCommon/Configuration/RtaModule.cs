@@ -1,9 +1,7 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 
@@ -64,11 +62,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
 			builder.RegisterType<AppliedAdherence>().SingleInstance();
-
-			if (_config.Toggle(Toggles.Wfm_RTA_ProperAlarm_34975))
-				builder.RegisterType<ProperAlarm>().As<IAppliedAlarm>().SingleInstance();
-			else
-				builder.RegisterType<AllRulesIsAlarm>().As<IAppliedAlarm>().SingleInstance();
+			
+			builder.RegisterType<ProperAlarm>().SingleInstance();
 		}
 	}
 }

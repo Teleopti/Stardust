@@ -205,7 +205,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		}
 
 		[Test]
-		[Toggle(Toggles.Wfm_RTA_ProperAlarm_34975)]
 		public void ShouldBeAlarmColorWhenAlarmHasStarted()
 		{
 			var agentStates = new[]
@@ -221,25 +220,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var states = Target.Build(agentStates);
 
 			states.Single().Color.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Red.ToArgb())));
-		}
-
-		[Test]
-		[ToggleOff(Toggles.Wfm_RTA_ProperAlarm_34975)]
-		public void ShouldBeUseRuleColorWhenProperAlarmIsDisabled()
-		{
-			var agentStates = new[]
-			{
-				new AgentStateReadModel
-				{
-					AlarmStartTime = "2015-12-22 08:00".Utc(),
-					RuleColor = Color.Orange.ToArgb(),
-					AlarmColor = Color.Red.ToArgb()
-				}
-			};
-			Now.Is("2015-12-22 08:30".Utc());
-			var states = Target.Build(agentStates);
-
-			states.Single().Color.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Orange.ToArgb())));
 		}
 	}
 }

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class Context
 	{
-		private readonly IAppliedAlarm _appliedAlarm;
+		private readonly ProperAlarm _appliedAlarm;
 		private readonly Lazy<StoredStateInfo> _stored;
 		private readonly Action<Context> _agentStateReadModelUpdater;
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			INow now,
 			StateMapper stateMapper,
 			AppliedAdherence appliedAdherence,
-			IAppliedAlarm appliedAlarm)
+			ProperAlarm appliedAlarm)
 		{
 			var dontDeferForNow = stored == null ? null : stored.Invoke();
 			_stored = new Lazy<StoredStateInfo>(() => dontDeferForNow);

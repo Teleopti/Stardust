@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Common
 	public static class ServiceLocatorForEntity
 	{
 		private static ICurrentBusinessUnit _currentBusinessUnit;
-		private static IAppliedAlarm _appliedAlarm;
+		private static ProperAlarm _appliedAlarm;
 		private static IUpdatedBy _updatedBy;
 
 		public static ICurrentBusinessUnit CurrentBusinessUnit
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Domain.Common
 			set { _currentBusinessUnit = value; }
 		}
 
-		public static IAppliedAlarm AppliedAlarm
+		public static ProperAlarm AppliedAlarm
 		{
-			get { return _appliedAlarm ?? new AllRulesIsAlarm(); }
+			get { return _appliedAlarm ?? new ProperAlarm(); }
 			set { _appliedAlarm = value; }
 		}
 

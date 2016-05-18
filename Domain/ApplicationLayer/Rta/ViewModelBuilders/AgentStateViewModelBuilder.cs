@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IUserCulture _culture;
-		private readonly IAppliedAlarm _appliedAlarm;
+		private readonly ProperAlarm _appliedAlarm;
 
-		public AgentStateViewModelBuilder(INow now, IUserTimeZone timeZone, IUserCulture culture, IAppliedAlarm appliedAlarm)
+		public AgentStateViewModelBuilder(INow now, IUserTimeZone timeZone, IUserCulture culture, ProperAlarm appliedAlarm)
 		{
 			_now = now;
 			_timeZone = timeZone;
