@@ -647,7 +647,11 @@
       <DependentUpon>Index.aspx</DependentUpon>
     </Compile>
     <Compile Include="Areas\Global\BasicActionThrottler.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\IRequestViewModelMapper.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\IShiftTradeRequestViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactory.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestViewModelMapper.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModelFactory\ShiftTradeRequestViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
     <Compile Include="Areas\ResourcePlanner\DayOffRulesController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />

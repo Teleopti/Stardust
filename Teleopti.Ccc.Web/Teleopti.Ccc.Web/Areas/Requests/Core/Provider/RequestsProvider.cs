@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			_peopleSearchProvider = peopleSearchProvider;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input, out int totalCount)
+		public IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input, IEnumerable<RequestType> requestTypes, out int totalCount)
 		{
-			return _repository.FindAllRequests(toRequestFilter(input), out totalCount).Where(permissionCheckPredicate);
+			return _repository.FindAllRequests(toRequestFilter(input, requestTypes), out totalCount).Where(permissionCheckPredicate);
 		}
 
-		private RequestFilter toRequestFilter(AllRequestsFormData input)
+		private RequestFilter toRequestFilter(AllRequestsFormData input, IEnumerable<RequestType> requestTypes)
 		{
 			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
 			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				RequestFilters = input.Filters,
 				Period = queryDateTimePeriod,
 				Paging = input.Paging,
-				RequestTypes = new List<RequestType> { RequestType.AbsenceRequest, RequestType.TextRequest },
+				RequestTypes = requestTypes,
 				SortingOrders = input.SortingOrders
 			};
 

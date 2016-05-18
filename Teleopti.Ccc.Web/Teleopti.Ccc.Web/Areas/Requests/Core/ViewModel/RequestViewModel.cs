@@ -27,6 +27,30 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public string DenyReason { get; set; }
 	}
 
+	public class ShiftTradeRequestViewModel : RequestViewModel
+	{
+		public string PersonTo { get; set; }
+		public string PersonToTeam { get; set; }
+		public string PersonToTimeZone { get; set; }
+
+		public IEnumerable<ShiftTradeDayViewModel> ShiftTradeDays { get; set; }
+	}
+
+	public class ShiftTradeDayViewModel
+	{
+		public DateOnly Date { get; set; }
+		public ShiftTradeScheduleDayDetailViewModel FromScheduleDayDetail { get; set; }
+		public ShiftTradeScheduleDayDetailViewModel ToScheduleDayDetail { get; set; }
+		
+	}
+
+	public class ShiftTradeScheduleDayDetailViewModel
+	{
+		public string Name { get; set; }
+		public string ShortName { get; set; }
+		public string Color { get; set; }
+	}
+
 	public class RequestListViewModel
 	{
 		public int TotalCount;

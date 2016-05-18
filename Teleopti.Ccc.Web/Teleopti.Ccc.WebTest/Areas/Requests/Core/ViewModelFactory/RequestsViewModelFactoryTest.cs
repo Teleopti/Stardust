@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var result = Target.Create(input);
 			result.Count().Should().Be.EqualTo(3);
-		}	
-		
+		}
+
 		[Test]
 		public void ShouldGetRequestsForDay()
 		{
@@ -83,14 +83,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 9),
 				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc }
 			};
-		
+
 			var result = Target.Create(input);
 			result.First().AgentName.Should().Be.EqualTo("test1 test1");
 			result.Second().AgentName.Should().Be.EqualTo("test2 test2");
 			result.Last().AgentName.Should().Be.EqualTo("test3 test3");
 
 		}
-		
+
 		[Test]
 		public void ShouldNotSeeRequestWithoutPermission()
 		{
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotSeeRequestBeforePermissionDate()
 		{
-			
+
 			setUpRequests();
 
 			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
@@ -131,22 +131,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			result.Count().Should().Be.EqualTo(1);
 		}
 
-		
+
 		[Test]
 		public void ShouldReturnRequestsBelongToQueriedAgents()
 		{
-			
+
 			var personSearchProvider = PeopleSearchProvider as FakePeopleSearchProvider;
 			var requests = setUpRequests();
 
-		
-			personSearchProvider.PresetReturnPeople(new List<IPerson>{requests.First().Person} );
+
+			personSearchProvider.PresetReturnPeople(new List<IPerson> { requests.First().Person });
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string> { {PersonFinderField.FirstName, "test1"}}					
+				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } }
 			};
 
 			var result = Target.Create(input);
@@ -214,7 +214,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			result.Requests.First().AgentName.Should().Be.EqualTo("test1 test1");
 
 		}
-
 
 		private IEnumerable<IPersonRequest> setUpRequests()
 		{

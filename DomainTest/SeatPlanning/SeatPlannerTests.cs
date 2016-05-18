@@ -109,10 +109,6 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var personAssignment = addAssignment(person, startDate, endDate);
 
 			var seatMapLocation = addLocation("Location", null, new Seat("Seat One", 1));
-
-			
-			
-			
 			var seatPlanner = setupSeatPlanner(teams, new[] { person }, new[] { seatMapLocation }, personAssignment);
 
 			seatPlanner.Plan(

@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
 	public interface IRequestsProvider
 	{
-		IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input, out int totalCount);
+		IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input, IEnumerable<RequestType> requestTypes, out int totalCount);
 	}
 }

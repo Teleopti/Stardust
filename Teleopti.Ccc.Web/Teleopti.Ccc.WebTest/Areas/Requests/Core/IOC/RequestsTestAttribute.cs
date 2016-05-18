@@ -13,6 +13,8 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
+using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
+using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.WebTest.Areas.Global;
@@ -58,6 +60,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
 			system.UseTestDouble(new SwedishCulture()).For<IUserCulture>();
 			system.UseTestDouble(new FakeEventPublisher()).For<IEventPublisher>();
+			
+
 		}
 	}
 }

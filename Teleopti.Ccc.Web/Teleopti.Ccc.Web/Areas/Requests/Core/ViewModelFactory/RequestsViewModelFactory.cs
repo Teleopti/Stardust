@@ -13,21 +13,19 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 	public class RequestsViewModelFactory : IRequestsViewModelFactory
 	{
 		private readonly IRequestsProvider _requestsProvider;
-		private readonly IPersonNameProvider _personNameProvider;
-		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+		private readonly IRequestViewModelMapper _requestViewModelMapper;
 
-		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
+		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper)
 		{
 			_requestsProvider = requestsProvider;
-			_personNameProvider = personNameProvider;
-			_ianaTimeZoneProvider = ianaTimeZoneProvider;
+			_requestViewModelMapper = requestViewModelMapper;
 		}
 
 		// Deprecate after Wfm_Requests_Performance_36295. Use CreateRequestListViewModel instead.
 		public IEnumerable<RequestViewModel> Create(AllRequestsFormData input)
 		{
 			int totalCount;
-			var requests = _requestsProvider.RetrieveRequests(input, out totalCount);
+			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest }, out totalCount);
 			var requestViewModels = requests.Select(toViewModel).ToArray();
 
 			var mapping = new Dictionary<RequestsSortingOrder, Func<RequestViewModel, object>>
@@ -57,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
 			int totalCount;
-			var requests = _requestsProvider.RetrieveRequests(input, out totalCount);	
+			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest }, out totalCount);
 
 			return new RequestListViewModel
 			{
@@ -65,50 +63,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				TotalCount = totalCount,
 				Skip = input.Paging.Skip,
 				Take = input.Paging.Take
-			};			
+			};
 		}
 
 		private RequestViewModel toViewModel(IPersonRequest request)
 		{
-			var team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime));
-			return new RequestViewModel()
-			{
-				Id = request.Id.GetValueOrDefault(),
-				Subject = request.GetSubject(new NoFormatting()),
-				Message = request.GetMessage(new NoFormatting()),
-				DenyReason = request.DenyReason,
-				TimeZone =  _ianaTimeZoneProvider.WindowsToIana(request.Person.PermissionInformation.DefaultTimeZone().Id),
-				PeriodStartTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime, request.Person.PermissionInformation.DefaultTimeZone()),
-				PeriodEndTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime, request.Person.PermissionInformation.DefaultTimeZone()),
-				CreatedTime = request.CreatedOn.HasValue? TimeZoneHelper.ConvertFromUtc(request.CreatedOn.Value, request.Person.PermissionInformation.DefaultTimeZone()): (DateTime?)null,
-				UpdatedTime = request.UpdatedOn.HasValue? TimeZoneHelper.ConvertFromUtc(request.UpdatedOn.Value, request.Person.PermissionInformation.DefaultTimeZone()): (DateTime?)null,
-				AgentName = _personNameProvider.BuildNameFromSetting(request.Person.Name),
-				Seniority=request.Person.Seniority,
-				Type = request.Request.RequestType,
-				TypeText = request.Request.RequestTypeDescription,
-				StatusText = request.StatusText,
-				Status = request.IsApproved
-					? RequestStatus.Approved
-					: request.IsPending
-						? RequestStatus.Pending
-						: request.IsDenied
-							? RequestStatus.Denied
-							: RequestStatus.New,
-				Payload = request.Request.RequestPayloadDescription,
-				Team = team == null? null:team.SiteAndTeam, 				
-				IsFullDay = isFullDay(request)
-			};
+			return _requestViewModelMapper.Map(new RequestViewModel(), request);
 		}
-
-		private bool isFullDay(IPersonRequest request)
-		{
-			// ref: Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.TextRequestFormMappingProfile
-			var startTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime, request.Person.PermissionInformation.DefaultTimeZone());
-			if (startTime.Hour != 0 || startTime.Minute != 0 || startTime.Second != 0) return false;
-			var endTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime, request.Person.PermissionInformation.DefaultTimeZone());
-			if (endTime.Hour != 23 || endTime.Minute != 59 || endTime.Second != 0) return false;
-			return true;
-		}
-
 	}
 }
