@@ -406,6 +406,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDayOffRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsOvertimeRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPreferenceRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsDateRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsGroupPageRepository.cs" />

@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 {
-    public class MultiplicatorDefinitionSet : VersionedAggregateRootWithBusinessUnit, IMultiplicatorDefinitionSet, IDeleteTag
+    public class MultiplicatorDefinitionSet : VersionedAggregateRootWithBusinessUnit, IMultiplicatorDefinitionSet, IDeleteTag, IAggregateRootWithEvents
     {
         private IList<IMultiplicatorDefinition> _definitionCollection;
         private string _name;
@@ -24,7 +25,39 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             _definitionCollection = new List<IMultiplicatorDefinition>();
         }
 
-        public virtual string Name
+	    private T CreateEvent<T>(INow now) where T: MultiplicatorDefinitionSetChangedBase, new()
+	    {
+		    return new T
+		    {
+			    MultiplicatorDefinitionSetId = Id.GetValueOrDefault(),
+			    MultiplicatorDefinitionSetName = Name,
+			    MultiplicatorType = MultiplicatorType,
+			    DatasourceUpdateDate = UpdatedOn ?? now.UtcDateTime(),
+			    IsDeleted = IsDeleted,
+		    };
+	    }
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    {
+		    var events = base.PopAllEvents(now, operation).ToList();
+		    if (operation != null)
+		    {
+			    switch (operation)
+			    {
+					case DomainUpdateType.Insert:
+						events.Add(CreateEvent<MultiplicatorDefinitionSetCreated>(now));
+					    break;
+					case DomainUpdateType.Update:
+						events.Add(CreateEvent<MultiplicatorDefinitionSetChanged>(now));
+						break;
+					case DomainUpdateType.Delete:
+						events.Add(CreateEvent<MultiplicatorDefinitionSetDeleted>(now));
+						break;
+				}
+		    }
+		    return events;
+	    }
+
+	    public virtual string Name
         {
             get { return _name; }
             set { _name = value; }

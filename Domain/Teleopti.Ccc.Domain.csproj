@@ -155,6 +155,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
+    <Compile Include="Analytics\AnalyticsOvertime.cs" />
     <Compile Include="Analytics\AnalyticsAbsence.cs" />
     <Compile Include="Analytics\AnalyticsScenario.cs" />
     <Compile Include="Analytics\AnalyticsDayOff.cs" />
@@ -195,6 +196,7 @@
     <Compile Include="ApplicationLayer\Commands\WriteProtectedScheduleCommandValidator.cs" />
     <Compile Include="ApplicationLayer\DayOff\AnalyticsDayOffUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\PersonalActivityAddedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\MultiplicatorDefinitionSetCreated.cs" />
     <Compile Include="ApplicationLayer\Events\AbsenceChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
     <Compile Include="ApplicationLayer\Events\ScenarioChangedEvents.cs" />
@@ -205,6 +207,7 @@
     <Compile Include="ApplicationLayer\Forecast\ExportMultisiteSkillsToSkillEventServiceBusHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\ImportForecastProcessorMessage.cs" />
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkillMessage.cs" />
+    <Compile Include="ApplicationLayer\MultiplicatorDefinitionSetHandlers\AnalyticsOvertimeUpdater.cs" />
     <Compile Include="ApplicationLayer\Payroll\RunPayrollExportEvent.cs" />
     <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
@@ -276,6 +279,7 @@
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsOvertimeRepository.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
     <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
