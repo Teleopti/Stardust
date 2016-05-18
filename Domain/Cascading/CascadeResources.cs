@@ -31,15 +31,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 					var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
 					if (remainingOverstaff <= 0)
 						continue;
-					foreach (var skillToMoveTo in cascadingSkills
-						.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && !skillToMoveFrom.Equals(x)))
+					foreach (var skillToMoveTo in cascadingSkills.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && !skillToMoveFrom.Equals(x)))
 					{
 						var resourcesInGroup = resourcesInSkillGroup(skillToMoveFrom.Activity, skillToMoveTo, skillToMoveFrom, interval);
-						//TODO: perf: hoppa ur ifall resourceingroup är 0. fixar sen
+						if (resourcesInGroup.IsZero())
+							continue;
 						ISkillStaffPeriodDictionary skillStaffPeriodToDic;
 						if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveTo, out skillStaffPeriodToDic))
 							continue;
-
 						var skillStaffPeriodTo = skillStaffPeriodToDic.SkillStaffPeriodOrDefault(interval);
 						var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 						if (skillToMoveToAbsoluteDifference >= 0)
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, resourcesToMove);
 
 						remainingOverstaff -= resourcesToMove;
-						if (Math.Abs(remainingOverstaff) < 0.0000000000000001d)
+						if(remainingOverstaff.IsZero())
 							break;
 					}
 				}
