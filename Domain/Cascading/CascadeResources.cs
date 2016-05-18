@@ -22,8 +22,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var schedulingResult = _stateHolder().SchedulingResultState;
 			var cascadingSkills = schedulingResult.CascadingSkills().ToArray();
 			foreach (var skillToMoveFrom in cascadingSkills.Reverse())
-			{
-				var skillStaffPeriodFromDic = schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveFrom];
+			{ 
+				ISkillStaffPeriodDictionary skillStaffPeriodFromDic;
+				if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveFrom, out skillStaffPeriodFromDic))
+					continue;
 				foreach (var interval in date.ToDateTimePeriod(skillToMoveFrom.TimeZone).Intervals(TimeSpan.FromMinutes(skillToMoveFrom.DefaultResolution)))
 				{
 					var skillStaffPeriodFrom = skillStaffPeriodFromDic.SkillStaffPeriodOrDefault(interval);
@@ -33,7 +35,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 					foreach (var skillToMoveTo in cascadingSkills
 						.Where(x => x.Activity.Equals(skillToMoveFrom.Activity) && !skillToMoveFrom.Equals(x) && VirtualSkillContext.VirtualSkillGroupResult.BelongsToSameSkillGroup(skillToMoveFrom, x)))
 					{
-						var skillStaffPeriodTo = schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skillToMoveTo].SkillStaffPeriodOrDefault(interval);
+						ISkillStaffPeriodDictionary skillStaffPeriodToDic;
+						if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveTo, out skillStaffPeriodToDic))
+							continue;
+
+						var skillStaffPeriodTo = skillStaffPeriodToDic.SkillStaffPeriodOrDefault(interval);
 						var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 						if (skillToMoveToAbsoluteDifference >= 0)
 							continue;
