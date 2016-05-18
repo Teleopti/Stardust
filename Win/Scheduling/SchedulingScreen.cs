@@ -267,15 +267,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ribbonControlAdv1.QuickPanelVisible = true;	
 		}
 
-		private void checkSmsLinkLicense(IToggleManager toggleManager)
+		private void checkSmsLinkLicense()
 		{
 			var dataSource = UnitOfWorkFactory.CurrentUnitOfWorkFactory().Current().Name;
-			var toggleEnabled = toggleManager.IsEnabled(Toggles.RTA_NotifyViaSMS_31567);
 			var hasLicense = DefinedLicenseDataFactory.HasLicense(dataSource) &&
 							 DefinedLicenseDataFactory.GetLicenseActivator(dataSource)
 								 .EnabledLicenseOptionPaths.Contains(
 									 DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
-			toolStripMenuItemNotifyAgent.Visible = hasLicense && toggleEnabled;
+			toolStripMenuItemNotifyAgent.Visible = hasLicense;
 		}
 
 		private void setMenuItemsHardToLeftToRight()
@@ -525,7 +524,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_cutPasteHandlerFactory = new CutPasteHandlerFactory(this, () => _scheduleView, deleteFromSchedulePart,
 				checkPastePermissions, pasteFromClipboard, enablePasteOperation);
 
-			checkSmsLinkLicense(toggleManager);
+			checkSmsLinkLicense();
 		}
 
 		private SchedulingScreenSettings loadSchedulingScreenSettings()

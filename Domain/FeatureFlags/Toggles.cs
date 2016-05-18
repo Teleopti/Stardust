@@ -27,8 +27,6 @@
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
-		RTA_NotifyViaSMS_31567,
-
 		Portal_NewLandingpage_29415,
 		Show_StaticPageOnNoInternet_29415,
 		MyTimeWeb_SortSchedule_32092,

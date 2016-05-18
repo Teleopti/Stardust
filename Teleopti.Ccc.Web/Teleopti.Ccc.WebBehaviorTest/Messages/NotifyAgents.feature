@@ -3,7 +3,6 @@
 	As a team leader
 	I want to send sms to the agents from RTA
 
-@OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 Scenario: Access from RTA
 	Given there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -29,7 +28,6 @@ Scenario: Access from RTA
 	Then The message tool should be opened in a new window
 
 @ignore
-@OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 Scenario: Send message
 	Given there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -63,7 +61,6 @@ Scenario: Send message
 @ignore
 #It will be redirected to Anywhere with toggle 'MyTimeWeb_KeepUrlAfterLogon_34762' off
 @OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
-@OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 Scenario: Send message after application sign in
 	Given there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -94,7 +91,6 @@ Scenario: Send message after application sign in
 @ignore
 #It will be redirected to Anywhere with toggle 'MyTimeWeb_KeepUrlAfterLogon_34762' off
 @OnlyRunIfEnabled('MyTimeWeb_KeepUrlAfterLogon_34762')
-@OnlyRunIfEnabled('RTA_NotifyViaSMS_31567')
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Send message after windows sign in
 	Given there is a site named 'Paris'

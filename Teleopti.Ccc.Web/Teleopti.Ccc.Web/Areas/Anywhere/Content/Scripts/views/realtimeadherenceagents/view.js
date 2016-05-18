@@ -130,7 +130,7 @@
 			permissions.get().done(function (data) {
 				viewModel.permissionAddActivity(data.IsAddActivityAvailable);
 				viewModel.permissionSendMessage(data.IsSmsLinkAvailable);
-				viewModel.notifyViaSMSEnabled(resources.RTA_NotifyViaSMS_31567 && viewModel.permissionSendMessage());
+				viewModel.notifyViaSMSEnabled(viewModel.permissionSendMessage());
 			});
 
 			viewModel.agentAdherenceDetailsEnabled(resources.RTA_AdherenceDetails_34267);
