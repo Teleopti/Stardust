@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					{
 						GroupId = Guid.Empty,
 						GroupName = null as string,
-						IsLogOutState = false,
 						StateCodes = new[]
 						{
 							new
@@ -51,7 +50,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					{
 						GroupId = m.StateGroup.Id.Value,
 						GroupName = m.StateGroup.Name,
-						IsLogOutState = m.StateGroup.IsLogOutState,
 						StateCodes = m.StateGroup.StateCollection.IsEmpty()
 							? new[]
 							{
@@ -106,8 +104,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					ThresholdTime = rule.ThresholdTime,
 					AlarmColor = rule.AlarmColor,
 					StateGroupId = @group.GroupId,
-					StateGroupName = @group.GroupName,
-					IsLogOutState = @group.IsLogOutState
+					StateGroupName = @group.GroupName
 				};
 
 			var groupsWithoutMapping = (
@@ -121,8 +118,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					PlatformTypeId = c.PlatformTypeId,
 					StateCode = c.StateCode,
 					StateGroupId = g.Id.Value,
-					StateGroupName = g.Name,
-					IsLogOutState = g.IsLogOutState
+					StateGroupName = g.Name
 				});
 
 			return allMappings

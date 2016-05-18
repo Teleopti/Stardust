@@ -4,6 +4,27 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public class MappingsState
+	{
+		private readonly Func<IEnumerable<Mapping>> _loadMappings;
+		private IEnumerable<Mapping> _mappings;
+
+		public MappingsState(Func<IEnumerable<Mapping>> loadMappings)
+		{
+			_loadMappings = loadMappings;
+		}
+
+		public IEnumerable<Mapping> Use()
+		{
+			return _mappings ?? (_mappings = _loadMappings.Invoke());
+		}
+
+		public void Invalidate()
+		{
+			_mappings = null;
+		}
+	}
+
 	public class Context
 	{
 		private readonly IAppliedAlarm _appliedAlarm;
@@ -28,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var dontDeferForNow = stored == null ? null : stored.Invoke();
 			_stored = new Lazy<StoredStateInfo>(() => dontDeferForNow);
 			var scheduleLazy = new Lazy<IEnumerable<ScheduleLayer>>(schedule);
-			var mappingsLazy = new Lazy<IEnumerable<Mapping>>(() => mappings.Invoke(this));
+			var mappingsState = new MappingsState(() => mappings.Invoke(this));
 			_agentStateReadModelUpdater = agentStateReadModelUpdater ?? (a => { });
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
@@ -40,8 +61,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_appliedAlarm = appliedAlarm;
 
 			Schedule = new ScheduleInfo(scheduleLazy, _stored, CurrentTime);
-			State = new StateRuleInfo(mappingsLazy, _stored, stateCode, platformTypeId, businessUnitId, Input, Schedule, stateMapper);
-			Adherence = new AdherenceInfo(Input, _stored, mappingsLazy, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
+			State = new StateRuleInfo(mappingsState, _stored, stateCode, platformTypeId, businessUnitId, Input, Schedule, stateMapper);
+			Adherence = new AdherenceInfo(Input, _stored, mappingsState, businessUnitId, State, Schedule, appliedAdherence, stateMapper);
 		}
 
 		public Guid PersonId { get; private set; }

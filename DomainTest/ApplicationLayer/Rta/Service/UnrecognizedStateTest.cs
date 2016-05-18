@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	{
 		public FakeRtaDatabase Database;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
+		public IRtaStateGroupRepository StateGroups;
 
 		[Test]
 		public void ShouldAddStateCodeToDatabase()
@@ -30,21 +33,43 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Ignore]
-		public void ShouldMapToDefaults()
-		{	
-			var inAdherence = Guid.NewGuid();
+		public void ShouldUpdateReadModelWithDefaultState()
+		{
 			Database
 				.WithUser("usercode")
-				.WithRule(inAdherence, "logged out", Guid.Empty);
+				.WithRule(Guid.NewGuid(), "loggedout", null, "Logged Out");
+
+			Target.SaveState(new ExternalUserStateForTest
+			{
+				UserCode = "usercode",
+				StateCode = "unrecognized-loggedout"
+			});
+
+			Database.PersistedReadModel.StateId.Should().Be(StateGroups.LoadAll().Single(x => x.DefaultStateGroup).Id.Value);
+			Database.PersistedReadModel.StateName.Should().Be("Logged Out");
+		}
+
+		[Test]
+		public void ShouldBlahLogOutBlahSnapShotBlahDefaultStateRuleBla()
+		{
+			Assert.Ignore();
+		}
+
+		[Test]
+		public void ShouldUpdateReadModelWithDefaultRule()
+		{	
+			var adhering = Guid.NewGuid();
+			Database
+				.WithUser("usercode")
+				.WithRule(adhering, "loggedout", null);
 			
 			Target.SaveState(new ExternalUserStateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "new logged out state code"
+				StateCode = "unrecognized-loggedout"
 			});
 
-			Database.PersistedReadModel.RuleId.Should().Be(inAdherence);
+			Database.PersistedReadModel.RuleId.Should().Be(adhering);
 		}
 		
 		[Test]
@@ -89,6 +114,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
 			Database.StateCodes.Select(x => x.Name).Should().Contain("statecode");
+		}
+
+		[Test]
+		public void ShouldNotAddDuplicatesInBatch()
+		{
+			Database
+				.WithUser("usercode1")
+				.WithUser("usercode2")
+				.WithUser("usercode3")
+				.WithRule();
+
+			Target.SaveStateSnapshot(new[]
+			{
+				new ExternalUserStateForTest
+				{
+					UserCode = "usercode1",
+					StateCode = "phone",
+					BatchId = "2016-05-18 08:00".Utc()
+				},
+				new ExternalUserStateForTest
+				{
+					UserCode = "usercode2",
+					StateCode = "phone",
+					BatchId = "2016-05-18 08:00".Utc()
+				}
+			});
+			
+			Target.SaveStateSnapshot(new[]
+			{
+				new ExternalUserStateForTest
+				{
+					UserCode = "usercode3",
+					StateCode = "phone",
+					BatchId = "2016-05-18 08:05".Utc()
+				}
+			});
+
+			Database.StateCodes.Where(x => x.StateCode == Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot)
+				.Should().Have.Count.EqualTo(1);
 		}
 	}
 }

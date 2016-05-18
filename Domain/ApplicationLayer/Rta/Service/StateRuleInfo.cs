@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Lazy<StoredStateInfo> _stored;
 
 		public StateRuleInfo(
-			Lazy<IEnumerable<Mapping>> mappings,
+			MappingsState mappings,
 			Lazy<StoredStateInfo> stored, 
 			string stateCode,
 			Guid platformTypeId,
@@ -22,8 +21,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			)
 		{
 			_stored = stored;
-			_mappedState = new Lazy<MappedState>(() => stateMapper.StateFor(mappings.Value, businessUnitId, platformTypeId, stateCode, input.StateDescription));
-			_mappedRule = new Lazy<MappedRule>(() => stateMapper.RuleFor(mappings.Value, businessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new MappedRule());
+			_mappedState = new Lazy<MappedState>(() => stateMapper.StateFor(mappings, businessUnitId, platformTypeId, stateCode, input.StateDescription));
+			_mappedRule = new Lazy<MappedRule>(() => stateMapper.RuleFor(mappings, businessUnitId, platformTypeId, stateCode, schedule.CurrentActivityId()) ?? new MappedRule());
 		}
 
 		public bool StateGroupChanged()

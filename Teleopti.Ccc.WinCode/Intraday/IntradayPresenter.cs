@@ -472,8 +472,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		{
 			var adapters = _rtaStateHolder.RtaStateGroups.Select(rtaStateGroup => new AgentStateViewAdapter(rtaStateGroup, model)).ToList();
 
-			adapters.Add(new AgentStateViewAdapter(new RtaStateGroup("OLAANDASADSSECRETNAME", false, false), model, _rtaStateHolder.RtaStateGroups));
-			adapters.Add(new AgentStateViewAdapter(new RtaStateGroup("OLAANDASADSSECRETNAMETWO", false, false), model, _rtaStateHolder.RtaStateGroups));
+			adapters.Add(new AgentStateViewAdapter((IRtaStateGroup) new RtaStateGroup("OLAANDASADSSECRETNAME", false, false), model));
+			adapters.Add(new AgentStateViewAdapter((IRtaStateGroup) new RtaStateGroup("OLAANDASADSSECRETNAMETWO", false, false), model));
 
 			return adapters;
 		}

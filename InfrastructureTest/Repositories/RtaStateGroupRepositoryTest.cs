@@ -17,10 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         protected override IRtaStateGroup CreateAggregateWithCorrectBusinessUnit()
         {
-            var stateGroup = new RtaStateGroup("test", true, false)
-            {
-	            IsLogOutState = true
-            };
+            var stateGroup = new RtaStateGroup("test", true, false);
 	        stateGroup.AddState("state1", "01", Guid.NewGuid());
             return stateGroup;
         }
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.BusinessUnit.Id, loadedAggregateFromDatabase.BusinessUnit.Id);
             Assert.AreEqual(org.Available, loadedAggregateFromDatabase.Available);
             Assert.AreEqual(org.DefaultStateGroup, loadedAggregateFromDatabase.DefaultStateGroup);
-            Assert.AreEqual(org.IsLogOutState,loadedAggregateFromDatabase.IsLogOutState);
             Assert.AreEqual(org.StateCollection.Count, loadedAggregateFromDatabase.StateCollection.Count);
 			Assert.AreEqual(org.StateCollection[0].BusinessUnit.Id, loadedAggregateFromDatabase.StateCollection[0].BusinessUnit.Id);
         }

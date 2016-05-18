@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Persister.Models			
 				.Single(x => x.PersonId == personId)
-				.StateCode.Should().Be("CCC Logged out");
+				.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
 		}
 
 		[Test]
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Persister.Models
 				.Single(x => x.PersonId == personId)
-				.StateCode.Should().Be("CCC Logged out");
+				.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
 		}
 
 		[Test]
@@ -189,12 +189,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		[Test]
 		public void ShouldNotLogOutAlreadyLoggedOutAgents()
 		{
-			var personId = Guid.NewGuid();
+			var user2 = Guid.NewGuid();
 			Database
 				.WithUser("usercode1", Guid.NewGuid())
-				.WithUser("usercode2", personId)
+				.WithUser("usercode2", user2)
 				.WithRule("statecode", Guid.Empty)
-				.WithRule("statecode2", Guid.Empty, true);
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, true);
 
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
@@ -207,10 +207,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
 				{
 					UserCode = "usercode2",
-					StateCode = "statecode2"
+					StateCode = Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot
 				}
 			});
 
+			Now.Is("2014-10-20 10:05");
 			Target.SaveStateSnapshot(new[]
 			{
 				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
@@ -221,8 +222,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			});
 
 			Persister.Models
-				.Single(x => x.PersonId == personId)
-				.StateCode.Should().Be("statecode2");
+				.Single(x => x.PersonId == user2)
+				.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
 
 		[Test]

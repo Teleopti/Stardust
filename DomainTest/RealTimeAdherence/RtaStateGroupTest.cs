@@ -26,17 +26,14 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Assert.AreEqual(_name, _target.Name);
             Assert.AreEqual(_available, _target.Available);
             Assert.AreEqual(_defaultStateGroup, _target.DefaultStateGroup);
-            Assert.IsFalse(_target.IsLogOutState);
 
             _target.Name = "newName";
             _target.Available = false;
             _target.DefaultStateGroup = true;
-            _target.IsLogOutState = true;
 
             Assert.AreEqual("newName",_target.Name);
             Assert.IsFalse(_target.Available);
             Assert.IsTrue(_target.DefaultStateGroup);
-            Assert.IsTrue(_target.IsLogOutState);
         }
 
         [Test]

@@ -104,8 +104,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public virtual void ForAll(Action<Context> action)
 		{
-			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
-
 			_databaseReader.LoadAllPersonOrganizationData()
 				.ForEach(x =>
 				{
@@ -119,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _previousStateInfoLoader.Load(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							s => mappings,
+							s => _withUnitOfWork.Get(() => _mappingReader.Read()),
 							s => _agentStateReadModelUpdater.Update(s),
 							_now,
 							_stateMapper,
@@ -133,18 +131,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[AnalyticsUnitOfWork]
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
 		{
-			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
-
 			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut =
 				from a in missingAgents
-				let state = _stateMapper.StateFor(
-					mappings,
-					a.BusinessUnitId,
-					a.PlatformTypeId,
-					a.StateCode,
-					null)
-				where !state.IsLogOutState
+				where a.StateCode != input.StateCode
 				select a;
 
 			agentsNotAlreadyLoggedOut.ForEach(x =>
@@ -157,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.SiteId.GetValueOrDefault(),
 					() => _previousStateInfoLoader.Load(x.PersonId),
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
-					s => mappings,
+					s => _withUnitOfWork.Get(() => _mappingReader.Read()),
 					s => _agentStateReadModelUpdater.Update(s),
 					_now,
 					_stateMapper,
@@ -170,8 +160,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[AnalyticsUnitOfWork]
 		public virtual void ForSynchronize(Action<Context> action)
 		{
-			var mappings = _withUnitOfWork.Get(() => _mappingReader.Read());
-
 			_agentStateReadModelPersister.GetAll()
 				.ForEach(x =>
 				{
@@ -187,7 +175,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						null,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						s => mappings,
+						s => _withUnitOfWork.Get(() => _mappingReader.Read()),
 						null,
 						_now,
 						_stateMapper,

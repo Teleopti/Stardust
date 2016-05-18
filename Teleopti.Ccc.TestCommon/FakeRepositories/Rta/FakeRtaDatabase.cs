@@ -272,7 +272,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					stateGroup = new RtaStateGroup(name, isDefaultStateGroup, true);
 					stateGroup.SetId(Guid.NewGuid());
 					stateGroup.SetBusinessUnit(_businessUnit);
-					stateGroup.IsLogOutState = isLoggedOutState;
 					stateGroup.AddState(null, stateCode, withPlatform(platformTypeId));
 					RtaStateGroupRepository.Add(stateGroup);
 				}
@@ -300,7 +299,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			var stateGroup = new RtaStateGroup("Empty", false, true);
 			stateGroup.SetId(Guid.NewGuid());
 			stateGroup.SetBusinessUnit(_businessUnit);
-			stateGroup.IsLogOutState = false;
 			RtaStateGroupRepository.Add(stateGroup);
 	
 			var mapping = new RtaMap(stateGroup, null);
@@ -482,6 +480,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, Guid ruleId, string stateCode, Guid? activityId)
 		{
 			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, null, false, null);
+		}
+
+		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, Guid ruleId, string stateCode, Guid? activityId, string name)
+		{
+			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, name, false, null);
 		}
 	}
 

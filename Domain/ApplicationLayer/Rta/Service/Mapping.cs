@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid PlatformTypeId { get; set; }
 		public Guid StateGroupId { get; set; }
 		public string StateGroupName { get; set; }
-		public bool IsLogOutState { get; set; }
 
 		public Guid? ActivityId { get; set; }
 

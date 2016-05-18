@@ -306,8 +306,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				setAvailableDescriptionToNode(node);
 			}
 
-			setUseForLogOutDescriptionToNode(node);
-
 			return node;
 		}
 
@@ -466,20 +464,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			_cancelValidate = false;
 		}
-
-		private void setUseForLogOutDescriptionToNode(TreeNodeAdv node)
-		{
-			_cancelValidate = true;
-			var stateGroup = node.TagObject as IRtaStateGroup;
-			if (stateGroup != null)
-			{
-				node.Text = stateGroup.IsLogOutState
-								? string.Concat(node.Text, " - ", Resources.UseForLogOut)
-								: node.Text;
-			}
-			_cancelValidate = false;
-		}
-
+		
 		private void treeViewAdv1QueryContinueDrag(object sender, QueryContinueDragEventArgs e)
 		{
 			// Cancel dragging when Escape was pressed.
@@ -530,7 +515,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				stateGroup.Name = e.Node.Text;
 				// If state group prop available is true then add description
 				setAvailableDescriptionToNode(e.Node);
-				setUseForLogOutDescriptionToNode(e.Node);
 			}
 			else
 			{
@@ -548,7 +532,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			// State Group changed
 			stateGroup.Available = e.Node.Checked;
 			setAvailableDescriptionToNode(e.Node);
-			setUseForLogOutDescriptionToNode(e.Node);
 			_cancelValidate = false;
 		}
 
@@ -573,28 +556,16 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var menuItemSetDefault = new MenuItem(Resources.SetAsDefaultStateGroup);
 			var menuItemNewStateGroup = new MenuItem(Resources.NewStateGroup);
 			var menuItemDeleteStateGroup = new MenuItem(Resources.DeleteStateGroup);
-			var menuItemSetLogOut = new MenuItem(Resources.ToggleLogOutState);
-
-			menuItemSetLogOut.Click += menuItemSetLogOutClick;
+			
 			menuItemSetDefault.Click += menuitemClick;
 			menuItemNewStateGroup.Click += buttonNewClick;
 			menuItemDeleteStateGroup.Click += buttonDeleteClick;
 
 			treeViewAdv1.ContextMenu.MenuItems.Add(menuItemSetDefault);
-			treeViewAdv1.ContextMenu.MenuItems.Add(menuItemSetLogOut);
 			treeViewAdv1.ContextMenu.MenuItems.Add(menuItemNewStateGroup);
 			treeViewAdv1.ContextMenu.MenuItems.Add(menuItemDeleteStateGroup);
 		}
-
-		private void menuItemSetLogOutClick(object sender, EventArgs e)
-		{
-			var stateGroupToSet = _currentSourceNode.TagObject as IRtaStateGroup;
-			if (stateGroupToSet == null) return;
-
-			stateGroupToSet.IsLogOutState = !stateGroupToSet.IsLogOutState;
-			updateTreeview(stateGroupToSet);
-		}
-
+		
 		private void menuitemClick(object sender, EventArgs e)
 		{
 			setDefaultStateGroup();

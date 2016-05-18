@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -8,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly ExternalUserStateInputModel _input;
 		private readonly Lazy<StoredStateInfo> _stored;
-		private readonly Lazy<IEnumerable<Mapping>> _mappings;
+		private readonly MappingsState _mappings;
 		private readonly Guid _businessUnitId;
 		private readonly StateRuleInfo _stateRuleInfo;
 		private readonly ScheduleInfo _scheduleInfo;
@@ -18,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AdherenceInfo(
 			ExternalUserStateInputModel input,
 			Lazy<StoredStateInfo> stored,
-			Lazy<IEnumerable<Mapping>> mappings,
+			MappingsState mappings,
 			Guid businessUnitId,
 			StateRuleInfo stateRuleInfo,
 			ScheduleInfo scheduleInfo,
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, Guid? activityId)
 		{
-			var rule = _stateMapper.RuleFor(_mappings.Value, _businessUnitId, platformTypeId, stateCode, activityId);
+			var rule = _stateMapper.RuleFor(_mappings, _businessUnitId, platformTypeId, stateCode, activityId);
 			if (rule == null)
 				return _appliedAdherence.ForEvent(null, null);
 			return _appliedAdherence.ForEvent(rule.Adherence, rule.StaffingEffect);

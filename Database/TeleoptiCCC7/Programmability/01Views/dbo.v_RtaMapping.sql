@@ -13,7 +13,6 @@ SELECT
 	s.PlatformTypeId AS PlatformTypeId,
 	g.Id AS StateGroupId,
 	g.Name AS StateGroupName,
-	g.IsLogOutState AS IsLogOutState,
 
 	m.Activity AS ActivityId,
 

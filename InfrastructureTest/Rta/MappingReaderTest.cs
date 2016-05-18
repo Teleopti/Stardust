@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadStateFromMapping()
 		{
 			var group = new RtaStateGroup("Phone", true, true);
-			group.IsLogOutState = true;
 			group.AddState(".", "phone", Guid.NewGuid());
 			WithUnitOfWork.Do(() =>
 			{
@@ -64,7 +63,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			mapping.StateGroupId.Should().Be(group.Id.Value);
 			mapping.StateGroupName.Should().Be("Phone");
-			mapping.IsLogOutState.Should().Be(true);
 			mapping.StateCode.Should().Be("phone");
 			mapping.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
 		}
@@ -73,7 +71,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public void ShouldReadStateWithoutMapping()
 		{
 			var group = new RtaStateGroup("Phone", true, true);
-			group.IsLogOutState = true;
 			group.AddState(".", "phone", Guid.NewGuid());
 			WithUnitOfWork.Do(() =>
 			{
@@ -84,7 +81,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 
 			mapping.StateGroupId.Should().Be(group.Id.Value);
 			mapping.StateGroupName.Should().Be("Phone");
-			mapping.IsLogOutState.Should().Be(true);
 			mapping.StateCode.Should().Be("phone");
 			mapping.PlatformTypeId.Should().Be(group.StateCollection.Single().PlatformTypeId);
 		}
