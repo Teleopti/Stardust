@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	public class FakeMappingReader : IMappingReader
 	{
 		private readonly IRtaMapRepository _rtaMapRepository;
-		private readonly IAppliedAdherence _appliedAdherence;
+		private readonly AppliedAdherence _appliedAdherence;
 		private readonly IRtaStateGroupRepository _stateGroupRepository;
 
 		public FakeMappingReader(
 			IRtaMapRepository rtaMapRepository,
-			IAppliedAdherence appliedAdherence,
+			AppliedAdherence appliedAdherence,
 			IRtaStateGroupRepository stateGroupRepository)
 		{
 			_rtaMapRepository = rtaMapRepository;

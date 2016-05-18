@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseReader _databaseReader;
 		private readonly WithAnalyticsUnitOfWork _withAnalytics;
 		private readonly WithUnitOfWork _withUnitOfWork;
-		private readonly IAppliedAdherence _appliedAdherence;
+		private readonly AppliedAdherence _appliedAdherence;
 		private readonly IAppliedAlarm _appliedAlarm;
 
 		public ContextLoader(
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseReader databaseReader,
 			WithAnalyticsUnitOfWork withAnalytics,
 			WithUnitOfWork withUnitOfWork,
-			IAppliedAdherence appliedAdherence,
+			AppliedAdherence appliedAdherence,
 			IAppliedAlarm appliedAlarm
 			)
 		{

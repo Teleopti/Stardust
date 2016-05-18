@@ -5,16 +5,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
-using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AdherenceDetails
 {
 	[ReadModelUpdaterTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class NeutralAdherenceTest
 	{
 		public FakeAdherenceDetailsReadModelPersister Persister;

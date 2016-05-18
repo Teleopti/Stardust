@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Action<Context> agentStateReadModelUpdater, 
 			INow now,
 			StateMapper stateMapper,
-			IAppliedAdherence appliedAdherence,
+			AppliedAdherence appliedAdherence,
 			IAppliedAlarm appliedAlarm)
 		{
 			var dontDeferForNow = stored == null ? null : stored.Invoke();

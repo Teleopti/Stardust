@@ -63,11 +63,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<BelongsToDateDecorator>().As<IRtaEventDecorator>().SingleInstance();
 			builder.RegisterType<CurrentBelongsToDate>().SingleInstance();
-
-			if (_config.Toggle(Toggles.RTA_NeutralAdherence_30930))
-				builder.RegisterType<BySetting>().As<IAppliedAdherence>().SingleInstance();
-			else
-				builder.RegisterType<ByStaffingEffect>().As<IAppliedAdherence>().SingleInstance();
+			builder.RegisterType<AppliedAdherence>().SingleInstance();
 
 			if (_config.Toggle(Toggles.Wfm_RTA_ProperAlarm_34975))
 				builder.RegisterType<ProperAlarm>().As<IAppliedAlarm>().SingleInstance();

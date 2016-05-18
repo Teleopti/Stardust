@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -17,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.FullTests
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class InconsistentPercentage32862 : ISetup
 	{
 		public FakeRtaDatabase Database;

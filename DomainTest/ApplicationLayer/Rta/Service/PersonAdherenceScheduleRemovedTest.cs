@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class PersonAdherenceScheduleRemovedTest
 	{
 		public FakeRtaDatabase Database;

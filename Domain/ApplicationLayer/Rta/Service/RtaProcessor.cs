@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IShiftEventPublisher _shiftEventPublisher;
 		private readonly IActivityEventPublisher _activityEventPublisher;
 		private readonly IStateEventPublisher _stateEventPublisher;
-		private readonly IAppliedAdherence _appliedAdherence;
+		private readonly AppliedAdherence _appliedAdherence;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
 		private readonly IAppliedAlarm _appliedAlarm;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
 			IStateEventPublisher stateEventPublisher,
-			IAppliedAdherence appliedAdherence,
+			AppliedAdherence appliedAdherence,
 			IEventPublisherScope eventPublisherScope,
 			ICurrentEventPublisher eventPublisher,
 			IAppliedAlarm appliedAlarm)

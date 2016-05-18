@@ -15,36 +15,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[TestFixture]
 	[RtaTest]
-	[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 	public class PersonNeutralAdherenceEventTest
 	{
 		public FakeRtaDatabase Database;
 		public FakeEventPublisher Publisher;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
-
-		[Test]
-		[ToggleOff(Toggles.RTA_NeutralAdherence_30930)]
-		public void ShouldNotPublishIfToggleOff()
-		{
-			var personId = Guid.NewGuid();
-			var admin = Guid.NewGuid();
-			Database
-				.WithUser("usercode", personId)
-				.WithSchedule(personId, admin, "2015-03-10 8:00", "2015-03-10 10:00")
-				.WithRule("admin", admin, 0, Adherence.Neutral);
-			Now.Is("2015-03-10 8:30");
-
-			Target.SaveState(new ExternalUserStateForTest
-			{
-				UserCode = "usercode",
-				StateCode = "admin"
-			});
-
-			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>().Should().Have.Count.EqualTo(0);
-			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>().Should().Have.Count.EqualTo(1);
-		}
-
+		
 		[Test]
 		public void ShouldPublish()
 		{

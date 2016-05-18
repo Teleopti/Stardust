@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly Guid _businessUnitId;
 		private readonly StateRuleInfo _stateRuleInfo;
 		private readonly ScheduleInfo _scheduleInfo;
-		private readonly IAppliedAdherence _appliedAdherence;
+		private readonly AppliedAdherence _appliedAdherence;
 		private readonly StateMapper _stateMapper;
 
 		public AdherenceInfo(
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid businessUnitId,
 			StateRuleInfo stateRuleInfo,
 			ScheduleInfo scheduleInfo,
-			IAppliedAdherence appliedAdherence,
+			AppliedAdherence appliedAdherence,
 			StateMapper stateMapper)
 		{
 			_input = input;

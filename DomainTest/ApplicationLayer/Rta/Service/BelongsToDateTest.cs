@@ -163,7 +163,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
-		[Toggle(Toggles.RTA_NeutralAdherence_30930)]
 		public void ShouldPublishNeutralAdherenceEventWithBelongsToDate()
 		{
 			var personId = Guid.NewGuid();

@@ -4,39 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
-	public interface IAppliedAdherence
-	{
-		Adherence ForRule(IRtaRule rule);
-		EventAdherence ForEvent(Adherence? adherence, double? staffingEffect);
-	}
-
-	public class ByStaffingEffect : IAppliedAdherence
-	{
-		public Adherence ForRule(IRtaRule rule)
-		{
-			if (rule == null)
-				return Adherence.In;
-			return forStaffingEffect(rule.StaffingEffect);
-		}
-
-		public EventAdherence ForEvent(Adherence? adherence, double? staffingEffect)
-		{
-			return forStaffingEffect(staffingEffect) == Adherence.Out 
-				? EventAdherence.Out
-				: EventAdherence.In;
-		}
-
-		private static Adherence forStaffingEffect(double? staffingEffect)
-		{
-			if (!staffingEffect.HasValue)
-				return Adherence.In;
-			return staffingEffect.Value.Equals(0)
-				? Adherence.In
-				: Adherence.Out;
-		}
-	}
-
-	public class BySetting : IAppliedAdherence
+	public class AppliedAdherence
 	{
 		public Adherence ForRule(IRtaRule rule)
 		{
