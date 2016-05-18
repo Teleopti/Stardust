@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Analytics;
@@ -28,6 +30,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.SetDateTime("datasource_update_date", analyticsOvertime.DatasourceUpdateDate)
 				.SetBoolean("is_deleted", analyticsOvertime.IsDeleted);
 			query.ExecuteUpdate();
+		}
+
+		public IList<AnalyticsOvertime> Overtimes()
+		{
+			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+				@"select overtime_id OvertimeId, 
+						overtime_code OvertimeCode,
+						overtime_name OvertimeName,
+						datasource_update_date DatasourceUpdateDate,
+						is_deleted IsDeleted,
+						business_unit_id BusinessUnitId
+					from mart.dim_overtime WITH (NOLOCK)")
+				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsOvertime)))
+				.SetReadOnly(true)
+				.List<AnalyticsOvertime>();
 		}
 	}
 }

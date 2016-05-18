@@ -37,6 +37,5 @@ BEGIN
 		,is_deleted = @is_deleted
 	WHERE
 	overtime_code = @overtime_code
-	and datasource_update_date < @datasource_update_date -- Only update if the information is newer
 END
 GO
