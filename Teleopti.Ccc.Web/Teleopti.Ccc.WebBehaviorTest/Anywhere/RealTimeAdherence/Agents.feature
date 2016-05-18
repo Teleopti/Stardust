@@ -16,6 +16,7 @@ Scenario: Should not be able to see agents if not permitted
 	When I try to view real time adherence for team 'Red'
 	Then I should see a message that I have no permission for this function
 
+@ignore
 Scenario: Should be able to see current states of all agents
 	Given the time is '2014-01-21 00:00:00'
 	And rta is ready
