@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				: DateTime.MaxValue;
 		}
 
-		[EnabledBy(Toggles.RTA_TeamChanges_36043)]
 		public void Handle(PersonTeamChangedEvent @event)
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent
@@ -124,7 +123,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			});
 		}
 
-		[EnabledBy(Toggles.RTA_TeamChanges_36043)]
 		public void Handle(PersonPeriodChangedEvent @event)
 		{
 			_eventPublisher.Publish(new PersonAssociationChangedEvent

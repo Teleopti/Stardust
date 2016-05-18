@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 {
 	[ReadModelUpdaterTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_TeamChanges_36043)]
 	public class TeamChanges
 	{
 		public FakeTeamOutOfAdherenceReadModelPersister Persister;

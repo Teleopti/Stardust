@@ -37,7 +37,6 @@ Background:
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 
-@OnlyRunIfEnabled('RTA_TeamChanges_36043')
 Scenario: Exclude person changed team
 	Given the time is '2016-02-01 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
@@ -46,7 +45,6 @@ Scenario: Exclude person changed team
 	When 'Pierre Baldi' changes team to 'Green'
 	Then I should see team 'Red' with 0 employees out of adherence
 
-@OnlyRunIfEnabled('RTA_TeamChanges_36043')
 Scenario: Exclude person changed team over time
 	Given the time is '2016-02-01 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'

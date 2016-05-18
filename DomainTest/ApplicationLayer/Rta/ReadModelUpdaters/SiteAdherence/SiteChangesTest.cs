@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 {
 	[ReadModelUpdaterTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_TeamChanges_36043)]
 	public class SiteChangesTest
 	{
 		public FakeSiteOutOfAdherenceReadModelPersister Persister;

@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 {
 	[TestFixture]
 	[DomainTest]
-	[Toggle(Toggles.RTA_TeamChanges_36043)]
 	public class PeriodChangesTest
 	{
 		public PersonAssociationChangedEventPublisher Target;
