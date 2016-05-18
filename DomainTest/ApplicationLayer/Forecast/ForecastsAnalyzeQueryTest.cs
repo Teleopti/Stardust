@@ -67,6 +67,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
             Assert.That(result.IntervalLength, Is.EqualTo(TimeSpan.FromTicks(9000000000)));
         }
 
+		[Test]
+		public void ShouldGetCorrectPeriod()
+		{
+			var row1 = new ForecastsRow
+			{
+				TaskTime = 170,
+				AfterTaskTime = 0,
+				Agents = 2,
+				LocalDateTimeFrom = new DateTime(2012, 3, 1, 12, 0, 0),
+				LocalDateTimeTo = new DateTime(2012, 3, 1, 12, 15, 0),
+				SkillName = "Insurance",
+				Tasks = 10,
+				UtcDateTimeFrom = new DateTime(2012, 3, 1, 11, 0, 0, DateTimeKind.Utc),
+				UtcDateTimeTo = new DateTime(2012, 3, 1, 11, 15, 0, DateTimeKind.Utc)
+			};
+
+			var row2 = new ForecastsRow
+			{
+				TaskTime = 170,
+				AfterTaskTime = 0,
+				Agents = 2,
+				LocalDateTimeFrom = new DateTime(2012, 3, 2, 23, 45, 0),
+				LocalDateTimeTo = new DateTime(2012, 3, 3, 0, 0, 0),
+				SkillName = "Insurance",
+				Tasks = 10,
+				UtcDateTimeFrom = new DateTime(2012, 3, 1, 22, 45, 0, DateTimeKind.Utc),
+				UtcDateTimeTo = new DateTime(2012, 3, 1, 23, 0, 0, DateTimeKind.Utc)
+			};
+
+			var result = _target.Run(new[] { row1, row2 }, _skill);
+			Assert.That(result.Period.StartDate, Is.EqualTo(new DateOnly(2012, 3, 1)));
+			Assert.That(result.Period.EndDate, Is.EqualTo(new DateOnly(2012, 3, 2)));
+		}
+
         private static IEnumerable<IForecastsRow> setUpForecasts()
         {
             var row1 = new ForecastsRow
@@ -124,5 +158,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
             };
             return new[] {row1, row2};
         }
-    }
+	}
 }

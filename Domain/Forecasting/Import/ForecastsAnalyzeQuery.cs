@@ -64,7 +64,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
                 previousIntervalLength = intervalLength;
                 rowNumber++;
             }
-            result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime));
+				if (endDateTime.TimeOfDay == TimeSpan.Zero)
+		        endDateTime = endDateTime.AddDays(-1);
+
+				result.Period = new DateOnlyPeriod(new DateOnly(startDateTime), new DateOnly(endDateTime));
             result.WorkloadDayOpenHours = workloadDayOpenHours;
             result.IntervalLength = previousIntervalLength.GetValueOrDefault();
             result.SkillName = previousSkillName;
