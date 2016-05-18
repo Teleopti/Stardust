@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.SiteAdh
 {
 	[ReadModelUpdaterTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_TerminatedPersons_36042)]
 	public class PersonTerminatedTest
 	{
 		public FakeSiteOutOfAdherenceReadModelPersister Persister;

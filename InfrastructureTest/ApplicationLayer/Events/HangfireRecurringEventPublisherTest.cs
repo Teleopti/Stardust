@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
 	[TestFixture]
 	[InfrastructureTest]
-	[Toggle(Toggles.RTA_TerminatedPersons_36042)]
 	public class HangfireRecurringEventPublisherTest : ISetup
 	{
 		public FakeHangfireEventClient JobClient;

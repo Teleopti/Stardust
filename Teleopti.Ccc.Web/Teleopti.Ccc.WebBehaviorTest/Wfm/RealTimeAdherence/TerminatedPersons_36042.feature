@@ -28,7 +28,6 @@ Background:
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
 
-@OnlyRunIfEnabled('RTA_TerminatedPersons_36042')
 Scenario: Exclude terminated agents
 	Given the time is '2016-01-14 09:00:00'
 	And rta is ready
@@ -39,7 +38,6 @@ Scenario: Exclude terminated agents
 	And I view Real time adherence for teams on site 'Paris'
 	Then I should see team 'Red' with 0 employees out of adherence
 
-@OnlyRunIfEnabled('RTA_TerminatedPersons_36042')
 Scenario: Exclude agents terminated retroactively
 	Given the time is '2016-01-14 09:00:00'
 	And rta is ready

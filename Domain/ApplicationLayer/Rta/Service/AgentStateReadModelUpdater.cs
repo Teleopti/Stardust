@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStateReadModelPersister.Delete(@event.PersonId);
 		}
 
-		[EnabledBy(Toggles.RTA_TerminatedPersons_36042)]
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{

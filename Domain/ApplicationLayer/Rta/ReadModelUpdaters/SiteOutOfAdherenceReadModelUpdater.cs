@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				deletePerson);
 		}
 
-		[EnabledBy(Toggles.RTA_TerminatedPersons_36042)]
 		[ReadModelUnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{

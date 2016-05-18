@@ -18,7 +18,6 @@
 		Settings_AlertViaEmailFromSMSLink_30444,
 
 		RTA_AdherenceDetails_34267,
-		RTA_TerminatedPersons_36042,
 		RTA_TeamChanges_36043,
 		RTA_ScheduleProjectionReadOnlyHangfire_35703,
 

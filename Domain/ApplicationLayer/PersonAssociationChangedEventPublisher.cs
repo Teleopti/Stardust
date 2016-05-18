@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	[EnabledBy(Toggles.RTA_TerminatedPersons_36042)]
 	public class PersonAssociationChangedEventPublisher : 
 		IHandleEvent<TenantHourTickEvent>,
 		IHandleEvent<PersonTerminalDateChangedEvent>,

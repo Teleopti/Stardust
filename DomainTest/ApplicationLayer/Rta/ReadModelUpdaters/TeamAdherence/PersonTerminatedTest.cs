@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.TeamAdh
 {
 	[ReadModelUpdaterTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_TerminatedPersons_36042)]
 	public class PersonTerminatedTest
 	{
 		public FakeTeamOutOfAdherenceReadModelPersister Persister;
