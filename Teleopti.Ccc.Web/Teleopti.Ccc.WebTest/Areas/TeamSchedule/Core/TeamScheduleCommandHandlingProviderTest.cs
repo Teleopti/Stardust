@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldInvokeAddPersonalActivityCommandHandleWithPermission()
 		{
 			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
