@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.Debug(
-					$"Consuming event for running request waitlist with Id=\"{@event.Id}\", "
-					+ $"Period=\"{@event.Period}\" (Message timestamp=\"{@event.Timestamp}\")");
+					"Consuming event for running request waitlist with "
+					+ $"StarTime=\"{@event.StartTime}\", EndTime=\"{@event.EndTime}\" "
+					+ $"(Message timestamp=\"{@event.Timestamp}\")");
 			}
 			
 			var theRealOne = _componentContext.Resolve<IHandleEvent<RunRequestWaitlistEvent>>();

@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			{
 				InitiatorId = trackInfo.OperatedPersonId,
 				JobName = "Run Request Waitlist",
-				Period = command.Period,
+				StartTime = command.Period.StartDateTime,
+				EndTime = command.Period.EndDateTime,
 				LogOnBusinessUnitId = _currentBusinessUnit.Current().Id.GetValueOrDefault(),
 				LogOnDatasource = _currentDataSource.Current().DataSourceName,
 				Timestamp = DateTime.UtcNow

@@ -29,16 +29,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (Logger.IsDebugEnabled)
 			{
 				Logger.Debug(
-					$"Consuming event for running request waitlist with Id=\"{@event.Id}\", "
-					+ $"Period=\"{@event.Period}\" (Message timestamp=\"{@event.Timestamp}\")");
+					"Consuming event for running request waitlist with "
+					+ $"StartTime=\"{@event.StartTime}\", EndTime=\"{@event.EndTime}\" "
+					+ $"(Message timestamp=\"{@event.Timestamp}\")");
 			}
 
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
+				var period = new DateTimePeriod(@event.StartTime, @event.EndTime);
 				var workflowControlSets = _wcsRepository.LoadAll();
 				foreach (var wcs in workflowControlSets)
 				{
-					_processor.ProcessAbsenceRequestWaitlist(uow, @event.Period, wcs);
+					_processor.ProcessAbsenceRequestWaitlist(uow, period, wcs);
 				}
 			}
 		}

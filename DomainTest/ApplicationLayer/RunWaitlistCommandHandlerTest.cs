@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			target.Handle(command);
 			var @event = ((FakeEventPublisher) publisher).PublishedEvents.Single() as RunRequestWaitlistEvent;
 			Assert.NotNull(@event);
-			Assert.AreEqual(@event.Period, period);
+			Assert.AreEqual(@event.StartTime, period.StartDateTime);
+			Assert.AreEqual(@event.EndTime, period.EndDateTime);
 		}
 	}
 }
