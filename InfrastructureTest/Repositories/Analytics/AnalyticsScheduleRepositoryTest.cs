@@ -48,18 +48,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadOvertimes()
-		{
-			var overtime = new DimOvertime(22, Guid.NewGuid(), "Overtime1", _datasource, businessUnitId);
-
-			analyticsDataFactory.Setup(overtime);
-			analyticsDataFactory.Persist();
-
-			var overtimes = WithAnalyticsUnitOfWork.Get(() => Target.Overtimes());
-			overtimes.Count.Should().Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldLoadShiftLengths()
 		{
 			var sl = new ShiftLength(33, 240, _datasource);

@@ -76,8 +76,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
                 Arg<ProjectionChangedEventLayer>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<int>.Is.Anything)).Return(new AnalyticsFactScheduleDate());
 
             var repoMock = MockRepository.GenerateMock<IAnalyticsScheduleRepository>();
-            _timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock, new FakeAnalyticsAbsenceRepository());
-	        repoMock.Stub(x => x.Overtimes()).Return(new List<IAnalyticsGeneric>());
+		    var overtimeRepository = MockRepository.GenerateMock<IAnalyticsOvertimeRepository>();
+            _timeHandler = new AnalyticsFactScheduleTimeHandler(repoMock, new FakeAnalyticsAbsenceRepository(), overtimeRepository);
+		    overtimeRepository.Stub(x => x.Overtimes()).Return(new List<AnalyticsOvertime>());
+
             repoMock.Stub(x => x.ShiftLengths()).Return(new List<IAnalyticsShiftLength>());
 	        repoMock.Stub(x => x.Activities()).Return(new List<AnalyticsActivity>());
 

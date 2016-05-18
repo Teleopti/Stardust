@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<AnalyticsActivity> Activities();
 		IList<IAnalyticsGeneric> ShiftCategories();
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
-		IList<IAnalyticsGeneric> Overtimes();
+		//IList<IAnalyticsGeneric> Overtimes();
 		IList<IAnalyticsShiftLength> ShiftLengths();
 
 		int ShiftLengthId(int shiftLength);

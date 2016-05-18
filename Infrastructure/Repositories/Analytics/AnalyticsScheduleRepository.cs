@@ -211,14 +211,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		}
 
 
-		public IList<IAnalyticsGeneric> Overtimes()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select overtime_id Id, overtime_code Code from mart.dim_overtime WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
-				.SetReadOnly(true)
-				.List<IAnalyticsGeneric>();
-		}
+		//public IList<IAnalyticsGeneric> Overtimes()
+		//{
+		//	return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+		//		"select overtime_id Id, overtime_code Code from mart.dim_overtime WITH (NOLOCK)")
+		//		.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
+		//		.SetReadOnly(true)
+		//		.List<IAnalyticsGeneric>();
+		//}
 
 		public IList<IAnalyticsShiftLength> ShiftLengths()
 		{

@@ -10,11 +10,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 	{
 		private readonly IAnalyticsScheduleRepository _repository;
 		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
+		private readonly IAnalyticsOvertimeRepository _analyticsOvertimeRepository;
 
-		public AnalyticsFactScheduleTimeHandler(IAnalyticsScheduleRepository repository, IAnalyticsAbsenceRepository analyticsAbsenceRepository)
+		public AnalyticsFactScheduleTimeHandler(IAnalyticsScheduleRepository repository, IAnalyticsAbsenceRepository analyticsAbsenceRepository, IAnalyticsOvertimeRepository analyticsOvertimeRepository)
 		{
 			_repository = repository;
 			_analyticsAbsenceRepository = analyticsAbsenceRepository;
+			_analyticsOvertimeRepository = analyticsOvertimeRepository;
 		}
 
 		public IAnalyticsFactScheduleTime Handle(ProjectionChangedEventLayer layer, int shiftCategoryId, int scenarioId, int shiftLength)
@@ -87,9 +89,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 		public int MapOvertimeId(Guid overtimeCode)
 		{
-			var overtimes = _repository.Overtimes();
-			var overtime = overtimes.FirstOrDefault(a => a.Code.Equals(overtimeCode));
-			return overtime != null ? overtime.Id : -1;
+			var overtimes = _analyticsOvertimeRepository.Overtimes();
+			var overtime = overtimes.FirstOrDefault(a => a.OvertimeCode.Equals(overtimeCode));
+			return overtime != null ? overtime.OvertimeId : -1;
 		}
 	}
 }
