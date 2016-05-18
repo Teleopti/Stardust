@@ -26,14 +26,27 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public void ForDay(DateOnly date)
 		{
-			using (_virtualSkillContext.Create(new DateOnlyPeriod(date, date)))
+			doForPeriod(new DateOnlyPeriod(date, date));
+		}
+
+		public void ForAll()
+		{
+			doForPeriod(_stateHolder().RequestedPeriod.DateOnlyPeriod);
+		}
+
+		private void doForPeriod(DateOnlyPeriod period)
+		{
+			using (_virtualSkillContext.Create(period))
 			{
-				//TODO - we don't want to do this for every day, need a DateOnlyPeriod method as well?
 				using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
 				{
-					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false); //ska vara true, true - fixa och lägg på test senare
+					foreach (var date in period.DayCollection())
+					{
+						//ska vara true, true (?) - fixa och lägg på test senare
+						_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
+						_cascadeResources.Execute(date);
+					}
 				}
-				_cascadeResources.Execute(date);
 			}
 		}
 	}

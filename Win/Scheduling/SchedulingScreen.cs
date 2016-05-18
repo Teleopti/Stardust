@@ -6938,11 +6938,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripButtonCalculateCascading.Enabled = true;
 
 				var cascadingCalc = _container.Resolve<CascadingResourceCalculation>();
-
-				foreach (var dateOnly in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
-				{
-					cascadingCalc.ForDay(dateOnly);
-				}
+				cascadingCalc.ForAll();
 
 				ribbonControlAdv1.Cursor = Cursors.Default;
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
