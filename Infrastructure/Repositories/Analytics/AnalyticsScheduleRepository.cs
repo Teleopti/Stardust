@@ -249,8 +249,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public Guid Code { get; set; }
 	}
 
-	}
-
 	public class AnalyticsShiftLength : IAnalyticsShiftLength
 	{
 		public int Id { get; set; }
