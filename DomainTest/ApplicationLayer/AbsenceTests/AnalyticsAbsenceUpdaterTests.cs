@@ -8,10 +8,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Absence
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceTests
 {
 	[TestFixture]
-	public class AbsenceAnalyticsUpdaterTests
+	public class AnalyticsAbsenceUpdaterTests
 	{
 		private AnalyticsAbsenceUpdater _target;
 		private FakeAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
