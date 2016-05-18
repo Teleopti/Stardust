@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 	public class AnalyticsScheduleRepositoryTest
 	{
 		public IAnalyticsScheduleRepository Target;
+		public IAnalyticsActivityRepository TargetActivityRepository;
 		public WithAnalyticsUnitOfWork WithAnalyticsUnitOfWork;
 		private AnalyticsDataFactory analyticsDataFactory;
 		private UtcAndCetTimeZones _timeZones;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			analyticsDataFactory.Persist();
 
 
-			var acts = WithAnalyticsUnitOfWork.Get(() => Target.Activities());
+			var acts = WithAnalyticsUnitOfWork.Get(() => TargetActivityRepository.Activities());
 			acts.Count.Should().Be.EqualTo(1);
 		}
 
