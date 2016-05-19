@@ -12,7 +12,7 @@ Background:
 	And there is queue statistics for 'Queue1'
 	And there is a workload 'TheWorkload1' with skill 'TheSkill1' and queue 'Queue1'
 
-@ignore
+
 Scenario: Forecast all
 	Given there is a workload 'TheWorkload2' with skill 'TheSkill1' and queue 'Queue1'
 	And there is no forecast data

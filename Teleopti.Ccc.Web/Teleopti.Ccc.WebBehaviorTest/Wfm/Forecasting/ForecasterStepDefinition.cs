@@ -78,10 +78,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		[When(@"I use default forecast period and forecast for all")]
 		public void WhenIUseDefaultForecastPeriodAndForecastForAll()
 		{
+			Browser.Interactions.AssertVisibleUsingJQuery(".forecast-create-button");
 			Browser.Interactions.Click(".forecast-create-button");
+			Browser.Interactions.AssertVisibleUsingJQuery("span.startDate");
 			ScenarioContext.Current.Add("startdate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.startDate"), CultureInfo.GetCultureInfo(1053))));
 			ScenarioContext.Current.Add("enddate", new DateOnly(DateTime.Parse(Browser.Interactions.GetText("span.endDate"), CultureInfo.GetCultureInfo(1053))));
 			Browser.Interactions.Click(".do-forecast");
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".do-forecast");
 		}
 
 		[Given(@"I use default forecast period and forecast for one workload")]
