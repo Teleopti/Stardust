@@ -119,13 +119,15 @@
 		Wfm_MoveExportMultiSiteSkillOnStardust_38134,
 		Payroll_ToStardust_38204,
 		ETL_SpeedUpScenario_38300,
-		ETL_SpeedUpAbsence_38301,
 		Scheduler_LoadWithoutRequests_38567,
 		PersonCollectionChanged_ToHangfire_38420,
 		ETL_SpeedUpIntradayActivity_38303,
 		ETL_SpeedUpNightlyActivity_38303,
 		ETL_SpeedUpIntradayOvertime_38304,
-		ETL_SpeedUpNightlyOvertime_38304
+		ETL_SpeedUpNightlyOvertime_38304,
+		ETL_SpeedUpIntradayAbsence_38301,
+		ETL_SpeedUpNightlyAbsence_38301
+
 		// ReSharper restore InconsistentNaming
 	}
 }

@@ -29,7 +29,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new StageActivityJobStep(jobParameters));
 			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpAbsence_38301))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAbsence_38301))
 			{
 				Add(new StageAbsenceJobStep(jobParameters));
 			}
@@ -95,7 +95,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new DimActivityJobStep(jobParameters));
 			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpAbsence_38301))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAbsence_38301))
 			{
 				Add(new DimAbsenceJobStep(jobParameters));
 			}

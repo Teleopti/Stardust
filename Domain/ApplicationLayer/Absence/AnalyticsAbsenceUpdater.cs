@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 {
-	[EnabledBy(Toggles.ETL_SpeedUpAbsence_38301)]
+	[EnabledBy(Toggles.ETL_SpeedUpIntradayAbsence_38301)]
 	public class AnalyticsAbsenceUpdater:
 		IHandleEvent<AbsenceChangedEvent>,
 		IHandleEvent<AbsenceDeletedEvent>,
