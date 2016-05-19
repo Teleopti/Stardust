@@ -87,7 +87,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		[Ignore]
 		public void ShouldInvokeAddPersonalActivityCommandHandleWithPermission()
 		{
 			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
@@ -106,7 +105,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				PersonalActivityId = Guid.NewGuid(),
 				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
-				EndTime = new DateTime(2016, 4, 16, 17, 0, 0)
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
 			ActivityCommandHandler.ResetCalledCount();
@@ -133,7 +133,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 				PersonalActivityId = Guid.NewGuid(),
 				Date = date,
 				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
-				EndTime = new DateTime(2016, 4, 16, 17, 0, 0)
+				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo()
 			};
 
 			ActivityCommandHandler.ResetCalledCount();

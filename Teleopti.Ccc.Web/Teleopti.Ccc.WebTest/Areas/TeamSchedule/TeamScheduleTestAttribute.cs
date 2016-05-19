@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var fakeActivityCommandHandler = new FakeActivityCommandHandler();
 
 			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<AddActivityCommand>>();
+			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<AddPersonalActivityCommand>>();
 			system.UseTestDouble<FakeActivityCommandHandler>(fakeActivityCommandHandler).For<IHandleCommand<RemoveActivityCommand>>();
 			system.UseTestDouble(fakeActivityCommandHandler).For<IHandleCommand<MoveShiftLayerCommand>>();
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
