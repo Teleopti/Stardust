@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		{
 		}
 
+		[ImpersonateSystem] 
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
 		public new virtual void Handle(SettingsForPersonPeriodChangedEvent @event)
