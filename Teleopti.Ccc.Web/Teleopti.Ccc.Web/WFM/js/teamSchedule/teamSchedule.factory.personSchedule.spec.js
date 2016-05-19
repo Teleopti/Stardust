@@ -220,7 +220,6 @@ describe("test of PersonSchedule", function () {
 
 	it("should get correct schedule start time", function() {
 		var queryDate = "2015-10-30";
-		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
 		var timeLineStart = 0;
 		var timeLineEnd = 1440;
 
@@ -233,12 +232,12 @@ describe("test of PersonSchedule", function () {
 		var scheduleYesterday = {
 			"PersonId": "221B-Baker-Street",
 			"Name": "Sherlock Holmes",
-			"Date": yesterday,
+			"Date": new Date('2015-10-29T00:00:00Z'),
 			"Projection": [],
 			"DayOff":
 			{
 				"DayOffName": "Day off",
-				"Start": yesterday + " 00:00",
+				"Start": "2015-10-30T07:00:00",
 				"Minutes": 1440
 			}
 		};
@@ -246,12 +245,12 @@ describe("test of PersonSchedule", function () {
 		var scheduleToday = {
 			"PersonId": "221B-Baker-Street",
 			"Name": "Sherlock Holmes",
-			"Date": queryDate,
+			"Date": new Date('2015-10-30T00:00:00Z'),
 			"Projection": [
 			{
 				"Color": "#80FF80",
 				"Description": "Email",
-				"Start": queryDate + " 07:00",
+				"Start": '2015-10-30T07:00:00',
 				"Minutes": 480
 			}],
 			"DayOff":null
@@ -259,12 +258,11 @@ describe("test of PersonSchedule", function () {
 		var personSchedule = target.Create(scheduleToday, timeLine);
 		personSchedule.Merge(scheduleYesterday, timeLine);
 
-		expect(personSchedule.ScheduleStartTime()).toEqual(queryDate + " 07:00");
+		expect(personSchedule.ScheduleStartTime()).toEqual('2015-10-30T07:00:00');
 	});
 
 	it("should get correct schedule end time", function() {
-		var queryDate = "2015-10-30";
-		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+		var queryDate = "2015-10-30T00:00:00";
 		var timeLineStart = 0;
 		var timeLineEnd = 1440;
 
@@ -277,12 +275,12 @@ describe("test of PersonSchedule", function () {
 		var scheduleYesterday = {
 			"PersonId": "221B-Baker-Street",
 			"Name": "Sherlock Holmes",
-			"Date": yesterday,
+			"Date": new Date('2015-10-29T00:00:00'),
 			"Projection": [],
 			"DayOff":
 			{
 				"DayOffName": "Day off",
-				"Start": yesterday + " 00:00",
+				"Start": '2015-10-29T08:00:00',
 				"Minutes": 1440
 			}
 		};
@@ -295,7 +293,7 @@ describe("test of PersonSchedule", function () {
 			{
 				"Color": "#80FF80",
 				"Description": "Email",
-				"Start": queryDate + " 07:00",
+				"Start": "2015-10-30T07:00:00",
 				"Minutes": 480
 			}],
 			"DayOff":null
@@ -303,7 +301,7 @@ describe("test of PersonSchedule", function () {
 		var personSchedule = target.Create(scheduleToday, timeLine);
 		personSchedule.Merge(scheduleYesterday, timeLine);
 
-		expect(personSchedule.ScheduleEndTime()).toEqual(queryDate + " 15:00");
+		expect(personSchedule.ScheduleEndTime()).toEqual(moment(queryDate).endOf('day').format("YYYY-MM-DDTHH:mm:00"));
 	});
 
 	it('Should get correct person activities count', function() {

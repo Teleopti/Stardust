@@ -64,9 +64,9 @@
 				},
 				ContractTime: formatContractTimeMinutes(schedule.ContractTimeMinutes),
 				ScheduleStartTime: function () {
-					var start = this.Date.format('YYYY-MM-DD hh:mm');
-					angular.forEach(this.Shifts, function(shift) {
-						if (shift.Date.isSame(start,'day') && shift.Projections.length > 0) {
+					var start = this.Date.format('YYYY-MM-DDTHH:mm:00');
+					angular.forEach(this.Shifts, function (shift) {
+						if (shift.Date.format('YYYY-MM-DDT00:00:00') === start && shift.Projections.length > 0) {
 							start = shift.Projections[0].Start;
 						}
 					});
@@ -76,11 +76,11 @@
 					var start = this.Date;
 					var end = moment(schedule.Date).endOf('day');
 					angular.forEach(this.Shifts, function (shift) {
-						if (shift.Date.isSame(start,'day') && shift.Projections.length > 0) {
+						if (shift.Date.format('YYYY-MM-DD') == start && shift.Projections.length > 0) {
 							end = moment(shift.Projections[shift.Projections.length - 1].Start).add(shift.Projections[shift.Projections.length - 1].Minutes,'minutes');
 						}
 					});
-					return end.format("YYYY-MM-DD HH:mm");
+					return end.format("YYYY-MM-DDTHH:mm:00");
 				},
 				AbsenceCount: function(){
 					var shiftsForCurrentDate = this.Shifts.filter(function (shift) {

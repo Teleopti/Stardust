@@ -36,7 +36,7 @@ describe("[ScheduleManagement Service Test]", function() {
 			{
 				"Color": "#80FF80",
 				"Description": "Email",
-				"Start": scheduleDate + " 08:00",
+				"Start": scheduleDate + " 08:00:00",
 				"Minutes": 480
 			}
 		],
