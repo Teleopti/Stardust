@@ -14485,4 +14485,12 @@ Help us improve your experience by sending an error report</value>
     <value>Help</value>
     <comment>Navbar label for help</comment>
   </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>Submit process waitlisted requests success</value>
+    <comment>notify user the submit is a success</comment>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>Please chose a period to process waitlisted requests in</value>
+    <comment>Please chose a period to process waitlisted requests in.</comment>
+  </data>
 </root>

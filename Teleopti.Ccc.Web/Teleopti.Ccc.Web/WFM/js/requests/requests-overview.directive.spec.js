@@ -134,6 +134,7 @@
 			expect(requestsDataService.getLastRequestParameters()[2].pageNumber).toEqual(2);
 		});
 
+		
 
 		function getInnerScope(element) {
 			var targets = element.find('requests-table-container');

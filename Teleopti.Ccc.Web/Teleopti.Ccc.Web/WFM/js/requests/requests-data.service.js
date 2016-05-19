@@ -10,6 +10,7 @@
 		var denyRequestsUrl = '../api/Requests/denyRequests';
 		var cancelRequestsUrl = '../api/Requests/cancelRequests';
 		var loadAllAbsenceUrl = '../api/Absence/GetAllAbsences';
+		var processWaitlistRequests = '../api/Requests/runWaitlist';
 
 		this.getAllRequestsPromise_old = function(filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -27,6 +28,14 @@
 
 		this.cancelRequestsPromise = function(selectedRequestIds) {
 			return $http.post(cancelRequestsUrl, selectedRequestIds);
+		};
+
+		this.processWaitlistRequestsPromise = function (waitlistPeriod) {
+            var waitlistPeriodGet= {
+                startTime: waitlistPeriod.startDate,
+                endTime: waitlistPeriod.endDate
+            }
+            return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
 		};
 
 		this.denyRequestsPromise = function(selectedRequestIds) {

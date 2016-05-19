@@ -106,6 +106,8 @@
 				requestsNotificationService.notifyDenyRequestsSuccess(changedRequestsCount, requestsCount);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Cancel) {
 				requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
+			    requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess();
 			}
 		}
 
@@ -117,7 +119,7 @@
 				requestsNotificationService.notifyCommandError(errorMessage);
 			});
 		}
-
+		//Todo: submit command failure doesn't give an error info, this parameter will be undefined.
 		function onCommandError(error) {
 			vm.disableInteraction = false;
 			forceRequestsReloadWithoutSelection();

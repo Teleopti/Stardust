@@ -38,7 +38,8 @@
 		this.REQUEST_COMMANDS = {
 			Approve: 'approve',
 			Deny: 'deny',
-			Cancel: 'cancel'
+			Cancel: 'cancel',
+            ProcessWaitlist:'processWaitlist'
 		};
 
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {		

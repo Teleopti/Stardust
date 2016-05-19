@@ -28253,6 +28253,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Submit process waitlisted requests success.
+        /// </summary>
+        public static string SubmitProcessWaitlistedRequestsSuccess {
+            get {
+                return ResourceManager.GetString("SubmitProcessWaitlistedRequestsSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Submit.
         /// </summary>
         public static string SubmitRequest {
@@ -31617,6 +31626,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Waitlisted {
             get {
                 return ResourceManager.GetString("Waitlisted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please chose a period to process waitlisted requests in.
+        /// </summary>
+        public static string WaitlistPeriod {
+            get {
+                return ResourceManager.GetString("WaitlistPeriod", resourceCulture);
             }
         }
         

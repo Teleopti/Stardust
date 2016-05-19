@@ -18,6 +18,10 @@
 		vm.cancelRequests = cancelRequests;
 		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
+		vm.toggleProcessWaitlistModal = toggleProcessWaitlistModal;
+		vm.processWaitlistRequests = processWaitlistRequests;
+	    vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
+		initWaitlistProcessPeriod();
 
 		function handleErrorMessages(errorMessages) {
 			if (vm.onErrorMessages) {
@@ -26,13 +30,22 @@
 			
 		}
 
-		function doStandardCommandHandling(requestType, dataServicePromise) {
+		function initWaitlistProcessPeriod() {
+			vm.waitlistPeriod = { startDate: new Date(), endDate: new Date() };
+		}
 
-			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
-			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
-			if (vm.beforeCommand && !vm.beforeCommand()) return;
+		function doStandardCommandHandling(requestType, dataServicePromise,useStraight) {
 
-			var commandInProgress = dataServicePromise(selectedRequestIds);
+			if (!useStraight) {
+				var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
+				if (!selectedRequestIds || selectedRequestIds.length === 0) return;
+				if (vm.beforeCommand && !vm.beforeCommand()) return;
+				var commandInProgress = dataServicePromise(selectedRequestIds);
+			} else {
+				var commandInProgress = dataServicePromise(vm.waitlistPeriod);
+			}
+			
+			
 			if (vm.afterCommandSuccess) {
 				commandInProgress.success(function (requestCommandHandlingResult) {
 
@@ -40,8 +53,8 @@
 						vm.afterCommandSuccess({
 							commandType: requestType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
-							requestsCount: selectedRequestIds.length
-						});
+							requestsCount: useStraight == true ? null : selectedRequestIds.length
+					});
 					} else {
 						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
 					}
@@ -55,6 +68,12 @@
 
 		function approveRequests() {
 			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise);
+		}
+
+		function processWaitlistRequests() {
+		    vm.toggleProcessWaitlistModal();
+		    doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist, requestsDataService.processWaitlistRequestsPromise,true);
+			initWaitlistProcessPeriod();
 		}
 
 		function cancelRequests() {
@@ -76,6 +95,10 @@
 			return toggleSvc.Wfm_Requests_Cancel_37741 === true;
 		}
 
+        function runWaitlistToggleIsEnabled() {
+            return toggleSvc.Wfm_Requests_Run_waitlist_38071 === true;
+        }
+
 		function canCancelRequests() {
 			return !disableCommands();
 		}
@@ -83,6 +106,10 @@
 		function toggleCancelConfirmationModal() {
 			vm.ShowCancelAbsenceConfirmationModal = !vm.ShowCancelAbsenceConfirmationModal;
 		}
+
+        function toggleProcessWaitlistModal() {
+            vm.showProcessWaitlistModal = !vm.showProcessWaitlistModal;
+        }
 	}
 
 	function requestsCommandsPaneDirective() {

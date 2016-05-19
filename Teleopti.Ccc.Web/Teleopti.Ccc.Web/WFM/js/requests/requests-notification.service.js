@@ -6,7 +6,6 @@
 
 	function requestsNotificationService(NoticeService, $translate, $q) {
 		var displayStandardSuccess = function(changedRequestsCount, requestsCount, affectedResource, notAffectedResource) {
-			
 			$q.all([$translate(affectedResource), $translate(notAffectedResource)]).then(function (texts) {
 				var changedRequestsText = texts[0];
 				var notChangedRequestsText = texts[1];
@@ -32,6 +31,12 @@
 
 		this.notifyCancelledRequestsSuccess = function (changedRequestsCount, requestsCount) {
 			displayStandardSuccess(changedRequestsCount, requestsCount, "RequestsHaveBeenCancelled", "RequestsHaveNotBeenCancelled");
+		}
+
+		this.notifySubmitProcessWaitlistedRequestsSuccess = function () {
+		    $q.all([$translate("SubmitProcessWaitlistedRequestsSuccess")]).then(function (texts) {
+		        NoticeService.success(texts[0], 5000, true);
+		    });
 		}
 
 		this.notifyCommandError = function (error) {

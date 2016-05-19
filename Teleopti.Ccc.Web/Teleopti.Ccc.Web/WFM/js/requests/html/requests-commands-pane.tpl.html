@@ -1,63 +1,90 @@
 ﻿<button class="wfm-btn wfm-btn-invis-primary approve-requests"
-		ng-click="requestsCommandsPane.approveRequests()"
-		ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
-	<i class="mdi mdi-check"></i>
-	<md-tooltip><span translate>Approve</span></md-tooltip>
+        ng-click="requestsCommandsPane.approveRequests()"
+        ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+    <i class="mdi mdi-check"></i>
+    <md-tooltip><span translate>Approve</span></md-tooltip>
 </button>
 <button class="wfm-btn wfm-btn-invis-primary deny-requests"
-		ng-click="requestsCommandsPane.denyRequests()"
-		ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
-	<i class="mdi mdi-block-helper"></i>
-	<md-tooltip><span translate>Deny</span></md-tooltip>
+        ng-click="requestsCommandsPane.denyRequests()"
+        ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+    <i class="mdi mdi-block-helper"></i>
+    <md-tooltip><span translate>Deny</span></md-tooltip>
 </button>
 <div tabindex="0" class="context-menu card-context">
-	<i class="mdi mdi-dots-vertical"></i>
-	<span class="context-menu-left">
-		<ul class="wfm-list">
-			<li class="wfm-btn wfm-btn-invis-primary"
-					ng-click="requestsCommandsPane.approveRequests()"
-					ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
-				<i class="mdi mdi-check"></i>
-				<label><span translate>Approve</span></label>
-			</li>
-			<li class="wfm-btn wfm-btn-invis-primary"
-					ng-click="requestsCommandsPane.denyRequests()"
-					ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
-				<i class="mdi mdi-block-helper"></i>
-				<label><span translate>Deny</span></label>
-			</li>
-			
-			<li class="wfm-btn wfm-btn-invis-primary"
-				ng-click="requestsCommandsPane.toggleCancelConfirmationModal()"
-				ng-show="requestsCommandsPane.cancelToggleIsEnabled()"
-				ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}">
-				<i class="mdi mdi-close"></i>
-				<label><span translate>Cancel</span></label>
-			</li>
-		</ul>
-	</span>
+    <i class="mdi mdi-dots-vertical"></i>
+    <span class="context-menu-left">
+        <ul class="wfm-list">
+            <li class="wfm-btn wfm-btn-invis-primary"
+                ng-click="requestsCommandsPane.approveRequests()"
+                ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+                <i class="mdi mdi-check"></i>
+                <label><span translate>Approve</span></label>
+            </li>
+            <li class="wfm-btn wfm-btn-invis-primary"
+                ng-click="requestsCommandsPane.denyRequests()"
+                ng-class="{'wfm-btn-primary-disabled' : requestsCommandsPane.disableCommands()}">
+                <i class="mdi mdi-block-helper"></i>
+                <label><span translate>Deny</span></label>
+            </li>
+            <li class="wfm-btn wfm-btn-invis-primary"
+                ng-click="requestsCommandsPane.toggleCancelConfirmationModal()"
+                ng-show="requestsCommandsPane.cancelToggleIsEnabled()"
+                ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}">
+                <i class="mdi mdi-close"></i>
+                <label><span translate>Cancel</span></label>
+            </li>
+            <li class="wfm-btn wfm-btn-invis-primary"
+                ng-show="requestsCommandsPane.runWaitlistToggleIsEnabled()"
+                ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">
+                <i class="mdi mdi-check"></i>
+                <label><span translate>ProcessWaitlist</span></label>
+            </li>
+        </ul>
+    </span>
+
 </div>
-
 <div ng-cloak class="modal-box">
-	<div ng-cloak ng-show="requestsCommandsPane.ShowCancelAbsenceConfirmationModal">
-		<div class="modalbg">
-			<div class="dialog">
-				<div class="modal-inner-content">
-					<h3>{{'CancelAbsenceRequest'|translate}}</h3>
-					&nbsp;<br/>
-					<p>{{'CancelAbsenceRequestDescription'|translate}}</p>
-					<p>{{'AreYouSureYouWishToCancelAbsence'|translate}}</p>
+    <div ng-cloak ng-show="requestsCommandsPane.ShowCancelAbsenceConfirmationModal">
+        <div class="modalbg">
+            <div class="dialog">
+                <div class="modal-inner-content">
+                    <h3>{{'CancelAbsenceRequest'|translate}}</h3>
+                    &nbsp;<br />
+                    <p>{{'CancelAbsenceRequestDescription'|translate}}</p>
+                    <p>{{'AreYouSureYouWishToCancelAbsence'|translate}}</p>
 
-				</div>
-				<div class="modal-actions">
-					<aside>
-						<button ng-click="requestsCommandsPane.toggleCancelConfirmationModal()" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
-						<button ng-click='requestsCommandsPane.cancelRequests()' class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
-					</aside>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+                <div class="modal-actions">
+                    <aside>
+                        <button ng-click="requestsCommandsPane.toggleCancelConfirmationModal()" class="wfm-btn wfm-btn-invis-default">{{'No'|translate}}</button>
+                        <button ng-click='requestsCommandsPane.cancelRequests()' class="wfm-btn wfm-btn-invis-default">{{'Yes'|translate}}</button>
+                    </aside>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div ng-cloak class="modal-box">
+    <div ng-cloak ng-if="requestsCommandsPane.showProcessWaitlistModal">
+        <div class="modalbg">
+            <div class="dialog">
+                <form name="form">
+	                <div class="modal-inner-content">
+						<h2>{{'WaitlistPeriod' | translate}}:</h2>
+			                <div class="text-center">
+				                <date-range-picker name="WaitlistRange" ng-model="requestsCommandsPane.waitlistPeriod"></date-range-picker>
+			                </div>
+	                </div>
+                    <div class="modal-actions">
+                        <aside>
+                            <button class="wfm-btn wfm-btn-invis-default" ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">{{ 'Close' | translate }}</button>
+                            <button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="form.WaitlistRange.$invalid" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsCommandsPane.processWaitlistRequests()">{{ 'Run' | translate }}</button>
+                        </aside>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 
