@@ -125,11 +125,11 @@
 
 .option-locked{
 	pointer-events:none;
-	color:$gray026!important;
+	color:$text-color-muted!important;
 }
 
 .locked {
-	color: rgba(0,0,0,.06)!important;
+	color: $text-color-muted!important;
 	cursor: not-allowed;
 	pointer-events:none;
 }
