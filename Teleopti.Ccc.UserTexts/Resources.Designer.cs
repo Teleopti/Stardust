@@ -17805,7 +17805,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to add activity for agent {0}..
+        ///   Looks up a localized string similar to No permission to add activity for agent(s).
         /// </summary>
         public static string NoPermissionAddAgentActivity {
             get {
@@ -17841,7 +17841,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to remove activities for agent {0}..
+        ///   Looks up a localized string similar to No permission to remove activities for agent(s).
         /// </summary>
         public static string NoPermissionRemoveAgentActivity {
             get {

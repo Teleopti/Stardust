@@ -14263,11 +14263,11 @@ Help us improve your experience by sending an error report</value>
     <comment>Error message alerting the user that the current agent selection is not appropriate for swapping schedule.</comment>
   </data>
   <data name="NoPermissionAddAgentActivity" xml:space="preserve">
-    <value>No permission to add activity for agent {0}.</value>
+    <value>No permission to add activity for agent(s)</value>
     <comment>Error message to nofiy missing permission to add agent activity</comment>
   </data>
   <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
-    <value>No permission to remove activities for agent {0}.</value>
+    <value>No permission to remove activities for agent(s)</value>
     <comment>Error message to notify missing permission for removing activity</comment>
   </data>
   <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
