@@ -29,13 +29,16 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var defaultResolution = cascadingSkills.First().DefaultResolution; //(maybe) correct...
 			foreach (var activity in activities)
 			{
+				var cascadingSkillsForActivity = cascadingSkills.Where(x => x.Activity.Equals(activity)).ToArray();
 				foreach (var interval in date.ToDateTimePeriod(timeZone).Intervals(TimeSpan.FromMinutes(defaultResolution)))
 				{
-					var affectedSkillForSkillGroups = ResourceCalculationContext.Fetch().AffectedResources(activity, interval).Select(x => x.Value);
-					//fel sortering
+					var affectedSkillForSkillGroups = orderedSkillGroups(cascadingSkillsForActivity, ResourceCalculationContext.Fetch().AffectedResources(activity, interval).Values);
 					foreach (var skillGroup in affectedSkillForSkillGroups)
 					{
-						var skillToMoveFrom = cascadingSkills.First(x => skillGroup.Skills.Contains(x));
+						var remainingResourcesInGroup = skillGroup.Resources;
+						if (remainingResourcesInGroup.IsZero())
+							continue;
+						var skillToMoveFrom = skillGroup.PrimarySkill;
 						ISkillStaffPeriodDictionary skillStaffPeriodFromDic;
 						if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveFrom, out skillStaffPeriodFromDic))
 							continue;
@@ -43,12 +46,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 						var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
 						if (remainingOverstaff <= 0)
 							continue;
-						//fel sortering
-						foreach (var skillToMoveTo in skillGroup.Skills.Where(x => !skillToMoveFrom.Equals(x) && skillToMoveFrom.Activity.Equals(x.Activity) && x.IsCascading()))
+						foreach (var skillToMoveTo in skillGroup.CascadingSkills)
 						{
-							var resourcesInGroup = resourcesInSkillGroup(skillToMoveFrom.Activity, skillToMoveTo, skillToMoveFrom, interval);
-							if (resourcesInGroup.IsZero())
-								continue;
 							ISkillStaffPeriodDictionary skillStaffPeriodToDic;
 							if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveTo, out skillStaffPeriodToDic))
 								continue;
@@ -56,11 +55,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 							var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 							if (skillToMoveToAbsoluteDifference >= 0)
 								continue;
-							var resourcesToMove = Math.Min(Math.Min(Math.Abs(skillToMoveToAbsoluteDifference), remainingOverstaff), resourcesInGroup);
+							var resourcesToMove = Math.Min(Math.Min(Math.Abs(skillToMoveToAbsoluteDifference), remainingOverstaff), remainingResourcesInGroup);
 							skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, resourcesToMove);
-
+							remainingResourcesInGroup -= resourcesToMove;
 							remainingOverstaff -= resourcesToMove;
-							if (remainingOverstaff.IsZero())
+							if (remainingOverstaff.IsZero() || remainingResourcesInGroup.IsZero())
 								break;
 						}
 					}
@@ -70,36 +69,35 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 
 		//make its own class - TO BE CONTINUED...///
-		private IEnumerable<CascadingSkillGroup> orderedSkillGroups(IEnumerable<ISkill> cascadingSkills, IEnumerable<IEnumerable<ISkill>> skillGroups)
+		private static IEnumerable<CascadingSkillGroup> orderedSkillGroups(IEnumerable<ISkill> cascadingSkills, IEnumerable<AffectedSkills> affectedSkills)
 		{
-			//ain't correct currently
-			var primarySkills = new List<ISkill>();
-			foreach (var skillGroup in skillGroups)
+			//TODO: shouldn't just sort by "first" skill
+			var ret = new List<CascadingSkillGroup>();
+			foreach (var skillGroup in affectedSkills)
 			{
-				primarySkills.Add(cascadingSkills.First(x => skillGroup.Contains(x)));
-			}
-			primarySkills.OrderByDescending(x => x.CascadingIndex);
+				var primarySkill = cascadingSkills.First(x => skillGroup.Skills.Contains(x) && x.IsCascading());
+				//TODO: check this - why is this needed? (activity check) - the resources will be wrong also...
+				var skillsUsedByPrimarySkill = skillGroup.Skills.Where(x => x.IsCascading() && x.Activity.Equals(primarySkill.Activity));
 
-			foreach (var primarySkill in primarySkills)
-			{
-				foreach (var skillGroup in skillGroups)
-				{
-					if (skillGroup.Contains(primarySkill))
-						yield return new CascadingSkillGroup(primarySkill, skillGroup.Where(x => !x.Equals(primarySkill)));
-				}
+				ret.Add(new CascadingSkillGroup(primarySkill, skillsUsedByPrimarySkill, skillGroup.Resource));
 			}
+			var orderedPrimarySkills = ret.Where(x => x.CascadingSkills.Count() > 1).OrderByDescending(x => x.PrimarySkill.CascadingIndex);
+
+			return orderedPrimarySkills;
 		}
 
 		public class CascadingSkillGroup
 		{
-			public CascadingSkillGroup(ISkill primarySkill, IEnumerable<ISkill> cascadingSkills)
+			public CascadingSkillGroup(ISkill primarySkill, IEnumerable<ISkill> cascadingSkills, double resources)
 			{
 				PrimarySkill = primarySkill;
 				CascadingSkills = cascadingSkills;
+				Resources = resources;
 			}
 
 			public ISkill PrimarySkill { get; private set; }
 			public IEnumerable<ISkill> CascadingSkills { get; private set; }
+			public double Resources { get; private set; }
 		}
 
 		/// 
