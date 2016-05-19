@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var mainShiftLayer = shiftLayer as MainShiftLayer;
 
-			if (mainShiftLayer == null)
+			if (!(shiftLayer is MainShiftLayer) && !(shiftLayer is PersonalShiftLayer))
 			{
 				command.ErrorMessages.Add(Resources.CannotDeleteSelectedActivities);
 				return;
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return layerAsMain?.OrderIndex ?? int.MaxValue;
 			});
 
-			if (mainShiftLayer.OrderIndex == minOrderIndex)
+			if (mainShiftLayer != null && mainShiftLayer.OrderIndex == minOrderIndex)
 			{
 				command.ErrorMessages.Add(Resources.CannotDeleteBaseActivity);
 				return;
