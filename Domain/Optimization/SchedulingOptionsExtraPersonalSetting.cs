@@ -29,8 +29,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		//Move elsewhere
 		private Guid? _scheduleTagId;
-        private int _resourceCalculateFrequency = 1;
-        private int _screenRefreshRate = 10;
 
 	    public void MapTo(ISchedulingOptions schedulingOptions, IEnumerable<IScheduleTag> scheduleTags,
 		    IList<GroupPageLight> groupPages, IList<GroupPageLight> groupPagesForTeamBlockPer,
@@ -64,14 +62,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    schedulingOptions.TeamSameActivity = _useCommmonActivity;
 		    if (activityList != null & _commonActivtyId.HasValue)
 			    schedulingOptions.CommonActivity = activityList.FirstOrDefault(x => x.Id == _commonActivtyId);
-
-		    schedulingOptions.ResourceCalculateFrequency = _resourceCalculateFrequency;
-		    if (_resourceCalculateFrequency < 1 || _resourceCalculateFrequency > 10)
-			    schedulingOptions.ResourceCalculateFrequency = 1;
-
-		    schedulingOptions.RefreshRate = _screenRefreshRate;
-		    if (_screenRefreshRate < 1 || _screenRefreshRate > 999)
-			    schedulingOptions.RefreshRate = 10;
 	    }
 
 	    public void MapFrom(ISchedulingOptions schedulingOptions)
@@ -85,9 +75,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useGroupSchedulingCommonEnd = schedulingOptions.TeamSameEndTime;
 		    _useGroupSchedulingCommonCategory = schedulingOptions.TeamSameShiftCategory;
 		    _useCommmonActivity = schedulingOptions.TeamSameActivity;
-
-		    _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
-		    _screenRefreshRate = schedulingOptions.RefreshRate;
 		    _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;
 
 		    _groupSchedlingForTeamBlockPerKey = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key;

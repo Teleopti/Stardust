@@ -24,7 +24,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			    UseMinimumPersons = true,
 			    UseMaximumPersons = true,
 			    UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,
-			    UseAverageShiftLengths = true
+			    UseAverageShiftLengths = true,
+				RefreshRate = 32,
+				ResourceCalculateFrequency = 12
+				
 		    };
 
 		    target.MapFrom(options);
@@ -37,6 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		    targetOptions.UseMinimumPersons.Should().Be.True();
 		    targetOptions.UseAverageShiftLengths.Should().Be.True();
 		    targetOptions.UserOptionMaxSeatsFeature.Should().Be.EqualTo(MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak);
+		    targetOptions.RefreshRate.Should().Be.EqualTo(32);
+		    targetOptions.ResourceCalculateFrequency.Should().Be.EqualTo(12);
 		}
     }
 }

@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private bool _useAverageShiftLengths = true;
 		private MaxSeatsFeatureOptions _maxSeatsFeatureOptions;
 		private Guid? _shiftCategoryId;
+		private int _refreshRate;
+		private int _calculationFrequenzy;
        
 		public void MapTo(ISchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories)
 		{
@@ -21,6 +23,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.UseMaximumPersons = _useMaxStaff;
 			schedulingOptions.UserOptionMaxSeatsFeature = _maxSeatsFeatureOptions;
 			schedulingOptions.UseAverageShiftLengths = _useAverageShiftLengths;
+			schedulingOptions.RefreshRate = _refreshRate < 1? 10: _refreshRate;
+			schedulingOptions.ResourceCalculateFrequency = _calculationFrequenzy < 1? 1 : _calculationFrequenzy;
 
 			if (!_shiftCategoryId.HasValue) return;
 			schedulingOptions.ShiftCategory =
@@ -33,6 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_useMaxStaff = schedulingOptions.UseMaximumPersons;
 			_maxSeatsFeatureOptions = schedulingOptions.UserOptionMaxSeatsFeature;
 			_useAverageShiftLengths = schedulingOptions.UseAverageShiftLengths;
+			_refreshRate = schedulingOptions.RefreshRate;
+			_calculationFrequenzy = schedulingOptions.ResourceCalculateFrequency;
 			_shiftCategoryId = schedulingOptions.ShiftCategory != null ? schedulingOptions.ShiftCategory.Id : null;
       	}
 	}

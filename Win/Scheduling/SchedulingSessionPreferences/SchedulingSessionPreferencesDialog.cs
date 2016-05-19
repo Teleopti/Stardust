@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		private readonly IEnumerable<IScheduleTag> _scheduleTags;
 		private readonly string _settingValue;
 		private readonly IEnumerable<IActivity> _availableActivity;
-		private readonly IToggleManager _toggleManager;
 		private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
 		private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
@@ -44,8 +42,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			ISchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			string settingValue, 
-			IEnumerable<IActivity> availableActivity, 
-			IToggleManager toggleManager)
+			IEnumerable<IActivity> availableActivity)
 			: this()
 		{
 			_schedulingOptions = schedulingOptions;
@@ -62,7 +59,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_scheduleTags = addKeepOriginalScheduleTag(scheduleTags);
 			_settingValue = settingValue;
 			_availableActivity = availableActivity;
-			_toggleManager = toggleManager;
 		}
 
 		private IEnumerable<IScheduleTag> addKeepOriginalScheduleTag(IEnumerable<IScheduleTag> scheduleTags)

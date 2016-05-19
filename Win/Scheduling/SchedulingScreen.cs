@@ -1131,7 +1131,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
 					daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
 					true, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions",
-					_schedulerState.CommonStateHolder.ActiveActivities, _container.Resolve<IToggleManager>()))
+					_schedulerState.CommonStateHolder.ActiveActivities))
 			{
 				if (options.ShowDialog(this) == DialogResult.OK)
 				{
@@ -3041,8 +3041,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							daysOffPreferences,
 							_schedulerState.CommonStateHolder.ActiveShiftCategories,
 							false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
-							"SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities,
-							_container.Resolve<IToggleManager>()))
+							"SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
@@ -3082,7 +3081,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var options = new SchedulingSessionPreferencesDialog(_optimizerOriginalPreferences.SchedulingOptions,
 						daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
 						false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
-						_schedulerState.CommonStateHolder.ActiveActivities, _container.Resolve<IToggleManager>()))
+						_schedulerState.CommonStateHolder.ActiveActivities))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)
 					{
