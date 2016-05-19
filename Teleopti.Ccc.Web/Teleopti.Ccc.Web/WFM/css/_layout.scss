@@ -170,8 +170,14 @@ wfm-notice{
 	color: $text-color-standard;
 }
 
+//ie specific
+
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	.container.content{
 		height: 92vh;
+	}
+
+	.nav-context-menu .nav-context-menu-left{
+		text-transform:inherit!important;
 	}
 }
