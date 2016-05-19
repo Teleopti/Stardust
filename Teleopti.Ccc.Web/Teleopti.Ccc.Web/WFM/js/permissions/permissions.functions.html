@@ -42,7 +42,7 @@
 		<div ng-class="{myRoleLock: disablePermissionForMe()}" class="line-right" ng-click="toggleDangerModal=true && !selectedRole.BuiltIn">
 			<div class="wfm-switch panel-switch">
 				<input type="checkbox" ng-model="allToggleElement.is" ng-disabled="selectedRole.BuiltIn" id="switchAll" />
-				<label for="switchAll">
+				<label for="switchAll" class="myRoleLock">
 					<span class="wfm-switch-label" translate>AccessAllFunctions</span>
 					<span class="wfm-switch-toggle"></span>
 				</label>
