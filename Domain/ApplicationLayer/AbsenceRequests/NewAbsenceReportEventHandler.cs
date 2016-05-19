@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	public class NewAbsenceReportHangfireEventHandler : NewAbsenceReportBase, IHandleEvent<NewAbsenceReportCreatedEvent>,
 		IRunOnHangfire
 	{
-		[AsSystem]
+		[ImpersonateSystem]
 		[UnitOfWork]
 		public new virtual void Handle(NewAbsenceReportCreatedEvent @event)
 		{
