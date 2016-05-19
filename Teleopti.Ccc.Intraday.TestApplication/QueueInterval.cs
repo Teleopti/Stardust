@@ -8,5 +8,7 @@
 		public decimal OfferedCalls { get; set; }
 		public decimal HandleTime { get; set; }
 	    public int DatasourceId { get; set; }
+		public decimal TalkTime { get; set; }
+		public decimal Acw { get; set; }
 	}
 }
