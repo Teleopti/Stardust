@@ -1,12 +1,18 @@
 'use strict';
 
 angular.module('wfm.rta').provider('RtaState', function() {
-	var rtaAgentsTemplate = function(elem, attr) {
+	var toggles = {
+		RTA_AlarmContext_29357: false
+	};
+	var rtaAgentsTemplate = function (elem, attr) {
+		if (toggles.RTA_AlarmContext_29357)
+			return 'js/rta/rta-agents-RTA_AlarmContext_29357.html';
 		return 'js/rta/rta-agents.html';
 	};
 	this.$get = function() {
 		return function(toggleService) {
-			toggleService.togglesLoaded.then(function() {
+			toggleService.togglesLoaded.then(function () {
+				toggles.RTA_AlarmContext_29357 = toggleService.RTA_AlarmContext_29357;
 			});
 		};
 	};
