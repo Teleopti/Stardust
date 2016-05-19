@@ -18,15 +18,18 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 	{
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly IRequestCommandHandlingProvider _commandHandlingProvider;
+		private readonly IShiftTradeRequestViewModelFactory _shiftTradeRequestViewModelFactory;
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
+
 			IRequestCommandHandlingProvider commandHandlingProvider,
-			ILoggedOnUser loggedOnUser)
+			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
 			_loggedOnUser = loggedOnUser;
+			_shiftTradeRequestViewModelFactory = shiftTradeRequestViewModelFactory;
 		}
 
 		[HttpPost, Route("api/Requests/loadTextAndAbsenceRequests"), UnitOfWork]
@@ -34,12 +37,17 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		{
 			return _requestsViewModelFactory.Create(input);
 		}
-
+		
 		[HttpGet, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests(
-			[ModelBinder(typeof (AllRequestsFormDataConverter))] AllRequestsFormData input)
+		public virtual RequestListViewModel GetRequests([ModelBinder(typeof (AllRequestsFormDataConverter))] AllRequestsFormData input)
 		{
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
+		}
+
+		[HttpGet, Route("api/Requests/shiftTradeRequests"), UnitOfWork]
+		public virtual RequestListViewModel GetShiftTradeRequests([ModelBinder(typeof(AllRequestsFormDataConverter))] AllRequestsFormData input)
+		{
+			return _shiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 		}
 
 		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]

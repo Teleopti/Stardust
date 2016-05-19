@@ -83,6 +83,7 @@ Wfm_Requests_Cancel_37741 = DEV
 Wfm_Requests_Cancel_Agent_38055 = DEV
 Wfm_Requests_Filtering_37748 = RC
 Wfm_Requests_Run_waitlist_38071 = DEV
+Wfm_Requests_ShiftTrade_37751 = DEV
 
 Wfm_Intraday_38074 = RC
 

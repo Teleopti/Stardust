@@ -185,7 +185,26 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void filterRequestByPersons(ICriteria criteria, IEnumerable<IPerson> persons)
 		{
 			if (persons == null) return;
-			criteria.Add(Restrictions.In("Person", persons.ToArray()));
+
+			var people = persons.ToArray();
+
+			criteria.Add (Restrictions.Or(
+					includeRequestsWithShiftTradePersonTo(people),
+					Restrictions.In("Person", people)
+				));
+		}
+
+		private static AbstractCriterion includeRequestsWithShiftTradePersonTo (IPerson[] people)
+		{
+			var shiftTradeDetailsForAgentPersonTo = DetachedCriteria.For<ShiftTradeSwapDetail>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Restrictions.In("PersonTo", people ));
+			
+			var shiftTradeRequestsForAgentPersonTo = DetachedCriteria.For<ShiftTradeRequest>()
+				.SetProjection(Projections.Property("Parent"))
+				.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", shiftTradeDetailsForAgentPersonTo));
+
+			return Subqueries.PropertyIn ("requests", shiftTradeRequestsForAgentPersonTo);
 		}
 
 		private void filterRequestByRequestType(ICriteria criteria, IEnumerable<RequestType> requestTypes)
@@ -273,6 +292,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					break;
 				case RequestType.TextRequest:
 					type = typeof(TextRequest);
+					break;
+				case RequestType.ShiftTradeRequest:
+					type = typeof(ShiftTradeRequest);
 					break;
 				default:
 					return null;

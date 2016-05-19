@@ -88,11 +88,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				return;
 			}
 			var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
-			
+
 			shiftTradeScheduleDayDetailViewModel.Name = shiftCategory.Description.Name;
-			//ROBTODO: is the short name actually being set???
 			shiftTradeScheduleDayDetailViewModel.Color = shiftCategory.DisplayColor.ToHtml();
-			shiftTradeScheduleDayDetailViewModel.ShortName= shiftCategory.Description.ShortName;
+			shiftTradeScheduleDayDetailViewModel.ShortName = shiftCategory.Description.ShortName;
 		}
 
 		private static void mapDayOffFields(IScheduleDay scheduleDay, ShiftTradeScheduleDayDetailViewModel shiftTradeScheduleDayDetailViewModel)
@@ -100,8 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var dayOff = scheduleDay.PersonAssignment(false).DayOff();
 
 			shiftTradeScheduleDayDetailViewModel.Name = dayOff.Description.Name;
-			//ROBTODO: is the short name actually being set???
-			shiftTradeScheduleDayDetailViewModel.ShortName= dayOff.Description.ShortName;
+			shiftTradeScheduleDayDetailViewModel.ShortName = dayOff.Description.ShortName;
 			shiftTradeScheduleDayDetailViewModel.Color = dayOff.DisplayColor.ToHtml();
 		}
 	}

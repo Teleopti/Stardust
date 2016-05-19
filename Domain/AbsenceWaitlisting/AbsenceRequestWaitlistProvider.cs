@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		{
 			var requestTypes = new[] { RequestType.AbsenceRequest };
 			var requestFilter = new RequestFilter() { Period = period, RequestTypes = requestTypes, ExcludeRequestsOnFilterPeriodEdge = true };
-
-
+			
 			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests (requestFilter)
 				where requestShouldBeProcessed (request, workflowControlSet)
 				orderby request.CreatedOn ascending

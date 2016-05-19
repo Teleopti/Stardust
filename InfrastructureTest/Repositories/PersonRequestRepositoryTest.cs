@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -1047,6 +1048,79 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
 			result.Count().Should().Be(1);
 
+		}
+
+		[Test]
+		public void ShouldReturnShiftTradeRequestsThatIntersectDatePeriod()
+		{
+			var person1 = PersonFactory.CreatePerson("person1");
+			var person2 = PersonFactory.CreatePerson("person2");
+			var person3 = PersonFactory.CreatePerson("person3");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(person3);
+
+			createShiftTradeRequest (new DateOnly (2016, 10, 2), new DateOnly (2016, 10, 4), person1, person2);
+			createShiftTradeRequest (new DateOnly (2016, 10, 1), new DateOnly (2016, 10, 3), person1, person3);
+			createShiftTradeRequest (new DateOnly (2016, 10, 4), new DateOnly (2016, 10, 5), person2, person3);
+
+			var filter = new RequestFilter()
+			{
+				Period = new DateTimePeriod(new DateTime(2016, 10, 2).Utc(), new DateTime(2016, 10, 4).Utc()),
+				Persons = new List<IPerson> { person1, person2, person3 },
+				RequestTypes = new List<RequestType> { RequestType.ShiftTradeRequest }
+			};
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			result.Count().Should().Be(3);
+		}
+
+		[Test]
+		public void ShouldReturnShiftTradeRequestsWherePersonToMatchesFilter()
+		{
+			var person1 = PersonFactory.CreatePerson("person1");
+			var person2 = PersonFactory.CreatePerson("person2");
+			var person3 = PersonFactory.CreatePerson("person3");
+
+			PersistAndRemoveFromUnitOfWork(person1);
+			PersistAndRemoveFromUnitOfWork(person2);
+			PersistAndRemoveFromUnitOfWork(person3);
+
+			createShiftTradeRequest(new DateOnly(2016, 10, 2), new DateOnly(2016, 10, 4), person1, person2);
+			createShiftTradeRequest(new DateOnly(2016, 10, 1), new DateOnly(2016, 10, 3), person1, person3);
+			createShiftTradeRequest(new DateOnly(2016, 10, 4), new DateOnly(2016, 10, 5), person2, person3);
+
+			var filter = new RequestFilter()
+			{
+				Period = new DateTimePeriod(new DateTime(2016, 10, 2).Utc(), new DateTime(2016, 10, 4).Utc()),
+				Persons = new List<IPerson> { person2 },
+				RequestTypes = new List<RequestType> { RequestType.ShiftTradeRequest }
+			};
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+
+			result.Count().Should().Be(2);
+		}
+
+		private PersonRequest createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
+		{
+			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();
+
+			var dateOnlyPeriod = new DateOnlyPeriod(dateFrom, dateTo);
+
+			foreach (var day in dateOnlyPeriod.DayCollection())
+			{
+				shiftTradeSwapDetailList.Add(new ShiftTradeSwapDetail(personFrom, personTo, day, day));
+			}
+
+			var shiftTradeRequest = new ShiftTradeRequest(shiftTradeSwapDetailList);
+
+			var personRequest = new PersonRequest(personFrom, shiftTradeRequest);
+
+			PersistAndRemoveFromUnitOfWork (personRequest);
+
+			return personRequest;
 		}
 
 		[Test]
