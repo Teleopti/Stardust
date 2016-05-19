@@ -1,0 +1,2 @@
+ALTER TABLE Tenant.Tenant ADD
+	Active bit NOT NULL CONSTRAINT DF_Tenant_Active DEFAULT 1
