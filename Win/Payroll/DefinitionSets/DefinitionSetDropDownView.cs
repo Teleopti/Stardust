@@ -39,9 +39,17 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             if (ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection != null &&
                 ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection.Count > 0)
             {
-                comboBoxAdvMultiplicatorDefinitionSets.DataSource = null;
+                
+	            if (ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection.Count <=
+					comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex)
+	            {
+		            comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex =
+			            ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection.Count - 1;
+	            }
 
-                comboBoxAdvMultiplicatorDefinitionSets.DataSource =
+				comboBoxAdvMultiplicatorDefinitionSets.DataSource = null;
+
+				comboBoxAdvMultiplicatorDefinitionSets.DataSource =
                     ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection;
 
                 comboBoxAdvMultiplicatorDefinitionSets.ValueMember = "Name";
