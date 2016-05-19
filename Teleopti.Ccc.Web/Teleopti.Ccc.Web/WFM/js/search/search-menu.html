@@ -1,5 +1,5 @@
 <div ng-controller="SearchCtrl" ng-show="searchmode">
-  <input type="text" id="searchbar" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
+  <input type="text" id="searchbar" ng-blur="ResetSearch()" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
   <div class="search-results material-depth-2">
     <ul class="wfm-list">
       <div ng-repeat="gp in searchResultGroups">
