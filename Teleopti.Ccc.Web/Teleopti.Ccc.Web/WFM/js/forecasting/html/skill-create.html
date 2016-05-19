@@ -12,7 +12,7 @@
 					<dd>
 						<div class="form-input-wrap skill-name">
 							<label for="nameId">{{'Name'|translate}}</label>
-							<input type="text" ng-maxlength="50" ng-model="model.name" name="Name" required="" id="nameId" />
+							<input type="text" ng-maxlength="50" autofocus autocomplete="off" ng-model="model.name" name="Name" required="" id="nameId" />
 							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Name.$touched">
 								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">{{ 'YouCannotHaveABlankName' | translate }}</div>
 								<div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.maxlength}">{{'NameCantBeMoreThan'|translate}}</div>
