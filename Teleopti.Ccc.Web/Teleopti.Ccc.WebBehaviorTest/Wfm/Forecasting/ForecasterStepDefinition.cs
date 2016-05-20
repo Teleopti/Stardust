@@ -250,6 +250,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertExists(".override-tasks-checkbox");
 			Browser.Interactions.Click(".override-tasks-checkbox");
+			Browser.Interactions.AssertVisibleUsingJQuery("#overrideTasksInputId");
 			Browser.Interactions.FillWith("#overrideTasksInputId", calls);
 			Browser.Interactions.AssertInputValue("#overrideTasksInputId", calls);
 		}
@@ -259,6 +260,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertExists(".override-talktime-checkbox");
 			Browser.Interactions.Click(".override-talktime-checkbox");
+			Browser.Interactions.AssertVisibleUsingJQuery("#overrideTalkTimeInputId");
 			Browser.Interactions.FillWith("#overrideTalkTimeInputId", talkTime);
 			Browser.Interactions.AssertInputValue("#overrideTalkTimeInputId", talkTime);
 		}
@@ -268,6 +270,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Forecasting
 		{
 			Browser.Interactions.AssertExists(".override-acw-checkbox");
 			Browser.Interactions.Click(".override-acw-checkbox");
+			Browser.Interactions.AssertVisibleUsingJQuery("#overrideAcwInputId");
 			Browser.Interactions.FillWith("#overrideAcwInputId", afterCallWork);
 			Browser.Interactions.AssertInputValue("#overrideAcwInputId", afterCallWork);
 		}
