@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute
 			{
 				Attempts = retries,
-				OnAttemptsExceeded = AttemptsExceededAction.Delete
+				OnAttemptsExceeded = AttemptsExceededAction.Fail
 			});
 			GlobalJobFilters.Filters.Add(new JobExpirationTimeAttribute
 			{
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				hangfireConfigLog += $"{nameof(jobExpirationCheck)}={jobExpirationCheck}, ";
 				hangfireConfigLog += $"{nameof(dashboardStatistics)}={dashboardStatistics}, ";
 				hangfireConfigLog += $"{nameof(dashboardCounters)}={dashboardCounters}, ";
-				hangfireConfigLog += $"{nameof(countersAggregateInterval)}={dashboardCounters}, ";
+				hangfireConfigLog += $"{nameof(countersAggregateInterval)}={countersAggregateInterval}, ";
 				logger.Debug(hangfireConfigLog);
 			}
 		}
