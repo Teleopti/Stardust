@@ -19,7 +19,14 @@
 		vm.PasswordMessage = "The password can not be empty";
 
 		vm.ErrorMessage = "";
-		
+		vm.FirstUser = false;
+
+	    $http.get("./HasNoUser").success(function (data) {
+	        vm.FirstUser = data;
+		}).error(function (xhr, ajaxOptions, thrownError) {
+		    console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+		});
+
 		vm.CheckName = function () {
 			if(vm.Name === '')
 			{
@@ -56,8 +63,15 @@
 			vm.PasswordOk = true;
 		}
 
+        vm.save = function() {
+            if (vm.FirstUser === true) {
+                vm.savefirst();
+                return;
+            }
+            vm.addUser();
+        }
 
-		vm.save = function () {
+		vm.addUser = function () {
 			$http.post('./AddUser', {
 				Name: vm.Name,
 				Email: vm.Email,
@@ -75,6 +89,26 @@
 					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
 					vm.Success = false;
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
+
+		vm.savefirst = function () {
+		    $http.post('./AddFirstUser', {
+		        Name: vm.Name,
+		        Email: vm.Email,
+		        Password: vm.Password,
+		        ConfirmPassword: vm.ConfirmPassword
+		    }).success(function (data) {
+				    if (!data.Success) {
+				        vm.ErrorMessage = data.Message;
+				        return;
+				    }
+				    window.location = "#";
+				})
+				.error(function (xhr, ajaxOptions, thrownError) {
+				    vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
+				    vm.Success = false;
+				    console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
 		};
 	}

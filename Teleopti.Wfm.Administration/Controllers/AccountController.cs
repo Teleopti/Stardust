@@ -125,58 +125,68 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("AddUser")]
 		public virtual UpdateUserResultModel AddUser(AddUserModel model)
 		{
-			if (string.IsNullOrEmpty(model.Password))
-				return new UpdateUserResultModel
-				{
-					Success = false,
-					Message = "Password can't be empty."
-				};
-			if (string.IsNullOrEmpty(model.Email))
-				return new UpdateUserResultModel
-				{
-					Success = false,
-					Message = "Email can't be empty."
-				};
-			if (string.IsNullOrEmpty(model.Name))
-				return new UpdateUserResultModel
-				{
-					Success = false,
-					Message = "Name can't be empty."
-				};
-			if (!model.Password.Equals(model.ConfirmPassword))
-				return new UpdateUserResultModel
-				{
-					Success = false,
-					Message = "Password and confirm password does not match."
-				};
-
-			try
-			{
-				var encryptedPassword = encryptString(model.Password);
-				var token = encryptString(model.Email);
-				var user = new TenantAdminUser {Email = model.Email, Name = model.Name, Password = encryptedPassword, AccessToken = token};
-				
-				_currentTenantSession.CurrentSession().Save(user);
-				
-			}
-			catch (Exception exception)
-			{
-				_currentTenantSession.CurrentSession().Clear();
-                return new UpdateUserResultModel
-				{
-					Success = false,
-					Message = exception.InnerException != null ? exception.InnerException.Message : exception.Message
-				};
-			}
-
-			return new UpdateUserResultModel
-			{
-				Success = true,
-				Message = "Updated the user successfully."
-			};
+		    return UpdateUserResultModel(model);
 		}
 
-		[HttpPost]
+	    private UpdateUserResultModel UpdateUserResultModel(AddUserModel model)
+	    {
+	        if (string.IsNullOrEmpty(model.Password))
+	            return new UpdateUserResultModel
+	            {
+	                Success = false,
+	                Message = "Password can't be empty."
+	            };
+	        if (string.IsNullOrEmpty(model.Email))
+	            return new UpdateUserResultModel
+	            {
+	                Success = false,
+	                Message = "Email can't be empty."
+	            };
+	        if (string.IsNullOrEmpty(model.Name))
+	            return new UpdateUserResultModel
+	            {
+	                Success = false,
+	                Message = "Name can't be empty."
+	            };
+	        if (!model.Password.Equals(model.ConfirmPassword))
+	            return new UpdateUserResultModel
+	            {
+	                Success = false,
+	                Message = "Password and confirm password does not match."
+	            };
+
+	        try
+	        {
+	            var encryptedPassword = encryptString(model.Password);
+	            var token = encryptString(model.Email);
+	            var user = new TenantAdminUser
+	            {
+	                Email = model.Email,
+	                Name = model.Name,
+	                Password = encryptedPassword,
+	                AccessToken = token
+	            };
+
+	            _currentTenantSession.CurrentSession().Save(user);
+	        }
+	        catch (Exception exception)
+	        {
+	            _currentTenantSession.CurrentSession().Clear();
+	            return new UpdateUserResultModel
+	            {
+	                Success = false,
+	                Message = exception.InnerException != null ? exception.InnerException.Message : exception.Message
+	            };
+	        }
+
+	        return new UpdateUserResultModel
+	        {
+	            Success = true,
+	            Message = "Updated the user successfully."
+	        };
+	    }
+
+	    [HttpPost]
 		[TenantUnitOfWork]
 		[Route("ChangePassword")]
 		public virtual JsonResult<UpdateUserResultModel> ChangePassword(ChangePasswordModel model)
@@ -224,7 +234,25 @@ namespace Teleopti.Wfm.Administration.Controllers
 				_currentTenantSession.CurrentSession().Delete(user);
 		}
 
-		private string encryptString(string value)
+        [OverrideAuthentication]
+        [HttpGet]
+        [TenantUnitOfWork]
+        [Route("HasNoUser")]
+        public virtual JsonResult<bool> HasNoUser()
+        {
+            return Json(_currentTenantSession.CurrentSession().GetNamedQuery("loadAllTenantUsers").List<TenantAdminUser>().Count == 0);
+        }
+
+        [OverrideAuthentication]
+        [HttpPost]
+        [TenantUnitOfWork]
+        [Route("AddFirstUser")]
+        public virtual UpdateUserResultModel AddFirstUser(AddUserModel model)
+        {
+            return UpdateUserResultModel(model);
+        }
+
+        private string encryptString(string value)
 		{
 			return string.Concat("###", BitConverter.ToString(hashString(value)).Replace("-", ""), "###");
 		}

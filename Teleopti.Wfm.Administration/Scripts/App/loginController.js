@@ -1,18 +1,13 @@
-﻿(function () {
+﻿(function ($http) {
 	'use strict';
 	var tokenKey = 'accessToken';
 	var userKey = 'userToken';
 	var emailKey = 'lastEmail';
 	var idKey = 'idToken';
+	var firstUser = false;
 
 	var token = sessionStorage.getItem(tokenKey);
-	if (token === null) {
-		$("#modal-login").dialog({
-			modal: true,
-			title: "Log in to access the admin site"
-	}
-		);
-	}
+    
 	angular
 		 .module('adminApp')
 		 .controller('loginController', loginController, []);
@@ -26,6 +21,25 @@
 
 		vm.user = sessionStorage.getItem(userKey);
 		$scope.selected = 1;
+
+		$http.get("./HasNoUser").success(function (data) {
+		    firstUser = data;
+		    if (firstUser) {
+		        vm.user = 'xxfirstxx';
+		        window.location = "#adduser";
+		    } else {
+		        if (token === null) {
+		            $("#modal-login").dialog({
+		                modal: true,
+		                title: "Log in to access the admin site"
+		            }
+                    );
+		        }
+		    }
+		}).error(function (xhr, ajaxOptions, thrownError) {
+		    console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+		});
+
 		function showError(jqXHR) {
 			vm.Message = jqXHR.Message + ': ' + jqXHR.ExceptionMessage;
 		}
