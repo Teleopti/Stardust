@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
@@ -16,16 +15,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
 	[AnalyticsUnitOfWorkTest]
-	public class AgentStateReadModelPersisterGetTest
+	public class AgentStatePersisterGetTest
 	{
-		public IAgentStateReadModelPersister Persister;
+		public IAgentStatePersister Persister;
 		public ICurrentAnalyticsUnitOfWork UnitOfWork;
 		public MutableNow Now;
 
 		[Test]
 		public void ShouldGetCurrentActualAgentState()
 		{
-			var state = new AgentStateReadModelForTest { PersonId = Guid.NewGuid() };
+			var state = new AgentStateForTest { PersonId = Guid.NewGuid() };
 			Persister.Persist(state);
 
 			var result = Persister.Get(state.PersonId);
@@ -47,8 +46,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var writer = Persister;
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
-			writer.Persist(new AgentStateReadModelForTest { PersonId = personId1 });
-			writer.Persist(new AgentStateReadModelForTest { PersonId = personId2 });
+			writer.Persist(new AgentStateForTest { PersonId = personId1 });
+			writer.Persist(new AgentStateForTest { PersonId = personId2 });
 
 			var result = Persister.GetAll();
 
@@ -60,28 +59,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldGetCurrentActualAgentStatesWithAllData()
 		{
 			var writer = Persister;
-			var state = new AgentStateReadModelForTest
+			var state = new AgentStateForTest
 			{
 				PersonId = Guid.NewGuid(),
+				BusinessUnitId = Guid.NewGuid(),
+				TeamId = Guid.NewGuid(),
+				SiteId = Guid.NewGuid(),
 				RuleId = Guid.NewGuid(),
-				RuleName = "alarm",
 				RuleStartTime = "2014-11-11 10:33".Utc(),
 				BatchId = "2014-11-11 10:34".Utc(),
-				BusinessUnitId = Guid.NewGuid(),
-				RuleColor = 3,
-				NextStart = "2014-11-11 10:35".Utc(),
-				OriginalDataSourceId = "1",
+				SourceId = "1",
 				PlatformTypeId = Guid.NewGuid(),
 				ReceivedTime = "2014-11-11 10:36".Utc(),
-				Scheduled = "schedule",
-				ScheduledId = Guid.NewGuid(),
-				ScheduledNext = "next",
-				ScheduledNextId = Guid.NewGuid(),
 				StaffingEffect = 1,
 				Adherence = (int) Adherence.Neutral,
-				StateName = "state",
 				StateCode = "statecode",
-				StateId = Guid.NewGuid(),
+				StateGroupId = Guid.NewGuid(),
 				StateStartTime = "2014-11-11 10:37".Utc(),
 			};
 			writer.Persist(state);
@@ -89,32 +82,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var result = Persister.GetAll().Single();
 
 			result.PersonId.Should().Be(state.PersonId);
+			result.BusinessUnitId.Should().Be(state.BusinessUnitId);
+			result.TeamId.Should().Be(state.TeamId);
+			result.SiteId.Should().Be(state.SiteId);
 			result.RuleId.Should().Be(state.RuleId);
-			result.RuleName.Should().Be(state.RuleName);
 			result.RuleStartTime.Should().Be(state.RuleStartTime);
 			result.BatchId.Should().Be(state.BatchId);
-			result.BusinessUnitId.Should().Be(state.BusinessUnitId);
-			result.RuleColor.Should().Be(state.RuleColor);
-			result.NextStart.Should().Be(state.NextStart);
-			result.OriginalDataSourceId.Should().Be(state.OriginalDataSourceId);
+			result.SourceId.Should().Be(state.SourceId);
 			result.PlatformTypeId.Should().Be(state.PlatformTypeId);
 			result.ReceivedTime.Should().Be(state.ReceivedTime);
-			result.Scheduled.Should().Be(state.Scheduled);
-			result.ScheduledId.Should().Be(state.ScheduledId);
-			result.ScheduledNext.Should().Be(state.ScheduledNext);
-			result.ScheduledNextId.Should().Be(state.ScheduledNextId);
 			result.StaffingEffect.Should().Be(state.StaffingEffect);
 			result.Adherence.Should().Be(state.Adherence);
-			result.StateName.Should().Be(state.StateName);
 			result.StateCode.Should().Be(state.StateCode);
-			result.StateId.Should().Be(state.StateId);
+			result.StateGroupId.Should().Be(state.StateGroupId);
 			result.StateStartTime.Should().Be(state.StateStartTime);
 		}
 
 		[Test]
 		public void ShouldReadActualAgentStateWithoutBusinessUnit()
 		{
-			Persister.Persist(new AgentStateReadModelForTest {BusinessUnitId = Guid.NewGuid()});
+			Persister.Persist(new AgentStateForTest {BusinessUnitId = Guid.NewGuid()});
 			UnitOfWork.Current()
 				.FetchSession()
 				.CreateSQLQuery("UPDATE Rta.ActualAgentState SET BusinessUnitId=NULL")
@@ -129,11 +116,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void ShouldReadNullValuesWhenClosingSnapshot()
 		{
 			var personId = Guid.NewGuid();
-			var state = new AgentStateReadModel
+			var state = new AgentState
 			{
 				PersonId = personId,
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				OriginalDataSourceId = "6"
+				SourceId = "6"
 			};
 			Persister.Persist(state);
 
@@ -145,22 +132,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		public void SHouldReadValuesWhenClosingSnapshot()
 		{
 			var personId = Guid.NewGuid();
-			var agentStateReadModel = new AgentStateReadModel
+			var agentStateReadModel = new AgentState
 			{
 				BusinessUnitId = Guid.NewGuid(),
 				PersonId = personId,
 				StateCode = "phone",
 				PlatformTypeId = Guid.NewGuid(),
-				StateName = "Ready",
-				StateId = Guid.NewGuid(),
-				Scheduled = "Phone",
-				ScheduledId = Guid.NewGuid(),
 				StateStartTime = "2015-03-06 15:00".Utc(),
-				ScheduledNext = "Break",
-				ScheduledNextId = Guid.NewGuid(),
-				NextStart = "2015-03-06 06:00".Utc(),
 				ReceivedTime = "2015-03-06 15:19".Utc(),
-				OriginalDataSourceId = "6"
+				SourceId = "6"
 			};
 			Persister.Persist(agentStateReadModel);
 
@@ -170,14 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.BusinessUnitId.Should().Be(agentStateReadModel.BusinessUnitId);
 			result.StateCode.Should().Be(agentStateReadModel.StateCode);
 			result.PlatformTypeId.Should().Be(agentStateReadModel.PlatformTypeId);
-			result.StateName.Should().Be(agentStateReadModel.StateName);
-			result.StateId.Should().Be(agentStateReadModel.StateId);
-			result.Scheduled.Should().Be(agentStateReadModel.Scheduled);
-			result.ScheduledId.Should().Be(agentStateReadModel.ScheduledId);
 			result.StateStartTime.Should().Be(agentStateReadModel.StateStartTime);
-			result.ScheduledNext.Should().Be(agentStateReadModel.ScheduledNext);
-			result.ScheduledNextId.Should().Be(agentStateReadModel.ScheduledNextId);
-			result.NextStart.Should().Be(agentStateReadModel.NextStart);
 		}
 
 		[Test]

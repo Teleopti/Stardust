@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
 		public MutableNow Now;
 		public FakeEventPublisher Publisher;
-		public IAgentStateReadModelPersister Persister;
+		public IAgentStateReadModelReader Persister;
 
 		[Test]
 		public void ShouldNotCacheSchedules()
@@ -111,47 +111,5 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>().Should().Not.Be.Empty();
 		}
 		
-		[Test, Ignore("Not applicable, unless we fake sql locking")]
-		public void ShouldNotSendDuplicateEvents()
-		{
-			Database
-				.WithRule("AUX1");
-			var tasks = new List<Task>();
-			100.Times(i =>
-			{
-				var personId = Guid.NewGuid();
-				Database
-					.WithUser(i.ToString(), personId)
-					.WithSchedule(personId, Guid.NewGuid(), "2015-05-19 08:00", "2015-05-19 09:00");
-			});
-			Now.Is("2015-05-19 08:00");
-
-			100.Times(i =>
-			{
-				tasks.Add(Task.Factory.StartNew(() =>
-					Target.SaveState(new ExternalUserStateForTest
-					{
-						UserCode = i.ToString(),
-						StateCode = "AUX1"
-					})));
-				tasks.Add(Task.Factory.StartNew(() =>
-					Target.SaveState(new ExternalUserStateForTest
-					{
-						UserCode = i.ToString(),
-						StateCode = "AUX1"
-					})));
-				tasks.Add(Task.Factory.StartNew(() =>
-					Target.SaveState(new ExternalUserStateForTest
-					{
-						UserCode = i.ToString(),
-						StateCode = "AUX1"
-					})));
-			});
-
-			Task.WaitAll(tasks.ToArray());
-
-			Persister.GetAll().Should().Have.Count.EqualTo(100);
-			Publisher.PublishedEvents.OfType<PersonActivityStartEvent>().Should().Have.Count.EqualTo(100);
-		}
 	}
 }

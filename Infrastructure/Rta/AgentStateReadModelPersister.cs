@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
@@ -79,46 +74,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("AlarmColor", model.AlarmColor)
 				.ExecuteUpdate();
-		}
-
-		public virtual IEnumerable<AgentStateReadModel> GetAll()
-		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState + "WITH (TABLOCK UPDLOCK)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>();
-		}
-
-		[InfoLog]
-		public virtual AgentStateReadModel Get(Guid personId)
-		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>()
-				.FirstOrDefault();
-		}
-
-		[InfoLog]
-		public virtual IEnumerable<AgentStateReadModel> GetNotInSnapshot(DateTime batchId, string dataSourceId)
-		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState +
-					  @"WITH (UPDLOCK) WHERE 
-						OriginalDataSourceId = :OriginalDataSourceId
-						AND (
-							BatchId < :BatchId
-							OR 
-							BatchId IS NULL
-							)";
-			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetParameter("BatchId", batchId)
-				.SetParameter("OriginalDataSourceId", dataSourceId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>();
 		}
 
 		public virtual void Delete(Guid personId)

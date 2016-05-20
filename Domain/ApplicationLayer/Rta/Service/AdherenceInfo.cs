@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AdherenceInfo
 	{
 		private readonly ExternalUserStateInputModel _input;
-		private readonly Lazy<StoredStateInfo> _stored;
+		private readonly Lazy<AgentState> _stored;
 		private readonly MappingsState _mappings;
 		private readonly Guid _businessUnitId;
 		private readonly StateRuleInfo _stateRuleInfo;
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AdherenceInfo(
 			ExternalUserStateInputModel input,
-			Lazy<StoredStateInfo> stored,
+			Lazy<AgentState> stored,
 			MappingsState mappings,
 			Guid businessUnitId,
 			StateRuleInfo stateRuleInfo,

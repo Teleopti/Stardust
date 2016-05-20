@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Domain
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AgentStateReadModel
 	{

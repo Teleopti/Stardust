@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public WithUnitOfWork WithUnitOfWork;
 		public IPersonRepository Persons;
 		public Domain.ApplicationLayer.Rta.Service.Rta Rta;
-		public IAgentStateReadModelPersister ReadModels;
+		public IAgentStateReadModelReader ReadModels;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				}
 			});
 
-			WithAnalyticsUnitOfWork.Get(() => ReadModels.Get(person.Id.Value))
+			ReadModels.Load(new[] { person.Id.Value }).SingleOrDefault()
 				.RuleName.Should().Be("OutAdherence");
 		}
 	}

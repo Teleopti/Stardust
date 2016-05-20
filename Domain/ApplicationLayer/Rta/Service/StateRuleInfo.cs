@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly Lazy<MappedRule> _mappedRule;
 		private readonly Lazy<MappedState> _mappedState;
-		private readonly Lazy<StoredStateInfo> _stored;
+		private readonly Lazy<AgentState> _stored;
 
 		public StateRuleInfo(
 			MappingsState mappings,
-			Lazy<StoredStateInfo> stored, 
+			Lazy<AgentState> stored, 
 			string stateCode,
 			Guid platformTypeId,
 			Guid businessUnitId,

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	public class SnapshotTests
 	{
-		public FakeAgentStateReadModelStorage Persister;
+		public FakeAgentStateStorage Persister;
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;

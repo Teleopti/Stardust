@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	public class FakeRtaDatabase : IDatabaseReader
 	{
 		private readonly INow _now;
-		private readonly FakeAgentStateReadModelStorage _agentStateReadModels;
+		private readonly FakeAgentStateStorage _agentStateReadModels;
 		private readonly FakeRtaStateGroupRepository _rtaStateGroupRepository;
 		private readonly FakeRtaMapRepository _rtaMapRepository;
 		private readonly FakeTenants _tenants;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase(
 			INow now,
-			FakeAgentStateReadModelStorage agentStateReadModels,
+			FakeAgentStateStorage agentStateReadModels,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
 			FakeRtaMapRepository rtaMapRepository,
 			FakeTenants tenants,
@@ -84,10 +84,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			withPlatform(new Guid(new ExternalUserStateForTest().PlatformTypeId));
 		}
 
-		public StoredStateInfo StoredState => _agentStateReadModels.Models.Select(x => new StoredStateInfo(x.PersonId, x)).SingleOrDefault();
+		public AgentState StoredState => _agentStateReadModels.Models.Select(x => new AgentState(x)).SingleOrDefault();
 		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
 		public IEnumerable<IRtaState> StateCodes => _rtaStateGroupRepository.LoadAll().Single().StateCollection;
-		public StoredStateInfo StoredStateFor(Guid personId) => new StoredStateInfo(personId, _agentStateReadModels.Get(personId));
+		public AgentState StoredStateFor(Guid personId) => _agentStateReadModels.Get(personId);
 		
 		public FakeRtaDatabase WithPlatform(Guid platformTypeId)
 		{

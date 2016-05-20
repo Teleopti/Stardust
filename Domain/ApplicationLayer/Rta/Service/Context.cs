@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class Context
 	{
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly Lazy<StoredStateInfo> _stored;
+		private readonly Lazy<AgentState> _stored;
 		private readonly Action<Context> _agentStateReadModelUpdater;
 
 		public Context(
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid businessUnitId, 
 			Guid teamId, 
 			Guid siteId, 
-			Func<StoredStateInfo> stored, 
+			Func<AgentState> stored, 
 			Func<IEnumerable<ScheduleLayer>> schedule, 
 			Func<Context, IEnumerable<Mapping>> mappings, 
 			Action<Context> agentStateReadModelUpdater, 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			ProperAlarm appliedAlarm)
 		{
 			var dontDeferForNow = stored == null ? null : stored.Invoke();
-			_stored = new Lazy<StoredStateInfo>(() => dontDeferForNow);
+			_stored = new Lazy<AgentState>(() => dontDeferForNow);
 			var scheduleLazy = new Lazy<IEnumerable<ScheduleLayer>>(schedule);
 			var mappingsState = new MappingsState(() => mappings.Invoke(this));
 			_agentStateReadModelUpdater = agentStateReadModelUpdater ?? (a => { });
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Guid SiteId { get; private set; }
 
 		public ExternalUserStateInputModel Input { get; set; }
-		public StoredStateInfo Stored { get { return _stored.Value; } }
+		public AgentState Stored { get { return _stored.Value; } }
 		public StateRuleInfo State { get; private set; }
 		public ScheduleInfo Schedule { get; private set; }
 		public AdherenceInfo Adherence { get; private set; }

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	public class GetAgentStatesTest : ISetup
 	{
 		public IGetAgentStates Target;
-		public FakeAgentStateReadModelStorage Database;
+		public FakeAgentStateStorage Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeUserCulture Culture;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
-			system.UseTestDouble<FakeAgentStateReadModelStorage>().For<IAgentStateReadModelReader>();
+			system.UseTestDouble<FakeAgentStateStorage>().For<IAgentStateReadModelReader>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();

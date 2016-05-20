@@ -11,13 +11,12 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
 	[AnalyticsDatabaseTest]
-	public class AgentStateReadModelPersisterConcurrencyTest : ISetup
+	public class AgentStatePersisterConcurrencyTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -69,9 +68,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 		public class TheService
 		{
-			private readonly IAgentStateReadModelPersister _persister;
+			private readonly IAgentStatePersister _persister;
 
-			public TheService(IAgentStateReadModelPersister persister)
+			public TheService(IAgentStatePersister persister)
 			{
 				_persister = persister;
 			}
@@ -92,7 +91,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				addOneTo(all);
 			}
 
-			private void addOneTo(IEnumerable<AgentStateReadModel> all)
+			private void addOneTo(IEnumerable<AgentState> all)
 			{
 				all.ForEach(m =>
 				{
@@ -109,13 +108,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			[AnalyticsUnitOfWork]
 			public virtual void AddOne(Guid personId, DateTime? batchId, string datasourceId)
 			{
-				var model = _persister.Get(personId) ?? new AgentStateReadModel
+				var model = _persister.Get(personId) ?? new AgentState()
 				{
 					PersonId = personId,
 					StateCode = "0",
 					ReceivedTime = "2016-03-15 00:00:00".Utc(),
 					BatchId = batchId,
-					OriginalDataSourceId = datasourceId
+					SourceId = datasourceId
 				};
 				Thread.Sleep(TimeSpan.FromMilliseconds(100));
 				model.StateCode = (int.Parse(model.StateCode) + 1).ToString();
@@ -123,13 +122,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			}
 
 			[AnalyticsUnitOfWork]
-			public virtual AgentStateReadModel Get(Guid personId)
+			public virtual AgentState Get(Guid personId)
 			{
 				return _persister.Get(personId);
 			}
 
 			[AnalyticsUnitOfWork]
-			public virtual IEnumerable<AgentStateReadModel> GetAll()
+			public virtual IEnumerable<AgentState> GetAll()
 			{
 				return _persister.GetAll();
 			}

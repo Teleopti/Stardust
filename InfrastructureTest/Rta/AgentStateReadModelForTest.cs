@@ -1,5 +1,5 @@
 ﻿using System;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {

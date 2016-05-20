@@ -1,25 +1,23 @@
 using System.Linq;
 using System.Threading;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.PerformanceTest.Code
 {
 	public class StatesArePersisted
 	{
-		private readonly IAgentStateReadModelPersister _persister;
+		private readonly IAgentStatePersister _persister;
 		private readonly StatesSender _sender;
 		private readonly WithAnalyticsUnitOfWork _unitOfWork;
 		private readonly IDataSourceScope _dataSource;
 
 		public StatesArePersisted(
-			IAgentStateReadModelPersister persister,
+			IAgentStatePersister persister,
 			StatesSender sender,
 			WithAnalyticsUnitOfWork unitOfWork,
 			IDataSourceScope dataSource)

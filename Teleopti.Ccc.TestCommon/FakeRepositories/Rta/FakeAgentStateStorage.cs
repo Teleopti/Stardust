@@ -8,20 +8,23 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-	public class FakeAgentStateReadModelStorage : IAgentStateReadModelReader, IAgentStateReadModelPersister
+	public class FakeAgentStateStorage : 
+		IAgentStateReadModelReader, 
+		IAgentStateReadModelPersister, 
+		IAgentStatePersister
 	{
 		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _data = new ConcurrentDictionary<Guid, AgentStateReadModel>(); 
 
-		public FakeAgentStateReadModelStorage()
+		public FakeAgentStateStorage()
 		{
 		}
 
-		public FakeAgentStateReadModelStorage(IEnumerable<AgentStateReadModel> data)
+		public FakeAgentStateStorage(IEnumerable<AgentStateReadModel> data)
 		{
 			data.ForEach(model =>_data.AddOrUpdate(model.PersonId, model, (g, m) => model));
 		}
 
-		public FakeAgentStateReadModelStorage Has(AgentStateReadModel model)
+		public FakeAgentStateStorage Has(AgentStateReadModel model)
 		{
 			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
 			return this;
@@ -61,30 +64,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					where t == m.TeamId
 					select m).ToArray();
 		}
-		
-		public IEnumerable<AgentStateReadModel> GetNotInSnapshot(DateTime batchId, string dataSourceId)
-		{
-			return (from s in _data.Values
-				where s.OriginalDataSourceId == dataSourceId &&
-				      (s.BatchId < batchId ||
-				       s.BatchId == null)
-				select s).ToArray();
-		}
-		
-		public AgentStateReadModel Get(Guid personId)
-		{
-			return _data.Values.SingleOrDefault(x => x.PersonId == personId);
-		}
-
-		public IEnumerable<AgentStateReadModel> GetAll()
-		{
-			return _data.Values.ToArray();
-		}
-
-
-
-
-
 
 		public void Persist(AgentStateReadModel model)
 		{
@@ -94,10 +73,55 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		}
 
-		public void Delete(Guid personId)
+		void IAgentStateReadModelPersister.Delete(Guid personId)
 		{
 			AgentStateReadModel model;
 			_data.TryRemove(personId, out model);
 		}
+
+
+
+
+
+		
+		public void Persist(AgentState model)
+		{
+			throw new NotImplementedException();
+		}
+
+		void IAgentStatePersister.Delete(Guid personId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string dataSourceId)
+		{
+			return (from s in _data.Values
+					where s.OriginalDataSourceId == dataSourceId &&
+						  (s.BatchId < batchId ||
+						   s.BatchId == null)
+					select new AgentState(s))
+				.ToArray();
+		}
+
+		public AgentState Get(Guid personId)
+		{
+			return _data.Values
+				.Select(x => new AgentState(x))
+				.SingleOrDefault(x => x.PersonId == personId);
+		}
+
+		public IEnumerable<AgentState> GetAll()
+		{
+			return _data.Values
+				.Select(x => new AgentState(x))
+				.ToArray()
+				;
+		}
+
+
+
+
+
 	}
 }

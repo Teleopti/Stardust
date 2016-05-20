@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ProperAlarm
 	{
-		public DateTime? StartTime(StateRuleInfo state, StoredStateInfo stored, DateTime currentTime)
+		public DateTime? StartTime(StateRuleInfo state, AgentState stored, DateTime currentTime)
 		{
 			if (!state.IsAlarm())
 				return null;

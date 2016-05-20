@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	public class DatabaseReaderTest
 	{
 		public IDatabaseReader Reader;
-		public IAgentStateReadModelPersister Writer;
 		public MutableNow Now;
 
 		[Test]

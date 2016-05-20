@@ -13,9 +13,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly INow _now;
 		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
-		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
 		private readonly StateMapper _stateMapper;
-		private readonly IPreviousStateInfoLoader _previousStateInfoLoader;
+		private readonly IAgentStatePersister _agentStatePersister;
 		private readonly IMappingReader _mappingReader;
 		private readonly IDatabaseReader _databaseReader;
 		private readonly WithAnalyticsUnitOfWork _withAnalytics;
@@ -27,9 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IDatabaseLoader databaseLoader,
 			INow now,
 			IAgentStateReadModelUpdater agentStateReadModelUpdater,
-			IAgentStateReadModelPersister agentStateReadModelPersister,
 			StateMapper stateMapper,
-			IPreviousStateInfoLoader previousStateInfoLoader,
+			IAgentStatePersister agentStatePersister,
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
 			WithAnalyticsUnitOfWork withAnalytics,
@@ -41,9 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
 			_now = now;
 			_agentStateReadModelUpdater = agentStateReadModelUpdater;
-			_agentStateReadModelPersister = agentStateReadModelPersister;
 			_stateMapper = stateMapper;
-			_previousStateInfoLoader = previousStateInfoLoader;
+			_agentStatePersister = agentStatePersister;
 			_mappingReader = mappingReader;
 			_databaseReader = databaseReader;
 			_withAnalytics = withAnalytics;
@@ -78,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.BusinessUnitId,
 							x.TeamId,
 							x.SiteId,
-							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _agentStatePersister.Get(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
 							s =>
 							{
@@ -115,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.BusinessUnitId,
 							x.TeamId,
 							x.SiteId,
-							() => _previousStateInfoLoader.Load(x.PersonId),
+							() => _agentStatePersister.Get(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
 							s => _withUnitOfWork.Get(() => _mappingReader.Read()),
 							s => _agentStateReadModelUpdater.Update(s),
@@ -131,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[AnalyticsUnitOfWork]
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
 		{
-			var missingAgents = _agentStateReadModelPersister.GetNotInSnapshot(input.BatchId, input.SourceId);
+			var missingAgents = _agentStatePersister.GetNotInSnapshot(input.BatchId, input.SourceId);
 			var agentsNotAlreadyLoggedOut =
 				from a in missingAgents
 				where a.StateCode != input.StateCode
@@ -145,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.BusinessUnitId,
 					x.TeamId.GetValueOrDefault(),
 					x.SiteId.GetValueOrDefault(),
-					() => _previousStateInfoLoader.Load(x.PersonId),
+					() => x,
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
 					s => _withUnitOfWork.Get(() => _mappingReader.Read()),
 					s => _agentStateReadModelUpdater.Update(s),
@@ -160,7 +157,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[AnalyticsUnitOfWork]
 		public virtual void ForSynchronize(Action<Context> action)
 		{
-			_agentStateReadModelPersister.GetAll()
+			_agentStatePersister.GetAll()
 				.ForEach(x =>
 				{
 					action.Invoke(new Context(

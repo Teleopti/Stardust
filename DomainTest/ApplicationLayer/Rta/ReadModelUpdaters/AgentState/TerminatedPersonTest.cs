@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 	public class TerminatedPersonTest
 	{
 		public AgentStateReadModelUpdater Target;
-		public FakeAgentStateReadModelStorage Persister;
+		public FakeAgentStateStorage Persister;
 
 		[Test]
 		public void ShouldRemoveReadModelIfPersonIsTerminated()
