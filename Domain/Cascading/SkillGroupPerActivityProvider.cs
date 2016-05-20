@@ -29,48 +29,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 				if (skillsUsedByPrimarySkill.Length <= 1)
 					continue;
 				var primarySkill = skillsUsedByPrimarySkill.First();
-				ret.Add(new CascadingSkillGroup(primarySkill, skillsUsedByPrimarySkill.Where(x => !x.Equals(primarySkill)).OrderBy(x => x.CascadingIndex), skillGroup.Resource));
+				ret.Add(new CascadingSkillGroup(primarySkill, skillsUsedByPrimarySkill.Where(x => !x.Equals(primarySkill)), skillGroup.Resource));
 			}
 
-			ret.Sort();
-
-			var skillGroups = ret.OrderByDescending(x => x.PrimarySkill.CascadingIndex).ToArray();
-			var count = skillGroups.Length;
-
-			for (var i = 0; i < count - 1; i++)
-			{
-				var first = skillGroups[i];
-				var second = skillGroups[i + 1];
-				var swap = false;
-
-				var firstSkills = first.CascadingSkills.ToArray();
-				var secondSkills = second.CascadingSkills.ToArray();
-
-				var firstSkillsCount = firstSkills.Length;
-				var secondSkillsCount = secondSkills.Length;
-
-				for (var x = 0; x < firstSkillsCount; x++)
-				{
-					if (x > secondSkillsCount - 1)
-					{
-						swap = true;
-						break;
-					}
-
-					if (firstSkills[x].CascadingIndex > secondSkills[x].CascadingIndex)
-					{
-						swap = true;
-						break;
-					}
-				}
-
-				if (!swap) continue;
-
-				skillGroups[i] = second;
-				skillGroups[i + 1] = first;
-			}
-
-			return skillGroups;
+			ret.Sort(new CascadingSkillGroupSorter());
+			return ret;
 		}
 	}
 }

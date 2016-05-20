@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				foreach (var interval in date.ToDateTimePeriod(stateHolder.TimeZoneInfo).Intervals(TimeSpan.FromMinutes(defaultResolution)))
 				{
-					//TODO: it seems that AffectedResources gives back skillgroups with skills using different activities -> hack (and incorrect) when we order the skill groups...
 					foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(activity, interval))
 					{
 						var remainingResourcesInGroup = skillGroup.Resources;

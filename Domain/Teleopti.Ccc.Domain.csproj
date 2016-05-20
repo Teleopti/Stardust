@@ -272,6 +272,7 @@
     <Compile Include="Cascading\CascadeResources.cs" />
     <Compile Include="Cascading\CascadingResourceCalculation.cs" />
     <Compile Include="Cascading\CascadingSkillGroup.cs" />
+    <Compile Include="Cascading\CascadingSkillGroupSorter.cs" />
     <Compile Include="Cascading\DoubleExtensionsInCascadingScenarios.cs" />
     <Compile Include="Cascading\SkillGroupPerActivityProvider.cs" />
     <Compile Include="Collection\SkillStaffPeriodDictionaryExtensions.cs" />
