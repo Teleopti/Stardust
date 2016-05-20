@@ -127,7 +127,9 @@
 		ETL_SpeedUpIntradayOvertime_38304,
 		ETL_SpeedUpNightlyOvertime_38304,
 		ETL_SpeedUpIntradayAbsence_38301,
-		ETL_SpeedUpNightlyAbsence_38301
+		ETL_SpeedUpNightlyAbsence_38301,
+		ETL_SpeedUpIntradayShiftCategory_38718,
+		ETL_SpeedUpNightlyShiftCategory_38718
 
 		// ReSharper restore InconsistentNaming
 	}

@@ -24,7 +24,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new StagePersonJobStep(jobParameters));
 				Add(new StageAgentSkillJobStep(jobParameters));
 			}
-
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayActivity_38303))
 			{
 				Add(new StageActivityJobStep(jobParameters));
@@ -37,7 +36,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new StageScenarioJobStep(jobParameters));
 			}
-			Add(new StageShiftCategoryJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayShiftCategory_38718))
+			{
+				Add(new StageShiftCategoryJobStep(jobParameters));
+			}
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
 			{
 				Add(new IntradayStageScheduleJobStep(jobParameters));
@@ -86,7 +88,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new DimSkillSetJobStep(jobParameters));
 			}
-
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
 				Add(new DimPersonJobStep(jobParameters));
@@ -103,7 +104,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new DimScenarioJobStep(jobParameters));
 			}
-			Add(new DimShiftCategoryJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayShiftCategory_38718))
+			{
+				Add(new DimShiftCategoryJobStep(jobParameters));
+			}
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
 			{
 				Add(new DimShiftLengthJobStep(jobParameters));
