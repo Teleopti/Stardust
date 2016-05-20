@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new ResourceOptimizationHelper(()=>_schedulerStateHolder, _occupiedSeatCalculator,
 													 new NonBlendSkillCalculator(),
 														 ()=>_personSkillProvider, _periodDistributionService,
-														 _intraIntervalFinderService);
+														 _intraIntervalFinderService, new TimeZoneGuardWrapper());
 		}
 
 		private void expectsForVerifyCalculateDay(ISkill skill1, ISkillStaffPeriodHolder skillStaffPeriodHolder,

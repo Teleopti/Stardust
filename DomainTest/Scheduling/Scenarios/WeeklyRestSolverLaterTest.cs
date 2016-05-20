@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 									),
 								new FullIntervalFinder()
 								)
-							)
+							), new TimeZoneGuardWrapper()
 						),
 					1,
 					true
@@ -544,7 +544,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 									),
 								new FullIntervalFinder()
 								)
-							)
+							), new TimeZoneGuardWrapper()
 						),
 					1,
 					true

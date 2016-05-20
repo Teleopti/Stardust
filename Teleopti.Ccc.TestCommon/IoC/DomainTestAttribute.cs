@@ -48,6 +48,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddModule(new OutboundScheduledResourcesProviderModule());
 			//
 
+			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
+
 			// Tenant (and datasource) stuff
 			system.AddModule(new TenantServerModule(configuration));
 			system.UseTestDouble<TenantAuthenticationFake>().For<ITenantAuthentication>();

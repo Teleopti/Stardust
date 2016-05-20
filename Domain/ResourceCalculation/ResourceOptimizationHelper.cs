@@ -18,13 +18,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;
 		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ResourceOptimizationHelper(Func<ISchedulerStateHolder> stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
 			Func<IPersonSkillProvider> personSkillProvider,
 			IPeriodDistributionService periodDistributionService,
-			IIntraIntervalFinderService intraIntervalFinderService)
+			IIntraIntervalFinderService intraIntervalFinderService,
+			ITimeZoneGuard timeZoneGuard)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_personSkillProvider = personSkillProvider;
 			_periodDistributionService = periodDistributionService;
 			_intraIntervalFinderService = intraIntervalFinderService;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 
@@ -61,7 +64,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
 					relevantProjections = extractor.CreateRelevantProjectionList(stateHolder.Schedules,
 						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-							localDate.AddDays(-1).Date, localDate.AddDays(1).Date, stateHolder.TimeZoneInfo));
+							localDate.AddDays(-1).Date, localDate.AddDays(1).Date, _timeZoneGuard.CurrentTimeZone()));
 					context =new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => relevantProjections));
 				}
 
@@ -82,7 +85,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private DateTimePeriod getPeriod(DateOnly localDate)
 		{
 			var currentStart = localDate;
-			return new DateOnlyPeriod(currentStart, currentStart).ToDateTimePeriod(TimeZoneGuard.Instance.TimeZone);
+			return new DateOnlyPeriod(currentStart, currentStart).ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()); 
 		}
 
 		public void ResourceCalculateDate(IResourceCalculationDataContainer relevantProjections,

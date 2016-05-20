@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 	{
 		public CascadingResourceCalculation Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
+		public FakeTimeZoneGuard TimeZoneGuard;
 
 		[Test]
 		public void ShouldMoveResourceToSecondarySkill()
@@ -431,7 +432,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore("to be fixed")]
+		[Test]
 		public void ShouldMoveResourcesForPeriodConsiderEndUserTimeZone()
 		{
 			var scenario = new Scenario("_");
@@ -458,16 +459,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
 			ass2.AddActivity(activity, new TimePeriod(0, 0, 24, 0));
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
-			SchedulerStateHolder().TimeZoneInfo = endUserTimeZone;
+			TimeZoneGuard.SetTimeZone(endUserTimeZone);
 
 			Target.ForDay(dateOnly);
 
 			var endUserPeriod = dateOnly.ToDateTimePeriod(endUserTimeZone);
 			foreach (var skillStaffPeriod in prioritizedSkillDay.SkillStaffPeriodCollection)
 			{
-				//should have moved resources within end user's period (based on time zone) only
 				skillStaffPeriod.AbsoluteDifference
-					.Should().Be.EqualTo(endUserPeriod.Contains(skillStaffPeriod.Period) ? 0.5 : 1.5);
+					.Should().Be.EqualTo(endUserPeriod.Contains(skillStaffPeriod.Period) ? 0.5 : -0.5); //1.5 -> primärskillresursberäkning har körts men inte shovling
 			}
 		}
 	}
