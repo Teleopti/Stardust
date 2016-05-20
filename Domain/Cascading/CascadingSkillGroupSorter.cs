@@ -18,12 +18,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			for (var i = 0; i < firstSkills.Length; i++)
 			{
-				//TODO: lägg på test för detta case!
-
-				//if (i > secondSkills.Length - 1)
-				//{
-				//	return ??
-				//}
+				if (i > secondSkills.Length - 1)
+				{
+					return 0;
+				}
 
 				var subSkillDiff = firstSkills[i].CascadingIndex.Value - secondSkills[i].CascadingIndex.Value;
 				if (subSkillDiff != 0)
