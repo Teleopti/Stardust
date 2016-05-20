@@ -7,9 +7,9 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using log4net;
 using log4net.Config;
 using Stardust.Node;
-using Stardust.Node.Workers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -39,8 +39,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private ConfigFileDefaultHost _denormalizeBus;
 		[NonSerialized]
 		private ConfigFileDefaultHost _payrollBus;
-		
+
 		private IContainer _sharedContainer;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
 
 		public ServiceBusRunner(Action<int> requestAdditionalTime)
 		{
@@ -55,8 +56,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private void hostServiceStart()
 		{
 			_requestAdditionalTime(60000);
-
 			XmlConfigurator.Configure(new FileInfo("log4net.config"));
+			logger.Info($"Starting service bus {nameof(ServiceBusRunner)}");
 
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true; //ignoreInvalidCertificate
 			ServicePointManager.DefaultConnectionLimit = 50;
@@ -78,6 +79,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			if (useRhino)
 			{
+				logger.Debug("Using rhino and it services");
+
 				_generalBus = new ConfigFileDefaultHost("GeneralQueue.config", new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 				_generalBus.Start();
 
@@ -92,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					_payrollBus = new ConfigFileDefaultHost("PayrollQueue.config", new PayrollBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
 					_payrollBus.Start();
 				}
-				
+
 			}
 			AppDomain.MonitoringIsEnabled = true;
 
@@ -116,6 +119,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Stop()
 		{
+			logger.Info($"Stopping service bus {nameof(ServiceBusRunner)}");
 			hostServiceStop();
 		}
 
@@ -181,15 +185,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				Assembly.GetExecutingAssembly()
 					.GetReferencedAssemblies()
 					.FirstOrDefault(x => x.Name.Equals(ConfigurationManager.AppSettings["HandlerAssembly"]));
-			if(assemblyName == null)
+			if (assemblyName == null)
 				throw new Exception("Can not find the Assembly specified in AppSettings['HandlerAssembly']");
 
 			var baseaddress = ConfigurationManager.AppSettings["NodeBaseAddress"].Replace("https", "http");
-			
+
 			var assembly = Assembly.Load(assemblyName);
 			var nodeConfig = new NodeConfiguration(new Uri(baseaddress),
 					 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-					 assembly, 
+					 assembly,
 					 ConfigurationManager.AppSettings["NodeName"],
 					 int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]));
 
@@ -201,7 +205,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterModule(new NodeHandlersModule(configuration));
 			var container = builder.Build();
 
-			
+
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());

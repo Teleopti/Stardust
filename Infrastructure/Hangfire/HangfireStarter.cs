@@ -5,6 +5,7 @@ using Hangfire;
 using Hangfire.SqlServer;
 using Hangfire.States;
 using Hangfire.Storage;
+using log4net;
 using Teleopti.Ccc.Domain.Config;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 	{
 		private readonly ILifetimeScope _lifetimeScope;
 		private readonly IConfigReader _config;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(HangfireStarter));
 
 		public HangfireStarter(ILifetimeScope lifetimeScope, IConfigReader config)
 		{
@@ -42,7 +44,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				defaultCountersAggregateInterval = 60 * 60 * 24;
 			}
 			var countersAggregateInterval = _config.ReadValue("HangfireCountersAggregateIntervalSeconds", defaultCountersAggregateInterval);
-
 
 			var sqlServerStorageOptions = new SqlServerStorageOptions
 			{
@@ -86,6 +87,19 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				GlobalStateHandlers.Handlers.Remove(GlobalStateHandlers.Handlers.Single(x => x.StateName == DeletedState.StateName));
 				GlobalStateHandlers.Handlers.Add(new emptyHandler(SucceededState.StateName));
 				GlobalStateHandlers.Handlers.Add(new emptyHandler(DeletedState.StateName));
+			}
+
+			if (logger.IsDebugEnabled)
+			{
+				var hangfireConfigLog = "Hangfire setup: ";
+				hangfireConfigLog += $"{nameof(retries)}={retries}, ";
+				hangfireConfigLog += $"{nameof(jobExpiration)}={jobExpiration}, ";
+				hangfireConfigLog += $"{nameof(pollInterval)}={pollInterval}, ";
+				hangfireConfigLog += $"{nameof(jobExpirationCheck)}={jobExpirationCheck}, ";
+				hangfireConfigLog += $"{nameof(dashboardStatistics)}={dashboardStatistics}, ";
+				hangfireConfigLog += $"{nameof(dashboardCounters)}={dashboardCounters}, ";
+				hangfireConfigLog += $"{nameof(countersAggregateInterval)}={dashboardCounters}, ";
+				logger.Debug(hangfireConfigLog);
 			}
 		}
 
