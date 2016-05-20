@@ -1,4 +1,3 @@
-using System;
 using Autofac;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static ICurrentUnitOfWork UnitOfWork;
 		public static DefaultDataCreator DefaultDataCreator;
 		public static DefaultAnalyticsDataCreator DefaultAnalyticsDataCreator;
-		public static HangfireUtilties Hangfire;
+		public static IHangfireUtilities Hangfire;
 		public static MutableNow Now;
 
 		public static void Setup()
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_container.Resolve<IMessageBrokerUrl>().Configure(TestSiteConfigurationSetup.URL.ToString());
 			_container.Resolve<ISignalRClient>().StartBrokerService();
 			_container.Resolve<HangfireClientStarter>().Start();
-			Hangfire = _container.Resolve<HangfireUtilties>();
+			Hangfire = _container.Resolve<IHangfireUtilities>();
 		}
 	}
 }

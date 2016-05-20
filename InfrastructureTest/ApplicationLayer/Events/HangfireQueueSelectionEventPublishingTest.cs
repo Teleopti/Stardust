@@ -6,6 +6,7 @@ using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	[AnalyticsDatabaseTest]
 	public class HangfireQueueSelectionEventPublishingTest : ISetup
 	{
-		public HangfireUtilties Hangfire;
+		public IHangfireUtilities Hangfire;
 		public IEventPublisher Publisher;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

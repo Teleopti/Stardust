@@ -741,6 +741,7 @@
     <Compile Include="Domain\IRestrictionSet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Infrastructure\IHangfireUtilities.cs" />
     <Compile Include="Infrastructure\IHttpServer.cs" />
     <Compile Include="Infrastructure\IIntervalLengthFetcher.cs" />
     <Compile Include="Infrastructure\ILicenseStatusXml.cs" />

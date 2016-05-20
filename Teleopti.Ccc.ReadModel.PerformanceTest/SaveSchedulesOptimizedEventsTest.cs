@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
@@ -12,11 +11,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 		public WithUnitOfWork WithUnitOfWork;
 		public Http Http;
 		public MutableNow Now;
-		public HangfireUtilties Hangfire;
+		public IHangfireUtilities Hangfire;
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public IScenarioRepository Scenarios;

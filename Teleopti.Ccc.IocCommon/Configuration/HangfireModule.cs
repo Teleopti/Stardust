@@ -3,6 +3,7 @@ using Hangfire;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<RecurringJobManager>()
 				.SingleInstance();
 
-			builder.RegisterType<HangfireUtilties>().SingleInstance().ApplyAspects();
+			//builder.RegisterType<HangfireUtilities>().SingleInstance().ApplyAspects();
+			builder.RegisterType<HangfireUtilities>().As<IHangfireUtilities>().SingleInstance().ApplyAspects();
 		}
 	}
 }

@@ -1,5 +1,6 @@
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.Register(c => c.Resolve<HangfireEventPublisher>()).As<IRecurringEventPublisher>().SingleInstance();
 			builder.RegisterType<TenantTickEventPublisher>().SingleInstance();
+			builder.RegisterType<CleanFailedQueuePublisher>().SingleInstance();
 			builder.RegisterType<AllTenantRecurringEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>().SingleInstance();

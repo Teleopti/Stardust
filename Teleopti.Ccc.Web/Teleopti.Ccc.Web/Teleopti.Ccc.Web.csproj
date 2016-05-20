@@ -678,6 +678,7 @@
     <Compile Include="Areas\TeamSchedule\Models\GetSchedulesForPeopleFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\MoveActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />
+    <Compile Include="Core\Hangfire\CleanFailedQueueStarterTask.cs" />
     <Compile Include="Core\ThemeSettingProvider.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />

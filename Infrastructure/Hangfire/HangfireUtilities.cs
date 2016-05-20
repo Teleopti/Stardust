@@ -1,20 +1,23 @@
 using System;
+using System.Linq;
 using System.Threading;
+using Castle.Core.Internal;
 using Hangfire;
 using Hangfire.Storage;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Interfaces.Messages;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Hangfire
 {
-	public class HangfireUtilties
+	public class HangfireUtilities : IHangfireUtilities
 	{
 		private readonly JobStorage _storage;
 		private readonly IBackgroundJobClient _backgroundJobs;
 		private readonly RecurringJobManager _recurringJobs;
 		private readonly IMonitoringApi _monitoring;
 
-		public HangfireUtilties(
+		public HangfireUtilities(
 			JobStorage storage,
 			IBackgroundJobClient backgroundJobs,
 			RecurringJobManager recurringJobs)
@@ -51,6 +54,19 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		public long NumberOfJobsInQueue(string name)
 		{
 			return _monitoring.EnqueuedCount(name);
+		}
+
+		public long NumberOfFailedJobs()
+		{
+			return _monitoring.FailedCount();
+		}
+
+		public void CleanFailedJobsBefore(DateTime time)
+		{
+			var expiredFailed = _monitoring.FailedJobs(0, 100)
+				.Where(x => x.Value.FailedAt.HasValue && x.Value.FailedAt < time);
+
+			expiredFailed.ForEach(j => _backgroundJobs.Delete(j.Key));
 		}
 
 		[LogTime]
