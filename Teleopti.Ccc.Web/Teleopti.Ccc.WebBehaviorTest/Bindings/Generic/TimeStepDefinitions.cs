@@ -1,7 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
