@@ -153,6 +153,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<AnalyticsScheduleRepository>().As<IAnalyticsScheduleRepository>().SingleInstance();
 			builder.RegisterType<AnalyticsScenarioRepository>().As<IAnalyticsScenarioRepository>().SingleInstance();
 			builder.RegisterType<AnalyticsAbsenceRepository>().As<IAnalyticsAbsenceRepository>().SingleInstance();
+			builder.RegisterType<AnalyticsShiftCategoryRepository>().As<IAnalyticsShiftCategoryRepository>().SingleInstance();
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
@@ -164,7 +165,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             if (!_config.Toggle(Toggles.ETL_SpeedUpIntradayPreference_37124))
             {
                 _config.Cache().This<IAnalyticsScheduleRepository>(b => b
-                    .CacheMethod(x => x.ShiftCategories())
                     .CacheMethod(x => x.ShiftLengths())
                     );
                 builder.CacheByInterfaceProxy<AnalyticsScheduleRepository, IAnalyticsScheduleRepository>();

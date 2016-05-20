@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void PersistFactScheduleDayCountRow(IAnalyticsFactScheduleDayCount dayCount);
 		void DeleteFactSchedule(int date, int personId, int scenarioId);
 
-		IList<IAnalyticsGeneric> ShiftCategories();
 		IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode);
 		IList<IAnalyticsShiftLength> ShiftLengths();
 

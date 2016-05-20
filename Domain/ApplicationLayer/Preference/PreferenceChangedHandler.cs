@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions;
 		private readonly IAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
+		private readonly IAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
 
 		public PreferenceChangedHandler
 			(IScenarioRepository scenarioRepository,
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			IPersonRepository personRepository,
 			IAnalyticsDayOffRepository analyticsDayOffRepository,
 			IAnalyticsScenarioRepository analyticsScenarioRepository,
-			IAnalyticsAbsenceRepository analyticsAbsenceRepository)
+			IAnalyticsAbsenceRepository analyticsAbsenceRepository,
+			IAnalyticsShiftCategoryRepository analyticsShiftCategoryRepository)
 		{
 
 			_scenarioRepository = scenarioRepository;
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			_analyticsDayOffRepository = analyticsDayOffRepository;
 			_analyticsScenarioRepository = analyticsScenarioRepository;
 			_analyticsAbsenceRepository = analyticsAbsenceRepository;
+			_analyticsShiftCategoryRepository = analyticsShiftCategoryRepository;
 
 
 			restrictionChecker = new RestrictionChecker();
@@ -160,7 +163,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
             var analyticsScenarios = _analyticsScenarioRepository.Scenarios();
             var analyticsDayOffs = _analyticsDayOffRepository.DayOffs();
 	        var analyticsAbsences = _analyticsAbsenceRepository.Absences();
-			var analyticsShiftCategories = _analyticsScheduleRepository.ShiftCategories();
+			var analyticsShiftCategories = _analyticsShiftCategoryRepository.ShiftCategories();
 
             var period = new DateOnlyPeriod(new DateOnly(preferenceDay.RestrictionDate.Date), new DateOnly(preferenceDay.RestrictionDate.Date));
             List<AnalyticsFactSchedulePreference> resultFactSchedulePreference = new List<AnalyticsFactSchedulePreference>();

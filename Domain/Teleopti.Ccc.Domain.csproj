@@ -287,6 +287,7 @@
     <Compile Include="Repositories\IAnalyticsOvertimeRepository.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
     <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsShiftCategoryRepository.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\SkillCombination.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />

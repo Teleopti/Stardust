@@ -415,6 +415,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsActivityRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsScenarioRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsShiftCategoryRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTeamRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsTimeZoneRepository.cs" />

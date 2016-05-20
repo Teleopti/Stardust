@@ -2,23 +2,22 @@
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 {
 	public class AnalyticsAbsenceRepository : IAnalyticsAbsenceRepository
 	{
-		private readonly ICurrentAnalyticsUnitOfWork _analyticsUnitOfWork;
+		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 
-		public AnalyticsAbsenceRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork)
+		public AnalyticsAbsenceRepository(ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
 		{
-			_analyticsUnitOfWork = analyticsUnitOfWork;
+			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
 		}
 
 		public IList<AnalyticsAbsence> Absences()
 		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+			return _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				@"select [absence_id] AbsenceId
 					,[absence_code] AbsenceCode
 					,[absence_name] AbsenceName
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void AddAbsence(AnalyticsAbsence analyticsAbsence)
 		{
-			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+			var query = _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				@"exec mart.[etl_dim_absence_insert]
 						@absence_code=:AbsenceCode, 
 						@absence_name=:AbsenceName, 
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		public void UpdateAbsence(AnalyticsAbsence analyticsAbsence)
 		{
-			var query = _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
+			var query = _currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				@"exec mart.[etl_dim_absence_update]
 						@absence_code=:AbsenceCode, 
 						@absence_name=:AbsenceName, 

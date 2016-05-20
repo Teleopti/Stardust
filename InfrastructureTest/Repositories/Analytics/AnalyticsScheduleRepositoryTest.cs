@@ -61,17 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		}
 
 		[Test]
-		public void ShouldLoadCategories()
-		{
-			analyticsDataFactory.Setup(Scenario.DefaultScenarioFor(1, Guid.NewGuid()));
-			analyticsDataFactory.Setup(new ShiftCategory(1, Guid.NewGuid(), "Kattegat", Color.Green, _datasource, businessUnitId));
-			analyticsDataFactory.Persist();
-
-			var cats = WithAnalyticsUnitOfWork.Get(() => Target.ShiftCategories());
-			cats.Count.Should().Be.EqualTo(1);
-		}
-
-		[Test]
 		public void ShouldLoadPerson()
 		{
 			var personPeriodCode = Guid.NewGuid();

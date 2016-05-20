@@ -180,15 +180,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 		}
 
-		public IList<IAnalyticsGeneric> ShiftCategories()
-		{
-			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
-				"select shift_category_id Id, shift_category_code Code from mart.dim_shift_category WITH (NOLOCK)")
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsGeneric)))
-				.SetReadOnly(true)
-				.List<IAnalyticsGeneric>();
-		}
-
 		public IAnalyticsPersonBusinessUnit PersonAndBusinessUnit(Guid personPeriodCode)
 		{
 			return _analyticsUnitOfWork.Current().Session().CreateSQLQuery(
