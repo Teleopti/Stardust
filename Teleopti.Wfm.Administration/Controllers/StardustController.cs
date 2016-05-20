@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Web.Http;
+using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
-	public class StardustController : ApiController
+    [TenantTokenAuthentication]
+    public class StardustController : ApiController
 	{
 		private readonly StardustRepository _stardustRepository;
 
