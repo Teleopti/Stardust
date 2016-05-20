@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<CascadingResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<CascadeResources>().InstancePerLifetimeScope();
+			builder.RegisterType<SkillGroupPerActivityProvider>().InstancePerLifetimeScope();
 
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
 			builder.RegisterModule(new IntraIntervalOptimizationServiceModule(_configuration));
