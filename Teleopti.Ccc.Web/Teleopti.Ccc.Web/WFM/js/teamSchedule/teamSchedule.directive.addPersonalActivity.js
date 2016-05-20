@@ -3,20 +3,17 @@
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'guidgenerator', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement'];
+	addPersonalActivityCtrl.$inject = ['$scope', 'guidgenerator', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'ReloadScheduleEvent'];
 
-	function addPersonalActivityCtrl($scope, guidgenerator, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc) {
+	function addPersonalActivityCtrl($scope, guidgenerator, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, reloadScheduleEvent) {
 		var vm = this;
+
+		vm.label = 'AddPersonalActivity';
 
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.notAllowedNameListString = "";
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
-		
-		vm.timeRange = {
-			startTime: new Date(),
-			endTime: new Date()
-		};
 
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
@@ -38,14 +35,23 @@
 			return !vm.isNextDay || mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
 		}
 
-		vm.addPersonActivity = function () {
-			activityService.addPersonActivity({
+		vm.addPersonalActivity = function () {
+			var requestData = {
 				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
 				Date: vm.referenceDay(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
 				ActivityId: vm.selectedActivityId,
 				TrackedCommandInfo: { TrackId: vm.trackId }
+			};
+
+			activityService.addPersonalActivity(requestData).then(function (response) {
+				$scope.$emit(reloadScheduleEvent, {
+					personIds: requestData.PersonIds
+				});
+
+				if (vm.getActionCb(vm.label))
+					vm.getActionCb(vm.label)(vm.TrackId, requestData, response.data);
 			});
 		};
 
@@ -75,8 +81,15 @@
 				} 
 			}
 
+			
 			return defaultStart;
 		}
+
+		vm.getDefaultActvityEndTime = function () {
+			return moment(getDefaultActvityStartTime()).add(1, 'hour').toDate();
+		}
+
+		
 	}
 
 	function addPersonalActivity() {
@@ -97,6 +110,12 @@
 
 			scope.vm.referenceDay = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
+			scope.vm.getActionCb = containerCtrl.getActionCb;
+
+			scope.vm.timeRange = {
+				startTime: selfCtrl.getDefaultActvityStartTime(),
+				endTime: selfCtrl.getDefaultActvityEndTime()
+			};
 		}
 	}
 })();

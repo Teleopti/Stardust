@@ -12,6 +12,7 @@
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
+
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
 				return fakeActivityService;
@@ -44,7 +45,7 @@
 
 	it('add-personal-activity should get date from container', function () {
 
-		var date = new Date('2016-06-15T00:00:00Z');
+		var date = moment('2016-06-15').toDate();
 		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 		scope.curDate = date;
@@ -182,17 +183,28 @@
 		expect(vm.isInputValid()).toBe(false);
 	});
 
-	it('should call add personal activity when click apply with correct data', function () {
+	it('should call add personal activity when click apply with correct data', inject(function (ReloadScheduleEvent) {
 		var date = new Date('2016-06-15T00:00:00Z');
 		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 		scope.curDate = date;
-
+		scope.eventMonitor = null;
+		scope.$on(ReloadScheduleEvent, function (event, data) {
+			scope.eventMonitor = data.personIds;
+		});
+	
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var target = $compile(html)(scope);
 
 		scope.$apply();
+
+		var monitorInCb = 0;
+		function actionCb() {
+			monitorInCb = 1;
+		}
+
+		target.isolateScope().vm.setActionCb('AddPersonalActivity', actionCb);
 
 		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
 
@@ -216,20 +228,24 @@
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
+		scope.$apply();
+
 		var applyButton = angular.element(target[0].querySelector(".add-personal-activity .form-submit"));
-		applyButton.triggerHandler('click', 100);
+		applyButton.triggerHandler('click');
 
 		scope.$apply();
 
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 		expect(activityData).not.toBeNull();
-		expect(activityData.PersonIds.length).toEqual(2);
+		expect(activityData.PersonIds.length).toEqual(vm.selectedAgents.length);
 		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
 		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).format('YYYY-MM-DDTHH:mm:00'));
 		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).format('YYYY-MM-DDTHH:mm:00'));
 		expect(activityData.Date).toEqual(vm.referenceDay());
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
-	});
+		expect(monitorInCb).toEqual(1);
+		expect(scope.eventMonitor.length).toEqual(vm.selectedAgents.length);
+	}));
 
 	it('should have correct default start time when no other shifts', function () {
 
@@ -263,7 +279,6 @@
 		expect(result.getMinutes()).toBe(nextTick.getMinutes());
 	});
 
-
 	it('should have later default start time than previous day over night shift end', function () {
 		var date = moment(WFMDate.nowInUserTimeZone()).add(7, 'day');
 
@@ -282,7 +297,6 @@
 		var result = vm.getDefaultActvityStartTime();
 		expect(result.getHours()).toBe(11);
 	});
-
 
 	function FakeScheduleManagementService() {
 		var latestEndTime = null;
@@ -343,7 +357,7 @@
 			};
 		};
 
-		this.addPersonActivity = function (input) {
+		this.addPersonalActivity = function (input) {
 			targetActivity = input;
 			return {
 				then: (function (cb) {

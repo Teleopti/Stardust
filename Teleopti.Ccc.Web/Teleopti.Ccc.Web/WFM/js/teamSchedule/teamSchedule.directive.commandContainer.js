@@ -18,8 +18,20 @@
 
 	function teamscheduleCommandContainerCtrl(guidgenerator) {
 		var vm = this;
+
+		var commandsConfig = {};
+
 		vm.getDate = function () { return vm.date; };
 		vm.getTrackId = guidgenerator.newGuid;
+		vm.getActionCb = function(label) {
+			return commandsConfig[label] == null ? null : commandsConfig[label].actionCb;
+		};
+
+		vm.setActionCb = function(label, cb) {
+			commandsConfig[label] = {
+				actionCb: cb
+			};
+		};
 
 	}
 })();

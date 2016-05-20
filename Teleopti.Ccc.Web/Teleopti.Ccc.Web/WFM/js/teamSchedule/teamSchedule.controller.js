@@ -303,6 +303,10 @@
 			vm.updateSchedules(personIds);
 		};
 
+		$scope.$on('teamSchedule.reload.schedule', function(event, data) {
+			vm.updateSchedules(data.personIds);
+		});
+
 		function isMessageNeedToBeHandled() {
 			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
 			var scheduleDate = vm.scheduleDateMoment();
