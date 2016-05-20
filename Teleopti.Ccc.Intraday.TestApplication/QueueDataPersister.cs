@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
                         queueInterval.IntervalId,
                         queueInterval.QueueId,
                         queueInterval.OfferedCalls,
-                        0,
+                        queueInterval.AnsweredCalls,
                         0,
                         0,
                         0,

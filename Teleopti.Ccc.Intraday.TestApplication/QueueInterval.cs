@@ -10,5 +10,6 @@
 	    public int DatasourceId { get; set; }
 		public decimal TalkTime { get; set; }
 		public decimal Acw { get; set; }
+	    public decimal AnsweredCalls { get; set; }
 	}
 }

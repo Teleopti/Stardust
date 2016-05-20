@@ -141,22 +141,24 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 				var index = forecastIntervals.IndexOf(interval);
 				var calculatedHandleTime = (decimal) Math.Round(interval.HandleTime + algorithmProperties.HandleTimeConstant*index);
-				var talkTime = (int) (calculatedHandleTime * new decimal(0.9));
-				var acw = (int)(calculatedHandleTime * new decimal(0.1));
-				var queueData = new QueueInterval()
+			    var talkTime = calculatedHandleTime * new decimal(0.9);
+			    var acw = calculatedHandleTime * new decimal(0.1);
+			    var offeredCalls = (decimal) Math.Round(
+			        interval.Calls +
+			        algorithmProperties.CallsConstant*index*(1 - ((double) index/algorithmProperties.IntervalCount)),
+			        1);
+                var queueData = new QueueInterval()
 				{
 					DateId = interval.DateId,
 					IntervalId = interval.IntervalId,
 					QueueId = targetQueue.QueueId,
 					DatasourceId = targetQueue.DatasourceId,
-					OfferedCalls =
-						(decimal)Math.Round(
-							 interval.Calls + algorithmProperties.CallsConstant * index * (1 - ((double)index / algorithmProperties.IntervalCount)),
-							 1),
-					TalkTime = talkTime,
+					OfferedCalls = offeredCalls,
+                    AnsweredCalls = offeredCalls,
+                    TalkTime = talkTime,
 					Acw = acw,
-					HandleTime = talkTime + acw
-				};
+					HandleTime = (decimal)Math.Round(interval.HandleTime + algorithmProperties.HandleTimeConstant * index)
+            };
 				queueDataList.Add(queueData);
 			}
 

@@ -28,7 +28,9 @@ BEGIN
 	
 	CREATE TABLE #queue_stats(
 	date_id int,
-	interval_id smallint,offered_calls decimal(19,0), 
+	interval_id smallint,
+	offered_calls decimal(19,0), 
+	answered_calls decimal(19,0), 
 	handle_time_s decimal(19,0))
 
 	CREATE TABLE #result(
@@ -36,6 +38,7 @@ BEGIN
 	forecasted_calls decimal(28,4), 
 	forecasted_handle_time_s decimal(28,4), 
 	offered_calls decimal(19,0), 
+	answered_calls decimal(19,0),
 	handle_time_s decimal(19,0))
 
 	SELECT @time_zone_id = time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code
@@ -85,6 +88,7 @@ BEGIN
 		date_id,
 		interval_id,
 		offered_calls,
+		answered_calls,
 		handle_time_s
 	FROM 
 		#queues q
@@ -100,12 +104,14 @@ BEGIN
 	UPDATE r
 	SET 
 		offered_calls = fq.offered_calls,
+		answered_calls = fq.answered_calls,
 		handle_time_s = fq.handle_time_s
 	FROM 
 			(SELECT 
 				date_id,
 				interval_id,
 				SUM(ISNULL(offered_calls, 0)) as offered_calls,
+				SUM(ISNULL(answered_calls, 0)) as answered_calls,
 				SUM(ISNULL(handle_time_s, 0)) as handle_time_s
 			FROM 
 				#queue_stats
@@ -134,10 +140,10 @@ BEGIN
 		END AS ForecastedAverageHandleTime,
 		offered_calls AS OfferedCalls,
 		handle_time_s AS HandleTime,
-		CASE ISNULL(offered_calls,0)
+		CASE ISNULL(answered_calls,0)
 			WHEN 0 THEN 0
 			ELSE 
-				ISNULL(handle_time_s,0) / ISNULL(offered_calls,0)
+				ISNULL(handle_time_s,0) / ISNULL(answered_calls,0)
 		END AS AverageHandleTime
 	FROM #result 
 	ORDER BY interval_id
