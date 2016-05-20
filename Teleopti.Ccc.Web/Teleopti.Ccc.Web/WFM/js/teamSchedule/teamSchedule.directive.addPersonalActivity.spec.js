@@ -2,25 +2,31 @@
 
 	var $compile,
 		$rootScope,
-		fakeActivityService;
+		fakeActivityService,
+		WFMDate,
+		fakeScheduleManagementSvc;
 
 	beforeEach(module('wfm.templates'));
 	beforeEach(module('wfm.teamSchedule'));
 
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
+		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
 				return fakeActivityService;
 			});
+			$provide.service('ScheduleManagement', function () {
+				return fakeScheduleManagementSvc;
+			});
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_, _WFMDate_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-
+		WFMDate = _WFMDate_;
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
@@ -181,11 +187,11 @@
 		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 		scope.curDate = date;
-		
+
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var target = $compile(html)(scope);
-		
+
 		scope.$apply();
 
 		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
@@ -202,7 +208,7 @@
 				personId: 'agent1',
 				name: 'agent1',
 				scheduleEndTime: '2016-06-15T17:00:00Z'
-			},{
+			}, {
 				personId: 'agent2',
 				name: 'agent2',
 				scheduleEndTime: '2016-06-15T17:00:00Z'
@@ -225,8 +231,79 @@
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
 
+	it('should have correct default start time when no other shifts', function () {
+
+		var date = new Date(WFMDate.nowInUserTimeZone());
+
+		fakeScheduleManagementSvc.setLatestEndTime(null);
+		fakeScheduleManagementSvc.setLatestStartTime(null);
+
+	
+		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
+		var scope = $rootScope.$new();
+		scope.curDate = date;
+
+		fakeActivityService.setAvailableActivities(getAvailableActivities());
+
+		var target = $compile(html)(scope);
+
+		scope.$apply();
+
+		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
 
 
+		vm.selectedAgents = [];
+
+		var result = vm.getDefaultActvityStartTime();
+
+		var nextTick = new Date(WFMDate.getNextTick());
+
+
+		expect(result.getHours()).toBe(nextTick.getHours());
+		expect(result.getMinutes()).toBe(nextTick.getMinutes());
+	});
+
+
+	it('should have later default start time than previous day over night shift end', function () {
+		var date = moment(WFMDate.nowInUserTimeZone()).add(7, 'day');
+
+		fakeScheduleManagementSvc.setLatestEndTime(date.clone().hour(10).toDate());
+		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(9).toDate());
+
+		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
+		var scope = $rootScope.$new();
+		scope.curDate = new Date(WFMDate.nowInUserTimeZone());
+
+		fakeActivityService.setAvailableActivities(getAvailableActivities());
+
+		var target = $compile(html)(scope);
+		scope.$apply();
+		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
+		var result = vm.getDefaultActvityStartTime();
+		expect(result.getHours()).toBe(11);
+	});
+
+
+	function FakeScheduleManagementService() {
+		var latestEndTime = null;
+		var latestStartTime = null;
+
+		this.setLatestEndTime = function (date) {
+			latestEndTime = date;
+		}
+
+		this.setLatestStartTime = function (date) {
+			latestStartTime = date;
+		}
+
+		this.getLatestPreviousDayOvernightShiftEnd = function () {
+			return latestEndTime;
+		}
+
+		this.getLatestStartOfSelectedSchedule = function () {
+			return latestStartTime;
+		}
+	}
 
 	function getAvailableActivities() {
 		return [

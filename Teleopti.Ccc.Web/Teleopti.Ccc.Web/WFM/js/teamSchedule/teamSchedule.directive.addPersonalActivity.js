@@ -49,20 +49,33 @@
 			});
 		};
 
+		vm.getDefaultActvityStartTime = getDefaultActvityStartTime;
+
 		function getDefaultActvityStartTime() {
 			var curDateMoment = moment(vm.referenceDay());
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, vm.selectedAgents);
 			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, vm.selectedAgents);
 
-			var defaultStart = null;
+			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();
 			if (overnightEnds !== null) {
-				defaultStart = overnightEnds;
+				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
 
-			if (wFMDateSvc.nowInUserTimeZone().format('YYYY-MM-DD') === moment(vm.referenceDay).format('YYYY-MM-DD')) {
-				wFMDateSvc.getNextTick();
+			if (moment(wFMDateSvc.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.referenceDay()).format('YYYY-MM-DD')) {
+				var nextTickTime = new Date(wFMDateSvc.getNextTick());
+				if (nextTickTime > defaultStart) {
+					defaultStart = nextTickTime;
+				}
+			} else {
+				
+				if (latestShiftStart !== null) {
+					var latestShiftStartPlusOneHour = moment(latestShiftStart).add(1, 'hour').toDate();
+					if (latestShiftStartPlusOneHour >= defaultStart)
+						defaultStart = latestShiftStart;
+				} 
 			}
 
+			return defaultStart;
 		}
 	}
 

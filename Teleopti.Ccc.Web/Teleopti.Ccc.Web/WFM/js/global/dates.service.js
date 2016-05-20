@@ -18,12 +18,13 @@
 			return moment(nowDate);
 		}
 		this.nowInUserTimeZone = function () {
-			return moment(this.nowMoment(), CurrentUserInfo.DefaultTimeZone);
+			return moment.tz(this.nowMoment(), CurrentUserInfo.DefaultTimeZone).format();
 		}
 		this.getNextTick= function() {
-			var minutes = Math.ceil(nowInUserTimeZone.minute() / tick) * tick;
-			var start = nowInUserTimeZone.startOf('hour').minutes(minutes);
+			var nowInUserTimeZoneMoment = moment(this.nowInUserTimeZone());
 
+			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
+			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
 			return start.format();
 		}
 	}
