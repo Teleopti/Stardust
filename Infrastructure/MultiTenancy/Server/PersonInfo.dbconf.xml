@@ -25,14 +25,18 @@
 	<query name="identityUserQuery">
 		<![CDATA[
 select p from PersonInfo p
+inner join p.Tenant t
 where p.Identity = :identity
+and t.Active = true
 ]]>
 	</query>
 
 	<query name="applicationUserQuery">
 		<![CDATA[
 select pi from PersonInfo pi
+inner join pi.Tenant t
 where pi.ApplicationLogonInfo.LogonName=:userName
+and t.Active = true
 ]]>
 	</query>
 

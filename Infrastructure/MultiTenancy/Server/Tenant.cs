@@ -13,14 +13,16 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 			Name = tenantName;
 			DataSourceConfiguration = new DataSourceConfiguration();
 			RtaKey = generateRtaKey(Name);
+		    Active = true;
 		}
 
 		public virtual DataSourceConfiguration DataSourceConfiguration { get; protected set; }
 		public virtual string Name { get; protected set; }
 		public virtual string RtaKey { get; set; }
 		public virtual int Id { get; protected set; }
+	    public virtual bool Active { get; set; }
 
-		private static string generateRtaKey(string name)
+	    private static string generateRtaKey(string name)
 		{
 			var hash = SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(name));
 			return string.Join("", hash.Select(b => b.ToString("x2")).ToArray()).Substring(0, 10);

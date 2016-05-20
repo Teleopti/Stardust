@@ -36,7 +36,18 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Server.Queries
 			result.Should().Be.Null();
 		}
 
-		[SetUp]
+        [Test]
+        public void ShouldReturnNullIfNotActiveTenant()
+        {
+            var before = target.FindUserData(existingPerson.Identity);
+            before.Tenant.Active = false;
+            _tenantUnitOfWorkManager.CurrentSession().Save(before);
+            _tenantUnitOfWorkManager.CurrentSession().Flush();
+            target.FindUserData(existingPerson.Identity)
+                    .Should().Be.Null();
+        }
+
+        [SetUp]
 		public void Setup_WillBeChangedWhenMovedAwayFromUnitOfWork()
 		{
 			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(InfraTestConfigReader.ConnectionString);
