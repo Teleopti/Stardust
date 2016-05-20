@@ -39,6 +39,7 @@ namespace Teleopti.Wfm.Administration.Core
 					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(appBuilder.ConnectionString);
 					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);
 					oldTenant.DataSourceConfiguration.SetNHibernateConfig(Environment.CommandTimeout, model.CommandTimeout.ToString());
+				    oldTenant.Active = model.Active;
 					_currentTenantSession.CurrentSession().Save(oldTenant);
 				}
 			}

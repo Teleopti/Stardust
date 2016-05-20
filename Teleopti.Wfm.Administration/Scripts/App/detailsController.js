@@ -18,6 +18,7 @@
 		vm.AnalyticsDatabase = "";
 		vm.AggregationDatabase = "";
 		vm.Version = null;
+	    vm.Active = true;
 		vm.TenantMessage = "Enter a new name for the Tenant";
 		vm.TenantOk = false;
 		vm.AppDbOk = false;
@@ -54,6 +55,7 @@
 					vm.AggregationDatabase = data.AggregationDatabase;
 					vm.Version = data.Version;
 					vm.CommandTimeout = data.CommandTimeout;
+			        vm.Active = data.Active;
 					//vm.CheckAppDb();
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
@@ -238,7 +240,8 @@
 						Server: vm.Server,
 						UserName: vm.UserName,
 						Password: vm.Password,
-						CommandTimeout: vm.CommandTimeout
+						CommandTimeout: vm.CommandTimeout,
+                        Active : vm.Active
 					}, tokenHeaderService.getHeaders())
 						.success(function (data) {
 							if (data.Success === false) {

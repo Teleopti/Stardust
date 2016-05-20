@@ -33,7 +33,8 @@
 						<td  class="paddingTenantList">Application database</td>
 						<td  class="paddingTenantList">Analytics database</td>
 						<td  class="paddingTenantList">Aggregation database</td>
-						<td  class="paddingTenantList">Version</td>
+					    <td class="paddingTenantList">Version</td>
+                        <td class="paddingTenantList">Active</td>
 					</tr>
 				</thead>
 				<tbody>
@@ -42,7 +43,8 @@
 						<td  class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.AppDatabase}}</a>   </td>
 						<td  class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.AnalyticsDatabase}}</a>   </td>
 						<td  class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.AggregationDatabase}}</a>   </td>
-						<td  class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.Version.ImportAppVersion}}</a>   </td>
+					    <td class="paddingTenantList"><a href="#details\{{tenant.Name}}">{{tenant.Version.ImportAppVersion}}</a> </td>
+                        <td class="paddingTenantList">{{tenant.Active}}</td>
 					</tr>
 				</tbody>
 			</table>

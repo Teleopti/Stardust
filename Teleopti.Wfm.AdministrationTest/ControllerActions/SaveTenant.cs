@@ -99,7 +99,8 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 					Password = "password",
                AnalyticsDatabase = "Southwind",
 					AppDatabase = "Southwind",
-					CommandTimeout = 180
+					CommandTimeout = 180,
+                    Active = false
 				};
 				Target.Save(model);
 			}
@@ -109,6 +110,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				loadedTenant.DataSourceConfiguration.ApplicationConnectionString.Should().Contain("Initial Catalog=Southwind");
 				loadedTenant.DataSourceConfiguration.AnalyticsConnectionString.Should().Contain("Initial Catalog=Southwind");
 				loadedTenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout].Should().Be.EqualTo("180");
+                loadedTenant.Active.Should().Be.False();
 			}
 		}
 	}

@@ -46,7 +46,8 @@ namespace Teleopti.Wfm.Administration.Controllers
 				AnalyticsDatabase = new SqlConnectionStringBuilder( t.DataSourceConfiguration.AnalyticsConnectionString).InitialCatalog,
 				AppDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.ApplicationConnectionString).InitialCatalog,
 				AggregationDatabase = new SqlConnectionStringBuilder(t.DataSourceConfiguration.AggregationConnectionString).InitialCatalog,
-				Version = _checkDatabaseVersions.GetVersions(t.DataSourceConfiguration.ApplicationConnectionString)
+				Version = _checkDatabaseVersions.GetVersions(t.DataSourceConfiguration.ApplicationConnectionString),
+                Active  = t.Active
 			}));
 		}
 
@@ -71,8 +72,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 				AggregationDatabase = builderAgg.InitialCatalog,
             Server =  builder.DataSource,
 				Version = _checkDatabaseVersions.GetVersions(tenant.DataSourceConfiguration.ApplicationConnectionString),
-            CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout])
-			});
+            CommandTimeout = int.Parse(tenant.DataSourceConfiguration.ApplicationNHibernateConfig[Environment.CommandTimeout]),
+             Active = tenant.Active
+         });
 		}
 
 		[HttpPost]
