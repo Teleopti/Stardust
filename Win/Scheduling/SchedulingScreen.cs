@@ -6949,6 +6949,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_skillMonthGridControl.Invalidate(true);
 				_skillFullPeriodGridControl.Invalidate(true);
 				refreshChart();
+				SplitterManager.EnableShiftEditor();
 				Refresh();
 			}
 
@@ -6964,7 +6965,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			toolStripExClipboard.Enabled = true;
 			toolStripExEdit2.Enabled = true;
-			toolStripExScheduleViews.Enabled = true;
+			toolStripButtonRequestView.Enabled = true;
+			toolStripButtonRestrictions.Enabled = true;
+			toolStripButtonFindAgents.Enabled = true;
+
 			toolStripExActions.Enabled = true;
 			toolStripExLocks.Enabled = true;
 			toolStripExTags.Enabled = true;
@@ -6982,11 +6986,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void disableForCascading()
 		{
 			_uIEnabled = false;
-			using (PerformanceOutput.ForOperation("disableAllExceptCancelInRibbon"))
+			using (PerformanceOutput.ForOperation("disableForCascading"))
 			{
 				toolStripExClipboard.Enabled = false;
 				toolStripExEdit2.Enabled = false;
-				toolStripExScheduleViews.Enabled = false;
+				toolStripButtonRequestView.Enabled = false;
+				toolStripButtonRestrictions.Enabled = false;
+				toolStripButtonFindAgents.Enabled = false;
 				toolStripExActions.Enabled = false;
 				toolStripExLocks.Enabled = false;
 				toolStripExTags.Enabled = false;
@@ -7015,6 +7021,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
 				disableSave();
 				toolStripStatusLabelContractTime.Enabled = false;
+				SplitterManager.DisableShiftEditor();
 			}
 		}
 	}
