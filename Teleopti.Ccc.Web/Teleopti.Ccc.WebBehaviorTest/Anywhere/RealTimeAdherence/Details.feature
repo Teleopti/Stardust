@@ -8,9 +8,7 @@ Background:
 
 @OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
 Scenario: Should be able to see adherence details for one agent within working hour
-	Given the time is '2014-10-06 00:00:00'
-	And rta is ready
-	And there is an activity named 'Phone'
+	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with
@@ -52,9 +50,7 @@ Scenario: Should be able to see adherence details for one agent within working h
 
 @OnlyRunIfEnabled('RTA_AdherenceDetails_34267')
 Scenario: Should be able to see adherence details for one agent outside of working hour
-	Given the time is '2014-10-06 00:00:00'
-	And rta is ready
-	And there is an activity named 'Phone'
+	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with

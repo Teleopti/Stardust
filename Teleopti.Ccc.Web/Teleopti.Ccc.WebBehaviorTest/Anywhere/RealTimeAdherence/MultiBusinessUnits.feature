@@ -8,7 +8,6 @@ Background:
 
 Scenario: Should display sites of a selected business unit
 	Given the time is '2014-08-01 13:00'
-	And rta is ready
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |	
@@ -37,9 +36,7 @@ Scenario: Should display sites of a selected business unit
 	Then I should see the site 'Paris'
 
 Scenario: Should be able to see all agents state updates of a team within a specific business unit
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |	
 	| Access to everyone					 | True              |

@@ -8,9 +8,7 @@ Background:
 
 @ignore
 Scenario: Should see adherence percentage for night shift agents
-	Given the time is '2014-10-06 00:00:00'
-	And rta is ready
-	And there is an activity named 'Phone'
+	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with
@@ -52,9 +50,7 @@ Scenario: Should see adherence percentage for night shift agents
 
 @ignore
 Scenario: Should see adherence details for night shift agents
-	Given the time is '2014-10-06 00:00:00'
-	And rta is ready
-	And there is an activity named 'Phone'
+	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And I have a role with

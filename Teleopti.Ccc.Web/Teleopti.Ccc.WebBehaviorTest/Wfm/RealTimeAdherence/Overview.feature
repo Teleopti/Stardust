@@ -7,9 +7,7 @@ Background:
 	Given there is a switch
 
 Scenario: See updates of sum of employees not adhering to schedule for each site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with full access
+	Given I have a role with full access
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
@@ -53,9 +51,7 @@ Scenario: See updates of sum of employees not adhering to schedule for each site
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: See updates of sum of employees not adhering to schedule for each team within a site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with full access
+	Given I have a role with full access
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
@@ -98,9 +94,7 @@ Scenario: See updates of sum of employees not adhering to schedule for each team
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
 Scenario: See current state of sum of employees not adhering to schedule for each site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with full access
+	Given I have a role with full access
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
@@ -144,9 +138,7 @@ Scenario: See current state of sum of employees not adhering to schedule for eac
 	And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: See current state of sum of employees not adhering to schedule for each team within a site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with full access
+	Given I have a role with full access
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'

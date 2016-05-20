@@ -30,7 +30,6 @@ Background:
 @OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Late for work
 	Given the time is '2016-05-19 17:00:00'
-	And rta is ready
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	Given the time is '2016-05-20 8:15:00'
 	When I view real time adherence for all agents on team 'Red'
@@ -43,7 +42,6 @@ Scenario: Late for work
 @OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Late back from lunch
 	Given the time is '2016-05-19 12:00:00'
-	And rta is ready
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	Given the time is '2016-05-20 13:15:00'
 	When I view real time adherence for all agents on team 'Red'

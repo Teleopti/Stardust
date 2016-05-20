@@ -26,13 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var datasource = new Datasources(DataSourceId, " ", -1, " ", -1, " ", " ", 1, false, SourceId, false);
 			DataMaker.Analytics().Apply(datasource);
 		}
-        
-		[Given(@"rta is ready")]
-		public void GivenThereIsRtaReady()
-		{
-			TestControllerMethods.TouchRta();
-		}
-        
+		
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode)

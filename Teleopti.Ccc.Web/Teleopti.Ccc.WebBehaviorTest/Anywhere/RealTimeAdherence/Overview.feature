@@ -8,7 +8,6 @@ Background:
 
 Scenario: Show site without always loading status
 	Given the time is '2014-01-21 13:00'
-	And rta is ready
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
@@ -25,7 +24,6 @@ Scenario: Show site without always loading status
 
 Scenario: Show team without always loading status
 	Given the time is '2014-01-21 13:00'
-	And rta is ready
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
@@ -41,9 +39,7 @@ Scenario: Show team without always loading status
 	Then I should see the team 'Red'
 
 Scenario: View updates of sum of employees not adhering to schedule for each site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -91,9 +87,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -165,9 +159,7 @@ Scenario: Should be able to go to Real time adherence overview
 	Then I should see Real time adherence overview in the menu
 
 Scenario: View current state of sum of employees not adhering to schedule for each site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -215,9 +207,7 @@ Scenario: View current state of sum of employees not adhering to schedule for ea
 	And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: View current state of sum of employees not adhering to schedule for each team within a site
-	Given the time is '2014-01-21 00:00:00'
-	And rta is ready
-	And I have a role with
+	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |

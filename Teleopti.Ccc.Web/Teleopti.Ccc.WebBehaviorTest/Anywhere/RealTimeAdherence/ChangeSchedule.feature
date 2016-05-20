@@ -10,8 +10,7 @@ Background:
 #Random faliure, probably because of rare anywhere issue
 #Not worth investigating according to Anders
 Scenario: Should be able to change schedule from agent state overview
-	Given the time is '2014-09-09 12:30:00'
-	And rta is ready
+	Given  the time is '2014-09-09 12:30:00'
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -51,7 +50,6 @@ Scenario: Should be able to change schedule from agent state overview
 #Not worth investigating according to Anders
 Scenario: Should be able to change schedule for multiple business units
 	Given the time is '2014-09-09 12:30:00'
-	And rta is ready
 	And I have a role with
 	| Field              | Value             |
 	| Name               | Real time analyst |

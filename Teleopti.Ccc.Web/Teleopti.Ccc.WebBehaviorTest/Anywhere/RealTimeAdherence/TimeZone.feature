@@ -10,9 +10,7 @@ Background:
 #Random faliure, probably because of rare anywhere issue
 #Not worth investigating according to Anders
 Scenario: Should see adherence percentage when call center is in Hawaii
-	Given the time is '2014-10-07 00:00:00'
-	And rta is ready
-	And I am located in Hawaii
+	Given I am located in Hawaii
 	And 'Pierre Baldi' is located in Hawaii
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -56,9 +54,7 @@ Scenario: Should see adherence percentage when call center is in Hawaii
 
 @ignore
 Scenario: Should see adherence details when call center is in Hawaii
-	Given the time is '2014-10-07 00:00:00'
-	And rta is ready
-	And I am located in Hawaii
+	Given I am located in Hawaii
 	And 'Pierre Baldi' is located in Hawaii
 	And there is an activity named 'Phone'
 	And there is a site named 'Paris'

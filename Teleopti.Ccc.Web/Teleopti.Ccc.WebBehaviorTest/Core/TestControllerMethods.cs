@@ -27,12 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			navigateOrRequest("Test/SetCurrentTime?ticks=" + time.Ticks);
 		}
-
-		public static void TouchRta()
-		{
-			navigateOrRequest("Test/TouchRta?tenant=" + DataSourceHelper.TestTenantName);
-		}
-
+		
 		public static void ClearConnections()
 		{
 			navigateOrRequest("Test/ClearConnections");
