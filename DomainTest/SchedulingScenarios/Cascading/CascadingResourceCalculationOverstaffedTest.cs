@@ -129,7 +129,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(1);
-
 			nonPrioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
 		}
@@ -147,7 +146,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			var nonPrioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(12, 0, 13, 0));
-
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person();
 			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -182,7 +180,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			var nonPrioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadThatIsClosed(nonPrioritizedSkill);
-
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent1 = new Person();
 			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);

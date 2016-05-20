@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -22,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	{
 		public IResourceOptimizationHelper ResourceOptimizationHelper;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public FakeTimeZoneGuard TimeZoneGuard;
 
 		[Test]
 		public void ShouldSplitResourceEqualIfEfficiencyIs100AndDemandIsEqual()
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2016,5,12);
-			var commonTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var commonTimeZone = TimeZoneGuard.CurrentTimeZone();
 
 			var skillA = new Skill("_", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = commonTimeZone }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillA);
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2016, 5, 12);
-			var commonTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var commonTimeZone = TimeZoneGuard.CurrentTimeZone();
 
 			var skillA = new Skill("_", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = commonTimeZone }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillA);
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2016, 5, 12);
-			var commonTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var commonTimeZone = TimeZoneGuard.CurrentTimeZone();
 
 			var skillA = new Skill("_", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = commonTimeZone }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillA);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2016, 5, 12);
-			var commonTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var commonTimeZone = TimeZoneGuard.CurrentTimeZone();
 
 			var skillA = new Skill("_", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = commonTimeZone }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillA);
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = new DateOnly(2016, 5, 12);
-			var commonTimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			var commonTimeZone = TimeZoneGuard.CurrentTimeZone();
 
 			var skillA = new Skill("_", "_", Color.Empty, 30, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = commonTimeZone }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillA);

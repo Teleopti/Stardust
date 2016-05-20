@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulerStateHolder.SchedulingResultState).Return(_stateHolder).Repeat.AtLeastOnce();
-				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).Repeat.AtLeastOnce();
 				Expect.Call(_stateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
 				expectsForVerifyCalculateDay(skill1, skillStaffPeriodHolder, dictionary, extractor, period, skills, service1,
 											 visualLayerCollection, service2, service3, skillStaffPeriodDictionary);
