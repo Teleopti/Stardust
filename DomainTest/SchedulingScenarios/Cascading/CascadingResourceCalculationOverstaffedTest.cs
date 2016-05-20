@@ -438,7 +438,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			var activity = new Activity("_");
 			var dateOnly = DateOnly.Today;
 			var scheduledAndSkillTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var endUserTimeZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time"); 
+			var endUserTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"); 
 			var prioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = scheduledAndSkillTimeZone }.WithId();
 			prioritizedSkill.SetCascadingIndex_UseFromTestOnly(1);
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(prioritizedSkill);
