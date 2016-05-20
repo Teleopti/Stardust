@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
@@ -13,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// Represents a shift category, a grouping of shifts
     /// </summary>
-    public class ShiftCategory : VersionedAggregateRootWithBusinessUnit, IShiftCategory, IDeleteTag, ICloneableEntity<ShiftCategory>
-    {
+    public class ShiftCategory : VersionedAggregateRootWithBusinessUnit, IShiftCategory, IDeleteTag, ICloneableEntity<ShiftCategory>, IAggregateRootWithEvents
+	{
         #region Fields
 
         private Description _description;
@@ -43,21 +45,42 @@ namespace Teleopti.Ccc.Domain.Scheduling
             
         }
 
-        #endregion
+		#endregion
 
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		{
+			var events = base.PopAllEvents(now, operation).ToList();
+			if (!operation.HasValue) return events;
+			switch (operation)
+			{
+				case DomainUpdateType.Insert:
+				case DomainUpdateType.Update:
+					events.Add(new ShiftCategoryChangedEvent
+					{
+						ShiftCategoryId = Id.GetValueOrDefault()
+					});
+					break;
+				case DomainUpdateType.Delete:
+					events.Add(new ShiftCategoryDeletedEvent
+					{
+						ShiftCategoryId = Id.GetValueOrDefault()
+					});
+					break;
+			}
+			return events;
+		}
 
+		#region Properties
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>The description.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-26
-        /// </remarks>
-        public virtual Description Description
+		/// <summary>
+		/// Gets or sets the description.
+		/// </summary>
+		/// <value>The description.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-10-26
+		/// </remarks>
+		public virtual Description Description
         {
             get { return _description; }
             set { _description = value; }
