@@ -22,16 +22,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 			//perf thingy - don't do this every time - look if necessary
 			var cascadingSkills = _stateHolder().SchedulingResultState.CascadingSkills().Where(x => x.Activity.Equals(activity)).ToArray();
 
-			var ret = new List<CascadingSkillGroup>();
-			foreach (var skillGroup in affectedSkills)
-			{
-				var skillsUsedByPrimarySkill = cascadingSkills.Where(x => skillGroup.Skills.Contains(x)).ToArray();
-				if (skillsUsedByPrimarySkill.Length <= 1)
-					continue;
-				var primarySkill = skillsUsedByPrimarySkill.First();
-				ret.Add(new CascadingSkillGroup(primarySkill, skillsUsedByPrimarySkill.Where(x => !x.Equals(primarySkill)), skillGroup.Resource));
-			}
-
+			var ret = (from skillGroup in affectedSkills
+								 let skillsUsedByPrimarySkill = cascadingSkills.Where(x => skillGroup.Skills.Contains(x)).ToArray()
+								 where skillsUsedByPrimarySkill.Length > 1
+								 let primarySkill = skillsUsedByPrimarySkill.First()
+								 select new CascadingSkillGroup(primarySkill, skillsUsedByPrimarySkill.Where(x => !x.Equals(primarySkill)), skillGroup.Resource)).ToList();
 			ret.Sort(new CascadingSkillGroupSorter());
 			return ret;
 		}

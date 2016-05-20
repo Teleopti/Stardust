@@ -246,7 +246,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
 
 			PersonSkillProvider.SkillsOnPersonDate(agent, dateOnly);
-
 			Target.ForDay(dateOnly);
 
 			prioritizedSkillDay.SkillStaffPeriodCollection.First().AbsoluteDifference
