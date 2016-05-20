@@ -1,12 +1,18 @@
 ﻿'use strict';
 describe('RtaRouteService', function() {
-	var target, $state;
+	var target, $state, curDate;
 
 	beforeEach(module('wfm.rta'));
 	beforeEach(inject(function(_$state_, RtaRouteService) {
 		target = RtaRouteService;
 		$state = _$state_;
+		curDate = new Date();
 	}));
+
+	afterEach(function() {
+		jasmine.clock().mockDate(curDate);
+	});
+
 
 	it('should go back to sites overview', function() {
 		spyOn($state, 'go');

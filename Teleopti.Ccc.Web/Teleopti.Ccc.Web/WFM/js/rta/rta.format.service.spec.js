@@ -1,11 +1,16 @@
 'use strict';
 describe('RtaFormatService', function() {
-	var target;
+	var target, curDate;
 
 	beforeEach(module('wfm.rta'));
 	beforeEach(inject(function(RtaFormatService) {
 		target = RtaFormatService;
+		curDate = new Date();
 	}));
+
+	afterEach(function() {
+		jasmine.clock().mockDate(curDate);
+	});
 
 	it('should format timestamp for today', function() {
 		var today = new Date('2015-04-17');

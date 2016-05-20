@@ -254,7 +254,7 @@
 	});
 
 
-	xit('should have correct default start time when no other shifts', function () {
+	it('should have correct default start time when no other shifts', function () {
 
 		var date = new Date(WFMDate.nowInUserTimeZone());
 
