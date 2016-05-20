@@ -14481,4 +14481,8 @@ Help us improve your experience by sending an error report</value>
     <value>You cannot add a personal activity to {0} without a shift</value>
     <comment>Alert message when it is not allowed to add new personal activity for agent in wfm/mytime</comment>
   </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>Help</value>
+    <comment>Navbar label for help</comment>
+  </data>
 </root>
