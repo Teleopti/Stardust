@@ -20,18 +20,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public void Execute(DateOnly date)
 		{
 			//TODO: if doing this for more than one day we might to do this initiazlie stuff (down to interval) only once. Or we wait with that...
-			var schedulingResult = _stateHolder().SchedulingResultState;
-			var cascadingSkills = schedulingResult.CascadingSkills().ToArray();
+			var stateHolder = _stateHolder();
+			var cascadingSkills = stateHolder.SchedulingResultState.CascadingSkills().ToArray();
 			if (!cascadingSkills.Any())
 				return;
 
 			var activities = cascadingSkills.Select(x => x.Activity).Distinct();
-			var timeZone = cascadingSkills.First().TimeZone; //not correct really...
 			var defaultResolution = cascadingSkills.First().DefaultResolution; //(maybe) correct...
 			foreach (var activity in activities)
 			{
 				var cascadingSkillsForActivity = cascadingSkills.Where(x => x.Activity.Equals(activity)).ToArray();
-				foreach (var interval in date.ToDateTimePeriod(timeZone).Intervals(TimeSpan.FromMinutes(defaultResolution)))
+				foreach (var interval in date.ToDateTimePeriod(stateHolder.TimeZoneInfo).Intervals(TimeSpan.FromMinutes(defaultResolution)))
 				{
 					//TODO: it seems that AffectedResources gives back skillgroups with skills using different activities -> hack (and incorrect) when we order the skill groups...
 					foreach (var skillGroup in orderedSkillGroups(cascadingSkillsForActivity, ResourceCalculationContext.Fetch().AffectedResources(activity, interval).Values))
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						if (remainingResourcesInGroup.IsZero())
 							continue;
 						ISkillStaffPeriodDictionary skillStaffPeriodFromDic;
-						if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillGroup.PrimarySkill, out skillStaffPeriodFromDic))
+						if (!stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillGroup.PrimarySkill, out skillStaffPeriodFromDic))
 							continue;
 						var skillStaffPeriodFrom = skillStaffPeriodFromDic.SkillStaffPeriodOrDefault(interval);
 						var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						foreach (var skillToMoveTo in skillGroup.CascadingSkills)
 						{
 							ISkillStaffPeriodDictionary skillStaffPeriodToDic;
-							if (!schedulingResult.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveTo, out skillStaffPeriodToDic))
+							if (!stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skillToMoveTo, out skillStaffPeriodToDic))
 								continue;
 							var skillStaffPeriodTo = skillStaffPeriodToDic.SkillStaffPeriodOrDefault(interval);
 							var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
@@ -132,9 +131,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 				Resources = resources;
 			}
 
-			public ISkill PrimarySkill { get; private set; }
-			public IEnumerable<ISkill> CascadingSkills { get; private set; }
-			public double Resources { get; private set; }
+			public ISkill PrimarySkill { get; }
+			public IEnumerable<ISkill> CascadingSkills { get; }
+			public double Resources { get; }
 		}
 	}
 }

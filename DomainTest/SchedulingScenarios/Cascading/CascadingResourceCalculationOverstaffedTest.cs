@@ -430,5 +430,45 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			skillBDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldMoveResourcesForPeriodConsiderEndUserTimeZone()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var scheduledAndSkillTimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var endUserTimeZone = TimeZoneInfo.FindSystemTimeZoneById("US Mountain Standard Time"); 
+			var prioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = scheduledAndSkillTimeZone }.WithId();
+			prioritizedSkill.SetCascadingIndex_UseFromTestOnly(1);
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(prioritizedSkill);
+			var prioritizedSkillDay = prioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var nonPrioritizedSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = scheduledAndSkillTimeZone }.WithId();
+			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(nonPrioritizedSkill);
+			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent1 = new Person();
+			agent1.PermissionInformation.SetDefaultTimeZone(scheduledAndSkillTimeZone);
+			agent1.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly);
+			ass1.AddActivity(activity, new TimePeriod(0, 0, 24, 0));
+			var agent2 = new Person();
+			agent2.PermissionInformation.SetDefaultTimeZone(scheduledAndSkillTimeZone);
+			agent2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly);
+			ass2.AddActivity(activity, new TimePeriod(0, 0, 24, 0));
+			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent1, agent2 }, new[] { ass1, ass2 }, new[] { prioritizedSkillDay, nonPrioritizedSkillDay });
+			SchedulerStateHolder().TimeZoneInfo = endUserTimeZone;
+
+			Target.ForDay(dateOnly);
+
+			var endUserPeriod = dateOnly.ToDateTimePeriod(endUserTimeZone);
+			foreach (var skillStaffPeriod in prioritizedSkillDay.SkillStaffPeriodCollection)
+			{
+				//should have moved resources within end user's period (based on time zone) only
+				skillStaffPeriod.AbsoluteDifference
+					.Should().Be.EqualTo(endUserPeriod.Contains(skillStaffPeriod.Period) ? 0.5 : 1.5);
+			}
+		}
 	}
 }
