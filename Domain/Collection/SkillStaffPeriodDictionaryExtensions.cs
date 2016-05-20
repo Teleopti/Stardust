@@ -21,6 +21,11 @@ namespace Teleopti.Ccc.Domain.Collection
 				createNullObject(period);
 		}
 
+		public static ISkillStaffPeriod SkillStaffPeriodOrDefault(this ISkillStaffPeriodHolder skillStaffPeriodHolder, ISkill skill, DateTimePeriod period)
+		{
+			return SkillStaffPeriodOrDefault(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skill, period);
+		}
+
 		private static ISkillStaffPeriod createNullObject(DateTimePeriod period)
 		{
 			return new SkillStaffPeriod(period, new Task(), new ServiceAgreement(), new StaffingCalculatorServiceFacade());
