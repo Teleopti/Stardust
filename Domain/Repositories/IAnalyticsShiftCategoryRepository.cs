@@ -1,10 +1,12 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces.Infrastructure.Analytics;
+using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsShiftCategoryRepository
 	{
-		IList<IAnalyticsGeneric> ShiftCategories();
+		IList<AnalyticsShiftCategory> ShiftCategories();
+		void AddShiftCategory(AnalyticsShiftCategory analyticsShiftCategory);
+		void UpdateShiftCategory(AnalyticsShiftCategory analyticsShiftCategory);
 	}
 }

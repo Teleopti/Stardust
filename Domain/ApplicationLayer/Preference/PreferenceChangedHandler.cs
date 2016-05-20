@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
             }
         }
 
-		private AnalyticsFactSchedulePreference mapSchedulePreference(IScheduleDay schedulePart, IList<AnalyticsScenario> analyticsScenarios, IScenario scenario, IList<IAnalyticsGeneric> analyticsShiftCategories,
+		private AnalyticsFactSchedulePreference mapSchedulePreference(IScheduleDay schedulePart, IList<AnalyticsScenario> analyticsScenarios, IScenario scenario, IList<AnalyticsShiftCategory> analyticsShiftCategories,
 			IPreferenceRestriction preferenceRestriction, IList<AnalyticsAbsence> analyticsAbsences, IList<AnalyticsDayOff> analyticsDayOffs,
 			AnalyticBusinessUnit businessUnitId, KeyValuePair<DateOnly, int> dateId, int analyticsPersonPeriodId, IPreferenceDay preferenceDay)
 		{
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			var scenarioId = analyticsScenarios.First(a => a.ScenarioCode.GetValueOrDefault() == scenario.Id.GetValueOrDefault()).ScenarioId;
 			var shiftCategory =
 				analyticsShiftCategories.FirstOrDefault(
-					a => a.Code == ((preferenceRestriction.ShiftCategory != null ? preferenceRestriction.ShiftCategory.Id : null) ?? Guid.Empty));
+					a => a.ShiftCategoryCode == ((preferenceRestriction.ShiftCategory != null ? preferenceRestriction.ShiftCategory.Id : null) ?? Guid.Empty));
 			var absence = analyticsAbsences.FirstOrDefault(a => a.AbsenceCode == ((preferenceRestriction.Absence != null ? preferenceRestriction.Absence.Id : null) ?? Guid.Empty));
 			var dayOffId = preferenceRestriction.DayOffTemplate == null ? -1 :
 				analyticsDayOffs.First(a => a.DayOffName == preferenceRestriction.DayOffTemplate.Description.Name && a.BusinessUnitId == businessUnitId.BusinessUnitId).DayOffId;
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 				PersonId = analyticsPersonPeriodId,
 				ScenarioId = scenarioId,
 				PreferenceTypeId = SchedulePreferenceTransformerHelper.GetPreferenceTypeId(preferenceRestriction),
-				ShiftCategoryId = shiftCategory != null ? shiftCategory.Id : -1,
+				ShiftCategoryId = shiftCategory != null ? shiftCategory.ShiftCategoryId : -1,
 				DayOffId = dayOffId,
 				PreferencesRequested = 1,
 				PreferencesFulfilled = permissionState == PermissionState.Satisfied ? 1 : 0,

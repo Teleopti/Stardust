@@ -166,6 +166,7 @@
     <Compile Include="FakeRepositories\FakeAnalyticsScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsDateRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsPreferenceRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsShiftCategoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsSkillRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeApplicationFunctionRepository.cs" />

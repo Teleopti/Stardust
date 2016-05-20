@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
@@ -34,7 +33,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		private FakeAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
 		private FakeAnalyticsAbsenceRepository _analyticsAbsenceRepository;
-		
+		private FakeAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
+
 
 		[SetUp]
 		public void Setup()
@@ -60,6 +60,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 					new AnalyticsAbsence {AbsenceCode = Guid.NewGuid(), AbsenceId = 1}
 				});
 
+			_analyticsShiftCategoryRepository = new FakeAnalyticsShiftCategoryRepository(
+				new List<AnalyticsShiftCategory>
+				{
+					new AnalyticsShiftCategory {ShiftCategoryCode = Guid.Empty, ShiftCategoryId = -1},
+					new AnalyticsShiftCategory {ShiftCategoryCode = Guid.NewGuid(), ShiftCategoryId = 1}
+				});
 			_target = new PreferenceChangedHandler(
 				_scenarioRepository,
 				_preferenceDayRepository,
@@ -72,7 +78,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				_personRepository,
 				_analyticsDayOffRepository,
 				_analyticsScenarioRepository,
-				_analyticsAbsenceRepository);
+				_analyticsAbsenceRepository,
+				_analyticsShiftCategoryRepository);
 		}
 
 		[Test]
@@ -270,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			var date = new DateTime(2001, 1, 1);
 			var preferenceRestriction = new PreferenceRestriction
 			{
-				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej").WithId(_analyticsScheduleRepository.ShiftCategories().First(a => a.Id == 1).Code),
+				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej").WithId(_analyticsShiftCategoryRepository.ShiftCategories().First(a => a.ShiftCategoryId == 1).ShiftCategoryCode),
 				Absence = AbsenceFactory.CreateAbsence("Absence").WithId(_analyticsAbsenceRepository.Absences().First(a => a.AbsenceId == 1).AbsenceCode),
 				DayOffTemplate = DayOffFactory.CreateDayOff().WithId(),
 				MustHave = true

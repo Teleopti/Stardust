@@ -164,10 +164,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 		private int getCategory(Guid shiftCategoryCode)
 		{
 			var cats = _analyticsShiftCategoryRepository.ShiftCategories();
-			var cat = cats.FirstOrDefault(x => x.Code.Equals(shiftCategoryCode));
+			var cat = cats.FirstOrDefault(x => x.ShiftCategoryCode.Equals(shiftCategoryCode));
 			if (cat == null)
 				return -1;
-			return cat.Id;
+			return cat.ShiftCategoryId;
 		}
 	}
 

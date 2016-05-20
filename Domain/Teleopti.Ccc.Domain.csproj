@@ -163,6 +163,7 @@
     <Compile Include="Analytics\AnalyticsGroupPage.cs" />
     <Compile Include="Analytics\AnalyticsPermission.cs" />
     <Compile Include="Analytics\AnalyticsPersonRepository.cs" />
+    <Compile Include="Analytics\AnalyticsShiftCategory.cs" />
     <Compile Include="Analytics\AnalyticsTimeZone.cs" />
     <Compile Include="Analytics\AnalyticsFactSchedulePreference.cs" />
     <Compile Include="Analytics\AnalyticTeam.cs" />

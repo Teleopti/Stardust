@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 		}
 
-		[AsSystem]
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		public virtual void Handle(AbsenceChangedEvent @event)
