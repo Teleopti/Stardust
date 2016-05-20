@@ -190,10 +190,13 @@
     <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Badge\AgentBadgeCalculator.cs" />
     <Compile Include="ApplicationLayer\Badge\AgentBadgeWithRankCalculator.cs" />
-    <Compile Include="ApplicationLayer\Badge\CalculateBadgeConsumer.cs" />
+    <Compile Include="ApplicationLayer\Badge\CalculateBadges.cs" />
     <Compile Include="ApplicationLayer\Badge\IAgentBadgeCalculator.cs" />
     <Compile Include="ApplicationLayer\Badge\IAgentBadgeWithRankCalculator.cs" />
+    <Compile Include="ApplicationLayer\Badge\IPerformBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\IRunningEtlJobChecker.cs" />
+    <Compile Include="ApplicationLayer\Badge\IsTeamGamificationSettingsAvailable.cs" />
+    <Compile Include="ApplicationLayer\Badge\PerformBadgeCalculation.cs" />
     <Compile Include="ApplicationLayer\Badge\RunningEtlJobChecker.cs" />
     <Compile Include="ApplicationLayer\Commands\CancelAbsenceRequestCommandValidator.cs" />
     <Compile Include="ApplicationLayer\Commands\ICancelAbsenceRequestCommandValidator.cs" />
@@ -206,7 +209,6 @@
     <Compile Include="ApplicationLayer\DayOff\AnalyticsDayOffUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\PersonalActivityAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\MultiplicatorDefinitionSetCreated.cs" />
-    <Compile Include="ApplicationLayer\Events\BadgeCalculationInitEvent.cs" />
     <Compile Include="ApplicationLayer\Events\CalculateBadgeMessage.cs" />
     <Compile Include="ApplicationLayer\Events\AbsenceChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RunRequestWaitlistEvent.cs" />
@@ -281,7 +283,6 @@
     <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonGroupsHandler.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdater.cs" />
-    <Compile Include="ApplicationLayer\Badge\BadgeCalculationInitHandler.cs" />
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />

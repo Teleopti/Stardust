@@ -844,7 +844,7 @@
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
-    <Compile Include="Messages\General\CalculateTimeZoneMessage.cs" />
+    <Compile Include="Messages\General\BadgeCalculationInitEvent.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
     <Compile Include="Messages\General\IForecastsRow.cs" />

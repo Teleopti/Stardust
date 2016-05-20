@@ -1,17 +1,10 @@
 using System;
-using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class CalculateBadgeMessage : EventWithInfrastructureContext
+	public class CalculateBadgeMessage 
 	{
-		private readonly Guid _messageId = Guid.NewGuid();
-
-		public Guid Identity
-		{
-			get { return _messageId; }
-		}
-
+		public Guid LogOnBusinessUnitId { get; set; }
 		public DateTime CalculationDate { get; set; }
 		public string TimeZoneCode { get; set; }
 	}

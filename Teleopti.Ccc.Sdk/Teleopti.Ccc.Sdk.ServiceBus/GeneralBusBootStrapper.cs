@@ -5,8 +5,6 @@ using Rhino.ServiceBus;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -28,7 +26,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var bus = Container.Resolve<IServiceBus>();
 			var toggleManager = Container.Resolve<IToggleManager>();
-			var publisher = Container.Resolve<IEventPublisher>();
 			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 
@@ -43,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 				foreach (var businessUnitId in businessUnitCollection)
 				{
-					publisher.Publish(new BadgeCalculationInitEvent
+					bus.Send(new BadgeCalculationInitMessage
 					{
 						LogOnDatasource = tenant.DataSourceName,
 						LogOnBusinessUnitId = businessUnitId,
@@ -53,16 +50,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					if (Logger.IsDebugEnabled)
 					{
 						Logger.DebugFormat(
-							"Sending BadgeCalculationInitEvent to Service Bus for Datasource={0} and BusinessUnitId={1}",
+							"Sending BadgeCalculationInitMessage to Service Bus for Datasource={0} and BusinessUnitId={1}",
 							tenant.DataSourceName,
 							businessUnitId);
 					}
 				}
 			}));
 		}
-
-
-
-
 	}
 }

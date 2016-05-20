@@ -1,106 +1,118 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using NUnit.Framework;
-//using Rhino.Mocks;
-//using Rhino.ServiceBus;
-//using Teleopti.Ccc.Domain.AgentInfo;
-//using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
-//using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-//using Teleopti.Ccc.Domain.Common;
-//using Teleopti.Ccc.Domain.FeatureFlags;
-//using Teleopti.Ccc.Domain.Repositories;
-//using Teleopti.Ccc.Infrastructure.Toggle;
-//using Teleopti.Ccc.TestCommon.FakeData;
-//using Teleopti.Interfaces.Infrastructure;
-//using Teleopti.Interfaces.Messages.General;
+﻿using System;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
+using Teleopti.Ccc.Sdk.ServiceBus.AgentBadge;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.General;
 
-//namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
-//{
-//	[TestFixture]
-//	public class BadgeCalculationInitConsumerTest
-//	{
-//		private IBusinessUnitRepository businessUnitRepository;
-//		private ITeamGamificationSettingRepository badgeSettingRep;
-//		private IServiceBus serviceBus;
-//		private BadgeCalculationInitHandler target;
-//		private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
-//		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
-//		private IToggleManager toggleManager;
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
+{
+	[TestFixture]
+	public class BadgeCalculationInitConsumerTest
+	{
 
-//		[SetUp]
-//		public void Setup()
-//		{
-//			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
-//			badgeSettingRep = MockRepository.GenerateMock<ITeamGamificationSettingRepository>();
-//			serviceBus = MockRepository.GenerateMock<IServiceBus>();
-//			currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
-//			loggedOnUnitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-//			toggleManager = MockRepository.GenerateMock<IToggleManager>();
-//			target = new BadgeCalculationInitHandler(serviceBus, badgeSettingRep, businessUnitRepository, currentUnitOfWorkFactory,toggleManager);
-//		}
+		private IServiceBus serviceBus;
+		private BadgeCalculationInitConsumer target;
+		private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
+		private IToggleManager toggleManager;
+		private IPerformBadgeCalculation _performBadgeCalculation;
+		private MockRepository _mock;
+		private IRunningEtlJobChecker _runningEtlJobChecker;
+		private INow _now;
+		private IIsTeamGamificationSettingsAvailable _isTeamGamificationSettingsAvailable;
+		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private IUnitOfWork _uow;
 
-//		[Test]
-//		public void ShouldSendCalculateTimeZoneMessageWhenAgentBadgeEnable()
-//		{
-//			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
-//			bussinessUnit.SetId(Guid.NewGuid());
+		[SetUp]
+		public void Setup()
+		{
 
-//			var message = new BadgeCalculationInitEvent
-//			{
-//				Timestamp = DateTime.Now,
-//				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
-//			};
-//			var timezoneList = new List<TimeZoneInfo> {TimeZoneInfo.Local};
+			_mock = new MockRepository();
+			_performBadgeCalculation = _mock.StrictMock<IPerformBadgeCalculation>();
+			toggleManager = _mock.StrictMock<IToggleManager>();
+			serviceBus = _mock.StrictMock<IServiceBus>();
+			currentUnitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
+			_runningEtlJobChecker = _mock.StrictMock<IRunningEtlJobChecker>();
+			_unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+			_uow = _mock.StrictMock<IUnitOfWork>();
+			_isTeamGamificationSettingsAvailable = _mock.StrictMock<IIsTeamGamificationSettingsAvailable>();
+			_now = new MutableNow();
 
-//			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
-//			badgeSettingRep.Stub(x => x.FindTeamGamificationSettingsByTeam(new Team())).IgnoreArguments()
-//				.Return(
-//					new TeamGamificationSetting
-//					{
-//						GamificationSetting = new GamificationSetting("TestSetting")
-//					});
-//			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(false);
+			target = new BadgeCalculationInitConsumer(_performBadgeCalculation, _runningEtlJobChecker, serviceBus, _now,
+				toggleManager, _isTeamGamificationSettingsAvailable, currentUnitOfWorkFactory);
+		}
 
-//			businessUnitRepository.Stub(x => x.LoadAllTimeZones()).Return(timezoneList);
+		[Test]
+		public void ShouldResendMessageIfNoSettingIsAvailable()
+		{
 
-//			target.Consume(message);
+			using (_mock.Record())
+			{
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
+				Expect.Call(toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
+				Expect.Call(_isTeamGamificationSettingsAvailable.Satisfy()).Return(false);
+				Expect.Call(() => serviceBus.DelaySend(DateTime.Now, null)).IgnoreArguments();
+				Expect.Call(() => _uow.Dispose());
 
-//			//serviceBus.AssertWasCalled(x => x.Send(new object()),
-//			//	o =>
-//			//		o.Constraints(
-//			//			Rhino.Mocks.Constraints.Is.Matching(
-//			//				new Predicate<object[]>(m => ((CalculateTimeZoneMessage) m[0]).TimeZoneCode == TimeZoneInfo.Local.Id))));
-//		}
+			}
 
-//		[Test]
-//		public void ShouldResendCalculateInitMessageWhenAgentBadgeDisabledForAllTeam()
-//		{
-//			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
-//			bussinessUnit.SetId(Guid.NewGuid());
+			using (_mock.Playback())
+			{
+				target.Consume(new BadgeCalculationInitMessage());
+			}
+		}
 
-//			var now = DateTime.Now;
-//			var message = new BadgeCalculationInitEvent
-//			{
-//				Timestamp = now,
-//				LogOnBusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
-//			};
-//			var timezoneList = new List<TimeZoneInfo> { TimeZoneInfo.Local };
+		[Test]
+		public void ShouldResendMessageIfNightlyIsRunning()
+		{
 
-//			currentUnitOfWorkFactory.Stub(x => x.Current()).Return(loggedOnUnitOfWorkFactory);
-//			badgeSettingRep.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam()).Return(
-//				new List<TeamGamificationSetting>());
-//			toggleManager.Stub(x => x.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
+			using (_mock.Record())
+			{
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
+				Expect.Call(toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
+				Expect.Call(_isTeamGamificationSettingsAvailable.Satisfy()).Return(true);
+				Expect.Call(_runningEtlJobChecker.NightlyEtlJobStillRunning()).Return(true);
+				Expect.Call(() => serviceBus.DelaySend(DateTime.Now, null)).IgnoreArguments();
+				Expect.Call(() => _uow.Dispose());
 
-//			businessUnitRepository.Stub(x => x.LoadAllTimeZones()).Return(timezoneList);
+			}
 
-//			target.Consume(message);
+			using (_mock.Playback())
+			{
+				target.Consume(new BadgeCalculationInitMessage());
+			}
+		}
 
-//			serviceBus.AssertWasCalled(x => x.DelaySend(DateTime.Now, new object()),
-//				o =>
-//					o.Constraints(
-//						Rhino.Mocks.Constraints.Is.Matching(new Predicate<DateTime>(m => m == now.Date.AddDays(1))),
-//						Rhino.Mocks.Constraints.Is.Matching(
-//							new Predicate<object[]>(m => ((BadgeCalculationInitEvent) m[0]).Identity == message.Identity))));
-//		}
-//	}
-//}
+		[Test]
+		public void ShouldPerformBadgeCalculations()
+		{
+
+			using (_mock.Record())
+			{
+				Expect.Call(currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
+				Expect.Call(toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
+				Expect.Call(_isTeamGamificationSettingsAvailable.Satisfy()).Return(true);
+				Expect.Call(_runningEtlJobChecker.NightlyEtlJobStillRunning()).Return(false);
+				Expect.Call(() => _performBadgeCalculation.Calculate(Guid.NewGuid(), false)).IgnoreArguments();
+				Expect.Call(() => serviceBus.DelaySend(DateTime.Now, null)).IgnoreArguments();
+				Expect.Call(() => _uow.PersistAll());
+				Expect.Call(() => _uow.Dispose());
+
+			}
+
+			using (_mock.Playback())
+			{
+				target.Consume(new BadgeCalculationInitMessage());
+			}
+		}
+	}
+}
