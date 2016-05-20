@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 
 			WithAnalyticsUnitOfWork.Do(() => Target.UpdateAbsence(analyticsAbsence));
 			WithAnalyticsUnitOfWork.Do(() => Target.Absences().Count.Should().Be.EqualTo(1));
-			var absenceFromDb = WithAnalyticsUnitOfWork.Get(() => Target.Absences().First(a => a.AbsenceCode == analyticsAbsence.AbsenceCode));
+			var absenceFromDb = WithAnalyticsUnitOfWork.Get(() => Target.Absences()).First(a => a.AbsenceCode == absenceCode);
 			absenceFromDb.AbsenceCode.Should().Be.EqualTo(analyticsAbsence.AbsenceCode);
 			absenceFromDb.AbsenceName.Should().Be.EqualTo(analyticsAbsence.AbsenceName);
 			absenceFromDb.AbsenceShortName.Should().Be.EqualTo(analyticsAbsence.AbsenceShortName);
