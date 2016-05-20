@@ -277,6 +277,7 @@
     <Compile Include="Cascading\SkillGroupPerActivityProvider.cs" />
     <Compile Include="Collection\SkillStaffPeriodDictionaryExtensions.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
+    <Compile Include="Common\MathExtended.cs" />
     <Compile Include="Forecasting\SkillStaffPeriodExtensions.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />

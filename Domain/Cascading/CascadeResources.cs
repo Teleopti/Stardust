@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 							var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 							if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 								continue;
-							var resourcesToMove = Math.Min(Math.Min(Math.Abs(skillToMoveToAbsoluteDifference), remainingOverstaff), remainingResourcesInGroup);
+							var resourcesToMove = MathExtended.Min(Math.Abs(skillToMoveToAbsoluteDifference), remainingOverstaff, remainingResourcesInGroup);
 							skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, resourcesToMove);
 							remainingResourcesInGroup -= resourcesToMove;
 							remainingOverstaff -= resourcesToMove;
