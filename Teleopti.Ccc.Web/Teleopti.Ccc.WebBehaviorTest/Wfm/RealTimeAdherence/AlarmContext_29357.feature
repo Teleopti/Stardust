@@ -33,11 +33,12 @@ Scenario: Late for work
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	Given the time is '2016-05-20 8:15:00'
 	When I view real time adherence for all agents on team 'Red'
-	Then I should see agent 'Pierre Baldi' status schedule
-	| Activity |
-	| <none>   |
-	| Phone    |
-	| Lunch    |
+	Then I should see agent status
+	| Field             | Value        |
+	| Name              | Pierre Baldi |
+	| Previous activity | <none>       |
+	| Activity          | Phone        |
+	| Next activity     | Lunch        |
 
 @OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Late back from lunch
@@ -45,7 +46,8 @@ Scenario: Late back from lunch
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	Given the time is '2016-05-20 13:15:00'
 	When I view real time adherence for all agents on team 'Red'
-	Then I should see agent 'Pierre Baldi' status schedule
-	| Activity |
-	| Lunch    |
-	| Phone    |
+	Then I should see agent status
+	| Field             | Value        |
+	| Name              | Pierre Baldi |
+	| Previous activity | Lunch        |
+	| Activity          | Phone        |
