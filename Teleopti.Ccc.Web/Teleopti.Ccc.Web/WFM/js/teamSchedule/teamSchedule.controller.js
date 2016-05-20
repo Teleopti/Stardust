@@ -1,11 +1,11 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$q', '$translate', 'TeamSchedule',
+	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$scope', '$q', '$translate', 'TeamSchedule',
 		'GroupScheduleFactory', 'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts',
 		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', 'ActivityService', 'guidgenerator', 'NoticeService', TeamScheduleController]);
 
-	function TeamScheduleController($q, $translate, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
+	function TeamScheduleController($scope, $q, $translate, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
 		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc, ActivityService, guidgenerator, NoticeService) {
 
 		var vm = this;

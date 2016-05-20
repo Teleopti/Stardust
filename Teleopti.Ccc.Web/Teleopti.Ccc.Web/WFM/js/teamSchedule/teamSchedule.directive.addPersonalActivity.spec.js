@@ -32,103 +32,53 @@
 	}));
 
 	it('add-personal-activity should render correctly', function () {
-
-		var html = '<teamschedule-command-container><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-
-		var target = $compile(html)(scope);
-
-		scope.$apply();
-		var result = target[0].querySelector('.add-personal-activity');
-		expect(result).not.toBeNull();
+		var result = setUp();
+		
+		expect(result.commandControl).not.toBeNull();
 	});
 
 	it('add-personal-activity should get date from container', function () {
+		var result = setUp();
 
-		var date = moment('2016-06-15').toDate();
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
-
-		var target = $compile(html)(scope);
-
-		scope.$apply();
-
-		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
-
-		expect(moment(vm.referenceDay()).format('YYYY-MM-DD')).toBe('2016-06-15');
+		expect(moment(result.commandControl.referenceDay()).format('YYYY-MM-DD')).toBe('2016-06-15');
 	});
 
 	it('should load activity list', function () {
-		var date = new Date('2016-06-15T00:00:00Z');
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
+		var result = setUp();
 
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
+		var activities = result.container[0].querySelectorAll('.activity-selector .activity-option-item');
 
-		var target = $compile(html)(scope);
-		scope.$apply();
-
-		var result = target[0].querySelectorAll('.activity-selector .activity-option-item');
-
-		expect(result.length).toBe(5);
+		expect(activities.length).toBe(5);
 	});
 
 	it('should see a disabled button when no activity selected', function () {
-		var date = new Date('2016-06-15T00:00:00Z');
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
+		var result = setUp();
 
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
-
-		var target = $compile(html)(scope);
-		scope.$apply();
-
-		var applyButton = angular.element(target[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
 	it('should see a disabled button when time range input is invalid', function () {
-		var date = new Date('2016-06-15T00:00:00Z');
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
+		var result = setUp();
 
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
-
-		var target = $compile(html)(scope);
-		scope.$apply();
-
-		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
-
-		vm.timeRange = {
+		result.commandControl.timeRange = {
 			startTime: new Date('2016-06-15T08:00:00Z'),
 			endTime: new Date('2016-06-15T07:00:00Z')
 		};
 
-		scope.$apply();
+		result.scope.$apply();
 
-		var applyButton = angular.element(target[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
 	it('should not allow to add personal activity if time range is not correct', function () {
-		var date = new Date('2016-06-15T00:00:00Z');
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
+		var result = setUp();
 
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
-
-		var target = $compile(html)(scope);
-		scope.$apply();
-
-		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
+		var vm = result.commandControl;
 
 		vm.isNextDay = true;
 		vm.disableNextDay = false;
@@ -146,17 +96,9 @@
 	});
 
 	it('should see a disabled button when anyone in selected is not allowed to add current activity', function () {
-		var date = new Date('2016-06-15T00:00:00Z');
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
+		var result = setUp();
 
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
-
-		var target = $compile(html)(scope);
-		scope.$apply();
-
-		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
+		var vm = result.commandControl;
 
 		vm.isNextDay = true;
 		vm.disableNextDay = false;
@@ -176,37 +118,16 @@
 				scheduleEndTime: '2016-06-16T09:00:00Z'
 			}];
 
-		var applyButton = angular.element(target[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 		expect(vm.isInputValid()).toBe(false);
 	});
 
-	it('should call add personal activity when click apply with correct data', inject(function (ReloadScheduleEvent) {
-		var date = new Date('2016-06-15T00:00:00Z');
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
-		scope.eventMonitor = null;
-		scope.$on(ReloadScheduleEvent, function (event, data) {
-			scope.eventMonitor = data.personIds;
-		});
-	
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
-
-		var target = $compile(html)(scope);
-
-		scope.$apply();
-
-		var monitorInCb = 0;
-		function actionCb() {
-			monitorInCb = 1;
-		}
-
-		target.isolateScope().vm.setActionCb('AddPersonalActivity', actionCb);
-
-		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
+	it('should call add personal activity when click apply with correct data',function() {
+		var result = setUp();
+		var vm = result.commandControl;
 
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
@@ -228,12 +149,12 @@
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
-		scope.$apply();
+		result.scope.$apply();
 
-		var applyButton = angular.element(target[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
 		applyButton.triggerHandler('click');
 
-		scope.$apply();
+		result.scope.$apply();
 
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 		expect(activityData).not.toBeNull();
@@ -243,9 +164,90 @@
 		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).format('YYYY-MM-DDTHH:mm:00'));
 		expect(activityData.Date).toEqual(vm.referenceDay());
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
-		expect(monitorInCb).toEqual(1);
-		expect(scope.eventMonitor.length).toEqual(vm.selectedAgents.length);
+	});
+
+	it('should fire reload schedule event after calling add personal activity', inject(function (ReloadScheduleEvent) {
+		var result = setUp();
+
+		var eventMonitor = null;
+		result.scope.$on(ReloadScheduleEvent, function(e, d) {
+			eventMonitor = d;
+		});
+
+		var vm = result.commandControl;
+
+		vm.isNextDay = false;
+		vm.disableNextDay = false;
+		vm.timeRange = {
+			startTime: new Date('2016-06-15T08:00:00Z'),
+			endTime: new Date('2016-06-15T16:00:00Z')
+		};
+
+		vm.selectedAgents = [
+			{
+				personId: 'agent1',
+				name: 'agent1',
+				scheduleEndTime: '2016-06-15T17:00:00Z'
+			}, {
+				personId: 'agent2',
+				name: 'agent2',
+				scheduleEndTime: '2016-06-15T17:00:00Z'
+			}];
+
+		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+
+		result.scope.$apply();
+
+		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
+		applyButton.triggerHandler('click');
+
+		result.scope.$apply();
+
+		expect(eventMonitor.personIds.length).toEqual(2);
 	}));
+
+	it('should invoke action callback after calling add personal activity', function () {
+		var result = setUp();
+
+		var cbMonitor = null;
+		function actionCb() {
+			cbMonitor = true;
+		}
+
+		result.container.isolateScope().vm.setActionCb('AddPersonalActivity', actionCb);
+
+		var vm = result.commandControl;
+
+		vm.isNextDay = false;
+		vm.disableNextDay = false;
+		vm.timeRange = {
+			startTime: new Date('2016-06-15T08:00:00Z'),
+			endTime: new Date('2016-06-15T16:00:00Z')
+		};
+
+		vm.selectedAgents = [
+			{
+				personId: 'agent1',
+				name: 'agent1',
+				scheduleEndTime: '2016-06-15T17:00:00Z'
+			}, {
+				personId: 'agent2',
+				name: 'agent2',
+				scheduleEndTime: '2016-06-15T17:00:00Z'
+			}];
+
+		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+
+		result.scope.$apply();
+
+		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
+		applyButton.triggerHandler('click');
+
+		result.scope.$apply();
+
+		expect(cbMonitor).toBeTruthy();
+	});
+
 
 	it('should have correct default start time when no other shifts', function () {
 
@@ -297,6 +299,34 @@
 		var result = vm.getDefaultActvityStartTime();
 		expect(result.getHours()).toBe(11);
 	});
+
+	function setUp(inputDate) {
+		var date;
+		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
+		var scope = $rootScope.$new();
+
+		if (inputDate == null) 
+			 date = moment('2016-06-15').toDate();
+		else
+			date = inputDate;
+			
+		scope.curDate = date;
+		fakeActivityService.setAvailableActivities(getAvailableActivities());
+
+		var container = $compile(html)(scope);
+
+		scope.$apply();
+
+		var commandControl = angular.element(container[0].querySelector(".add-personal-activity")).scope().vm;
+
+		var obj = {
+			container: container,
+			commandControl: commandControl,
+			scope: scope
+		};
+
+		return obj;
+	}
 
 	function FakeScheduleManagementService() {
 		var latestEndTime = null;
