@@ -16,9 +16,12 @@
 		});
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$compile_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
+		$httpBackend = _$httpBackend_;
+
+		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
 	it('add-personal-activity should render correctly', function () {
@@ -44,9 +47,9 @@
 
 		scope.$apply();
 
-		var result = angular.element(target[0].querySelector('.add-personal-activity'));
+		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
 
-		expect(moment(result.scope().getDate()).format('YYYY-MM-DD')).toBe('2016-06-15');
+		expect(moment(vm.referenceDay()).format('YYYY-MM-DD')).toBe('2016-06-15');
 	});
 
 	it('should load activity list', function () {
@@ -173,20 +176,21 @@
 		expect(vm.isInputValid()).toBe(false);
 	});
 
-	xit('should call add personal activity when click apply with correct data', function () {
+	it('should call add personal activity when click apply with correct data', function () {
 		var date = new Date('2016-06-15T00:00:00Z');
 		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 		scope.curDate = date;
-
+		
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
 		var target = $compile(html)(scope);
+		
 		scope.$apply();
 
 		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
 
-		vm.isNextDay = true;
+		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.timeRange = {
 			startTime: new Date('2016-06-15T08:00:00Z'),
@@ -214,12 +218,15 @@
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonIds.length).toEqual(2);
-		expect(activityData.ActivityId).toEqual('472e02c8-1a84-4064-9a3b-9b5e015ab3c6');
-		//expect(new Date(activityData.StartTime)).toEqual(vm.timeRange.startTime);
-		//expect(new Date(activityData.EndTime)).toEqual(vm.timeRange.endTime);
-		expect(activityData.Date).toEqual(scope.getSelectedDate());
-		expect(activityData.TrackedCommandInfo.TrackId).toEqual("B4A88909-A1A0-4672-A7A3-14909B2C7673");
+		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
+		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).format('YYYY-MM-DDTHH:mm:00'));
+		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).format('YYYY-MM-DDTHH:mm:00'));
+		expect(activityData.Date).toEqual(vm.referenceDay());
+		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
+
+
+
 
 	function getAvailableActivities() {
 		return [

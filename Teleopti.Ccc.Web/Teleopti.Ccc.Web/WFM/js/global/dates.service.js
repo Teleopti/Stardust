@@ -7,6 +7,7 @@
 
 	function WFMDate(CurrentUserInfo) {
 		var nowDate = new Date();
+		var tick = 15;
 		this.setNowDate = function(date) {
 			nowDate = date;
 		}
@@ -19,6 +20,11 @@
 		this.nowInUserTimeZone = function () {
 			return moment(this.nowMoment(), CurrentUserInfo.DefaultTimeZone);
 		}
-	}
+		this.getNextTick= function() {
+			var minutes = Math.ceil(nowInUserTimeZone.minute() / tick) * tick;
+			var start = nowInUserTimeZone.startOf('hour').minutes(minutes);
 
+			return start.format();
+		}
+	}
 })();

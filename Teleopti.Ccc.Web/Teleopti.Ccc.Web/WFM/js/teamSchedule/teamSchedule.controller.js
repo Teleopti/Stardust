@@ -145,6 +145,7 @@
 
 		vm.defaultNewActivityStart = function() {
 			var nowInUserTimeZone = WFMDateSvc.nowInUserTimeZone();
+			
 			if (vm.scheduleDateMoment().format('YYYY-MM-DD') == nowInUserTimeZone.format('YYYY-MM-DD')) {
 				var minutes = Math.ceil(nowInUserTimeZone.minute() / 15) * 15;
 				var start = nowInUserTimeZone.startOf('hour').minutes(minutes);

@@ -14,9 +14,12 @@
 		}
 	}
 
-	function teamscheduleCommandContainerCtrl() {
+	teamscheduleCommandContainerCtrl.$inject = ['guidgenerator'];
+
+	function teamscheduleCommandContainerCtrl(guidgenerator) {
 		var vm = this;
-		vm.getDate = function() { return vm.date; };
+		vm.getDate = function () { return vm.date; };
+		vm.getTrackId = guidgenerator.newGuid;
 
 	}
 })();

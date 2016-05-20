@@ -102,10 +102,38 @@
 				return latestStart;
 			};
 
+			svc.getLatestPreviousDayOvernightShiftEnd = function (scheduleDateMoment, selectedPersonIds) {
+				var previousDayShifts = [];
+
+				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
+					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
+						previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function(shift) {
+							return shift.Projections.length > 0
+								&& new Date(shift.Date.toDate().toDateString()) < new Date(scheduleDateMoment.toDate().toDateString());
+						}));
+					}
+				});
+
+				if (previousDayShifts.length == 0) return null;
+
+				var latestEndTimeMoment = null;
+				
+				previousDayShifts.forEach(function(shift) {
+					shift.Projections.forEach(function(projection) {
+						var projectionEndMoment = moment(projection.Start).add(projection.Minutes, 'minute');
+						if (latestEndTimeMoment === null || latestEndTimeMoment < projectionEndMoment)
+							latestEndTimeMoment = projectionEndMoment;
+					});
+				});
+
+				return latestEndTimeMoment ? latestEndTimeMoment.toDate() : null;
+			}
+
 			svc.getLatestStartTimeOfSelectedScheduleProjection = function (scheduleDateMoment, selectedPersonIds) {
 				var latestStart = 0;
 				var projectionShiftLayerIds = [];
 				var currentDayShifts = [];
+
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
 						currentDayShifts = currentDayShifts.concat(schedule.Shifts.filter(function (shift) {

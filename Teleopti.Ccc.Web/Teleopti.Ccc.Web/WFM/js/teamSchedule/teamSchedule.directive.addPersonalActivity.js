@@ -3,16 +3,16 @@
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'guidgenerator', 'ActivityService', 'PersonSelection'];
+	addPersonalActivityCtrl.$inject = ['$scope', 'guidgenerator', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement'];
 
-	function addPersonalActivityCtrl($scope, guidgenerator, activityService, personSelectionSvc) {
+	function addPersonalActivityCtrl($scope, guidgenerator, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc) {
 		var vm = this;
 
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.notAllowedNameListString = "";
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
-
+		
 		vm.timeRange = {
 			startTime: new Date(),
 			endTime: new Date()
@@ -39,17 +39,31 @@
 		}
 
 		vm.addPersonActivity = function () {
-			var trackId = guidgenerator.newGuid();
-			
-			//activityService.addPersonActivity({
-			//	PersonIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
-			//	Date: $scope.getDate(),
-			//	StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
-			//	EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
-			//	ActivityId: vm.selectedActivityId,
-			//	TrackedCommandInfo: { TrackId: trackId }
-			//});
+			activityService.addPersonActivity({
+				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
+				Date: vm.referenceDay(),
+				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
+				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
+				ActivityId: vm.selectedActivityId,
+				TrackedCommandInfo: { TrackId: vm.trackId }
+			});
 		};
+
+		function getDefaultActvityStartTime() {
+			var curDateMoment = moment(vm.referenceDay());
+			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, vm.selectedAgents);
+			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, vm.selectedAgents);
+
+			var defaultStart = null;
+			if (overnightEnds !== null) {
+				defaultStart = overnightEnds;
+			}
+
+			if (wFMDateSvc.nowInUserTimeZone().format('YYYY-MM-DD') === moment(vm.referenceDay).format('YYYY-MM-DD')) {
+				wFMDateSvc.getNextTick();
+			}
+
+		}
 	}
 
 	function addPersonalActivity() {
@@ -68,7 +82,8 @@
 			var containerCtrl = ctrls[0],
 				selfCtrl = ctrls[1];
 
-			scope.getDate = containerCtrl.getDate;
+			scope.vm.referenceDay = containerCtrl.getDate;
+			scope.vm.trackId = containerCtrl.getTrackId();
 		}
 	}
 })();
