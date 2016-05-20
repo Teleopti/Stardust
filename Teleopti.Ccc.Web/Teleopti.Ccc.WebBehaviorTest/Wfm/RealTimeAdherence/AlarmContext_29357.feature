@@ -6,6 +6,7 @@
 Background:
 	Given there is a switch
 	And there is an activity named 'Phone'
+	And there is an activity named 'Lunch'
 	And there is a site named 'Paris'
 	And there is a team named 'Red' on site 'Paris'
 	And Pierre Baldi has a person period with
