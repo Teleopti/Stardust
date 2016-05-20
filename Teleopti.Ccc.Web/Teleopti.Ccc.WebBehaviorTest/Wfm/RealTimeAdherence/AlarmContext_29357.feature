@@ -22,10 +22,11 @@ Background:
 	| Next activity start time | 2016-05-20 12:00 |
 	| Next activity end time   | 2016-05-20 13:00 |
 	And there is a rule with 
-	| Field           | Value        |
-	| Activity        | Phone        |
-	| Phone state     | LoggedOut    |
-	| Name            | Not adhering |
+	| Field       | Value        |
+	| Activity    | Phone        |
+	| Phone state | LoggedOut    |
+	| Name        | Not adhering |
+	| Is alarm    | true         |
 
 @OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Late for work
@@ -38,7 +39,6 @@ Scenario: Late for work
 	| Name              | Pierre Baldi |
 	| Previous activity | <none>       |
 	| Activity          | Phone        |
-	| Next activity     | Lunch        |
 
 @OnlyRunIfEnabled('RTA_AlarmContext_29357')
 Scenario: Late back from lunch
@@ -51,3 +51,14 @@ Scenario: Late back from lunch
 	| Name              | Pierre Baldi |
 	| Previous activity | Lunch        |
 	| Activity          | Phone        |
+
+@OnlyRunIfEnabled('RTA_AlarmContext_29357')
+Scenario: Early lunch
+	Given the time is '2016-05-20 12:45:00'
+	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
+	When I view real time adherence for all agents on team 'Red'
+	Then I should see agent status
+	| Field         | Value        |
+	| Name          | Pierre Baldi |
+	| Activity      | Phone        |
+	| Next Activity | Lunch        |
