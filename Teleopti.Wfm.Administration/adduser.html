@@ -1,4 +1,4 @@
-﻿<div ng-controller="adduserController as vm" style="margin-left: 50px; margin-right: 50px"> 
+﻿<div ng-controller="adduserController as vm" style="margin-left: 50px; margin-right: 50px">
     <div class="row">
         <div class="col-md-12" ng-show="loginVm.FirstUser == false">
             <a style="float: left; padding-top: 25px; padding-right: 50px" href="#users"><img alt="back" title="Back to Users" src="Content/images/left_round.png"/></a>
@@ -42,9 +42,10 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div style="margin-top: 30px" class="col-md-6">
-            <button class="btn btn-primary btn-default" ng-click="vm.save()">Save</button>
+            <button class="btn btn-primary btn-default" ng-disabled="!vm.SaveEnabled" ng-click="vm.save()">Save</button>
             <br/>
             <label class="ErrorLabel">{{vm.ErrorMessage}}</label>
         </div>

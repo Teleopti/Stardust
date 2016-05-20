@@ -28,7 +28,7 @@
 	</div>
 	<div class="row">
 		<div style="margin-top: 30px" class="col-md-6">
-			<button class="btn btn-primary btn-default" ng-click="vm.save()">Save</button>
+			<button class="btn btn-primary btn-default" ng-disabled="!vm.SaveEnabled" ng-click="vm.save()">Save</button>
 			<br />
 			<label class="ErrorLabel">{{vm.Message}}</label>
 		</div>
