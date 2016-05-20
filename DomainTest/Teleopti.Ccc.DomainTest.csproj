@@ -190,7 +190,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceTests\AnalyticsShiftCategoryUpdaterTests.cs" />
+    <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ActivityTests\ActivityChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />

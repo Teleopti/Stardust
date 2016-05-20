@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 
 	public class ShiftCategoryDeletedEvent : EventWithInfrastructureContext
 	{
+		public Guid ShiftCategoryId { get; set; }
 	}
 }

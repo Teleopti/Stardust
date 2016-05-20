@@ -9,7 +9,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradayShiftCategory_38718)]
 	public class AnalyticsShiftCategoryUpdater :
@@ -69,9 +69,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 			};
 		}
 
+		[AnalyticsUnitOfWork]
 		public virtual void Handle(ShiftCategoryDeletedEvent @event)
 		{
-			//throw new NotImplementedException();
+			logger.Debug($"Consuming {nameof(ShiftCategoryDeletedEvent)} for shift category id = {@event.ShiftCategoryId}. (Message timestamp = {@event.Timestamp})");
+			var analyticsShiftCategory = _analyticsShiftCategoryRepository.ShiftCategories().FirstOrDefault(a => a.ShiftCategoryCode == @event.ShiftCategoryId);
+
+			if (analyticsShiftCategory == null)
+				return;
+
+			// Delete
+			_analyticsShiftCategoryRepository.UpdateShiftCategory(new AnalyticsShiftCategory
+			{
+				ShiftCategoryCode = analyticsShiftCategory.ShiftCategoryCode,
+				ShiftCategoryName = analyticsShiftCategory.ShiftCategoryName,
+				ShiftCategoryShortname = analyticsShiftCategory.ShiftCategoryShortname,
+				DisplayColor = analyticsShiftCategory.DisplayColor,
+				BusinessUnitId = analyticsShiftCategory.BusinessUnitId,
+				DatasourceId = 1,
+				DatasourceUpdateDate = analyticsShiftCategory.DatasourceUpdateDate,
+				IsDeleted = true
+			});
 		}
 	}
 }
