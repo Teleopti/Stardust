@@ -6942,6 +6942,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
 				// ReSharper disable once LocalizableElement
 				toolStripStatusLabelStatus.Text = "Cascading";
+
+				_skillIntradayGridControl.Invalidate(true);
+				_skillDayGridControl.Invalidate(true);
+				_skillWeekGridControl.Invalidate(true);
+				_skillMonthGridControl.Invalidate(true);
+				_skillFullPeriodGridControl.Invalidate(true);
+				refreshChart();
 				Refresh();
 			}
 
