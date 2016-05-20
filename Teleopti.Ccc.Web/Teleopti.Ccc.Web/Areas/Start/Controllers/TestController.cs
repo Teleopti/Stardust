@@ -100,9 +100,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 			clearAllConnectionPools();
 
-			_rta.Touch("TestData");
-			_tenantTickEventPublisher.EnsurePublishings();
-
 			return View("Message", new TestMessageViewModel
 			{
 				Title = "Setting up for scenario",
@@ -115,9 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 					"Cancelling and waiting for hangfire jobs to finish",
 					"Clearing all connection pools",
 					"Restoring Ccc7 database",
-					"Restoring Analytics database",
-					"Initializing rta",
-					"Ensuring recurring hangfire jobs"
+					"Restoring Analytics database"
 				}
 			});
 		}
@@ -210,7 +205,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			else
 				_mutateNow.Is(new DateTime(ticks));
 
-			_hangfire.TriggerReccuringJobs();
+			fakeRecurringJobs();
 
 			return View("Message", new TestMessageViewModel
 			{
@@ -218,7 +213,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				Message = "Time is set to " + _now.UtcDateTime() + " in UTC"
 			});
 		}
-		
+
+		private void fakeRecurringJobs()
+		{
+			_rta.Touch("TestData");
+			_tenantTickEventPublisher.WithPublishingsForTest(() =>
+			{
+				_hangfire.TriggerReccuringJobs();
+			});
+		}
+
 		private static void clearAllConnectionPools()
 		{
 			SqlConnection.ClearAllPools();

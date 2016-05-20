@@ -33,6 +33,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_publisher.PublishMinutely(new TenantMinuteTickEvent());
 			_publisher.PublishHourly(new TenantHourTickEvent());
 		}
+		
+		public void WithPublishingsForTest(Action action)
+		{
+			_publisher.RemoveAllPublishings();
+			_publisher.PublishMinutely(new TenantMinuteTickEvent());
+			_publisher.PublishHourly(new TenantHourTickEvent());
+
+			action.Invoke();
+
+			_publisher.RemoveAllPublishings();
+
+		}
 	}
 
 }
