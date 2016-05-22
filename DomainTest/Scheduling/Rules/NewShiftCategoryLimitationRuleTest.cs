@@ -4,17 +4,27 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Time;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-    [TestFixture]
+    [DomainTest]
     public class NewShiftCategoryLimitationRuleTest
     {
-        private MockRepository _mocks;
+		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+
+		private MockRepository _mocks;
         private INewBusinessRule _target;
         private IShiftCategoryLimitationChecker _limitationChecker;
         private Dictionary<IPerson, IScheduleRange> _dic;
@@ -43,6 +53,54 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             _permissionInformation = _mocks.StrictMock<IPermissionInformation>();
             _timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
         }
+
+	    [Test]
+	    public void ShouldValidateEachShiftCategoryIsolatedFromOthersBug38715()
+	    {
+			var scenario = new Scenario("_");
+			var phoneActivity = new Activity("_");
+			var dateOnly = new DateOnly(2016,05,23);
+			var shiftCategory1 = new ShiftCategory("_").WithId();
+			var shiftCategory2 = new ShiftCategory("_").WithId();
+
+			var agent = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), dateOnly);
+		    var schedulePeriod = agent.SchedulePeriod(dateOnly);
+			schedulePeriod.PeriodType = SchedulePeriodType.Week;
+			schedulePeriod.AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory1) {MaxNumberOf = 0, Weekly = false});
+			schedulePeriod.AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategory2) {MaxNumberOf = 0, Weekly = false});
+
+		    var ass1 = new PersonAssignment(agent, scenario, dateOnly); //should alert
+		    ass1.AddActivity(phoneActivity, new TimePeriod(8, 0, 16, 0));
+			ass1.SetShiftCategory(shiftCategory1);
+
+			var ass2 = new PersonAssignment(agent, scenario, dateOnly.AddDays(1)); //should alert
+			ass2.AddActivity(phoneActivity, new TimePeriod(8, 0, 16, 0));
+			ass2.SetShiftCategory(shiftCategory2);
+
+		    var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly.AddWeeks(1)),
+			    new[] {agent}, new[] {ass1, ass2}, Enumerable.Empty<ISkillDay>());
+
+		    var scheduleDayToModify = stateHolder.Schedules.SchedulesForDay(dateOnly).First();
+			scheduleDayToModify.CreateAndAddPublicNote("_");
+
+		    var bussinesRuleCollection = NewBusinessRuleCollection.All(stateHolder.SchedulingResultState);
+		    var brokenRules =  stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDayToModify, bussinesRuleCollection,
+			    new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+
+		    foreach (var businessRuleResponse in brokenRules)
+		    {
+			    bussinesRuleCollection.Remove(businessRuleResponse);
+		    }
+
+			stateHolder.Schedules.Modify(ScheduleModifier.Scheduler, scheduleDayToModify, bussinesRuleCollection,
+				new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
+
+			var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
+		    scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(1);
+
+			scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1));
+			scheduleDay.BusinessRuleResponseCollection.Count.Should().Be.EqualTo(1);
+		}
 
         [Test]
         public void CanCreateNewShiftCategoryLimitationRule()

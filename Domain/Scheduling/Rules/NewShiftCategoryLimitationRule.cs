@@ -51,15 +51,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     IScheduleRange currentSchedules = rangeClones[person];
                     var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
                     var oldResponseCount = oldResponses.Count();
-                    foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
+					foreach (DateOnly day in period.DayCollection())
+					{
+						oldResponses.Remove(createResponse(person, day, "remove"));
+					}
+					foreach (var shiftCategoryLimitation in schedulePeriod.ShiftCategoryLimitationCollection())
                     {
                         if (!shiftCategoryLimitation.Weekly)
                         {
-                            foreach (DateOnly day in period.DayCollection())
-                            {
-                                oldResponses.Remove(createResponse(person, day,"remove"));
-                            }
-                            IList<DateOnly> datesWithCategory;
+							IList<DateOnly> datesWithCategory;
                             if (_limitationChecker.IsShiftCategoryOverPeriodLimit(shiftCategoryLimitation, period, currentSchedules, out datesWithCategory))
                             {
                                 string message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture,
