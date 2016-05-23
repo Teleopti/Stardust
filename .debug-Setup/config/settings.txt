@@ -32,7 +32,6 @@ $(TeleoptiClaimProvider)|<add identifier="urn:Teleopti" displayName="Teleopti" u
 $(UrlAuthenticationBridge)|http://localhost:52857/
 $(URL)|http://localhost:52858/
 $(CONFIGURATION_FILES_PATH)|c:\nhib
-$(USE_PERSISTENT_CRYPTOKEYS)|false
 $(SIGNALR_BACKPLANE_TYPE)|
 $(NEXT_ACTIVITY_TIME_TO_STAY)|30
 <compilation debug="false"|<compilation debug="true"

@@ -232,7 +232,6 @@ function SetDefaultSettings{
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(DEFAULT_IDENTITY_PROVIDER)" -content "`$(DEFAULT_IDENTITY_PROVIDER)|Teleopti"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WindowsClaimProvider)" -content "`$(WindowsClaimProvider)|"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(TeleoptiClaimProvider)" -content "`$(TeleoptiClaimProvider)|<add identifier=`"urn:Teleopti`" displayName=`"Teleopti`" url=`"https://$DataSourceName.teleopticloud.com/Web/sso/`" protocolHandler=`"RelativeOpenIdHandler`" />"
-	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(USE_PERSISTENT_CRYPTOKEYS)" -content "`$(USE_PERSISTENT_CRYPTOKEYS)|false"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(SIGNALR_BACKPLANE_TYPE)" -content "`$(SIGNALR_BACKPLANE_TYPE)|"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(SIGNALR_BACKPLANE_PREFIX)" -content "`$(SIGNALR_BACKPLANE_PREFIX)|$DataSourceName"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(SDK_CRED_PROT)" -content "`$(SDK_CRED_PROT)|None"

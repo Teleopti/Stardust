@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
 			builder.RegisterType<OpenIdProviderWapper>().As<IOpenIdProviderWapper>().SingleInstance();
 			builder.RegisterType<ProviderEndpointWrapper>().As<IProviderEndpointWrapper>().SingleInstance();
 			var usePersistentCryptoKeys = ConfigurationManager.AppSettings["UsePersistentCryptoKeys"];
-			if (!string.IsNullOrEmpty(usePersistentCryptoKeys) && usePersistentCryptoKeys.ToLowerInvariant() == "true")
+			if (string.IsNullOrEmpty(usePersistentCryptoKeys) || usePersistentCryptoKeys.ToLowerInvariant() != "false")
 			{
 				builder.RegisterType<SqlProviderApplicationStore>().As<IOpenIdApplicationStore>().SingleInstance();
 			}

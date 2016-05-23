@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 			builder.RegisterType<Now>().As<INow>().SingleInstance();
 			builder.Register(context => configReader).As<IConfigReader>().SingleInstance();
 			var usePersistentCryptoKeys = ConfigurationManager.AppSettings["UsePersistentCryptoKeys"];
-			if (!string.IsNullOrEmpty(usePersistentCryptoKeys) && usePersistentCryptoKeys.ToLowerInvariant() == "true")
+			if (string.IsNullOrEmpty(usePersistentCryptoKeys) || usePersistentCryptoKeys.ToLowerInvariant() != "false")
 			{
 				builder.RegisterType<SqlProviderApplicationStore>().As<IOpenIdApplicationStore>().SingleInstance();
 				builder.RegisterType<OpenIdProvider>().SingleInstance();
