@@ -507,7 +507,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 				.Should().Be.EqualTo(0);
 			skillBDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(-1);
-			skillBDay.SkillStaffPeriodCollection.First().AbsoluteDifference
+			skillCDay.SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
 	}
