@@ -6963,6 +6963,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void backgroundWorkerCascadingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
 			toolStripButtonCalculateCascading.Enabled = true;
+
+			toolStripButtonShowGraph.Enabled = true;
+			toolStripButtonShowGraph.Enabled = true;
+			toolStripButtonShowEditor.Enabled = true;
+			toolStripButtonShowPropertyPanel.Enabled = true;
+			toolStripButtonPeriodView.Enabled = true;
+			toolStripButtonWeekView.Enabled = true;
+			toolStripButtonSummaryView.Enabled = true;
+			toolStripButtonDayView.Enabled = true;
+			toolStripButtonShowResult.Enabled = true;
+
 			ribbonControlAdv1.Cursor = Cursors.Default;
 			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
 			// ReSharper disable once LocalizableElement
@@ -7019,6 +7030,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripExFilter.Enabled = false;
 
 
+				toolStripButtonShowGraph.Enabled = false;
+				toolStripButtonShowGraph.Enabled = false;
+				toolStripButtonShowEditor.Enabled = false;
+				toolStripButtonShowPropertyPanel.Enabled = false;
+				toolStripButtonShowResult.Enabled = false;
+				toolStripButtonPeriodView.Enabled = false;
+				toolStripButtonWeekView.Enabled = false;
+				toolStripButtonSummaryView.Enabled = false;
+				toolStripButtonDayView.Enabled = false;
+				
 				toolStripTabItemChart.Panel.Enabled = false;
 				toolStripTabItem1.Panel.Enabled = false;
 				toolStripMenuItemQuickAccessUndo.ShortcutKeys = Keys.None;
