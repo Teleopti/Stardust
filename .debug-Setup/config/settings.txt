@@ -32,7 +32,7 @@ $(TeleoptiClaimProvider)|<add identifier="urn:Teleopti" displayName="Teleopti" u
 $(UrlAuthenticationBridge)|http://localhost:52857/
 $(URL)|http://localhost:52858/
 $(CONFIGURATION_FILES_PATH)|c:\nhib
-$(SIGNALR_BACKPLANE_TYPE)|
+$(SIGNALR_BACKPLANE_TYPE)|sqlserver
 $(NEXT_ACTIVITY_TIME_TO_STAY)|30
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
