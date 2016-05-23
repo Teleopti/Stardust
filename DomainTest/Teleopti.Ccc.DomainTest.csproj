@@ -238,6 +238,7 @@
     <Compile Include="ApplicationLayer\RemovePartAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandlerTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
+    <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationTest.cs" />
     <Compile Include="Logon\ImpersonateSystemTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />
