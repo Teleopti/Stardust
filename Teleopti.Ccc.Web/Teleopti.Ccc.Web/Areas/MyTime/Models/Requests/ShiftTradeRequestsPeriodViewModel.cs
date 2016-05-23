@@ -21,6 +21,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	public class ShiftTradeRequestMiscSetting
 	{
 		public bool AnonymousTrading { get; set; }
-		public bool LockTrading { get; set; }
 	}
 }

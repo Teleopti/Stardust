@@ -8,7 +8,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -20,8 +19,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.CommandProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
@@ -35,14 +32,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	public class RequestsControllerTest
 	{
-		private ITimeFilterHelper _timeFilterHelper;
-
-		[SetUp]
-		public void Setup()
-		{
-			_timeFilterHelper = MockRepository.GenerateMock<ITimeFilterHelper>();
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnRequestsPartialView()
 		{
@@ -246,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var model = new ShiftTradeRequestsPeriodViewModel
 			{
 				HasWorkflowControlSet = true,
-				MiscSetting = new ShiftTradeRequestMiscSetting() { AnonymousTrading = true, LockTrading = true },
+				MiscSetting = new ShiftTradeRequestMiscSetting() { AnonymousTrading = true },
 				OpenPeriodRelativeStart = 2,
 				OpenPeriodRelativeEnd = 30,
 				NowYear = 2013,
@@ -262,7 +251,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			data.HasWorkflowControlSet.Should().Be.EqualTo(model.HasWorkflowControlSet);
 			data.MiscSetting.AnonymousTrading.Should().Be.EqualTo(model.MiscSetting.AnonymousTrading);
-			data.MiscSetting.LockTrading.Should().Be.EqualTo(model.MiscSetting.LockTrading);
 			data.OpenPeriodRelativeStart.Should().Be.EqualTo(model.OpenPeriodRelativeStart);
 			data.OpenPeriodRelativeEnd.Should().Be.EqualTo(model.OpenPeriodRelativeEnd);
 			data.NowYear = model.NowYear;
@@ -406,24 +394,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var data = (ShiftTradeRequestMiscSetting)result.Data;
 
 			data.AnonymousTrading.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldGetLockTrading()
-		{
-			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var model = new ShiftTradeRequestsPeriodViewModel
-			{
-				MiscSetting = new ShiftTradeRequestMiscSetting { LockTrading = true }
-			};
-
-			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel(Guid.Empty)).IgnoreArguments().Return(model);
-
-			var target = new RequestsController(modelFactory, null, null, null, null, new FakePermissionProvider(), null, null, null, null, null);
-			var result = target.GetShiftTradeRequestMiscSetting(Guid.Empty);
-			var data = (ShiftTradeRequestMiscSetting)result.Data;
-
-			data.LockTrading.Should().Be.True();
 		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)

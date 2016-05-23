@@ -136,8 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 					{
 						ret.MiscSetting = new ShiftTradeRequestMiscSetting()
 						{
-							AnonymousTrading = false,
-							LockTrading = false
+							AnonymousTrading = false
 						};
 					}
 				}

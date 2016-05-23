@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var shiftTradeRequest = MockRepository.GenerateMock<IShiftTradeRequest>();
 			requestRepository.Stub(x => x.Find(new Guid())).IgnoreArguments().Return(new PersonRequest(new Person()){Request = shiftTradeRequest});
 			var target = new RequestsViewModelFactory(null, null, null, null, provider, mapper, null, now, null, null, null, requestRepository);
-			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel(){MiscSetting = new ShiftTradeRequestMiscSetting(){AnonymousTrading = true, LockTrading = true}};
+			var shiftTradePeriodViewModel = new ShiftTradeRequestsPeriodViewModel(){MiscSetting = new ShiftTradeRequestMiscSetting(){AnonymousTrading = true}};
 			var workflowControlSet = new WorkflowControlSet();
 
 			provider.Stub(p => p.RetrieveUserWorkflowControlSet()).Return(workflowControlSet);
@@ -241,7 +241,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var result = target.CreateShiftTradePeriodViewModel(new Guid());
 
 			result.MiscSetting.AnonymousTrading.Should().Be.False();
-			result.MiscSetting.LockTrading.Should().Be.False();
 		}
 
 		[Test]

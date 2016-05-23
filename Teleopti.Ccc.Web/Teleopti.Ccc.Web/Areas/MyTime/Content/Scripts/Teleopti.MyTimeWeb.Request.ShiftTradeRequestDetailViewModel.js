@@ -34,7 +34,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		self.IsEditMessageEnabled();
 	};
 	self.isAnonymousTrading = ko.observable(false);
-	self.isLockTrading = ko.observable(false);
 	self.setMiscSetting = function(id) {
 		if (id != null) {
 			self.ajax.Ajax({
@@ -46,7 +45,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 				},
 				success: function(data) {				
 					self.isAnonymousTrading(data.AnonymousTrading);					
-					self.isLockTrading(data.LockTrading);
 				}
 			});
 		}
