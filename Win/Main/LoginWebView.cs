@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using EO.Base;
 using EO.WebBrowser;
 using log4net;
 using Syncfusion.Windows.Forms;
@@ -23,17 +24,19 @@ namespace Teleopti.Ccc.Win.Main
 			InitializeComponent();
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 			webView1.CertificateError += handlingCertificateErrors;
+			EO.Base.Runtime.Exception += handlingRuntimeErrors;
+		}
+
+		private void handlingRuntimeErrors(object sender, ExceptionEventArgs e)
+		{
+			_logger.Error("Error in the EO browser", e.ErrorException);
+			StartLogon();
 		}
 
 		private void handlingCertificateErrors(object sender, CertificateErrorEventArgs e)
 		{
-			showCertificateErrorMessage(e.Url);
-		}
-
-		private void showCertificateErrorMessage(string url)
-		{
-			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {url} </body></html>");
-			_logger.Error("The following url is missing a certificate. " + url);
+			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+			_logger.Error("The following url is missing a certificate. " + e.Url);
 		}
 
 		public void Warning(string warning)
@@ -136,6 +139,8 @@ namespace Teleopti.Ccc.Win.Main
 
 		public string ServerUrl { get; set; }
 	}
+
+
 
 	
 }

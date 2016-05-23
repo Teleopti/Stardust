@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Autofac;
+using EO.Base;
 using EO.WebBrowser;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -91,22 +92,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			webView1.CertificateError += handlingCertificateErrors;
+			webView1.CertificateError += handlingCertificateErrorsWebView1;
+			wfmWebView.CertificateError += handlingCertificateErrorsWfmWebView;
+			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
 		}
-
-		private void handlingCertificateErrors(object sender, CertificateErrorEventArgs e)
-		{
-			showCertificateErrorMessage(e.Url);
-		}
-
-		private void showCertificateErrorMessage(string url)
-		{
-			webView1.LoadCompleted -= WfmWebViewOnLoadCompleted;
-			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {url} </body></html>");
-			_logger.Error("The following url is missing a certificate. " + url);
-			webView1.LoadCompleted += WfmWebViewOnLoadCompleted;
-		}
-
+		
 		private void setBusinessUnitInWebView()
 		{
 			if (!wfmWebControl.Enabled) return;
@@ -929,6 +919,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			e.Menu.Items.Clear();
 		}
 
-		
+		private void handlingCertificateErrorsWfmWebView(object sender, CertificateErrorEventArgs e)
+		{
+			wfmWebView.LoadCompleted -= WfmWebViewOnLoadCompleted;
+			wfmWebView.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+			_logger.Error("The following url is missing a certificate. " + e.Url);
+			wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
+		}
+
+		private void handlingCertificateErrorsWebView1(object sender, CertificateErrorEventArgs e)
+		{
+			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+			_logger.Error("The following url is missing a certificate. " + e.Url);
+		}
+
+		private void handlingEoRuntimeErrors(object sender, ExceptionEventArgs e)
+		{
+			_logger.Error("Error in the EO browser", e.ErrorException);
+		}
 	}
 }
