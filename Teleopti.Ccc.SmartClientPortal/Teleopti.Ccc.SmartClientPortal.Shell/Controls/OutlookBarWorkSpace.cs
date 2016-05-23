@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Controls
             else
             {
                 _previewUrl = previewUrl.ToString();
-                tableLayoutPanel1.RowStyles[1].Height = 35F;
+                tableLayoutPanel1.RowStyles[1].Height = 45F;
             }
             this.tableLayoutPanel1.ResumeLayout();
 
