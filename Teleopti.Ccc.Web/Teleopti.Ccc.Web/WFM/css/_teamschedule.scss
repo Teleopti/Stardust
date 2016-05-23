@@ -302,7 +302,11 @@
 		}
 	}
 
-	.add-activity, .move-activity{
+	.teamschedule-command-container {
+		height: 100%;
+	}
+
+	.add-activity, .move-activity, .add-personal-activity {
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -316,14 +320,14 @@
 		}
     }
 
-    .add-activity{
+    .add-activity, .add-personal-activity {
 		.activity-selector{
 			width:100%;
 			min-height:20px;
 		}
 	}
 
-	md-content > button.wfm-btn {
+	md-content  button.wfm-btn {
 		min-height: 40px;
 		&:focus {
 			background-color: #007ACC;

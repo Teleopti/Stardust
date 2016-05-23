@@ -11,12 +11,12 @@ describe("[Test for TeamScheduleController]:", function() {
 
 	var nowDate = new Date("2015-10-26 12:16:00");
 
-	beforeEach(function() {
-		module('wfm.teamSchedule');
+	beforeEach(function() {		
 		module('externalModules');
 		module('wfm.notice');
 		module('shortcutsService');
 		module('wfmDate');
+		module('wfm.teamSchedule');
 
 		module(function($provide) {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);

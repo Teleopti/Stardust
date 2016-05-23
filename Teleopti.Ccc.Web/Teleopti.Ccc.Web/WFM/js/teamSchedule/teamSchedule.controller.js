@@ -1,12 +1,31 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', ['$scope', '$q', '$translate', 'TeamSchedule',
-		'GroupScheduleFactory', 'teamScheduleNotificationService', 'PersonSelection', 'ScheduleManagement', 'SwapShifts',
-		'PersonAbsence', 'Toggle', 'SignalR', 'dialogs', 'WFMDate', 'CommandCommon', 'ActivityService', 'guidgenerator', 'NoticeService', TeamScheduleController]);
+	angular.module('wfm.teamSchedule').controller('TeamScheduleCtrl', [
+		'$scope',
+		'$q',
+		'$translate',
+		'$mdSidenav',
+		'TeamSchedule',
+		'GroupScheduleFactory',
+		'teamScheduleNotificationService',
+		'PersonSelection',
+		'ScheduleManagement',				
+		'Toggle',
+		'SignalR',								
+		'NoticeService',
+		
 
-	function TeamScheduleController($scope, $q, $translate, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
-		scheduleMgmtSvc, swapShiftsSvc, personAbsenceSvc, toggleSvc, signalRSvc, dialogSvc, WFMDateSvc, CommandCommonSvc, ActivityService, guidgenerator, NoticeService) {
+		'PersonAbsence',
+		'SwapShifts',
+		'WFMDate',
+		'ActivityService',
+		'CommandCommon',
+		'guidgenerator',
+		TeamScheduleController]);
+
+	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
+		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService, personAbsenceSvc, swapShiftsSvc, WFMDateSvc, ActivityService, CommandCommonSvc, guidgenerator) {
 
 		var vm = this;
 
@@ -16,6 +35,29 @@
 		vm.scheduleDateFunction = function () {
 			return vm.scheudleDate;
 		};
+
+		vm.triggerCommand = function (label, needToOpenSidePanel) {			
+			if (needToOpenSidePanel) openSidePanel();
+			$scope.$broadcast('teamSchedule.init.command', {
+				activeCmd: label
+			});			
+		}
+
+		function openSidePanel() {
+			var commandContainerId = "teamschedule-command-container";
+			if (!$mdSidenav(commandContainerId).isOpen()) {
+				$mdSidenav(commandContainerId).toggle();
+			}
+
+			var unbindWatchPanel = $scope.$watch(function() {
+				return $mdSidenav(commandContainerId).isOpen();
+			}, function(newValue, oldValue) {
+				if (newValue !== oldValue && !newValue) {
+					$scope.$broadcast('teamSchedule.reset.command');
+					unbindWatchPanel();
+				}
+			});
+		}
 
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.toggleForSelectAgentsPerPageEnabled = false;
@@ -98,6 +140,7 @@
 
 		vm.loadSchedules = function() {
 			vm.isLoading = true;
+			
 			var params = getParamsForLoadingSchedules();
 			teamScheduleSvc.searchSchedules.query(params).$promise.then(function (result) {
 				scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment());

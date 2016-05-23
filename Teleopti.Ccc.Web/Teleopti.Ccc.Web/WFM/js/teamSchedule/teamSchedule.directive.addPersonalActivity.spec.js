@@ -255,32 +255,19 @@
 
 
 	it('should have correct default start time when no other shifts on today', function () {
-
 		var date = new Date(WFMDate.nowInUserTimeZone());
-
 		fakeScheduleManagementSvc.setLatestEndTime(null);
 		fakeScheduleManagementSvc.setLatestStartTime(null);
-	
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = date;
 
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
-
-		var target = $compile(html)(scope);
-
-		scope.$apply();
-
-		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
-
+		var result = setUp(date);
+		var vm = result.commandControl;
 		vm.selectedAgents = [];
 
-		var result = vm.getDefaultActvityStartTime();
-
+		var defaultStartTime = vm.getDefaultActvityStartTime();
 		var nextTick = new Date(WFMDate.getNextTickNoEarlierThanEight());
 
-		expect(result.getHours()).toBe(nextTick.getHours());
-		expect(result.getMinutes()).toBe(nextTick.getMinutes());
+		expect(defaultStartTime.getHours()).toBe(nextTick.getHours());
+		expect(defaultStartTime.getMinutes()).toBe(nextTick.getMinutes());
 	});
 
 	it('should have later default start time than previous day over night shift end', function () {
@@ -289,22 +276,16 @@
 		fakeScheduleManagementSvc.setLatestEndTime(date.clone().hour(10).toDate());
 		fakeScheduleManagementSvc.setLatestStartTime(date.clone().hour(9).toDate());
 
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
-		var scope = $rootScope.$new();
-		scope.curDate = new Date(WFMDate.nowInUserTimeZone());
-
-		fakeActivityService.setAvailableActivities(getAvailableActivities());
-
-		var target = $compile(html)(scope);
-		scope.$apply();
-		var vm = angular.element(target[0].querySelector(".add-personal-activity")).scope().vm;
-		var result = vm.getDefaultActvityStartTime();
-		expect(result.getHours()).toBe(11);
+		var result = setUp(date);
+		var vm = result.commandControl;
+	
+		var defaultStartTime = vm.getDefaultActvityStartTime();
+		expect(defaultStartTime.getHours()).toBe(11);
 	});
 
 	function setUp(inputDate) {
 		var date;
-		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
+		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 
 		if (inputDate == null) 
@@ -315,8 +296,10 @@
 		scope.curDate = date;
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
-		var container = $compile(html)(scope);
+		var container = $compile(html)(scope);	
+		scope.$apply();
 
+		container.isolateScope().vm.setActiveCmd('AddPersonalActivity');
 		scope.$apply();
 
 		var commandControl = angular.element(container[0].querySelector(".add-personal-activity")).scope().vm;

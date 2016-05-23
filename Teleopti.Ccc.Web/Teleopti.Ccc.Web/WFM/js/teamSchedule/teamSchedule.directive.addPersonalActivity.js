@@ -73,7 +73,6 @@
 					defaultStart = nextTickTime;
 				}
 			} else {
-				
 				if (latestShiftStart !== null) {
 					var latestShiftStartPlusOneHour = moment(latestShiftStart).add(1, 'hour').toDate();
 					if (latestShiftStartPlusOneHour >= defaultStart)
@@ -81,7 +80,6 @@
 				} 
 			}
 
-			
 			return defaultStart;
 		}
 
@@ -116,6 +114,11 @@
 				startTime: selfCtrl.getDefaultActvityStartTime(),
 				endTime: selfCtrl.getDefaultActvityEndTime()
 			};
+
+			scope.$on('teamSchedule.command.focus.default', function () {
+				var focusTarget = elem[0].querySelector('.focus-default');
+				if (focusTarget) angular.element(focusTarget).focus();
+			});
 		}
 	}
 })();

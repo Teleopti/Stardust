@@ -1,10 +1,10 @@
 ﻿<div class="add-personal-activity">
-	<div class="sidenav-header">{{'AddActivity'|translate}}</div>
+	<div class="sidenav-header">{{'AddPersonalActivity'|translate}}</div>
 	<md-content class="command-panel-content" layout-padding>
 		<form name="newPersonalActivityForm">
 			<h3>{{'PersonalActivity'|translate}}: </h3>
 			<div class="con-row">
-				<select class="activity-selector" ng-model="vm.selectedActivityId" required>
+				<select class="activity-selector focus-default" ng-model="vm.selectedActivityId" required>
 					<option class="activity-option" value="" disabled selected="">{{'SelectAnActivity'|translate}}</option>
 					<option class="activity-option-item" value="{{activity.Id}}" ng-repeat="activity in vm.availableActivities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
@@ -16,6 +16,8 @@
 		<button id="applyPersonalActivity" class="wfm-btn form-submit"
 				ng-class="{'wfm-btn-primary': newPersonalActivityForm.$valid, 'wfm-btn-primary-disabled': !(newPersonalActivityForm.$valid)}"
 				ng-disabled="newPersonalActivityForm.$valid ?'':'disabled'"
-				ng-click="vm.addPersonalActivity()"></button>
+				ng-click="vm.addPersonalActivity()">
+			{{'Apply' | translate}}
+		</button>
 	</md-content>
 </div>

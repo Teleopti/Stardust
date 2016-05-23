@@ -6,7 +6,8 @@
 		return {
 			restrict: 'E',
 			scope: {
-				configurations: '='
+				configurations: '=',
+				triggerCommand: '&?'
 			},
 			controller: ['$scope', '$mdSidenav', '$mdComponentRegistry', '$translate', 'PersonSelection', 'ShortCuts', 'keyCodes', 'NoticeService', teamscheduleCommandCtrl],
 			controllerAs: 'vm',
@@ -37,6 +38,22 @@
 				},
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
 				visible: function () { return vm.canActiveAddActivity(); }
+			},
+			{
+				label: "AddPersonalActivity",
+				shortcut: "Alt+T",
+				panelName: "add-personal-activity",
+				action: function () {				
+					if (vm.triggerCommand) {
+						vm.triggerCommand({
+							label: "AddPersonalActivity",
+							needToOpenSidePanel: true
+						});
+					}
+				},
+				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
+				visible: function () { return vm.canActiveAddPersonalActivity(); },
+				withCommandContainer: true
 			},
 			{
 				label: "MoveActivity",
@@ -75,6 +92,10 @@
 		vm.canActiveAddActivity = function () {
 			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
 		};
+
+		vm.canActiveAddPersonalActivity = function() {
+			return vm.toggles.AddPersonalActivityEnabled && vm.permissions.HasAddingPersonalActivityPermission;
+		}
 
 		vm.canActiveAddAbsence = function () {
 			return vm.toggles.AbsenceReportingEnabled
@@ -131,6 +152,10 @@
 		    $scope.$evalAsync();
 		};
 
+		vm.toggleCommandContainer = function(cmdName) {
+			$mdSidenav.toggle(cmdName);
+		};
+
 		vm.toggleCommandState = function (menuName) {
 			if (menuName !== undefined) {
 				$mdSidenav(menuName).toggle();
@@ -161,13 +186,13 @@
 			var currentCmd = vm.getCurrentCommand(currentCmdName);
 			if (currentCmd !== undefined) {
 				vm.commands.forEach(function (cmd) {
-					if (cmd.panelName.length > 0 && cmd.panelName !== currentCmd.panelName && $mdSidenav(cmd.panelName).isOpen()) {
+					if (!cmd.withCommandContainer && cmd.panelName.length > 0 && cmd.panelName !== currentCmd.panelName && $mdSidenav(cmd.panelName).isOpen()) {
 						$mdSidenav(cmd.panelName).close();
 					}
 				});
 			} else {
 				vm.commands.forEach(function (cmd) {
-					if (cmd.panelName.length > 0 && $mdSidenav(cmd.panelName).isOpen()) {
+					if (!cmd.withCommandContainer &&  cmd.panelName.length > 0 && $mdSidenav(cmd.panelName).isOpen()) {
 						$mdSidenav(cmd.panelName).close();
 					}
 				});
@@ -212,7 +237,14 @@
 			vm.toggles = vm.configurations.toggles;
 			vm.permissions = vm.configurations.permissions;
 			vm.isMenuVisible = function () {
-				return vm.canActiveAddAbsence() || vm.canActiveSwapShifts() || vm.canActiveRemoveAbsence() || vm.canActiveAddActivity() || vm.canActiveRemoveActivity() || vm.canActiveMoveActivity();
+				return vm.canActiveAddAbsence()
+					|| vm.canActiveSwapShifts()
+					|| vm.canActiveRemoveAbsence()
+					|| vm.canActiveAddActivity()
+					|| vm.canActiveRemoveActivity()
+					|| vm.canActiveMoveActivity()
+					|| vm.canActiveAddPersonalActivity()
+				;
 			};
 			registerShortCuts();
 		};
