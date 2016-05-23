@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				Expect.Call(toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318)).Return(true);
 				Expect.Call(_isTeamGamificationSettingsAvailable.Satisfy()).Return(true);
 				Expect.Call(_runningEtlJobChecker.NightlyEtlJobStillRunning()).Return(false);
-				Expect.Call(() => _performBadgeCalculation.Calculate(Guid.NewGuid(), false)).IgnoreArguments();
+				Expect.Call(() => _performBadgeCalculation.Calculate(Guid.NewGuid())).IgnoreArguments();
 				Expect.Call(() => serviceBus.DelaySend(DateTime.Now, null)).IgnoreArguments();
 				Expect.Call(() => _uow.PersistAll());
 				Expect.Call(() => _uow.Dispose());

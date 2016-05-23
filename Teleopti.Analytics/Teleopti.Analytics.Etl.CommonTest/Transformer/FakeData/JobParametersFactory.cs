@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Autofac;
+using Autofac.Core;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
@@ -39,6 +41,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 			}
 			public IToggleManager ToggleManager { get; private set; }
 			public ITenantLogonInfoLoader TenantLogonInfoLoader { get; private set; }
+			public IComponentContext IocContainer { get; set; }
 
 
 			public void EnableToggle(Toggles toggle)

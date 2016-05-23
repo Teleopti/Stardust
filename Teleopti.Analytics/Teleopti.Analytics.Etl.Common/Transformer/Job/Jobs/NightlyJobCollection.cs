@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {
@@ -184,7 +185,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new AppIndexMaintenanceJobStep(jobParameters)); // BU independent
 				Add(new AggIndexMaintenanceJobStep(jobParameters)); // BU independent
 			}
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_MoveBadgeCalculationToETL_38421))
+			{
+				Add(new CalculateBadgesJobStep(jobParameters));
+			}
 		}
 	}
-
 }

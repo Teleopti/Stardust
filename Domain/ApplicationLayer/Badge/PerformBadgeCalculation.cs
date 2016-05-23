@@ -23,18 +23,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		}
 
 
-		public void Calculate(Guid businessUnitId, bool fromEtl)
+		public void Calculate(Guid businessUnitId)
 		{
 			List<TimeZoneInfo> timeZoneList;
 			timeZoneList = _buRepository.LoadAllTimeZones().ToList();
 
 			foreach (var timeZoneInfo in timeZoneList)
 			{
-				calculateBadges(businessUnitId, timeZoneInfo.Id, fromEtl);
+				calculateBadges(businessUnitId, timeZoneInfo.Id);
 			}
 		}
 
-		private void calculateBadges(Guid businessUnitId, string timeZoneInfoId, bool fromEtl)
+		private void calculateBadges(Guid businessUnitId, string timeZoneInfoId)
 		{
 			const int badgeCalculationDelayDays = -2;
 			var today = _now.LocalDateTime();
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 				LogOnBusinessUnitId = businessUnitId,
 				CalculationDate = calculationDateForGivenTimeZone,
 				TimeZoneCode = timeZoneInfoId
-			}, fromEtl);
+			});
 
 		}
 	}

@@ -44,16 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 			_personRepository = personRepository;
 		}
 
-		public void Calculate(CalculateBadgeMessage message, bool isFromEtl)
+		public void Calculate(CalculateBadgeMessage message)
 		{
 			var teamSettings = _teamSettingsRepository.FindAllTeamGamificationSettingsSortedByTeam().ToList();
-			//if (!teamSettings.Any())
-			//{
-			//	//error happens
-			//	logger.Info("No gamification setting applied to any team, no badge calculation will be done");
-			//	//resendMessage(message);
-			//	return;
-			//}
 			var settings = teamSettings.Select(t => t.GamificationSetting).Distinct();
 			var calculateDate = new DateOnly(message.CalculationDate);
 
@@ -165,47 +158,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 					}
 				}
 
-
-				//resendMessage(message);
-
 			}
 		}
 
-
-
-		//private void resendMessage(CalculateBadgeMessage message, DateTime resendTime)
-		//{
-		//	var newMessage = new CalculateBadgeMessage
-		//	{
-		//		LogOnDatasource = message.LogOnDatasource,
-		//		LogOnBusinessUnitId = message.LogOnBusinessUnitId,
-		//		Timestamp = DateTime.UtcNow,
-		//		TimeZoneCode = message.TimeZoneCode,
-		//		CalculationDate = message.CalculationDate.AddDays(1)
-		//	};
-
-		//	_serviceBus.DelaySend(resendTime, newMessage);
-
-		//	if (logger.IsDebugEnabled)
-		//	{
-		//		logger.DebugFormat(
-		//			"Delay Sending CalculateBadgeMessage (Id=\"{0}\") to Service Bus for Timezone=\"{1}\" on next calculation time={2:yyyy-MM-dd HH:mm:ss}",
-		//			newMessage.Identity, newMessage.TimeZoneCode, resendTime);
-		//	}
-		//}
-
-		//private void resendMessage(CalculateBadgeMessage message)
-		//{
-		//	var today = _now.LocalDateOnly();
-		//	var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Unspecified);
-		//	var timeZone = TimeZoneInfo.FindSystemTimeZoneById(message.TimeZoneCode);
-
-		//	// Set badge calculation start at 5:00 AM
-		//	// Just hard code it now, the best solution is to trigger it from ETL
-		//	var nextMessageShouldBeProcessed = TimeZoneInfo.ConvertTime(tomorrow.AddHours(5), timeZone, TimeZoneInfo.Local);
-
-		//	resendMessage(message, nextMessageShouldBeProcessed);
-		//}
 
 		private void sendMessagesToPeopleGotABadge(IEnumerable<IAgentBadgeTransaction> newAwardedBadges,
 			IGamificationSetting setting, DateOnly calculateDate, BadgeType badgeType)

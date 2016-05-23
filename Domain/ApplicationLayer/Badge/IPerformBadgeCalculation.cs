@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 {
 	public interface IPerformBadgeCalculation
 	{
-		void Calculate(Guid businessUnitId, bool fromEtl);
+		void Calculate(Guid businessUnitId);
 	}
 }

@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var bus = Container.Resolve<IServiceBus>();
 			var toggleManager = Container.Resolve<IToggleManager>();
+			if (toggleManager.IsEnabled(Toggles.ETL_MoveBadgeCalculationToETL_38421))
+				return;
+
 			if (!toggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				return;
 

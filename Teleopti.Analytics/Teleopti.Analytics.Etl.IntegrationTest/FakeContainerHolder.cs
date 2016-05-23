@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Autofac;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -19,6 +20,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 		public IToggleManager ToggleManager { get; private set; }
 		public ITenantLogonInfoLoader TenantLogonInfoLoader { get; private set; }
+		public IComponentContext IocContainer { get; set; }
 
 
 		public void EnableToggle(Toggles toggle)

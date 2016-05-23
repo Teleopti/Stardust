@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
@@ -26,5 +27,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		bool RunIndexMaintenance { get; }
 
 		void SetTenantBaseConfigValues(IBaseConfiguration baseConfiguration);
+		IContainerHolder ContainerHolder { get; set; }
 	}
 }

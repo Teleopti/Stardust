@@ -99,9 +99,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var timezone = TimeZoneInfo.Utc;
 			var today = new DateTime(2014, 8, 8);
-			//var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
-			//var expectedNextMessageShouldBeProcessed =
-			//	TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
 
 			now.Stub(x => x.UtcDateTime()).Return(today);
 
@@ -133,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				CalculationDate = calculationDate
 			};
 
-			target.Calculate(message, false);
+			target.Calculate(message);
 
 			badgeWithRankCalculator.AssertWasNotCalled(
 				x => x.CalculateAHTBadges(persons, "", DateOnly.Today, newSetting, _businessUnitId),
@@ -148,16 +145,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x => x.CalculateAnsweredCallsBadges(persons, "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
-			//serviceBus.AssertWasCalled(x => x.DelaySend(new DateTime(), new object()),
-			//	o =>
-			//		o.Constraints(
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<DateTime>(m => m == expectedNextMessageShouldBeProcessed)),
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
-			//			{
-			//				var msg = ((CalculateBadgeMessage)m[0]);
-			//				return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-			//						&& msg.CalculationDate == message.CalculationDate.AddDays(1);
-			//			}))));
 		}
 
 		[Test]
@@ -165,10 +152,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var timezone = TimeZoneInfo.Utc;
 			var today = new DateTime(2014, 8, 8);
-			//var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
-			//var expectedNextMessageShouldBeProcessed =
-			//	TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
-
 			now.Stub(x => x.UtcDateTime()).Return(today);
 
 			var deletedSetting = new GamificationSetting("test")
@@ -200,7 +183,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				CalculationDate = calculationDate
 			};
 
-			target.Calculate(message, false);
+			target.Calculate(message);
 
 			calculator.AssertWasNotCalled(
 				x => x.CalculateAHTBadges(persons, "", DateOnly.Today, deletedSetting, _businessUnitId),
@@ -215,16 +198,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x => x.CalculateAnsweredCallsBadges(persons, "", DateOnly.Today, deletedSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
-			//serviceBus.AssertWasCalled(x => x.DelaySend(new DateTime(), new object()),
-			//	o =>
-			//		o.Constraints(
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<DateTime>(m => m == expectedNextMessageShouldBeProcessed)),
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
-			//			{
-			//				var msg = ((CalculateBadgeMessage)m[0]);
-			//				return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-			//						&& msg.CalculationDate == message.CalculationDate.AddDays(1);
-			//			}))));
 		}
 
 		[Test]
@@ -232,10 +205,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		{
 			var timezone = TimeZoneInfo.Utc;
 			var today = new DateTime(2014, 8, 8);
-			//var tomorrowUnspecified = new DateTime(2014, 8, 9, 0, 0, 0, DateTimeKind.Unspecified);
-			//var expectedNextMessageShouldBeProcessed =
-			//	TimeZoneInfo.ConvertTime(tomorrowUnspecified.AddHours(5), timezone, TimeZoneInfo.Local);
-
 			now.Stub(x => x.UtcDateTime()).Return(today);
 			var newSetting = new GamificationSetting("test")
 			{
@@ -254,7 +223,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				CalculationDate = calculationDate
 			};
 
-			target.Calculate(message, false);
+			target.Calculate(message);
 
 			calculator.AssertWasNotCalled(
 				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
@@ -267,16 +236,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
-			//serviceBus.AssertWasCalled(x => x.DelaySend(new DateTime(), new object()),
-			//	o =>
-			//		o.Constraints(
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<DateTime>(m => m == expectedNextMessageShouldBeProcessed)),
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
-			//			{
-			//				var msg = ((CalculateBadgeMessage)m[0]);
-			//				return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-			//						&& msg.CalculationDate == message.CalculationDate.AddDays(1);
-			//			}))));
+
 		}
 
 		[Test]
@@ -306,7 +266,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				CalculationDate = calculationDate
 			};
 
-			target.Calculate(message,false);
+			target.Calculate(message);
 
 			calculator.AssertWasNotCalled(
 				x => x.CalculateAHTBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
@@ -319,16 +279,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today, newSetting, _businessUnitId),
 				o => o.IgnoreArguments());
 
-			//serviceBus.AssertWasCalled(x => x.DelaySend(new DateTime(), new object()),
-			//	o =>
-			//		o.Constraints(
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<DateTime>(m => m == expectedNextMessageShouldBeProcessed)),
-			//			Rhino.Mocks.Constraints.Is.Matching(new Predicate<object[]>(m =>
-			//			{
-			//				var msg = ((CalculateBadgeMessage)m[0]);
-			//				return msg.TimeZoneCode == TimeZoneInfo.Utc.Id
-			//						&& msg.CalculationDate == message.CalculationDate.AddDays(1);
-			//			}))));
+
 		}
 	}
 }

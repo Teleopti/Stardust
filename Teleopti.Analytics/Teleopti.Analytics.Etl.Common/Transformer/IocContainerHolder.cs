@@ -8,6 +8,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 	{
 		IToggleManager ToggleManager { get; }
 		ITenantLogonInfoLoader TenantLogonInfoLoader { get; }
+		IComponentContext IocContainer { get; set; }
 	}
 
 	public class IocContainerHolder : IContainerHolder
@@ -16,7 +17,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		{
 			ToggleManager = container.Resolve<IToggleManager>();
 			TenantLogonInfoLoader = container.Resolve<ITenantLogonInfoLoader>();
+			IocContainer = container;
 		}
+
+		public IComponentContext IocContainer { get; set; }
 
 		public IToggleManager ToggleManager { get; private set; }
 		public ITenantLogonInfoLoader TenantLogonInfoLoader { get; private set; }

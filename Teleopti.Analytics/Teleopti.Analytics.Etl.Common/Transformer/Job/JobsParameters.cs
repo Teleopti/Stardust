@@ -27,12 +27,15 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			setOlapServerAndDatabase(cubeConnectionString);
 			IsPmInstalled = checkPmInstall(pmInstall);
 
+			ContainerHolder = containerHolder;
 			ToggleManager = containerHolder.ToggleManager;
 			TenantLogonInfoLoader = containerHolder.TenantLogonInfoLoader;
 
 
 			RunIndexMaintenance = runIndexMaintenance;
 		}
+
+		public IContainerHolder ContainerHolder { get; set; }
 
 		public int DataSource { get; set; }
 

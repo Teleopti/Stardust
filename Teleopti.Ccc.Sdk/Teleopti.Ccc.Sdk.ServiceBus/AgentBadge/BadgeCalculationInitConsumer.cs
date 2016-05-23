@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 				if (checkIfNightlyIsRunning(message)) return;
 
-				_performBadgeCalculation.Calculate(message.LogOnBusinessUnitId, false);
+				_performBadgeCalculation.Calculate(message.LogOnBusinessUnitId);
 
 				resendMessage(message);
 				uow.PersistAll();

@@ -278,6 +278,7 @@
     <Compile Include="Transformer\Job\JobStepResult.cs" />
     <Compile Include="Transformer\Job\Jobs\AgentSkillCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\AgentStatisticsJobCollection.cs" />
+    <Compile Include="Transformer\Job\Steps\CalculateBadgesJobStep.cs" />
     <Compile Include="Transformer\Job\Jobs\CleanupJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\ForecastJobCollection.cs" />
     <Compile Include="Transformer\Job\Jobs\InitialJobCollection.cs" />
