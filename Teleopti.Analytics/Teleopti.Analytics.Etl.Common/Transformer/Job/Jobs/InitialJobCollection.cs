@@ -15,7 +15,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimTimeZoneJobStep(jobParameters));
 			Add(new StageTimeZoneBridgeJobStep(jobParameters));
 			Add(new BridgeTimeZoneJobStep(jobParameters));
-		}
-	}
+            Add(new DimNotDefinedJobStep(jobParameters));
+        }
+    }
 
 }

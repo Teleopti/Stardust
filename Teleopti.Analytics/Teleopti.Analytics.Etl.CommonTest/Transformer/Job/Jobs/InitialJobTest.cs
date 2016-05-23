@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Jobs
         public void TestPopulateLoadSteps()
         {
             IList<IJobStep> jobStepList = new InitialJobCollection(_jobParameters);
-            Assert.AreEqual(7, jobStepList.Count);
+            Assert.AreEqual(8, jobStepList.Count);
         }
     }
 }

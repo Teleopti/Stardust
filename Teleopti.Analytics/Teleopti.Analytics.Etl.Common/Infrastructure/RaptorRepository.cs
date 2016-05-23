@@ -1735,8 +1735,13 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 			return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_queue_load_intraday", parameters,
 				_dataMartConnectionString);
 		}
+        public int FillDimensionsNotDefined()
+        {
+            return HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_all_dimensions_not_defined_load", null,
+                                                    _dataMartConnectionString);
 
-		public int PerformIndexMaintenance(string database)
+        }
+        public int PerformIndexMaintenance(string database)
 		{
 			string connectionString = null;
 

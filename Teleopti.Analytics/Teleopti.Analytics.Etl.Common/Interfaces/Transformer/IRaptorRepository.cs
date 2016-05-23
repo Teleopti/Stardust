@@ -16,7 +16,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 		IList<IActivity> LoadActivity();
 		int PersistActivity(DataTable dataTable);
 		int FillActivityDataMart(IBusinessUnit businessUnit);
-		IList<IShiftCategory> LoadShiftCategory();
+        int FillDimensionsNotDefined();
+        IList<IShiftCategory> LoadShiftCategory();
 		int PersistShiftCategory(DataTable dataTable);
 		int FillShiftCategoryDataMart(IBusinessUnit businessUnit);
 		IList<IScenario> LoadScenario();

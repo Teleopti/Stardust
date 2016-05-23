@@ -304,8 +304,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		{
 			return dataTable.Rows.Count;
 		}
-
-		public int PersistQueueWorkload(DataTable dataTable)
+        public int FillDimensionsNotDefined()
+        {
+            return 0;
+        }
+        public int PersistQueueWorkload(DataTable dataTable)
 		{
 			return 0;
 		}
