@@ -157,8 +157,9 @@
 					fillAgentsWithoutState();
 				}
 
+				var fakeShifts = [{AlarmDuration:0,Shift:[{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:10,Color:"red"},{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"}]},{AlarmDuration:0,Shift:[{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:10,Color:"red"},{Name:"Phone",Width:15,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:25,Color:"rgb(128, 255, 128)"}]},{AlarmDuration:4,Shift:[{Name:"Phone",Width:10,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:10,Color:"red"},{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"}]},{AlarmDuration:12,Shift:[{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:10,Color:"red"},{Name:"Phone",Width:10,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"}]},{AlarmDuration:10,Shift:[{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:10,Color:"red"},{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:15,Color:"yellow"},{Name:"Phone",Width:25,Color:"rgb(128, 255, 128)"}]},{AlarmDuration:2,Shift:[{Name:"Phone",Width:40,Color:"rgb(128, 255, 128)"},{Name:"Phone",Width:10,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:25,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:5,Color:"red"},]},{AlarmDuration:1,Shift:[{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:10,Color:"red"},{Name:"Phone",Width:10,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"}]},{AlarmDuration:1,Shift:[{Name:"Phone",Width:25,Color:"rgb(128, 255, 128)"},{Name:"Phone",Width:15,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:10,Color:"red"},]},{AlarmDuration:1,Shift:[{Name:"Empty",Width:10,Color:"white"},{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:30,Color:"rgb(128, 255, 128)"},{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"}]},{AlarmDuration:0,Shift:[{Name:"Empty",Width:30,Color:"white"},{Name:"Phone",Width:10,Color:"rgb(128, 255, 128)"},{Name:"Lunch",Width:20,Color:"yellow"},{Name:"Phone",Width:20,Color:"rgb(128, 255, 128)"},{Name:"ShortBreak",Width:20,Color:"rgb(128, 255, 128)"}]}];
 				function fillAgentsWithState(states) {
-					states.forEach(function(state) {
+					states.forEach(function(state, i) {
 						var agentInfo = $filter('filter')($scope.agentsInfo, {
 							PersonId: state.PersonId
 						});
@@ -177,8 +178,9 @@
 								AlarmStart: state.AlarmStart,
 								Color: state.Color,
 								TimeInState: state.TimeInState,
-								TimeInAlarm: state.TimeInAlarm
-							});
+								TimeInAlarm: state.TimeInAlarm,
+								RandomShift: fakeShifts[i%fakeShifts.length]
+						});
 						}
 					});
 				}
