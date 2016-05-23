@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using EO.WebBrowser;
+using log4net;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Win.Main
 	public partial class LoginWebView : MetroForm, ILogonView
 	{
 		private readonly LogonModel _model;
+		private readonly ILog _logger = LogManager.GetLogger(typeof(LoginWebView));
 
 		public LoginWebView(LogonModel model)
 		{
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Win.Main
 		private void showCertificateErrorMessage(string url)
 		{
 			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {url} </body></html>");
+			_logger.Error("The following url is missing a certificate. " + url);
 		}
 
 		public void Warning(string warning)

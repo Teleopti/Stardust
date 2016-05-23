@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			webView1.LoadCompleted -= WfmWebViewOnLoadCompleted;
 			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {url} </body></html>");
+			_logger.Error("The following url is missing a certificate. " + url);
 			webView1.LoadCompleted += WfmWebViewOnLoadCompleted;
 		}
 
