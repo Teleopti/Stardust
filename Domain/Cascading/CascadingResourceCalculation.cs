@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			{
 				foreach (var date in period.DayCollection())
 				{
-					//ska vara true, true (?) - fixa och lägg på test senare
+					//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
 					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 				}
 			}
