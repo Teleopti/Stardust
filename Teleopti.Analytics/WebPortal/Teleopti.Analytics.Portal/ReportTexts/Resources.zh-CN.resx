@@ -328,7 +328,7 @@
     <value>就绪状态的座席代表</value>
   </data>
   <data name="ResAgentsScheduled" xml:space="preserve">
-    <value>排班的座席代表</value>
+    <value>排定的座席代表</value>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
     <value>预测的时间 (小时:分钟 )</value>
@@ -340,7 +340,7 @@
     <value>选择</value>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
-    <value>按活动的排班时间</value>
+    <value>按活动的排定时间</value>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
     <value>小组测量数据</value>
@@ -508,7 +508,7 @@
     <value>座席代表：</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>座席度量</value>
+    <value>座席代表度量</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
     <value>遵时率 (%)</value>
@@ -610,7 +610,7 @@
     <value>帮助</value>
   </data>
   <data name="ResAcdLoginName" xml:space="preserve">
-    <value>Acd 登录</value>
+    <value>Acd 登录名</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>座席代表队列统计数据</value>
@@ -673,7 +673,7 @@
     <value>排定的缺勤时间 (小时:分钟 )</value>
   </data>
   <data name="ResScheduledOverTime" xml:space="preserve">
-    <value>已排定的加班 (小时:分钟 )</value>
+    <value>已排定的加班 (小时:分钟)</value>
   </data>
   <data name="ResAbsenceColon" xml:space="preserve">
     <value>缺勤：</value>
@@ -718,7 +718,7 @@
     <value>工作时间</value>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>每座席代表的缺勤时间</value>
+    <value>每个座席代表的缺勤时间</value>
   </data>
   <data name="ResAbsenceDayCount" xml:space="preserve">
     <value>全天</value>
@@ -733,16 +733,16 @@
     <value>当Web程序使用Windows认证时，客户端不能使用应用程序认证．</value>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
-    <value>请使用应用程序认证登录</value>
+    <value>请使用应用程序登录名</value>
   </data>
   <data name="PossibleSolution" xml:space="preserve">
     <value>可能的解决办法</value>
   </data>
   <data name="PossibleSolution1" xml:space="preserve">
-    <value>确认权限设置与ETL服务正确同步</value>
+    <value>确认权限设置已通过ETL服务正确同步。</value>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
-    <value>关闭程序并使用Windows认证重新登录；或者由系统管理员将认证修改为应用程序登录。</value>
+    <value>关闭程序并使用Windows认证重新登录；或者由系统管理员将认证修改为使用应用程序名登录。</value>
   </data>
   <data name="TechnicalInformation" xml:space="preserve">
     <value>技术信息</value>
@@ -763,13 +763,13 @@
     <value>所有</value>
   </data>
   <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
-    <value>服务水平目标时间内应答电话量 / 应答电话总量</value>
+    <value>服务水平目标时间内应答的电话量 / 应答电话总量</value>
   </data>
   <data name="ResAnsweredAndAbndCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>服务水平目标时间内应答及放弃电话量 / 呼入电话量</value>
+    <value>服务水平目标时间内应答及放弃的电话量 / 呼入电话量</value>
   </data>
   <data name="ResAnsweredCallsWithinSLPerOfferedCalls" xml:space="preserve">
-    <value>服务水平目标时间内应答电话量 / 呼入电话总量</value>
+    <value>服务水平目标时间内应答的电话量 / 呼入电话总量</value>
   </data>
   <data name="ResDay" xml:space="preserve">
     <value>天</value>

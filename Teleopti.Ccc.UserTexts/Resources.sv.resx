@@ -3170,7 +3170,7 @@ Ersätt</value>
     <comment>Manage groupings</comment>
   </data>
   <data name="PersonAssignmentIsNotValidDot" xml:space="preserve">
-    <value>Arbetspasset är inte tillåtet. {0}</value>
+    <value>Arbetspasset är inte tillåtet.</value>
     <comment>Person assignment is not valid.</comment>
   </data>
   <data name="ChangeYourRotations" xml:space="preserve">
@@ -13332,5 +13332,47 @@ Dessa val är aktiverade:
   <data name="LoadRequests" xml:space="preserve">
     <value>Ladda önskemål</value>
     <comment>a choice when opening scheduler</comment>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>Huvudaktiviteten kan inte tas bort</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>Flyttar aktiviteter för {0} agent(er), {1} lyckades och {2} misslyckades. </value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>Flyttade aktiviteter för valda agenter</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>Den nya tiden är inte giltig för </value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>Kan inte ändra schema för {0} {1}, eftersom det är skrivskyddat.</value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>Att avbryta den godkända förfrågan kommer att ta bort all eventuell tillhörande frånvaro från schemat. Är du säker på att du vill fortsätta?</value>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>Det är för sent att avbryta den här förfrågan. Den kan inte avbrytas senare än {0} dagar innan startdatum. </value>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>Kan inte lägga till en aktivitet inom ett skift som hör till dagen innan. </value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>En förfrågan som är {0} kan inte vara {1}.</value>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>Arbetspasset är inte tillåtet</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>Avmarkera</value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>Rättigheter för att lägga till personlig aktivitet för agent {0} saknas.</value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>Du kan inte lägga till en personlig aktivitet för {0} utan ett skift</value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>Hjälp</value>
   </data>
 </root>
