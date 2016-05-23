@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public void Execute(DateOnly date)
 		{
-			//TODO: if doing this for more than one day we might to do this initiazlie stuff (down to interval) only once. Or we wait with that...
 			var stateHolder = _stateHolder();
 			var cascadingSkills = stateHolder.SchedulingResultState.CascadingSkills().ToArray();
 			if (!cascadingSkills.Any())
