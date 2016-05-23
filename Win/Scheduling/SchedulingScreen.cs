@@ -190,6 +190,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly BackgroundWorker _backgroundWorkerScheduling = new BackgroundWorker();
 		private readonly BackgroundWorker _backgroundWorkerOptimization = new BackgroundWorker();
 		private readonly BackgroundWorker _backgroundWorkerOvertimeScheduling = new BackgroundWorker();
+		private readonly BackgroundWorker _backgroundWorkerCascading = new BackgroundWorker();
 		private readonly IUndoRedoContainer _undoRedo = new UndoRedoContainer(500);
 
 		private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections =
@@ -508,6 +509,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerOptimization.DoWork += _backgroundWorkerOptimization_DoWork;
 			_backgroundWorkerOptimization.ProgressChanged += _backgroundWorkerOptimization_ProgressChanged;
 			_backgroundWorkerOptimization.RunWorkerCompleted += _backgroundWorkerOptimization_RunWorkerCompleted;
+
+			_backgroundWorkerCascading.DoWork += backgroundWorkerCascadingDoWork;
+			_backgroundWorkerCascading.RunWorkerCompleted += backgroundWorkerCascadingRunWorkerCompleted;
+
 			//setPermissionOnControls();
 			setInitialClipboardControlState();
 			setupContextMenuSkillGrid();
@@ -5418,6 +5423,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
 			}
 
+			if (_backgroundWorkerCascading != null)
+			{
+				_backgroundWorkerCascading.DoWork -= backgroundWorkerCascadingDoWork;
+				_backgroundWorkerCascading.RunWorkerCompleted -= backgroundWorkerCascadingRunWorkerCompleted;
+			}
+
 			if (toolStripComboBoxAutoTag != null)
 				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTagSelectedIndexChanged;
 
@@ -6931,26 +6942,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (toolStripButtonCalculateCascading.Checked)
 			{
 				// ReSharper disable once LocalizableElement
-				toolStripStatusLabelStatus.Text = "Calculating...";
+				toolStripStatusLabelStatus.Text = "Cascading Calculating...";
 				disableForCascading();
-				toolStripButtonCalculateCascading.Enabled = true;
-
-				var cascadingCalc = _container.Resolve<CascadingResourceCalculation>();
-				cascadingCalc.ForAll();
-
-				ribbonControlAdv1.Cursor = Cursors.Default;
-				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
-				// ReSharper disable once LocalizableElement
-				toolStripStatusLabelStatus.Text = "Cascading";
-
-				_skillIntradayGridControl.Invalidate(true);
-				_skillDayGridControl.Invalidate(true);
-				_skillWeekGridControl.Invalidate(true);
-				_skillMonthGridControl.Invalidate(true);
-				_skillFullPeriodGridControl.Invalidate(true);
-				refreshChart();
-				SplitterManager.EnableShiftEditor();
-				Refresh();
+				toolStripButtonCalculateCascading.Enabled = false;
+				_backgroundWorkerCascading.RunWorkerAsync();
 			}
 
 			else
@@ -6959,6 +6954,30 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}		
 		}
 
+		void backgroundWorkerCascadingDoWork(object sender, DoWorkEventArgs e)
+		{
+			var cascadingCalc = _container.Resolve<CascadingResourceCalculation>();
+			cascadingCalc.ForAll();
+		}
+
+		private void backgroundWorkerCascadingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			toolStripButtonCalculateCascading.Enabled = true;
+			ribbonControlAdv1.Cursor = Cursors.Default;
+			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
+			// ReSharper disable once LocalizableElement
+			toolStripStatusLabelStatus.Text = "Cascading Ready";
+
+			_skillIntradayGridControl.Invalidate(true);
+			_skillDayGridControl.Invalidate(true);
+			_skillWeekGridControl.Invalidate(true);
+			_skillMonthGridControl.Invalidate(true);
+			_skillFullPeriodGridControl.Invalidate(true);
+			refreshChart();
+			SplitterManager.EnableShiftEditor();
+			Refresh();
+		}
+			
 		private void enableForCascading()
 		{
 			releaseUserInterface(false);
