@@ -13,5 +13,6 @@
 		public string AggregationDatabase { get; set; }
 		public VersionResultModel Version { get; set; }
         public bool Active { get; set; }
+		public bool UseIntegratedSecurity { get; set; }
 	}
 }

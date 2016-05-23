@@ -11,5 +11,6 @@ namespace Teleopti.Wfm.Administration.Models
 		public string Password { get; set; }
 		public string Server { get; set; }
 	    public bool Active { get; set; }
+		public bool UseIntegratedSecurity { get; set; }
 	}
 }

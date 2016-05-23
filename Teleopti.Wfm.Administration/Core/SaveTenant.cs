@@ -34,7 +34,7 @@ namespace Teleopti.Wfm.Administration.Core
 				var oldTenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(model.OriginalName));
 				if (oldTenant != null)
 				{
-					var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password };
+					var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password, IntegratedSecurity = model.UseIntegratedSecurity};
 					var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) { InitialCatalog = model.AnalyticsDatabase };
 					oldTenant.DataSourceConfiguration.SetApplicationConnectionString(appBuilder.ConnectionString);
 					oldTenant.DataSourceConfiguration.SetAnalyticsConnectionString(analBuilder.ConnectionString);

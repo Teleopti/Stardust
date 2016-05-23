@@ -67,6 +67,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				Id = tenant.Id,
             UserName = builder.UserID,
 				Password = builder.Password,
+				UseIntegratedSecurity = builder.IntegratedSecurity,
 				AppDatabase = builder.InitialCatalog,
 				AnalyticsDatabase = builderAnal.InitialCatalog,
 				AggregationDatabase = builderAgg.InitialCatalog,

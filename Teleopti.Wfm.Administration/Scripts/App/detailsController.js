@@ -50,6 +50,7 @@
 					vm.Server = data.Server;
 					vm.UserName = data.UserName;
 					vm.Password = data.Password;
+					vm.UseIntegratedSecurity = data.UseIntegratedSecurity;
 					vm.AnalyticsDatabase = data.AnalyticsDatabase;
 					vm.AppDatabase = data.AppDatabase;
 					vm.AggregationDatabase = data.AggregationDatabase;
@@ -240,6 +241,7 @@
 						Server: vm.Server,
 						UserName: vm.UserName,
 						Password: vm.Password,
+						UseIntegratedSecurity : vm.UseIntegratedSecurity,
 						CommandTimeout: vm.CommandTimeout,
                         Active : vm.Active
 					}, tokenHeaderService.getHeaders())
