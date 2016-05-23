@@ -91,7 +91,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			
+			webView1.CertificateError += handlingCertificateErrors;
+		}
+
+		private void handlingCertificateErrors(object sender, CertificateErrorEventArgs e)
+		{
+			showCertificateErrorMessage(e.Url);
+		}
+
+		private void showCertificateErrorMessage(string url)
+		{
+			webView1.LoadCompleted -= WfmWebViewOnLoadCompleted;
+			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {url} </body></html>");
+			webView1.LoadCompleted += WfmWebViewOnLoadCompleted;
 		}
 
 		private void setBusinessUnitInWebView()

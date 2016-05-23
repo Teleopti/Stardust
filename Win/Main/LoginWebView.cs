@@ -20,6 +20,17 @@ namespace Teleopti.Ccc.Win.Main
 			_model = model;
 			InitializeComponent();
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
+			webView1.CertificateError += handlingCertificateErrors;
+		}
+
+		private void handlingCertificateErrors(object sender, CertificateErrorEventArgs e)
+		{
+			showCertificateErrorMessage(e.Url);
+		}
+
+		private void showCertificateErrorMessage(string url)
+		{
+			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {url} </body></html>");
 		}
 
 		public void Warning(string warning)
@@ -50,10 +61,10 @@ namespace Teleopti.Ccc.Win.Main
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
-			
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
 		}
+		
 
 		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
 		{
