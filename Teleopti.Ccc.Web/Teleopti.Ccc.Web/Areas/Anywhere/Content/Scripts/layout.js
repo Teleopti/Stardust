@@ -253,12 +253,15 @@ define([
 		ko.cleanNode($('nav')[0]);
 		ko.applyBindings(menu, $('nav')[0]);
 	}
-	
+
 	function _initSignalR() {
 		signalrhubs
 			.start()
 			.fail(function(error) {
-				errorview.display("SignalR failed to start. Error message: " + error);
+				errorview.display({
+					title: "Error: SignalR failed to start.",
+					message: error
+				});
 			});
 	}
 
