@@ -135,5 +135,5 @@ ETL_SpeedUpIntradayOvertime_38304 = RC
 ETL_SpeedUpNightlyOvertime_38304 = RC
 ETL_SpeedUpIntradayAbsence_38301 = RC
 ETL_SpeedUpNightlyAbsence_38301 = RC
-ETL_SpeedUpIntradayShiftCategory_38718 = false
-ETL_SpeedUpNightlyShiftCategory_38718 = false
+ETL_SpeedUpIntradayShiftCategory_38718 = RC
+ETL_SpeedUpNightlyShiftCategory_38718 = RC
