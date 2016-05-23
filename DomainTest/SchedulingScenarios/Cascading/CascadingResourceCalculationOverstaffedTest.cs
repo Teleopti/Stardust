@@ -468,12 +468,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Cascading
 			}
 		}
 
-		[Test, Ignore("titta här micke")]
+		[Test]
 		public void ShouldOnlyMoveResourcesWithinSkillgroupWhereScheduledResourcesBelongToCorrectActivity()
 		{
 			var scenario = new Scenario("_");
-			var activity1 = new Activity("1");
-			var activity2 = new Activity("2");
+			var activity1 = new Activity("1").WithId();
+			var activity2 = new Activity("2").WithId();
 			var dateOnly = DateOnly.Today;
 			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity1, TimeZone = TimeZoneInfo.Utc }.WithId();
 			skillA.SetCascadingIndex_UseFromTestOnly(1);
