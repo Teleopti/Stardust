@@ -23,7 +23,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			int id;
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var user = new TenantAdminUser {AccessToken = "dummy",Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst"};
+				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
 				CurrentTenantSession.CurrentSession().Save(user);
 				id = user.Id;
 			}
@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				var loaded = Target.GetOneUser(id);
 				loaded.Content.Email.Should().Be.EqualTo("ola@teleopti.com");
-				Target.SaveUser(new UpdateUserModel {Email = "olle@teleopti.com", Id = id, Name = "Olle"});
+				Target.SaveUser(new UpdateUserModel { Email = "olle@teleopti.com", Id = id, Name = "Olle" });
 			}
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
@@ -61,7 +61,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				result.Success.Should().Be.False();
 				result.Message.Should().Be.EqualTo("Email can't be empty.");
 			}
-			
+
 		}
 
 		[Test]
@@ -87,44 +87,61 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 		}
 
-        [Test]
-        public void ShouldNotAllowSameEmail()
-        {
-            DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
-            int id;
-            using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-            {
-                var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
-                CurrentTenantSession.CurrentSession().Save(user);
-                id = user.Id;
-            }
-            using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-            {
-                var result = Target.CheckEmail(new CheckEmailModel() { Email = "ola@teleopti.com"}).Content;
-                result.Success.Should().Be.False();
-                result.Message.Should().Be.EqualTo("Email already exists.");
-            }
+		[Test]
+		public void ShouldNotAllowSameEmail()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
+				CurrentTenantSession.CurrentSession().Save(user);
+			}
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var result = Target.CheckEmail(new CheckEmailModel() { Email = "ola@teleopti.com" }).Content;
+				result.Success.Should().Be.False();
+				result.Message.Should().Be.EqualTo("Email already exists.");
+			}
 
-        }
+		}
 
-        [Test]
-        public void ShoulAllowSameEmailOnSameUser()
-        {
-            DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
-            int id;
-            using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-            {
-                var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
-                CurrentTenantSession.CurrentSession().Save(user);
-                id = user.Id;
-            }
-            using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
-            {
-                var result = Target.CheckEmail(new CheckEmailModel() { Email = "ola@teleopti.com",Id = id}).Content;
-                result.Success.Should().Be.True();
-               
-            }
+		[Test]
+		public void ShouldAllowSameEmailOnSameUser()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			int id;
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
+				CurrentTenantSession.CurrentSession().Save(user);
+				id = user.Id;
+			}
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var result = Target.CheckEmail(new CheckEmailModel() { Email = "ola@teleopti.com", Id = id }).Content;
+				result.Success.Should().Be.True();
 
-        }
-    }
+			}
+
+		}
+
+		[Test]
+		public void ShouldNotAllowOldDefaultEmail()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			int id;
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var user = new TenantAdminUser { AccessToken = "dummy", Email = "ola@teleopti.com", Name = "Ola", Password = "vadsomhelst" };
+				CurrentTenantSession.CurrentSession().Save(user);
+				id = user.Id;
+			}
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var result = Target.CheckEmail(new CheckEmailModel() { Email = "admin@company.com", Id = id }).Content;
+				result.Success.Should().Be.False();
+			}
+
+		}
+	}
 }

@@ -53,11 +53,11 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
 		public void SetTenantConnectionInfo(string name, string appConnectionString, string analyticsConnectionString)
 		{
-			_execute.ExecuteNonQuery("update tenant.tenant set name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
+			_execute.ExecuteNonQuery("update tenant.tenant set active = 1, name = @name, applicationconnectionstring = @app, analyticsconnectionstring = @analytics",
 				parameters: new Dictionary<string, object> { { "@name", name ?? string.Empty }, { "@app", appConnectionString }, { "@analytics", analyticsConnectionString } });
 		}
 
-		public void PersistAuditSetting()
+        public void PersistAuditSetting()
 		{
 			_execute.ExecuteNonQuery("delete from auditing.Auditsetting");
 			_execute.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSettingDefault.TheId + ", 0)");

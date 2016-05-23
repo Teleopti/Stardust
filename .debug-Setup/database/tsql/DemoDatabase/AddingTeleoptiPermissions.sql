@@ -110,6 +110,14 @@ inner join $(TELEOPTIANALYTICS).mart.dim_business_unit bu
             on 1=1
             and bu.business_unit_id > -1
 
+IF NOT EXISTS (SELECT * FROM $(TELEOPTICCC).Tenant.AdminUser WHERE Name = 'FirstAdmin')
+BEGIN
+	INSERT INTO $(TELEOPTICCC).Tenant.AdminUser (Name, Email, Password, AccessToken)
+	VALUES ('FirstAdmin', 'first@admin.is', '###2B2E73BBB3BEE5EC6C159C0FB4E5B9A2570CD8EE###', 'andaDummyToken')
+
+	UPDATE $(TELEOPTICCC).Tenant.Tenant SET Active = 1
+END
+
 SELECT @WinDomain = '$(USERDOMAIN)'
 SELECT @WinUser = '$(USERNAME)'
 --insert current user and connect to @userid
@@ -118,6 +126,7 @@ select @identity=@WinDomain + N'\' + @WinUser
 
 SET QUOTED_IDENTIFIER ON
 UPDATE $(TELEOPTICCC).Tenant.PersonInfo
-SET [Identity]=@identity 
+SET [Identity]=  @identity 
 where Id = @userid
+
 GO
