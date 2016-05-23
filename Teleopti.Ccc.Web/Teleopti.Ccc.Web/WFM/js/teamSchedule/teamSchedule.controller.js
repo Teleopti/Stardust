@@ -200,7 +200,8 @@
 		};
 
 		vm.defaultMoveActivityStart = function () {
-			return scheduleMgmtSvc.getLatestStartTimeOfSelectedScheduleProjection(vm.scheduleDateMoment(), personSelectionSvc.getSelectedPersonIdList());
+			var time = scheduleMgmtSvc.getLatestStartTimeOfSelectedScheduleProjection(vm.scheduleDateMoment(), personSelectionSvc.getSelectedPersonIdList());
+			return time == null ? new Date() : time;
 		};
 
 		vm.addActivity = function() {

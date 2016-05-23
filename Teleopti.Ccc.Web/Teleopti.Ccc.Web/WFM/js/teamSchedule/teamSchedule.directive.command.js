@@ -41,7 +41,7 @@
 			},
 			{
 				label: "AddPersonalActivity",
-				shortcut: "Alt+T",
+				shortcut: "Alt+P",
 				panelName: "add-personal-activity",
 				action: function () {				
 					if (vm.triggerCommand) {
@@ -215,21 +215,25 @@
 				if (!personSelectionSvc.anyAgentChecked() || !vm.canActiveAddActivity()) return;
 				vm.commands[1].action(); // Alt+T for add activity
 			});
+			shortCuts.registerKeySequence([keyCodes.P], [keyCodes.ALT], function () {
+				if (!personSelectionSvc.anyAgentChecked() || !vm.canActiveAddPersonalActivity()) return;
+				vm.commands[2].action(); // Alt+P for add personal activity
+			});
 			shortCuts.registerKeySequence([keyCodes.M], [keyCodes.ALT], function () {
 				if (!vm.canMoveActivity() || !vm.canActiveMoveActivity()) return;
-				vm.commands[2].action(); // Alt+M for move activity
+				vm.commands[3].action(); // Alt+M for move activity
 			});
 			shortCuts.registerKeySequence([keyCodes.S], [keyCodes.ALT], function () {
 				if (!personSelectionSvc.canSwapShifts() || !vm.canActiveSwapShifts()) return;
-				vm.commands[3].action(); // Alt+S for swap shifts
+				vm.commands[4].action(); // Alt+S for swap shifts
 			});
 			shortCuts.registerKeySequence([keyCodes.R], [keyCodes.ALT], function () {
 				if (!vm.canRemoveAbsence() || !vm.canActiveRemoveAbsence()) return;
-				vm.commands[4].action(); // Alt+R for remove absence
+				vm.commands[5].action(); // Alt+R for remove absence
 			});
 			shortCuts.registerKeySequence([keyCodes.X], [keyCodes.ALT], function () {
 				if (!vm.canRemoveActivity() || !vm.canActiveRemoveActivity()) return;
-				vm.commands[5].action(); // Alt+X for remove activity
+				vm.commands[6].action(); // Alt+X for remove activity
 			});
 		}
 

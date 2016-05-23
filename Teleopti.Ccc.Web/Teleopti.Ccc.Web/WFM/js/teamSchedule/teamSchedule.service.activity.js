@@ -7,7 +7,7 @@
 
 		var getAllActivitiesUrl = '../api/TeamScheduleData/FetchActivities';
 		var addActivityUrl = '../api/TeamScheduleCommand/AddActivity';
-		var addPersonalActivityUrl = '../api/TeamScheduleCommand/AddAPersonalctivity';
+		var addPersonalActivityUrl = '../api/TeamScheduleCommand/AddPersonalActivity';
 		var removeActivityUrl = '../api/TeamScheduleCommand/RemoveActivity';
 		var moveActivityUrl = '../api/TeamScheduleCommand/MoveActivity';
 
