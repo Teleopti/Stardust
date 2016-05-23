@@ -367,7 +367,11 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
                 OnUndo(null);
                 e.Handled = true;
             }
-        }
+				if (e.Key == Key.Return)
+				{
+					e.Handled = true;
+				}
+		}
 
         private void UserControl_KeyUp(object sender, KeyEventArgs e)
         {
