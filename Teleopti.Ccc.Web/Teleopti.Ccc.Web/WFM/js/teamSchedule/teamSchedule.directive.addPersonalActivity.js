@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'guidgenerator', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'ReloadScheduleEvent'];
+	addPersonalActivityCtrl.$inject = ['$scope', 'guidgenerator', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService'];
 
-	function addPersonalActivityCtrl($scope, guidgenerator, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, reloadScheduleEvent) {
+	function addPersonalActivityCtrl($scope, guidgenerator, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService) {
 		var vm = this;
 
 		vm.label = 'AddPersonalActivity';
@@ -34,24 +34,30 @@
 
 			return !vm.isNextDay || mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
 		}
-
+		
 		vm.addPersonalActivity = function () {
 			var requestData = {
 				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
 				Date: vm.referenceDay(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
-				ActivityId: vm.selectedActivityId,
+				PersonalActivityId: vm.selectedActivityId,
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 
-			activityService.addPersonalActivity(requestData).then(function (response) {
-				$scope.$emit(reloadScheduleEvent, {
-					personIds: requestData.PersonIds
-				});
-
-				if (vm.getActionCb(vm.label))
-					vm.getActionCb(vm.label)(vm.TrackId, requestData, response.data);
+			activityService.addPersonalActivity(requestData).then(function (response) {				
+				if (vm.getActionCb(vm.label)) {					
+					vm.getActionCb(vm.label)(vm.TrackId, requestData.PersonIds);
+				}
+				teamScheduleNotificationService.reportActionResult({
+					success: 'SuccessfulMessageForAddingActivity',
+					warning: 'PartialSuccessMessageForAddingActivity'
+				}, vm.selectedAgents.map(function(x) {
+					return {
+						PersonId: x.personId,
+						Name: x.name
+					}
+				}), response.data);
 			});
 		};
 
@@ -86,8 +92,6 @@
 		vm.getDefaultActvityEndTime = function () {
 			return moment(getDefaultActvityStartTime()).add(1, 'hour').toDate();
 		}
-
-		
 	}
 
 	function addPersonalActivity() {

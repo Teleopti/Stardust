@@ -43,6 +43,16 @@
 			});			
 		}
 
+		vm.commonCommandCallback = function (trackId, personIds) {	
+
+			var commandContainerId = "teamschedule-command-container";
+			if ($mdSidenav(commandContainerId).isOpen()) {
+				$mdSidenav(commandContainerId).close();
+			}
+			vm.lastCommandTrackId = trackId;
+			vm.updateSchedules(personIds);
+		}
+
 		function openSidePanel() {
 			var commandContainerId = "teamschedule-command-container";
 			if (!$mdSidenav(commandContainerId).isOpen()) {
@@ -346,11 +356,7 @@
 			vm.lastCommandTrackId = trackId;
 			vm.updateSchedules(personIds);
 		};
-
-		$scope.$on('teamSchedule.reload.schedule', function(event, data) {
-			vm.updateSchedules(data.personIds);
-		});
-
+	
 		function isMessageNeedToBeHandled() {
 			var personIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) { return schedule.PersonId; });
 			var scheduleDate = vm.scheduleDateMoment();

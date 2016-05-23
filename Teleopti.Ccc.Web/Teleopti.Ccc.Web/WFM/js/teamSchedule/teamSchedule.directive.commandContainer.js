@@ -6,13 +6,11 @@
 	function teamscheduleCommandContainerCtrl(guidgenerator) {
 		var vm = this;
 
-		var commandsConfig = {};
+		vm.actionCb = null;
 
 		vm.getDate = function () { return vm.date; };
 		vm.getTrackId = guidgenerator.newGuid;
-		vm.getActionCb = function (label) {
-			return commandsConfig[label] == null ? null : commandsConfig[label].actionCb;
-		};
+		
 
 		vm.activeCmd = null;
 
@@ -22,12 +20,23 @@
 
 		vm.resetActiveCmd = function() { vm.activeCmd = null; }
 
-		vm.setActionCb = function (label, cb) {
-			commandsConfig[label] = {
-				actionCb: cb
+
+		vm.getActionCb = function (_) {
+			var returnFn = function(trackId, personIds) {
+				vm.resetActiveCmd();
+				if (vm.actionCallback) {
+					vm.actionCallback({
+						trackId: trackId,
+						personIds: personIds
+					});
+				}
 			};
+			return returnFn;
 		};
 
+		vm.setActionCb = function (_, cb) {
+			vm.actionCb = cb;
+		};
 	}
 
 	function teamscheduleCommandContainer() {
@@ -35,7 +44,8 @@
 			restrict: 'E',
 			controller: teamscheduleCommandContainerCtrl,
 			scope: {
-				date: '='
+				date: '=',
+				actionCallback: '&?'
 			},
 			controllerAs: 'vm',
 			bindToController: true,
@@ -54,6 +64,7 @@
 			elem.on('focus', function () {
 				scope.$broadcast('teamSchedule.command.focus.default');
 			});
+			
 		}
 	}
 

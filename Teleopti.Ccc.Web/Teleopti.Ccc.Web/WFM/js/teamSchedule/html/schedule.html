@@ -40,7 +40,9 @@
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
-			<teamschedule-command-container date="vm.selectedDate" md-sidenav-focus tabindex="100"></teamschedule-command-container>
+			<teamschedule-command-container date="vm.selectedDate"
+											action-callback="vm.commonCommandCallback(trackId, personIds)"
+											md-sidenav-focus tabindex="100"></teamschedule-command-container>
 		</md-sidenav>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="report-absence">

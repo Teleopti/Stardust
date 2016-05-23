@@ -4809,7 +4809,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot add a personal activity to {0} without a shift.
+        ///   Looks up a localized string similar to You cannot add personal activity when there is no shift.
         /// </summary>
         public static string CanNotAddPersonalActivityToAgentWithoutShift {
             get {

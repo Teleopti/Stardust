@@ -23,8 +23,5 @@
 						'default': '400'
 					});
 			}
-		])
-		.constant('ReloadScheduleEvent', function() {
-			return 'teamSchedule.reload.schedule';
-		});
+		]);
 })();
