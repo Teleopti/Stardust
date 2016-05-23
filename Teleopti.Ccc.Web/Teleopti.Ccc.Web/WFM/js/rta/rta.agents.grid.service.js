@@ -52,7 +52,7 @@
 					rowTemplate = 'js/rta/rta-agents-rowtemplate-AdherenceDetails_34267.html';
 
 				var columnDefs = [];
-				columnDefs.push({
+				var name = {
 					displayName: 'Name',
 					field: 'Name',
 					enableColumnMenu: false,
@@ -60,40 +60,40 @@
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
 					sort: args.sort || null
-				});
-				columnDefs.push({
+				};
+				var team = {
 					displayName: 'Team',
 					field: 'TeamName',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate'
-				});
-				columnDefs.push({
+				};
+				var state = {
 					displayName: 'State',
 					field: 'State',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate'
-				});
-				columnDefs.push({
+				};
+				var activity = {
 					displayName: 'Activity',
 					field: 'Activity',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate'
-				});
-				columnDefs.push({
+				};
+				var nextActivity = {
 					displayName: 'NextActivity',
 					field: 'NextActivity',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: nextActivityCellTemplate,
 					headerCellFilter: 'translate'
-				});
-				columnDefs.push({
+				};
+				var alarm = {
 					displayName: 'Alarm',
 					field: 'Alarm',
 					enableColumnMenu: false,
@@ -101,25 +101,21 @@
 					cellTemplate: alarmCellTemplate,
 					headerCellFilter: 'translate',
 					sortingAlgorithm: args.sortingAlgorithm || null
-				});
-				columnDefs.push({
+				};
+				var timeInAlarm = {
 					displayName: 'TimeInAlarm',
 					field: timeInAlarmField,
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmDurationCellTemplate,
 					headerCellFilter: 'translate'
-				});
+				};
+
 
 				if (toggleService.RTA_AlarmContext_29357) {
-					removeByName(columnDefs, "Activity");
-					removeByName(columnDefs, "NextActivity");
-					var columns = ["15%", "15%", "10%", "10%", "10%"];
-					for (var i = 0; i < columns.length; i++) {
-						columnDefs[i].width = columns[i];
-						if (args.alarmOnly)
-							columnDefs[i].headerCellTemplate = 'js/rta/rta-agents-headercelltemplate-RTA_AlarmContext_29357.html';
-					}
+					rowTemplate = 'js/rta/rta-agents-rowtemplate-RTA_AlarmContext_29357.html';
+					columnDefs.push(name);
+					columnDefs.push(team);
 					columnDefs.push({
 						displayName: 'Shift',
 						field: 'RandomShift',
@@ -128,9 +124,27 @@
 						cellClass: 'shift-class',
 						cellTemplate: 'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html',
 						headerCellFilter: 'translate',
-						width: "40%"
 					});
+					columnDefs.push(timeInAlarm);
+					alarm.cellTemplate = '<div class="label lg-positive" style="background-color: #FF0000 !important"}}">OutAdherence</div>';
+					columnDefs.push(alarm);
+					columnDefs.push(state);
+					var columns = ["15%", "15%", "40%", "10%", "10%", "10%"];
+					for (var i = 0; i < columns.length; i++) {
+						columnDefs[i].width = columns[i];
+						if (args.alarmOnly && i !== 2)
+							columnDefs[i].headerCellTemplate = 'js/rta/rta-agents-headercelltemplate-RTA_AlarmContext_29357.html';
+					}
+				} else {
+					columnDefs.push(name);
+					columnDefs.push(team);
+					columnDefs.push(state);
+					columnDefs.push(activity);
+					columnDefs.push(nextActivity);
+					columnDefs.push(alarm);
+					columnDefs.push(timeInAlarm);
 				}
+
 
 				return {
 					rowTemplate: rowTemplate,
@@ -139,13 +153,6 @@
 					enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER
 				};
 			};
-
-			function removeByName(columnDefs, name) {
-				for (var i = columnDefs.length - 1; i >= 0; i--) {
-					if (columnDefs[i].displayName === name)
-						columnDefs.splice(i, 1);
-				}
-			}
 		}
 	]);
 })();
