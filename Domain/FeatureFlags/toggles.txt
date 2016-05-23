@@ -58,21 +58,23 @@ MessageBroker_SchedulingScreenMailbox_32733 = true
 WfmPeople_ImportUsers_33665 = true
 RTA_ScheduleProjectionReadOnlyHangfire_35703 = RC
 RTA_AlarmContext_29357 = DEV
+
 WfmPeople_AdjustSkill_34138 = true
 ResourcePlanner_WeeklyRestSolver_35043 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true
 WfmPermission_ReplaceOldPermission_34671 = true
+
 WfmTeamSchedule_AbsenceReporting_35995 = true
 WfmTeamSchedule_SetAgentsPerPage_36230 = true
 WfmTeamSchedule_SwapShifts_36231 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
-WfmTeamSchedule_RemoveAbsence_36705 = RC
-WfmTeamSchedule_AddActivity_37541 = RC
-WfmTeamSchedule_RemoveActivity_37743 = RC
+WfmTeamSchedule_RemoveAbsence_36705 = true
+WfmTeamSchedule_AddActivity_37541 = true
+WfmTeamSchedule_RemoveActivity_37743 = true
 WfmTeamSchedule_MoveActivity_37744 = RC
 WfmTeamSchedule_ShowContractTime_38509 = RC
-WfmTeamSchedule_PrepareForRelease_37752 = DEV
-WebByPassDefaultPermissionCheck_37984 = RC
+WfmTeamSchedule_PrepareForRelease_37752 = true
+WebByPassDefaultPermissionCheck_37984 = true
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Basic_35986 = true
