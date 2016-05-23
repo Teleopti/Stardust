@@ -188,7 +188,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public void ClearReferredShiftTradeRequests()
 		{
-			_shiftTradeRequestStatusChecker.ClearReferredShiftTradeRequests();
+			if (_shiftTradeRequestStatusChecker != null)
+				_shiftTradeRequestStatusChecker.ClearReferredShiftTradeRequests();
 		}
 
 		public void LoadSchedules(IScheduleStorage scheduleStorage, IPersonProvider personsProvider, IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions, IScheduleDateTimePeriod period)
