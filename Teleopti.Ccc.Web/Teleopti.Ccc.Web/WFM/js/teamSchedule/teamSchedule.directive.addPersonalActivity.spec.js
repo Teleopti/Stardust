@@ -254,13 +254,12 @@
 	});
 
 
-	it('should have correct default start time when no other shifts', function () {
+	it('should have correct default start time when no other shifts on today', function () {
 
 		var date = new Date(WFMDate.nowInUserTimeZone());
 
 		fakeScheduleManagementSvc.setLatestEndTime(null);
 		fakeScheduleManagementSvc.setLatestStartTime(null);
-
 	
 		var html = '<teamschedule-command-container date="curDate"><add-personal-activity></add-personal-activity></teamschedule-command-container>';
 		var scope = $rootScope.$new();
@@ -278,8 +277,8 @@
 
 		var result = vm.getDefaultActvityStartTime();
 
-		var nextTick = new Date(WFMDate.getNextTick());
-		
+		var nextTick = new Date(WFMDate.getNextTickNoEarlierThanEight());
+
 		expect(result.getHours()).toBe(nextTick.getHours());
 		expect(result.getMinutes()).toBe(nextTick.getMinutes());
 	});

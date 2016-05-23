@@ -27,5 +27,15 @@
 			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
 			return start.format();
 		}
+		this.getNextTickNoEarlierThanEight = function () {
+			var nowInUserTimeZoneMoment = moment(this.nowInUserTimeZone());
+
+			var minutes = Math.ceil(nowInUserTimeZoneMoment.minute() / tick) * tick;
+			var start = nowInUserTimeZoneMoment.startOf('hour').minutes(minutes);
+
+			start.hours() < 8 && start.hours(8) &&start.minutes(minutes);
+
+			return start.format();
+		}
 	}
 })();

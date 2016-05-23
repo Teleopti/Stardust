@@ -68,7 +68,7 @@
 			}
 
 			if (moment(wFMDateSvc.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.referenceDay()).format('YYYY-MM-DD')) {
-				var nextTickTime = new Date(wFMDateSvc.getNextTick());
+				var nextTickTime = new Date(wFMDateSvc.getNextTickNoEarlierThanEight());
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;
 				}
