@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.ClickContaining(".person-name", agentName);
 		}
-
-		[When(@"I click menu button in team schedule")]
-		public void WhenIClickMenuButtonInTeamSchedule()
+		
+		[When(@"I open menu in team schedule")]
+		public void WhenIOpenMenuInTeamSchedule()
 		{
 			Browser.Interactions.Click("#scheduleContextMenuButton");
 		}
@@ -91,17 +91,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			var values = table.CreateInstance<AddActivityFormInfo>();
 
 			Browser.Interactions.ClickContaining(".activity-selector option", values.Activity);
-			var startTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')",
-				values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
-			var endTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')",
-				values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			var startTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			var endTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 			var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
 			var timeRange = new Dictionary<string, string>
 			{
 				{"vm.timeRange", timeRangeStr}
 			};
-			Browser.Interactions.SetScopeValues(".activity-time-range", timeRange);
+			Browser.Interactions.SetScopeValues(".add-activity .activity-time-range", timeRange);
 		}
+
+		[When(@"I set new personal activity as")]
+		public void WhenISetNewPersonalActivityAs(Table table)
+		{
+			Browser.Interactions.WaitScopeCondition(".add-personal-activity", "vm.availableActivitiesLoaded", true,
+				() =>
+				{
+					var values = table.CreateInstance<AddPersonalActivityFormInfo>();
+
+					Browser.Interactions.ClickVisibleOnly(".add-personal-activity .activity-selector");
+					Browser.Interactions.ClickContaining(".activity-option-item", values.Activity);
+
+					Browser.Interactions.ClickContaining(".activity-selector option", values.Activity);
+					var startTime = string.Format("new Date('{0}')", values.StartTime);
+					var endTime = string.Format("new Date('{0}')", values.EndTime);
+					var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
+					var referenceDay = string.Format("function(){{return new Date('{0}');}}", values.ReferenceDay);
+					var timeRange = new Dictionary<string, string>
+					{
+						{"vm.referenceDay", referenceDay},
+						{"vm.timeRange", timeRangeStr}
+					};
+					Browser.Interactions.SetScopeValues(".add-personal-activity .activity-time-range", timeRange);
+				});
+		}
+
 
 		[Then(@"I should be able to apply my new activity")]
 		public void ThenIShouldBeAbleToApplyMyNewActivity()
@@ -229,6 +253,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public string Activity { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+		public bool IsNextDay { get; set; }
+	}
+
+	public class AddPersonalActivityFormInfo
+	{
+		public string Activity { get; set; }
+		public string ReferenceDay { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 		public bool IsNextDay { get; set; }
 	}
 }

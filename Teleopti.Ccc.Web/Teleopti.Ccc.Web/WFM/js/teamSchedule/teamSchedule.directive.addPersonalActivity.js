@@ -13,10 +13,12 @@
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
 		vm.notAllowedNameListString = "";
+		vm.availableActivitiesLoaded = false;
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.availableActivities = activities;
+			vm.availableActivitiesLoaded = true;
 		});
 
 		vm.isInputValid = function () {

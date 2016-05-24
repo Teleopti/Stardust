@@ -46,16 +46,16 @@ Background:
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to add activity
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
-	And I click menu button in team schedule
+	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
 	And I set new activity as
-	| Field       | Value |
-	| Activity    | Phone |
-	| Start time  | 12:00 |
-	| End time    | 13:00 |
-	| Is next day | false |
+	| Field       | Value            |
+	| Activity    | Phone            |
+	| Start time  | 2016-10-10 12:00 |
+	| End time    | 2016-10-10 13:00 |
+	| Is next day | false            |
 	Then I should be able to apply my new activity
 	When I apply my new activity
 	Then I should see a successful notice
@@ -69,7 +69,6 @@ Scenario: Default activity start time range should be 08:00-09:00 when agent's s
 	And I click menu item 'AddActivity' in team schedule
 	Then I should see the add activity time starts '08:00' and ends '09:00'
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
 Scenario: Should see enabled add personal activity button
 	Given 'John Smith' has a shift with
@@ -81,10 +80,9 @@ Scenario: Should see enabled add personal activity button
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
-	And I click menu button in team schedule
+	And I open menu in team schedule
 	Then I should see 'AddPersonalActivity' menu is enabled
 
-@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
 Scenario: Should be able to add personal activity
 	Given 'John Smith' has a shift with
@@ -96,8 +94,15 @@ Scenario: Should be able to add personal activity
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
-	And I click menu button in team schedule
+	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
+	And I set new personal activity as
+	| Field        | Value            |
+	| Activity     | Training         |
+	| ReferenceDay | 2016-10-10       |
+	| Start time   | 2016-10-10 12:00 |
+	| End time     | 2016-10-10 13:00 |
+	| Is next day  | false            |
 	And I apply add personal activity
 	Then I should see a successful notice
 	
@@ -114,7 +119,7 @@ Scenario: Should see disabled remove activity button when no activity is selecte
 	| Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
-	And I click menu button in team schedule
+	And I open menu in team schedule
 	Then I should see 'RemoveActivity' menu item is disabled
 
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
@@ -156,7 +161,6 @@ Scenario: Should be able to remove multiple activities
 	Then I should see a successful notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
-@ignore
 Scenario: Should not be able to remove basic activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
