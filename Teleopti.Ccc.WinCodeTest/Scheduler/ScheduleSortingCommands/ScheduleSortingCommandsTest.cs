@@ -153,92 +153,92 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
             _target = new SortByEndDescendingCommand(_stateHolder);
 			_target.Execute(new DateOnly(2009, 1, 1));
 
-            Assert.IsTrue(_stateHolder.FilteredPersonDictionary.Count == 8);
+            Assert.IsTrue(_stateHolder.FilteredCombinedAgentsDictionary.Count == 8);
 
 
-				Assert.AreEqual(person8, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
-                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
-                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
-                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(7).Value);
+				Assert.AreEqual(person8, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(5).Value);
+                Assert.AreEqual(person6, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(6).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(7).Value);
 
 
                 _target = new SortByEndAscendingCommand(_stateHolder);
                 _target.Execute(new DateOnly(2009, 1, 1));
 
-                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-        		Assert.AreEqual(person8, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
-                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);	
-                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
-                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(7).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+        		Assert.AreEqual(person8, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(5).Value);	
+                Assert.AreEqual(person6, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(6).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(7).Value);
 
 
                 _target = new SortByStartDescendingCommand(_stateHolder);
                 _target.Execute(new DateOnly(2009, 1, 1));
 
-				Assert.AreEqual(person8, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
-                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
-                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
-                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(7).Value);
+				Assert.AreEqual(person8, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(5).Value);
+                Assert.AreEqual(person6, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(6).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(7).Value);
 
 
                 _target = new SortByStartAscendingCommand(_stateHolder);
                 _target.Execute(new DateOnly(2009, 1, 1));
 
-                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-				Assert.AreEqual(person8, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
-                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);	
-                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
-                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(7).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+				Assert.AreEqual(person8, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(5).Value);	
+                Assert.AreEqual(person6, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(6).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(7).Value);
 
                 _target = new NoSortCommand(_stateHolder);
                 _target.Execute(new DateOnly(2009, 1, 1));
 
-                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-                Assert.AreEqual(person8, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
-				Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
-                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
-                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(7).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+                Assert.AreEqual(person8, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
+				Assert.AreEqual(person7, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(5).Value);
+                Assert.AreEqual(person6, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(6).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(7).Value);
 
                 _target = new SortByContractTimeAscendingCommand(_stateHolder);
                 _target.Execute(new DateOnly(2009, 1, 1));
 
-				Assert.AreEqual(person8, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
-                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
-                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
-                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(7).Value);
+				Assert.AreEqual(person8, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(5).Value);
+                Assert.AreEqual(person6, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(6).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(7).Value);
 
                 _target = new SortByContractTimeDescendingCommand(_stateHolder);
                 _target.Execute(new DateOnly(2009, 1, 1));
 
-                Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-                Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-                Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-                Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-				Assert.AreEqual(person8, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
-                Assert.AreEqual(person7, _stateHolder.FilteredPersonDictionary.ElementAt(5).Value);
-                Assert.AreEqual(person6, _stateHolder.FilteredPersonDictionary.ElementAt(6).Value);
-                Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(7).Value);
+                Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+                Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+                Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+                Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+				Assert.AreEqual(person8, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
+                Assert.AreEqual(person7, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(5).Value);
+                Assert.AreEqual(person6, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(6).Value);
+                Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(7).Value);
 
         }
     }

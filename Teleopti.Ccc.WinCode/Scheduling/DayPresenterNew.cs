@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public override void QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
-            if (e.RowIndex - View.RowHeaders > SchedulerState.FilteredPersonDictionary.Count)
+            if (e.RowIndex - View.RowHeaders > SchedulerState.FilteredCombinedAgentsDictionary.Count)
             {
                 // Bug fix:
                 // Select last row and change to a narrower filter
@@ -116,9 +116,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (e.RowIndex > View.RowHeaders && e.ColIndex >= (int)ColumnType.StartScheduleColumns)
             {
                 e.Style.MergeCell = GridMergeCellDirection.None;
-                if (_schedulerState.FilteredPersonDictionary.Count > 0)
+                if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                 {
-                    IPerson agent = _schedulerState.FilteredPersonDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
+                    IPerson agent = _schedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
                     IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
                     IScheduleDay daySchedule = totalScheduleRange.ScheduledDay(_selectedDate);
 

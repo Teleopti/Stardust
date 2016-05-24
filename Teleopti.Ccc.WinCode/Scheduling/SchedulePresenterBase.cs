@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         {
             get
             {
-                return SchedulerState.FilteredPersonDictionary.Count + 1;
+                return SchedulerState.FilteredCombinedAgentsDictionary.Count + 1;
             }
         }
 
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if ((ColumnType)column == ColumnType.CurrentDayOffColumn || (ColumnType)column == ColumnType.TargetDayOffColumn)
 					comparer = new DayOffCountComparer(loggedOnCulture);
 
-                sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+                sortedFilteredPersonDictionary = SchedulerState.FilteredCombinedAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
 		 
                 IsAscendingSort = true;
             }
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
         public virtual void QueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
-            if (e.RowIndex - View.RowHeaders > SchedulerState.FilteredPersonDictionary.Count)
+            if (e.RowIndex - View.RowHeaders > SchedulerState.FilteredCombinedAgentsDictionary.Count)
             {
                 // Bug fix:
                 // Select last row and change to a narrower filter
@@ -317,9 +317,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (e.RowIndex > View.RowHeaders && e.ColIndex >= (int)ColumnType.StartScheduleColumns)
             {
                 e.Style.MergeCell = GridMergeCellDirection.None;
-                if (_schedulerState.FilteredPersonDictionary.Count > 0)
+                if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                 {
-                    IPerson agent = _schedulerState.FilteredPersonDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
+                    IPerson agent = _schedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
 
 					var localDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
                     localDate = localDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
@@ -359,9 +359,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (e.ColIndex == (int)ColumnType.RowHeaderColumn)
                 {
                     //add person to tag and set text to name
-                    if (_schedulerState.FilteredPersonDictionary.Count > 0)
+                    if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
                     {
-                        e.Style.Tag = _schedulerState.FilteredPersonDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
+                        e.Style.Tag = _schedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
                         e.Style.Text = _schedulerState.CommonAgentName((IPerson)e.Style.Tag);
                     }
                 }
@@ -546,10 +546,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (e.ColIndex > (int)ColumnType.RowHeaderColumn &&
                     e.ColIndex < (int)ColumnType.StartScheduleColumns &&
                     e.RowIndex > View.ColHeaders &&
-                    SchedulerState.FilteredPersonDictionary.Count > 0 &&
+                    SchedulerState.FilteredCombinedAgentsDictionary.Count > 0 &&
                     (e.RowIndex - (View.RowHeaders + 1)) >= 0)
                 {
-                    IPerson person = SchedulerState.FilteredPersonDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
+                    IPerson person = SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(e.RowIndex - (View.RowHeaders + 1)).Value;
                     QueryOverviewStyleInfo(e.Style, person, (ColumnType)e.ColIndex);
                 }
             }

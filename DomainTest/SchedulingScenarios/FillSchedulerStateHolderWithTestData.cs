@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			foreach (var agent in agents)
 			{
 				stateHolder.AllPermittedPersons.Add(agent);
-				stateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
+				stateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);			
 			}
 			foreach (var scheduleData in persistableScheduleData)
 			{
@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			stateHolder.SchedulingResultState.AddSkills(uniqueSkills.ToArray());
 
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, TimeZoneInfo.Utc);
+			((SchedulerStateHolder) stateHolder).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(dateTimePeriod);
 			return stateHolder;
 		}
 

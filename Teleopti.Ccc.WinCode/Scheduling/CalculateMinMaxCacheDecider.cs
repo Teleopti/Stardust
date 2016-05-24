@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public bool ShouldCacheBeDisabled(ISchedulerStateHolder stateHolder, ISchedulingOptions schedulingOptions, IEffectiveRestrictionCreator effectiveRestrictionCreator, int cacheEntryLimit)
 		{
-			var persons = stateHolder.FilteredPersonDictionary.Values;
+			var persons = stateHolder.FilteredCombinedAgentsDictionary.Values;
 			var uniqueRestrictions = new HashSet<IEffectiveRestriction>();
 			var uniqueBags = new HashSet<IRuleSetBag>();
 			var uniqueRuleSets = new HashSet<IWorkShiftRuleSet>();

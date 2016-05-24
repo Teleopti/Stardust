@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			get
 			{
 				_schedulerStateHolder.FilterPersons(reportAgentSelector1.SelectedPersonGuids);
-				return _schedulerStateHolder.FilteredPersonDictionary.Values.ToList();
+				return _schedulerStateHolder.FilteredCombinedAgentsDictionary.Values.ToList();
 			}
 		}
 

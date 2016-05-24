@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			_eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.LoadingRealTimeAdherenceDataThreeDots);
 
 			_rtaStateHolder.Initialize();
-			_rtaStateHolder.SetFilteredPersons(SchedulerStateHolder.FilteredPersonDictionary.Values);
+			_rtaStateHolder.SetFilteredPersons(SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values);
 
 			if (!_realTimeAdherenceEnabled) return;
 
@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		public IDayLayerViewModel CreateDayLayerViewModel()
 		{
 			var viewModel = new DayLayerViewModel(_rtaStateHolder, _eventAggregator, _unitOfWorkFactory, _repositoryFactory, new DispatcherWrapper());
-			viewModel.CreateModels(SchedulerStateHolder.FilteredPersonDictionary.Values,
+			viewModel.CreateModels(SchedulerStateHolder.FilteredCombinedAgentsDictionary.Values,
 										  SchedulerStateHolder.RequestedPeriod);
 			return viewModel;
 		}

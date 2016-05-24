@@ -77,19 +77,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         IScheduleDictionary Schedules { get; }
 
         /// <summary>
-        /// Gets the combined filters person dictionary.
+        /// Gets the combined filters person dictionary, like if you filter on site1 and then on agents with overtime avail.
         /// </summary>
         /// <value>The filtered person dictionary.</value>
         /// <remarks>
         /// Created by: micke
         /// Created date: 2009-03-21
         /// </remarks>
-        IDictionary<Guid, IPerson> FilteredPersonDictionary { get; }
+        IDictionary<Guid, IPerson> FilteredCombinedAgentsDictionary { get; }
 
-	    /// <summary>
-	    /// Gets the filtered agents
-	    /// </summary>
-	    IDictionary<Guid, IPerson> FilteredAgentsDictionary { get; }
+		/// <summary>
+		/// Gets the filtered agents, you should probably use FilteredCombinedAgentsDictionary instead
+		/// </summary>
+		IDictionary<Guid, IPerson> FilteredAgentsDictionary { get; }
 
 	    /// <summary>
         /// Gets the time zone info.

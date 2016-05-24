@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                     ();
                 Expect.Call(viewBase.RowHeaders).Return(1).Repeat.AtLeastOnce();
                 Expect.Call(schedulerState1.RequestedPeriod).Return(new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(), TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone));
-                Expect.Call(schedulerState1.FilteredPersonDictionary).Return(persons).Repeat.AtLeastOnce();
+                Expect.Call(schedulerState1.FilteredCombinedAgentsDictionary).Return(persons).Repeat.AtLeastOnce();
                 Expect.Call(schedulerState1.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);
                 Expect.Call(range.ScheduledDay(new DateOnly(2011, 01, 01))).Return(scheduleDay1);

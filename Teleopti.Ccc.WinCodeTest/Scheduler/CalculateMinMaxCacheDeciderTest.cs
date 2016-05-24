@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private void commonMocks()
 		{
-			Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_personDic);
+			Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(_personDic);
 			Expect.Call(_stateHolder.RequestedPeriod)
 				  .Return(new DateOnlyPeriodAsDateTimePeriod(
 							  new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), TimeZoneInfo.Utc)).Repeat.AtLeastOnce();

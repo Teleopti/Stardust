@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             persistableCollection.Add(overtimeAvailability);
             using (_mocks.Record())
             {
-                Expect.Call(_stateHolder.FilteredPersonDictionary).Return(listOfPerson);
+                Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(listOfPerson);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[person]).Return(_scheduleRange);
                 Expect.Call(_scheduleRange.ScheduledDayCollection(dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay });
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var date = DateOnly.Today.AddDays(1);
             using (_mocks.Record())
             {
-                Expect.Call(_stateHolder.FilteredPersonDictionary).Return(new Dictionary<Guid, IPerson>());
+                Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(new Dictionary<Guid, IPerson>());
                 Expect.Call(() => _stateHolder.FilterPersonsOvertimeAvailability(new List<IPerson>())).IgnoreArguments();
             }
             using (_mocks.Playback())

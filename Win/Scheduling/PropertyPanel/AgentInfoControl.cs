@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 						tableLayoutPanelRanking.Visible = true;
 						tableLayoutPanelFairness.Visible = false;
 						updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.SchedulingResultState.ShiftCategories,
-					                  _stateHolder.FilteredPersonDictionary.Values.ToList());
+					                  _stateHolder.FilteredCombinedAgentsDictionary.Values.ToList());
 				        break;
 		        }
 	        }

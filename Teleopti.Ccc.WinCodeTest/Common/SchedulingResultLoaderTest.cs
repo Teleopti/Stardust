@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			_permittedPeople[0].Stub(x => x.PermissionInformation).Return(new PermissionInformation(_permittedPeople[0]));
 
             target.LoadWithIntradayData(_uow);
-            Assert.IsTrue(_schedulerState.FilteredPersonDictionary.Values.Contains(_permittedPeople[0]));
+            Assert.IsTrue(_schedulerState.FilteredCombinedAgentsDictionary.Values.Contains(_permittedPeople[0]));
         }
 
         private void createInitializeCommonStateHolderExpectation()

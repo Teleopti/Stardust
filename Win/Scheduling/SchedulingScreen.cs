@@ -766,7 +766,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (e.KeyCode == Keys.Enter && toolStripTextBoxFilter.Focused)
 			{
-				_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '), SchedulerState.FilteredPersonDictionary);
+				_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '), SchedulerState.FilteredCombinedAgentsDictionary);
 				e.Handled = true;
 				e.SuppressKeyPress = true;
 			}
@@ -1401,7 +1401,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView != null)
 			{
-				if (SchedulerState.FilteredPersonDictionary.Count > 0)
+				if (SchedulerState.FilteredCombinedAgentsDictionary.Count > 0)
 				{
 					IList<IDayOffTemplate> displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
 					if (displayList.Count > 0)
@@ -1409,7 +1409,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						// todo: remove comment when the user warning is ready for the other activities(delete, paste, swap etc.)
 						var clone =
 							(IScheduleDay)
-								SchedulerState.Schedules[SchedulerState.FilteredPersonDictionary.ElementAt(0).Value].
+								SchedulerState.Schedules[SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(0).Value].
 									ScheduledDay(new DateOnly(DateTime.MinValue.AddDays(1))).Clone();
 						var selectedSchedules = _scheduleView.SelectedSchedules();
 						if (!selectedSchedules.Any())
@@ -2380,7 +2380,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXSelectedAgentsColon") + " " +
                                                       _scheduleView.AllSelectedPersons().Count() + " " + 
                                                       LanguageResourceHelper.Translate("XXAgentsColon") + " " +
-                                                      _schedulerState.FilteredPersonDictionary.Count + " " +
+                                                      _schedulerState.FilteredCombinedAgentsDictionary.Count + " " +
                                                       LanguageResourceHelper.Translate("XXLoadedColon") +
                                                       " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 
@@ -2533,7 +2533,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			toolStripStatusLabelScheduleTag.Visible = true;
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
-													  _schedulerState.FilteredPersonDictionary.Count + " " + 
+													  _schedulerState.FilteredCombinedAgentsDictionary.Count + " " + 
 													  LanguageResourceHelper.Translate("XXLoadedColon") +
 													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
@@ -4456,7 +4456,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				cachedNumberOfEachCategoryPerPerson,
 				_schedulerState.RequestedPeriod.DateOnlyPeriod,
 				_schedulerState);
-			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 		}
@@ -4471,14 +4471,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				_cachedPersonsFilterView =
 					new PersonsFilterView(SchedulerState.RequestedPeriod.DateOnlyPeriod,
-						SchedulerState.FilteredPersonDictionary,
+						SchedulerState.FilteredCombinedAgentsDictionary,
 						_container,
 						ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory()
 							.ApplicationFunctions, DefinedRaptorApplicationFunctionPaths.OpenSchedulePage),
 						string.Empty,
 						permittedPersons, true);
 			}
-			_cachedPersonsFilterView.SetCurrentFilter(SchedulerState.FilteredPersonDictionary);
+			_cachedPersonsFilterView.SetCurrentFilter(SchedulerState.FilteredCombinedAgentsDictionary);
 			return _cachedPersonsFilterView;
 		}
 
@@ -4513,7 +4513,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_grid.Refresh();
 				}
 				if (_requestView != null)
-					_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
+					_requestView.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Select(kvp => kvp.Key));
 				drawSkillGrid();
 			}
 		}
@@ -6326,7 +6326,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void displaySearch()
 		{
-			IList<IPerson> persons = new List<IPerson>(SchedulerState.FilteredPersonDictionary.Values);
+			IList<IPerson> persons = new List<IPerson>(SchedulerState.FilteredCombinedAgentsDictionary.Values);
 
 			using (var searchForm = new SearchPerson(persons))
 			{
@@ -6493,7 +6493,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			using (
 				var form = new FindMatchingNew(_restrictionExtractor, selected.Person, selected.DateOnlyAsPeriod.DateOnly,
 					new ScheduleDayForPerson(() => new ScheduleRangeForPerson(() => _schedulerState.SchedulingResultState)),
-					_schedulerState.FilteredPersonDictionary.Values)
+					_schedulerState.FilteredCombinedAgentsDictionary.Values)
 				)
 			{
 				form.ShowDialog(this);
@@ -6562,7 +6562,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (defaultRequest != null)
 				id = defaultRequest.Person.Id.GetValueOrDefault();
 			var presenter = _container.BeginLifetimeScope().Resolve<IRequestHistoryViewPresenter>();
-			presenter.ShowHistory(id, _schedulerState.FilteredPersonDictionary.Values);
+			presenter.ShowHistory(id, _schedulerState.FilteredCombinedAgentsDictionary.Values);
 		}
 
 		private void toolStripExTags_SizeChanged(object sender, EventArgs e)
@@ -6744,14 +6744,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_grid.Refresh();
 			}
 			if (_requestView != null)
-				_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
+				_requestView.FilterPersons(_schedulerState.FilteredCombinedAgentsDictionary.Select(kvp => kvp.Key));
 			drawSkillGrid();
 
-			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
+			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredCombinedAgentsDictionary.Values);
 			schedulerSplitters1.RefreshTabInfoPanels();
 			updateShiftEditor();
 			toolStripStatusLabelNumberOfAgents.Text = LanguageResourceHelper.Translate("XXAgentsColon") + " " +
-													  _schedulerState.FilteredPersonDictionary.Count;
+													  _schedulerState.FilteredCombinedAgentsDictionary.Count;
 		}
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)

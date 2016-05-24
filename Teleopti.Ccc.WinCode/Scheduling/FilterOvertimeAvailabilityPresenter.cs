@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public void Filter(TimeSpan filterStartTime, TimeSpan filterEndTime, DateOnly value)
 		{
-            var persons = _schedulerStateHolder.FilteredPersonDictionary.Values;
+            var persons = _schedulerStateHolder.FilteredCombinedAgentsDictionary.Values;
             foreach (var person in persons)
             {
                 var scheduleDays = _schedulerStateHolder.Schedules[person].ScheduledDayCollection(new DateOnlyPeriod(value, value));

@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			_target = new SortBySeniorityRankingAscendingCommand(_stateHolder, _personRankCalculator);
 			_target.Execute(new DateOnly(2009, 1, 1));
 
-            Assert.IsTrue(_stateHolder.FilteredPersonDictionary.Count == 5);
+            Assert.IsTrue(_stateHolder.FilteredCombinedAgentsDictionary.Count == 5);
 
-            Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-            Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-            Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-            Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-            Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
+            Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+            Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+            Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+            Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+            Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
         }
 
 		[Test]
@@ -79,13 +79,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ScheduleSortingCommands
 			_target = new SortBySeniorityRankingDescendingCommand(_stateHolder, _personRankCalculator);
 			_target.Execute(new DateOnly(2009, 1, 1));
 
-			Assert.IsTrue(_stateHolder.FilteredPersonDictionary.Count == 5);
+			Assert.IsTrue(_stateHolder.FilteredCombinedAgentsDictionary.Count == 5);
 
-			Assert.AreEqual(person4, _stateHolder.FilteredPersonDictionary.ElementAt(0).Value);
-			Assert.AreEqual(person3, _stateHolder.FilteredPersonDictionary.ElementAt(1).Value);
-			Assert.AreEqual(person1, _stateHolder.FilteredPersonDictionary.ElementAt(2).Value);
-			Assert.AreEqual(person2, _stateHolder.FilteredPersonDictionary.ElementAt(3).Value);
-			Assert.AreEqual(person5, _stateHolder.FilteredPersonDictionary.ElementAt(4).Value);
+			Assert.AreEqual(person4, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(0).Value);
+			Assert.AreEqual(person3, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(1).Value);
+			Assert.AreEqual(person1, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(2).Value);
+			Assert.AreEqual(person2, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(3).Value);
+			Assert.AreEqual(person5, _stateHolder.FilteredCombinedAgentsDictionary.ElementAt(4).Value);
 		}
 
 	    private void setMock(IPerson person1, IPerson person2, IPerson person3, IPerson person4, IPerson person5)

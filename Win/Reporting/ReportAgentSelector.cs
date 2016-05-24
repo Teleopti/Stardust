@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Win.Reporting
 		{
 			var all = _stateHolder.AllPermittedPersons.Select(p => p.Id.Value).ToList();
 
-			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnlyPeriod, _stateHolder.FilteredPersonDictionary,
+			using (var scheduleFilterView = new PersonsFilterView(_stateHolder.RequestedPeriod.DateOnlyPeriod, _stateHolder.FilteredCombinedAgentsDictionary,
 				ComponentContext,ReportApplicationFunction, _selectedGroupPageKey, all, false))
 			{
 				scheduleFilterView.StartPosition = FormStartPosition.Manual;
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Win.Reporting
 			builder.Append(_selectedPersonGuids.Count().ToString(currentCultureInfo));
 			builder.Append(":");
 			_stateHolder.FilterPersons(_selectedPersonGuids);
-			foreach (var person in _stateHolder.FilteredPersonDictionary)
+			foreach (var person in _stateHolder.FilteredCombinedAgentsDictionary)
 			{
 				builder.Append(person.Value.Name);
 				builder.Append(", ");

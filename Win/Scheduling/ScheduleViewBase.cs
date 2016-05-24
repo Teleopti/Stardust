@@ -1271,13 +1271,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 var localDate = (DateOnly)_grid.Model[1, colIndex].Tag;
                 IPerson agent = null;
-                if (j - (RowHeaders + 1) >= Presenter.SchedulerState.FilteredPersonDictionary.Count)
+                if (j - (RowHeaders + 1) >= Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count)
                 {
-                    if (Presenter.SchedulerState.FilteredPersonDictionary.Count > 0)
-                        agent = Presenter.SchedulerState.FilteredPersonDictionary.ElementAt(0).Value;
+                    if (Presenter.SchedulerState.FilteredCombinedAgentsDictionary.Count > 0)
+                        agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(0).Value;
                 }
                 else
-                    agent = Presenter.SchedulerState.FilteredPersonDictionary.ElementAt(j - (RowHeaders + 1)).Value;
+                    agent = Presenter.SchedulerState.FilteredCombinedAgentsDictionary.ElementAt(j - (RowHeaders + 1)).Value;
 
                 if (agent != null)
                 {
@@ -1318,7 +1318,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 
             foreach(int i in rowList)
-                list.Add(Presenter.SchedulerState.FilteredPersonDictionary[((IPerson)_grid.Model[i, 1].Tag).Id.Value]);
+                list.Add(Presenter.SchedulerState.FilteredCombinedAgentsDictionary[((IPerson)_grid.Model[i, 1].Tag).Id.Value]);
 
             return list;
         }

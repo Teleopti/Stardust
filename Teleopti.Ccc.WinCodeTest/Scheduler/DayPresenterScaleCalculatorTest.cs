@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         
             using (_mocks.Record())
             {
-                Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
+                Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
            
             using (_mocks.Record())
             {
-                Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
+                Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
 
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
           
             using (_mocks.Record())
             {
-                Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
+                Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
            
             using (_mocks.Record())
             {
-                Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
+                Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
 
@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
            
             using (_mocks.Record())
             {
-                Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_persons);
+                Expect.Call(_stateHolder.FilteredCombinedAgentsDictionary).Return(_persons);
                 Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary);
                 Expect.Call(_scheduleDictionary[_person]).Return(_range);
 				

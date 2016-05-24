@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             var min = DateTime.MaxValue;
             var max = DateTime.MinValue;
             var timeZone = TimeZoneGuard.Instance.TimeZone;
-            foreach (var person in schedulerState.FilteredPersonDictionary.Values)
+            foreach (var person in schedulerState.FilteredCombinedAgentsDictionary.Values)
             {
                 var range = schedulerState.Schedules[person];
 	           

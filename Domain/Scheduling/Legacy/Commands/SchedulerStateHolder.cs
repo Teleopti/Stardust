@@ -90,8 +90,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			get { return _workingPersonRequests; }
 		}
 
-		//returns all filters combined
-		public IDictionary<Guid, IPerson> FilteredPersonDictionary
+		//returns all filters combined, for example if you filter on site1, then agents with overtime avail
+		public IDictionary<Guid, IPerson> FilteredCombinedAgentsDictionary
 		{
 			get { return combinedFilters(); }
         }

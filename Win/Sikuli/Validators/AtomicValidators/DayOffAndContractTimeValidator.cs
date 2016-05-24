@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Sikuli.Validators.AtomicValidators
 			bool contractTimeResult = true;
 			bool daysOffResult = true;
 			var result = new SikuliValidationResult(SikuliValidationResult.ResultValue.Pass);
-			IList<IPerson> persons = _schedulerState.FilteredPersonDictionary.Values.ToList();
+			IList<IPerson> persons = _schedulerState.FilteredCombinedAgentsDictionary.Values.ToList();
 			var requestedPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 
 			foreach (var person in persons)

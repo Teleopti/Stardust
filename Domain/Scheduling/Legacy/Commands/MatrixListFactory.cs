@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			var stateHolder = _schedulerStateHolder();
 			var period = stateHolder.RequestedPeriod.DateOnlyPeriod.Inflate(10);
-			var persons = stateHolder.FilteredPersonDictionary;
+			var persons = stateHolder.SchedulingResultState.PersonsInOrganization;
 			var startDate = period.StartDate;
 			var matrixes = new List<IScheduleMatrixPro>();
 			foreach (var person in persons)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				var date = startDate;
 				while (date <= period.EndDate)
 				{
-					var matrix = createMatrixForPersonAndDate(person.Value, date);
+					var matrix = createMatrixForPersonAndDate(person, date);
 					if (matrix == null)
 					{
 						date = date.AddDays(1);
