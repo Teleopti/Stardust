@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				"NextActivityStartTime: {6}, " +
 				"RuleName: {7}, " +
 				"RuleStartTime: {8}, " +
-				"IsRuleAlarm: {10}, " +
-				"AlarmStartTime: {11}",
+				"IsRuleAlarm: {9}, " +
+				"AlarmStartTime: {10}",
 				PersonId,
 				StateCode, 
 				StateName, 
