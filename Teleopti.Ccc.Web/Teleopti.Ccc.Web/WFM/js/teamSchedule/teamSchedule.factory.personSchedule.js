@@ -223,8 +223,7 @@
 		}
 
 		function formatContractTimeMinutes(minutes) {
-			var time = moment().startOf('day').add(minutes, 'minutes');
-			return time.format("H:mm");
+			return Math.floor(minutes / 60) + ":" + (minutes % 60 === 0 ? "00":minutes%60);
 		}
 
 		return personScheduleFactory;

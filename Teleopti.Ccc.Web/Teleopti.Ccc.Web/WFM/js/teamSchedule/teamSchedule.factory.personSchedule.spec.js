@@ -358,6 +358,82 @@ describe("test of PersonSchedule", function () {
 		expect(personSchedule.Shifts[1].ActivityCount()).toEqual(1);
 	});
 
+	it('Should get correct formatted contact time', function() {
+		var queryDate = "2015-10-30";
+		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+		var timeLineStart = 0;
+		var timeLineEnd = 1440;
+
+		var timeLine = {
+			Offset: moment(queryDate),
+			StartMinute: timeLineStart,
+			EndMinute: timeLineEnd,
+			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+		};
+		var scheduleToday = {
+			"PersonId": "221B-Baker-Street",
+			"Name": "Sherlock Holmes",
+			"Date": queryDate,
+			"ContractTimeMinutes": 480,
+			"Projection": [
+			{
+			    "ShiftLayerIds": ["222"],
+				"Color": "#80FF80",
+				"Description": "Email",
+				"Start": queryDate + " 07:00",
+				"Minutes": 240
+			},
+			{
+			    "ShiftLayerIds": ["333"],
+				"Color": "#80FF80",
+				"Description": "Email",
+				"Start": queryDate + " 11:00",
+				"Minutes": 1230
+			}],
+			"DayOff": null
+		};
+		var personSchedule = target.Create(scheduleToday, timeLine);
+		expect(personSchedule.ContractTime).toEqual("8:00");
+	});
+
+	it('Should get correct formatted contact time when it is greater than 24 hours', function() {
+		var queryDate = "2015-10-30";
+		var yesterday = moment(queryDate).add(-1, "days").startOf("days").format("YYYY-MM-DD");
+		var timeLineStart = 0;
+		var timeLineEnd = 1440;
+
+		var timeLine = {
+			Offset: moment(queryDate),
+			StartMinute: timeLineStart,
+			EndMinute: timeLineEnd,
+			LengthPercentPerMinute: 100 / (timeLineEnd - timeLineStart)
+		};
+		var scheduleToday = {
+			"PersonId": "221B-Baker-Street",
+			"Name": "Sherlock Holmes",
+			"Date": queryDate,
+			"ContractTimeMinutes": 1470,
+			"Projection": [
+			{
+			    "ShiftLayerIds": ["222"],
+				"Color": "#80FF80",
+				"Description": "Email",
+				"Start": queryDate + " 07:00",
+				"Minutes": 240
+			},
+			{
+			    "ShiftLayerIds": ["333"],
+				"Color": "#80FF80",
+				"Description": "Email",
+				"Start": queryDate + " 11:00",
+				"Minutes": 240
+			}],
+			"DayOff": null
+		};
+		var personSchedule = target.Create(scheduleToday, timeLine);
+		expect(personSchedule.ContractTime).toEqual("24:30");
+	});
+
 	function verifyShift(timeLine, shift, rawSchedule) {
 		shift.Projections.forEach(function (projection, index) {
 			var rawProjection = rawSchedule.Projection[index];
