@@ -8,6 +8,7 @@
 		this.notify = notify;
 
 		this.reportActionResult = reportActionResult;
+		this.buildConfirmationMessage = buildConfirmationMessage;
 
 		function reportActionResult(commandInfo, actionTargets, failActionResults) {
 			
@@ -38,6 +39,10 @@
 			});
 		}
 
+		function buildConfirmationMessage(template, personCount, activityCount, needTranslate) {
+			var text = needTranslate ? $translate.instant(template) : template;
+			return replaceParams(text, [activityCount, personCount]);
+		}
 
 		function notify(type, template, params) {
 			var translatedTemplate = $translate.instant(template);

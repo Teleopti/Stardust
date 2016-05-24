@@ -83,9 +83,17 @@
 				label: "RemoveActivity",
 				shortcut: "Alt+X",
 				panelName: "", // Leave empty if not creating a mdSidenav panel
-				action: function () { vm.setCurrentCommand('RemoveActivity'); parentVm.confirmRemoveActivity(); },
+				action: function () {
+					if (vm.triggerCommand) {
+						vm.triggerCommand({
+							label: "RemoveActivity",
+							needToOpenSidePanel: false
+						});
+					}				
+				},
 				clickable: function () { return vm.canRemoveActivity(); },
-				visible: function () { return vm.canActiveRemoveActivity(); }
+				visible: function () { return vm.canActiveRemoveActivity(); },
+				withCommandContainer: true
 			}
 		];
 

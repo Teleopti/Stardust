@@ -294,47 +294,7 @@
 			CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
 			'RemoveAbsence', removeAbsence, null, vm.scheduleDate, getRemoveAbsenceMessage)();
 		}
-
-		function removeActivity() {
-			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
-			var personActivities = [];
-			var trackId = guidgenerator.newGuid();
-			var personIds = personSelectionSvc.getSelectedPersonIdList();
-			angular.forEach(selectedPersonProjections, function (personProjection) {
-				personActivities.push({
-					PersonId: personProjection.personId,
-					Name: personProjection.name,
-					ShiftLayerIds: personProjection.selectedActivities
-				});
-			});
-			var removeActivityForm = {
-				Date: vm.scheduleDateMoment(),
-				PersonActivities: personActivities,
-				TrackedCommandInfo: { TrackId: trackId }
-			};
-
-			var commandInfo = {
-				"success": 'SuccessfulMessageForRemovingActivity',
-				"warning": 'PartialSuccessMessageForRemovingActivity'
-			};
-
-			ActivityService.removeActivity(removeActivityForm).then(function (response) {
-				vm.afterActionCallback(trackId, personIds);
-				notificationService.reportActionResult(commandInfo, personActivities, response.data);
-			});
-		}
-
-		function getRemoveActivityMessage() {
-			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedActivity"),
-			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.PersonCount]);
-		}
-
-		vm.confirmRemoveActivity = function () {
-			CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
-			'RemoveActivity', removeActivity, null, vm.scheduleDate, getRemoveActivityMessage)();
-		}
-
-
+	
 		vm.selectedPersonInfo = function() {
 			return personSelectionSvc.personInfo;
 		};

@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
 
-	addPersonalActivityCtrl.$inject = ['$scope', 'guidgenerator', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService'];
+	addPersonalActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService'];
 
-	function addPersonalActivityCtrl($scope, guidgenerator, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService) {
+	function addPersonalActivityCtrl($scope, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService) {
 		var vm = this;
 
 		vm.label = 'AddPersonalActivity';

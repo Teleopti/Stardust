@@ -1454,6 +1454,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.moveActivity.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.removeActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.timeline.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.groupSchedule.js" />
