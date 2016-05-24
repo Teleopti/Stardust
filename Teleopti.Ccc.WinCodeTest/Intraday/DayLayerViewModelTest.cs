@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var actualAgentState = new AgentStateReadModel
 				{
 					PersonId = guid,
-					ScheduledNext = "New Next Activity",
+					NextActivity = "New Next Activity",
 					RuleStartTime = DateTime.UtcNow.AddMinutes(-10),
 					RuleName = "New Alarm Name"
 				};
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.Raise(r => r.AgentstateUpdated += null, this, customEventArgs);
 
 			var result = target.Models.FirstOrDefault(d => d.Person.Id == guid);
-			result.NextActivityDescription.Should().Be.EqualTo(actualAgentState.ScheduledNext);
+			result.NextActivityDescription.Should().Be.EqualTo(actualAgentState.NextActivity);
 			result.AlarmDescription.Should().Be.EqualTo(actualAgentState.RuleName);
 		}
 
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			var actualAgentState = new AgentStateReadModel
 			{
 				PersonId = person.Id.Value,
-				RuleId = Guid.NewGuid()
+				RuleName = "Alarm"
 			};
 			var rtaStateHolder = new RtaStateHolder(new SchedulingResultStateHolder(), MockRepository.GenerateMock<IRtaStateGroupRepository>());
 			rtaStateHolder.SetFilteredPersons(new [] {person});

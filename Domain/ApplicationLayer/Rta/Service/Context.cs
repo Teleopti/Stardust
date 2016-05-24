@@ -135,38 +135,61 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		    get { return _appliedAlarm.StartTime(State, Stored, CurrentTime); }
 		}
 
+		public AgentState MakeAgentState()
+		{
+			return new AgentState
+			{
+				PersonId = PersonId,
+				BusinessUnitId = BusinessUnitId,
+				SiteId = SiteId,
+				TeamId = TeamId,
+				BatchId = batchId,
+
+				PlatformTypeId = platformTypeId,
+				SourceId = Input.SourceId ?? Stored.SourceId(),
+				ReceivedTime = CurrentTime,
+
+				StateCode = stateCode,
+				StateGroupId = State.StateGroupId(),
+				StateStartTime = stateStartTime,
+
+				ActivityId = Schedule.CurrentActivityId(),
+				NextActivityId = Schedule.NextActivityId(),
+				NextActivityStartTime = Schedule.NextActivityStartTime(),
+
+				RuleId = State.RuleId(),
+				RuleStartTime = ruleStartTime,
+				StaffingEffect = State.StaffingEffect(),
+				Adherence = State.Adherence(),
+
+				AlarmStartTime = alarmStartTime
+			};
+		}
+
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
 			return new AgentStateReadModel
 			{
-				BatchId = batchId,
-				NextStart = Schedule.NextActivityStartTime(),
-				OriginalDataSourceId = Input.SourceId ?? Stored.SourceId(),
-				PlatformTypeId = platformTypeId,
 				ReceivedTime = CurrentTime,
 				PersonId = PersonId,
 				BusinessUnitId = BusinessUnitId,
 				SiteId = SiteId,
 				TeamId = TeamId,
 
-				Scheduled = Schedule.CurrentActivityName(),
-				ScheduledId = Schedule.CurrentActivityId(),
-				ScheduledNext = Schedule.NextActivityName(),
-				ScheduledNextId = Schedule.NextActivityId(),
+				Activity = Schedule.CurrentActivityName(),
+				NextActivity = Schedule.NextActivityName(),
+				NextActivityStartTime = Schedule.NextActivityStartTime(),
 
 				StateCode = stateCode,
-				StateId = State.StateGroupId(),
 				StateName = State.StateGroupName(),
 				StateStartTime = stateStartTime,
 
-				RuleId = State.RuleId(),
 				RuleName = State.RuleName(),
 				RuleStartTime = ruleStartTime,
 				RuleColor = State.RuleDisplayColor(),
 				StaffingEffect = State.StaffingEffect(),
-				Adherence = (int?)State.Adherence(),
 
-				IsAlarm = isAlarm,
+				IsRuleAlarm = isAlarm,
 				AlarmStartTime = alarmStartTime,
 				AlarmColor = State.AlarmColor(),
 			};

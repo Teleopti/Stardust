@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public AgentStateReadModelForTest()
 		{
 			ReceivedTime = DateTime.UtcNow;
-			OriginalDataSourceId = "0";
-			IsAlarm = true;
+			IsRuleAlarm = true;
 		}
 	}
 }

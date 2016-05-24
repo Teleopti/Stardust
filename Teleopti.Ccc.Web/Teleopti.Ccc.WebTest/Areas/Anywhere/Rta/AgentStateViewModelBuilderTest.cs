@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	public class AgentStateViewModelBuilderTest : ISetup
 	{
 		public IAgentStateViewModelBuilder Target;
-		public FakeAgentStateStorage Database;
+		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeUserCulture Culture;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
-			system.UseTestDouble<FakeAgentStateStorage>().For<IAgentStateReadModelReader>();
+			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelReader>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 					TeamId = teamId,
 					StateName = "state",
 					StateStartTime = "2015-10-22 08:00".Utc(),
-					Scheduled = "phone",
-					ScheduledNext = "lunch",
-					NextStart = "2015-10-22 09:00".Utc(),
+					Activity = "phone",
+					NextActivity = "lunch",
+					NextActivityStartTime = "2015-10-22 09:00".Utc(),
 					RuleName = "in adherence",
 					RuleStartTime = "2015-10-22 08:00".Utc(),
 					RuleColor = 0
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			{
 				new AgentStateReadModel
 				{
-					NextStart = "2015-11-23 09:00".Utc()
+					NextActivityStartTime = "2015-11-23 09:00".Utc()
 				}
 			};
 			Now.Is("2015-11-23 08:30".Utc());
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			{
 				new AgentStateReadModel
 				{
-					NextStart = "2015-11-24 09:00".Utc()
+					NextActivityStartTime = "2015-11-24 09:00".Utc()
 				}
 			};
 			Now.Is("2015-11-23 17:30".Utc());
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			{
 				new AgentStateReadModel
 				{
-					NextStart = null
+					NextActivityStartTime = null
 				}
 			};
 			Now.Is("2015-11-23 08:30".Utc());

@@ -15,7 +15,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[AnalyticsDatabaseTest]
+	[DatabaseTest]
 	public class AgentStatePersisterConcurrencyTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				_persister = persister;
 			}
 
-			[AnalyticsUnitOfWork]
+			[UnitOfWork]
 			public virtual void AddOneToNotInSnapshot(DateTime batchId, string datasourceId)
 			{
 				var all = _persister.GetNotInSnapshot(batchId, datasourceId);
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				addOneTo(all);
 			}
 
-			[AnalyticsUnitOfWork]
+			[UnitOfWork]
 			public virtual void AddOneToAll()
 			{
 				var all = _persister.GetAll();
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				AddOne(personId, null, null);
 			}
 
-			[AnalyticsUnitOfWork]
+			[UnitOfWork]
 			public virtual void AddOne(Guid personId, DateTime? batchId, string datasourceId)
 			{
 				var model = _persister.Get(personId) ?? new AgentState()
@@ -121,13 +121,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				_persister.Persist(model);
 			}
 
-			[AnalyticsUnitOfWork]
+			[UnitOfWork]
 			public virtual AgentState Get(Guid personId)
 			{
 				return _persister.Get(personId);
 			}
 
-			[AnalyticsUnitOfWork]
+			[UnitOfWork]
 			public virtual IEnumerable<AgentState> GetAll()
 			{
 				return _persister.GetAll();

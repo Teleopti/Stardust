@@ -180,12 +180,13 @@
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\PersonAssignmentRepositoryWithRandomLatency.cs" />
     <Compile Include="FakeRepositories\Rta\ExternalUserStateForSnapshot.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeAgentStatePersister.cs" />
     <Compile Include="InfraTestConfigReader.cs" />
     <Compile Include="EncryptPassword.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="Execute.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeAgentStateStorage.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeAgentStateReadModelPersister.cs" />
     <Compile Include="FakeAllBusinessUnitsUnitOfWorkAspect.cs" />
     <Compile Include="FakeCurrentBusinessUnit.cs" />
     <Compile Include="FakeCurrentTransactionHooks.cs" />

@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.InfrastructureTest
 {

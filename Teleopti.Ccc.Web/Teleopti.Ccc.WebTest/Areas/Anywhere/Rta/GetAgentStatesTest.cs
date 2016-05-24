@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 	public class GetAgentStatesTest : ISetup
 	{
 		public IGetAgentStates Target;
-		public FakeAgentStateStorage Database;
+		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
 		public FakeUserCulture Culture;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.AddModule(new WebAppModule(configuration));
-			system.UseTestDouble<FakeAgentStateStorage>().For<IAgentStateReadModelReader>();
+			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelReader>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				SiteId = siteId,
 				StateName = "state",
 				StateStartTime = "2015-10-22 08:00".Utc(),
-				Scheduled = "phone",
-				ScheduledNext = "lunch",
-				NextStart = "2015-10-22 09:00".Utc(),
+				Activity = "phone",
+				NextActivity = "lunch",
+				NextActivityStartTime = "2015-10-22 09:00".Utc(),
 				RuleName = "in adherence",
 				RuleStartTime = "2015-10-22 08:00".Utc(),
 				RuleColor = 0
@@ -104,9 +104,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				TeamId = teamId,
 				StateName = "state",
 				StateStartTime = "2015-10-22 08:00".Utc(),
-				Scheduled = "phone",
-				ScheduledNext = "lunch",
-				NextStart = "2015-10-22 09:00".Utc(),
+				Activity = "phone",
+				NextActivity = "lunch",
+				NextActivityStartTime = "2015-10-22 09:00".Utc(),
 				RuleName = "in adherence",
 				RuleStartTime = "2015-10-22 08:00".Utc(),
 				RuleColor = 0
@@ -138,13 +138,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 				{
 					PersonId = personId1,
 					SiteId = siteId1,
-					IsAlarm = true
+					IsRuleAlarm = true
 				})
 				.Has(new AgentStateReadModel
 				{
 					PersonId = personId2,
 					SiteId = siteId2,
-					IsAlarm = false
+					IsRuleAlarm = false
 				});
 
 			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true, null);

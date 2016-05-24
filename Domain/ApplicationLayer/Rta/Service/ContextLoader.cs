@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -17,8 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IAgentStatePersister _agentStatePersister;
 		private readonly IMappingReader _mappingReader;
 		private readonly IDatabaseReader _databaseReader;
-		private readonly WithAnalyticsUnitOfWork _withAnalytics;
-		private readonly WithUnitOfWork _withUnitOfWork;
 		private readonly AppliedAdherence _appliedAdherence;
 		private readonly ProperAlarm _appliedAlarm;
 
@@ -30,8 +29,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IAgentStatePersister agentStatePersister,
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
-			WithAnalyticsUnitOfWork withAnalytics,
-			WithUnitOfWork withUnitOfWork,
 			AppliedAdherence appliedAdherence,
 			ProperAlarm appliedAlarm
 			)
@@ -43,8 +40,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStatePersister = agentStatePersister;
 			_mappingReader = mappingReader;
 			_databaseReader = databaseReader;
-			_withAnalytics = withAnalytics;
-			_withUnitOfWork = withUnitOfWork;
 			_appliedAdherence = appliedAdherence;
 			_appliedAlarm = appliedAlarm;
 		}
@@ -59,6 +54,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return dataSourceId;
 		}
 
+		[AllBusinessUnitsUnitOfWork]
+		protected virtual void WithUnitOfWork(Action action)
+		{
+			action.Invoke();
+		}
+
 		public virtual void For(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var dataSourceId = validateSourceId(input);
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader.LoadPersonOrganizationData(dataSourceId, userCode)
 				.ForEach(x =>
 				{
-					_withAnalytics.Do(() =>
+					WithUnitOfWork(() =>
 					{
 						action.Invoke(new Context(
 							input,
@@ -87,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 									new[] {s.Schedule.CurrentActivityId(), s.Schedule.PreviousActivityId(), s.Schedule.NextActivityId()}
 										.Distinct()
 										.ToArray();
-								return _withUnitOfWork.Get(() => _mappingReader.ReadFor(stateCodes, activities));
+								return _mappingReader.ReadFor(stateCodes, activities);
 							},
 							s => _agentStateReadModelUpdater.Update(s),
 							_now,
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader.LoadAllPersonOrganizationData()
 				.ForEach(x =>
 				{
-					_withAnalytics.Do(() =>
+					WithUnitOfWork(() =>
 					{
 						action.Invoke(new Context(
 							null,
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							x.SiteId,
 							() => _agentStatePersister.Get(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
-							s => _withUnitOfWork.Get(() => _mappingReader.Read()),
+							s => _mappingReader.Read(),
 							s => _agentStateReadModelUpdater.Update(s),
 							_now,
 							_stateMapper,
@@ -125,7 +126,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 		}
 
-		[AnalyticsUnitOfWork]
+		[AllBusinessUnitsUnitOfWork]
 		public virtual void ForClosingSnapshot(ExternalUserStateInputModel input, Action<Context> action)
 		{
 			var missingAgents = _agentStatePersister.GetNotInSnapshot(input.BatchId, input.SourceId);
@@ -144,7 +145,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					x.SiteId.GetValueOrDefault(),
 					() => x,
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
-					s => _withUnitOfWork.Get(() => _mappingReader.Read()),
+					s => _mappingReader.Read(),
 					s => _agentStateReadModelUpdater.Update(s),
 					_now,
 					_stateMapper,
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
-		[AnalyticsUnitOfWork]
+		[AllBusinessUnitsUnitOfWork]
 		public virtual void ForSynchronize(Action<Context> action)
 		{
 			_agentStatePersister.GetAll()
@@ -172,7 +173,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						x.SiteId.GetValueOrDefault(),
 						null,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
-						s => _withUnitOfWork.Get(() => _mappingReader.Read()),
+						s => _mappingReader.Read(),
 						null,
 						_now,
 						_stateMapper,

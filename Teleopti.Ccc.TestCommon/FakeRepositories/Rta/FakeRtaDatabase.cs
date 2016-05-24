@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	public class FakeRtaDatabase : IDatabaseReader
 	{
 		private readonly INow _now;
-		private readonly FakeAgentStateStorage _agentStateReadModels;
+		private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
+		private readonly FakeAgentStatePersister _agentStates;
 		private readonly FakeRtaStateGroupRepository _rtaStateGroupRepository;
 		private readonly FakeRtaMapRepository _rtaMapRepository;
 		private readonly FakeTenants _tenants;
@@ -64,7 +65,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public FakeRtaDatabase(
 			INow now,
-			FakeAgentStateStorage agentStateReadModels,
+			FakeAgentStateReadModelPersister agentStateReadModels,
+			FakeAgentStatePersister agentStates,
 			FakeRtaStateGroupRepository rtaStateGroupRepository,
 			FakeRtaMapRepository rtaMapRepository,
 			FakeTenants tenants,
@@ -73,6 +75,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		{
 			_now = now;
 			_agentStateReadModels = agentStateReadModels;
+			_agentStates = agentStates;
 			_rtaStateGroupRepository = rtaStateGroupRepository;
 			_rtaMapRepository = rtaMapRepository;
 			_tenants = tenants;
@@ -84,10 +87,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			withPlatform(new Guid(new ExternalUserStateForTest().PlatformTypeId));
 		}
 
-		public AgentState StoredState => _agentStateReadModels.Models.Select(x => new AgentState(x)).SingleOrDefault();
+		public AgentState StoredState => _agentStates.GetAll().SingleOrDefault();
+		public AgentState StoredStateFor(Guid personId) => _agentStates.Get(personId);
 		public AgentStateReadModel PersistedReadModel => _agentStateReadModels.Models.SingleOrDefault();
 		public IEnumerable<IRtaState> StateCodes => _rtaStateGroupRepository.LoadAll().Single().StateCollection;
-		public AgentState StoredStateFor(Guid personId) => _agentStateReadModels.Get(personId);
 		
 		public FakeRtaDatabase WithPlatform(Guid platformTypeId)
 		{
@@ -199,6 +202,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			if (ruleId != null)
 			{
 				_rtaRule = new RtaRule();
+				if (name != null)
+					_rtaRule.Description = new Description(name);
 				_rtaRule.SetId(ruleId);
 				_rtaRule.SetBusinessUnit(_businessUnit);
 				_rtaRule.StaffingEffect = staffingEffect;
@@ -278,14 +283,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		
 		public FakeRtaDatabase WithExistingAgentState(Guid personId, string stateCode)
 		{
-			_agentStateReadModels.Has(new AgentStateReadModel
+			_agentStates.Has(new AgentState
 			{
 				PersonId = personId,
 				BusinessUnitId = _businessUnitId,
 				PlatformTypeId = new Guid(_platformTypeId),
 				StateCode = stateCode,
 				StaffingEffect = 0,
-				OriginalDataSourceId = new ExternalUserStateForTest().SourceId
+				SourceId = new ExternalUserStateForTest().SourceId
 			});
 			return this;
 		}
@@ -388,9 +393,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return fakeDataBuilder.WithRule(Guid.NewGuid(), stateCode, null, activityId, staffingEffect, null, null);
 		}
 
-		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, Guid? alarmId)
+		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, Guid? ruleId)
 		{
-			return fakeDataBuilder.WithRule(alarmId, stateCode, null, activityId, 0, null, null);
+			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, null, null);
+		}
+
+		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, Guid? ruleId, string name)
+		{
+			return fakeDataBuilder.WithRule(ruleId, stateCode, null, activityId, 0, name, null);
 		}
 
 		public static FakeRtaDatabase WithRule(this FakeRtaDatabase fakeDataBuilder, string stateCode, Guid? activityId, string name)

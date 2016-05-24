@@ -10,24 +10,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IAgentStateReadModelUpdater
 	{
 		private readonly IAgentStateReadModelPersister _agentStateReadModelPersister;
+		private readonly IAgentStatePersister _agentStatePersister;
 
-		public AgentStateReadModelUpdater(IAgentStateReadModelPersister agentStateReadModelPersister)
+		public AgentStateReadModelUpdater(
+			IAgentStateReadModelPersister agentStateReadModelPersister,
+			IAgentStatePersister agentStatePersister
+			)
 		{
 			_agentStateReadModelPersister = agentStateReadModelPersister;
+			_agentStatePersister = agentStatePersister;
 		}
 
-		[AnalyticsUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
 			_agentStateReadModelPersister.Delete(@event.PersonId);
+			_agentStatePersister.Delete(@event.PersonId);
 		}
 
-		[AnalyticsUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(PersonAssociationChangedEvent @event)
 		{
 			if (@event.TeamId.HasValue)
 				return;
 			_agentStateReadModelPersister.Delete(@event.PersonId);
+			_agentStatePersister.Delete(@event.PersonId);
 		}
 
 
@@ -35,6 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public void Update(Context info)
 		{
+			_agentStatePersister.Persist(info.MakeAgentState());
 			_agentStateReadModelPersister.Persist(info.MakeAgentStateReadModel());
 		}
 	}

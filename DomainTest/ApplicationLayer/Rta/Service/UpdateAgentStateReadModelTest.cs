@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName(), personId);
 
-			Database.PersistedReadModel.NextStart.Should().Be(null);
+			Database.PersistedReadModel.NextActivityStartTime.Should().Be(null);
 		}
 
 		[Test]

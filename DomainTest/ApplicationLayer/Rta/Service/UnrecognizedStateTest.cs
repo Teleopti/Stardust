@@ -45,23 +45,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "unrecognized-loggedout"
 			});
 
-			Database.PersistedReadModel.StateId.Should().Be(StateGroups.LoadAll().Single(x => x.DefaultStateGroup).Id.Value);
+			Database.StoredState.StateGroupId.Should().Be(StateGroups.LoadAll().Single(x => x.DefaultStateGroup).Id.Value);
 			Database.PersistedReadModel.StateName.Should().Be("Logged Out");
 		}
-
-		[Test]
-		public void ShouldBlahLogOutBlahSnapShotBlahDefaultStateRuleBla()
-		{
-			Assert.Ignore();
-		}
-
+		
 		[Test]
 		public void ShouldUpdateReadModelWithDefaultRule()
 		{	
-			var adhering = Guid.NewGuid();
 			Database
 				.WithUser("usercode")
-				.WithRule(adhering, "loggedout", null);
+				.WithRule(Guid.NewGuid(), "loggedout", null, "adhering");
 			
 			Target.SaveState(new ExternalUserStateForTest
 			{
@@ -69,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "unrecognized-loggedout"
 			});
 
-			Database.PersistedReadModel.RuleId.Should().Be(adhering);
+			Database.PersistedReadModel.RuleName.Should().Be("adhering");
 		}
 		
 		[Test]

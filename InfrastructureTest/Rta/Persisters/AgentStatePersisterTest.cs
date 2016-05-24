@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[AnalyticsUnitOfWorkTest]
+	[UnitOfWorkTest]
 	public class AgentStatePersisterTest
 	{
 		public IAgentStatePersister Target;

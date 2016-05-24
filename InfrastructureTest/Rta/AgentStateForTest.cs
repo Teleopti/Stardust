@@ -10,11 +10,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			ReceivedTime = DateTime.UtcNow;
 			SourceId = "0";
 		}
-
-		public AgentStateForTest(AgentStateReadModel fromStorage) : base(fromStorage)
-		{
-			ReceivedTime = DateTime.UtcNow;
-			SourceId = "0";
-		}
 	}
 }

@@ -9,10 +9,8 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -41,9 +39,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				.WithDataSource("sourceId")
 				.WithAgent("user1")
 				.WithAgent("user2")
+
 				.WithStateGroup("phone")
 				.WithRule("InAdherence", Adherence.In)
 				.WithMapping("phone", "InAdherence")
+
 				.WithStateGroup(logOutBySnapshot)
 				.WithRule("OutAdherence", Adherence.Out)
 				.WithMapping(logOutBySnapshot, "OutAdherence")
@@ -92,7 +92,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				}
 			});
 
-			ReadModels.Load(new[] { person.Id.Value }).SingleOrDefault()
+			WithUnitOfWork.Get(() => ReadModels.Load(new[] { person.Id.Value }))
+				.SingleOrDefault()
 				.RuleName.Should().Be("OutAdherence");
 		}
 	}

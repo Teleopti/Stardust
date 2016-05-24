@@ -11,78 +11,136 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public class AgentStatePersister : IAgentStatePersister
 	{
-		private readonly ICurrentAnalyticsUnitOfWork _unitOfWork;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public AgentStatePersister(ICurrentAnalyticsUnitOfWork unitOfWork)
+		public AgentStatePersister(ICurrentUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
 		}
 
-		public void Persist(AgentState model)
+		[InfoLog]
+		public virtual void Persist(AgentState model)
 		{
-			_unitOfWork.Current().Session()
-				.CreateSQLQuery(
-					@"EXEC [RTA].[rta_addorupdate_actualagentstate]
-					@PersonId = :PersonId,
-					@BatchId = :BatchId,
-					@BusinessUnitId = :BusinessUnitId,
-					@SiteId = :SiteId,
-					@TeamId = :TeamId,
-					@OriginalDataSourceId = :OriginalDataSourceId,
-					@PlatformTypeId = :PlatformTypeId,
-					@ReceivedTime = :ReceivedTime,
-					@Scheduled = :Scheduled,
-					@ScheduledId = :ScheduledId,
-					@ScheduledNext = :ScheduledNext,
-					@ScheduledNextId = :ScheduledNextId,
-					@NextStart = :NextStart,
-					@StateCode = :StateCode,
-					@State = :State,
-					@StateId = :StateId,
-					@StateStartTime = :StateStartTime,
-					@AlarmId = :AlarmId,
-					@AlarmName = :AlarmName,
-					@RuleStartTime = :RuleStartTime,
-					@Color = :Color,
-					@StaffingEffect = :StaffingEffect,
-					@Adherence = :Adherence,
-					@IsRuleAlarm = :IsRuleAlarm,
-					@AlarmStartTime = :AlarmStartTime,
-					@AlarmColor = :AlarmColor")
+			var updated = _unitOfWork.Current().Session()
+				.CreateSQLQuery(@"
+					UPDATE [dbo].[AgentState]
+					SET
+						BatchId = :BatchId,
+						SourceId = :SourceId,
+						PlatformTypeId = :PlatformTypeId,
+						BusinessUnitId = :BusinessUnitId,
+						SiteId = :SiteId,
+						TeamId = :TeamId,
+						ReceivedTime = :ReceivedTime,
+						StateCode = :StateCode,
+						StateGroupId = :StateGroupId,
+						StateStartTime = :StateStartTime,
+						ActivityId = :ActivityId, 
+						NextActivityId = :NextActivityId,
+						NextActivityStartTime = :NextActivityStartTime, 
+						RuleId = :RuleId,
+						RuleStartTime = :RuleStartTime,
+						StaffingEffect = :StaffingEffect,
+						Adherence = :Adherence,
+						AlarmStartTime = :AlarmStartTime
+					WHERE 
+						PersonId = :PersonId
+				")
 				.SetParameter("PersonId", model.PersonId)
 				.SetParameter("BatchId", model.BatchId)
+				.SetParameter("SourceId", model.SourceId)
+				.SetParameter("PlatformTypeId", model.PlatformTypeId)
 				.SetParameter("BusinessUnitId", model.BusinessUnitId)
 				.SetParameter("SiteId", model.SiteId)
 				.SetParameter("TeamId", model.TeamId)
-				.SetParameter("OriginalDataSourceId", model.SourceId)
-				.SetParameter("PlatformTypeId", model.PlatformTypeId)
 				.SetParameter("ReceivedTime", model.ReceivedTime)
-				.SetParameter("Scheduled", "")
-				.SetParameter("ScheduledId", Guid.NewGuid())
-				.SetParameter("ScheduledNext", "")
-				.SetParameter("ScheduledNextId", Guid.NewGuid())
-				.SetParameter("NextStart", DateTime.UtcNow)
 				.SetParameter("StateCode", model.StateCode)
-				.SetParameter("State", "")
-				.SetParameter("StateId", model.StateGroupId)
+				.SetParameter("StateGroupId", model.StateGroupId)
 				.SetParameter("StateStartTime", model.StateStartTime)
-				.SetParameter("AlarmId", model.RuleId)
-				.SetParameter("AlarmName", "")
+				.SetParameter("ActivityId", model.ActivityId)
+				.SetParameter("NextActivityId", model.NextActivityId)
+				.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
+				.SetParameter("RuleId", model.RuleId)
 				.SetParameter("RuleStartTime", model.RuleStartTime)
-				.SetParameter("Color", 0)
 				.SetParameter("StaffingEffect", model.StaffingEffect)
 				.SetParameter("Adherence", model.Adherence)
-				.SetParameter("IsRuleAlarm", false)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
-				.SetParameter("AlarmColor", 0)
 				.ExecuteUpdate();
+			if (updated == 0)
+			{
+				_unitOfWork.Current().Session()
+					.CreateSQLQuery(@"
+						INSERT INTO [dbo].[AgentState]
+						(
+							PersonId, 
+							BatchId,
+							SourceId,
+							PlatformTypeId,
+							BusinessUnitId,
+							TeamId,
+							SiteId,
+							ReceivedTime,
+							StateCode,
+							StateGroupId,
+							StateStartTime,
+							ActivityId,
+							NextActivityId,
+							NextActivityStartTime,
+							RuleId,
+							RuleStartTime,
+							StaffingEffect,
+							Adherence,
+							AlarmStartTime)
+						VALUES
+						(
+							:PersonId, 
+							:BatchId,
+							:SourceId,
+							:PlatformTypeId,
+							:BusinessUnitId,
+							:TeamId,
+							:SiteId,
+							:ReceivedTime,
+							:StateCode,
+							:StateGroupId,
+							:StateStartTime,
+							:ActivityId,
+							:NextActivityId,
+							:NextActivityStartTime,
+							:RuleId,
+							:RuleStartTime,
+							:StaffingEffect,
+							:Adherence,
+							:AlarmStartTime)
+					")
+					.SetParameter("PersonId", model.PersonId)
+					.SetParameter("BatchId", model.BatchId)
+					.SetParameter("SourceId", model.SourceId)
+					.SetParameter("PlatformTypeId", model.PlatformTypeId)
+					.SetParameter("BusinessUnitId", model.BusinessUnitId)
+					.SetParameter("SiteId", model.SiteId)
+					.SetParameter("TeamId", model.TeamId)
+					.SetParameter("ReceivedTime", model.ReceivedTime)
+					.SetParameter("StateCode", model.StateCode)
+					.SetParameter("StateGroupId", model.StateGroupId)
+					.SetParameter("StateStartTime", model.StateStartTime)
+					.SetParameter("ActivityId", model.ActivityId)
+					.SetParameter("NextActivityId", model.NextActivityId)
+					.SetParameter("NextActivityStartTime", model.NextActivityStartTime)
+					.SetParameter("RuleId", model.RuleId)
+					.SetParameter("RuleStartTime", model.RuleStartTime)
+					.SetParameter("StaffingEffect", model.StaffingEffect)
+					.SetParameter("Adherence", model.Adherence)
+					.SetParameter("AlarmStartTime", model.AlarmStartTime)
+					.ExecuteUpdate();
+			}
 		}
 
 		public void Delete(Guid personId)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(
-					@"DELETE RTA.ActualAgentState WHERE PersonId = :PersonId")
+					@"DELETE [dbo].[AgentState] WHERE PersonId = :PersonId")
 				.SetParameter("PersonId", personId)
 				.ExecuteUpdate()
 				;
@@ -90,33 +148,31 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public virtual IEnumerable<AgentState> GetAll()
 		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState + "WITH (TABLOCK UPDLOCK)";
+			var sql = SelectAgentState + "WITH (TABLOCK UPDLOCK)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalState)))
 				.SetReadOnly(true)
-				.List<AgentStateReadModel>()
-				.Select(x => new AgentState(x));
+				.List<AgentState>();
 		}
 
 		[InfoLog]
 		public virtual AgentState Get(Guid personId)
 		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId";
+			var sql = SelectAgentState + "WITH (UPDLOCK) WHERE PersonId = :PersonId";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("PersonId", personId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(AgentStateReadModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalState)))
 				.SetReadOnly(true)
-				.List<AgentStateReadModel>()
-				.Select(x => new AgentState(x))
+				.List<AgentState>()
 				.FirstOrDefault();
 		}
 
 		[InfoLog]
-		public virtual IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string dataSourceId)
+		public virtual IEnumerable<AgentState> GetNotInSnapshot(DateTime batchId, string sourceId)
 		{
-			var sql = AgentStateReadModelReader.SelectActualAgentState +
+			var sql = SelectAgentState +
 					  @"WITH (UPDLOCK) WHERE 
-						OriginalDataSourceId = :OriginalDataSourceId
+						SourceId = :SourceId
 						AND (
 							BatchId < :BatchId
 							OR 
@@ -124,11 +180,38 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							)";
 			return _unitOfWork.Current().Session().CreateSQLQuery(sql)
 				.SetParameter("BatchId", batchId)
-				.SetParameter("OriginalDataSourceId", dataSourceId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (AgentStateReadModel)))
+				.SetParameter("SourceId", sourceId)
+				.SetResultTransformer(Transformers.AliasToBean(typeof (internalState)))
 				.SetReadOnly(true)
-				.List<AgentStateReadModel>()
-				.Select(x => new AgentState(x));
+				.List<AgentState>();
 		}
+
+		private class internalState : AgentState
+		{
+			public int AdherenceInt { set { base.Adherence = (Interfaces.Domain.Adherence?) value; } }
+		}
+
+		private static string SelectAgentState =
+@"SELECT
+PersonId, 
+BatchId,
+SourceId,
+PlatformTypeId,
+BusinessUnitId,
+TeamId,
+SiteId,
+ReceivedTime,
+StateCode,
+StateGroupId,
+StateStartTime,
+ActivityId,
+NextActivityId,
+NextActivityStartTime,
+RuleId,
+RuleStartTime,
+StaffingEffect,
+Adherence AS AdherenceInt,
+AlarmStartTime
+FROM [dbo].[AgentState] ";
 	}
 }

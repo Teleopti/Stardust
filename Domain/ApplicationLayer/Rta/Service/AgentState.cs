@@ -5,37 +5,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class AgentState
 	{
-		public AgentState()
-		{
-		}
-
-		public AgentState(AgentStateReadModel fromStorage)
-		{
-			PersonId = fromStorage.PersonId;
-			BusinessUnitId = fromStorage.BusinessUnitId;
-			TeamId = fromStorage.TeamId;
-			SiteId = fromStorage.SiteId;
-			BatchId = fromStorage.BatchId;
-			PlatformTypeId = fromStorage.PlatformTypeId;
-			SourceId = fromStorage.OriginalDataSourceId;
-			ReceivedTime = fromStorage.ReceivedTime;
-
-			StateCode = fromStorage.StateCode;
-			StateGroupId = fromStorage.StateId;
-			StateStartTime = fromStorage.StateStartTime;
-
-			ActivityId = fromStorage.ScheduledId;
-			NextActivityId = fromStorage.ScheduledNextId;
-			NextActivityStartTime = fromStorage.NextStart;
-
-			RuleId = fromStorage.RuleId;
-			RuleStartTime = fromStorage.RuleStartTime;
-			StaffingEffect = fromStorage.StaffingEffect;
-			Adherence = (Adherence?)fromStorage.Adherence;
-
-			AlarmStartTime = fromStorage.AlarmStartTime;
-		}
-
 		public DateTime? BatchId { get; set; }
 		public Guid PlatformTypeId { get; set; }
 		public string SourceId { get; set; }

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database.WithSchedule(personId, brejk, "break", "2016-03-04 10:00", "2016-03-04 10:15");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.ScheduledNext.Should().Be("break");
+			Database.PersistedReadModel.NextActivity.Should().Be("break");
 		}
 
 		[Test]

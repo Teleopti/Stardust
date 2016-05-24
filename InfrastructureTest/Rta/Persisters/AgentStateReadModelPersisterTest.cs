@@ -10,19 +10,19 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[AnalyticsDatabaseTest]
+	[UnitOfWorkTest]
 	public class AgentStateReadModelPersisterTest
 	{
 		public IAgentStateReadModelPersister Target;
 		public IAgentStateReadModelReader Reader;
-		public WithAnalyticsUnitOfWork UnitOfWork;
+		public WithUnitOfWork UnitOfWork;
 
 		[Test]
 		public void ShouldPersistModel()
 		{
 			var state = new AgentStateReadModelForTest();
 
-			UnitOfWork.Do(() => Target.Persist(state));
+			Target.Persist(state);
 
 			var result = Reader.Load(new [] { state.PersonId }).SingleOrDefault();
 			result.Should().Not.Be.Null();
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var businessUnitId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest { BusinessUnitId = businessUnitId };
 
-			UnitOfWork.Do(() => Target.Persist(state));
+			Target.Persist(state);
 
 			Reader.Load(new[] { state.PersonId }).Single()
 				.BusinessUnitId.Should().Be(businessUnitId);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var teamId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest { TeamId = teamId };
 
-			UnitOfWork.Do(() => Target.Persist(state));
+			Target.Persist(state);
 
 			Reader.Load(new[] { state.PersonId }).Single()
 				.TeamId.Should().Be(teamId);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			var siteId = Guid.NewGuid();
 			var state = new AgentStateReadModelForTest { SiteId = siteId };
 
-			UnitOfWork.Do(() => Target.Persist(state));
+			Target.Persist(state);
 
 			Reader.Load(new[] { state.PersonId }).Single()
 				.SiteId.Should().Be(siteId);
@@ -69,38 +69,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 
-			UnitOfWork.Do(() =>
-				Target.Persist(new AgentStateReadModel
-				{
-					PersonId = personId,
-					BusinessUnitId = Guid.NewGuid(),
-					TeamId = null,
-					SiteId = null,
-					PlatformTypeId = Guid.NewGuid(),
-					OriginalDataSourceId = null,
-					ReceivedTime = "2015-01-02 10:00".Utc(),
-					BatchId = null,
+			Target.Persist(new AgentStateReadModel
+			{
+				PersonId = personId,
+				BusinessUnitId = Guid.NewGuid(),
+				TeamId = null,
+				SiteId = null,
+				ReceivedTime = "2015-01-02 10:00".Utc(),
 
-					StateCode = null,
-					StateId = null,
-					StateStartTime = null,
-					StateName = null,
+				StateCode = null,
+				StateStartTime = null,
+				StateName = null,
 
-					ScheduledId = null,
-					Scheduled = null,
-					ScheduledNextId = null,
-					ScheduledNext = null,
-					NextStart = null,
+				Activity = null,
+				NextActivity = null,
+				NextActivityStartTime = null,
 
-					RuleId = null,
-					RuleName = null,
-					RuleStartTime = null,
-					AlarmStartTime = null,
-					StaffingEffect = null,
-					Adherence = null,
-					RuleColor = null,
-				})
-				);
+				RuleName = null,
+				RuleStartTime = null,
+				AlarmStartTime = null,
+				StaffingEffect = null,
+				RuleColor = null,
+			});
 
 			Reader.Load(new[] { personId }).Single()
 				.Should().Not.Be.Null();
@@ -112,7 +102,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest { AlarmStartTime = "2015-12-11 08:00".Utc() };
 
-			UnitOfWork.Do(() => Target.Persist(state));
+			Target.Persist(state);
 
 			Reader.Load(new[] { state.PersonId }).Single()
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
@@ -121,12 +111,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		[Test]
 		public void ShouldPersistIsAlarm()
 		{
-			var state = new AgentStateReadModelForTest { IsAlarm = true };
+			var state = new AgentStateReadModelForTest { IsRuleAlarm = true };
 
-			UnitOfWork.Do(() => Target.Persist(state));
+			Target.Persist(state);
 
 			Reader.Load(new[] { state.PersonId }).Single()
-				.IsAlarm.Should().Be(true);
+				.IsRuleAlarm.Should().Be(true);
 		}
 
 		[Test]
@@ -134,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var state = new AgentStateReadModelForTest { AlarmColor = Color.Red.ToArgb() };
 
-			UnitOfWork.Do(() => Target.Persist(state));
+			Target.Persist(state);
 
 			Reader.Load(new[] { state.PersonId }).Single()
 				.AlarmColor.Should().Be(Color.Red.ToArgb());
@@ -145,9 +135,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		{
 			var personId = Guid.NewGuid();
 			var model = new AgentStateReadModelForTest { PersonId = personId };
-			UnitOfWork.Do(() => Target.Persist(model));
+			Target.Persist(model);
 
-			UnitOfWork.Do(() => Target.Delete(personId));
+			Target.Delete(personId);
 
 			Reader.Load(new[] { personId }).SingleOrDefault()
 				.Should().Be.Null();

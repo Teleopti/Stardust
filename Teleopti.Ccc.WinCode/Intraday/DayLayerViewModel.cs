@@ -145,13 +145,13 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		{
 
 			ModelEditable.EditItem(dayLayerModel);
-			dayLayerModel.CurrentActivityDescription = agentStateReadModel.Scheduled;
+			dayLayerModel.CurrentActivityDescription = agentStateReadModel.Activity;
 			dayLayerModel.EnteredCurrentState = agentStateReadModel.StateStartTime ?? DateTime.MinValue;
-			dayLayerModel.NextActivityDescription = agentStateReadModel.ScheduledNext;
-			dayLayerModel.NextActivityStartDateTime = agentStateReadModel.NextStart ?? DateTime.MinValue;
+			dayLayerModel.NextActivityDescription = agentStateReadModel.NextActivity;
+			dayLayerModel.NextActivityStartDateTime = agentStateReadModel.NextActivityStartTime ?? DateTime.MinValue;
 			dayLayerModel.CurrentStateDescription = agentStateReadModel.StateName;
 			dayLayerModel.RuleStartTime = agentStateReadModel.RuleStartTime ?? DateTime.MinValue;
-			dayLayerModel.HasAlarm = agentStateReadModel.RuleId != Guid.Empty;
+			dayLayerModel.HasAlarm = agentStateReadModel.RuleName != null;
 			dayLayerModel.StaffingEffect = agentStateReadModel.StaffingEffect ?? 0;
 			dayLayerModel.ColorValue = agentStateReadModel.RuleColor ?? 0;
 			dayLayerModel.AlarmDescription = agentStateReadModel.RuleName;

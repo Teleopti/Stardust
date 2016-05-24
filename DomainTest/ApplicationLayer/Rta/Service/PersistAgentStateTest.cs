@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var activityId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithSchedule(personId, activityId, "Phone", "2014-10-20 10:00", "2014-10-20 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.ScheduledId.Should().Be(activityId);
+			Database.PersistedReadModel.Activity.Should().Be("Phone");
 		}
 
 		[Test]
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.ScheduledId.Should().Be(null);
+			Database.PersistedReadModel.Activity.Should().Be(null);
 		}
 
 		[Test]
@@ -130,18 +130,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.SaveState(state);
 
-			Database.PersistedReadModel.ScheduledId.Should().Be(null);
+			Database.PersistedReadModel.Activity.Should().Be(null);
 		}
 
 		[Test]
 		public void ShouldPersistWithNextActivity()
 		{
 			var personId = Guid.NewGuid();
-			var activityId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 11:00")
+				.WithSchedule(personId, Guid.NewGuid(), "Lunch", "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-20 11:00", "2014-10-20 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -151,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.ScheduledNextId.Should().Be(activityId);
+			Database.PersistedReadModel.NextActivity.Should().Be("Phone");
 		}
 
 		[Test]
@@ -160,8 +159,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var personId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithSchedule(personId, Guid.NewGuid(), "2014-10-21 10:00", "2014-10-21 11:00")
+				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-20 10:00", "2014-10-20 11:00")
+				.WithSchedule(personId, Guid.NewGuid(), "Phone", "2014-10-21 10:00", "2014-10-21 11:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -171,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.ScheduledNextId.Should().Be(null);
+			Database.PersistedReadModel.NextActivity.Should().Be(null);
 		}
 
 		[Test]
@@ -181,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var activityId = Guid.NewGuid();
 			Database
 				.WithUser("usercode", personId)
-				.WithSchedule(personId, activityId, "2014-10-20 11:00", "2014-10-20 12:00")
+				.WithSchedule(personId, activityId, "Phone", "2014-10-20 11:00", "2014-10-20 12:00")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -191,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.ScheduledNextId.Should().Be(activityId);
+			Database.PersistedReadModel.NextActivity.Should().Be("Phone");
 		}
 
 
@@ -204,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode", personId)
 				.WithSchedule(personId, activityId, "2014-10-20 10:00", "2014-10-20 11:00")
-				.WithRule("statecode", activityId, alarmId)
+				.WithRule("statecode", activityId, alarmId, "rule")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -214,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				StateCode = "statecode"
 			});
 
-			Database.PersistedReadModel.RuleId.Should().Be(alarmId);
+			Database.PersistedReadModel.RuleName.Should().Be("rule");
 		}
 
 		[Test]

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 	[TestFixture]
 	public class SnapshotTests
 	{
-		public FakeAgentStateStorage Persister;
+		public FakeAgentStateReadModelPersister Persister;
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
@@ -263,8 +263,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			Persister.Models
-				.Single(x => x.PersonId == personId)
+			Database.StoredStateFor(personId)
 				.PlatformTypeId.Should().Be.EqualTo(Guid.Empty);
 		}
 	}

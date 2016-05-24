@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 {
 	[TestFixture]
-	[AnalyticsUnitOfWorkTest]
+	[UnitOfWorkTest]
 	public class AgentStatePersisterGetTest
 	{
 		public IAgentStatePersister Persister;
@@ -97,21 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.StateGroupId.Should().Be(state.StateGroupId);
 			result.StateStartTime.Should().Be(state.StateStartTime);
 		}
-
-		[Test]
-		public void ShouldReadActualAgentStateWithoutBusinessUnit()
-		{
-			Persister.Persist(new AgentStateForTest {BusinessUnitId = Guid.NewGuid()});
-			UnitOfWork.Current()
-				.FetchSession()
-				.CreateSQLQuery("UPDATE Rta.ActualAgentState SET BusinessUnitId=NULL")
-				.ExecuteUpdate();
-
-			Persister.GetAll().Single()
-				.BusinessUnitId
-				.Should().Be(Guid.Empty);
-		}
-
+		
 		[Test]
 		public void ShouldReadNullValuesWhenClosingSnapshot()
 		{
@@ -129,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
-		public void SHouldReadValuesWhenClosingSnapshot()
+		public void ShouldReadValuesWhenClosingSnapshot()
 		{
 			var personId = Guid.NewGuid();
 			var agentStateReadModel = new AgentState
@@ -152,22 +135,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			result.PlatformTypeId.Should().Be(agentStateReadModel.PlatformTypeId);
 			result.StateStartTime.Should().Be(agentStateReadModel.StateStartTime);
 		}
-
-		[Test]
-		public void ShouldNotCrashWhenBusinessUnitIdIsNull()
-		{
-			var personId = Guid.NewGuid();
-			var sql = string.Format(@"					
-						insert into rta.ActualAgentState (PersonId,  PlatformTypeId, ReceivedTime, BatchId, OriginalDataSourceId, BusinessUnitId)
-						values('{0}', '{1}', '{2}', '{2}', '2', null)", personId, Guid.NewGuid(), "2015-04-21 8:00");
-			using (var connection = new SqlConnection(InfraTestConfigReader.AnalyticsConnectionString))
-			{
-				connection.Open();
-				using (var command = new SqlCommand(sql, connection))
-					command.ExecuteNonQuery();
-			}
-			
-			Assert.DoesNotThrow(() => Persister.GetNotInSnapshot("2015-04-21 8:15".Utc(), "2"));
-		}
+		
 	}
 }
