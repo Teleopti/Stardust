@@ -126,7 +126,7 @@
 						headerCellFilter: 'translate',
 					});
 					columnDefs.push(timeInAlarm);
-					alarm.cellTemplate = '<div class="label lg-positive" style="background-color: #FF0000 !important"}}">OutAdherence</div>';
+					alarm.cellTemplate = '<div class="label" style="background-color: #FF0000; font-size: 14px; color: white">OutAdherence</div>';
 					columnDefs.push(alarm);
 					columnDefs.push(state);
 					var columns = ["15%", "15%", "40%", "10%", "10%", "10%"];
