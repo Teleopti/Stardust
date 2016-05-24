@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var ass1 = new PersonAssignment(agentKnowingSkillAandB, scenario, dateOnly);
 			ass1.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
 			var ass2 = new PersonAssignment(agentKnowingSkillB, scenario, dateOnly);
-			ass1.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
+			ass2.AddActivity(activity, new TimePeriod(8, 0, 16, 0));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agentKnowingSkillAandB, agentKnowingSkillB, nonScheduledAgent }, new[] {ass1, ass2}, new[]{ skillADay, skillBDay});
 
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
