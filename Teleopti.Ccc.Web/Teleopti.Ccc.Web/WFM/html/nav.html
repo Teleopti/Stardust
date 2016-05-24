@@ -1,15 +1,14 @@
 <div class="con-row nav-row">
 	<div class="con-flex nav-inline">
-		<span class="brand" ui-sref="main">Teleopti WFM</span>
+		<span class="brand" ui-sref="main">Teleopti WFM </span>
 
 		<div class="navbar-left">
 			<span ng-controller="BusinessUnitsCtrl">
 				<span ng-if="show">
-					<span class="ui-select">
-						<i class="bu-caret mdi mdi-menu-down"></i>
-						<select name="business-unit-select" id="business-unit-select" class="bu-change" ng-change="changeBusinessUnit(data.selectedBu)" ng-options="bu.Name for bu in data.businessUnits" ng-model="data.selectedBu" ></select>
+					<md-select class="bu-select" name="business-unit-select" id="business-unit-select" ng-change="changeBusinessUnit(data.selectedBu)" ng-model="data.selectedBu" placeholder="{{data.selectedBu.Name}}">
 						<md-tooltip>{{'BusinessUnit' |translate}}</md-tooltip>
-					</span>
+						<md-option ng-repeat="bu in data.businessUnits" ng-value="bu">{{bu.Name}}</md-option>
+					</md-select>
 				</span>
 			</span>
 		</div>
@@ -61,9 +60,9 @@
 			</div>
 		</a>
 
-	<a ng-show="personalizeToggle" ng-controller="themeController">
-		<div ng-include="'js/global/wfm-themes/themes-menu.html'"></div>
-	</a>
+		<a ng-show="personalizeToggle" ng-controller="themeController">
+			<div ng-include="'js/global/wfm-themes/themes-menu.html'"></div>
+		</a>
 
 		<a href="{{help.currentHelp.helpUrl}}" target="_blank"  ng-controller="HelpController">
 			<div class="panel-menu">

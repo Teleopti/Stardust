@@ -67,7 +67,5 @@ Scenario: Select business unit
 	And I should not see a role 'Role2' in the list
 	When I pick business unit 'Business Unit 1'
 	Then I should see a role 'Role1' in the list
-	And I should not see a role 'Role2' in the list
 	When I pick business unit 'Business Unit 2'
-	Then I should not see a role 'Role1' in the list
-	And I should see a role 'Role2' in the list
+	Then I should see a role 'Role2' in the list

@@ -52,7 +52,9 @@
 				<div class="con-flex">
 					<form class="forecast-campaign">
 						<label>{{'Scenario' | translate}}: </label>
-						<select class="scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" ng-options="s.Name for s in scenarios"></select>
+						<md-select class="scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" placeholder="{{ 'Scenario' | translate }}">
+							<md-option ng-repeat="scenario in scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+						</md-select>
 					</form>
 				</div>
 				<div class="con-flex split-3-1"></div>
@@ -105,7 +107,9 @@
 		<div class="con-row">
 			<div class="con-flex"  ng-if="modalForecastingInfo.forecastForAll">
 				<label>{{ 'Scenario' | translate }}:</label>
-				<select class="scenario-select" ng-model="modalForecastingInfo.selectedScenario" ng-options="s.Name for s in scenarios"></select>
+				<md-select class="scenario-select" ng-model="modalForecastingInfo.selectedScenario" placeholder="{{ 'Scenario' | translate }}">
+					<md-option ng-repeat="scenario in scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+				</md-select>
 			</div>
 			<div class="alert-warning notice-spacer" ng-if="moreThanOneYear()"><i class='mdi mdi-alert'></i>{{ 'ForecastPeriodLength' | translate }}.</div>
 
@@ -203,8 +207,8 @@
 												<label for="campaignPercentageInputId">
 													{{ 'CampaignCallsPercentSign' | translate }}
 													<input type="number" ng-model="modalModifyInfo.campaignPercentage" name="campaignPercentageInput" id="campaignPercentageInputId"
-															 ng-model-options="{ debounce: 500 }" max="{{campaignPercentageConst.max}}" min="{{campaignPercentageConst.min}}"
-															 ng-change="campaignPercentageChanged(campaignForm)" />
+													ng-model-options="{ debounce: 500 }" max="{{campaignPercentageConst.max}}" min="{{campaignPercentageConst.min}}"
+													ng-change="campaignPercentageChanged(campaignForm)" />
 												</label>
 												<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.campaignPercentageInput.$touched">
 													<div class="form-input-message" ng-class="{formInvalidInput:form.campaignPercentageInput.$error.required}">{{ 'Required' | translate }}</div>

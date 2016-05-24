@@ -20,14 +20,19 @@
 						</div>
 						<div class="form-input-wrap skill-activity">
 							<label for="activityId">{{'SkillActivity'|translate}}</label>
-							<select id="activityId" ng-model="model.selectedActivity" ng-options="activity.Name for activity in activities" name="Activity" required></select>
+							<md-select id="activityId" ng-model="model.selectedActivity" required="">
+								<md-option ng-repeat="activity in activities" name="Activity" ng-value="activity">{{activity.Name}}</md-option>
+							</md-select>
 							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
 								<div class="form-input-message" ng-class="{formInvalidInput:form.Activity.$error.required}">{{ 'Required' | translate }}</div>
 							</div>
+
 						</div>
 						<div class="form-input-wrap skill-timezone">
 							<label for="timezoneId">{{'TimeZone'|translate}}</label>
-							<select id="timezoneId" ng-model="model.selectedTimezone" ng-options="timezone.Name for timezone in timezones" name="Timezone" required></select>
+							<md-select id="timezoneId" ng-model="model.selectedTimezone" required="">
+								<md-option ng-repeat="timezone in timezones" ng-value="timezone">{{timezone.Name}}</md-option>
+							</md-select>
 							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
 								<div class="form-input-message" ng-class="{formInvalidInput:form.Timezone.$error.required}">{{ 'Required' | translate }}</div>
 							</div>
@@ -65,10 +70,10 @@
 							<div>
 								<label>{{'OpenHours'|translate}}</label>
 								<working-hours-picker class="skill-create-form-picker working-hours-picker" working-hours="model.workingHours"></working-hours-picker>
-									<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
-										<div class="form-input-message form-warning-input">{{'AllDaysAreClosed'|translate}}</div>
-									</div>
+								<div ng-cloak class="animate-input-message" ng-show="noOpenHoursWarning()">
+									<div class="form-input-message form-warning-input">{{'AllDaysAreClosed'|translate}}</div>
 								</div>
+							</div>
 						</div>
 					</dd>
 					<dd>

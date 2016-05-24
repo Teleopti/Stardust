@@ -13,17 +13,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm
 		public void ThenIShouldHaveAvailableBusinessUnitsWith(Table table)
 		{
 			var buNames = table.CreateSet<BusinessUnitData>();
-			buNames.ForEach(bu => Browser.Interactions.AssertExistsUsingJQuery(string.Format(".navbar-left select option:contains({0})", bu.Name)));
+			buNames.ForEach(bu => Browser.Interactions.AssertExistsUsingJQuery(string.Format(".navbar-left .bu-select md-option:contains({0})", bu.Name)));
 		}
 
 
 		[When(@"I pick business unit '(.*)'")]
 		public void WhenIPickBusinessUnit(string businessUnit)
 		{
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".navbar-left select", businessUnit);
-
-			//need to manually trigger the change event
-			Browser.Interactions.Javascript("angular.element(jQuery('.navbar-left select')).triggerHandler('change');");
+			Browser.Interactions.Click("#business-unit-select");
+			Browser.Interactions.ClickContaining("md-option", businessUnit);
 		}
 
 		public class BusinessUnitData
