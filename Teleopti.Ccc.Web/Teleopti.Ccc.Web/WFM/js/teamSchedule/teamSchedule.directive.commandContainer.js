@@ -6,8 +6,6 @@
 	function teamscheduleCommandContainerCtrl(guidgenerator) {
 		var vm = this;
 
-		vm.actionCb = null;
-
 		vm.getDate = function () { return vm.date; };
 		vm.getTrackId = guidgenerator.newGuid;
 		
@@ -35,7 +33,7 @@
 		};
 
 		vm.setActionCb = function (_, cb) {
-			vm.actionCb = cb;
+			vm.actionCallback = cb;
 		};
 	}
 

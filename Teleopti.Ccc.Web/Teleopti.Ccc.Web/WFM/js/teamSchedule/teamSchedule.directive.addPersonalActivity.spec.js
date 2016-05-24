@@ -164,52 +164,12 @@
 		var activityData = fakeActivityService.getAddActivityCalledWith();
 		expect(activityData).not.toBeNull();
 		expect(activityData.PersonIds.length).toEqual(vm.selectedAgents.length);
-		expect(activityData.ActivityId).toEqual(vm.selectedActivityId);
+		expect(activityData.PersonalActivityId).toEqual(vm.selectedActivityId);
 		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).format('YYYY-MM-DDTHH:mm:00'));
 		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).format('YYYY-MM-DDTHH:mm:00'));
 		expect(activityData.Date).toEqual(vm.referenceDay());
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
-
-	it('should fire reload schedule event after calling add personal activity', inject(function (ReloadScheduleEvent) {
-		var result = setUp();
-
-		var eventMonitor = null;
-		result.scope.$on(ReloadScheduleEvent, function(e, d) {
-			eventMonitor = d;
-		});
-
-		var vm = result.commandControl;
-
-		vm.isNextDay = false;
-		vm.disableNextDay = false;
-		vm.timeRange = {
-			startTime: new Date('2016-06-15T08:00:00Z'),
-			endTime: new Date('2016-06-15T16:00:00Z')
-		};
-
-		vm.selectedAgents = [
-			{
-				personId: 'agent1',
-				name: 'agent1',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
-			}, {
-				personId: 'agent2',
-				name: 'agent2',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
-			}];
-
-		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
-
-		result.scope.$apply();
-
-		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
-		applyButton.triggerHandler('click');
-
-		result.scope.$apply();
-
-		expect(eventMonitor.personIds.length).toEqual(2);
-	}));
 
 	it('should invoke action callback after calling add personal activity', function () {
 		var result = setUp();

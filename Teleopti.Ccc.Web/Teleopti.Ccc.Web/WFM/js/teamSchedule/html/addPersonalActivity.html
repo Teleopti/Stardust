@@ -4,16 +4,17 @@
 		<form name="newPersonalActivityForm">
 			<h3>{{'PersonalActivity'|translate}}: </h3>
 			<div class="con-row">
-				<select class="activity-selector focus-default" ng-model="vm.selectedActivityId" required>
+				<select class="activity-selector focus-default" ng-model="vm.selectedActivityId" tabindex="100" required>
 					<option class="activity-option" value="" disabled selected="">{{'SelectAnActivity'|translate}}</option>
 					<option class="activity-option-item" value="{{activity.Id}}" ng-repeat="activity in vm.availableActivities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>
-			<activity-time-range-picker class="activity-time-range" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.referenceDay" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
+			<activity-time-range-picker class="activity-time-range" custom-tabindex="100" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.referenceDay" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
 			</activity-time-range-picker>
 		</form>
 
 		<button id="applyPersonalActivity" class="wfm-btn form-submit"
+				tabindex="100"
 				ng-class="{'wfm-btn-primary': newPersonalActivityForm.$valid, 'wfm-btn-primary-disabled': !(newPersonalActivityForm.$valid)}"
 				ng-disabled="newPersonalActivityForm.$valid ?'':'disabled'"
 				ng-click="vm.addPersonalActivity()">
