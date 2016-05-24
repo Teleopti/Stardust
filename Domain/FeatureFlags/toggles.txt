@@ -70,6 +70,7 @@ WfmTeamSchedule_SwapShifts_36231 = true
 WfmTeamSchedule_SeeScheduleChangesByOthers_36303 = true
 WfmTeamSchedule_RemoveAbsence_36705 = true
 WfmTeamSchedule_AddActivity_37541 = true
+WfmTeamSchedule_AddPersonalActivity_37742 = RC
 WfmTeamSchedule_RemoveActivity_37743 = true
 WfmTeamSchedule_MoveActivity_37744 = RC
 WfmTeamSchedule_ShowContractTime_38509 = RC
