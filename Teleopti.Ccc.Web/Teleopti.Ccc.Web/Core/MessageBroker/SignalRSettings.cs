@@ -35,13 +35,6 @@ namespace Teleopti.Ccc.Web.Broker
 				settings.DefaultMessageBufferSize = Convert.ToInt32(value);
 			}
 
-			value = ConfigurationManager.AppSettings["ScaleOutBackplaneUrl"];
-			Uri uri;
-			if (!string.IsNullOrEmpty(value) && Uri.TryCreate(value,UriKind.RelativeOrAbsolute, out uri))
-			{
-				settings.ScaleOutBackplaneUrl = uri;
-			}
-
 			value = ConfigurationManager.AppSettings["EnablePerformanceCounters"];
 			settings.EnablePerformanceCounters = !string.IsNullOrEmpty(value) && Convert.ToBoolean(value);
 
@@ -84,7 +77,6 @@ namespace Teleopti.Ccc.Web.Broker
 		public TimeSpan? ConnectionTimeout { get; set; }
 		public TimeSpan? DisconnectTimeout { get; set; }
 		public int? DefaultMessageBufferSize { get; set; }
-		public Uri ScaleOutBackplaneUrl { get; set; }
 		public bool ThrottleMessages { get; set; }
 		public int MessagesPerSecond { get; set; }
 		public bool EnablePerformanceCounters { get; set; }

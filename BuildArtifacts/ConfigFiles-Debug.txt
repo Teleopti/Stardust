@@ -3,7 +3,6 @@
 ..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.WebService\web.config;RTAWeb.config
 ..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config;ServiceBusHost.config
 ..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\Teleopti.Analytics.Portal\web.config;AnalyticsWeb.config
-..\Teleopti.Ccc.Web.Broker\web.config;BrokerWeb.config
 ..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config;AppETLTool.config
 
 

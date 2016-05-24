@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading;
-using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Infrastructure;
 
@@ -38,12 +37,6 @@ namespace Teleopti.Ccc.Web.Broker
                 case SignalRBackplaneType.Redis:
 					GlobalHost.DependencyResolver.UseRedis(new RedisScaleoutConfiguration(settingsFromParser.SignalRBackplaneConnectionString, prefix));
 			        break;
-				default:
-					if (settingsFromParser.ScaleOutBackplaneUrl != null)
-					{
-						GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
-					}
-					break;
 			}
 
 			if (!settingsFromParser.EnablePerformanceCounters)
