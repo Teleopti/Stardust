@@ -1,4 +1,5 @@
-﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
+﻿$(SIGNALR_BACKPLANE)|$(SQL_AUTH_STRING);Initial Catalog=$(DB_ANALYTICS);Application Name=Teleopti.Web.Backplane
+$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
 $(AS_SERVER_NAME)|.
 $(SQL_SERVER_NAME)|.
 $(DB_CCC7)|TeleoptiApp_Demo
@@ -33,6 +34,7 @@ $(UrlAuthenticationBridge)|http://localhost:52857/
 $(URL)|http://localhost:52858/
 $(CONFIGURATION_FILES_PATH)|c:\nhib
 $(SIGNALR_BACKPLANE_TYPE)|sqlserver
+$(SIGNALR_BACKPLANE_PREFIX)|
 $(NEXT_ACTIVITY_TIME_TO_STAY)|30
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"

@@ -1,4 +1,5 @@
-﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
+﻿$(SIGNALR_BACKPLANE)|$(SQL_AUTH_STRING);Initial Catalog=$(DB_ANALYTICS);Application Name=Teleopti.Web.Backplane
+$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
 $(AS_SERVER_NAME)|.
 $(SQL_SERVER_NAME)|.
 $(IIS_AUTH)|Windows
@@ -26,6 +27,7 @@ $(STARDUST)|http://localhost/
 $(WEB_DEPLOY)|false
 $(URL)|http://localhost:52858/
 $(SIGNALR_BACKPLANE_TYPE)|sqlserver
+$(SIGNALR_BACKPLANE_PREFIX)|
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"

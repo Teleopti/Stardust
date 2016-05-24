@@ -1,3 +1,4 @@
+$(SIGNALR_BACKPLANE)|$(SQL_AUTH_STRING);Initial Catalog=$(DB_ANALYTICS);Application Name=Teleopti.Web.Backplane
 $(SQL_AUTH_STRING)|Data Source=REPLACEME;User Id=training;Password=training;encrypt=true;trustServerCertificate=true
 $(AS_SERVER_NAME)|MySSAS\instance
 $(AS_DATABASE)|TeleoptiAnalytics
@@ -26,5 +27,6 @@ $(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB
 $(RTA_SERVICE)|http://REPLACEME/TeleoptiCCC/RTA/TeleoptiRtaService.svc
 $(CONFIGURATION_FILES_PATH)|c:\Program Files (x86)\Teleopti\ConfigurationFiles
 $(SIGNALR_BACKPLANE_TYPE)|sqlserver
+$(SIGNALR_BACKPLANE_PREFIX)|
 $(ETLPM_BINDING_NAME)|Etl_Pm_Http_Binding
 $(WEB_DEPLOY)|true
