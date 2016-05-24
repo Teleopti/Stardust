@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 		public static IDataSourceConfigurationSetter ForWeb()
 		{
-			return new DataSourceConfigurationSetter(true, "Teleopti.Wfm.Web", new ConfigReader());
+			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.Web", new ConfigReader());
 		}
 		public static IDataSourceConfigurationSetter ForDesktop()
 		{
