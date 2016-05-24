@@ -116,14 +116,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			try
 			{
 				JSObject window = wfmWebView.GetDOMWindow();
-				var iAmCalledFromFatClient = (JSFunction) wfmWebView.EvalScript("iAmCalledFromFatClient");
-				if (iAmCalledFromFatClient == null)
+				if (wfmWebView.CanEvalScript)
+				{
+					var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
+					if (iAmCalledFromFatClient == null)
+					{
+						setWfmWebUrl(_permissionModule);
+						return;
+					}
+
+					iAmCalledFromFatClient.Invoke(window, new object[] { });
+				}
+				else
 				{
 					setWfmWebUrl(_permissionModule);
-					return;
 				}
-
-				iAmCalledFromFatClient.Invoke(window, new object[] {});
 			}
 			catch (JSInvokeException)
 			{
@@ -139,11 +146,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (cnt < 60) return;
 			cnt = 0;
 			JSObject window = wfmWebView.GetDOMWindow();
-			var ahAhAhAhStayingAlive = (JSFunction)wfmWebView.EvalScript("ahAhAhAhStayingAlive");
-			if (ahAhAhAhStayingAlive != null)
+			if (wfmWebView.CanEvalScript)
 			{
-				ahAhAhAhStayingAlive.Invoke(window, new object[] { });
+				try
+				{
+					var ahAhAhAhStayingAlive = (JSFunction)wfmWebView.EvalScript("ahAhAhAhStayingAlive");
+					if (ahAhAhAhStayingAlive != null)
+					{
+						ahAhAhAhStayingAlive.Invoke(window, new object[] { });
+					}
+				}
+				catch (JSInvokeException)
+				{
+					
+				}
+				
 			}
+			
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
