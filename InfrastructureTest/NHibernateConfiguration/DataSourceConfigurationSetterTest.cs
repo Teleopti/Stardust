@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		public void VerifyWebConfig()
 		{
 			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForWeb();
-			target.UseSecondLevelCache.Should().Be.True();
+			target.UseSecondLevelCache.Should().Be.False();
 			target.ApplicationName.Should().Be.EqualTo("Teleopti.Wfm.Web");
 		}
 
