@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var nonCascadingSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonCascadingSkill, new TimePeriod(8, 0, 9, 0));
 			var skillDay = nonCascadingSkill.CreateSkillDayWithDemand(scenario, dateOnly, 2);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), nonCascadingSkill);
 			var assignment = new PersonAssignment(agent, scenario, dateOnly);
 			assignment.AddActivity(activity, new TimePeriod(5, 0, 10, 0)); //1 agent per interval
@@ -61,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(8, 0, 9, 0));
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill});
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0)); 
@@ -93,8 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var nonCascadingSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonCascadingSkill, new TimePeriod(8, 0, 9, 0));
 			var nonCascadingSkillDay = nonCascadingSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonCascadingSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
@@ -122,8 +119,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(8, 0, 9, 0));
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			((PersonSkill) agent.Period(dateOnly).PersonSkillCollection.Single(x => x.Skill.Equals(prioritizedSkill))).Active = false;
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
@@ -153,8 +149,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(8, 0, 9, 0));
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
@@ -182,8 +177,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonHighestPrioSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonHighestPrioSkill, new TimePeriod(8, 0, 9, 0));
 			var nonHighestPrioSkillDay = nonHighestPrioSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { highestPrioSkill, nonHighestPrioSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(scheduledActivity, new TimePeriod(5, 0, 10, 0));
@@ -211,8 +205,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(8, 0, 9, 0));
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
@@ -238,8 +231,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonPrioritizedSkill.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonPrioritizedSkill, new TimePeriod(8, 0, 9, 0));
 			var nonPrioritizedSkillDay = nonPrioritizedSkill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { prioritizedSkill, nonPrioritizedSkill });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
@@ -263,8 +255,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var nonCascadingSkill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc };
 			WorkloadFactory.CreateWorkloadWithOpenHours(nonCascadingSkill, new TimePeriod(8, 0, 9, 0));
 			var skillDay = nonCascadingSkill.CreateSkillDayWithDemand(scenario, dateOnly, 2);
-			var agent = new Person();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), nonCascadingSkill);
 			var assignment = new PersonAssignment(agent, scenario, dateOnly);
 			assignment.AddActivity(activity, new TimePeriod(5, 0, 10, 0)); //1 agent per interval

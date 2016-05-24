@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < 10; i++)
 			{
-				var agent = new Person().WithId();
-				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 				agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -96,8 +95,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var asses = new List<IPersonAssignment>();
 			for (var i = 0; i < 10; i++)
 			{
-				var agent = new Person().WithId();
-				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 				agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -131,8 +129,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -162,8 +159,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -195,8 +191,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -228,8 +223,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -257,8 +251,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -289,13 +282,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
-			var agent2 = new Person().WithId();
-			agent2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent2.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent2.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent2.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -329,8 +320,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -353,8 +343,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = new Activity("_"), TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			var meetingPerson = new MeetingPerson(agent, false);
@@ -391,8 +380,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -424,8 +412,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -461,8 +448,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -498,8 +484,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -534,8 +519,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -570,8 +554,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -641,8 +624,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(63), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -690,8 +672,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId();
-			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 			agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
@@ -737,8 +718,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 				var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
 				skillDays.Add(skillDay);
-				var agent = new Person().WithId();
-				agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 				agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1));
 				agent.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);

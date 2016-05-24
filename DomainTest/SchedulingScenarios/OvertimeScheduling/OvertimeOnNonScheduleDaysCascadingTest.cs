@@ -42,15 +42,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			skillB.SetCascadingIndex_UseFromTestOnly(2);
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skillB);
 			var skillBDay = skillB.CreateSkillDayWithDemand(scenario, dateOnly, 1);
-			var nonScheduledAgent = new Person().WithId();
+			var nonScheduledAgent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			nonScheduledAgent.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), 
 				new[] { skillA, skillB });
 			nonScheduledAgent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
-			var agentKnowingSkillAandB = new Person().WithId();
+			var agentKnowingSkillAandB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentKnowingSkillAandB.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), 
 				new[]{ skillA, skillB});
 			agentKnowingSkillAandB.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
-			var agentKnowingSkillB = new Person().WithId();
+			var agentKnowingSkillB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
 			agentKnowingSkillB.AddPeriodWithSkills(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), 
 				new[] { skillB });
 			agentKnowingSkillB.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
