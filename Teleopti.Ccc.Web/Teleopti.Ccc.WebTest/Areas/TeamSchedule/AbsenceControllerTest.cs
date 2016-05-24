@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Interfaces.Domain;
-using AbsenceViewModel = Teleopti.Ccc.Web.Areas.TeamSchedule.Models.AbsenceViewModel;
 
 namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 {
@@ -52,31 +50,28 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var availableAbsences = new[] { requestableAbsence, notRequestableAbsence };
 			var result = target.GetAvailableAbsences().ToList();
 
-			checkAbsenceExisting(result, availableAbsences);
-		}
-
-		[Test]
-		public void ShouldGetAllAbsences()
-		{
-			var allAbsences = new[] { requestableAbsence, notRequestableAbsence, deletedAbsence };
-			var result = target.GetAllAbsences().ToList();
-			
-			checkAbsenceExisting(result, allAbsences);
-		}
-
-		private void checkAbsenceExisting(IEnumerable<AbsenceViewModel> resultAbsences, IEnumerable<IAbsence> expectedAbsences)
-		{
-			var result = resultAbsences.ToList();
-			var expected = expectedAbsences.ToList();
-
-			Assert.AreEqual(result.Count, expected.Count);
-			foreach (var absence in expected)
+			Assert.AreEqual(result.Count, availableAbsences.Length);
+			foreach (var absence in availableAbsences)
 			{
 				Assert.True(result.Any(x => (
 					x.Id == absence.Id.ToString() &&
 					x.Name == absence.Description.Name &&
 					x.ShortName == absence.Description.ShortName)));
 			}
+		}
+
+		[Test]
+		public void ShouldGetRequestableAbsences()
+		{
+			var result = target.GetRequestableAbsences().ToList();
+
+			Assert.AreEqual(result.Count, 1);
+
+			var resultAbsence = result.Single();
+			Assert.True(
+				resultAbsence.Id == requestableAbsence.Id.ToString() &&
+				resultAbsence.Name == requestableAbsence.Description.Name &&
+				resultAbsence.ShortName == requestableAbsence.Description.ShortName);
 		}
 	}
 }

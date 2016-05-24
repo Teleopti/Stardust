@@ -286,7 +286,7 @@
 			}
 		}
 
-		this.getAllAbsences = function () {
+		this.getRequestableAbsences = function () {
 			return {
 				then: function (cb) {
 					cb({
