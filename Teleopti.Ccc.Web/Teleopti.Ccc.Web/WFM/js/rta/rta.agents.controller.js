@@ -98,8 +98,10 @@
 				})();
 
 				var updateBreadCrumb = function(agentsInfo) {
-					$scope.siteName = agentsInfo[0].SiteName;
-					$scope.teamName = agentsInfo[0].TeamName;
+					if (agentsInfo.length > 0) {
+						$scope.siteName = agentsInfo[0].SiteName;
+						$scope.teamName = agentsInfo[0].TeamName;
+					}
 				};
 				if (siteIds.length > 1) {
 					$scope.multipleSitesName = "Multiple Sites";

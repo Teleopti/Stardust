@@ -8,55 +8,23 @@ describe('RtaAgentsCtrl', function() {
 		$resource,
 		$state,
 		$sessionStorage,
+		$fakeBackend,
 		scope;
 
 	var stateParams = {};
-	var agents = [];
-	var states = [];
-	var adherences = [];
 
 	beforeEach(module('wfm.rta'));
 
 	beforeEach(function() {
-		agents = [{
-			Name: "Ashley Andeen",
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-			SiteName: "London",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			TeamName: "Team Preferences"
-		}];
-
-		states = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			State: "Ready",
-			StateStartTime: "\/Date(1429254905000)\/",
-			Activity: "Phone",
-			NextActivity: "Short break",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "In Adherence",
-			AlarmStart: "\/Date(1432105910000)\/",
-			Color: "#00FF00",
-			TimeInState: 15473,
-			TimeInAlarm: 0
-		}];
-
-		adherences = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			AdherencePercent: 99,
-			LastTimestamp: "16:34"
-		}];
-	});
-
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.service('$stateParams', function() {
+		module(function ($provide) {
+			$provide.service('$stateParams', function () {
+				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_, _$sessionStorage_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_, _$sessionStorage_, _FakeRtaBackend_) {
 		$controller = _$controller_;
 		scope = _$rootScope_.$new();
 		$q = _$q_;
@@ -66,67 +34,10 @@ describe('RtaAgentsCtrl', function() {
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
+		$fakeBackend = _FakeRtaBackend_;
 
-		var paramsOf = function (url) {
-			var result = {};
-			var queryString = url.split("?")[1];
-			if (queryString == null) {
-				return result;
-			}
-			var params = queryString.split("&");
-			angular.forEach(params, function(t) {
-				var kvp = t.split("=");
-				if (result[kvp[0]] != null)
-					result[kvp[0]] = [].concat(result[kvp[0]], kvp[1]);
-				else
-					result[kvp[0]] = kvp[1];
-			});
-			return result;
-		};
+		$fakeBackend.clear();
 
-		$httpBackend.whenGET2 = function(url) {
-			var r = $httpBackend.whenGET(url);
-			return {
-				respond: function(fn) {
-					r.respond(function (method, url, data, headers, params) {
-						var params2 = paramsOf(url);
-						return fn(params2, method, url, data, headers, params);
-					});
-				}
-			}
-		};
-
-		$httpBackend.whenGET2(/\.\.\/api\/Adherence\/ForToday(.*)/)
-			.respond(function (params) {
-				var result = adherences.find(function(a) {
-					return a.PersonId === params.personId;
-				});
-				return [200, result];
-			});
-		$httpBackend.whenGET2(/\.\.\/api\/Agents\/ForTeams(.*)/)
-			.respond(function (params) {
-				return [200, agents.filter(function(a) { return a.TeamId === params.teamIds; })];
-			});
-		$httpBackend.whenGET2(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/)
-			.respond(function (params) {
-				params.inAlarmOnly = params.inAlarmOnly || false;
-				var result =
-					states.filter(function(s) {
-						var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
-						return a != null && a.TeamId === params.ids;
-					}).filter(function(s) {
-						return !params.inAlarmOnly || s.TimeInAlarm > 0;
-					}).sort(function(s1, s2) {
-						if (params.alarmTimeDesc)
-							return s1.TimeInAlarm - s2.TimeInAlarm;
-						return 0;
-					});
-				return [200, result];
-			});
-		$httpBackend.whenGET2(/ToggleHandler\/(.*)/)
-			.respond(function (params) {
-				return [200, { IsEnabled: false }];
-			});
 	}));
 
 	var createController = function() {
@@ -163,10 +74,10 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should get agent for team', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		}];
+		});
 
 		createController();
 
@@ -175,10 +86,10 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should display site name London', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			SiteName: "London",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}];
+		});
 
 		createController();
 
@@ -187,10 +98,10 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should display team name Team Preferences', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			TeamName: "Team Preferences"
-		}];
+		});
 
 		createController();
 
@@ -199,7 +110,11 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should get agent states', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		states = [{
+		$fakeBackend.withAgent({
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+		});
+		$fakeBackend.withState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
 			StateStartTime: "\/Date(1429254905000)\/",
@@ -210,7 +125,7 @@ describe('RtaAgentsCtrl', function() {
 			AlarmStart: "\/Date(1432105910000)\/",
 			Color: "#00FF00",
 			TimeInState: 15473
-		}];
+		});
 
 		createController()
 			.apply('agentsInAlarm = false');
@@ -228,11 +143,24 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should update agent state', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		states[0].State = "Ready";
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				TeamName: "Team Preferences"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Ready"
+			});
 
 		var c = createController()
 			.apply('agentsInAlarm = false');
-		states[0].State = "In Call";
+		$fakeBackend
+			.clearStates()
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "In Call"
+			});
 		c.wait(5000);
 
 		expect(scope.agents[0].State).toEqual("In Call");
@@ -240,11 +168,11 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should set state to agent', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}];
-		states = [{
+		})
+		.withState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
 			StateStartTime: "\/Date(1429254905000)\/",
@@ -255,7 +183,7 @@ describe('RtaAgentsCtrl', function() {
 			AlarmStart: "\/Date(1432105910000)\/",
 			Color: "#00FF00",
 			TimeInState: 15473
-		}];
+		});
 
 		createController()
 			.apply('agentsInAlarm = false');
@@ -273,21 +201,22 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should display in the same order as states received', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}, {
+		})
+		.withAgent({
 			Name: "Charley Caper",
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		}];
-
-		states = [{
+		})
+		.withState({
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b"
-		}, {
+		})
+		.withState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
-		}];
+		});
 
 		createController()
 			.apply('agentsInAlarm = false');
@@ -302,12 +231,11 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should display agent without state received', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}];
-		states = [];
+		});
 
 		createController()
 			.apply('agentsInAlarm = false');
@@ -319,16 +247,16 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should filter agent name with agentFilter', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}, {
+		})
+		.withAgent({
 			Name: "Charley Caper",
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}];
-		states = [];
+		});
 
 		createController()
 			.apply("agentsInAlarm = false")
@@ -339,25 +267,47 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should filter agent state updates with agentFilter ', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}];
-		states[0].State = "In Call";
+		});
+		$fakeBackend.withState({
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			State: "In Call"
+		});
 
 		var c = createController()
 			.apply("agentsInAlarm = false")
 			.apply('filterText = "Ashley"');
-		states[0].State = "Ready";
+		$fakeBackend
+			.clearStates()
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Ready"
+			});
 		c.wait(5000);
 
 		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
 		expect(scope.filteredData[0].State).toEqual("Ready");
 	});
 
+	//$fakeBackend.withAgent({
+	//	Name: "Ashley Andeen",
+	//	PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+	//	SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+	//	SiteName: "London",
+	//	TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+	//	TeamName: "Team Preferences"
+	//});
+
 	it('should go back to sites when business unit is changed', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+		$fakeBackend.withAgent({
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+		});
 		spyOn($state, 'go');
 
 		createController()
@@ -370,19 +320,18 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should get adherence percentage for agent when clicked', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
-		}];
-		adherences = [{
+		}).withAdherence({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			AdherencePercent: 99,
 			LastTimestamp: "16:34"
-		}];
+		});
 
 		createController()
 			.apply(function() {
-				scope.getAdherenceForAgent(agents[0].PersonId);
+				scope.getAdherenceForAgent("11610fe4-0130-4568-97de-9b5e015b2564");
 			});
 
 		expect(scope.adherence.AdherencePercent).toEqual(99);
@@ -391,9 +340,9 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should stop polling when page is about to destroy', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}];
+		});
 
 		createController()
 			.wait(5000);
@@ -417,6 +366,9 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should select an agent', function() {
 		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
+		$fakeBackend.withAgent({
+			PersonId: personId
+		});
 
 		createController()
 			.apply(function() { scope.selectAgent(personId); });
@@ -426,6 +378,9 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should unselect an agent', function() {
 		var personId = '11610fe4-0130-4568-97de-9b5e015b2564';
+		$fakeBackend.withAgent({
+			PersonId: personId
+		});
 
 		createController()
 			.apply(function () { scope.selectAgent(personId); })
@@ -437,6 +392,12 @@ describe('RtaAgentsCtrl', function() {
 	it('should unselect previous selected agent', function() {
 		var personId1 = '11610fe4-0130-4568-97de-9b5e015b2564';
 		var personId2 = '6b693b41-e2ca-4ef0-af0b-9e06008d969b';
+		$fakeBackend.withAgent({
+			PersonId: personId1
+		});
+		$fakeBackend.withAgent({
+			PersonId: personId2
+		});
 
 		createController()
 			.apply(function () { scope.selectAgent(personId1); })
@@ -460,7 +421,6 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should display states with alarm time in desc order when agentsInAlarm is turned on', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		states = [];
 
 		createController()
 			.apply('agentsInAlarm = true');
@@ -470,20 +430,21 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should display states in alarm only', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}, {
+		});
+		$fakeBackend.withAgent({
 			Name: "Charley Caper",
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		}];
-		states = [{
+		});
+		$fakeBackend.withState({
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			State: "Break",
 			TimeInAlarm: 60
-		}];
+		});
 
 		createController()
 			.apply('agentsInAlarm = true');
@@ -494,12 +455,11 @@ describe('RtaAgentsCtrl', function() {
 
 	it('should display nothing', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		agents = [{
+		$fakeBackend.withAgent({
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		}];
-		states = [];
+		});
 
 		createController()
 			.apply('agentsInAlarm = true');

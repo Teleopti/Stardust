@@ -185,12 +185,12 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js']
+					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js']
 				}
 			},
 			dev: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js']
+					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js']
 				},
 				options: {
 					sourceMap: true,
