@@ -5,11 +5,9 @@ using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 {
@@ -191,7 +189,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected activity '(.*)'")]
 		public void WhenISelectedActivity(string description)
 		{
-			Browser.Interactions.ClickUsingJQuery($".schedule .layer[projection-name={description}]");
+			Browser.Interactions.ClickVisibleOnly(string.Format(".layer[projection-name={0}]", description));
 		}
 
 		[When(@"I apply move activity")]
