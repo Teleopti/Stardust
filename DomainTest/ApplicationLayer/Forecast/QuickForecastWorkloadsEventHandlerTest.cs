@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Forecast;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 		private IMultisiteDayRepository _multisiteDayRep;
 		private IRepository<IMultisiteSkill> _skillRep;
 		private IValidatedVolumeDayRepository _validatedVolumeDayRepo;
-		private IEventPublisher _eventPublisher;
+		private FakeEventPublisher _eventPublisher;
 		private ICurrentUnitOfWork _currentUnitOfWork;
 
 		[SetUp]
@@ -66,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_forecastClassesCreator = MockRepository.GenerateMock<IForecastClassesCreator>();
 			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
 			_validatedVolumeDayRepo = MockRepository.GenerateMock<IValidatedVolumeDayRepository>();
-			_eventPublisher = MockRepository.GenerateMock<IEventPublisher>();
+			_eventPublisher = new FakeEventPublisher();
 			_currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 
 			_target = new QuickForecastWorkloadsEventHandlerBase(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback,
@@ -203,6 +205,62 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 
 			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
 														  o => o.IgnoreArguments());
+		}
+
+		[Test]
+		public void ShouldForecastAndPublishNextEvent()
+		{
+			_workloadIds = new[] {Guid.NewGuid(), Guid.NewGuid()};
+			_mess.WorkloadIds = _workloadIds;
+
+			var jobResult = MockRepository.GenerateMock<IJobResult>();
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("Sales"));
+			var scenario = MockRepository.GenerateMock<IScenario>();
+			var skillDayCalc = MockRepository.GenerateMock<ISkillDayCalculator>();
+			var totalVolume = MockRepository.GenerateMock<ITotalVolume>();
+			var validatedRep = MockRepository.GenerateMock<IValidatedVolumeDayRepository>();
+			var workloadDayTemplateCalculator = MockRepository.GenerateMock<IWorkloadDayTemplateCalculator>();
+			var taskOwner = MockRepository.GenerateMock<ITaskOwner>();
+			var teskOwners = new List<ITaskOwner> { taskOwner };
+			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013, 1, 1), new List<ITaskOwner>(), TaskOwnerPeriodType.Other);
+
+
+			_currentUnitOfWork.Stub(a => a.Current()).Return(new FakeUnitOfWork());
+
+			_currentunitOfWorkFactory.Stub(x => x.Current()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
+			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
+			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
+			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
+			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
+
+			validatedRep.Stub(x => x.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
+			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>())).Return(new List<ITaskOwner>()).IgnoreArguments();
+
+			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, new List<IValidatedVolumeDay>())).Return(teskOwners);
+			_forecastClassesCreator.Stub(x => x.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
+			_outlierRep.Stub(x => x.FindByWorkload(workload)).Return(new List<IOutlier>());
+			_skillDayRep.Stub(x => x.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments().Return(new Collection<ISkillDay>());
+			_forecastClassesCreator.Stub(x => x.CreateSkillDayCalculator(null, new List<ISkillDay>(), _statPeriod)).IgnoreArguments().Return(skillDayCalc);
+			_workloadDayHelper.Stub(x => x.GetWorkloadDaysFromSkillDays(new List<ISkillDay>(), workload)).IgnoreArguments().Return(new List<IWorkloadDayBase>());
+
+			_forecastClassesCreator.Stub(x => x.CreateTotalVolume()).Return(totalVolume);
+			totalVolume.Create(null, new List<ITaskOwner>(), new List<IVolumeYear>(), new List<IOutlier>(), 0, 0, false, workload);
+
+			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
+			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(null);
+
+			_target.Handle(_mess);
+
+			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
+														  o => o.IgnoreArguments());
+
+			_eventPublisher.PublishedEvents.Should().Not.Be.Empty();
+			var publishedEvent = _eventPublisher.PublishedEvents.First() as QuickForecastWorkloadsEvent;
+			publishedEvent.Should().Not.Be.Null();
+			publishedEvent.CurrentWorkloadId.Should().Be.EqualTo(_workloadIds.Last());
+
 		}
 
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
