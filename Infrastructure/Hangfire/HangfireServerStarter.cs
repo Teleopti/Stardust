@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 				Queues = QueueName.All().ToArray()
 			};
 			app.UseHangfireServer(options);
-
-			if (_config.ReadValue("HangfireDashboard", true))
-				app.UseHangfireDashboard();
 		}
 	}
 }

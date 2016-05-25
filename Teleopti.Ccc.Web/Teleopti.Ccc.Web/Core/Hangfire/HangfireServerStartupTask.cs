@@ -20,6 +20,5 @@ namespace Teleopti.Ccc.Web.Core.Hangfire
 			_starter.Start(application);
 			return null;
 		}
-
 	}
 }
