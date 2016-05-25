@@ -164,11 +164,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I try to delete selected absence")]
 		public void WhenITryToDeleteSelectedAbsence()
 		{
-			var propertyValues = new Dictionary<string, string>
-			{
-				{"vm.isScenarioTest", "true"}
-			};
-			Browser.Interactions.SetScopeValues(".scenario-test-trick", propertyValues);
 			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
 			Browser.Interactions.ClickUsingJQuery("#menuItemRemoveAbsence");
 		}

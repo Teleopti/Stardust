@@ -81,7 +81,7 @@ Background:
 		| Name       | Vacation         |
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
-
+@ignore
 Scenario: Could delete absences for an agent
 	When I view wfm team schedules
 	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
