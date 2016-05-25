@@ -26,22 +26,22 @@ Background:
 	And there is a contract schedule named 'A contract schedule'
 	And there is a part time percentage named 'Part time percentage'
 	And there is a rule set with
-		| Field          | Value       |
-		| Name           | A rule set  |
-		| Activity       | Phone       |
-		| Shift category | Day         |	
+	| Field          | Value       |
+	| Name           | A rule set  |
+	| Activity       | Phone       |
+	| Shift category | Day         |	
 	And there is a shift bag named 'A shift bag' with rule set 'A rule set'
 	And there is a skill named 'A skill' with activity 'Phone'
 	And 'John Smith' has a workflow control set publishing schedules until '2016-12-01'
 	And 'John Smith' has a person period with
-		| Field                | Value                |
-		| Shift bag            | A shift bag          |
-		| Skill                | A skill              |
-		| Team                 | Team green           |
-		| Start date           | 2016-01-01           |
-		| Contract             | A contract           |
-		| Contract schedule    | A contract schedule  |
-		| Part time percentage | Part time percentage |
+	| Field                | Value                |
+	| Shift bag            | A shift bag          |
+	| Skill                | A skill              |
+	| Team                 | Team green           |
+	| Start date           | 2016-01-01           |
+	| Contract             | A contract           |
+	| Contract schedule    | A contract schedule  |
+	| Part time percentage | Part time percentage |
 
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to add activity
@@ -51,12 +51,12 @@ Scenario: Should be able to add activity
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
 	And I set new activity as
-	| Field        | Value            |
-	| Activity     | Phone            |
-	| SelectedDate | 2016-10-10       |
-	| Start time   | 2016-10-10 12:00 |
-	| End time     | 2016-10-10 13:00 |
-	| Is next day  | false            |
+	| Field         | Value            |
+	| Activity      | Phone            |
+	| Selected date | 2016-10-10       |
+	| Start time    | 2016-10-10 12:00 |
+	| End time      | 2016-10-10 13:00 |
+	| Is next day   | false            |
 	Then I should be able to apply my new activity
 	When I apply my new activity
 	Then I should see a successful notice
@@ -98,12 +98,12 @@ Scenario: Should be able to add personal activity
 	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
 	And I set new activity as
-	| Field        | Value            |
-	| Activity     | Training         |
-	| SelectedDate | 2016-10-10       |
-	| Start time   | 2016-10-10 12:00 |
-	| End time     | 2016-10-10 13:00 |
-	| Is next day  | false            |
+	| Field         | Value            |
+	| Activity      | Training         |
+	| Selected date | 2016-10-10       |
+	| Start time    | 2016-10-10 12:00 |
+	| End time      | 2016-10-10 13:00 |
+	| Is next day   | false            |
 	And I apply add personal activity
 	Then I should see a successful notice
 	
