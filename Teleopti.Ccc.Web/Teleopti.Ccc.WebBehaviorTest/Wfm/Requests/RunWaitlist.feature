@@ -6,22 +6,6 @@ Feature: RunWaitlist
 	and approve waitlisted requests after something has changed in the system.
 
 @ignore
-Scenario: Should be disabled without run waitlist permission
-   Given Given I have a role with
-		 | Field               | Value |
-		 | Run Request Wailist | False |
-	When I view wfm requests
-	 And I should see "Run Waitlist" function disabled
-
-@ignore
-Scenario: Should be enabled with permission to run waitlist
-   Given Given I have a role with
-		 | Field               | Value |
-		 | Run Request Wailist | True  |
-	When I view wfm requests
-	 And I should see "Run Waitlist" function enabled
-
-@ignore
 Scenario: Should notify user that waitlist begin to run in backend
    Given Given I have a role with
 		 | Field               | Value |
@@ -40,16 +24,3 @@ Scenario: Should notify user that run waitlist task finished
 	 And I triggered run request waitlist
 	 And I wait until run waitlist task finished
 	Then I should see a instant notification that run request wailist task started by me finished
-
-@ignore
-#Function description only
-Scenario: Should notify user on next logon that run waitlist task finished
-   Given Given I have a role with
-		 | Field               | Value |
-		 | Run Request Wailist | True  |
-	When I view wfm requests
-	 And I triggered run request waitlist
-	 And I logged out
-	 And I wait until run waitlist task finished
-	 And I logged on again
-	Then I should see a notification that run request wailist task started by me finished
