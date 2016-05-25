@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public ScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotPlaceOvertimeShiftDueToNoUnderstaffingAfterShoveling()
 		{
 			var scenario = new Scenario("_");

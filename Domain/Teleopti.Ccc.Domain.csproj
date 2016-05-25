@@ -315,7 +315,11 @@
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduledExcludeDayOff.cs" />
+    <Compile Include="Scheduling\IResourceCalculateDelayerFactory.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DoFullResourceOptimizationOneTime.cs" />
+    <Compile Include="Scheduling\ResourceCalculateDelayerFactoryWithCascading.cs" />
+    <Compile Include="Scheduling\ResourceCalculateDelayerFactoryWithoutCascading.cs" />
+    <Compile Include="Scheduling\ResourceCalculateDelayerWithCascading.cs" />
     <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />
     <Compile Include="Scheduling\TeamBlock\BetweenDayOffBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />

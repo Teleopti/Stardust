@@ -18,22 +18,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IFullResourceCalculation _fullResourceCalculation;
+		private readonly IResourceCalculateDelayerFactory _resourceCalculateDelayerFactory;
 
 		public ScheduleOvertime(Func<ISchedulerStateHolder> schedulerState, 
 																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
-																	IResourceOptimizationHelper resourceOptimizationHelper,
-																	IFullResourceCalculation fullResourceCalculation)
+																	IFullResourceCalculation fullResourceCalculation,
+																	IResourceCalculateDelayerFactory resourceCalculateDelayerFactory)
 		{
 			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_fullResourceCalculation = fullResourceCalculation;
+			_resourceCalculateDelayerFactory = resourceCalculateDelayerFactory;
 		}
 
 		public void Execute(IOvertimePreferences overtimePreferences, 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 										IList<IScheduleDay> selectedSchedules)
 		{
 			_fullResourceCalculation.Execute();
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
+			var resourceCalculateDelayer = _resourceCalculateDelayerFactory.Create(1, true);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;

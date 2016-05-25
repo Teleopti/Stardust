@@ -32,21 +32,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			if (_calculationFrequency == 1)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _considerShortBreaks, doIntraIntervalCalculation);
+				ResourceCalculateDate(scheduleDateOnly, _considerShortBreaks, doIntraIntervalCalculation);
 				DateTimePeriod? dateTimePeriod = workShiftProjectionPeriod;
 				if (dateTimePeriod.HasValue)
 				{
 					DateTimePeriod period = dateTimePeriod.Value;
 					if (isNightShift(period))
-						_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _considerShortBreaks, doIntraIntervalCalculation);
+					{
+						ResourceCalculateDate(scheduleDateOnly.AddDays(1), _considerShortBreaks, doIntraIntervalCalculation);
+					}
 				}
 				return true;
 			}
 
 			if (_counter % _calculationFrequency == 0 || scheduleDateOnly != _lastDate.Value)
 			{
-				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value,  _considerShortBreaks, doIntraIntervalCalculation);
-				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value.AddDays(1),  _considerShortBreaks, doIntraIntervalCalculation);
+				ResourceCalculateDate(_lastDate.Value, _considerShortBreaks, doIntraIntervalCalculation);
+				ResourceCalculateDate(_lastDate.Value.AddDays(1), _considerShortBreaks, doIntraIntervalCalculation);
 				_lastDate = scheduleDateOnly;
 				_counter = 1;
 
@@ -74,6 +76,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var viewerEndDate = new DateOnly(period.EndDateTimeLocal(tz).AddMinutes(-1));
 
 			return viewerStartDate != viewerEndDate;
+		}
+
+		protected virtual void ResourceCalculateDate(DateOnly date, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		{
+			_resourceOptimizationHelper.ResourceCalculateDate(date, considerShortBreaks, doIntraIntervalCalculation);
 		}
 	}
 }
