@@ -1,6 +1,8 @@
 ﻿using System;
+using System.ComponentModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -11,16 +13,19 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		IRunOnHangfire
 	{
 		private readonly IHangfireUtilities _hangfireUtilities;
+		private readonly IConfigReader _config;
 
-		public CleanFailedQueueHandler(IHangfireUtilities hangfireUtilities)
+		public CleanFailedQueueHandler(IHangfireUtilities hangfireUtilities, IConfigReader config)
 		{
 			_hangfireUtilities = hangfireUtilities;
+			_config = config;
 		}
 
 		[RecurringId("CleanFailedQueueHandler:::CleanFailedQueue")]
 		public void Handle(CleanFailedQueue @event)
 		{
-			_hangfireUtilities.CleanFailedJobsBefore(DateTime.UtcNow - TimeSpan.FromDays(90)); 
+			var expiryDays = _config.ReadValue("HangfireCleanFailedJobsAfterDays", 90);
+			_hangfireUtilities.CleanFailedJobsBefore(DateTime.UtcNow - TimeSpan.FromDays(expiryDays)); 
 		}
 	}
 }
