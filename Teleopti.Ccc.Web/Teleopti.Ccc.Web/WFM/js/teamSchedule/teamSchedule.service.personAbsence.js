@@ -1,40 +1,33 @@
 ﻿"use strict";
 
 angular.module("wfm.teamSchedule").service("PersonAbsence", [
-	"$resource", "$q", "guidgenerator", function ($resource, $q, guidgenerator) {
+	"$http", "$q", function ($http, $q) {
 		var service = this;
 
-		service.loadAbsences = $resource("../api/Absence/GetAvailableAbsences", {}, {
-			query: {
-				method: "GET",
-				params: {},
-				isArray: true
-			}
-		});
+		var loadAbsencesUrl = "../api/Absence/GetAvailableAbsences";
+		var addFullDayAbsenceUrl = "../api/TeamSchedule/AddFullDayAbsence";
+		var addIntradayAbsenceUrl = "../api/TeamSchedule/AddIntradayAbsence";
+		var removeAbsenceUrl = "../api/TeamSchedule/RemoveAbsence";
 
-		service.applyFullDayAbsence = $resource("../api/TeamSchedule/AddFullDayAbsence", {}, {
-			post: {
-				method: "POST",
-				params: {},
-				isArray: true
-			}
-		});
+		service.loadAbsences = function () {
+			var deferred = $q.defer();
+			$http.get(loadAbsencesUrl).success(function (data) {
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
 
-		service.applyIntradayAbsence = $resource("../api/TeamSchedule/AddIntradayAbsence", {}, {
-			post: {
-				method: "POST",
-				params: {},
-				isArray: true
-			}
-		});
+		service.addFullDayAbsence = function(data) {
+			return $http.post(addFullDayAbsenceUrl, data);
+		}
 
-		service.removeAbsence = $resource("../api/TeamSchedule/RemoveAbsence", {}, {
-			post: {
-				method: "POST",
-				params: {},
-				isArray: true
-			}
-		});
+		service.addIntradayAbsence = function(data) {
+			return $http.post(addIntradayAbsenceUrl, data);
+		}
+
+		service.removeAbsence = function(data) {
+			return $http.post(removeAbsenceUrl, data);
+		}		
 
 		service.removePersonAbsence = removePersonAbsence;
 

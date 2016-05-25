@@ -117,7 +117,6 @@
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 
-			console.log('run this?');
 			scope.vm.timeRange = {
 				startTime: selfCtrl.getDefaultActvityStartTime(),
 				endTime: selfCtrl.getDefaultActvityEndTime()

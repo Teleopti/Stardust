@@ -18,7 +18,6 @@
 
 		vm.resetActiveCmd = function() { vm.activeCmd = null; }
 
-
 		vm.getActionCb = function (_) {
 			var returnFn = function(trackId, personIds) {
 				vm.resetActiveCmd();
@@ -35,6 +34,17 @@
 		vm.setActionCb = function (_, cb) {
 			vm.actionCallback = cb;
 		};
+
+		vm.hasPermission = function(permission) {
+			if (!vm.configurations || !vm.configurations.permissions) return false;
+			return vm.configurations.permissions[permission];
+		}
+
+		vm.hasToggle = function(toggle) {
+			if (!vm.configurations || !vm.configurations.toggles) return false;
+			return vm.configurations.toggles[toggle];
+		}
+
 	}
 
 	function teamscheduleCommandContainer() {
@@ -43,7 +53,8 @@
 			controller: teamscheduleCommandContainerCtrl,
 			scope: {
 				date: '=',
-				actionCallback: '&?'
+				actionCallback: '&?',
+				configurations: '=?'
 			},
 			controllerAs: 'vm',
 			bindToController: true,

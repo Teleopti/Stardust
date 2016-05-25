@@ -1,138 +1,130 @@
-﻿'use strict';
+﻿(function () {
+	'use strict';
 
-(function () {
-	angular.module('wfm.teamSchedule').directive('addAbsence', ['$locale', '$translate', 'guidgenerator', 'PersonAbsence', absencePanel]);
+	angular.module('wfm.teamSchedule').directive('addAbsence', addAbsenceDirective);
 
-	function absencePanel($locale) {
-		return {
-			templateUrl: 'js/teamSchedule/html/addabsencepanel.html',
-			scope: {
-				permissions: '&',
-				defaultDateTime: '&',
-				actionsAfterAbsenceApply: '&'
-			},
-			controller: ['$element', '$translate', 'PersonAbsence', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addAbsenceCtrl],
-			controllerAs: 'vm',
-			bindToController: true,
-			link: function (scope, element, attr) {
-				scope.vm.init(scope, $locale);
-			}
-		};
-	}
+	addAbsenceCtrl.$inject = ['PersonAbsence', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', '$locale'];
 
-	function addAbsenceCtrl($element, $translate, personAbsenceSvc, guidgenerator, CommandCommon, personSelectionSvc, NotificationService) {
+	function addAbsenceCtrl(PersonAbsenceSvc, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, $locale) {
 		var vm = this;
-		addTabIndexToControls();
-		removePanelTabIndex();
-		addFocusListenerToInputs();
 
-		vm.selectedAbsenceStartDate = vm.defaultDateTime();
+		vm.label = 'AddAbsence';
+	
+		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
-		vm.selectedAbsenceEndDate = moment(vm.defaultDateTime()).add(1, 'hour').toDate();
-		vm.absencePermissions = {
-			IsAddIntradayAbsenceAvailable: vm.permissions().IsAddIntradayAbsenceAvailable,
-			IsAddFullDayAbsenceAvailable: vm.permissions().IsAddFullDayAbsenceAvailable
-		};
-		vm.isFullDayAbsence = vm.absencePermissions.IsAddFullDayAbsenceAvailable;
+		PersonAbsenceSvc.loadAbsences().then(function (absences) {
+			vm.availableAbsenceTypes = absences;
+			vm.availableAbsenceTypesLoaded = true;
+		});
 
-		vm.isDataChangeValid = function () {
-			return vm.selectedAbsenceId !== undefined && (vm.isAbsenceTimeValid() || vm.isAbsenceDateValid());
-		};
+		vm.isTimeRangeValid = function() {
+			return vm.isAbsenceTimeValid() || vm.isAbsenceDateValid();
+		}
 
 		vm.isAbsenceTimeValid = function () {
-			return !vm.isFullDayAbsence && (moment(vm.selectedAbsenceEndDate) >= moment(vm.selectedAbsenceStartDate));
+			return !vm.isFullDayAbsence && (moment(vm.timeRange.endTime) >= moment(vm.timeRange.startTime));
 		};
 
 		vm.isAbsenceDateValid = function () {
-			return vm.isFullDayAbsence && moment(vm.selectedAbsenceEndDate).startOf('day') >= moment(vm.selectedAbsenceStartDate).startOf('day');
+			return vm.isFullDayAbsence && moment(vm.timeRange.endTime).startOf('day') >= moment(vm.timeRange.startTime).startOf('day');
 		}
 
-		vm.applyAbsence = CommandCommon.wrapPersonWriteProtectionCheck(true, 'AddAbsence', applyAbsence,null, vm.selectedAbsenceStartDate);
+		vm.getDefaultAbsenceStartTime = function () {
+			var curDateMoment = moment(vm.selectedDate());
+			var personIds = vm.selectedAgents.map(function(agent) { return agent.personId; });
+			return scheduleManagementSvc.getEarliestStartOfSelectedSchedule(curDateMoment, personIds);
+		}
+		
+		vm.getDefaultAbsenceEndTime = function() {
+			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
+		}
 
-		function applyAbsence() {
-			var trackId = guidgenerator.newGuid();
-			var personIds = personSelectionSvc.getCheckedPersonIds();
+		vm.addAbsence = function () {
+			var requestData = {
+				PersonIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
+				Date: vm.selectedDate(),	
+				AbsenceId: vm.selectedAbsenceId,
+				TrackedCommandInfo: { TrackId: vm.trackId }
+			};
+			var actionPromise;
 			if (vm.isFullDayAbsence) {
-				personAbsenceSvc.applyFullDayAbsence.post({
-					PersonIds: personIds,
-					AbsenceId: vm.selectedAbsenceId,
-					StartDate: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD"),
-					EndDate: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD"),
-					TrackedCommandInfo: { TrackId: trackId }
-				}).$promise.then(onSuccessfullyAppliedAbsence, onFailingToApplyAbsence);
+				requestData.StartDate = moment(vm.timeRange.startTime).format("YYYY-MM-DD");
+				requestData.EndDate = moment(vm.timeRange.endTime).format("YYYY-MM-DD");
+				actionPromise = PersonAbsenceSvc.addFullDayAbsence(requestData);
 			} else {
-				personAbsenceSvc.applyIntradayAbsence.post({
-					PersonIds: personIds,
-					AbsenceId: vm.selectedAbsenceId,
-					StartTime: moment(vm.selectedAbsenceStartDate).format("YYYY-MM-DD HH:mm"),
-					EndTime: moment(vm.selectedAbsenceEndDate).format("YYYY-MM-DD HH:mm"),
-					TrackedCommandInfo: { TrackId: trackId }
-				}).$promise.then(onSuccessfullyAppliedAbsence, onFailingToApplyAbsence);
+				requestData.StartTime = moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm");
+				requestData.EndTime = moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm");
+				actionPromise = PersonAbsenceSvc.addIntradayAbsence(requestData);
 			}
 
-			function onFailingToApplyAbsence(result) {
-				vm.actionsAfterAbsenceApply({
-					trackId: trackId,
-					personIds: personIds,
-				});
-				NotificationService.notify('error', 'AddAbsenceFailed');
-			}
-
-			function onSuccessfullyAppliedAbsence(result) {
-				vm.actionsAfterAbsenceApply({
-					trackId: trackId,
-					personIds: personIds,
-				});
-				var total = personSelectionSvc.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount;
-				var fail = result.length;
-				if (fail === 0) {
-					NotificationService.notify('success', 'AddAbsenceSuccessedResult');
-				} else {
-					var description = NotificationService.notify('warning', 'AddAbsenceTotalResult', [total - fail, fail]);
+			actionPromise.then(function (response) {
+				if (vm.getActionCb(vm.label)) {
+					vm.getActionCb(vm.label)(vm.TrackId, requestData.PersonIds);
 				}
-			}
-		}
-
-		function updateDateAndTimeFormat($scope, $locale) {
-			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
-			$scope.vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
-			$scope.$on('$localeChangeSuccess', updateDateAndTimeFormat);
-		}
-
-		vm.init = function ($scope, $locale) {
-			updateDateAndTimeFormat($scope, $locale);
-			personAbsenceSvc.loadAbsences.query().$promise.then(function (result) {
-				vm.AvailableAbsenceTypes = result;
+				teamScheduleNotificationService.reportActionResult({
+					success: 'AddAbsenceSuccessedResult',
+					warning: 'AddAbsenceTotalResult'
+				}, vm.selectedAgents.map(function (x) {
+					return {
+						PersonId: x.personId,
+						Name: x.name
+					}
+				}), response.data);
 			});
 		};
 
-		function addTabIndexToControls() {
-			var panel = $element[0];
-			var controls = [];
-			controls.push(panel.querySelector('select.absence-selector'));
-			controls.push.apply(controls, panel.querySelectorAll('team-schedule-datepicker input'));
-			controls.push.apply(controls, panel.querySelectorAll('.timepicker input'));
-			controls.push(panel.querySelector('#apply-absence-btn'));
-			angular.forEach(controls, addTabIndexToElement);
-		}
+		vm.updateDateAndTimeFormat = updateDateAndTimeFormat;
 
-		function addTabIndexToElement(element) {
-			var _tabindex = $element.attr('tabIndex');
-			angular.element(element).attr('tabIndex', _tabindex);
+		function updateDateAndTimeFormat() {
+			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
+			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;			
 		}
-
-		function removePanelTabIndex() {
-			$element.removeAttr('tabIndex');
-		}
-
-		function addFocusListenerToInputs() {
-			var inputs = $element[0].querySelectorAll('.timepicker input');
-			angular.forEach(inputs, function (input) {
-				angular.element(input).on('focus', function (event) {
-					event.target.select();
-				});
-			});
-		}
-
 	}
+
+
+	function addAbsenceDirective() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: addAbsenceCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			templateUrl: 'js/teamSchedule/html/addAbsence.tpl.html',
+			require: ['^teamscheduleCommandContainer', 'addAbsence'],
+			link: postlink
+		}
+
+		function postlink(scope, elem, attrs, ctrls) {
+			var containerCtrl = ctrls[0],
+				selfCtrl = ctrls[1];
+
+			scope.vm.selectedDate = containerCtrl.getDate;
+			scope.vm.trackId = containerCtrl.getTrackId();
+			scope.vm.getActionCb = containerCtrl.getActionCb;
+			scope.vm.isAddFullDayAbsenceAvailable = function() {
+				return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
+			};
+			scope.vm.isAddIntradayAbsenceAvailable = function() {
+				return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
+			}
+
+			scope.vm.timeRange = {
+				startTime: selfCtrl.getDefaultAbsenceStartTime(),
+				endTime: selfCtrl.getDefaultAbsenceEndTime()
+			};
+
+			scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
+
+			scope.$on('teamSchedule.command.focus.default', function () {
+				var focusTarget = elem[0].querySelector('.focus-default');
+				if (focusTarget) angular.element(focusTarget).focus();
+			});
+
+			selfCtrl.updateDateAndTimeFormat();
+			scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
+		}
+	}
+
+
+
 })();

@@ -190,11 +190,6 @@
 			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
 		};
 
-		vm.setEarliestStartOfSelectedSchedule = function() {
-			var selectedPersonIds = personSelectionSvc.getSelectedPersonIdList();
-			vm.earliestStartTime = scheduleMgmtSvc.getEarliestStartOfSelectedSchedule(vm.scheduleDateMoment(), selectedPersonIds);
-		}
-
 		vm.defaultNewActivityStart = function() {
 			var nowInUserTimeZone = moment(WFMDateSvc.nowInUserTimeZone());
 
@@ -216,10 +211,7 @@
 		vm.moveActivity = function () {
 		};
 
-		vm.addAbsence = function() {
-			vm.setEarliestStartOfSelectedSchedule();
-		};
-	
+
 		function removeAbsence(removeEntireCrossDayAbsence) {
 			var trackId = guidgenerator.newGuid();
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();

@@ -24,10 +24,18 @@
 			{
 				label: "AddAbsence",
 				shortcut: "Alt+A",
-				panelName: 'report-absence',
-				action: function () { vm.setCurrentCommand('AddAbsence'); parentVm.addAbsence(); },
+				panelName: 'add-absence',
+				action: function () {
+					if (vm.triggerCommand) {
+						vm.triggerCommand({
+							label: "AddAbsence",
+							needToOpenSidePanel: true
+						});
+					}
+				},
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
-				visible: function () { return vm.canActiveAddAbsence(); }
+				visible: function () { return vm.canActiveAddAbsence(); },
+				withCommandContainer: true
 			},
 			{
 				label: "AddActivity",

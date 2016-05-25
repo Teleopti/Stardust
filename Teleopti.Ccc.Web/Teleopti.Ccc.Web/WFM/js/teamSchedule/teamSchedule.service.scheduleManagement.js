@@ -63,27 +63,28 @@
 
 			svc.getEarliestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
 				var startUpdated = false;
-				var earlistStart = new Date("2099-12-31");
-				for (var i = 0; i < svc.groupScheduleVm.Schedules.length; i++) {
-					var schedule = svc.groupScheduleVm.Schedules[i];
-					var scheduleStart = new Date(schedule.ScheduleStartTime());
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {
+				var earlistStart = moment("2099-12-31");
+
+				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
+					var scheduleStart = moment(schedule.ScheduleStartTime());
+					
+					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart < earlistStart) {						
 						startUpdated = true;
 						earlistStart = scheduleStart;
 					}
-				}
+				});
 
 				if (!startUpdated) {
 					// Set to 08:00 for empty schedule or day off
-					earlistStart = scheduleDateMoment.startOf('day').add(8, 'hour').toDate();
+					earlistStart = scheduleDateMoment.startOf('day').add(8, 'hour');
 				}
-
-				return earlistStart;
+			
+				return earlistStart.toDate();
 			}
 
 			svc.getLatestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
 				var startUpdated = false;
-				var latestStart = scheduleDateMoment.toDate();
+				var latestStart = scheduleDateMoment;
 
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					var scheduleStart = moment(schedule.ScheduleStartTime());
@@ -96,10 +97,10 @@
 
 				if (!startUpdated) {
 					// Set to 08:00 for empty schedule or day off
-					latestStart = scheduleDateMoment.startOf('day').add(8, 'hour').toDate();
+					latestStart = scheduleDateMoment.startOf('day').add(8, 'hour');
 				}
 
-				return latestStart;
+				return latestStart.toDate();
 			};
 
 			svc.getLatestPreviousDayOvernightShiftEnd = function (scheduleDateMoment, selectedPersonIds) {
@@ -109,7 +110,7 @@
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
 						previousDayShifts = previousDayShifts.concat(schedule.Shifts.filter(function(shift) {
 							return shift.Projections.length > 0
-								&& new Date(shift.Date.toDate().toDateString()) < new Date(scheduleDateMoment.toDate().toDateString());
+								&& new Date(shift.Date.format('YYYY-MM-DD')) < new Date(scheduleDateMoment.format('YYYY-MM-DD'));
 						}));
 					}
 				});

@@ -78,8 +78,7 @@ describe("teamschedule schedule management service tests", function() {
 
 	it("Should get latest shift start in given schedules", function() {
 		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
-
-		expect(target.getLatestStartOfSelectedSchedule(scheduleDateMoment, [schedule1.PersonId,schedule2.PersonId])).toEqual(moment(schedule2.Projection[0].Start));
+		expect(moment(target.getLatestStartOfSelectedSchedule(scheduleDateMoment, [schedule1.PersonId,schedule2.PersonId])).format("HH:mm")).toEqual(moment(schedule2.Projection[0].Start).format("HH:mm"));
 	});
 
 	it('should get latest previous day overnight shift end', function() {
