@@ -1,0 +1,15 @@
+﻿<table style="width: 100%;">
+	<tr ng-repeat="shiftTradeDay in row.entity['ShiftTradeDays'] | filterShiftTradeDetailDisplay:col.colDef.field">
+		<td class="shift-trade-cell" ng-style="{'background-color': shiftTradeDay.FromScheduleDayDetail.Color}">
+			{{shiftTradeDay.FromScheduleDayDetail.ShortName}}
+		</td>
+	</tr>
+
+	<tr ng-repeat="shiftTradeDay in row.entity['ShiftTradeDays'] | filterShiftTradeDetailDisplay:col.colDef.field">
+		<td class="shift-trade-cell" ng-style="{'background-color': shiftTradeDay.FromScheduleDayDetail.Color}">
+			{{shiftTradeDay.ToScheduleDayDetail.ShortName}}
+		</td>
+	</tr>
+</table>
+
+

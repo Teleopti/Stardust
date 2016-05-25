@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
@@ -15,26 +14,38 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IRequestViewModelMapper _requestViewModelMapper;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
+		private readonly IUserCulture _userCulture;
 
-		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider)
+		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserCulture userCulture)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
+			_userCulture = userCulture;
 		}
 
-		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
+		public ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
 			int totalCount;
-			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.ShiftTradeRequest }, out totalCount);
+			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.ShiftTradeRequest }, out totalCount).ToArray();
 
-			return new RequestListViewModel()
+			var requestMinDate = requests.Min (r => r.Request.Period.LocalStartDateTime);
+			var requestMaxDate = requests.Max (r => r.Request.Period.LocalEndDateTime);
+
+			var requestListModel = new ShiftTradeRequestListViewModel()
 			{
-				Requests =
-					requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request))
+				Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request)).ToList(),
+				TotalCount = totalCount,
+				Skip = input.Paging.Skip,
+				Take = input.Paging.Take,
+				MinimumDateTime = requestMinDate,
+				MaximumDateTime = requestMaxDate,
+				FirstDateForVisualisation = new DateOnly(DateHelper.GetFirstDateInWeek(requestMinDate, _userCulture.GetCulture())),
+				LastDateForVisualisation = new DateOnly(DateHelper.GetLastDateInWeek(requestMaxDate, _userCulture.GetCulture())),
 			};
-
+			
+			return requestListModel;
 		}
 
 		private ShiftTradeRequestViewModel createShiftTradeRequestViewModel(IPersonRequest request)
@@ -49,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				PersonTo = _personNameProvider.BuildNameFromSetting(personTo.Name),
 				PersonToTeam = personToTeam?.SiteAndTeam,
 				PersonToTimeZone = _ianaTimeZoneProvider.WindowsToIana(personTo.PermissionInformation.DefaultTimeZone().Id),
-				ShiftTradeDays = shiftTradeDays
+				ShiftTradeDays = shiftTradeDays.ToList()
 			};
 		}
 
@@ -69,13 +80,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		{
 			var shiftTradeScheduleDayDetailViewModel = new ShiftTradeScheduleDayDetailViewModel();
 
+			if (scheduleDay == null) return shiftTradeScheduleDayDetailViewModel;
+
 			if (scheduleDay.HasDayOff())
 			{
-				mapDayOffFields(scheduleDay, shiftTradeScheduleDayDetailViewModel);
+				mapDayOffFields (scheduleDay, shiftTradeScheduleDayDetailViewModel);
 			}
 			else
 			{
-				mapMainShiftFields(scheduleDay, shiftTradeScheduleDayDetailViewModel);
+				mapMainShiftFields (scheduleDay, shiftTradeScheduleDayDetailViewModel);
 			}
 
 			return shiftTradeScheduleDayDetailViewModel;

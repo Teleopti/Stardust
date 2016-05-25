@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -16,15 +13,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestRepository _repository;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly IToggleManager _toggleManager;
+		
 		private readonly IPermissionProvider _permissionProvider;
 
-		public PersonRequestProvider(IPersonRequestRepository repository, ILoggedOnUser loggedOnUser, IUserTimeZone userTimeZone, IToggleManager toggleManager, IPermissionProvider permissionProvider)
+		public PersonRequestProvider(IPersonRequestRepository repository, ILoggedOnUser loggedOnUser, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider)
 		{
 			_repository = repository;
 			_loggedOnUser = loggedOnUser;
 			_userTimeZone = userTimeZone;
-			_toggleManager = toggleManager;
+			
 			_permissionProvider = permissionProvider;
 		}
 

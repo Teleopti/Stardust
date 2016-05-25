@@ -16,18 +16,45 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPeopleSearchProvider _peopleSearchProvider;
+		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
+		private readonly IShiftTradeSwapScheduleDetailsMapper _shiftTradeSwapScheduleDetailsMapper;
 
-		public RequestsProvider(IPersonRequestRepository repository, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, IPeopleSearchProvider peopleSearchProvider)
+		public RequestsProvider(IPersonRequestRepository repository, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, IPeopleSearchProvider peopleSearchProvider, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IShiftTradeSwapScheduleDetailsMapper shiftTradeSwapScheduleDetailsMapper )
 		{
 			_repository = repository;
 			_userTimeZone = userTimeZone;
 			_permissionProvider = permissionProvider;
 			_peopleSearchProvider = peopleSearchProvider;
+			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
+			_shiftTradeSwapScheduleDetailsMapper = shiftTradeSwapScheduleDetailsMapper;
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveRequests(AllRequestsFormData input, IEnumerable<RequestType> requestTypes, out int totalCount)
 		{
-			return _repository.FindAllRequests(toRequestFilter(input, requestTypes), out totalCount).Where(permissionCheckPredicate);
+			var requests = _repository.FindAllRequests(toRequestFilter(input, requestTypes), out totalCount).Where(permissionCheckPredicate).ToList();
+
+			return setupShiftTradeRequestStatus(requests);
+		}
+
+		private IEnumerable<IPersonRequest> setupShiftTradeRequestStatus(IEnumerable<IPersonRequest> requests)
+		{
+			foreach (var request in requests
+				.Where (request => request.Request is IShiftTradeRequest)
+				.Select (request => request))
+			{
+				var shiftTradeRequest = (IShiftTradeRequest) request.Request;
+				if (request.IsPending || request.IsNew)
+				{
+					_shiftTradeRequestStatusChecker.Check (shiftTradeRequest);
+				}
+				else
+				{
+					_shiftTradeSwapScheduleDetailsMapper.Map(shiftTradeRequest);
+				}
+				
+			}
+
+			return requests;
 		}
 
 		private RequestFilter toRequestFilter(AllRequestsFormData input, IEnumerable<RequestType> requestTypes)

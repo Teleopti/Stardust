@@ -2,6 +2,11 @@
 	background-color: $white;
 	position: relative;
 	height: 87vh;
+    //height: 70vh;
+
+    .panel {
+        height: 0;
+    }
 
 	.advanced-search-container tr td:nth-child(2) div {
 		margin-right: 0 !important;
@@ -9,13 +14,15 @@
 
 	#time-zone-switch {
 		position: relative;
-		top: 1em;
 	}
 
 	.filter-switch {
-		position: absolute;
-		top: 1rem;
-		left: 65rem;
+		display: inline-block;
+        padding-left: 3px;
+
+		.relative {
+			position: relative;
+		}
 	}
 
 	.inline-block {
@@ -69,7 +76,9 @@
 	}
 
 	.ui-grid {
-		height: 77vh;
+		//height: 61vh;
+        height: 71vh;
+        margin: 15px;
 
 		.ui-grid-cell-contents {
 			width: 85%;
@@ -86,9 +95,25 @@
 		}
 	}
 
+    .shift-trade-cell {
+        width: 100% !important;
+        height: 30px !important;
+        box-sizing: border-box;
+        border:1px solid #aeaeae;
+    }
+
+    .request-header-full-height{
+        height: 60px;
+    }
+
+    .shift-trade-header-weekend{
+        color: $red-600;
+    }
+
 	.paging {
 		position: relative;
-		bottom: 1rem;
+        top : -24px;
+		//bottom: 1rem;
 
 		.total-requests-count {
 			margin-right: 20px;
@@ -118,6 +143,10 @@
 	input.ui-grid-filter-input {
 		text-overflow: ellipsis;
 	}
+
+    .ui-grid-viewport {
+        //overflow: visible!important;
+    }
 
 	.ui-grid-header-viewport {
 		overflow: visible;
@@ -157,4 +186,22 @@
 			padding-top: 0px;
 		}
 	}
+
+    
+     [role="tabpanel"],
+        md-tabs {
+            transition: none;
+        }
+
+     md-content {
+         overflow: visible;
+     }
+
+     .ui-grid-canvas .ui-grid-cell {
+        display: flex;
+        //justify-content: center;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        text-overflow: ellipsis;
+     }
 }

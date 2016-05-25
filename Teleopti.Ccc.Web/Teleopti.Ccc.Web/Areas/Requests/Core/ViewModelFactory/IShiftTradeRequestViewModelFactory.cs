@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
 	public interface IShiftTradeRequestViewModelFactory
 	{
-		RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input);
+		ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input);
 	}
 }

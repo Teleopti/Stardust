@@ -1,7 +1,7 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
-	describe('Requests overview directive', function() {
+	describe('Requests overview directive', function () {
 		var $compile, $rootScope, requestsDataService, requestsDefinitions;
 
 		var targetElement, targetScope;
@@ -9,19 +9,19 @@
 		beforeEach(module('wfm.templates'));
 		beforeEach(module('wfm.requests'));
 
-		beforeEach(function() {
+		beforeEach(function () {
 			var requestsDataService = new FakeRequestsDataService();
-			module(function($provide) {
-				$provide.service('requestsDataService', function() {
+			module(function ($provide) {
+				$provide.service('requestsDataService', function () {
 					return requestsDataService;
 				});
-				$provide.service('Toggle', function() {
+				$provide.service('Toggle', function () {
 					return new FakeToggleService();
 				});
 			});
 		});
 
-		beforeEach(inject(function(_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_) {
+		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDataService = _requestsDataService_;
@@ -29,7 +29,7 @@
 			targetScope = $rootScope.$new();
 		}));
 
-		it("show requests table container", function() {
+		it("show requests table container", function () {
 			requestsDataService.setRequests([]);
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
@@ -37,7 +37,7 @@
 			expect(targets.length).toEqual(1);
 		});
 
-		it("populate requests data from requests data service", function() {
+		it("populate requests data from requests data service", function () {
 
 			var request = {
 				Id: 1,
@@ -52,7 +52,7 @@
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
 		});
 
-		it("should not request data when filter contains error", function() {
+		it("should not request data when filter contains error", function () {
 			requestsDataService.setRequests([]);
 
 			targetScope.period = {};
@@ -69,7 +69,7 @@
 			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
 		});
 
-		it("should request data when filter change to valid values", function() {
+		it("should request data when filter change to valid values", function () {
 
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
@@ -88,7 +88,7 @@
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 		});
 
-		it("should request data when search term changed", function() {
+		it("should request data when search term changed", function () {
 
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
@@ -106,7 +106,7 @@
 			expect(requestsDataService.getLastRequestParameters()[0].agentSearchTerm).toEqual("search term");
 		});
 
-		it("should request data when pagination changed", function() {		
+		it("should request data when pagination changed", function () {
 
 			requestsDataService.setRequests([{ Id: 1 }, { Id: 2 }]);
 			targetScope.period = {};
@@ -142,7 +142,7 @@
 		}
 	});
 
-	describe('requests table container directive', function() {
+	describe('requests table container directive', function () {
 		var $compile, $rootScope, requestsDefinitions, $filter;
 
 		beforeEach(module('wfm.templates'));
@@ -165,9 +165,9 @@
 			$rootScope = _$rootScope_;
 			requestsDefinitions = _requestsDefinitions_;
 			$filter = _$filter_;
-		}));
+	}));
 
-		it('should apply template', function() {
+		it('should apply template', function () {
 			var test = setUpTarget();
 			expect(test.target.html()).not.toEqual('');
 		});
@@ -187,9 +187,9 @@
 			expect(targets.length).toEqual(2);
 		});
 
-		it("startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says", function() {
+		it("startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says", function () {
 			var test = setUpTarget();
-			
+
 			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-05T00:00:00', PeriodEndTime: '2016-01-07T23:59:00', CreatedTime: '2016-01-05T03:29:37', TimeZone: 'Europe/Berlin', UpdatedTime: '2016-01-05T03:29:37' }];
 			test.scope.$digest();
 
@@ -215,12 +215,94 @@
 			test.scope.$digest();
 
 			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T05:00:00', 'Europe/Berlin'));
-			
+
 			isolatedScope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
 			test.scope.$digest();
 
 			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T14:00:00'));
 		});
+
+		it("should be able to calculate column categorys for weeks using supplied period startofweek", function () {
+			var test = setUpTarget();
+
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2016-05-25T00:00:00',
+				Maximum: '2016-06-02T00:00:00',
+				StartOfWeek: '2016-05-23T00:00:00'
+			};
+
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+
+			var weeks = isolatedScope.requestsTableContainer.getWeekCategories();
+			
+			expect(weeks[0].name).toEqual(toShortDateString('2016-05-23T00:00:00'));
+			expect(weeks[1].name).toEqual(toShortDateString('2016-05-30T00:00:00'));
+			
+		});
+
+		
+		it("should get columns representing the days involved in the shift trade, starting on Monday", function () {
+			var test = setUpTarget();
+
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2016-05-25T00:00:00',
+				Maximum: '2016-06-02T00:00:00',
+				StartOfWeek: '2016-05-23T00:00:00',
+				EndOfWeek: '2016-06-05T00:00:00'
+			};
+
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+			var columns = isolatedScope.requestsTableContainer.getShiftTradeVisualisationDayColumns();
+
+			expect(columns.length).toEqual(14);
+
+			expect(columns[0].displayName).toEqual('Mon');
+			expect(columns[0].category).toEqual(toShortDateString('2016-05-23T00:00:00'));
+			
+			expect(columns[13].displayName).toEqual('Sun');
+			expect(columns[13].category).toEqual(toShortDateString('2016-05-30T00:00:00'));
+
+		});
+
+
+		it("should get columns representing the days involved in the shift trade, starting on Sunday", function () {
+			var test = setUpTarget();
+
+			test.scope.shiftTradeRequestDateSummary = {
+				Minimum: '2016-05-25T00:00:00',
+				Maximum: '2016-06-02T00:00:00',
+				StartOfWeek: '2016-05-22T00:00:00',
+				EndOfWeek: '2016-06-04T00:00:00'
+			};
+
+			test.scope.$digest();
+
+			var isolatedScope = test.target.isolateScope();
+			var columns = isolatedScope.requestsTableContainer.getShiftTradeVisualisationDayColumns();
+
+			expect(columns.length).toEqual(14);
+
+			expect(columns[0].displayName).toEqual('Sun');
+			expect(columns[0].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
+
+			expect(columns[1].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
+
+			expect(columns[13].category).toEqual(toShortDateString('2016-05-29T00:00:00'));
+
+			expect(columns[13].displayName).toEqual('Sat');
+
+
+		});
+
+
+		function toShortDateString(dateString) {
+			return $filter('date')(moment(dateString).toDate(), "shortDate");
+		}
+
 
 		function toDateString(date, timeZone) {
 			var _isNowDST = moment.tz(timeZone).isDST();
@@ -233,13 +315,13 @@
 			var directiveElem = getCompiledElement();
 
 			function getCompiledElement() {
-				var element = angular.element('<requests-table-container requests="requests"></requests-table-container>');
+				var element = angular.element('<requests-table-container requests="requests" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
 				var compiledElement = $compile(element)(scope);
 				scope.$digest();
 				return compiledElement;
 			};
 
-			return {  scope: scope, target: directiveElem };
+			return { scope: scope, target: directiveElem };
 		}
 	});
 
@@ -254,28 +336,28 @@
 			_lastRequestParameters = null;
 		};
 
-		this.setRequests = function(requests) {
+		this.setRequests = function (requests) {
 			_requests = requests;
 		};
 
 		this.getHasSentRequests = function () { return _hasSentRequests; }
-		this.getLastRequestParameters = function() { return _lastRequestParameters; }
+		this.getLastRequestParameters = function () { return _lastRequestParameters; }
 
 		this.getAllRequestsPromise_old = function () {
 			_hasSentRequests = true;
 			_lastRequestParameters = arguments;
 			return {
-				then: function (cb) {					
+				then: function (cb) {
 					cb({ data: _requests });
 				}
 			}
 		};
 
-		this.getAllRequestsPromise = function() {
+		this.getAllRequestsPromise = function () {
 			_hasSentRequests = true;
 			_lastRequestParameters = arguments;
 			return {
-				then: function(cb) {
+				then: function (cb) {
 					cb({
 						data: {
 							Requests: _requests,

@@ -80,10 +80,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (shiftTradeRequest == null) return;
             if (!_isInBatchMode)
             {
-                IList<IShiftTradeRequest> shiftTradeRequests =
-                    ExtractPeriodAndPersons(new List<IPersonRequest> {(IPersonRequest) shiftTradeRequest.Parent});
-                if (shiftTradeRequests.Count == 0 || !_period.HasValue || _persons.Count == 0) return;
-								LoadScheduleDictionary(_period.Value);
+                var shiftTradeRequests = ExtractPeriodAndPersons(new List<IPersonRequest> {(IPersonRequest) shiftTradeRequest.Parent});
+
+				if (shiftTradeRequests.Count == 0 || !_period.HasValue || _persons.Count == 0) return;
+
+				LoadScheduleDictionary(_period.Value);
             }
             VerifyShiftTradeIsUnchanged(_scheduleDictionary, shiftTradeRequest, _authorization);
         }
@@ -93,18 +94,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             bool scheduleUnchanged = true;
             foreach (IShiftTradeSwapDetail shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
             {
-                IScheduleRange rangeFrom = scheduleDictionary[shiftTradeSwapDetail.PersonFrom];
-                IScheduleRange rangeTo = scheduleDictionary[shiftTradeSwapDetail.PersonTo];
+	            updateShiftTradeSwapScheduleInformation(scheduleDictionary, shiftTradeSwapDetail);
 
-                IScheduleDay partFrom = rangeFrom.ScheduledDay(shiftTradeSwapDetail.DateFrom);
-                IScheduleDay partTo = rangeTo.ScheduledDay(shiftTradeSwapDetail.DateTo);
-                long checksumFrom = new ShiftTradeChecksumCalculator(partFrom).CalculateChecksum();
-                long checksumTo = new ShiftTradeChecksumCalculator(partTo).CalculateChecksum();
+				long checksumFrom = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartFrom).CalculateChecksum();
+				long checksumTo = new ShiftTradeChecksumCalculator(shiftTradeSwapDetail.SchedulePartTo).CalculateChecksum();
 
-                shiftTradeSwapDetail.SchedulePartFrom = partFrom;
-                shiftTradeSwapDetail.SchedulePartTo = partTo;
-
-                if (shiftTradeSwapDetail.ChecksumFrom != checksumFrom ||
+				if (shiftTradeSwapDetail.ChecksumFrom != checksumFrom ||
                     shiftTradeSwapDetail.ChecksumTo != checksumTo)
                 {
                     shiftTradeRequest.Refer(authorization);
@@ -113,5 +108,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
             return scheduleUnchanged;
         }
+
+		private static void updateShiftTradeSwapScheduleInformation (IScheduleDictionary scheduleDictionary,IShiftTradeSwapDetail shiftTradeSwapDetail)
+		{
+			var rangeFrom = scheduleDictionary[shiftTradeSwapDetail.PersonFrom];
+			var rangeTo = scheduleDictionary[shiftTradeSwapDetail.PersonTo];
+
+			var partFrom = rangeFrom.ScheduledDay (shiftTradeSwapDetail.DateFrom);
+			var partTo = rangeTo.ScheduledDay (shiftTradeSwapDetail.DateTo);
+			
+
+			shiftTradeSwapDetail.SchedulePartFrom = partFrom;
+			shiftTradeSwapDetail.SchedulePartTo = partTo;
+			
+		}
     }
 }

@@ -14,17 +14,23 @@
 
 		toggleService.togglesLoaded.then(init);
 				
+		
 		function init() {
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
 			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
 			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 			vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
+			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 			vm.forceRequestsReloadWithSelection = forceRequestsReloadWithSelection;
+
 			getSelectedRequestsInfoText();
 			vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
-			vm.dateRangeTemplateType = 'popup';			
-
+			vm.dateRangeTemplateType = 'popup';
+			
+			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
+			vm.filterEnabled = vm.filterToggleEnabled;
+			
 			vm.period = { startDate: new Date(), endDate: new Date() };
 			vm.paging = {
 				pageSize: 50,
@@ -47,6 +53,8 @@
 			vm.disableInteraction = false;
 
 		}
+
+		
 
 		function getSelectedRequestsInfoText() {
 			$translate("SelectedRequestsInfo").then(function (text) {

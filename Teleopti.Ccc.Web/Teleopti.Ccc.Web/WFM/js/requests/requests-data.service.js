@@ -6,6 +6,7 @@
 	function requestsDataService($http, $translate, requestsDefinitions) {
 		var loadTextAndAbsenceRequestsUrl_old = '../api/Requests/loadTextAndAbsenceRequests';
 		var listRequestsUrl = '../api/Requests/requests';
+		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
 		var approveRequestsUrl = '../api/Requests/approveRequests';
 		var denyRequestsUrl = '../api/Requests/denyRequests';
 		var cancelRequestsUrl = '../api/Requests/cancelRequests';
@@ -18,6 +19,12 @@
 
 		this.getAllRequestsPromise = function(filter, sortingOrders, paging) {
 			return $http.get(listRequestsUrl,
+				{ params: requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging) }
+			);
+		};
+
+		this.getShiftTradeRequestsPromise = function (filter, sortingOrders, paging) {
+			return $http.get(listShiftTradeRequestsUrl,
 				{ params: requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging) }
 			);
 		};

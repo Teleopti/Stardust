@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
 
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
+		//	system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			system.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
 			system.UseTestDouble(new ConfigurablePermissions()).For<IAuthorization>();
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 				.For<IAbsenceRequestCancelService>();
 
 			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
-			system.UseTestDouble(new SwedishCulture()).For<IUserCulture>();
+			//system.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("sv-SE"))).For<IUserCulture>();
+			system.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))).For<IUserCulture>();
 			system.UseTestDouble(new FakeEventPublisher()).For<IEventPublisher>();
 			
 

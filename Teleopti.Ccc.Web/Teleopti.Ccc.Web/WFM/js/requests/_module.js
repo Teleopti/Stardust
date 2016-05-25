@@ -6,6 +6,7 @@
 		'ui.grid',
 		'ui.grid.autoResize',
 		'ui.grid.selection',
+		'ui.grid.pinning',
 		'pascalprecht.translate',
 		'wfm.notice',
 		'currentUserInfoService',

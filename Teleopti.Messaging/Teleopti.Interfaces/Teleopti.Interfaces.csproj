@@ -177,6 +177,7 @@
     <Compile Include="Domain\ISeatFrequencyCalculator.cs" />
     <Compile Include="Domain\ISeatMapPersister.cs" />
     <Compile Include="Domain\ISeatOccupancyFrequency.cs" />
+    <Compile Include="Domain\IShiftTradeSwapScheduleDetailsMapper.cs" />
     <Compile Include="Domain\ISkillTypeProvider.cs" />
     <Compile Include="Domain\IPersonPreferenceDayOccupationFactory.cs" />
     <Compile Include="Domain\IPersonSkillDayCreator.cs" />

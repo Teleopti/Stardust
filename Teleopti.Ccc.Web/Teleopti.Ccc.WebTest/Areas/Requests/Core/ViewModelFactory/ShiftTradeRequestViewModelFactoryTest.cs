@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -9,6 +11,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -34,7 +37,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPeopleSearchProvider PeopleSearchProvider;
 		public IPersonRequestCheckAuthorization PersonRequestCheckAuthorization;
 		public IScheduleStorage ScheduleStorage;
-
+		public IUserCulture UserCulture;
+		
+		[SetUp]
+		public void Setup()
+		{
+			setupStateHolderProxy();
+		}
+		
 		[Test]
 		public void ShouldGetShiftTradeRequest()
 		{
@@ -66,6 +76,59 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 			requestListViewModel.Requests.Count().Should().Be.EqualTo(2);
+		}
+
+
+		[Test]
+		public void ShouldReturnMinimumAndMaximumDate()
+		{
+
+			var minRequest = createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
+					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+
+			createShiftTradeRequest(new DateOnly(2016, 3, 3), new DateOnly(2016, 3, 3),
+				PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+
+			var maxRequest = createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
+				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 10)
+			};
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+
+			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(minRequest.Request.Period.LocalStartDateTime);
+			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(maxRequest.Request.Period.LocalEndDateTime);
+		}
+
+		[Test]
+		public void ShouldReturnStartAndEndOfWeekBasedOnLocale()
+		{
+			UserCulture = new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"));
+
+
+			createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
+					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+
+			createShiftTradeRequest(new DateOnly(2016, 3, 3), new DateOnly(2016, 3, 3),
+				PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+
+			createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
+				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 10)
+			};
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+
+			requestListViewModel.FirstDateForVisualisation.Should().Be.EqualTo(new DateOnly(2016, 02, 28));
+			requestListViewModel.LastDateForVisualisation.Should().Be.EqualTo(new DateOnly(2016, 03, 12));
 		}
 
 		[Test]
@@ -153,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			addDayOff(personTo, "DayOff", "DO", Color.Gray, new DateOnly(2016, 3, 2));
 			addPersonAssignment(personFrom, "sdfFrom", "shiftCategoryFrom", Color.AliceBlue, new DateOnly(2016, 3, 2));
 
-			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, 
+			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
 				new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 03), Scenario.Current());
 
@@ -255,6 +318,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var textRequest = new TextRequest(dateTimePeriod);
 			var personRequest = new PersonRequest(PersonFactory.CreatePerson("test1"), textRequest).WithId();
 			((FakePersonRequestRepository)PersonRequestRepository).Add(personRequest);
+		}
+
+		private static void setupStateHolderProxy()
+		{
+			var stateMock = new FakeState();
+			var dataSource = new DataSource(UnitOfWorkFactoryFactory.CreateUnitOfWorkFactory("for test"), null, null);
+			var loggedOnPerson = StateHolderProxyHelper.CreateLoggedOnPerson();
+			StateHolderProxyHelper.CreateSessionData(loggedOnPerson, dataSource, BusinessUnitFactory.BusinessUnitUsedInTest);
+			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 		}
 
 	}

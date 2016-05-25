@@ -1350,8 +1350,11 @@
     <Content Include="WFM\js\intraday\intraday.area.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
+    <Content Include="WFM\js\requests\html\header-template.html" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
+    <Content Include="WFM\js\requests\html\shift-trade-day-template.html" />
     <Content Include="WFM\js\requests\ngEnter.js" />
+    <Content Include="WFM\js\requests\requests-absence-text-grid-configuration.service.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.js" />
     <Content Include="WFM\js\requests\request-command-params-holder.service.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.spec.js" />
@@ -1378,6 +1381,7 @@
     <Content Include="WFM\js\requests\html\requests.html" />
     <Content Include="WFM\js\requests\requests-data.service.js" />
     <Content Include="WFM\js\requests\requests-overview.directive.js" />
+    <Content Include="WFM\js\requests\requests-shift-trade-grid-configuration.service.js" />
     <Content Include="WFM\js\requests\requests-table-container.directive.js" />
     <Content Include="WFM\js\requests\requests-definitions.service.js" />
     <Content Include="WFM\js\requests\requests.controller.js" />

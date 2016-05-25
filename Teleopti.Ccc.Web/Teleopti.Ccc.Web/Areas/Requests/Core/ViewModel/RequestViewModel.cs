@@ -59,4 +59,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public IEnumerable<RequestViewModel> Requests;
 	}
 
+	public class ShiftTradeRequestListViewModel : RequestListViewModel
+	{
+		public DateTime MinimumDateTime;
+		public DateTime MaximumDateTime;
+		public DateOnly FirstDateForVisualisation { get; set; }
+		public DateOnly LastDateForVisualisation { get; set; }
+	}
+
 }
