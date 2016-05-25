@@ -1412,13 +1412,15 @@
     <Content Include="WFM\js\rta\rta.agents.filters.spec.js" />
     <Content Include="WFM\js\rta\rta.agentsforsites.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.agentsforteams.controller.spec.js" />
-    <Content Include="WFM\js\rta\rta.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.faketime.service.js" />
     <Content Include="WFM\js\global\http.js" />
     <Content Include="WFM\js\rta\rta.format.service.spec.js" />
+    <Content Include="WFM\js\rta\rta.html" />
     <Content Include="WFM\js\rta\rta.organization.service.js" />
     <Content Include="WFM\js\rta\rta.organization.service.spec.js" />
     <Content Include="WFM\js\rta\rta.route.service.spec.js" />
+    <Content Include="WFM\js\rta\rta.sites.controller.js" />
+    <Content Include="WFM\js\rta\rta.sites.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.state.provider.js" />
     <Content Include="WFM\js\rta\rta.teams.controller.spec.js" />
     <Content Include="WFM\js\search\search-menu.html" />
@@ -1708,7 +1710,6 @@
     <Content Include="WFM\js\resourceplanner\planningperiods-modal.html" />
     <Content Include="WFM\js\resourceplanner\planningperiods.service.js" />
     <Content Include="WFM\js\seatManagement\seatmap.controller.js" />
-    <Content Include="WFM\js\rta\rta.controller.js" />
     <Content Include="WFM\js\people\people.start.controller.js" />
     <Content Include="WFM\js\people\people.service.js" />
     <Content Include="WFM\js\permissions\permissions.controller.js" />
