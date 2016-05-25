@@ -162,7 +162,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			settingsFile.UpdateFileByName("HangfireDashboard", "true");
 			settingsFile.UpdateFileByName("HangfireDashboardStatistics", "true");
 			settingsFile.UpdateFileByName("HangfireDashboardCounters", "true");
-			settingsFile.UpdateFileByName("HangfireDashboardDisplayNames", "true");
 			settingsFile.UpdateFileByName("HangfireJobExpirationSeconds", TimeSpan.FromDays(1).TotalSeconds.ToString());
 
 			// iisexpress

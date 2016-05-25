@@ -65,7 +65,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		[Setting("HangfireDashboardDisplayNames", true)]
 		public void ShouldPassEventTypeInDisplayName()
 		{
 			Target.Publish(new HangfireTestEvent());
@@ -74,20 +73,11 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
-		[Setting("HangfireDashboardDisplayNames", true)]
 		public void ShouldPassHandlerTypeInDisplayName()
 		{
 			Target.Publish(new HangfireTestEvent());
 
 			JobClient.DisplayName.Should().Contain(typeof(TestHandler).Name);
-		}
-
-		[Test]
-		public void ShouldNotPassDisplayNameByDefault()
-		{
-			Target.Publish(new HangfireTestEvent());
-
-			JobClient.DisplayName.Should().Be.Null();
 		}
 
 		[Test]

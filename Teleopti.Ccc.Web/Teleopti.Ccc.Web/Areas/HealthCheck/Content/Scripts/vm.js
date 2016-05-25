@@ -20,6 +20,7 @@ define([
 		self.checkBusEnabled = ko.observable(true);
 		self.StardustJobId = ko.observable('');
 		self.StardustSuccess = ko.observable(false);
+		self.HangfireFailCount = ko.observable(0);
 		self.TimesChecked = 0;
 
 		var subscribe = function (options) {

@@ -40,6 +40,10 @@ define([
 		vm.StardustJobId(data);
 	});
 
+	http.get('HealthCheck/CheckHangfireFailedQueue').done(function (data) {
+		vm.HangfireFailCount(data);
+	});
+
 	http.get('api/HealthCheck/ServerDetails').done(function(data) {
 		vm.configuredUrls(data.Data.UrlsReachable.UrlResults);
 		vm.services(data.Data.RunningServices.Services);

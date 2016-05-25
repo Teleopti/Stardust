@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Config;
@@ -24,8 +23,9 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		[RecurringId("CleanFailedQueueHandler:::CleanFailedQueue")]
 		public void Handle(CleanFailedQueue @event)
 		{
+			
 			var expiryDays = _config.ReadValue("HangfireCleanFailedJobsAfterDays", 90);
-			_hangfireUtilities.CleanFailedJobsBefore(DateTime.UtcNow - TimeSpan.FromDays(expiryDays)); 
+			_hangfireUtilities.CleanFailedJobsBefore(DateTime.UtcNow - TimeSpan.FromDays(expiryDays));
 		}
 	}
 }

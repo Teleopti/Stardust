@@ -63,6 +63,13 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						<span data-bind="visible: StardustSuccess()">Success</span>
 						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: StardustSuccess()"></i>
 					</li>
+					
+					<h3>Hangfire Failed Events</h3>
+					<li class="list-group-item" data-bind="css: { 'list-group-item-success': HangfireFailCount() == 0, 'list-group-item-danger': HangfireFailCount() > 0 }">
+						<span data-bind="text: HangfireFailCount()"></span>
+						<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: HangfireFailCount() == 0"></i>
+						<i class="pull-right glyphicon glyphicon-warning-sign" data-bind="visible: HangfireFailCount() > 0"></i>
+					</li>
 
 					<h3>ETL history</h3>
 					<ul class="list-group etl-history" data-bind="foreach: etlJobHistory">

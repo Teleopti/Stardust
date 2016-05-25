@@ -16,6 +16,7 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 {
@@ -27,16 +28,18 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly IEtlLogObjectRepository _etlLogObjectRepository;
 		private readonly IStardustSender _stardustSender;
 		private readonly IToggleManager _toggleManager;
+		private readonly IHangfireUtilities _hangfireUtilities;
 
 	    public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
 												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
-												  IStardustSender stardustSender, IToggleManager toggleManager)
+												  IStardustSender stardustSender, IToggleManager toggleManager, IHangfireUtilities hangfireUtilities)
 		{
 			_populatingPublisher = populatingPublisher;
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
 			_stardustSender = stardustSender;
 			_toggleManager = toggleManager;
+		    _hangfireUtilities = hangfireUtilities;
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckBus")]
@@ -139,6 +142,13 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 			if(_toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
 				id = _stardustSender.Send(new StardustHealthCheckEvent {JobName = "Stardust healthcheck" ,UserName = "Health Check"});
 			return Ok(id);
+		}
+
+		[HttpGet, UnitOfWork, Route("HealthCheck/CheckHangfireFailedQueue")]
+		public virtual IHttpActionResult CheckHangfireFailedQueue()
+		{
+			var failedCount = _hangfireUtilities.NumberOfFailedJobs();
+			return Ok(failedCount);
 		}
 	}
 }
