@@ -69,5 +69,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 
         public string LogOnDatasource { get; set; }
         public Guid LogOnBusinessUnitId { get; set; }
+
+		public Guid? CurrentWorkloadId { get; set; }
     }
 }
