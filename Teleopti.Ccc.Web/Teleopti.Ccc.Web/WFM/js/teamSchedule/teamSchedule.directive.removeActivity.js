@@ -13,13 +13,16 @@
 		vm.selectedPersonProjections = PersonSelection.getSelectedPersonInfoList();
 		vm.removeActivity = function () {
 			var personIds = vm.selectedPersonProjections.map(function(x) { return x.personId; });
+			var personProjectionsWithSelectedActivities = vm.selectedPersonProjections.filter(function (x) {
+				return (Array.isArray(x.selectedActivities) && x.selectedActivities.length > 0);
+			});
 			var requestData = {
 				Date: vm.selectedDate(),
-				PersonActivities: vm.selectedPersonProjections.map(function(x) {
+				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
 					return { PersonId: x.personId, Name: x.name, ShiftLayerIds: x.selectedActivities };
 				}),
 				TrackedCommandInfo: { TrackId: vm.trackId }
-			}
+			};
 
 			ActivityService.removeActivity(requestData).then(function(response) {
 				if (vm.getActionCb(vm.label)) {
@@ -29,7 +32,7 @@
 				notification.reportActionResult({
 					"success": 'SuccessfulMessageForRemovingActivity',
 					"warning": 'PartialSuccessMessageForRemovingActivity'
-				}, vm.selectedPersonProjections.map(function (x) {
+				}, personProjectionsWithSelectedActivities.map(function (x) {
 					return {
 						PersonId: x.personId,
 						Name: x.name
@@ -47,7 +50,7 @@
 				parent: angular.element(document.body),
 				clickOutsideToClose: true,
 				bindToController: true,
-				onRemoving: function() {					
+				onRemoving: function() {
 					vm.resetActiveCmd();
 				},
 				locals: {
