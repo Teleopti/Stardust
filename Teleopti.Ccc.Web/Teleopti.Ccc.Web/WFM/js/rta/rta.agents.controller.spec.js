@@ -1,14 +1,11 @@
 'use strict';
 describe('RtaAgentsCtrl', function() {
-	var $q,
-		$rootScope,
-		$interval,
+	var $interval,
 		$httpBackend,
-		$controller,
-		$resource,
 		$state,
 		$sessionStorage,
 		$fakeBackend,
+		$controllerBuilder,
 		scope;
 
 	var stateParams = {};
@@ -24,53 +21,19 @@ describe('RtaAgentsCtrl', function() {
 		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_, _$sessionStorage_, _FakeRtaBackend_) {
-		$controller = _$controller_;
-		scope = _$rootScope_.$new();
-		$q = _$q_;
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
 		$interval = _$interval_;
-		$rootScope = _$rootScope_;
-		$resource = _$resource_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
+		$controllerBuilder = _ControllerBuilder_;
+
+		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 
 		$fakeBackend.clear();
 
 	}));
-
-	var createController = function() {
-		$controller('RtaAgentsCtrl', {
-			$scope: scope
-		});
-		scope.$digest();
-		$httpBackend.flush();
-		var safeBackendFlush = function() {
-			try { // the internal mock will throw if no requests were made
-				$httpBackend.flush();
-			} catch (e) {
-			}
-		};
-		var callbacks = {
-			apply: function (apply) {
-				if (typeof apply === "function") {
-					apply();
-					scope.$digest();
-				} else {
-					scope.$apply(apply);
-				}
-				safeBackendFlush();
-				return callbacks;
-			},
-			wait: function (milliseconds) {
-				$interval.flush(milliseconds);
-				safeBackendFlush();
-				return callbacks;
-			}
-		};
-		return callbacks;
-	}
 
 	it('should get agent for team', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
@@ -79,7 +42,7 @@ describe('RtaAgentsCtrl', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 		});
 
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
@@ -91,7 +54,7 @@ describe('RtaAgentsCtrl', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
 
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.siteName).toEqual("London");
 	});
@@ -103,7 +66,7 @@ describe('RtaAgentsCtrl', function() {
 			TeamName: "Team Preferences"
 		});
 
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.teamName).toEqual("Team Preferences");
 	});
@@ -113,8 +76,8 @@ describe('RtaAgentsCtrl', function() {
 		$fakeBackend.withAgent({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		});
-		$fakeBackend.withState({
+		})
+		.withState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
 			StateStartTime: "\/Date(1429254905000)\/",
@@ -127,7 +90,7 @@ describe('RtaAgentsCtrl', function() {
 			TimeInState: 15473
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].State).toEqual("Ready");
@@ -153,7 +116,7 @@ describe('RtaAgentsCtrl', function() {
 				State: "Ready"
 			});
 
-		var c = createController()
+		var c = $controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 		$fakeBackend
 			.clearStates()
@@ -185,7 +148,7 @@ describe('RtaAgentsCtrl', function() {
 			TimeInState: 15473
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].State).toEqual("Ready");
@@ -218,7 +181,7 @@ describe('RtaAgentsCtrl', function() {
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].Name).toEqual("Charley Caper");
@@ -237,7 +200,7 @@ describe('RtaAgentsCtrl', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].Name).toEqual("Ashley Andeen");
@@ -258,7 +221,7 @@ describe('RtaAgentsCtrl', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply("agentsInAlarm = false")
 			.apply('filterText = "Charley"');
 
@@ -277,7 +240,7 @@ describe('RtaAgentsCtrl', function() {
 			State: "In Call"
 		});
 
-		var c = createController()
+		var c = $controllerBuilder.createController()
 			.apply("agentsInAlarm = false")
 			.apply('filterText = "Ashley"');
 		$fakeBackend
@@ -292,15 +255,6 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.filteredData[0].State).toEqual("Ready");
 	});
 
-	//$fakeBackend.withAgent({
-	//	Name: "Ashley Andeen",
-	//	PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-	//	SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-	//	SiteName: "London",
-	//	TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-	//	TeamName: "Team Preferences"
-	//});
-
 	it('should go back to sites when business unit is changed', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
@@ -310,7 +264,7 @@ describe('RtaAgentsCtrl', function() {
 		});
 		spyOn($state, 'go');
 
-		createController()
+		$controllerBuilder.createController()
 			.apply(function() {
 				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
 			});
@@ -329,7 +283,7 @@ describe('RtaAgentsCtrl', function() {
 			LastTimestamp: "16:34"
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply(function() {
 				scope.getAdherenceForAgent("11610fe4-0130-4568-97de-9b5e015b2564");
 			});
@@ -344,7 +298,7 @@ describe('RtaAgentsCtrl', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.wait(5000);
 
 		scope.$emit('$destroy');
@@ -356,7 +310,7 @@ describe('RtaAgentsCtrl', function() {
 		$sessionStorage.buid = undefined;
 		spyOn($state, 'go');
 
-		createController()
+		$controllerBuilder.createController()
 			.apply(function() {
 				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
 			});
@@ -370,7 +324,7 @@ describe('RtaAgentsCtrl', function() {
 			PersonId: personId
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply(function() { scope.selectAgent(personId); });
 
 		expect(scope.isSelected(personId)).toEqual(true);
@@ -382,7 +336,7 @@ describe('RtaAgentsCtrl', function() {
 			PersonId: personId
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply(function () { scope.selectAgent(personId); })
 			.apply(function () { scope.selectAgent(personId); });
 
@@ -394,12 +348,12 @@ describe('RtaAgentsCtrl', function() {
 		var personId2 = '6b693b41-e2ca-4ef0-af0b-9e06008d969b';
 		$fakeBackend.withAgent({
 			PersonId: personId1
-		});
-		$fakeBackend.withAgent({
+		})
+		.withAgent({
 			PersonId: personId2
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply(function () { scope.selectAgent(personId1); })
 			.apply(function () { scope.selectAgent(personId2); });
 
@@ -407,13 +361,13 @@ describe('RtaAgentsCtrl', function() {
 	});
 
 	it('should not show adherence updated when there is no adherence value', function() {
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.showAdherenceUpdates()).toEqual(false);
 	});
 
 	it('should display adherence updated when there is adherence value', function() {
-		createController()
+		$controllerBuilder.createController()
 			.apply('adherencePercent = 0');
 
 		expect(scope.showAdherenceUpdates()).toEqual(true);
@@ -422,7 +376,7 @@ describe('RtaAgentsCtrl', function() {
 	it('should display states with alarm time in desc order when agentsInAlarm is turned on', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 
-		createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = true');
 
 		// missing assert!
@@ -434,19 +388,19 @@ describe('RtaAgentsCtrl', function() {
 			Name: "Ashley Andeen",
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
-		});
-		$fakeBackend.withAgent({
+		})
+		.withAgent({
 			Name: "Charley Caper",
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-		});
-		$fakeBackend.withState({
+		})
+		.withState({
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			State: "Break",
 			TimeInAlarm: 60
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = true');
 
 		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
@@ -461,7 +415,7 @@ describe('RtaAgentsCtrl', function() {
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 		});
 
-		createController()
+		$controllerBuilder.createController()
 			.apply('agentsInAlarm = true');
 
 		expect(scope.filteredData.length).toEqual(0);
@@ -470,7 +424,7 @@ describe('RtaAgentsCtrl', function() {
 	it('should show all agents if it is specified by url', function() {
 		stateParams.showAllAgents = true;
 
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.agentsInAlarm).toEqual(false);
 	});

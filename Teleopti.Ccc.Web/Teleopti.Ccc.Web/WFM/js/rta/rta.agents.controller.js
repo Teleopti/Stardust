@@ -31,13 +31,13 @@
 				$scope.inAlarmGrid = options;
 
 				$scope.getTableHeight = function() {
-						var rowHeight = 30;
-						var headerHeight = 30;
-						var agentMenuHeight = 45;
-						return {
-									height: ($scope.filteredData.length * rowHeight + headerHeight + agentMenuHeight) + "px"
-						};
-			};
+					var rowHeight = 30;
+					var headerHeight = 30;
+					var agentMenuHeight = 45;
+					return {
+						height: ($scope.filteredData.length * rowHeight + headerHeight + agentMenuHeight) + "px"
+					};
+				};
 
 				$scope.selectAgent = function(personId) {
 					selectedPersonId = $scope.isSelected(personId) ? '' : personId;
