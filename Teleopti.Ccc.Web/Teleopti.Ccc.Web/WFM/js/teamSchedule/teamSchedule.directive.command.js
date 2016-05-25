@@ -73,9 +73,17 @@
 				label: "SwapShifts",
 				shortcut: "Alt+S",
 				panelName: "", // Leave empty if not creating a mdSidenav panel
-				action: function () { vm.setCurrentCommand('SwapShifts'); parentVm.swapShifts(); },
+				action: function () {
+					if (vm.triggerCommand) {
+						vm.triggerCommand({
+							label: "SwapShifts",
+							needToOpenSidePanel: false
+						});
+					}
+				},
 				clickable: function () { return personSelectionSvc.canSwapShifts(); },
-				visible: function () { return vm.canActiveSwapShifts(); }
+				visible: function () { return vm.canActiveSwapShifts(); },
+				withCommandContainer: true
 			},
 			{
 				label: "RemoveAbsence",

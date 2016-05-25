@@ -17,7 +17,6 @@
 		
 
 		'PersonAbsence',
-		'SwapShifts',
 		'WFMDate',
 		'ActivityService',
 		'CommandCommon',
@@ -25,7 +24,7 @@
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService, personAbsenceSvc, swapShiftsSvc, WFMDateSvc, ActivityService, CommandCommonSvc, guidgenerator) {
+		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService, personAbsenceSvc, WFMDateSvc, ActivityService, CommandCommonSvc, guidgenerator) {
 
 		var vm = this;
 
@@ -220,39 +219,7 @@
 		vm.addAbsence = function() {
 			vm.setEarliestStartOfSelectedSchedule();
 		};
-
-		vm.swapShifts = CommandCommonSvc.wrapPersonWriteProtectionCheck(true, 'SwapShift', swapShifts, {
-			check: function () { return personSelectionSvc.getSelectedPersonIdList().length == 2; },
-			message: 'MustSelectTwoAgentsToSwap'
-		}, vm.scheduleDate);
-
-
-		function swapShifts() {
-			var selectedPersonIds = personSelectionSvc.getCheckedPersonIds();
-			var personIdFrom = selectedPersonIds[0];
-			var personIdTo = selectedPersonIds[1];
-			var scheduleDate = vm.scheduleDateMoment().format('YYYY-MM-DD');
-			var trackId = guidgenerator.newGuid();
-			var swapShiftsForm = {
-				PersonIdFrom: personIdFrom,
-				PersonIdTo: personIdTo,
-				ScheduleDate: scheduleDate,
-				TrackedCommandInfo: {
-					TrackId: trackId
-				}
-			};
-			swapShiftsSvc.SwapShifts(swapShiftsForm).then(function onSwapSuccess(result) {
-				vm.afterActionCallback(trackId, personSelectionSvc.getSelectedPersonIdList());
-				if (result.length === 0) {
-					notificationService.notify('success', 'FinishedSwapShifts');
-				} else {
-					notificationService.notify('error', 'FailedToSwapShifts');
-				}
-			}, function onSwapError(error) {
-				notificationService.notify('error', 'FailedToSwapShifts');
-			});
-		}
-
+	
 		function removeAbsence(removeEntireCrossDayAbsence) {
 			var trackId = guidgenerator.newGuid();
 			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
