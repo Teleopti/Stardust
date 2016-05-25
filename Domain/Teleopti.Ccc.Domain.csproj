@@ -307,9 +307,9 @@
     <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
     <Compile Include="Repositories\IAnalyticsShiftCategoryRepository.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
-    <Compile Include="ResourceCalculation\IResourceCalculation.cs" />
-    <Compile Include="ResourceCalculation\ResourceCalcuationWithoutCascading.cs" />
-    <Compile Include="ResourceCalculation\ResourceCalculationForCascading.cs" />
+    <Compile Include="ResourceCalculation\IFullResourceCalculation.cs" />
+    <Compile Include="ResourceCalculation\FullResourceCalculationWithoutCascading.cs" />
+    <Compile Include="ResourceCalculation\FullResourceCalculationWithCascading.cs" />
     <Compile Include="ResourceCalculation\SkillCombination.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />
     <Compile Include="Scheduling\Assignment\IIsDayScheduled.cs" />

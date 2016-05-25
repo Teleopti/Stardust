@@ -1,26 +1,19 @@
-using System;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ResourceCalcuationWithoutCascading : IResourceCalculation
+	public class FullResourceCalculationWithoutCascading : IFullResourceCalculation
 	{
 		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
-		public ResourceCalcuationWithoutCascading(DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
+		public FullResourceCalculationWithoutCascading(DoFullResourceOptimizationOneTime doFullResourceOptimizationOneTime)
 		{
 			_doFullResourceOptimizationOneTime = doFullResourceOptimizationOneTime;
 		}
 
-		public void All()
+		public void Execute()
 		{
 			_doFullResourceOptimizationOneTime.ExecuteIfNecessary(new NoSchedulingProgress(), false);
-		}
-
-		public void Period(DateOnlyPeriod period)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

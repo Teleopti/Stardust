@@ -77,11 +77,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillGroupPerActivityProvider>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
 			{
-				builder.RegisterType<ResourceCalculationForCascading>().As<IResourceCalculation>().InstancePerLifetimeScope();
+				builder.RegisterType<FullResourceCalculationWithCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
 			}
 			else
 			{
-				builder.RegisterType<ResourceCalcuationWithoutCascading>().As<IResourceCalculation>().InstancePerLifetimeScope();
+				builder.RegisterType<FullResourceCalculationWithoutCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
 			}
 
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
