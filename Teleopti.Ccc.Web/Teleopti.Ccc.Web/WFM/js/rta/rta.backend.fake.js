@@ -11,6 +11,8 @@
 			var activityAdherences = [];
 			var sites = [];
 			var siteAdherences = [];
+			var teams = [];
+			var teamAdherences = [];
 
 			var paramsOf = function(url) {
 				var result = {};
@@ -118,6 +120,21 @@
 					return [200, siteAdherences];
 				});
 
+			$httpBackend.whenGET2(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/)
+				.respond(function (params) {
+					var result =
+						teamAdherences.filter(function(ta) {
+							var t = teams.find(function (team) { return team.Id === ta.Id; });
+							return t != null && params.siteId === t.SiteId;
+						});
+					return [200, result];
+				});
+
+			$httpBackend.whenGET2(/\.\.\/api\/Teams\/ForSite(.*)/)
+				.respond(function (params) {
+					return [200, teams.filter(function(team) { return team.SiteId === params.siteId; })];
+				});
+
 			this.clear = function() {
 				agents = [];
 				states = [];
@@ -126,6 +143,8 @@
 				activityAdherences = [];
 				sites = [];
 				siteAdherences = [];
+				teams = [];
+				teamAdherences = [];
 			}
 
 			this.withAgent = function(agent) {
@@ -170,6 +189,21 @@
 
 			this.clearSiteAdherences = function () {
 				siteAdherences = [];
+				return this;
+			};
+
+			this.withTeam = function(team) {
+				teams.push(team);
+				return this;
+			};
+
+			this.withTeamAdherence = function(teamAdherence) {
+				teamAdherences.push(teamAdherence);
+				return this;
+			};
+
+			this.clearTeamAdherences = function() {
+				teamAdherences = [];
 				return this;
 			};
 
