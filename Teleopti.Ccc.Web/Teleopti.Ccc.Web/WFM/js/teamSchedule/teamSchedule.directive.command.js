@@ -97,9 +97,17 @@
 				label: "RemoveAbsence",
 				shortcut: "Alt+R",
 				panelName: "", // Leave empty if not creating a mdSidenav panel
-				action: function () { vm.setCurrentCommand('RemoveAbsence'); parentVm.confirmRemoveAbsence(); },
+				action: function () {
+					if (vm.triggerCommand) {
+						vm.triggerCommand({
+							label: "RemoveAbsence",
+							needToOpenSidePanel: false
+						});
+					}
+				},
 				clickable: function () { return vm.canRemoveAbsence(); },
-				visible: function () { return vm.canActiveRemoveAbsence(); }
+				visible: function () { return vm.canActiveRemoveAbsence(); },
+				withCommandContainer: true
 			},
 			{
 				label: "RemoveActivity",

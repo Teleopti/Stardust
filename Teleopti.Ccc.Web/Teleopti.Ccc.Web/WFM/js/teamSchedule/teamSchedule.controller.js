@@ -16,15 +16,11 @@
 		'NoticeService',
 		
 
-		'PersonAbsence',
 		'WFMDate',
-		'ActivityService',
-		'CommandCommon',
-		'guidgenerator',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService, personAbsenceSvc, WFMDateSvc, ActivityService, CommandCommonSvc, guidgenerator) {
+		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService,  WFMDateSvc) {
 
 		var vm = this;
 
@@ -211,46 +207,6 @@
 		vm.moveActivity = function () {
 		};
 
-
-		function removeAbsence(removeEntireCrossDayAbsence) {
-			var trackId = guidgenerator.newGuid();
-			var selectedPersonIdList = personSelectionSvc.getSelectedPersonIdList();
-			var selectedPersonProjections = personSelectionSvc.getSelectedPersonInfoList();
-
-			var selectedPersonAbsences = [];
-			angular.forEach(selectedPersonProjections, function (personProjection) {
-				if (personProjection.personAbsenceCount > 0) {
-					selectedPersonAbsences.push({
-						PersonId: personProjection.personId,
-						Name: personProjection.name,
-						PersonAbsenceIds: personProjection.selectedAbsences
-					});
-				}
-			});
-
-			var commandInfo = {
-				"success": 'FinishedRemoveAbsence',
-				"warning": 'PartialSuccessMessageForRemovingAbsence'
-			};
-
-			personAbsenceSvc.removePersonAbsence(vm.scheduleDateMoment(), selectedPersonAbsences,
-				removeEntireCrossDayAbsence, trackId).then(function (result) {
-					vm.afterActionCallback(trackId, selectedPersonIdList);
-					notificationService.reportActionResult(commandInfo, selectedPersonAbsences, result);
-				});
-		}
-
-		function getRemoveAbsenceMessage() {
-			return replaceParameters($translate.instant("AreYouSureToRemoveSelectedAbsence"),
-			[personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.AbsenceCount, personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedAbsenceInfo.PersonCount]);
-		}
-
-
-		vm.confirmRemoveAbsence = function () {
-			CommandCommonSvc.wrapPersonWriteProtectionCheck(false,
-			'RemoveAbsence', removeAbsence, null, vm.scheduleDate, getRemoveAbsenceMessage)();
-		}
-	
 		vm.selectedPersonInfo = function() {
 			return personSelectionSvc.personInfo;
 		};

@@ -1450,7 +1450,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.scheduletable.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addAbsence.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addabsence.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addAbsence.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.addPersonalActivity.js" />
@@ -1462,6 +1462,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.datepicker.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.moveActivity.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.removeAbsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.removeActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.scheduletable.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.swapShifts.js" />
