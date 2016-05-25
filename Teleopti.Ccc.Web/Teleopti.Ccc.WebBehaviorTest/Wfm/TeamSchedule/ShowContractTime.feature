@@ -12,50 +12,24 @@ Background:
 	| Name                          | Wfm Team Green |
 	| Access to everyone            | True           |
 	| Access to Wfm MyTeam Schedule | true           |
-	| Add Activity                  | true           |
-	| Remove Activity               | true           |
-	| Move Activity                 | true           |
-	| See Contract Time             | true           |
-	And there is a shift category named 'Day'
-	And there are activities
-	| Name     | Color    |
-	| Phone    | Green    |
-	| Lunch    | Yellow   |
-	| Sales    | Red      |
-	| Training | Training |
-	And there is a contract named 'A contract'
-	And there is a contract schedule named 'A contract schedule'
-	And there is a part time percentage named 'Part time percentage'
-	And there is a rule set with
-		| Field          | Value       |
-		| Name           | A rule set  |
-		| Activity       | Phone       |
-		| Shift category | Day         |	
-	And there is a shift bag named 'A shift bag' with rule set 'A rule set'
-	And there is a skill named 'A skill' with activity 'Phone'
-	And 'John Smith' has a workflow control set publishing schedules until '2016-12-01'
 	And 'John Smith' has a person period with
 		| Field                | Value                |
-		| Shift bag            | A shift bag          |
-		| Skill                | A skill              |
 		| Team                 | Team green           |
 		| Start date           | 2016-01-01           |
-		| Contract             | A contract           |
-		| Contract schedule    | A contract schedule  |
-		| Part time percentage | Part time percentage |
+	And 'John Smith' has a workflow control set publishing schedules until '2016-12-01'	
+	And John Smith has a schedule period with 
+	| Field      | Value      |
+	| Start date | 2016-01-01 |
+	| Type       | Week       |
+	| Length     | 1          |
+	And there is a shift category named 'Day'	
+	And John Smith has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2016-01-01 08:00 |
+	| EndTime               | 2016-01-01 18:00 |
+	| Shift category		| Day	           |
 
 Scenario: Should be able to see contract time
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
-	And I selected agent 'John Smith'
-	And I click menu button in team schedule
-	And I click menu item 'AddActivity' in team schedule
-	And I set new activity as
-	| Field       | Value |
-	| Activity    | Phone |
-	| Start time  | 12:00 |
-	| End time    | 13:00 |
-	| Is next day | false |
-	Then I should be able to apply my new activity
-	When I apply my new activity
-	Then I should see contract time of '1:00'
+	Then I should see contract time of '10:00'

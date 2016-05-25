@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see contract time of '(.*)'")]
 		public void ThenIShouldSeeContractTimeOf(string contractTime)
 		{
-			Browser.Interactions.AssertExists(".contract-time", contractTime);
+			Browser.Interactions.AssertExistsUsingJQuery(".contract-time", contractTime);
 		}
 	}
 
