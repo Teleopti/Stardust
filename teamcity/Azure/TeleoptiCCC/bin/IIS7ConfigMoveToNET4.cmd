@@ -9,7 +9,6 @@ Call :ChangeAppPoolVersion SDK v4.0
 Call :ChangeAppPoolVersion Analytics v4.0
 Call :ChangeAppPoolVersion RTA v4.0
 Call :ChangeAppPoolVersion Client v4.0
-Call :ChangeAppPoolVersion Broker.backplane v4.0
 Call :ChangeAppPoolVersion AuthenticationBridge v4.0
 Call :ChangeAppPoolVersion WindowsIdentityProvider v4.0
 Call :ChangeAppPoolVersion Administration v4.0

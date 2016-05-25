@@ -251,7 +251,6 @@ function SetDefaultSettings{
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(RTA_STATE_CODE)" -content "`$(RTA_STATE_CODE)|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(RTA_QUEUE_ID)" -content "`$(RTA_QUEUE_ID)|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_BROKER_FOR_WEB)" -content "`$(WEB_BROKER_FOR_WEB)|https://$DataSourceName.teleopticloud.com/Web"
-	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_BROKER_BACKPLANE)" -content "`$(WEB_BROKER_BACKPLANE)|"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(WEB_BROKER)" -content "`$(WEB_BROKER)|https://$DataSourceName.teleopticloud.com/Web/"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_ASMX)" -content "`$(PM_ASMX)|NotImplemented"
 	AddIfNotExists -fullPathsettingsFile "$fullPathsettingsFile" -variableName "`$(PM_SERVICE)" -content "`$(PM_SERVICE|NotImplemented"
