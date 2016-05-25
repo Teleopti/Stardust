@@ -6,6 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -23,10 +25,18 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
-	public class OvertimeOnNonScheduledDaysTest
+	[TestFixture(false)]
+	[TestFixture(true)]
+	public class OvertimeOnNonScheduledDaysTest : IConfigureToggleManager
 	{
+		private readonly bool _cascadingSkills;
 		public ScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+
+		public OvertimeOnNonScheduledDaysTest(bool cascadingSkills)
+		{
+			_cascadingSkills = cascadingSkills;
+		}
 
 		[Test]
 		public void ShouldPlaceOvertimeOnEmptyDayWithDemand()
@@ -819,6 +829,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities()
 				.Should().Be.Empty();
+		}
+
+		public void Configure(FakeToggleManager toggleManager)
+		{
+			if (_cascadingSkills)
+			{
+				toggleManager.Enable(Toggles.ResourcePlanner_CascadingSkills_38524);
+			}
 		}
 	}
 }
