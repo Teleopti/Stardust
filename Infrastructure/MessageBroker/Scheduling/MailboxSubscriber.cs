@@ -23,16 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.MessageBroker.Scheduling
 
 			MessageBrokerInStateHolder.Instance.RegisterEventSubscription(
 				onEventMessage,
-				scenario,
-				typeof(Scenario),
-				typeof(IScheduleChangedMessage),
-				period.StartDateTime,
-				period.EndDateTime,
-				false,
-				true);
-
-			MessageBrokerInStateHolder.Instance.RegisterEventSubscription(
-				onEventMessage,
 				typeof(IPersistableScheduleData),
 				period.StartDateTime,
 				period.EndDateTime,
