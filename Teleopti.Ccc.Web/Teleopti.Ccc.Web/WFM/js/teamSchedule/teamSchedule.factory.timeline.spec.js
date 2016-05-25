@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-describe("TimeLine", function () {
+describe("teamschedule timeLine tests", function () {
 
 	var dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
 	var mockCurrentUserInfo = {

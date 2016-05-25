@@ -1,7 +1,7 @@
 ﻿(function() {
 	'use strict';
 
-	describe('test of moveActivityValidator', function() {
+	describe('teamschedule move activity validator tests', function() {
 		var target, personSelection, scheduleMgmt;
 		beforeEach(function () {
 			module("wfm.teamSchedule");

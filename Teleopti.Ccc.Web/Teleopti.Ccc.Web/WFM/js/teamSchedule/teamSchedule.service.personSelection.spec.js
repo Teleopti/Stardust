@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-describe("test of PersonSelection", function() {
+describe("teamschedule person selection tests", function() {
 	var target;
 
 	beforeEach(function() {

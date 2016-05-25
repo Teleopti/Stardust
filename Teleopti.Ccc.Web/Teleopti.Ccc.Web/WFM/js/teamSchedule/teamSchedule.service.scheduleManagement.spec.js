@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-describe("[ScheduleManagement Service Test]", function() {
+describe("teamschedule schedule management service tests", function() {
 	var target;
 
 	beforeEach(function() {

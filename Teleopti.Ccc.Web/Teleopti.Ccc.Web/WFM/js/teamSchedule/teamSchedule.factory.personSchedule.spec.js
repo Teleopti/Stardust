@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-describe("test of PersonSchedule", function () {
+describe("teamschedule person dchedule tests", function () {
 	var dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
 	var target;
 

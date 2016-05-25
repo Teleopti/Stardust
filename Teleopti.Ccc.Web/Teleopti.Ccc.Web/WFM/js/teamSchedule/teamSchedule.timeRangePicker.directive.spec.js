@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('activity-time-range-picker directive', function () {
+describe('teamschedule activity-time-range-picker directive tests', function () {
 	var elementCompileFn, $templateCache, $compile, element,
         scope;
 
