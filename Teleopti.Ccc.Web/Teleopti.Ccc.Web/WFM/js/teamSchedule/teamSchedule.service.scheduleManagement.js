@@ -117,7 +117,7 @@
 				if (previousDayShifts.length == 0) return null;
 
 				var latestEndTimeMoment = null;
-				
+
 				previousDayShifts.forEach(function(shift) {
 					shift.Projections.forEach(function(projection) {
 						var projectionEndMoment = moment(projection.Start).add(projection.Minutes, 'minute');
@@ -137,7 +137,7 @@
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					if (selectedPersonIds.indexOf(schedule.PersonId) > -1) {
 						currentDayShifts = currentDayShifts.concat(schedule.Shifts.filter(function (shift) {
-							return shift.Date.toDate().toDateString() == scheduleDateMoment.toDate().toDateString();
+							return shift.Date.format('YYYY-MM-DD') === scheduleDateMoment.format('YYYY-MM-DD');
 						}));
 					}
 				});
@@ -145,7 +145,6 @@
 					if (shift.Projections) {
 						shift.Projections.forEach(function (projection) {
 							var scheduleStart = moment(projection.Start).toDate();
-							
 							if (projection.Selected && (latestStart === null || scheduleStart >= latestStart )) {
 							    var exist =  projection.ShiftLayerIds && projection.ShiftLayerIds.some(function (layerId) {
 									return projectionShiftLayerIds.indexOf(layerId) > -1;
