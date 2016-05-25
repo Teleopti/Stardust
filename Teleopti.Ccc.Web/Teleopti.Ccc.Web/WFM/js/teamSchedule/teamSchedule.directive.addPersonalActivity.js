@@ -40,7 +40,7 @@
 		vm.addPersonalActivity = function () {
 			var requestData = {
 				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
-				Date: vm.referenceDay(),
+				Date: vm.selectedDate(),
 				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
 				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
 				PersonalActivityId: vm.selectedActivityId,
@@ -66,7 +66,7 @@
 		vm.getDefaultActvityStartTime = getDefaultActvityStartTime;
 
 		function getDefaultActvityStartTime() {
-			var curDateMoment = moment(vm.referenceDay());
+			var curDateMoment = moment(vm.selectedDate());
 			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, vm.selectedAgents);
 			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, vm.selectedAgents);
 
@@ -75,7 +75,7 @@
 				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
 			}
 
-			if (moment(wFMDateSvc.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.referenceDay()).format('YYYY-MM-DD')) {
+			if (moment(wFMDateSvc.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.selectedDate()).format('YYYY-MM-DD')) {
 				var nextTickTime = new Date(wFMDateSvc.getNextTickNoEarlierThanEight());
 				if (nextTickTime > defaultStart) {
 					defaultStart = nextTickTime;
@@ -112,7 +112,7 @@
 			var containerCtrl = ctrls[0],
 				selfCtrl = ctrls[1];
 
-			scope.vm.referenceDay = containerCtrl.getDate;
+			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 

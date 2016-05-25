@@ -45,13 +45,13 @@
 	it('add-personal-activity should get date from container', function () {
 		var result = setUp();
 
-		expect(moment(result.commandControl.referenceDay()).format('YYYY-MM-DD')).toBe('2016-06-15');
+		expect(moment(result.commandControl.selectedDate()).format('YYYY-MM-DD')).toBe('2016-06-15');
 	});
 
 	it('should load activity list', function () {
 		var result = setUp();
 
-		var activities = result.container[0].querySelectorAll('.activity-selector .activity-option-item');
+		var activities = result.container[0].querySelectorAll('.add-activity .activity-selector .activity-option-item');
 
 		expect(activities.length).toBe(5);
 	});
@@ -59,7 +59,7 @@
 	it('should see a disabled button when no activity selected', function () {
 		var result = setUp();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
@@ -74,7 +74,7 @@
 
 		result.scope.$apply();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
@@ -123,7 +123,7 @@
 				scheduleEndTime: '2016-06-16T09:00:00Z'
 			}];
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 		expect(applyButton.attr('disabled')).toBe('disabled');
@@ -156,7 +156,7 @@
 
 		result.scope.$apply();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 		applyButton.triggerHandler('click');
 
 		result.scope.$apply();
@@ -167,7 +167,7 @@
 		expect(activityData.PersonalActivityId).toEqual(vm.selectedActivityId);
 		expect(moment(activityData.StartTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.startTime).format('YYYY-MM-DDTHH:mm:00'));
 		expect(moment(activityData.EndTime).format('YYYY-MM-DDTHH:mm:00')).toEqual(moment(vm.timeRange.endTime).format('YYYY-MM-DDTHH:mm:00'));
-		expect(activityData.Date).toEqual(vm.referenceDay());
+		expect(activityData.Date).toEqual(vm.selectedDate());
 		expect(activityData.TrackedCommandInfo.TrackId).toBe(vm.trackId);
 	});
 
@@ -205,7 +205,7 @@
 
 		result.scope.$apply();
 
-		var applyButton = angular.element(result.container[0].querySelector(".add-personal-activity .form-submit"));
+		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 		applyButton.triggerHandler('click');
 
 		result.scope.$apply();
@@ -262,7 +262,7 @@
 		container.isolateScope().vm.setActiveCmd('AddPersonalActivity');
 		scope.$apply();
 
-		var commandControl = angular.element(container[0].querySelector(".add-personal-activity")).scope().vm;
+		var commandControl = angular.element(container[0].querySelector(".add-activity")).scope().vm;
 
 		var obj = {
 			container: container,

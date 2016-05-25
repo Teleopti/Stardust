@@ -5,8 +5,8 @@
 			<h3>{{'Activity'|translate}}: </h3>
 			<div class="con-row">
 				<select class="activity-selector" tabindex="{{::vm.tabindex}}" ng-model="vm.selectedActivityId" required>
-					<option class="command-panel-option" value="" disabled selected="">{{'SelectAnActivity'|translate}}</option>
-					<option class="command-panel-option" value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
+					<option class="activity-option" value="" disabled selected="">{{'SelectAnActivity'|translate}}</option>
+					<option class="activity-option-item" value="{{activity.Id}}" ng-repeat="activity in vm.activities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>
 			<activity-time-range-picker class="activity-time-range" custom-tabindex="{{::vm.tabindex}}" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">

@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			};
 			Browser.Interactions.SetScopeValues(".datepicker-container", propertyValues);
 			Browser.Interactions.PressEnter("team-schedule-datepicker #teamschedule-datepicker-input");
+			Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
 		}
 
 		[Then(@"I should see schedule with absence for '(.*)' displayed")]
@@ -88,44 +89,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I set new activity as")]
 		public void WhenISetNewActivityAs(Table table)
 		{
-			var values = table.CreateInstance<AddActivityFormInfo>();
-
-			Browser.Interactions.ClickContaining(".activity-selector option", values.Activity);
-			var startTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
-			var endTime = string.Format("new Date((new Date()).toDateString()+ ' {0}')", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
-			var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
-			var timeRange = new Dictionary<string, string>
-			{
-				{"vm.timeRange", timeRangeStr}
-			};
-			Browser.Interactions.SetScopeValues(".add-activity .activity-time-range", timeRange);
-		}
-
-		[When(@"I set new personal activity as")]
-		public void WhenISetNewPersonalActivityAs(Table table)
-		{
-			Browser.Interactions.WaitScopeCondition(".add-personal-activity", "vm.availableActivitiesLoaded", true,
+			Browser.Interactions.WaitScopeCondition(".add-activity", "vm.availableActivitiesLoaded", true,
 				() =>
 				{
-					var values = table.CreateInstance<AddPersonalActivityFormInfo>();
+					var values = table.CreateInstance<AddActivityFormInfo>();
 
-					Browser.Interactions.ClickVisibleOnly(".add-personal-activity .activity-selector");
-					Browser.Interactions.ClickContaining(".activity-option-item", values.Activity);
-
+					Browser.Interactions.ClickVisibleOnly(".add-activity .activity-selector");
 					Browser.Interactions.ClickContaining(".activity-selector option", values.Activity);
+
+					Browser.Interactions.ClickContaining(".activity-option-item", values.Activity);
 					var startTime = string.Format("new Date('{0}')", values.StartTime);
 					var endTime = string.Format("new Date('{0}')", values.EndTime);
 					var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
-					var referenceDay = string.Format("function(){{return new Date('{0}');}}", values.ReferenceDay);
+					var selectedDate = string.Format("function(){{return new Date('{0}');}}", values.SelectedDate);
 					var timeRange = new Dictionary<string, string>
 					{
-						{"vm.referenceDay", referenceDay},
+						{"vm.selectedDate", selectedDate},
 						{"vm.timeRange", timeRangeStr}
 					};
-					Browser.Interactions.SetScopeValues(".add-personal-activity .activity-time-range", timeRange);
+					Browser.Interactions.SetScopeValues(".add-activity .activity-time-range", timeRange);
 				});
 		}
-
 
 		[Then(@"I should be able to apply my new activity")]
 		public void ThenIShouldBeAbleToApplyMyNewActivity()
@@ -231,14 +215,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I apply remove activity")]
 		public void WhenIApplyRemoveActivity()
 		{
-			var propertyValues = new Dictionary<string, string>
-			{
-				{"vm.isScenarioTest", "true"}
-			};
-			Browser.Interactions.SetScopeValues(".scenario-test-trick", propertyValues);
 			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
 			Browser.Interactions.ClickUsingJQuery("#menuItemRemoveActivity");
-			Browser.Interactions.Click(".team-schedule-command-confirm-dialog .wfm-btn-primary:not([disabled])");
 		}
 
 		[Then(@"I should see contract time of '(.*)'")]
@@ -251,15 +229,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 	public class AddActivityFormInfo
 	{
 		public string Activity { get; set; }
-		public DateTime StartTime { get; set; }
-		public DateTime EndTime { get; set; }
-		public bool IsNextDay { get; set; }
-	}
-
-	public class AddPersonalActivityFormInfo
-	{
-		public string Activity { get; set; }
-		public string ReferenceDay { get; set; }
+		public string SelectedDate { get; set; }
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
 		public bool IsNextDay { get; set; }

@@ -39,10 +39,12 @@
 		vm.isNextDay = false;
 		vm.selectedActivityId = null;
 		vm.disableNextDay = false;
+		vm.availableActivitiesLoaded = false;
 		vm.addActivity = commandCommon.wrapPersonWriteProtectionCheck(true, 'AddActivity', addActivity, null, vm.selectedDate());
 
 		activityService.fetchAvailableActivities().then(function (activities) {
 			vm.activities = activities;
+			vm.availableActivitiesLoaded = true;
 		});
 		var notAllowed = "";
 		vm.notAllowedToAddActivityWithoutShift = function () {

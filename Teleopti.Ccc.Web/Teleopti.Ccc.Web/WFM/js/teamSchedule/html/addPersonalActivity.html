@@ -1,4 +1,4 @@
-﻿<div class="add-personal-activity">
+﻿<div class="add-activity">
 	<div class="sidenav-header">{{'AddPersonalActivity'|translate}}</div>
 	<md-content class="command-panel-content" layout-padding>
 		<form name="newPersonalActivityForm">
@@ -9,7 +9,7 @@
 					<option class="activity-option-item" value="{{activity.Id}}" ng-repeat="activity in vm.availableActivities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>
-			<activity-time-range-picker class="activity-time-range" custom-tabindex="100" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.referenceDay" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
+			<activity-time-range-picker class="activity-time-range" custom-tabindex="100" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
 			</activity-time-range-picker>
 		</form>
 

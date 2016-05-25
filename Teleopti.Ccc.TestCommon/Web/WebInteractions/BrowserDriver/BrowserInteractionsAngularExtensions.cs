@@ -18,6 +18,14 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			interactions.Javascript(script);		
 		}
 
+		public static void InvokeServiceAction(this IBrowserInteractions interactions, string selector, string serviceName, string actionName)
+		{
+			var script = getInjectableService(selector, serviceName) + string.Format(" service.{0}();", actionName);
+
+			Console.Out.WriteLine(">>>" + script);
+			interactions.Javascript(script);
+		}
+
 		public static void WaitScopeCondition<T>(this IBrowserInteractions interactions, string selector, string name,
 			T constraint, Action actionThen, bool useIsolateScope = false)
 		{
@@ -35,7 +43,7 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 			
 			interactions.AssertJavascriptResultContains(query, "True");		
 		}
-
+	
 		public static void AssertScopeValue<T>(this IBrowserInteractions interactions, string selector, string name, T constraint, bool useIsolateScope = false)
 		{		
 			var script = string.Format(scopeByQuerySelector(selector, useIsolateScope) + " return scope.{0}; ", name);
@@ -87,6 +95,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		private static string runnerByQuerySelector(string selector)
 		{
 			return string.Format("var runner = {0}.injector().get('$timeout'); ", elementByQuerySelector(selector));
+		}
+
+		private static string getInjectableService(string selector, string serviceName)
+		{
+			return string.Format("var service = {0}.injector().get('{1}'); ", elementByQuerySelector(selector), serviceName);
 		}
 
 		private static string runScript(string selector, string script, bool useIsolateScope)

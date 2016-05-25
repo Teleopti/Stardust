@@ -51,11 +51,12 @@ Scenario: Should be able to add activity
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
 	And I set new activity as
-	| Field       | Value            |
-	| Activity    | Phone            |
-	| Start time  | 2016-10-10 12:00 |
-	| End time    | 2016-10-10 13:00 |
-	| Is next day | false            |
+	| Field        | Value            |
+	| Activity     | Phone            |
+	| SelectedDate | 2016-10-10       |
+	| Start time   | 2016-10-10 12:00 |
+	| End time     | 2016-10-10 13:00 |
+	| Is next day  | false            |
 	Then I should be able to apply my new activity
 	When I apply my new activity
 	Then I should see a successful notice
@@ -96,10 +97,10 @@ Scenario: Should be able to add personal activity
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
-	And I set new personal activity as
+	And I set new activity as
 	| Field        | Value            |
 	| Activity     | Training         |
-	| ReferenceDay | 2016-10-10       |
+	| SelectedDate | 2016-10-10       |
 	| Start time   | 2016-10-10 12:00 |
 	| End time     | 2016-10-10 13:00 |
 	| Is next day  | false            |

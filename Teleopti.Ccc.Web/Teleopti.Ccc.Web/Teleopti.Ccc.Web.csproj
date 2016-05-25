@@ -1518,6 +1518,8 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.personAbsence.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.personSelection.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.personSelection.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.scenarioTestUtil.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.service.scenarioTestUtil.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.signalr.js" />

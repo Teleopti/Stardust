@@ -33,3 +33,10 @@ Scenario: Should be able to see contract time
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-01-01'
 	Then I should see contract time of '10:00'
+	And I open menu in team schedule
+	| Field        | Value            |
+	| Activity     | Phone            |
+	| SelectedDate | 2016-01-01       |
+	| Start time   | 2016-01-01 12:00 |
+	| End time     | 2016-01-01 13:00 |
+	| Is next day  | false            |

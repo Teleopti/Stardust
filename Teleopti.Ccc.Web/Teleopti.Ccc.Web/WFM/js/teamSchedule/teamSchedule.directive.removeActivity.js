@@ -4,9 +4,9 @@
 
 	angular.module('wfm.teamSchedule').directive('removeActivity', removeActivityDirective);
 
-	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$mdDialog'];
+	removeActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'teamScheduleNotificationService', '$mdDialog', 'ScenarioTestUtil'];
 
-	function removeActivityCtrl(ActivityService, PersonSelection, notification, $mdDialog) {
+	function removeActivityCtrl(ActivityService, PersonSelection, notification, $mdDialog, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'RemoveActivity';
 
@@ -65,6 +65,13 @@
 				}
 			});
 		}
+
+		vm.init = function() {
+			if (ScenarioTestUtil.isScenarioTest())
+				vm.removeActivity();
+			else
+				vm.popDialog();
+		}
 	}
 
 
@@ -88,8 +95,9 @@
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
 
-			// trigger command directly
-			selfCtrl.popDialog();
+			selfCtrl.init();
+
+			
 		}
 
 	}

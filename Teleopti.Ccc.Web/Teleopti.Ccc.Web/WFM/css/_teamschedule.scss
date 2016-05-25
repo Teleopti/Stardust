@@ -306,7 +306,7 @@
 		height: 100%;
 	}
 
-	.add-activity, .move-activity, .add-personal-activity {
+	.add-activity, .move-activity{
 		height: 100%;
 		display: flex;
 		flex-direction: column;
@@ -320,7 +320,7 @@
 		}
     }
 
-    .add-activity, .add-personal-activity {
+    .add-activity{
 		.activity-selector{
 			width:100%;
 			min-height:20px;

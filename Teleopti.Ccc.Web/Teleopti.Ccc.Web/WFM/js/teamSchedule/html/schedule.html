@@ -28,8 +28,6 @@
 		<div class="clearfix"></div>
 	</div>
 
-	<input class="scenario-test-trick" ng-show="false" value="vm.isScenarioTest">
-
 	<div class="con-row teamschedule-body">
 		<div class="big-table-wrapper">
 			<div class="alert-warning notice-spacer" ng-if="vm.total > 500">
@@ -40,7 +38,7 @@
 		</div>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-command-container">
-			<teamschedule-command-container date="vm.selectedDate"
+			<teamschedule-command-container date="vm.scheduleDate"
 											action-callback="vm.commonCommandCallback(trackId, personIds)"
 											md-sidenav-focus tabindex="100"></teamschedule-command-container>
 		</md-sidenav>
@@ -51,9 +49,6 @@
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-activity">
 			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" tabindex="101" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()" actions-after-activity-apply="vm.afterActionCallback(trackId, personIds)"></add-activity-panel>
 		</md-sidenav>
-		<!--<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="add-personal-activity">
-			<add-activity-panel ng-if="vm.toggleCurrentSidenav()" tabindex="101" selected-date="vm.scheduleDate" default-start="vm.defaultNewActivityStart()" actions-after-activity-apply="vm.afterActionCallback(trackId, personIds)"></add-activity-panel>
-		</md-sidenav>-->
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="move-activity">
 			<move-activity-panel tabindex="103" ng-if="vm.toggleCurrentSidenav()" selected-date="vm.scheduleDate" default-start="vm.defaultMoveActivityStart()" actions-after-activity-apply="vm.afterActionCallback(trackId, personIds)"></move-activity-panel>
 		</md-sidenav>
