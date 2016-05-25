@@ -31,6 +31,12 @@ BEGIN
 	SELECT 'No datasource available'
 	RETURN 0
 END
+--make sure datasource exists in mart.etl_intraday_settings
+IF NOT EXISTS(select * from [mart].[etl_job_intraday_settings] where detail_id=@detail_id and datasource_id=@datasource_id) AND @datasource_id<>-2
+BEGIN	
+	SELECT 'No datasource available'
+	RETURN 0
+END
 --------------------------------------------------------------------------
 --If we get All = -2 loop existing log objects and call this SP in a cursor for each log object
 --------------------------------------------------------------------------
