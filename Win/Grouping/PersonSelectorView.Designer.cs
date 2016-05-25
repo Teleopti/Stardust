@@ -24,23 +24,31 @@ namespace Teleopti.Ccc.Win.Grouping
 	        _groupPageHelper = null;
 	        _eventAggregator = null;
 	        _globalEventAggregator = null;
-			foreach (TabPageAdv tabPage in tabControlAdv.TabPages)
-			{
-				tabPage.Tag = null;
+	        if (tabControlAdv != null)
+	        {
+				foreach (TabPageAdv tabPage in tabControlAdv.TabPages)
+				{
+					tabPage.Tag = null;
+				}
+				this.tabControlAdv.SelectedIndexChanged -= new System.EventHandler(this.tabControlAdvSelectedIndexChanged);
+				this.tabControlAdv.KeyDown -= new System.Windows.Forms.KeyEventHandler(this.tabControlAdvKeyDown);
+				this.tabControlAdv.KeyPress -= new System.Windows.Forms.KeyPressEventHandler(this.tabControlAdvKeyPressed);
+				tabControlAdv.TabPages.Clear();
+				tabControlAdv = null;
 			}
-			this.tabControlAdv.SelectedIndexChanged -= new System.EventHandler(this.tabControlAdvSelectedIndexChanged);
-			this.tabControlAdv.KeyDown -= new System.Windows.Forms.KeyEventHandler(this.tabControlAdvKeyDown);
-			this.tabControlAdv.KeyPress -= new System.Windows.Forms.KeyPressEventHandler(this.tabControlAdvKeyPressed);
-			tabControlAdv.TabPages.Clear();
-			tabControlAdv = null;
-			treeViewAdvMainTabTree.AfterCheck -= treeViewAdvMainTabTreeAfterCheck;
-			this.treeViewAdvMainTabTree.AfterSelect -= treeViewAdvMainTabTreeAfterSelect;
-            this.treeViewAdvMainTabTree.NodeBackgroundPaint -= treeViewAdvMainTabTreeNodeBackgroundPaint;
-            this.treeViewAdvMainTabTree.AfterSelect -= treeViewAdvMainTabTreeAfterSelect;
-            this.treeViewAdvMainTabTree.KeyDown -= treeViewAdvMainTabTreeKeyDown;
-            this.treeViewAdvMainTabTree.MouseDoubleClick -= openModule;
-            treeViewAdvMainTabTree.Nodes.Clear();
-			treeViewAdvMainTabTree = null;
+
+	        if (treeViewAdvMainTabTree != null)
+	        {
+				treeViewAdvMainTabTree.AfterCheck -= treeViewAdvMainTabTreeAfterCheck;
+				this.treeViewAdvMainTabTree.AfterSelect -= treeViewAdvMainTabTreeAfterSelect;
+				this.treeViewAdvMainTabTree.NodeBackgroundPaint -= treeViewAdvMainTabTreeNodeBackgroundPaint;
+				this.treeViewAdvMainTabTree.AfterSelect -= treeViewAdvMainTabTreeAfterSelect;
+				this.treeViewAdvMainTabTree.KeyDown -= treeViewAdvMainTabTreeKeyDown;
+				this.treeViewAdvMainTabTree.MouseDoubleClick -= openModule;
+				treeViewAdvMainTabTree.Nodes.Clear();
+				treeViewAdvMainTabTree = null;
+			}
+			
 			xdtpDate = null;
 			DoFilter = null;
 
