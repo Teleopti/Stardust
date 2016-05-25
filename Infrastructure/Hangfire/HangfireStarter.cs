@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		// GOSH.. Sooo much text...
 		public void Start(string connectionString)
 		{
-			var retries = _config.ReadValue("HangfireAutomaticRetryAttempts", 3);
+			var retries = _config.ReadValue("HangfireAutomaticRetryAttempts", 10);
 			var jobExpiration = _config.ReadValue("HangfireJobExpirationSeconds", 60 * 60 * 24 * 2);
 			var pollInterval = _config.ReadValue("HangfireQueuePollIntervalSeconds", 2);
 			var jobExpirationCheck = _config.ReadValue("HangfireJobExpirationCheckIntervalSeconds", 60 * 15);
