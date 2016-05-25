@@ -29,7 +29,7 @@
 					var r = $httpBackend.whenGET(url);
 					return {
 						respond: function(fn) {
-							r.respond(function(method, url, data, headers, params) {
+							return r.respond(function(method, url, data, headers, params) {
 								var params2 = paramsOf(url);
 								return fn(params2, method, url, data, headers, params);
 							});
@@ -47,7 +47,7 @@
 
 				$httpBackend.whenGET2(/\.\.\/api\/Agents\/ForTeams(.*)/)
 					.respond(function(params) {
-						return [200, agents.filter(function(a) { return a.TeamId === params.teamIds; })];
+						return [200, agents.filter(function (a) { return params.teamIds.indexOf(a.TeamId) >= 0; })];
 					});
 
 				$httpBackend.whenGET2(/\.\.\/api\/Agents\/ForSites(.*)/)
@@ -61,7 +61,7 @@
 						var result =
 							states.filter(function(s) {
 								var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
-								return a != null && a.TeamId === params.ids;
+								return a != null && params.ids.indexOf(a.TeamId) >= 0;
 							}).filter(function(s) {
 								return !params.inAlarmOnly || s.TimeInAlarm > 0;
 							}).sort(function(s1, s2) {
