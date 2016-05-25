@@ -215,8 +215,7 @@ describe('RtaAgentsCtrl for teams', function() {
 				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
 
-		$controllerBuilder.createController()
-			.wait(5000);
+		$controllerBuilder.createController();
 
 		scope.$emit('$destroy');
 		$interval.flush(5000);

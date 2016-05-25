@@ -1,155 +1,52 @@
 'use strict';
 describe('RtaAgentsCtrl for sites', function() {
-	var $q,
-		$rootScope,
-		$interval,
+	var $interval,
 		$httpBackend,
-		$controller,
-		$resource,
 		$state,
 		$sessionStorage,
-		scope;
+		scope,
+		$fakeBackend,
+		$controllerBuilder;
 
 	var stateParams = {};
-	var agents = [];
-	var states = [];
-	var adherence = {};
 
 	beforeEach(module('wfm.rta'));
 
-	beforeEach(function() {
-		agents = [{
-			Name: "Ashley Andeen",
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-			SiteName: "London",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
-			TeamName: "Team Preferences"
-		}, {
-			Name: "Charley Caper",
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
-			SiteName: "Paris",
-			TeamId: "103afc66-2bfa-45f4-9823-9e06008d5062",
-			TeamName: "Team Backoffice"
-		}];
-
-		states = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			State: "Ready",
-			StateStartTime: "\/Date(1429254905000)\/",
-			Activity: "Phone",
-			NextActivity: "Short break",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "In Adherence",
-			AlarmStart: "\/Date(1432105910000)\/",
-			Color: "#00FF00",
-			TimeInState: 15473
-		}, {
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			State: "In Call",
-			StateStartTime: "\/Date(1429254905000)\/",
-			Activity: "Short break",
-			NextActivity: "Phone",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "Out of Adherence",
-			AlarmStart: "\/Date(1432105910000)\/",
-			Color: "#FF0000",
-			TimeInState: 15473
-		}];
-
-		adherence = {
-			AdherencePercent: 99,
-			LastTimestamp: "16:34"
-		};
-	});
-
-	beforeEach(function() {
-		module(function($provide) {
-			$provide.service('$stateParams', function() {
+	beforeEach(function () {
+		module(function ($provide) {
+			$provide.service('$stateParams', function () {
+				stateParams = {};
 				return stateParams;
 			});
 		});
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_, _$interval_, _$controller_, _$resource_, _$state_, _$sessionStorage_) {
-		$controller = _$controller_;
-		scope = _$rootScope_.$new();
-		$q = _$q_;
+	beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_) {
 		$interval = _$interval_;
-		$rootScope = _$rootScope_;
-		$resource = _$resource_;
 		$state = _$state_;
 		$sessionStorage = _$sessionStorage_;
 		$httpBackend = _$httpBackend_;
+		$fakeBackend = _FakeRtaBackend_;
+		$controllerBuilder = _ControllerBuilder_;
 
-		$httpBackend.whenGET("../api/Adherence/ForToday?personId=11610fe4-0130-4568-97de-9b5e015b2564")
-			.respond(function() {
-				return [200, adherence];
-			});
-		$httpBackend.whenGET("../api/Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c&siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-			.respond(function() {
-				return [200, agents];
-			});
-		$httpBackend.whenGET("../api/Agents/ForSites?siteIds=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
-			.respond(function() {
-				return [200, [agents[0]]];
-			});
-		$httpBackend.whenGET("../api/Agents/ForSites?siteIds=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-			.respond(function() {
-				return [200, agents];
-			});
+		scope = $controllerBuilder.setup('RtaAgentsCtrl');
 
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c")
-			.respond(function() {
-				return [200, [states[0]]];
-			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&inAlarmOnly=true")
-			.respond(function () {
-				return [200, [states[0]]];
-			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-			.respond(function() {
-				return [200, states];
-			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461&inAlarmOnly=true")
-			.respond(function() {
-				return [200, states];
-			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461")
-			.respond(function () {
-				return [200, states];
-			});
-		$httpBackend.whenGET("../api/Agents/GetStatesForSites?alarmTimeDesc=true&ids=d970a45a-90ff-4111-bfe1-9b5e015ab45c&ids=6a21c802-7a34-4917-8dfd-9b5e015ab461&inAlarmOnly=true")
-			.respond(function () {
-				return [200, states];
-			});
-		$httpBackend.whenGET(/ToggleHandler\/(.*)/).respond(function() {
-			return [200, {
-				IsEnabled: false
-			}];
-		});
+		$fakeBackend.clear();
+
 	}));
-
-	var createController = function() {
-		$controller('RtaAgentsCtrl', {
-			$scope: scope
-		});
-		scope.$digest();
-		$httpBackend.flush();
-	}
 
 	it('should get agents for multiple sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		agents = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-		}, {
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
-		}];
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+			})
+			.withAgent({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
+			});
 
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 		expect(scope.agents[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
@@ -157,25 +54,34 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	it('should get agents for single selected site', function() {
 		stateParams.siteIds = ["6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		agents = [{
+		$fakeBackend.withAgent({
 			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
 			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
-		}];
+		});
 
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
 	});
 
 	it('should get agent states for multiple sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		states = [{
-			"PersonId": "11610fe4-0130-4568-97de-9b5e015b2564"
-		}, {
-			"PersonId": "6b693b41-e2ca-4ef0-af0b-9e06008d969b"
-		}];
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+			})
+			.withAgent({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
+			})
+			.withState({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b"
+			});
 
-		createController();
+		$controllerBuilder.createController();
 
 		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 		expect(scope.agents[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
@@ -183,14 +89,43 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	it('should update agent states for multiple sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		states[0].State = "Ready";
-		states[1].State = "In Call";
 
-		createController();
-		states[0].State = "In Call";
-		states[1].State = "Ready";
-		$interval.flush(5000);
-		$httpBackend.flush();
+		$fakeBackend
+			.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+			})
+			.withAgent({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Ready"
+			})
+			.withState({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				State: "In Call"
+			});
+
+		
+
+		$controllerBuilder.createController()
+			.apply("agentsInAlarm = false")
+			.apply(function() {
+				$fakeBackend.clearStates()
+					.withState({
+						PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+						State: "In Call"
+					})
+					.withState({
+						PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+						State: "Ready"
+					});
+				
+		})
+		.wait(5000);
+	
 
 		expect(scope.agents[0].State).toEqual("In Call");
 		expect(scope.agents[1].State).toEqual("Ready");
@@ -198,39 +133,41 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	it('should set states to agents for multiple sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		agents = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-		}, {
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
-		}];
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+			})
+			.withAgent({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				State: "Ready",
+				StateStartTime: "\/Date(1429254905000)\/",
+				Activity: "Phone",
+				NextActivity: "Short break",
+				NextActivityStartTime: "\/Date(1432109700000)\/",
+				Alarm: "In Adherence",
+				AlarmStart: "\/Date(1432105910000)\/",
+				Color: "#00FF00",
+				TimeInState: 15473
+			})
+			.withState({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				State: "In Call",
+				StateStartTime: "\/Date(1429254905000)\/",
+				Activity: "Short break",
+				NextActivity: "Phone",
+				NextActivityStartTime: "\/Date(1432109700000)\/",
+				Alarm: "Out of Adherence",
+				AlarmStart: "\/Date(1432105910000)\/",
+				Color: "#FF0000",
+				TimeInState: 15473
+			});
 
-		states = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			State: "Ready",
-			StateStartTime: "\/Date(1429254905000)\/",
-			Activity: "Phone",
-			NextActivity: "Short break",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "In Adherence",
-			AlarmStart: "\/Date(1432105910000)\/",
-			Color: "#00FF00",
-			TimeInState: 15473
-		}, {
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			State: "In Call",
-			StateStartTime: "\/Date(1429254905000)\/",
-			Activity: "Short break",
-			NextActivity: "Phone",
-			NextActivityStartTime: "\/Date(1432109700000)\/",
-			Alarm: "Out of Adherence",
-			AlarmStart: "\/Date(1432105910000)\/",
-			Color: "#FF0000",
-			TimeInState: 15473
-		}];
-
-		createController();
+		$controllerBuilder.createController()
+			.apply("agentsInAlarm = false");
 
 		expect(scope.agents[0].State).toEqual("Ready");
 		expect(scope.agents[0].StateStartTime).toEqual("\/Date(1429254905000)\/");
@@ -255,35 +192,36 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	it('should filter agent name with agentFilter', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		agents = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			Name: "Ashley Andeen",
-			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-		}, {
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			Name: "Charlie Caper",
-			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
-		}];
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				Name: "Ashley Andeen",
+				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+			})
+			.withAgent({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				Name: "Charlie Caper",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+			});
 
-		createController();
-		scope.$apply("agentsInAlarm = false");
-		scope.$apply("filterText = 'Ashley'");
+		$controllerBuilder.createController()
+			.apply("agentsInAlarm = false")
+			.apply("filterText = 'Ashley'");
 
 		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
 	});
 
 	it('should stop polling when page is about to destroy', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		agents = [{
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-		}, {
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
-		}];
-		createController();
-		$interval.flush(5000);
-		$httpBackend.flush();
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+			})
+			.withAgent({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+			});
+
+		$controllerBuilder.createController();
 
 		scope.$emit('$destroy');
 		$interval.flush(5000);
@@ -292,12 +230,10 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	it('should poll states in alarm only for sites', function() {
 		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
-		$controller('RtaAgentsCtrl', {
-			$scope: scope
-		});
 
-		scope.$apply("agentsInAlarm = true");
+		$controllerBuilder.createController()
+			.apply("agentsInAlarm = true");
 
-		$httpBackend.flush();
+		//missing assert
 	});
 });
