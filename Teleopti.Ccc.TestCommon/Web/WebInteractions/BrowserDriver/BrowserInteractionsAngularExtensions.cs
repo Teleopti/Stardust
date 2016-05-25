@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		{
 			var script = getInjectableService(selector, serviceName) + string.Format(" service.{0}();", actionName);
 
-			Console.Out.WriteLine(">>>" + script);
 			interactions.Javascript(script);
 		}
 
