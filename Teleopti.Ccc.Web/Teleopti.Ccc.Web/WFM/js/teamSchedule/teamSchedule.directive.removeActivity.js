@@ -14,7 +14,7 @@
 		vm.removeActivity = function () {
 			var personIds = vm.selectedPersonProjections.map(function(x) { return x.personId; });
 			var requestData = {
-				Date: vm.referenceDay(),
+				Date: vm.selectedDate(),
 				PersonActivities: vm.selectedPersonProjections.map(function(x) {
 					return { PersonId: x.personId, Name: x.name, ShiftLayerIds: x.selectedActivities };
 				}),
@@ -90,7 +90,7 @@
 			var containerCtrl = ctrls[0],
 				selfCtrl = ctrls[1];
 
-			scope.vm.referenceDay = containerCtrl.getDate;
+			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;

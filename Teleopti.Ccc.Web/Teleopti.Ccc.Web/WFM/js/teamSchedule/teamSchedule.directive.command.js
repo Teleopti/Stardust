@@ -34,10 +34,16 @@
 				shortcut: "Alt+T",
 				panelName: "add-activity",
 				action: function () {
-					vm.setCurrentCommand('AddActivity'); parentVm.addActivity();
+					if (vm.triggerCommand) {
+						vm.triggerCommand({
+							label: "AddActivity",
+							needToOpenSidePanel: true
+						});
+					}
 				},
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
-				visible: function () { return vm.canActiveAddActivity(); }
+				visible: function () { return vm.canActiveAddActivity(); },
+				withCommandContainer: true
 			},
 			{
 				label: "AddPersonalActivity",

@@ -214,9 +214,6 @@
 			return time == null ? new Date() : time;
 		};
 
-		vm.addActivity = function() {
-		};
-
 		vm.moveActivity = function () {
 		};
 

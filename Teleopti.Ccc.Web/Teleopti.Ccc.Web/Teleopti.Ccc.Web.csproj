@@ -1432,7 +1432,7 @@
     <Content Include="WFM\js\seatManagement\seatplanreport.controller.spec.js" />
     <Content Include="WFM\js\seatManagement\teampicker.controller.spec.js" />
     <Content Include="WFM\js\teamSchedule\html\addabsencepanel.html" />
-    <Content Include="WFM\js\teamSchedule\html\addActivityPanel.tpl.html" />
+    <Content Include="WFM\js\teamSchedule\html\addActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />

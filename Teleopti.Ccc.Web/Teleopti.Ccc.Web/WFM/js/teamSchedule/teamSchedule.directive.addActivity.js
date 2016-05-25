@@ -1,118 +1,135 @@
-﻿(function () {
-
+﻿(function() {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('addActivityPanel', addActivityPanel);
+	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
 
-	function addActivityPanel() {
-		return {
-			restrict: 'E',
-			scope: {
-				selectedDate: '&',
-				actionsAfterActivityApply: '&?',
-				defaultStart: '&?',
-				tabindex: '@?'
-			},
-			templateUrl: 'js/teamSchedule/html/addActivityPanel.tpl.html',
-			controller: ['$element','$translate', 'ActivityService', 'guidgenerator', 'CommandCommon', 'PersonSelection', 'teamScheduleNotificationService', addActivityCtrl],
-			controllerAs: 'vm',
-			bindToController: true
-		};
-	}
+	addActivityCtrl.$inject = ['$scope', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService'];
 
-	function addActivityCtrl($element, $translate, activityService, guidgenerator, commandCommon, personSelectionSvc, NotificationSvc) {
+	function addActivityCtrl($scope, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService) {
 		var vm = this;
-		var startTimeMoment;
 
-		init();
+		vm.label = 'AddActivity';
 
-		if (vm.defaultStart) {
-			startTimeMoment = moment(moment(vm.selectedDate()).format("YYYY-MM-DD") + " " + vm.defaultStart());
-		} else {
-			startTimeMoment = moment();
-		}
-		var endTimeMoment = moment(startTimeMoment).add(1, 'hour');
-		vm.timeRange = {
-			startTime: startTimeMoment.toDate(),
-			endTime: endTimeMoment.toDate()
-		};
 		vm.isNextDay = false;
-		vm.selectedActivityId = null;
 		vm.disableNextDay = false;
+		vm.notAllowedNameListString = "";
 		vm.availableActivitiesLoaded = false;
-		vm.addActivity = commandCommon.wrapPersonWriteProtectionCheck(true, 'AddActivity', addActivity, null, vm.selectedDate());
+		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		activityService.fetchAvailableActivities().then(function (activities) {
-			vm.activities = activities;
+			vm.availableActivities = activities;
 			vm.availableActivitiesLoaded = true;
 		});
-		var notAllowed = "";
-		vm.notAllowedToAddActivityWithoutShift = function () {
-			if (notAllowed == "")
-				return "";
-			var agentName = notAllowed.substr(0, notAllowed.length - 2);
-			return {
-				Message: $translate.instant('CanNotAddActivityToAgentWithoutShift').replace('{0}', agentName),
-				AgentName: agentName
-			}
+
+		vm.isInputValid = function () {
+			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return false;
+
+			var invalidAgents = vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange.startTime); });
+			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.name; }).join(', ');
+
+			return invalidAgents.length === 0;
 		};
 
-		vm.isInputValid = function () {						
-			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return true;				
-			var isValid = true;
-			notAllowed = "";
-			var formattedStartTime = moment(vm.timeRange.startTime).format('YYYY-MM-DD HH:mm');
-			angular.forEach(vm.selectedAgents, function (selectedAgent) {
-				if (selectedAgent.scheduleEndTime == undefined) return;			
-				var isAllowed = isNewActivityAllowed(formattedStartTime, selectedAgent.scheduleEndTime);
-				if (!isAllowed) {				
-					isValid = false;
-					if (notAllowed.indexOf(selectedAgent.name) == -1) {
-						notAllowed += selectedAgent.name + ', ';
-					}
-				}
-			});
-
-			return isValid;
-		};
-
-		function isNewActivityAllowed(activityStart, scheduleEnd) {			
+		vm.isNewActivityAllowedForAgent = function (agent, activityStart) {
 			var mActivityStart = moment(activityStart);
-			var mScheduleEnd = moment(scheduleEnd);
-			return !vm.isNextDay ||  mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
+			var mScheduleEnd = moment(agent.scheduleEndTime);
+
+			return !vm.isNextDay || mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
 		}
 
-		function addActivity() {
-			var trackId = guidgenerator.newGuid();
-
-			var commandInfo = {
-				success: 'SuccessfulMessageForAddingActivity',
-				warning: 'PartialSuccessMessageForAddingActivity'
+		vm.addActivity = function () {
+			var requestData = {
+				PersonIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
+				Date: vm.selectedDate(),
+				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DDTHH:mm"),
+				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DDTHH:mm"),
+				ActivityId: vm.selectedActivityId,
+				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 
-			var actionTargets = vm.selectedAgents.map(function(agent) { return { Name: agent.name, PersonId : agent.personId}; });
-
-			activityService.addActivity({
-				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
-				Date: vm.selectedDate(),
-				StartTime: moment(vm.timeRange.startTime).format("YYYY-MM-DD HH:mm"),
-				EndTime: moment(vm.timeRange.endTime).format("YYYY-MM-DD HH:mm"),
-				ActivityId: vm.selectedActivityId,
-				TrackedCommandInfo:{TrackId:trackId}
-			}).then(function (response) {
-				if (vm.actionsAfterActivityApply) {
-					vm.actionsAfterActivityApply({
-						trackId: trackId,
-						personIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
-					});
+			activityService.addActivity(requestData).then(function (response) {
+				if (vm.getActionCb(vm.label)) {
+					vm.getActionCb(vm.label)(vm.TrackId, requestData.PersonIds);
 				}
-				NotificationSvc.reportActionResult(commandInfo, actionTargets, response.data);
+				teamScheduleNotificationService.reportActionResult({
+					success: 'SuccessfulMessageForAddingActivity',
+					warning: 'PartialSuccessMessageForAddingActivity'
+				}, vm.selectedAgents.map(function (x) {
+					return {
+						PersonId: x.personId,
+						Name: x.name
+					}
+				}), response.data);
 			});
+		};
+
+		vm.getDefaultActvityStartTime = getDefaultActvityStartTime;
+
+		function getDefaultActvityStartTime() {
+			var curDateMoment = moment(vm.selectedDate());
+			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, vm.selectedAgents);
+			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, vm.selectedAgents);
+
+			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();
+			if (overnightEnds !== null) {
+				defaultStart = moment(overnightEnds).add(1, 'hour').toDate();
+			}
+
+			if (moment(wFMDateSvc.nowInUserTimeZone()).format('YYYY-MM-DD') === moment(vm.selectedDate()).format('YYYY-MM-DD')) {
+				var nextTickTime = new Date(wFMDateSvc.getNextTickNoEarlierThanEight());
+				if (nextTickTime > defaultStart) {
+					defaultStart = nextTickTime;
+				}
+			} else {
+				if (latestShiftStart !== null) {
+					var latestShiftStartPlusOneHour = moment(latestShiftStart).add(1, 'hour').toDate();
+					if (latestShiftStartPlusOneHour >= defaultStart)
+						defaultStart = latestShiftStart;
+				}
+			}
+
+			return defaultStart;
 		}
 
-		function init() {
-			vm.selectedAgents = personSelectionSvc.getCheckedPersonInfoList();
-			$element.removeAttr('tabindex');
+		vm.getDefaultActvityEndTime = function () {
+			return moment(getDefaultActvityStartTime()).add(1, 'hour').toDate();
 		}
 	}
+
+
+	function addActivityDirective() {
+		return {
+			restrict: 'E',
+			scope: {},
+			controller: addActivityCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
+			templateUrl: 'js/teamSchedule/html/addActivity.tpl.html',
+			require: ['^teamscheduleCommandContainer', 'addActivity'],
+			link: postlink
+		}
+
+		function postlink(scope, elem, attrs, ctrls) {
+			var containerCtrl = ctrls[0],
+				selfCtrl = ctrls[1];
+
+			scope.vm.selectedDate = containerCtrl.getDate;
+			scope.vm.trackId = containerCtrl.getTrackId();
+			scope.vm.getActionCb = containerCtrl.getActionCb;
+
+			console.log('run this?');
+			scope.vm.timeRange = {
+				startTime: selfCtrl.getDefaultActvityStartTime(),
+				endTime: selfCtrl.getDefaultActvityEndTime()
+			};
+
+			scope.$on('teamSchedule.command.focus.default', function () {
+				var focusTarget = elem[0].querySelector('.focus-default');
+				if (focusTarget) angular.element(focusTarget).focus();
+			});
+		}
+	}
+
+
+
 })();
