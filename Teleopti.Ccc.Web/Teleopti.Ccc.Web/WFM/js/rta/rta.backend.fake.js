@@ -9,6 +9,8 @@
 			var adherences = [];
 			var personDetails = [];
 			var activityAdherences = [];
+			var sites = [];
+			var siteAdherences = [];
 
 			var paramsOf = function(url) {
 				var result = {};
@@ -106,12 +108,24 @@
 					return [200, activityAdherences.filter(function(a) { return a.PersonId === params.personId })];
 				});
 
+			$httpBackend.whenGET2(/\.\.\/api\/Sites$/)
+				.respond(function(params) {
+					return [200, sites];
+				});
+
+			$httpBackend.whenGET2(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/)
+				.respond(function (params) {
+					return [200, siteAdherences];
+				});
+
 			this.clear = function() {
 				agents = [];
 				states = [];
 				adherences = [];
 				personDetails = [];
 				activityAdherences = [];
+				sites = [];
+				siteAdherences = [];
 			}
 
 			this.withAgent = function(agent) {
@@ -143,5 +157,21 @@
 				activityAdherences.push(activityAdherence);
 				return this;
 			}
+
+			this.withSite = function (site) {
+				sites.push(site);
+				return this;
+			};
+
+			this.withSiteAdherence = function (siteAdherence) {
+				siteAdherences.push(siteAdherence);
+				return this;
+			};
+
+			this.clearSiteAdherences = function () {
+				siteAdherences = [];
+				return this;
+			};
+
 		});
 })();
