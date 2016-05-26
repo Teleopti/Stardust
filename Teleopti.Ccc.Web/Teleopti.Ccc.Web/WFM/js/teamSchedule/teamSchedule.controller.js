@@ -204,9 +204,7 @@
 			return time == null ? new Date() : time;
 		};
 
-		vm.moveActivity = function () {
-		};
-
+	
 		vm.selectedPersonInfo = function() {
 			return personSelectionSvc.personInfo;
 		};

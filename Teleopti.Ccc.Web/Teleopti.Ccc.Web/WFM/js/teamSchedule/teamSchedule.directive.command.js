@@ -73,9 +73,17 @@
 				label: "MoveActivity",
 				shortcut: "Alt+M",
 				panelName: "move-activity",
-				action: function () { vm.moveActivityAction(); },
+				action: function () {
+					if (vm.triggerCommand) {
+						vm.triggerCommand({
+							label: "MoveActivity",
+							needToOpenSidePanel: true
+						});
+					}
+				},
 				clickable: function () { return vm.canMoveActivity(); },
-				visible: function () { return vm.canActiveMoveActivity(); }
+				visible: function () { return vm.canActiveMoveActivity(); },
+				withCommandContainer: true
 			},
 			{
 				label: "SwapShifts",

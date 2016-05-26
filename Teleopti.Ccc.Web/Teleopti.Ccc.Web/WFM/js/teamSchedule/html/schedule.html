@@ -43,10 +43,7 @@
 											configurations="vm.cmdConfigurations"
 											md-sidenav-focus tabindex="100"></teamschedule-command-container>
 		</md-sidenav>
-		
-		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="move-activity">
-			<move-activity-panel tabindex="103" ng-if="vm.toggleCurrentSidenav()" selected-date="vm.scheduleDate" default-start="vm.defaultMoveActivityStart()" actions-after-activity-apply="vm.afterActionCallback(trackId, personIds)"></move-activity-panel>
-		</md-sidenav>
+				
 	</div>
 
 	<div class="con-footer" ng-if="vm.paginationOptions.totalPages > 0">
