@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -31,21 +32,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.MultiplicatorDefinitionSetHandler
 			logger.Debug($"New instance of {nameof(AnalyticsOvertimeUpdater)} was created");
 		}
 
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(MultiplicatorDefinitionSetCreated @event)
 		{
 			logger.Debug($"Consuming {nameof(MultiplicatorDefinitionSetCreated)} for event id = {@event.MultiplicatorDefinitionSetId}.");
 			handle(@event);
 		}
 
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(MultiplicatorDefinitionSetChanged @event)
 		{
 			logger.Debug($"Consuming {nameof(MultiplicatorDefinitionSetChanged)} for event id = {@event.MultiplicatorDefinitionSetId}.");
 			handle(@event);
 		}
 
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
+		[UnitOfWork]
 		public virtual void Handle(MultiplicatorDefinitionSetDeleted @event)
 		{
 			logger.Debug($"Consuming {nameof(MultiplicatorDefinitionSetDeleted)} for event id = {@event.MultiplicatorDefinitionSetId}.");

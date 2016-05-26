@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using System;
+using System.Drawing;
+using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -15,13 +17,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 	{
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsDayOffRepository _analyticsDayOffRepository;
+		private readonly IDayOffTemplateRepository _dayOffTemplateRepository;
 
 		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsDayOffUpdater));
 
-		public AnalyticsDayOffUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsDayOffRepository analyticsDayOffRepository)
+		public AnalyticsDayOffUpdater(IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsDayOffRepository analyticsDayOffRepository, IDayOffTemplateRepository dayOffTemplateRepository)
 		{
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsDayOffRepository = analyticsDayOffRepository;
+			_dayOffTemplateRepository = dayOffTemplateRepository;
 			if (logger.IsInfoEnabled)
 			{
 				logger.Info($"New instance of {nameof(AnalyticsDayOffUpdater)} was created");
@@ -38,15 +42,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 			}
 
 			var businessUnitId = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId).BusinessUnitId;
+			var dayOffTemplate = _dayOffTemplateRepository.Get(@event.DayOffTemplateId);
+			
 			var dayOff = new AnalyticsDayOff
 			{
 				DayOffCode = @event.DayOffTemplateId,
 				BusinessUnitId = businessUnitId,
-				DayOffName = @event.DayOffName,
-				DayOffShortname = @event.DayOffShortName,
-				DisplayColor = -8355712,
-				DisplayColorHtml = "#808080",
-				DatasourceUpdateDate = @event.DatasourceUpdateDate,
+				DayOffName = dayOffTemplate.Description.Name,
+				DayOffShortname = dayOffTemplate.Description.ShortName,
+				DisplayColor = dayOffTemplate.DisplayColor.ToArgb(),
+				DisplayColorHtml = ColorTranslator.ToHtml(dayOffTemplate.DisplayColor),
+				DatasourceUpdateDate = dayOffTemplate.UpdatedOn ?? DateTime.UtcNow,
 				DatasourceId = 1
 			};
 			
