@@ -2340,7 +2340,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
 						_teamLeaderMode, _container.Resolve<IToggleManager>());
 
-					disableActionsCascading(true);
 					disableButtonsIfTeamLeaderMode();
 					_scheduleView.Presenter.UpdateFromEditor();
 					if (_showEditor)
@@ -2367,6 +2366,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						_currentIntraDayDate = selectedDate;
 					}
+
+					disableActionsCascading(true);
 
 					if (selectedSchedules.Any())
 						_dateNavigateControl.SetSelectedDateNoInvoke(selectedSchedules[0].DateOnlyAsPeriod.DateOnly);
@@ -2408,7 +2409,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 				}
 
-				SplitterManager.EnableShiftEditor();
+				if(!toolStripButtonCalculateCascading.Checked)
+					SplitterManager.EnableShiftEditor();
 
 				scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
 
@@ -7024,7 +7026,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			enableSave();
 			refreshChart();
-			//SplitterManager.EnableShiftEditor();
 			Refresh();
 		}
 
@@ -7044,6 +7045,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (enableOverTime && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
 				ToolStripMenuItemScheduleOvertime.Enabled = true;
+
+			schedulerSplitters1.ElementHost1.Enabled = false;
 		}
 
 		private void enableForCascading()
@@ -7054,16 +7057,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripExEdit2.Enabled = true;
 			toolStripButtonRequestView.Enabled = true;
 			toolStripButtonRestrictions.Enabled = true;
-			//toolStripButtonFindAgents.Enabled = true;
-
-			//toolStripExActions.Enabled = true;
-			//toolStripExLocks.Enabled = true;
-			//toolStripExTags.Enabled = true;
 			toolStripExLoadOptions.Enabled = true;
-			//toolStripExFilter.Enabled = true;
 
-			SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
-						_teamLeaderMode, _container.Resolve<IToggleManager>());
+			SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager, _teamLeaderMode, _container.Resolve<IToggleManager>());
 
 			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
 			disableButtonsIfTeamLeaderMode();
@@ -7085,16 +7081,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripExEdit2.Enabled = false;
 				toolStripButtonRequestView.Enabled = false;
 				toolStripButtonRestrictions.Enabled = false;
-				//toolStripButtonFindAgents.Enabled = false;
-				
-				
-				//toolStripExTags.Enabled = false;
 				toolStripExLoadOptions.Enabled = false;
 
-				//toolStripExLocks.Enabled = false;
-				//toolStripExFilter.Enabled = false;
-				//toolStripExActions.Enabled = false;
-				
 				disableActionsCascading(false);
 
 				toolStripButtonShowGraph.Enabled = false;
