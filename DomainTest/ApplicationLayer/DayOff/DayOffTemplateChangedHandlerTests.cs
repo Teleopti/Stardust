@@ -38,14 +38,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(0);
 			var @event = new DayOffTemplateChangedEvent
 			{
-				DayOffName = "DayOffName",
-				DayOffShortName = "DD",
 				DayOffTemplateId = id,
-				DatasourceUpdateDate = DateTime.Today,
 				LogOnBusinessUnitId = businessUnitCode
 			};
 
-			var dayOffTemplate = new DayOffTemplate {DisplayColor = Color.Gray, UpdatedOn = DateTime.Today };
+			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today };
 			dayOffTemplate.SetId(id);
 			dayOffTemplate.ChangeDescription("DayOffName", "DD");
 
@@ -73,14 +70,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(0);
 			var @event = new DayOffTemplateChangedEvent
 			{
-				DayOffName = "DayOffName",
-				DayOffShortName = "DD",
 				DayOffTemplateId = id,
-				DatasourceUpdateDate = DateTime.Today,
 				LogOnBusinessUnitId = businessUnitCode
 			};
 
-			var dayOffTemplate = new DayOffTemplate { DisplayColor = Color.Gray, UpdatedOn = DateTime.Today };
+			var dayOffTemplate = new DayOffTemplate { UpdatedOn = DateTime.Today };
 			dayOffTemplate.SetId(id);
 			dayOffTemplate.ChangeDescription("DayOffName", "DD");
 
@@ -93,7 +87,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.DayOff
 			dayOffTemplate.ChangeDescription("DayOffName update", "DD");
 			_dayOffTemplateRepository.Stub(x => x.Get(id)).Return(dayOffTemplate);
 
-			@event.DayOffName = "DayOffName update";
 			_target.Handle(@event);
 
 			_analyticsDayOffRepository.DayOffs().Count.Should().Be.EqualTo(1);

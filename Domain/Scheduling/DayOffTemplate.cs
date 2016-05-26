@@ -37,9 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						events.Add(new DayOffTemplateChangedEvent
 						{
 							DayOffTemplateId = Id.GetValueOrDefault(),
-							DayOffName = Description.Name,
-							DayOffShortName = Description.ShortName,
-							DatasourceUpdateDate = UpdatedOn ?? now.UtcDateTime()
 						});
 						break;
 			    }
