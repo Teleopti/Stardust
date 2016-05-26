@@ -12,6 +12,7 @@
 			}
 
 			function getCategories() {
+
 				return null;
 			}
 

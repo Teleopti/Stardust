@@ -1,9 +1,19 @@
 ﻿<md-progress-linear md-mode="indeterminate" ng-if="!requestsOverview.loaded"></md-progress-linear>
 
-<requests-table-container	class="requests-table-container"
-							shift-trade-view="requestsOverview.shiftTradeView"
-                         	requests="requestsOverview.requests"
-							shift-trade-request-date-summary="requestsOverview.shiftTradeRequestDateSummary"
-							filters="requestsOverview.filters"
-							filter-enabled="requestsOverview.filterEnabled"
-							sorting-orders="requestsOverview.sortingOrders"></requests-table-container>
+<requests-table-container class="requests-table-container"
+						  shift-trade-view="requestsOverview.shiftTradeView"
+						  requests="requestsOverview.requests"
+						  shift-trade-request-date-summary="requestsOverview.shiftTradeRequestDateSummary"
+						  filters="requestsOverview.filters"
+						  filter-enabled="requestsOverview.filterEnabled"
+						  sorting-orders="requestsOverview.sortingOrders"></requests-table-container>
+
+<div class="paging pull-right" ng-if="requestsOverview.isPaginationEnabled">
+	<wfm-pagination pagination-options="requestsOverview.paging" get-data-for-page-callback="requestsOverview.forceRequestsReloadWithSelection"></wfm-pagination>
+	<div class="total-requests-count pull-left">
+		<span>{{requestsOverview.showSelectedRequestsInfo()}}</span>
+	</div>
+	<select ng-if="requestsOverview.paging.totalRequestsCount > 0"
+			class="page-size-selector pull-left"
+			ng-model="requestsOverview.paging.pageSize" ng-options="option for option in requestsOverview.pageSizeOptions" ng-change="requestsOverview.onPageSizeChanges()"></select>
+</div>

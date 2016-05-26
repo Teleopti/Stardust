@@ -2,7 +2,7 @@
 	'use strict';
 
 	describe('Requests overview directive', function () {
-		var $compile, $rootScope, requestsDataService, requestsDefinitions;
+		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector;
 
 		var targetElement, targetScope;
 
@@ -10,23 +10,55 @@
 		beforeEach(module('wfm.requests'));
 
 		beforeEach(function () {
+
 			var requestsDataService = new FakeRequestsDataService();
+
 			module(function ($provide) {
+
+				$provide.service('Toggle', function () {
+					return {
+						Wfm_Requests_Basic_35986: true,
+						Wfm_Requests_People_Search_36294: true,
+						Wfm_Requests_Performance_36295: true,
+						Wfm_Requests_ApproveDeny_36297: true,
+						Wfm_Requests_Filtering_37748 : true,
+						togglesLoaded: {
+							then: function (cb) { cb(); }
+						}
+					}
+				});
+
 				$provide.service('requestsDataService', function () {
 					return requestsDataService;
-				});
-				$provide.service('Toggle', function () {
-					return new FakeToggleService();
 				});
 			});
 		});
 
-		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_) {
+		function fakeRequestCommandParamsHolder() {
+			var requestIds;
+			this.setSelectedRequestsIds = function (ids) {
+				console.log(ids, "Called set");
+				requestIds = ids;
+			}
+			this.getSelectedRequestsIds = function () {
+				console.log(requestIds, "Called");
+				return requestIds;
+			}
+			this.resetSelectedRequestIds = function()
+			{
+				requestIds = [];
+			}
+
+		}
+
+
+		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_, _$injector_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDataService = _requestsDataService_;
 			requestsDefinitions = _requestsDefinitions_;
 			targetScope = $rootScope.$new();
+			$injector = _$injector_;
 		}));
 
 		it("show requests table container", function () {
@@ -106,35 +138,28 @@
 			expect(requestsDataService.getLastRequestParameters()[0].agentSearchTerm).toEqual("search term");
 		});
 
-		it("should request data when pagination changed", function () {
+		it('should show selected requests information when requests get selected and nothing vice verse', function () {
+			
+			var requestIds = [{ id: 1 }, { id: 2 }];
+			requestsDataService.setRequests([]);
 
-			requestsDataService.setRequests([{ Id: 1 }, { Id: 2 }]);
-			targetScope.period = {};
-			targetScope.paging = {
-				pageSize: 1,
-				pageNumber: 1,
-				totalPages: 1,
-				totalRequestsCount: 2
-			};
-			targetScope.isPaginationEnabled = true;
-
-
-			targetElement = $compile('<requests-overview period="period"  paging="paging" toggle-pagination-enabled="isPaginationEnabled"></requests-overview>')(targetScope);
-
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
 
-			requestsDataService.reset();
+			var requestCommandParamsHolder = $injector.get('requestCommandParamsHolder');
+			requestCommandParamsHolder.setSelectedRequestIds(requestIds, false);
 
-			targetScope.paging.pageNumber = 2;
+			var vm = getInnerScope(targetElement).requestsOverview;
 
-			targetScope.$broadcast('reload.requests.with.selection');
-
+			vm.selectedRequestsInfoText = 'Selected {0} of {1} requests';
+			vm.paging.totalRequestsCount = 10;
 			targetScope.$digest();
-			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
-			expect(requestsDataService.getLastRequestParameters()[2].pageNumber).toEqual(2);
+			expect(vm.showSelectedRequestsInfo()).toEqual('Selected 2 of 10 requests');
+
+			requestCommandParamsHolder.setSelectedRequestIds([]);
+			targetScope.$digest();
+			expect(vm.showSelectedRequestsInfo()).toEqual('');
 		});
-
-		
 
 		function getInnerScope(element) {
 			var targets = element.find('requests-table-container');
@@ -152,8 +177,18 @@
 			var requestsDataService = new FakeRequestsDataService();
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
-					return new FakeToggleService();
+					return {
+						Wfm_Requests_Basic_35986: true,
+						Wfm_Requests_People_Search_36294: true,
+						Wfm_Requests_Performance_36295: true,
+						Wfm_Requests_ApproveDeny_36297: true,
+						Wfm_Requests_Filtering_37748: true,
+						togglesLoaded: {
+							then: function (cb) { cb(); }
+						}
+					}
 				});
+
 				$provide.service('requestsDataService', function () {
 					return requestsDataService;
 				});
@@ -165,7 +200,7 @@
 			$rootScope = _$rootScope_;
 			requestsDefinitions = _requestsDefinitions_;
 			$filter = _$filter_;
-	}));
+		}));
 
 		it('should apply template', function () {
 			var test = setUpTarget();
@@ -208,6 +243,7 @@
 			var test = setUpTarget();
 
 			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-06T14:00:00', PeriodEndTime: '2016-01-09T20:00:00', CreatedTime: '2016-01-06T10:17:31', TimeZone: 'Pacific/Port_Moresby', UpdatedTime: '2016-01-06T10:17:31', IsFullDay: false }];
+		
 			test.scope.$digest();
 			var isolatedScope = test.target.isolateScope();
 			isolatedScope.requestsTableContainer.userTimeZone = 'Europe/Berlin';
@@ -222,8 +258,10 @@
 			expect(test.scope.requests[0].FormatedPeriodStartTime()).toEqual(toDateString('2016-01-06T14:00:00'));
 		});
 
-		xit("should be able to calculate column categorys for weeks using supplied period startofweek", function () {
+		it("should be able to calculate column categorys for weeks using supplied period startofweek", function () {
 			var test = setUpTarget();
+
+			setUpShiftTradeRequestData(test);
 
 			test.scope.shiftTradeRequestDateSummary = {
 				Minimum: '2016-05-25T00:00:00',
@@ -233,18 +271,19 @@
 
 			test.scope.$digest();
 
-			var isolatedScope = test.target.isolateScope();
-
-			var weeks = isolatedScope.requestsTableContainer.getWeekCategories();
+			var vm = test.target.isolateScope().requestsTableContainer;
+			var categories= vm.gridOptions.category;
 			
-			expect(weeks[0].name).toEqual(toShortDateString('2016-05-23T00:00:00'));
-			expect(weeks[1].name).toEqual(toShortDateString('2016-05-30T00:00:00'));
+			expect(categories[0].name).toEqual(toShortDateString('2016-05-23T00:00:00'));
+			expect(categories[1].name).toEqual(toShortDateString('2016-05-30T00:00:00'));
 			
 		});
 
 		
-		xit("should get columns representing the days involved in the shift trade, starting on Monday", function () {
+		it("should get columns representing the days involved in the shift trade, starting on Monday", function () {
 			var test = setUpTarget();
+
+			setUpShiftTradeRequestData(test);
 
 			test.scope.shiftTradeRequestDateSummary = {
 				Minimum: '2016-05-25T00:00:00',
@@ -255,8 +294,17 @@
 
 			test.scope.$digest();
 
-			var isolatedScope = test.target.isolateScope();
-			var columns = isolatedScope.requestsTableContainer.getShiftTradeVisualisationDayColumns();
+			var vm = test.target.isolateScope().requestsTableContainer;
+
+			var columnDefs = vm.gridOptions.columnDefs;
+
+			var columns = [];
+
+			for (var i = 0; i < columnDefs.length; i++) {
+				if (columnDefs[i].isShiftTradeDayColumn) {
+					columns.push(columnDefs[i]);
+				}
+			}
 
 			expect(columns.length).toEqual(14);
 
@@ -269,8 +317,10 @@
 		});
 
 
-		xit("should get columns representing the days involved in the shift trade, starting on Sunday", function () {
+		it("should get columns representing the days involved in the shift trade, starting on Sunday", function () {
 			var test = setUpTarget();
+
+			setUpShiftTradeRequestData(test);
 
 			test.scope.shiftTradeRequestDateSummary = {
 				Minimum: '2016-05-25T00:00:00',
@@ -281,8 +331,17 @@
 
 			test.scope.$digest();
 
-			var isolatedScope = test.target.isolateScope();
-			var columns = isolatedScope.requestsTableContainer.getShiftTradeVisualisationDayColumns();
+			var vm = test.target.isolateScope().requestsTableContainer;
+
+			var columnDefs = vm.gridOptions.columnDefs;
+
+			var columns = [];
+
+			for (var i = 0; i < columnDefs.length; i++) {
+				if (columnDefs[i].isShiftTradeDayColumn) {
+					columns.push(columnDefs[i]);
+				}
+			}
 
 			expect(columns.length).toEqual(14);
 
@@ -297,6 +356,23 @@
 
 
 		});
+
+		function setUpShiftTradeRequestData(test) {
+			var shiftTradeDays = [
+				{
+					Date: '2016-05-27T00:00:00',
+					FromScheduleDayDetail: { Name: "name1", ShortName: "shortname1", Color: "red" }
+				},
+				{
+					Date: '2016-05-28T00:00:00',
+					FromScheduleDayDetail: { Name: "name2", ShortName: "shortname2", Color: "yellow" }
+				}
+			];
+
+
+			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-06T14:00:00', PeriodEndTime: '2016-01-09T20:00:00', CreatedTime: '2016-01-06T10:17:31', TimeZone: 'Pacific/Port_Moresby', UpdatedTime: '2016-01-06T10:17:31', IsFullDay: false, ShiftTradeDays: shiftTradeDays }];
+			test.scope.shiftTradeView = true;
+		}
 
 
 		function toShortDateString(dateString) {
@@ -315,7 +391,7 @@
 			var directiveElem = getCompiledElement();
 
 			function getCompiledElement() {
-				var element = angular.element('<requests-table-container requests="requests" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
+				var element = angular.element('<requests-table-container requests="requests" shift-trade-view="shiftTradeView" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
 				var compiledElement = $compile(element)(scope);
 				scope.$digest();
 				return compiledElement;
@@ -323,8 +399,9 @@
 
 			return { scope: scope, target: directiveElem };
 		}
-	});
 
+
+	});
 	function FakeRequestsDataService() {
 		var _requests;
 		var _hasSentRequests;
@@ -388,8 +465,5 @@
 			];
 		}
 	}
-
-	function FakeToggleService() {
-		this.Wfm_Requests_Filtering_37748 = true;
-	}
+	
 })();

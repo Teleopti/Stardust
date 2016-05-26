@@ -19,9 +19,6 @@
 		vm.reselectRequests = reselectRequests;
 		vm.getShiftTradeHeaderClass = getShiftTradeHeaderClass;
 		
-		var configurationService = vm.shiftTradeView ? 'ShiftTradeGridConfiguration' : 'TextAndAbsenceGridConfiguration';
-		vm.gridConfigurationService = $injector.get(configurationService);
-
 		$scope.$watch("requestsTableContainer.filterEnabled",
 			function handleFilterEnabledChanged(newValue, oldValue) {
 				vm.gridOptions.enableFiltering = newValue;
@@ -41,6 +38,10 @@
 
 		function setupColumnDefinitions() {
 
+			if (!vm.gridConfigurationService) {
+				var configurationService = vm.shiftTradeView ? 'ShiftTradeGridConfiguration' : 'TextAndAbsenceGridConfiguration';
+				vm.gridConfigurationService = $injector.get(configurationService);
+			}
 			
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary);
 			vm.gridOptions.category = vm.gridConfigurationService.categories(vm.shiftTradeRequestDateSummary);
@@ -156,7 +157,7 @@
 				return visibleSelectedRequestsIds.indexOf(id) < 0;
 			});
 
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds();
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(vm.shiftTradeView);
 			var newAllSelectedRequestsId = [];
 
 			angular.forEach(allSelectedRequestsIds, function (id) {
@@ -169,18 +170,19 @@
 					newAllSelectedRequestsId.push(id);
 			});
 
-			requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId);
+			requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId, vm.shiftTradeView);
 
 			if (vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length) && vm.requests.length > 0) {
 				vm.gridApi.grid.selection.selectAll = true;
 			} else {
 				vm.gridApi.grid.selection.selectAll = false;
 			}
+
 		}
 
 		function getVisibleSelectedRequestsRows() {
 			if (!vm.gridOptions.data) return [];
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds();
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(vm.shiftTradeView);
 			return vm.gridOptions.data.filter(function (row) {
 				return allSelectedRequestsIds.indexOf(row.Id) > -1;
 			});
@@ -239,9 +241,8 @@
 				vm.gridApi.clearSelectedRows();
 			}
 			vm.gridApi.grid.selection.selectAll = false;
-			requestCommandParamsHolder.resetSelectedRequestIds();
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.shiftTradeView);
 			vm.gridApi.selection.clearSelectedRows();
-
 		}
 		
 		function reselectRequests() {
@@ -298,6 +299,7 @@
 			scope.$on('reload.requests.with.selection', function () {
 				requestsTableContainerCtrl.reselectRequests();
 			});
+
 		}
 	}
 })();

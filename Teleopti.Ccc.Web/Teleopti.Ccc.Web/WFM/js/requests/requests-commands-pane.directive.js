@@ -6,7 +6,7 @@
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective)
 
 
-	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle'];
+	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder','Toggle'];
 
 	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc) {
 		var vm = this;
@@ -34,10 +34,15 @@
 			vm.waitlistPeriod = { startDate: new Date(), endDate: new Date() };
 		}
 
+		function getSelectedRequestIds() {
+			
+			return requestCommandParamsHolder ? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) : null;
+		}
+
 		function doStandardCommandHandling(requestType, dataServicePromise,useStraight) {
 
 			if (!useStraight) {
-				var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
+				var selectedRequestIds = getSelectedRequestIds();
 				if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 				if (vm.beforeCommand && !vm.beforeCommand()) return;
 				var commandInProgress = dataServicePromise(selectedRequestIds);
@@ -86,7 +91,7 @@
 		}
 
 		function disableCommands() {
-			var selectedRequestIds = requestCommandParamsHolder.getSelectedRequestsIds();
+			var selectedRequestIds = getSelectedRequestIds();
 			if (vm.commandsDisabled) return true;
 			return !selectedRequestIds || selectedRequestIds.length === 0;
 		}
@@ -122,7 +127,8 @@
 				afterCommandSuccess: '&?',
 				afterCommandError: '&?',
 				onErrorMessages: '&?',
-				commandsDisabled: '=?'
+				commandsDisabled: '=?',
+				isShiftTradeViewActive: '='
 			},
 			restrict: 'E',
 			templateUrl: 'js/requests/html/requests-commands-pane.tpl.html'

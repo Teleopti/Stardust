@@ -33,23 +33,7 @@ describe('RequestsControllerTests', function () {
 	}));
 
 
-	it('should show selected requests information when requests get selected and nothing vice verse', function () {
-		var test = setUpTarget();
-
-		var requestIds = [{id:1}, {id:2}];
-		requestCommandParamsHolder.setSelectedRequestsIds(requestIds);
-
-		test.target.selectedRequestsInfoText = 'Selected {0} of {1} requests';
-		test.target.paging.totalRequestsCount = 10;
-		test.scope.$digest();
-
-		expect(test.target.showSelectedRequestsInfo()).toEqual('Selected 2 of 10 requests');
-
-		requestCommandParamsHolder.setSelectedRequestsIds([]);
-		test.scope.$digest();
-		expect(test.target.showSelectedRequestsInfo()).toEqual('');
-	});
-
+	
 
 	function setUpTarget() {
 		var scope = $rootScope.$new();

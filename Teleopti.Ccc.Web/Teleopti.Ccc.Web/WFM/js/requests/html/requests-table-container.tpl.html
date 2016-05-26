@@ -1,6 +1,6 @@
 ﻿<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto"  ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning></div>
 
-<div class="wfm-switch time-zone-switch" id="time-zone-switch">
+<div class="wfm-switch time-zone-switch" id="time-zone-switch" ng-if="!requestsTableContainer.shiftTradeView">
 	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingRequestSubmitterTimeZone"/>
 	<label for="switch1">
 		<span class="wfm-switch-toggle"></span>

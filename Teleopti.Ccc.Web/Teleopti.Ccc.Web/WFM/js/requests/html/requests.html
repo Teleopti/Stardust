@@ -1,4 +1,5 @@
-﻿<div class="view-header">
+﻿
+<div class="view-header">
 	<div class="view-title">
 		<i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>
 		<h1 translate style="display: inline-block">Requests</h1>
@@ -25,6 +26,7 @@
 	</div>
 	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled"
 							before-command="requests.onBeforeCommand()"
+							is-shift-trade-view-active="requests.isShiftTradeViewActive()"
 							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount)"
 							on-error-messages="requests.onErrorMessages(errorMessages)"
 							after-command-error="requests.onCommandError(error)"
@@ -33,15 +35,12 @@
 	<div class="panel material-depth-1">
 		<div class="wfm-slide-tabs tabbed-panel">
 			<md-content class="md-padding">
-				<md-tabs md-dynamic-height md-border-bottom>
+				<md-tabs md-dynamic-height md-border-botto md-selected="requests.selectedTabIndex">
 					<md-tab label="{{'AbsenceRequest' | translate}} / {{'TextRequest' | translate}}">
 						<md-content class="md-padding">
 							<requests-overview period="requests.period"
 											   agent-search-term="requests.agentSearchTerm"
-											   paging="requests.paging"
-											   filter-enabled="requests.filterEnabled"
-											   toggle-pagination-enabled="requests.isPaginationEnabled"
-											   on-total-requests-count-changes="requests.onTotalRequestsCountChanges(totalRequestsCount)">
+											   filter-enabled="requests.filterEnabled" >
 							</requests-overview>
 						</md-content>
 					</md-tab>
@@ -51,25 +50,13 @@
 							<requests-overview shift-trade-view
 											   period="requests.period"
 											   agent-search-term="requests.agentSearchTerm"
-											   paging="requests.paging"
-											   filter-enabled="requests.filterEnabled"
-											   toggle-pagination-enabled="requests.isPaginationEnabled"
-											   on-total-requests-count-changes="requests.onTotalRequestsCountChanges(totalRequestsCount)">
+											   filter-enabled="requests.filterEnabled">
 							</requests-overview>
 						</md-content>
 					</md-tab>
 
 
 				</md-tabs>
-				<div class="paging pull-right" ng-if="requests.isPaginationEnabled">
-					<wfm-pagination pagination-options="requests.paging" get-data-for-page-callback="requests.forceRequestsReloadWithSelection"></wfm-pagination>
-					<div class="total-requests-count pull-left">
-						<span>{{requests.showSelectedRequestsInfo()}}</span>
-					</div>
-					<select ng-if="requests.paging.totalRequestsCount > 0"
-							class="page-size-selector pull-left"
-							ng-model="requests.paging.pageSize" ng-options="option for option in requests.pageSizeOptions" ng-change="requests.onPageSizeChanges()"></select>
-				</div>
 			</md-content>
 
 		</div>

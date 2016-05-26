@@ -119,20 +119,22 @@
 				var isWeekend = (day.isoWeekday() === 6 || day.isoWeekday() === 7);
 				var startOfWeek = getStartOfWeek(day.clone(), startOfWeekIsoDay);
 
+
 				return {
 					displayName: $filter('date')(day.toDate(), "EEE"),
 					field: $filter('date')(day.toDate(), "shortDate"),
 					headerCellFilter: 'translate',
 					enablePinning: false,
 					enableColumnMenu: false,
-					enableColumnResizing: false,
+					enableColumnResizing: true,
 					category: $filter('date')(startOfWeek.toDate(), "shortDate"),
 					cellTemplate: 'js/requests/html/shift-trade-day-template.html',
 					headerCellClass: isWeekend ? 'shift-trade-header-weekend' : '',
 					width: 45,
 					//cellClass: 'shift-trade-column',
 					enableSorting: false,
-					enableFiltering: false
+					enableFiltering: false,
+					isShiftTradeDayColumn: true
 				}
 			}
 
@@ -169,6 +171,7 @@
 
 					day.add(1, 'weeks');
 				}
+
 				return categories;
 			}
 

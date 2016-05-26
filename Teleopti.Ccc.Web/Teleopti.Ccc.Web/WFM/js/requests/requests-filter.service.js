@@ -42,6 +42,7 @@
 	angular.module('wfm.requests').filter('filterShiftTradeDetailDisplay', function ($filter) {
 
 		return function (shiftTradeDays, day) {
+
 			return shiftTradeDays.filter(function (element) {
 
 				var date = ($filter('date')(moment(element.Date).toDate(), "shortDate"));
