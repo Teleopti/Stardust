@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 			var studentAvailabilityForDate = CalendarCells.DateSelector(fields.Date);
 
-			Browser.Interactions.AssertNotExists(studentAvailabilityForDate,string.Format("{0} .img.loading-small-gray-blue", studentAvailabilityForDate));
+			Browser.Interactions.AssertNotVisibleUsingJQuery($"{studentAvailabilityForDate} .loading-small-gray-blue");
 
 			if (fields.StartTime != null)
 				Browser.Interactions.AssertFirstContainsUsingJQuery(studentAvailabilityForDate, fields.StartTime);
