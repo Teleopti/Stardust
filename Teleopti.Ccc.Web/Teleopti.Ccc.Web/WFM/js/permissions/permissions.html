@@ -51,7 +51,7 @@
 										</md-tooltip>
 									</i>
 										<span ng-class="{'myRoleLock': role.IsMyRole}">
-									<i ng-click="removeRole(role)" class="mdi mdi-delete">
+									<i ng-click="roleDeleteModal = true" class="mdi mdi-delete">
 										</i>
 										<md-tooltip ng-hide="role.IsMyRole">
 											{{'Delete' | translate}}
@@ -62,6 +62,25 @@
 									</span>
 								</span>
 							</div>
+
+							<div ng-cloak class="modal-box">
+								<div ng-cloak ng-show="roleDeleteModal">
+									<div class="modalbg">
+										<div class="dialog-mini">
+											<div class="modal-inner-content">
+												<h3>{{role.DescriptionText}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+											</div>
+											<div class="modal-actions">
+												<aside>
+													<button ng-click="roleDeleteModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+													<button ng-click="removeRole(role)" class="wfm-btn wfm-btn-invis-primary">{{'Delete'|translate}}</button>
+												</aside>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
 						</li>
 					</ul>
 				</div>
