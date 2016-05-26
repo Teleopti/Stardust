@@ -1299,6 +1299,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemScheduleClick(object sender, EventArgs e)
 		{
+			if (toolStripButtonCalculateCascading.Checked)
+				return;
 			scheduleSelected(false);
 		}
 
@@ -2099,37 +2101,48 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void RecalculateResources()
 		{
-			if (_backgroundWorkerRunning) return;
-
-			if (_backgroundWorkerResourceCalculator.IsBusy)
-				return;
-
-			var daysToRecalculate = _schedulerState.DaysToRecalculate;
-			var numberOfDaysToRecalculate = daysToRecalculate.Count();
-			if (numberOfDaysToRecalculate == 0 && _uIEnabled)
-				return;
-
-			if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
+			if (toolStripButtonCalculateCascading.Checked)
 			{
-				Refresh();
-				validatePersons();
-				return;
+				toolStripStatusLabelStatus.Text = "Cascading Calculating...";
+				disableForCascading();
+				toolStripButtonCalculateCascading.Enabled = false;
+				_backgroundWorkerCascading.RunWorkerAsync();
 			}
 
-			disableAllExceptCancelInRibbon();
+			else
+			{
+				if (_backgroundWorkerRunning) return;
 
-			if (toolStripProgressBar1.CustomLabelControl == null) //Somone knows why this is null in some cases?
-				toolStripProgressBar1 = new MetroToolStripProgressBar();
+				if (_backgroundWorkerResourceCalculator.IsBusy)
+					return;
 
-			toolStripProgressBar1.Maximum = numberOfDaysToRecalculate;
-			toolStripProgressBar1.Value = 0;
+				var daysToRecalculate = _schedulerState.DaysToRecalculate;
+				var numberOfDaysToRecalculate = daysToRecalculate.Count();
+				if (numberOfDaysToRecalculate == 0 && _uIEnabled)
+					return;
 
-			toolStripProgressBar1.Visible = true;
-			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot");
+				if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
+				{
+					Refresh();
+					validatePersons();
+					return;
+				}
 
-			_backgroundWorkerResourceCalculator.WorkerReportsProgress = true;
-			_backgroundWorkerRunning = true;
-			_backgroundWorkerResourceCalculator.RunWorkerAsync();
+				disableAllExceptCancelInRibbon();
+
+				if (toolStripProgressBar1.CustomLabelControl == null) //Somone knows why this is null in some cases?
+					toolStripProgressBar1 = new MetroToolStripProgressBar();
+
+				toolStripProgressBar1.Maximum = numberOfDaysToRecalculate;
+				toolStripProgressBar1.Value = 0;
+
+				toolStripProgressBar1.Visible = true;
+				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot");
+
+				_backgroundWorkerResourceCalculator.WorkerReportsProgress = true;
+				_backgroundWorkerRunning = true;
+				_backgroundWorkerResourceCalculator.RunWorkerAsync();
+			}
 		}
 
 		private void _backgroundWorkerResourceCalculator_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -2327,6 +2340,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
 						_teamLeaderMode, _container.Resolve<IToggleManager>());
 
+					disableActionsCascading(true);
 					disableButtonsIfTeamLeaderMode();
 					_scheduleView.Presenter.UpdateFromEditor();
 					if (_showEditor)
@@ -3432,10 +3446,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.DayOffTemplate = _schedulerState.CommonStateHolder.DefaultDayOffTemplate;
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
-			if (lastCalculationState)
-			{
-				_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), true);
-			}
+			//if (lastCalculationState)
+			//{
+			//	_optimizationHelperExtended.ResourceCalculateAllDays(new BackgroundWorkerWrapper(_backgroundWorkerOvertimeScheduling), true);
+			//}
 
 			_totalScheduled = 0;
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
@@ -3505,7 +3519,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_personsToValidate.Add(permittedPerson);
 			}
 
-			RecalculateResources();
+			if (toolStripButtonCalculateCascading.Checked)
+			{
+				releaseUserInterface(false);
+				disableForCascading();
+				enableAfterCascadingCalculating();
+			}
+			else
+			{
+				RecalculateResources();
+			}
 		}
 
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
@@ -6951,6 +6974,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			else
 			{
 				enableForCascading();
+				toolStripButtonCalculateCascading.Invalidate();
 			}		
 		}
 
@@ -6962,8 +6986,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void backgroundWorkerCascadingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
 		{
-			toolStripButtonCalculateCascading.Enabled = true;
+			enableAfterCascadingCalculating();	
+		}
 
+		private void enableAfterCascadingCalculating()
+		{
+			toolStripButtonCalculateCascading.Enabled = true;
 			toolStripButtonShowGraph.Enabled = true;
 			toolStripButtonShowGraph.Enabled = true;
 			toolStripButtonShowEditor.Enabled = true;
@@ -6973,6 +7001,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonSummaryView.Enabled = true;
 			toolStripButtonDayView.Enabled = true;
 			toolStripButtonShowResult.Enabled = true;
+
+			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+				ToolStripMenuItemScheduleOvertime.Enabled = true;
+
+			disableButtonsIfTeamLeaderMode();
 
 			ribbonControlAdv1.Cursor = Cursors.Default;
 			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
@@ -6984,11 +7017,35 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_skillWeekGridControl.Invalidate(true);
 			_skillMonthGridControl.Invalidate(true);
 			_skillFullPeriodGridControl.Invalidate(true);
+
+			_grid.Cursor = Cursors.Default;
+			_grid.Enabled = true;
+			_grid.Cursor = Cursors.Default;
+
+			enableSave();
 			refreshChart();
-			SplitterManager.EnableShiftEditor();
+			//SplitterManager.EnableShiftEditor();
 			Refresh();
 		}
-			
+
+		private void disableActionsCascading(bool enableOverTime)
+		{
+			if (!toolStripButtonCalculateCascading.Checked)
+				return;
+
+			foreach (var subItem in toolStripSplitButtonSchedule.DropDownItems)
+			{
+				var control = subItem as ToolStripItem;
+				if (control != null)
+					control.Enabled = false;
+			}
+
+			toolStripDropDownButtonSwap.Enabled = false;
+
+			if (enableOverTime && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
+				ToolStripMenuItemScheduleOvertime.Enabled = true;
+		}
+
 		private void enableForCascading()
 		{
 			releaseUserInterface(false);
@@ -6997,13 +7054,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripExEdit2.Enabled = true;
 			toolStripButtonRequestView.Enabled = true;
 			toolStripButtonRestrictions.Enabled = true;
-			toolStripButtonFindAgents.Enabled = true;
+			//toolStripButtonFindAgents.Enabled = true;
 
-			toolStripExActions.Enabled = true;
-			toolStripExLocks.Enabled = true;
-			toolStripExTags.Enabled = true;
+			//toolStripExActions.Enabled = true;
+			//toolStripExLocks.Enabled = true;
+			//toolStripExTags.Enabled = true;
 			toolStripExLoadOptions.Enabled = true;
-			toolStripExFilter.Enabled = true;
+			//toolStripExFilter.Enabled = true;
+
+			SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager,
+						_teamLeaderMode, _container.Resolve<IToggleManager>());
+
+			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
+			disableButtonsIfTeamLeaderMode();
 
 			foreach (var date in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
 			{
@@ -7022,13 +7085,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripExEdit2.Enabled = false;
 				toolStripButtonRequestView.Enabled = false;
 				toolStripButtonRestrictions.Enabled = false;
-				toolStripButtonFindAgents.Enabled = false;
-				toolStripExActions.Enabled = false;
-				toolStripExLocks.Enabled = false;
-				toolStripExTags.Enabled = false;
+				//toolStripButtonFindAgents.Enabled = false;
+				
+				
+				//toolStripExTags.Enabled = false;
 				toolStripExLoadOptions.Enabled = false;
-				toolStripExFilter.Enabled = false;
 
+				//toolStripExLocks.Enabled = false;
+				//toolStripExFilter.Enabled = false;
+				//toolStripExActions.Enabled = false;
+				
+				disableActionsCascading(false);
 
 				toolStripButtonShowGraph.Enabled = false;
 				toolStripButtonShowGraph.Enabled = false;
@@ -7060,6 +7127,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					toolStripSpinningProgressControl1 = new Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
 				disableSave();
+				disableButtonsIfTeamLeaderMode();
 				toolStripStatusLabelContractTime.Enabled = false;
 				SplitterManager.DisableShiftEditor();
 			}
