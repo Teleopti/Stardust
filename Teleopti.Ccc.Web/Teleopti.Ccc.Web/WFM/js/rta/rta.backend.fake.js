@@ -120,6 +120,11 @@
 					return [200, siteAdherences];
 				});
 
+			$httpBackend.whenGET2(/\.\.\/api\/Teams\/ForSite(.*)/)
+				.respond(function (params) {
+					return [200, teams.filter(function (team) { return team.SiteId === params.siteId; })];
+				});
+
 			$httpBackend.whenGET2(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/)
 				.respond(function (params) {
 					var result =
@@ -128,11 +133,6 @@
 							return t != null && params.siteId === t.SiteId;
 						});
 					return [200, result];
-				});
-
-			$httpBackend.whenGET2(/\.\.\/api\/Teams\/ForSite(.*)/)
-				.respond(function (params) {
-					return [200, teams.filter(function(team) { return team.SiteId === params.siteId; })];
 				});
 
 			this.clear = function() {
