@@ -309,6 +309,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			Exception exception = null;
 			try
 			{
+				using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 				using (PerformanceOutput.ForOperation("Read and collect agent states"))
 				{
 					_agentStateReadModelReader.Load(_rtaStateHolder.FilteredPersons)
