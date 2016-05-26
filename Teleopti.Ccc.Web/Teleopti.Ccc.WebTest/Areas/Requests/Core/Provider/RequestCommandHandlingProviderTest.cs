@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		{
 			setupStateHolderProxy();
 			var period = new DateTimePeriod(DateTime.UtcNow.AddDays(-7), DateTime.UtcNow);
-			var result = Target.RunWaitlist(period);
+			var result = Target.RunWaitlist(period,Guid.Empty);
 
 			result.Success.Should().Be.True();
 			result.AffectedRequestIds.Any().Should().Be.False();

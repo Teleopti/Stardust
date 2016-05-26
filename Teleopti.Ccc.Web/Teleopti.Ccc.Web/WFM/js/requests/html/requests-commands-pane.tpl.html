@@ -64,27 +64,26 @@
         </div>
     </div>
 </div>
-<div ng-cloak class="modal-box">
-    <div ng-cloak ng-if="requestsCommandsPane.showProcessWaitlistModal">
-        <div class="modalbg">
-            <div class="dialog">
-                <form name="form">
-	                <div class="modal-inner-content">
-						<h2>{{'WaitlistPeriod' | translate}}:</h2>
-			                <div class="text-center">
-				                <date-range-picker name="WaitlistRange" ng-model="requestsCommandsPane.waitlistPeriod"></date-range-picker>
-			                </div>
-	                </div>
-                    <div class="modal-actions">
-                        <aside>
-                            <button class="wfm-btn wfm-btn-invis-default" ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">{{ 'Close' | translate }}</button>
-                            <button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="form.WaitlistRange.$invalid" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsCommandsPane.processWaitlistRequests()">{{ 'Run' | translate }}</button>
-                        </aside>
-                    </div>
-                </form>
+
+<modal-dialog show="requestsCommandsPane.showProcessWaitlistModal" ng-cloak>
+    <h1 class="modal-title">{{'WaitlistPeriod' | translate}}</h1>
+    <div class="modal-inner-content">
+        <h2>{{'ProcessWaitlistRequestsReminder' | translate}}</h2>
+        <form name="form">
+            <div class="modal-inner-content">
+                <div class="text-center">
+                    <date-range-picker name="WaitlistRange" ng-model="requestsCommandsPane.waitlistPeriod"></date-range-picker>
+                </div>
             </div>
-        </div>
+        </form>
     </div>
-</div>
+    <div class="modal-actions">
+        <aside>
+            <button class="wfm-btn wfm-btn-invis-default" ng-click="requestsCommandsPane.toggleProcessWaitlistModal()">{{ 'Cancel' | translate }}</button>
+            <button class="wfm-btn wfm-btn-invis-primary do-forecast" ng-disabled="form.WaitlistRange.$invalid" ng-class="{'wfm-btn-invis-disabled':form.WaitlistRange.$invalid }" ng-click="requestsCommandsPane.processWaitlistRequests()">{{ 'Run' | translate }}</button>
+        </aside>
+    </div>
+</modal-dialog>
+
 
 

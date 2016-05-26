@@ -6,6 +6,7 @@ using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -107,7 +108,9 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Client
 			aggregateRoots.Add(typeof (MeetingChangedEntity), new List<Type> {typeof (IMeetingChangedEntity)});
 			aggregateRoots.Add(typeof (IScheduleChangedInDefaultScenario),
 							   new List<Type> {typeof (IScheduleChangedInDefaultScenario)});
-			aggregateRoots.Add(typeof(ITeleoptiDiagnosticsInformation),
+            aggregateRoots.Add(typeof(IRunRequestWaitlistEventMessage),
+                               new List<Type> { typeof(IRunRequestWaitlistEventMessage) });
+            aggregateRoots.Add(typeof(ITeleoptiDiagnosticsInformation),
 							   new List<Type> { typeof(ITeleoptiDiagnosticsInformation) });
 			aggregateRoots.Add(typeof (IPersonScheduleDayReadModel),
 							   new List<Type> {typeof (IPersonScheduleDayReadModel)});

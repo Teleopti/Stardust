@@ -39,15 +39,14 @@
 			return requestCommandParamsHolder ? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) : null;
 		}
 
-		function doStandardCommandHandling(requestType, dataServicePromise,useStraight) {
-
+function doStandardCommandHandling(requestType, dataServicePromise, useStraight, commandId, waitlistPeriod) {
 			if (!useStraight) {
 				var selectedRequestIds = getSelectedRequestIds();
 				if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 				if (vm.beforeCommand && !vm.beforeCommand()) return;
 				var commandInProgress = dataServicePromise(selectedRequestIds);
 			} else {
-				var commandInProgress = dataServicePromise(vm.waitlistPeriod);
+			    var commandInProgress = dataServicePromise(waitlistPeriod, commandId);
 			}
 			
 			
@@ -58,8 +57,10 @@
 						vm.afterCommandSuccess({
 							commandType: requestType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
-							requestsCount: useStraight == true ? null : selectedRequestIds.length
-					});
+							requestsCount: useStraight == true ? null : selectedRequestIds.length,
+							commandId: commandId,
+							waitlistPeriod: waitlistPeriod
+						});
 					} else {
 						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
 					}
@@ -74,10 +75,21 @@
 		function approveRequests() {
 			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise);
 		}
+		function s4() {
+		    return Math.floor((1 + Math.random()) * 0x10000)
+				.toString(16)
+				.substring(1);
+		}
+
+		var newGuid = function () {
+		    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		};
+
+	    var commandId = newGuid();
 
 		function processWaitlistRequests() {
 		    vm.toggleProcessWaitlistModal();
-		    doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist, requestsDataService.processWaitlistRequestsPromise,true);
+		    doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist, requestsDataService.processWaitlistRequestsPromise,true,commandId,vm.waitlistPeriod);
 			initWaitlistProcessPeriod();
 		}
 

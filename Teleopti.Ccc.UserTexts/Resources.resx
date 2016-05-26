@@ -14486,11 +14486,23 @@ Help us improve your experience by sending an error report</value>
     <comment>Navbar label for help</comment>
   </data>
   <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
-    <value>Submit process waitlisted requests success</value>
+    <value>The waitlisted requests for the period of {0} start beeing processing.</value>
     <comment>notify user the submit is a success</comment>
   </data>
   <data name="WaitlistPeriod" xml:space="preserve">
-    <value>Please chose a period to process waitlisted requests in</value>
-    <comment>Please chose a period to process waitlisted requests in.</comment>
+    <value>All waitlisted requests will be processed for the selected period</value>
+    <comment>All waitlisted requests will be processed for the selected period</comment>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>The waitlisted requests for the period of {0} have been processed.</value>
+    <comment>{0} startTime - endTime</comment>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>PROCESS WAITLIST</value>
+    <comment>Process Waitlist</comment>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>The waitlist-processing will be done in the background and could take some time until it is finished</value>
+    <comment> The waitlist-processing will be done in the background and could take some time until it is finished</comment>
   </data>
 </root>

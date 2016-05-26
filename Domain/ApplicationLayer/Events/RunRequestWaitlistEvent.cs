@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	{
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
-	}
+	    public Guid CommandId { get; set; }
+    }
 }

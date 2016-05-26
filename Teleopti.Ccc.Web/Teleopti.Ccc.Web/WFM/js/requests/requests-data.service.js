@@ -37,10 +37,11 @@
 			return $http.post(cancelRequestsUrl, selectedRequestIds);
 		};
 
-		this.processWaitlistRequestsPromise = function (waitlistPeriod) {
+		this.processWaitlistRequestsPromise = function (waitlistPeriod,commandId) {
             var waitlistPeriodGet= {
                 startTime: waitlistPeriod.startDate,
-                endTime: waitlistPeriod.endDate
+                endTime: waitlistPeriod.endDate,
+                commandId:commandId
             }
             return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
 		};

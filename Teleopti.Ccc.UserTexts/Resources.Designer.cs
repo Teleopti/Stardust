@@ -21321,6 +21321,33 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PROCESS WAITLIST.
+        /// </summary>
+        public static string ProcessWaitlist {
+            get {
+                return ResourceManager.GetString("ProcessWaitlist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The waitlisted requests for the period of {0} have been processed..
+        /// </summary>
+        public static string ProcessWaitlistedRequestsFinished {
+            get {
+                return ResourceManager.GetString("ProcessWaitlistedRequestsFinished", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The waitlist-processing will be done in the background and could take some time until it is finished.
+        /// </summary>
+        public static string ProcessWaitlistRequestsReminder {
+            get {
+                return ResourceManager.GetString("ProcessWaitlistRequestsReminder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Product activation key successfully applied.
         ///Congratulations! You are now a licensed user of this award winning workforce management solution.
         ///The application will now exit.
@@ -28253,7 +28280,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Submit process waitlisted requests success.
+        ///   Looks up a localized string similar to The waitlisted requests for the period of {0} start beeing processing..
         /// </summary>
         public static string SubmitProcessWaitlistedRequestsSuccess {
             get {
@@ -31630,7 +31657,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please chose a period to process waitlisted requests in.
+        ///   Looks up a localized string similar to All waitlisted requests will be processed for the selected period.
         /// </summary>
         public static string WaitlistPeriod {
             get {
