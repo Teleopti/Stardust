@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 			_target = new AnalyticsOvertimeUpdater(_analyticsOvertimeRepository, _analyticsBusinessUnitRepository, _multiplicatorDefinitionSetRepository);
 		}
 
-		[Test, TestCaseSource("OvertimeEvents")]
+		[Test, TestCaseSource(nameof(overtimeEvents))]
 		public void ShouldAddOrUpdate(MultiplicatorDefinitionSetChangedBase @event)
 		{
 			@event.MultiplicatorDefinitionSetId = multiplicatorDefinitionSet.Id.GetValueOrDefault();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 								ao.OvertimeName == multiplicatorDefinitionSet.Name)));
 		}
 
-		[Test, TestCaseSource("NonOvertimeEvents")]
+		[Test, TestCaseSource(nameof(nonOvertimeEvents))]
 		public void ShouldDoNothingWhenWrongTypeOfMultiplicatorDefinitionSet(MultiplicatorDefinitionSetChangedBase @event)
 		{
 			@event.MultiplicatorDefinitionSetId = multiplicatorDefinitionSet.Id.GetValueOrDefault();
@@ -62,31 +62,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.MultiplicatorDefinitionSetHan
 		}
 
 		#region TestData
-		private static object[] OvertimeEvents =
+		private static readonly object[] overtimeEvents =
 		{
-			new object[] {CreateEvent<MultiplicatorDefinitionSetCreated>(MultiplicatorType.Overtime)},
-			new object[] {CreateEvent<MultiplicatorDefinitionSetChanged>(MultiplicatorType.Overtime)},
-			new object[] {CreateEvent<MultiplicatorDefinitionSetDeleted>(MultiplicatorType.Overtime) }
+			new object[] {createEvent<MultiplicatorDefinitionSetCreated>(MultiplicatorType.Overtime)},
+			new object[] {createEvent<MultiplicatorDefinitionSetChanged>(MultiplicatorType.Overtime)},
+			new object[] {createEvent<MultiplicatorDefinitionSetDeleted>(MultiplicatorType.Overtime) }
 		};
 
-		private static object[] NonOvertimeEvents =
+		private static readonly object[] nonOvertimeEvents =
 		{
-			new object[] {CreateEvent<MultiplicatorDefinitionSetCreated>(MultiplicatorType.OBTime)},
-			new object[] {CreateEvent<MultiplicatorDefinitionSetChanged>(MultiplicatorType.OBTime) },
-			new object[] {CreateEvent<MultiplicatorDefinitionSetDeleted>(MultiplicatorType.OBTime) }
+			new object[] {createEvent<MultiplicatorDefinitionSetCreated>(MultiplicatorType.OBTime)},
+			new object[] {createEvent<MultiplicatorDefinitionSetChanged>(MultiplicatorType.OBTime) },
+			new object[] {createEvent<MultiplicatorDefinitionSetDeleted>(MultiplicatorType.OBTime) }
 		};
 
 		
 
-		private static T CreateEvent<T>(MultiplicatorType type) where T : MultiplicatorDefinitionSetChangedBase, new()
+		private static T createEvent<T>(MultiplicatorType type) where T : MultiplicatorDefinitionSetChangedBase, new()
 		{
 			return new T
 			{
 				LogOnBusinessUnitId = Guid.NewGuid(),
-				IsDeleted = false,
-				DatasourceUpdateDate = DateTime.UtcNow,
 				MultiplicatorDefinitionSetId = Guid.NewGuid(),
-				MultiplicatorDefinitionSetName = "Test",
 				MultiplicatorType = type
 			};
 		}

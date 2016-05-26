@@ -25,15 +25,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             _definitionCollection = new List<IMultiplicatorDefinition>();
         }
 
-	    private T CreateEvent<T>(INow now) where T: MultiplicatorDefinitionSetChangedBase, new()
+	    private T createEvent<T>() where T: MultiplicatorDefinitionSetChangedBase, new()
 	    {
 		    return new T
 		    {
 			    MultiplicatorDefinitionSetId = Id.GetValueOrDefault(),
-			    MultiplicatorDefinitionSetName = Name,
-			    MultiplicatorType = MultiplicatorType,
-			    DatasourceUpdateDate = UpdatedOn ?? now.UtcDateTime(),
-			    IsDeleted = IsDeleted,
+			    MultiplicatorType = MultiplicatorType
 		    };
 	    }
 		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
@@ -44,13 +41,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 			    switch (operation)
 			    {
 					case DomainUpdateType.Insert:
-						events.Add(CreateEvent<MultiplicatorDefinitionSetCreated>(now));
+						events.Add(createEvent<MultiplicatorDefinitionSetCreated>());
 					    break;
 					case DomainUpdateType.Update:
-						events.Add(CreateEvent<MultiplicatorDefinitionSetChanged>(now));
+						events.Add(createEvent<MultiplicatorDefinitionSetChanged>());
 						break;
 					case DomainUpdateType.Delete:
-						events.Add(CreateEvent<MultiplicatorDefinitionSetDeleted>(now));
+						events.Add(createEvent<MultiplicatorDefinitionSetDeleted>());
 						break;
 				}
 		    }
@@ -81,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         public virtual void AddDefinition(IMultiplicatorDefinition definition)
         {
             if(definition.Multiplicator.MultiplicatorType != MultiplicatorType)
-                throw new ArgumentException("MultiplicatorType must be same for definition and definitionset", "definition");
+                throw new ArgumentException("MultiplicatorType must be same for definition and definitionset", nameof(definition));
 
             definition.SetParent(this);
             _definitionCollection.Add(definition);
@@ -90,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         public virtual void AddDefinitionAt(IMultiplicatorDefinition definition, int orderIndex)
         {
             if (definition.Multiplicator.MultiplicatorType != MultiplicatorType)
-                throw new ArgumentException("MultiplicatorType must be same for definition and definitionset", "definition");
+                throw new ArgumentException("MultiplicatorType must be same for definition and definitionset", nameof(definition));
 
             definition.SetParent(this);
             _definitionCollection.Insert(orderIndex, definition);
@@ -103,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 
         public virtual void MoveDefinitionUp(IMultiplicatorDefinition definition)
         {
-            int index = _definitionCollection.IndexOf(definition);
+            var index = _definitionCollection.IndexOf(definition);
             if (index > 0)
             {
                 _definitionCollection.Remove(definition);
@@ -113,7 +110,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 
         public virtual void MoveDefinitionDown(IMultiplicatorDefinition definition)
         {
-            int index = _definitionCollection.IndexOf(definition);
+            var index = _definitionCollection.IndexOf(definition);
             if (index < _definitionCollection.Count - 1)
             {
                 _definitionCollection.Remove(definition);
@@ -123,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 
         public virtual IList<IMultiplicatorLayer> CreateProjectionForPeriod(DateOnlyPeriod period, TimeZoneInfo timeZoneInfo)
         {
-            List<IMultiplicatorLayer> unMergedList = new List<IMultiplicatorLayer>();
+            var unMergedList = new List<IMultiplicatorLayer>();
             foreach (var definition in _definitionCollection)
             {
                 unMergedList.AddRange(definition.GetLayersForPeriod(period, timeZoneInfo));
@@ -132,21 +129,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
             if (unMergedList.Count == 0) return unMergedList;
 
             IList<IMultiplicatorLayer> workingColl = new List<IMultiplicatorLayer>();
-            DateTime startTimeTemp = unMergedList.Min(p => p.Period.StartDateTime);
+            var startTimeTemp = unMergedList.Min(p => p.Period.StartDateTime);
 
-            DateTime endTime = unMergedList.Max(p => p.Period.EndDateTime);
-            DateTime currentTime = startTimeTemp;
-            IMultiplicatorLayer workingLayer;
+            var endTime = unMergedList.Max(p => p.Period.EndDateTime);
+            var currentTime = startTimeTemp;
 
-            while (currentTime < endTime)
+	        while (currentTime < endTime)
             {
-                bool layerFound = false;
-                for (int inverseLoop = unMergedList.Count - 1; inverseLoop >= 0; inverseLoop--)
+                var layerFound = false;
+                for (var inverseLoop = unMergedList.Count - 1; inverseLoop >= 0; inverseLoop--)
                 {
-                    workingLayer = unMergedList[inverseLoop];
-                    if (workingLayer.Period.Contains(currentTime))
+	                var workingLayer = unMergedList[inverseLoop];
+	                if (workingLayer.Period.Contains(currentTime))
                     {
-                        DateTime layerEndTime = findLayerEndTime(inverseLoop, workingLayer, currentTime, unMergedList);
+                        var layerEndTime = findLayerEndTime(inverseLoop, workingLayer, currentTime, unMergedList);
                         IMultiplicatorLayer newLayer = new MultiplicatorLayer(this, workingLayer.Payload,
                                                                               new DateTimePeriod(
                                                                                   currentTime,
@@ -158,7 +154,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
                         break;
                     }
                 }
-                if (!layerFound)
+	            if (!layerFound)
                     currentTime = findNextTimeSlot(currentTime, unMergedList);
             }
             return workingColl;
@@ -166,13 +162,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 
         private static DateTime findLayerEndTime(int currentLayerIndex, IMultiplicatorLayer workingLayer, DateTime currentTime, IList<IMultiplicatorLayer> layers)
         {
-            DateTime layerEndTime = workingLayer.Period.EndDateTime;
+            var layerEndTime = workingLayer.Period.EndDateTime;
             if (currentLayerIndex != layers.Count - 1)
             {
-                int orgLayerCount = layers.Count;
-                for (int higherPrioLoop = currentLayerIndex + 1; higherPrioLoop < orgLayerCount; higherPrioLoop++)
+                var orgLayerCount = layers.Count;
+                for (var higherPrioLoop = currentLayerIndex + 1; higherPrioLoop < orgLayerCount; higherPrioLoop++)
                 {
-                    DateTimePeriod higherPrioLayerPeriod = layers[higherPrioLoop].Period;
+                    var higherPrioLayerPeriod = layers[higherPrioLoop].Period;
                     if (workingLayer.Period.Contains(higherPrioLayerPeriod.StartDateTime) &&
                         higherPrioLayerPeriod.EndDateTime > currentTime &&
                         higherPrioLayerPeriod.StartDateTime < layerEndTime)
@@ -186,10 +182,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
 
         private static DateTime findNextTimeSlot(DateTime currentTime, IEnumerable<IMultiplicatorLayer> layers)
         {
-            DateTime retTime = DateTime.MaxValue;
-            foreach (IMultiplicatorLayer layer in layers)
+            var retTime = DateTime.MaxValue;
+            foreach (var layer in layers)
             {
-                DateTime layerTime = layer.Period.StartDateTime;
+                var layerTime = layer.Period.StartDateTime;
                 if (layerTime > currentTime && layerTime < retTime)
                     retTime = layerTime;
             }
@@ -211,10 +207,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         /// </remarks>
         public virtual IMultiplicatorDefinitionSet NoneEntityClone()
         {
-            MultiplicatorDefinitionSet clone = (MultiplicatorDefinitionSet)MemberwiseClone();
+            var clone = (MultiplicatorDefinitionSet)MemberwiseClone();
             clone.ReInitializeCollections();
             clone.SetId(null);
-            foreach (IMultiplicatorDefinition definition in _definitionCollection)
+            foreach (var definition in _definitionCollection)
                 clone.AddDefinition(definition.NoneEntityClone());
             return clone;
         }
@@ -229,9 +225,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TimeLayer
         /// </remarks>
         public virtual IMultiplicatorDefinitionSet EntityClone()
         {
-            MultiplicatorDefinitionSet clone = (MultiplicatorDefinitionSet)MemberwiseClone();
+            var clone = (MultiplicatorDefinitionSet)MemberwiseClone();
             clone.ReInitializeCollections();
-            foreach (IMultiplicatorDefinition definition in _definitionCollection)
+            foreach (var definition in _definitionCollection)
                 clone.AddDefinition(definition.NoneEntityClone());
             return clone;
         }
