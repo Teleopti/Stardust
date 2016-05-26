@@ -1436,11 +1436,11 @@
     <Content Include="WFM\js\teamSchedule\html\addAbsence.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\addActivityTimeRangePicker.tpl.html" />
-    <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.html" />
+    <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\moveActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\removeAbsenceConfirmDialog.html" />
-    <Content Include="WFM\js\teamSchedule\html\teamscheduleCommand.html" />
+    <Content Include="WFM\js\teamSchedule\html\commandMenu.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduleCommandContainer.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
@@ -1455,8 +1455,8 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.moveActivity.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.spec.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.command.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandMenu.spec.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandMenu.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandConfirmDialog.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandContainer.spec.js" />

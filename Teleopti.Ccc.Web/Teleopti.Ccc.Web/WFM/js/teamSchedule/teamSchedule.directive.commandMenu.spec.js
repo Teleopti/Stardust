@@ -10,14 +10,11 @@
 	};
 
 	beforeEach(function () {
-		module(function ($provide) {
-			$provide.value('$mdSidenav', function () { });
-			$provide.value('$mdComponentRegistry', function () { });
+		module(function ($provide) {		
 			$provide.value('ShortCuts', function() {
 				return fakeShortCuts;
 			}());
 			$provide.value('keyCodes', function () { });
-
 		});
 
 	});
@@ -31,7 +28,7 @@
 
 	it('should view menu when adding activity is permitted', function () {
 
-		var html = '<teamschedule-command configurations="getConfigurations()"></teamschedule-command>';
+		var html = '<teamschedule-command-menu configurations="getConfigurations()"></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = { toggleCurrentSidenav: function () { } };
 		var config = {

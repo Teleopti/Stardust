@@ -137,7 +137,7 @@
 			    overStaff: null
 		    };
 
-		    returnData.dates = new moment(data.Dates).format("YYYY-MM-DD");
+		    returnData.dates = moment(data.Dates).format("YYYY-MM-DD");
 		    returnData.rawBacklogs = data.BacklogPersonHours;
 		    returnData.unscheduledPlans = data.PlannedPersonHours;
 		    returnData.schedules = data.ScheduledPersonHours;
@@ -173,7 +173,7 @@
 
             if (!graphDataSeq || graphDataSeq <= 0) return;
 
-            var beforeStartDate = new moment(graphDataSeq[0].dates).subtract(1, 'days').format("YYYY-MM-DD");
+            var beforeStartDate = moment(graphDataSeq[0].dates).subtract(1, 'days').format("YYYY-MM-DD");
 
             var extrapolatedGraphData = {
                 dates: beforeStartDate,

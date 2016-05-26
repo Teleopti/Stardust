@@ -209,15 +209,7 @@
 			return personSelectionSvc.personInfo;
 		};
 
-		function replaceParameters(text, params) {
-			if (params) {
-				params.forEach(function(element, index) {
-					text = text.replace('{' + index + '}', element);
-				});
-			}
-			return text;
-		}
-
+	
 		vm.toggleErrorDetails = function() {
 			vm.showErrorDetails = !vm.showErrorDetails;
 		};

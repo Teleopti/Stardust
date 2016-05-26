@@ -103,7 +103,7 @@
 			controller: addPersonalActivityCtrl,
 			controllerAs: 'vm',
 			bindToController: true,
-			templateUrl: 'js/teamSchedule/html/addPersonalActivity.html',
+			templateUrl: 'js/teamSchedule/html/addPersonalActivity.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'addPersonalActivity'],
 			link: postlink
 		}
