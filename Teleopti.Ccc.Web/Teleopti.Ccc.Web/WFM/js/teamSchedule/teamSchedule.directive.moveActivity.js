@@ -33,7 +33,7 @@
 
 					function setTabNavigation() {
 						if (angular.isDefined($attrs.tabindex)) {
-							var timepickerInputs = $element[0].querySelectorAll('input[type=text]');iu
+							var timepickerInputs = $element[0].querySelectorAll('input[type=text]');
 							for (var i = 0; i < timepickerInputs.length; i++) {
 								timepickerInputs[i].tabIndex = $attrs.tabindex;
 								addFocusListener(timepickerInputs[i]);
