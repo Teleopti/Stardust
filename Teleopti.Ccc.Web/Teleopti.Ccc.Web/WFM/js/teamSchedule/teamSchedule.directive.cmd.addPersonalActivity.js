@@ -67,8 +67,9 @@
 
 		function getDefaultActvityStartTime() {
 			var curDateMoment = moment(vm.selectedDate());
-			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, vm.selectedAgents);
-			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, vm.selectedAgents);
+			var personIds = vm.selectedAgents.map(function(agent) { return agent.personId; });
+			var overnightEnds = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
+			var latestShiftStart = scheduleManagementSvc.getLatestStartOfSelectedSchedule(curDateMoment, personIds);
 
 			var defaultStart = curDateMoment.clone().hour(8).minute(0).second(0).toDate();
 			if (overnightEnds !== null) {
@@ -84,7 +85,7 @@
 				if (latestShiftStart !== null) {
 					var latestShiftStartPlusOneHour = moment(latestShiftStart).add(1, 'hour').toDate();
 					if (latestShiftStartPlusOneHour >= defaultStart)
-						defaultStart = latestShiftStart;
+						defaultStart = latestShiftStartPlusOneHour;
 				} 
 			}
 

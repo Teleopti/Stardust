@@ -62,6 +62,11 @@
 			}
 
 			svc.getEarliestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
+				selectedPersonIds.forEach(function (x) {
+					if (typeof x !== 'string')
+						throw "Invalid parameter.";
+				});
+
 				var startUpdated = false;
 				var earlistStart = moment("2099-12-31");
 
@@ -83,13 +88,18 @@
 			}
 
 			svc.getLatestStartOfSelectedSchedule = function (scheduleDateMoment, selectedPersonIds) {
+				selectedPersonIds.forEach(function (x) {
+					if (typeof x !== 'string')
+						throw "Invalid parameter.";
+				});
+
 				var startUpdated = false;
-				var latestStart = scheduleDateMoment;
+				var latestStart = scheduleDateMoment.startOf('day');
 
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
 					var scheduleStart = moment(schedule.ScheduleStartTime());
-
-					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {
+								
+					if (selectedPersonIds.indexOf(schedule.PersonId) > -1 && scheduleStart > latestStart) {						
 						startUpdated = true;
 						latestStart = scheduleStart;
 					}
@@ -104,6 +114,11 @@
 			};
 
 			svc.getLatestPreviousDayOvernightShiftEnd = function (scheduleDateMoment, selectedPersonIds) {
+				selectedPersonIds.forEach(function (x) {
+					if (typeof x !== 'string')
+						throw "Invalid parameter.";
+				});
+
 				var previousDayShifts = [];
 
 				svc.groupScheduleVm.Schedules.forEach(function (schedule) {
@@ -131,6 +146,12 @@
 			}
 
 			svc.getLatestStartTimeOfSelectedScheduleProjection = function (scheduleDateMoment, selectedPersonIds) {
+
+				selectedPersonIds.forEach(function(x) {
+					if (typeof x !== 'string')
+						throw "Invalid parameter.";
+				});
+
 				var latestStart = null;
 				var projectionShiftLayerIds = [];
 				var currentDayShifts = [];

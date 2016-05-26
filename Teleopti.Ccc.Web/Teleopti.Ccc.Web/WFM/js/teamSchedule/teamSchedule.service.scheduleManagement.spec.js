@@ -22,7 +22,7 @@ describe("teamschedule schedule management service tests", function() {
 			{
 				"Color": "#80FF80",
 				"Description": "Email",
-				"Start": scheduleDate + " 07:00",
+				"Start": scheduleDate + " 11:00",
 				"Minutes": 480
 			}
 		],
@@ -37,7 +37,7 @@ describe("teamschedule schedule management service tests", function() {
 			{
 				"Color": "#80FF80",
 				"Description": "Email",
-				"Start": scheduleDate + " 08:00:00",
+				"Start": scheduleDate + " 12:00:00",
 				"Minutes": 480
 			}
 		],
@@ -85,4 +85,11 @@ describe("teamschedule schedule management service tests", function() {
 		target.resetSchedules([schedule1, schedule2, schedule3], scheduleDateMoment);
 		expect(target.getLatestPreviousDayOvernightShiftEnd(scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId]).toTimeString()).toEqual(moment(schedule3.Projection[0].Start).add(schedule3.Projection[0].Minutes, 'minute').toDate().toTimeString());
 	});
+
+	it('Should get latest shift start independent of timepart of schedule date', function() {
+		target.resetSchedules([schedule1, schedule2], scheduleDateMoment);
+		scheduleDateMoment.hour(17);
+		expect(moment(target.getLatestStartOfSelectedSchedule(scheduleDateMoment, [schedule1.PersonId, schedule2.PersonId])).format("HH:mm")).toEqual(moment(schedule2.Projection[0].Start).format("HH:mm"));
+	});
+
 });
