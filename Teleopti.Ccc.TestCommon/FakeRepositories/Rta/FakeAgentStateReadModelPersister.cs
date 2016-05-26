@@ -61,22 +61,28 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool inAlarm)
 		{
-			var sites = from s in siteIds
+			var states = from s in siteIds
 				from m in _data.Values
 				where s == m.SiteId
 				select m;
-			sites = inAlarmOnly.HasValue ? sites.Where(x => x.IsRuleAlarm == inAlarmOnly.Value).ToArray() : sites.ToArray();
-			return sites;
+			if (inAlarm)
+				states = states.Where(x => x.IsRuleAlarm)
+					.OrderBy(x => x.AlarmStartTime);
+			return states;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool inAlarm)
 		{
-			return (from t in teamIds
-					from m in _data.Values
-					where t == m.TeamId
-					select m).ToArray();
+			var states = from t in teamIds
+				from m in _data.Values
+				where t == m.TeamId
+				select m;
+			if (inAlarm)
+				states = states.Where(x => x.IsRuleAlarm)
+					.OrderBy(x => x.AlarmStartTime);
+			return states;
 		}
 
 	}

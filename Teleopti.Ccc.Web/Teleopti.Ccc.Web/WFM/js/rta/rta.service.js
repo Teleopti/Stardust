@@ -33,23 +33,39 @@
 						isArray: true
 					}
 				}).query({
-					ids: data.siteIds,
-					alarmTimeDesc: data.alarmTimeDesc,
-					inAlarmOnly: data.inAlarmOnly
+					ids: data.siteIds
 				}).$promise;
 			};
 
-			this.getStatesForTeams = function (data) {
-				return $resource('../api/Agents/GetStatesForTeams', {}, {
+			this.getAlarmStatesForSites = function (data) {
+				return $resource('../api/Agents/GetAlarmStatesForSites', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
 					}
 				}).query({
-					ids: data.teamIds,
-					alarmTimeDesc: data.alarmTimeDesc,
-					inAlarmOnly: data.inAlarmOnly
+					ids: data.siteIds
 				}).$promise;
+			};
+
+			this.getStatesForTeams = function (data) {
+				return $resource('../api/Agents/GetStatesForTeams', {}, {
+						query: {
+							method: 'GET',
+							isArray: true
+						}
+					}).query({ ids: data.teamIds })
+					.$promise;
+			};
+
+			this.getAlarmStatesForTeams = function(data) {
+				return $resource('../api/Agents/GetAlarmStatesForTeams', {}, {
+						query: {
+							method: 'GET',
+							isArray: true
+						}
+					}).query({ ids: data.teamIds })
+					.$promise;
 			};
 
 			this.getAdherenceForTeamsOnSite = function(data) {

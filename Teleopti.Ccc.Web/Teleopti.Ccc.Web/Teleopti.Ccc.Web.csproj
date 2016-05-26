@@ -1410,12 +1410,13 @@
     <Content Include="WFM\js\rta\rta-agents.html" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.spec.js" />
+    <Content Include="WFM\js\rta\rta.agents.controller.inalarm.spec.js" />
     <Content Include="WFM\js\rta\rta.controller.fortest.js" />
     <Content Include="WFM\js\rta\rta.backend.fake.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.filters.spec.js" />
-    <Content Include="WFM\js\rta\rta.agentsforsites.controller.spec.js" />
-    <Content Include="WFM\js\rta\rta.agentsforteams.controller.spec.js" />
+    <Content Include="WFM\js\rta\rta.agents.controller.forsites.spec.js" />
+    <Content Include="WFM\js\rta\rta.agents.controller.forteams.spec.js" />
     <Content Include="WFM\js\rta\rta.faketime.service.js" />
     <Content Include="WFM\js\global\http.js" />
     <Content Include="WFM\js\rta\rta.format.service.spec.js" />

@@ -1,5 +1,5 @@
 'use strict';
-describe('RtaAgentsCtrl for sites', function() {
+describe('RtaAgentsCtrl for teams', function() {
 	var $interval,
 		$httpBackend,
 		$state,
@@ -35,111 +35,80 @@ describe('RtaAgentsCtrl for sites', function() {
 
 	}));
 
-	it('should get agents for multiple sites', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+	it('should get agents for multiple teams', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-			})
-			.withAgent({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
-			});
-
-		$controllerBuilder.createController();
-
-		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
-		expect(scope.agents[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
-	});
-
-	it('should get agents for single selected site', function() {
-		stateParams.siteIds = ["6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-		$fakeBackend.withAgent({
-			PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-			SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461",
+			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 		});
 
 		$controllerBuilder.createController();
 
-		expect(scope.agents[0].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
+		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
-	it('should get agent states for multiple sites', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+	it('should get agent states for multiple teams', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
-			})
-			.withAgent({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			})
 			.withState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
-			})
-			.withState({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b"
 			});
 
 		$controllerBuilder.createController();
 
 		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
-		expect(scope.agents[1].PersonId).toEqual("6b693b41-e2ca-4ef0-af0b-9e06008d969b");
 	});
 
-	it('should update agent states for multiple sites', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
-
-		$fakeBackend
-			.withAgent({
+	it('should update agent states for multiple teams', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
+		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 			})
 			.withAgent({
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+				TeamId: "103afc66-2bfa-45f4-9823-9e06008d5062",
 			})
 			.withState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				State: "Ready"
+				State: "Ready",
 			})
 			.withState({
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				State: "In Call"
+				State: "In Call",
 			});
-
-		
 
 		$controllerBuilder.createController()
 			.apply("agentsInAlarm = false")
-			.apply(function() {
+			.apply(function () {
 				$fakeBackend.clearStates()
 					.withState({
 						PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-						State: "In Call"
+						State: "In Call",
 					})
 					.withState({
 						PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-						State: "Ready"
+						State: "Ready",
 					});
-				
-		})
-		.wait(5000);
-	
+			})
+			.wait(5000);
 
 		expect(scope.agents[0].State).toEqual("In Call");
 		expect(scope.agents[1].State).toEqual("Ready");
 	});
 
-	it('should set states to agents for multiple sites', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+	it('should set states to agents for multiple teams', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
 		$fakeBackend.withAgent({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			})
 			.withAgent({
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+				TeamId: "103afc66-2bfa-45f4-9823-9e06008d5062"
 			})
 			.withState({
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -190,35 +159,60 @@ describe('RtaAgentsCtrl for sites', function() {
 		expect(scope.agents[1].TimeInState).toEqual(15473);
 	});
 
-	it('should filter agent name with agentFilter', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+	it('should filter agent state updates with agentFilter ', function() {
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
 		$fakeBackend.withAgent({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 				Name: "Ashley Andeen",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			})
 			.withAgent({
+				Name: "Charley Caper",
 				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				Name: "Charlie Caper",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+				State: "In Call",
 			});
 
 		$controllerBuilder.createController()
 			.apply("agentsInAlarm = false")
-			.apply("filterText = 'Ashley'");
+			.apply("filterText = 'Caper'")
+			.apply(function() {
+				$fakeBackend.clearStates()
+					.withState({
+						PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
+						State: "Ready",
+					});
+			})
+			.wait(5000);
 
-		expect(scope.filteredData[0].Name).toEqual("Ashley Andeen");
+		expect(scope.filteredData[0].Name).toEqual("Charley Caper");
+		expect(scope.filteredData[0].State).toEqual("Ready");
+	});
+
+	it('should go back to sites when business unit is changed', function() {
+		$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+		spyOn($state, 'go');
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+			});
+
+		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
 	it('should stop polling when page is about to destroy', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c", "6a21c802-7a34-4917-8dfd-9b5e015ab461"];
+		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495", "103afc66-2bfa-45f4-9823-9e06008d5062"];
 		$fakeBackend.withAgent({
-				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-				SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c"
+				Name: "Ashley Andeen",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			})
 			.withAgent({
-				PersonId: "6b693b41-e2ca-4ef0-af0b-9e06008d969b",
-				SiteId: "6a21c802-7a34-4917-8dfd-9b5e015ab461"
+				Name: "Charley Caper",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
 			});
 
 		$controllerBuilder.createController();
@@ -228,12 +222,36 @@ describe('RtaAgentsCtrl for sites', function() {
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	it('should poll states in alarm only for sites', function() {
-		stateParams.siteIds = ["d970a45a-90ff-4111-bfe1-9b5e015ab45c"];
+	it('should get adherence percentage for agent when clicked', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend.withAgent({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564"
+			})
+			.withAdherence({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				AdherencePercent: 99,
+				LastTimestamp: "16:34"
+			});
 
 		$controllerBuilder.createController()
-			.apply("agentsInAlarm = true");
+			.apply(function() {
+				scope.getAdherenceForAgent("11610fe4-0130-4568-97de-9b5e015b2564");
+			});
 
-		//missing assert
+		expect(scope.adherence.AdherencePercent).toEqual(99);
+		expect(scope.adherence.LastTimestamp).toEqual("16:34");
 	});
+
+	it('should not go back to sites overview when business unit is not initialized yet', function() {
+		$sessionStorage.buid = undefined;
+		spyOn($state, 'go');
+
+		$controllerBuilder.createController()
+			.apply(function() {
+				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+			});
+
+		expect($state.go).not.toHaveBeenCalledWith('rta');
+	});
+
 });

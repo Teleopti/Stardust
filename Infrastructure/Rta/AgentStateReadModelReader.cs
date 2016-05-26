@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				);
         }
 
-		public virtual IList<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
+		public IList<AgentStateReadModel> Load(IEnumerable<Guid> personIds)
 		{
 			var ret = new List<AgentStateReadModel>();
 			foreach (var personList in personIds.Batch(400))
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return ret;
 		}
 
-		public virtual IList<AgentStateReadModel> LoadForTeam(Guid teamId)
+		public IList<AgentStateReadModel> LoadForTeam(Guid teamId)
 		{
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(selectAgentState + "WITH (NOLOCK) WHERE TeamId = :teamId")
@@ -53,17 +53,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
-		public virtual IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool inAlarm)
 		{
 			var query = selectAgentState + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
-			if (inAlarmOnly.HasValue)
-				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
-			if(alarmTimeDesc.HasValue)
-				if (alarmTimeDesc.Value)
-					query += " ORDER BY AlarmStartTime";
-				else
-					query += " ORDER BY AlarmStartTime DESC";
-
+			if (inAlarm)
+				query += " AND IsRuleAlarm = 1 ORDER BY AlarmStartTime ASC";
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("siteIds", siteIds)
@@ -72,17 +66,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
-		public virtual IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool inAlarm)
 		{
 			var query = selectAgentState + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
-			if (inAlarmOnly.HasValue)
-				query += " AND IsRuleAlarm = " + Convert.ToInt32(inAlarmOnly.Value);
-			if (alarmTimeDesc.HasValue)
-				if (alarmTimeDesc.Value)
-					query += " ORDER BY AlarmStartTime";
-				else
-					query += " ORDER BY AlarmStartTime DESC";
-
+			if (inAlarm)
+				query += " AND IsRuleAlarm = 1 ORDER BY AlarmStartTime ASC";
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("teamIds", teamIds)

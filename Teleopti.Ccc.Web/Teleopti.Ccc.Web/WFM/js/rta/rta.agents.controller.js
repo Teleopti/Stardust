@@ -91,11 +91,16 @@
 					return RtaService.getAgentsForSites;
 				})();
 
-				var getStates = (function() {
-					if (teamIds.length > 0)
+				var getStates = function (inAlarm) {
+					if (teamIds.length > 0) {
+						if (inAlarm)
+							return RtaService.getAlarmStatesForTeams;
 						return RtaService.getStatesForTeams;
+					}
+					if (inAlarm)
+						return RtaService.getAlarmStatesForSites;
 					return RtaService.getStatesForSites;
-				})();
+				};
 
 				var updateBreadCrumb = function(agentsInfo) {
 					if (agentsInfo.length > 0) {
@@ -144,11 +149,9 @@
 				}
 
 				function updateStates() {
-					getStates({
+					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,
-							teamIds: teamIds,
-							inAlarmOnly: $scope.agentsInAlarm === true ? true : null,
-							alarmTimeDesc: $scope.agentsInAlarm === true ? true : null,
+							teamIds: teamIds
 						})
 						.then(setStatesInAgents);
 				}

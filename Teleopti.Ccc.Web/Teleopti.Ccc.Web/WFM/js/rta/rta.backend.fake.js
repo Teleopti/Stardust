@@ -31,18 +31,6 @@
 				return result;
 			};
 
-			$httpBackend.whenGET2 = function(url) {
-				var r = $httpBackend.whenGET(url);
-				return {
-					respond: function(fn) {
-						return r.respond(function(method, url, data, headers, params) {
-							var params2 = paramsOf(url);
-							return fn(params2, method, url, data, headers, params);
-						});
-					}
-				}
-			};
-
 			var fake = function(url, response) {
 				$httpBackend.whenGET(url)
 					.respond(function(method, url, data, headers, params) {
@@ -71,34 +59,46 @@
 
 			fake(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/,
 				function (params) {
-					params.inAlarmOnly = params.inAlarmOnly || false;
+					var result = states.filter(function(s) {
+						var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
+						return a != null && params.ids.indexOf(a.TeamId) >= 0;
+					});
+					return [200, result];
+				});
+
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForTeams(.*)/,
+				function (params) {
 					var result =
-						states.filter(function(s) {
-							var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
+						states.filter(function (s) {
+							var a = agents.find(function (a) { return a.PersonId === s.PersonId; });
 							return a != null && params.ids.indexOf(a.TeamId) >= 0;
-						}).filter(function(s) {
-							return !params.inAlarmOnly || s.TimeInAlarm > 0;
-						}).sort(function(s1, s2) {
-							if (params.alarmTimeDesc)
-								return s1.TimeInAlarm - s2.TimeInAlarm;
-							return 0;
+						}).filter(function (s) {
+							return s.TimeInAlarm > 0;
+						}).sort(function (s1, s2) {
+							return s2.TimeInAlarm - s1.TimeInAlarm;
 						});
 					return [200, result];
 				});
 
 			fake(/\.\.\/api\/Agents\/GetStatesForSites(.*)/,
 				function (params) {
-					params.inAlarmOnly = params.inAlarmOnly || false;
+					var result = states.filter(function(s) {
+							var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
+							return a != null && params.ids.indexOf(a.SiteId) >= 0;
+						});
+					return [200, result];
+				});
+
+			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSites(.*)/,
+				function (params) {
 					var result =
 						states.filter(function(s) {
 							var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
 							return a != null && params.ids.indexOf(a.SiteId) >= 0;
 						}).filter(function(s) {
-							return !params.inAlarmOnly || s.TimeInAlarm > 0;
+							return s.TimeInAlarm > 0;
 						}).sort(function(s1, s2) {
-							if (params.alarmTimeDesc)
-								return s1.TimeInAlarm - s2.TimeInAlarm;
-							return 0;
+							return s2.TimeInAlarm - s1.TimeInAlarm;
 						});
 					return [200, result];
 				});

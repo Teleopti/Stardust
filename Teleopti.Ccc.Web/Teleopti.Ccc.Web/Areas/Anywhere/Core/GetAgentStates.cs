@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public interface IGetAgentStates
 	{
-		IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds, bool? inAlarmOnly, bool? alarmTimeDesc);
-		IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds, bool? inAlarmOnly, bool? alarmTimeDesc);
+		IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds, bool inAlarm);
+		IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds, bool inAlarm);
 	}
 
 	public class GetAgentStates : IGetAgentStates
@@ -16,21 +16,23 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IAgentStateViewModelBuilder _agentStateViewModelBuilder;
 
-		public GetAgentStates(IAgentStateReadModelReader agentStateReadModelReader,
-			IAgentStateViewModelBuilder agentStateViewModelBuilder)
+		public GetAgentStates(
+			IAgentStateReadModelReader agentStateReadModelReader,
+			IAgentStateViewModelBuilder agentStateViewModelBuilder
+			)
 		{
 			_agentStateReadModelReader = agentStateReadModelReader;
 			_agentStateViewModelBuilder = agentStateViewModelBuilder;
 		}
 
-		public IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds, bool? inAlarmOnly, bool? alarmTimeDesc)
+		public IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds, bool inAlarm)
 		{
-			return _agentStateViewModelBuilder.Build(_agentStateReadModelReader.LoadForSites(siteIds, inAlarmOnly, alarmTimeDesc));
+			return _agentStateViewModelBuilder.Build(_agentStateReadModelReader.LoadForSites(siteIds, inAlarm));
 		}
 
-		public IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds, bool? inAlarmOnly, bool? alarmTimeDesc)
+		public IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds, bool inAlarm)
 		{
-			return _agentStateViewModelBuilder.Build(_agentStateReadModelReader.LoadForTeams(teamIds, inAlarmOnly, alarmTimeDesc));
+			return _agentStateViewModelBuilder.Build(_agentStateReadModelReader.LoadForTeams(teamIds, inAlarm));
 		}
 	}
 }

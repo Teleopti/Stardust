@@ -1,10 +1,8 @@
 using System;
-using System.Drawing;
 using System.Linq;
 using System.Net;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -23,7 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IPersonRepository _personRepository;
 		private readonly INow _date;
 	    private readonly ICommonAgentNameProvider _commonAgentNameProvider;
-		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 		private readonly IGetAgents _getAgents;
 		private readonly IGetAgentStates _getAgentsStates;
 
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			IPersonRepository personRepository, 
 			INow date, 
 			ICommonAgentNameProvider commonAgentNameProvider, 
-			IAgentStateReadModelReader agentStateReadModelReader,
 			IGetAgents getAgents,
 			IGetAgentStates getAgentsStates)
 		{
@@ -41,7 +37,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_personRepository = personRepository;
 			_date = date;
 		    _commonAgentNameProvider = commonAgentNameProvider;
-		    _agentStateReadModelReader = agentStateReadModelReader;
 			_getAgents = getAgents;
 			_getAgentsStates = getAgentsStates;
 		}
@@ -106,27 +101,37 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
 		public virtual IHttpActionResult GetStates(Guid teamId)
 		{
-			return Ok(_getAgentsStates.ForTeams(new[] { teamId }, null, null).ToArray());
+			return Ok(_getAgentsStates.ForTeams(new[] { teamId }, false).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
 		public virtual IHttpActionResult GetStatesForSites([FromUri]StatesQuery query)
 		{
-			return Ok(_getAgentsStates.ForSites(query.Ids, query.InAlarmOnly, query.AlarmTimeDesc).ToArray());
+			return Ok(_getAgentsStates.ForSites(query.Ids, false).ToArray());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
 		public virtual IHttpActionResult GetStatesForTeams([FromUri]StatesQuery query)
 		{
-			return Ok(_getAgentsStates.ForTeams(query.Ids, query.InAlarmOnly, query.AlarmTimeDesc).ToArray());
+			return Ok(_getAgentsStates.ForTeams(query.Ids, false).ToArray());
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSites")]
+		public virtual IHttpActionResult GetAlarmStatesForSites([FromUri]StatesQuery query)
+		{
+			return Ok(_getAgentsStates.ForSites(query.Ids, true).ToArray());
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForTeams")]
+		public virtual IHttpActionResult GetAlarmStatesForTeams([FromUri]StatesQuery query)
+		{
+			return Ok(_getAgentsStates.ForTeams(query.Ids, true).ToArray());
 		}
 	}
 
 	public class StatesQuery
 	{
 		public Guid[] Ids { get; set; }
-		public bool? InAlarmOnly { get; set; }
-		public bool? AlarmTimeDesc{ get; set; }
     }
 	
 	public class PersonDetailModel

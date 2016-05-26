@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Persister.Persist(new AgentStateReadModelForTest { SiteId = siteId2, PersonId = Guid.NewGuid() });
 			Persister.Persist(new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = Guid.NewGuid() });
 
-			var result = Target.LoadForSites(new[] {siteId1, siteId2}, null, null);
+			var result = Target.LoadForSites(new[] {siteId1, siteId2}, false);
 
 			result.Count().Should().Be(2);
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId2, PersonId = Guid.NewGuid() });
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
 
-			var result = Target.LoadForTeams(new[] {teamId1, teamId2}, null, null);
+			var result = Target.LoadForTeams(new[] {teamId1, teamId2}, false);
 
 			result.Count().Should().Be(2);
 		}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				IsRuleAlarm = false
 			});
 
-			var result = Target.LoadForTeams(new[] {teamId}, true, null);
+			var result = Target.LoadForTeams(new[] {teamId}, true);
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -134,37 +134,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				AlarmStartTime = "2015-12-16 8:00".Utc()
 			});
 
-			var result = Target.LoadForSites(new[] {siteId}, null, true);
+			var result = Target.LoadForSites(new[] {siteId}, true);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-
-		[Test]
-		public void ShouldLoadStatesOrderByLongestAlarmTimeLast()
-		{
-			var siteId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
-			});
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
-			});
-
-			var result = Target.LoadForSites(new[] {siteId}, null, false);
-
-			result.First().PersonId.Should().Be(personId1);
-			result.Last().PersonId.Should().Be(personId2);
-		}
-
+		
 		[Test]
 		public void ShouldLoadTeamStatesOrderByLongestAlarmTimeFirst()
 		{
@@ -184,35 +159,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				AlarmStartTime = "2015-12-16 8:00".Utc()
 			});
 
-			var result = Target.LoadForTeams(new[] {teamId}, null, true);
+			var result = Target.LoadForTeams(new[] {teamId}, true);
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-
-		[Test]
-		public void ShouldLoadTeamStatesOrderByLongestAlarmTimeLast()
-		{
-			var teamId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
-			});
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				TeamId = teamId,
-				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
-			});
-
-			var result = Target.LoadForTeams(new[] {teamId}, null, false);
-
-			result.First().PersonId.Should().Be(personId1);
-			result.Last().PersonId.Should().Be(personId2);
-		}
+		
 	}
 }
