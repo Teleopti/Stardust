@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		public string SiteName { get; set; }
 	}
 
-	public class AgentStatusViewModel
+	public class AgentStateViewModel
 	{
 		public Guid PersonId { get; set; }
 		public string State { get; set; }

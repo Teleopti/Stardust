@@ -161,28 +161,27 @@
 					fillAgentsWithState(states);
 					fillAgentsWithoutState();
 
+					var m = moment(states.Time).startOf('hour');
 					$scope.timeline = [
 						{
-							Offset: "10%",
-							Time: "9:00"
+							Time: m.format('HH:mm')
 						},
 						{
-							Offset: "33.61%",
-							Time: "10:00"
+							Time: m.add(1, 'hour').format('HH:mm')
 						},
 						{
-							Offset: "57.22%",
-							Time: "11:00"
+							Time: m.add(1, 'hour').format('HH:mm')
 						},
 						{
-							Offset: "80.83%",
-							Time: "12:00"
+							Time: m.add(1, 'hour').format('HH:mm')
 						}
 					];
+					
+					
 				}
 
 				function fillAgentsWithState(states) {
-					states.forEach(function(state, i) {
+					states.States.forEach(function(state, i) {
 						var agentInfo = $filter('filter')($scope.agentsInfo, {
 							PersonId: state.PersonId
 						});
@@ -202,7 +201,7 @@
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
-								AlarmWidth: (state.TimeInAlarm / 3600 * 25) + '%',
+								AlarmWidth: "5%", //(state.TimeInAlarm / 3600 * 25) + '%',
 								Shift: [
 									{
 										Color: "rgb(128, 255, 128)",

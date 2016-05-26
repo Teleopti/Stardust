@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public interface IGetAgentStates
 	{
-		IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds, bool inAlarm);
-		IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds, bool inAlarm);
+		IEnumerable<AgentStateViewModel> ForSites(Guid[] siteIds, bool inAlarm);
+		IEnumerable<AgentStateViewModel> ForTeams(Guid[] teamIds, bool inAlarm);
 	}
 
 	public class GetAgentStates : IGetAgentStates
@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_agentStateViewModelBuilder = agentStateViewModelBuilder;
 		}
 
-		public IEnumerable<AgentStatusViewModel> ForSites(Guid[] siteIds, bool inAlarm)
+		public IEnumerable<AgentStateViewModel> ForSites(Guid[] siteIds, bool inAlarm)
 		{
 			return _agentStateViewModelBuilder.Build(_agentStateReadModelReader.LoadForSites(siteIds, inAlarm));
 		}
 
-		public IEnumerable<AgentStatusViewModel> ForTeams(Guid[] teamIds, bool inAlarm)
+		public IEnumerable<AgentStateViewModel> ForTeams(Guid[] teamIds, bool inAlarm)
 		{
 			return _agentStateViewModelBuilder.Build(_agentStateReadModelReader.LoadForTeams(teamIds, inAlarm));
 		}

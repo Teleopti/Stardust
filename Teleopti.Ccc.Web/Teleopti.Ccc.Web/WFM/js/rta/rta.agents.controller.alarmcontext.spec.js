@@ -35,16 +35,34 @@ describe('RtaAgentsCtrl', function() {
 
 	}));
 
-	xit('should display something about shift and stuff', function() {
-		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
-		$fakeBackend.withAgent({
-			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
-			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+	[
+		"2016-05-26T00:30:00",
+		"2016-05-26T11:30:00",
+		"2016-05-26T15:30:00",
+		"2016-05-26T23:30:00"
+	].forEach(function(value) {
+
+		var time = moment(value);
+
+		it('should display time line for ' + time.format('HH:mm'), function() {
+
+			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+			$fakeBackend
+				.withTime(time.format('YYYY-MM-DDTHH:mm:ss'))
+				.withAgent({
+					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				});
+
+			$controllerBuilder.createController();
+
+			expect(scope.timeline.length).toEqual(4);
+			expect(scope.timeline[0].Time).toEqual(time.startOf('hour').format('HH:mm'));
+			expect(scope.timeline[1].Time).toEqual(time.add(1, 'hour').format('HH:mm'));
+			expect(scope.timeline[2].Time).toEqual(time.add(1, 'hour').format('HH:mm'));
+			expect(scope.timeline[3].Time).toEqual(time.add(1, 'hour').format('HH:mm'));
 		});
 
-		$controllerBuilder.createController();
-
-		expect(scope.agents[0].PersonId).toEqual("11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
 

@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 {
 	public interface IAgentStateViewModelBuilder
 	{
-		IEnumerable<AgentStatusViewModel> Build(IEnumerable<AgentStateReadModel> agentStates);
+		IEnumerable<AgentStateViewModel> Build(IEnumerable<AgentStateReadModel> agentStates);
 	}
 
 	public class AgentStateViewModelBuilder : IAgentStateViewModelBuilder
@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 			_appliedAlarm = appliedAlarm;
 		}
 
-		public IEnumerable<AgentStatusViewModel> Build(IEnumerable<AgentStateReadModel> states)
+		public IEnumerable<AgentStateViewModel> Build(IEnumerable<AgentStateReadModel> states)
 		{
 			return states.Select(x =>
 			{
 				var timeInAlarm = calculateTimeInAlarm(x);
-				return new AgentStatusViewModel
+				return new AgentStateViewModel
 				{
 					PersonId = x.PersonId,
 					State = x.StateName,

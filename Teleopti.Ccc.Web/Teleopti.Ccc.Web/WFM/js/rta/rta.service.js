@@ -29,8 +29,7 @@
 			this.getStatesForSites = function(data) {
 				return $resource('../api/Agents/GetStatesForSites', {}, {
 					query: {
-						method: 'GET',
-						isArray: true
+						method: 'GET'
 					}
 				}).query({
 					ids: data.siteIds
@@ -40,8 +39,7 @@
 			this.getAlarmStatesForSites = function (data) {
 				return $resource('../api/Agents/GetAlarmStatesForSites', {}, {
 					query: {
-						method: 'GET',
-						isArray: true
+						method: 'GET'
 					}
 				}).query({
 					ids: data.siteIds
@@ -51,8 +49,7 @@
 			this.getStatesForTeams = function (data) {
 				return $resource('../api/Agents/GetStatesForTeams', {}, {
 						query: {
-							method: 'GET',
-							isArray: true
+							method: 'GET'
 						}
 					}).query({ ids: data.teamIds })
 					.$promise;
@@ -61,8 +58,7 @@
 			this.getAlarmStatesForTeams = function(data) {
 				return $resource('../api/Agents/GetAlarmStatesForTeams', {}, {
 						query: {
-							method: 'GET',
-							isArray: true
+							method: 'GET'
 						}
 					}).query({ ids: data.teamIds })
 					.$promise;

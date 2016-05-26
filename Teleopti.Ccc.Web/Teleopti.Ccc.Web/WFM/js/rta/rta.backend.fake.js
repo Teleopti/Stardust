@@ -4,6 +4,7 @@
 		.module('wfm.rta')
 		.service('FakeRtaBackend', function($httpBackend) {
 
+			var serverTime = null;
 			var agents = [];
 			var states = [];
 			var adherences = [];
@@ -63,7 +64,7 @@
 						var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
 						return a != null && params.ids.indexOf(a.TeamId) >= 0;
 					});
-					return [200, result];
+					return [200, { Time: serverTime, States: result }];
 				});
 
 			fake(/\.\.\/api\/Agents\/GetAlarmStatesForTeams(.*)/,
@@ -77,7 +78,7 @@
 						}).sort(function (s1, s2) {
 							return s2.TimeInAlarm - s1.TimeInAlarm;
 						});
-					return [200, result];
+					return [200, { Time: serverTime, States: result }];
 				});
 
 			fake(/\.\.\/api\/Agents\/GetStatesForSites(.*)/,
@@ -86,7 +87,7 @@
 							var a = agents.find(function(a) { return a.PersonId === s.PersonId; });
 							return a != null && params.ids.indexOf(a.SiteId) >= 0;
 						});
-					return [200, result];
+					return [200, { Time: serverTime, States: result }];
 				});
 
 			fake(/\.\.\/api\/Agents\/GetAlarmStatesForSites(.*)/,
@@ -100,7 +101,7 @@
 						}).sort(function(s1, s2) {
 							return s2.TimeInAlarm - s1.TimeInAlarm;
 						});
-					return [200, result];
+					return [200, { Time: serverTime, States: result }];
 				});
 
 			fake(/ToggleHandler\/(.*)/,
@@ -143,7 +144,8 @@
 					return [200, result];
 				});
 
-			this.clear = function() {
+			this.clear = function () {
+				serverTime = null;
 				agents = [];
 				states = [];
 				adherences = [];
@@ -154,6 +156,11 @@
 				teams = [];
 				teamAdherences = [];
 			}
+
+			this.withTime = function (time) {
+				serverTime = time; 
+				return this;
+			};
 
 			this.withAgent = function(agent) {
 				agents.push(agent);
