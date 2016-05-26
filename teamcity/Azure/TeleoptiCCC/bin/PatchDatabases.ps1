@@ -217,7 +217,7 @@ Try
 	$CCC7DB = $CCC7DB.Replace("`r","")
 	$CCC7DB = $CCC7DB.Replace("`n","")
 
-	$SQLServerFile = $SQLServer + ".txt"
+	$SQLServerFile = $SQLServer.Replace("tcp:", "") + ".txt"
 	
 	$fullPathSQLServerFile =  $DBManagerFolder + "\" + $SQLServerFile 
 
