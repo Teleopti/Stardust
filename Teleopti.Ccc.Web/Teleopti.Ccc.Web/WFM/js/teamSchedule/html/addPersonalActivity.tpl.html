@@ -12,11 +12,14 @@
 			<activity-time-range-picker class="activity-time-range" custom-tabindex="100" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
 			</activity-time-range-picker>
 		</form>
-
+		<div ng-if="vm.notAllowedNameListString.length > 0">
+			<i class="mdi mdi-alert-octagon" style="vertical-align:middle;"></i>
+			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.notAllowedNameListString}}.</span>
+		</div>
 		<button id="applyPersonalActivity" class="wfm-btn form-submit"
 				tabindex="100"
-				ng-class="{'wfm-btn-primary': newPersonalActivityForm.$valid, 'wfm-btn-primary-disabled': !(newPersonalActivityForm.$valid)}"
-				ng-disabled="newPersonalActivityForm.$valid ?'':'disabled'"
+				ng-class="{'wfm-btn-primary': newPersonalActivityForm.$valid && vm.isInputValid(), 'wfm-btn-primary-disabled': !(newPersonalActivityForm.$valid) || !vm.isInputValid()}"
+				ng-disabled="newPersonalActivityForm.$valid && vm.isInputValid() ?'':'disabled'"
 				ng-click="vm.addPersonalActivity()">
 			{{'Apply' | translate}}
 		</button>

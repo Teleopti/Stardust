@@ -301,7 +301,7 @@ describe("teamschedule person dchedule tests", function () {
 		var personSchedule = target.Create(scheduleToday, timeLine);
 		personSchedule.Merge(scheduleYesterday, timeLine);
 
-		expect(personSchedule.ScheduleEndTime()).toEqual(moment(queryDate).endOf('day').format("YYYY-MM-DDTHH:mm:00"));
+		expect(personSchedule.ScheduleEndTime()).toEqual("2015-10-30T15:00:00");
 	});
 
 	it('Should get correct person activities count', function() {

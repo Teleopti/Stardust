@@ -76,7 +76,7 @@
 					var start = this.Date;
 					var end = moment(schedule.Date).endOf('day');
 					angular.forEach(this.Shifts, function (shift) {
-						if (shift.Date.format('YYYY-MM-DD') == start && shift.Projections.length > 0) {
+						if (shift.Date.format('YYYY-MM-DD') == start.format('YYYY-MM-DD') && shift.Projections.length > 0) {
 							end = moment(shift.Projections[shift.Projections.length - 1].Start).add(shift.Projections[shift.Projections.length - 1].Minutes,'minutes');
 						}
 					});
