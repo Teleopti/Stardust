@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using NHibernate.Impl;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -48,16 +49,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							   + "@groupIdList=:groupIdList, @businessUnitId=:businessUnitId, @name=:name, "
                                + "@noSpaceInName = :noSpaceInName, "
                                + "@firstNameFirst = :firstNameFirst";
-			return ((NHibernateUnitOfWork) _unitOfWork.Current()).Session.CreateSQLQuery(sql)
+			var result = new List<IAuthorizeOrganisationDetail>();
+			groupIdList.Batch(100).ForEach(l =>
+			{
+				var batchResult = ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(sql)
 				.SetDateOnly("scheduleDate", shiftTradeDate)
-				.SetString("groupIdList", string.Join(",", groupIdList))
+				.SetString("groupIdList", string.Join(",", l))
 				.SetString("name", name)
-                .SetBoolean("noSpaceInName", useChineseNameFormat)
-                .SetBoolean("firstNameFirst", firstNameFirst)
+				.SetBoolean("noSpaceInName", useChineseNameFormat)
+				.SetBoolean("firstNameFirst", firstNameFirst)
 				.SetGuid("businessUnitId", getBusinessUnitId())
-				.SetResultTransformer(Transformers.AliasToBean(typeof (PersonSelectorShiftTrade)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
 				.SetReadOnly(true)
 				.List<IAuthorizeOrganisationDetail>();
+				result.AddRange(batchResult);
+			});
+			return result;
 		}
 	}
 
