@@ -29,11 +29,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
 		}
 
-		[Then(@"I should see schedule with absence for '(.*)' displayed")]
-		public void ThenIShouldSeeScheduleForDisplayed(string agentName)
+		[Then(@"I should see schedule with absence '(.*)' for '(.*)' displayed")]
+		public void ThenIShouldSeeScheduleForDisplayed(string absence, string agentName)
 		{
 			Browser.Interactions.AssertAnyContains(".person-name", agentName);
-			Browser.Interactions.AssertExists(".schedule div.personAbsence");
+			Browser.Interactions.AssertVisibleUsingJQuery($".schedule .layer.personAbsence[projection-name='{absence}']");
 		}
 
 		[Then(@"I should see schedule with no absence for '(.*)' displayed")]
