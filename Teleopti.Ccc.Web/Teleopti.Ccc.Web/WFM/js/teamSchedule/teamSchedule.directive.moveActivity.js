@@ -15,7 +15,7 @@
 				allowNextDay: '&'
 			},
 			bindToController: true,
-			controller: ['$scope', 'MoveActivityValidator', '$element', '$attrs', function ($scope, validator, $element, $attrs) {
+			controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
 				var vm = this;
 				vm.showMeridian = vm.showMeridian();
 				vm.allowNextDay = vm.allowNextDay();
@@ -25,14 +25,6 @@
 
 				function init(ngModel) {
 					setTabNavigation();
-
-					$scope.$watch(function () {
-						return vm.newStartTime;
-					}, function (newVal, oldVal) {
-						var validity = validateStartTime(newVal.startTime);
-						ngModel.$setValidity('startTime', validity);
-					}, true);
-
 					function addFocusListener(element) {
 						angular.element(element).on('focus', function (event) {
 							event.target.select();
@@ -41,7 +33,7 @@
 
 					function setTabNavigation() {
 						if (angular.isDefined($attrs.tabindex)) {
-							var timepickerInputs = $element[0].querySelectorAll('input[type=text]');
+							var timepickerInputs = $element[0].querySelectorAll('input[type=text]');iu
 							for (var i = 0; i < timepickerInputs.length; i++) {
 								timepickerInputs[i].tabIndex = $attrs.tabindex;
 								addFocusListener(timepickerInputs[i]);
@@ -52,19 +44,12 @@
 							event.target.querySelector('input').focus();
 						});
 					}
-
-					function validateStartTime(value) {
-						var validity = true;
-						var newStart = vm.newStartTime.nextDay ? moment(value).add(1, 'days') : moment(value);
-						validity = validator.validateMoveToTime(newStart);
-						return validity;
-					}
 				}
 			}],
 			link: function (scope, elem, attr, ctrls) {
 				var ngModel = ctrls[0];
 				var moveActivityInputCtrl = ctrls[1];
-				moveActivityInputCtrl.init(ngModel);
+				moveActivityInputCtrl.init();
 			},
 			controllerAs: 'vm',
 			template: [
@@ -110,8 +95,15 @@
 		vm.defaultStartTime = moment(vm.defaultStart()).add(ADD_HOURS, 'hour').toDate();
 		vm.newStartTime = {
 			startTime: vm.defaultStartTime,
-			nextDay: false
+			nextDay: !moment(vm.defaultStartTime).isSame(vm.selectedDate(), 'day')
 		};
+		var newStart;
+		vm.isInputValid = function () {
+			var dateStr = vm.newStartTime.nextDay ? moment(vm.selectedDate()).add(1, 'days').format('YYYY-MM-DD'):moment(vm.selectedDate()).format('YYYY-MM-DD');
+			var timeStr = moment(vm.newStartTime.startTime).format('HH:mm');
+			newStart = moment(dateStr + ' ' + timeStr);
+			return validator.validateMoveToTime(newStart);
+		}
 		vm.invalidPeople = function () {
 			var people = validator.getInvalidPeople().join(', ');
 			return people;
@@ -129,7 +121,6 @@
 					ShiftLayerIds: personProjection.selectedActivities
 				});
 			});
-			var newStart = vm.newStartTime.nextDay ? moment(vm.newStartTime.startTime).add(1, 'd') : moment(vm.newStartTime.startTime);
 			var moveActivityForm = {
 				Date: vm.selectedDate(),
 				PersonActivities: personActivities,
