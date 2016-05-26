@@ -11,7 +11,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 	{
 		public CalculateBadgesJobStep(IJobParameters jobParameters) : base(jobParameters)
 		{
-			Name = "Calculate Badges";
+			Name = "CalculateBadges";
 		}
 
 		protected virtual IUnitOfWorkFactory UnitOfWorkFactory
