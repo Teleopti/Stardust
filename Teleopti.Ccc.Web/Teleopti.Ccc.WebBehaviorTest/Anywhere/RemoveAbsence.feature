@@ -88,7 +88,7 @@ Scenario: Remove absence with confirmation
 	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see 0 absences in the absence list
 	And I should not see any shift
-	
+@ignore	
 Scenario: Remove one of two absences
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
