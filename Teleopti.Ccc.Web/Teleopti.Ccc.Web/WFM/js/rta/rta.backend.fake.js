@@ -43,26 +43,34 @@
 				}
 			};
 
-			$httpBackend.whenGET2(/\.\.\/api\/Adherence\/ForToday(.*)/)
-				.respond(function(params) {
+			var fake = function(url, response) {
+				$httpBackend.whenGET(url)
+					.respond(function(method, url, data, headers, params) {
+						var params2 = paramsOf(url);
+						return response(params2, method, url, data, headers, params);
+					});
+			};
+
+			fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
+				function(params) {
 					var result = adherences.find(function(a) {
 						return a.PersonId === params.personId;
 					});
 					return [200, result];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Agents\/ForTeams(.*)/)
-				.respond(function(params) {
+			fake(/\.\.\/api\/Agents\/ForTeams(.*)/,
+				function(params) {
 					return [200, agents.filter(function(a) { return params.teamIds.indexOf(a.TeamId) >= 0; })];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Agents\/ForSites(.*)/)
-				.respond(function(params) {
+			fake(/\.\.\/api\/Agents\/ForSites(.*)/,
+				function (params) {
 					return [200, agents.filter(function(a) { return params.siteIds.indexOf(a.SiteId) >= 0; })];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/)
-				.respond(function(params) {
+			fake(/\.\.\/api\/Agents\/GetStatesForTeams(.*)/,
+				function (params) {
 					params.inAlarmOnly = params.inAlarmOnly || false;
 					var result =
 						states.filter(function(s) {
@@ -78,8 +86,8 @@
 					return [200, result];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Agents\/GetStatesForSites(.*)/)
-				.respond(function(params) {
+			fake(/\.\.\/api\/Agents\/GetStatesForSites(.*)/,
+				function (params) {
 					params.inAlarmOnly = params.inAlarmOnly || false;
 					var result =
 						states.filter(function(s) {
@@ -95,38 +103,38 @@
 					return [200, result];
 				});
 
-			$httpBackend.whenGET2(/ToggleHandler\/(.*)/)
-				.respond(function(params) {
+			fake(/ToggleHandler\/(.*)/,
+				function (params) {
 					return [200, { IsEnabled: false }];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Agents\/PersonDetails(.*)/)
-				.respond(function (params) {
+			fake(/\.\.\/api\/Agents\/PersonDetails(.*)/,
+				function (params) {
 					return [200, personDetails.find(function(p) { return p.PersonId === params.personId })];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Adherence\/ForDetails(.*)/)
-				.respond(function(params) {
+			fake(/\.\.\/api\/Adherence\/ForDetails(.*)/,
+				function (params) {
 					return [200, activityAdherences.filter(function(a) { return a.PersonId === params.personId })];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Sites$/)
-				.respond(function(params) {
+			fake(/\.\.\/api\/Sites$/,
+				function (params) {
 					return [200, sites];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/)
-				.respond(function (params) {
+			fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
+				function (params) {
 					return [200, siteAdherences];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Teams\/ForSite(.*)/)
-				.respond(function (params) {
+			fake(/\.\.\/api\/Teams\/ForSite(.*)/,
+				function (params) {
 					return [200, teams.filter(function (team) { return team.SiteId === params.siteId; })];
 				});
 
-			$httpBackend.whenGET2(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/)
-				.respond(function (params) {
+			fake(/\.\.\/api\/Teams\/GetOutOfAdherenceForTeamsOnSite(.*)/,
+				function (params) {
 					var result =
 						teamAdherences.filter(function(ta) {
 							var t = teams.find(function (team) { return team.Id === ta.Id; });
