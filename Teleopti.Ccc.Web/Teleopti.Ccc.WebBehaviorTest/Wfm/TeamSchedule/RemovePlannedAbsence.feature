@@ -81,16 +81,13 @@ Background:
 		| Name       | Vacation         |
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
-@ignore
+
 Scenario: Could delete absences for an agent
 	When I view wfm team schedules
 	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
 	Then I should see schedule with absence for 'John Smith' displayed
 	When I selected the person absence for 'John Smith'
 	And I try to delete selected absence
-	Then I should see a confirm message that will remove 1 absences from 1 person
-	And I should not see remove entire cross days checkbox input
-	When I click apply button
 	Then I should see schedule with no absence for 'John Smith' displayed
 
 @ignore
