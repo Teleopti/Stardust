@@ -30,9 +30,11 @@
 			"DayOff": null
 		};
 
-		xit('should return false when moving to time changes the schedule start date', function() {
-			scheduleMgmt.mergeSchedules([schedule], moment(scheduleDate));
+		it('should return false when moving to time changes the schedule start date', function() {
+			
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+
 			personSchedule.IsSelected = true;
 			personSelection.updatePersonSelection(personSchedule);
 			personSelection.toggleAllPersonProjections(personSchedule, scheduleDate);
