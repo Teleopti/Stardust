@@ -193,7 +193,7 @@ Scenario: Should be able to move activity
 	Then I should see a successful notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
-Scenario: Should not be able to move basic activity
+Scenario: Should be able to move basic activity
 	Given 'John Smith' has a shift with
     | Field            | Value            |
     | Shift category   | Day              |

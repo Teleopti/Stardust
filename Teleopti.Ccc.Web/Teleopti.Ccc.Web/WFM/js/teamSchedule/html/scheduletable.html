@@ -39,7 +39,7 @@
 					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
 						<div class="layer absolute floatleft selectable projection-layer" projection-name="{{projection.Description}}" ng-repeat="projection in shift.Projections"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
-							 ng-class="{projection.Description + '-class', overtime:projection.IsOvertime, personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
+							 ng-class="{overtime:projection.IsOvertime, personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
 							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, shift, vm.selectedDate)}"
 							 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
 							<md-tooltip>{{projection.Description}}</md-tooltip>
