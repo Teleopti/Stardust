@@ -191,7 +191,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I change to business unit '(.*)'")]
 		public void WhenIChangeToBusinessUnit(string businessUnitName)
 		{
-			Browser.Interactions.ClickContaining("option", businessUnitName);
+			Browser.Interactions.Click("#business-unit-select");
+			Browser.Interactions.ClickContaining("md-option", businessUnitName);
 		}
 
 		private static void assertAgentStatus(string name, RealTimeAdherenceAgentStatus status)
