@@ -160,18 +160,33 @@
 					$scope.agents = [];
 					fillAgentsWithState(states);
 					fillAgentsWithoutState();
+
+					$scope.timeline = [
+						{
+							Offset: "10%",
+							Time: "9:00"
+						},
+						{
+							Offset: "33.61%",
+							Time: "10:00"
+						},
+						{
+							Offset: "57.22%",
+							Time: "11:00"
+						},
+						{
+							Offset: "80.83%",
+							Time: "12:00"
+						}
+					];
 				}
 
-				var fakeShifts = [{ AlarmDuration: 0, Shift: [{ Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 10, Color: "red" }, { Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }] }, { AlarmDuration: 0, Shift: [{ Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 10, Color: "red" }, { Name: "Phone", Width: 15, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 25, Color: "rgb(128, 255, 128)" }] }, { AlarmDuration: 4, Shift: [{ Name: "Phone", Width: 10, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 10, Color: "red" }, { Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }] }, { AlarmDuration: 12, Shift: [{ Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 10, Color: "red" }, { Name: "Phone", Width: 10, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }] }, { AlarmDuration: 10, Shift: [{ Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 10, Color: "red" }, { Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 15, Color: "yellow" }, { Name: "Phone", Width: 25, Color: "rgb(128, 255, 128)" }] }, { AlarmDuration: 2, Shift: [{ Name: "Phone", Width: 40, Color: "rgb(128, 255, 128)" }, { Name: "Phone", Width: 10, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 25, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 5, Color: "red" }, ] }, { AlarmDuration: 1, Shift: [{ Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 10, Color: "red" }, { Name: "Phone", Width: 10, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }] }, { AlarmDuration: 1, Shift: [{ Name: "Phone", Width: 25, Color: "rgb(128, 255, 128)" }, { Name: "Phone", Width: 15, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 10, Color: "red" }, ] }, { AlarmDuration: 1, Shift: [{ Name: "Empty", Width: 10, Color: "white" }, { Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 30, Color: "rgb(128, 255, 128)" }, { Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }] }, { AlarmDuration: 0, Shift: [{ Name: "Empty", Width: 30, Color: "white" }, { Name: "Phone", Width: 10, Color: "rgb(128, 255, 128)" }, { Name: "Lunch", Width: 20, Color: "yellow" }, { Name: "Phone", Width: 20, Color: "rgb(128, 255, 128)" }, { Name: "ShortBreak", Width: 20, Color: "rgb(128, 255, 128)" }] }];
-				var alarmduration = 10;
 				function fillAgentsWithState(states) {
 					states.forEach(function(state, i) {
 						var agentInfo = $filter('filter')($scope.agentsInfo, {
 							PersonId: state.PersonId
 						});
 						if (agentInfo.length > 0) {
-							var fakeShift = fakeShifts[i % fakeShifts.length];
-							fakeShift.AlarmDuration = alarmduration - i;
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
 								TeamName: agentInfo[0].TeamName,
@@ -187,8 +202,25 @@
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
-								RandomShift: fakeShift
-						});
+								AlarmWidth: (state.TimeInAlarm / 3600 * 25) + '%',
+								Shift: [
+									{
+										Color: "rgb(128, 255, 128)",
+										Offset: "10%",
+										Width: "25%"
+									},
+									{
+										Color: "yellow",
+										Offset: "35%",
+										Width: "10%"
+									},
+									{
+										Color: "rgb(128, 255, 128)",
+										Offset: "45%",
+										Width: "25%"
+									}
+								]
+							});
 						}
 					});
 				}

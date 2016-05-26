@@ -1,11 +1,5 @@
 <div style="height: 30px; text-align: right; background-color: white; padding-top: 10px; ">
-  <div col-index="renderIndex" title="TOOLTIP" style="padding: 0; position: relative">
-    <span>
-      <label class="label label-info"style="left: 0; float: left">08:00</label>
-      <label class="label label-info"style="left:23.61%; position: absolute">09:00</label>
-      <label class="label label-info"style="left:47.22%; position: absolute">10:00</label>
-      <label class="label label-info"style="left:70.83%; position: absolute">11:00</label>
-      <label class="label label-info"style="right:0; float: right">12:00</label>
-    </span>
-  </div>
+	<div col-index="renderIndex" title="TOOLTIP" style="padding: 0; position: relative">
+		<label ng-repeat="row in grid.appScope.timeline" class="label label-info" style="position: absolute; left: {{row.Offset}}">{{row.Time}}</label>
+	</div>
 </div>

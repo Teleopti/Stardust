@@ -118,7 +118,7 @@
 					columnDefs.push(team);
 					columnDefs.push({
 						displayName: 'Shift',
-						field: 'RandomShift',
+						field: 'Shift',
 						enableColumnMenu: false,
 						headerCellTemplate: 'js/rta/rta-agents-headershiftcelltemplate-RTA_AlarmContext_29357.html',
 						cellClass: 'shift-class',
