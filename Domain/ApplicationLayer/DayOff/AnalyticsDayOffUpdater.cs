@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.DayOff
 		}
 
 		[AsSystem]
+		[UnitOfWork]
 		[AnalyticsUnitOfWork]
 		public virtual void Handle(DayOffTemplateChangedEvent @event)
 		{
