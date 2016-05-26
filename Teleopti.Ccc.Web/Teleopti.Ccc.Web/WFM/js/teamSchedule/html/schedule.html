@@ -55,27 +55,4 @@
 				ng-change="vm.selectorChanged()"></select>
 		<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 	</div>
-
-	<div class="modal-box" ng-if="vm.showErrorDetails">
-		<div class="modalbg">
-			<div class="dialog">
-				<div class="modal-title text-danger">
-					{{vm.errorTitle}}
-				</div>
-				<div class="modal-inner-content">
-					<ul class="wfm-simple-list">
-						<li ng-repeat="error in vm.errorDetails">
-							<span>{{error.PersonName}}</span>
-							<span class="subtext text-danger" ng-repeat="msg in error.Message">{{msg}}</span>
-						</li>
-					</ul>
-				</div>
-				<div class="modal-actions">
-					<aside>
-						<button ng-click="vm.toggleErrorDetails()" class="wfm-btn wfm-btn-invis-default">{{'Back'|translate}}</button>
-					</aside>
-				</div>
-			</div>
-		</div>
-	</div>
 </div>

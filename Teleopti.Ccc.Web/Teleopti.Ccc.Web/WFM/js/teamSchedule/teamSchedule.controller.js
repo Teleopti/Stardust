@@ -14,22 +14,15 @@
 		'Toggle',
 		'SignalR',								
 		'NoticeService',
-		
-
-		'WFMDate',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService,  WFMDateSvc) {
+		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService) {
 
 		var vm = this;
 
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
-
-		vm.scheduleDateFunction = function () {
-			return vm.scheudleDate;
-		};
 
 		vm.triggerCommand = function (label, needToOpenSidePanel) {			
 			if (needToOpenSidePanel) openSidePanel();
@@ -68,7 +61,6 @@
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 		vm.lastCommandTrackId = "";
-		vm.isScenarioTest = false;
 		vm.permissionsAndTogglesLoaded = false;
 
 		vm.searchOptions = {
@@ -186,37 +178,8 @@
 			return vm.paginationOptions.totalPages > 1 && selectedPersonIdList.length < vm.total;
 		};
 
-		vm.defaultNewActivityStart = function() {
-			var nowInUserTimeZone = moment(WFMDateSvc.nowInUserTimeZone());
-
-			if (vm.scheduleDateMoment().format('YYYY-MM-DD') == nowInUserTimeZone.format('YYYY-MM-DD')) {
-				var minutes = Math.ceil(nowInUserTimeZone.minute() / 15) * 15;
-				var start = nowInUserTimeZone.startOf('hour').minutes(minutes);
-				return start.format('HH:mm');
-			}else {
-				var latestStart = scheduleMgmtSvc.getLatestStartOfSelectedSchedule(vm.scheduleDateMoment(), personSelectionSvc.getSelectedPersonIdList());
-				return moment(latestStart).format('HH:mm');
-			}
-		};
-
-		vm.defaultMoveActivityStart = function () {
-			var time = scheduleMgmtSvc.getLatestStartTimeOfSelectedScheduleProjection(vm.scheduleDateMoment(), personSelectionSvc.getSelectedPersonIdList());
-			return time == null ? new Date() : time;
-		};
-
-	
-		vm.selectedPersonInfo = function() {
-			return personSelectionSvc.personInfo;
-		};
-
-	
 		vm.toggleErrorDetails = function() {
 			vm.showErrorDetails = !vm.showErrorDetails;
-		};
-		vm.afterActionCallback = function (trackId, personIds) {
-			vm.cmdConfigurations.currentCommandName = null;
-			vm.lastCommandTrackId = trackId;
-			vm.updateSchedules(personIds);
 		};
 	
 		function isMessageNeedToBeHandled() {

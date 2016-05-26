@@ -1439,13 +1439,11 @@
     <Content Include="WFM\js\teamSchedule\html\addPersonalActivity.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\commandConfirmDialog.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\moveActivity.tpl.html" />
-    <Content Include="WFM\js\teamSchedule\html\removeAbsenceConfirmDialog.html" />
     <Content Include="WFM\js\teamSchedule\html\commandMenu.tpl.html" />
     <Content Include="WFM\js\teamSchedule\html\scheduletable.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduleCommandContainer.html" />
     <Content Include="WFM\js\teamSchedule\html\teamscheduledatepicker.html" />
     <Content Include="WFM\js\teamSchedule\html\time-range-picker.tpl.html" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.controller.removeAbsenceConfirmDialog.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.controller.scheduletable.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addAbsence.js" />
@@ -1472,7 +1470,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeline.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.factory.timeLine.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.activity.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.service.commandCommon.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.guidgenerator.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.moveActivityValidator.js" />

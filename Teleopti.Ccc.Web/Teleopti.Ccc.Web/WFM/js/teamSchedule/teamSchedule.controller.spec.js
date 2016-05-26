@@ -120,29 +120,7 @@ describe("[Test for TeamScheduleController]:", function() {
 		expect(searchScheduleCalledTimes).toEqual(0);
 	}));
 
-	it("should get correct new activity start for today", function() {
-		rootScope.$digest();
-		controller.scheduleDate = new Date("2015-10-26");
-		var selectedPersons = personSelection.personInfo;
-		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
-		selectedPersons[personSchedule1.PersonId] = {checked: true};
-
-		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 12:30:00").format('HH:mm'));
-	});
-
-	it("should get correct new activity start for selected date", function () {
-		controller.scheduleDate = new Date("2015-10-26T12:00:00Z");
-		nowDate = new Date("2015-10-25 12:16:00");
-		rootScope.$digest();
-		
-		var selectedPersons = personSelection.personInfo;
-		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
-		selectedPersons[personSchedule1.PersonId] = {checked: true};
-
-		expect(controller.defaultNewActivityStart()).toEqual(moment("2015-10-26 08:00:00").format('HH:mm'));
-	});
-
-
+	
 	function setUpController($controller) {
 		return $controller("TeamScheduleCtrl", {
 			$scope: rootScope,
