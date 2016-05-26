@@ -8,7 +8,6 @@
 		'$mdSidenav',
 		'TeamSchedule',
 		'GroupScheduleFactory',
-		'teamScheduleNotificationService',
 		'PersonSelection',
 		'ScheduleManagement',				
 		'Toggle',
@@ -16,7 +15,7 @@
 		'NoticeService',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, notificationService, personSelectionSvc,
+	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
 		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService) {
 
 		var vm = this;

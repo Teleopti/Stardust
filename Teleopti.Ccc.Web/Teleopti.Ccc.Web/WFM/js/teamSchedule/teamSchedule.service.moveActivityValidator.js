@@ -15,9 +15,11 @@
 			selectedPersonIds.forEach(function(agentId) {
 				for (var i = 0; i < schedules.length; i++) {
 					if (schedules[i].PersonId === agentId) {
-						
+				
 						var newScheduleStart = getNewScheduleStartMoment(schedules[i].Date, schedules[i], newStartMoment);
-						var newScheduleEnd = getLatestScheduleEndMoment(schedules[i].Date, schedules[i], newStartMoment);
+						var newScheduleEnd = getLatestScheduleEndMoment(schedules[i].Date, schedules[i], newStartMoment);					
+						if (newScheduleEnd === null) continue;
+
 						var scheduleLength = newScheduleEnd.diff(newScheduleStart, 'minutes');
 
 						if (newScheduleStart.format('YYYY-MM-DD') !== schedules[i].Date.format('YYYY-MM-DD') || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
@@ -36,7 +38,7 @@
 			if (!projections || projections.length === 0) return null;
 
 			var projectionLengths =	projections.map(function(p) {
-				return moment(p.End).diff(moment(p.End), 'minutes');
+				return p.Minutes;
 			});
 		
 			return Math.max.apply(null, projectionLengths);
@@ -89,7 +91,11 @@
 
 		function getLatestScheduleEndMoment(scheduleDateMoment, personSchedule, newStartMoment) {
 			var selected = getSelectedProjections(scheduleDateMoment, personSchedule);
-			var newEndMoment = newStartMoment.clone().add(calculateMaximumProjectionLengthInMinute(selected), 'minutes');
+
+			var pl = calculateMaximumProjectionLengthInMinute(selected);
+			if (pl === null) return null;
+
+			var newEndMoment = newStartMoment.clone().add(pl, 'minutes');
 
 			var unselected = getUnselectedProjections(scheduleDateMoment, personSchedule);
 			if (!unselected || unselected.length === 0) return newEndMoment;
