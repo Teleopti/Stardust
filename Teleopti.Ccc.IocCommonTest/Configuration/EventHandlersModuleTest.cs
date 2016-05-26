@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldResolveSameInstanceOfHandlers()
 		{
 			allEvents().ForEach(x =>
