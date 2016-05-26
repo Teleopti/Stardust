@@ -34,24 +34,6 @@
 			});
 		});
 
-		function fakeRequestCommandParamsHolder() {
-			var requestIds;
-			this.setSelectedRequestsIds = function (ids) {
-				console.log(ids, "Called set");
-				requestIds = ids;
-			}
-			this.getSelectedRequestsIds = function () {
-				console.log(requestIds, "Called");
-				return requestIds;
-			}
-			this.resetSelectedRequestIds = function()
-			{
-				requestIds = [];
-			}
-
-		}
-
-
 		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_, _$injector_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;

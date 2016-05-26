@@ -62,8 +62,6 @@
 
 		function showSelectedRequestsInfo() {
 
-			console.log(requestCommandParamsHolder.getSelectedRequestsIds(),"GET REQUEST IDS");
-
 			vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(vm.shiftTradeView).length;
 			if (vm.selectedRequestsCount > 0 && vm.selectedRequestsInfoText) {
 				return vm.selectedRequestsInfoText.replace(/\{0\}|\{1\}/gi, function(target) {
