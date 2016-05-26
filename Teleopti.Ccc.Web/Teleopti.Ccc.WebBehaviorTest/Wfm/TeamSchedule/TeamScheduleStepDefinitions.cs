@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected activity '(.*)'")]
 		public void WhenISelectedActivity(string description)
 		{
-			Browser.Interactions.ClickVisibleOnly(string.Format(".layer[projection-name={0}]", description));
+			Browser.Interactions.ClickUsingJQuery($".projection-layer[projection-name={description}]");
 		}
 
 		[When(@"I apply move activity")]
