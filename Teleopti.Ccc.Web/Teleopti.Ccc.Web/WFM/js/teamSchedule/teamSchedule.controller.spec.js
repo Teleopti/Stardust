@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe("[Test for TeamScheduleController]:", function() {
+describe("teamschedule controller tests", function() {
 	var $q,
 		rootScope,
 		controller,

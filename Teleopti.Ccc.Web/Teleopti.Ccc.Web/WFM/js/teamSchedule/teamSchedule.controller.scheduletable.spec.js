@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
+describe('teamschedule schedule table controller tests', function () {
 	var controller;
 	var scope, personSelection;
 
@@ -105,8 +105,11 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 			"PersonId": "1234",
 			"Date": moment("2016-02-19"),
 			"Shifts": [ shift ],
+			ScheduleStartTime: function () {
+				return "2016-02-19 08:00";
+			},
 			ScheduleEndTime: function () {
-				return moment("2016-02-19 16:30")
+				return "2016-02-19 16:30";
 			},
 			AbsenceCount: function () {
 				return 3;
@@ -191,8 +194,11 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 			"Shifts": [
 				shift
 			],
+			ScheduleStartTime: function () {
+				return "2016-02-19 08:30";
+			},
 			ScheduleEndTime: function () {
-				return moment("2016-02-19 16:30")
+				return "2016-02-19 16:30";
 			},
 			ActivityCount: function () {
 				return 3;
@@ -286,8 +292,11 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 			"Shifts": [
 				shift
 			],
+			ScheduleStartTime: function () {
+				return "2016-02-19 08:30";
+			},
 			ScheduleEndTime: function () {
-				return moment("2016-02-19 16:30")
+				return "2016-02-19 16:30";
 			},
 			ActivityCount: function () {
 				return 2;
@@ -398,8 +407,11 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 			"Shifts": [
 				shift
 			],
+			ScheduleStartTime: function () {
+				return "2016-02-19 08:30";
+			},
 			ScheduleEndTime: function () {
-				return moment("2016-02-19 16:30")
+				return "2016-02-19 16:30";
 			},
 			ActivityCount: function () {
 				return 3;
@@ -451,6 +463,7 @@ describe('[TeamSchedule ScheduleTable ControllerTest]', function () {
 				AbsenceCount: 0,
 				ActivityCount: 0
 			}],
+			ScheduleStartTime: function () { return dateMoment.startOf('day') },
 			ScheduleEndTime: function () { return dateMoment.endOf('day') },
 			AllowSwap: function () { return false; }
 		};

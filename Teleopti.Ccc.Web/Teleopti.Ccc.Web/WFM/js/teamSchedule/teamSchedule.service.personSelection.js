@@ -38,6 +38,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					name: personSchedule.Name,
 					checked: true,
 					allowSwap: personSchedule.AllowSwap(),
+					scheduleStartTime: personSchedule.ScheduleStartTime(),
 					scheduleEndTime: personSchedule.ScheduleEndTime(),
 					personAbsenceCount: absences.length,
 					personActivityCount: activities.length,
@@ -127,6 +128,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 				selectedPeople[personId] = {
 					name: personSchedule.Name,
 					allowSwap: personSchedule.AllowSwap(),
+					scheduleStartTime: personSchedule.ScheduleStartTime(),
 					scheduleEndTime: personSchedule.ScheduleEndTime(),
 					personAbsenceCount: 0,
 					personActivityCount: 0,
@@ -236,6 +238,7 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 					personId: key,
 					name: schedule.name,
 					allowSwap: schedule.allowSwap,
+					scheduleStartTime: schedule.scheduleStartTime,
 					scheduleEndTime: schedule.scheduleEndTime,
 					personAbsenceCount: schedule.personAbsenceCount,
 					personActivityCount: schedule.personActivityCount,
@@ -265,7 +268,11 @@ angular.module("wfm.teamSchedule").service("PersonSelection", [
 			if (personIds.length !== 2) {
 				return false;
 			}
-			return svc.personInfo[personIds[0]].allowSwap && svc.personInfo[personIds[1]].allowSwap;
+
+			var isBothAllowSwap = svc.personInfo[personIds[0]].allowSwap && svc.personInfo[personIds[1]].allowSwap;
+			var isOnlyTodaySchedules = moment(svc.personInfo[personIds[0]].scheduleStartTime).format('YYYY-MM-DD') === moment(svc.personInfo[personIds[1]].scheduleStartTime).format('YYYY-MM-DD');
+
+			return isBothAllowSwap && isOnlyTodaySchedules;
 		};
 
 		svc.getTotalSelectedPersonAndProjectionCount = function() {

@@ -20,6 +20,9 @@ describe("teamschedule person selection tests", function() {
 		Date: scheduleDate,
 		Shifts: [],
 		AllowSwap: function () { return false; },
+		ScheduleStartTime: function () {
+			return "2016-03-20 08:00";
+		},
 		ScheduleEndTime: function () {
 			return "2016-03-20 18:00";
 		}
@@ -40,7 +43,10 @@ describe("teamschedule person selection tests", function() {
 			}
 		],
 		AllowSwap: function () { return false; },
-		ScheduleEndTime: function() {
+		ScheduleStartTime: function() {
+			return "2016-03-20 08:00";
+		},
+		ScheduleEndTime: function () {
 			return "2016-03-20 18:00";
 		}
 	};
@@ -50,6 +56,9 @@ describe("teamschedule person selection tests", function() {
 		Date: scheduleDate,
 		Shifts: [],
 		AllowSwap: function () { return true; },
+		ScheduleStartTime: function () {
+			return "2016-03-20 08:00";
+		},
 		ScheduleEndTime: function () {
 			return "2016-03-20 18:00";
 		}

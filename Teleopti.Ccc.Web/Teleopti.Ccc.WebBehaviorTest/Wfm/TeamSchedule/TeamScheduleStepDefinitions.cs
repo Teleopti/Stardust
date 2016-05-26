@@ -141,6 +141,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.Click("#applyPersonalActivity");
 		}
 
+		[Then(@"I should see agent '(.*)' with shift '(.*)'")]
+		public void ThenIShouldSeeAgentWithShift(string agent, string shift)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery($".projection-layer[projection-name={shift}]");
+		}
+
 		[Then(@"I should see a successful notice")]
 		public void ThenIShouldSeeASuccessfulNotice()
 		{
@@ -158,6 +164,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertExists(".notice-container .notice-error");
 		}
+
+		[When(@"I see a successful notice")]
+		public void WhenISeeASuccessfulNotice()
+		{
+			Browser.Interactions.AssertExists(".notice-container .notice-success");
+		}
+
 
 		[When(@"I try to delete selected absence")]
 		public void WhenITryToDeleteSelectedAbsence()

@@ -12,7 +12,7 @@ Background:
 	| Name                          | Wfm Team Green |
 	| Access to everyone            | True           |
 	| Access to Wfm MyTeam Schedule | true           |
-	| Swap Shifts                   | true           |
+	| Swap Shifts                   | true           |	
 	And there is a shift category named 'Day'
 	And there are activities
 	| Name     | Color    |
@@ -20,6 +20,10 @@ Background:
 	| Lunch    | Yellow   |
 	| Sales    | Red      |
 	| Training | Training |
+	And there are absences
+	| Name     | Color |
+	| Vacation | Pink  |
+	| Illness  | Red   |
 	And there is a contract named 'A contract'
 	And there is a contract schedule named 'A contract schedule'
 	And there is a part time percentage named 'Part time percentage'
@@ -74,31 +78,50 @@ Scenario: Can swap shifts when selected 2 agents' schedule
 
 @ignore
 Scenario: Could not do shift swap when no permission
-	Given I am a team leader without 'Swap Shifts' permission
-	And I am viewing team schedule for '2016-01-01'
-	When I selected 2 agents
-	Then I should not see "Swap shifts" menu item
+	Given 'John Smith' has an absence with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2016-10-10 08:00 |
+	| End time   | 2016-10-10 17:00 |
+	And 'Bill Gates' has an absence with
+	| Field      | Value            |
+	| Name       | Illness          |
+	| Start time | 2016-10-10 08:00 |
+	| End time   | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I selected agent 'Bill Gates'
+	And I open menu in team schedule
+	Then I should not see 'SwapShifts' menu item
 
-@ignore
 Scenario: Schedule with full day absence is not allowed to swap
-	Given I am a team leader without 'Swap Shifts' permission
-	And I am viewing team schedule for '2016-01-01'
-	When I selected agent 'Ashley Andeen' with full day absence
-	And I selected agent 'Steve Novack' with Early Shift
-	Then I should see "Swap shifts" menu item is disabled
+	Given 'John Smith' has a full day absence named 'Vacation' on '2016-10-10'	
+	And 'Bill Gates' has a full day absence named 'Illness' on '2016-10-10'
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I selected agent 'Bill Gates'
+	And I open menu in team schedule
+	Then I should see 'SwapShifts' menu item is disabled
 
-@ignore
 Scenario: Schedule with overnight shift from yesterday is not allowed to swap
-	Given I am a team leader without 'Swap Shifts' permission
-	And I am viewing team schedule for '2016-01-01'
-	When I selected agent 'Ashley Andeen' with overnight shift from yesterday
-	And I selected agent 'Steve Novack' with Early Shift
-	Then I should see "Swap shifts" menu item is disabled
-
-@ignore
-Scenario: Should see notice that swap shifts finished
-	Given I am a team leader without 'Swap Shifts' permission
-	And I am viewing team schedule for '2016-01-01'
-	When I selected 2 agents
-	And I applied 'Swap Shifts'
-	Then I should see notice that swap shifts finished successfully
+	Given 'John Smith' has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| StartTime        | 2016-10-09 17:00 |
+	| EndTime          | 2016-10-10 08:00 |
+	And 'Bill Gates' has a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Sales            |
+	| StartTime        | 2016-10-10 08:00 |
+	| EndTime          | 2016-10-10 17:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I selected agent 'Bill Gates'
+	And I open menu in team schedule
+	And I click menu item 'SwapShifts' in team schedule
+	Then I should see 'SwapShifts' menu item is disabled
