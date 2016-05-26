@@ -279,6 +279,7 @@
     <Compile Include="Hangfire\HangfireStarter.cs" />
     <Compile Include="Hangfire\HangfireUtilities.cs" />
     <Compile Include="Hangfire\IgnoreNHibernateErrorsInHangfireWorkers.cs" />
+    <Compile Include="Hangfire\JobStorageWrapper.cs" />
     <Compile Include="Hangfire\QueueNameFromAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="Licensing\ISetLicenseActivator.cs" />

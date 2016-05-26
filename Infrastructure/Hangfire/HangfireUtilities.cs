@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 		private readonly IMonitoringApi _monitoring;
 
 		public HangfireUtilities(
-			JobStorage storage,
+			IJobStorageWrapper storage,
 			IBackgroundJobClient backgroundJobs,
 			RecurringJobManager recurringJobs)
 		{
-			_storage = storage;
+			_storage = storage.GetJobStorage();
 			_backgroundJobs = backgroundJobs;
 			_recurringJobs = recurringJobs;
-			_monitoring = storage.GetMonitoringApi();
+			_monitoring = _storage.GetMonitoringApi();
 		}
 
 		public void TriggerReccuringJobs()
