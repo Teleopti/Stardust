@@ -139,7 +139,8 @@ Scenario: Should be able to remove single activity
 	And I selected activity 'Lunch'
 	And I apply remove activity
 	Then I should see a successful notice
-
+	
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should be able to remove multiple activities
 	Given 'John Smith' has a shift with
