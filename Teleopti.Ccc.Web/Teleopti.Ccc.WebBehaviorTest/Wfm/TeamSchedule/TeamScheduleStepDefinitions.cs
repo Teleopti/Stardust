@@ -232,16 +232,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		}
 
 		[When(@"I move activity to '(.*)' with next day being '(.*)'")]
-		public void WhenIMoveActivityToWithNextDayBeing(string newStartTimeIso, string isNextDay)
+		public void WhenIMoveActivityToWithNextDayBeing(string newStartTime, string isNextDay)
 		{
-			var newStartTime = new Dictionary<string, string>
+			var newStartTimeModel = new Dictionary<string, string>
 			{
-				{"vm.bindingTime", $"moment('{newStartTimeIso}').toDate()"},
+				{"vm.bindingTime", $"moment('{newStartTime}').toDate()"},
 				{"vm.nextDay", isNextDay}
 			};
 			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
 			Browser.Interactions.ClickUsingJQuery("#menuItemMoveActivity");
-			Browser.Interactions.SetScopeValues(".move-activity", newStartTime);
+			Browser.Interactions.SetScopeValues(".move-activity", newStartTimeModel);
 			Browser.Interactions.ClickUsingJQuery("#applyMoveActivity");
 		}
 
