@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
@@ -64,6 +65,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AppliedAdherence>().SingleInstance();
 			
 			builder.RegisterType<ProperAlarm>().SingleInstance();
+
+
+			builder.RegisterType<GetAgentStates>().As<IGetAgentStates>().SingleInstance();
 		}
 	}
 }

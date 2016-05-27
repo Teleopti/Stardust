@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public interface IGetAgentStates
 	{

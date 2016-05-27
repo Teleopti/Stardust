@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
@@ -10,11 +11,9 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	[DomainTest]
 	[TestFixture]
@@ -23,14 +22,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		public IGetAgentStates Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
-		public FakeUserTimeZone TimeZone;
-		public FakeUserCulture Culture;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebAppModule(configuration));
-			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelReader>();
-			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
@@ -80,17 +74,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForSites(new[] {siteId}, false);
+			var agentState = Target.ForSites(new[] {siteId}, false).Single();
 
-			agentState.Single().PersonId.Should().Be(personId);
-			agentState.Single().State.Should().Be("state");
-			agentState.Single().StateStartTime.Should().Be("2015-10-22 08:00".Utc());
-			agentState.Single().Activity.Should().Be("phone");
-			agentState.Single().NextActivity.Should().Be("lunch");
-			agentState.Single().NextActivityStartTime.Should().Be("09:00");
-			agentState.Single().Alarm.Should().Be("in adherence");
-			agentState.Single().Color.Should().Be("#000000");
-			agentState.Single().TimeInState.Should().Be(30 * 60);
+			agentState.PersonId.Should().Be(personId);
+			agentState.State.Should().Be("state");
+			agentState.StateStartTime.Should().Be("2015-10-22 08:00".Utc());
+			agentState.Activity.Should().Be("phone");
+			agentState.NextActivity.Should().Be("lunch");
+			agentState.NextActivityStartTime.Should().Be("09:00");
+			agentState.Alarm.Should().Be("in adherence");
+			agentState.Color.Should().Be("#000000");
+			agentState.TimeInState.Should().Be(30 * 60);
 		}
 
 		[Test]
@@ -113,17 +107,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForTeams(new[] {teamId}, false);
+			var agentState = Target.ForTeams(new[] {teamId}, false).Single();
 
-			agentState.Single().PersonId.Should().Be(personId);
-			agentState.Single().State.Should().Be("state");
-			agentState.Single().StateStartTime.Should().Be("2015-10-22 08:00".Utc());
-			agentState.Single().Activity.Should().Be("phone");
-			agentState.Single().NextActivity.Should().Be("lunch");
-			agentState.Single().NextActivityStartTime.Should().Be("09:00");
-			agentState.Single().Alarm.Should().Be("in adherence");
-			agentState.Single().Color.Should().Be("#000000");
-			agentState.Single().TimeInState.Should().Be(30 * 60);
+			agentState.PersonId.Should().Be(personId);
+			agentState.State.Should().Be("state");
+			agentState.StateStartTime.Should().Be("2015-10-22 08:00".Utc());
+			agentState.Activity.Should().Be("phone");
+			agentState.NextActivity.Should().Be("lunch");
+			agentState.NextActivityStartTime.Should().Be("09:00");
+			agentState.Alarm.Should().Be("in adherence");
+			agentState.Color.Should().Be("#000000");
+			agentState.TimeInState.Should().Be(30 * 60);
 		}
 		
 		[Test]
@@ -147,9 +141,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true);
+			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true).Single();
 
-			agentStates.Single().PersonId.Should().Be(personId1);
+			agentStates.PersonId.Should().Be(personId1);
 		}
 
 	}

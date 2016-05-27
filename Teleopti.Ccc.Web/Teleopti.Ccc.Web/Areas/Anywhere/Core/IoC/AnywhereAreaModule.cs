@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -9,15 +10,10 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
-using Teleopti.Ccc.Web.Areas.Rta;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
-using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -58,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<GetBusinessUnitId>().As<IGetBusinessUnitId>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonalAvailableDataProvider>().As<IPersonalAvailableDataProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GetAgents>().As<IGetAgents>().InstancePerLifetimeScope();
-			builder.RegisterType<GetAgentStates>().As<IGetAgentStates>().InstancePerLifetimeScope();
+
 
 			builder.RegisterType<NonBlendSkillCalculator>().As<INonBlendSkillCalculator>();
 			builder.RegisterType<NonBlendSkillImpactOnPeriodForProjection>().As<INonBlendSkillImpactOnPeriodForProjection>();
