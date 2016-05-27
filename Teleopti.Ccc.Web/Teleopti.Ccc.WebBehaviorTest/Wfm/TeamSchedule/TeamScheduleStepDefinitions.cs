@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
 		}
 
+		[When(@"I should see schedule with absence '(.*)' for '(.*)' displayed")]
 		[Then(@"I should see schedule with absence '(.*)' for '(.*)' displayed")]
 		public void ThenIShouldSeeScheduleForDisplayed(string absence, string agentName)
 		{
@@ -169,14 +170,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenISeeASuccessfulNotice()
 		{
 			Browser.Interactions.AssertExists(".notice-container .notice-success");
-		}
-
-
-		[When(@"I try to delete selected absence")]
-		public void WhenITryToDeleteSelectedAbsence()
-		{
-			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
-			Browser.Interactions.ClickUsingJQuery("#menuItemRemoveAbsence");
 		}
 
 		[Then(@"I should see a confirm message that will remove (\d*) absences from (\d*) person"), SetCulture("en-US")]

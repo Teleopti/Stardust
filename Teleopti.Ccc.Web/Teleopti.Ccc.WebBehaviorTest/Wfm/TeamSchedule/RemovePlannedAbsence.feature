@@ -19,10 +19,11 @@ Background:
 		| Name           | A rule set  |
 		| Activity       | Phone       |
 		| Shift category | Day         |
-	And there is an absence with
-		| Field | Value    |
-		| Name  | Vacation |
-		| Color | Pink     |
+	And there are absences
+		| Name     | Color    |
+		| Name     | Vacation |
+		| Vacation | Pink     |
+		| Illness  | Blue     |
 	And there is a shift bag named 'A shift bag' with rule set 'A rule set'
 	And there is a skill named 'A skill' with activity 'Phone'
 	And I have a role with
@@ -71,41 +72,63 @@ Background:
 		| Activity       | Phone            |
 		| Start time     | 2016-10-10 09:00 |
 		| End time       | 2016-10-10 16:00 |
-	And 'John Smith' has an absence with
+
+Scenario: Could delete absences for an agent
+	Given 'John Smith' has an absence with
+		| Field      | Value            |
+		| Name       | Vacation         |
+		| Start time | 2016-10-10 10:00 |
+		| End time   | 2016-10-10 11:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
+	When I selected the person absence for 'John Smith'
+	And I open menu in team schedule
+	And I click menu item 'RemoveAbsence' in team schedule
+	Then I should see schedule with no absence for 'John Smith' displayed
+
+Scenario: Absence deletion should only be enabled when when absence selected
+	Given 'John Smith' has an absence with
+		| Field      | Value            |
+		| Name       | Vacation         |
+		| Start time | 2016-10-10 10:00 |
+		| End time   | 2016-10-10 11:00 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	And I should see schedule with absence 'Vacation' for 'John Smith' displayed
+	And I open menu in team schedule
+	Then I should see 'RemoveAbsence' menu item is disabled
+
+Scenario: Full day absence should be able to delete
+	Given 'John Smith' has a full day absence named 'Vacation' on '2016-10-10'	
+	And 'Bill Gates' has a full day absence named 'Illness' on '2016-10-10'
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected agent 'John Smith'
+	And I selected agent 'Bill Gates'
+	And I open menu in team schedule
+	And I click menu item 'RemoveAbsence' in team schedule
+	Then I should see a successful notice
+
+Scenario: Could delete absences for multiple agents
+	Given 'John Smith' has an absence with
 		| Field      | Value            |
 		| Name       | Vacation         |
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
 	And 'Bill Gates' has an absence with
 		| Field      | Value            |
-		| Name       | Vacation         |
+		| Name       | Illness          |
 		| Start time | 2016-10-10 10:00 |
 		| End time   | 2016-10-10 11:00 |
-
-Scenario: Could delete absences for an agent
 	When I view wfm team schedules
-	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
+	And I searched schedule with keyword 'green' and schedule date '2016-10-10'
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
-	When I selected the person absence for 'John Smith'
-	And I try to delete selected absence
-	Then I should see schedule with no absence for 'John Smith' displayed
-
-@ignore
-Scenario: Absence deletion should only be enabled when when absence selected
-	Given I am a team leader
-	When I viewing schedule of my team members
-	Then The delete absence function should be disabled
-	When I selected absence of agent "Ashley Andeen"
-	Then The delete absence function should be enabled
-
-@ignore
-Scenario: Could delete absences for multiple agents
-	Given I am a team leader
-	When I view wfm team schedules
-	And I selected absence of agent "Ashley Andeen"
-	And I selected absence of agent "John Smith"
-	And I delete absences for these two agents.
-	Then Both absences for agents "Ashley Andeen" and "John Smith" are deleted
+	When I selected agent 'John Smith'
+	And I selected agent 'Bill Gates'
+	And I open menu in team schedule
+	And I click menu item 'RemoveAbsence' in team schedule
+	Then I should see a successful notice
 
 @ignore
 Scenario: Could remove one intraday absence out of 2
