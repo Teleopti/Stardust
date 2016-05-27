@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
@@ -166,9 +167,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					if ((existingPeriod == null && newOrUpdatedPersonPeriod.SkillsetId != null) ||
 						(existingPeriod != null && newOrUpdatedPersonPeriod.SkillsetId != existingPeriod.SkillsetId))
 					{
-						publishSkillChangeEvent(personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
+						publishSkillChangeEvent(@event, personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
 					}
-
+					
 					// Update/Add/Delete from Bridge Acd Login Person table
 					var bridgeListForPersonPeriod = _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(newOrUpdatedPersonPeriod.PersonId);
 					foreach (var externalLogOn in personPeriod.ExternalLogOnCollection)
@@ -228,7 +229,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			
 		}
 
-		private void publishSkillChangeEvent(Interfaces.Domain.IPersonPeriod personPeriod, IEnumerable<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
+		private void publishSkillChangeEvent(PersonCollectionChangedEvent @event, IPersonPeriod personPeriod, IEnumerable<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
 		{
 			var existsInAnalytics = personPeriod.PersonSkillCollection.Where(a => analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id))).ToList();
 			
@@ -246,7 +247,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					AnalyticsPersonPeriodId = updatedAnalyticsPersonPeriod.PersonId,
 					AnalyticsBusinessUnitId = updatedAnalyticsPersonPeriod.BusinessUnitId,
 					AnalyticsActiveSkillsId = activeSkills,
-					AnalyticsInactiveSkillsId = inactiveSkills
+					AnalyticsInactiveSkillsId = inactiveSkills,
+					InitiatorId = @event.InitiatorId,
+					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
+					LogOnDatasource = @event.LogOnDatasource,
+					Timestamp = @event.Timestamp
 				});
 			});
 		}
