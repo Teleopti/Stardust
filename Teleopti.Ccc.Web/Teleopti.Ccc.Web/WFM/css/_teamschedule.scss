@@ -1,376 +1,382 @@
 ﻿.team-schedule {
-	background-color: $white;
+    background-color: $white;
 
-	input {
-		background-color: transparent;
-	}
+    input {
+        background-color: transparent;
+    }
 
-	.relative {
-		position: relative;
-	}
+    .relative {
+        position: relative;
+    }
 
-	.teamschedule-header{
+    .teamschedule-header {
         min-height: 44px;
         padding: 5px;
 
-        .leftside-part{
-			display: flex;
-			flex-direction: row;
-			flex-wrap: wrap;
-			justify-content: flex-start;
+        .leftside-part {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: flex-start;
             padding-right: 50px;
-		}
+        }
 
-		.people-search-container{
-			display: inline-block;
-			margin: 10px 10px 10px 0;
+        .people-search-container {
+            display: inline-block;
+            margin: 10px 10px 10px 0;
 
-            #simple-people-search{
-				width: 316px;
-			}
-
-            .advanced-search-container{
-                min-width: 316px;
-
-	            // CSS hack for IE10, IE11 and edge
-	            @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
-		            .con-row {
-			            min-width: 316px;
-		            }
-	            }
+            #simple-people-search {
+                width: 316px;
             }
-		}
 
-		.wfm-switch{
-			display: inline-block;
-			margin: 10px;
-			padding: 0 60px 0 0;
-			min-width: 200px;
+            .advanced-search-container {
+                min-width: 316px;
+                // CSS hack for IE10, IE11 and edge
+                @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
+                    .con-row {
+                        min-width: 316px;
+                    }
+                }
+            }
+        }
+
+        .wfm-switch {
+            display: inline-block;
+            margin: 10px;
+            padding: 0 60px 0 0;
+            min-width: 200px;
             flex-grow: 1;
             text-align: right;
 
-			.wfm-switch-toggle{
-				right: 0;
-			}
-		}
+            .wfm-switch-toggle {
+                right: 0;
+            }
+        }
 
-        .teamschedule-command{
+        .teamschedule-command {
             float: right;
             text-align: right;
             margin-top: -45px;
         }
 
-		.context-menu .context-menu-left{
-			z-index: 1000;
-			text-transform: none;
-		}
-	}
+        .context-menu .context-menu-left {
+            z-index: 1000;
+            text-transform: none;
+        }
+    }
 
-     team-schedule-datepicker{
-		display: inline-block;
-		vertical-align: top;
-		white-space: nowrap;
+    team-schedule-datepicker {
+        display: inline-block;
+        vertical-align: top;
+        white-space: nowrap;
 
-        >span{
+        > span {
             min-width: 200px;
             max-width: 300px;
         }
 
-		input {
-			text-align: center;
+        input {
+            text-align: center;
             width: 130px;
         }
 
-        input.datepicker-mini{
+        input.datepicker-mini {
             width: 110px;
         }
-	}
+    }
 
-	.con-row.teamschedule-body{
-		align-items:flex-start;
-		position:relative;
-		min-height:500px;
-	}
+    .con-row.teamschedule-body {
+        align-items: flex-start;
+        position: relative;
+        min-height: 500px;
+    }
 
-	.big-table-wrapper {
-		position: relative;
-		overflow: hidden;
-		width:100%;
-	}
+    .big-table-wrapper {
+        position: relative;
+        overflow: hidden;
+        width: 100%;
+    }
 
-	.page-size-selector {
-		width: 60px;
-		margin-top: 10px;
-		margin-right: 20px;
-		margin-bottom: 10px;
-	}
+    .page-size-selector {
+        width: 60px;
+        margin-top: 10px;
+        margin-right: 20px;
+        margin-bottom: 10px;
+    }
 
-	.time-line {
-		min-width: 300px;
-		z-index: 10;
+    .time-line {
+        min-width: 300px;
+        z-index: 10;
 
-		.ruler {
-			height: 100%;
-			width: 1px;
-			background-color: $gray012;
-			z-index: 10;
-		}
+        .ruler {
+            height: 100%;
+            width: 1px;
+            background-color: $gray012;
+            z-index: 10;
+        }
 
-		.label {
-			font-size: xx-small;
-			height: 12px;
-			z-index: 11;
-			margin-left: -23px;
-		}
-	}
+        .label {
+            font-size: xx-small;
+            height: 12px;
+            z-index: 11;
+            margin-left: -23px;
+        }
+    }
 
-	.shift {
-		.layer {
-			z-index: 10;
-			height: 22px;
-			text-align: center;
-		}
+    .shift {
+        .layer {
+            z-index: 10;
+            height: 22px;
+            text-align: center;
+        }
 
-		.layer.hasSelected {
+        .layer.hasSelected {
             opacity: 0.4;
-		}
+        }
 
-        .layer.noneSelected{
+        .layer.noneSelected {
             opacity: 1;
         }
 
-        .layer.selected{
+        .layer.selected {
             opacity: 1;
             border: 1px dashed #795548;
-         }
+        }
 
-        .layer.lighterBorder{
+        .layer.lighterBorder {
             border-color: #00ffff;
         }
 
-		.layer:first-of-type {
-			-webkit-border-radius: 4px 0px 0px 4px;
-			-moz-border-radius: 4px 0px 0px 4px;
-			border-radius: 4px 0px 0px 4px;
-		}
+        .layer:first-of-type {
+            -webkit-border-radius: 4px 0px 0px 4px;
+            -moz-border-radius: 4px 0px 0px 4px;
+            border-radius: 4px 0px 0px 4px;
+        }
 
-		.layer:last-of-type {
-			-webkit-border-radius: 0px 4px 4px 0px;
-			-moz-border-radius: 0px 4px 4px 0px;
-			border-radius: 0px 4px 4px 0px;
-		}
+        .layer:last-of-type {
+            -webkit-border-radius: 0px 4px 4px 0px;
+            -moz-border-radius: 0px 4px 4px 0px;
+            border-radius: 0px 4px 4px 0px;
+        }
 
-		.layer:only-child {
-			-webkit-border-radius: 4px 4px 4px 4px;
-			-moz-border-radius: 4px 4px 4px 4px;
-			border-radius: 4px 4px 4px 4px;
-		}
-	}
-
-	.overtime {
-		background-size: 11px 11px;
-		background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent);
-	}
-
-	.dayoff {
-		text-align: center;
-		top: -5px;
-		height: 30px;
-		padding: 7px;
-		background-size: 11px 11px;
-		background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
-	}
-
-	.absolute {
-		position: absolute;
-	}
-
-	.person-name-column {
-
-		.wfm-checkbox-toggle:after {
-			width: 15px;
-			height: 15px;
-			font-size: 11px;
-		}
-
-		.wfm-checkbox {
-			display: inline-block;
-			padding: 0;
-			width: auto;
-		}
-	}
-
-	th.person-name-column{
-		width: 15%;
-	}
-
-	th.right-border-empty{
-		width: 2%;
-	}
-
-	th.contract-time-header {
-		font-weight: 400;
-		width: 5%;
-		white-space: nowrap;
-	}
-
-	.timepicker {
-		height: 48px;
-
-		input[type=text] {
-			width: 22px;
-			padding-bottom: 2px;
-			text-align: center;
-		}
-
-		button {
-			min-width: 30px;
-		}
-	}
-
-	ul li.item[disabled] {
-		opacity: .4;
-		cursor: not-allowed;
-	}
-
-	.table {
-		thead, tbody, tfoot {
-			tr > th, td {
-				padding: 5px 0 5px 0;
-				border-bottom: rgba(204, 204, 204, 0.99) 1px solid;
-			}
-
-            .person-name{
-                padding-left:5px;
-            }
-
-			tr:hover{
-				background: $gray012;
-			}
-
-			.contract-time-column {
-				padding-left: 8px;
-				padding-right: 8px;
-				text-align: center;
-			}
-		}
-	}
-
-	.wfm-btn-sm {
-		padding: 5px;
-		margin-left: 0;
-		margin-right: 0;
-	}
-
-	md-sidenav{
-		min-width:360px;
-		box-shadow:none;
-	}
-
-	.absence-report{
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-
-		md-content{
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			height: 100%;
-		}
-
-		md-content>div{
-			display:flex;
-			flex-direction:column;
-			justify-content:flex-start;
-		}
-
-		.absence-selector{
-			padding:0;
-			min-height:20px;
-		}
-
-		.con-row>.teamschedule-datepicker{
-			padding-right: 0;
-			height: 48px;
-		}
-
-		.con-row>.uib-timepicker{
-			padding-left: 0;
-			margin-top: -4px;
-		}
-	}
-
-	.teamschedule-command-container {
-		height: 100%;
-	}
-
-	.add-activity, .move-activity{
-		height: 100%;
-		display: flex;
-		flex-direction: column;
-		justify-content: flex-start;
-
-		md-content{
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
-			height: 100%;
-		}
+        .layer:only-child {
+            -webkit-border-radius: 4px 4px 4px 4px;
+            -moz-border-radius: 4px 4px 4px 4px;
+            border-radius: 4px 4px 4px 4px;
+        }
     }
 
-    .add-activity{
-		.activity-selector{
-			width:100%;
-			min-height:20px;
-		}
-	}
+    .overtime {
+        background-size: 11px 11px;
+        background-image: linear-gradient(45deg,transparent,transparent 4px,rgba(251,251,251,.8) 6px,transparent 10px,transparent);
+    }
 
-	md-content  button.wfm-btn {
-		min-height: 40px;
-		&:focus {
-			background-color: #007ACC;
-		}
-	}
+    .dayoff {
+        text-align: center;
+        top: -5px;
+        height: 30px;
+        padding: 7px;
+        background-size: 11px 11px;
+        background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
+    }
 
-	.modal-box .wfm-simple-list{
-		max-height: 430px
-	}
+    .absolute {
+        position: absolute;
+    }
 
-	.con-footer{
-		.notice-spacer{
-			float:left;
-			margin-bottom: 0;
-			padding: 5px;
-			width: auto;
-			display: inline-block;
-		}
-	}
+    .person-name-column {
 
-	.con-row {
-		align-items: center;
-		.wfm-time-range-picker-wrap button {
-			line-height: 25px;
-		}
-	}
+        .wfm-checkbox-toggle:after {
+            width: 15px;
+            height: 15px;
+            font-size: 11px;
+        }
 
-	.hidden-for-test {
-		display: none;
-	}
+        .wfm-checkbox {
+            display: inline-block;
+            padding: 0;
+            width: auto;
+        }
+    }
 
-	.selectable {
-		cursor: pointer;
-	}
-	.unselectable {
-		cursor: not-allowed !important;
-	}
+    th.person-name-column {
+        width: 15%;
+    }
+
+    th.right-border-empty {
+        width: 2%;
+    }
+
+    th.contract-time-header {
+        font-weight: 400;
+        width: 5%;
+        white-space: nowrap;
+    }
+
+    .timepicker {
+        height: 48px;
+
+        input[type=text] {
+            width: 22px;
+            padding-bottom: 2px;
+            text-align: center;
+        }
+
+        button {
+            min-width: 30px;
+        }
+    }
+
+    ul li.item[disabled] {
+        opacity: .4;
+        cursor: not-allowed;
+    }
+
+    .table {
+        thead, tbody, tfoot {
+            tr > th, td {
+                padding: 5px 0 5px 0;
+                border-bottom: rgba(204, 204, 204, 0.99) 1px solid;
+            }
+
+            .person-name {
+                padding-left: 5px;
+            }
+
+            tr:hover {
+                background: $gray012;
+            }
+
+            .contract-time-column {
+                padding-left: 8px;
+                padding-right: 8px;
+                text-align: center;
+            }
+        }
+    }
+
+    .wfm-btn-sm {
+        padding: 5px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    md-sidenav {
+        min-width: 360px;
+        box-shadow: none;
+    }
+
+    .absence-report {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        md-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        md-content > div {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .absence-selector {
+            padding: 0;
+            min-height: 20px;
+        }
+
+        .con-row > .teamschedule-datepicker {
+            padding-right: 0;
+            height: 48px;
+        }
+
+        .con-row > .uib-timepicker {
+            padding-left: 0;
+            margin-top: -4px;
+        }
+    }
+
+    .teamschedule-command-container {
+        height: 100%;
+
+        .command-panel-content .con-row {
+            flex-direction: row !important;
+        }
+    }
+
+    .add-activity, .move-activity {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+
+        md-content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+    }
+
+    .add-activity {
+        .activity-selector {
+            width: 100%;
+            min-height: 20px;
+        }
+    }
+
+    md-content button.wfm-btn {
+        min-height: 40px;
+
+        &:focus {
+            background-color: #007ACC;
+        }
+    }
+
+    .modal-box .wfm-simple-list {
+        max-height: 430px;
+    }
+
+    .con-footer {
+        .notice-spacer {
+            float: left;
+            margin-bottom: 0;
+            padding: 5px;
+            width: auto;
+            display: inline-block;
+        }
+    }
+
+    .con-row {
+        align-items: center;
+
+        .wfm-time-range-picker-wrap button {
+            line-height: 25px;
+        }
+    }
+
+    .hidden-for-test {
+        display: none;
+    }
+
+    .selectable {
+        cursor: pointer;
+    }
+
+    .unselectable {
+        cursor: not-allowed !important;
+    }
 }
 
 .team-schedule-command-confirm-dialog {
 
-    .row{
-        .wfm-btn-default{
+    .row {
+        .wfm-btn-default {
             margin-right: 20px;
         }
     }
