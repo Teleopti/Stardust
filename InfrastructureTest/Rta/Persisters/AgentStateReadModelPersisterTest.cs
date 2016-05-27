@@ -131,6 +131,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldUpdateShift()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Target.Persist(
+				new AgentStateReadModelForTest
+				{
+					PersonId = personId,
+					TeamId = teamId,
+					Shift = "x"
+				});
+
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				Shift = "y"
+			});
+
+			Reader.LoadForTeams(new[] {teamId}, false)
+				.Single()
+				.Shift.Should().Be("y");
+		}
+
+		[Test]
 		public void ShouldDelete()
 		{
 			var personId = Guid.NewGuid();

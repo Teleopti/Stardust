@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
 {
@@ -14,27 +12,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	[UnitOfWorkTest]
 	public class AgentStateReadModelReaderTest
 	{
+		public IJsonSerializer Serializer;
 		public IAgentStateReadModelReader Target;
 		public IAgentStateReadModelPersister Persister;
-
-		[Test]
-		public void VerifyLoadActualAgentState()
-		{
-			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
-			person.SetId(Guid.NewGuid());
-			var result = Target.Load(new List<IPerson> {person});
-			Assert.IsNotNull(result);
-		}
-
-		[Test]
-		public void ShouldLoadLastAgentState()
-		{
-			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
-			person.SetId(Guid.NewGuid());
-			var result = Target.Load(new List<Guid> {person.Id.GetValueOrDefault()});
-			Assert.IsNotNull(result);
-		}
-
+		
 		[Test]
 		public void ShouldLoadAgentStateByTeamId()
 		{
@@ -164,6 +145,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);
 		}
-		
+
+		[Test]
+		public void ShouldLoadScheduleForTeam()
+		{
+			var teamId = Guid.NewGuid();
+			var personId = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId,
+				Shift = Serializer.SerializeObject(new
+				{
+					Color = "#80FF80",
+					Offset = "10%",
+					Width = "25%"
+				})
+			});
+
+			var result = Target.LoadForTeam(teamId).Single();
+
+			result.Shift.Should().Be(
+				Serializer.SerializeObject(new
+				{
+					Color = "#80FF80",
+					Offset = "10%",
+					Width = "25%"
+				}));
+		}	
 	}
 }

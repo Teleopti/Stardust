@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						StaffingEffect = :StaffingEffect, 
 						IsRuleAlarm = :IsRuleAlarm, 
 						AlarmStartTime = :AlarmStartTime, 
-						AlarmColor = :AlarmColor
+						AlarmColor = :AlarmColor,
+						Shift = :Shift
 					WHERE 
 						PersonId = :PersonId
 				")
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("AlarmColor", model.AlarmColor)
+				.SetParameter("Shift", model.Shift)
 				.ExecuteUpdate();
 			if (updated == 0)
 			{
@@ -85,7 +87,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							StaffingEffect, 
 							IsRuleAlarm, 
 							AlarmStartTime, 
-							AlarmColor
+							AlarmColor,
+							Shift
 						)
 						VALUES
 						(
@@ -106,7 +109,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							:StaffingEffect, 
 							:IsRuleAlarm, 
 							:AlarmStartTime, 
-							:AlarmColor
+							:AlarmColor,
+							:Shift
 						)
 					")
 					.SetParameter("PersonId", model.PersonId)
@@ -127,6 +131,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 					.SetParameter("AlarmStartTime", model.AlarmStartTime)
 					.SetParameter("AlarmColor", model.AlarmColor)
+					.SetParameter("Shift", model.Shift)
 					.ExecuteUpdate();
 			}
 		}

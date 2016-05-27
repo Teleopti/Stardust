@@ -11,6 +11,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 	[TestFixture]
 	public class GetAgentStatesTest : ISetup
 	{
+		public IJsonSerializer Serializer;
 		public IGetAgentStates Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					SiteId = siteId2
 				});
 
-			var agentState = Target.ForSites(new[] {siteId1, siteId2}, false);
+			var agentState = Target.ForSites(new[] {siteId1, siteId2}, false).ToArray();
 
 			agentState.First().PersonId.Should().Be(personId1);
 			agentState.Last().PersonId.Should().Be(personId2);
@@ -146,5 +148,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			agentStates.PersonId.Should().Be(personId1);
 		}
 
+		[Test]
+		public void ShouldGetSchedulesForTeam()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				Shift = Serializer.SerializeObject(new
+				{
+					Color = "#80FF80",
+					Offset = "10%",
+					Width = "25%"
+				})
+			});
+
+			var state = Target.ForTeams(new[] {teamId}, false).Single();
+
+			state.Shift
+				.Should().Be(
+					Serializer.SerializeObject(new
+					{
+						Color = "#80FF80",
+						Offset = "10%",
+						Width = "25%"
+					}));
+		}
 	}
 }

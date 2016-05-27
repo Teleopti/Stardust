@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool IsRuleAlarm { get; set; }
 		public DateTime? AlarmStartTime { get; set; }
 		public int? AlarmColor { get; set; }
+		
+		public string Shift { get; set; }
 
 		public override string ToString()
 		{

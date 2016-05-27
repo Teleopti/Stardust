@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 					AlarmStart = x.AlarmStartTime,
 					Color = _appliedAlarm.ColorTransition(x, timeInAlarm),
 					TimeInState = x.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
-					TimeInAlarm = timeInAlarm
+					TimeInAlarm = timeInAlarm,
+					Shift = x.Shift
 				};
 			});
 		}
