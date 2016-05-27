@@ -1428,7 +1428,6 @@
     <Content Include="WFM\js\rta\rta.sites.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.state.provider.js" />
     <Content Include="WFM\js\rta\rta.teams.controller.spec.js" />
-    <Content Include="WFM\js\search\search-menu.html" />
     <Content Include="WFM\js\search\search.controller.spec.js" />
     <Content Include="WFM\js\seatManagement\locationpicker.controller.spec.js" />
     <Content Include="WFM\js\seatManagement\seatmapcanvas.directive.spec.js" />

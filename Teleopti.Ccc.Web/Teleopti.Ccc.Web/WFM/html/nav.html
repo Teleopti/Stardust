@@ -1,4 +1,4 @@
-<div class="con-row nav-row">
+<div class="con-row nav-row" ng-controller="SearchCtrl">
 	<div class="con-flex nav-inline">
 		<span class="brand" ui-sref="main">Teleopti WFM </span>
 
@@ -14,12 +14,31 @@
 		</div>
 	</div>
 	<div class="con-flex split-1-2">
-		<div ng-include="'js/search/search-menu.html'"></div>
+		<div ng-show="searchmode">
+		  <input type="text" id="searchbar" ng-blur="delayFocus()" class="navbar-search" placeholder="{{'SearchThreeDots' | translate}}" ng-model="keyword" ng-change="searchKeyword()"/>
+		  <div class="search-results material-depth-2">
+		    <ul class="wfm-list">
+		      <div ng-repeat="gp in searchResultGroups">
+		        <li class="wfm-search-li" style="pointer-events:none;">
+		          <button ng-if="gp == 'Permission' " class="wfm-fab mini result-icon"><i class="mdi mdi-account-key"></i></button>
+		          <button ng-if="gp == 'Planning Period' " class="wfm-fab mini info result-icon"><i class="mdi mdi-calendar"></i></button>
+		          {{gp}}
+		        </li>
+		        <li ng-repeat="item in searchResult | filter:{ SearchGroup: gp }">
+		          <div ng-click="clickedItem(item);searchbarFocus();">
+		            {{item.Name}}
+		          </div>
+		        </li>
+		        <li ng-if="searchResult.length == 0"></li>
+		      </div>
+		    </ul>
+		  </div>
+		</div>
 	</div>
 	<div class="con-flex"></div>
 
 	<div class="nav-tools">
-		<a ng-click="searchmode=!searchmode">
+		<a ng-click="searchbarSetFocus()">
 			<div class="panel-menu">
 				<div class="context-menu card-context" ng-class="{'active-context material-depth-2':searchmode}">
 					<i class="mdi mdi-magnify"></i>
