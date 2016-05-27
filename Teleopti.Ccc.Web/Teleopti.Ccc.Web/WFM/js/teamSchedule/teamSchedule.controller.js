@@ -22,6 +22,7 @@
 
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
+		vm.scheduleFullyLoaded = false;
 
 		vm.triggerCommand = function (label, needToOpenSidePanel) {			
 			if (needToOpenSidePanel) openSidePanel();
@@ -132,6 +133,7 @@
 			vm.total = result.Total;
 			vm.searchOptions.searchKeywordChanged = false;
 			vm.searchOptions.keyword = result.Keyword;
+			vm.scheduleFullyLoaded = true;
 		};
 
 		vm.loadSchedules = function() {

@@ -52,9 +52,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected agent '(.*)'")]
 		public void WhenISelectedAgent(string agentName)
 		{
-			Browser.Interactions.ClickContaining(".person-name", agentName);
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.ClickContaining(".person-name", agentName);
+				});
 		}
-		
+
 		[When(@"I open menu in team schedule")]
 		public void WhenIOpenMenuInTeamSchedule()
 		{
@@ -195,7 +199,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected activity '(.*)'")]
 		public void WhenISelectedActivity(string description)
 		{
-			Browser.Interactions.ClickUsingJQuery($".projection-layer[projection-name={description}]");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.ClickUsingJQuery($".projection-layer[projection-name={description}]");
+				});
 		}
 
 		[When(@"I apply move activity")]

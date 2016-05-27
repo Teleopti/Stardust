@@ -82,7 +82,7 @@ Scenario: Could delete absences for an agent
 	When I view wfm team schedules
 	And I searched schedule with keyword 'John' and schedule date '2016-10-10'
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
-	When I selected the person absence for 'John Smith'
+	When I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'RemoveAbsence' in team schedule
 	Then I should see schedule with no absence for 'John Smith' displayed
