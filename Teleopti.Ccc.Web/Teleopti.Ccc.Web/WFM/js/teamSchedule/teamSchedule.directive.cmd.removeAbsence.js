@@ -27,7 +27,7 @@
 			
 			PersonAbsenceSvc.removeAbsence(requestData).then(function (response) {
 				if (vm.getActionCb(vm.label)) {
-					vm.getActionCb(vm.label)(vm.TrackId, personIds);
+					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
 
 				notification.reportActionResult({

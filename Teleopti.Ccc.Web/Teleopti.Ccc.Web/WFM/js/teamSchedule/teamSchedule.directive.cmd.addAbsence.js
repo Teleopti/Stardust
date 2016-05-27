@@ -59,7 +59,7 @@
 
 			actionPromise.then(function (response) {
 				if (vm.getActionCb(vm.label)) {
-					vm.getActionCb(vm.label)(vm.TrackId, requestData.PersonIds);
+					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
 				teamScheduleNotificationService.reportActionResult({
 					success: 'AddAbsenceSuccessedResult',
