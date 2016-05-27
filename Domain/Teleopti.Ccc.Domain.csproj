@@ -186,6 +186,7 @@
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\GetAgentStates.cs" />
     <Compile Include="ApplicationLayer\ShiftCategory\AnalyticsShiftCategoryUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommand.cs" />
@@ -226,7 +227,7 @@
     <Compile Include="ApplicationLayer\Forecast\OpenAndSplitTargetSkillMessage.cs" />
     <Compile Include="ApplicationLayer\MultiplicatorDefinitionSetHandlers\AnalyticsOvertimeUpdater.cs" />
     <Compile Include="ApplicationLayer\Payroll\RunPayrollExportEvent.cs" />
-    <Compile Include="ApplicationLayer\PersonAbsences\PersonAbsenceRemovedHandler.cs" />
+    <Compile Include="ApplicationLayer\PersonAbsences\RequestPersonAbsenceRemovedHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ActionErrorMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandler.cs" />

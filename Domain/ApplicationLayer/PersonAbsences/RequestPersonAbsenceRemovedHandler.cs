@@ -10,17 +10,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 {
 	[EnabledBy(Toggles.Wfm_Requests_Cancel_37741)]
 #pragma warning disable 618
-	public class PersonAbsenceRemovedHandler : IHandleEvent<PersonAbsenceRemovedEvent>, IRunOnStardust
+	public class RequestPersonAbsenceRemovedHandler : IHandleEvent<RequestPersonAbsenceRemovedEvent>, IRunOnStardust
 #pragma warning restore 618
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(PersonAbsenceRemovedHandler));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(RequestPersonAbsenceRemovedEvent));
 
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IAbsenceRequestWaitlistProcessor _waitlistProcessor;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IAbsenceRequestCancelService _absenceRequestCancelService;
 
-		public PersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService)
+		public RequestPersonAbsenceRemovedHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IAbsenceRequestWaitlistProcessor waitlistProcessor, IPersonRequestRepository personRequestRepository, IAbsenceRequestCancelService absenceRequestCancelService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_waitlistProcessor = waitlistProcessor;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonAbsences
 		}
 
 		[AsSystem]
-		public virtual void Handle(PersonAbsenceRemovedEvent @event)
+		public virtual void Handle(RequestPersonAbsenceRemovedEvent @event)
 		{
 			if (logger.IsDebugEnabled)
 			{

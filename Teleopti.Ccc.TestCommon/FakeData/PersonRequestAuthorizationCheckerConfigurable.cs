@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			HasEditPermission = HasViewPermission = HasCancelPermission = true;
 		}
 
+		public void RevokeCancelRequestPermission()
+		{
+			HasCancelPermission = false;
+		}
+
 		public void VerifyEditRequestPermission(IPersonRequest personRequest)
 		{
 		}

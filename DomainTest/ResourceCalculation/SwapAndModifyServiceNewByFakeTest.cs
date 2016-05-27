@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.DomainTest.Common;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -143,25 +144,4 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ScheduleChangedEventDetector.GetEvents().Any(e => e.PersonId == agent1.Id).Should().Be.True();
 		}
 	}
-
-	public class ScheduleChangedEventDetector:IHandleEvent<ScheduleChangedEvent>
-	{
-		private List<ScheduleChangedEvent> _events = new List<ScheduleChangedEvent>();
-
-		public void Handle(ScheduleChangedEvent @event)
-		{
-			_events.Add(@event);
-		}
-
-		public void Reset()
-		{
-			_events.Clear();
-		}
-
-		public IEnumerable<ScheduleChangedEvent> GetEvents()
-		{
-			return _events.ToArray();
-		}
-	}
-
 }

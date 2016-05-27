@@ -5,9 +5,18 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeScheduleDifferenceSaver : IScheduleDifferenceSaver
 	{
-		private readonly IScheduleStorage _scheduleStorage;
+		private IScheduleStorage _scheduleStorage;
 
 		public FakeScheduleDifferenceSaver(IScheduleStorage scheduleStorage)
+		{
+			_scheduleStorage = scheduleStorage;
+		}
+
+		public FakeScheduleDifferenceSaver()
+		{			
+		}
+
+		public void SetScheduleStorage(IScheduleStorage scheduleStorage)
 		{
 			_scheduleStorage = scheduleStorage;
 		}

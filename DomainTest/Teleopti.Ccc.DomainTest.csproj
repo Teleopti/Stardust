@@ -238,6 +238,7 @@
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\GroupingReadModelDataUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\RemovePartAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandlerTest.cs" />
+    <Compile Include="Common\ScheduleChangedEventDetector.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduledDaysCascadingTest.cs" />

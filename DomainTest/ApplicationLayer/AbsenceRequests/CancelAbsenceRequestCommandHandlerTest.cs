@@ -1,117 +1,123 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Tracking;
+using Teleopti.Ccc.DomainTest.Common;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
+	[DomainTest]
 	[TestFixture]
-	public class CancelAbsenceRequestCommandHandlerTest
+	[UseEventPublisher(typeof (FakeEventPublisherWithOverwritingHandlers))]
+	public class CancelAbsenceRequestCommandHandlerEventTest :ISetup
 	{
-		private FakePersonRequestRepository _requestRepository;
-		private FakeCurrentScenario _scenario;
-		private FakePersonAbsenceRepository _personAbsenceRepository;
-		private PersonRequestAuthorizationCheckerForTest _personRequestAuthorizationChecker;
-		private PersonAbsenceRemover _personAbsenceRemover;
-		private FakeScheduleStorage _scheduleStorage;
-		private BusinessRulesForPersonalAccountUpdate _businessRulesForAccountUpdate;
-		private SaveSchedulePartService _saveSchedulePartService;
-		private PersonAbsenceCreator _personAbsenceCreator;
-		private FakeCommonAgentNameProvider _fakeCommonAgentNameProvider;
-		private FakeLoggedOnUser _loggedOnUser;
-		private SwedishCulture _culture;
-		private IAbsence _absence;
-		private IPerson _person;
-		private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private FakeSchedulingResultStateHolder _schedulingResultStateHolder;
-		private CancelAbsenceRequestCommandHandler _cancelAbsenceRequestHandler;
-		private ConfigurablePermissions _configurablePermissions;
+		public CancelAbsenceRequestCommandHandler Target;
+		public ScheduleChangedEventDetector ScheduleChangedEventDetector;
+		public FakePersonRequestRepository RequestRepository;
+		public PersonRequestAuthorizationCheckerConfigurable PersonRequestAuthorizationChecker;
+		public ApprovalServiceForTest ApprovalService;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakePersonAbsenceRepository PersonAbsenceRepository;
+		public FakeScheduleStorage ScheduleStorage;
+		public FakePersonRepository PersonRepository;
+		public CancelAbsenceRequestCommandValidator CancelAbsenceRequestCommandValidator;
+		public FakeCurrentScenario CurrentScenario;
+		public WriteProtectedScheduleCommandValidator WriteProtectedScheduleCommandValidator;
+		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public FakeLoggedOnUser LoggedOnUser;
+		public FakeCommonAgentNameProvider CommonAgentNameProvider;
+		public FakeUserCulture UserCulture;
+		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
+		public FakeEventPublisherWithOverwritingHandlers EventPublisher;
+		public INow Now;
 
-		[SetUp]
-		public void Setup()
+		private IPerson person;
+		private IAbsence absence;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_scenario = new FakeCurrentScenario();
-			_requestRepository = new FakePersonRequestRepository();
-			_personAbsenceRepository = new FakePersonAbsenceRepository();
-			_personRequestAuthorizationChecker = new PersonRequestAuthorizationCheckerForTest();
-			_schedulingResultStateHolder = new FakeSchedulingResultStateHolder();
-			_fakeCommonAgentNameProvider = new FakeCommonAgentNameProvider();
-			_loggedOnUser = new FakeLoggedOnUser();
-			_culture = new SwedishCulture();
+			system.UseTestDouble<ScheduleChangedEventDetector>().For<IHandleEvent<ScheduleChangedEvent>>();
+			system.UseTestDouble<PersonAbsenceRemover>().For<IPersonAbsenceRemover>(); 
+			system.UseTestDouble<SaveSchedulePartService>().For<ISaveSchedulePartService>();
+			system.UseTestDouble<PersonAbsenceCreator>().For<IPersonAbsenceCreator>();		
+			system.UseTestDouble<PersonRequestAuthorizationCheckerConfigurable>().For<IPersonRequestCheckAuthorization>();
+			system.UseTestDouble<ApprovalServiceForTest>().For<IRequestApprovalService>();
+			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakePersonRequestRepository>().For<IPersonRequestRepository>();
+			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<CancelAbsenceRequestCommandValidator>().For<ICancelAbsenceRequestCommandValidator>();
+			system.UseTestDouble<WriteProtectedScheduleCommandValidator>().For<IWriteProtectedScheduleCommandValidator>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<AbsenceRequestCancelService>().For<IAbsenceRequestCancelService>();
+			system.UseTestDouble<FakePersonAbsenceAccountRepository>().For<IPersonAbsenceAccountRepository>();
+			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			var userCulture = new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture());
+			system.UseTestDouble(userCulture).For<IUserCulture>();
 
-			_absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
-			_person = PersonFactory.CreatePerson("Yngwie", "Malmsteen").WithId();
-
-			_scheduleStorage = new FakeScheduleStorage();
-
-			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
-			_businessRulesForAccountUpdate = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, _schedulingResultStateHolder);
-
-			var scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_scheduleStorage);
-			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver, _personAbsenceAccountRepository);
-			_personAbsenceCreator = new PersonAbsenceCreator(_saveSchedulePartService, _businessRulesForAccountUpdate);
-			_personAbsenceRemover = new PersonAbsenceRemover(_businessRulesForAccountUpdate, _saveSchedulePartService, _personAbsenceCreator, _loggedOnUser, new AbsenceRequestCancelService (new PersonRequestAuthorizationCheckerForTest()));
-
-
-			_configurablePermissions = new ConfigurablePermissions();
-
-			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
-				_configurablePermissions, new FakeCommonAgentNameProvider(), new FakeLoggedOnUser(), new SwedishCulture());
-
-			var cancelAbsenceRequestCommandValidator = new CancelAbsenceRequestCommandValidator ( _personRequestAuthorizationChecker, _fakeCommonAgentNameProvider, _loggedOnUser, _culture);
-			
-			_cancelAbsenceRequestHandler = new CancelAbsenceRequestCommandHandler (_requestRepository, _personAbsenceRepository, _personAbsenceRemover,
-				_loggedOnUser, _culture, _scheduleStorage, _scenario, writeProtectedScheduleCommandValidator, cancelAbsenceRequestCommandValidator);
-
+			system.AddService<CancelAbsenceRequestCommandHandler>();
 		}
-
-		[Test]
-		public void ShouldCancelAcceptedRequestAndDeleteRelatedAbsence()
+		
+		private void commonSetup()
 		{
-			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand, _personRequestAuthorizationChecker);
-
-			Assert.AreEqual (true, personRequest.IsCancelled);
-			Assert.IsTrue(_scheduleStorage.LoadAll().IsEmpty());
-			Assert.IsTrue (cancelRequestCommand.ErrorMessages.IsEmpty() );
+			absence = AbsenceFactory.CreateAbsence("Holiday").WithId();
+			person = PersonFactory.CreatePerson("Yngwie","Malmsteen").WithId();
+			PersonRepository.Add(person);
+			UserCulture.IsSwedish();
+			ScheduleDifferenceSaver.SetScheduleStorage(ScheduleStorage);
 		}
 		
 		[Test]
+		public void TargetShouldBeDefined()
+		{
+			commonSetup();
+			Target.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldNotCancelRequestWhenNoPermission()
 		{
+			commonSetup();
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-			var personRequestAuthorizationChecker = new PersonRequestAuthorizationCheckerConfigurable()
-			{
-				HasCancelPermission = false
-			};
+
+			PersonRequestAuthorizationChecker.RevokeCancelRequestPermission();
 			
-			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand, personRequestAuthorizationChecker);
-			
-			Assert.AreEqual(false, personRequest.IsCancelled);
-			Assert.AreEqual(1, _scheduleStorage.LoadAll().Count);
-			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
+
+			var personRequest = basicCancelAbsenceRequest(cancelRequestCommand);
+
+			Assert.AreEqual(false,personRequest.IsCancelled);
+			Assert.AreEqual(1, ScheduleStorage.LoadAll().Count);
+			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
 		}
 
 		[Test]
 		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceCannotBeFound()
 		{
-			
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 01);
+			commonSetup();
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
 
-			var absenceRequest = createApprovedAbsenceRequest(_absence, dateTimePeriodOfAbsenceRequest, _person);
+			var absenceRequest = createApprovedAbsenceRequest(absence,dateTimePeriodOfAbsenceRequest, person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
 			var cancelRequestCommand = new CancelAbsenceRequestCommand()
@@ -119,43 +125,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				PersonRequestId = personRequest.Id.GetValueOrDefault()
 			};
 
-			_cancelAbsenceRequestHandler.Handle(cancelRequestCommand);
+			Target.Handle(cancelRequestCommand);
 
-			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CouldNotCancelRequestNoAbsence,
-				_fakeCommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_person),
-				absenceRequest.Period.StartDateTimeLocal(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", _culture.GetCulture())),
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}
 
 		[Test]
 		public void ShouldFailGracefullyWhenAttemptingToCancelRequestWhereAbsenceRequestHasNotBeenAccepted()
 		{
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 01);
-			
-			var absenceRequest = new AbsenceRequest(_absence, dateTimePeriodOfAbsenceRequest);
-			var personRequest = new PersonRequest (_person, absenceRequest).WithId();
-			_requestRepository.Add(personRequest);
+			commonSetup();
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,01);
+
+			var absenceRequest = new AbsenceRequest(absence,dateTimePeriodOfAbsenceRequest);
+			var personRequest = new PersonRequest(person,absenceRequest).WithId();
+			RequestRepository.Add(personRequest);
 			personRequest.Pending();
-			
+
 			var cancelRequestCommand = new CancelAbsenceRequestCommand()
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault()
 			};
 
-			_cancelAbsenceRequestHandler.Handle(cancelRequestCommand);
+			Target.Handle(cancelRequestCommand);
 
-			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(1,cancelRequestCommand.ErrorMessages.Count);
 			Assert.AreEqual(string.Format(Resources.CanOnlyCancelApprovedAbsenceRequest,
-				_fakeCommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_person),
-				absenceRequest.Period.StartDateTimeLocal(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", _culture.GetCulture())),
+				CommonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
+				absenceRequest.Period.StartDateTimeLocal(LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()).Date.ToString("d", UserCulture.GetCulture())),
 				cancelRequestCommand.ErrorMessages[0]);
 		}
 
 		[Test]
-		public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccount ()
+		public void CancellingARequestWithMultipleAbsencesShouldUpdatePersonAccount()
 		{
-			var accountDay = new AccountDay(new DateOnly(2016, 03, 1))
+			commonSetup();
+			var accountDay = new AccountDay(new DateOnly(2016,03,1))
 			{
 				BalanceIn = TimeSpan.FromDays(5),
 				Accrued = TimeSpan.FromDays(25),
@@ -163,122 +171,155 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				LatestCalculatedBalance = TimeSpan.FromDays(8)  // have used 8 days
 			};
 
-			createPersonAbsenceAccount (_person, _absence, accountDay);
+			createPersonAbsenceAccount(person,absence,accountDay);
 
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
-			cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand, true);
+			cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand,true);
 
-			Assert.AreEqual(30, accountDay.Remaining.TotalDays);
+			Assert.AreEqual(30,accountDay.Remaining.TotalDays);
 		}
-		
-		[Test] 
+
+		[Test]
 		public void ShouldCancelAcceptedRequestAndDeleteMultipleRelatedAbsences()
 		{
+			commonSetup();
 			var cancelRequestCommand = new CancelAbsenceRequestCommand();
 			var personRequest = cancelAbsenceRequestWithMultipleAbsences(cancelRequestCommand);
 
 			Assert.IsTrue(personRequest.IsCancelled);
-			Assert.IsTrue(_scheduleStorage.LoadAll().IsEmpty());
+			Assert.IsTrue(ScheduleStorage.LoadAll().IsEmpty());
 			Assert.IsTrue(cancelRequestCommand.ErrorMessages.IsEmpty());
 		}
 
-		private PersonRequest cancelAbsenceRequestWithMultipleAbsences (CancelAbsenceRequestCommand cancelRequestCommand, bool checkPersonAccounts = false)
+
+		[Test]
+		public void BasicCancelAbsenceRequestShouldFireRequestPersonAbsenceRemovedEvent()
 		{
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 14);
-			var absenceRequest = createApprovedAbsenceRequest (_absence, dateTimePeriodOfAbsenceRequest, _person);
+			commonSetup();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
+			basicCancelAbsenceRequest(cancelRequestCommand);
+			var personAbsence = PersonAbsenceRepository.LoadAll().First();
+
+			var events = personAbsence.PopAllEvents(Now, DomainUpdateType.Delete).ToArray();
+
+			events.Length.Should().Be.EqualTo(2);
+			events[0].Should().Be.OfType<PersonAbsenceRemovedEvent>();
+			events[1].Should().Be.OfType<RequestPersonAbsenceRemovedEvent>();			
+		}
+
+		[Test]
+		public void BasicCancelAbsenceRequestShouldEventuallyFireOnlyOneScheduleChangedEvent()
+		{
+			commonSetup();
+			var cancelRequestCommand = new CancelAbsenceRequestCommand();
+			basicCancelAbsenceRequest(cancelRequestCommand);
+			var personAbsence = PersonAbsenceRepository.LoadAll().First();
+
+			var events = personAbsence.PopAllEvents(Now,DomainUpdateType.Delete).ToList();
+
+			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent),typeof(ScheduleChangedEventDetector));
+			ScheduleChangedEventDetector.Reset();
+
+			events.ForEach(e => EventPublisher.Publish(e));
+			var scheduleChangedEvents = ScheduleChangedEventDetector.GetEvents();
+
+			scheduleChangedEvents.Count().Should().Be.EqualTo(1);
+		}
+
+
+		private PersonRequest cancelAbsenceRequestWithMultipleAbsences(CancelAbsenceRequestCommand cancelRequestCommand,bool checkPersonAccounts = false)
+		{
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,14);
+			var absenceRequest = createApprovedAbsenceRequest(absence, dateTimePeriodOfAbsenceRequest, person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
-			if (checkPersonAccounts)
+			if(checkPersonAccounts)
 			{
 				createShiftsForPeriod(dateTimePeriodOfAbsenceRequest);
 			}
-			
-			createPersonAbsence (_absence, new DateTimePeriod (2016, 03, 05, 2016, 03, 07), _person, absenceRequest);
-			createPersonAbsence (_absence, new DateTimePeriod (2016, 03, 09, 2016, 03, 13), _person, absenceRequest);
-			createPersonAbsence (_absence, new DateTimePeriod (2016, 03, 01, 2016, 03, 03), _person, absenceRequest);
+
+			createPersonAbsence(absence,new DateTimePeriod(2016,03,05,2016,03,07), person,absenceRequest);
+			createPersonAbsence(absence,new DateTimePeriod(2016,03,09,2016,03,13), person,absenceRequest);
+			createPersonAbsence(absence,new DateTimePeriod(2016,03,01,2016,03,03), person,absenceRequest);
 
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
 
-			_cancelAbsenceRequestHandler.Handle (cancelRequestCommand);
+			Target.Handle(cancelRequestCommand);
 
 			return personRequest;
 		}
 
 
-		private void createPersonAbsenceAccount(IPerson person, IAbsence absence, IAccount accountDay)
+		private void createPersonAbsenceAccount(IPerson person,IAbsence absence,IAccount accountDay)
 		{
-			var personAbsenceAccount = new PersonAbsenceAccount(person, absence);
+			var personAbsenceAccount = new PersonAbsenceAccount(person,absence);
 			personAbsenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
 			personAbsenceAccount.Add(accountDay);
 
-			_personAbsenceAccountRepository.Add(personAbsenceAccount);
+			PersonAbsenceAccountRepository.Add(personAbsenceAccount);
 		}
 
-		private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand, IPersonRequestCheckAuthorization personRequestAuthorizationChecker)
-		{
-			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016, 03, 01, 2016, 03, 03);
 
-			var absenceRequest = createApprovedAbsenceRequest(_absence, dateTimePeriodOfAbsenceRequest, _person);
+		private PersonRequest basicCancelAbsenceRequest(CancelAbsenceRequestCommand cancelRequestCommand)
+		{
+			var dateTimePeriodOfAbsenceRequest = new DateTimePeriod(2016,03,01,2016,03,03);
+
+			var absenceRequest = createApprovedAbsenceRequest(absence ,dateTimePeriodOfAbsenceRequest, person);
 			var personRequest = absenceRequest.Parent as PersonRequest;
 
-			createPersonAbsence(_absence, dateTimePeriodOfAbsenceRequest, _person, absenceRequest);
+			createPersonAbsence(absence ,dateTimePeriodOfAbsenceRequest, person, absenceRequest);
 			cancelRequestCommand.PersonRequestId = personRequest.Id.GetValueOrDefault();
-
-			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
-				new FullPermission(), new FakeCommonAgentNameProvider(), new FakeLoggedOnUser(), new SwedishCulture());
-
-			var cancelAbsenceRequestCommandValidator = new CancelAbsenceRequestCommandValidator(personRequestAuthorizationChecker, _fakeCommonAgentNameProvider, _loggedOnUser, _culture);
-
-			new CancelAbsenceRequestCommandHandler (_requestRepository, _personAbsenceRepository, _personAbsenceRemover, _loggedOnUser, _culture,
-				_scheduleStorage, _scenario, writeProtectedScheduleCommandValidator, cancelAbsenceRequestCommandValidator).Handle(cancelRequestCommand);
+		
+			Target.Handle(cancelRequestCommand);
 			return personRequest;
 		}
 
-		private AbsenceRequest createApprovedAbsenceRequest (IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person)
+		private AbsenceRequest createApprovedAbsenceRequest(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person)
 		{
-			var absenceRequest = new AbsenceRequest (absence, dateTimePeriodOfAbsenceRequest);
-			createApprovedPersonRequest (person, absenceRequest);
+			var absenceRequest = new AbsenceRequest(absence,dateTimePeriodOfAbsenceRequest);
+			createApprovedPersonRequest(person,absenceRequest);
 			return absenceRequest;
 		}
-		
-		private PersonRequest createApprovedPersonRequest (IPerson person, AbsenceRequest absenceRequest)
+
+		private PersonRequest createApprovedPersonRequest(IPerson person,AbsenceRequest absenceRequest)
 		{
-			var personRequest = new PersonRequest (person, absenceRequest).WithId();
-			_requestRepository.Add (personRequest);
+			var personRequest = new PersonRequest(person,absenceRequest).WithId();
+			RequestRepository.Add(personRequest);
 
 			personRequest.Pending();
-			personRequest.Approve (new ApprovalServiceForTest(), _personRequestAuthorizationChecker);
+			personRequest.Approve(ApprovalService, PersonRequestAuthorizationChecker);
 			return personRequest;
 		}
 
-		private PersonAbsence createPersonAbsence (IAbsence absence, DateTimePeriod dateTimePeriodOfAbsenceRequest, IPerson person, AbsenceRequest absenceRequest)
+		private PersonAbsence createPersonAbsence(IAbsence absence,DateTimePeriod dateTimePeriodOfAbsenceRequest,IPerson person,AbsenceRequest absenceRequest)
 		{
-			var absenceLayer = new AbsenceLayer (absence, dateTimePeriodOfAbsenceRequest);
-			var personAbsence = new PersonAbsence (person, _scenario.Current(), absenceLayer, absenceRequest).WithId();
+			var absenceLayer = new AbsenceLayer(absence,dateTimePeriodOfAbsenceRequest);
+			var personAbsence = new PersonAbsence(person, CurrentScenario.Current(), absenceLayer,absenceRequest).WithId();
 
-			_personAbsenceRepository.Add (personAbsence);
-			_scheduleStorage.Add (personAbsence);
+			PersonAbsenceRepository.Add(personAbsence);
+			ScheduleStorage.Add(personAbsence);
 
 			return personAbsence;
 		}
 
 		private void createShiftsForPeriod(DateTimePeriod period)
 		{
-			foreach (var day in period.WholeDayCollection(TimeZoneInfo.Utc))
+			foreach(var day in period.WholeDayCollection(TimeZoneInfo.Utc))
 			{
 				// need to have a shift otherwise personAccount day off will not be affected
-				_scheduleStorage.Add(createAssignment(_person, day.StartDateTime, day.EndDateTime, _scenario));
+				ScheduleStorage.Add(createAssignment(person, day.StartDateTime,day.EndDateTime, CurrentScenario.Current()));
 			}
 		}
 
-		private static IPersonAssignment createAssignment(IPerson person, DateTime startDate, DateTime endDate, ICurrentScenario currentScenario)
+		private static IPersonAssignment createAssignment(IPerson person,DateTime startDate,DateTime endDate, IScenario scenario)
 		{
 			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
-				currentScenario.Current(),
+				scenario,
 				person,
-				new DateTimePeriod(startDate, endDate));
+				new DateTimePeriod(startDate,endDate));
 		}
 
-		
 	}
+
+		
 }

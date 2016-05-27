@@ -112,12 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				
 			};
-
-			if (AbsenceRequest != null)
-			{
-				personAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
-			}
-
+			
 			if (trackedCommandInfo != null)
 			{
 				personAbsenceRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
@@ -170,31 +165,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			AddEvent(personAbsenceModifiedEvent);
 		}
 
-		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation=null)
-        {
-            var events = base.PopAllEvents(now, operation).ToList();
-            if (!operation.HasValue) return events;
-            if (operation == DomainUpdateType.Delete) {
-					var personAbsenceRemovedEvent = new PersonAbsenceRemovedEvent()
-					{
-						PersonId = Person.Id.GetValueOrDefault(),
-						ScenarioId = Scenario.Id.GetValueOrDefault(),
-						StartDateTime = Period.StartDateTime,
-						EndDateTime = Period.EndDateTime,
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
-					};
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		{
+			var events = base.PopAllEvents(now, operation).ToList();
+			if (!operation.HasValue) return events;
+			if (operation == DomainUpdateType.Delete && AbsenceRequest != null)
+			{
+				var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
+				{
+					PersonId = Person.Id.GetValueOrDefault(),
+					ScenarioId = Scenario.Id.GetValueOrDefault(),
+					StartDateTime = Period.StartDateTime,
+					EndDateTime = Period.EndDateTime,
+					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
+					AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault()
+				};
+				events.Add(requestPersonAbsenceRemovedEvent);
+			}
+			return events;
+		}
 
-					if (AbsenceRequest != null)
-					{
-						personAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
-					}
-					
-
-					events.Add(personAbsenceRemovedEvent);
-            }
-            return events;
-        }
-		
 
 		/// <summary>
 		/// Constructor for NHibernate
