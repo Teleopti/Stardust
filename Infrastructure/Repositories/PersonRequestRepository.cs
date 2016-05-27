@@ -598,8 +598,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 										Restrictions.Gt("personTo.TerminalDate", DateOnly.Today)))
 									.Add(Restrictions.Or(Restrictions.IsNull("personFrom.TerminalDate"),
 										Restrictions.Gt("personFrom.TerminalDate", DateOnly.Today)))
-									.Add(Restrictions.Or(Restrictions.InG("PersonFrom", personChunkList),
-										Restrictions.InG("PersonTo", personChunkList)))))))
+									.Add(Restrictions.InG("PersonFrom", personChunkList))
+									.Add(Restrictions.InG("PersonTo", personChunkList))))))
 						.List<IPersonRequest>();
 
 			var personRequests =
