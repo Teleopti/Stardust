@@ -6,6 +6,7 @@
 	var blinkTitleTimer;
 	var webNotification = function() { return true; }; //default also send as web notification if possible
 	var webNotifications = new Array();
+	var showingText = null;
 
 	function _setOptions(options) {
 		if (options && options.originalDocumentTitle)
@@ -87,6 +88,7 @@
 	}
 
 	function _messageClosed() {
+		_resetShowingText();
 		$.pinify.clearOverlay();
 		_stopBlinkDocumentTitle();
 	}
@@ -113,8 +115,15 @@
 		top.document.title = originalDocumentTitle;
 	}
 
+	function _resetShowingText() {
+		showingText = null;
+	}
+
 	return {
 		Notify: function (options, notifyText) {
+			if (showingText === notifyText) return;
+			showingText = notifyText;
+
 			_setOptions(options);
 			_notify(notifyText);
 			_webNotification(notifyText);
