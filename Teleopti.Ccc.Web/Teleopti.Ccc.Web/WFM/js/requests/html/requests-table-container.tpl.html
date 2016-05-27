@@ -1,6 +1,6 @@
-﻿<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto"  ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning></div>
+﻿<div ng-show="requestsTableContainer.thereIsRequest()" ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto"  ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning></div>
 
-<div class="wfm-switch time-zone-switch" id="time-zone-switch" ng-if="!requestsTableContainer.shiftTradeView">
+<div class="wfm-switch time-zone-switch" id="time-zone-switch" ng-show="!requestsTableContainer.shiftTradeView && requestsTableContainer.thereIsRequest()">
 	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingRequestSubmitterTimeZone"/>
 	<label for="switch1">
 		<span class="wfm-switch-toggle"></span>
@@ -10,4 +10,11 @@
 	</label>
 </div>
 
-<i ng-if="requestsTableContainer.gridOptions.enableFiltering" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-close" style="cursor: pointer; position: absolute; top: 3rem; left: 2rem;"></i>
+<i ng-show="requestsTableContainer.gridOptions.enableFiltering && requestsTableContainer.thereIsRequest()" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-close" style="cursor: pointer; position: absolute; top: 3rem; left: 2rem;"></i>
+
+<ul class="notification-list wfm-simple-list" ng-show="!requestsTableContainer.thereIsRequest()">
+	<li>
+		<i class="mdi mdi-alert"></i>
+		<b>{{"NoRequestsFound" | translate}}</b>
+	</li>
+</ul>

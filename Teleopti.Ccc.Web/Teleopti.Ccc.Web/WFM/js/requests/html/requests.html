@@ -1,5 +1,4 @@
-﻿
-<div class="view-header">
+﻿<div class="view-header">
 	<div class="view-title">
 		<i class="mdi mdi mdi-numeric-9-plus-box-multiple-outline"></i>
 		<h1 translate style="display: inline-block">Requests</h1>
@@ -36,7 +35,7 @@
 		<div class="wfm-slide-tabs tabbed-panel">
 			<md-content class="md-padding">
 				<md-tabs md-dynamic-height md-border-botto md-selected="requests.selectedTabIndex">
-					<md-tab label="{{'AbsenceRequest' | translate}} / {{'TextRequest' | translate}}">
+					<md-tab label="{{'Absence' | translate}} {{'And' | translate}} {{'Text' | translate}}">
 						<md-content class="md-padding">
 							<requests-overview period="requests.period"
 											   agent-search-term="requests.agentSearchTerm"
@@ -45,7 +44,7 @@
 						</md-content>
 					</md-tab>
 
-					<md-tab label="{{'ShiftTradeRequest' | translate}}" ng-if="requests.isShiftTradeViewVisible">
+					<md-tab label="{{'ShiftTrade' | translate}}" ng-if="requests.isShiftTradeViewVisible">
 						<md-content class="md-padding">
 							<requests-overview shift-trade-view
 											   period="requests.period"
@@ -57,6 +56,7 @@
 
 
 				</md-tabs>
+				<div class="paging pull-right" ng-if="requests.isPaginationEnabled && requests.paging.totalPages>0"></div>
 			</md-content>
 
 		</div>

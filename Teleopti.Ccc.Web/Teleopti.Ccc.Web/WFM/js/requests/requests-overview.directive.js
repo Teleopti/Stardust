@@ -43,7 +43,7 @@
 			totalRequestsCount: 0
 		};
 
-
+		
 		function init() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
 			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
@@ -91,6 +91,7 @@
 		function getRequests(requestsFilter, sortingOrders, paging, done) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
 				vm.requests = requests.data.Requests;
+				
 				vm.shiftTradeRequestDateSummary = {
 					Minimum: requests.data.MinimumDateTime,
 					Maximum: requests.data.MaximumDateTime,

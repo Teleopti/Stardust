@@ -14505,4 +14505,8 @@ Help us improve your experience by sending an error report</value>
     <value>The waitlist-processing will be done in the background and could take some time until it is finished</value>
     <comment> The waitlist-processing will be done in the background and could take some time until it is finished</comment>
   </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>Shift Trade</value>
+    <comment>Shift Trade text in WFM Requests</comment>
+  </data>
 </root>

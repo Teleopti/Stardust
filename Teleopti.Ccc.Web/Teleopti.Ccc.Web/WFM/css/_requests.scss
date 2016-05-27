@@ -2,7 +2,6 @@
 	background-color: $white;
 	position: relative;
 	height: 87vh;
-    //height: 70vh;
 
     .panel {
         height: 0;
@@ -76,7 +75,6 @@
 	}
 
 	.ui-grid {
-		//height: 61vh;
         height: 71vh;
         margin: 15px;
 
@@ -113,7 +111,6 @@
 	.paging {
 		position: relative;
         top : -24px;
-		//bottom: 1rem;
 
 		.total-requests-count {
 			margin-right: 20px;
@@ -149,16 +146,8 @@
 		text-overflow: ellipsis;
 	}
 
-    .ui-grid-viewport {
-        /*overflow: visible!important;*/
-    }
-
-	.ui-grid-header-viewport {
-		overflow: visible;
-	}
-
-	.ui-grid-top-panel {
-		overflow: visible;
+	.ui-grid-pinned-container-right .ui-grid-render-container-right .ui-grid-viewport {
+		overflow: auto!important;
 	}
 
 	.ui-grid-filter-container > input[type="text"] {
@@ -198,15 +187,21 @@
             transition: none;
         }
 
-     md-content {
-         overflow: visible;
-     }
-
      .ui-grid-canvas .ui-grid-cell {
         display: flex;
-        //justify-content: center;
         flex-direction: column;
         flex-wrap: nowrap;
         text-overflow: ellipsis;
+			td{
+				max-width: 10px;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+				overflow: hidden;
+			}
      }
+
+	 .isWeekend tbody:empty{
+		 width: 100%;
+		 background-color: rebeccapurple;
+	 }
 }

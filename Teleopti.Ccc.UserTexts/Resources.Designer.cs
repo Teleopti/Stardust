@@ -26578,6 +26578,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shift Trade.
+        /// </summary>
+        public static string ShiftTrade {
+            get {
+                return ResourceManager.GetString("ShiftTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift trade can not be done due to absence in a shift..
         /// </summary>
         public static string ShiftTradeAbsenceDenyReason {

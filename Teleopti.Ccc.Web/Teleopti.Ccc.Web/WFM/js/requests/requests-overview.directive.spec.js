@@ -45,12 +45,12 @@
 
 		it("show requests table container", function () {
 			requestsDataService.setRequests([]);
-			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetElement = $compile('<requests-overview ></requests-overview>')(targetScope);
 			targetScope.$digest();
 			var targets = targetElement.find('requests-table-container');
 			expect(targets.length).toEqual(1);
 		});
-
+			
 		it("populate requests data from requests data service", function () {
 
 			var request = {
@@ -191,6 +191,10 @@
 
 		it('see UI Grid', function () {
 			var test = setUpTarget();
+
+			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-05T00:00:00', PeriodEndTime: '2016-01-07T23:59:00', CreatedTime: '2016-01-05T03:29:37', TimeZone: 'Europe/Berlin', UpdatedTime: '2016-01-05T03:29:37' }];
+			test.scope.$digest();
+
 			var targets = Array.from(test.target.children());
 			expect(targets.some(function (target) { return angular.element(target).hasClass('ui-grid'); })).toBeTruthy();
 
@@ -290,10 +294,10 @@
 
 			expect(columns.length).toEqual(14);
 
-			expect(columns[0].displayName).toEqual('Mon');
+			expect(columns[0].displayName).toEqual('23');
 			expect(columns[0].category).toEqual(toShortDateString('2016-05-23T00:00:00'));
 			
-			expect(columns[13].displayName).toEqual('Sun');
+			expect(columns[13].displayName).toEqual('05');
 			expect(columns[13].category).toEqual(toShortDateString('2016-05-30T00:00:00'));
 
 		});
@@ -327,14 +331,14 @@
 
 			expect(columns.length).toEqual(14);
 
-			expect(columns[0].displayName).toEqual('Sun');
+			expect(columns[0].displayName).toEqual('22');
 			expect(columns[0].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
 
 			expect(columns[1].category).toEqual(toShortDateString('2016-05-22T00:00:00'));
 
 			expect(columns[13].category).toEqual(toShortDateString('2016-05-29T00:00:00'));
 
-			expect(columns[13].displayName).toEqual('Sat');
+			expect(columns[13].displayName).toEqual('04');
 
 
 		});
@@ -355,7 +359,17 @@
 			test.scope.requests = [{ Id: 1, PeriodStartTime: '2016-01-06T14:00:00', PeriodEndTime: '2016-01-09T20:00:00', CreatedTime: '2016-01-06T10:17:31', TimeZone: 'Pacific/Port_Moresby', UpdatedTime: '2016-01-06T10:17:31', IsFullDay: false, ShiftTradeDays: shiftTradeDays }];
 			test.scope.shiftTradeView = true;
 		}
+		
+		xit("should hide grid when there is no requests", function () {
 
+					var test = setUpTarget();
+					test.scope.requests = [];
+					test.scope.$digest();
+					var targets = test.target[0].querySelectorAll('.ui-grid-render-container-body .ui-grid-row');
+					var messageTargets = test.target[0].querySelectorAll('.notification-list.wfm-simple-list');
+					expect(targets.length).toEqual(0);
+					expect(messageTargets.length).toEqual(1);
+				});
 
 		function toShortDateString(dateString) {
 			return $filter('date')(moment(dateString).toDate(), "shortDate");

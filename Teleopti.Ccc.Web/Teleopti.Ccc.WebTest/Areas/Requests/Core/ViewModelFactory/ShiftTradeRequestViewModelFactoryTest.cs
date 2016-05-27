@@ -234,6 +234,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 		}
 
+		[Test]
+		public void ShouldGetNoRequests()
+		{
+			var personTo = PersonFactory.CreatePerson("Person", "To");
+			var personFrom = PersonFactory.CreatePerson("Person", "From");
+
+			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom, personTo);
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 2, 1),
+				EndDate = new DateOnly(2016, 2, 3)
+			};
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+			requestListViewModel.Requests.Count().Should().Be(0);
+		}
+
 		private static void setShiftTradeSwapDetailsToAndFrom(IShiftTradeRequest shiftTradeRequest, IScheduleDictionary schedule,
 			IPerson personTo, IPerson personFrom)
 		{

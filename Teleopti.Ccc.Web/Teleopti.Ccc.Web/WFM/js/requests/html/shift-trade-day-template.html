@@ -1,4 +1,4 @@
-﻿<table style="width: 100%;">
+﻿<table style="width: 100%;" ng-class="{isWeekend:col.colDef.isWeekend}">
 	<tr ng-repeat="shiftTradeDay in row.entity['ShiftTradeDays'] | filterShiftTradeDetailDisplay:col.colDef.field">
 		<td class="shift-trade-cell" ng-style="{'background-color': shiftTradeDay.FromScheduleDayDetail.Color}">
 			{{shiftTradeDay.FromScheduleDayDetail.ShortName}}

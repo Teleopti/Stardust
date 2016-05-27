@@ -18,11 +18,14 @@
 		vm.clearSelection = clearSelection;
 		vm.reselectRequests = reselectRequests;
 		vm.getShiftTradeHeaderClass = getShiftTradeHeaderClass;
+		vm.thereIsRequest = thereIsRequest;
 		
-		$scope.$watch("requestsTableContainer.filterEnabled",
+		$scope.$watch('requestsTableContainer.filterEnabled',
 			function handleFilterEnabledChanged(newValue, oldValue) {
-				vm.gridOptions.enableFiltering = newValue;
-				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+				if (vm.thereIsRequest()) {
+					vm.gridOptions.enableFiltering = newValue;
+					vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+				}
 			});
 
 		function getShiftTradeHeaderClass() {
@@ -31,7 +34,7 @@
 
 		function applyColumnFilters(columnDefs) {
 			angular.forEach(columnDefs, function (col) {
-				var columnsWithFilterEnabled = ["Subject", "Message", "Type", "Status"];
+				var columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
 				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
 			});
 		}
@@ -89,7 +92,7 @@
 			angular.forEach(vm.SelectedAbsences, function (absence) {
 				filters += absence.Id + ' ';
 			});
-			requestFilterSvc.SetFilter("Absence", filters.trim());
+			requestFilterSvc.SetFilter('Absence', filters.trim());
 
 			vm.filters = requestFilterSvc.Filters;
 		};
@@ -99,7 +102,7 @@
 			angular.forEach(vm.SelectedRequestStatuses, function (status) {
 				filters += status.Id + ' ';
 			});
-			requestFilterSvc.SetFilter("Status", filters.trim());
+			requestFilterSvc.SetFilter('Status', filters.trim());
 
 			vm.filters = requestFilterSvc.Filters;
 		};
@@ -117,6 +120,7 @@
 				rowHeight: vm.shiftTradeView ? 60 : 30 ,
 				
 				onRegisterApi: function (gridApi) {
+
 					vm.gridApi = gridApi;
 					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
 						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function (x) { return x !== null; });
@@ -193,8 +197,8 @@
 			var hours = moment.duration(length, 'seconds')._data.hours;
 			var minutes = moment.duration(length, 'seconds')._data.minutes == 0 ? '00' : moment.duration(length, 'seconds')._data.minutes;
 			var totalHours = hours + days * 24 == 0 ? '00' : hours + days * 24;
-			if (isFullDay) return totalHours + 1 + ":" + "00";
-			else return totalHours + ":" + minutes;
+			if (isFullDay) return totalHours + 1 + ':' + '00';
+			else return totalHours + ':' + minutes;
 		}
 
 		function prepareComputedColumns(requests) {
@@ -202,11 +206,11 @@
 			vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
 
 			function formatedDateTime(dateTime, timezone, displayDateOnly) {
-				var angularTimezone = moment.tz(vm.isUsingRequestSubmitterTimeZone == true ? timezone : vm.userTimeZone).format("Z");
-				angularTimezone = angularTimezone.replace(":", "");
+				var angularTimezone = moment.tz(vm.isUsingRequestSubmitterTimeZone == true ? timezone : vm.userTimeZone).format('Z');
+				angularTimezone = angularTimezone.replace(':', '');
 				var _dateTime = moment.tz(dateTime, timezone).toDate();
-				if (displayDateOnly && vm.isUsingRequestSubmitterTimeZone) return $filter('date')(_dateTime, "shortDate", angularTimezone);
-				else return $filter('date')(_dateTime, "short", angularTimezone);
+				if (displayDateOnly && vm.isUsingRequestSubmitterTimeZone) return $filter('date')(_dateTime, 'shortDate', angularTimezone);
+				else return $filter('date')(_dateTime, 'short', angularTimezone);
 			}
 
 			angular.forEach(requests, function (row) {
@@ -228,21 +232,29 @@
 					return typeText;
 				}
 			});
-
+			
 			if (requests && requests.length > 0 ) {
 				setupColumnDefinitions();
-			}
+			} 
 
 			return requests;
 		}
 
+		function thereIsRequest() {
+			return vm.requests && vm.requests.length > 0;
+		}
+
 		function clearSelection() {
-			if (vm.gridApi.clearSelectedRows) {
-				vm.gridApi.clearSelectedRows();
+
+			if (vm.gridApi && vm.gridApi != null) {
+				if (vm.gridApi.clearSelectedRows) {
+					vm.gridApi.clearSelectedRows();
+				}
+				vm.gridApi.grid.selection.selectAll = false;
+				vm.gridApi.selection.clearSelectedRows();
 			}
-			vm.gridApi.grid.selection.selectAll = false;
+
 			requestCommandParamsHolder.resetSelectedRequestIds(vm.shiftTradeView);
-			vm.gridApi.selection.clearSelectedRows();
 		}
 		
 		function reselectRequests() {
@@ -284,14 +296,16 @@
 			var requestsTableContainerCtrl = ctrls[0];
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
 			scope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
-			
-			scope.$watch(function () {
-				return scope.requestsTableContainer.requests;
-			}, function (v) {
-				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
-				requestsTableContainerCtrl.reselectRequests();
-			}, true);
 
+			scope.$watch(function() {
+				return scope.requestsTableContainer.requests;
+			}, function(v) {
+				if (v && v.length > 0) {
+					scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
+					requestsTableContainerCtrl.reselectRequests();
+				}
+			}, true);
+			
 			scope.$on('reload.requests.without.selection', function () {
 				requestsTableContainerCtrl.clearSelection();
 			});
