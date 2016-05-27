@@ -263,9 +263,15 @@ Try
 
     # Create SqlCommand object, define command text, and set the connection
     $cmd = New-Object System.Data.SqlClient.SqlCommand
-    $cmd.CommandText = "SELECT ApplicationConnectionString, AnalyticsConnectionString FROM Tenant.Tenant"
     $cmd.Connection = $con
 
+    $cmd.CommandText = “UPDATE Tenant.Tenant SET ApplicationConnectionString = REPLACE(ApplicationConnectionString, 'Data Source=', 'Data Source=tcp:') WHERE ApplicationConnectionString NOT LIKE 'Data Source=tcp:%'”
+    $rowsAffected = $cmd.ExecuteNonQuery()
+
+    $cmd.CommandText = “UPDATE Tenant.Tenant SET AnalyticsConnectionString = REPLACE(AnalyticsConnectionString, 'Data Source=', 'Data Source=tcp:') WHERE AnalyticsConnectionString NOT LIKE 'Data Source=tcp:%'”
+    $rowsAffected = $cmd.ExecuteNonQuery()
+
+    $cmd.CommandText = "SELECT ApplicationConnectionString, AnalyticsConnectionString FROM Tenant.Tenant"
     # Create SqlDataReader
     $dr = $cmd.ExecuteReader()
     
