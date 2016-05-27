@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I see '(.*)' in agent name area")]
 		public void ShouldSeeInShiftTradeAgentNameArea(string name)
 		{
+			Browser.Interactions.AssertKnockoutContextContains(".agent-name-row", "agentName", name);
 			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
 		}
 
