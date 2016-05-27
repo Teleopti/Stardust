@@ -2171,7 +2171,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				afterBackgroundWorkersCompleted(e.Cancelled);
 				return;
-			}
+			}		
 
 			validatePersons();
 		}
@@ -3425,6 +3425,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReady");
 				if (_schedulerState.SchedulingResultState.SkipResourceCalculation)
 					statusStrip1.BackColor = Color.Salmon;
+
 				ResumeLayout(true);
 			}
 		}
@@ -6975,8 +6976,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			else
 			{
+				toolStripButtonCalculateCascading.Enabled = false;
 				enableForCascading();
-				toolStripButtonCalculateCascading.Invalidate();
 			}		
 		}
 
@@ -7051,6 +7052,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void enableForCascading()
 		{
+			SplitterManager.EnableShiftEditor();
+
 			releaseUserInterface(false);
 
 			toolStripExClipboard.Enabled = true;
@@ -7058,11 +7061,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonRequestView.Enabled = true;
 			toolStripButtonRestrictions.Enabled = true;
 			toolStripExLoadOptions.Enabled = true;
+			toolStripButtonCalculateCascading.Enabled = true;
 
 			SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager, _teamLeaderMode, _container.Resolve<IToggleManager>());
 
 			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
 			disableButtonsIfTeamLeaderMode();
+
 
 			foreach (var date in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
 			{
