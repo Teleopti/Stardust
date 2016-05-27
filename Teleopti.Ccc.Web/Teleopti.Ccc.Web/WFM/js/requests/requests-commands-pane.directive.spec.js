@@ -245,7 +245,7 @@ describe('RequestsControllerTests', function () {
 		targetScope.onErrorMessages = target.onErrorMessages;
 		targetScope.onCommandError = target.onCommandError;
 		var targetElement = $compile('<requests-commands-pane ' +
-			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount) "' +
+			'after-command-success="onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod) "' +
 			'on-error-messages="onErrorMessages(errorMessages) "' +
 			'after-command-error="onCommandError(error)"' +
 			'"></requests-commands-pane>')(targetScope);
