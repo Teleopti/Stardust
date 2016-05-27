@@ -248,6 +248,12 @@ Try
 	#Add-Content "$PatchDBPath\PatchDBs.bat" "$PatchDBTool $SQLServer $CCC7DB $AnalyticsDB $PATCHUSER $PATCHPWD $SQLUser $SQLPwd"
     #&"$PatchDBPath\PatchDBs.bat"
 
+    log-info "Check so one tenant points to itself"
+    $checkConn = "-CT1 -TS`"Server=$SQLServer;Database=$CCC7DB;User ID=$PATCHUSER;Password=$PATCHPWD`""
+
+    $command = $PatchDBPath + "\Enrypted\Teleopti.Support.Security.exe"
+        &"$command" $checkConn
+
     log-info "Get databases to patch"
      # Create SqlConnection object and define connection string
     $con = New-Object System.Data.SqlClient.SqlConnection

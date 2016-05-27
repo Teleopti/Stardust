@@ -26,7 +26,9 @@ namespace Teleopti.Support.Security
 				AnalyticsDbConnectionString = AnalyticsDbConnectionString(),
 				AnalyticsDbConnectionStringToStore = AnalyticsDbConnectionStringToStore(),
 				ApplicationDbConnectionString = ApplicationDbConnectionString(),
-				ApplicationDbConnectionStringToStore = ApplicationDbConnectionStringToStore()
+				ApplicationDbConnectionStringToStore = ApplicationDbConnectionStringToStore(),
+				CheckTenantConnectionStrings = CheckTenantConnectionStrings,
+				TenantStoreConnectionString = TenantStoreConnectionString
 			};
 		}
 
@@ -119,8 +121,18 @@ namespace Teleopti.Support.Security
 					case "-CS": //Used by WISE to set conn string, _without_ initial catalog
 						_baseConnstring = switchValue;
 						break;
+					case "-CT":
+						CheckTenantConnectionStrings = true;
+						break;
+					case "-TS":
+						TenantStoreConnectionString = switchValue;
+						break;
 				}
 			}
 		}
+
+		public string TenantStoreConnectionString { get; set; }
+
+		public bool CheckTenantConnectionStrings { get; set; }
 	}
 }

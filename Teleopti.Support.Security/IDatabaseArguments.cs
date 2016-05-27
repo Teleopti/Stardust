@@ -11,6 +11,10 @@
 		string AnalyticsDbConnectionStringToStore { get; set; }
 
 		string ApplicationDbConnectionStringToStore { get; set; }
+
+		string TenantStoreConnectionString { get; set; }
+
+		bool CheckTenantConnectionStrings { get; set; }
 	}
 
 	public class DatabaseArguments : IDatabaseArguments
@@ -20,5 +24,7 @@
 		public string ApplicationDbConnectionString { get; set; }
 		public string AnalyticsDbConnectionStringToStore { get; set; }
 		public string ApplicationDbConnectionStringToStore { get; set; }
+		public string TenantStoreConnectionString { get; set; }
+		public bool CheckTenantConnectionStrings { get; set; }
 	}
 }
