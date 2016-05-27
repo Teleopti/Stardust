@@ -12,6 +12,12 @@ else
 $SQLServer=$args[1]
 $CCC7DB=$args[2]
 
+#log-info "Check so one tenant points to itself"
+    $checkConn = "-CT1 -TS`"Server=$SQLServer;Database=$CCC7DB;User ID=$PATCHUSER;Password=$PATCHPWD`""
+
+    $command = $PSScriptRoot + "\..\Enrypted\Teleopti.Support.Security.exe"
+        &"$command" $checkConn
+
 
 #log-info "Get databases to patch"
      # Create SqlConnection object and define connection string
