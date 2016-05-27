@@ -115,7 +115,7 @@ Wfm_QuickForecastOnHangfire_35845 = true
 ETL_SpeedUpPermissionReport_33584 = true
 Wfm_RecalculateForecastOnHangfire_37971 = true
 
-ETL_SpeedUpPersonPeriodNightly_38097 = false
+ETL_SpeedUpPersonPeriodNightly_38097 = RC
 Stardust_MoveAbsenceRequestTo_37941 = RC
 ETL_SpeedUpNightlyReloadDatamart_38131 = RC
 ETL_SpeedUpFactScheduleNightly_38019 = RC # not to be released until pbi 38304 is done 
