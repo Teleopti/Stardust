@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ITeamRepository _teamRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly INow _date;
+		private readonly INow _now;
 	    private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IGetAgents _getAgents;
 		private readonly IGetAgentStates _getAgentsStates;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public AgentsController(IPermissionProvider permissionProvider,
 			ITeamRepository teamRepository, 
 			IPersonRepository personRepository, 
-			INow date, 
+			INow now, 
 			ICommonAgentNameProvider commonAgentNameProvider, 
 			IGetAgents getAgents,
 			IGetAgentStates getAgentsStates)
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_permissionProvider = permissionProvider;
 			_teamRepository = teamRepository;
 			_personRepository = personRepository;
-			_date = date;
+			_now = now;
 		    _commonAgentNameProvider = commonAgentNameProvider;
 			_getAgents = getAgents;
 			_getAgentsStates = getAgentsStates;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var team = _teamRepository.Get(teamId);
 			var isPermitted =
 				_permissionProvider.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
-					_date.LocalDateOnly(), team);
+					_now.LocalDateOnly(), team);
 			if (!isPermitted)
 			{
 				return StatusCode(HttpStatusCode.Forbidden);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 
-			var today = _date.LocalDateOnly();
+			var today = _now.LocalDateOnly();
 			var agents =
 				_personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
 					.Select(
@@ -104,28 +104,30 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return Ok(_getAgentsStates.ForTeams(new[] { teamId }, false).ToArray());
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
-		public virtual IHttpActionResult GetStatesForSites([FromUri]StatesQuery query)
-		{
-			return Ok(_getAgentsStates.ForSites(query.Ids, false).ToArray());
-		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
 		public virtual IHttpActionResult GetStatesForTeams([FromUri]StatesQuery query)
 		{
-			return Ok(_getAgentsStates.ForTeams(query.Ids, false).ToArray());
-		}
 
-		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSites")]
-		public virtual IHttpActionResult GetAlarmStatesForSites([FromUri]StatesQuery query)
-		{
-			return Ok(_getAgentsStates.ForSites(query.Ids, true).ToArray());
+			return Ok(new {Time = _now.UtcDateTime(), States = _getAgentsStates.ForTeams(query.Ids, false).ToArray()});
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForTeams")]
 		public virtual IHttpActionResult GetAlarmStatesForTeams([FromUri]StatesQuery query)
 		{
-			return Ok(_getAgentsStates.ForTeams(query.Ids, true).ToArray());
+			return Ok(new { Time = _now.UtcDateTime(), States = _getAgentsStates.ForTeams(query.Ids, true).ToArray()});
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
+		public virtual IHttpActionResult GetStatesForSites([FromUri]StatesQuery query)
+		{
+			return Ok(new { Time = _now.UtcDateTime(), States = _getAgentsStates.ForSites(query.Ids, false).ToArray()});
+		}
+
+		[UnitOfWork, HttpGet, Route("api/Agents/GetAlarmStatesForSites")]
+		public virtual IHttpActionResult GetAlarmStatesForSites([FromUri]StatesQuery query)
+		{
+			return Ok(new { Time = _now.UtcDateTime(), States = _getAgentsStates.ForSites(query.Ids, true).ToArray()});
 		}
 	}
 
