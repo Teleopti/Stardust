@@ -193,6 +193,24 @@ Scenario: Should be able to move activity
 	Then I should see a successful notice
 
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
+Scenario: Should be able to move activity in overnight shift from next day to current day
+	Given 'John Smith' has a shift with
+    | Field                         | Value            |
+    | Shift category                | Day              |
+    | Activity                      | Phone            |
+    | StartTime                     | 2016-10-10 21:00 |
+    | EndTime                       | 2016-10-11 03:00 |
+    | Scheduled activity            | Sales            |
+    | Scheduled activity start time | 2016-10-11 01:00 |
+    | Scheduled activity end time   | 2016-10-11 01:25 |
+	When I view wfm team schedules
+	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
+	And I selected activity 'Sales'
+	And I move activity to '2016-10-10 23:05' with next day being 'false'
+	Then I should see a successful notice
+	And the start of 'Sales' is '125' mins later than the start of 'Phone'
+
+@OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
 Scenario: Should be able to move basic activity
 	Given 'John Smith' has a shift with
     | Field            | Value            |

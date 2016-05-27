@@ -230,6 +230,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			Browser.Interactions.AssertExistsUsingJQuery(".contract-time", contractTime);
 		}
+
+		[When(@"I move activity to '(.*)' with next day being '(.*)'")]
+		public void WhenIMoveActivityToWithNextDayBeing(string newStartTimeIso, string isNextDay)
+		{
+			var newStartTime = new Dictionary<string, string>
+			{
+				{"vm.bindingTime", $"moment('{newStartTimeIso}').toDate()"},
+				{"vm.nextDay", isNextDay}
+			};
+			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
+			Browser.Interactions.ClickUsingJQuery("#menuItemMoveActivity");
+			Browser.Interactions.SetScopeValues(".move-activity", newStartTime);
+			Browser.Interactions.ClickUsingJQuery("#applyMoveActivity");
+		}
+
+		[Then(@"the start of '(.*)' is '(.*)' mins later than the start of '(.*)'")]
+		public void ThenTheStartOfIsMinsLaterThanTheStartOf(string activityA, int interval, string activityB)
+		{
+			var hours = Convert.ToSingle(Browser.Interactions.Javascript("return (document.querySelectorAll('.ruler').length - 1)"));
+			var scheduleTableWidth = Convert.ToSingle(Browser.Interactions.Javascript("return document.querySelector('td.schedule.schedule-column').clientWidth"));
+			var minuteWidth = scheduleTableWidth / hours / 60;
+			var activityALeft = Convert.ToSingle(Browser.Interactions.Javascript($"return parseFloat(getComputedStyle(document.querySelector('[projection-name=\"{activityA}\"]')).left);"));
+			var activityBLeft = Convert.ToSingle(Browser.Interactions.Javascript($"return parseFloat(getComputedStyle(document.querySelector('[projection-name=\"{activityB}\"]')).left);"));
+			var intervalWidth = Math.Floor(minuteWidth * interval);
+			Assert.AreEqual(intervalWidth, Math.Floor(activityALeft - activityBLeft));
+		}
 	}
 
 	public class AddActivityFormInfo
