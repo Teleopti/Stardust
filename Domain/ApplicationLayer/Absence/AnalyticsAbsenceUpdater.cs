@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 			}
 		}
 
-		private AnalyticsAbsence transformToAnalyticsAbsence(IAbsence absence, int analyticsBusinessUnitId)
+		private static AnalyticsAbsence transformToAnalyticsAbsence(IAbsence absence, int analyticsBusinessUnitId)
 		{
 			return new AnalyticsAbsence
 			{
@@ -86,25 +86,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Absence
 			if (analyticsAbsence == null)
 				return;
 
+			analyticsAbsence.IsDeleted = true;
 			// Delete
-			_analyticsAbsenceRepository.UpdateAbsence(new AnalyticsAbsence
-			{
-				AbsenceCode = analyticsAbsence.AbsenceCode,
-				AbsenceName = analyticsAbsence.AbsenceName,
-				AbsenceShortName = analyticsAbsence.AbsenceShortName,
-				DisplayColor = analyticsAbsence.DisplayColor,
-				DisplayColorHtml = analyticsAbsence.DisplayColorHtml,
-				BusinessUnitId = analyticsAbsence.BusinessUnitId,
-				InContractTime = analyticsAbsence.InContractTime,
-				InContractTimeName = analyticsAbsence.InContractTimeName,
-				InPaidTime = analyticsAbsence.InPaidTime,
-				InPaidTimeName = analyticsAbsence.InPaidTimeName,
-				InWorkTime = analyticsAbsence.InWorkTime,
-				InWorkTimeName = analyticsAbsence.InWorkTimeName,
-				DatasourceId = 1,
-				DatasourceUpdateDate = analyticsAbsence.DatasourceUpdateDate,
-				IsDeleted = true
-			});
+			_analyticsAbsenceRepository.UpdateAbsence(analyticsAbsence);
 		}
 	}
 }

@@ -24,16 +24,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 #pragma warning restore 618
 	{
 		public AnalyticsPersonPeriodUpdaterBus(IPersonRepository personRepository,
-				IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
-				IAnalyticsSkillRepository analyticsSkillRepository,
-				IEventPublisher eventPublisher,
-				IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
-				IAnalyticsTeamRepository analyticsTeamRepository,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
-				: base(
-					personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
-					analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined, currentAnalyticsUnitOfWork)
-		{ }
+			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
+			IAnalyticsSkillRepository analyticsSkillRepository,
+			IEventPublisher eventPublisher,
+			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
+			IAnalyticsTeamRepository analyticsTeamRepository,
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
+			: base(
+				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
+				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
+				currentAnalyticsUnitOfWork)
+		{
+		}
 
 		[AnalyticsUnitOfWork]
 		public new virtual void Handle(PersonCollectionChangedEvent @event)
@@ -54,11 +57,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IEventPublisher eventPublisher,
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsTeamRepository analyticsTeamRepository,
-			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
-				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined, currentAnalyticsUnitOfWork)
-		{ }
+				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
+				currentAnalyticsUnitOfWork)
+		{
+		}
 
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
@@ -122,10 +128,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				}
 
 				var person = persons.First(a => a.Id.Equals(personCodeGuid));
-				if (person == null)
-				{
-					continue;
-				}
 
 				var personPeriodsInAnalytics = _analyticsPersonPeriodRepository.GetPersonPeriods(personCodeGuid);
 
@@ -164,7 +166,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					if ((existingPeriod == null && newOrUpdatedPersonPeriod.SkillsetId != null) ||
 						(existingPeriod != null && newOrUpdatedPersonPeriod.SkillsetId != existingPeriod.SkillsetId))
 					{
-						publishSkillChangeEvent(@event, personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
+						publishSkillChangeEvent(personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
 					}
 
 					// Update/Add/Delete from Bridge Acd Login Person table
@@ -226,16 +228,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			
 		}
 
-		private void publishSkillChangeEvent(PersonCollectionChangedEvent @event, Interfaces.Domain.IPersonPeriod personPeriod, List<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
+		private void publishSkillChangeEvent(Interfaces.Domain.IPersonPeriod personPeriod, IEnumerable<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
 		{
-			var activeSkills =
-				personPeriod.PersonSkillCollection.Where(
-					a => a.Active && analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id)))
-					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId).ToList();
-			var inactiveSkills =
-				personPeriod.PersonSkillCollection.Where(
-					a => !a.Active && analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id)))
-					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId).ToList();
+			var existsInAnalytics = personPeriod.PersonSkillCollection.Where(a => analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id))).ToList();
+			
+			var activeSkills = existsInAnalytics.Where(a => a.Active)
+					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId)
+					.ToList();
+			var inactiveSkills = existsInAnalytics.Where(a => !a.Active)
+					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId)
+					.ToList();
+
 			_currentAnalyticsUnitOfWork.Current().AfterSuccessfulTx(() =>
 			{
 				_eventPublisher.Publish(new AnalyticsPersonPeriodSkillsChangedEvent
@@ -243,11 +246,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					AnalyticsPersonPeriodId = updatedAnalyticsPersonPeriod.PersonId,
 					AnalyticsBusinessUnitId = updatedAnalyticsPersonPeriod.BusinessUnitId,
 					AnalyticsActiveSkillsId = activeSkills,
-					AnalyticsInactiveSkillsId = inactiveSkills,
-					InitiatorId = @event.InitiatorId,
-					LogOnBusinessUnitId = @event.LogOnBusinessUnitId,
-					LogOnDatasource = @event.LogOnDatasource,
-					Timestamp = @event.Timestamp
+					AnalyticsInactiveSkillsId = inactiveSkills
 				});
 			});
 		}

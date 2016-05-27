@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 		private Guid testPerson1Id;
 
-		private AnalyticsSkill fakeSkill3 = new AnalyticsSkill
+		private readonly AnalyticsSkill fakeSkill3 = new AnalyticsSkill
 		{
 			SkillId = 3,
 			SkillCode = Guid.NewGuid()
@@ -49,8 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				new DateTime(2017, 12, 31));
 
 			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
-			var skills = new List<AnalyticsSkill>();
-			skills.Add(fakeSkill3);
+			var skills = new List<AnalyticsSkill> {fakeSkill3};
 			_analyticsSkillRepository.SetSkills(skills);
 			_personRepository = new FakePersonRepository();
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
@@ -271,7 +269,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
-			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
+			ISkill skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType);
 			skill.Activity = act;
 			skill.TimeZone = (TimeZoneInfo.Local);
 
@@ -299,12 +297,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
-			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
+			ISkill skill = new Domain.Forecasting.Skill("for test", "sdf", Color.Blue, 3, skType);
 			skill.SetId(fakeSkill3.SkillCode);
 			skill.Activity = act;
 			skill.TimeZone = (TimeZoneInfo.Local);
 
-			ISkill skill2 = new Skill("for test2", "sdf2", Color.Blue, 3, skType);
+			ISkill skill2 = new Domain.Forecasting.Skill("for test2", "sdf2", Color.Blue, 3, skType);
 			skill.Activity = act;
 			skill.TimeZone = (TimeZoneInfo.Local);
 

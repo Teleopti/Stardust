@@ -5,15 +5,15 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
-namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 {
 	[TestFixture]
-	public class UpdateSkillAnalyticsHandlerTest
+	public class AnalyticsSkillUpdaterTest
 	{
 		FakeAnalyticsSkillRepository analyticsSkillRepository;
 		ISkillRepository skillRepository;

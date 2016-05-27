@@ -260,7 +260,7 @@
     <Compile Include="ApplicationLayer\Forecast\QuickForecastWorkloadsEventHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\RecalculateForecastOnSkillEventHandler.cs" />
     <Compile Include="ApplicationLayer\Forecast\StatisticLoader.cs" />
-    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdater.cs" />
+    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\AnalyticsGroupPageUpdater.cs" />
     <Compile Include="ApplicationLayer\ICurrentInitiatorIdentifier.cs" />
     <Compile Include="ApplicationLayer\IInitiatorIdentifierScope.cs" />
     <Compile Include="ApplicationLayer\InitiatorIdentifier.cs" />
@@ -270,7 +270,6 @@
     <Compile Include="Analytics\AnalyticsFactAgentSkill.cs" />
     <Compile Include="ApplicationLayer\Preference\PreferenceFulfillmentChangedHandler.cs" />
     <Compile Include="ApplicationLayer\Preference\PreferenceChangedHandler.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsSkillUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStatePersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelPersister.cs" />
@@ -284,6 +283,7 @@
     <Compile Include="ApplicationLayer\RequestFactory.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandler.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandler.cs" />
+    <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdater.cs" />
     <Compile Include="ApplicationLayer\TenantTickEventPublisher.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonGroupsHandler.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\BuildInGroupsAnalyticsUpdater.cs" />

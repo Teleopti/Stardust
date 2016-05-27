@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -24,11 +23,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
         IRunOnServiceBus
 #pragma warning restore 618
     {
-        public AnalyticsPersonGroupsHandlerBus(IPersonRepository personRepository,
-            IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
-            IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
-            :base(personRepository,analyticsBridgeGroupPagePersonRepository, analyticsGroupPageRepository, groupPageRepository)
-        {}
+		public AnalyticsPersonGroupsHandlerBus(IPersonRepository personRepository,
+			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository,
+			IAnalyticsGroupPageRepository analyticsGroupPageRepository, IGroupPageRepository groupPageRepository)
+			: base(personRepository, analyticsBridgeGroupPagePersonRepository, analyticsGroupPageRepository, groupPageRepository)
+		{
+			
+		}
 
         [AnalyticsUnitOfWork]
         public new virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		public virtual void Handle(AnalyticsPersonCollectionChangedEvent @event)
 		{
-			logger.DebugFormat("Handle AnalyticsPersonCollectionChangedEvent for {0}", @event.SerializedPeople);
+			logger.Debug($"Handle AnalyticsPersonCollectionChangedEvent for {@event.SerializedPeople}");
 			foreach (var personId in @event.PersonIdCollection)
 			{
 				var person = _personRepository.Get(personId) ?? new Person();
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 				}
 				// Remove any group pages associated with deleted person periods or deleted persons
 				var personPeriodIds = person.PersonPeriodCollection.Select(p => p.Id.GetValueOrDefault()).ToList();
-				logger.DebugFormat("deleting bridge group page person {0} excluding person periods {1}", personId, string.Join(",", personPeriodIds));
+				logger.Debug($"Deleting bridge group page person {personId} excluding person periods {string.Join(",", personPeriodIds)}");
 				_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonExcludingPersonPeriods(personId, personPeriodIds);
 			}
 		}
@@ -132,10 +133,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			var toBeAdded = groups.Where(t => currentGroups.All(g => g != t.GroupCode)).ToList();
 			
 			_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeDeleted);
-			logger.DebugFormat("deleting groups {0} for period {1}", string.Join(",", toBeDeleted), personPeriodId);
+			logger.Debug($"Deleting groups {string.Join(",", toBeDeleted)} for period {personPeriodId}");
 			foreach (var groupInfo in toBeAdded)
 			{
-				logger.DebugFormat("add group page if not existing for {0}, {1}, {2}, {3}", groupInfo.GroupPageCode, groupInfo.GroupPageName, groupInfo.GroupCode, groupInfo.GroupCode);
+				logger.Debug($"Add group page if not existing for {groupInfo.GroupPageCode}, {groupInfo.GroupPageName}, {groupInfo.GroupCode}, {groupInfo.GroupCode}");
 				_analyticsGroupPageRepository.AddGroupPageIfNotExisting(new AnalyticsGroup
 				{
 					GroupName = groupInfo.GroupName,
@@ -147,7 +148,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					GroupPageNameResourceKey = groupInfo.GroupPageNameResourceKey
 				});
 			}
-			logger.DebugFormat("adding groups {0} for period {1}", string.Join(",", toBeAdded), personPeriodId);
+			logger.Debug($"Adding groups {string.Join(",", toBeAdded)} for period {personPeriodId}");
 			_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePersonForPersonPeriod(personPeriodId, toBeAdded.Select(x => x.GroupCode).ToList());
 			return toBeDeleted;
 		}
@@ -155,14 +156,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		// Removes any GroupPages in specified set that have no people mapped to them
 		private void clearEmptyGroups(IEnumerable<Guid> toBeDeleted)
 		{
-			var groupsToDelete = new List<Guid>();
-			foreach (var groupId in toBeDeleted)
-			{
-				var peopleInGroup = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(groupId);
-				if (!peopleInGroup.Any())
-					groupsToDelete.Add(groupId);
-			}
-			logger.DebugFormat("clearing empty group for {0}", string.Join(",", groupsToDelete));
+			var groupsToDelete = (from groupId in toBeDeleted
+				let peopleInGroup = _analyticsBridgeGroupPagePersonRepository.GetBridgeGroupPagePerson(groupId)
+				where !peopleInGroup.Any()
+				select groupId).ToList();
+
+			logger.Debug($"Clearing empty group for {string.Join(",", groupsToDelete)}");
 			_analyticsGroupPageRepository.DeleteGroupPagesByGroupCodes(groupsToDelete);
 		}
 
@@ -188,32 +187,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		{
 			
 			var contract = personPeriod.PersonContract.Contract.Id.GetValueOrDefault();
-			if (contract != Guid.Empty && personPeriod.PersonContract.Contract.IsChoosable)
-			{
-				var contractGroupPage = getGroupPage(groupPages, "Contracts", Resources.Contracts);
-				groupIds.Add(new analyticsGroupForPerson(contract, personPeriod.PersonContract.Contract.Description.Name, contractGroupPage));
-			}
-				
+			if (contract == Guid.Empty || !personPeriod.PersonContract.Contract.IsChoosable) return;
+
+			var contractGroupPage = getGroupPage(groupPages, "Contracts", Resources.Contracts);
+			groupIds.Add(new analyticsGroupForPerson(contract, personPeriod.PersonContract.Contract.Description.Name, contractGroupPage));
 		}
 
 		private static void handleContractSchedule(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
 			var contractSchedule = personPeriod.PersonContract.ContractSchedule.Id.GetValueOrDefault();
-			if (contractSchedule != Guid.Empty && personPeriod.PersonContract.ContractSchedule.IsChoosable)
-			{
-				var contractScheduleGroupPage = getGroupPage(groupPages, "ContractSchedule", Resources.ContractSchedule);
-				groupIds.Add(new analyticsGroupForPerson(contractSchedule, personPeriod.PersonContract.ContractSchedule.Description.Name, contractScheduleGroupPage));
-			}
+			if (contractSchedule == Guid.Empty || !personPeriod.PersonContract.ContractSchedule.IsChoosable) return;
+
+			var contractScheduleGroupPage = getGroupPage(groupPages, "ContractSchedule", Resources.ContractSchedule);
+			groupIds.Add(new analyticsGroupForPerson(contractSchedule, personPeriod.PersonContract.ContractSchedule.Description.Name, contractScheduleGroupPage));
 		}
 
 		private static void handlePartTimePercentage(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
 		{
 			var partTimePercentage = personPeriod.PersonContract.PartTimePercentage.Id.GetValueOrDefault();
-			if (partTimePercentage != Guid.Empty && personPeriod.PersonContract.PartTimePercentage.IsChoosable)
-			{
-				var partTimePercentageGroupPage = getGroupPage(groupPages, "PartTimepercentages", Resources.PartTimepercentages);
-				groupIds.Add(new analyticsGroupForPerson(partTimePercentage, personPeriod.PersonContract.PartTimePercentage.Description.Name, partTimePercentageGroupPage));
-			}
+			if (partTimePercentage == Guid.Empty || !personPeriod.PersonContract.PartTimePercentage.IsChoosable) return;
+
+			var partTimePercentageGroupPage = getGroupPage(groupPages, "PartTimepercentages", Resources.PartTimepercentages);
+			groupIds.Add(new analyticsGroupForPerson(partTimePercentage, personPeriod.PersonContract.PartTimePercentage.Description.Name, partTimePercentageGroupPage));
 		}
 
 		private static void handleRuleSetBag(IPersonPeriod personPeriod, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
@@ -221,11 +216,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			if (personPeriod.RuleSetBag == null) return;
 
 			var ruleSetBag = personPeriod.RuleSetBag.Id.GetValueOrDefault();
-			if (ruleSetBag != Guid.Empty && personPeriod.RuleSetBag.IsChoosable)
-			{
-				var ruleSetBagGroupPage = getGroupPage(groupPages, "RuleSetBag", Resources.RuleSetBag);
-				groupIds.Add(new analyticsGroupForPerson(ruleSetBag, personPeriod.RuleSetBag.Description.Name, ruleSetBagGroupPage));
-			}
+			if (ruleSetBag == Guid.Empty || !personPeriod.RuleSetBag.IsChoosable) return;
+
+			var ruleSetBagGroupPage = getGroupPage(groupPages, "RuleSetBag", Resources.RuleSetBag);
+			groupIds.Add(new analyticsGroupForPerson(ruleSetBag, personPeriod.RuleSetBag.Description.Name, ruleSetBagGroupPage));
 		}
 
 		private static void handleNotes(string note, ICollection<analyticsGroupForPerson> groupIds, IEnumerable<AnalyticsGroupPage> groupPages)
@@ -239,7 +233,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 		private static string formatNoteName(string note)
 		{
-			return note.Length > 50 ? string.Format("{0}..", note.Substring(0, 48)) : note;
+			return note.Length <= 50 ? note : $"{note.Substring(0, 48)}..";
 		}
 
 		private class analyticsGroupForPerson

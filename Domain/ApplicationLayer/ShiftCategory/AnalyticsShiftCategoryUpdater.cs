@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftCategory
 			}
 		}
 
-		private AnalyticsShiftCategory transformToAnalyticsShiftCategory(IShiftCategory shiftCategory, int businessUnitId)
+		private static AnalyticsShiftCategory transformToAnalyticsShiftCategory(IShiftCategory shiftCategory, int businessUnitId)
 		{
 			return new AnalyticsShiftCategory
 			{

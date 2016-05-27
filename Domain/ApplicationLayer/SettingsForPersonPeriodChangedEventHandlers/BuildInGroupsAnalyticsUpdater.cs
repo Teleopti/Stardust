@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using log4net;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -64,6 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		private readonly IContractRepository _contractRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly List<Func<AnalyticsGroup, Guid, bool>> _checks;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(BuildInGroupsAnalyticsUpdaterBase));
 
 		public BuildInGroupsAnalyticsUpdaterBase(IAnalyticsGroupPageRepository analyticsGroupPageRepository, ISkillRepository skillRepository, IPartTimePercentageRepository partTimePercentageRepository, IRuleSetBagRepository ruleSetBagRepository, IContractRepository contractRepository, IContractScheduleRepository contractScheduleRepository)
 		{
@@ -88,13 +90,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 			foreach (var entityId in @event.IdCollection)
 			{
 				var groupPage = _analyticsGroupPageRepository.GetGroupPageByGroupCode(entityId);
-				if (groupPage != null)
+				if (groupPage == null) continue;
+				foreach (var check in _checks)
 				{
-					foreach (var check in _checks)
-					{
-						if (check(groupPage, entityId))
-							break;
-					}
+					if (check(groupPage, entityId))
+						break;
 				}
 			}
 		}
@@ -102,10 +102,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 		private bool check<T>(AnalyticsGroup @group, Func<T> getter, Func<T, string> propertyAccessor)
 		{
 			var entity = getter();
-			if (entity == null) return false;
+			if (entity == null)
+				return false;
+
 			if (@group.GroupName != propertyAccessor(entity))
 			{
 				@group.GroupName = propertyAccessor(entity);
+				logger.Debug($"Updating Group: {@group.GroupName}, {@group.GroupCode}");
 				_analyticsGroupPageRepository.UpdateGroupPage(@group);
 			}
 			return true;

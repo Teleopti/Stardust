@@ -15,13 +15,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 			 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439),
 		DisabledBy(Toggles.GroupPageCollection_ToHangfire_38178)]
-	public class GroupPageAnalyticsUpdaterOnServicebus : GroupPageAnalyticsUpdaterBase,
+	public class AnalyticsGroupPageUpdaterOnServicebus : AnalyticsGroupPageUpdaterBase,
 	IHandleEvent<GroupPageCollectionChangedEvent>,
 	IRunOnServiceBus
 #pragma warning restore 618
 	{
-		public GroupPageAnalyticsUpdaterOnServicebus(IGroupPageRepository groupPageRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, 
-			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) : base(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository)
+		public AnalyticsGroupPageUpdaterOnServicebus(
+			IGroupPageRepository groupPageRepository,
+			IAnalyticsGroupPageRepository analyticsGroupPageRepository,
+			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) : 
+			base(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository)
 		{
 		}
 
@@ -35,12 +38,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 	[EnabledBy(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623,
 			 Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439,
 			Toggles.GroupPageCollection_ToHangfire_38178)]
-	public class GroupPageAnalyticsUpdaterOnHangfire : GroupPageAnalyticsUpdaterBase,
+	public class AnalyticsGroupPageUpdaterOnHangfire : AnalyticsGroupPageUpdaterBase,
 	IHandleEvent<GroupPageCollectionChangedEvent>,
 	IRunOnHangfire
 	{
-		public GroupPageAnalyticsUpdaterOnHangfire (IGroupPageRepository groupPageRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, 
-			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) : base(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository)
+		public AnalyticsGroupPageUpdaterOnHangfire(IGroupPageRepository groupPageRepository, 
+			IAnalyticsGroupPageRepository analyticsGroupPageRepository,
+			IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository) : 
+			base(groupPageRepository, analyticsGroupPageRepository, analyticsBridgeGroupPagePersonRepository)
 		{
 		}
 
@@ -53,14 +58,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 		}
 	}
 
-	public class GroupPageAnalyticsUpdaterBase
+	public class AnalyticsGroupPageUpdaterBase
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(GroupPageAnalyticsUpdaterBase));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsGroupPageUpdaterBase));
 		private readonly IGroupPageRepository _groupPageRepository;
 		private readonly IAnalyticsGroupPageRepository _analyticsGroupPageRepository;
 		private readonly IAnalyticsBridgeGroupPagePersonRepository _analyticsBridgeGroupPagePersonRepository;
 
-		public GroupPageAnalyticsUpdaterBase(IGroupPageRepository groupPageRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository)
+		public AnalyticsGroupPageUpdaterBase(IGroupPageRepository groupPageRepository, IAnalyticsGroupPageRepository analyticsGroupPageRepository, IAnalyticsBridgeGroupPagePersonRepository analyticsBridgeGroupPagePersonRepository)
 		{
 			_groupPageRepository = groupPageRepository;
 			_analyticsGroupPageRepository = analyticsGroupPageRepository;
@@ -73,8 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 
 			if (!groupPages.Any())
 			{
-				logger.DebugFormat("Did not find any group pages in APP database, deleting anything we have in analytics for group pages: {0}.",
-						string.Join(",", @event.GroupPageIdCollection));
+				logger.Debug($"Did not find any group pages in APP database, deleting anything we have in analytics for group pages: {string.Join(",", @event.GroupPageIdCollection)}.");
 				_analyticsBridgeGroupPagePersonRepository.DeleteAllBridgeGroupPagePerson(@event.GroupPageIdCollection);
 				_analyticsGroupPageRepository.DeleteGroupPages(@event.GroupPageIdCollection);
 			}
@@ -98,12 +102,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 						};
 						if (existingInAnalytics.Any(x => x.GroupCode == rootGroup.Id))
 						{
-							logger.DebugFormat("Updating group page {0}, group {1}", analyticsGroupPage.GroupPageCode, analyticsGroupPage.GroupCode);
+							logger.Debug($"Updating group page {analyticsGroupPage.GroupPageCode}, group {analyticsGroupPage.GroupCode}");
 							_analyticsGroupPageRepository.UpdateGroupPage(analyticsGroupPage);
 						}
 						else
 						{
-							logger.DebugFormat("Creating group page {0}, group {1}", analyticsGroupPage.GroupPageCode, analyticsGroupPage.GroupCode);
+							logger.Debug($"Creating group page {analyticsGroupPage.GroupPageCode}, group {analyticsGroupPage.GroupCode}");
 							_analyticsGroupPageRepository.AddGroupPageIfNotExisting(analyticsGroupPage);
 						}
 						var people = getRecursively(rootGroup.ChildGroupCollection, rootGroup.PersonCollection.ToList()).Select(x => x.Id.GetValueOrDefault()).ToList();
@@ -112,10 +116,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 						var toBeDeleted = currentPersonCodesInGroupPage.Where(x => !people.Contains(x)).ToList();
 
 						if (toBeAdded.Any())
-							logger.DebugFormat("Adding {0} people to group {1}", toBeAdded.Count, rootGroupId);
+							logger.Debug($"Adding {toBeAdded.Count} people to group {rootGroupId}");
 						_analyticsBridgeGroupPagePersonRepository.AddBridgeGroupPagePerson(toBeAdded, rootGroupId);
 						if (toBeDeleted.Any())
-							logger.DebugFormat("Removing {0} people from group {1}", toBeDeleted.Count, rootGroupId);
+							logger.Debug($"Removing {toBeDeleted.Count} people from group {rootGroupId}");
 						_analyticsBridgeGroupPagePersonRepository.DeleteBridgeGroupPagePerson(toBeDeleted, rootGroupId);
 					}
 				}

@@ -44,43 +44,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Activity
 			var applicationActivity = _activityRepository.Get(@event.ActivityId);
 			var analyticsBusinessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 
+			var activity = new AnalyticsActivity
+			{
+				ActivityCode = @event.ActivityId,
+				ActivityName = applicationActivity.Name,
+				DisplayColor = applicationActivity.DisplayColor.ToArgb(),
+				DisplayColorHtml = ColorTranslator.ToHtml(applicationActivity.DisplayColor),
+				InReadyTime = applicationActivity.InReadyTime,
+				InContractTime = applicationActivity.InContractTime,
+				InPaidTime = applicationActivity.InPaidTime,
+				InWorkTime = applicationActivity.InWorkTime,
+				BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
+				DatasourceId = 1,
+				DatasourceUpdateDate = applicationActivity.UpdatedOn.GetValueOrDefault(),
+				IsDeleted = applicationActivity.IsDeleted
+			};
+
 			// Add
 			if (analyticsActivity == null)
 			{
-				_analyticsActivityRepository.AddActivity(new AnalyticsActivity
-				{
-					ActivityCode = @event.ActivityId,
-					ActivityName = applicationActivity.Name,
-					DisplayColor = applicationActivity.DisplayColor.ToArgb(),
-					DisplayColorHtml = ColorTranslator.ToHtml(applicationActivity.DisplayColor),
-					InReadyTime = applicationActivity.InReadyTime,
-					InContractTime = applicationActivity.InContractTime,
-					InPaidTime = applicationActivity.InPaidTime,
-					InWorkTime = applicationActivity.InWorkTime,
-					BusinessUnitId = analyticsBusinessUnit.BusinessUnitId,
-					DatasourceId = 1,
-					DatasourceUpdateDate = applicationActivity.UpdatedOn.GetValueOrDefault(),
-					IsDeleted = applicationActivity.IsDeleted
-				});
+				_analyticsActivityRepository.AddActivity(activity);
 			}
 			else
 			// Update
 			{
-				_analyticsActivityRepository.UpdateActivity(new AnalyticsActivity
-				{
-					ActivityCode = @event.ActivityId,
-					ActivityName = applicationActivity.Name,
-					DisplayColor = applicationActivity.DisplayColor.ToArgb(),
-					DisplayColorHtml = ColorTranslator.ToHtml(applicationActivity.DisplayColor),
-					InReadyTime = applicationActivity.InReadyTime,
-					InContractTime = applicationActivity.InContractTime,
-					InPaidTime = applicationActivity.InPaidTime,
-					InWorkTime = applicationActivity.InWorkTime,
-					BusinessUnitId = analyticsActivity.BusinessUnitId,
-					DatasourceId = 1,
-					DatasourceUpdateDate = applicationActivity.UpdatedOn.GetValueOrDefault(),
-					IsDeleted = applicationActivity.IsDeleted
-				});
+				_analyticsActivityRepository.UpdateActivity(activity);
 			}
 		}
 	}

@@ -303,17 +303,14 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public static IEnumerable<AnalyticsBridgeSkillsetSkill> NewBridgeSkillSetSkillsFromSkills(List<AnalyticsSkill> listOfSkills, int newSkillSetId)
 		{
-			foreach (var skill in listOfSkills)
+			return listOfSkills.Select(skill => new AnalyticsBridgeSkillsetSkill
 			{
-				yield return new AnalyticsBridgeSkillsetSkill
-				{
-					SkillsetId = newSkillSetId,
-					SkillId = skill.SkillId,
-					BusinessUnitId = skill.BusinessUnitId,
-					DatasourceId = skill.DatasourceId,
-					DatasourceUpdateDate = skill.DatasourceUpdateDate
-				};
-			}
+				SkillsetId = newSkillSetId,
+				SkillId = skill.SkillId,
+				BusinessUnitId = skill.BusinessUnitId,
+				DatasourceId = skill.DatasourceId,
+				DatasourceUpdateDate = skill.DatasourceUpdateDate
+			});
 		}
 	}
 }

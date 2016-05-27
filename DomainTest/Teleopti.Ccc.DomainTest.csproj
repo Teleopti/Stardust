@@ -213,7 +213,7 @@
     <Compile Include="ApplicationLayer\Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="ApplicationLayer\Forecast\StatisticLoaderTest.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupingReadModelGroupPageUpdaterTests.cs" />
-    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\GroupPageAnalyticsUpdaterTests.cs" />
+    <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\AnalyticsGroupPageUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\MoveShiftLayerCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\MultiplicatorDefinitionSetHandlers\AnalyticsOvertimeUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\MyTeamRemovePersonAbsenceCommandHandlerTest.cs" />
@@ -227,7 +227,6 @@
     <Compile Include="ApplicationLayer\Preference\Analytics\PreferenceChangedHandlerTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\UpdatePersonGroupsAnalyticsHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\UpdateSkillAnalyticsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />
@@ -239,6 +238,7 @@
     <Compile Include="ApplicationLayer\RemovePartAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandlerTest.cs" />
     <Compile Include="Common\ScheduleChangedEventDetector.cs" />
+    <Compile Include="ApplicationLayer\Skill\AnalyticsSkillUpdaterTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduledDaysCascadingTest.cs" />

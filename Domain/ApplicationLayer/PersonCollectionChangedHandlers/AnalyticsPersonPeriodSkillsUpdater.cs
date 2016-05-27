@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Logon;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 {
@@ -26,9 +25,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
        IHandleEvent<AnalyticsPersonPeriodSkillsChangedEvent>,
        IRunOnHangfire
     {
-        public AnalyticsPersonPeriodSkillsUpdaterHangfire(IAnalyticsSkillRepository analyticsSkillRepository)
-            : base(analyticsSkillRepository)
-        {}
+	    public AnalyticsPersonPeriodSkillsUpdaterHangfire(IAnalyticsSkillRepository analyticsSkillRepository)
+		    : base(analyticsSkillRepository)
+	    {
+	    }
     }
 
     public class AnalyticsPersonPeriodSkillsUpdater 
@@ -49,14 +49,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			var businessUnitId = @event.AnalyticsBusinessUnitId;
 
 			// Delete current references
-			logger.DebugFormat("Deleting fact_agent_skill for person period id '{0}'", personPeriodId);
+			logger.Debug($"Deleting fact_agent_skill for person period id '{personPeriodId}'");
 			_analyticsSkillRepository.DeleteAgentSkillForPersonId(personPeriodId);
 
 			if (!@event.AnalyticsActiveSkillsId.Any() && !@event.AnalyticsInactiveSkillsId.Any())
 				return;
 
 			// Insert current parts
-			logger.DebugFormat("Insert new fact_agent_skill references for person period id '{0}' ", personPeriodId);
+			logger.Debug($"Insert new fact_agent_skill references for person period id '{personPeriodId}' ");
 			foreach (var activeSkillId in @event.AnalyticsActiveSkillsId)
 			{
 				_analyticsSkillRepository.AddAgentSkill(personPeriodId, activeSkillId, true, businessUnitId);

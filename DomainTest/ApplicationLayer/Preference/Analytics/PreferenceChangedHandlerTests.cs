@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		private IScheduleStorage _scheduleStorage;
 		private IAnalyticsPreferenceRepository _analyticsPreferenceRepository;
 		private IAnalyticsDateRepository _analyticsDateRepository;
-		private FakeAnalyticsScheduleRepository _analyticsScheduleRepository;
 		private FakePersonRepository _personRepository;
 		private FakeAnalyticsDayOffRepository _analyticsDayOffRepository;
 		private FakeAnalyticsScenarioRepository _analyticsScenarioRepository;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_scheduleStorage = new FakeScheduleDataReadScheduleStorage();
 			_analyticsPreferenceRepository = new FakeAnalyticsPreferenceRepository();
 			_analyticsDateRepository = new FakeAnalyticsDateRepository();
-			_analyticsScheduleRepository = new FakeAnalyticsScheduleRepository();
 			_personRepository = new FakePersonRepository();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
@@ -71,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				_preferenceDayRepository,
 				_personPeriodRepository,
 				_analyticsBusinessUnitRepository,
-				_analyticsScheduleRepository,
 				_analyticsDateRepository,
 				_scheduleStorage,
 				_analyticsPreferenceRepository,

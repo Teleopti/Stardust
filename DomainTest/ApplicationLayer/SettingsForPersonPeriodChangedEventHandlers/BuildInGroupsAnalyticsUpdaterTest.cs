@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
@@ -143,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SettingsForPersonPeriodChange
 			_ruleSetBagRepository.Stub(r => r.Get(entityId)).Return(null);
 			_contractRepository.Stub(r => r.Get(entityId)).Return(null);
 			_contractScheduleRepository.Stub(r => r.Get(entityId)).Return(null);
-			var skill = new Skill();
+			var skill = new Domain.Forecasting.Skill();
 			skill.ChangeName(updateGroupName);
 			_skillRepository.Stub(r => r.Get(entityId)).Return(skill);
 

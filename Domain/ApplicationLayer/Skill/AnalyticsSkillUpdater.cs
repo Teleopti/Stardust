@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradaySkill_37543)]
 	public class AnalyticsSkillUpdater :
