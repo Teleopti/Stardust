@@ -649,7 +649,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             anotherPerson2.Name = new Name("Kirk", "Douglas");
             PersistAndRemoveFromUnitOfWork(anotherPerson2);
 
-            IList<IPerson> persons = new List<IPerson>{_person, anotherPerson, anotherPerson2};
+            IList<IPerson> persons = new List<IPerson>{_person, anotherPerson, anotherPerson2, personTo};
             
             IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
                 new List<IShiftTradeSwapDetail>
@@ -902,7 +902,29 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 								.Should().Be.Empty();
 			}
 
-			[Test]
+
+		[Test]
+		public void ShouldNotIncludeShiftTradeIfOnlyOneOfTheAgentsIsPassedIn()
+		{
+			var personTo = PersonFactory.CreatePerson("person to");
+			var personFrom = PersonFactory.CreatePerson("person from");
+			PersistAndRemoveFromUnitOfWork(personTo);
+			PersistAndRemoveFromUnitOfWork(personFrom);
+
+			var shiftTradeRequest = new ShiftTradeRequest(
+					new List<IShiftTradeSwapDetail>
+									{
+												new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16),new DateOnly(2008, 7, 16))
+									});
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
+			shiftTradePersonRequest.Pending();
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+
+			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(new[] { personTo}, new DateTimePeriod(2000, 1, 1, 2010, 1, 1))
+							.Should().Be.Empty();
+		}
+
+		[Test]
 			public void ShouldNotIncludeShiftTradeOfTerminatedPersonFrom()
 			{
 				var personTo = PersonFactory.CreatePerson("person to");
