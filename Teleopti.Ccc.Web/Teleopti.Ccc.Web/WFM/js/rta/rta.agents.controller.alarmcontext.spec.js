@@ -45,7 +45,6 @@ describe('RtaAgentsCtrl', function() {
 		var time = moment(value);
 
 		it('should display time line for ' + time.format('HH:mm'), function() {
-
 			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 			$fakeBackend
 				.withTime(time.format('YYYY-MM-DDTHH:mm:ss'))
@@ -65,5 +64,53 @@ describe('RtaAgentsCtrl', function() {
 
 	});
 
+	it('should display schedule', function() {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+
+		$fakeBackend
+			.withAgent({
+				Name: "Ashley Andeen",
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				Shift: [
+					{
+						Color: "#80FF80",
+						Offset: "10%",
+						Width: "25%"
+					}
+				]
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+		expect(scope.agents[0].Shift.length).toEqual(1);
+		expect(scope.agents[0].Shift[0].Color).toEqual("#80FF80");
+		expect(scope.agents[0].Shift[0].Offset).toEqual("10%");
+		expect(scope.agents[0].Shift[0].Width).toEqual("25%");
+	});
+
+	it('should display the width of the alarm', function () {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+
+		$fakeBackend
+			.withAgent({
+				Name: "Ashley Andeen",
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TimeInAlarm: 1800
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+		expect(scope.agents[0].AlarmWidth).toEqual("12.5%");
+	});
 
 });

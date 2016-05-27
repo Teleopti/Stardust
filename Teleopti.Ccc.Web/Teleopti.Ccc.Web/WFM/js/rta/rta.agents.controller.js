@@ -165,19 +165,16 @@
 					$scope.timeline = [
 						{
 							Time: m.format('HH:mm')
-						},
-						{
+						}, {
 							Time: m.add(1, 'hour').format('HH:mm')
-						},
-						{
+						}, {
 							Time: m.add(1, 'hour').format('HH:mm')
-						},
-						{
+						}, {
 							Time: m.add(1, 'hour').format('HH:mm')
 						}
 					];
-					
-					
+
+
 				}
 
 				function fillAgentsWithState(states) {
@@ -201,24 +198,8 @@
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
-								AlarmWidth: "5%", //(state.TimeInAlarm / 3600 * 25) + '%',
-								Shift: [
-									{
-										Color: "rgb(128, 255, 128)",
-										Offset: "10%",
-										Width: "25%"
-									},
-									{
-										Color: "yellow",
-										Offset: "35%",
-										Width: "10%"
-									},
-									{
-										Color: "rgb(128, 255, 128)",
-										Offset: "45%",
-										Width: "25%"
-									}
-								]
+								AlarmWidth: (state.TimeInAlarm / 3600 * 25) + '%',
+								Shift: state.Shift
 							});
 						}
 					});
