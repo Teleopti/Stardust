@@ -1,19 +1,19 @@
 ﻿<div ng-controller="adduserController as vm" style="margin-left: 50px; margin-right: 50px">
     <div class="row">
-        <div class="col-md-12" ng-show="loginVm.FirstUser == false">
+        <div class="col-md-12" ng-show="vm.FirstUser == false">
             <a style="float: left; padding-top: 25px; padding-right: 50px" href="#users"><img alt="back" title="Back to Users" src="Content/images/left_round.png"/></a>
             <h2>Add new User</h2>
             <p>
                 Lets you add a new user to administrate the Tenants.
             </p>
         </div>
-        <div class="col-md-12" ng-show="!loginVm.FirstUser">
+        <div class="col-md-12" ng-show="vm.FirstUser == true">
             <h2>Add first user for adminstration of Tenants</h2>
             <p>
                 There must be at least one user that administer Tenants. Be sure you remember the account information so you can logon the next time.
             </p>
         </div>
-
+		
         <div class="col-md-12">
             <div>
                 <div class="importCaption">Name</div>
