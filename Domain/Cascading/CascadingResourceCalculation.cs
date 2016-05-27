@@ -32,31 +32,24 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private void doForPeriod(DateOnlyPeriod period)
 		{
-			Lazy<IResourceCalculationDataContainerWithSingleOperation> existingContext = null;
-			if (ResourceCalculationContext.InContext)
+			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				var currentContext = ResourceCalculationContext.Fetch();
-				existingContext = new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => currentContext);
-			}
-
-			using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
-			{
-				foreach (var date in period.DayCollection())
+				using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
 				{
-					//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
-					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
+					foreach (var date in period.DayCollection())
+					{
+						//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
+						_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
+					}
+				}
+				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider()).Create())
+				{
+					foreach (var date in period.DayCollection())
+					{
+						_cascadeResources.Execute(date);
+					}
 				}
 			}
-			using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider()).Create())
-			{
-				foreach (var date in period.DayCollection())
-				{
-					_cascadeResources.Execute(date);
-				}
-			}
-
-			if(existingContext != null)
-				new ResourceCalculationContext(existingContext);
 		}
 	}
 }
