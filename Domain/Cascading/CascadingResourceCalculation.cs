@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class CascadingResourceCalculation : IResourceOptimizationHelper
 	{
-		private readonly IResourceOptimizerHelperOld _resourceOptimizationHelper;
+		private readonly IResourceOptimizationHelperOld _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly CascadeResources _cascadeResources;
 
-		public CascadingResourceCalculation(IResourceOptimizerHelperOld resourceOptimizationHelper,
+		public CascadingResourceCalculation(IResourceOptimizationHelperOld resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder,
 																CascadeResources cascadeResources)
 		{
@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
+			//TODO: need to consider params above
 			ForDay(localDate);
 		}
 	}

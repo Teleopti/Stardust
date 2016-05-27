@@ -10,12 +10,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public interface IResourceOptimizerHelperOld
+	//remove me when cascading toggle is gone
+	public interface IResourceOptimizationHelperOld
 	{
 		void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation);
 	}
 
-	public class ResourceOptimizationHelper : IResourceOptimizationHelper, IResourceOptimizerHelperOld
+	public class ResourceOptimizationHelper : IResourceOptimizationHelper, IResourceOptimizationHelperOld
 	{
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
