@@ -32,7 +32,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private void doForPeriod(DateOnlyPeriod period)
 		{
-			//TODO: look this over. AFAIK - we want to keep "context before" when leaving this method (and remove last context - or first when all res calc is made new way)
+			Lazy<IResourceCalculationDataContainerWithSingleOperation> existingContext = null;
+			if (ResourceCalculationContext.InContext)
+			{
+				var currentContext = ResourceCalculationContext.Fetch();
+				existingContext = new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => currentContext);
+			}
+
 			using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
 			{
 				foreach (var date in period.DayCollection())
@@ -48,6 +54,9 @@ namespace Teleopti.Ccc.Domain.Cascading
 					_cascadeResources.Execute(date);
 				}
 			}
+
+			if(existingContext != null)
+				new ResourceCalculationContext(existingContext);
 		}
 	}
 }

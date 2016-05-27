@@ -242,6 +242,7 @@
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduleDaysCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnScheduledDaysCascadingTest.cs" />
+    <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationContextTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationTest.cs" />
     <Compile Include="Logon\ImpersonateSystemTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandlerTest.cs" />
