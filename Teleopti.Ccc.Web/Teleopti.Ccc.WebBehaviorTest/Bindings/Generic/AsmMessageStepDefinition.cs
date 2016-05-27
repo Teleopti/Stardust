@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldBeNotifiedThatIHaveUnreadMessageS(int unreadMessageCount)
 		{
 			if (unreadMessageCount == 0)
-				Browser.Interactions.AssertNotVisibleUsingJQuery(".container li>a[href*='#MessageTab'] span.badge");
+				Browser.Interactions.AssertVisibleUsingJQuery(".container span.badge.no-unread-msg");
 			else
-				Browser.Interactions.AssertExistsUsingJQuery("[href*='#MessageTab'] span.badge.badge-important", unreadMessageCount);
+				Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".badge-important:contains('{0}')", unreadMessageCount));
 		}
 
 		[When(@"I receive message number '(.*)' while not viewing message page")]

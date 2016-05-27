@@ -22,21 +22,6 @@ Scenario: Show message tab
 	When I am viewing week schedule
 	Then Message tab should be visible
 
-Scenario: Indicate new message while logged on
-	Given I have the role 'Full access to mytime'
-	And I am viewing week schedule
-	When I receive message number '1' while not viewing message page
-	Then I should be notified that I have '1' unread message(s)
-
-Scenario: Indicate another new message while logged on
-	Given I have the role 'Full access to mytime'
-	And I have an unread message with
-	| Field         | Value        |
-	| Title         | New message	 |
-	When I am viewing week schedule
-	And I receive message number '2' while not viewing message page
-	Then I should be notified that I have '2' unread message(s)
-
 Scenario: Indicate new message at logon
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -109,6 +94,7 @@ Scenario: Reduce number of unread messages in message tab title
 	When I navigate to messages
 	And I click on the message with the title 'New message'
 	And I confirm reading the message with the title 'New message'
+	And I am viewing week schedule
 	Then I should be notified that I have '1' unread message(s)
 
 Scenario: Receive a new message when viewing message page
