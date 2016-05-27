@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			wfmWebView.CertificateError += handlingCertificateErrorsWfmWebView;
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
 		}
-		
+
 		private void setBusinessUnitInWebView()
 		{
 			if (!wfmWebControl.Enabled) return;
@@ -116,24 +116,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			try
 			{
 				JSObject window = wfmWebView.GetDOMWindow();
-				if (wfmWebView.CanEvalScript)
+				while (!wfmWebView.CanEvalScript)
 				{
+					//wait until loaded
+				}
 					var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
 					if (iAmCalledFromFatClient == null)
 					{
 						setWfmWebUrl(_permissionModule);
 						return;
 					}
-
 					iAmCalledFromFatClient.Invoke(window, new object[] { });
-				}
-				else
-				{
-					setWfmWebUrl(_permissionModule);
-				}
 			}
-			catch (JSInvokeException)
+			catch (JSInvokeException exception)
 			{
+				_logger.Error(exception);
 				setWfmWebUrl(_permissionModule);
 			}
 		}
@@ -955,6 +952,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void handlingEoRuntimeErrors(object sender, ExceptionEventArgs e)
 		{
 			_logger.Error("Error in the EO browser", e.ErrorException);
+		}
+		
+		private void handlingLoadFailedError(object sender, LoadFailedEventArgs e)
+		{
+		//	e.UseDefaultMessage();
 		}
 	}
 }
