@@ -8,6 +8,7 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldBeNotifiedThatIHaveUnreadMessageS(int unreadMessageCount)
 		{
 			if (unreadMessageCount == 0)
-				Browser.Interactions.AssertNotExists(".container", "[href*='#MessageTab'] span.badge");
+				Browser.Interactions.AssertNotVisibleUsingJQuery(".container li>a[href*='#MessageTab'] span.badge");
 			else
-				Browser.Interactions.AssertFirstContains("[href*='#MessageTab'] span.badge", unreadMessageCount.ToString(CultureInfo.InvariantCulture));
+				Browser.Interactions.AssertExistsUsingJQuery("[href*='#MessageTab'] span.badge.badge-important", unreadMessageCount);
 		}
 
 		[When(@"I receive message number '(.*)' while not viewing message page")]
