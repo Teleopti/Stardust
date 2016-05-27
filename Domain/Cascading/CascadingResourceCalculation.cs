@@ -5,13 +5,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class CascadingResourceCalculation
+	public class CascadingResourceCalculation : IResourceOptimizationHelper
 	{
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IResourceOptimizerHelperOld _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly CascadeResources _cascadeResources;
 
-		public CascadingResourceCalculation(IResourceOptimizationHelper resourceOptimizationHelper,
+		public CascadingResourceCalculation(IResourceOptimizerHelperOld resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder,
 																CascadeResources cascadeResources)
 		{
@@ -50,6 +50,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 					}
 				}
 			}
+		}
+
+		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		{
+			ForDay(localDate);
 		}
 	}
 }

@@ -10,7 +10,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ResourceOptimizationHelper : IResourceOptimizationHelper
+	public interface IResourceOptimizerHelperOld
+	{
+		void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation);
+	}
+
+	public class ResourceOptimizationHelper : IResourceOptimizationHelper, IResourceOptimizerHelperOld
 	{
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;

@@ -72,18 +72,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<CascadingResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<CascadeResources>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillGroupPerActivityProvider>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
 			{
 				builder.RegisterType<FullResourceCalculationWithCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
 				builder.RegisterType<ResourceCalculateDelayerFactoryWithCascading>().As<IResourceCalculateDelayerFactory>().InstancePerLifetimeScope();
+				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizerHelperOld>().InstancePerLifetimeScope();
+				builder.RegisterType<CascadingResourceCalculation>().As<IResourceOptimizationHelper>().AsSelf().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<FullResourceCalculationWithoutCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
 				builder.RegisterType<ResourceCalculateDelayerFactoryWithoutCascading>().As<IResourceCalculateDelayerFactory>().InstancePerLifetimeScope();
+				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
 			}
 
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
@@ -190,7 +192,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftFinderService>().As<IWorkShiftFinderService>().InstancePerLifetimeScope();
 
 			builder.RegisterType<OccupiedSeatCalculator>().As<IOccupiedSeatCalculator>().SingleInstance();
-			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonSkillProvider>().As<IPersonSkillProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 
