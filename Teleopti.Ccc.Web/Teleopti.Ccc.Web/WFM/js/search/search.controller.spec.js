@@ -70,7 +70,7 @@ describe('SearchCtrl', function() {
 			SearchSvrc: mockSearchService
 		});
 		scope.keyword = 'dfa';
-		scope.resetSearch();
+		scope.ResetSearch();
 		scope.$digest();
 
 		expect(scope.searchResultGroups.length).toEqual(0);
