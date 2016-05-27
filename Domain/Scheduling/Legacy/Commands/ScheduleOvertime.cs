@@ -19,21 +19,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly IFullResourceCalculation _fullResourceCalculation;
-		private readonly IResourceCalculateDelayerFactory _resourceCalculateDelayerFactory;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		public ScheduleOvertime(Func<ISchedulerStateHolder> schedulerState, 
 																	Func<ISchedulingResultStateHolder> schedulingResultStateHolder, 
 																	IScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	IFullResourceCalculation fullResourceCalculation,
-																	IResourceCalculateDelayerFactory resourceCalculateDelayerFactory)
+																	IResourceOptimizationHelper resourceOptimizationHelper)
 		{
 			_schedulerState = schedulerState;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_scheduleOvertimeOnNonScheduleDays = scheduleOvertimeOnNonScheduleDays;
 			_fullResourceCalculation = fullResourceCalculation;
-			_resourceCalculateDelayerFactory = resourceCalculateDelayerFactory;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
 		public void Execute(IOvertimePreferences overtimePreferences, 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 										IList<IScheduleDay> selectedSchedules)
 		{
 			_fullResourceCalculation.Execute();
-			var resourceCalculateDelayer = _resourceCalculateDelayerFactory.Create(1, true);
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true);
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;
