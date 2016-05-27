@@ -94,7 +94,7 @@
 
 
 			scope.$on('teamSchedule.command.focus.default', function () {
-				var focusTarget = elem[0].querySelector('.focus-default');
+				var focusTarget = elem[0].querySelector('.focus-default input');
 				if (focusTarget) angular.element(focusTarget).focus();
 			});			
 		}

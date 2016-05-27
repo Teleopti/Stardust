@@ -122,6 +122,14 @@
 
 			selfCtrl.updateDateAndTimeFormat();
 			scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
+
+			elem.find('team-schedule-datepicker').on('focus', function (e) {				
+				e.target.querySelector('input').focus();
+			});
+
+			elem.find('uib-timepicker').on('focus', function (e) {				
+				e.target.querySelector('input').focus();
+			});			
 		}
 	}
 

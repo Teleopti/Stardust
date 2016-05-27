@@ -13,24 +13,24 @@
 			<h3>{{'From'|translate}}: </h3>
 			<div class="con-row">
 				<span class="col-sm-7 teamschedule-datepicker">
-					<team-schedule-datepicker selected-date="vm.timeRange.startTime" mini />
+					<team-schedule-datepicker selected-date="vm.timeRange.startTime" tabindex="101" mini />
 				</span>
 				<span class="col-sm-5 uib-timepicker">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.startTime"></uib-timepicker>
+					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.startTime" tabindex="102"></uib-timepicker>
 				</span>
 			</div>
 
 			<h3>{{'To'|translate}}: </h3>
 			<div class="con-row">
 				<span class="col-sm-7 teamschedule-datepicker">
-					<team-schedule-datepicker selected-date="vm.timeRange.endTime" mini />
+					<team-schedule-datepicker selected-date="vm.timeRange.endTime" tabindex="103" mini />
 				</span>
 				<span class="col-sm-5 uib-timepicker">
-					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.endTime"></uib-timepicker>
+					<uib-timepicker show-meridian="vm.showMeridian" ng-show="!vm.isFullDayAbsence && vm.isAddIntradayAbsenceAvailable()" ng-model="vm.timeRange.endTime" tabindex="104"></uib-timepicker>
 				</span>
 			</div>
 
-			<div class="wfm-checkbox" ng-if="vm.isAddFullDayAbsenceAvailable()">
+			<div class="wfm-checkbox" ng-if="vm.isAddFullDayAbsenceAvailable()" tabindex="105">
 				<input type="checkbox" id="is-full-day" ng-model="vm.isFullDayAbsence" ng-disabled="vm.isAddFullDayAbsenceAvailable() && !vm.isAddIntradayAbsenceAvailable()" />
 				<label for="is-full-day">
 					<span class="wfm-checkbox-toggle"></span>
@@ -42,7 +42,7 @@
 		</form>
 
 		<button id="applyAbsence" class="wfm-btn form-submit"
-				tabindex="100"
+				tabindex="106"
 				ng-class="{'wfm-btn-primary': newAbsenceForm.$valid && vm.isTimeRangeValid(), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isTimeRangeValid())}"
 				ng-disabled="newAbsenceForm.$valid && vm.isTimeRangeValid() ?'':'disabled'"
 				ng-click="vm.addAbsence()">
