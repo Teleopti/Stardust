@@ -309,7 +309,7 @@
         }
     }
 
-    .add-activity, .move-activity {
+    .add-absence, .add-activity, .move-activity{
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -323,11 +323,9 @@
         }
     }
 
-    .add-activity {
-        .activity-selector {
-            width: 100%;
-            min-height: 20px;
-        }
+    .add-activity .activity-selector, .add-absence .absence-selector {
+        width: 100%;
+        min-height: 20px;
     }
 
     md-content button.wfm-btn {
