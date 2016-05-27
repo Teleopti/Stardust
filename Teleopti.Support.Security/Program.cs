@@ -39,7 +39,7 @@ namespace Teleopti.Support.Security
 				{
 					var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(arguments.TenantStoreConnectionString);
 					var checker = new CheckTenantConnectionStrings(tenantUnitOfWorkManager, tenantUnitOfWorkManager);
-					checker.CheckConnectionStrings();
+					checker.CheckConnectionStrings(arguments.TenantStoreConnectionString);
 					return;
 				}
 				var upgrade = new UpgradeRunner();
