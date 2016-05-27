@@ -177,12 +177,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
 
-			Browser.Interactions.AssertExistsUsingJQuery(
-				string.Format(".absence-list .absence-user-timezone:contains('{0}'):contains('{1}'):contains('{2}')",
-											absenceListItemInfo.Name,
-											absenceListItemInfo.StartTimeFormatted(),
-											absenceListItemInfo.EndTimeFormatted())
-				);
+			Browser.Interactions.AssertExistsUsingJQuery(".absence-list .absence-user-timezone .absence-name", absenceListItemInfo.Name);
+			Browser.Interactions.AssertExistsUsingJQuery(".absence-list .absence-user-timezone .absence-start-time", absenceListItemInfo.StartTimeFormatted());
+			Browser.Interactions.AssertExistsUsingJQuery(".absence-list .absence-user-timezone .absence-end-time", absenceListItemInfo.EndTimeFormatted());
 		}
 
 		[Then(@"I should see absence in other time zone with")]

@@ -88,7 +88,7 @@ Scenario: Remove absence with confirmation
 	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see 0 absences in the absence list
 	And I should not see any shift
-@ignore	
+
 Scenario: Remove one of two absences
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -114,6 +114,7 @@ Scenario: Remove one of two absences
 	| Color      | Gray  |
 	When I click 'remove' on absence named 'Illness'
 	And I click 'confirm removal' on absence named 'Illness'
+	And I am viewing team schedule for '2013-05-06'
 	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
@@ -147,6 +148,7 @@ Scenario: Remove absence starting from day 2 on night shift
 	| Color      | Red   |
 	When I click 'remove' on absence named 'Vacation'
 	And I click 'confirm removal' on absence named 'Vacation'
+	And I am viewing team schedule for '2013-12-06'
 	And I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-12-06'
 	Then I should see 0 absences in the absence list
 	And I should not see a scheduled activity with
