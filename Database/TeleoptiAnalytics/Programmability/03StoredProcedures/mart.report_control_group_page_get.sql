@@ -48,7 +48,7 @@ SELECT DISTINCT
 		group_order						= 0,
 		group_page_name_resource_key	= group_page_name_resource_key
 	FROM
-		mart.dim_group_page
+		mart.dim_group_page WITH (NOLOCK)
 	WHERE
 		business_unit_code = @bu_id AND
 		group_page_name_resource_key IS NOT NULL
@@ -81,7 +81,7 @@ SELECT DISTINCT
 		group_order		= 1,
 		NULL
 	FROM
-		mart.dim_group_page
+		mart.dim_group_page WITH (NOLOCK)
 	WHERE
 		business_unit_code = @bu_id AND
 		group_page_name_resource_key IS NULL

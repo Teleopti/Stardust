@@ -48,7 +48,7 @@ SELECT DISTINCT
 	name	= isnull(l.term_language,d.site_name)
 FROM
 	
-	mart.dim_person d
+	mart.dim_person d WITH(NOLOCK)
 
 LEFT JOIN
 	mart.language_translation l
@@ -71,7 +71,7 @@ SELECT DISTINCT
 	name	= isnull(l.term_language,d.site_name)
 FROM
 	
-	mart.dim_person d
+	mart.dim_person d WITH(NOLOCK)
 
 LEFT JOIN
 	mart.language_translation l

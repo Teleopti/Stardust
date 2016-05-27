@@ -47,7 +47,7 @@ SELECT
 	id		= scenario_id,
 	name	= scenario_name
 FROM
-	mart.dim_scenario d
+	mart.dim_scenario d WITH(NOLOCK)
 WHERE 
 	--scenario_name='Default'
 	default_scenario = 1 --Always load current default_scenario (regardless of is_deleted)
@@ -60,7 +60,7 @@ SELECT
 	id		= scenario_id,
 	name	= scenario_name
 FROM
-	mart.dim_scenario d
+	mart.dim_scenario d WITH(NOLOCK)
 WHERE 
 	scenario_id <>-1
 	--AND scenario_name<>'Default'

@@ -58,7 +58,7 @@ BEGIN
 			personcode		= '00000000-0000-0000-0000-000000000001',
 			name			= d.person_name
 		FROM
-			mart.dim_person d
+			mart.dim_person d WITH(NOLOCK)
 		WHERE person_id=-1 --Not Defined
 
 	--Fix translation for "All" + "Not Defined"
@@ -84,7 +84,7 @@ INSERT #agents(person_code,name)
 	SELECT DISTINCT
 		person_code		= dp.person_code,
 		name			= dp.person_name
-	FROM mart.dim_person dp
+	FROM mart.dim_person dp WITH(NOLOCK)
 	WHERE (dp.site_id = @site_id OR @site_id=-2)
 	AND (dp.team_id IN (SELECT id FROM #teams) OR -2 IN (SELECT id FROM #teams))
 	AND dp.person_id<>-1

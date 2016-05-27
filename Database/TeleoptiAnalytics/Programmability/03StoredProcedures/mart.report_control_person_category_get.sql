@@ -28,7 +28,7 @@ SELECT
 	@user_person_id = person_id,
 	@user_team_id	= team_id
 FROM 
-	mart.dim_person d 
+	mart.dim_person d WITH(NOLOCK)
 WHERE 
 	person_code= @person_code
 create table #person_category(id int,name nvarchar(200))
@@ -37,7 +37,7 @@ IF @person_category_type_id=1 --LÄGGER IN EMPOLYMENT_TYPE HÅRT TILLSVIDARE
 begin
 	insert #person_category(id,name)
 	SELECT DISTINCT -1,employment_type_name
-	FROM mart.dim_person
+	FROM mart.dim_person WITH(NOLOCK)
 	where employment_type_code is null
 
 	

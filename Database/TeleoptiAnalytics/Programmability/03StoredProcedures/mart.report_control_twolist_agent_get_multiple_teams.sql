@@ -63,7 +63,7 @@ SELECT
 	name	= d.person_name,
 	person_code = '00000000-0000-0000-0000-000000000001'
 FROM
-	mart.dim_person d
+	mart.dim_person d WITH(NOLOCK)
 WHERE person_id=-1 --Not Defined
 
 --Fix translation "Not Defined"
@@ -95,7 +95,7 @@ SELECT DISTINCT
 --	id		= dp.person_id,
 	name	= dp.person_name,
 	person_code = dp.person_code
-FROM mart.dim_person dp
+FROM mart.dim_person dp WITH(NOLOCK)
 INNER JOIN #teams t
 	ON (dp.team_id = t.team_id OR t.team_id=-2)
 WHERE (dp.site_id = @site_id OR @site_id=-2)

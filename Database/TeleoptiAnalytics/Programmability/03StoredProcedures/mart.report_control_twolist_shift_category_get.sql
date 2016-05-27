@@ -27,9 +27,9 @@ SELECT
 	id		= shift_category_id,
 	name	= shift_category_name
 FROM
-	mart.dim_shift_category d
+	mart.dim_shift_category d WITH(NOLOCK)
 INNER JOIN 
-	mart.dim_business_unit b
+	mart.dim_business_unit b WITH(NOLOCK)
 ON 
 	b.business_unit_id=d.business_unit_id
 WHERE shift_category_id<>-1

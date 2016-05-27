@@ -26,9 +26,9 @@ SELECT
 	id		= day_off_id,
 	name	= isnull(term_language,day_off_name)
 FROM
-	mart.dim_day_off d
+	mart.dim_day_off d WITH(NOLOCK)
 INNER JOIN 
-	mart.dim_business_unit b
+	mart.dim_business_unit b WITH(NOLOCK)
 ON 
 	b.business_unit_id=d.business_unit_id
 LEFT JOIN

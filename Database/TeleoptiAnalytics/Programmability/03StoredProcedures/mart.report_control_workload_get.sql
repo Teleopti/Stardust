@@ -34,7 +34,7 @@ SELECT
 	id		= workload_id,
 	name	= isnull(term_language,workload_name)
 FROM
-	mart.dim_workload d
+	mart.dim_workload d WITH(NOLOCK)
 LEFT JOIN
 	mart.language_translation l
 ON
@@ -51,7 +51,7 @@ SELECT
 	id		= workload_id,
 	name	= isnull(term_language,workload_name)
 FROM
-	mart.dim_workload d
+	mart.dim_workload d WITH(NOLOCK)
 LEFT JOIN
 	mart.language_translation l
 ON

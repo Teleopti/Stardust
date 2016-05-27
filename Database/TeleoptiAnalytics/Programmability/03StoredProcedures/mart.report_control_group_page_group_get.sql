@@ -26,7 +26,7 @@ SELECT DISTINCT
 	id		= grp.group_id,
 	name	= grp.group_name
 FROM
-	mart.dim_group_page grp
+	mart.dim_group_page grp WITH (NOLOCK)
 WHERE	grp.business_unit_code = @bu_id
 AND grp.group_page_code = @group_page_code
 ORDER BY grp.group_name

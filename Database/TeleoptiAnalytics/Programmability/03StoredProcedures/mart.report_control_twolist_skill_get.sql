@@ -27,7 +27,7 @@ SELECT
 	id		= skill_id,
 	name	= isnull(term_language,skill_name)
 FROM
-	mart.dim_skill d
+	mart.dim_skill d WITH(NOLOCK)
 LEFT JOIN
 	mart.language_translation l
 ON
@@ -42,9 +42,9 @@ SELECT
 	id		= skill_id,
 	name	= isnull(term_language,skill_name)
 FROM
-	mart.dim_skill d
+	mart.dim_skill d WITH(NOLOCK)
 INNER JOIN 
-	mart.dim_business_unit b
+	mart.dim_business_unit b WITH(NOLOCK)
 ON b.business_unit_id=d.business_unit_id
 LEFT JOIN
 	mart.language_translation l

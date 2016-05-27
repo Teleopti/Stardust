@@ -60,10 +60,10 @@ SELECT DISTINCT
 	person_code = d.person_code,
 	name		= d.person_name
 FROM
-	mart.dim_person d
-INNER JOIN  mart.bridge_group_page_person bridge
+	mart.dim_person d WITH(NOLOCK) 
+INNER JOIN  mart.bridge_group_page_person bridge WITH(NOLOCK)
 	ON bridge.person_id = d.person_id
-INNER JOIN  mart.dim_group_page dim
+INNER JOIN  mart.dim_group_page dim WITH(NOLOCK)
 	ON dim.group_page_id = bridge.group_page_id
 INNER JOIN #groups g
 	ON g.group_page_group_id = dim.group_id

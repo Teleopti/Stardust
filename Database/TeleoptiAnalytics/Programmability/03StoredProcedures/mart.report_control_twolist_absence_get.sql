@@ -27,9 +27,9 @@ SELECT
 	id		= absence_id,
 	name	= absence_name
 FROM
-	mart.dim_absence d
+	mart.dim_absence d WITH(NOLOCK)
 INNER JOIN 
-	mart.dim_business_unit b
+	mart.dim_business_unit b WITH(NOLOCK)
 ON 
 	b.business_unit_id=d.business_unit_id
 WHERE absence_id<>-1

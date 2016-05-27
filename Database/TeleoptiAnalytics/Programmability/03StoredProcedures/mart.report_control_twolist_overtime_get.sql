@@ -27,9 +27,9 @@ SELECT
 	id		= overtime_id,
 	name	= overtime_name
 FROM
-	mart.dim_overtime d
+	mart.dim_overtime d WITH(NOLOCK)
 INNER JOIN 
-	mart.dim_business_unit b
+	mart.dim_business_unit b WITH(NOLOCK)
 ON 
 	b.business_unit_id=d.business_unit_id
 WHERE overtime_id<>-1

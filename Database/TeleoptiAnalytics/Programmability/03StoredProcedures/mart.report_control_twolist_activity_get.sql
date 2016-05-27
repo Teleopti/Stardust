@@ -28,9 +28,9 @@ SELECT
 	id		= activity_id,
 	name	=activity_name
 FROM
-	mart.dim_activity d
+	mart.dim_activity d WITH(NOLOCK)
 INNER JOIN 
-	mart.dim_business_unit b
+	mart.dim_business_unit b WITH(NOLOCK)
 ON 
 	b.business_unit_id=d.business_unit_id
 WHERE activity_id<>-1

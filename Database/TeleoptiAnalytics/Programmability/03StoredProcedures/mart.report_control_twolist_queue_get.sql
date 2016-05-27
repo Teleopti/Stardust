@@ -31,8 +31,9 @@ SELECT
 	id		= dq.queue_id,
 	name	= dq.queue_name
 FROM
-	mart.dim_queue dq
-INNER JOIN mart.bridge_queue_workload bqw ON
+	mart.dim_queue dq WITH(NOLOCK)
+INNER JOIN mart.bridge_queue_workload bqw WITH(NOLOCK)
+ON 
 	bqw.queue_id=dq.queue_id
 WHERE bqw.skill_id in (select id from #skills)
 AND bqw.workload_id in (select id from #workloads)
