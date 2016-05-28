@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
@@ -18,10 +19,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
 	[DomainTest]
 	[TestFixture]
-	public class GetAgentStatesTest : ISetup
+	public class AgentStatesViewModelBuilderTest : ISetup
 	{
 		public IJsonSerializer Serializer;
-		public IGetAgentStates Target;
+		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
 
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					SiteId = siteId2
 				});
 
-			var agentState = Target.ForSites(new[] {siteId1, siteId2}, false).ToArray();
+			var agentState = Target.ForSites(new[] {siteId1, siteId2}, false).States.ToArray();
 
 			agentState.First().PersonId.Should().Be(personId1);
 			agentState.Last().PersonId.Should().Be(personId2);
@@ -76,11 +77,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForSites(new[] {siteId}, false).Single();
+			var agentState = Target.ForSites(new[] {siteId}, false).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
-			agentState.StateStartTime.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Activity.Should().Be("phone");
 			agentState.NextActivity.Should().Be("lunch");
 			agentState.NextActivityStartTime.Should().Be("09:00");
@@ -109,11 +109,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForTeams(new[] {teamId}, false).Single();
+			var agentState = Target.ForTeams(new[] {teamId}, false).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
-			agentState.StateStartTime.Should().Be("2015-10-22 08:00".Utc());
 			agentState.Activity.Should().Be("phone");
 			agentState.NextActivity.Should().Be("lunch");
 			agentState.NextActivityStartTime.Should().Be("09:00");
@@ -143,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true).Single();
+			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true).States.Single();
 
 			agentStates.PersonId.Should().Be(personId1);
 		}
@@ -165,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				})
 			});
 
-			var state = Target.ForTeams(new[] {teamId}, false).Single();
+			var state = Target.ForTeams(new[] {teamId}, false).States.Single();
 
 			state.Shift
 				.Should().Be(
@@ -175,6 +174,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						Offset = "10%",
 						Width = "25%"
 					}));
+		}
+
+		[Test]
+		public void ShouldGetCurrentTime()
+		{
+			Now.Is("2016-05-28 12:00");
+
+			Target.ForTeams(new Guid[] {}, false)
+				.Time.Should().Be("2016-05-28 12:00".Utc());
+		}
+
+		[Test]
+		public void ShouldGetCurrentTimeForSitesToo()
+		{
+			Now.Is("2016-05-28 12:00");
+
+			Target.ForSites(new Guid[] { }, false)
+				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 	}
 }

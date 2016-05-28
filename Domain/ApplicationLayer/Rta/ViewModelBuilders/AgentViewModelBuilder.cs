@@ -1,29 +1,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 {
-	public interface IGetAgents
+	public class AgentViewModelBuilder
 	{
-		IEnumerable<AgentViewModel> ForSites(Guid[] siteIds);
-		IEnumerable<AgentViewModel> ForTeams(Guid[] teamIds);
-	}
-
-	public class GetAgents : IGetAgents
-	{
+		private readonly ICurrentAuthorization _permissionProvider;
+		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ITeamRepository _teamRepository;
 		private readonly INow _now;
 
-		public GetAgents(IPersonRepository personRepository, ISiteRepository siteRepository, ITeamRepository teamRepository, INow now)
+		public AgentViewModelBuilder(
+			ICurrentAuthorization permissionProvider,
+			ICommonAgentNameProvider commonAgentNameProvider, 
+			IPersonRepository personRepository, 
+			ISiteRepository siteRepository, 
+			ITeamRepository teamRepository, 
+			INow now)
 		{
+			_permissionProvider = permissionProvider;
+			_commonAgentNameProvider = commonAgentNameProvider;
 			_personRepository = personRepository;
 			_siteRepository = siteRepository;
 			_teamRepository = teamRepository;
@@ -68,6 +75,35 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						SiteId = t.Site.Id.ToString()
 					})));
 			return agents;
+		}
+
+		public IEnumerable<AgentViewModel> ForTeam(Guid teamId)
+		{
+			var team = _teamRepository.Get(teamId);
+			var isPermitted = _permissionProvider.Current().IsPermitted(
+				DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, 
+				_now.LocalDateOnly(), 
+				team);
+			if (!isPermitted)
+			{
+				throw new PermissionException();
+			}
+
+			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
+
+			var today = _now.LocalDateOnly();
+			return _personRepository.FindPeopleBelongTeam(team, new DateOnlyPeriod(today, today))
+					.Select(
+						x =>
+							new AgentViewModel
+							{
+								PersonId = x.Id.GetValueOrDefault(),
+								Name = commonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(x.Id.GetValueOrDefault())),
+								SiteId = team.Site.Id.ToString(),
+								SiteName = team.Site.Description.Name,
+								TeamId = team.Id.ToString(),
+								TeamName = team.Description.Name
+							}).ToArray();
 		}
 	}
 }

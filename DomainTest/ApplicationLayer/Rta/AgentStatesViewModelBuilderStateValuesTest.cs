@@ -2,6 +2,8 @@ using System;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -9,19 +11,17 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Interfaces.Domain;
-using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
-	[IoCTest]
+	[DomainTest]
 	[TestFixture]
-	public class AgentStateViewModelBuilderTest : ISetup
+	public class AgentStatesViewModelBuilderStateValuesTest : ISetup
 	{
-		public IAgentStateViewModelBuilder Target;
+		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
@@ -29,9 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.AddModule(new WebAppModule(configuration));
 			system.UseTestDouble<FakeAgentStateReadModelPersister>().For<IAgentStateReadModelReader>();
-			system.UseTestDouble<MutableNow>().For<INow>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserCulture>();
 		}
@@ -42,8 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			var personId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			var agentStates = new[]
-			{
+			Database.Has(
 				new AgentStateReadModel
 				{
 					PersonId = personId,
@@ -58,14 +55,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 					RuleStartTime = "2015-10-22 08:00".Utc(),
 					RuleColor = 0
 				}
-			};
+				);
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var states = Target.Build(agentStates);
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().PersonId.Should().Be(personId);
 			states.Single().State.Should().Be("state");
-			states.Single().StateStartTime.Should().Be("2015-10-22 08:00".Utc());
 			states.Single().Activity.Should().Be("phone");
 			states.Single().NextActivity.Should().Be("lunch");
 			states.Single().NextActivityStartTime.Should().Be("09:00");
@@ -77,12 +73,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldHaveWhiteAsDefaultColor()
 		{
-			var agentStates = new[]
-			{
-				new AgentStateReadModel()
-			};
+			var teamId = Guid.NewGuid();
+			Database.Has(
+				new AgentStateReadModel
+				{
+					TeamId = teamId,
+				}
+				);
 
-			var states = Target.Build(agentStates);
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().Color.Should().Be("#FFFFFF");
 		}
@@ -90,18 +89,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldGetActivityTimeInLoggedOnUserTimeZone()
 		{
-			var agentStates = new[]
-			{
+			var teamId = Guid.NewGuid();
+			Database.Has(
 				new AgentStateReadModel
 				{
+					TeamId = teamId,
 					NextActivityStartTime = "2015-11-23 09:00".Utc()
 				}
-			};
+				);
 			Now.Is("2015-11-23 08:30".Utc());
 			TimeZone.IsSweden();
 			Culture.IsSwedish();
 
-			var states = Target.Build(agentStates);
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().NextActivityStartTime.Should().Be("10:00");
 		}
@@ -109,18 +109,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldGetActivityTimeForTomorrow()
 		{
-			var agentStates = new[]
-			{
+			var teamId = Guid.NewGuid();
+			Database.Has(
 				new AgentStateReadModel
 				{
+					TeamId = teamId,
 					NextActivityStartTime = "2015-11-24 09:00".Utc()
 				}
-			};
+				);
 			Now.Is("2015-11-23 17:30".Utc());
 			TimeZone.IsSweden();
 			Culture.IsSwedish();
 
-			var states = Target.Build(agentStates);
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().NextActivityStartTime.Should().Be("2015-11-24 10:00");
 		}
@@ -128,45 +129,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldGetNullActivityTime()
 		{
-			var agentStates = new[]
-			{
+			var teamId = Guid.NewGuid();
+			Database.Has(
 				new AgentStateReadModel
 				{
+					TeamId = teamId,
 					NextActivityStartTime = null
 				}
-			};
+				);
 			Now.Is("2015-11-23 08:30".Utc());
 
-			var states = Target.Build(agentStates);
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().NextActivityStartTime.Should().Be(null);
 		}
 		
 		[Test]
-		public void ShouldHaveAlarmStartFromAlarmStartTime()
-		{
-			var agentStates = new[]
-			{
-				new AgentStateReadModel
-				{
-					AlarmStartTime = "2015-11-23 08:15".Utc()
-				}
-			};
-
-			var states = Target.Build(agentStates);
-
-			states.Single().AlarmStart.Should().Be("2015-11-23 08:15".Utc());
-		}
-
-		[Test]
 		public void ShouldBeNullWhenThereIsNoAlarmStartTime()
 		{
-			var agentStates = new[]
-			{
-				new AgentStateReadModel()
-			};
+			var teamId = Guid.NewGuid();
+			Database.Has(
+				new AgentStateReadModel
+				{
+					TeamId = teamId
+				}
+				);
 
-			var states = Target.Build(agentStates);
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().TimeInAlarm.Should().Be(null);
 		}
@@ -174,15 +163,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldHaveCalculatedTimeInAlarm()
 		{
-			var agentStates = new[]
-			{
+			var teamId = Guid.NewGuid();
+			Database.Has(
 				new AgentStateReadModel
 				{
+					TeamId = teamId,
 					AlarmStartTime = "2015-12-22 08:00".Utc()
 				}
-			};
+			);
 			Now.Is("2015-12-22 08:01".Utc());
-			var states = Target.Build(agentStates);
+
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().TimeInAlarm.Should().Be(60);
 		}
@@ -190,15 +181,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldBeNullWhenAlarmHasNotStartedYet()
 		{
-			var agentStates = new[]
-			{
+			var teamId = Guid.NewGuid();
+			Database.Has(
 				new AgentStateReadModel
 				{
+					TeamId = teamId,
 					AlarmStartTime = "2015-12-22 09:00".Utc()
 				}
-			};
+				);
 			Now.Is("2015-12-22 08:30".Utc());
-			var states = Target.Build(agentStates);
+
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().TimeInAlarm.Should().Be(null);
 		}
@@ -206,17 +199,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldBeAlarmColorWhenAlarmHasStarted()
 		{
-			var agentStates = new[]
-			{
+			var teamId = Guid.NewGuid();
+			Database.Has(
 				new AgentStateReadModel
 				{
+					TeamId = teamId,
 					AlarmStartTime = "2015-12-22 08:00".Utc(),
 					RuleColor = Color.Orange.ToArgb(),
 					AlarmColor = Color.Red.ToArgb()
 				}
-			};
+				);
 			Now.Is("2015-12-22 08:30".Utc());
-			var states = Target.Build(agentStates);
+
+			var states = Target.ForTeams(new[] { teamId }, false).States;
 
 			states.Single().Color.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Red.ToArgb())));
 		}

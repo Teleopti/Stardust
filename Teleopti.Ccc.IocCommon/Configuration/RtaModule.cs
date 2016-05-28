@@ -50,9 +50,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStatePersister>().As<IAgentStatePersister>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AgentStateReadModelPersister>().As<IAgentStateReadModelPersister>().SingleInstance().ApplyAspects();
 
+			builder.RegisterType<AgentViewModelBuilder>().SingleInstance();
+			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
 			builder.RegisterType<AdherenceDetailsViewModelBuilder>().SingleInstance().As<IAdherenceDetailsViewModelBuilder>();
-			builder.RegisterType<AgentStateViewModelBuilder>().SingleInstance().As<IAgentStateViewModelBuilder>();
 			builder.RegisterType<RtaDecoratingEventPublisher>().As<IRtaDecoratingEventPublisher>().SingleInstance();
 
 			builder.RegisterType<ShiftEventPublisher>().SingleInstance().As<IShiftEventPublisher>();
@@ -66,8 +67,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 
-
-			builder.RegisterType<GetAgentStates>().As<IGetAgentStates>().SingleInstance();
 		}
 	}
 }

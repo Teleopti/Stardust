@@ -6,27 +6,68 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 {
-	public interface IAgentStateViewModelBuilder
+	public class AgentStatesViewModel
 	{
-		IEnumerable<AgentStateViewModel> Build(IEnumerable<AgentStateReadModel> agentStates);
+		public DateTime Time { get; set; }
+		public IEnumerable<AgentStateViewModel> States { get; set; }
 	}
 
-	public class AgentStateViewModelBuilder : IAgentStateViewModelBuilder
+	public class AgentStateViewModel
+	{
+		public Guid PersonId { get; set; }
+		public string State { get; set; }
+		public string Activity { get; set; }
+		public string NextActivity { get; set; }
+		public string NextActivityStartTime { get; set; }
+		public string Alarm { get; set; }
+		public string Color { get; set; }
+		public int TimeInState { get; set; }
+		public int? TimeInAlarm { get; set; }
+		public string Shift { get; set; }
+	}
+
+	public class AgentStatesViewModelBuilder
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IUserCulture _culture;
 		private readonly ProperAlarm _appliedAlarm;
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 
-		public AgentStateViewModelBuilder(INow now, IUserTimeZone timeZone, IUserCulture culture, ProperAlarm appliedAlarm)
+		public AgentStatesViewModelBuilder(
+			INow now,
+			IUserTimeZone timeZone, 
+			IUserCulture culture,
+			ProperAlarm appliedAlarm,
+			IAgentStateReadModelReader agentStateReadModelReader
+			)
 		{
 			_now = now;
 			_timeZone = timeZone;
 			_culture = culture;
 			_appliedAlarm = appliedAlarm;
+			_agentStateReadModelReader = agentStateReadModelReader;
 		}
 
-		public IEnumerable<AgentStateViewModel> Build(IEnumerable<AgentStateReadModel> states)
+		public AgentStatesViewModel ForSites(Guid[] siteIds, bool inAlarm)
+		{
+			return new AgentStatesViewModel
+			{
+				Time = _now.UtcDateTime(),
+				States = buildStates(_agentStateReadModelReader.LoadForSites(siteIds, inAlarm))
+			};
+		}
+
+		public AgentStatesViewModel ForTeams(Guid[] teamIds, bool inAlarm)
+		{
+			return new AgentStatesViewModel
+			{
+				Time = _now.UtcDateTime(),
+				States = buildStates(_agentStateReadModelReader.LoadForTeams(teamIds, inAlarm))
+			};
+		}
+
+		private IEnumerable<AgentStateViewModel> buildStates(IEnumerable<AgentStateReadModel> states)
 		{
 			return states.Select(x =>
 			{
@@ -35,14 +76,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 				{
 					PersonId = x.PersonId,
 					State = x.StateName,
-					StateStartTime = x.StateStartTime,
 					Activity = x.Activity,
 					NextActivity = x.NextActivity,
 					NextActivityStartTime = formatTime(x.NextActivityStartTime),
 					Alarm = x.RuleName,
-					AlarmStart = x.AlarmStartTime,
 					Color = _appliedAlarm.ColorTransition(x, timeInAlarm),
-					TimeInState = x.StateStartTime.HasValue ? (int) (_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
+					TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
 					TimeInAlarm = timeInAlarm,
 					Shift = x.Shift
 				};

@@ -1,41 +1,27 @@
 ﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Core.IoC;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
+namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 {
-	[IoCTest]
+	[DomainTest]
 	[TestFixture]
-	public class GetAgentsTest : ISetup
+	public class AgentViewModelBuilderTest
 	{
-		public IGetAgents Target;
+		public AgentViewModelBuilder Target;
 		public FakePersonRepository PersonRepository;
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
 		public MutableNow Now;
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.AddModule(new WebAppModule(configuration));
-			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
-			system.UseTestDouble<FakeSiteRepository>().For<ISiteRepository>();
-			system.UseTestDouble<FakeTeamRepository>().For<ITeamRepository>();
-			system.UseTestDouble<MutableNow>().For<INow>();
-		}
-
+		
 		[Test]
 		public void ShouldGetAgentForSites()
 		{

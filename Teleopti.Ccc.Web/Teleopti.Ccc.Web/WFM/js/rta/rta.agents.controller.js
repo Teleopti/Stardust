@@ -160,21 +160,27 @@
 					$scope.agents = [];
 					fillAgentsWithState(states);
 					fillAgentsWithoutState();
+					buildTimeline(states);
+				}
 
-					var m = moment(states.Time).startOf('hour');
+				function buildTimeline(states) {
+					var offset = moment(states.Time).add(-1, 'hour');
+					var displayMinutes = 60 * 4;
+
+					var timeline = function (time) {
+						return {
+							Time: time.format('HH:mm'),
+							Offset: (time.diff(offset, 'minutes') / displayMinutes * 100) + "%"
+						};
+					};
+
+					var time = moment(states.Time).startOf('hour');
 					$scope.timeline = [
-						{
-							Time: m.format('HH:mm')
-						}, {
-							Time: m.add(1, 'hour').format('HH:mm')
-						}, {
-							Time: m.add(1, 'hour').format('HH:mm')
-						}, {
-							Time: m.add(1, 'hour').format('HH:mm')
-						}
+						timeline(time),
+						timeline(time.add(1, 'hour')),
+						timeline(time.add(1, 'hour')),
+						timeline(time.add(1, 'hour'))
 					];
-
-
 				}
 
 				function fillAgentsWithState(states) {
@@ -189,12 +195,10 @@
 								PersonId: agentInfo[0].PersonId,
 								TeamId: agentInfo[0].TeamId,
 								State: state.State,
-								StateStartTime: state.StateStartTime,
 								Activity: state.Activity,
 								NextActivity: state.NextActivity,
 								NextActivityStartTime: state.NextActivityStartTime,
 								Alarm: state.Alarm,
-								AlarmStart: state.AlarmStart,
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,

@@ -36,18 +36,27 @@ describe('RtaAgentsCtrl', function() {
 	}));
 
 	[
-		"2016-05-26T00:30:00",
-		"2016-05-26T11:30:00",
-		"2016-05-26T15:30:00",
-		"2016-05-26T23:30:00"
-	].forEach(function(value) {
+	{
+		time: "2016-05-26T00:30:00",
+		expect: ["00:00", "01:00", "02:00", "03:00"]
+	},
+	{
+		time: "2016-05-26T11:30:00",
+		expect: ["11:00", "12:00", "13:00", "14:00"]
+	},
+	{
+		time: "2016-05-26T15:30:00",
+		expect: ["15:00", "16:00", "17:00", "18:00"]
+	},
+	{
+		time: "2016-05-26T23:30:00",
+		expect: ["23:00", "00:00", "01:00", "02:00"]
+	}].forEach(function(example) {
 
-		var time = moment(value);
-
-		it('should display time line for ' + time.format('HH:mm'), function() {
+		it('should display time line for ' + example.time, function () {
 			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 			$fakeBackend
-				.withTime(time.format('YYYY-MM-DDTHH:mm:ss'))
+				.withTime(example.time)
 				.withAgent({
 					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
@@ -55,11 +64,40 @@ describe('RtaAgentsCtrl', function() {
 
 			$controllerBuilder.createController();
 
-			expect(scope.timeline.length).toEqual(4);
-			expect(scope.timeline[0].Time).toEqual(time.startOf('hour').format('HH:mm'));
-			expect(scope.timeline[1].Time).toEqual(time.add(1, 'hour').format('HH:mm'));
-			expect(scope.timeline[2].Time).toEqual(time.add(1, 'hour').format('HH:mm'));
-			expect(scope.timeline[3].Time).toEqual(time.add(1, 'hour').format('HH:mm'));
+			expect(scope.timeline.length).toEqual(example.expect.length);
+			example.expect.forEach(function (e, i) {
+				expect(scope.timeline[i].Time).toEqual(e);
+			});
+		});
+
+	});
+
+	[
+	{
+		time: "2016-05-26T12:00:00",
+		expect: ["25%", "50%", "75%", "100%"],
+	},
+	{
+		time: "2016-05-26T12:30:00",
+		expect: ["12.5%", "37.5%", "62.5%", "87.5%"],
+	}
+	].forEach(function (example) {
+
+		it('should position time line for ' + example.time, function () {
+			stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+			$fakeBackend
+				.withTime(example.time)
+				.withAgent({
+					PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+					TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
+				});
+
+			$controllerBuilder.createController();
+
+			expect(scope.timeline.length).toEqual(example.expect.length);
+			example.expect.forEach(function (e, i) {
+				expect(scope.timeline[i].Offset).toEqual(e);
+			});
 		});
 
 	});

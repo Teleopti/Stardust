@@ -187,7 +187,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
-    <Compile Include="ApplicationLayer\Rta\GetAgentStates.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentStatesViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ShiftCategory\AnalyticsShiftCategoryUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommand.cs" />
     <Compile Include="ApplicationLayer\Activity\AnalyticsActivityUpdater.cs" />
@@ -491,7 +492,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\InvalidPlatformException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidSourceException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidUserCodeException.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentStateViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModelBuilders\AgentViewModel.cs" />
     <Compile Include="ApplicationLayer\TestHandlers.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeProcessor.cs" />
