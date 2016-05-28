@@ -80,12 +80,10 @@ describe('RtaAgentsCtrl', function() {
 		.withState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
-			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
-			AlarmStart: "\/Date(1432105910000)\/",
 			Color: "#00FF00",
 			TimeInState: 15473
 		});
@@ -94,12 +92,10 @@ describe('RtaAgentsCtrl', function() {
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].State).toEqual("Ready");
-		expect(scope.agents[0].StateStartTime).toEqual("\/Date(1429254905000)\/");
 		expect(scope.agents[0].Activity).toEqual("Phone");
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[0].Alarm).toEqual("In Adherence");
-		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
 		expect(scope.agents[0].Color).toEqual("#00FF00");
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 	});
@@ -138,12 +134,10 @@ describe('RtaAgentsCtrl', function() {
 		.withState({
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			State: "Ready",
-			StateStartTime: "\/Date(1429254905000)\/",
 			Activity: "Phone",
 			NextActivity: "Short break",
 			NextActivityStartTime: "\/Date(1432109700000)\/",
 			Alarm: "In Adherence",
-			AlarmStart: "\/Date(1432105910000)\/",
 			Color: "#00FF00",
 			TimeInState: 15473
 		});
@@ -152,12 +146,10 @@ describe('RtaAgentsCtrl', function() {
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].State).toEqual("Ready");
-		expect(scope.agents[0].StateStartTime).toEqual("\/Date(1429254905000)\/");
 		expect(scope.agents[0].Activity).toEqual("Phone");
 		expect(scope.agents[0].NextActivity).toEqual("Short break");
 		expect(scope.agents[0].NextActivityStartTime).toEqual("\/Date(1432109700000)\/");
 		expect(scope.agents[0].Alarm).toEqual("In Adherence");
-		expect(scope.agents[0].AlarmStart).toEqual("\/Date(1432105910000)\/");
 		expect(scope.agents[0].Color).toEqual("#00FF00");
 		expect(scope.agents[0].TimeInState).toEqual(15473);
 	});

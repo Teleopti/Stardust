@@ -47,12 +47,10 @@ describe('RtaOrganizationService', function() {
 				queryDeferred.resolve([{
 					"PersonId": "cb67d5f1-5dd1-45af-b4e2-9b5e015b2572",
 					"State": "Ready",
-					StateStartTime: "\/Date(1429254905000)\/",
 					"Activity": "Phone",
 					"NextActivity": "Short break",
 					"NextActivityStartTime": "\/Date(1432109700000)\/",
 					"Alarm": "In Adherence",
-					"AlarmStart": "\/Date(1432105910000)\/",
 					"AlarmColor": "#00FF00",
 					"TimeInState": 15473375
 				}]);
