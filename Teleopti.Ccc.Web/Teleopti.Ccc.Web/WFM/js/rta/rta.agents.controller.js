@@ -163,14 +163,17 @@
 					buildTimeline(states);
 				}
 
+				function secondsToPercent(seconds) {
+					return (seconds / 3600 * 25) + '%';
+				}
+
 				function buildTimeline(states) {
 					var offset = moment(states.Time).add(-1, 'hour');
-					var displayMinutes = 60 * 4;
 
 					var timeline = function (time) {
 						return {
 							Time: time.format('HH:mm'),
-							Offset: (time.diff(offset, 'minutes') / displayMinutes * 100) + "%"
+							Offset: secondsToPercent(time.diff(offset, 'seconds'))
 						};
 					};
 
@@ -202,7 +205,7 @@
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
-								AlarmWidth: (state.TimeInAlarm / 3600 * 25) + '%',
+								AlarmWidth: secondsToPercent(state.TimeInAlarm),
 								Shift: state.Shift
 							});
 						}
