@@ -188,6 +188,7 @@
 						timeline(time.add(1, 'hour')),
 						timeline(time.add(1, 'hour'))
 					];
+
 				}
 
 				function fillAgentsWithState(states) {
