@@ -167,13 +167,17 @@
 					return (seconds / 3600 * 25) + '%';
 				}
 
+				function timeToPercent(currentTime, time) {
+					var offset = moment(currentTime).add(-1, 'hour');
+					return secondsToPercent(moment(time).diff(offset, 'seconds'));
+				}
+
 				function buildTimeline(states) {
-					var offset = moment(states.Time).add(-1, 'hour');
 
 					var timeline = function (time) {
 						return {
 							Time: time.format('HH:mm'),
-							Offset: secondsToPercent(time.diff(offset, 'seconds'))
+							Offset: timeToPercent(states.Time, time)
 						};
 					};
 
@@ -191,6 +195,15 @@
 						var agentInfo = $filter('filter')($scope.agentsInfo, {
 							PersonId: state.PersonId
 						});
+						state.Shift = state.Shift || [];
+						var shift = state.Shift.map(function (s) {
+							var lengthSeconds = moment(s.EndTime).diff(moment(s.StartTime), 'seconds');
+							return {
+								Color: s.Color,
+								Offset: timeToPercent(states.Time, s.StartTime),
+								Width: secondsToPercent(lengthSeconds)
+							};
+						});
 						if (agentInfo.length > 0) {
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
@@ -206,7 +219,7 @@
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
 								AlarmWidth: secondsToPercent(state.TimeInAlarm),
-								Shift: state.Shift
+								Shift: shift
 							});
 						}
 					});

@@ -106,6 +106,7 @@ describe('RtaAgentsCtrl', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 
 		$fakeBackend
+			.withTime("2016-05-26T12:00:00")
 			.withAgent({
 				Name: "Ashley Andeen",
 				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
@@ -116,8 +117,8 @@ describe('RtaAgentsCtrl', function() {
 				Shift: [
 					{
 						Color: "#80FF80",
-						Offset: "10%",
-						Width: "25%"
+						StartTime: "2016-05-26T12:00:00",
+						EndTime: "2016-05-26T14:00:00"
 					}
 				]
 			});
@@ -127,8 +128,8 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.agents[0].Shift.length).toEqual(1);
 		expect(scope.agents[0].Shift[0].Color).toEqual("#80FF80");
-		expect(scope.agents[0].Shift[0].Offset).toEqual("10%");
-		expect(scope.agents[0].Shift[0].Width).toEqual("25%");
+		expect(scope.agents[0].Shift[0].Offset).toEqual("25%");
+		expect(scope.agents[0].Shift[0].Width).toEqual("50%");
 	});
 
 	it('should display the width of the alarm', function () {

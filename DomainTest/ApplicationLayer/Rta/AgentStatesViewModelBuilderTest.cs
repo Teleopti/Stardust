@@ -159,8 +159,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				Shift = Serializer.SerializeObject(new
 				{
 					Color = "#80FF80",
-					Offset = "10%",
-					Width = "25%"
+					StartTime = "2016-05-29T12:00:00",
+					EndTime = "2016-05-29T13:00:00",
 				})
 			});
 
@@ -171,8 +171,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					Serializer.SerializeObject(new
 					{
 						Color = "#80FF80",
-						Offset = "10%",
-						Width = "25%"
+						StartTime = "2016-05-29T12:00:00",
+						EndTime = "2016-05-29T13:00:00",
 					}));
 		}
 
