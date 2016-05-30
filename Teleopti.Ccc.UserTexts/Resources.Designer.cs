@@ -12859,8 +12859,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application has encountered an unexpected error.
-        ///Help us improve your experience by sending an error report.
+        ///   Looks up a localized string similar to The application has encountered an unexpected error..
         /// </summary>
         public static string InternalErrorMessage {
             get {
