@@ -1456,6 +1456,7 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.addPersonalActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.moveActivity.js" />
+    <Content Include="WFM\js\teamSchedule\teamSchedule.directive.cmd.moveActivity.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandMenu.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandMenu.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.directive.commandConfirmDialog.js" />

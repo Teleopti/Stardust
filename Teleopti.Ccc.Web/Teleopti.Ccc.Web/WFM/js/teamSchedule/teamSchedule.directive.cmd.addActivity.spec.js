@@ -32,7 +32,7 @@
 		WFMDate = _WFMDate_;
 
 		PersonSelection = _PersonSelection_;
-		PersonSelection.clearPersonInfo()
+		PersonSelection.clearPersonInfo();
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 

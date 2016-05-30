@@ -3,44 +3,64 @@
 
 	angular.module('wfm.teamSchedule').directive('moveActivity', moveActivityDirective);
 
-	moveActivityCtrl.$inject = ['ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'MoveActivityValidator'];
+	moveActivityCtrl.$inject = ['$translate', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'MoveActivityValidator'];
 
-	function moveActivityCtrl(activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, validator) {
+	function moveActivityCtrl($translate, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, validator) {
 		var vm = this;
 
 		vm.label = 'MoveActivity';
 
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
-	
+
 		vm.getDefaultMoveToStartTime = function () {
 			var curDateMoment = moment(vm.selectedDate());
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.personId; });
-			var time = scheduleManagementSvc.getLatestStartTimeOfSelectedScheduleProjection(curDateMoment, personIds) || new Date();
-			return moment(time).add(1, 'hour').toDate();		
+			var selectedDateProjectionLatestStart = scheduleManagementSvc.getLatestStartTimeOfSelectedScheduleProjection(curDateMoment, personIds);
+			var previousDateProjectionLatestEnd = scheduleManagementSvc.getLatestPreviousDayOvernightShiftEnd(curDateMoment, personIds);
+			var time = new Date();
+
+			time = selectedDateProjectionLatestStart != null ? selectedDateProjectionLatestStart : time;
+			time = previousDateProjectionLatestEnd != null && previousDateProjectionLatestEnd > time ? previousDateProjectionLatestEnd : time;
+
+			return moment(time).add(1, 'hour').toDate();
 		}
 
-		vm.isInputValid = function() {
+		vm.isInputValid = function () {
 			return validator.validateMoveToTime(moment(vm.getMoveToStartTimeStr()));
 		}
-	
+
 		vm.invalidPeople = function () {
 			var people = validator.getInvalidPeople().join(', ');
 			return people;
 		};
 
-		vm.getMoveToStartTimeStr = function() {
+		vm.getMoveToStartTimeStr = function () {
 			var dateStr = (vm.nextDay ? moment(vm.selectedDate()).add(1, 'days') : moment(vm.selectedDate())).format('YYYY-MM-DD');
-			var timeStr = moment(vm.bindingTime).format('HH:mm');
+			var timeStr = moment(vm.moveToTime).format('HH:mm');
 			return dateStr + 'T' + timeStr;
 		}
 
-		vm.moveActivity = function () {			
+		vm.moveActivity = function () {
+			var isMultiAcitvitiesSelectForOneAgent = false;
+			var multiActivitiesSelectedAgentsList = [];
 			var personProjectionsWithSelectedActivities = vm.selectedAgents.filter(function (x) {
-				return (Array.isArray(x.selectedActivities) && x.selectedActivities.length > 0);
+				if (x.selectedActivities.length > 1) {
+					isMultiAcitvitiesSelectForOneAgent = true;
+					multiActivitiesSelectedAgentsList.push(x.name);
+				}
+				return (Array.isArray(x.selectedActivities) && x.selectedActivities.length == 1);
 			});
+
+			if (isMultiAcitvitiesSelectForOneAgent) {
+				var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + " " + multiActivitiesSelectedAgentsList.join(", ") + ".";
+				teamScheduleNotificationService.notify('error', errorMessage);
+				vm.getActionCb(vm.label) && vm.getActionCb(vm.label)(null, null);
+				return;
+			}
+
 			var personIds = vm.selectedAgents.map(function (agent) { return agent.personId; });
 
-			var requestData = {				
+			var requestData = {
 				Date: vm.selectedDate(),
 				PersonActivities: personProjectionsWithSelectedActivities.map(function (x) {
 					return { PersonId: x.personId, ShiftLayerIds: x.selectedActivities };
@@ -50,7 +70,7 @@
 			};
 
 			activityService.moveActivity(requestData).then(function (response) {
-				if (vm.getActionCb(vm.label)) {					
+				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
 				teamScheduleNotificationService.reportActionResult({
@@ -63,11 +83,9 @@
 					}
 				}), response.data);
 
-			});			
+			});
 		};
-		
 	}
-
 
 	function moveActivityDirective() {
 		return {
@@ -89,14 +107,13 @@
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 
-			scope.vm.bindingTime = selfCtrl.getDefaultMoveToStartTime();
+			scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
 			scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
-
 
 			scope.$on('teamSchedule.command.focus.default', function () {
 				var focusTarget = elem[0].querySelector('.focus-default input');
 				if (focusTarget) angular.element(focusTarget).focus();
-			});			
+			});
 		}
 	}
 

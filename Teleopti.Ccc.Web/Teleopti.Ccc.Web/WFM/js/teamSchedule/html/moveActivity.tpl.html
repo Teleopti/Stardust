@@ -3,7 +3,7 @@
 	<md-content class="command-panel-content" layout-padding>
 		<form name="moveActivityForm">
 			<h3>{{'StartTime' | translate}}:</h3>
-			<uib-timepicker class="focus-default" ng-model="vm.bindingTime" tabindex="100" required></uib-timepicker>
+			<uib-timepicker class="focus-default" ng-model="vm.moveToTime" tabindex="100" required></uib-timepicker>
 			<div class="wfm-switch">
 				<input type="checkbox" id="mvActNextDay" ng-model="vm.nextDay" tabindex="101"/>
 				<label for="mvActNextDay">
@@ -13,7 +13,7 @@
 			</div>
 		</form>
 		<div ng-if="!vm.isInputValid()">
-			<i class="mdi mdi-alert-octagon" style="vertical-align:middle;"></i>
+			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.invalidPeople()}}.</span>
 		</div>
 		<button id="applyMoveActivity" class="wfm-btn form-submit" tabindex="102"

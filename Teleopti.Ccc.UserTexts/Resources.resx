@@ -14509,4 +14509,8 @@ Help us improve your experience by sending an error report</value>
     <value>Shift Trade</value>
     <comment>Shift Trade text in WFM Requests</comment>
   </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>Can not move multiple activities for selected agents</value>
+    <comment>Message of not allowing to move multiple activities for selected agents in teamschedule</comment>
+  </data>
 </root>

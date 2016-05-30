@@ -37,8 +37,8 @@
 			if ($mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).close();
 			}
-			vm.lastCommandTrackId = trackId;
-			vm.updateSchedules(personIds);
+			vm.lastCommandTrackId = trackId != null ? trackId : null;
+			personIds && vm.updateSchedules(personIds);
 		}
 
 		function openSidePanel() {
