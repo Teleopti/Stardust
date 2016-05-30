@@ -40,9 +40,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 
 
-		public void Update(Context info)
+		public void UpdateState(Context info)
 		{
 			_agentStatePersister.Persist(info.MakeAgentState());
+		}
+
+		public void UpdateReadModel(Context info)
+		{
 			_agentStateReadModelPersister.Persist(info.MakeAgentStateReadModel());
 		}
 	}

@@ -56,7 +56,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				where a.StartDateTime < timeWindowEnd
 				select a;
 		}
-		
+
+		public IEnumerable<ScheduleLayer> ActivitiesForReadModel(DateTime timeToCheck)
+		{
+			if (timeToCheck == DateTime.MinValue)
+				return Enumerable.Empty<ScheduleLayer>();
+			var timeWindowStart = timeToCheck.AddHours(-1);
+			var timeWindowEnd = timeToCheck.AddHours(3);
+			return from a in _schedule.Value
+				   where a.EndDateTime > timeWindowStart
+				   where a.StartDateTime < timeWindowEnd
+				   select a;
+		}
+
 		public bool ShiftStarted()
 		{
 			return _stored.Value.ActivityId() == null &&

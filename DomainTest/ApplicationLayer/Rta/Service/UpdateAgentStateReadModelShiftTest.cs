@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Interfaces;
 
@@ -90,6 +92,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var shift = Database.PersistedReadModel.Shift;
 
 			shift.Single().Color.Should().Be("#008000");
+		}
+
+		[Test]
+		public void ShouldPersistActivityEnteringTimeWindow()
+		{
+			var person = Guid.NewGuid();
+			Now.Is("2016-05-30 09:55");
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, Color.Green, "2016-05-30 13:00", "2016-05-30 14:00");
+
+			Target.CheckForActivityChanges(Database.TenantName());
+			Now.Is("2016-05-30 10:05");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			var shift = Database.PersistedReadModel.Shift;
+
+			shift.Single().Color.Should().Be("#008000");
+		}
+
+		[Test]
+		public void ShouldNotPersistIfNoActivityEnteringTimeWindow()
+		{
+			var person = Guid.NewGuid();
+			Now.Is("2016-05-30 09:55");
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, Color.Green, "2016-05-30 13:00", "2016-05-30 14:00");
+
+			Target.CheckForActivityChanges(Database.TenantName());
+			Now.Is("2016-05-30 09:59");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.PersistedReadModel.ReceivedTime.Should().Be("2016-05-30 09:55".Utc());
+		}
+
+		[Test]
+		public void ShouldPersistAllKindsOfScheduleChanges()
+		{
+			Assert.Ignore("really, should be more than a single test?");
 		}
 	}
 

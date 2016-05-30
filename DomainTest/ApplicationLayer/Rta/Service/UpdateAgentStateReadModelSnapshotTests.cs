@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -9,9 +10,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
 	[RtaTest]
 	[TestFixture]
-	public class SnapshotTests
+	public class UpdateAgentStateReadModelSnapshotTests
 	{
-		public FakeAgentStatePersister Persister;
+		public FakeAgentStateReadModelPersister Persister;
 		public FakeRtaDatabase Database;
 		public MutableNow Now;
 		public Domain.ApplicationLayer.Rta.Service.Rta Target;
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Database
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithUser("usercode2", personId)
-				.WithRule("statecode", Guid.Empty)
+				.WithRule("statecode", Guid.Empty, null, "A State")
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 
 			Now.Is("2014-10-20 10:00");
@@ -50,8 +52,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			Database.StoredStateFor(personId)
-				.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+			Persister.Models
+				.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("Logged Out");
 		}
 
 		[Test]
@@ -63,7 +66,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode1", Guid.NewGuid())
 				.WithSource("source2")
 				.WithUser("usercode2", personId)
-				.WithRule("statecode", Guid.Empty)
+				.WithRule("statecode", Guid.Empty, null, "A State")
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 			Target.SaveStateSnapshot(new[]
@@ -95,8 +99,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			Database.StoredStateFor(personId)
-				.StateCode.Should().Be("statecode");
+			Persister.Models
+				.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("A State");
 		}
 
 		[Test]
@@ -107,7 +112,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSource("source1")
 				.WithUser("usercode1", "source1", Guid.NewGuid())
 				.WithUser("usercode2", "source1", personId)
-				.WithRule("statecode1", Guid.Empty)
+				.WithRule("statecode1", Guid.Empty, null, "A State")
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -135,8 +141,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			Database.StoredStateFor(personId)
-				.StateCode.Should().Be(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot);
+			Persister.Models
+				.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("Logged Out");
 		}
 
 		[Test]
@@ -148,7 +155,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithUser("usercode1", "source1", Guid.NewGuid())
 				.WithSource("source2")
 				.WithUser("usercode2", "source2", personId)
-				.WithRule("statecode1", Guid.Empty)
+				.WithRule("statecode1", Guid.Empty, null, "A State")
+				.WithRule(Domain.ApplicationLayer.Rta.Service.Rta.LogOutBySnapshot, Guid.Empty, null, "Logged Out")
 				;
 			Now.Is("2014-10-20 10:00");
 
@@ -176,8 +184,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				}
 			});
 
-			Database.StoredStateFor(personId)
-				.StateCode.Should().Be("statecode1");
+			Persister.Models
+				.Single(x => x.PersonId == personId)
+				.StateName.Should().Be("A State");
 		}
 
 		[Test]
@@ -215,50 +224,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				},
 			});
 
-			Database.StoredStateFor(user2)
+			Persister.Models
+				.Single(x => x.PersonId == user2)
 				.ReceivedTime.Should().Be("2014-10-20 10:00".Utc());
 		}
-
-		[Test]
-		public void ShouldUseEmptyPlatformTypeIdWhenLoggingOutAgent()
-		{
-			var personId = Guid.NewGuid();
-			var platformTypeId = Guid.NewGuid();
-			Database
-				.WithPlatform(platformTypeId)
-				.WithUser("usercode1", Guid.NewGuid())
-				.WithUser("usercode2", personId)
-				.WithRule("statecode", Guid.Empty)
-				;
-			Now.Is("2014-10-20 10:00");
-			Target.SaveStateSnapshot(new[]
-			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
-				{
-					UserCode = "usercode1",
-					StateCode = "statecode",
-					PlatformTypeId = platformTypeId.ToString()
-				},
-				new ExternalUserStateForSnapshot("2014-10-20 10:00".Utc())
-				{
-					UserCode = "usercode2",
-					StateCode = "statecode",
-					PlatformTypeId = platformTypeId.ToString()
-				}
-			});
-
-			Target.SaveStateSnapshot(new[]
-			{
-				new ExternalUserStateForSnapshot("2014-10-20 10:05".Utc())
-				{
-					UserCode = "usercode1",
-					StateCode = "statecode",
-					PlatformTypeId = platformTypeId.ToString()
-				},
-			});
-
-			Database.StoredStateFor(personId)
-				.PlatformTypeId.Should().Be.EqualTo(Guid.Empty);
-		}
+		
 	}
 }

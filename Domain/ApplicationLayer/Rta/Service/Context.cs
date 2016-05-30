@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Interfaces;
@@ -28,12 +29,49 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 	}
 
+	public interface IUpdateStuff
+	{
+		void UpdateReadModel(Context context);
+		void UpdateState(Context context);
+	}
+
+	public class UpdateStuff : IUpdateStuff
+	{
+		private readonly IAgentStateReadModelUpdater _updater;
+
+		public UpdateStuff(IAgentStateReadModelUpdater updater)
+		{
+			_updater = updater;
+		}
+
+		public void UpdateReadModel(Context context)
+		{
+			_updater.UpdateReadModel(context);
+		}
+
+		public void UpdateState(Context context)
+		{
+			_updater.UpdateState(context);
+		}
+	}
+
+	public class DontUpdateStuff : IUpdateStuff
+	{
+		public void UpdateReadModel(Context context)
+		{
+		}
+
+		public void UpdateState(Context context)
+		{
+		}
+	}
+
 	public class Context
 	{
 		private readonly ProperAlarm _appliedAlarm;
 		private readonly IJsonSerializer _serializer;
 		private readonly Lazy<AgentState> _stored;
-		private readonly Action<Context> _agentStateReadModelUpdater;
+		private readonly IUpdateStuff _updateStuff;
 
 		public Context(
 			ExternalUserStateInputModel input, 
@@ -43,8 +81,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid siteId, 
 			Func<AgentState> stored, 
 			Func<IEnumerable<ScheduleLayer>> schedule, 
-			Func<Context, IEnumerable<Mapping>> mappings, 
-			Action<Context> agentStateReadModelUpdater, 
+			Func<Context, IEnumerable<Mapping>> mappings,
+			IUpdateStuff updateStuff, 
 			INow now,
 			StateMapper stateMapper,
 			AppliedAdherence appliedAdherence,
@@ -55,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stored = new Lazy<AgentState>(() => dontDeferForNow);
 			var scheduleLazy = new Lazy<IEnumerable<ScheduleLayer>>(schedule);
 			var mappingsState = new MappingsState(() => mappings.Invoke(this));
-			_agentStateReadModelUpdater = agentStateReadModelUpdater ?? (a => { });
+			_updateStuff = updateStuff;
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
 			PersonId = personId;
@@ -83,12 +121,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AdherenceInfo Adherence { get; private set; }
 		public DateTime CurrentTime { get; private set; }
 
-		public void UpdateAgentStateReadModel()
-		{
-			_agentStateReadModelUpdater.Invoke(this);
-		}
-
-		public bool ThereIsAChange()
+		public bool ShouldProcessState()
 		{
 			return !batchId.Equals(Stored.BatchId()) ||
 				   !Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
@@ -96,6 +129,59 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
 				   !State.StateGroupId().Equals(Stored.StateGroupId())
 				;
+		}
+
+		public void UpdateAgentState()
+		{
+			_updateStuff.UpdateState(this);
+		}
+
+		public bool ShouldUpdateReadModel()
+		{
+			return
+				!Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
+				!Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
+				!Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
+				!State.StateGroupId().Equals(Stored.StateGroupId()) ||
+				!Schedule.ActivitiesForReadModel().Count().Equals(Schedule.ActivitiesForReadModel(Stored.ReceivedTime()).Count())
+				;
+
+			//Debug.WriteLine(Input.UserCode);
+			//Debug.WriteLine(Input.StateCode);
+			//Debug.WriteLine(PersonId);
+			//if (!Schedule.NextActivityId().Equals(Stored.NextActivityId()))
+			//{
+			//	Debug.WriteLine(Stored.NextActivityId());
+			//	Debug.WriteLine(Schedule.NextActivityId());
+			//	Debug.WriteLine("next activity changed");
+			//	return true;
+			//}
+			//if (!State.StateGroupId().Equals(Stored.StateGroupId()))
+			//{
+			//	Debug.WriteLine(Stored.StateGroupId());
+			//	Debug.WriteLine(State.StateGroupId());
+			//	Debug.WriteLine("state group changed");
+			//	return true;
+			//}
+			//if (Stored == null)
+			//{
+			//	Debug.WriteLine("no previous state");
+			//	return true;
+			//}
+			//if (!Schedule.ActivitiesForReadModel().Count().Equals(
+			//	Schedule.ActivitiesForReadModel(Stored.ReceivedTime()).Count()
+			//	))
+			//{
+			//	Debug.WriteLine("number of activities in window changed");
+			//	return true;
+			//}
+			//Debug.WriteLine("no change");
+			//return false;
+		}
+
+		public void UpdateAgentStateReadModel()
+		{
+			_updateStuff.UpdateReadModel(this);
 		}
 
 		// for logging
@@ -210,6 +296,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				Shift = shift
 			};
 		}
-		
 	}
 }
