@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public DateTime? AlarmStartTime { get; set; }
 		public int? AlarmColor { get; set; }
 		
-		public string Shift { get; set; }
+		public IEnumerable<ChoppedLayer> Shift{ get; set; }
 
 		public override string ToString()
 		{
@@ -57,5 +58,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				);
 		}
 
+	}
+
+	public class ChoppedLayer
+	{
+		public string Color { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 	}
 }

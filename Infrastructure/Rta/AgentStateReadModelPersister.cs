@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
@@ -9,10 +10,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	public class AgentStateReadModelPersister : IAgentStateReadModelPersister
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly IJsonSerializer _serializer;
 
-		public AgentStateReadModelPersister(ICurrentUnitOfWork unitOfWork)
+		public AgentStateReadModelPersister(ICurrentUnitOfWork unitOfWork, IJsonSerializer serializer)
 		{
 			_unitOfWork = unitOfWork;
+			_serializer = serializer;
 		}
 
 		[InfoLog]
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
 				.SetParameter("AlarmColor", model.AlarmColor)
-				.SetParameter("Shift", model.Shift)
+				.SetParameter("Shift", _serializer.SerializeObject(model.Shift))
 				.ExecuteUpdate();
 			if (updated == 0)
 			{
@@ -131,7 +134,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.SetParameter("IsRuleAlarm", model.IsRuleAlarm)
 					.SetParameter("AlarmStartTime", model.AlarmStartTime)
 					.SetParameter("AlarmColor", model.AlarmColor)
-					.SetParameter("Shift", model.Shift)
+					.SetParameter("Shift", _serializer.SerializeObject(model.Shift))
 					.ExecuteUpdate();
 			}
 		}

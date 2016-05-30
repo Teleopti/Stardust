@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					SiteId = siteId2
 				});
 
-			var agentState = Target.ForSites(new[] {siteId1, siteId2}, false).States.ToArray();
+			var agentState = Target.ForSites(new[] { siteId1, siteId2 }, false).States.ToArray();
 
 			agentState.First().PersonId.Should().Be(personId1);
 			agentState.Last().PersonId.Should().Be(personId2);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForSites(new[] {siteId}, false).States.Single();
+			var agentState = Target.ForSites(new[] { siteId }, false).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			});
 			Now.Is("2015-10-22 08:30".Utc());
 
-			var agentState = Target.ForTeams(new[] {teamId}, false).States.Single();
+			var agentState = Target.ForTeams(new[] { teamId }, false).States.Single();
 
 			agentState.PersonId.Should().Be(personId);
 			agentState.State.Should().Be("state");
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			agentState.Color.Should().Be("#000000");
 			agentState.TimeInState.Should().Be(30 * 60);
 		}
-		
+
 		[Test]
 		public void ShouldOnlyGetAgentStatesInAlarm()
 		{
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 					IsRuleAlarm = false
 				});
 
-			var agentStates = Target.ForSites(new[] {siteId1, siteId2}, true).States.Single();
+			var agentStates = Target.ForSites(new[] { siteId1, siteId2 }, true).States.Single();
 
 			agentStates.PersonId.Should().Be(personId1);
 		}
@@ -156,24 +156,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			{
 				PersonId = personId,
 				TeamId = teamId,
-				Shift = Serializer.SerializeObject(new
+				Shift = new[]
 				{
-					Color = "#80FF80",
-					StartTime = "2016-05-29T12:00:00",
-					EndTime = "2016-05-29T13:00:00",
-				})
-			});
-
-			var state = Target.ForTeams(new[] {teamId}, false).States.Single();
-
-			state.Shift
-				.Should().Be(
-					Serializer.SerializeObject(new
+					new ChoppedLayer
 					{
 						Color = "#80FF80",
 						StartTime = "2016-05-29T12:00:00",
 						EndTime = "2016-05-29T13:00:00",
-					}));
+					}
+				}
+			});
+
+			var state = Target.ForTeams(new[] { teamId }, false).States.Single();
+
+			state.Shift.Single().Color.Should().Be("#80FF80");
+			state.Shift.Single().StartTime.Should().Be("2016-05-29T12:00:00");
+			state.Shift.Single().EndTime.Should().Be("2016-05-29T13:00:00");
 		}
 
 		[Test]
@@ -181,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		{
 			Now.Is("2016-05-28 12:00");
 
-			Target.ForTeams(new Guid[] {}, false)
+			Target.ForTeams(new Guid[] { }, false)
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
 

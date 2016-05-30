@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 			
-			var shift = Deserializer.DeserializeObject<IEnumerable<DeserializedForTest>>(Database.PersistedReadModel.Shift);
+			var shift = Database.PersistedReadModel.Shift;
 			shift.Single().StartTime.Should().Be("2016-05-30 09:00");
 			shift.Single().EndTime.Should().Be("2016-05-30 10:00");
 			shift.Single().Color.Should().Be("#008000");
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Deserializer.DeserializeObject<IEnumerable<DeserializedForTest>>(Database.PersistedReadModel.Shift);
+			var shift = Database.PersistedReadModel.Shift;
 
 			shift.Count().Should().Be(2);
 			shift.First().Color.Should().Be("#008000");
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Deserializer.DeserializeObject<IEnumerable<DeserializedForTest>>(Database.PersistedReadModel.Shift);
+			var shift = Database.PersistedReadModel.Shift;
 
 			shift.Single().Color.Should().Be("#FF0000");
 		}
@@ -88,16 +88,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Deserializer.DeserializeObject<IEnumerable<DeserializedForTest>>(Database.PersistedReadModel.Shift);
+			var shift = Database.PersistedReadModel.Shift;
 
 			shift.Single().Color.Should().Be("#008000");
-		}
-
-		public class DeserializedForTest
-		{
-			public string Color;
-			public string StartTime;
-			public string EndTime;
 		}
 	}
 

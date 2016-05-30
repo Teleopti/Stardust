@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		public string Color { get; set; }
 		public int TimeInState { get; set; }
 		public int? TimeInAlarm { get; set; }
-		public string Shift { get; set; }
+		public IEnumerable<ChoppedLayer> Shift { get; set; }
 	}
 
 	public class AgentStatesViewModelBuilder

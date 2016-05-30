@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 
 			Target.Persist(state);
 
-			var result = Reader.Load(new [] { state.PersonId }).SingleOrDefault();
+			var result = Reader.Load(new[] { state.PersonId }).SingleOrDefault();
 			result.Should().Not.Be.Null();
 		}
 
@@ -140,19 +140,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					PersonId = personId,
 					TeamId = teamId,
-					Shift = "x"
+					Shift = new[]
+					{
+						new ChoppedLayer
+						{
+							Color = "#80FF80"
+						}
+					}
 				});
 
 			Target.Persist(new AgentStateReadModelForTest
 			{
 				PersonId = personId,
 				TeamId = teamId,
-				Shift = "y"
+				Shift = new[]
+				{
+					new ChoppedLayer
+					{
+						Color = "#000000"
+					}
+				}
 			});
 
-			Reader.LoadForTeams(new[] {teamId}, false)
+			Reader.LoadForTeams(new[] { teamId }, false)
 				.Single()
-				.Shift.Should().Be("y");
+				.Shift.Single().Color.Should().Be("#000000");
 		}
 
 		[Test]
