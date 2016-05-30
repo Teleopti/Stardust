@@ -646,7 +646,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				'height': self.heightPx,
 				'color': self.textColor,
 				'background-size': self.isOvertime ? '11px 11px' : 'initial',
-				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0,.2) 6px,transparent 10px,transparent)' : '',
+				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255,.5) 6px,transparent 10px,transparent)' : '',
 				'background-color': self.backgroundColor
 			};
 		});
