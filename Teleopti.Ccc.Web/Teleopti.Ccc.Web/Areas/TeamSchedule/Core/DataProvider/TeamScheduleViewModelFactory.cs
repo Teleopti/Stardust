@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				var person = personScheduleDay.Person;
 				var schedules = personScheduleDay.Schedules.ToArray();
 				var canViewConfidential = peopleCanSeeConfidentialAbsencesFor.Contains(person.Id.GetValueOrDefault());
-				if (!schedules.Any())
+				if (!schedules.Any(s =>s.DateOnlyAsPeriod.DateOnly == dateInUserTimeZone))
 				{
 					list.Add(new GroupScheduleShiftViewModel
 					{

@@ -438,6 +438,27 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			result.First().Date.Should().Be.EqualTo("2020-01-01");
 			result.Second().Date.Should().Be.EqualTo("2019-12-31");
 		}
+		[Test]
+		public void ShouldReturnEmptyScheduleVmForEmptyScheduleWhenThereIsOvernightShiftForScheduleSearch()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person = PersonFactory.CreatePerson("Sherlock", "Holmes");
+			PeopleSearchProvider.Add(person);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+
+			var scheduleDayPrevious = ScheduleDayFactory.Create(new DateOnly(scheduleDate).AddDays(-1), person, scenario);
+			var paPrev = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2019, 12, 31, 20, 2020, 1, 1, 3));
+			scheduleDayPrevious.Add(paPrev);
+			ScheduleProvider.AddScheduleDay(scheduleDayPrevious);
+
+			var result = Target.SearchSchedules("Sherlock", scheduleDate, 20, 1, false).Content.Schedules.ToList();
+
+			result.Count.Should().Be.EqualTo(2);
+			result.First().Date.Should().Be.EqualTo("2020-01-01");
+			result.Second().Date.Should().Be.EqualTo("2019-12-31");
+		}
 
 		[Test]
 		public void ShouldIndicateOvertimeActivityForScheduleSearch()
