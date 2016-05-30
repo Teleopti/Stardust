@@ -122,6 +122,27 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].AlarmWidth).toEqual("12.5%");
 	});
 
+
+	it('should cut alarm to fit schedule window', function () {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+
+		$fakeBackend
+			.withAgent({
+				Name: "Ashley Andeen",
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TimeInAlarm: 4000
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+		expect(scope.agents[0].AlarmWidth).toEqual("25%");
+	});
+
 	it('should display scheduled activity', function () {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 

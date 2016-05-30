@@ -163,14 +163,22 @@
 					buildTimeline(states);
 				}
 
-				function secondsToPercent(seconds) {
+				function layerPercentage(seconds) {
+					return percentageFromSeconds(seconds, 100);
+				}
+
+				function alarmPercentage(seconds) {
+					return percentageFromSeconds(seconds, 25);
+				}
+
+				function percentageFromSeconds(seconds, max) {
 					var maxPercentage = (seconds / 3600 * 25);
-					return maxPercentage > 100 ? 100 + '%' : maxPercentage + '%';
+					return maxPercentage > max ? max + '%' : maxPercentage + '%';
 				}
 
 				function timeToPercent(currentTime, time) {
 					var offset = moment(currentTime).add(-1, 'hour');
-					return secondsToPercent(moment(time).diff(offset, 'seconds'));
+					return layerPercentage(moment(time).diff(offset, 'seconds'));
 				}
 
 				function buildTimeline(states) {
@@ -206,7 +214,7 @@
 							return {
 								Color: s.Color,
 								Offset: timeToPercent(states.Time, s.StartTime),
-								Width: secondsToPercent(lengthSeconds)
+								Width: layerPercentage(lengthSeconds)
 							};
 						});
 						if (agentInfo.length > 0) {
@@ -223,7 +231,7 @@
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
-								AlarmWidth: secondsToPercent(state.TimeInAlarm),
+								AlarmWidth: alarmPercentage(state.TimeInAlarm),
 								Shift: shift
 							});
 						}
