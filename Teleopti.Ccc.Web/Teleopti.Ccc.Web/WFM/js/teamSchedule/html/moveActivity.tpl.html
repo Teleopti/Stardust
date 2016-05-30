@@ -3,7 +3,7 @@
 	<md-content class="command-panel-content" layout-padding>
 		<form name="moveActivityForm">
 			<h3>{{'StartTime' | translate}}:</h3>
-			<uib-timepicker class="focus-default" ng-model="vm.moveToTime" tabindex="100" required></uib-timepicker>
+			<uib-timepicker class="focus-default" ng-model="vm.moveToTime" tabindex="100" required show-meridian="vm.showMeridian" meridians="vm.meridians"></uib-timepicker>
 			<div class="wfm-switch">
 				<input type="checkbox" id="mvActNextDay" ng-model="vm.nextDay" tabindex="101"/>
 				<label for="mvActNextDay">

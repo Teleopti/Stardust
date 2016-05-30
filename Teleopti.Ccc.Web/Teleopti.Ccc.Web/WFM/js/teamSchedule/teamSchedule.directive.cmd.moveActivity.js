@@ -3,12 +3,14 @@
 
 	angular.module('wfm.teamSchedule').directive('moveActivity', moveActivityDirective);
 
-	moveActivityCtrl.$inject = ['$translate', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'MoveActivityValidator'];
+	moveActivityCtrl.$inject = ['$locale', '$translate', 'ActivityService', 'PersonSelection', 'WFMDate', 'ScheduleManagement', 'teamScheduleNotificationService', 'MoveActivityValidator'];
 
-	function moveActivityCtrl($translate, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, validator) {
+	function moveActivityCtrl($locale, $translate, activityService, personSelectionSvc, wFMDateSvc, scheduleManagementSvc, teamScheduleNotificationService, validator) {
 		var vm = this;
 
 		vm.label = 'MoveActivity';
+		vm.showMeridian = /h:/.test($locale.DATETIME_FORMATS.shortTime);
+		vm.meridians = vm.showMeridian ? $locale.DATETIME_FORMATS.AMPMS : [];
 
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
