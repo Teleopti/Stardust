@@ -35,13 +35,7 @@ namespace Teleopti.Support.Security
 			{
 				var commandLineArgument = new CommandLineArgument(args);
 				var arguments = commandLineArgument.GetDatabaseArguments();
-				if (arguments.CheckTenantConnectionStrings)
-				{
-					var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(arguments.TenantStoreConnectionString);
-					var checker = new CheckTenantConnectionStrings(tenantUnitOfWorkManager, tenantUnitOfWorkManager);
-					checker.CheckConnectionStrings(arguments.TenantStoreConnectionString);
-					return;
-				}
+
 				var upgrade = new UpgradeRunner();
 				upgrade.Upgrade(arguments);
 
