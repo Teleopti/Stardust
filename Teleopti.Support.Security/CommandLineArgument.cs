@@ -60,6 +60,8 @@ namespace Teleopti.Support.Security
 
 		private string createConnectionStringBasedOnBaseConnstring(string initialCatalog)
 		{
+			if (_baseConnstring == null || initialCatalog == null)
+				return "";
 			return new SqlConnectionStringBuilder(_baseConnstring)
 			{
 				InitialCatalog = initialCatalog,
@@ -69,6 +71,9 @@ namespace Teleopti.Support.Security
 
 		private string createConnectionString(string initialCatalog)
 		{
+			if (_destinationServer == null || initialCatalog == null)
+				return "";
+
 			var sqlConnectionStringBuilder = new SqlConnectionStringBuilder
 			{
 				DataSource = _destinationServer,
