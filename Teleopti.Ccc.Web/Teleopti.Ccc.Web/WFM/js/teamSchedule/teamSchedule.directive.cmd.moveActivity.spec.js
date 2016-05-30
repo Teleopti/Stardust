@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-describe("teamschedule move activity directive test", function () {
+describe("teamschedule move activity directive tests", function () {
 
 	var $compile,
 		$rootScope,
@@ -76,7 +76,7 @@ describe("teamschedule move activity directive test", function () {
 		expect(applyButton.attr('disabled')).toBe('disabled');
 	});
 
-	it('should not allow to add activity if move to time is not correct', function () {
+	it('should not allow to move activity if move to time is not correct', function () {
 		var vm = setUp(moment('2016-06-15').toDate()).commandControl;
 
 		vm.moveToTime = new Date('2016-06-14');
