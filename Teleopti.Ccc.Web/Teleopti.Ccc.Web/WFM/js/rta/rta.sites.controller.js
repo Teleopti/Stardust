@@ -8,7 +8,7 @@
 				$scope.getAdherencePercent = RtaFormatService.numberToPercent;
 				$scope.checkboxesChecked = 0;
 				var selectedSiteIds = [];
-				var message = "RTA has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customers/customer-center/service_desk/feedback.aspx'>feedback.</a>\
+				var message = "RTA has been improved! We appreciate your <a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>feedback.</a>\
 				Old <a href='../Anywhere#realtimeadherencesites'>RTA</a> can be accessed for a limited time.";
 
 				NoticeService.info(message, null, true);
