@@ -164,7 +164,8 @@
 				}
 
 				function secondsToPercent(seconds) {
-					return (seconds / 3600 * 25) + '%';
+					var maxPercentage = (seconds / 3600 * 25);
+					return maxPercentage > 100 ? 100 + '%' : maxPercentage + '%';
 				}
 
 				function timeToPercent(currentTime, time) {
@@ -173,7 +174,6 @@
 				}
 
 				function buildTimeline(states) {
-
 					var timeline = function (time) {
 						return {
 							Time: time.format('HH:mm'),
@@ -197,7 +197,11 @@
 							PersonId: state.PersonId
 						});
 						state.Shift = state.Shift || [];
-						var shift = state.Shift.map(function (s) {
+
+						removeLayersOutsideOfDisplayWindow(state.Shift, moment(states.Time));
+
+						var shift = state.Shift
+							.map(function (s) {
 							var lengthSeconds = moment(s.EndTime).diff(moment(s.StartTime), 'seconds');
 							return {
 								Color: s.Color,
@@ -222,6 +226,14 @@
 								AlarmWidth: secondsToPercent(state.TimeInAlarm),
 								Shift: shift
 							});
+						}
+					});
+				}
+
+				function removeLayersOutsideOfDisplayWindow(shift, now) {
+					shift.forEach(function (layer, index) {
+						if (now.add(-1, 'hours') >= moment(layer.EndTime) || now.add(3, 'hours') <= moment(layer.StartTime)) {
+							shift.splice(index, 1);							
 						}
 					});
 				}
