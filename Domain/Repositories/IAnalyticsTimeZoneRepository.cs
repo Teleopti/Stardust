@@ -6,5 +6,4 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		AnalyticsTimeZone Get(string id);
 	}
-
 }

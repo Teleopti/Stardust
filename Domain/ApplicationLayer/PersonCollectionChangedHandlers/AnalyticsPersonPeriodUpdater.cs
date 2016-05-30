@@ -32,11 +32,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsTeamRepository analyticsTeamRepository,
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IAnalyticsDateRepository analyticsDateRepository)
+			IAnalyticsDateRepository analyticsDateRepository,
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository)
+				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository)
 		{
 		}
 
@@ -61,11 +62,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsTeamRepository analyticsTeamRepository,
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
-			IAnalyticsDateRepository analyticsDateRepository)
+			IAnalyticsDateRepository analyticsDateRepository,
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository)
+				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository)
 		{
 		}
 
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
+		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
@@ -99,7 +102,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsTeamRepository analyticsTeamRepository, 
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork, 
-			IAnalyticsDateRepository analyticsDateRepository)
+			IAnalyticsDateRepository analyticsDateRepository, 
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -110,6 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
 			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
 			_analyticsDateRepository = analyticsDateRepository;
+			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -123,7 +128,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
 
 			var transformer = new PersonPeriodTransformer(_analyticsPersonPeriodRepository, _analyticsSkillRepository,
-				_analyticsBusinessUnitRepository, _analyticsTeamRepository, _analyticsPersonPeriodMapNotDefined, _analyticsDateRepository);
+				_analyticsBusinessUnitRepository, _analyticsTeamRepository, _analyticsPersonPeriodMapNotDefined, _analyticsDateRepository, _analyticsTimeZoneRepository);
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{

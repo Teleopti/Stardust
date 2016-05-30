@@ -85,10 +85,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return 123;
 		}
-
-		public int? TimeZone(string timeZoneCode)
-		{
-			return 1;
-		}
 	}
 }

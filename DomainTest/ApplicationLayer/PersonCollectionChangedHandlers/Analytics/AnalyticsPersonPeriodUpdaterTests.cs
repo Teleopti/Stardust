@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsTeamRepository _analyticsTeamRepository;
 		private FakeEventPublisher _eventPublisher;
 		private IAnalyticsDateRepository _analyticsDateRepository;
+		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 
 		private Guid testPerson1Id;
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsDateRepository = new FakeAnalyticsDateRepository(
 				new DateTime(2015, 01, 01),
 				new DateTime(2017, 12, 31));
-
+			_analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
 			var p1 = new Person
 			{
 				Name = new Name("Test1", "Testsson"),
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var auow = MockRepository.GenerateMock<ICurrentAnalyticsUnitOfWork>();
 			auow.Stub(a => a.Current()).Return(new FakeUnitOfWork());
 
-			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined(), auow, _analyticsDateRepository);
+			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined(), auow, _analyticsDateRepository, _analyticsTimeZoneRepository);
 		}
 
 		[Test]

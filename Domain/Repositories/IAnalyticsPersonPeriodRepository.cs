@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Analytics;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
@@ -14,10 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddPersonPeriod(AnalyticsPersonPeriod personPeriod);
 		void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
 		
-		int? TimeZone(string timeZoneCode);
-		//IAnalyticsDate MaxDate();
-		//IAnalyticsDate MinDate();
-		//IAnalyticsDate Date(DateTime date);
 		int IntervalsPerDay();
 		int MaxIntervalId();
 		void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod);

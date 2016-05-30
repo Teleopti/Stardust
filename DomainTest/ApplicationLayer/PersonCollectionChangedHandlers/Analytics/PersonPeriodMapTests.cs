@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private FakeAnalyticsTeamRepository fakeAnalyticsTeamRepository;
 		private PersonPeriodTransformer personPeriodTransformer;
 		private IAnalyticsDateRepository _analyticsDateRepository;
+		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 
 		private AnalyticsSkill fakeSkill1 = new AnalyticsSkill
 		{
@@ -87,9 +88,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsDateRepository = new FakeAnalyticsDateRepository(
 				new DateTime(2015, 01, 01),
 				new DateTime(2017, 12, 31));
+			_analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
 
 			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository, new ReturnNotDefined(), _analyticsDateRepository);
+				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository, new ReturnNotDefined(), _analyticsDateRepository, _analyticsTimeZoneRepository);
 		}
 
 

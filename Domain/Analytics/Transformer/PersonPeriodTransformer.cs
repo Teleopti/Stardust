@@ -18,8 +18,9 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
+		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 
-		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, IAnalyticsDateRepository analyticsDateRepository)
+		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, IAnalyticsDateRepository analyticsDateRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			_analyticsTeamRepository = analyticsTeamRepository;
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
 			_analyticsDateRepository = analyticsDateRepository;
+			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
@@ -224,7 +226,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public int? MapTimeZoneId(string timeZoneCode)
 		{
-			return _analyticsPersonPeriodRepository.TimeZone(timeZoneCode);
+			var timeZone = _analyticsTimeZoneRepository.Get(timeZoneCode);
+			return timeZone?.TimeZoneId;
 		}
 
 		public int MapTeamId(Guid teamCode, int siteId, string teamName, int businessUnitId)
