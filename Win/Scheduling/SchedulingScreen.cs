@@ -8,14 +8,11 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
-using EO.Internal;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -25,7 +22,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Domain.Shoveling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Account;
 using Teleopti.Ccc.Infrastructure.Persisters.Requests;
@@ -52,7 +48,6 @@ using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Logging;
@@ -64,12 +59,10 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Persisters;
@@ -102,7 +95,6 @@ using Teleopti.Ccc.WpfControls.Controls.Notes;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Task = Teleopti.Ccc.Domain.Forecasting.Task;
 
 #endregion
 
@@ -180,7 +172,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IRestrictionExtractor _restrictionExtractor;
 		private readonly IResourceOptimizationHelperExtended _optimizationHelperExtended;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
-		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
 		private readonly ICollection<IPerson> _personsToValidate = new HashSet<IPerson>();
 		private readonly ICollection<IPerson> _restrictionPersonsToReload = new HashSet<IPerson>();
@@ -218,7 +209,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private DateTime _lastSaved = DateTime.Now;
 		private SchedulingScreenPermissionHelper _permissionHelper;
 		private readonly CutPasteHandlerFactory _cutPasteHandlerFactory;
-		private readonly IComponentContext _componentContext;
 		private Form _mainWindow;
 		private bool _cancelButtonPressed;
 		private IDaysOffPreferences _daysOffPreferences;
@@ -369,7 +359,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			: this()
 		{
 			Application.DoEvents();
-			_componentContext = componentContext;
 			_mainWindow = ownerWindow;
 
 			_container = componentContext.Resolve<ILifetimeScope>().BeginLifetimeScope();
@@ -421,7 +410,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
 			_optimizationHelperExtended = _container.Resolve<IResourceOptimizationHelperExtended>();
 			_skillDayLoadHelper = _container.Resolve<ISkillDayLoadHelper>();
-			_skillDayRepository = _container.Resolve<ISkillDayRepository>();
 			_peopleAndSkillLoaderDecider = _container.Resolve<IPeopleAndSkillLoaderDecider>();
 
 			_schedulerState.SetRequestedScenario(loadScenario);
@@ -793,16 +781,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonCalculation.Checked = !_schedulerState.SchedulingResultState.SkipResourceCalculation;
 			if (_schedulerState.SchedulingResultState.SkipResourceCalculation)
 			{
-				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
-				{
-					var shovelService = new ShovelServicePoc(_container.Resolve<ResourceCalculationContextFactoryPOC>());
-					var orderedSkillList =
-						_schedulerState.SchedulingResultState.Skills.Where(
-							skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).OrderBy(skill => skill.Name).ToList();
-					shovelService.Execute(_schedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,
-						_schedulerState.RequestedPeriod, orderedSkillList);
-					drawSkillGrid();
-				}
 				statusStrip1.BackColor = Color.Salmon;
 			}
 			else
@@ -3752,18 +3730,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Log.Info("No, changed my mind... Removed " + (peopleCountFromBeginning - peopleInOrg.Count) + " people.");
 				var skills = stateHolder.SchedulingResultState.Skills;
 				int orgSkills = skills.Length;
-				int removedSkills = result.FilterSkills(skills,stateHolder.SchedulingResultState.RemoveSkill,s => stateHolder.SchedulingResultState.AddSkills(s));
-				if( _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
-				{
-					var cascadingSkillReducer = new SkillGroupReducerForCascadingSkills();
-					foreach (var person in peopleInOrg)
-					{
-						foreach (var personPeriod in person.PersonPeriodCollection)
-						{
-							cascadingSkillReducer.ReduceToPrimarySkill(personPeriod);						
-						}
-					}
-				}
+				int removedSkills = result.FilterSkills(skills,stateHolder.SchedulingResultState.RemoveSkill,s => stateHolder.SchedulingResultState.AddSkills(s));			
 				Log.Info("Removed " + removedSkills + " skill when filtering (original: " + orgSkills + ")");
 			}
 		}
@@ -4310,26 +4277,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 			}
 
-			if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
-			{
-				var skillGridMenuItemCascadingSkillAnalyzer = new ToolStripMenuItem("Cascading Skill Analyzer...");
-				skillGridMenuItemCascadingSkillAnalyzer.Click += skillGridMenuItemCascadingSkillAnalyzer_Click;
-				_contextMenuSkillGrid.Items.Add(skillGridMenuItemCascadingSkillAnalyzer);
-			}
-
 			_skillDayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillIntradayGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillWeekGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillMonthGridControl.ContextMenuStrip = _contextMenuSkillGrid;
 			_skillFullPeriodGridControl.ContextMenuStrip = _contextMenuSkillGrid;
-		}
-
-		void skillGridMenuItemCascadingSkillAnalyzer_Click(object sender, EventArgs e)
-		{
-			using (var analyzerView = new CascadingSkillsAnalyzer(_container, _schedulerState, _currentIntraDayDate))
-			{
-				analyzerView.ShowDialog(this);
-			}
 		}
 
 		private void skillGridMenuItemAgentSkillAnalyser_Click(object sender, EventArgs e)

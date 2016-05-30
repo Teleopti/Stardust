@@ -564,12 +564,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             {
 				if(personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
 					createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, personSkill.SkillPercentage.ToString(), 3);
-
-				if (_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsPOC_37679))
-				{
-					if (!personSkill.Active && !((IDeleteTag)personSkill.Skill).IsDeleted)
-						createAndAddItem(listViewPersonPeriod, personSkill.Skill.Name, "Not Active", 3);
-				}
             }
 
             if (personPeriod.PersonMaxSeatSkillCollection.Count > 0)
