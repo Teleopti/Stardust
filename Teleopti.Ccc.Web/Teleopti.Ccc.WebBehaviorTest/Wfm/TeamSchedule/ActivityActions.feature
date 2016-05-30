@@ -192,6 +192,7 @@ Scenario: Should be able to move activity
 	And I apply move activity
 	Then I should see a successful notice
 
+@ignore
 @OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
 Scenario: Should be able to move activity in overnight shift from next day to current day
 	Given 'John Smith' has a shift with
