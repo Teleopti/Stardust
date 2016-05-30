@@ -13375,4 +13375,22 @@ Dessa val är aktiverade:
   <data name="HelpLabel" xml:space="preserve">
     <value>Hjälp</value>
   </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>Alla förfrågningar på väntelistan för den valda perioden kommer att behandlas</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>Förfrågningarna på väntelistan för perioden {0} har behandlats.</value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>BEHANDLA VÄNTELISTA</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>Behandlingen av väntelistan kommer att göras i bakgrunden och kan ta lite tid innan den är klar</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>Skiftbyte</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>Kan inte flytta flera aktiviteter för valda agenter</value>
+  </data>
 </root>

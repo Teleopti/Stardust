@@ -5942,7 +5942,7 @@ Periods</comment>
     <value>队列统计数据</value>
   </data>
   <data name="ResReportScheduledAgentsPerIntervalAndTeam" xml:space="preserve">
-    <value>每个间隔和小组所已定的座席代表数量</value>
+    <value>每个间隔和小组已排定的座席代表数</value>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
     <value>每个活动的已排定时间</value>
