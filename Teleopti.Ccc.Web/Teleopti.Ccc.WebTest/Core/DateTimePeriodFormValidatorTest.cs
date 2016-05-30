@@ -45,5 +45,26 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			result.Single().ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.Period));
 		}
+
+		[Test]
+		public void ShouldNotAcceptDateOutOfSmallDateTimeRange()
+		{
+			var date = new DateTime(1760, 4, 30);
+
+			var form = new DateTimePeriodForm
+			{
+				StartDate = new DateOnly() { Date = date },
+				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
+				EndDate = new DateOnly() { Date = date },
+				EndTime = new TimeOfDay(TimeSpan.FromHours(11))
+			};
+
+			var target = new DateTimePeriodFormValidator();
+
+			var result = target.Validate(form).ToArray();
+
+			result[0].ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.StartDate));
+			result[1].ErrorMessage.Should().Be(string.Format(Resources.InvalidTimeValue, Resources.EndDate));
+		}
 	}
 }
