@@ -4,52 +4,19 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeAnalyticsPersonPeriodRepository : IAnalyticsPersonPeriodRepository
 	{
-		public readonly DateTime SetupStartDate;
-		public readonly DateTime SetupEndDate;
-		readonly List<AnalyticsDate> fakeDates = new List<AnalyticsDate>();
 		private readonly List<AnalyticsPersonPeriod> fakePersonPeriods;
 		private readonly List<AnalyticsBridgeAcdLoginPerson> fakeAcdLoginPersons; 
 
-		public FakeAnalyticsPersonPeriodRepository(DateTime setupStartDate, DateTime setupEndDate)
+		public FakeAnalyticsPersonPeriodRepository()
 		{
-			SetupStartDate = setupStartDate;
-			SetupEndDate = setupEndDate;
-
 			fakePersonPeriods = new List<AnalyticsPersonPeriod>();
 			fakeAcdLoginPersons = new List<AnalyticsBridgeAcdLoginPerson>();
-
-			initDates();
 		}
-
-		private void initDates()
-		{
-			fakeDates.Add(new AnalyticsDate
-			{
-				DateId = -1,
-				DateDate = new DateTime(1900, 01, 01)
-			});
-			fakeDates.Add(new AnalyticsDate
-			{
-				DateId = -2,
-				DateDate = new DateTime(2059, 12, 31)
-			});
-
-			var d = SetupStartDate;
-			var dIndex = 0;
-			while (d <= SetupEndDate)
-			{
-				fakeDates.Add(new AnalyticsDate() { DateId = dIndex, DateDate = d });
-				d = d.AddDays(1);
-				dIndex++;
-			}
-		}
-
 
 		public AnalyticsPersonPeriod PersonPeriod(Guid personPeriodCode)
 		{
@@ -72,13 +39,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			fakePersonPeriods.RemoveAll(a => a.PersonPeriodCode.Equals(personPeriod.PersonPeriodCode));
 			fakePersonPeriods.Add(personPeriod);
-		}
-
-		
-
-		public IAnalyticsDate Date(DateTime date)
-		{
-			return fakeDates.FirstOrDefault(a => a.DateDate.Equals(date));
 		}
 
 		public int IntervalsPerDay()
@@ -130,16 +90,5 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return 1;
 		}
-
-		public IAnalyticsDate MaxDate()
-		{
-			return fakeDates.Last();
-		}
-
-		public IAnalyticsDate MinDate()
-		{
-			return fakeDates.First(a => a.DateId >= 0);
-		}
-
 	}
 }

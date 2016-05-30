@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void UpdatePersonPeriod(AnalyticsPersonPeriod personPeriod);
 		
 		int? TimeZone(string timeZoneCode);
-		IAnalyticsDate MaxDate();
-		IAnalyticsDate MinDate();
-		IAnalyticsDate Date(DateTime date);
+		//IAnalyticsDate MaxDate();
+		//IAnalyticsDate MinDate();
+		//IAnalyticsDate Date(DateTime date);
 		int IntervalsPerDay();
 		int MaxIntervalId();
 		void DeletePersonPeriod(AnalyticsPersonPeriod analyticsPersonPeriod);

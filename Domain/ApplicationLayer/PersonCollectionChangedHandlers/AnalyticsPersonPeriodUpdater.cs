@@ -31,11 +31,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsTeamRepository analyticsTeamRepository,
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
-			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
+			IAnalyticsDateRepository analyticsDateRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork)
+				currentAnalyticsUnitOfWork, analyticsDateRepository)
 		{
 		}
 
@@ -59,11 +60,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
 			IAnalyticsTeamRepository analyticsTeamRepository,
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
-			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
+			IAnalyticsDateRepository analyticsDateRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork)
+				currentAnalyticsUnitOfWork, analyticsDateRepository)
 		{
 		}
 
@@ -87,6 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
+		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
@@ -95,7 +98,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, 
 			IAnalyticsTeamRepository analyticsTeamRepository, 
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
-			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork)
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork, 
+			IAnalyticsDateRepository analyticsDateRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -105,6 +109,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_analyticsTeamRepository = analyticsTeamRepository;
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
 			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
+			_analyticsDateRepository = analyticsDateRepository;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -112,13 +117,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		public virtual void Handle(PersonCollectionChangedEvent @event)
 		{
 			var personPeriodFilter = new PersonPeriodFilter(
-				_analyticsPersonPeriodRepository.MinDate().DateDate,
-				_analyticsPersonPeriodRepository.MaxDate().DateDate);
+				_analyticsDateRepository.MinDate().DateDate,
+				_analyticsDateRepository.MaxDate().DateDate);
 
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
 
 			var transformer = new PersonPeriodTransformer(_analyticsPersonPeriodRepository, _analyticsSkillRepository,
-				_analyticsBusinessUnitRepository, _analyticsTeamRepository, _analyticsPersonPeriodMapNotDefined);
+				_analyticsBusinessUnitRepository, _analyticsTeamRepository, _analyticsPersonPeriodMapNotDefined, _analyticsDateRepository);
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{

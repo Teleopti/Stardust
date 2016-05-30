@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private IAnalyticsTeamRepository _analyticsTeamRepository;
 		private FakeEventPublisher _eventPublisher;
+		private IAnalyticsDateRepository _analyticsDateRepository;
 
 		private Guid testPerson1Id;
 
@@ -43,9 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public void Setup()
 		{
 
-			_personPeriodRepository = new FakeAnalyticsPersonPeriodRepository(
-				new DateTime(2015, 01, 01),
-				new DateTime(2017, 12, 31));
+			_personPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 
 			_analyticsSkillRepository = new FakeAnalyticsSkillRepository();
 			var skills = new List<AnalyticsSkill> {fakeSkill3};
@@ -54,6 +53,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_analyticsTeamRepository = new FakeAnalyticsTeamRepository();
 			_eventPublisher = new FakeEventPublisher();
+			_analyticsDateRepository = new FakeAnalyticsDateRepository(
+				new DateTime(2015, 01, 01),
+				new DateTime(2017, 12, 31));
 
 			var p1 = new Person
 			{
@@ -83,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var auow = MockRepository.GenerateMock<ICurrentAnalyticsUnitOfWork>();
 			auow.Stub(a => a.Current()).Return(new FakeUnitOfWork());
 
-			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined(), auow);
+			_target = new AnalyticsPersonPeriodUpdater(_personRepository, _personPeriodRepository, _analyticsSkillRepository, _eventPublisher, _analyticsBusinessUnitRepository, _analyticsTeamRepository, new ReturnNotDefined(), auow, _analyticsDateRepository);
 		}
 
 		[Test]

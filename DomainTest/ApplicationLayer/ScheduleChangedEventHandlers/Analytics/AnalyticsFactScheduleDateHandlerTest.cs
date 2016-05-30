@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Analytics;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.Analytics
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 	{
 		private IAnalyticsDateRepository _dateRepository;
 		private AnalyticsFactScheduleDateHandler _target;
-		private List<KeyValuePair<DateOnly, int>> _dimDateList;
+		private List<IAnalyticsDate> _dimDateList;
 		private const int firstDateId = 1;
 		private const int secondDateId = 2;
 		private DateOnly _shiftStartDateLocal;
@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				EndDateTime = _shiftEndDateUtc,
 			};
 			_dateRepository = MockRepository.GenerateMock<IAnalyticsDateRepository>();
-			_dimDateList = new List<KeyValuePair<DateOnly, int>>
+			_dimDateList = new List<IAnalyticsDate>
 			{
-				new KeyValuePair<DateOnly, int>(new DateOnly(2014, 12, 3), firstDateId),
-				new KeyValuePair<DateOnly, int>(new DateOnly(2014, 12, 4), secondDateId)
+				new AnalyticsDate {DateDate = new DateOnly(2014, 12, 3).Date,DateId = firstDateId}, 
+				new AnalyticsDate {DateDate = new DateOnly(2014, 12, 4).Date,DateId = secondDateId}
 			};
 			_dateRepository.Stub(x => x.Dates()).Return(_dimDateList);
 			_target = new AnalyticsFactScheduleDateHandler(_dateRepository);

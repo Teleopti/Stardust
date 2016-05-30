@@ -4,7 +4,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
@@ -38,8 +37,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		public void ShouldLoadADate()
 		{
 			var date = Target.Date(DateTime.Now);
-			date.Key.Date.Should().Be.EqualTo(DateTime.Now.Date);
-			date.Value.Should().Be.GreaterThanOrEqualTo(0).And.Be.LessThanOrEqualTo(6);
+			date.DateDate.Date.Should().Be.EqualTo(DateTime.Now.Date);
+			date.DateId.Should().Be.GreaterThanOrEqualTo(0).And.Be.LessThanOrEqualTo(6);
+		}
+
+		[Test]
+		public void ShouldLoadMaxDate()
+		{
+			var date = Target.MaxDate();
+			date.DateId.Should().Be.EqualTo(6);
+		}
+
+		[Test]
+		public void ShouldLoadMinDate()
+		{
+			var date = Target.MinDate();
+			date.DateId.Should().Be.EqualTo(0);
 		}
 	}
 }

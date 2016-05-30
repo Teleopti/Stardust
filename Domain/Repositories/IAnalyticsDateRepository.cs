@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
 	public interface IAnalyticsDateRepository
 	{
-		IList<KeyValuePair<DateOnly, int>> Dates();
-		KeyValuePair<DateOnly, int> Date(DateTime date);
+		IList<IAnalyticsDate> Dates();
+		IAnalyticsDate MaxDate();
+		IAnalyticsDate MinDate();
+		IAnalyticsDate Date(DateTime date);
 	}
 }

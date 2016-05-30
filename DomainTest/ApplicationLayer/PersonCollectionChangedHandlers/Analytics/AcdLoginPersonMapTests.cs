@@ -15,9 +15,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[SetUp]
 		public void SetupTests()
 		{
-			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository(
-				new DateTime(2015, 01, 01),
-				new DateTime(2017, 12, 31));
+			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 
 			_acdLoginPersonTransformer = new AcdLoginPersonTransformer(fakeAnalyticsPersonPeriodRepository);
 

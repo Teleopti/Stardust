@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private FakeAnalyticsBusinessUnitRepository fakeAnalyticsBusinessUnitRepository;
 		private FakeAnalyticsTeamRepository fakeAnalyticsTeamRepository;
 		private PersonPeriodTransformer personPeriodTransformer;
+		private IAnalyticsDateRepository _analyticsDateRepository;
 
 		private AnalyticsSkill fakeSkill1 = new AnalyticsSkill
 		{
@@ -36,9 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		[SetUp]
 		public void SetupTests()
 		{
-			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository(
-				new DateTime(2015, 01, 01),
-				new DateTime(2017, 12, 31));
+			fakeAnalyticsPersonPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 			fakeAnalyticsSkillRepository = new FakeAnalyticsSkillRepository();
 
 			var fakeSkills = new List<AnalyticsSkill>
@@ -84,9 +84,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 
 			fakeAnalyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			fakeAnalyticsTeamRepository = new FakeAnalyticsTeamRepository();
+			_analyticsDateRepository = new FakeAnalyticsDateRepository(
+				new DateTime(2015, 01, 01),
+				new DateTime(2017, 12, 31));
 
 			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository, new ReturnNotDefined());
+				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository, new ReturnNotDefined(), _analyticsDateRepository);
 		}
 
 

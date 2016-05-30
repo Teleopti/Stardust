@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Logon;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			var personPeriod = person.Period(new DateOnly(@event.RestrictionDate.Date));
 			var analyticsPersonPeriodId = _analyticsPersonPeriodRepository.PersonPeriod(personPeriod.Id.GetValueOrDefault()).PersonId;
 
-			_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+			_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriodId);
 		}
 
 		[AsSystem]
@@ -188,12 +189,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			// Delete
 			if (scenarioId == Guid.Empty)
 			{
-				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId);
+				_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriodId);
 			}
 			else
 			{
 				var analyticScenarioId = analyticsScenarios.First(a => a.ScenarioCode.GetValueOrDefault() == scenarioId).ScenarioId;
-				_analyticsPreferenceRepository.DeletePreferences(dateId.Value, analyticsPersonPeriodId, analyticScenarioId);
+				_analyticsPreferenceRepository.DeletePreferences(dateId.DateId, analyticsPersonPeriodId, analyticScenarioId);
 			}
 
 			// Insert
@@ -212,7 +213,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 			IEnumerable<AnalyticsAbsence> analyticsAbsences, 
 			IEnumerable<AnalyticsDayOff> analyticsDayOffs,
 			AnalyticBusinessUnit businessUnitId, 
-			KeyValuePair<DateOnly, int> dateId, 
+			IAnalyticsDate analyticsDate, 
 			int analyticsPersonPeriodId, 
 			IPreferenceDay preferenceDay)
 		{
@@ -225,7 +226,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 
 			var preferenceItem = new AnalyticsFactSchedulePreference
 			{
-				DateId = dateId.Value,
+				DateId = analyticsDate.DateId,
 				IntervalId = 0,
 				PersonId = analyticsPersonPeriodId,
 				ScenarioId = scenarioId,

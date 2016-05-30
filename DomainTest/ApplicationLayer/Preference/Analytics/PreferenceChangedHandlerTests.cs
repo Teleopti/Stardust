@@ -38,16 +38,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 		[SetUp]
 		public void Setup()
 		{
-			_personPeriodRepository = new FakeAnalyticsPersonPeriodRepository(
-				new DateTime(2001, 01, 01),
-				new DateTime(2002, 12, 31));
+			_personPeriodRepository = new FakeAnalyticsPersonPeriodRepository();
 
 			_analyticsBusinessUnitRepository = new FakeAnalyticsBusinessUnitRepository();
 			_preferenceDayRepository = new FakePreferenceDayRepository();
 			_scenarioRepository = new FakeScenarioRepository();
 			_scheduleStorage = new FakeScheduleDataReadScheduleStorage();
 			_analyticsPreferenceRepository = new FakeAnalyticsPreferenceRepository();
-			_analyticsDateRepository = new FakeAnalyticsDateRepository();
+			_analyticsDateRepository = new FakeAnalyticsDateRepository(
+				new DateTime(2001, 01, 01),
+				new DateTime(2002, 12, 31));
 			_personRepository = new FakePersonRepository();
 			_analyticsDayOffRepository = new FakeAnalyticsDayOffRepository();
 			_analyticsScenarioRepository = new FakeAnalyticsScenarioRepository();
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date1).Value,
+				DateId = _analyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 123 // Not matched
 			});
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
@@ -116,13 +116,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date1).Value,
+				DateId = _analyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 123 // Not matched
 			});
 			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date1).Value,
+				DateId = _analyticsDateRepository.Date(date1).DateId,
 				ScenarioId = 1 // Matched
 			});
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(date).Value
+				DateId = _analyticsDateRepository.Date(date).DateId
 			});
 
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(1);
@@ -205,12 +205,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).Value
+				DateId = _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId
 			});
 			_analyticsPreferenceRepository.AddPreference(new AnalyticsFactSchedulePreference
 			{
 				PersonId = 0,
-				DateId = _analyticsDateRepository.Date(new DateTime(2001, 1, 2)).Value
+				DateId = _analyticsDateRepository.Date(new DateTime(2001, 1, 2)).DateId
 			});
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
 
@@ -221,8 +221,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 				RestrictionDate = new DateTime(2001, 1, 1)
 			});
 			_analyticsPreferenceRepository.PreferencesForPerson(0).Count.Should().Be.EqualTo(2);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).Value).PreferencesFulfilled.Should().Be.EqualTo(0);
-			_analyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).Value).PreferencesUnfulfilled.Should().Be.EqualTo(1);
+			_analyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesFulfilled.Should().Be.EqualTo(0);
+			_analyticsPreferenceRepository.PreferencesForPerson(0).First(a => a.DateId == _analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId).PreferencesUnfulfilled.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 			item.DayOffId.Should().Be.EqualTo(1);
 			item.ShiftCategoryId.Should().Be.EqualTo(1);
 			item.DatasourceId.Should().Be.EqualTo(1);
-			item.DateId.Should().Be.EqualTo(_analyticsDateRepository.Date(new DateTime(2001, 1, 1)).Value);
+			item.DateId.Should().Be.EqualTo(_analyticsDateRepository.Date(new DateTime(2001, 1, 1)).DateId);
 			item.ScenarioId.Should().Be.EqualTo(1);
 			item.BusinessUnitId.Should().Be.EqualTo(1);
 			item.IntervalId.Should().Be.EqualTo(0);

@@ -17,14 +17,16 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTeamRepository _analyticsTeamRepository;
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
+		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 
-		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined)
+		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, IAnalyticsDateRepository analyticsDateRepository)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsTeamRepository = analyticsTeamRepository;
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
+			_analyticsDateRepository = analyticsDateRepository;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			var timeZoneId = MapTimeZoneId(timeZoneInfo.Id);
 
 			var maxDate = MapMaxDate();
-			var minDate = _analyticsPersonPeriodRepository.MinDate().DateDate;
+			var minDate = _analyticsDateRepository.MinDate().DateDate;
 
 			var validFromDate = ValidFromDate(personPeriodStartDate, timeZoneInfo, minDate);
 			var validToDate = ValidToDate(personPeriodEndDate, timeZoneInfo, maxDate.DateDate);
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public int MapDateId(DateTime date)
 		{
-			var analyticsDate = _analyticsPersonPeriodRepository.Date(date);
+			var analyticsDate = _analyticsDateRepository.Date(date);
 			if (analyticsDate != null)
 				return analyticsDate.DateId;
 			return -1;
@@ -217,7 +219,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 
 		public IAnalyticsDate MapMaxDate()
 		{
-			return _analyticsPersonPeriodRepository.MaxDate();
+			return _analyticsDateRepository.MaxDate();
 		}
 
 		public int? MapTimeZoneId(string timeZoneCode)
