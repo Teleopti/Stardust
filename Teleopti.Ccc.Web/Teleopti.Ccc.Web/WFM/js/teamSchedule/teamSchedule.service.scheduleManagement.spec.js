@@ -1,15 +1,69 @@
 ﻿"use strict";
 
 describe("teamschedule schedule management service tests", function() {
-	var target;
+	var target, fakeTeamScheduleSvc;
 
 	beforeEach(function() {
 		module("wfm.teamSchedule");
 	});
 
+
+	beforeEach(function () {
+		fakeTeamScheduleSvc = new FakeTeamScheduleSvc();
+		module(function ($provide) {
+			$provide.service('TeamSchedule', function() {
+				return fakeTeamScheduleSvc;
+			});
+		});
+	});
+
 	beforeEach(inject(function (ScheduleManagement) {
 		target = ScheduleManagement;
 	}));
+
+	function FakeTeamScheduleSvc() {
+		var newData = {
+			Schedules: [
+				{
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": scheduleDate,
+					"Projection": [
+						{
+							"Color": "#80FF80",
+							"Description": "Phone",
+							"Start": scheduleDate + " 11:00",
+							"Minutes": 480
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				},
+				{
+					"PersonId": "221B-Baker-SomeoneElse",
+					"Name": "SomeoneElse",
+					"Date": yesterday,
+					"Projection": [
+						{
+							"Color": "#80FF80",
+							"Description": "Email",
+							"Start": yesterday + " 21:00",
+							"Minutes": 480
+						}
+					],
+					"IsFullDayAbsence": false,
+					"DayOff": null
+				}
+			]
+		};
+		this.getSchedules = function (date, agents) {
+			return {
+				then: function(cb) {
+					cb(newData);
+				}
+			}
+		}
+	}
 
 	var scheduleDate = "2016-01-02";
 	var yesterday = "2016-01-01";
@@ -74,6 +128,17 @@ describe("teamschedule schedule management service tests", function() {
 
 		target.resetSchedules([schedule1], scheduleDateMoment);
 		expect(target.groupScheduleVm.Schedules.length).toEqual(1);
+	}));
+
+	it("Should update group schedule and keep the order", inject(function () {
+		target.resetSchedules([schedule1, schedule3, schedule2], scheduleDateMoment);
+		expect(target.groupScheduleVm.Schedules.length).toEqual(2);
+
+		target.updateScheduleForPeoples(["221B-Baker-SomeoneElse"], scheduleDateMoment, function (){});
+		expect(target.groupScheduleVm.Schedules.length).toEqual(2);
+		expect(target.rawSchedules[0].PersonId).toEqual("221B-Baker-SomeoneElse");
+		expect(target.rawSchedules[0].Date).toEqual(scheduleDate);
+		expect(target.rawSchedules[0].Projection[0].Description).toEqual("Phone");
 	}));
 
 	it("Should get latest shift start in given schedules", function() {

@@ -22,19 +22,24 @@
 				recreateScheduleVm(scheduleDateMoment);
 			}
 
-			svc.updateScheduleForPeoples = function (personIdList, scheduleDateMoment, afterLoading) {
-				teamScheduleSvc.getSchedules(scheduleDateMoment.format('YYYY-MM-DD'), personIdList).then(function (result) {
+			svc.updateScheduleForPeoples = function(personIdList, scheduleDateMoment, afterLoading) {
+				var scheduleDateStr = scheduleDateMoment.format('YYYY-MM-DD');
+				teamScheduleSvc.getSchedules(scheduleDateStr, personIdList).then(function(result) {
 
-					angular.forEach(result.Schedules, function (schedule) {
+					angular.forEach(result.Schedules, function(schedule) {
 						var personId = schedule.PersonId;
-						for (var i = 0; i < svc.rawSchedules.length; i++) {
-							if (personId === svc.rawSchedules[i].PersonId) {
-								svc.rawSchedules[i] = schedule;
-								break;
+						
+						if (schedule.Date === scheduleDateStr) {
+							for (var i = 0; i < svc.rawSchedules.length; i++) {
+								if (personId === svc.rawSchedules[i].PersonId && svc.rawSchedules[i].Date === scheduleDateStr) {
+									svc.rawSchedules[i] = schedule;
+									break;
+								}
 							}
-						}
-					});
 
+						}
+
+					});
 					svc.mergeSchedules(svc.rawSchedules, scheduleDateMoment);
 					afterLoading();
 				});
