@@ -46,7 +46,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected the person absence for '(.*)'")]
 		public void WhenISelectedThePersonAbsenceFor(string agentName)
 		{
-			Browser.Interactions.ClickContaining(".person-name .wfm-checkbox-label", "John Smith");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.ClickContaining(".person-name .wfm-checkbox-label", "John Smith");
+				});
 		}
 
 		[When(@"I selected agent '(.*)'")]
@@ -87,6 +91,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void WhenIClickMenuItemInTeamSchedule(string menuItem)
 		{
 			Browser.Interactions.Click("#menuItem" + menuItem);
+
 		}
 
 		[When(@"I set new activity as")]
@@ -149,31 +154,51 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see agent '(.*)' with shift '(.*)'")]
 		public void ThenIShouldSeeAgentWithShift(string agent, string shift)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery($".projection-layer[projection-name={shift}]");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertExistsUsingJQuery($".projection-layer[projection-name={shift}]");
+				});
 		}
 
 		[Then(@"I should see a successful notice")]
 		public void ThenIShouldSeeASuccessfulNotice()
 		{
-			Browser.Interactions.AssertExists(".notice-container .notice-success");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertExists(".notice-container .notice-success");
+				});
 		}
 
 		[Then(@"I should see a warning notice")]
 		public void ThenIShouldSeeAWarningNotice()
 		{
-			Browser.Interactions.AssertExists(".notice-container .notice-warning");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertExists(".notice-container .notice-warning");
+				});
 		}
 
 		[Then(@"I should see an error notice")]
 		public void ThenIShouldSeeAnErrorNotice()
 		{
-			Browser.Interactions.AssertExists(".notice-container .notice-error");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertExists(".notice-container .notice-error");
+				});
 		}
 
 		[When(@"I see a successful notice")]
 		public void WhenISeeASuccessfulNotice()
 		{
-			Browser.Interactions.AssertExists(".notice-container .notice-success");
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertExists(".notice-container .notice-success");
+				});
 		}
 
 		[Then(@"I should see a confirm message that will remove (\d*) absences from (\d*) person"), SetCulture("en-US")]
@@ -229,7 +254,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see contract time of '(.*)'")]
 		public void ThenIShouldSeeContractTimeOf(string contractTime)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".contract-time", contractTime);
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertExistsUsingJQuery(".contract-time", contractTime);
+				});
 		}
 
 		[When(@"I move activity to '(.*)' with next day being '(.*)'")]
