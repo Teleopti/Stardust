@@ -324,6 +324,7 @@
     <Compile Include="Scheduling\Assignment\IsDayScheduled.cs" />
     <Compile Include="Scheduling\Assignment\IsDayScheduledExcludeDayOff.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DoFullResourceOptimizationOneTime.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\LockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\AssignScheduledLayers.cs" />
     <Compile Include="Scheduling\TeamBlock\BetweenDayOffBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\ReturnPeriodBasedOnDayBlockFinder.cs" />

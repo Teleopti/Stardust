@@ -19,16 +19,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly ISynchronizeIntradayOptimizationResult _synchronizeIntradayOptimizationResult;
+		private readonly IGridlockManager _gridlockManager;
 
 		public IntradayOptimizationEventHandler(IntradayOptimization intradayOptimization,
 									Func<ISchedulerStateHolder> schedulerStateHolder,
 									IFillSchedulerStateHolder fillSchedulerStateHolder,
-									ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult)
+									ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult,
+									IGridlockManager gridlockManager)
 		{
 			_intradayOptimization = intradayOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_synchronizeIntradayOptimizationResult = synchronizeIntradayOptimizationResult;
+			_gridlockManager = gridlockManager;
 		}
 
 		[LogTime]
@@ -36,16 +39,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			using (CommandScope.Create(@event))
 			{
-				DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.RunResolveWeeklyRestRule);
+				DoOptimization(@event.Period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.RunResolveWeeklyRestRule);
 				_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, @event.Period);
 			}
 		}
 
 		[UnitOfWork]
-		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentsInIsland, IEnumerable<Guid> agentsToOptimize, bool runResolveWeeklyRestRule)
+		protected virtual void DoOptimization(DateOnlyPeriod period, IEnumerable<Guid> agentsInIsland, IEnumerable<Guid> agentsToOptimize, IEnumerable<LockInfo> locks, bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, period);
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, _gridlockManager, locks, period);
 			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize).ToList(), runResolveWeeklyRestRule);
 		}
 	}

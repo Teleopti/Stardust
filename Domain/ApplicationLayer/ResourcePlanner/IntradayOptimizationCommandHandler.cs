@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -11,11 +13,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly CreateIslands _createIslands;
+		private readonly IGridlockManager _gridLockManager;
 
-		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, CreateIslands createIslands)
+		public IntradayOptimizationCommandHandler(IEventPublisher eventPublisher, CreateIslands createIslands, IGridlockManager gridLockManager) //TODO - will it work without Func?
 		{
 			_eventPublisher = eventPublisher;
 			_createIslands = createIslands;
+			_gridLockManager = gridLockManager;
 		}
 
 		public void Execute(IntradayOptimizationCommand command)
@@ -38,7 +42,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 						RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
 						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
 						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
-						CommandId = command.CommandId
+						CommandId = command.CommandId,
+						UserLocks = _gridLockManager.LockInfos()
 					});
 				}
 			}
@@ -64,11 +69,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IPeopleInOrganization _peopleInOrganization;
+		private readonly IGridlockManager _gridLockManager;
 
-		public IntradayOptimizationOneThreadCommandHandler(IEventPublisher eventPublisher, IPeopleInOrganization peopleInOrganization)
+		public IntradayOptimizationOneThreadCommandHandler(IEventPublisher eventPublisher, IPeopleInOrganization peopleInOrganization, IGridlockManager gridLockManager) //TODO - will it work without Func?
 		{
 			_eventPublisher = eventPublisher;
 			_peopleInOrganization = peopleInOrganization;
+			_gridLockManager = gridLockManager;
 		}
 
 		public void Execute(IntradayOptimizationCommand command)
@@ -83,7 +90,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				AgentsInIsland = LoadPeopleInOrganization(command.Period).Select(x => x.Id.Value),
 				AgentsToOptimize = agentsToOptimize,
 				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
-				CommandId = command.CommandId
+				CommandId = command.CommandId,
+				UserLocks = _gridLockManager.LockInfos()
 			});
 		}
 

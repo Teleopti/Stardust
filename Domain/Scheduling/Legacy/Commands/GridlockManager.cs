@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-    public interface IGridlockManager
+	public interface IGridlockManager
     {
         /// <summary>
         /// Return dictionary with locks
@@ -97,6 +97,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
         void Clear();
 
         void ClearWriteProtected();
+
+		IEnumerable<LockInfo> LockInfos();
     }
 
     /// <summary>
@@ -334,7 +336,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             }
         }
 
-        public static string GetPersonDateKey(IPerson person, DateOnly dateOnly)
+	    public IEnumerable<LockInfo> LockInfos()
+	    {
+			foreach (var gridLockDictionary in GridlocksDictionary.Values)
+			{
+				foreach (var gridLock in gridLockDictionary)
+				{
+					yield return new LockInfo { Date = gridLock.Value.LocalDate, AgentId = gridLock.Value.Person.Id.Value };
+				}
+			}
+		}
+
+	    public static string GetPersonDateKey(IPerson person, DateOnly dateOnly)
         {
 			return person.GetHashCode().ToString(CultureInfo.InvariantCulture) + "|" +  dateOnly.GetHashCode().ToString(CultureInfo.InvariantCulture);
         }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 	public abstract class FillSchedulerStateHolder : IFillSchedulerStateHolder
 	{
 		[LogTime]
-		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, DateOnlyPeriod period)
+		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period)
 		{
 			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
@@ -22,7 +23,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
+			setLocks(schedulerStateHolderTo, gridLockManager, locks);
 			schedulerStateHolderTo.ResetFilteredPersons();
+		}
+
+		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, IGridlockManager gridlockManager, IEnumerable<LockInfo> locks)
+		{
+			if (locks == null)
+				return;
+
+			foreach (var lockInfo in locks)
+			{
+				var agent = schedulerStateHolderTo.AllPermittedPersons.Single(x => x.Id.Value == lockInfo.AgentId);
+				gridlockManager.AddLock(agent, lockInfo.Date, LockType.Normal, new DateTimePeriod());
+			}
 		}
 
 		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
