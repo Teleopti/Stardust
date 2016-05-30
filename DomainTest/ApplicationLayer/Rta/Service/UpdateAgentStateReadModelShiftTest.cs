@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -10,7 +9,7 @@ using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 {
-	[TestFixture]
+    [TestFixture]
 	[RtaTest]
 	public class UpdateAgentStateReadModelShiftTest
 	{
