@@ -3,9 +3,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Resolvers;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -20,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AppliedAdherence _appliedAdherence;
 		private readonly ProperAlarm _appliedAlarm;
+		private readonly IJsonSerializer _jsonSerializer;
 
 		public ContextLoader(
 			IDatabaseLoader databaseLoader,
@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
 			AppliedAdherence appliedAdherence,
-			ProperAlarm appliedAlarm
+			ProperAlarm appliedAlarm,
+			IJsonSerializer jsonSerializer
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader = databaseReader;
 			_appliedAdherence = appliedAdherence;
 			_appliedAlarm = appliedAlarm;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		protected int validateSourceId(ExternalUserStateInputModel input)
@@ -94,7 +96,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							_now,
 							_stateMapper,
 							_appliedAdherence,
-							_appliedAlarm
+							_appliedAlarm,
+							_jsonSerializer
 							));
 					});
 				});
@@ -120,7 +123,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							_now,
 							_stateMapper,
 							_appliedAdherence,
-							_appliedAlarm
+							_appliedAlarm,
+							_jsonSerializer
 							));
 					});
 				});
@@ -150,7 +154,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_now,
 					_stateMapper,
 					_appliedAdherence,
-					_appliedAlarm
+					_appliedAlarm,
+					_jsonSerializer
 					));
 			});
 		}
@@ -178,7 +183,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						_now,
 						_stateMapper,
 						_appliedAdherence,
-						_appliedAlarm
+						_appliedAlarm,
+						_jsonSerializer
 						));
 				});
 		}

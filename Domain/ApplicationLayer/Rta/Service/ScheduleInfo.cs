@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -46,6 +47,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			});
 		}
 
+		public IEnumerable<ScheduleLayer> ActivitiesForReadModel()
+		{
+			var timeWindowStart = _currentTime.AddHours(-1);
+			var timeWindowEnd = _currentTime.AddHours(3);
+			return from a in _schedule.Value
+				where a.EndDateTime > timeWindowStart
+				where a.StartDateTime < timeWindowEnd
+				select a;
+		}
+		
 		public bool ShiftStarted()
 		{
 			return _stored.Value.ActivityId() == null &&

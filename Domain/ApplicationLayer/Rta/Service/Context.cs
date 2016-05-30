@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -28,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class Context
 	{
 		private readonly ProperAlarm _appliedAlarm;
+		private readonly IJsonSerializer _serializer;
 		private readonly Lazy<AgentState> _stored;
 		private readonly Action<Context> _agentStateReadModelUpdater;
 
@@ -44,7 +48,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			INow now,
 			StateMapper stateMapper,
 			AppliedAdherence appliedAdherence,
-			ProperAlarm appliedAlarm)
+			ProperAlarm appliedAlarm,
+			IJsonSerializer serializer)
 		{
 			var dontDeferForNow = stored == null ? null : stored.Invoke();
 			_stored = new Lazy<AgentState>(() => dontDeferForNow);
@@ -59,6 +64,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			SiteId = siteId;
 
 			_appliedAlarm = appliedAlarm;
+			_serializer = serializer;
 
 			Schedule = new ScheduleInfo(scheduleLazy, _stored, CurrentTime);
 			State = new StateRuleInfo(mappingsState, _stored, stateCode, platformTypeId, businessUnitId, Input, Schedule, stateMapper);
@@ -168,6 +174,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
+			var shift = Schedule.ActivitiesForReadModel()
+				.Select(a => new
+				{
+					Color = ColorTranslator.ToHtml(Color.FromArgb(a.DisplayColor)),
+					StartTime = a.StartDateTime.ToString("yyyy-MM-dd HH:mm"),
+					EndTime = a.EndDateTime.ToString("yyyy-MM-dd HH:mm"),
+				});
+
 			return new AgentStateReadModel
 			{
 				ReceivedTime = CurrentTime,
@@ -192,6 +206,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				IsRuleAlarm = isAlarm,
 				AlarmStartTime = alarmStartTime,
 				AlarmColor = State.AlarmColor(),
+
+				Shift = _serializer.SerializeObject(shift)
 			};
 		}
 		

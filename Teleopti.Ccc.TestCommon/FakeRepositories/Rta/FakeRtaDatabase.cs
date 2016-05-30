@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
@@ -173,8 +174,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public FakeRtaDatabase WithSchedule(Guid personId, Guid activityId, string name, DateOnly belongsToDate, string start, string end)
+		public FakeRtaDatabase WithSchedule(Guid personId, Guid activityId, string start, string end, DateOnly? belongsToDate, string name, Color? color)
 		{
+			if (!belongsToDate.HasValue)
+				belongsToDate = new DateOnly(start.Utc());
+			if (!color.HasValue)
+				color = Color.Black;
 			_schedules.Add(new scheduleLayer2
 			{
 				PersonId = personId,
@@ -184,7 +189,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					Name = name,
 					StartDateTime = start.Utc(),
 					EndDateTime = end.Utc(),
-					BelongsToDate = belongsToDate
+					BelongsToDate = belongsToDate.Value,
+					DisplayColor = color.Value.ToArgb()
 				}
 			});
 			return this;
@@ -357,18 +363,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 	{
 		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Guid activityId, string start, string end)
 		{
-			return fakeDataBuilder.WithSchedule(personId, activityId, null, new DateOnly(start.Utc()), start, end);
+			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, null, null, null);
 		}
 
 		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Guid activityId, string name, string start, string end)
 		{
-			return fakeDataBuilder.WithSchedule(personId, activityId, name, new DateOnly(start.Utc()), start, end);
+			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, null, name, null);
 		}
 
 		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Guid activityId, DateOnly belongsToDate, string start, string end)
 		{
-			return fakeDataBuilder.WithSchedule(personId, activityId, null, belongsToDate, start, end);
+			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, belongsToDate, null, null);
 		}
+
+		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Guid activityId, string name, DateOnly belongsToDate, string start, string end)
+		{
+			return fakeDataBuilder.WithSchedule(personId, activityId, start, end, belongsToDate, null, Color.Black);
+		}
+
+		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, Color color, string start, string end)
+		{
+			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, new DateOnly(start.Utc()), null, color);
+		}
+
 	}
 
 	public static class FakeDatabaseRuleExtensions
