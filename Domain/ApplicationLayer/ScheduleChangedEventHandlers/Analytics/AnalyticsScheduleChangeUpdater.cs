@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 
 			if (scenarioId == -1)
 			{
-				logger.Warn($"Scenario with code {@event.ScenarioId} has not been inserted in analytics yet. " +
-							$"Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
+				logger.Warn(
+					$"Scenario with code {@event.ScenarioId} has not been inserted in analytics yet. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 				return;
 			}
 
@@ -72,16 +72,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 				int dateId;
 				if (!_factScheduleDateHandler.MapDateId(new DateOnly(scheduleDay.Date), out dateId))
 				{
-					logger.Warn($"Date {scheduleDay.Date} could not be mapped to Analytics date_id. " +
-								$"Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
+					logger.Warn(
+						$"Date {scheduleDay.Date} could not be mapped to Analytics date_id. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 					continue;
 				}
 				
 				var personPart = _factSchedulePersonHandler.Handle(scheduleDay.PersonPeriodId);
 				if (personPart.PersonId == -1)
 				{
-					logger.Debug($"PersonPeriodId {scheduleDay.PersonPeriodId} could not be found. " +
-								 $"Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
+					logger.Debug(
+						$"PersonPeriodId {scheduleDay.PersonPeriodId} could not be found. Schedule changes for agent {@event.PersonId} is not saved into Analytics database.");
 					continue;
 				}
 				try
@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Anal
 					var numOfRetry = @event.RetriesCount += 1;
 					if (numOfRetry > 5)
 					{
-						logger.ErrorFormat("Timeout when handling ProjectionChangedEvent on day {0}. Maximim number of retries reached, giving up.", scheduleDay.Date);
+						logger.Error($"Timeout when handling ProjectionChangedEvent on day {scheduleDay.Date}. Maximim number of retries reached, giving up.");
 						return;
 					}
-					logger.WarnFormat("Timeout when handling ProjectionChangedEvent on day {0}. Resending the event for processing later. Retry number {1}", scheduleDay.Date, numOfRetry);
+					logger.Warn($"Timeout when handling ProjectionChangedEvent on day {scheduleDay.Date}. Resending the event for processing later. Retry number {numOfRetry}");
 					var processTime = DateTime.Now.AddSeconds(30 * numOfRetry);
 					var @newEvent = new ProjectionChangedEvent
 					{
