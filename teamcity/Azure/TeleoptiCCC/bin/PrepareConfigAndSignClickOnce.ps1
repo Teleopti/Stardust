@@ -143,7 +143,7 @@ function CopyFileToBlobStorage {
       [string]$sourceFolder,
       [string]$pattern
       )
-	log-info "Copying file from blob storage... $sourceFolder , $pattern"
+	log-info "Copying file to blob storage... $sourceFolder , $pattern"
 	
     $BlobPath = TeleoptiDriveMapProperty-get -name "BlobPath"
     $AccountKey = TeleoptiDriveMapProperty-get -name "AccountKey"
@@ -324,8 +324,6 @@ Try
 	
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
-    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "decryption.key"
-    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "validation.key"
 	#copy the settings for sms (and email) notifications, if any
     CopyFileFromBlobStorage -destinationFolder "$DatasourcesPath" -filename "NotificationConfig.xml"
 	#copy the password policy, if any
@@ -350,6 +348,10 @@ Try
 	}
 	
 	SetDefaultSettings -fullPathsettingsFile "$fullPathsettingsFile" -DataSourceName "$DataSourceName"
+	
+	#Try to get machine key from BlogStorage, if cannot, support tool will generate one, and save back to BlogStorage at a later step, hope no other instance comes to this step before we save the first one.
+	CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "decryption.key"
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "validation.key"
 
     $SupportTool = $SupportToolFolder + "\Teleopti.Support.Tool.exe"
     Set-Location $SupportToolFolder
