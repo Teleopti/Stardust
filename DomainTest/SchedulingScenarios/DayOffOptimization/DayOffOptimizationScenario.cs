@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	public abstract class DayOffOptimizationScenario : IConfigureToggleManager, ISetup
 	{
+		private readonly bool _teamBlockDayOffForIndividuals;
+
 		protected DayOffOptimizationScenario(bool teamBlockDayOffForIndividuals)
 		{
-			TeamBlockDayOffForIndividuals = teamBlockDayOffForIndividuals;
+			_teamBlockDayOffForIndividuals = teamBlockDayOffForIndividuals;
 		}
-
-		protected bool TeamBlockDayOffForIndividuals { get; private set; }
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if (TeamBlockDayOffForIndividuals)
+			if (_teamBlockDayOffForIndividuals)
 			{
 				toggleManager.Enable(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998);
 			}
