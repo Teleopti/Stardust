@@ -43,7 +43,13 @@ a{
 	}
 }
 
+.notice-item{
+	display: flex;
+}
 
+.notice-close{
+	margin-left: auto;
+}
 /*nav-context-menu*/
 .nav-row{
 	padding-top:5px;
