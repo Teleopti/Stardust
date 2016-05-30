@@ -190,7 +190,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly BackgroundWorker _backgroundWorkerScheduling = new BackgroundWorker();
 		private readonly BackgroundWorker _backgroundWorkerOptimization = new BackgroundWorker();
 		private readonly BackgroundWorker _backgroundWorkerOvertimeScheduling = new BackgroundWorker();
-		private readonly BackgroundWorker _backgroundWorkerCascading = new BackgroundWorker();
 		private readonly IUndoRedoContainer _undoRedo = new UndoRedoContainer(500);
 
 		private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections =
@@ -509,9 +508,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerOptimization.DoWork += _backgroundWorkerOptimization_DoWork;
 			_backgroundWorkerOptimization.ProgressChanged += _backgroundWorkerOptimization_ProgressChanged;
 			_backgroundWorkerOptimization.RunWorkerCompleted += _backgroundWorkerOptimization_RunWorkerCompleted;
-
-			_backgroundWorkerCascading.DoWork += backgroundWorkerCascadingDoWork;
-			_backgroundWorkerCascading.RunWorkerCompleted += backgroundWorkerCascadingRunWorkerCompleted;
 
 			//setPermissionOnControls();
 			setInitialClipboardControlState();
@@ -1299,8 +1295,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripMenuItemScheduleClick(object sender, EventArgs e)
 		{
-			if (toolStripButtonCalculateCascading.Checked)
-				return;
 			scheduleSelected(false);
 		}
 
@@ -2101,48 +2095,37 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void RecalculateResources()
 		{
-			if (toolStripButtonCalculateCascading.Checked)
+			if (_backgroundWorkerRunning) return;
+
+			if (_backgroundWorkerResourceCalculator.IsBusy)
+				return;
+
+			var daysToRecalculate = _schedulerState.DaysToRecalculate;
+			var numberOfDaysToRecalculate = daysToRecalculate.Count();
+			if (numberOfDaysToRecalculate == 0 && _uIEnabled)
+				return;
+
+			if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
 			{
-				toolStripStatusLabelStatus.Text = "Cascading Calculating...";
-				disableForCascading();
-				toolStripButtonCalculateCascading.Enabled = false;
-				_backgroundWorkerCascading.RunWorkerAsync();
+				Refresh();
+				validatePersons();
+				return;
 			}
 
-			else
-			{
-				if (_backgroundWorkerRunning) return;
+			disableAllExceptCancelInRibbon();
 
-				if (_backgroundWorkerResourceCalculator.IsBusy)
-					return;
+			if (toolStripProgressBar1.CustomLabelControl == null) //Somone knows why this is null in some cases?
+				toolStripProgressBar1 = new MetroToolStripProgressBar();
 
-				var daysToRecalculate = _schedulerState.DaysToRecalculate;
-				var numberOfDaysToRecalculate = daysToRecalculate.Count();
-				if (numberOfDaysToRecalculate == 0 && _uIEnabled)
-					return;
+			toolStripProgressBar1.Maximum = numberOfDaysToRecalculate;
+			toolStripProgressBar1.Value = 0;
 
-				if ((_schedulerState.SchedulingResultState.SkipResourceCalculation || _teamLeaderMode) && _uIEnabled)
-				{
-					Refresh();
-					validatePersons();
-					return;
-				}
+			toolStripProgressBar1.Visible = true;
+			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot");
 
-				disableAllExceptCancelInRibbon();
-
-				if (toolStripProgressBar1.CustomLabelControl == null) //Somone knows why this is null in some cases?
-					toolStripProgressBar1 = new MetroToolStripProgressBar();
-
-				toolStripProgressBar1.Maximum = numberOfDaysToRecalculate;
-				toolStripProgressBar1.Value = 0;
-
-				toolStripProgressBar1.Visible = true;
-				toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXCalculatingResourcesDotDotDot");
-
-				_backgroundWorkerResourceCalculator.WorkerReportsProgress = true;
-				_backgroundWorkerRunning = true;
-				_backgroundWorkerResourceCalculator.RunWorkerAsync();
-			}
+			_backgroundWorkerResourceCalculator.WorkerReportsProgress = true;
+			_backgroundWorkerRunning = true;
+			_backgroundWorkerResourceCalculator.RunWorkerAsync();	
 		}
 
 		private void _backgroundWorkerResourceCalculator_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -2367,8 +2350,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_currentIntraDayDate = selectedDate;
 					}
 
-					disableActionsCascading(true);
-
 					if (selectedSchedules.Any())
 						_dateNavigateControl.SetSelectedDateNoInvoke(selectedSchedules[0].DateOnlyAsPeriod.DateOnly);
 
@@ -2408,9 +2389,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					SplitterManager.DisableShiftEditor();
 					return;
 				}
-
-				if(!toolStripButtonCalculateCascading.Checked)
-					SplitterManager.EnableShiftEditor();
 
 				scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
 
@@ -2591,7 +2569,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setupRequestPresenter();
 			setupRequestViewButtonStates();
 			releaseUserInterface(e.Cancelled);
-			toolStripButtonCalculateCascading.Visible = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkills_38524);
 			ResumeLayout(true);
 			toolStripStatusLabelStatus.Text = LanguageResourceHelper.Translate("XXReadyThreeDots");
 			Cursor = Cursors.Default;
@@ -3522,16 +3499,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_personsToValidate.Add(permittedPerson);
 			}
 
-			if (toolStripButtonCalculateCascading.Checked)
-			{
-				releaseUserInterface(false);
-				disableForCascading();
-				enableAfterCascadingCalculating();
-			}
-			else
-			{
-				RecalculateResources();
-			}
+			RecalculateResources();	
 		}
 
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
@@ -5449,12 +5417,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_backgroundWorkerOptimization.ProgressChanged -= _backgroundWorkerOptimization_ProgressChanged;
 			}
 
-			if (_backgroundWorkerCascading != null)
-			{
-				_backgroundWorkerCascading.DoWork -= backgroundWorkerCascadingDoWork;
-				_backgroundWorkerCascading.RunWorkerCompleted -= backgroundWorkerCascadingRunWorkerCompleted;
-			}
-
 			if (toolStripComboBoxAutoTag != null)
 				toolStripComboBoxAutoTag.SelectedIndexChanged -= toolStripComboBoxAutoTagSelectedIndexChanged;
 
@@ -6959,171 +6921,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonRefreshLarge_Click(object sender, EventArgs e)
 		{
 			refreshData();
-		}
-
-		private void toolStripButtonCalculateCascadingClick(object sender, EventArgs e)
-		{
-			toolStripButtonCalculateCascading.Checked = !toolStripButtonCalculateCascading.Checked;
-
-			if (toolStripButtonCalculateCascading.Checked)
-			{
-				// ReSharper disable once LocalizableElement
-				toolStripStatusLabelStatus.Text = "Cascading Calculating...";
-				disableForCascading();
-				toolStripButtonCalculateCascading.Enabled = false;
-				_backgroundWorkerCascading.RunWorkerAsync();
-			}
-
-			else
-			{
-				toolStripButtonCalculateCascading.Enabled = false;
-				enableForCascading();
-			}		
-		}
-
-		void backgroundWorkerCascadingDoWork(object sender, DoWorkEventArgs e)
-		{
-			var cascadingCalc = _container.Resolve<CascadingResourceCalculation>();
-			cascadingCalc.ForAll();
-		}
-
-		private void backgroundWorkerCascadingRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-		{
-			enableAfterCascadingCalculating();	
-		}
-
-		private void enableAfterCascadingCalculating()
-		{
-			toolStripButtonCalculateCascading.Enabled = true;
-			toolStripButtonShowGraph.Enabled = true;
-			toolStripButtonShowGraph.Enabled = true;
-			toolStripButtonShowEditor.Enabled = true;
-			toolStripButtonShowPropertyPanel.Enabled = true;
-			toolStripButtonPeriodView.Enabled = true;
-			toolStripButtonWeekView.Enabled = true;
-			toolStripButtonSummaryView.Enabled = true;
-			toolStripButtonDayView.Enabled = true;
-			toolStripButtonShowResult.Enabled = true;
-
-			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
-				ToolStripMenuItemScheduleOvertime.Enabled = true;
-
-			disableButtonsIfTeamLeaderMode();
-
-			ribbonControlAdv1.Cursor = Cursors.Default;
-			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
-			// ReSharper disable once LocalizableElement
-			toolStripStatusLabelStatus.Text = "Cascading Ready";
-
-			_skillIntradayGridControl.Invalidate(true);
-			_skillDayGridControl.Invalidate(true);
-			_skillWeekGridControl.Invalidate(true);
-			_skillMonthGridControl.Invalidate(true);
-			_skillFullPeriodGridControl.Invalidate(true);
-
-			_grid.Cursor = Cursors.Default;
-			_grid.Enabled = true;
-			_grid.Cursor = Cursors.Default;
-
-			enableSave();
-			refreshChart();
-			Refresh();
-		}
-
-		private void disableActionsCascading(bool enableOverTime)
-		{
-			if (!toolStripButtonCalculateCascading.Checked)
-				return;
-
-			foreach (var subItem in toolStripSplitButtonSchedule.DropDownItems)
-			{
-				var control = subItem as ToolStripItem;
-				if (control != null)
-					control.Enabled = false;
-			}
-
-			toolStripDropDownButtonSwap.Enabled = false;
-
-			if (enableOverTime && PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.AutomaticScheduling))
-				ToolStripMenuItemScheduleOvertime.Enabled = true;
-
-			schedulerSplitters1.ElementHost1.Enabled = false;
-		}
-
-		private void enableForCascading()
-		{
-			SplitterManager.EnableShiftEditor();
-
-			releaseUserInterface(false);
-
-			toolStripExClipboard.Enabled = true;
-			toolStripExEdit2.Enabled = true;
-			toolStripButtonRequestView.Enabled = true;
-			toolStripButtonRestrictions.Enabled = true;
-			toolStripExLoadOptions.Enabled = true;
-			toolStripButtonCalculateCascading.Enabled = true;
-
-			SchedulerRibbonHelper.EnableScheduleButton(toolStripSplitButtonSchedule, _scheduleView, _splitterManager, _teamLeaderMode, _container.Resolve<IToggleManager>());
-
-			if (_scheduleView != null) enableSwapButtons(_scheduleView.SelectedSchedules());
-			disableButtonsIfTeamLeaderMode();
-
-
-			foreach (var date in _schedulerState.RequestedPeriod.DateOnlyPeriod.DayCollection())
-			{
-				_schedulerState.MarkDateToBeRecalculated(date);
-			}
-
-			RecalculateResources();
-		}
-
-		private void disableForCascading()
-		{
-			_uIEnabled = false;
-			using (PerformanceOutput.ForOperation("disableForCascading"))
-			{
-				toolStripExClipboard.Enabled = false;
-				toolStripExEdit2.Enabled = false;
-				toolStripButtonRequestView.Enabled = false;
-				toolStripButtonRestrictions.Enabled = false;
-				toolStripExLoadOptions.Enabled = false;
-
-				disableActionsCascading(false);
-
-				toolStripButtonShowGraph.Enabled = false;
-				toolStripButtonShowGraph.Enabled = false;
-				toolStripButtonShowEditor.Enabled = false;
-				toolStripButtonShowPropertyPanel.Enabled = false;
-				toolStripButtonShowResult.Enabled = false;
-				toolStripButtonPeriodView.Enabled = false;
-				toolStripButtonWeekView.Enabled = false;
-				toolStripButtonSummaryView.Enabled = false;
-				toolStripButtonDayView.Enabled = false;
-				
-				toolStripTabItemChart.Panel.Enabled = false;
-				toolStripTabItem1.Panel.Enabled = false;
-				toolStripMenuItemQuickAccessUndo.ShortcutKeys = Keys.None;
-				ControlBox = false;
-				toggleQuickButtonEnabledState(false);
-				contextMenuViews.Enabled = false;
-				toolStripButtonShrinkage.Enabled = false;
-				toolStripButtonValidation.Enabled = false;
-				toolStripButtonCalculation.Enabled = false;
-				_grid.Cursor = Cursors.WaitCursor;
-				_grid.Enabled = false;
-				_grid.Cursor = Cursors.WaitCursor;
-				schedulerSplitters1.DisableViewShiftCategoryDistribution();
-				schedulerSplitters1.ElementHost1.Enabled = false; //shifteditor
-				toggleQuickButtonEnabledState(toolStripButtonQuickAccessCancel, true);
-				ribbonControlAdv1.Cursor = Cursors.AppStarting;
-				if (toolStripSpinningProgressControl1.SpinningProgressControl == null)
-					toolStripSpinningProgressControl1 = new Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
-				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
-				disableSave();
-				disableButtonsIfTeamLeaderMode();
-				toolStripStatusLabelContractTime.Enabled = false;
-				SplitterManager.DisableShiftEditor();
-			}
 		}
 	}
 }
