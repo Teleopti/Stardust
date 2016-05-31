@@ -113,51 +113,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void wfmWebViewOnLoadCompletedSetBusinessUnit(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
 		{
 			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
-			wfmWebView.LoadCompleted += wfmWebViewOnLoadCompletedLoadWfmUrl;
 			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
 			{
 				setWfmWebUrl(_permissionModule);
 			}
 		}
-
-		private void wfmWebViewOnLoadCompletedLoadWfmUrl(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
-		{
-			callScriptToHideNavigation();
-		}
-
-		
-		private void callScriptToHideNavigation()
-		{
-			try
-			{
-				wfmWebView.QueueScriptCall(runIAmFromFatClient);
-			}
-			catch (JSInvokeException exception)
-			{
-				_logger.Error(exception);
-				setWfmWebUrl(_permissionModule);
-			}
-		}
-
-		private void runIAmFromFatClient()
-		{
-			JSObject window = wfmWebView.GetDOMWindow();
-			if (wfmWebView.CanEvalScript)
-			{
-				var iAmCalledFromFatClient = (JSFunction) wfmWebView.EvalScript("iAmCalledFromFatClient");
-				if (iAmCalledFromFatClient == null)
-				{
-					setWfmWebUrl(_permissionModule);
-					return;
-				}
-				iAmCalledFromFatClient.Invoke(window, new object[] {});
-			}
-			else
-			{
-				setWfmWebUrl(_permissionModule);
-			}
-		}
-
 
 		private int cnt;
 		private void keepWfmAlive()
@@ -398,7 +358,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				wfmWebView = new WebView();
 				wfmWebControl.WebView = wfmWebView;
 			}
-			wfmWebView.LoadUrl(string.Format("{0}WFM/#{1}", webServer, _permissionModule));
+			wfmWebView.LoadUrl(string.Format("{0}WFM/index_desktop_client.html#{1}", webServer, _permissionModule));
 		}
 
 		private string webServer
@@ -472,7 +432,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				}
 				else
 				{
-					callScriptToHideNavigation();
 					backStageViewMain.HideBackStage();
 					toggleWebControls(false);
 				}
@@ -956,7 +915,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void handlingCertificateErrorsWfmWebView(object sender, CertificateErrorEventArgs e)
 		{
-			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedLoadWfmUrl;
 			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
 			wfmWebView.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
 			_logger.Error("The following url is missing a certificate. " + e.Url);

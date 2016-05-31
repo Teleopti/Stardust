@@ -16,7 +16,10 @@
 		<GruntCmd>$(NodeDir)grunt</GruntCmd>
 
 		<!-- Grunt Build Command -->
-		<GruntBuild>"$(GruntCmd)" dist --verbose --no-color </GruntBuild>
+		<GruntBuild>"$(GruntCmd)" dist --no-color </GruntBuild>
+
+		<!-- Grunt Build Command for desktop client -->
+		<GruntBuildForDesktop>"$(GruntCmd)" buildForDesktop --no-color </GruntBuildForDesktop>
 
 		<!-- NPM install command -->
 		<NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
@@ -66,5 +69,7 @@
 		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
 		<Message Text="Executing Node.JS Builds: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
 		<Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuild)" />
+	  <Message Text="Executing Node.JS Build for desktop client: $(GruntBuild) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" />
+	  <Exec ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" Command="$(GruntBuildForDesktop)" />
 	</Target>
 </Project>

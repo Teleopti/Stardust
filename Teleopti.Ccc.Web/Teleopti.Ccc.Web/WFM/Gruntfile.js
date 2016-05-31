@@ -147,6 +147,55 @@ module.exports = function(grunt) {
 				],
 				dest: 'dist/modules.js'
 			},
+			distJsForDesktop: {
+				src: [
+					'node_modules/angular/angular.min.js',
+					'node_modules/angular-ui-router/release/angular-ui-router.min.js',
+					'node_modules/angular-resizable/angular-resizable.min.js',
+					'node_modules/angular-resource/angular-resource.min.js',
+					'node_modules/angular-sanitize/angular-sanitize.min.js',
+					'node_modules/angular-translate/dist/angular-translate.min.js',
+					'node_modules/angular-translate/dist/angular-translate-loader-url/angular-translate-loader-url.min.js',
+					'node_modules/angular-dynamic-locale/tmhDynamicLocale.min.js',
+					'node_modules/moment/min/moment-with-locales.min.js',
+					'node_modules/moment-timezone/builds/moment-timezone-with-data.min.js',
+					'node_modules/angular-moment/angular-moment.min.js',
+					'node_modules/ng-file-upload/dist/ng-file-upload-shim.min.js',
+					'node_modules/ng-file-upload/dist/ng-file-upload.min.js',
+					'node_modules/angular-ui-grid/ui-grid.min.js',
+					'node_modules/angular-ui-indeterminate/dist/indeterminate.min.js',
+					'node_modules/ngstorage/ngStorage.min.js',
+					'node_modules/angular-ui-tree/dist/angular-ui-tree.min.js',
+					'node_modules/angular-aria/angular-aria.min.js',
+					'node_modules/angular-animate/angular-animate.min.js',
+					'node_modules/angular-gantt/assets/angular-gantt.js',
+					'node_modules/angular-gantt/assets/angular-gantt-plugins.js',
+					'node_modules/angular-gantt/assets/angular-gantt-table-plugin.js',
+					'node_modules/angular-gantt/assets/angular-gantt-tooltips-plugin.js',
+					'node_modules/teleopti-styleguide/dist/wfmdirectives.min.js',
+					'node_modules/teleopti-styleguide/dist/templates.js',
+					'node_modules/filesaver.js/FileSaver.min.js',
+					'node_modules/jquery/dist/jquery.min.js',
+					'node_modules/isteven-angular-multiselect/isteven-multi-select.js',
+					'vendor/hammerjs/hammer.min.js',
+					'node_modules/angular-material/angular-material.min.js',
+					'node_modules/angular-ui-bootstrap/ui-bootstrap-tpls.min.js',
+					'vendor/fabricjs/fabric.min.js',
+					'vendor/fabricjs/fabricjs_viewport.js',
+					'vendor/ng-image-input-with-preview/ng-image-input-with-preview.js',
+					'vendor/d3/d3.min.js',
+					'vendor/c3/c3.min.js',
+					'vendor/c3/c3-angular.min.js',
+					'vendor/ui-bootstrap-custom-build/datepicker.directive.ext.js',
+					'vendor/ui-bootstrap-custom-build/timepicker.directive.ext.js',
+					'node_modules/angular-dialog-service/dist/dialogs.min.js',
+					'node_modules/angular-dialog-service/dist/dialogs-default-translations.min.js',
+					'vendor/uigrid.directive.ext.js',
+					'../Content/signalr/jquery.signalR-2.2.0.js',
+					'../Content/signalr/broker-hubs.js'
+				],
+				dest: 'dist/modulesForDesktop.js'
+			},
 			distCss: {
 				src: [
 					'node_modules/bootstrap/dist/css/bootstrap.min.css',
@@ -185,7 +234,12 @@ module.exports = function(grunt) {
 		uglify: {
 			dist: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js']
+					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js']
+				}
+			},
+			distForDesktop: {
+				files: {
+					'dist/mainForDesktop.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js','!js/app.js']
 				}
 			},
 			dev: {
@@ -208,16 +262,30 @@ module.exports = function(grunt) {
 				rename: false,
 				ignorePatterns: ['MaterialDesignIcons/css/materialdesignicons.min.css']
 			},
-			assets: {
-				files: [{
-					src: ['index.html']
-				}]
+			dist: {
+				assets: {
+					files: [{
+						src: ['index.html']
+					}]
+				}
+			},
+			distForDesktop: {
+				assets: {
+					files: [{
+						src: ['index_desktop_client.html']
+					}]
+				}
 			}
 		},
 		processhtml: {
 			dist: {
 				files: {
 					'index.html': ['index.tpl.html']
+				}
+			},
+			distForDesktop: {
+				files: {
+					'index_desktop_client.html': ['index_desktop_client.tpl.html']
 				}
 			}
 		},
@@ -280,7 +348,9 @@ module.exports = function(grunt) {
 	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
-	grunt.registerTask('generateIndex', ['processhtml', 'cacheBust']);
+	grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
 
+	// for desktop client
+	grunt.registerTask('buildForDesktop', ['ngtemplates', 'sass', 'concat:distJsForDesktop', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:distForDesktop', 'copy:sourceMaps', 'processhtml:distForDesktop', 'cacheBust:distForDesktop']);
 
 };

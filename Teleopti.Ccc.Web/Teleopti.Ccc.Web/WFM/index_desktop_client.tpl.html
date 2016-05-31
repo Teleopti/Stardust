@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html ng-app="wfm">
+<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>WFM</title>
+	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css">
+	<link id="themeModules" rel="stylesheet" href="dist/modules_classic.min.css">
+	<link id="themeStyle" rel="stylesheet" href="dist/style_classic.min.css">
+</head>
+<body ng-show="isAuthenticated" ng-cloak>
+<div class="layout-container">
+	<div id="materialcontainer" class="container content">
+		<div ui-view></div>
+		<wfm-notice notices="wfmNotices"></wfm-notice>
+	</div>
+
+</div>
+	<script type="text/javascript">
+		var materialcontainer = document.getElementById('materialcontainer');
+		if (materialcontainer) {
+			materialcontainer.style["margin-top"] = '0';
+			materialcontainer.style.height = '100vh';
+		}
+
+		function ahAhAhAhStayingAlive() {
+			$.get('../Start/Url/Index')
+				.success(function() {
+					return true;
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		}
+		window.onerror = function(errorMessage, url, line) {
+			var req = new XMLHttpRequest();
+			req.open('POST', '../api/Logging/LogError', true);
+			req.setRequestHeader("Content-type", "application/json");
+			req.send(JSON.stringify({
+				Message: errorMessage,
+				Url: url,
+				LineNumber: line,
+				ParentUrl: document.location.href,
+				UserAgent: navigator.userAgent
+			}));
+		};
+	</script>
+	<script src="dist/modules.js"></script>
+	<script src="dist/templates.js"></script>
+	<script src="dist/main.min.js"></script>
+</body>
+
+</html>

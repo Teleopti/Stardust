@@ -1318,7 +1318,9 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.0.min.js" />
+    <Content Include="WFM\index_desktop_client.tpl.html" />
     <Content Include="WFM\index.tpl.html" />
+    <Content Include="WFM\js\app_desktop_client.js" />
     <Content Include="WFM\js\forecasting\forecasting.advanced.controller.spec.js" />
     <Content Include="WFM\js\forecasting\forecasting.start.controller.spec.js" />
     <Content Include="WFM\js\forecasting\html\forecasting-result-chart.html" />
