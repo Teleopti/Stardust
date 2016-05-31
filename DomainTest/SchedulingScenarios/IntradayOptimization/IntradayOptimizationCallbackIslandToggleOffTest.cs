@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		public IntradayOptimizationCallbackIslandToggleOffTest()
-			: base(false)
+			: base(false, false)
 		{
 		}
 

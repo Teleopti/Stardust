@@ -15,8 +15,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
 	public class DayOffOptimizationLockDaysTest : DayOffOptimizationScenario
 	{
@@ -29,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		public DayOffOptimizationLockDaysTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
+		public DayOffOptimizationLockDaysTest(bool teamBlockDayOffForIndividuals, bool cascading) : base(teamBlockDayOffForIndividuals, cascading)
 		{
 		}
 

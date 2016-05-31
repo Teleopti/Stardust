@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 
 		public IntradayOptimizationCommandSpecificTest() 
-			: base(true)
+			: base(true, true)
 		{
 		}
 

@@ -22,6 +22,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationIslandTests : IntradayOptimizationScenario, ISetup
@@ -34,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeSkillDayRepositorySimulateNewUnitOfWork SkillDayRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		public IntradayOptimizationIslandTests() 
-			: base(true)
+		public IntradayOptimizationIslandTests(bool cascading) 
+			: base(true, cascading)
 		{
 		}
 

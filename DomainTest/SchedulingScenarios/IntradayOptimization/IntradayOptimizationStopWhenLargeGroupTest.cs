@@ -21,8 +21,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationStopWhenLargeGroupTest : IntradayOptimizationScenario, ISetup
@@ -38,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		public IntradayOptimizationStopWhenLargeGroupTest(bool intradayIslands) 
-			: base(intradayIslands)
+		public IntradayOptimizationStopWhenLargeGroupTest(bool intradayIslands, bool cascading) 
+			: base(intradayIslands, cascading)
 		{
 		}
 

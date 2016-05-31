@@ -24,6 +24,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationCallbackDesktopTest : IntradayOptimizationScenario, ISetup
@@ -32,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public DesktopOptimizationContext DesktopOptimizationContext;
 
-		public IntradayOptimizationCallbackDesktopTest() 
-			: base(true)
+		public IntradayOptimizationCallbackDesktopTest(bool cascading) 
+			: base(true, cascading)
 		{
 		}
 
