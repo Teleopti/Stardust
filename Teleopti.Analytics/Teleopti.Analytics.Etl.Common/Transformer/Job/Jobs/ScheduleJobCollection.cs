@@ -29,11 +29,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageOvertimeJobStep(jobParameters));
 			Add(new StageRequestJobStep(jobParameters));
 			Add(new SqlServerUpdateStatistics(jobParameters));
+			Add(new DimBusinessUnitJobStep(jobParameters));
 			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayDayOff_38213))
 			{
 				Add(new DimDayOffJobStep(jobParameters));
 			}
-			Add(new DimBusinessUnitJobStep(jobParameters));
 			Add(new DimDateJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
 			Add(new DimSiteJobStep(jobParameters));

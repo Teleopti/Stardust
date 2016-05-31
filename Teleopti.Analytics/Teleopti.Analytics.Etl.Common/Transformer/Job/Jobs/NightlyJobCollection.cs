@@ -56,10 +56,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new StageScheduleJobStep(jobParameters));
 				Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			}
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayDayOff_38213))
-			{
-				Add(new DimDayOffJobStep(jobParameters));
-			}
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
 		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyPreference_38283)
                 || !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
@@ -92,6 +88,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
 			Add(new DimBusinessUnitJobStep(jobParameters));
+			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayDayOff_38213))
+			{
+				Add(new DimDayOffJobStep(jobParameters));
+			}
 			Add(new DimScorecardJobStep(jobParameters));
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
 			{
