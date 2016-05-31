@@ -11,10 +11,6 @@
 			var interval;
 			var pollingTimeout = 60000;
 			$scope.DeleteSkillAreaModal = false;
-			$scope.showIncoming = true;
-			$scope.showStaffing = false;
-			$scope.showProductivity = false;
-			$scope.showSummary = false;
 			$scope.selectedIndex = 0;
 			$scope.hiddenArray = [];
 			$scope.prevArea;
@@ -288,24 +284,6 @@
 								timeoutPromise = undefined;
 							}
 						};
-
-						var deselectAll = function () {
-							$scope.showIncoming = false;
-							$scope.showStaffing = false;
-							$scope.showProductivity = false;
-						}
-						$scope.toggleOthers = function (index, intraCard) {
-							deselectAll();
-							$scope.selectedIndex = index;
-							if (intraCard === 'incoming') {
-								$scope.showIncoming = true;
-							} else if (intraCard === 'staffing') {
-								$scope.showStaffing = true;
-							}
-							else if (intraCard === 'productivity') {
-								$scope.showProductivity = true;
-							}
-						}
 
 						if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
 							$scope.HasMonitorData = false;

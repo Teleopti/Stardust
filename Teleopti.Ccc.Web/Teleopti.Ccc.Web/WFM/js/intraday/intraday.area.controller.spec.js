@@ -195,14 +195,6 @@ describe('IntradayAreaCtrl', function () {
 		expect(scope.latestActualInterval).toEqual('--:--');
 	});
 
-	it('should switch active chart tab', function () {
-		createController(false);
-		scope.toggleOthers(1, 'staffing');
-
-		expect(scope.showStaffing).toEqual(true);
-		expect(scope.showIncoming).toEqual(false);
-	});
-
     it('should find max value of data series to apply to latest actual data chart bar', function() {
         createController(false);
 
