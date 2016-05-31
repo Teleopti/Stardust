@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -28,49 +26,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_mappings = null;
 		}
 	}
-
-	public interface IUpdateStuff
-	{
-		void UpdateReadModel(Context context);
-		void UpdateState(Context context);
-	}
-
-	public class UpdateStuff : IUpdateStuff
-	{
-		private readonly IAgentStateReadModelUpdater _updater;
-
-		public UpdateStuff(IAgentStateReadModelUpdater updater)
-		{
-			_updater = updater;
-		}
-
-		public void UpdateReadModel(Context context)
-		{
-			_updater.UpdateReadModel(context);
-		}
-
-		public void UpdateState(Context context)
-		{
-			_updater.UpdateState(context);
-		}
-	}
-
-	public class DontUpdateStuff : IUpdateStuff
-	{
-		public void UpdateReadModel(Context context)
-		{
-		}
-
-		public void UpdateState(Context context)
-		{
-		}
-	}
-
+	
 	public class Context
 	{
+		private readonly Action<Context> _updateState;
 		private readonly ProperAlarm _appliedAlarm;
 		private readonly Lazy<AgentState> _stored;
-		private readonly IUpdateStuff _updateStuff;
 
 		public Context(
 			ExternalUserStateInputModel input, 
@@ -81,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Func<AgentState> stored, 
 			Func<IEnumerable<ScheduledActivity>> schedule, 
 			Func<Context, IEnumerable<Mapping>> mappings,
-			IUpdateStuff updateStuff, 
+			Action<Context> updateState, 
 			INow now,
 			StateMapper stateMapper,
 			AppliedAdherence appliedAdherence,
@@ -91,7 +52,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stored = new Lazy<AgentState>(() => dontDeferForNow);
 			var scheduleLazy = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
 			var mappingsState = new MappingsState(() => mappings.Invoke(this));
-			_updateStuff = updateStuff;
 			Input = input ?? new ExternalUserStateInputModel();
 			CurrentTime = now.UtcDateTime();
 			PersonId = personId;
@@ -99,6 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			TeamId = teamId;
 			SiteId = siteId;
 
+			_updateState = updateState ?? (c => {});
 			_appliedAlarm = appliedAlarm;
 
 			Schedule = new ScheduleInfo(scheduleLazy, _stored, CurrentTime);
@@ -125,29 +86,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				!Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
 				!Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
 				!Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
-				!State.StateGroupId().Equals(Stored.StateGroupId())
-				;
-		}
-
-		public void UpdateAgentState()
-		{
-			_updateStuff.UpdateState(this);
-		}
-
-		public bool ShouldUpdateReadModel()
-		{
-			return
-				!Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
-				!Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
-				!Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
 				!State.StateGroupId().Equals(Stored.StateGroupId()) ||
 				!Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum())
 				;
 		}
 
-		public void UpdateAgentStateReadModel()
+		public void UpdateAgentState()
 		{
-			_updateStuff.UpdateReadModel(this);
+			_updateState(this);
 		}
 
 		// for logging

@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		private readonly DataSourceResolver _dataSourceResolver;
 		private readonly INow _now;
-		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 		private readonly StateMapper _stateMapper;
 		private readonly IAgentStatePersister _agentStatePersister;
 		private readonly IMappingReader _mappingReader;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public ContextLoader(
 			IDatabaseLoader databaseLoader,
 			INow now,
-			IAgentStateReadModelUpdater agentStateReadModelUpdater,
 			StateMapper stateMapper,
 			IAgentStatePersister agentStatePersister,
 			IMappingReader mappingReader,
@@ -34,7 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
 			_now = now;
-			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 			_stateMapper = stateMapper;
 			_agentStatePersister = agentStatePersister;
 			_mappingReader = mappingReader;
@@ -89,7 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 										.ToArray();
 								return _mappingReader.ReadFor(stateCodes, activities);
 							},
-							new UpdateStuff(_agentStateReadModelUpdater),
+							c => _agentStatePersister.Persist(c.MakeAgentState()),
 							_now,
 							_stateMapper,
 							_appliedAdherence,
@@ -115,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							() => _agentStatePersister.Get(x.PersonId),
 							() => _databaseReader.GetCurrentSchedule(x.PersonId),
 							s => _mappingReader.Read(),
-							new UpdateStuff(_agentStateReadModelUpdater),
+							c => _agentStatePersister.Persist(c.MakeAgentState()),
 							_now,
 							_stateMapper,
 							_appliedAdherence,
@@ -145,7 +142,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					() => x,
 					() => _databaseReader.GetCurrentSchedule(x.PersonId),
 					s => _mappingReader.Read(),
-					new UpdateStuff(_agentStateReadModelUpdater), 
+					c => _agentStatePersister.Persist(c.MakeAgentState()),
 					_now,
 					_stateMapper,
 					_appliedAdherence,
@@ -173,7 +170,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						null,
 						() => _databaseReader.GetCurrentSchedule(x.PersonId),
 						s => _mappingReader.Read(),
-						new DontUpdateStuff(), 
+						null,
 						_now,
 						_stateMapper,
 						_appliedAdherence,

@@ -37,15 +37,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_agentStatePersister.Delete(@event.PersonId);
 		}
 
-
-
-
-		public void UpdateState(Context info)
-		{
-			_agentStatePersister.Persist(info.MakeAgentState());
-		}
-
-		public void UpdateReadModel(Context info)
+		
+		public void Update(Context info)
 		{
 			_agentStateReadModelPersister.Persist(info.MakeAgentStateReadModel());
 		}

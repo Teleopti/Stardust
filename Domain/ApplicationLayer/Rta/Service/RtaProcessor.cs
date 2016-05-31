@@ -9,30 +9,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IStateEventPublisher _stateEventPublisher;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
+		private readonly IAgentStateReadModelUpdater _agentStateReadModelUpdater;
 
 		public RtaProcessor(
 			IShiftEventPublisher shiftEventPublisher,
 			IActivityEventPublisher activityEventPublisher,
 			IStateEventPublisher stateEventPublisher,
 			IEventPublisherScope eventPublisherScope,
-			ICurrentEventPublisher eventPublisher)
+			ICurrentEventPublisher eventPublisher,
+			IAgentStateReadModelUpdater agentStateReadModelUpdater)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
 			_stateEventPublisher = stateEventPublisher;
 			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
+			_agentStateReadModelUpdater = agentStateReadModelUpdater;
 		}
 
 		[InfoLog]
 		public virtual void Process(Context context)
 		{
-			if (context.ShouldUpdateReadModel())
-				context.UpdateAgentStateReadModel();
-
 			if (!context.ShouldProcessState())
 				return;
-
+			
 			var eventCollector = new EventCollector(_eventPublisher);
 			
 			context.UpdateAgentState();
@@ -45,6 +45,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			}
 
 			eventCollector.PublishTransitions();
+
+			_agentStateReadModelUpdater.Update(context);
 		}
 	}
 }

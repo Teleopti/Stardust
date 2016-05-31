@@ -159,6 +159,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Database.PersistedReadModel.Shift.Last().Color.Should().Be("#FFC0CB");
 		}
+
+		[Test]
+		public void ShouldNotPersistIfNothingChangesAfterAChange()
+		{
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var shortbreak = Guid.NewGuid();
+			Now.Is("2016-05-30 10:00");
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
+				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
+				.WithSchedule(person, Color.Orange, "2016-05-30 12:00", "2016-05-30 13:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.ClearSchedule(person)
+				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
+				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
+				.WithSchedule(person, Color.Pink, "2016-05-30 12:00", "2016-05-30 13:00");
+			Now.Is("2016-05-30 10:01");
+			Target.CheckForActivityChanges(Database.TenantName());
+			Now.Is("2016-05-30 10:02");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.PersistedReadModel.ReceivedTime.Should().Be("2016-05-30 10:01".Utc());
+		}
 	}
 
 }
