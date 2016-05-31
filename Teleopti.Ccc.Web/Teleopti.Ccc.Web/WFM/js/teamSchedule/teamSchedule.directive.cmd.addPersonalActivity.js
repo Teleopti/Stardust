@@ -1,5 +1,5 @@
 ﻿(function () {
-	"use strict";
+	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('addPersonalActivity', addPersonalActivity);
 
@@ -12,7 +12,7 @@
 
 		vm.isNextDay = false;
 		vm.disableNextDay = false;
-		vm.notAllowedNameListString = "";
+		vm.notAllowedNameListString = '';
 		vm.availableActivitiesLoaded = false;
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
@@ -106,26 +106,39 @@
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/addPersonalActivity.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'addPersonalActivity'],
-			link: postlink
-		}
+			compile: function (tElement, tAttrs) {
+				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+				function addTabindexTo() {
+					angular.forEach(arguments, function (arg) {
+						angular.forEach(arg, function (elem) {
+							elem.setAttribute('tabIndex', tabindex);
+						});
+					});
+				}
+				addTabindexTo(
+					tElement[0].querySelectorAll('select.activity-selector'),
+					tElement[0].querySelectorAll('activity-time-range-picker'),
+					tElement[0].querySelectorAll('button#applyPersonalActivity')
+				);
+				return function postLink(scope, elem, attrs, ctrls) {
+					var containerCtrl = ctrls[0],
+						selfCtrl = ctrls[1];
 
-		function postlink(scope, elem, attrs, ctrls) {
-			var containerCtrl = ctrls[0],
-				selfCtrl = ctrls[1];
+					scope.vm.selectedDate = containerCtrl.getDate;
+					scope.vm.trackId = containerCtrl.getTrackId();
+					scope.vm.getActionCb = containerCtrl.getActionCb;
 
-			scope.vm.selectedDate = containerCtrl.getDate;
-			scope.vm.trackId = containerCtrl.getTrackId();
-			scope.vm.getActionCb = containerCtrl.getActionCb;
+					scope.vm.timeRange = {
+						startTime: selfCtrl.getDefaultActvityStartTime(),
+						endTime: selfCtrl.getDefaultActvityEndTime()
+					};
 
-			scope.vm.timeRange = {
-				startTime: selfCtrl.getDefaultActvityStartTime(),
-				endTime: selfCtrl.getDefaultActvityEndTime()
-			};
-
-			scope.$on('teamSchedule.command.focus.default', function () {
-				var focusTarget = elem[0].querySelector('.focus-default');
-				if (focusTarget) angular.element(focusTarget).focus();
-			});
-		}
+					scope.$on('teamSchedule.command.focus.default', function () {
+						var focusTarget = elem[0].querySelector('.focus-default');
+						if (focusTarget) angular.element(focusTarget).focus();
+					});
+				};
+			},
+		};
 	}
 })();
