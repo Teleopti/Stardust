@@ -130,7 +130,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsTrue(existingDeniedRequest.IsApproved);
 			Assert.IsNullOrEmpty (existingDeniedRequest.DenyReason);
 			//new request should be denied as is a request for the same day as the accepted absence request
-			Assert.IsTrue(newRequest.IsWaitlisted);
+            //now it is denied
+			Assert.IsTrue(newRequest.IsDenied);
 		}
 
 		[Test]
@@ -296,7 +297,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsTrue(newRequest.IsPending);
 		}
 
-		[Test]
+        [Test]
+        public void DuplicatedAbsenceRequestShouldGoesToDeny()
+        {
+            var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
+            var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
+            var requestDateTimePeriod = new DateTimePeriod(startDateTime, endDateTime);
+            var absence = AbsenceFactory.CreateAbsence("Holiday");
+
+            var workflowControlSetOne = createWorkFlowControlSet(new DateTime(2016, 01, 01), new DateTime(2016, 12, 31), absence, new GrantAbsenceRequest(), true);
+            var personOne = createAndSetupPerson(startDateTime, endDateTime, workflowControlSetOne);
+
+            var existingWaitlistedRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+            existingWaitlistedRequest.Deny(null, "Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+
+            var newRequest = createAbsenceRequest(personOne, absence, requestDateTimePeriod);
+            var newAbsenceRequestConsumer = createNewAbsenceRequestHandler(true, false);
+
+            newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
+
+            Assert.IsTrue(existingWaitlistedRequest.IsApproved);
+            Assert.IsTrue(newRequest.IsDenied);
+
+        }
+
+        [Test]
 		public void ShouldNotUpdateWaitlistedRequestsFromDifferentWorkflowControlSets()
 		{
 			var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);

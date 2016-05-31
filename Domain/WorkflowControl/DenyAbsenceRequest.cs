@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		public string DenyReason { get; set; }
 
+		public bool AlreadyAbsence { get; set; }
 		public override IProcessAbsenceRequest CreateInstance()
 		{
 			return new DenyAbsenceRequest { DenyReason = DenyReason };
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			UndoAll(requiredForProcessingAbsenceRequest);
 			var personRequest = (IPersonRequest)absenceRequest.Parent;
-			personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization, true);
+			personRequest.Deny(processingPerson, DenyReason, requiredForProcessingAbsenceRequest.Authorization, true, AlreadyAbsence);
 		}
 
 		public override bool Equals(object obj)

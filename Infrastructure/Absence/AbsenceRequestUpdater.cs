@@ -258,9 +258,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private void denyAbsenceRequest(string reasonResourceKey)
+		private void denyAbsenceRequest(string reasonResourceKey,bool alreadyAbsence = false)
 		{
 			_denyAbsenceRequest.DenyReason = reasonResourceKey;
+			_denyAbsenceRequest.AlreadyAbsence = alreadyAbsence;
 			_process = _denyAbsenceRequest;
 		}
 
@@ -350,7 +351,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			if (_process.GetType() == typeof(GrantAbsenceRequest) && alreadyAbsent)
 			{
 				denyAbsenceRequest(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent",
-					absenceRequest.Person.PermissionInformation.Culture()));
+					absenceRequest.Person.PermissionInformation.Culture()), true);
 
 				if (logger.IsDebugEnabled)
 				{

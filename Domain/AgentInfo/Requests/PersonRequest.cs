@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private ISet<IRequest> requests = new HashSet<IRequest>();
 		private bool _isDeleted;
 		private string _denyReason = string.Empty;
+		private bool _alreadyAbsent;
 		private DateTime _updatedOnServerUtc;
 
 		protected PersonRequest()
@@ -166,10 +167,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			notifyPropertyChanged("IsApproved");
 		}
 
-		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, bool isAutoDeny = false)
+		public virtual void Deny(IPerson denyPerson, string denyReasonTextResourceKey, IPersonRequestCheckAuthorization authorization, bool isAutoDeny = false, bool alreadyAbsence = false)
 		{
 			authorization.VerifyEditRequestPermission(this);
-
+			_alreadyAbsent = alreadyAbsence;
 			if (CanDeny(isAutoDeny))
 			{
 				RequestState.Deny();
@@ -182,6 +183,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			}
 
 			_denyReason = denyReasonTextResourceKey ?? string.Empty;
+			
 			notifyOnStatusChange();
 		}
 
@@ -438,7 +440,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			if (autoDenied)
 			{
-				if (waitlistingIsEnabled())
+				if (waitlistingIsEnabled()&&!_alreadyAbsent)
 				{
 					RequestState = new waitListedPersonRequest(this);
 				}
