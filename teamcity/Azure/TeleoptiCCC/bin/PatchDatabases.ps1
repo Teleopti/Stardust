@@ -249,10 +249,11 @@ Try
     #&"$PatchDBPath\PatchDBs.bat"
 
     log-info "Check so one tenant points to itself"
-    $checkConn = "-CT1 -TS`"Server=$SQLServer;Database=$CCC7DB;User ID=$PATCHUSER;Password=$PATCHPWD`""
+    $CCC7DB = $CCC7DB.Trim()
+    $checkConn = "-TSServer=$SQLServer;Database=$CCC7DB;UID=$PATCHUSER;Password=$PATCHPWD"
 
     $command = $PatchDBPath + "\Enrypted\Teleopti.Support.Security.exe"
-        &"$command" $checkConn
+        &"$command" "-CT1" $checkConn
 
     log-info "Get databases to patch"
      # Create SqlConnection object and define connection string

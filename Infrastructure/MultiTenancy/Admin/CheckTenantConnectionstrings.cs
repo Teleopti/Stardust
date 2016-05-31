@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 
 		public bool CheckEm(string tenantStoreConnectionstring)
 		{
-			var storeConn = new SqlConnectionStringBuilder(tenantStoreConnectionstring);
+            log.DebugFormat("Checking tenant connection strings [{0}]", tenantStoreConnectionstring);
+            var storeConn = new SqlConnectionStringBuilder(tenantStoreConnectionstring);
 			var tenants = _loadAllTenants.Tenants();
 			foreach (var tenant in tenants)
 			{

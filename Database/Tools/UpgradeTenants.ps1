@@ -13,10 +13,12 @@ $SQLServer=$args[1]
 $CCC7DB=$args[2]
 
 #log-info "Check so one tenant points to itself"
-    $checkConn = "-CT1 -TS`"Server=$SQLServer;Database=$CCC7DB;User ID=$PATCHUSER;Password=$PATCHPWD`""
+
+    $CCC7DB = $CCC7DB.Trim
+    $checkConn = "-TSServer=$SQLServer;Database=$CCC7DB;UID=$PATCHUSER;Password=$PATCHPWD"
 
     $command = $PSScriptRoot + "\..\Enrypted\Teleopti.Support.Security.exe"
-        &"$command" $checkConn
+        &"$command" "-CT1" $checkConn
 
 
 #log-info "Get databases to patch"

@@ -10,7 +10,7 @@ namespace Teleopti.Support.Security
 	{
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly TenantUnitOfWorkManager _currentTenantSession;
-		private static readonly ILog log = LogManager.GetLogger(typeof(UpdateTenantData));
+		private static readonly ILog log = LogManager.GetLogger(typeof(CheckTenantConnectionStrings));
 
 		public CheckTenantConnectionStrings(
 			ITenantUnitOfWork tenantUnitOfWork,
