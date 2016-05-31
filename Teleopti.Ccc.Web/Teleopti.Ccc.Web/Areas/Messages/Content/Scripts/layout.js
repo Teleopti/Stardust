@@ -1,17 +1,18 @@
-
 define([
-		'text!templates/layout.html'
+	'jquery',
+	'text!templates/layout.html'
 ], function (
-		layoutTemplate
-		) {
+	$,
+	layoutTemplate
+) {
 
-	function render() {
-		$('body').append(layoutTemplate);
+    function render() {
+        $('body').append(layoutTemplate);
 
-		require(['view'], function (view) {
-		});
-	}
+        require(['view'], function(view) {
+        });
+    }
 
-	render();
+    render();
 
 });
