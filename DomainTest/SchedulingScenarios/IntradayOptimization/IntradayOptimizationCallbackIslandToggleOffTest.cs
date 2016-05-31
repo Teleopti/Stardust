@@ -16,8 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationCallbackIslandToggleOffTest : IntradayOptimizationScenario
@@ -31,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IntradayOptimizationCallbackContext CallbackContext;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		public IntradayOptimizationCallbackIslandToggleOffTest(bool jumpOutWhenLargeGroupIsHalfOptimized)
-			: base(false, jumpOutWhenLargeGroupIsHalfOptimized)
+		public IntradayOptimizationCallbackIslandToggleOffTest()
+			: base(false)
 		{
 		}
 

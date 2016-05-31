@@ -21,8 +21,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationCommandSpecificTest : IntradayOptimizationScenario, ISetup
@@ -37,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IScheduleStorage ScheduleStorage;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 
-		public IntradayOptimizationCommandSpecificTest(bool jumpOutWhenLargeGroupIsHalfOptimized) 
-			: base(true, jumpOutWhenLargeGroupIsHalfOptimized)
+		public IntradayOptimizationCommandSpecificTest() 
+			: base(true)
 		{
 		}
 

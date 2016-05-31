@@ -1419,7 +1419,6 @@
     <Compile Include="Optimization\DayOffDecisionMakerExecuter.cs" />
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractor.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractor.cs" />
-    <Compile Include="Optimization\IntradayOptimizerContainer.cs" />
     <Compile Include="Optimization\IntradayOptimizer2.cs" />
     <Compile Include="Optimization\RelativeDailyValueByPersonalSkillsExtractor.cs" />
     <Compile Include="Optimization\DayOffOptimizer.cs" />

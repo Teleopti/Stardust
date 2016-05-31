@@ -30,8 +30,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationIslandDesktopTest : IntradayOptimizationScenario, ISetup
@@ -39,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IOptimizeIntradayDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		public IntradayOptimizationIslandDesktopTest(bool jumpOutWhenLargeGroupIsHalfOptimized) 
-			: base(true, jumpOutWhenLargeGroupIsHalfOptimized)
+		public IntradayOptimizationIslandDesktopTest() 
+			: base(true)
 		{
 		}
 

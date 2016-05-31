@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		public IntradayOptimizationStopWhenLargeGroupTest(bool intradayIslands) 
-			: base(intradayIslands, true)
+			: base(intradayIslands)
 		{
 		}
 

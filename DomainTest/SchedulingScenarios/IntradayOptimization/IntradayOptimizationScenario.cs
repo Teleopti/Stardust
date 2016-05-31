@@ -7,12 +7,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	public abstract class IntradayOptimizationScenario : IConfigureToggleManager
 	{
 		private readonly bool _intradayIslands;
-		private readonly bool _jumpOutWhenLargeGroupIsHalfOptimized;
 
-		protected IntradayOptimizationScenario(bool intradayIslands, bool jumpOutWhenLargeGroupIsHalfOptimized)
+		protected IntradayOptimizationScenario(bool intradayIslands)
 		{
 			_intradayIslands = intradayIslands;
-			_jumpOutWhenLargeGroupIsHalfOptimized = jumpOutWhenLargeGroupIsHalfOptimized;
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
@@ -25,15 +23,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			{
 				toggleManager.Disable(Toggles.ResourcePlanner_IntradayIslands_36939);
 			}
-			if (_jumpOutWhenLargeGroupIsHalfOptimized)
-			{
-				toggleManager.Enable(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049);
-			}
-			else
-			{
-				toggleManager.Disable(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049);
-			}
-			//35043?
 		}
 	}
 }
