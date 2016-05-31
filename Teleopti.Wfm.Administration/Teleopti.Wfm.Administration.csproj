@@ -222,10 +222,12 @@
     <Content Include="adduser.html" />
     <Content Include="changePassword.html" />
     <Content Include="addSuperUser.html" />
+    <Content Include="HangfireDashboard.html" />
     <Content Include="Scripts\App\adduserController.js" />
     <Content Include="Scripts\App\changePasswordController.js" />
     <Content Include="Scripts\App\addSuperUserController.js" />
     <Content Include="Scripts\App\tokenHeaderService.js" />
+    <Content Include="Scripts\Hangfire\hangfireController.js" />
     <Content Include="Scripts\StardustApp\nodeDetailsController.js" />
     <Content Include="StardustDashboard\nodedetails.html" />
     <Content Include="StardustDashboard\jobdetails.html" />
@@ -283,6 +285,7 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controllers\HangfireController.cs" />
     <Compile Include="Core\Hangfire\HangfireCookie.cs" />
     <Compile Include="Core\Hangfire\HangfireDashboardAuthorization.cs" />
     <Compile Include="Startup.cs" />

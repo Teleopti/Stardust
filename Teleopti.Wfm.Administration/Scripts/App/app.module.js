@@ -53,6 +53,9 @@
                 .when('/nodedetails/:nodeId', {
                 templateUrl: 'StardustDashboard/nodedetails.html',
                 controller: 'nodeDetailsController'
-                });
-            
+                })
+				.when('/HangfireDashboard', {
+					templateUrl: 'HangfireDashboard.html',
+					controller: 'hangfireController'
+				});
     });
