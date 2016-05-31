@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				.Should().Not.Be.Null();
 		}
 
-
 		[Test]
 		public void ShouldPersistAlarmStartTime()
 		{
@@ -101,7 +100,31 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 			Target.Get(state.PersonId)
 				.AlarmStartTime.Should().Be("2015-12-11 08:00".Utc());
 		}
-		
+
+		[Test]
+		public void ShouldPersistTimeWindowCheckSum()
+		{
+			var state = new AgentStateForTest {TimeWindowCheckSum = 375};
+
+			Target.Persist(state);
+
+			Target.Get(state.PersonId)
+				.TimeWindowCheckSum.Should().Be(375);
+		}
+
+		[Test]
+		public void ShouldUpdateTimeWindowCheckSum()
+		{
+			var state = new AgentStateForTest { TimeWindowCheckSum = 375 };
+			Target.Persist(state);
+			state.TimeWindowCheckSum = 475;
+
+			Target.Persist(state);
+
+			Target.Get(state.PersonId)
+				.TimeWindowCheckSum.Should().Be(475);
+		}
+
 		[Test]
 		public void ShouldDelete()
 		{

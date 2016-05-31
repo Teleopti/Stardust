@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IDatabaseReader _databaseReader;
 		private readonly AppliedAdherence _appliedAdherence;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly IJsonSerializer _jsonSerializer;
 
 		public ContextLoader(
 			IDatabaseLoader databaseLoader,
@@ -30,8 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IMappingReader mappingReader,
 			IDatabaseReader databaseReader,
 			AppliedAdherence appliedAdherence,
-			ProperAlarm appliedAlarm,
-			IJsonSerializer jsonSerializer
+			ProperAlarm appliedAlarm
 			)
 		{
 			_dataSourceResolver = new DataSourceResolver(databaseLoader);
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_databaseReader = databaseReader;
 			_appliedAdherence = appliedAdherence;
 			_appliedAlarm = appliedAlarm;
-			_jsonSerializer = jsonSerializer;
 		}
 
 		protected int validateSourceId(ExternalUserStateInputModel input)
@@ -96,8 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							_now,
 							_stateMapper,
 							_appliedAdherence,
-							_appliedAlarm,
-							_jsonSerializer
+							_appliedAlarm
 							));
 					});
 				});
@@ -123,8 +119,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							_now,
 							_stateMapper,
 							_appliedAdherence,
-							_appliedAlarm,
-							_jsonSerializer
+							_appliedAlarm
 							));
 					});
 				});
@@ -154,8 +149,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					_now,
 					_stateMapper,
 					_appliedAdherence,
-					_appliedAlarm,
-					_jsonSerializer
+					_appliedAlarm
 					));
 			});
 		}
@@ -183,8 +177,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						_now,
 						_stateMapper,
 						_appliedAdherence,
-						_appliedAlarm,
-						_jsonSerializer
+						_appliedAlarm
 						));
 				});
 		}

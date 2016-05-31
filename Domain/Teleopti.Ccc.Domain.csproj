@@ -1328,7 +1328,7 @@
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IDatabaseReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\ScheduleLayer.cs" />
+    <Compile Include="ApplicationLayer\Rta\Service\ScheduledActivity.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />

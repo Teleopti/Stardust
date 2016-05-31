@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						RuleStartTime = :RuleStartTime,
 						StaffingEffect = :StaffingEffect,
 						Adherence = :Adherence,
-						AlarmStartTime = :AlarmStartTime
+						AlarmStartTime = :AlarmStartTime,
+						TimeWindowCheckSum = :TimeWindowCheckSum
 					WHERE 
 						PersonId = :PersonId
 				")
@@ -65,6 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetParameter("StaffingEffect", model.StaffingEffect)
 				.SetParameter("Adherence", model.Adherence)
 				.SetParameter("AlarmStartTime", model.AlarmStartTime)
+				.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 				.ExecuteUpdate();
 			if (updated == 0)
 			{
@@ -90,7 +92,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							RuleStartTime,
 							StaffingEffect,
 							Adherence,
-							AlarmStartTime)
+							AlarmStartTime,
+							TimeWindowCheckSum)
 						VALUES
 						(
 							:PersonId, 
@@ -111,7 +114,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 							:RuleStartTime,
 							:StaffingEffect,
 							:Adherence,
-							:AlarmStartTime)
+							:AlarmStartTime,
+							:TimeWindowCheckSum)
 					")
 					.SetParameter("PersonId", model.PersonId)
 					.SetParameter("BatchId", model.BatchId)
@@ -132,6 +136,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.SetParameter("StaffingEffect", model.StaffingEffect)
 					.SetParameter("Adherence", model.Adherence)
 					.SetParameter("AlarmStartTime", model.AlarmStartTime)
+					.SetParameter("TimeWindowCheckSum", model.TimeWindowCheckSum)
 					.ExecuteUpdate();
 			}
 		}
@@ -188,30 +193,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		private class internalState : AgentState
 		{
-			public int AdherenceInt { set { base.Adherence = (Interfaces.Domain.Adherence?) value; } }
+			public new int Adherence { set { base.Adherence = (Interfaces.Domain.Adherence?) value; } }
 		}
 
-		private static string SelectAgentState =
-@"SELECT
-PersonId, 
-BatchId,
-SourceId,
-PlatformTypeId,
-BusinessUnitId,
-TeamId,
-SiteId,
-ReceivedTime,
-StateCode,
-StateGroupId,
-StateStartTime,
-ActivityId,
-NextActivityId,
-NextActivityStartTime,
-RuleId,
-RuleStartTime,
-StaffingEffect,
-Adherence AS AdherenceInt,
-AlarmStartTime
-FROM [dbo].[AgentState] ";
+		private static string SelectAgentState = @"SELECT * FROM [dbo].[AgentState] ";
 	}
 }

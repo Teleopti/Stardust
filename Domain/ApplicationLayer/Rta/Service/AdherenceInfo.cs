@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return adherenceFor(_stored.Value.StateCode(), _stored.Value.PlatformTypeId(), _scheduleInfo.CurrentActivity());
 		}
 
-		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduleLayer activity)
+		private EventAdherence adherenceFor(string stateCode, Guid platformTypeId, ScheduledActivity activity)
 		{
 			var activityId = (Guid?)null;
 			if (activity != null)

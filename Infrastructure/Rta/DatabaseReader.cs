@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_now = now;
 		}
 
-		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
+		public IList<ScheduledActivity> GetCurrentSchedule(Guid personId)
 		{
 			var utcDate = _now.UtcDateTime().Date;
 			const string query = @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor, BelongsToDate 
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 											WHERE PersonId=@PersonId
 											AND BelongsToDate BETWEEN @StartDate AND @EndDate";
 
-			var layers = new List<ScheduleLayer>();
+			var layers = new List<ScheduledActivity>();
 			using (var connection = new SqlConnection(_connectionStrings.Application()))
 			{
 				var command = connection.CreateCommand();
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
-					var layer = new ScheduleLayer
+					var layer = new ScheduledActivity
 					{
 						PayloadId = reader.GetGuid(reader.GetOrdinal("PayloadId")),
 						StartDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime")),

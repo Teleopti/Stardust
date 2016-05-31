@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -31,10 +30,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 			
-			var shift = Database.PersistedReadModel.Shift;
-			shift.Single().StartTime.Should().Be("2016-05-30 09:00");
-			shift.Single().EndTime.Should().Be("2016-05-30 10:00");
-			shift.Single().Color.Should().Be("#008000");
+			var shift = Database.PersistedReadModel.Shift.Single();
+			shift.StartTime.Should().Be("2016-05-30 09:00");
+			shift.EndTime.Should().Be("2016-05-30 10:00");
+			shift.Color.Should().Be("#008000");
 		}
 
 		[Test]
@@ -72,9 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Database.PersistedReadModel.Shift;
-
-			shift.Single().Color.Should().Be("#FF0000");
+			Database.PersistedReadModel.Shift.Single().Color.Should().Be("#FF0000");
 		}
 
 		[Test]
@@ -89,9 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Database.PersistedReadModel.Shift;
-
-			shift.Single().Color.Should().Be("#008000");
+			Database.PersistedReadModel.Shift.Single().Color.Should().Be("#008000");
 		}
 
 		[Test]
@@ -107,9 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Now.Is("2016-05-30 10:05");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			var shift = Database.PersistedReadModel.Shift;
-
-			shift.Single().Color.Should().Be("#008000");
+			Database.PersistedReadModel.Shift.Single().Color.Should().Be("#008000");
 		}
 
 		[Test]
@@ -129,9 +122,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		public void ShouldNotPersistIfNothingChanges()
+		{
+			var person = Guid.NewGuid();
+			Now.Is("2016-05-30 10:00");
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, Color.Green, "2016-05-30 10:00", "2016-05-30 11:00");
+
+			Target.CheckForActivityChanges(Database.TenantName());
+			Now.Is("2016-05-30 10:01");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.PersistedReadModel.ReceivedTime.Should().Be("2016-05-30 10:00".Utc());
+		}
+
+		[Test]
 		public void ShouldPersistAllKindsOfScheduleChanges()
 		{
-			Assert.Ignore("really, should be more than a single test?");
+			var person = Guid.NewGuid();
+			var phone = Guid.NewGuid();
+			var shortbreak = Guid.NewGuid();
+			Now.Is("2016-05-30 10:00");
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
+				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
+				.WithSchedule(person, Color.Orange, "2016-05-30 12:00", "2016-05-30 13:00");
+
+			Target.CheckForActivityChanges(Database.TenantName());
+			Database.ClearSchedule(person)
+				.WithSchedule(person, phone, "2016-05-30 10:00", "2016-05-30 11:00")
+				.WithSchedule(person, shortbreak, "2016-05-30 11:00", "2016-05-30 12:00")
+				.WithSchedule(person, Color.Pink, "2016-05-30 12:00", "2016-05-30 13:00");
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			Database.PersistedReadModel.Shift.Last().Color.Should().Be("#FFC0CB");
 		}
 	}
 

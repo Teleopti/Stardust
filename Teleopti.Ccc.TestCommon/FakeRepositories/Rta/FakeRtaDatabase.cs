@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private class scheduleLayer2
 		{
 			public Guid PersonId { get; set; }
-			public ScheduleLayer ScheduleLayer { get; set; }
+			public ScheduledActivity ScheduledActivity { get; set; }
 		}
 		private readonly List<scheduleLayer2> _schedules = new List<scheduleLayer2>();
 
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_schedules.Add(new scheduleLayer2
 			{
 				PersonId = personId,
-				ScheduleLayer = new ScheduleLayer
+				ScheduledActivity = new ScheduledActivity
 				{
 					PayloadId = activityId,
 					Name = name,
@@ -301,17 +301,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return this;
 		}
 
-		public IList<ScheduleLayer> GetCurrentSchedule(Guid personId)
+		public IList<ScheduledActivity> GetCurrentSchedule(Guid personId)
 		{
-			var layers = from l in _schedules
+			return (
+				from l in _schedules
 				where
 					l.PersonId == personId &&
-					l.ScheduleLayer.BelongsToDate.Date >= _now.UtcDateTime().Date.AddDays(-1) &&
-					l.ScheduleLayer.BelongsToDate.Date <= _now.UtcDateTime().Date.AddDays(1)
-				select l.ScheduleLayer;
-			return new List<ScheduleLayer>(layers);
+					l.ScheduledActivity.BelongsToDate.Date >= _now.UtcDateTime().Date.AddDays(-1) &&
+					l.ScheduledActivity.BelongsToDate.Date <= _now.UtcDateTime().Date.AddDays(1)
+				select l.ScheduledActivity.CopyBySerialization()
+				).ToList();
 		}
-		
+
 		public ConcurrentDictionary<string, int> Datasources()
 		{
 			return new ConcurrentDictionary<string, int>(_datasources);

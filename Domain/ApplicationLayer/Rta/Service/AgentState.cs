@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public Adherence? Adherence { get; set; }
 
 		public DateTime? AlarmStartTime { get; set; }
+
+		public int? TimeWindowCheckSum { get; set; }
 	}
 
 	public static class AgentStateExtensions
@@ -88,7 +90,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return stored.get(s => s.RuleId);
 		}
 
-		
+
+
+		public static int? TimeWindowCheckSum(this AgentState stored)
+		{
+			return stored.get(s => s.TimeWindowCheckSum);
+		}
+
+
 
 		private static T get<T>(this AgentState stored, Func<AgentState, T> getter)
 		{

@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class Context
 	{
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly IJsonSerializer _serializer;
 		private readonly Lazy<AgentState> _stored;
 		private readonly IUpdateStuff _updateStuff;
 
@@ -80,18 +79,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			Guid teamId, 
 			Guid siteId, 
 			Func<AgentState> stored, 
-			Func<IEnumerable<ScheduleLayer>> schedule, 
+			Func<IEnumerable<ScheduledActivity>> schedule, 
 			Func<Context, IEnumerable<Mapping>> mappings,
 			IUpdateStuff updateStuff, 
 			INow now,
 			StateMapper stateMapper,
 			AppliedAdherence appliedAdherence,
-			ProperAlarm appliedAlarm,
-			IJsonSerializer serializer)
+			ProperAlarm appliedAlarm)
 		{
 			var dontDeferForNow = stored == null ? null : stored.Invoke();
 			_stored = new Lazy<AgentState>(() => dontDeferForNow);
-			var scheduleLazy = new Lazy<IEnumerable<ScheduleLayer>>(schedule);
+			var scheduleLazy = new Lazy<IEnumerable<ScheduledActivity>>(schedule);
 			var mappingsState = new MappingsState(() => mappings.Invoke(this));
 			_updateStuff = updateStuff;
 			Input = input ?? new ExternalUserStateInputModel();
@@ -102,7 +100,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			SiteId = siteId;
 
 			_appliedAlarm = appliedAlarm;
-			_serializer = serializer;
 
 			Schedule = new ScheduleInfo(scheduleLazy, _stored, CurrentTime);
 			State = new StateRuleInfo(mappingsState, _stored, stateCode, platformTypeId, businessUnitId, Input, Schedule, stateMapper);
@@ -123,11 +120,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public bool ShouldProcessState()
 		{
-			return !batchId.Equals(Stored.BatchId()) ||
-				   !Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
-				   !Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
-				   !Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
-				   !State.StateGroupId().Equals(Stored.StateGroupId())
+			return
+				!batchId.Equals(Stored.BatchId()) ||
+				!Schedule.CurrentActivityId().Equals(Stored.ActivityId()) ||
+				!Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
+				!Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
+				!State.StateGroupId().Equals(Stored.StateGroupId())
 				;
 		}
 
@@ -143,40 +141,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				!Schedule.NextActivityId().Equals(Stored.NextActivityId()) ||
 				!Schedule.NextActivityStartTime().Equals(Stored.NextActivityStartTime()) ||
 				!State.StateGroupId().Equals(Stored.StateGroupId()) ||
-				!Schedule.ActivitiesForReadModel().Count().Equals(Schedule.ActivitiesForReadModel(Stored.ReceivedTime()).Count())
+				!Schedule.TimeWindowCheckSum().Equals(Stored.TimeWindowCheckSum())
 				;
-
-			//Debug.WriteLine(Input.UserCode);
-			//Debug.WriteLine(Input.StateCode);
-			//Debug.WriteLine(PersonId);
-			//if (!Schedule.NextActivityId().Equals(Stored.NextActivityId()))
-			//{
-			//	Debug.WriteLine(Stored.NextActivityId());
-			//	Debug.WriteLine(Schedule.NextActivityId());
-			//	Debug.WriteLine("next activity changed");
-			//	return true;
-			//}
-			//if (!State.StateGroupId().Equals(Stored.StateGroupId()))
-			//{
-			//	Debug.WriteLine(Stored.StateGroupId());
-			//	Debug.WriteLine(State.StateGroupId());
-			//	Debug.WriteLine("state group changed");
-			//	return true;
-			//}
-			//if (Stored == null)
-			//{
-			//	Debug.WriteLine("no previous state");
-			//	return true;
-			//}
-			//if (!Schedule.ActivitiesForReadModel().Count().Equals(
-			//	Schedule.ActivitiesForReadModel(Stored.ReceivedTime()).Count()
-			//	))
-			//{
-			//	Debug.WriteLine("number of activities in window changed");
-			//	return true;
-			//}
-			//Debug.WriteLine("no change");
-			//return false;
 		}
 
 		public void UpdateAgentStateReadModel()
@@ -254,13 +220,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StaffingEffect = State.StaffingEffect(),
 				Adherence = State.Adherence(),
 
-				AlarmStartTime = alarmStartTime
+				AlarmStartTime = alarmStartTime,
+
+				TimeWindowCheckSum = Schedule.TimeWindowCheckSum()
 			};
 		}
 
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
-			var shift = Schedule.ActivitiesForReadModel()
+			var shift = Schedule.ActivitiesInTimeWindow()
 				.Select(a => new AgentStateActivityReadModel
 				{
 					Color = ColorTranslator.ToHtml(Color.FromArgb(a.DisplayColor)),
