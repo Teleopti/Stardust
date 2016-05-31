@@ -108,6 +108,64 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		}
 
 		[Test]
+		public void ShouldCalculateContractTimeOnlyForRequestedTime()
+		{
+			var budgetDay = _mocks.StrictMock<IBudgetDay>();
+			var usedAbsenceTime = new List<PayloadWorkTime>
+			{
+				new PayloadWorkTime
+				{
+					TotalContractTime = TimeSpan.FromHours(1).Ticks
+				}
+			};
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(_defaultDay);
+
+			var budgetGroup = GetBudgetGroup();
+
+			personPeriod.BudgetGroup = budgetGroup;
+			_person.AddPersonPeriod(personPeriod);
+			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
+
+			var sPeriod = shortPeriod();
+			var lPeriod = longPeriod();
+			using (_mocks.Record())
+			{
+				Expect.Call(_scenarioRepository.Current()).Return(ScenarioFactory.CreateScenarioAggregate());
+				Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
+				Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
+					.IgnoreArguments()
+					.Return(new List<IBudgetDay>
+					{
+						budgetDay
+					});
+				Expect.Call(budgetDay.Allowance).Return(2d);
+				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
+				Expect.Call(budgetDay.IsClosed).Return(false);
+				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
+				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null))
+					.IgnoreArguments().Return(usedAbsenceTime);
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
+				Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
+				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+				Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+				Expect.Call(_visualLayerCollection.Period()).Return(lPeriod);
+				Expect.Call(_visualLayerCollection.ContractTime(new DateTimePeriod(lPeriod.StartDateTime, sPeriod.EndDateTime)))
+					.Return(sPeriod.EndDateTime - lPeriod.StartDateTime);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsTrue(_target.IsSatisfied(new AbsenceRequstAndSchedules
+				{
+					SchedulingResultStateHolder = _schedulingResultStateHolder,
+					AbsenceRequest = _absenceRequest
+				}).IsValid);
+			}
+		}
+
+		[Test]
 		public void ShouldBeInvalidIfNotEnoughAllowanceLeft()
 		{
 			var budgetDay = _mocks.StrictMock<IBudgetDay>();
