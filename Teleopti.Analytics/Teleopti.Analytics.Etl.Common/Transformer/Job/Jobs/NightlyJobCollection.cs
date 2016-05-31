@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new StageAbsenceJobStep(jobParameters));
 			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenario_38300))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenarioNightly_38300))
 			{
 				Add(new StageScenarioJobStep(jobParameters));
 			}
@@ -119,7 +119,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new DimAbsenceJobStep(jobParameters));
 			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenario_38300))
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenarioNightly_38300))
 			{
 				Add(new DimScenarioJobStep(jobParameters));
 			}

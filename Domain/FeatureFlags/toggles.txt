@@ -122,6 +122,7 @@ ETL_SpeedUpFactScheduleNightly_38019 = RC # not to be released until pbi 38304 i
 ETL_SpeedUpIntradayPreference_37124 = RC # not to be released until pbi 38304 is done 
 ETL_SpeedUpIntradayDayOff_38213 = true # not to be released until pbi 38304 is done 
 ETL_SpeedUpScenario_38300 = true # not to be released until pbi 38304 is done 
+ETL_SpeedUpScenarioNightly_38300 = false
 ETL_SpeedUpIntradayActivity_38303 = true
 ETL_SpeedUpNightlyActivity_38303 = RC
 ShiftTrade_ToHangfire_38181 = true
