@@ -9,7 +9,7 @@
 					<option class="activity-option-item" value="{{activity.Id}}" ng-repeat="activity in vm.availableActivities | orderBy: 'Name'">{{activity.Name}}</option>
 				</select>
 			</div>
-			<activity-time-range-picker class="activity-time-range" custom-tabindex="100" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
+			<activity-time-range-picker class="activity-time-range" tabindex="100" ng-model="vm.timeRange" template-url="js/teamSchedule/html/addActivityTimeRangePicker.tpl.html" reference-day="vm.selectedDate" disable-next-day="vm.disableNextDay" is-next-day="vm.isNextDay">
 			</activity-time-range-picker>
 		</form>
 		<div ng-if="vm.notAllowedNameListString.length > 0">

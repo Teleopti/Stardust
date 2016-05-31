@@ -3,7 +3,6 @@
 	'use strict';
 
 	angular.module('wfm.teamSchedule')
-           .directive('tmpTimepickerWrap', ['$locale', timepickerWrap])
            .directive('activityTimeRangePicker', ['$filter', timeRangePicker]);
 
 	var defaultTemplate = 'js/teamSchedule/html/addActivityTimeRangePicker.tpl.html';
@@ -18,26 +17,36 @@
 				referenceDay: '=?',
 				isNextDay: '=?'
 			},
-			controller: ['$scope', '$element', '$attrs', timeRangePickerCtrl],
+			controller: ['$scope', '$element', '$attrs', '$locale', timeRangePickerCtrl],
 			require: ['ngModel', 'activityTimeRangePicker'],
 			transclude: true,
 			compile: compileFn
 		};
 
-		function compileFn() {
-			return {
-				pre: prelink,
-				post: postlink
-			};
+		function compileFn(tElement, tAttrs) {
+
+			function addTabindexToTimepickers() {
+				var timepickers = tElement.find('uib-timepicker');
+				angular.forEach(timepickers, function (tp) {
+					tp.setAttribute('tabIndex', tAttrs.tabindex);
+				});
+			}
+
+			addTabindexToTimepickers();
+
+			return postlink;
 		}
 
-		function timeRangePickerCtrl($scope, $element, $attrs) {
+		function timeRangePickerCtrl($scope, $element, $attrs, $locale) {
 
-			/* jshint validthis: true */
+			var meridianInfo = getMeridiemInfoFromMoment($locale);
 
 			var vm = this;
 			$element.addClass('wfm-time-range-picker-wrap');
 
+			$scope.showMeridian = meridianInfo.showMeridian;
+			$scope.meridians = $scope.showMeridian ? [meridianInfo.am, meridianInfo.pm] : [];
+			$scope.minuteStep = 5;
 			vm.mutateMoment = mutateMoment;
 			vm.sameDate = sameDate;
 
@@ -57,19 +66,19 @@
 			}
 		}
 
-		function prelink(scope, elem, attrs) {
-			scope.tabindex = attrs.customTabindex;
-		}
-
 		function postlink(scope, elem, attrs, ctrls) {
 			var ngModel = ctrls[0],
-                timeRangeCtrl = ctrls[1];
+				timeRangeCtrl = ctrls[1];
 
 			scope.$watch(watchUIChange, respondToUIChange, true);
 
 			ngModel.$parsers.push(parseView);
 			ngModel.$formatters.push(formatModel);
 			ngModel.$render = render;
+
+			elem.removeAttr('tabindex');
+
+			addFocusListenerToInputs(elem.find('input'));
 
 			function formatModel(modelValue) {
 				if (!modelValue) {
@@ -166,67 +175,12 @@
 		}
 	}
 
-	function timepickerWrap($locale) {
-
-		var meridianInfo = getMeridiemInfoFromMoment($locale);
-
-		return {
-			template: '<uib-timepicker></uib-timepicker>',
-			controller: ['$scope', '$element', timepickerWrapCtrl],
-			compile: compileFn,
-		};
-
-		function compileFn(tElement, tAttributes) {
-			var binding = tAttributes.ngModel;
-			tElement.addClass('wfm-timepicker-wrap');
-
-			var cellElement = tElement.find('uib-timepicker');
-			cellElement.attr('ng-model', binding);
-			cellElement.attr('show-meridian', 'showMeridian');
-			cellElement.attr('minute-step', 'minuteStep');
-
-			if (meridianInfo.showMeridian) {
-				cellElement.attr('meridians', 'meridians');
-			}
-
-			return {
-				post: postLinkFn
-			};
-		}
-
-		function postLinkFn(scope, elem, attrs, ctrls) {
-			var inputs = elem.find('input');
-			var meridiemButtons = elem.find('button');
-			var tabindex = scope.tabindex;
-			addFocusListenerToInputs(inputs);
-			setTabindexOnElems(inputs, tabindex);
-			setTabindexOnElems(meridiemButtons, tabindex);
-		}
-
-		function timepickerWrapCtrl($scope, $element) {
-			$scope.showMeridian = meridianInfo.showMeridian;
-			$scope.minuteStep = 5;
-			$element.removeAttr('tabindex');
-
-			if (meridianInfo.showMeridian) {
-				$scope.meridians = [meridianInfo.am, meridianInfo.pm];
-			}
-		}
-
-		function addFocusListenerToInputs(inputElems) {
-			angular.forEach(inputElems, function (input) {
-				angular.element(input).on('focus', function (event) {
-					event.target.select();
-				});
+	function addFocusListenerToInputs(inputElems) {
+		angular.forEach(inputElems, function (input) {
+			angular.element(input).on('focus', function (event) {
+				event.target.select();
 			});
-		}
-
-		function setTabindexOnElems(elems, tabindex) {
-			angular.forEach(elems, function (elem) {
-				angular.element(elem).attr('tabindex', tabindex);
-			});
-		}
-
+		});
 	}
 
 	function getMeridiemInfoFromMoment($locale) {

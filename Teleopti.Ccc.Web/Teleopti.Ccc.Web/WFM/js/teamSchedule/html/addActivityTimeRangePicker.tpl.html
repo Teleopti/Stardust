@@ -1,12 +1,12 @@
 ﻿<div>
 	<h3>{{'Time'|translate}}: </h3>
 	<div class="con-row">
-		<div>
-			<tmp-timepicker-wrap ng-model="startTime"></tmp-timepicker-wrap>
+		<div class="wfm-timepicker-wrap">
+			<uib-timepicker ng-model="startTime" minute-step="minuteStep" show-meridian="showMeridian" meridians="meridians"></uib-timepicker>
 		</div>
 		<div>—</div>
-		<div>
-			<tmp-timepicker-wrap ng-model="endTime"></tmp-timepicker-wrap>
+		<div class="wfm-timepicker-wrap">
+			<uib-timepicker ng-model="endTime" minute-step="minuteStep" show-meridian="showMeridian" meridians="meridians"></uib-timepicker>
 		</div>
 	</div>
 

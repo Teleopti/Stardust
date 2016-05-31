@@ -47,7 +47,7 @@ describe('teamschedule activity-time-range-picker directive tests', function () 
 	it('Should show timepickers for start-time and end-time', function () {
 		var element = elementCompileFn()(scope);
 		scope.$apply();
-		var timepickers = element.find('tmp-timepicker-wrap');		
+		var timepickers = element[0].querySelectorAll('.wfm-timepicker-wrap');
 		expect(timepickers.length).toEqual(2);
 	});
 
@@ -88,14 +88,14 @@ describe('teamschedule activity-time-range-picker directive tests', function () 
 	it('Should set date to next day when next switch is true and start is smaller than end', function () {
 		var element = elementCompileFn()(scope);
 		scope.$apply();
-		
+
 		var divs = element.children();
 		var validityDiv = angular.element(divs[0]);
 
 		validityDiv.scope().isNextDay = true;
 		validityDiv.scope().startTime = moment({ hour: 10, minute: 30 }).toDate();
 		validityDiv.scope().endTime = moment({ hour: 11, minute: 30 }).toDate();
-		
+
 		scope.$apply();
 
 		expect(scope.timeRange.startTime).toEqual(new Date("2016-04-09 10:30"));
@@ -106,14 +106,14 @@ describe('teamschedule activity-time-range-picker directive tests', function () 
 	it('Should set date to reference day when next switch is false and start is smaller than end', function () {
 		var element = elementCompileFn()(scope);
 		scope.$apply();
-		
+
 		var divs = element.children();
 		var validityDiv = angular.element(divs[0]);
 
 		validityDiv.scope().isNextDay = false;
 		validityDiv.scope().startTime = moment({ hour: 10, minute: 30 }).toDate();
 		validityDiv.scope().endTime = moment({ hour: 11, minute: 30 }).toDate();
-		
+
 		scope.$apply();
 
 		expect(scope.timeRange.startTime).toEqual(new Date("2016-04-08 10:30"));
@@ -170,7 +170,7 @@ describe('custom locale sv', function () {
 	it('Should not show meridian in Swedish time-format', function () {
 		element = elementCompileFn()(scope);
 		scope.$apply();
-		var timepicker = angular.element(element.find('tmp-timepicker-wrap')[0]);
+		var timepicker = angular.element(element[0].querySelector('.wfm-timepicker-wrap'));
 		expect(timepicker.scope().showMeridian).toBeFalsy();
 
 	});
@@ -221,7 +221,7 @@ describe('custom locale en', function () {
 	it('Should show meridian in US time-format', function () {
 		element = elementCompileFn()(scope);
 		scope.$apply();
-		var timepicker = angular.element(element.find('tmp-timepicker-wrap')[0]);
+		var timepicker = angular.element(element[0].querySelector('.wfm-timepicker-wrap'));
 		expect(timepicker.scope().showMeridian).toBeTruthy();
 
 	});

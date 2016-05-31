@@ -3,9 +3,9 @@
 	<md-content class="command-panel-content" layout-padding>
 		<form name="moveActivityForm">
 			<h3>{{'StartTime' | translate}}:</h3>
-			<uib-timepicker class="focus-default" ng-model="vm.moveToTime" tabindex="100" required show-meridian="vm.showMeridian" meridians="vm.meridians"></uib-timepicker>
+			<uib-timepicker class="focus-default" ng-model="vm.moveToTime" tabindex="{{::vm.tabindex}}" required show-meridian="vm.showMeridian" meridians="vm.meridians"></uib-timepicker>
 			<div class="wfm-switch">
-				<input type="checkbox" id="mvActNextDay" ng-model="vm.nextDay" tabindex="101"/>
+				<input type="checkbox" id="mvActNextDay" ng-model="vm.nextDay" tabindex="{{::vm.tabindex}}"/>
 				<label for="mvActNextDay">
 					<span class="wfm-switch-label">{{"NextDay" | translate}}</span>
 					<span class="wfm-switch-toggle"></span>
@@ -16,7 +16,7 @@
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} {{vm.invalidPeople()}}.</span>
 		</div>
-		<button id="applyMoveActivity" class="wfm-btn form-submit" tabindex="102"
+		<button id="applyMoveActivity" class="wfm-btn form-submit" tabindex="{{::vm.tabindex}}"
 				ng-class="{ 'wfm-btn-primary': vm.isInputValid() && moveActivityForm.$valid, 'wfm-btn-primary-disabled': !vm.isInputValid() || !moveActivityForm.$valid}"
 				ng-disabled="!vm.isInputValid() || !moveActivityForm.$valid"
 				ng-click="vm.moveActivity()">
