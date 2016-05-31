@@ -2,11 +2,39 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
+	public class AgentStateCleaner :
+		IRunOnHangfire,
+		IHandleEvent<PersonDeletedEvent>,
+		IHandleEvent<PersonAssociationChangedEvent>
+	{
+		private readonly IAgentStatePersister _persister;
+
+		public AgentStateCleaner(IAgentStatePersister persister)
+		{
+			_persister = persister;
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(PersonDeletedEvent @event)
+		{
+			_persister.Delete(@event.PersonId);
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(PersonAssociationChangedEvent @event)
+		{
+			if (@event.TeamId.HasValue)
+				return;
+			_persister.Delete(@event.PersonId);
+		}
+	}
+
 	public class Rta
 	{
 		public static string LogOutStateCode = "LOGGED-OFF";

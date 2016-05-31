@@ -528,7 +528,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\IActivityEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherenceDetailsReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAdherenceEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateCodeAdder.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IInitializeble.cs" />
