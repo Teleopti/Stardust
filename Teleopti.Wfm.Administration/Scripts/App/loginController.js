@@ -108,6 +108,7 @@
 		vm.logout = function () {
 			sessionStorage.removeItem(tokenKey);
 			sessionStorage.removeItem(userKey);
+			$http.post('./Logout');
 			vm.user = null;
 		}
 	}
