@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
+		public FakeUserTimeZone TimeZone;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -159,9 +161,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				{
 					new AgentStateActivityReadModel
 					{
-						Color = "#80FF80",
-						StartTime = "2016-05-29T12:00:00",
-						EndTime = "2016-05-29T13:00:00",
+						Color = ColorTranslator.FromHtml("#80FF80").ToArgb(),
+						StartTime = "2016-05-29 12:00:00".Utc(),
+						EndTime = "2016-05-29 13:00:00".Utc(),
 					}
 				}
 			});
@@ -171,6 +173,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			state.Shift.Single().Color.Should().Be("#80FF80");
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T12:00:00");
 			state.Shift.Single().EndTime.Should().Be("2016-05-29T13:00:00");
+		}
+
+		[Test]
+		public void ShouldGetSchedulesInUserTimeZone()
+		{
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				TeamId = teamId,
+				Shift = new[]
+				{
+					new AgentStateActivityReadModel
+					{
+						StartTime = "2016-05-29 12:00:00".Utc(),
+						EndTime = "2016-05-29 13:00:00".Utc(),
+					}
+				}
+			});
+			TimeZone.IsSweden();
+
+			var state = Target.ForTeams(new[] { teamId }, false).States.Single();
+
+			state.Shift.Single().StartTime.Should().Be("2016-05-29T14:00:00");
+			state.Shift.Single().EndTime.Should().Be("2016-05-29T15:00:00");
 		}
 
 		[Test]
@@ -190,5 +216,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			Target.ForSites(new Guid[] { }, false)
 				.Time.Should().Be("2016-05-28 12:00".Utc());
 		}
+		
+		[Test]
+		public void ShouldGetCurrentTimeInUserTimeZone()
+		{
+			Now.Is("2016-05-28 12:00");
+			TimeZone.IsSweden();
+
+			Target.ForTeams(new Guid[] { }, false)
+				.Time.Should().Be("2016-05-28 14:00".Utc());
+		}
+
+
+
 	}
 }

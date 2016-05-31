@@ -140,13 +140,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					PersonId = personId,
 					TeamId = teamId,
-					Shift = new[]
-					{
-						new AgentStateActivityReadModel
-						{
-							Color = "#80FF80"
-						}
-					}
 				});
 
 			Target.Persist(new AgentStateReadModelForTest
@@ -157,14 +150,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				{
 					new AgentStateActivityReadModel
 					{
-						Color = "#000000"
+						Color = Color.Green.ToArgb()
 					}
 				}
 			});
 
 			Reader.LoadForTeams(new[] { teamId }, false)
 				.Single()
-				.Shift.Single().Color.Should().Be("#000000");
+				.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 		}
 
 		[Test]

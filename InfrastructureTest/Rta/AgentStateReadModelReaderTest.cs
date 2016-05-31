@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -159,18 +160,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 				{
 					new AgentStateActivityReadModel
 					{
-						Color = "#80FF80",
-						StartTime = "2016-05-30 08:00",
-						EndTime = "2016-05-30 09:00"
+						Color = Color.Green.ToArgb(),
+						StartTime = "2016-05-30 08:00".Utc(),
+						EndTime = "2016-05-30 09:00".Utc()
 					}
 				}
 			});
 
 			var result = Target.LoadForTeam(teamId).Single();
 
-			result.Shift.Single().Color.Should().Be("#80FF80");
-			result.Shift.Single().StartTime.Should().Be("2016-05-30 08:00");
-			result.Shift.Single().EndTime.Should().Be("2016-05-30 09:00");
+			result.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
+			result.Shift.Single().StartTime.Should().Be("2016-05-30 08:00".Utc());
+			result.Shift.Single().EndTime.Should().Be("2016-05-30 09:00".Utc());
 		}
 	}
 }

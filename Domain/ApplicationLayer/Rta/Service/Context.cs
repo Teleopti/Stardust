@@ -177,9 +177,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			var shift = Schedule.ActivitiesInTimeWindow()
 				.Select(a => new AgentStateActivityReadModel
 				{
-					Color = ColorTranslator.ToHtml(Color.FromArgb(a.DisplayColor)),
-					StartTime = a.StartDateTime.ToString("yyyy-MM-dd HH:mm"),
-					EndTime = a.EndDateTime.ToString("yyyy-MM-dd HH:mm"),
+					Color = a.DisplayColor,
+					StartTime = a.StartDateTime,
+					EndTime = a.EndDateTime,
 				});
 
 			return new AgentStateReadModel

@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
@@ -23,7 +26,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		public string Color { get; set; }
 		public int TimeInState { get; set; }
 		public int? TimeInAlarm { get; set; }
-		public IEnumerable<AgentStateActivityReadModel> Shift { get; set; }
+		public IEnumerable<AgentStateActivityViewModel> Shift { get; set; }
+	}
+
+	public class AgentStateActivityViewModel
+	{
+		public string Color { get; set; }
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
 	}
 
 	public class AgentStatesViewModelBuilder
@@ -51,19 +61,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 
 		public AgentStatesViewModel ForSites(Guid[] siteIds, bool inAlarm)
 		{
-			return new AgentStatesViewModel
-			{
-				Time = _now.UtcDateTime(),
-				States = buildStates(_agentStateReadModelReader.LoadForSites(siteIds, inAlarm))
-			};
+			return build(_agentStateReadModelReader.LoadForSites(siteIds, inAlarm));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds, bool inAlarm)
 		{
+			return build(_agentStateReadModelReader.LoadForTeams(teamIds, inAlarm));
+		}
+
+		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)
+		{
 			return new AgentStatesViewModel
 			{
-				Time = _now.UtcDateTime(),
-				States = buildStates(_agentStateReadModelReader.LoadForTeams(teamIds, inAlarm))
+				Time = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()),
+				States = buildStates(states)
 			};
 		}
 
@@ -83,7 +94,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 					Color = _appliedAlarm.ColorTransition(x, timeInAlarm),
 					TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
 					TimeInAlarm = timeInAlarm,
-					Shift = x.Shift
+					Shift = x.Shift?.Select(y => new AgentStateActivityViewModel
+					{
+						Color= ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
+						StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss")
+					}).ToArray()
 				};
 			});
 		}

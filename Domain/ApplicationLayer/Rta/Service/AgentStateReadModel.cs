@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	public class AgentStateActivityReadModel
 	{
-		public string Color { get; set; }
-		public string StartTime { get; set; }
-		public string EndTime { get; set; }
+		public int Color { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
 	}
 }
