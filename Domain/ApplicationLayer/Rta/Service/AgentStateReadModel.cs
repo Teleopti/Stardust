@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public bool IsRuleAlarm { get; set; }
 		public DateTime? AlarmStartTime { get; set; }
 		public int? AlarmColor { get; set; }
-		
-		public IEnumerable<ChoppedLayer> Shift{ get; set; }
+
+		public IEnumerable<AgentStateActivityReadModel> Shift { get; set; }
 
 		public override string ToString()
 		{
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 	}
 
-	public class ChoppedLayer
+	public class AgentStateActivityReadModel
 	{
 		public string Color { get; set; }
 		public string StartTime { get; set; }

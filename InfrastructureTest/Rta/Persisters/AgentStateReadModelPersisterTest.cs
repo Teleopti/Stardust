@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 					TeamId = teamId,
 					Shift = new[]
 					{
-						new ChoppedLayer
+						new AgentStateActivityReadModel
 						{
 							Color = "#80FF80"
 						}
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				TeamId = teamId,
 				Shift = new[]
 				{
-					new ChoppedLayer
+					new AgentStateActivityReadModel
 					{
 						Color = "#000000"
 					}

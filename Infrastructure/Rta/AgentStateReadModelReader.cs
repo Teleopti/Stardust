@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				ret.AddRange(_unitOfWork.Current().Session()
 					.CreateSQLQuery(selectAgentState + "WITH (NOLOCK) WHERE PersonId IN(:persons)")
 					.SetParameterList("persons", personList)
-					.SetResultTransformer(Transformers.AliasToBean(typeof(agentStateReadeModel)))
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 					.SetReadOnly(true)
 					.List<AgentStateReadModel>());
 			}
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(selectAgentState + "WITH (NOLOCK) WHERE TeamId = :teamId")
 				.SetParameter("teamId", teamId)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(agentStateReadeModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
 		}
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("siteIds", siteIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(agentStateReadeModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
 		}
@@ -75,40 +75,18 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("teamIds", teamIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(agentStateReadeModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
 		}
 
-		private static readonly string selectAgentState = @"
-SELECT
-[PersonId],
-[BusinessUnitId],
-[SiteId],
-[TeamId],
-[ReceivedTime],
-[Activity],
-[NextActivity],
-[NextActivityStartTime],
-[StateCode],
-[StateName],
-[StateStartTime],
-[RuleName],
-[RuleStartTime],
-[RuleColor],
-[StaffingEffect],
-[IsRuleAlarm],
-[AlarmStartTime],
-[AlarmColor],
-[Shift] AS ShiftString
-FROM [ReadModel].AgentState ";
+		private static readonly string selectAgentState = @"SELECT * FROM [ReadModel].AgentState ";
 
-
-		class agentStateReadeModel : AgentStateReadModel
+		private class internalModel : AgentStateReadModel
 		{
-			public string ShiftString
+			public new string Shift
 			{
-				set { base.Shift = JsonConvert.DeserializeObject<IEnumerable<ChoppedLayer>>(value); }
+				set { base.Shift = JsonConvert.DeserializeObject<IEnumerable<AgentStateActivityReadModel>>(value); }
 			}
 		}
 	}

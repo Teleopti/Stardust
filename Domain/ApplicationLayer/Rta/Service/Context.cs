@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public AgentStateReadModel MakeAgentStateReadModel()
 		{
 			var shift = Schedule.ActivitiesForReadModel()
-				.Select(a => new ChoppedLayer
+				.Select(a => new AgentStateActivityReadModel
 				{
 					Color = ColorTranslator.ToHtml(Color.FromArgb(a.DisplayColor)),
 					StartTime = a.StartDateTime.ToString("yyyy-MM-dd HH:mm"),

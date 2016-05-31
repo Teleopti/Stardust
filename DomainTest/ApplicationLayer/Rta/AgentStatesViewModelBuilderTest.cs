@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 				TeamId = teamId,
 				Shift = new[]
 				{
-					new ChoppedLayer
+					new AgentStateActivityReadModel
 					{
 						Color = "#80FF80",
 						StartTime = "2016-05-29T12:00:00",
