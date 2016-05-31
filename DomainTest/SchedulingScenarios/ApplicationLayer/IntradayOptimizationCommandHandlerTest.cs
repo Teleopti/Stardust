@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -15,10 +14,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_IntradayIslands_36939)]
 	public class IntradayOptimizationCommandHandlerTest
 	{
-		public IIntradayOptimizationCommandHandler Target;
+		public IntradayOptimizationCommandHandler Target;
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
 

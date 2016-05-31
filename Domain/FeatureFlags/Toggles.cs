@@ -94,7 +94,6 @@
 		ETL_SpeedUpGroupPagePersonIntraday_37623,
 		WfmGlobalLayout_personalOptions_37114,
 
-		ResourcePlanner_IntradayIslands_36939,
 		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
 		ResourcePlanner_ScheduleOvertimeOnNonWorkingDays_38025,
 		ResourcePlanner_CascadingSkills_38524,

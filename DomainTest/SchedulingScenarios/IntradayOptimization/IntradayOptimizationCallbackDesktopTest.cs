@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationCallbackDesktopTest : IntradayOptimizationScenario, ISetup
 	{
-		public IOptimizeIntradayDesktop Target;
+		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public DesktopOptimizationContext DesktopOptimizationContext;
 
 		public IntradayOptimizationCallbackDesktopTest(bool cascading) 
-			: base(true, cascading)
+			: base(cascading)
 		{
 		}
 
@@ -60,10 +60,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				ass.SetShiftCategory(new ShiftCategory("_").WithId());
 				asses.Add(ass);
 			}
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly, asses.Select(x => x.Person), asses, skillDay);
+			SchedulerStateHolderFrom.Fill(scenario, dateOnly, asses.Select(x => x.Person), asses, skillDay);
 
 			var callbackTracker = new TrackIntradayOptimizationCallback();
-			Target.Optimize(schedulerStateHolderFrom.SchedulingResultState.Schedules.SchedulesForDay(dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), callbackTracker);
+			Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
 			callbackTracker.SuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
 
@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				ass.SetShiftCategory(new ShiftCategory("_").WithId());
 				asses.Add(ass);
 			}
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, new List<ISkillDay>());
+			SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), asses.Select(x => x.Person), asses, new List<ISkillDay>());
 
 			var callbackTracker = new TrackIntradayOptimizationCallback();
-			Target.Optimize(schedulerStateHolderFrom.SchedulingResultState.Schedules.SchedulesForDay(dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), new DateOnlyPeriod(dateOnly, dateOnly), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), callbackTracker);
+			Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
 			callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
 

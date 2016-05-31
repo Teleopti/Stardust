@@ -310,7 +310,6 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\GuessResourceCalculationHasBeenMadeTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackIslandToggleOffTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationIslandTests.cs" />

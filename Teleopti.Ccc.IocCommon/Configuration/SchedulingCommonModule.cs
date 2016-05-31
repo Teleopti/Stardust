@@ -368,17 +368,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 			builder.RegisterType<ResourceCalculationContextFactory>().InstancePerLifetimeScope();
-
-			if (_configuration.Toggle(Toggles.ResourcePlanner_IntradayIslands_36939))
-			{
-				builder.RegisterType<IntradayOptimizationCommandHandler>().As<IIntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
-				builder.RegisterType<OptimizeIntradayIslandsDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
-			}
-			else
-			{
-				builder.RegisterType<IntradayOptimizationOneThreadCommandHandler>().As<IIntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
-				builder.RegisterType<OptimizeIntradayDesktop>().As<IOptimizeIntradayDesktop>().InstancePerLifetimeScope();
-			}
+			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
+			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
 			builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().ApplyAspects().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();

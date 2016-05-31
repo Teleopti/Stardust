@@ -238,29 +238,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
 
-				if (configuration.Toggle(Toggles.ResourcePlanner_IntradayIslands_36939))
-				{
-					builder.RegisterType<DesktopOptimizationContext>()
-						.As<IFillSchedulerStateHolder>()
-						.As<ISynchronizeIntradayOptimizationResult>()
-						.As<IOptimizationPreferencesProvider>()
-						.As<IPeopleInOrganization>()
-						.As<ICurrentIntradayOptimizationCallback>()
-						.AsSelf()
-						.ApplyAspects()
-						.SingleInstance();
-				}
-				else
-				{
-					builder.RegisterType<DesktopOptimizationContext>()
-						.As<IFillSchedulerStateHolder>()
-						.As<ISynchronizeIntradayOptimizationResult>()
-						.As<IOptimizationPreferencesProvider>()
-						.As<IPeopleInOrganization>()
-						.AsSelf()
-						.ApplyAspects()
-						.SingleInstance();
-				}
+				builder.RegisterType<DesktopOptimizationContext>()
+					.As<IFillSchedulerStateHolder>()
+					.As<ISynchronizeIntradayOptimizationResult>()
+					.As<IOptimizationPreferencesProvider>()
+					.As<IPeopleInOrganization>()
+					.As<ICurrentIntradayOptimizationCallback>()
+					.AsSelf()
+					.ApplyAspects()
+					.SingleInstance();
 
 				builder.Register(c => new WebConfigReader(() =>
 				{

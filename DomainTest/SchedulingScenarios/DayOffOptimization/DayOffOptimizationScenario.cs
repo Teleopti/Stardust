@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			}
 			else
 			{
-				toggleManager.Disable(Toggles.ResourcePlanner_IntradayIslands_36939);
+				toggleManager.Disable(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998);
 			}
 			if (_cascading)
 			{

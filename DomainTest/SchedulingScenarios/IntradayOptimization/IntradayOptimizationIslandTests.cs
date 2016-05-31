@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		public IntradayOptimizationIslandTests(bool cascading) 
-			: base(true, cascading)
+			: base(cascading)
 		{
 		}
 

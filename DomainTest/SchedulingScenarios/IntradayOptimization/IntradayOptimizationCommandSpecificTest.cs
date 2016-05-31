@@ -30,13 +30,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public IIntradayOptimizationCommandHandler Target;
+		public IntradayOptimizationCommandHandler Target;
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public IScheduleStorage ScheduleStorage;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 
 		public IntradayOptimizationCommandSpecificTest() 
-			: base(true, true)
+			: base(true)
 		{
 		}
 

@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class IntradayOptimizationFromWeb
 	{
-		private readonly IIntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
+		private readonly IntradayOptimizationCommandHandler _intradayOptimizationCommandHandler;
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
-		public IntradayOptimizationFromWeb(IIntradayOptimizationCommandHandler intradayOptimizationCommandHandler, IPlanningPeriodRepository planningPeriodRepository)
+		public IntradayOptimizationFromWeb(IntradayOptimizationCommandHandler intradayOptimizationCommandHandler, IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_intradayOptimizationCommandHandler = intradayOptimizationCommandHandler;
 			_planningPeriodRepository = planningPeriodRepository;

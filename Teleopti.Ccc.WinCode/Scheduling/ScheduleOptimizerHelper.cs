@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly OptimizerHelperHelper _optimizerHelper;
 		private readonly IRequiredScheduleHelper _requiredScheduleHelper;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IOptimizeIntradayDesktop _optimizeIntradayDesktop;
+		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayDesktop;
 		private readonly IExtendReduceTimeHelper _extendReduceTimeHelper;
 		private readonly IExtendReduceDaysOffHelper _extendReduceDaysOffHelper;
 		private readonly Func<ISchedulingResultStateHolder> _stateHolder;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_optimizerHelper = optimizerHelper;
 			_requiredScheduleHelper = requiredScheduleHelper;
 			_matrixListFactory = matrixListFactory;
-			_optimizeIntradayDesktop = _container.Resolve<IOptimizeIntradayDesktop>();
+			_optimizeIntradayDesktop = _container.Resolve<OptimizeIntradayIslandsDesktop>();
 			_allResults = () => _container.Resolve<IWorkShiftFinderResultHolder>();
 			_extendReduceTimeHelper = new ExtendReduceTimeHelper(_container);
 			_extendReduceDaysOffHelper = new ExtendReduceDaysOffHelper(_container, optimizerHelper, _allResults);
@@ -316,8 +316,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						optimizerPreferences,
 						selectedDays,
 						backgroundWorker,
-						selectedPeriod,
-						dayOffOptimizationPreferenceProvider);
+						selectedPeriod);
 					continuedStep = true;
 				}
 			}
@@ -475,8 +474,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			IEnumerable<IScheduleDay> scheduleDays,
 			ISchedulingProgress backgroundWorker,
-			DateOnlyPeriod selectedPeriod,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			DateOnlyPeriod selectedPeriod)
 		{
 			_backgroundWorker = backgroundWorker;
 			using (PerformanceOutput.ForOperation("Running new intraday optimization"))
@@ -486,7 +484,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 				if (_progressEvent != null && _progressEvent.Cancel) return;
 
-				_optimizeIntradayDesktop.Optimize(scheduleDays, optimizerPreferences, selectedPeriod, dayOffOptimizationPreferenceProvider, new IntradayOptimizationCallback(_backgroundWorker));
+				_optimizeIntradayDesktop.Optimize(scheduleDays.Select(x => x.Person).Distinct(), selectedPeriod, optimizerPreferences, new IntradayOptimizationCallback(_backgroundWorker));
 			}
 		}
 

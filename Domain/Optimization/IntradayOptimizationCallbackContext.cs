@@ -2,6 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	//DENNA?
 	public class IntradayOptimizationCallbackContext : ICurrentIntradayOptimizationCallback
 	{
 		[ThreadStatic]
