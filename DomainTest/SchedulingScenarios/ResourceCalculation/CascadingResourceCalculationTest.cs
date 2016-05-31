@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(-1);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotConsiderSkillsWithoutOpenHours()
 		{
 			var scenario = new Scenario("_");
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMoveResourcesOutsideOpenHoursFromPrimarySkill()
 		{
 			var scenario = new Scenario("_");

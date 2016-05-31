@@ -39,13 +39,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 					foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(activity, interval))
 					{
 						var remainingResourcesInGroup = skillGroup.Resources;
-						var skillStaffPeriodFrom = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillGroup.PrimarySkill, interval);
+						var skillStaffPeriodFrom = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillGroup.PrimarySkill, interval, int.MaxValue);
 						var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
 						if (!remainingOverstaff.IsOverstaffed())
 							continue;
 						foreach (var skillToMoveTo in skillGroup.CascadingSkills)
 						{
-							var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval);
+							var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 							var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
 							if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 								continue;
