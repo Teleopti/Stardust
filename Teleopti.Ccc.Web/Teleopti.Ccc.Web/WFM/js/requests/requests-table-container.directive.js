@@ -1,6 +1,5 @@
 ﻿'use strict';
 
-
 (function () {
 
 	angular.module('wfm.requests')
