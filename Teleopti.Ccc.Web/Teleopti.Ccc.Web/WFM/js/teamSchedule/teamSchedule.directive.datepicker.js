@@ -1,6 +1,5 @@
-﻿'use strict';
-
-(function () {
+﻿(function () {
+	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('teamScheduleDatepicker', ['$locale', teamScheduleDatePicker]);
 
@@ -14,15 +13,29 @@
 			controller: ['$timeout', teamScheduleDatePickerCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
-			link: function (scope, element, attr) {
-				scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
-				scope.$on('$localeChangeSuccess', function() {
+			compile: function (tElement, tAttrs) {
+				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+				function addTabindexTo() {
+					angular.forEach(arguments, function (arg) {
+						angular.forEach(arg, function (elem) {
+							elem.setAttribute('tabIndex', tabindex);
+						});
+					});
+				}
+				addTabindexTo(
+					tElement[0].querySelectorAll('input'),
+					tElement[0].querySelectorAll('button')
+				);
+				return function postLink(scope, element, attr) {
 					scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
-				});
-				scope.vm.isMiniMode = 'mini' in attr;
-			}
+					scope.$on('$localeChangeSuccess', function () {
+						scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
+					});
+					scope.vm.isMiniMode = 'mini' in attr;
+				};
+			},
 		};
-	};
+	}
 
 	function teamScheduleDatePickerCtrl($timeout) {
 		var vm = this;
@@ -48,6 +61,6 @@
 			vm.isCalendarOpened = !vm.isCalendarOpened;
 		};
 
-	};
+	}
 
 })();
