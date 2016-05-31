@@ -105,30 +105,32 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var bu = ((ITeleoptiIdentity) TeleoptiPrincipal.CurrentPrincipal.Identity).BusinessUnit.Id;
 			var request = new Request(webServer + "Start/AuthenticationApi/Logon");
 			request.PostData.AddValue("businessUnitId", bu.GetValueOrDefault().ToString());
+			request.Method = "post";
+			wfmWebView.LoadCompleted += wfmWebViewOnLoadCompletedSetBusinessUnit;
 			wfmWebView.LoadRequest(request);
 		}
 
-		private void WfmWebViewOnLoadCompleted(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
+		private void wfmWebViewOnLoadCompletedSetBusinessUnit(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
+		{
+			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
+			wfmWebView.LoadCompleted += wfmWebViewOnLoadCompletedLoadWfmUrl;
+			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
+			{
+				setWfmWebUrl(_permissionModule);
+			}
+		}
+
+		private void wfmWebViewOnLoadCompletedLoadWfmUrl(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
 		{
 			callScriptToHideNavigation();
 		}
 
+		
 		private void callScriptToHideNavigation()
 		{
 			try
 			{
-				JSObject window = wfmWebView.GetDOMWindow();
-				while (!wfmWebView.CanEvalScript)
-				{
-					//wait until loaded
-				}
-					var iAmCalledFromFatClient = (JSFunction)wfmWebView.EvalScript("iAmCalledFromFatClient");
-					if (iAmCalledFromFatClient == null)
-					{
-						setWfmWebUrl(_permissionModule);
-						return;
-					}
-					iAmCalledFromFatClient.Invoke(window, new object[] { });
+				wfmWebView.QueueScriptCall(runIAmFromFatClient);
 			}
 			catch (JSInvokeException exception)
 			{
@@ -136,6 +138,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				setWfmWebUrl(_permissionModule);
 			}
 		}
+
+		private void runIAmFromFatClient()
+		{
+			JSObject window = wfmWebView.GetDOMWindow();
+			if (wfmWebView.CanEvalScript)
+			{
+				var iAmCalledFromFatClient = (JSFunction) wfmWebView.EvalScript("iAmCalledFromFatClient");
+				if (iAmCalledFromFatClient == null)
+				{
+					setWfmWebUrl(_permissionModule);
+					return;
+				}
+				iAmCalledFromFatClient.Invoke(window, new object[] {});
+			}
+			else
+			{
+				setWfmWebUrl(_permissionModule);
+			}
+		}
+
 
 		private int cnt;
 		private void keepWfmAlive()
@@ -235,6 +257,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				wfmWebControl.Enabled = false;
 				wfmWebControl.Visible = false;
 			}
+			
 			setBusinessUnitInWebView();
 
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
@@ -829,15 +852,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				startFirstEnabledModule();
 			}
-
 			
 			toolStripStatusLabelSpring.Text = LanguageResourceHelper.Translate("XXReady");
-			
-			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
-			{
-				wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
-				setWfmWebUrl(_permissionModule);
-			}
+
 			TopMost = true;
 			Focus();
 			BringToFront();
@@ -939,10 +956,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		private void handlingCertificateErrorsWfmWebView(object sender, CertificateErrorEventArgs e)
 		{
-			wfmWebView.LoadCompleted -= WfmWebViewOnLoadCompleted;
+			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedLoadWfmUrl;
+			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
 			wfmWebView.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
 			_logger.Error("The following url is missing a certificate. " + e.Url);
-			wfmWebView.LoadCompleted += WfmWebViewOnLoadCompleted;
 		}
 
 		private void handlingCertificateErrorsWebView1(object sender, CertificateErrorEventArgs e)
@@ -958,7 +975,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		
 		private void handlingLoadFailedError(object sender, LoadFailedEventArgs e)
 		{
-		//	e.UseDefaultMessage();
+			_logger.Error(e.ErrorMessage + "Url: " + e.Url);
+			e.UseDefaultMessage();
 		}
 	}
 }
