@@ -142,6 +142,8 @@
 				var focusTarget = elem[0].querySelector('.focus-default');
 				if (focusTarget) angular.element(focusTarget).focus();
 			});
+
+			elem.removeAttr('tabindex');
 		}
 	}
 

@@ -23,7 +23,7 @@
 
 		vm.isInputValid = function () {
 			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return false;
-		
+
 			var invalidAgents = vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange.startTime); });
 			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.name; }).join(', ');
 
@@ -36,7 +36,7 @@
 
 			return !vm.isNextDay || mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
 		}
-		
+
 		vm.addPersonalActivity = function () {
 			var requestData = {
 				PersonIds: vm.selectedAgents.map(function(agent) { return agent.personId; }),
@@ -47,8 +47,8 @@
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
 
-			activityService.addPersonalActivity(requestData).then(function (response) {				
-				if (vm.getActionCb(vm.label)) {					
+			activityService.addPersonalActivity(requestData).then(function (response) {
+				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, requestData.PersonIds);
 				}
 				teamScheduleNotificationService.reportActionResult({
@@ -86,7 +86,7 @@
 					var latestShiftStartPlusOneHour = moment(latestShiftStart).add(1, 'hour').toDate();
 					if (latestShiftStartPlusOneHour >= defaultStart)
 						defaultStart = latestShiftStartPlusOneHour;
-				} 
+				}
 			}
 
 			return defaultStart;
@@ -137,6 +137,8 @@
 						var focusTarget = elem[0].querySelector('.focus-default');
 						if (focusTarget) angular.element(focusTarget).focus();
 					});
+
+					elem.removeAttr('tabindex');
 				};
 			},
 		};

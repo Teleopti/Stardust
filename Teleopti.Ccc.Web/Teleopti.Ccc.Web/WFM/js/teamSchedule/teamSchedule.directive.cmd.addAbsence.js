@@ -9,7 +9,7 @@
 		var vm = this;
 
 		vm.label = 'AddAbsence';
-	
+
 		vm.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 
 		PersonAbsenceSvc.loadAbsences().then(function (absences) {
@@ -34,7 +34,7 @@
 			var personIds = vm.selectedAgents.map(function(agent) { return agent.personId; });
 			return scheduleManagementSvc.getEarliestStartOfSelectedSchedule(curDateMoment, personIds);
 		}
-		
+
 		vm.getDefaultAbsenceEndTime = function() {
 			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
 		}
@@ -42,7 +42,7 @@
 		vm.addAbsence = function () {
 			var requestData = {
 				PersonIds: vm.selectedAgents.map(function (agent) { return agent.personId; }),
-				Date: vm.selectedDate(),	
+				Date: vm.selectedDate(),
 				AbsenceId: vm.selectedAbsenceId,
 				TrackedCommandInfo: { TrackId: vm.trackId }
 			};
@@ -77,7 +77,7 @@
 
 		function updateDateAndTimeFormat() {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
-			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;			
+			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 		}
 	}
 
@@ -142,16 +142,15 @@
 			selfCtrl.updateDateAndTimeFormat();
 			scope.$on('$localeChangeSuccess', selfCtrl.updateDateAndTimeFormat);
 
-			elem.find('team-schedule-datepicker').on('focus', function (e) {				
+			elem.find('team-schedule-datepicker').on('focus', function (e) {
 				e.target.querySelector('input').focus();
 			});
 
-			elem.find('uib-timepicker').on('focus', function (e) {				
+			elem.find('uib-timepicker').on('focus', function (e) {
 				e.target.querySelector('input').focus();
-			});			
+			});
+
+			elem.removeAttr('tabindex');
 		}
 	}
-
-
-
 })();
