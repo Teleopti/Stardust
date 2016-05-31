@@ -140,7 +140,10 @@
 				if (arr[0].length === 0)
 					match = true;
 
-				if (match) arr[1].apply();
+				if (match) {
+          event.preventDefault ? event.preventDefault() : event.returnValue = false;
+          arr[1].apply();
+        }
 				return match;
 			};
 
