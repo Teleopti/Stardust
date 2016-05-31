@@ -11,18 +11,19 @@ WITH EXECUTE AS OWNER
 AS
 SET NOCOUNT ON
 
+DECLARE @haveRecord uniqueidentifier
 DECLARE @haveVersion int
 DECLARE @do bit
 
 SET @do = 0
 
-SELECT @haveVersion = [Version]
+SELECT @haveVersion = [Version], @haveRecord = [PersonId]
 FROM ReadModel.PersonScheduleProjectionLoadTime WITH (UPDLOCK)
 WHERE 
 	PersonId = @PersonId AND 
 	BelongsToDate = @BelongsToDate
 
-IF (@haveVersion IS NULL)
+IF (@haveRecord IS NULL)
 BEGIN
 	INSERT INTO ReadModel.PersonScheduleProjectionLoadTime (
 		PersonId,
@@ -33,7 +34,7 @@ BEGIN
 	SET @do = 1
 END
 
-IF (@haveVersion < @version)
+IF (@haveRecord IS NOT NULL AND (@haveVersion IS NULL OR @haveVersion < @version))
 BEGIN
 	UPDATE ReadModel.PersonScheduleProjectionLoadTime
 	SET [Version] = @version
