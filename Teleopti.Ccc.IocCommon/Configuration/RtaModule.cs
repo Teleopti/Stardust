@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RtaInitializor>().SingleInstance();
 			builder.RegisterType<TenantsInitializedInRta>().SingleInstance();
 			builder.RegisterType<RtaProcessor>().SingleInstance().ApplyAspects();
-			builder.RegisterType<AgentStateReadModelUpdater>().SingleInstance();
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
