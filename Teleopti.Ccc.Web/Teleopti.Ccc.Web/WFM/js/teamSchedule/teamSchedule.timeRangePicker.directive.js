@@ -24,15 +24,18 @@
 		};
 
 		function compileFn(tElement, tAttrs) {
-
-			function addTabindexToTimepickers() {
-				var timepickers = tElement.find('uib-timepicker');
-				angular.forEach(timepickers, function (tp) {
-					tp.setAttribute('tabIndex', tAttrs.tabindex);
+			var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+			function addTabindexTo() {
+				angular.forEach(arguments, function (arg) {
+					angular.forEach(arg, function (elem) {
+						elem.setAttribute('tabIndex', tabindex);
+					});
 				});
 			}
 
-			addTabindexToTimepickers();
+			addTabindexTo(
+				tElement[0].querySelectorAll('uib-timepicker')
+			);
 
 			return postlink;
 		}

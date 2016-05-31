@@ -107,8 +107,23 @@
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/addActivity.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'addActivity'],
-			link: postlink
-		}
+			compile: function (tElement, tAttrs) {
+				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+				function addTabindexTo() {
+					angular.forEach(arguments, function (arg) {
+						angular.forEach(arg, function (elem) {
+							elem.setAttribute('tabIndex', tabindex);
+						});
+					});
+				}
+				addTabindexTo(
+					tElement[0].querySelectorAll('select.activity-selector'),
+					tElement[0].querySelectorAll('activity-time-range-picker'),
+					tElement[0].querySelectorAll('button#applyActivity')
+				);
+				return postlink;
+			},
+		};
 
 		function postlink(scope, elem, attrs, ctrls) {
 			var containerCtrl = ctrls[0],
