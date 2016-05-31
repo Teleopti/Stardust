@@ -360,14 +360,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();
 			builder.RegisterType<DayOffBusinessRuleValidation>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048))
-			{
-				builder.RegisterType<ResourceCalculateAfterDeleteDecider>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<AlwaysResourceCalculateAfterDelete>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
-			}
+			builder.RegisterType<ResourceCalculateAfterDeleteDecider>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
 			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_JumpOutWhenLargeGroupIsHalfOptimized_37049))

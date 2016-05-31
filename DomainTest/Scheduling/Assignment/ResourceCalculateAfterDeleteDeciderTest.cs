@@ -16,7 +16,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SkillGroupDeleteAfterCalculation_37048)]
 	public class ResourceCalculateAfterDeleteDeciderTest : ISetup
 	{
 		public IResourceCalculateAfterDeleteDecider Target;

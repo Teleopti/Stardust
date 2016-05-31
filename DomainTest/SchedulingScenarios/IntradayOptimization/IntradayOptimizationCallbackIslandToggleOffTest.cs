@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -17,13 +16,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false, false)]
-	[TestFixture(false, true)]
-	[TestFixture(true, false)]
-	[TestFixture(true, true)]
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
-	public class IntradayOptimizationCallbackIslandToggleOffTest : IntradayOptimizationScenario //remove me when island toggle is gone
+	public class IntradayOptimizationCallbackIslandToggleOffTest : IntradayOptimizationScenario
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -34,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IntradayOptimizationCallbackContext CallbackContext;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
-		public IntradayOptimizationCallbackIslandToggleOffTest(bool skillGroupDeleteAfterCalculation, bool jumpOutWhenLargeGroupIsHalfOptimized)
-			: base(skillGroupDeleteAfterCalculation, false, jumpOutWhenLargeGroupIsHalfOptimized)
+		public IntradayOptimizationCallbackIslandToggleOffTest(bool jumpOutWhenLargeGroupIsHalfOptimized)
+			: base(false, jumpOutWhenLargeGroupIsHalfOptimized)
 		{
 		}
 

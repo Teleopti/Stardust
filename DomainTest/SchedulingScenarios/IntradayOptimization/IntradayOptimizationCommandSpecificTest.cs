@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -22,10 +21,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false, false)]
-	[TestFixture(false, true)]
-	[TestFixture(true, false)]
-	[TestFixture(true, true)]
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationCommandSpecificTest : IntradayOptimizationScenario, ISetup
@@ -40,8 +37,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IScheduleStorage ScheduleStorage;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
 
-		public IntradayOptimizationCommandSpecificTest(bool skillGroupDeleteAfterCalculation, bool jumpOutWhenLargeGroupIsHalfOptimized) 
-			: base(skillGroupDeleteAfterCalculation, true, jumpOutWhenLargeGroupIsHalfOptimized)
+		public IntradayOptimizationCommandSpecificTest(bool jumpOutWhenLargeGroupIsHalfOptimized) 
+			: base(true, jumpOutWhenLargeGroupIsHalfOptimized)
 		{
 		}
 

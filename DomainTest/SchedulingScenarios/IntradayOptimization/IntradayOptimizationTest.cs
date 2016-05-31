@@ -23,14 +23,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
-	[TestFixture(false, false, false)]
-	[TestFixture(false, false, true)]
-	[TestFixture(false, true, false)]
-	[TestFixture(false, true, true)]
-	[TestFixture(true, false, false)]
-	[TestFixture(true, false, true)]
-	[TestFixture(true, true, false)]
-	[TestFixture(true, true, true)]
+	[TestFixture(false, false)]
+	[TestFixture(false, true)]
+	[TestFixture(true, false)]
+	[TestFixture(true, true)]
 	[DomainTest]
 	[UseEventPublisher(typeof(RunInProcessEventPublisher))]
 	public class IntradayOptimizationTest : IntradayOptimizationScenario, ISetup
@@ -46,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public Func<IGridlockManager> LockManager;
 
-		public IntradayOptimizationTest(bool skillGroupDeleteAfterCalculation, bool intradayIslands, bool jumpOutWhenLargeGroupIsHalfOptimized) 
-			: base(skillGroupDeleteAfterCalculation, intradayIslands, jumpOutWhenLargeGroupIsHalfOptimized)
+		public IntradayOptimizationTest(bool intradayIslands, bool jumpOutWhenLargeGroupIsHalfOptimized) 
+			: base(intradayIslands, jumpOutWhenLargeGroupIsHalfOptimized)
 		{
 		}
 
