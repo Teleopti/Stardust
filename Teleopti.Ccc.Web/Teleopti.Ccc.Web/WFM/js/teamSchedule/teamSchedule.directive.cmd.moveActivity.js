@@ -99,7 +99,22 @@
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/moveActivity.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'moveActivity'],
-			link: postlink
+			compile: function (tElement, tAttrs) {
+				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+				function addTabindexTo() {
+					angular.forEach(arguments, function (arg) {
+						angular.forEach(arg, function (elem) {
+							elem.setAttribute('tabIndex', tabindex);
+						});
+					});
+				}
+				addTabindexTo(
+					tElement[0].querySelectorAll('uib-timepicker'),
+					tElement[0].querySelectorAll('input[type=checkbox]#mvActNextDay'),
+					tElement[0].querySelectorAll('button#applyMoveActivity')
+				);
+				return postlink;
+			},
 		}
 
 		function postlink(scope, elem, attrs, ctrls) {
