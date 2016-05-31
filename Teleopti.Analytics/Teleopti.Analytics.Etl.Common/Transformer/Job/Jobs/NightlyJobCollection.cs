@@ -61,8 +61,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new DimDayOffJobStep(jobParameters));
 			}
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
-			Add(new StageSchedulePreferenceJobStep(jobParameters));
-			Add(new StageAvailabilityJobStep(jobParameters));
+		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyPreference_38283)
+                || !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
+		    {
+		        Add(new StageSchedulePreferenceJobStep(jobParameters));
+		    }
+		    Add(new StageAvailabilityJobStep(jobParameters));
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlySkill_37543))
 			{
 				Add(new StageSkillJobStep(jobParameters));
@@ -149,8 +153,12 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new FactScheduleJobStep(jobParameters));
 				Add(new FactScheduleDayCountJobStep(jobParameters));
 			}
-			Add(new FactSchedulePreferenceJobStep(jobParameters));
-			Add(new FactAvailabilityJobStep(jobParameters));
+            if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyPreference_38283)
+                || !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
+            {
+                Add(new FactSchedulePreferenceJobStep(jobParameters));
+		    }
+		    Add(new FactAvailabilityJobStep(jobParameters));
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent

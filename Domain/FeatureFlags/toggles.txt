@@ -141,3 +141,4 @@ ETL_SpeedUpNightlyAbsence_38301 = RC
 ETL_SpeedUpIntradayShiftCategory_38718 = true
 ETL_MoveBadgeCalculationToETL_38421 = RC
 ETL_SpeedUpNightlyShiftCategory_38718 = RC
+ETL_SpeedUpNightlyPreference_38283 = RC
