@@ -677,7 +677,6 @@
     <Compile Include="Areas\TeamSchedule\Models\MoveActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />
     <Compile Include="Core\Hangfire\CleanFailedQueueStarterTask.cs" />
-    <Compile Include="Core\Hangfire\HangfireDashboardStartupTask.cs" />
     <Compile Include="Core\ThemeSettingProvider.cs" />
     <Compile Include="Areas\Search\Controllers\PeopleSearchController.cs" />
     <Compile Include="Areas\Search\Controllers\SearchController.cs" />
@@ -1145,7 +1144,6 @@
     <Compile Include="Filters\AuthenticationModule.cs" />
     <Compile Include="Filters\AuthorizeTeleoptiAttribute.cs" />
     <Compile Include="Filters\BasicAuthenticationAttribute.cs" />
-    <Compile Include="Filters\HangfireDashboardAuthorization.cs" />
     <Compile Include="Filters\HttpAuthenticationChallengeContextExtensions.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
     <Compile Include="Filters\IAuthenticationModule.cs" />
