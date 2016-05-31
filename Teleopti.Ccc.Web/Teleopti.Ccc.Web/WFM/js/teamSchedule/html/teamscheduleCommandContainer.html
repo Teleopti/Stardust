@@ -3,7 +3,7 @@
 	<add-activity ng-if="vm.activeCmd == 'AddActivity'"></add-activity>
 	<remove-activity ng-if="vm.activeCmd == 'RemoveActivity'"></remove-activity>
 	<swap-shifts ng-if="vm.activeCmd == 'SwapShifts'"></swap-shifts>
-	<add-absence ng-if="vm.activeCmd == 'AddAbsence'"></add-absence>
+	<add-absence ng-if="vm.activeCmd == 'AddAbsence'" tabindex="200"></add-absence>
 	<remove-absence ng-if="vm.activeCmd == 'RemoveAbsence'"></remove-absence>
 	<move-activity ng-if="vm.activeCmd == 'MoveActivity'"></move-activity>
 </div>

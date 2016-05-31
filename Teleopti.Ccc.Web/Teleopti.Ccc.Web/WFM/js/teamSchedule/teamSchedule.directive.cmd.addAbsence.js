@@ -91,7 +91,26 @@
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/addAbsence.tpl.html',
 			require: ['^teamscheduleCommandContainer', 'addAbsence'],
-			link: postlink
+			compile: function (tElement, tAttrs) {
+				var tabindex = angular.isDefined(tAttrs.tabindex) ? tAttrs.tabindex : '0';
+
+				function addTabindexTo() {
+					angular.forEach(arguments, function (arg) {
+						angular.forEach(arg, function (elem) {
+							elem.setAttribute('tabIndex', tabindex);
+						});
+					});
+				}
+
+				addTabindexTo(
+					tElement[0].querySelectorAll('select.absence-selector'),
+					tElement[0].querySelectorAll('team-schedule-datepicker'),
+					tElement[0].querySelectorAll('uib-timepicker'),
+					tElement[0].querySelectorAll('button#applyAbsence')
+				);
+
+				return postlink;
+			},
 		}
 
 		function postlink(scope, elem, attrs, ctrls) {
