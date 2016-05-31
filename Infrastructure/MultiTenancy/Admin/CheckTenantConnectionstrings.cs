@@ -27,7 +27,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 				if (tenantConn.DataSource.Equals(storeConn.DataSource, StringComparison.OrdinalIgnoreCase) &&
 					 tenantConn.InitialCatalog.Equals(storeConn.InitialCatalog, StringComparison.OrdinalIgnoreCase))
 					return true;
-			}
+                if (tenantConn.DataSource.Equals("tcp:" + storeConn.DataSource, StringComparison.OrdinalIgnoreCase) &&
+                     tenantConn.InitialCatalog.Equals(storeConn.InitialCatalog, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
 			foreach (var tenant in tenants)
 			{
 				var tenantConn = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString)
