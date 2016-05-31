@@ -14,7 +14,7 @@ $CCC7DB=$args[2]
 
 #log-info "Check so one tenant points to itself"
 
-    $CCC7DB = $CCC7DB.Trim
+    $CCC7DB = $CCC7DB.Trim()
     $checkConn = "-TSServer=$SQLServer;Database=$CCC7DB;UID=$PATCHUSER;Password=$PATCHPWD"
 
     $command = $PSScriptRoot + "\..\Enrypted\Teleopti.Support.Security.exe"
