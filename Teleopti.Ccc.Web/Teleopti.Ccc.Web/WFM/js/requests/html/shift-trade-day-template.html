@@ -1,15 +1,26 @@
-﻿<table style="width: 100%;" ng-class="{isWeekend:col.colDef.isWeekend}">
-	<tr ng-repeat="shiftTradeDay in row.entity['ShiftTradeDays'] | filterShiftTradeDetailDisplay:col.colDef.field">
-		<td class="shift-trade-cell" ng-style="{'background-color': shiftTradeDay.FromScheduleDayDetail.Color}">
-			{{shiftTradeDay.FromScheduleDayDetail.ShortName}}
-		</td>
-	</tr>
+﻿<div ng-init="matchingShiftTradeDays = (row.entity['ShiftTradeDays'] | filterShiftTradeDetailDisplay:col.colDef.field)" ng-class="col.colDef.isWeekend? 'isWeekend':''">
 
-	<tr ng-repeat="shiftTradeDay in row.entity['ShiftTradeDays'] | filterShiftTradeDetailDisplay:col.colDef.field">
-		<td class="shift-trade-cell" ng-style="{'background-color': shiftTradeDay.ToScheduleDayDetail.Color}">
-			{{shiftTradeDay.ToScheduleDayDetail.ShortName}}
-		</td>
-	</tr>
-</table>
+	<table ng-if="matchingShiftTradeDays.length == 0" style="width: 100%;">
+		<tr>
+			<td class="shift-trade-cell" ng-style="{'background-color': '$white'}"></td>
+		</tr>
+		<tr>
+			<td class="shift-trade-cell" ng-style="{'background-color': '$white'}"></td>
+		</tr>
+	</table>
+	<table ng-if="matchingShiftTradeDays.length == 1" style="width: 100%;">
+		<tr ng-repeat="shiftTradeDay in  matchingShiftTradeDays">
+			<td class="shift-trade-cell" >
+				<div class="shift-trade-cell-text" ng-style="{'background-color': shiftTradeDay.FromScheduleDayDetail.Color}">{{shiftTradeDay.FromScheduleDayDetail.ShortName}}</div>
+			</td>
+		</tr>
+
+		<tr ng-repeat="shiftTradeDay in  matchingShiftTradeDays">
+			<td class="shift-trade-cell" >
+				<div class="shift-trade-cell-text" ng-style="{'background-color': shiftTradeDay.ToScheduleDayDetail.Color}">{{shiftTradeDay.ToScheduleDayDetail.ShortName}}</div>
+			</td>
+		</tr>
+	</table>
 
 
+</div>

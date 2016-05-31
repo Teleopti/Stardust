@@ -67,7 +67,8 @@
 						headerCellClass: 'request-time-zone-header',
 						cellTemplate: '<table style="width: 100%; height: 100%;"><tr><td> {{row.entity[col.field]}}</td></tr><tr><td> {{row.entity["PersonToTimeZone"]}}</td></tr></table>',
 						enableSorting: false,
-						pinnedLeft: true,
+						pinnedRight: true,
+						visible: false,
 						minWidth: 111
 					},
 					{
@@ -76,10 +77,9 @@
 						headerCellFilter: 'translate',
 						cellClass: 'request-team',
 						headerCellClass: 'request-team-header',
-						cellTemplate: '<table style="width: 100%; height: 100%;"><tr><td> {{row.entity[col.field]}}</td></tr></table>',
+						cellTemplate: '<table style="width: 100%; height: 100%;"><tr><td> {{row.entity[col.field]}}</td></tr><tr><td> {{row.entity["PersonToTeam"]}}</td></tr></table>',
 						enableSorting: false,
-						visible: false,
-						pinnedRight: true,
+						pinnedLeft: true,
 						minWidth: 111
 					},
 					{
@@ -217,6 +217,7 @@
 					headerCellFilter: 'translate',
 					enablePinning: false,
 					enableColumnMenu: false,
+					enableHiding: false,
 					enableColumnResizing: true,
 					category: $filter('date')(startOfWeek.toDate(), 'shortDate'),
 					cellTemplate: 'js/requests/html/shift-trade-day-template.html',
@@ -257,7 +258,7 @@
 				var categories = [];
 				while (!day.isAfter(maximum)) {
 					categories.push({
-						name: $filter('date')(day.toDate(), "shortDate"),
+						name: $filter('date')(day.toDate(), 'shortDate'),
 						visible: true
 					});
 

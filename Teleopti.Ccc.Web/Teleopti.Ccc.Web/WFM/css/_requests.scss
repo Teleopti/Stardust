@@ -1,55 +1,35 @@
-﻿﻿.wfm-requests {
-	background-color: $white;
+﻿.wfm-requests {
 	position: relative;
 	height: 87vh;
+	background-color: $white;
 
-    .panel {
-        height: 0;
-    }
-
-	.advanced-search-container tr td:nth-child(2) div {
-		margin-right: 0 !important;
+	.inline-block, .wfm-date-range-picker-wrap {
+		display: inline-block;
 	}
 
-	#time-zone-switch {
+	[id="time-zone-switch"] {
 		position: relative;
+	}
+
+	.panel {
+		height: 0;
 	}
 
 	.filter-switch {
 		display: inline-block;
-        padding-left: 3px;
-
-		.relative {
-			position: relative;
-		}
-	}
-
-	.inline-block {
-		display: inline-block;
+		padding-left: 3px;
 	}
 
 	.operation-container {
-		padding-left: 12px;
 		padding-top: 12px;
 		padding-bottom: 12px;
-	}
-
-	md-progress-linear {
-		width: 100%;
+		padding-left: 12px;
 	}
 
 	requests-commands-pane {
 		position: absolute;
-		right: 1em;
 		top: 0;
-	}
-
-	.m-r-5 {
-		margin-right: 5px;
-	}
-
-	.m-l-5 {
-		margin-left: 5px;
+		right: 1em;
 	}
 
 	.request-filter {
@@ -57,26 +37,18 @@
 			width: 300px;
 		}
 
-		#simple-people-search {
+		[id="simple-people-search"] {
 			width: 316px;
 		}
 	}
 
-	.wfm-date-range-picker-wrap {
-		display: inline-block;
-
-		.relative {
-			position: relative;
-		}
-
-		input {
-			width: 100px !important;
-		}
+	.wfm-date-range-picker-wrap input {
+		width: 100px !important;
 	}
 
 	.ui-grid {
-        height: 71vh;
-        margin: 15px;
+		height: 71vh;
+		margin: 15px;
 
 		.ui-grid-cell-contents {
 			width: 85%;
@@ -93,28 +65,17 @@
 		}
 	}
 
-    .shift-trade-cell {
-        width: 100% !important;
-        height: 30px !important;
-        box-sizing: border-box;
-        border:1px solid #aeaeae;
-    }
-
-    .request-header-full-height{
-        height: 60px;
-    }
-
-    .shift-trade-header-weekend{
-        color: $red-600;
-    }
+	.request-header-full-height {
+		height: 60px;
+	}
 
 	.paging {
 		position: relative;
-        top : -24px;
+		top: -24px;
 
 		.total-requests-count {
-			margin-right: 20px;
 			margin-top: 5px;
+			margin-right: 20px;
 		}
 
 		.page-size-selector {
@@ -123,31 +84,23 @@
 		}
 
 		.pagination {
-			margin-left: 20px;
 			margin-top: 0;
 			margin-bottom: 0;
+			margin-left: 20px;
 		}
 	}
 
-    requests-overview[shift-trade-view] .paging{
-        position: relative;
-        top: 0;
-    }
+	requests-overview[shift-trade-view] .paging {
+		position: relative;
+		top: 0;
+	}
 
 	requests-commands-pane .wfm-btn-primary-disabled {
 		background-color: transparent;
 	}
 
-	.wfm-date-range-picker-wrap .inline-datepicker-wrap .start-date-input + .dropdown-menu {
-		margin-left: -180px;
-	}
-
 	input.ui-grid-filter-input {
 		text-overflow: ellipsis;
-	}
-
-	.ui-grid-pinned-container-right .ui-grid-render-container-right .ui-grid-viewport {
-		overflow: auto!important;
 	}
 
 	.ui-grid-filter-container > input[type="text"] {
@@ -156,15 +109,15 @@
 
 	.multiSelect {
 		> button {
-			min-height: 20px !important;
-			max-height: 22px;
 			width: 100%;
-			font-weight: normal;
+			max-height: 22px;
+			font-weight: 400;
+			min-height: 20px !important;
 		}
 
 		.checkboxLayer {
-			min-width: 150px;
 			width: 90%;
+			min-width: 150px;
 		}
 
 		.checkBoxContainer {
@@ -174,34 +127,108 @@
 		.multiSelectItem {
 			min-width: 120px;
 		}
+	}
 
-		.buttonLabel {
-			height: 20px;
-			padding-top: 0px;
+	[role="tabpanel"], md-tabs {
+		transition: none;
+	}
+
+	.ui-grid-canvas .ui-grid-cell {
+		display: flex;
+		flex-flow: column nowrap;
+		text-overflow: ellipsis;
+		border-bottom-width: 1px !important;
+
+		td {
+			overflow: hidden;
+			max-width: 10px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 	}
 
-    
-     [role="tabpanel"],
-        md-tabs {
-            transition: none;
-        }
+	[id="tab-content-1"] {
+		.ui-grid-top-panel {
+			overflow: visible;
+		}
 
-     .ui-grid-canvas .ui-grid-cell {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        text-overflow: ellipsis;
-			td{
-				max-width: 10px;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				overflow: hidden;
+		.ui-grid-viewport {
+			overflow: visible !important;
+		}
+
+		.ui-grid-header-viewport {
+			overflow: visible;
+		}
+	}
+
+	[id="tab-content-2"] {
+		.shift-trade-header-weekend {
+			color: $red-600;
+		}
+
+		.shift-trade-cell {
+			box-sizing: border-box;
+			border: 1px solid #aeaeae;
+			width: 100% !important;
+			height: 30px !important;
+		}
+
+		.ui-grid-menu-button.ui-grid-menu-button {
+			right: -20px;
+		}
+
+		.ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
+			border-right-style: hidden;
+		}
+
+		.isWeekend {
+			width: 100%;
+			background-color: $orange-400;
+
+			.shift-trade-cell-text {
+				background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
+				background-size: 11px 11px;
 			}
-     }
+		}
 
-	 .isWeekend tbody:empty{
-		 width: 100%;
-		 background-color: rebeccapurple;
-	 }
+		.ui-grid-category-text {
+			margin-top: 5px;
+			text-align: left;
+		}
+
+		.ui-grid-category-weekday {
+			padding-top: 5px;
+		}
+
+		.shift-trade-cell-text {
+			margin-right: 2px;
+			margin-left: 2px;
+			text-align: center;
+			border: 1px solid #000;
+			border-radius: 2px;
+		}
+
+		md-content {
+			overflow: hidden;
+		}
+
+		.ui-grid-pinned-container-left .ui-grid-top-panel,
+		.ui-grid-pinned-container-right .ui-grid-top-panel {
+			overflow: visible;
+		}
+
+		.ui-grid-pinned-container-left .ui-grid-viewport,
+		.ui-grid-pinned-container-right .ui-grid-viewport {
+			overflow: visible !important;
+		}
+
+		.ui-grid-pinned-container-left .ui-grid-header-viewport,
+		.ui-grid-pinned-container-right .ui-grid-header-viewport {
+			overflow: visible;
+		}
+
+		.ui-grid-pinned-container-right .ui-grid-render-container-right .ui-grid-viewport {
+			overflow: visible !important;
+		}
+	}
 }
