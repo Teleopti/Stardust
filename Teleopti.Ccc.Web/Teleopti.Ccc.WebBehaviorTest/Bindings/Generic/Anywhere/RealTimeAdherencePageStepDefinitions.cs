@@ -1,15 +1,11 @@
 using System;
 using System.Drawing;
-using System.Linq;
-using System.Web.UI;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -225,10 +221,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			if (status.State != null)
 				Browser.Interactions.AssertAnyContains(selector, status.State);
-			if (status.Activity != null)
-				Browser.Interactions.AssertAnyContains(selector, status.Activity);
-			if (status.NextActivity != null)
-				Browser.Interactions.AssertAnyContains(selector, status.NextActivity);
+
+
+			if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_AlarmContext_29357))
+			{
+				if (status.PreviousActivity != null)
+				{
+					if (status.PreviousActivity == "<none>")
+						Browser.Interactions.AssertNotExists(selector, selector + " .previous-activity");
+					else
+						Browser.Interactions.AssertExists(selector + " .previous-activity[name='{0}']", status.PreviousActivity);
+				}
+				if (status.Activity != null)
+					Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", status.Activity);
+				if (status.NextActivity != null)
+					Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", status.NextActivity);
+			}
+			else
+			{
+				if (status.Activity != null)
+					Browser.Interactions.AssertAnyContains(selector, status.Activity);
+				if (status.NextActivity != null)
+					Browser.Interactions.AssertAnyContains(selector, status.NextActivity);
+			}
 			if (status.NextActivityStartTimeFormatted() != null)
 				Browser.Interactions.AssertAnyContains(selector, status.NextActivityStartTimeFormatted());
 			if (status.Alarm != null)
@@ -259,6 +274,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	{
 		public string Name	{ get; set; }
 		public string State	{ get; set; }
+		public string PreviousActivity	{ get; set; }
 		public string Activity	{ get; set; }
 		public string NextActivity	{ get; set; }
 		public string NextActivityStartTime	{ get; set; }

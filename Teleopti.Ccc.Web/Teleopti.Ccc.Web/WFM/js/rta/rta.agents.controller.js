@@ -215,7 +215,8 @@
 								Color: s.Color,
 								Offset: timeToPercent(states.Time, s.StartTime),
 								Width: layerPercentage(lengthSeconds),
-								Name: s.Name
+								Name: s.Name,
+								Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
 							};
 						});
 						if (agentInfo.length > 0) {
@@ -260,6 +261,18 @@
 								TeamId: agentInfo.TeamId,
 							});
 					});
+				}
+
+				function getClassForActivity(currentTime, startTime, endTime) {
+					var now = moment(currentTime).unix(),
+						start = moment(startTime).unix(),
+						end = moment(endTime).unix();
+
+					if (now < start)
+						return 'next-activity';
+					else if (now > end)
+						return 'previous-activity';
+					return 'current-activity';
 				}
 			}
 		]);

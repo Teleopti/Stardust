@@ -127,7 +127,6 @@
 					});
 					columnDefs.push(alarm);
 					columnDefs.push(timeInAlarm);
-					alarm.cellTemplate = '<div class="label" style="background-color: #FF0000; font-size: 14px; color: white">OutAdherence</div>';
 					columnDefs.push(state);
 					var columns = ["15%", "15%", "40%", "10%", "10%", "10%"];
 					for (var i = 0; i < columns.length; i++) {
