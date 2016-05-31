@@ -22,7 +22,7 @@ namespace Teleopti.Support.Security
 
 		public void CheckConnectionStrings(string tenantStoreConnectionString)
 		{
-			log.Debug(string.Format("Checking tenant connection strings [{0}]",tenantStoreConnectionString));
+			log.DebugFormat("Checking tenant connection strings [{0}]",tenantStoreConnectionString);
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var checker = new CheckTenantConnectionstrings(new LoadAllTenants(_currentTenantSession), _currentTenantSession);

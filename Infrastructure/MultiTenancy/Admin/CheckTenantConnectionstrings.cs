@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using log4net;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
@@ -8,8 +9,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 	{
 		private readonly LoadAllTenants _loadAllTenants;
 		private readonly TenantUnitOfWorkManager _tenantUnitOfWorkManager;
-
-		public CheckTenantConnectionstrings(LoadAllTenants loadAllTenants, TenantUnitOfWorkManager tenantUnitOfWorkManager)
+        private static readonly ILog log = LogManager.GetLogger(typeof(CheckTenantConnectionstrings));
+        public CheckTenantConnectionstrings(LoadAllTenants loadAllTenants, TenantUnitOfWorkManager tenantUnitOfWorkManager)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 				{
 					DataSource = "XXXChangeConnectionstrings"
 				};
-				tenant.DataSourceConfiguration.SetApplicationConnectionString(tenantConn.ConnectionString);
+                log.DebugFormat("Changing Data Source for Tenant {0} to make sure we don't patch wrong database.", tenant.Name);
+                tenant.DataSourceConfiguration.SetApplicationConnectionString(tenantConn.ConnectionString);
 				_tenantUnitOfWorkManager.CurrentSession().Save(tenant);
 			}
 
