@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 						new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
 				};
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
-								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario), 
+								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
 								   activityRepository, personRepository, new UtcTimeZone(), null);
 
 			var command = new AddActivityCommand
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
 			var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
 			var shiftCategory = new ShiftCategory("Day");
-			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> {shiftCategory});
+			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> { shiftCategory });
 
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(ScenarioFactory.CreateScenarioWithId("scenario", true)),
@@ -165,11 +165,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldCreateNewShiftCategoryForActivityAddedOnDayOff()
+		{
+			var date = new DateOnly(2013, 11, 14);
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var addedActivity = ActivityFactory.CreateActivity("Added activity");
+			var activityRepository = new FakeWriteSideRepository<IActivity> { addedActivity };
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
+
+			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("scenario"), personRepository.SingleOrDefault(), date, new DayOffTemplate());
+			personAssignmentRepository.Add(dayOff);
+
+			var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
+			var shiftCategory = new ShiftCategory("Day");
+			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> { shiftCategory });
+
+			var target = new AddActivityCommandHandler(personAssignmentRepository,
+									new ThisCurrentScenario(personAssignmentRepository.SingleOrDefault().Scenario),
+								   activityRepository, personRepository,
+								   new UtcTimeZone(), shiftCategoryRepository
+								   );
+
+			personAssignmentRepository.Count().Should().Be.EqualTo(1);
+			personAssignmentRepository.SingleOrDefault().ShiftLayers.Count().Should().Be.EqualTo(0);
+
+			var command = new AddActivityCommand
+			{
+				PersonId = personRepository.Single().Id.Value,
+				Date = date,
+				ActivityId = addedActivity.Id.Value
+			};
+			target.Handle(command);
+
+			personAssignmentRepository.Count().Should().Be.EqualTo(1);
+			personAssignmentRepository.SingleOrDefault().MainActivities().Single().Payload.Name.Should().Be("Added activity");
+			personAssignmentRepository.SingleOrDefault().ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
+		}
+
+		[Test]
 		public void ShouldReportErrorIfActivityConflictsWithOvernightShiftsFromPreviousDay()
 		{
 			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
 			var addedActivity = ActivityFactory.CreateActivity("Added activity");
-			var activityRepository = new FakeWriteSideRepository<IActivity> { addedActivity };			
+			var activityRepository = new FakeWriteSideRepository<IActivity> { addedActivity };
 			var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
 			var shiftCategory = new ShiftCategory("Day");
 			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> { shiftCategory });
@@ -177,23 +215,23 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("Phone");
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				mainActivity, personRepository.Single(),
-				new DateTimePeriod(2013,11,13,23,2013,11,14,8));
+				new DateTimePeriod(2013, 11, 13, 23, 2013, 11, 14, 8));
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository { pa };
 
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
-								   activityRepository,personRepository,
-								   new UtcTimeZone(),shiftCategoryRepository
+								   activityRepository, personRepository,
+								   new UtcTimeZone(), shiftCategoryRepository
 								   );
-			
+
 			var command = new AddActivityCommand
 			{
 				PersonId = personRepository.Single().Id.Value,
-				Date = new DateOnly(2013,11,14),
+				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 5, 0, 0),
-				EndTime = new DateTime(2013,11,14,8,0,0),
+				EndTime = new DateTime(2013, 11, 14, 8, 0, 0),
 			};
 			target.Handle(command);
 

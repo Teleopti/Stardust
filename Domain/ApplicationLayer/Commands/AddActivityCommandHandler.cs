@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var person = _personForId.Load(command.PersonId);
 			var scenario = _currentScenario.Current();
 			var personAssignment = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
-				{
-					Date = command.Date,
-					Scenario = scenario,
-					Person = person
-				});
-			
+			{
+				Date = command.Date,
+				Scenario = scenario,
+				Person = person
+			});
+
 			command.ErrorMessages = new List<string>();
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (personAssignment == null)
 			{
-				var newPersonAssignment = new PersonAssignment(person, scenario, command.Date);			
+				var newPersonAssignment = new PersonAssignment(person, scenario, command.Date);
 				newPersonAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
 				shiftCategories.Sort(new ShiftCategorySorter());
@@ -68,6 +68,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					newPersonAssignment.SetShiftCategory(shiftCategory);
 					_personAssignmentRepository.Add(newPersonAssignment);
 				}
+			}
+			else if (!personAssignment.ShiftLayers.Any())
+			{
+				personAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
+
+				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
+				shiftCategories.Sort(new ShiftCategorySorter());
+				var shiftCategory = shiftCategories.FirstOrDefault();
+				if (shiftCategory != null)
+					personAssignment.SetShiftCategory(shiftCategory);
 			}
 			else
 			{
