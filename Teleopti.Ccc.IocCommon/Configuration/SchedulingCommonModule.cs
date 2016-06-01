@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_CascadingSkills_38524))
 			{
 				builder.RegisterType<FullResourceCalculationWithCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
-				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelperOld>().InstancePerLifetimeScope();
+				builder.RegisterType<ResourceOptimizationHelper>().InstancePerLifetimeScope();
 				builder.RegisterType<CascadingResourceCalculation>().As<IResourceOptimizationHelper>().AsSelf().InstancePerLifetimeScope();
 			}
 			else

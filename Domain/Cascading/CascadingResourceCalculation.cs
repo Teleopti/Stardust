@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class CascadingResourceCalculation : IResourceOptimizationHelper
 	{
-		private readonly IResourceOptimizationHelperOld _resourceOptimizationHelper;
+		private readonly ResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly CascadeResources _cascadeResources;
 
-		public CascadingResourceCalculation(IResourceOptimizationHelperOld resourceOptimizationHelper,
+		public CascadingResourceCalculation(ResourceOptimizationHelper resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder,
 																CascadeResources cascadeResources)
 		{
