@@ -89,17 +89,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return request;
 		}
 
-		private IPersonRequest createShiftExchangeOffer(DateTime startDate)
+		private IPersonRequest createShiftExchangeOffer(DateTime startDate, DateTime? shiftDate = null,
+			DateTime? validTo = null)
 		{
-			IPersonRequest request = new PersonRequest(_person);
-			var currentShift = ScheduleDayFactory.Create(new DateOnly(2008, 5, 1), _person);
+			var shiftDateOnly = shiftDate != null ? new DateOnly(shiftDate.Value) : new DateOnly(2008, 5, 1);
+			var currentShift = ScheduleDayFactory.Create(shiftDateOnly, _person);
 
 			var dayFilterCriteria = new ScheduleDayFilterCriteria(ShiftExchangeLookingForDay.WorkingShift,
 				new DateTimePeriod(startDate, startDate.AddDays(1)));
-			var offer = new ShiftExchangeOffer(currentShift,
-				new ShiftExchangeCriteria(new DateOnly(2008, 7, 9), dayFilterCriteria), ShiftExchangeOfferStatus.Pending);
 
-			request.Request = offer;
+			var validToDateOnly = validTo != null ? new DateOnly(validTo.Value) : new DateOnly(2008, 7, 9);
+			var offer = new ShiftExchangeOffer(currentShift, new ShiftExchangeCriteria(validToDateOnly, dayFilterCriteria),
+				ShiftExchangeOfferStatus.Pending);
+
+			var request = new PersonRequest(_person)
+			{
+				Request = offer
+			};
 			request.Pending();
 
 			return request;
@@ -1538,6 +1544,27 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var resultDesc = setupOverlapTest(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
 
 			resultDesc.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldExcludeDeletedShiftExchangeOfferForBulletin()
+		{
+			var startDate = DateTime.UtcNow;
+
+			var shiftExchangeOfferReq = createShiftExchangeOffer(startDate, startDate, startDate.AddDays(1));
+			var shiftExchangeOfferReq2 = createShiftExchangeOffer(startDate, startDate, startDate.AddDays(1));
+			((IDeleteTag) shiftExchangeOfferReq2).SetDeleted();
+
+			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferReq);
+			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferReq2);
+
+			var foundShiftExchangeRequests =
+				new PersonRequestRepository(UnitOfWork).FindShiftExchangeOffersForBulletin(new[] {_person},
+					new DateOnly(startDate)).ToList();
+
+			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0]));
+			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferReq.Request));
 		}
 
 		#region Request filtering test cases

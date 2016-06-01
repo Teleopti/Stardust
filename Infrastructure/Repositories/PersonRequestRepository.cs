@@ -660,11 +660,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
 			DateOnly shiftTradeDate)
 		{
-			return Session.CreateCriteria(typeof(IShiftExchangeOffer))
-				.Add(Restrictions.Eq("Date", shiftTradeDate))
-				.Add(Restrictions.In("Person", personList.ToList()))
-				.Add(Restrictions.Ge("Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
-				.Add(Restrictions.Eq("Status", ShiftExchangeOfferStatus.Pending))
+			return Session.CreateCriteria(typeof (IShiftExchangeOffer), "offer")
+				.CreateCriteria("Parent", "req", JoinType.InnerJoin)
+				.Add(Restrictions.Eq("req.IsDeleted", false))
+				.Add(Restrictions.Eq("offer.Date", shiftTradeDate))
+				.Add(Restrictions.In("offer.Person", personList.ToList()))
+				.Add(Restrictions.Ge("offer.Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
+				.Add(Restrictions.Eq("offer.Status", ShiftExchangeOfferStatus.Pending))
 				.List<ShiftExchangeOffer>();
 		}
 
