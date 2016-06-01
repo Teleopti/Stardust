@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			return XmlLicenseService.IsThisTooManyActiveAgents(maxLicensedActiveAgents, maxActiveAgentsGrace.Value, activeAgents);
 		}
 
-		public LicenseActivator(string customerName, DateTime expirationDate, int maxActiveAgents, int maxSeats, LicenseType licenseType, Percent maxActiveAgentsGrace,
-				IsThisAlmostTooManyActiveAgents isThisAlmostTooManyActiveAgents, IsThisTooManyActiveAgents isThisTooManyActiveAgents, string majorVersion)
+		public LicenseActivator(string customerName, DateTime expirationDate, bool perpetual, int maxActiveAgents, int maxSeats, LicenseType licenseType, Percent maxActiveAgentsGrace, IsThisAlmostTooManyActiveAgents isThisAlmostTooManyActiveAgents, IsThisTooManyActiveAgents isThisTooManyActiveAgents, string majorVersion)
 		{
 			CustomerName = customerName;
 			ExpirationDate = expirationDate;
+			Perpetual = perpetual;
 			MaxActiveAgents = maxActiveAgents;
 			MaxSeats = maxSeats;
 			LicenseType = licenseType;
@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 		public string MajorVersion { get; private set; }
 
 		public DateTime ExpirationDate { get; private set; }
+		public bool Perpetual { get; private set; }
 
 		public int MaxActiveAgents { get; private set; }
 

@@ -340,7 +340,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolvePortalViewModelFactory()
 		{
 		    DefinedLicenseDataFactory.SetLicenseActivator("asdf",
-		        new LicenseActivator(null, DateTime.MinValue, 0, 0, LicenseType.Agent,
+		        new LicenseActivator(null, DateTime.MinValue, false, 0, 0, LicenseType.Agent,
 		            new Percent(), null, null, "8"));
 			requestContainer.Resolve<IPortalViewModelFactory>()
 				.Should().Not.Be.Null();

@@ -10197,10 +10197,6 @@ These options are activated:
     <value>Override the forecasted values.</value>
     <comment>Information while making overrides to forecasts</comment>
   </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>With campaign</value>
-    <comment>calls with campaign</comment>
-  </data>
   <data name="AbsenceThreshold" xml:space="preserve">
     <value>Threshold</value>
     <comment>threshold for budgeted allowance</comment>
@@ -14511,5 +14507,28 @@ Check your internet connection or contact your administrator.</value>
   <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
     <value>Can not move multiple activities for selected agents</value>
     <comment>Message of not allowing to move multiple activities for selected agents in teamschedule</comment>
+  </data>
+  <data name="ProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>This system is licensed to "{0}" according to the terms and conditions of the license agreement.
+
+The product activation key covers a maximum of {1} active agents.
+
+Major version: {4}
+
+The product activation key schema is "{2}".
+These options are activated:
+{3}</value>
+    <comment>product activation key text shown in about box when perpetual is true</comment>
+  </data>
+  <data name="SeatProductActivationKeyV8Perpetual" xml:space="preserve">
+    <value>This system is licensed to "{0}" according to the terms and conditions of the license agreement.
+
+The product activation key covers a maximum of {1} seats.
+
+Major version: {4}
+
+The product activation key schema is "{2}".
+These options are activated:
+{3}</value>
   </data>
 </root>

@@ -197,7 +197,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public string CustomerName { get; private set; }
             public DateTime ExpirationDate { get; private set; }
             public TimeSpan ExpirationGracePeriod { get; private set; }
-            public int MaxActiveAgents { get; private set; }
+	        public bool Perpetual { get; private set; }
+	        public int MaxActiveAgents { get; private set; }
 						public double MaxActiveAgentsGrace { get; private set; }
 	        public double MajorVersion { get; private set; }
 
@@ -301,6 +302,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public string CustomerName { get; private set; }
 			  public DateTime ExpirationDate { get; private set; }
 			  public TimeSpan ExpirationGracePeriod { get; private set; }
+			  public bool Perpetual { get; private set; }
 			  public int MaxActiveAgents { get; private set; }
 			  public double MaxActiveAgentsGrace { get; private set; }
 			  public double MajorVersion { get; private set; }
@@ -396,7 +398,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public string CustomerName { get; private set; }
             public DateTime ExpirationDate { get; private set; }
             public TimeSpan ExpirationGracePeriod { get; private set; }
-            public int MaxActiveAgents { get; private set; }
+	        public bool Perpetual { get; private set; }
+	        public int MaxActiveAgents { get; private set; }
             public double MaxActiveAgentsGrace { get; private set; }
 	        public double MajorVersion { get; private set; }
 
@@ -518,7 +521,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public string CustomerName { get; private set; }
             public DateTime ExpirationDate { get; private set; }
             public TimeSpan ExpirationGracePeriod { get; private set; }
-            public int MaxActiveAgents { get; private set; }
+	        public bool Perpetual { get; private set; }
+	        public int MaxActiveAgents { get; private set; }
 						public double MaxActiveAgentsGrace { get; private set; }
 	        public double MajorVersion { get; private set; }
 

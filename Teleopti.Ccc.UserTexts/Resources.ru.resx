@@ -12030,9 +12030,6 @@ Teleopti R&amp;D</value>
   <data name="ForecastOverrideMsg" xml:space="preserve">
     <value>Изменение спрогнозированных значений.</value>
   </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>кампании</value>
-  </data>
   <data name="SuccessTip" xml:space="preserve">
     <value>Удачно</value>
   </data>

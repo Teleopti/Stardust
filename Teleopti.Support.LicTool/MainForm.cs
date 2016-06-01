@@ -272,6 +272,8 @@ namespace Teleopti.Support.LicTool
 			xdoc.InsertBefore(xmlDeclaration, xdoc.DocumentElement);
 			xdoc.AppendChild(rootNode);
 			rootNode.AppendChild(xdoc.CreateElement("CustomerName")).AppendChild(xdoc.CreateTextNode(txtbxCustomerName.Text));
+			if (chkPerpetual.Checked)
+				rootNode.AppendChild(xdoc.CreateElement("Perpetual")).AppendChild(xdoc.CreateTextNode("true"));
 			rootNode.AppendChild(xdoc.CreateElement("ExpirationDate")).AppendChild(xdoc.CreateTextNode(dtpkrExpirationDate.Value.ToString("s", invariant)));
 			rootNode.AppendChild(xdoc.CreateElement("ExpirationGracePeriod")).AppendChild(xdoc.CreateTextNode("P" + numExpirationGracePeriodDays.Value.ToString(invariant) + "D"));
 			rootNode.AppendChild(xdoc.CreateElement("MaxActiveAgents")).AppendChild(xdoc.CreateTextNode(numMaxActiveAgents.Value.ToString(invariant)));

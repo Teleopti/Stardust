@@ -11958,9 +11958,6 @@ Teleopti R&amp;D</value>
   <data name="Text" xml:space="preserve">
     <value>文本</value>
   </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>活动呼叫量</value>
-  </data>
   <data name="ForecastPeriod" xml:space="preserve">
     <value>未来周期</value>
   </data>

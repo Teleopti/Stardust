@@ -12752,9 +12752,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="PartOfCampaign" xml:space="preserve">
     <value>Del av en kampanj</value>
   </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>Med kampanj</value>
-  </data>
   <data name="RunningForecast" xml:space="preserve">
     <value>Prognostisering pågår</value>
   </data>

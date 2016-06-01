@@ -21414,6 +21414,23 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement.
+        ///
+        ///The product activation key covers a maximum of {1} active agents.
+        ///
+        ///Major version: {4}
+        ///
+        ///The product activation key schema is &quot;{2}&quot;.
+        ///These options are activated:
+        ///{3}.
+        /// </summary>
+        public static string ProductActivationKeyV8Perpetual {
+            get {
+                return ResourceManager.GetString("ProductActivationKeyV8Perpetual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Product name:.
         /// </summary>
         public static string ProductNameColon {
@@ -25131,6 +25148,23 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SeatProductActivationKeyV8 {
             get {
                 return ResourceManager.GetString("SeatProductActivationKeyV8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement.
+        ///
+        ///The product activation key covers a maximum of {1} seats.
+        ///
+        ///Major version: {4}
+        ///
+        ///The product activation key schema is &quot;{2}&quot;.
+        ///These options are activated:
+        ///{3}.
+        /// </summary>
+        public static string SeatProductActivationKeyV8Perpetual {
+            get {
+                return ResourceManager.GetString("SeatProductActivationKeyV8Perpetual", resourceCulture);
             }
         }
         
@@ -32057,15 +32091,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WitAmpersandhinColon {
             get {
                 return ResourceManager.GetString("WitAmpersandhinColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to With campaign.
-        /// </summary>
-        public static string With_campaign {
-            get {
-                return ResourceManager.GetString("With campaign", resourceCulture);
             }
         }
         

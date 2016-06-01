@@ -53,26 +53,43 @@ namespace Teleopti.Ccc.Win.Main
             {
                 options.AppendLine(option);
             }
-        	var licenseResource = Resources.ProductActivationKeyV8;
-        	var max = license.MaxActiveAgents;
+        		var licenseResource = Resources.ProductActivationKeyV8;
+        		var max = license.MaxActiveAgents;
 
-			if(license.LicenseType == LicenseType.Seat)
-			{
-				licenseResource = Resources.SeatProductActivationKeyV8;
-				labelActiveAgentsInUse.Text = "";
-				labelActiveAgentsOrSeats.Text = "";
-				buttonAdvViewActive.Visible = false;
-			}
+	        if (license.LicenseType == LicenseType.Seat)
+	        {
+		        licenseResource = license.Perpetual
+			        ? Resources.SeatProductActivationKeyV8Perpetual
+			        : Resources.SeatProductActivationKeyV8;
+		        labelActiveAgentsInUse.Text = "";
+		        labelActiveAgentsOrSeats.Text = "";
+		        buttonAdvViewActive.Visible = false;
+	        }
 
-            string licenseText = String.Format(CultureInfo.CurrentCulture,
-                licenseResource,
-                license.CustomerName,
-                license.ExpirationDate,
-                max,
-                license.EnabledLicenseSchemaName,
-                options,license.MajorVersion);
+	        string licenseText;
+			
+	        if (license.Perpetual)
+	        {
+				licenseResource = Resources.ProductActivationKeyV8Perpetual;
+				licenseText = String.Format(CultureInfo.CurrentCulture,
+			        licenseResource,
+			        license.CustomerName,
+			        max,
+			        license.EnabledLicenseSchemaName,
+			        options, license.MajorVersion);
+	        }
+	        else
+	        {
+		        licenseText = String.Format(CultureInfo.CurrentCulture,
+			        licenseResource,
+			        license.CustomerName,
+			        license.ExpirationDate,
+			        max,
+			        license.EnabledLicenseSchemaName,
+			        options, license.MajorVersion);
+	        }
 
-            return licenseText;
+	        return licenseText;
         }
 
         private void buttonAdvOkClick(object sender, EventArgs e)

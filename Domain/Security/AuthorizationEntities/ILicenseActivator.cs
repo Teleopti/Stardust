@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		DateTime ExpirationDate { get; }
 
+		bool Perpetual { get; }
+
 		int MaxActiveAgents { get; }
 
 		Percent MaxActiveAgentsGrace { get; }

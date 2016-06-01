@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 			ILicenseActivator licenseActivator = new LicenseActivator(licenseService.CustomerName,
 																						 licenseService.ExpirationDate,
+																						 licenseService.Perpetual,
 																						 licenseService.MaxActiveAgents,
 																						 licenseService.MaxSeats,
 																						 licenseService.LicenseType,

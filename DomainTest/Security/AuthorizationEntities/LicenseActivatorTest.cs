@@ -16,18 +16,18 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 		private const int _maxActiveAgents = 10;
 		private readonly Percent _maxActiveAgentsGrace = new Percent(0.1);
 		private readonly DateTime _expirationDate = DateTime.Now.AddDays(2);
+		private readonly bool _showAsPerpetual = true;
 
 		[SetUp]
 		public void Setup()
 		{
-			_target = new LicenseActivator(_customerName, _expirationDate, _maxActiveAgents, 100, LicenseType.Agent, _maxActiveAgentsGrace,
+			_target = new LicenseActivator(_customerName, _expirationDate, _showAsPerpetual, _maxActiveAgents, 100, LicenseType.Agent, _maxActiveAgentsGrace,
 							XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents, "8");
 		}
 
 		[Test]
 		public void VerifyProperties()
 		{
-
 			IList<string> setOptions = new List<string> { "schema1/option1", "schema1/option2" };
 			foreach (string setOption in setOptions)
 			{
@@ -41,14 +41,10 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
 				Assert.IsTrue(setOptions.Contains(option));
 			}
 
-			string expectedSchema = "schema1";
-			string getName = _target.EnabledLicenseSchemaName;
-			Assert.AreEqual(expectedSchema, getName);
-
-			string customerName = _target.CustomerName;
-			Assert.IsFalse(string.IsNullOrEmpty(customerName));
-			DateTime expirationDate = _target.ExpirationDate;
-			Assert.AreEqual(_expirationDate, expirationDate);
+			Assert.AreEqual("schema1", _target.EnabledLicenseSchemaName);
+			Assert.IsFalse(string.IsNullOrEmpty(_target.CustomerName));;
+			Assert.AreEqual(_expirationDate, _target.ExpirationDate);
+			Assert.AreEqual(_showAsPerpetual, _target.Perpetual);
 			int maxActiveAgents = _target.MaxActiveAgents;
 			Assert.Less(0, maxActiveAgents);
 			Percent maxActiveAgentsGrace = _target.MaxActiveAgentsGrace;

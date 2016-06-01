@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Gizli Biçimle Metin Kutusu</value>
@@ -8515,9 +8515,6 @@ Aktif modüller:
   </data>
   <data name="ForecastOverrideMsg" xml:space="preserve">
     <value>Tahminli değerleri çiğne</value>
-  </data>
-  <data name="With campaign" xml:space="preserve">
-    <value>Kampanyalı değerler</value>
   </data>
   <data name="SuccessTip" xml:space="preserve">
     <value>Tahminleme başarıyla sonuçlandı.</value>
