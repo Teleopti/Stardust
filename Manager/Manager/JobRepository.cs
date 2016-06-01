@@ -4,9 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -159,22 +157,7 @@ namespace Stardust.Manager
 
 				foreach (var uri in allAliveWorkerNodesUri)
 				{
-					try
-					{
-						var builderHelper = new NodeUriBuilderHelper(uri);
-						var isIdleUri = builderHelper.GetIsIdleTemplateUri();
-
-						var response = httpSender.GetAsync(isIdleUri).Result;
-
-						if (response.IsSuccessStatusCode)
-						{
-							AssignJobToWorkerNodeWorker(httpSender, uri);
-						}
-					}
-					catch
-					{
-						// continue
-					}
+					AssignJobToWorkerNodeWorker(httpSender, uri);
 				}
 			}
 			catch (Exception exp)
@@ -467,22 +450,13 @@ namespace Stardust.Manager
 								}
 							}
 						}
-
 						if (sentToWorkerNodeUri != null)
 						{
-							var taskSendCancel = new Task<HttpResponseMessage>(() =>
-							{
-								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-								var uriCancel = builderHelper.GetCancelJobUri(jobId);
+							var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
+							var uriCancel = builderHelper.GetCancelJobUri(jobId);
+							var response = httpSender.DeleteAsync(uriCancel).Result;
 
-								return httpSender.DeleteAsync(uriCancel).Result;
-							});
-
-							taskSendCancel.Start();
-							taskSendCancel.Wait();
-
-							if (taskSendCancel.IsCompleted &&
-								taskSendCancel.Result.IsSuccessStatusCode)
+							if (response != null && response.IsSuccessStatusCode)
 							{
 								using (var createUpdateCancellingResultCommand = _createSqlCommandHelper.CreateUpdateCancellingResultCommand(jobId, sqlConnection, sqlTransaction))
 								{
@@ -494,6 +468,10 @@ namespace Stardust.Manager
 								}
 
 								Retry(sqlTransaction.Commit);
+							}
+							else
+							{
+								this.Log().ErrorWithLineNumber("Could not send cancel to node. JobId: " + jobId);
 							}
 						}
 					}
@@ -539,71 +517,69 @@ namespace Stardust.Manager
 						return;
 					}
 
-					var taskPostJob = new Task<HttpResponseMessage>(() =>
+					var builderHelper = new NodeUriBuilderHelper(availableNode);
+					var urijob = builderHelper.GetJobTemplateUri();
+					var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
+
+					if (response == null)
 					{
-						var builderHelper = new NodeUriBuilderHelper(availableNode);
-						var urijob = builderHelper.GetJobTemplateUri();
+						var updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
+											SET Alive = @Alive
+											WHERE Url = @Url";
 
-						var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
-						response.Content = new StringContent(availableNode.ToString());
+						using (var command = new SqlCommand(updateCommandText, sqlConnection))
+						{
+							command.Parameters.Add("@Alive", SqlDbType.Bit).Value = false;
+							command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = availableNode.ToString();
+							command.ExecuteNonQueryWithRetry(_retryPolicy);
+						}
+						return;
+					}
 
-						return response;
-					});
-
-					taskPostJob.Start();
-					taskPostJob.Wait();
-
-					if (taskPostJob.IsCompleted)
+					if (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest))
 					{
-						if (taskPostJob.Result.IsSuccessStatusCode ||
-						    taskPostJob.Result.StatusCode.Equals(HttpStatusCode.BadRequest))
+						string sentToWorkerNodeUri = availableNode.ToString();
+						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
-							string sentToWorkerNodeUri = taskPostJob.Result.Content.ReadAsStringAsync().Result;
-							using (var sqlTransaction = sqlConnection.BeginTransaction())
+							using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
 							{
-								using (var insertIntoJobCommand = _createSqlCommandHelper.CreateInsertIntoJobCommand(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction))
+								if (response.IsSuccessStatusCode)
 								{
-									if (taskPostJob.Result.IsSuccessStatusCode)
-									{
-										insertIntoJobCommand.Parameters.AddWithValue("@Result", DBNull.Value);
-									}
-									else
-									{
-										insertIntoJobCommand.Parameters.AddWithValue("@Result", taskPostJob.Result.ReasonPhrase);
-									}
-									insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+									insertIntoJobCommand.Parameters.AddWithValue("@Result", DBNull.Value);
 								}
-								using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
+								else
 								{
-									deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+									insertIntoJobCommand.Parameters.AddWithValue("@Result", response.ReasonPhrase);
 								}
-								Retry(sqlTransaction.Commit);
+								insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
-
-							if (sentToWorkerNodeUri != null)
+							using (var deleteJobQueueItemCommand = _createSqlCommandHelper.CreateDeleteFromJobQueueCommand(jobQueueItem.JobId, sqlConnection, sqlTransaction))
 							{
-								var builderHelper = new NodeUriBuilderHelper(sentToWorkerNodeUri);
-								var urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
-
-								//what should happen if this response is not 200? 
-								var resp = httpSender.PutAsync(urijob, null);
+								deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
+							Retry(sqlTransaction.Commit);
 						}
-						else
+
+						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
+
+						//what should happen if this response is not 200? 
+						var resp = httpSender.PutAsync(urijob, null);
+
+					}
+					else
+					{
+						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
-							using (var sqlTransaction = sqlConnection.BeginTransaction())
+							var commandText = "update [Stardust].[JobQueue] set Tagged = NULL where JobId = @Id";
+
+							using (var cmd = new SqlCommand(commandText, sqlConnection, sqlTransaction))
 							{
-								var commandText = "update [Stardust].[JobQueue] set Tagged = NULL where JobId = @Id";
-
-								using (var cmd = new SqlCommand(commandText, sqlConnection, sqlTransaction))
-								{
-									cmd.Parameters.AddWithValue("@Id", jobQueueItem.JobId);
-									cmd.ExecuteNonQuery();
-								}
-								sqlTransaction.Commit();
+								cmd.Parameters.AddWithValue("@Id", jobQueueItem.JobId);
+								cmd.ExecuteNonQuery();
 							}
-
+							sqlTransaction.Commit();
 						}
+
 					}
 				}
 			}

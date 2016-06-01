@@ -97,7 +97,25 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				if (exp.Message.Contains("UQ_WorkerNodes_Url"))
+				{
+					using (var connection = new SqlConnection(_connectionString))
+					{
+						connection.OpenWithRetry(_retryPolicy);
+						var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat,
+											Alive = @Alive
+											WHERE Url = @Url";
+
+						using (var command = new SqlCommand(updateCommandText, connection))
+						{
+							command.Parameters.Add("@Heartbeat", SqlDbType.DateTime).Value = DateTime.UtcNow;
+							command.Parameters.Add("@Alive", SqlDbType.Bit).Value = true;
+							command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = workerNode.Url.ToString();
+
+							command.ExecuteNonQueryWithRetry(_retryPolicy);
+						}
+					}
 					return;
+				}
 
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
 				throw;
@@ -126,7 +144,7 @@ namespace Stardust.Manager
 					var ordinalPosForHeartBeat = 0;
 					var ordinalPosForUrl = 0;
 
-					var listOfObjectArray = new List<object[]>();
+					var allNodes = new List<object[]>();
 
 					using (var commandSelectAll = new SqlCommand(selectCommand, connection))
 					{
@@ -141,13 +159,13 @@ namespace Stardust.Manager
 								{
 									var temp = new object[readAllWorkerNodes.FieldCount];
 									readAllWorkerNodes.GetValues(temp);
-									listOfObjectArray.Add(temp);
+									allNodes.Add(temp);
 								}
 							}
 						}
 					}
 
-					if (listOfObjectArray.Any())
+					if (allNodes.Any())
 					{
 						using (var trans = connection.BeginTransaction())
 						{
@@ -156,14 +174,12 @@ namespace Stardust.Manager
 								commandUpdate.Parameters.Add("@Alive", SqlDbType.Bit);
 								commandUpdate.Parameters.Add("@Url", SqlDbType.NVarChar);
 
-								foreach (var objectse in listOfObjectArray)
+								foreach (var node in allNodes)
 								{
-									var heartBeatDateTime =
-										(DateTime) objectse[ordinalPosForHeartBeat];
-									var url = objectse[ordinalPosForUrl];
+									var heartBeatDateTime = (DateTime)node[ordinalPosForHeartBeat];
+									var url = node[ordinalPosForUrl];
 									var currentDateTime = DateTime.UtcNow;
-									var dateDiff =
-										(currentDateTime - heartBeatDateTime).TotalSeconds;
+									var dateDiff = (currentDateTime - heartBeatDateTime).TotalSeconds;
 									if (dateDiff > timeSpan.TotalSeconds)
 									{
 										commandUpdate.Parameters["@Alive"].Value = false;

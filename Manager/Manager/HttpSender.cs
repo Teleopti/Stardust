@@ -30,7 +30,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
+				return null;
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
+				return null;
 			}
 		}
 
@@ -76,29 +76,7 @@ namespace Stardust.Manager
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
-			}
-		}
-
-
-		public async Task<HttpResponseMessage> GetAsync(Uri url)
-		{
-			try
-			{
-				using (var client = new HttpClient())
-				{
-					client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-					var response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead)
-						.ConfigureAwait(false);
-
-					return response;
-				}
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
+				return null;
 			}
 		}
 	}
