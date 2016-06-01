@@ -34,6 +34,33 @@ namespace Teleopti.Ccc.TestCommon
 			return skillDay;
 		}
 
+		public static ISkillDay CreateSkillDayWithDemandOnInterval(this ISkill skill, IScenario scenario, DateOnly dateOnly, IDictionary<DateTimePeriod, double> numberOfAgentsOnIntervalDemands)
+		{
+			var intervals = 24*(skill.DefaultResolution/60d);
+			var skillDataPeriods = new List<ISkillDataPeriod>();
+			for (var interval = 0; interval < intervals; interval++)
+			{	
+				var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, skill.TimeZone);
+				var period = new DateTimePeriod(dateTime.AddMinutes(interval * skill.DefaultResolution), dateTime.AddMinutes((interval + 1) * skill.DefaultResolution));
+				var demand = 0d;
+				if (numberOfAgentsOnIntervalDemands.ContainsKey(period))
+				{
+					demand = numberOfAgentsOnIntervalDemands[period];
+				}
+
+				skillDataPeriods.Add(new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(),period ) {ManualAgents = demand});
+			}
+
+			var workloadDays = new List<IWorkloadDay>();
+			var workloadDay = new WorkloadDay();
+			var workload = skill.WorkloadCollection.First();
+			workloadDay.CreateFromTemplate(dateOnly, workload, (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, dateOnly.DayOfWeek));
+			workloadDays.Add(workloadDay);
+			var skillDay = new SkillDay(dateOnly, skill, scenario, workloadDays, skillDataPeriods);
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(dateOnly, dateOnly));
+			return skillDay;
+		}
+
 		public static ISkillDay CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan demandPerInterval)
 		{
 			var manualAgents = (double)demandPerInterval.Ticks/TimeSpan.FromMinutes(skill.DefaultResolution).Ticks;
