@@ -1,6 +1,27 @@
 ﻿(function() {
 	"use strict";
 
+
+	angular.module('wfm.requests')
+		.filter('filterShiftTradeDetailDisplay', ['$filter', filterShiftTradeDetailDisplay]);
+	
+	function filterShiftTradeDetailDisplay($filter) {
+
+		return function (shiftTradeDays, day) {
+			if (!shiftTradeDays) {
+				return true;
+			}
+
+			return shiftTradeDays.filter(function (element) {
+
+				var date = ($filter('date')(moment(element.Date).toDate(), "shortDate"));
+				if (date === day) {
+					return true;
+				}
+			});
+		}
+	};
+	
 	angular.module('wfm.requests').service('RequestsFilter', [
 			function() {
 				var vm = this;
@@ -39,21 +60,6 @@
 	);
 
 
-	angular.module('wfm.requests').filter('filterShiftTradeDetailDisplay', function ($filter) {
-
-		return function (shiftTradeDays, day) {
-			if (!shiftTradeDays) {
-				return true;
-			}
-
-			return shiftTradeDays.filter(function (element) {
-
-				var date = ($filter('date')(moment(element.Date).toDate(), "shortDate"));
-				if (date === day) {
-					return true;
-				}
-			});
-		}
-	});
+	
 
 })();
