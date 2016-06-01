@@ -14485,7 +14485,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Navbar label for help</comment>
   </data>
   <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
-    <value>The waitlisted requests for the period of {0} start beeing processing.</value>
+    <value>The waitlisted requests for the period of {0} start processing.</value>
     <comment>notify user the submit is a success</comment>
   </data>
   <data name="WaitlistPeriod" xml:space="preserve">
@@ -14493,7 +14493,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>All waitlisted requests will be processed for the selected period</comment>
   </data>
   <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
-    <value>The waitlisted requests for the period of {0} have been processed.</value>
+    <value>The waitlisted requests for the period of {0} have processed.</value>
     <comment>{0} startTime - endTime</comment>
   </data>
   <data name="ProcessWaitlist" xml:space="preserve">
