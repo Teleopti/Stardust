@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 		public string Color { get; set; }
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
+		public string Name { get; set; }
 	}
 
 	public class AgentStatesViewModelBuilder
@@ -98,8 +99,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
 					{
 						Color= ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
 						StartTime = TimeZoneHelper.ConvertFromUtc(y.StartTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
-						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss")
-					}).ToArray()
+						EndTime = TimeZoneHelper.ConvertFromUtc(y.EndTime.Utc(), _timeZone.TimeZone()).ToString("yyyy-MM-ddTHH:mm:ss"),
+						Name = y.Name
+					})
 				};
 			});
 		}

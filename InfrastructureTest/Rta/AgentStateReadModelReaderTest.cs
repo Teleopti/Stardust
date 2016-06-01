@@ -162,7 +162,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 					{
 						Color = Color.Green.ToArgb(),
 						StartTime = "2016-05-30 08:00".Utc(),
-						EndTime = "2016-05-30 09:00".Utc()
+						EndTime = "2016-05-30 09:00".Utc(),
+						Name = "Phone"
 					}
 				}
 			});
@@ -172,6 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 			result.Shift.Single().StartTime.Should().Be("2016-05-30 08:00".Utc());
 			result.Shift.Single().EndTime.Should().Be("2016-05-30 09:00".Utc());
+			result.Shift.Single().Name.Should().Be("Phone");
 		}
 	}
 }

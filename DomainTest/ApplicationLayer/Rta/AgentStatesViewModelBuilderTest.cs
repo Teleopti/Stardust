@@ -164,6 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 						Color = ColorTranslator.FromHtml("#80FF80").ToArgb(),
 						StartTime = "2016-05-29 12:00:00".Utc(),
 						EndTime = "2016-05-29 13:00:00".Utc(),
+						Name = "Phone"
 					}
 				}
 			});
@@ -173,6 +174,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta
 			state.Shift.Single().Color.Should().Be("#80FF80");
 			state.Shift.Single().StartTime.Should().Be("2016-05-29T12:00:00");
 			state.Shift.Single().EndTime.Should().Be("2016-05-29T13:00:00");
+			state.Shift.Single().Name.Should().Be("Phone");
 		}
 
 		[Test]

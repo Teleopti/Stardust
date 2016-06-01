@@ -214,7 +214,8 @@
 							return {
 								Color: s.Color,
 								Offset: timeToPercent(states.Time, s.StartTime),
-								Width: layerPercentage(lengthSeconds)
+								Width: layerPercentage(lengthSeconds),
+								Name: s.Name
 							};
 						});
 						if (agentInfo.length > 0) {
