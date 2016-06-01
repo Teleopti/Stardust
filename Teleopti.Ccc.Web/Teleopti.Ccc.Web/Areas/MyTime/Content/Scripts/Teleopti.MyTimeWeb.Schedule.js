@@ -638,6 +638,36 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.heightPx = ko.computed(function () {
 			return self.height() + 'px';
 		});
+		self.overTimeStyle = function (color) {
+			var rgbTohex = function(rgb) {
+				if (rgb.charAt(0) === '#')
+					return rgb;
+				var ds = rgb.split(/\D+/);
+				var decimal = Number(ds[1]) * 65536 + Number(ds[2]) * 256 + Number(ds[3]);
+				var digits = 6;
+				var hexString = decimal.toString(16);
+				while (hexString.length < digits)
+					hexString += "0";
+
+				return "#" + hexString;
+			}
+
+			var getLumi = function (cstring) {
+				var matched = /#([\w\d]{2})([\w\d]{2})([\w\d]{2})/.exec(cstring);
+				if (!matched) return null;
+				return (299 * parseInt(matched[1], 16) + 587 * parseInt(matched[2], 16) + 114 * parseInt(matched[3], 16)) / 1000;
+			}
+
+			var lightColor = "#00ffff";
+			var darkColor = "#795548";
+			var backgroundColor = rgbTohex(color);
+			var useLighterStyle = Math.abs(getLumi(backgroundColor) - getLumi(lightColor)) > Math.abs(getLumi(backgroundColor) - getLumi(darkColor));
+
+			var darkStyle = 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0, .3) 6px,transparent 10px,transparent';
+			var lightStyle = 'linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255, .5) 6px,transparent 10px,transparent';
+
+			return useLighterStyle ? lightStyle : darkStyle;
+		};
 
 		self.styleJson = ko.computed(function () {
 			return {
@@ -646,7 +676,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				'height': self.heightPx,
 				'color': self.textColor,
 				'background-size': self.isOvertime ? '11px 11px' : 'initial',
-				'background-image': self.isOvertime ? 'linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255,.5) 6px,transparent 10px,transparent)' : '',
+				'background-image': self.isOvertime ? self.overTimeStyle(self.backgroundColor()) : '',
 				'background-color': self.backgroundColor
 			};
 		});
