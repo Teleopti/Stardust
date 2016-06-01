@@ -10,7 +10,32 @@
     
 	angular
 		 .module('adminApp')
-		 .controller('loginController', loginController, []);
+		 .controller('loginController', loginController, [])
+		 .directive('menuItem', function() {
+			return {
+				scope: {
+					text: "@",
+					link: "@",
+					index: "@",
+					state:"="
+				},
+				templateUrl: 'menuitem.html',
+				replace: true,
+				bindToController: true,
+				controller: function ($scope, $window) {
+					this.isSelected = function() {
+						return this.state.selected === this.index;
+					};
+					this.setSelected = function() {
+						this.state.selected = this.index;
+					};
+
+					if ($window.location.hash === this.link)
+						this.setSelected();
+				},
+				controllerAs: "ctrl"
+			};
+		});
 
 	function loginController($scope, $http) {
 		var vm = this;
@@ -20,7 +45,11 @@
 		vm.Id = sessionStorage.getItem(idKey);
 
 		vm.user = sessionStorage.getItem(userKey);
-		$scope.selected = 1;
+		$scope.state = {selected: 1};
+		$scope.menuItems = [
+			{ text: "Tenant administration!!", link: "#/" },
+			{ text: "See Stardust status", link: "#/StardustDashboard" }
+		];
 
 		$http.get("./HasNoUser").success(function (data) {
 		    firstUser = data;

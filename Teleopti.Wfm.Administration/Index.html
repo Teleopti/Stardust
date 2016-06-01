@@ -42,14 +42,11 @@
 
         </div>
     </div>
-    <div>
-        <ul class="nav nav-tabs">
-            <li ng:click="selected=1" ng:class="{'active' : selected==1 }"><a href="#">Tenant administration</a></li>
-            <li ng:click="selected=2" ng:class="{'active' : selected==2 }"><a href="#StardustDashboard">See Stardust status</a></li>
-            <!--<li><a href="#">Healthcheck</a></li>
-            <li><a href="#">Menu 3</a></li>-->
-        </ul>
-    </div>
+	<div>
+		<ul class="nav nav-tabs">
+			<menu-item ng-repeat="item in menuItems" text="{{item.text}}" link="{{item.link}}" index="{{$index}}" state="state"/>
+		</ul>
+	</div>
 
 
 </div>
