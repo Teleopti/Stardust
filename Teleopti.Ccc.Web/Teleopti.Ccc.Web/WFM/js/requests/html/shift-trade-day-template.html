@@ -11,13 +11,23 @@
 	<table ng-if="matchingShiftTradeDays.length == 1" style="width: 100%;">
 		<tr ng-repeat="shiftTradeDay in  matchingShiftTradeDays">
 			<td class="shift-trade-cell" >
-				<div class="shift-trade-cell-text" ng-style="{'background-color': shiftTradeDay.FromScheduleDayDetail.Color}">{{shiftTradeDay.FromScheduleDayDetail.ShortName}}</div>
+				<div class="shift-trade-cell-text" ng-style="{'background-color': shiftTradeDay.FromScheduleDayDetail.Color}">
+					{{shiftTradeDay.FromScheduleDayDetail.ShortName}}
+					<md-tooltip>
+						{{shiftTradeDay.FromScheduleDayDetail.Name}}
+					</md-tooltip>
+				</div>
 			</td>
 		</tr>
 
 		<tr ng-repeat="shiftTradeDay in  matchingShiftTradeDays">
 			<td class="shift-trade-cell" >
-				<div class="shift-trade-cell-text" ng-style="{'background-color': shiftTradeDay.ToScheduleDayDetail.Color}">{{shiftTradeDay.ToScheduleDayDetail.ShortName}}</div>
+				<div class="shift-trade-cell-text" ng-style="{'background-color': shiftTradeDay.ToScheduleDayDetail.Color}">
+					{{shiftTradeDay.ToScheduleDayDetail.ShortName}}
+					<md-tooltip>
+						{{shiftTradeDay.ToScheduleDayDetail.Name}}
+					</md-tooltip>
+				</div>
 			</td>
 		</tr>
 	</table>
