@@ -47,8 +47,9 @@
 		vm.user = sessionStorage.getItem(userKey);
 		$scope.state = {selected: 1};
 		$scope.menuItems = [
-			{ text: "Tenant administration!!", link: "#/" },
-			{ text: "See Stardust status", link: "#/StardustDashboard" }
+			{ text: "Tenant administration", link: "#/" },
+			{ text: "See Stardust status", link: "#/StardustDashboard" },
+			{ text: "Hangfire Dashboard", link: "#/HangfireDashboard" }
 		];
 
 		$http.get("./HasNoUser").success(function (data) {

@@ -6,6 +6,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Wfm.Administration.Core;
+using Teleopti.Wfm.Administration.Core.Hangfire;
 
 namespace Teleopti.Wfm.AdministrationTest
 {
@@ -19,13 +20,19 @@ namespace Teleopti.Wfm.AdministrationTest
 
 			system.AddModule(new WfmAdminModule());
 			system.UseTestDouble<ConsoleLogger>().For<IUpgradeLog>();
+			system.UseTestDouble<FakeHangfireCookie>().For<IHangfireCookie>();
 
-			_tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+			_tenantUnitOfWorkManager = TenantUnitOfWorkForTest();
 			system.AddService(_tenantUnitOfWorkManager);
 
 			system.AddService<DbPathProviderFake>();
 			system.AddService<CheckPasswordStrengthFake>();
 			system.AddService<TestPollutionCleaner>();
+		}
+
+		public static TenantUnitOfWorkManager TenantUnitOfWorkForTest()
+		{
+			return TenantUnitOfWorkManager.Create(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
 		}
 
 		protected override void AfterTest()

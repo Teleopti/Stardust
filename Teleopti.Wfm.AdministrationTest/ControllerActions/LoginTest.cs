@@ -24,7 +24,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
-			var model = new LoginModel {GrantType = "password",Password = "passadej", UserName = "olle@teleopti.com"};
+			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "olle@teleopti.com" };
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
@@ -59,10 +59,11 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var addUserModel = new AddUserModel {ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
 				Target.AddUser(addUserModel);
 			}
 			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
+
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var result = Target.Login(model).Content;
@@ -70,6 +71,52 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				result.AccessToken.Should().Not.Be.Empty();
 				result.UserName.Should().Be.EqualTo("Ola");
 			}
+		}
+
+		[Test]
+		public void ShouldSetHangfireCookie()
+		{
+			var hangfireCookie = new FakeHangfireCookie();
+			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie);
+			hangfireCookie.CookieIsSet.Should().Be.False();
+			
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+				Target.AddUser(addUserModel);
+			}
+			var model = new LoginModel { GrantType = "password", Password = "passadej", UserName = "ola@teleopti.com" };
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var result = Target.Login(model).Content;
+				result.Success.Should().Be.True();
+			}
+
+			hangfireCookie.CookieIsSet.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotSetHangfireCookie()
+		{
+			var hangfireCookie = new FakeHangfireCookie();
+			Target = new AccountController(TenantTestAttribute.TenantUnitOfWorkForTest(), hangfireCookie);
+			hangfireCookie.CookieIsSet.Should().Be.False();
+
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var addUserModel = new AddUserModel { ConfirmPassword = "passadej", Email = "ola@teleopti.com", Name = "Ola", Password = "passadej" };
+				Target.AddUser(addUserModel);
+			}
+			var model = new LoginModel { GrantType = "password", Password = "wrongPassword", UserName = "ola@teleopti.com" };
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			{
+				var result = Target.Login(model).Content;
+				result.Success.Should().Be.False();
+			}
+
+			hangfireCookie.CookieIsSet.Should().Be.False();
 		}
 	}
 }

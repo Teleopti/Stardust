@@ -5,7 +5,6 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Web;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -21,11 +20,13 @@ namespace Teleopti.Wfm.Administration.Controllers
 	public class AccountController : ApiController
 	{
 		private readonly ICurrentTenantSession _currentTenantSession;
-		private const string Salt = "adgvabar4g61qt46gv";
+		private readonly IHangfireCookie _hangfireCookie;
+		private const string salt = "adgvabar4g61qt46gv";
 
-		public AccountController(ICurrentTenantSession currentTenantSession)
+		public AccountController(ICurrentTenantSession currentTenantSession, IHangfireCookie hangfireCookie)
 		{
 			_currentTenantSession = currentTenantSession;
+			_hangfireCookie = hangfireCookie;
 		}
 
 		[OverrideAuthentication]
@@ -53,7 +54,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 							var userName = reader.GetString(1);
 							var accessToken = reader.GetString(2);
 
-							HangfireCookie.SetHangfireAdminCookie(userName, model.UserName);
+							_hangfireCookie.SetHangfireAdminCookie(userName, model.UserName);
 							return Json(new LoginResult { Success = true, Id = id, UserName = userName, AccessToken = accessToken });
 						}
 					}
@@ -67,7 +68,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("Logout")]
 		public virtual IHttpActionResult Logout(LoginModel model)
 		{
-			HangfireCookie.RemoveAdminCookie();
+			_hangfireCookie.RemoveAdminCookie();
 			return Ok();
 		}
 
@@ -204,7 +205,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new UpdateUserResultModel
 				{
 					Success = false,
-					Message = exception.InnerException != null ? exception.InnerException.Message : exception.Message
+					Message = exception.InnerException?.Message ?? exception.Message
 				};
 			}
 
@@ -246,7 +247,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return Json(new UpdateUserResultModel
 				{
 					Success = false,
-					Message = exception.InnerException != null ? exception.InnerException.Message : exception.Message
+					Message = exception.InnerException?.Message ?? exception.Message
 				});
 			}
 
@@ -287,7 +288,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 		}
 		private byte[] hashString(string value)
 		{
-			var stringValue = string.Concat(Salt, value);
+			var stringValue = string.Concat(salt, value);
 			using (SHA1Managed encryptor = new SHA1Managed())
 			{
 				return encryptor.ComputeHash(Encoding.UTF8.GetBytes(stringValue));

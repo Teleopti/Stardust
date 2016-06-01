@@ -7,12 +7,12 @@ using Microsoft.Owin.Security;
 
 namespace Teleopti.Wfm.Administration.Core.Hangfire
 {
-	public class HangfireCookie
+	public class HangfireCookie : IHangfireCookie
 	{
 		public static string TenantAdminRoleName = "TenantAdmin";
 
 		// This cookie is used only for getting authenticated in Hangfire
-		public static void SetHangfireAdminCookie(string userName, string email)
+		public void SetHangfireAdminCookie(string userName, string email)
 		{
 			var claims = new List<Claim>
 							{
@@ -31,7 +31,7 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 			}, identity);
 		}
 
-		public static void RemoveAdminCookie()
+		public void RemoveAdminCookie()
 		{
 			var identity = HttpContext.Current.GetOwinContext().Authentication.User.Identity;
 			if (!identity.IsAuthenticated)
@@ -39,5 +39,11 @@ namespace Teleopti.Wfm.Administration.Core.Hangfire
 
 			HttpContext.Current.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
 		}
+	}
+
+	public interface IHangfireCookie
+	{
+		void SetHangfireAdminCookie(string userName, string email);
+		void RemoveAdminCookie();
 	}
 }

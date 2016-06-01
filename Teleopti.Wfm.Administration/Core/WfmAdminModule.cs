@@ -16,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Controllers;
+using Teleopti.Wfm.Administration.Core.Hangfire;
 using Teleopti.Wfm.Administration.Core.Stardust;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -48,6 +49,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<NullLog>().As<IUpgradeLog>();
 			builder.RegisterType<UpgradeRunner>().SingleInstance();
 			builder.RegisterType<UpgradeLogRetriever>().As<IUpgradeLogRetriever>().SingleInstance();
+			builder.RegisterType<HangfireCookie>().As<IHangfireCookie>().SingleInstance();
 			
 			builder.Register(c => new LoadPasswordPolicyService(ConfigurationManager.AppSettings["ConfigurationFilesPath"])).SingleInstance().As<ILoadPasswordPolicyService>();
 			builder.RegisterType<PasswordPolicy>().SingleInstance().As<IPasswordPolicy>();
