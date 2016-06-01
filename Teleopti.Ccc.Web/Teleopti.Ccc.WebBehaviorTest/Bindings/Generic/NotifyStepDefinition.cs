@@ -15,14 +15,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var fetchActivityUrl = "/api/TeamScheduleData/FetchActivities";
 			var createActivityUrl = "/api/TeamScheduleCommand/AddActivity/WithoutCheckingPermission";
-			var requestData = $"ActivityId:d[0].Id:'{startTime.Split(' ')[0].Replace("-", "/")}',StartTime:'{startTime}',EndTime:'{endTime}',PersonIds:[user.AgentId]";
+			var requestData = $"ActivityId:d[0].Id, Date:'{startTime.Split(' ')[0]}',StartTime:'{startTime}',EndTime:'{endTime}',PersonIds:[user.AgentId]";
 
 			var javascript = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){$.ajax({url:'" + fetchActivityUrl +
 				"',type:'GET',contentType:'application/json',success:function(d){$.ajax({url:'" + createActivityUrl +
 				"',type:'POST',contentType:'application/json',data:JSON.stringify({" + requestData + "})});}});});";
 
 			Browser.Interactions.Javascript(javascript);
-			Browser.TimeoutScope(new TimeSpan(0, 0, 20));
 		}
 
 		[Then(@"I should see one notify message")]

@@ -74,98 +74,90 @@ Background:
 @broker
 Scenario: Alert agent when schedule changed
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-04 09:00:00'
 	And Alert Time setting is '180' seconds
+	And the time is '2030-01-04 09:00:00'
 	When I am viewing week schedule
 	And An activity with time '2030-01-04 12:00' to '2030-01-04 13:00' is added to my schedule
 	Then I should see one notify message
 
 Scenario: Alert agent before first activity starts
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 07:56:59'
-	And Alert Time setting is '180' seconds                      
-	When I am viewing week schedule
+	And Alert Time setting is '180' seconds
 	And the time is '2030-01-01 07:57:00'
+	When I am viewing week schedule
 	Then I should see a notify message contains text Phone
 	And I should see a notify message contains text start
 	And I should see a notify message contains text 8:00 AM
 
 Scenario: Alert agent before next activity starts
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 10:55:59'
-	And Alert Time setting is '240' seconds    
-	When I am viewing week schedule
+	And Alert Time setting is '240' seconds
 	And the time is '2030-01-01 10:56:00'
+	When I am viewing week schedule
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text start
 	And I should see a notify message contains text 11:00 AM
 
 Scenario: Alert agent before last activity ends
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 16:58:59'
-	And Alert Time setting is '60' seconds                      
-	When I am viewing week schedule
+	And Alert Time setting is '60' seconds
 	And the time is '2030-01-01 16:59:00'
+	When I am viewing week schedule
 	Then I should see a notify message contains text Current shift will end
 	And I should see a notify message contains text 5:00 PM
 
 Scenario: Do not alert agent Before Alert Time
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 10:55:00'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
+	And Alert Time setting is '120' seconds
 	And the time is '2030-01-01 10:57:00'
+	When I am viewing week schedule
 	Then I should not see any notify
 
 Scenario: Do not alert agent After Alert Time 
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 11:45:00'
-	And Alert Time setting is '60' seconds                      
-	When I am viewing week schedule
+	And Alert Time setting is '60' seconds
 	And the time is '2030-01-01 11:45:01'
+	When I am viewing week schedule
+	
 	Then I should not see any notify
 
 Scenario: Do not alert agent without permission for ASM
 	Given I have the role 'No access to ASM'
-	And the time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
+	And Alert Time setting is '120' seconds
 	And the time is '2030-01-01 10:58:00'
+	When I am viewing week schedule
 	Then I should not see any notify
 
 Scenario: Automatical close pop up notify message
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
+	And Alert Time setting is '120' seconds
 	And the time is '2030-01-01 10:58:00'
+	When I am viewing week schedule
+	
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text start
 	Then I should not see pop up notify message within one minute
 
 Scenario: Do not show pop up notify message to agent without permission for ASM
 	Given I have the role 'No access to ASM'
-	And the time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
+	And Alert Time setting is '120' seconds
 	And the time is '2030-01-01 10:58:00'
+	When I am viewing week schedule
 	Then I should not see pop up notify message
 
 Scenario: Should alert agent when now is between 2 shift
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-03 14:56:59'
-	And Alert Time setting is '180' seconds                      
+	And Alert Time setting is '180' seconds	
+	And the time is '2030-01-03 14:57:00'
 	When I am viewing week schedule
-	And the time is '2030-01-01 14:57:00'
 	Then I should see a notify message contains text Phone
 	And I should see a notify message contains text start
 	And I should see a notify message contains text 3:00 PM
 
 Scenario: Should alert agent latest activity when now is at latest activity of 2 nearby shift
 	Given I have the role 'Full access to mytime'
-	And the time is '2030-01-03 06:56:59'
-	And Alert Time setting is '180' seconds                      
+	And Alert Time setting is '180' seconds
+	And the time is '2030-01-03 06:57:01'
 	When I am viewing week schedule
-	And the time is '2030-01-03 06:57:00'
 	Then I should see a notify message contains text Current shift will end
 	And I should see a notify message contains text 7:00 AM
