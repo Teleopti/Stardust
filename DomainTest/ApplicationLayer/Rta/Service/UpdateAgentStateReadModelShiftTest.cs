@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.CheckForActivityChanges(Database.TenantName());
 			
 			var shift = Database.PersistedReadModel.Shift.Single();
-			shift.StartTime.Should().Be("2016-05-30 09:00");
-			shift.EndTime.Should().Be("2016-05-30 10:00");
-			shift.Color.Should().Be("#008000");
+			shift.StartTime.Should().Be("2016-05-30 09:00".Utc());
+			shift.EndTime.Should().Be("2016-05-30 10:00".Utc());
+			shift.Color.Should().Be(Color.Green.ToArgb());
 		}
 
 		[Test]
@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			var shift = Database.PersistedReadModel.Shift;
 
 			shift.Count().Should().Be(2);
-			shift.First().Color.Should().Be("#008000");
-			shift.First().StartTime.Should().Be("2016-05-30 09:00");
-			shift.First().EndTime.Should().Be("2016-05-30 10:00");
-			shift.Last().Color.Should().Be("#FF0000");
-			shift.Last().StartTime.Should().Be("2016-05-30 10:00");
-			shift.Last().EndTime.Should().Be("2016-05-30 11:00");
+			shift.First().Color.Should().Be(Color.Green.ToArgb());
+			shift.First().StartTime.Should().Be("2016-05-30 09:00".Utc());
+			shift.First().EndTime.Should().Be("2016-05-30 10:00".Utc());
+			shift.Last().Color.Should().Be(Color.Red.ToArgb());
+			shift.Last().StartTime.Should().Be("2016-05-30 10:00".Utc());
+			shift.Last().EndTime.Should().Be("2016-05-30 11:00".Utc());
 		}
 
 		[Test]
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Single().Color.Should().Be("#FF0000");
+			Database.PersistedReadModel.Shift.Single().Color.Should().Be(Color.Red.ToArgb());
 		}
 
 		[Test]
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Single().Color.Should().Be("#008000");
+			Database.PersistedReadModel.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 		}
 
 		[Test]
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Now.Is("2016-05-30 10:05");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Single().Color.Should().Be("#008000");
+			Database.PersistedReadModel.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 		}
 
 		[Test]
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 				.WithSchedule(person, Color.Pink, "2016-05-30 12:00", "2016-05-30 13:00");
 			Target.CheckForActivityChanges(Database.TenantName());
 
-			Database.PersistedReadModel.Shift.Last().Color.Should().Be("#FFC0CB");
+			Database.PersistedReadModel.Shift.Last().Color.Should().Be(Color.Pink.ToArgb());
 		}
 
 		[Test]
