@@ -798,6 +798,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(false);
 		}
 
+		[Test]
+		public void ShiftTrade_SendChangeOverMessageBroker_NewPendingOkByBothParts_ReturnTrue()
+		{
+			setupShiftTrade();
+			_target.Persisted();
+			_target.Pending();
+			((ShiftTradeRequest)_target.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, _authorization);
+			_target.SendChangeOverMessageBroker().Should().Be.EqualTo(true);
+		}
+
 
 		private PersonRequest tryMovePersonRequestFromDeniedToApproved(bool waitlistingEnabled)
 		{

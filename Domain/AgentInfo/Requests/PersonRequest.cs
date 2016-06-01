@@ -918,6 +918,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				var shiftTradeStatus = shiftTradeRequest.GetShiftTradeStatus(new EmptyShiftTradeRequestChecker());
 				if (_persistedState.IsNew && _requestState.IsNew)
 					return false;
+				if (_persistedState.IsNew && _requestState.IsPending && shiftTradeStatus == ShiftTradeStatus.OkByBothParts)
+					return true;
 				if (_persistedState.IsNew && _requestState.IsPending)
 					return false;
 				if (_persistedState.IsPending && _requestState.IsDenied && shiftTradeStatus == ShiftTradeStatus.OkByMe)
