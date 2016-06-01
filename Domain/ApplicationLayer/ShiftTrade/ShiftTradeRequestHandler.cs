@@ -337,13 +337,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 				loadSchedulingDataForRequestWithoutResourceCalculation, differenceService)
 		{ }
 
-		[ImpersonateSystem, UnitOfWork]
+		[AsSystem, UnitOfWork]
 		public new virtual void Handle(NewShiftTradeRequestCreatedEvent @event)
 		{
 			base.Handle(@event);
 		}
 
-		[ImpersonateSystem, UnitOfWork]
+		[AsSystem, UnitOfWork]
 		public new virtual void Handle(AcceptShiftTradeEvent @event)
 		{
 			base.Handle(@event);
