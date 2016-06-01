@@ -521,22 +521,22 @@ namespace Stardust.Manager
 					var urijob = builderHelper.GetJobTemplateUri();
 					var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
 
-					if (response == null)
-					{
-						var updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
-											SET Alive = @Alive
-											WHERE Url = @Url";
+					//if (response == null)
+					//{
+					//	var updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
+					//						SET Alive = @Alive
+					//						WHERE Url = @Url";
 
-						using (var command = new SqlCommand(updateCommandText, sqlConnection))
-						{
-							command.Parameters.Add("@Alive", SqlDbType.Bit).Value = false;
-							command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = availableNode.ToString();
-							command.ExecuteNonQueryWithRetry(_retryPolicy);
-						}
-						return;
-					}
+					//	using (var command = new SqlCommand(updateCommandText, sqlConnection))
+					//	{
+					//		command.Parameters.Add("@Alive", SqlDbType.Bit).Value = false;
+					//		command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = availableNode.ToString();
+					//		command.ExecuteNonQueryWithRetry(_retryPolicy);
+					//	}
+					//	return;
+					//}
 
-					if (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest))
+					if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 					{
 						string sentToWorkerNodeUri = availableNode.ToString();
 						using (var sqlTransaction = sqlConnection.BeginTransaction())
@@ -570,6 +570,19 @@ namespace Stardust.Manager
 					{
 						using (var sqlTransaction = sqlConnection.BeginTransaction())
 						{
+							if (response == null)
+							{
+								var updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
+											SET Alive = @Alive
+											WHERE Url = @Url";
+
+								using (var command = new SqlCommand(updateCommandText, sqlConnection, sqlTransaction))
+								{
+									command.Parameters.Add("@Alive", SqlDbType.Bit).Value = false;
+									command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = availableNode.ToString();
+									command.ExecuteNonQueryWithRetry(_retryPolicy);
+								}
+							}
 							var commandText = "update [Stardust].[JobQueue] set Tagged = NULL where JobId = @Id";
 
 							using (var cmd = new SqlCommand(commandText, sqlConnection, sqlTransaction))

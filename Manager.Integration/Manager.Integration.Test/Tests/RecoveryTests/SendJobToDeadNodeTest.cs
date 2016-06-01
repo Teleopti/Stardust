@@ -65,7 +65,7 @@ namespace Manager.Integration.Test.Tests.RecoveryTests
 
 			//Should not take long time to assign job, if it takes more than some seconds 
 			// otherwise it is maybe the background timer who assigned the job
-			waitForJobToStartEvent.Wait(TimeSpan.FromSeconds(20));
+			waitForJobToStartEvent.Wait(TimeSpan.FromSeconds(10));
 
 			Assert.IsTrue(checkTablesInManagerDbTimer.ManagerDbRepository.WorkerNodes.Count == 2, "There should be two nodes registered");
 			Assert.IsTrue(!checkTablesInManagerDbTimer.ManagerDbRepository.JobQueueItems.Any(), "Job queue should be empty.");
