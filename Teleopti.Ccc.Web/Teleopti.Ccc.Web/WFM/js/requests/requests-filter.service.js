@@ -42,6 +42,9 @@
 	angular.module('wfm.requests').filter('filterShiftTradeDetailDisplay', function ($filter) {
 
 		return function (shiftTradeDays, day) {
+			if (!shiftTradeDays) {
+				return true;
+			}
 
 			return shiftTradeDays.filter(function (element) {
 

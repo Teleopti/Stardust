@@ -1,4 +1,4 @@
-﻿<md-progress-linear md-mode="indeterminate" ng-if="!requestsOverview.loaded && requestsOverview.requests && requestsOverview.requests.length>0"></md-progress-linear>
+﻿<md-progress-linear md-mode="indeterminate" ng-if="!requestsOverview.loaded"></md-progress-linear>
 
 <requests-table-container class="requests-table-container"
 						  shift-trade-view="requestsOverview.shiftTradeView"
@@ -8,7 +8,7 @@
 						  filter-enabled="requestsOverview.filterEnabled"
 						  sorting-orders="requestsOverview.sortingOrders"></requests-table-container>
 
-<div class="paging pull-right" ng-if="requestsOverview.isPaginationEnabled">
+<div class="paging pull-right" ng-if="requestsOverview.isPaginationEnabled" ng-show="requestsOverview.loaded">
 	<wfm-pagination pagination-options="requestsOverview.paging" get-data-for-page-callback="requestsOverview.forceRequestsReloadWithSelection"></wfm-pagination>
 	<div class="total-requests-count pull-left">
 		<span>{{requestsOverview.showSelectedRequestsInfo()}}</span>
@@ -17,3 +17,5 @@
 			class="page-size-selector pull-left"
 			ng-model="requestsOverview.paging.pageSize" ng-options="option for option in requestsOverview.pageSizeOptions" ng-change="requestsOverview.onPageSizeChanges()"></select>
 </div>
+
+

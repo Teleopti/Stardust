@@ -15,10 +15,11 @@
             monitorRunRequestWaitlist();
             vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
             vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
+            vm.isShiftTradeViewActive = isShiftTradeViewActive;
             vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
 			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
             vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
-			vm.isShiftTradeViewActive = isShiftTradeViewActive;
+			
 			
 			vm.dateRangeTemplateType = 'popup';
 			
@@ -53,7 +54,7 @@
         }
 
         function forceRequestsReloadWithoutSelection() {
-            $scope.$broadcast('reload.requests.without.selection');
+        	$scope.$broadcast('reload.requests.without.selection');
         }
 
         function onBeforeCommand() {

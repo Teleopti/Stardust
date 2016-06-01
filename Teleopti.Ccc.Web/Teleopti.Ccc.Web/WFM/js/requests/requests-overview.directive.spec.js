@@ -62,8 +62,26 @@
 			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
 			targetScope.$digest();
 			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isActive = true;
+			targetScope.$digest();
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
+		});
+
+		it("should not populate requests data from requests data service when inactive", function() {
+
+			var request = {
+				Id: 1,
+				Type: requestsDefinitions.REQUEST_TYPES.TEXT
+			};
+
+			requestsDataService.setRequests([request]);
+			targetElement = $compile('<requests-overview></requests-overview>')(targetScope);
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isActive = false;
+			targetScope.$digest();
+			expect(scope.requestsOverview.requests.length).toEqual(0);
 		});
 
 		it("should not request data when filter contains error", function () {
@@ -72,7 +90,8 @@
 			targetScope.period = {};
 			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
 			targetScope.$digest();
-
+			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isActive = true;
 			requestsDataService.reset();
 			targetScope.period = {
 				startDate: moment().add(1, 'day').toDate(),
@@ -88,9 +107,12 @@
 			requestsDataService.setRequests([]);
 			targetScope.period = {};
 			targetElement = $compile('<requests-overview period="period"></requests-overview>')(targetScope);
-
+			
 			targetScope.$digest();
 
+			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isActive = true;
+			
 			requestsDataService.reset();
 
 			targetScope.period = {
@@ -111,7 +133,8 @@
 			targetElement = $compile('<requests-overview period="period" agent-search-term="agentSearchTerm"></requests-overview>')(targetScope);
 
 			targetScope.$digest();
-
+			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isActive = true;
 			requestsDataService.reset();
 
 			targetScope.agentSearchTerm = "search term";
@@ -186,6 +209,7 @@
 
 		it('should apply template', function () {
 			var test = setUpTarget();
+			test.scope.$digest();
 			expect(test.target.html()).not.toEqual('');
 		});
 
@@ -246,7 +270,7 @@
 
 		it("should be able to calculate column categorys for weeks using supplied period startofweek", function () {
 			var test = setUpTarget();
-
+			
 			setUpShiftTradeRequestData(test);
 
 			test.scope.shiftTradeRequestDateSummary = {
@@ -255,9 +279,10 @@
 				StartOfWeek: '2016-05-23T00:00:00'
 			};
 
+			
 			test.scope.$digest();
-
 			var vm = test.target.isolateScope().requestsTableContainer;
+			
 			var categories= vm.gridOptions.category;
 			
 			expect(categories[0].name).toEqual(toShortDateString('2016-05-23T00:00:00'));
@@ -389,7 +414,7 @@
 			function getCompiledElement() {
 				var element = angular.element('<requests-table-container requests="requests" shift-trade-view="shiftTradeView" shift-trade-request-date-summary="shiftTradeRequestDateSummary" ></requests-table-container>');
 				var compiledElement = $compile(element)(scope);
-				scope.$digest();
+				//scope.$digest();
 				return compiledElement;
 			};
 

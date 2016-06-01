@@ -23,7 +23,7 @@
 		</div>
 
 	</div>
-	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled"
+	<requests-commands-pane ng-if="requests.isRequestsCommandsEnabled && !requests.isShiftTradeViewActive()"
 							before-command="requests.onBeforeCommand()"
 							is-shift-trade-view-active="requests.isShiftTradeViewActive()"
 							after-command-success="requests.onCommandSuccess(commandType, changedRequestsCount, requestsCount, commandId, waitlistPeriod)"
@@ -37,7 +37,8 @@
 				<md-tabs md-dynamic-height md-border-botto md-selected="requests.selectedTabIndex">
 					<md-tab label="{{'Absence' | translate}} {{'And' | translate}} {{'Text' | translate}}">
 						<md-content class="md-padding">
-							<requests-overview period="requests.period"
+							<requests-overview is-active="requests.selectedTabIndex == 0"
+											   period="requests.period"
 											   agent-search-term="requests.agentSearchTerm"
 											   filter-enabled="requests.filterEnabled" >
 							</requests-overview>
@@ -47,6 +48,7 @@
 					<md-tab label="{{'ShiftTrade' | translate}}" ng-if="requests.isShiftTradeViewVisible">
 						<md-content class="md-padding">
 							<requests-overview shift-trade-view
+											   is-active="requests.selectedTabIndex == 1"
 											   period="requests.period"
 											   agent-search-term="requests.agentSearchTerm"
 											   filter-enabled="requests.filterEnabled">

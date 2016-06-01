@@ -21,10 +21,8 @@
 		
 		$scope.$watch('requestsTableContainer.filterEnabled',
 			function handleFilterEnabledChanged(newValue, oldValue) {
-				if (vm.thereIsRequest()) {
-					vm.gridOptions.enableFiltering = newValue;
-					vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
-				}
+				vm.gridOptions.enableFiltering = newValue;
+				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 			});
 
 		function getShiftTradeHeaderClass() {
@@ -44,7 +42,7 @@
 				var configurationService = vm.shiftTradeView ? 'ShiftTradeGridConfiguration' : 'TextAndAbsenceGridConfiguration';
 				vm.gridConfigurationService = $injector.get(configurationService);
 			}
-			
+
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary);
 			vm.gridOptions.category = vm.gridConfigurationService.categories(vm.shiftTradeRequestDateSummary);
 			applyColumnFilters(vm.gridOptions.columnDefs);
@@ -217,11 +215,20 @@
 					var length = moment(row.PeriodEndTime).diff(moment(row.PeriodStartTime), 'seconds');
 					return formatToTimespan(length, row.IsFullDay);
 				};
-				row.FormatedPeriodStartTime = function () { return formatedDateTime(row.PeriodStartTime, row.TimeZone, row.IsFullDay); };
-				row.FormatedPeriodEndTime = function () { return formatedDateTime(row.PeriodEndTime, row.TimeZone, row.IsFullDay); };
+				row.FormatedPeriodStartTime = function () {
+					 return formatedDateTime(row.PeriodStartTime, row.TimeZone, row.IsFullDay);
+				};
+				row.FormatedPeriodEndTime = function() {
+					return formatedDateTime(row.PeriodEndTime, row.TimeZone, row.IsFullDay);
+				};
 
-				row.FormatedCreatedTime = function () { return formatedDateTime(row.CreatedTime, row.TimeZone, false); };
-				row.FormatedUpdatedTime = function () { return formatedDateTime(row.UpdatedTime, row.TimeZone, false); };
+				row.FormatedCreatedTime = function() {
+					return formatedDateTime(row.CreatedTime, row.TimeZone, false);
+				};
+
+				row.FormatedUpdatedTime = function() {
+					return formatedDateTime(row.UpdatedTime, row.TimeZone, false);
+				};
 
 				row.GetType = function () {
 					var typeText = row.TypeText;
@@ -231,11 +238,9 @@
 					return typeText;
 				}
 			});
-			
-			if (requests && requests.length > 0 ) {
-				setupColumnDefinitions();
-			} 
 
+			setupColumnDefinitions();
+			
 			return requests;
 		}
 
@@ -298,11 +303,10 @@
 
 			scope.$watch(function() {
 				return scope.requestsTableContainer.requests;
-			}, function(v) {
-				if (v && v.length > 0) {
-					scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(v);
-					requestsTableContainerCtrl.reselectRequests();
-				}
+			}, function (requests) {
+				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(requests);
+				requestsTableContainerCtrl.reselectRequests();
+				
 			}, true);
 			
 			scope.$on('reload.requests.without.selection', function () {

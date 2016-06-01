@@ -5,6 +5,7 @@
 	angular.module('wfm.requests')
 		.factory('TextAndAbsenceGridConfiguration', function () {
 
+			var columns = [];
 
 			var service = {
 				columnDefinitions: columnDefinitions,
@@ -16,9 +17,9 @@
 				return null;
 			}
 
-			function columnDefinitions() {
+			function setupColumns() {
 
-				return [
+				columns = [
 				{ displayName: 'StartTime', field: 'FormatedPeriodStartTime()', headerCellFilter: 'translate', cellClass: 'request-period-start-time', headerCellClass: 'request-period-start-time-header' },
 				{ displayName: 'EndTime', field: 'FormatedPeriodEndTime()', headerCellFilter: 'translate', cellClass: 'request-period-end-time', headerCellClass: 'request-period-end-time-header' },
 				{ displayName: 'TimeZone', field: 'TimeZone', headerCellFilter: 'translate', cellClass: 'request-time-zone', headerCellClass: 'request-time-zone-header', visible: false, enableSorting: false },
@@ -50,7 +51,8 @@
 						disableCancelFilterButton: true,
 						placeholder: 'Filter...'
 					},
-					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\" > <input ng-enter=\"enter()\" style=\"background-color:#FFF\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
+					filterHeaderTemplate: '<div class=\"ui-grid-filter-container\" ng-repeat=\"colFilter in col.filters\">' +
+						'<input xng-enter=\"enter()\" style=\"background-color:#FFF\" type=\"text\" class=\"ui-grid-filter-input ui-grid-filter-input-{{$index}}\" ng-model=\"colFilter.term\" ng-attr-placeholder=\"{{colFilter.placeholder || \'\'}}\" aria-label=\"{{colFilter.ariaLabel || aria.defaultFilterLabel}}\" /></div>'
 				},
 				{
 					displayName: 'Message',
@@ -84,8 +86,17 @@
 				{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
 				];
 
+
 			}
 
+			function columnDefinitions() {
+				
+				if (columns.length == 0) {
+					setupColumns();
+				}
+				
+				return columns;
+			}
 
 			return service;
 
