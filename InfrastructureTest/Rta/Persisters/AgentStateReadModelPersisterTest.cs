@@ -131,6 +131,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 		}
 
 		[Test]
+		public void ShouldPersistShift()
+		{
+			var personId = Guid.NewGuid();
+
+			Target.Persist(new AgentStateReadModelForTest
+			{
+				PersonId = personId,
+				Shift = new[]
+				{
+					new AgentStateActivityReadModel
+					{
+						Color = Color.Green.ToArgb(),
+						StartTime = "2016-06-01 10:00".Utc(),
+						EndTime = "2016-06-01 11:00".Utc(),
+						Name = "Phone"
+					}
+				}
+			});
+
+			var shift = Reader.Load(new[] {personId}).Single().Shift.Single();
+			shift.Color.Should().Be(Color.Green.ToArgb());
+			shift.StartTime.Should().Be("2016-06-01 10:00".Utc());
+			shift.EndTime.Should().Be("2016-06-01 11:00".Utc());
+			shift.Name.Should().Be("Phone");
+		}
+
+		[Test]
 		public void ShouldUpdateShift()
 		{
 			var personId = Guid.NewGuid();
