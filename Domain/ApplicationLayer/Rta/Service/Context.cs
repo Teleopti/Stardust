@@ -180,6 +180,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Color = a.DisplayColor,
 					StartTime = a.StartDateTime,
 					EndTime = a.EndDateTime,
+					Name = a.Name
 				});
 
 			return new AgentStateReadModel

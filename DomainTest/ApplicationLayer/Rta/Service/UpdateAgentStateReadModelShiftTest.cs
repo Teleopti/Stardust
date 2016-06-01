@@ -37,6 +37,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 		}
 
 		[Test]
+		public void ShouldPersistShiftWithActivityName()
+		{
+			var person = Guid.NewGuid();
+			Now.Is("2016-05-30 09:00");
+			Database
+				.WithUser("usercode", person)
+				.WithSchedule(person, "Phone", "2016-05-30 09:00", "2016-05-30 10:00");
+
+			Target.CheckForActivityChanges(Database.TenantName());
+
+			var shift = Database.PersistedReadModel.Shift.Single();
+			shift.Name.Should().Be("Phone");
+		}
+
+		[Test]
 		public void ShouldPersistTwoActivities()
 		{
 			var person = Guid.NewGuid();

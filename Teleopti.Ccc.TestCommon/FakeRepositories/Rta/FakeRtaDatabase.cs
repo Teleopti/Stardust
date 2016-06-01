@@ -387,6 +387,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, new DateOnly(start.Utc()), null, color);
 		}
 
+		public static FakeRtaDatabase WithSchedule(this FakeRtaDatabase fakeDataBuilder, Guid personId, string name, string start, string end)
+		{
+			return fakeDataBuilder.WithSchedule(personId, Guid.NewGuid(), start, end, new DateOnly(start.Utc()), name, null);
+		}
+
 	}
 
 	public static class FakeDatabaseRuleExtensions
