@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		{
 			var newStartTimeModel = new Dictionary<string, string>
 			{
-				{"vm.bindingTime", $"moment('{newStartTime}').toDate()"},
+				{"vm.moveToTime", $"moment('{newStartTime}').toDate()"},
 				{"vm.nextDay", isNextDay}
 			};
 			Browser.Interactions.ClickUsingJQuery("#scheduleContextMenuButton");
