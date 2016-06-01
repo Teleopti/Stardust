@@ -211,6 +211,38 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].Shift[1].Width).toEqual("50%");
 	});
 
+	it('should display all activities', function () {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+
+		$fakeBackend
+			.withTime("2014-01-21T12:45:00")
+			.withAgent({
+				Name: "Ashley Andeen",
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				Shift: [
+					{
+						Color: "#80FF80",
+						StartTime: "2014-01-21T12:00:00",
+						EndTime: "2014-01-21T13:00:00"
+					},
+					{
+						Color: "#0000FF",
+						StartTime: "2014-01-21T13:00:00",
+						EndTime: "2014-01-21T13:30:00"
+					}
+				]
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+		expect(scope.agents[0].Shift.length).toEqual(2);
+	});
+
 	it('should not display past activity before display window', function () {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend
@@ -237,7 +269,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].Shift.length).toEqual(0);
 	});
 
-	it('should not display future shift outside of scheduleView', function () {
+	it('should not display future activities outside of display window', function () {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend
 			.withTime("2016-05-30T08:00:00")
@@ -261,6 +293,43 @@ describe('RtaAgentsCtrl', function() {
 			.apply('agentsInAlarm = false');
 
 		expect(scope.agents[0].Shift.length).toEqual(0);
+	});
+
+	it('should not display future activities outside of display window', function () {
+		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+		$fakeBackend
+			.withTime("2016-05-30T08:00:00")
+			.withAgent({
+				Name: "Ashley Andeen",
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+				PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+				Shift: [
+					{
+						StartTime: "2016-05-30T10:00:00",
+						EndTime: "2016-05-30T11:00:00"
+					},
+					{
+						StartTime: "2016-05-30T11:00:00",
+						EndTime: "2016-05-30T12:00:00"
+					},
+					{
+						StartTime: "2016-05-30T12:00:00",
+						EndTime: "2016-05-30T13:00:00"
+					},
+					{
+						StartTime: "2016-05-30T13:00:00",
+						EndTime: "2016-05-30T14:00:00"
+					}
+				]
+			});
+
+		$controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+		expect(scope.agents[0].Shift.length).toEqual(1);
 	});
 
 	it('should cut activities that are larger than display window', function () {

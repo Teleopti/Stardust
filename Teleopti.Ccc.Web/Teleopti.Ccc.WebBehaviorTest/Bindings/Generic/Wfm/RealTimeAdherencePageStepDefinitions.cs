@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -59,10 +60,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see real time agent details for '(.*)'")]
 		public void ThenIShouldSeeRealTimeAgentDetailsFor(string name, Table table)
 		{
-			var stateInfo = table.CreateInstance<RealTimeAdherenceAgentStatus>();
-			assertAgentStatus(name,stateInfo);
+			var status = table.CreateInstance<RealTimeAdherenceAgentStatus>();
+
+			const string selector = ".agent-name:contains('{0}') ~ :contains('{1}')";
+
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.State);
+			if (status.Activity != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Activity);
+			if (status.NextActivity != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivity);
+			if (status.NextActivityStartTimeFormatted() != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivityStartTimeFormatted());
+			if (status.Alarm != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Alarm);
+			if (status.AlarmTimeFormatted() != null)
+				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.AlarmTimeFormatted());
+			if (status.AlarmColor != null)
+				Browser.Interactions.AssertExistsUsingJQuery("tr[style*='background-color: {0}'] .agent-name:contains('{1}')", toRGBA(status.AlarmColor, "0.6"), name);
 		}
-		
+
 		[Then(@"I should see agent status")]
 		public void ThenIShouldSeeAgentDetailsFor(Table table)
 		{
@@ -190,30 +206,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.Click("#business-unit-select");
 			Browser.Interactions.ClickContaining("md-option", businessUnitName);
 		}
-
-		private static void assertAgentStatus(string name, RealTimeAdherenceAgentStatus status)
-		{
-			const string selector = ".agent-name:contains('{0}') ~ :contains('{1}')";
-
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.State);
-			if (status.Activity != null)	
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Activity);
-			if (status.NextActivity != null)
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivity);
-			if (status.NextActivityStartTimeFormatted() != null )
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.NextActivityStartTimeFormatted());
-			if (status.Alarm != null)
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.Alarm);
-			if (status.AlarmTimeFormatted() != null)
-				Browser.Interactions.AssertExistsUsingJQuery(selector, name, status.AlarmTimeFormatted());
-
-			if (status.AlarmColor != null)
-			{
-				const string colorSelector = "tr[style*='background-color: {0}'] .agent-name:contains('{1}')";
-				Browser.Interactions.AssertExistsUsingJQuery(colorSelector, toRGBA(status.AlarmColor, "0.6"), name);
-			}
-		}
-
+		
 		private static void assertAgentStatus(RealTimeAdherenceAgentStatus status)
 		{
 			var personId = DataMaker.Person(status.Name).Person.Id.Value;
@@ -221,7 +214,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			if (status.State != null)
 				Browser.Interactions.AssertAnyContains(selector, status.State);
-
 
 			if (SystemSetup.Toggles.IsEnabled(Toggles.RTA_AlarmContext_29357))
 			{
@@ -236,6 +228,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 					Browser.Interactions.AssertExists(selector + " .current-activity[name='{0}']", status.Activity);
 				if (status.NextActivity != null)
 					Browser.Interactions.AssertExists(selector + " .next-activity[name='{0}']", status.NextActivity);
+				if (status.NextActivityStartTimeFormatted() != null)
+				{
+					//Assert.Fail("Remove from scenarios when removing toggle?");
+				}
+				if (status.AlarmColor != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(status.AlarmColor, "0.6") + "']");
+				if (status.Color != null)
+					Browser.Interactions.AssertExists(selector + " [style*='background-color: " + toRGBA(status.Color, "0.6") + "']");
 			}
 			else
 			{
@@ -243,24 +243,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 					Browser.Interactions.AssertAnyContains(selector, status.Activity);
 				if (status.NextActivity != null)
 					Browser.Interactions.AssertAnyContains(selector, status.NextActivity);
+				if (status.NextActivityStartTimeFormatted() != null)
+					Browser.Interactions.AssertAnyContains(selector, status.NextActivityStartTimeFormatted());
+				if (status.AlarmColor != null)
+					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(status.AlarmColor, "0.6") + "']");
+				if (status.Color != null)
+					Browser.Interactions.AssertExists(selector + "[style*='background-color: " + toRGBA(status.Color, "0.6") + "']");
 			}
-			if (status.NextActivityStartTimeFormatted() != null)
-				Browser.Interactions.AssertAnyContains(selector, status.NextActivityStartTimeFormatted());
+
 			if (status.Alarm != null)
 				Browser.Interactions.AssertAnyContains(selector, status.Alarm);
 			if (status.AlarmTimeFormatted() != null)
 				Browser.Interactions.AssertAnyContains(selector, status.AlarmTimeFormatted());
 
-			if (status.AlarmColor != null)
-			{
-				var colorSelector = selector + "[style*='background-color: " + toRGBA(status.AlarmColor, "0.6") +"']";
-				Browser.Interactions.AssertExists(colorSelector);
-			}
-			if (status.Color != null)
-			{
-				var colorSelector = selector + "[style*='background-color: " + toRGBA(status.Color, "0.6") +"']";
-				Browser.Interactions.AssertExists(colorSelector);
-			}
 		}
 		
 		private static String toRGBA(string colorName, string transparency)

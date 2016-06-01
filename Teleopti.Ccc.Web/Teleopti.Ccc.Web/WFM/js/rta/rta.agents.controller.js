@@ -206,19 +206,21 @@
 						});
 						state.Shift = state.Shift || [];
 
-						removeLayersOutsideOfDisplayWindow(state.Shift, moment(states.Time));
-
+						var now = moment(states.Time);
 						var shift = state.Shift
+							.filter(function(layer) {
+								return !(now.clone().add(-1, 'hours') >= moment(layer.EndTime) || now.clone().add(3, 'hours') <= moment(layer.StartTime));
+							})
 							.map(function (s) {
-							var lengthSeconds = moment(s.EndTime).diff(moment(s.StartTime), 'seconds');
-							return {
-								Color: s.Color,
-								Offset: timeToPercent(states.Time, s.StartTime),
-								Width: layerPercentage(lengthSeconds),
-								Name: s.Name,
-								Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
-							};
-						});
+								var lengthSeconds = moment(s.EndTime).diff(moment(s.StartTime), 'seconds');
+								return {
+									Color: s.Color,
+									Offset: timeToPercent(states.Time, s.StartTime),
+									Width: layerPercentage(lengthSeconds),
+									Name: s.Name,
+									Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
+								};
+							});
 						if (agentInfo.length > 0) {
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
@@ -236,14 +238,6 @@
 								AlarmWidth: alarmPercentage(state.TimeInAlarm),
 								Shift: shift
 							});
-						}
-					});
-				}
-
-				function removeLayersOutsideOfDisplayWindow(shift, now) {
-					shift.forEach(function (layer, index) {
-						if (now.add(-1, 'hours') >= moment(layer.EndTime) || now.add(3, 'hours') <= moment(layer.StartTime)) {
-							shift.splice(index, 1);							
 						}
 					});
 				}

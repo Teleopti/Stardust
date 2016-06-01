@@ -3,55 +3,51 @@
 	angular.module('wfm.rta').service('RtaGridService', ['Toggle', 'uiGridConstants',
 		function(toggleService, uiGridConstants) {
 			this.makeAllGrid = function() {
-				var sort = {
-					direction: 'asc'
-				};
-				var sortingAlgorithm = function(a, b) {
-					if ((a === null || a === undefined) && (b === null || b === undefined))
-						return 0;
-					if (a === null || a === undefined)
-						return -1;
-					if (b === null || b === undefined)
-						return 1;
-					if (a > b)
-						return 1;
-					if (a < b)
-						return -1;
-					return 0;
-				};
-				return makeGridOptions({
-					headerCellTemplate: 'js/rta/rta-agents-headercelltemplate.html',
-					sort: sort,
-					sortingAlgorithm: sortingAlgorithm,
-					alarmOnly: false
-				});
+				return makeGridOptions(false);
 			};
 
 			this.makeInAlarmGrid = function() {
-				return makeGridOptions({
-					headerCellTemplate: '<div></div>',
-					alarmOnly: true
-				});
+				return makeGridOptions(true);
 			};
 
-			function makeGridOptions(args) {
-				args = args || {};
+			var sortingAlgorithm = function (a, b) {
+				if (a == null && b == null)
+					return 0;
+				if (a == null)
+					return -1;
+				if (b == null)
+					return 1;
+				if (a > b)
+					return 1;
+				if (a < b)
+					return -1;
+				return 0;
+			}
+
+			function makeGridOptions(alarmOnly) {
 				var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 				var coloredWithTimeCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.format(COL_FIELD)}}</div>';
 				var coloredWithDurationCellTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
 				var nextActivityCellTemplate = '<div class="ui-grid-cell-contents"><span class="mdi mdi-arrow-right"></span>{{row.entity.NextActivityStartTime}} {{row.entity.NextActivity}}</div>';
+
 				var alarmCellTemplate = coloredCellTemplate;
+				if (toggleService.RTA_AlarmContext_29357)
+					alarmCellTemplate = '<div class="ui-grid-cell-contents label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div>';
+
 				var alarmDurationCellTemplate = '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
-				var headerCellTemplate = args.headerCellTemplate || null;
-				var rowTemplate = args.rowTemplate || 'js/rta/rta-agents-rowtemplate.html';
-				var timeInAlarmField = 'TimeInAlarm';
+				var headerCellTemplate = 'js/rta/rta-agents-headercelltemplate.html';
+				if (alarmOnly) {
+					if (toggleService.RTA_AlarmContext_29357) {
+						headerCellTemplate = '<div style="height: 30px; background-color: white;"></div>';
+					} else {
+						headerCellTemplate = '<div></div>';
+					}
+				}
 
-				if (toggleService.RTA_AdherenceDetails_34267)
-					rowTemplate = 'js/rta/rta-agents-rowtemplate-AdherenceDetails_34267.html';
+				var rowTemplate = 'js/rta/rta-agents-rowtemplate.html';
 
-				var columnDefs = [];
 				var name = {
 					displayName: 'Name',
 					field: 'Name',
@@ -59,7 +55,8 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
-					sort: args.sort || null
+					width: toggleService.RTA_AlarmContext_29357 ? "15%" : null,
+					sort: alarmOnly ? null : { direction: 'asc' }
 				};
 				var team = {
 					displayName: 'Team',
@@ -67,7 +64,8 @@
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
-					headerCellFilter: 'translate'
+					headerCellFilter: 'translate',
+					width: toggleService.RTA_AlarmContext_29357 ? "15%" : null,
 				};
 				var state = {
 					displayName: 'State',
@@ -75,7 +73,8 @@
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
-					headerCellFilter: 'translate'
+					headerCellFilter: 'translate',
+					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
 				};
 				var activity = {
 					displayName: 'Activity',
@@ -100,40 +99,42 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmCellTemplate,
 					headerCellFilter: 'translate',
-					sortingAlgorithm: args.sortingAlgorithm || null
-				};
+					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
+					sortingAlgorithm: alarmOnly ? null : sortingAlgorithm
+			};
 				var timeInAlarm = {
 					displayName: 'TimeInAlarm',
-					field: timeInAlarmField,
+					field: 'TimeInAlarm',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmDurationCellTemplate,
-					headerCellFilter: 'translate'
+					headerCellFilter: 'translate',
+					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
 				};
+				var shift = {
+					displayName: 'Shift',
+					field: 'Shift',
+					enableColumnMenu: false,
+					headerCellTemplate: 'js/rta/rta-agents-headershiftcelltemplate-RTA_AlarmContext_29357.html',
+					cellClass: 'shift-class',
+					cellTemplate: 'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html',
+					headerCellFilter: 'translate',
+					width: "40%",
+				};
+				
+				var columnDefs = [];
 
+				if (toggleService.RTA_AdherenceDetails_34267)
+					rowTemplate = 'js/rta/rta-agents-rowtemplate-AdherenceDetails_34267.html';
 
 				if (toggleService.RTA_AlarmContext_29357) {
 					rowTemplate = 'js/rta/rta-agents-rowtemplate-RTA_AlarmContext_29357.html';
 					columnDefs.push(name);
 					columnDefs.push(team);
-					columnDefs.push({
-						displayName: 'Shift',
-						field: 'Shift',
-						enableColumnMenu: false,
-						headerCellTemplate: 'js/rta/rta-agents-headershiftcelltemplate-RTA_AlarmContext_29357.html',
-						cellClass: 'shift-class',
-						cellTemplate: 'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html',
-						headerCellFilter: 'translate',
-					});
+					columnDefs.push(shift);
 					columnDefs.push(alarm);
 					columnDefs.push(timeInAlarm);
 					columnDefs.push(state);
-					var columns = ["15%", "15%", "40%", "10%", "10%", "10%"];
-					for (var i = 0; i < columns.length; i++) {
-						columnDefs[i].width = columns[i];
-						if (args.alarmOnly && i !== 2)
-							columnDefs[i].headerCellTemplate = 'js/rta/rta-agents-headercelltemplate-RTA_AlarmContext_29357.html';
-					}
 				} else {
 					columnDefs.push(name);
 					columnDefs.push(team);
@@ -143,7 +144,6 @@
 					columnDefs.push(alarm);
 					columnDefs.push(timeInAlarm);
 				}
-
 
 				return {
 					rowTemplate: rowTemplate,
