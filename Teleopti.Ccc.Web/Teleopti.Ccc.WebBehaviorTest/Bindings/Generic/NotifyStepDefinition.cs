@@ -10,6 +10,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	{
 		const string notifyTextSelector = "#noty_bottom_layout_container .noty_bar .noty_message .noty_text";
 
+		[When(@"An activity with time '(.*)' to '(.*)' is added to my schedule")]
+		public void WhenAnActivityWithTimeToIsAddedToMySchedule(string startTime, string endTime)
+		{
+			var fetchActivityUrl = "/api/TeamScheduleData/FetchActivities";
+			var createActivityUrl = "/api/TeamScheduleCommand/AddActivity/WithoutCheckingPermission";
+			var requestData = $"ActivityId:d[0].Id:'{startTime.Split(' ')[0].Replace("-", "/")}',StartTime:'{startTime}',EndTime:'{endTime}',PersonIds:[user.AgentId]";
+
+			var javascript = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){$.ajax({url:'" + fetchActivityUrl +
+				"',type:'GET',contentType:'application/json',success:function(d){$.ajax({url:'" + createActivityUrl +
+				"',type:'POST',contentType:'application/json',data:JSON.stringify({" + requestData + "})});}});});";
+
+			Browser.Interactions.Javascript(javascript);
+			Browser.TimeoutScope(new TimeSpan(0, 0, 20));
+		}
+
 		[Then(@"I should see one notify message")]
 		public void ThenIShouldSeeAnAlert()
 		{

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			_helper = helper;
 		}
 
-		public List<FailActionResult> AddActivity(AddActivityFormData input)
+		public List<FailActionResult> AddActivity(AddActivityFormData input, bool checkPermission = true)
 		{
 			var permissions = new Dictionary<string,string>
 			{
@@ -46,7 +46,30 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				actionResult.PersonId = personId;
 				actionResult.Messages = new List<string>();
 
-				if(checkPermission(permissions,input.Date, person,actionResult.Messages))
+				if (checkPermission)
+				{
+					if (checkPermissionFn(permissions, input.Date, person, actionResult.Messages))
+					{
+						var command = new AddActivityCommand
+						{
+							PersonId = personId,
+							ActivityId = input.ActivityId,
+							Date = input.Date,
+							StartTime = input.StartTime,
+							EndTime = input.EndTime,
+							TrackedCommandInfo =
+								input.TrackedCommandInfo != null
+									? input.TrackedCommandInfo
+									: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+						};
+						_commandDispatcher.Execute(command);
+						if (command.ErrorMessages != null && command.ErrorMessages.Any())
+						{
+							actionResult.Messages.AddRange(command.ErrorMessages);
+						}
+					}
+				}
+				else
 				{
 					var command = new AddActivityCommand
 					{
@@ -56,12 +79,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						StartTime = input.StartTime,
 						EndTime = input.EndTime,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo != null
-								? input.TrackedCommandInfo
-								: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+								input.TrackedCommandInfo != null
+									? input.TrackedCommandInfo
+									: new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 					_commandDispatcher.Execute(command);
-					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
 					{
 						actionResult.Messages.AddRange(command.ErrorMessages);
 					}
@@ -89,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				actionResult.PersonId = personId;
 				actionResult.Messages = new List<string>();
 
-				if (checkPermission(permissions, input.Date, person, actionResult.Messages))
+				if (checkPermissionFn(permissions, input.Date, person, actionResult.Messages))
 				{
 					var command = new AddPersonalActivityCommand
 					{
@@ -137,7 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var person = _personRepository.Get(personActivity.PersonId);
 				actionResult.PersonId = personActivity.PersonId;
 				actionResult.Messages = new List<string>();
-				if (checkPermission(permissions, input.Date, person, actionResult.Messages))				
+				if (checkPermissionFn(permissions, input.Date, person, actionResult.Messages))				
 				{
 					foreach(var shiftLayerId in personActivity.ShiftLayerIds)
 					{
@@ -180,7 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				var person = _personRepository.Get(personActivity.PersonId);
 				var personError = new FailActionResult {PersonId = person.Id.GetValueOrDefault(), Messages = new List<string>()};
-				if (!checkPermission(permission, input.Date, person, personError.Messages))
+				if (!checkPermissionFn(permission, input.Date, person, personError.Messages))
 				{
 					result.Add(personError);
 					continue;
@@ -226,7 +249,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				&& agent.PersonWriteProtection.IsWriteProtected(date);
 		}
 
-		private bool checkPermission(Dictionary<string,string> permissions,DateOnly date,IPerson agent,IList<string> messages)
+		private bool checkPermissionFn(Dictionary<string,string> permissions,DateOnly date,IPerson agent,IList<string> messages)
 		{
 			var newMessages = new List<string>();
 
@@ -247,7 +270,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 	public interface ITeamScheduleCommandHandlingProvider
 	{
-		List<FailActionResult> AddActivity(AddActivityFormData formData);		
+		List<FailActionResult> AddActivity(AddActivityFormData formData, bool checkPermission = true);		
 		List<FailActionResult> AddPersonalActivity(AddPersonalActivityFormData formData);		
 		IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds);
 		List<FailActionResult> RemoveActivity(RemoveActivityFormData input);
