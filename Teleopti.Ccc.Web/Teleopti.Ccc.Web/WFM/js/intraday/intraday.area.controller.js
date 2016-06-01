@@ -18,6 +18,7 @@
 			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>feedback.</a>";
 			var prevSkill = {};
 			$scope.currentInterval = [];
+			$scope.chart;
 
 			NoticeService.info(message, null, true);
 
@@ -296,7 +297,7 @@
 							for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
 								intervalsList.push(interval);
 							}
-							c3.generate({
+							$scope.chart = c3.generate({
 								bindto: '#intradayChart',
 								data: {
 									x: 'x',
@@ -373,6 +374,11 @@
 							});
 						}
 
+						$scope.resizeChart = function () {
+							$timeout(function () {
+									$scope.chart.resize()
+							}, 1000);
+						}
 					}
 				]);
 			})();
