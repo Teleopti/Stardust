@@ -53,8 +53,8 @@ namespace Teleopti.Interfaces.Domain
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 
 		IDayOff DayOff();
-		void SetDayOff(IDayOffTemplate template);
-		void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination);
+		void SetDayOff(IDayOffTemplate template, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null);
+		void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination,TrackedCommandInfo trackedCommandInfo = null);
 		bool AssignedWithDayOff(IDayOffTemplate template);
 		void FillWithDataFrom(IPersonAssignment newAss);
 		void AddActivity(IActivity activity, DateTimePeriod period);

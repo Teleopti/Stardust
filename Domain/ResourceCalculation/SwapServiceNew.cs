@@ -67,13 +67,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 
-			sourceAssignment.SetThisAssignmentsDayOffOn(targetAssignment);
+			sourceAssignment.SetThisAssignmentsDayOffOn(targetAssignment,trackedCommandInfo);
 
 			targetAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
 
 			sourceAssignment.ClearMainActivities( false, trackedCommandInfo );
 			sourceAssignment.ClearOvertimeActivities( false, trackedCommandInfo );
-			sourceAssignment.SetDayOff(null);
+			sourceAssignment.SetDayOff(null, false, trackedCommandInfo);
 		}
 
 		public IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules)

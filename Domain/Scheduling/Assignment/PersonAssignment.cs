@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ClearMainActivities();
 			ClearOvertimeActivities();
 			ClearPersonalActivities();
-			SetDayOff(null);
+			SetDayOff(null, true);
 			AddEvent(() => new DayUnscheduledEvent
 			{
 				Date = Date.Date,
@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
-			SetDayOff(null);
+			SetDayOff(null, true);
 		}
 
 		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Insert(index, layer);
-			SetDayOff(null);
+			SetDayOff(null, true);
 
 		}
 
@@ -535,24 +535,37 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return new DayOff(anchorDateTime, _dayOffTemplate.TargetLength, _dayOffTemplate.Flexibility, _dayOffTemplate.Description, _dayOffTemplate.DisplayColor, _dayOffTemplate.PayrollCode);
 		}
 
-		public virtual void SetDayOff(IDayOffTemplate template)
+		public virtual void SetDayOff(IDayOffTemplate template, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			_dayOffTemplate = template;
 			if (_dayOffTemplate == null) return;
 
 			ClearMainActivities();
-			AddEvent(() => new DayOffAddedEvent
+
+			if (!muteEvent)
 			{
-				Date = Date.Date,
-				PersonId = Person.Id.Value,
-				ScenarioId = Scenario.Id.Value,
-				LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
-			});
+				AddEvent(() =>
+				{
+					var @event = new DayOffAddedEvent
+					{
+						Date = Date.Date,
+						PersonId = Person.Id.Value,
+						ScenarioId = Scenario.Id.Value,
+						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+					};
+					if(trackedCommandInfo != null)
+					{
+						@event.InitiatorId = trackedCommandInfo.OperatedPersonId;
+						@event.CommandId = trackedCommandInfo.TrackId;
+					}
+					return @event;
+				});
+			}			
 		}
 
-		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination)
+		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			dayOffDestination.SetDayOff(_dayOffTemplate);
+			dayOffDestination.SetDayOff(_dayOffTemplate, false, trackedCommandInfo);
 		}
 
 		public virtual bool AssignedWithDayOff(IDayOffTemplate template)

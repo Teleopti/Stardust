@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -142,6 +143,57 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var events = agent1Assignment.PopAllEvents(Now).ToList();		
 			events.ForEach(e => EventPublisher.Publish(e));
 			ScheduleChangedEventDetector.GetEvents().Any(e => e.PersonId == agent1.Id).Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldFireEventsWithCorrectTrackedCommandInfoWhenSwapWithDayOff()
+		{
+			var date = new DateOnly(2016,4,8);
+
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill",activity);
+			var schedulePeriod = new SchedulePeriod(date,SchedulePeriodType.Week,1);
+			var scenario = ScenarioRepository.Has("some name");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dayOffTemplate = new DayOffTemplate(new Description("_"));
+			dayOffTemplate.SetTargetAndFlexibility(TimeSpan.FromHours(36),TimeSpan.FromHours(6));
+			dayOffTemplate.Anchor = TimeSpan.FromHours(12.5);
+
+			var agent1 = PersonRepository.Has(new Contract("_"),new ContractSchedule("_"),new PartTimePercentage("_"),new Team { Site = new Site("site") },schedulePeriod,skill);
+			var agent2 = PersonRepository.Has(new Contract("_"),new ContractSchedule("_"),new PartTimePercentage("_"),new Team { Site = new Site("site") },schedulePeriod,skill);
+
+			PersonAssignmentRepository.Has(agent1,scenario,activity,shiftCategory,new DateOnlyPeriod(date,date),
+				new TimePeriod(8,0,16,0));
+			PersonAssignmentRepository.Has(agent1,scenario,dayOffTemplate, date.AddDays(1));
+
+			var assignments = PersonAssignmentRepository.LoadAll().ToArray();
+			var agent1Assignment = assignments[0] as PersonAssignment;  //PersonAssignmentRepository.GetSingle(date,agent1) as PersonAssignment;
+			var agent2Assignment = assignments[1] as PersonAssignment;
+			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(scenario,date.Date,agent1Assignment);
+			(scheduleDictionary as ScheduleDictionaryForTest).AddPersonAssignment((agent2Assignment));
+
+
+			agent1Assignment.PopAllEvents(Now);
+			agent2Assignment.PopAllEvents(Now);
+			EventPublisher.OverwriteHandler(typeof(ScheduleChangedEvent),typeof(ScheduleChangedEventDetector));
+			ScheduleChangedEventDetector.Reset();
+
+			var trackedCommandInfo = new TrackedCommandInfo
+			{
+				OperatedPersonId = Guid.NewGuid(),
+				TrackId = Guid.NewGuid()
+			};
+
+			Target.Swap(agent1,agent2,
+				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance),trackedCommandInfo);
+
+			var eventsFromAgent1 = agent1Assignment.PopAllEvents(Now).ToList();
+			var eventsFromAgent2 = agent2Assignment.PopAllEvents(Now).ToList();
+
+			eventsFromAgent1.ForEach(e => EventPublisher.Publish(e));
+			eventsFromAgent2.ForEach(e => EventPublisher.Publish(e));
+			ScheduleChangedEventDetector.GetEvents().Should().Have.Count.GreaterThan(0);
+			ScheduleChangedEventDetector.GetEvents().All(e => e.CommandId == trackedCommandInfo.TrackId).Should().Be.True();
 		}
 	}
 }

@@ -131,7 +131,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				ScenarioId = @event.ScenarioId,
 				StartDateTime = dateTimeperiod.StartDateTime,
 				EndDateTime = dateTimeperiod.EndDateTime,
-				InitiatorId = @event.InitiatorId
+				InitiatorId = @event.InitiatorId,
+				CommandId = @event.CommandId
 			});
 		}
 
