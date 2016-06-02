@@ -416,6 +416,7 @@
     <Compile Include="Repositories\Analytics\AnalyticsPermissionRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsPersonPeriodRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsActivityRepository.cs" />
+    <Compile Include="Repositories\Analytics\AnalyticsRequestRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsScenarioRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsShiftCategoryRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsSkillRepository.cs" />

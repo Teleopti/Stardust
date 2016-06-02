@@ -158,6 +158,8 @@
     <Compile Include="Analytics\AnalyticsActivity.cs" />
     <Compile Include="Analytics\AnalyticsOvertime.cs" />
     <Compile Include="Analytics\AnalyticsAbsence.cs" />
+    <Compile Include="Analytics\AnalyticsRequest.cs" />
+    <Compile Include="Analytics\AnalyticsRequestedDay.cs" />
     <Compile Include="Analytics\AnalyticsScenario.cs" />
     <Compile Include="Analytics\AnalyticsDayOff.cs" />
     <Compile Include="Analytics\AnalyticsGroup.cs" />
@@ -312,6 +314,7 @@
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\IAnalyticsOvertimeRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsRequestRepository.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
     <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
     <Compile Include="Repositories\IAnalyticsShiftCategoryRepository.cs" />
