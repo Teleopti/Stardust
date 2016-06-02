@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		public virtual void Handle(RequestChangedEvent @event)
 		{
 			var personRequest = _personRequestRepository.FindPersonRequestByRequestId(@event.RequestId);
-			if (personRequest == null) throw new ArgumentException("Request missing in app database");
+			if (personRequest == null)
+				throw new ArgumentException("Request missing in app database");
 
 			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			var personPeriod = getPersonPeriod(personRequest);
@@ -142,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				personPeriods.FirstOrDefault(
 					x => x.ValidFromDate <= personRequest.RequestedDate && x.ValidToDate > personRequest.RequestedDate);
 			if (personPeriod == null)
-				throw new Exception("Person period missing from analytics.");
+				throw new ArgumentException("Person period missing from analytics.");
 			return personPeriod;
 		}
 	}

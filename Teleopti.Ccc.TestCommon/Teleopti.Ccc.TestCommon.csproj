@@ -160,6 +160,7 @@
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsActivityRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsAbsenceRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsRequestRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsScenarioRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsDayOffRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsBusinessUnitRepository.cs" />

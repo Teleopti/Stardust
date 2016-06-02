@@ -190,6 +190,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStatesViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentStatesViewModelBuilderStateValuesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\AgentViewModelBuilderTest.cs" />

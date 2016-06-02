@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IPersonRequest FindPersonRequestByRequestId(Guid value)
 		{
-			throw new NotImplementedException();
+			return _requestRepository.FirstOrDefault(x => x.Request.Id.GetValueOrDefault() == value);
 		}
 
 		public IList<IPersonRequest> FindAllRequestsExceptOffer(IPerson person, Paging paging)
