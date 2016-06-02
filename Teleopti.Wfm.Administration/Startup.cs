@@ -51,7 +51,8 @@ namespace Teleopti.Wfm.Administration
 				AuthorizationFilters = new IAuthorizationFilter[]
 				{
 					new HangfireDashboardAuthorization()
-				}
+				},
+				AppPath = null
 			};
 
 			if (config.ReadValue("HangfireDashboard", true))
