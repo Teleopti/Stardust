@@ -2,10 +2,8 @@
 using System.Web;
 using System.Web.Security;
 using Common.Logging;
-using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
@@ -35,9 +33,10 @@ namespace Teleopti.Ccc.Web.Core
 		public void SignOut()
 		{
 			FormsAuthentication.SignOut();
-			var fedAuthCookie = new HttpCookie(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddYears(-2) };
-			_httpContext.Current().Response.Cookies.Remove(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName);
-			_httpContext.Current().Response.Cookies.Add(fedAuthCookie);
+			var fedAuthCookie = new HttpCookie(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddYears(-2), HttpOnly = true};
+			var httpCookieCollection = _httpContext.Current().Response.Cookies;
+			httpCookieCollection.Remove(_sessionSpecificCookieForIdentityProviderDataProviderSettings.AuthenticationCookieName);
+			httpCookieCollection.Add(fedAuthCookie);
 		}
 
 		public bool TryGetCurrentUser(out string userName)
@@ -65,6 +64,4 @@ namespace Teleopti.Ccc.Web.Core
 			return false;
 		}
 	}
-
-	
 }
