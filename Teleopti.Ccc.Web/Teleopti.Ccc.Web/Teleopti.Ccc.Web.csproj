@@ -1394,7 +1394,6 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.report.controller.spec.js" />
     <Content Include="WFM\js\rta\rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html" />
-    <Content Include="WFM\js\rta\rta-agents-headercelltemplate-RTA_AlarmContext_29357.html" />
     <Content Include="WFM\js\rta\rta-agents-headershiftcelltemplate-RTA_AlarmContext_29357.html" />
     <Content Include="WFM\js\rta\rta-agents-rowtemplate-RTA_AlarmContext_29357.html" />
     <Content Include="WFM\js\rta\rta-agents-RTA_AlarmContext_29357.html" />
