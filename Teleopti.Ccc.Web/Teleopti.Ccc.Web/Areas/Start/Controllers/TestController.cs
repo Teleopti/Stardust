@@ -219,6 +219,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_tenantTickEventPublisher.WithPublishingsForTest(() =>
 			{
 				_hangfire.TriggerReccuringJobs();
+				_hangfire.WaitForQueue();
 			});
 		}
 
