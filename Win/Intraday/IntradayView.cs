@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -41,8 +42,9 @@ namespace Teleopti.Ccc.Win.Intraday
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
 	    private readonly IEventPublisher _publisher;
 	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
-	    private DateNavigateControl _timeNavigationControl;
+		private DateNavigateControl _timeNavigationControl;
 		private GridRowInChartSettingButtons _gridrowInChartSetting;
 		private IntradayViewContent _intradayViewContent;
 		private ToolStripGalleryItem _previousClickedGalleryItem;
@@ -51,15 +53,16 @@ namespace Teleopti.Ccc.Win.Intraday
 		private readonly IntradaySettingManager _settingManager;
 
 		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,IEventPublisher publisher,IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator )
+			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,IEventPublisher publisher,IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, ResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_eventAggregator = eventAggregator;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
 		    _publisher = publisher;
 		    _eventInfrastructureInfoPopulator = eventInfrastructureInfoPopulator;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 
-		    var authorization = PrincipalAuthorization.Current();
+			var authorization = PrincipalAuthorization.Current();
 
 			InitializeComponent();
 			if (DesignMode) return;
@@ -549,7 +552,7 @@ namespace Teleopti.Ccc.Win.Intraday
 				throw e.Error;
 			}
 
-			_intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder, _settingManager, _overriddenBusinessRulesHolder, _resourceOptimizationHelperExtended);
+			_intradayViewContent = new IntradayViewContent(Presenter, this, _eventAggregator, Presenter.SchedulerStateHolder, _settingManager, _overriddenBusinessRulesHolder, _resourceOptimizationHelperExtended, _resourceCalculationContextFactory);
 			_intradayViewContent.RightToLeft = RightToLeft; //To solve error with wrong dock labels running RTL
 			_timeNavigationControl.SetSelectedDate(Presenter.IntradayDate);
 			Presenter.ExternalAgentStateReceived += presenterExternalAgentStateReceived;

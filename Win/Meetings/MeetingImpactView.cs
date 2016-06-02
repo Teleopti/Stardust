@@ -37,16 +37,18 @@ namespace Teleopti.Ccc.Win.Meetings
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
 		private readonly IToggleManager _toggleManager;
-		
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+
 		public MeetingImpactView()
 		{
 			InitializeComponent();
 		}
 
-		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService)
+		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService, ResourceCalculationContextFactory resourceCalculationContextFactory)
 			: this()
 		{
 			_toggleManager = toggleManager;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_transparentMeetingMeetingControl = new TransparentMeetingMeetingControl();
 			_skillIntradayGridControl = new SkillIntradayGridControl("MeetingSkillIntradayGridAndChart", _toggleManager);
 
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.Win.Meetings
 																	   new OccupiedSeatCalculator(),
 																	   new NonBlendSkillCalculator(),
 																	   ()=>personSkillProvider, new PeriodDistributionService(), 
-																		intraIntervalFinderService, new TimeZoneGuardWrapper());
+																		intraIntervalFinderService, new TimeZoneGuardWrapper(), _resourceCalculationContextFactory);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(new FromFactory(() =>UnitOfWorkFactory.Current)), new PairMatrixService<Guid>(new PairDictionaryFactory<Guid>()));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);

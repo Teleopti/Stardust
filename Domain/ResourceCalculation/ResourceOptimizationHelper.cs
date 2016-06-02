@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private readonly ITimeZoneGuard _timeZoneGuard;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ResourceOptimizationHelper(Func<ISchedulerStateHolder> stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
@@ -26,7 +27,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			Func<IPersonSkillProvider> personSkillProvider,
 			IPeriodDistributionService periodDistributionService,
 			IIntraIntervalFinderService intraIntervalFinderService,
-			ITimeZoneGuard timeZoneGuard)
+			ITimeZoneGuard timeZoneGuard,
+			ResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_periodDistributionService = periodDistributionService;
 			_intraIntervalFinderService = intraIntervalFinderService;
 			_timeZoneGuard = timeZoneGuard;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 		}
 
 
@@ -52,22 +55,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
-				IResourceCalculationDataContainerWithSingleOperation relevantProjections;
 				IDisposable context = null;
-				if (ResourceCalculationContext.InContext)
+				if (!ResourceCalculationContext.InContext)
 				{
-					relevantProjections = ResourceCalculationContext.Fetch();
+					context = _resourceCalculationContextFactory.Create(new DateOnlyPeriod(localDate.AddDays(-1), localDate.AddDays(1)));
 				}
-				else
-				{
-					var extractor = new ScheduleProjectionExtractor(_personSkillProvider(),
-						stateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-					relevantProjections = extractor.CreateRelevantProjectionList(stateHolder.Schedules,
-						TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-							localDate.AddDays(-1).Date, localDate.AddDays(1).Date, _timeZoneGuard.CurrentTimeZone()));
-					context =new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => relevantProjections));
-				}
-
+				var relevantProjections = ResourceCalculationContext.Fetch();
 				ResourceCalculateDate(relevantProjections, localDate, considerShortBreaks);
 
 				if (doIntraIntervalCalculation)

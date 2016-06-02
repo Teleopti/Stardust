@@ -1078,7 +1078,6 @@
     <Compile Include="RealTimeAdherence\RtaMapTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FixedStaffSchedulingServiceTest.cs" />
-    <Compile Include="ResourceCalculation\ResourceOptimizationHelperTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolderTest.cs" />
     <Compile Include="ResourceCalculation\StudentSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionServiceTest.cs" />

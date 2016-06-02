@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -10,14 +11,17 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private readonly ResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly CascadeResources _cascadeResources;
+		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public CascadingResourceCalculation(ResourceOptimizationHelper resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder,
-																CascadeResources cascadeResources)
+																CascadeResources cascadeResources,
+																ITimeZoneGuard timeZoneGuard)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_stateHolder = stateHolder;
 			_cascadeResources = cascadeResources;
+			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public void ForDay(DateOnly date)
@@ -32,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private void doForPeriod(DateOnlyPeriod period)
 		{
-			using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider()).Create())
+			//TODO: context för en viss period här?
+			using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider(), _timeZoneGuard).Create())
 			{
 				foreach (var date in period.DayCollection())
 				{
@@ -40,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 				}
 			}
-			using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider()).Create())
+			using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create())
 			{
 				foreach (var date in period.DayCollection())
 				{

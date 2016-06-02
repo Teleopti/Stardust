@@ -61,9 +61,10 @@ namespace Teleopti.Ccc.Win.Intraday
 		private bool _userWantsToCloseIntraday;
 		private MultipleHostControl shiftEditorHost;
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
-			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended)
+			 IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder, IResourceOptimizationHelperExtended resourceOptimizationHelperExtended, ResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			if (presenter == null) throw new ArgumentNullException("presenter");
 			if (owner == null) throw new ArgumentNullException("owner");
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.Win.Intraday
 			_settingManager = settingManager;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
 			_resourceOptimizationHelperExtended = resourceOptimizationHelperExtended;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_presenter = presenter;
 			_schedulerStateHolder = schedulerStateHolder;
 			_owner = owner;
@@ -120,15 +122,10 @@ namespace Teleopti.Ccc.Win.Intraday
 			//Claes & Roger: we don't know if intrainterval calc needs to be done. We keep this as before
 			if(!_schedulerStateHolder.SchedulingResultState.Skills.Any()) return;
 
-			using (new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() =>
+			var period = new DateOnlyPeriod(_schedulerStateHolder.DaysToRecalculate.Min().AddDays(-1), _schedulerStateHolder.DaysToRecalculate.Max());
+			using (_resourceCalculationContextFactory.Create(period))
 			{
-				var period = new DateOnlyPeriod(_schedulerStateHolder.DaysToRecalculate.Min().AddDays(-1), _schedulerStateHolder.DaysToRecalculate.Max());
-				var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(), _schedulerStateHolder.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-				return extractor.CreateRelevantProjectionList(_schedulerStateHolder.Schedules, period.ToDateTimePeriod(_schedulerStateHolder.TimeZoneInfo));
-			})))
-			{
-				_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(
-					new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);
+				_resourceOptimizationHelperExtended.ResourceCalculateMarkedDays(new BackgroundWorkerWrapper(_backgroundWorkerResources), true, true);
 			}
 		}
 

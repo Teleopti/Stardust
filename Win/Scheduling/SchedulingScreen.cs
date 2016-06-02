@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_schedulerState.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(loadingPeriod,
 				TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
 			_schedulerState.UndoRedoContainer = _undoRedo;
-			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState);
+			_schedulerMeetingHelper = new SchedulerMeetingHelper(_schedulerMessageBrokerHandler, _schedulerState, _container.Resolve<ResourceCalculationContextFactory>());
 			//Using the same module id when saving meeting changes to avoid getting them via MB as well
 
 			toolStripMenuItemLoggedOnUserTimeZone.Text = _schedulerState.TimeZoneInfo.DisplayName;
@@ -2164,16 +2164,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IDisposable disposableContext = null;
 			if (!ResourceCalculationContext.InContext)
 			{
-				disposableContext = new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(
-					() =>
-					{
-						var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1),
-							_schedulerState.DaysToRecalculate.Max());
-						var extractor = new ScheduleProjectionExtractor(new PersonSkillProvider(),
-							_schedulerState.SchedulingResultState.Skills.Min(s => s.DefaultResolution));
-						return extractor.CreateRelevantProjectionList(_schedulerState.Schedules,
-							period.ToDateTimePeriod(_schedulerState.TimeZoneInfo));
-					}));
+				var period = new DateOnlyPeriod(_schedulerState.DaysToRecalculate.Min().AddDays(-1), _schedulerState.DaysToRecalculate.Max());
+				disposableContext = _container.Resolve<ResourceCalculationContextFactory>().Create(period);
 			}
 			_optimizationHelperExtended.ResourceCalculateMarkedDays(
 				new BackgroundWorkerWrapper(_backgroundWorkerResourceCalculator), SchedulerState.ConsiderShortBreaks, true);

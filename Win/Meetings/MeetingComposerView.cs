@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IToggleManager _toogleManager;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
+		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		}
 
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
-			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager, IIntraIntervalFinderService intraIntervalFinderService)
+			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager, IIntraIntervalFinderService intraIntervalFinderService, ResourceCalculationContextFactory resourceCalculationContextFactory)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			_eventAggregator = eventAggregator;
 			_toogleManager = toogleManager;
 			_intraIntervalFinderService = intraIntervalFinderService;
+			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_meetingComposerPresenter = new MeetingComposerPresenter(this, meetingViewModel, new DisableDeletedFilter(new CurrentUnitOfWork(CurrentUnitOfWorkFactory.Make())), schedulerStateHolder);
 			panelContent.Enabled = editMeetingPermission;
 			ribbonControlAdv1.Enabled = editMeetingPermission;
@@ -314,7 +317,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private IMeetingImpactView getImpactView()
 		{
-			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _toogleManager, _intraIntervalFinderService);
+			return new MeetingImpactView(_meetingComposerPresenter.Model, _meetingComposerPresenter.SchedulerStateHolder, this, _toogleManager, _intraIntervalFinderService, _resourceCalculationContextFactory);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
