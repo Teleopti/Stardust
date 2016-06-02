@@ -192,8 +192,8 @@ wfm.config([
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
-			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function () {
-				$timeout(function () {
+			$rootScope.$watchGroup(['toggleLeftSide', 'toggleRightSide'], function() {
+				$timeout(function() {
 					$rootScope.$broadcast('sidenav:toggle');
 				}, 500);
 			});

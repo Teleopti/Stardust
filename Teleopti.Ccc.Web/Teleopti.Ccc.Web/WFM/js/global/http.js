@@ -6,7 +6,6 @@
 		.factory('httpInterceptor', [
 			'$q', '$injector', '$timeout', '$translate', function($q, $injector, $timeout, $translate) {
 				var connected = true;
-
 				function request(config) {
 					if (!connected) {
 						var q = $q.defer();

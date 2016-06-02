@@ -5,10 +5,19 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>WFM</title>
 	<link rel="stylesheet" href="vendor/MaterialDesignIcons/css/materialdesignicons.min.css">
-	<link id="themeModules" rel="stylesheet" href="dist/modules_classic.min.css">
-	<link id="themeStyle" rel="stylesheet" href="dist/style_classic.min.css">
+	<link id="themeModules" rel="stylesheet" href="">
+	<link id="themeStyle" rel="stylesheet" href="">
+	<style>.loader{display:inline-block;font-size:120px;animation:2s rotate infinite linear;width:1em;height:1em}.loader circle{fill:transparent;stroke:#09f;stroke-width:.07em;stroke-dasharray:2.3525em .4705em;animation:1.3s strokeDashArray infinite linear,24s infinite linear}@keyframes rotate{from{transform:rotate(0)}to{transform:rotate(360deg)}}@keyframes strokeDashArray{10%,from{stroke-dasharray:2.3525em .4705em;stroke-dashoffset:0}50%{stroke-dasharray:.001em 2.825em;stroke-dashoffset:-2.826em}60%{stroke-dasharray:.001em 2.825em}to{stroke-dasharray:2.3525em .4705em;stroke-dashoffset:-2.826em}}.pulse{z-index:9999991;margin:35vh auto 0;text-align:center}.backdrop{position:fixed;z-index:999999;width:100%;height:100%;background:#fff}
+	</style>
 </head>
-<body ng-show="isAuthenticated" ng-cloak>
+<body ng-show="isAuthenticated" ng-cloak ng-controller="mainController">
+	<div class="backdrop" ng-if="!styleIsFullyLoaded">
+	<div class="pulse">
+	 <div class="loader">
+	   <svg width="1em" height="1em"><circle cx="0.5em" cy="0.5em" r="0.45em"/></svg>
+	 </div>
+	</div>
+	</div>
 <div id="nav" ng-include="'html/nav.html'" class="material-depth-1 navbar navbar-default navbar-static-top " role="navigation"></div>
 <div class="layout-container">
 	<div id="leftsidenav" class="sidenav material-depth-1 left" ng-class="{'is-hidden':toggleLeftSide}">
@@ -24,10 +33,11 @@
 	</div>
 	<div id="materialcontainer" class="container content">
 		<div ui-view></div>
-		<wfm-notice notices="wfmNotices"></wfm-notice>
+		<wfm-notice notices="$parent.wfmNotices"></wfm-notice>
 	</div>
 
 </div>
+
 	<script type="text/javascript">
 		function iAmCalledFromFatClient() {
 			removeElements();
@@ -85,6 +95,7 @@
 				UserAgent: navigator.userAgent
 			}));
 		};
+
 	</script>
 	<script src="dist/modules.js"></script>
 	<script src="dist/templates.js"></script>

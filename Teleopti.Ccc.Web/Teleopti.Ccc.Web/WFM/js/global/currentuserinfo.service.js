@@ -53,8 +53,11 @@
 						wfmI18nService.setLocales(data);
 						service.SetCurrentUserInfo(data);
 						BusinessUnitsService.initBusinessUnit();
-						ThemeService.init();
-						deferred.resolve(data);
+						ThemeService.init().then(function(){
+							deferred.resolve(data);
+						},function(error){
+							deferred.reject(error);
+						});
 					});
 					return deferred.promise;
 				};

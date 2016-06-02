@@ -1,10 +1,10 @@
 (function() {
 	'use strict';
-	var themes = angular.module('wfm.themes', ['toggleService']);
+	var themespicker = angular.module('wfm.themes');
 
-	themes.controller('themeController', [
-		'$scope', 'Toggle', 'ThemeService', '$q',
-		function($scope, Toggle, ThemeService, $q) {
+	themespicker.controller('themesPickerController', [
+		'$scope', 'Toggle','$rootScope', 'ThemeService', '$q',
+		function($scope, Toggle,$rootScope, ThemeService, $q) {
 
 			Toggle.togglesLoaded.then(function() {
 				$scope.personalizeToggle = Toggle.WfmGlobalLayout_personalOptions_37114;
@@ -35,7 +35,7 @@
 				});
 				return deferred.promise;
 			}
-			var toggleActiveOverlay = function(){
+			var toggleActiveOverlay = function() {
 				$scope.showOverlay = !$scope.showOverlay;
 				replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
 			};
@@ -43,23 +43,23 @@
 				if (state === true || state === false) {
 					$scope.showOverlay = state;
 					replaceCurrentTheme($scope.currentTheme, $scope.showOverlay);
-				}else {
+				} else {
 					toggleActiveOverlay();
 					focusMenu();
 				}
 			};
 
 			var replaceCurrentTheme = function(theme, overlay) {
-				ThemeService.setTheme(theme);
+				$rootScope.setTheme(theme);
 				ThemeService.saveTheme(theme, overlay);
 			};
-			var toggleActiveTheme = function(){
+			var toggleActiveTheme = function() {
 				if ($scope.darkTheme) {
 					$scope.currentTheme = 'classic';
-					replaceCurrentTheme('classic',	$scope.showOverlay );
+					replaceCurrentTheme('classic', $scope.showOverlay);
 				} else {
 					$scope.currentTheme = 'dark';
-					replaceCurrentTheme('dark', $scope.showOverlay );
+					replaceCurrentTheme('dark', $scope.showOverlay);
 				}
 			};
 
@@ -68,9 +68,9 @@
 					$scope.currentTheme = theme;
 					replaceCurrentTheme(theme, $scope.showOverlay);
 					return;
-				}else {
-					focusMenu();
+				} else {
 					toggleActiveTheme();
+					focusMenu();
 				}
 
 

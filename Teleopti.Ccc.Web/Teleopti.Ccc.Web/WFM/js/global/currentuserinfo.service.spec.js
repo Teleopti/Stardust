@@ -2,16 +2,16 @@
 	'use strict';
 
 	describe('currentUserInfoService', function () {
-		var $httpBackend;
+		var $httpBackend, $rootScope;
 
 		beforeEach(function () {
 			module('currentUserInfoService');
 		});
 
-		beforeEach(inject(function (_$httpBackend_) {
+		beforeEach(inject(function (_$httpBackend_,_$rootScope_) {
 			$httpBackend = _$httpBackend_;
-
-
+			$rootScope = _$rootScope_;
+			$rootScope.setTheme = function(){};
 		}));
 
 		it('should set the current user info', inject(function(CurrentUserInfo) {
@@ -32,8 +32,6 @@
 				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
 				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
-				
-
 				var request = CurrentUserInfo.getCurrentUserFromServer();
 
 				request.success(function (result) {
@@ -58,13 +56,12 @@
 			});
 		});
 
-		it('should init the user context', function (done) {
+		it('should init the user context with toggles', function (done) {
 			inject(function (CurrentUserInfo) {
-				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, {'WfmGlobalLayout_personalOptions_37114': true});
 				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
-				$httpBackend.expectGET("../api/BusinessUnit").respond(200, 'mock');
-				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
-				//$httpBackend.expectGET("../api/Theme").respond(200, {Name:'light'});
+				$httpBackend.expectGET("../api/BusinessUnit").respond(200, ['mock']);
+				$httpBackend.expectGET("../api/Theme").respond(200, {Name:'light'});
 
 				CurrentUserInfo.initContext().then(function() {
 					var result = CurrentUserInfo.isConnected();
@@ -72,8 +69,23 @@
 					done();
 				});
 				$httpBackend.flush();
-
 			});
 		});
+
+		it('should init the user context without theme toggle', function (done) {
+			inject(function (CurrentUserInfo) {
+				$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, {'WfmGlobalLayout_personalOptions_37114': false});
+				$httpBackend.expectGET("../api/Global/User/CurrentUser").respond(200, { Language: 'en', DateFormat: 'en', UserName: 'Ashley' });
+				$httpBackend.expectGET("../api/BusinessUnit").respond(200, ['mock']);
+
+				CurrentUserInfo.initContext().then(function() {
+					var result = CurrentUserInfo.isConnected();
+					expect(result).toBe(true);
+					done();
+				});
+				$httpBackend.flush();
+			});
+		});
+
 	});
 })();
