@@ -69,8 +69,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new StageOvertimeJobStep(jobParameters));
 			}
-			
-			Add(new IntradayStageRequestJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayRequest_38914))
+			{
+				Add(new IntradayStageRequestJobStep(jobParameters));
+			}
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new DimBusinessUnitJobStep(jobParameters));
@@ -166,12 +168,14 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 
 
-
 			Add(new FactForecastWorkloadJobStep(jobParameters, true));
 			Add(new FactScheduleDeviationJobStep(jobParameters, true));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-			Add(new FactRequestJobStep(jobParameters, true));
-			Add(new FactRequestedDaysJobStep(jobParameters, true));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayRequest_38914))
+			{
+				Add(new FactRequestJobStep(jobParameters, true));
+				Add(new FactRequestedDaysJobStep(jobParameters, true));
+			}
 
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
 			{
