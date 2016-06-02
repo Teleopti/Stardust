@@ -47,11 +47,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return person;
 		}
 
-		public IPerson Has(IContract contract, ISchedulePeriod schedulePeriod, ISkill skill)
-		{
-			return Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team {Site = new Site("site")}, schedulePeriod, skill);
-		}
-
 		public void Add(IPerson person)
 		{
 			_persons.Add(person);
