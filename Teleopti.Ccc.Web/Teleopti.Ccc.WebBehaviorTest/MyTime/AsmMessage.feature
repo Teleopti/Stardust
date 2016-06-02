@@ -130,7 +130,7 @@ Scenario: See reply dialogue in message text
 	| Ok if you buy me dinner?  |
 	| It´s a deal!				|
 
-Scenario: Do not allow empty reply
+Scenario: Allow empty reply
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field					| Value				|
@@ -139,7 +139,7 @@ Scenario: Do not allow empty reply
 	| Text reply allowed	| True				|
 	And I am viewing messages
 	When I click on the message with the title 'New message'
-	Then I should not be able to send response for the message with the title 'New message'
+	Then I should be able to send response for the message with the title 'New message'
  
 Scenario: Show reply options for message with multiple options
 Given I have the role 'Full access to mytime'
