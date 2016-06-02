@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static ISkillDay CreateSkillDayWithDemandOnInterval(this ISkill skill, IScenario scenario, DateOnly dateOnly, double defaultDemand, IDictionary<DateTimePeriod, double> numberOfAgentsOnIntervalDemands)
 		{
-			var intervals = 24*(skill.DefaultResolution/60d);
+			var intervals = 24/(skill.DefaultResolution/60d);
 			var skillDataPeriods = new List<ISkillDataPeriod>();
 			for (var interval = 0; interval < intervals; interval++)
 			{	

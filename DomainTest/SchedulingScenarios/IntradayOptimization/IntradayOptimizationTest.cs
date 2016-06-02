@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -310,6 +311,60 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
 		}
+
+		[Test, Ignore]
+		public void ShouldOnlyConsiderPrimarySkillDuringOptimization()
+		{
+			var dateOnly = DateOnly.Today;
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
+			var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
+
+			var activity = new Activity("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
+
+			var skillA = SkillRepository.Has("skillA", activity);
+			var skillB = SkillRepository.Has("skillB", activity);
+
+			((Skill)skillA).SetCascadingIndex_UseFromTestOnly(1);
+			((Skill)skillB).SetCascadingIndex_UseFromTestOnly(2);
+
+			var agentA = new Person().InTimeZone(TimeZoneInfo.Utc).WithId();
+			
+			agentA.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
+				new[] {skillA, skillB });
+			
+			agentA.AddSchedulePeriod(schedulePeriod);
+			PersonRepository.Has(agentA);
+			agentA.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
+
+			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agentA.PermissionInformation.DefaultTimeZone());
+			var demandSkillA = new Dictionary<DateTimePeriod, double>();
+			var demandSkillB = new Dictionary<DateTimePeriod, double>();
+			var period800To815 = new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(8).AddMinutes(15));
+			var period815To830 = new DateTimePeriod(dateTime.AddHours(17).AddMinutes(15), dateTime.AddHours(17).AddMinutes(30));
+
+			demandSkillA.Add(period815To830, 1);
+			demandSkillB.Add(period800To815, 2);
+
+			SkillDayRepository.Has(new List<ISkillDay>
+						   {
+								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0 ,demandSkillA),
+								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, demandSkillB)
+								  
+						   });
+
+			PersonAssignmentRepository.Has(agentA, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
+
+			Target.Execute(planningPeriod.Id.Value);
+
+			PersonAssignmentRepository.GetSingle(dateOnly, agentA).Period
+				  .Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8).AddMinutes(15), dateTime.AddHours(17).AddMinutes(15)));
+		}
+
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
