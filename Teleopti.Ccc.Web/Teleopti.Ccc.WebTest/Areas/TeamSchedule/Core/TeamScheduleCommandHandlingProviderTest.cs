@@ -87,34 +87,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		[Test]
-		public void ShouldInvokeAddActivityCommandHandleWhenDeliberatelyNotCheckingPermission()
-		{
-			PermissionProvider.Enable();
-			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
-			var person2 = PersonFactory.CreatePersonWithGuid("c","d");
-			PersonRepository.Has(person1);
-			PersonRepository.Has(person2);
-
-			var date = new DateOnly(2016,4,16);
-
-			var input = new AddActivityFormData
-			{
-				ActivityId = Guid.NewGuid(),
-				Date = date,
-				StartTime = new DateTime(2016, 4, 16, 8, 0, 0),
-				EndTime = new DateTime(2016, 4, 16, 17, 0, 0),
-				PersonIds = new[] { person1.Id.Value, person2.Id.Value },
-				TrackedCommandInfo = new TrackedCommandInfo()
-			};
-
-			ActivityCommandHandler.ResetCalledCount();
-
-			Target.AddActivity(input, false);
-
-			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(2);
-		}
-
-		[Test]
 		public void ShouldInvokeAddPersonalActivityCommandHandleWithPermission()
 		{
 			var person1 = PersonFactory.CreatePersonWithGuid("a","b");
@@ -267,6 +239,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Messages.Contains(Resources.NoPermissionMoveAgentActivity).Should().Be.True();
 		}
+
 		[Test]
 		public void ShouldReturnWriteProtectedMsgWhenWriteProtected()
 		{
@@ -338,6 +311,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			((MoveShiftLayerCommand)(ActivityCommandHandler.CalledCommands.First())).NewStartTimeInUtc.Should().Be(input.StartTime);
 
 		}
+
 		[Test]
 		public void ShouldCovertNewStartToUTC()
 		{

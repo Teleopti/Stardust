@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenAnActivityWithTimeToIsAddedToMySchedule(string startTime, string endTime)
 		{
 			var fetchActivityUrl = "/api/TeamScheduleData/FetchActivities";
-			var createActivityUrl = "/api/TeamScheduleCommand/AddActivity/WithoutCheckingPermission";
+			var createActivityUrl = "/api/TeamScheduleCommand/AddActivity";
 			var requestData = $"ActivityId:d[0].Id, Date:'{startTime.Split(' ')[0]}',StartTime:'{startTime}',EndTime:'{endTime}',PersonIds:[user.AgentId]";
 
 			var javascript = "Teleopti.MyTimeWeb.Common.GetUserData(function(user){$.ajax({url:'" + fetchActivityUrl +
