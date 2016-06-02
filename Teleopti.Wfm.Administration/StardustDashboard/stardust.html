@@ -1,21 +1,18 @@
 ﻿<div ng-controller="stardustController as vm" style="margin-left: 50px;margin-right: 50px">
-    <h2>Stardust</h2>
+    <h2>Stardust Dashboard</h2>
 
     <div class="row">
         <div class="col-md-12">
             <h3>Nodes</h3>
-            <p>
-                Shows your nodes.
-            </p>
             <div style="font-size: 14p; font-weight: bold;color: red">{{vm.NodeError}}</div>
             <div>
                 <table>
                     <thead>
                         <tr>
-                            <th>Url</th>
-                            <th>Latest Heartbeat</th>
-                            <th>Running</th>
-                            <th>Alive</th>
+							<th>Url</th>
+							<th>Latest Heartbeat (UTC)</th>
+							<th>Working</th>
+							<th>Alive</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,10 +30,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <h3>Jobs</h3>
-            <p>
-                Shows History of jobs.
-            </p>
+            <h3>Job History</h3>
             <div style="font-size: 14p; font-weight: bold;color: red">{{vm.JobError}}</div>
             <div>
                 <table>
@@ -44,7 +38,7 @@
                         <tr>
                             <th>Name</th>
                             <th>Created By</th>
-                            <th>Created</th>
+                            <th>Created At </th>
                             <th>Started</th>
                             <th>Ended</th>
                             <th>Sent to</th>
