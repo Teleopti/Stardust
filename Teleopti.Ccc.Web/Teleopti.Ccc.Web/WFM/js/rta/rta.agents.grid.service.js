@@ -33,7 +33,7 @@
 
 				var alarmCellTemplate = coloredCellTemplate;
 				if (toggleService.RTA_AlarmContext_29357)
-					alarmCellTemplate = '<div class="ui-grid-cell-contents label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div>';
+				    alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
 
 				var alarmDurationCellTemplate = '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
@@ -74,7 +74,7 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
+					width: toggleService.RTA_AlarmContext_29357 ? "8%" : null,
 				};
 				var activity = {
 					displayName: 'Activity',
@@ -99,7 +99,7 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
+					width: toggleService.RTA_AlarmContext_29357 ? "15%" : null,
 					sortingAlgorithm: alarmOnly ? null : sortingAlgorithm
 			};
 				var timeInAlarm = {
@@ -109,7 +109,7 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmDurationCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
+					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
 				var shift = {
 					displayName: 'Shift',
