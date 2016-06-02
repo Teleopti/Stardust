@@ -2368,6 +2368,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 				}
 
+				SplitterManager.EnableShiftEditor();
+
 				scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
 
 				if (_showEditor)
