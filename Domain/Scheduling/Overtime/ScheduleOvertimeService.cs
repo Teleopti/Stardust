@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
 
@@ -22,17 +23,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IGridlockManager _gridlockManager;
 
-		public ScheduleOvertimeService(IOvertimeLengthDecider overtimeLengthDecider, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public ScheduleOvertimeService(IOvertimeLengthDecider overtimeLengthDecider, 
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IGridlockManager gridlockManager )
 		{
 			_overtimeLengthDecider = overtimeLengthDecider;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_gridlockManager = gridlockManager;
 		}
 
 		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, INewBusinessRuleCollection rules, IScheduleTagSetter scheduleTagSetter, TimeZoneInfo timeZoneInfo)
 		{
 			var person = scheduleDay.Person;
+			if (_gridlockManager.Gridlocks(person, dateOnly) != null) return false;
 			if (!hasMultiplicatorDefinitionSetOfOvertimeType(person, dateOnly)) return false;
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime, overtimePreferences.SelectedTimePeriod.EndTime);

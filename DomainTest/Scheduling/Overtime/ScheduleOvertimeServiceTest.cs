@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			_rules = NewBusinessRuleCollection.Minimum();
 			_scheduleTagSetter = _mock.StrictMock<IScheduleTagSetter>();
 			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder);
+			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager());
 			_timeZoneInfo = TimeZoneInfo.Utc;
 			_person = PersonFactory.CreatePerson("person");
 			_activity = ActivityFactory.CreateActivity("activity");
