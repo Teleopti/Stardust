@@ -41,14 +41,21 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public DateOnly Date { get; set; }
 		public ShiftTradeScheduleDayDetailViewModel FromScheduleDayDetail { get; set; }
 		public ShiftTradeScheduleDayDetailViewModel ToScheduleDayDetail { get; set; }
-		
 	}
 
 	public class ShiftTradeScheduleDayDetailViewModel
 	{
 		public string Name { get; set; }
+		public ShiftObjectType Type{ get; set; }
 		public string ShortName { get; set; }
 		public string Color { get; set; }
+	}
+
+
+	public enum ShiftObjectType
+	{
+		PersonAssignment =1,
+		DayOff
 	}
 
 	public class RequestListViewModel
@@ -65,6 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public DateTime MaximumDateTime;
 		public DateOnly FirstDateForVisualisation { get; set; }
 		public DateOnly LastDateForVisualisation { get; set; }
+			
 	}
 
 }

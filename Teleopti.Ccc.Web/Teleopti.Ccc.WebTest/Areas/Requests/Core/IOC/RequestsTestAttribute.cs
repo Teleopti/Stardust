@@ -50,16 +50,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble<FakeScheduleDataReadScheduleStorage>().For<IScheduleStorage>();
 
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
-		//	system.UseTestDouble(new FakeUserCulture(CultureInfoFactory.CreateEnglishCulture())).For<IUserCulture>();
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			system.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
 			system.UseTestDouble(new ConfigurablePermissions()).For<IAuthorization>();
 			system.UseTestDouble(new FakeCommonAgentNameProvider()).For<ICommonAgentNameProvider>();
-			system.UseTestDouble(new AbsenceRequestCancelService(personRequestCheckAuthorization))
-				.For<IAbsenceRequestCancelService>();
+			system.UseTestDouble(new AbsenceRequestCancelService(personRequestCheckAuthorization)).For<IAbsenceRequestCancelService>();
 
 			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();
-			//system.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("sv-SE"))).For<IUserCulture>();
 			system.UseTestDouble(new FakeUserCulture(CultureInfo.GetCultureInfo("en-US"))).For<IUserCulture>();
 			system.UseTestDouble(new FakeEventPublisher()).For<IEventPublisher>();
 			

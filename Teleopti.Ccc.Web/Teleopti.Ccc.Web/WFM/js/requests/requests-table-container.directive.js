@@ -18,7 +18,12 @@
 		vm.reselectRequests = reselectRequests;
 		vm.getShiftTradeHeaderClass = getShiftTradeHeaderClass;
 		vm.thereIsRequest = thereIsRequest;
-		
+		vm.isDayOff = isDayOff;
+
+		function isDayOff(scheduleDayDetail) {
+			return scheduleDayDetail.Type === requestsDefinitions.SHIFT_OBJECT_TYPE.DayOff;
+		}
+
 		$scope.$watch('requestsTableContainer.filterEnabled',
 			function handleFilterEnabledChanged(newValue, oldValue) {
 				vm.gridOptions.enableFiltering = newValue;
@@ -104,7 +109,7 @@
 			vm.filters = requestFilterSvc.Filters;
 		};
 
-		function getGridOptions(requests) {
+		function getGridOptions() {
 
 			var options = {
 				appScopeProvider: vm,
@@ -112,9 +117,8 @@
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 				useExternalSorting: true,
 				headerTemplate: 'js/requests/html/header-template.html',
-				data: requests,
 				gridMenuTitleFilter: $translate,
-				rowHeight: vm.shiftTradeView ? 60 : 30 ,
+				rowHeight: vm.shiftTradeView ? 60 : 30,
 				
 				onRegisterApi: function (gridApi) {
 
@@ -240,7 +244,10 @@
 			});
 
 			setupColumnDefinitions();
+
+			vm.gridOptions.data = requests;
 			
+
 			return requests;
 		}
 
@@ -304,7 +311,7 @@
 			scope.$watch(function() {
 				return scope.requestsTableContainer.requests;
 			}, function (requests) {
-				scope.requestsTableContainer.gridOptions.data = requestsTableContainerCtrl.prepareComputedColumns(requests);
+				requestsTableContainerCtrl.prepareComputedColumns(requests);
 				requestsTableContainerCtrl.reselectRequests();
 				
 			}, true);

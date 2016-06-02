@@ -48,6 +48,7 @@
 		function init() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
 			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
+			vm.loaded = false;
 		}
 
 		function onIsActiveChange(isActive) {

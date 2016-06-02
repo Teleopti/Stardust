@@ -152,7 +152,7 @@
 		}
 	}
 
-	[id="tab-content-1"] {
+	.text-absence-view {
 		.ui-grid-top-panel {
 			overflow: visible;
 		}
@@ -162,7 +162,10 @@
 		}
 	}
 
-	[id="tab-content-2"] {
+	.shift-trade-view {
+
+        overflow: hidden!important;
+
 		.shift-trade-header-weekend {
 			color: $red-600;
 		}
@@ -185,11 +188,11 @@
 		.isWeekend {
 			width: 100%;
 			background-color: $orange-400;
+		}
 
-			.shift-trade-cell-text {
-				background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
-				background-size: 11px 11px;
-			}
+        .is-day-off {
+			background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
+			background-size: 11px 11px;
 		}
 
 		.ui-grid-category-text {
@@ -207,10 +210,6 @@
 			text-align: center;
 			border: 1px solid #000;
 			border-radius: 2px;
-		}
-
-		md-content {
-			overflow: hidden;
 		}
 
 		.ui-grid-pinned-container-left .ui-grid-top-panel,

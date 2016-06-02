@@ -192,7 +192,47 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			shiftTradeDay.FromScheduleDayDetail.Name.Should().Be(personFromAssignment.ShiftCategory.Description.Name);
 			shiftTradeDay.FromScheduleDayDetail.ShortName.Should().Be(personFromAssignment.ShiftCategory.Description.ShortName);
 			shiftTradeDay.ToScheduleDayDetail.Color.Should().Be(personToAssignment.ShiftCategory.DisplayColor.ToHtml());
+			shiftTradeDay.ToScheduleDayDetail.Type.Should().Be(ShiftObjectType.PersonAssignment);
 			shiftTradeDay.FromScheduleDayDetail.Color.Should().Be(personFromAssignment.ShiftCategory.DisplayColor.ToHtml());
+		}
+
+		[Test, Ignore("In Progress")]
+		public void ShouldGetShiftTradeDayWithAbsence()
+		{
+
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+
+			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1), personFrom, personTo);
+			var shiftTradeRequest = (ShiftTradeRequest)personrequest.Request;
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 1)
+			};
+
+			var personToAssignment = addPersonAssignment(personTo, "sdfTo", "shiftCategory", Color.PaleVioletRed, new DateOnly(2016, 3, 1));
+			var personFromAbsence = addPersonAbsence (personFrom, "Holiday", "HO", Color.Aqua, new DateOnly (2016, 3, 1));
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 02), Scenario.Current());
+
+			setShiftTradeSwapDetailsToAndFrom(shiftTradeRequest, schedule, personTo, personFrom);
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+			var requestViewModel = (ShiftTradeRequestViewModel)requestListViewModel.Requests.First();
+			var shiftTradeDay = requestViewModel.ShiftTradeDays.Single();
+
+			shiftTradeDay.Date.Should().Be(new DateOnly(requestViewModel.PeriodStartTime));
+			shiftTradeDay.ToScheduleDayDetail.Name.Should().Be(personToAssignment.ShiftCategory.Description.Name);
+			shiftTradeDay.ToScheduleDayDetail.ShortName.Should().Be(personToAssignment.ShiftCategory.Description.ShortName);
+			shiftTradeDay.FromScheduleDayDetail.Name.Should().Be(personFromAbsence.Layer.Payload.Description.Name);
+			shiftTradeDay.FromScheduleDayDetail.ShortName.Should().Be(personFromAbsence.Layer.Payload.Description.ShortName);
+			shiftTradeDay.ToScheduleDayDetail.Color.Should().Be(personToAssignment.ShiftCategory.DisplayColor.ToHtml());
+			shiftTradeDay.ToScheduleDayDetail.Type.Should().Be(ShiftObjectType.PersonAssignment);
+			//shiftTradeDay.FromScheduleDayDetail.Type.Should().Be(ShiftObjectType.PersonAbsence);
+			shiftTradeDay.FromScheduleDayDetail.Color.Should().Be(Color.White.ToHtml());
 		}
 
 		[Test]
@@ -229,9 +269,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			requestViewModel.ShiftTradeDays.Count().Should().Be(3);
 			shiftTradeDay.ToScheduleDayDetail.Name.Should().Be("DayOff");
+			shiftTradeDay.ToScheduleDayDetail.Type.Should().Be(ShiftObjectType.DayOff);
 			shiftTradeDay.ToScheduleDayDetail.ShortName.Should().Be("DO");
 			shiftTradeDay.ToScheduleDayDetail.Color.Should().Be(Color.Gray.ToHtml());
-
 		}
 
 		[Test]
@@ -276,9 +316,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			}
 		}
 
-		private PersonAssignment addPersonAssignment(IPerson personTo, string activityName, string categoryName, Color displayColor, DateOnly date)
+		private PersonAssignment addPersonAssignment(IPerson person, string activityName, string categoryName, Color displayColor, DateOnly date)
 		{
-			var personAssignment = new PersonAssignment(personTo, Scenario.Current(), date);
+			var personAssignment = new PersonAssignment(person, Scenario.Current(), date);
 			personAssignment.AddActivity(new Activity(activityName), date.ToDateTimePeriod(TimeZoneInfo.Utc));
 			personAssignment.SetShiftCategory(new ShiftCategory(categoryName)
 			{
@@ -288,6 +328,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			ScheduleStorage.Add(personAssignment);
 			return personAssignment;
+		}
+
+
+		private PersonAbsence addPersonAbsence(IPerson person, string name, string shortName, Color displayColor, DateOnly date)
+		{
+			var personAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer (AbsenceFactory.CreateAbsence (name, shortName, displayColor), date.ToDateTimePeriod (TimeZoneInfo.Local)));
+
+			ScheduleStorage.Add(personAbsence);
+			return personAbsence;
 		}
 
 		private PersonAssignment addDayOff(IPerson personTo, string name, string shortName, Color displayColor, DateOnly date)

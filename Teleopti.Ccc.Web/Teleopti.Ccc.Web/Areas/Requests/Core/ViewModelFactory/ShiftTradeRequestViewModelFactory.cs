@@ -1,6 +1,8 @@
 using System;
+using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
@@ -16,14 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IUserCulture _userCulture;
+		private readonly IScheduleProvider _scheduleProvider;
 
-		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserCulture userCulture)
+		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IUserCulture userCulture, IScheduleProvider scheduleProvider)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_userCulture = userCulture;
+			_scheduleProvider = scheduleProvider;
 		}
 
 		public ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
@@ -77,13 +81,23 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			};
 		}
 
-		private static ShiftTradeDayViewModel createShiftTradeDayViewModel(IShiftTradeSwapDetail shiftTradeSwapDetail)
+		private ShiftTradeDayViewModel createShiftTradeDayViewModel(IShiftTradeSwapDetail shiftTradeSwapDetail)
 		{
+
+			var schedulePartTo = shiftTradeSwapDetail.SchedulePartTo ??
+								 _scheduleProvider.GetScheduleForPersons (shiftTradeSwapDetail.DateTo, new[] {shiftTradeSwapDetail.PersonTo})
+									 .SingleOrDefault();
+
+			var schedulePartFrom = shiftTradeSwapDetail.SchedulePartFrom ??
+								 _scheduleProvider.GetScheduleForPersons(shiftTradeSwapDetail.DateFrom, new[] { shiftTradeSwapDetail.PersonFrom })
+									 .SingleOrDefault();
+
+
 			var shiftTradeDayViewModel = new ShiftTradeDayViewModel()
 			{
 				Date = shiftTradeSwapDetail.DateTo,
-				ToScheduleDayDetail = createScheduleDayDetail(shiftTradeSwapDetail.SchedulePartTo),
-				FromScheduleDayDetail = createScheduleDayDetail(shiftTradeSwapDetail.SchedulePartFrom)
+				ToScheduleDayDetail = createScheduleDayDetail(schedulePartTo),
+				FromScheduleDayDetail = createScheduleDayDetail(schedulePartFrom)
 			};
 
 			return shiftTradeDayViewModel;
@@ -95,29 +109,55 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			if (scheduleDay == null) return shiftTradeScheduleDayDetailViewModel;
 
+			var significantPartForDisplay = scheduleDay.SignificantPartForDisplay();
+
+
 			if (scheduleDay.HasDayOff())
 			{
 				mapDayOffFields (scheduleDay, shiftTradeScheduleDayDetailViewModel);
 			}
 			else
 			{
-				mapMainShiftFields (scheduleDay, shiftTradeScheduleDayDetailViewModel);
+
+				if (significantPartForDisplay == SchedulePartView.FullDayAbsence || significantPartForDisplay == SchedulePartView.ContractDayOff)
+				{
+					mapFullDayAbsenceFields (scheduleDay, shiftTradeScheduleDayDetailViewModel);
+				}
+				else
+				{
+					mapMainShiftFields(scheduleDay, shiftTradeScheduleDayDetailViewModel);
+				}
 			}
 
 			return shiftTradeScheduleDayDetailViewModel;
 		}
 
+		private static void mapFullDayAbsenceFields (IScheduleDay scheduleDay, ShiftTradeScheduleDayDetailViewModel shiftTradeScheduleDayDetailViewModel)
+		{
+			var absenceCollection = scheduleDay.PersonAbsenceCollection();
+			if (absenceCollection.Count > 0)
+			{
+				var absence = absenceCollection[0].Layer.Payload;
+
+				shiftTradeScheduleDayDetailViewModel.Name = absence.Description.Name;
+				shiftTradeScheduleDayDetailViewModel.ShortName = absence.Description.ShortName;
+				shiftTradeScheduleDayDetailViewModel.Color = Color.White.ToHtml(); // absence.DisplayColor.ToHtml(); as requested, colour it white.
+			}
+		}
+
 		private static void mapMainShiftFields(IScheduleDay scheduleDay, ShiftTradeScheduleDayDetailViewModel shiftTradeScheduleDayDetailViewModel)
 		{
-			if (scheduleDay.SignificantPartForDisplay() != SchedulePartView.MainShift)
+
+			if (scheduleDay.SignificantPartForDisplay() != SchedulePartView.MainShift  )
 			{
 				return;
 			}
 			var shiftCategory = scheduleDay.PersonAssignment().ShiftCategory;
 
 			shiftTradeScheduleDayDetailViewModel.Name = shiftCategory.Description.Name;
-			shiftTradeScheduleDayDetailViewModel.Color = shiftCategory.DisplayColor.ToHtml();
 			shiftTradeScheduleDayDetailViewModel.ShortName = shiftCategory.Description.ShortName;
+			shiftTradeScheduleDayDetailViewModel.Color = shiftCategory.DisplayColor.ToHtml();
+			shiftTradeScheduleDayDetailViewModel.Type = ShiftObjectType.PersonAssignment;
 		}
 
 		private static void mapDayOffFields(IScheduleDay scheduleDay, ShiftTradeScheduleDayDetailViewModel shiftTradeScheduleDayDetailViewModel)
@@ -127,6 +167,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			shiftTradeScheduleDayDetailViewModel.Name = dayOff.Description.Name;
 			shiftTradeScheduleDayDetailViewModel.ShortName = dayOff.Description.ShortName;
 			shiftTradeScheduleDayDetailViewModel.Color = dayOff.DisplayColor.ToHtml();
+			shiftTradeScheduleDayDetailViewModel.Type = ShiftObjectType.DayOff;
+
 		}
 	}
 }

@@ -221,13 +221,16 @@
 					enableColumnResizing: true,
 					category: $filter('date')(startOfWeek.toDate(), 'shortDate'),
 					cellTemplate: 'js/requests/html/shift-trade-day-template.html',
+
+
+					//cellTemplate: '<div ng-init=\"matchingShiftTradeDays=(row.entity[\'ShiftTradeDays\'] | filterShiftTradeDetailDisplay:col.colDef.field)\" ng-class=\"col.colDef.isWeekend? \'isWeekend\':\'\'\"><table ng-if=\"matchingShiftTradeDays.length==0\" style=\"width: 100%;\"><tr><td class=\"shift-trade-cell\" ng-style=\"{\'background-color\': \'$white\'}\"></td></tr><tr><td class=\"shift-trade-cell\" ng-style=\"{\'background-color\': \'$white\'}\"></td></tr></table><table ng-if=\"matchingShiftTradeDays.length==1\" style=\"width: 100%;\"><tr ng-repeat=\"shiftTradeDay in matchingShiftTradeDays\"><td class=\"shift-trade-cell\" ><div class=\"shift-trade-cell-text\" ng-style=\"{\'background-color\': shiftTradeDay.FromScheduleDayDetail.Color}\">{{shiftTradeDay.FromScheduleDayDetail.ShortName}}<md-tooltip>{{shiftTradeDay.FromScheduleDayDetail.Name}}</md-tooltip></div></td></tr><tr ng-repeat=\"shiftTradeDay in matchingShiftTradeDays\"><td class=\"shift-trade-cell\" ><div class=\"shift-trade-cell-text\" ng-style=\"{\'background-color\': shiftTradeDay.ToScheduleDayDetail.Color}\">{{shiftTradeDay.ToScheduleDayDetail.ShortName}}<md-tooltip>{{shiftTradeDay.ToScheduleDayDetail.Name}}</md-tooltip></div></td></tr></table></div>',
 					headerCellClass: isWeekend ? 'shift-trade-header-weekend' : '',
 					width: 37,
 					//cellClass: 'shift-trade-column',
 					enableSorting: false,
 					enableFiltering: false,
 					isShiftTradeDayColumn: true,
-					isWeekend: isWeekend
+					isWeekend: isWeekend,
 				}
 			}
 

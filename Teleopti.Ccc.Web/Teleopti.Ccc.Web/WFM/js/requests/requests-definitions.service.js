@@ -35,6 +35,11 @@
 			UpdatedOnDesc	: 19
 		};
 
+		this.SHIFT_OBJECT_TYPE = {
+			PersonAssignment: 1,
+			DayOff : 2
+		}
+
 		this.REQUEST_COMMANDS = {
 			Approve: 'approve',
 			Deny: 'deny',

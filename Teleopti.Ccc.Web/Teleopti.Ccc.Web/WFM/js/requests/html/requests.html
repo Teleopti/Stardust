@@ -36,7 +36,7 @@
 			<md-content class="md-padding">
 				<md-tabs md-dynamic-height md-border-botto md-selected="requests.selectedTabIndex">
 					<md-tab label="{{'Absence' | translate}} {{'And' | translate}} {{'Text' | translate}}">
-						<md-content class="md-padding">
+						<md-content class="md-padding text-absence-view">
 							<requests-overview is-active="requests.selectedTabIndex == 0"
 											   period="requests.period"
 											   agent-search-term="requests.agentSearchTerm"
@@ -45,8 +45,8 @@
 						</md-content>
 					</md-tab>
 
-					<md-tab label="{{'ShiftTrade' | translate}}" ng-if="requests.isShiftTradeViewVisible">
-						<md-content class="md-padding">
+					<md-tab label="{{'ShiftTrade' | translate}}" ng-if="requests.isShiftTradeViewVisible" >
+						<md-content class="md-padding shift-trade-view">
 							<requests-overview shift-trade-view
 											   is-active="requests.selectedTabIndex == 1"
 											   period="requests.period"
