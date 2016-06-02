@@ -99,11 +99,10 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			return self.replyOptions.length > 1;
 		});
 
-		self.canConfirm = ko.computed(function () {
-			if (self.isSending() || (self.allowDialogueReply() && self.reply().length == 0 && (self.selectedReply() == undefined || self.selectedReply() == 'OK')) || self.selectedReply() == undefined && self.userMustSelectReplyOption()) {
-				return false;
-	}
-			return true;
+		self.canConfirm = ko.computed(function() {
+			return !self.isSending() && (!self.userMustSelectReplyOption() // No reply option selection needed
+					|| (self.userMustSelectReplyOption() && self.selectedReply() != undefined) // No reply option selected but it's necessary
+			);
 		});
 
 		self.updateItem = function (itemToUpdate) {
