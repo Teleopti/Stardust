@@ -86,8 +86,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				ApplicationStartModule.TasksFromStartup =
 					_bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>(), application).ToArray();
 
-				SignalRConfiguration.Configure(SignalRSettings.Load(),
-					() => application.MapSignalR(new HubConfiguration { EnableJSONP = true }));
+				SignalRConfiguration.Configure(SignalRSettings.Load(), () => application.MapSignalR(new HubConfiguration()));
 				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 				FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(
 					new MachineKeySessionSecurityTokenHandler());
