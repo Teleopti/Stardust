@@ -14,6 +14,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Cascading;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -118,6 +119,16 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 
 			controllerNew
 				.Should().Not.Be.SameInstanceAs(controllerNew2);
+		}
+
+		[Test]
+		public void WebShouldRespectCascadingToggle()
+		{
+			using (var container = buildContainer(Toggles.ResourcePlanner_CascadingSkills_38524, true))
+			{
+				container.Resolve<IResourceOptimizationHelper>()
+					.Should().Be.OfType<CascadingResourceCalculation>();
+			}
 		}
 
 		[Test]

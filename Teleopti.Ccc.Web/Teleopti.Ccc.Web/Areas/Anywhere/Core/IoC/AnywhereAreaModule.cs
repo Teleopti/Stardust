@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			
 			builder.RegisterType<SkillLoaderDecider>().As<ISkillLoaderDecider>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().SingleInstance();
-			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>().SingleInstance();
 			builder.RegisterType<GetSiteAdherence>().As<IGetSiteAdherence>().InstancePerLifetimeScope();
 			builder.RegisterType<GetTeamAdherence>().As<IGetTeamAdherence>().InstancePerLifetimeScope();
