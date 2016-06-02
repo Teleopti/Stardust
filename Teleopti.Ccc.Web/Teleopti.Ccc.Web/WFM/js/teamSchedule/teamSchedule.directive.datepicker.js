@@ -32,6 +32,7 @@
 						scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
 					});
 					scope.vm.isMiniMode = 'mini' in attr;
+					element.removeAttr('tabindex');
 				};
 			},
 		};
