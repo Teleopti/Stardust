@@ -1,20 +1,22 @@
-﻿<!--<ul class="notification-list wfm-simple-list notice-warning" ng-show="!requestsTableContainer.thereIsRequest()">
-	<li>
-		<i class="mdi mdi-alert"></i>
-		<b>{{"NoRequestsFound" | translate}}</b>
-	</li>
-</ul>-->
+﻿<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning></div>
 
-<div ui-grid="requestsTableContainer.gridOptions" class="ui-grid height-auto" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning></div>
-
-<div class="wfm-switch time-zone-switch" id="time-zone-switch" ng-show="!requestsTableContainer.shiftTradeView && requestsTableContainer.thereIsRequest()">
-	<input type="checkbox" id="switch1" ng-model="requestsTableContainer.isUsingRequestSubmitterTimeZone"/>
-	<label for="switch1">
-		<span class="wfm-switch-toggle"></span>
-		<span style="width: 55px; display: inline-block;"></span>
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone!=true"><span translate>LogonUserTimeZone</span></span>
-		<span class="wfm-switch-label" ng-show="requestsTableContainer.isUsingRequestSubmitterTimeZone==true" translate>RequestSubmitterTimeZone</span>
-	</label>
+<div ng-show="!requestsTableContainer.shiftTradeView && requestsTableContainer.thereIsRequest()">
+	<span class="wfm-radio">
+		<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone" checked="requestsTableContainer.isUsingRequestSubmitterTimeZone == false"
+			    ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = false" />
+		<label for="radioUserTimezone">
+			<span class="wfm-radio-toggle"></span>
+			<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
+		</label>
+	</span>
+	<span class="wfm-radio">
+		<input type="radio" name="groupTimezoneSetting" id="radioRequestTimezone" checked="requestsTableContainer.isUsingRequestSubmitterTimeZone == true"
+			   ng-click="requestsTableContainer.isUsingRequestSubmitterTimeZone = true" />
+		<label for="radioRequestTimezone">
+			<span class="wfm-radio-toggle"></span>
+			<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
+		</label>
+	</span>
 </div>
 
 <i ng-show="requestsTableContainer.gridOptions.enableFiltering" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-close" style="cursor: pointer; position: absolute; top: 5rem; left: 2rem;"></i>

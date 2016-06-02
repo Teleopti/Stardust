@@ -14254,7 +14254,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your Time zone.
+        ///   Looks up a localized string similar to Show time in my Time zone.
         /// </summary>
         public static string LogonUserTimeZone {
             get {
@@ -23019,7 +23019,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request time zone.
+        ///   Looks up a localized string similar to Show time in request time zone.
         /// </summary>
         public static string RequestSubmitterTimeZone {
             get {
