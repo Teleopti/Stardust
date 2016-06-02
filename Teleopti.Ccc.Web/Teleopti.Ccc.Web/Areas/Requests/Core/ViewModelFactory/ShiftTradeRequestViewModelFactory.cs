@@ -28,23 +28,29 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		public ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
+			var requestListModel = new ShiftTradeRequestListViewModel()
+			{
+				Requests = new RequestViewModel[] { }
+			};
+
+			if (input == null)
+			{
+				return requestListModel;
+			}
+
 			int totalCount;
 			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.ShiftTradeRequest }, out totalCount).ToArray();
 
-			var requestListModel = new ShiftTradeRequestListViewModel()
-			{
-				TotalCount = totalCount,
-				Skip = input.Paging.Skip,
-				Take = input.Paging.Take,
-				Requests = new RequestViewModel[] {}
-			};
+			requestListModel.TotalCount = totalCount;
+			requestListModel.Skip = input.Paging.Skip;
+			requestListModel.Take = input.Paging.Take;
 
 			var existsRequests = requests.Any();
 
 			if (existsRequests)
 			{
-				var requestMinDate = requests.Any() ? requests.Min(r => r.Request.Period.LocalStartDateTime) : default(DateTime);
-				var requestMaxDate = requests.Any() ? requests.Max(r => r.Request.Period.LocalEndDateTime) : default(DateTime);
+				var requestMinDate = requests.Min(r => r.Request.Period.LocalStartDateTime);
+				var requestMaxDate = requests.Max(r => r.Request.Period.LocalEndDateTime);
 				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request)).ToList();
 				requestListModel.MinimumDateTime = requestMinDate;
 				requestListModel.MaximumDateTime = requestMaxDate;

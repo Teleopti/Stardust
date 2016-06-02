@@ -52,6 +52,14 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
+			if (input == null)
+			{
+				return new RequestListViewModel
+				{
+					Requests = new RequestViewModel[] {}
+				};
+			}
+
 			int totalCount;
 			var requests = _requestsProvider.RetrieveRequests(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest }, out totalCount);
 

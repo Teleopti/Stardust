@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetNoRequests()
+		public void ShouldGetNoRequestsWithUnmatchedDate()
 		{
 			var personTo = PersonFactory.CreatePerson("Person", "To");
 			var personFrom = PersonFactory.CreatePerson("Person", "From");
@@ -249,6 +249,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+			requestListViewModel.Requests.Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldGetNoRequestsWithNullInput()
+		{
+			var personTo = PersonFactory.CreatePerson("Person", "To");
+			var personFrom = PersonFactory.CreatePerson("Person", "From");
+
+			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom, personTo);
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(null);
 			requestListViewModel.Requests.Count().Should().Be(0);
 		}
 

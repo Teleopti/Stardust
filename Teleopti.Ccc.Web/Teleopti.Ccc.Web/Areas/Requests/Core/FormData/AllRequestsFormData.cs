@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 
 			DateTime startDateTime, endDateTime;
 
-			if (startDate.RawValue == null || !DateTime.TryParse(startDate.AttemptedValue, out startDateTime)
-				|| endDate.RawValue == null || !DateTime.TryParse(endDate.AttemptedValue, out endDateTime))
+			if (startDate.RawValue == null || !DateTime.TryParse(startDate.AttemptedValue, out startDateTime) || !isValidDateRange(startDateTime)
+				|| endDate.RawValue == null || !DateTime.TryParse(endDate.AttemptedValue, out endDateTime) || !isValidDateRange(endDateTime))
 			{
 				bindingContext.ModelState.AddModelError(
 					bindingContext.ModelName, "Cannot convert value to all requests form data");
@@ -130,6 +130,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 			}
 
 			return result;
+		}
+
+		private static bool isValidDateRange(DateTime date)
+		{
+			return date > DateHelper.MinSmallDateTime && date < DateHelper.MaxSmallDateTime;
 		}
 	}
 }

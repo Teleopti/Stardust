@@ -193,6 +193,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldGetNoRequestsWithNullInput()
+		{
+			setUpRequests();
+			var result = Target.CreateRequestListViewModel(null);
+			result.Requests.Count().Should().Be.EqualTo(0);
+			result.TotalCount.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldReturnRequestsBelongToQueriedAgentsInRequestListViewModel()
 		{
 
