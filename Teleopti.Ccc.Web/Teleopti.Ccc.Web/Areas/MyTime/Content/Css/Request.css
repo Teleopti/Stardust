@@ -587,3 +587,7 @@ input[type=search]::-ms-clear {
 .shift-trade-agent-name + .tooltip {
 	white-space: pre-wrap;
 }
+
+.full-day-label {
+	max-width: 70px;
+}
