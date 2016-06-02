@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 	public class AssertConfigurationTest
 	{
 		[Test]
+		[Category("ToggleCheck")]
 		public void ShouldRunInToggleDevMode()
 		{
 			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
