@@ -92,10 +92,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			KeyPreview = true;
 			KeyDown += Form_KeyDown;
 			KeyPress += Form_KeyPress;
-			webView1.CertificateError += handlingCertificateErrorsWebView1;
-			wfmWebView.CertificateError += handlingCertificateErrorsWfmWebView;
-			wfmWebView.LoadFailed += handlingLoadFailedError;
-			webView1.LoadFailed += handlingLoadFailedError;
+
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
 		}
 

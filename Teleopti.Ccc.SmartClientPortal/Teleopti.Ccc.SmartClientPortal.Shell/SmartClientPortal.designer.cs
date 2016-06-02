@@ -243,6 +243,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.webView1.Command += new EO.WebBrowser.CommandHandler(this.webView1_Command);
 			this.webView1.NewWindow += new EO.WebBrowser.NewWindowHandler(this.webView1NewWindow);
 			this.webView1.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.webView1LoadFailed);
+			this.webView1.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWebView1);
+			// 
+			// wfmWebView
+			//
+			this.wfmWebView.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWfmWebView);
+			this.wfmWebView.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
 			// 
 			// wfmWebControl
 			// 
