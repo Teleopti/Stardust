@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldOnlyConsiderPrimarySkillDuringOptimization()
 		{
 			var dateOnly = DateOnly.Today;
