@@ -638,7 +638,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.heightPx = ko.computed(function () {
 			return self.height() + 'px';
 		});
-		self.overTimeStyle = function (color) {
+		self.overTimeLighterBackgroundStyle = ko.computed(function () {
 			var rgbTohex = function(rgb) {
 				if (rgb.charAt(0) === '#')
 					return rgb;
@@ -660,14 +660,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			var lightColor = "#00ffff";
 			var darkColor = "#795548";
-			var backgroundColor = rgbTohex(color);
+			var backgroundColor = rgbTohex(self.backgroundColor());
 			var useLighterStyle = Math.abs(getLumi(backgroundColor) - getLumi(lightColor)) > Math.abs(getLumi(backgroundColor) - getLumi(darkColor));
 
-			var darkStyle = 'linear-gradient(45deg,transparent,transparent 4px,rgba(0,0,0, .3) 6px,transparent 10px,transparent';
-			var lightStyle = 'linear-gradient(45deg,transparent,transparent 4px,rgba(255,255,255, .5) 6px,transparent 10px,transparent';
+			return useLighterStyle;
+		});
 
-			return useLighterStyle ? lightStyle : darkStyle;
-		};
+		self.overTimeDarkerBackgroundStyle = ko.computed(function() { return !self.overTimeLighterBackgroundStyle(); });
 
 		self.styleJson = ko.computed(function () {
 			return {
@@ -676,7 +675,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				'height': self.heightPx,
 				'color': self.textColor,
 				'background-size': self.isOvertime ? '11px 11px' : 'initial',
-				'background-image': self.isOvertime ? self.overTimeStyle(self.backgroundColor()) : '',
 				'background-color': self.backgroundColor
 			};
 		});

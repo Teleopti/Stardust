@@ -172,7 +172,7 @@
 					</div>
 					<!-- /ko -->
 					<!-- ko ifnot: isOvertimeAvailability() -->
-					<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson">
+					<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: styleJson, css:{'overtime-background-image-light': isOvertime && overTimeLighterBackgroundStyle, 'overtime-background-image-dark': isOvertime && overTimeDarkerBackgroundStyle}">
 						<div data-bind="visible: showTitle">
 							<strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
 							<!-- ko if: hasMeeting -->
