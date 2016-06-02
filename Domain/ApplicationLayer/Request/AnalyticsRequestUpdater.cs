@@ -139,11 +139,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		private AnalyticsPersonPeriod getPersonPeriod(IPersonRequest personRequest)
 		{
 			var personPeriods = _analyticsPersonPeriodRepository.GetPersonPeriods(personRequest.Person.Id.GetValueOrDefault());
+			if (!personPeriods.Any())
+				throw new ArgumentException("Person period missing from analytics.");
 			var personPeriod =
 				personPeriods.FirstOrDefault(
 					x => x.ValidFromDate <= personRequest.RequestedDate && x.ValidToDate > personRequest.RequestedDate);
 			if (personPeriod == null)
-				throw new ArgumentException("Person period missing from analytics.");
+				throw new ArgumentException("A person period does not exist for the required date period.");
 			return personPeriod;
 		}
 	}
