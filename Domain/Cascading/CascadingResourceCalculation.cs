@@ -36,20 +36,23 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private void doForPeriod(DateOnlyPeriod period)
 		{
-			//TODO: context för en viss period här?
-			using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider(), _timeZoneGuard).Create())
+			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				foreach (var date in period.DayCollection())
+				//TODO: context för en viss period här?
+				using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider(), _timeZoneGuard).Create())
 				{
-					//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
-					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
+					foreach (var date in period.DayCollection())
+					{
+						//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
+						_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
+					}
 				}
-			}
-			using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create())
-			{
-				foreach (var date in period.DayCollection())
+				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create())
 				{
-					_cascadeResources.Execute(date);
+					foreach (var date in period.DayCollection())
+					{
+						_cascadeResources.Execute(date);
+					}
 				}
 			}
 		}
