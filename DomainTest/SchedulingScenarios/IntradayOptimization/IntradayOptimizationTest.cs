@@ -7,7 +7,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -312,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldOnlyConsiderPrimarySkillDuringOptimization()
 		{
 			var dateOnly = DateOnly.Today;
@@ -326,35 +325,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var activity = new Activity("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 
-			var skillA = SkillRepository.Has("skillA", activity);
-			var skillB = SkillRepository.Has("skillB", activity);
-
-			((Skill)skillA).SetCascadingIndex_UseFromTestOnly(1);
-			((Skill)skillB).SetCascadingIndex_UseFromTestOnly(2);
-
-			var agentA = new Person().InTimeZone(TimeZoneInfo.Utc).WithId();
+			var skillA = SkillRepository.Has("skillA", activity, 1);
+			var skillB = SkillRepository.Has("skillB", activity, 2);
 			
-			agentA.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }),
-				new[] {skillA, skillB });
-			
-			agentA.AddSchedulePeriod(schedulePeriod);
-			PersonRepository.Has(agentA);
+			var agentA = PersonRepository.Has(contract, schedulePeriod, skillA, skillB).InTimeZone(TimeZoneInfo.Utc);
 			agentA.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agentA.PermissionInformation.DefaultTimeZone());
-			var demandSkillA = new Dictionary<DateTimePeriod, double>();
-			var demandSkillB = new Dictionary<DateTimePeriod, double>();
-			var period800To815 = new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(8).AddMinutes(15));
-			var period815To830 = new DateTimePeriod(dateTime.AddHours(17).AddMinutes(15), dateTime.AddHours(17).AddMinutes(30));
-
-			demandSkillA.Add(period815To830, 1);
-			demandSkillB.Add(period800To815, 2);
-
 			SkillDayRepository.Has(new List<ISkillDay>
 						   {
-								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0 ,demandSkillA),
-								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, demandSkillB)
-								  
+								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, new Tuple<TimePeriod, double>(new TimePeriod(17, 15, 17, 30), 1)),
+								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 2))  
 						   });
 
 			PersonAssignmentRepository.Has(agentA, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));

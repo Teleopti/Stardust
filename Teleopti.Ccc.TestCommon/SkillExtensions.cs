@@ -22,16 +22,41 @@ namespace Teleopti.Ccc.TestCommon
 
 			}
 
+			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
+		}
+
+		private static ISkillDay setupSkillDay(ISkill skill, IScenario scenario, DateOnly dateOnly, IEnumerable<ISkillDataPeriod> skillDataPeriods)
+		{
 			var workloadDays = new List<IWorkloadDay>();
 			var workloadDay = new WorkloadDay();
 			var workload = skill.WorkloadCollection.First();
-			workloadDay.CreateFromTemplate(dateOnly, workload, (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, dateOnly.DayOfWeek));
+			workloadDay.CreateFromTemplate(dateOnly, workload,
+				(IWorkloadDayTemplate) workload.GetTemplate(TemplateTarget.Workload, dateOnly.DayOfWeek));
 			workloadDays.Add(workloadDay);
-
 			var skillDay = new SkillDay(dateOnly, skill, scenario, workloadDays, skillDataPeriods);
-
-			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(dateOnly, dateOnly));
+			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> {skillDay},
+				new DateOnlyPeriod(dateOnly, dateOnly));
 			return skillDay;
+		}
+
+		public static ISkillDay CreateSkillDayWithDemandOnInterval(this ISkill skill, IScenario scenario, DateOnly dateOnly,
+			double defaultDemand, params Tuple<TimePeriod, double>[] intervalDemands)
+		{
+			var skillDataPeriods = new List<ISkillDataPeriod>();
+			var intervals = dateOnly.ToDateTimePeriod(skill.TimeZone).Intervals(TimeSpan.FromMinutes(skill.DefaultResolution));
+			var startDateTime = intervals.First().StartDateTime;
+			var intervalDemandsDic = intervalDemands.ToDictionary(k => new DateTimePeriod(startDateTime.Add(k.Item1.StartTime), startDateTime.Add(k.Item1.EndTime)), v => v.Item2);
+			foreach (var interval in intervals)
+			{
+				double demand;
+				if (!intervalDemandsDic.TryGetValue(interval, out demand))
+				{
+					demand = defaultDemand;
+				}
+				skillDataPeriods.Add(new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(), interval) { ManualAgents = demand });
+			}
+
+			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
 		}
 
 		public static ISkillDay CreateSkillDayWithDemandOnInterval(this ISkill skill, IScenario scenario, DateOnly dateOnly, double defaultDemand, IDictionary<DateTimePeriod, double> numberOfAgentsOnIntervalDemands)
@@ -51,14 +76,7 @@ namespace Teleopti.Ccc.TestCommon
 				skillDataPeriods.Add(new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(),period ) {ManualAgents = demand});
 			}
 
-			var workloadDays = new List<IWorkloadDay>();
-			var workloadDay = new WorkloadDay();
-			var workload = skill.WorkloadCollection.First();
-			workloadDay.CreateFromTemplate(dateOnly, workload, (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, dateOnly.DayOfWeek));
-			workloadDays.Add(workloadDay);
-			var skillDay = new SkillDay(dateOnly, skill, scenario, workloadDays, skillDataPeriods);
-			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, new DateOnlyPeriod(dateOnly, dateOnly));
-			return skillDay;
+			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
 		}
 
 		public static ISkillDay CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnly dateOnly, TimeSpan demandPerInterval)
@@ -77,16 +95,8 @@ namespace Teleopti.Ccc.TestCommon
 
 			skillDataPeriods.Add(skillDataPeriod);
 
-			var workloadDays = new List<IWorkloadDay>();
-			var workloadDay = new WorkloadDay();
-			var workload = skill.WorkloadCollection.First();
-			workloadDay.CreateFromTemplate(dateOnly, workload, (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, dateOnly.DayOfWeek));
-			workloadDays.Add(workloadDay);
 
-			var skillDay = new SkillDay(dateOnly, skill, scenario, workloadDays, skillDataPeriods);
-
-			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, dateOnlyPeriod);
-			return skillDay;
+			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
 		}
 
 		public static IList<ISkillDay> CreateSkillDayWithDemand(this ISkill skill, IScenario scenario, DateOnlyPeriod period, TimeSpan demandPerInterval)

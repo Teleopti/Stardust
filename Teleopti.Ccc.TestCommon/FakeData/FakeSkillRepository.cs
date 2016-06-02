@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,14 +17,24 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_skills = new List<ISkill>();
 		}
 
-		public ISkill Has(string skillName, IActivity activity)
+		public ISkill Has(string skillName, IActivity activity, int? cascadingIndex)
 		{
-			var skill = SkillFactory.CreateSkill(skillName);
+			var skill = (Skill)SkillFactory.CreateSkill(skillName);
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			skill.Activity = activity;
 			skill.SetId(Guid.NewGuid());
 			_skills.Add(skill);
+
+			if (cascadingIndex.HasValue)
+			{
+				skill.SetCascadingIndex_UseFromTestOnly(cascadingIndex.Value);
+			}
 			return skill;
+		}
+
+		public ISkill Has(string skillName, IActivity activity)
+		{
+			return Has(skillName, activity, null);
 		}
 
 		public void Has(params ISkill[] skills)
