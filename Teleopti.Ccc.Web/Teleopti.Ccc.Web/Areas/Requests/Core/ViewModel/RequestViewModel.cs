@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 	public enum ShiftObjectType
 	{
 		PersonAssignment =1,
-		DayOff
+		DayOff,
+		FullDayAbsence
 	}
 
 	public class RequestListViewModel

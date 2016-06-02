@@ -8,6 +8,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -196,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			shiftTradeDay.FromScheduleDayDetail.Color.Should().Be(personFromAssignment.ShiftCategory.DisplayColor.ToHtml());
 		}
 
-		[Test, Ignore("In Progress")]
+		[Test]
 		public void ShouldGetShiftTradeDayWithAbsence()
 		{
 
@@ -231,7 +232,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			shiftTradeDay.FromScheduleDayDetail.ShortName.Should().Be(personFromAbsence.Layer.Payload.Description.ShortName);
 			shiftTradeDay.ToScheduleDayDetail.Color.Should().Be(personToAssignment.ShiftCategory.DisplayColor.ToHtml());
 			shiftTradeDay.ToScheduleDayDetail.Type.Should().Be(ShiftObjectType.PersonAssignment);
-			//shiftTradeDay.FromScheduleDayDetail.Type.Should().Be(ShiftObjectType.PersonAbsence);
+			shiftTradeDay.FromScheduleDayDetail.Type.Should().Be(ShiftObjectType.FullDayAbsence);
 			shiftTradeDay.FromScheduleDayDetail.Color.Should().Be(Color.White.ToHtml());
 		}
 
@@ -319,7 +320,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		private PersonAssignment addPersonAssignment(IPerson person, string activityName, string categoryName, Color displayColor, DateOnly date)
 		{
 			var personAssignment = new PersonAssignment(person, Scenario.Current(), date);
-			personAssignment.AddActivity(new Activity(activityName), date.ToDateTimePeriod(TimeZoneInfo.Utc));
+			//personAssignment.AddActivity(new Activity(activityName), date.ToDateTimePeriod(TimeZoneInfo.Utc));
+			personAssignment.AddActivity(new Activity(activityName), new DateTimePeriod(date.Date.Utc(), date.Date.AddHours (8).Utc()));
 			personAssignment.SetShiftCategory(new ShiftCategory(categoryName)
 			{
 				DisplayColor = displayColor
@@ -333,9 +335,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 		private PersonAbsence addPersonAbsence(IPerson person, string name, string shortName, Color displayColor, DateOnly date)
 		{
-			var personAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer (AbsenceFactory.CreateAbsence (name, shortName, displayColor), date.ToDateTimePeriod (TimeZoneInfo.Local)));
 
+			var personfromAssignment = addPersonAssignment(person, "sdfTo", "shiftCategory", Color.PaleVioletRed, date);
+			ScheduleStorage.Add(personfromAssignment);
+
+			var personAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer (AbsenceFactory.CreateAbsence (name, shortName, displayColor), date.ToDateTimePeriod (TimeZoneInfo.Local)));
 			ScheduleStorage.Add(personAbsence);
+
 			return personAbsence;
 		}
 
