@@ -32,10 +32,11 @@ namespace Teleopti.Ccc.Win.Main
 		private void handlingRuntimeErrors(object sender, ExceptionEventArgs e)
 		{
 			_logger.Error("Error in the EO browser", e.ErrorException);
-
+			_logger.Info("EO Browser: Error in EO Browser starting the retry process.");
 			if (_restartLogonWhenEoBrowserErrorsCount < 5)
 			{
 				_restartLogonWhenEoBrowserErrorsCount++;
+				_logger.Info(string.Format("EO Browser: Error in EO Browser retry number {0} process.", _restartLogonWhenEoBrowserErrorsCount));
 				StartLogon();
 			}
 			else
@@ -74,9 +75,11 @@ namespace Teleopti.Ccc.Win.Main
 		public ILogonPresenter Presenter { get; set; }
 		public bool StartLogon()
 		{
+			_logger.Info("EO Browser: Stating the login process by loading the URL.");
 			webView1.BeforeContextMenu += webView1_BeforeContextMenu;
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
+			_logger.Info("EO Browser: Loading URL to show the login web view.");
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
@@ -90,11 +93,13 @@ namespace Teleopti.Ccc.Win.Main
 
 		private void WebView_JSIsTeleoptiProvider(object sender, JSExtInvokeArgs e)
 		{
+			_logger.Info("EO Browser: Called from the JS to populate the application type");
 			_model.AuthenticationType = AuthenticationTypeOption.Application;
 		}
 
 		private void WebView_JSFatClientWebLogin(object sender, JSExtInvokeArgs e)
 		{
+			_logger.Info("EO Browser: Called from the JS to start the login process for fat client");
 			var personId = Guid.Parse(e.Arguments[1].ToString());
 			var businessUnitId = Guid.Parse(e.Arguments[0].ToString());
 			_model.PersonId = personId;

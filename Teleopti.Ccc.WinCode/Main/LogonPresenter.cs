@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		{
 			CurrentStep = LoginStep.SelectLogonType;
 			_view.ServerUrl = serverUrl;
+			Logger.Info("EO Browser: show the login screen.");
 			return _view.StartLogon();
 			
 		}
@@ -215,7 +216,8 @@ namespace Teleopti.Ccc.WinCode.Main
 
 		public bool webLogin(Guid businessunitId)
 		{
-		    try
+			Logger.Info("EO Browser: Authenticating the user in web");
+			try
 		    {
                 var authenticationResult = _authenticationQuerier.TryLogon(new IdLogonClientModel { Id = _model.PersonId }, UserAgentConstant.UserAgentWin);
                 if (!StateHolderReader.IsInitialized)
@@ -225,7 +227,8 @@ namespace Teleopti.Ccc.WinCode.Main
                 }
                 if (authenticationResult.Success)
                 {
-                    _model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, authenticationResult.Person);
+						  Logger.Info("EO Browser: Authentication was successful");
+						  _model.SelectedDataSourceContainer = new DataSourceContainer(authenticationResult.DataSource, authenticationResult.Person);
                     WinTenantCredentials.SetCredentials(authenticationResult.Person.Id.Value, authenticationResult.TenantPassword);
                     using (var uow = _model.SelectedDataSourceContainer.DataSource.Application.CreateAndOpenUnitOfWork())
                     {
@@ -236,7 +239,8 @@ namespace Teleopti.Ccc.WinCode.Main
                     initApplication();
                     return true;
                 }
-                _model.Warning = authenticationResult.FailReason;
+				Logger.Info("EO Browser: Authentication was unsuccessful");
+				_model.Warning = authenticationResult.FailReason;
                 _model.AuthenticationType = AuthenticationTypeOption.Application;
                 return false;
             }
@@ -252,6 +256,7 @@ namespace Teleopti.Ccc.WinCode.Main
 		}
 		private void initApplication()
 		{
+			Logger.Info("EO Browser: Loading the main application");
 			_view.ClearForm(Resources.InitializingTreeDots);
 			setBusinessUnit();
 			if (!_initializer.InitializeApplication(_model.SelectedDataSourceContainer))
@@ -259,11 +264,13 @@ namespace Teleopti.Ccc.WinCode.Main
 				_view.Exit(DialogResult.Cancel);
 				return;
 			}
+			Logger.Info("EO Browser: Loaded the main application disposing the login screen now.");
 			_view.Exit(DialogResult.OK);
 		}
 
 		private void setBusinessUnit()
 		{
+			Logger.Info("EO Browser: Setting business unit before loading fat client");
 			var businessUnit = _model.SelectedBu;
 			businessUnit = _availableBusinessUnitsProvider.LoadHierarchyInformation(_model.SelectedDataSourceContainer.DataSource, businessUnit);
 
