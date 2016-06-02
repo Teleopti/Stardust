@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('addActivity', addActivityDirective);
@@ -24,17 +24,31 @@
 		vm.isInputValid = function () {
 			if (vm.timeRange == undefined || vm.selectedActivityId == undefined || vm.timeRange.startTime == undefined) return false;
 
-			var invalidAgents = vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange.startTime); });
+			var invalidAgents = vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); });
 			vm.notAllowedNameListString = invalidAgents.map(function (x) { return x.name; }).join(', ');
 
 			return invalidAgents.length === 0;
 		};
 
-		vm.isNewActivityAllowedForAgent = function (agent, activityStart) {
-			var mActivityStart = moment(activityStart);
+		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
+			var mNewActivityStart = moment(timeRange.startTime);
+			var mNewActivityEnd = moment(timeRange.endTime);
 			var mScheduleEnd = moment(agent.scheduleEndTime);
+			var mScheduleStart = moment(agent.scheduleStartTime);
+			var allowShiftTotalMinutes = 36 * 60;
+			var totalMinutes;
 
-			return !vm.isNextDay || mActivityStart.isSame(mScheduleEnd, 'day') && (mScheduleEnd.isAfter(mActivityStart));
+			if (mNewActivityEnd.isSame(moment(vm.selectedDate()), 'day')) {
+				totalMinutes = (mNewActivityEnd.hours() - mScheduleStart.hours()) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
+			} else {
+				totalMinutes = (mNewActivityEnd.hours() - mScheduleStart.hours() + 24) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
+			}
+
+			var withinAllowShiftPeriod = totalMinutes <= allowShiftTotalMinutes;
+
+			if (mNewActivityStart.isSame(mScheduleEnd, 'day'))
+				return withinAllowShiftPeriod && (mScheduleEnd.isAfter(mNewActivityStart));
+			else return withinAllowShiftPeriod;
 		}
 
 		vm.addActivity = function () {
