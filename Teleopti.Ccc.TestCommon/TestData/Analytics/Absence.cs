@@ -49,5 +49,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		public IEnumerable<DataRow> Rows { get; private set; }
 
+		public static Absence NotDefinedAbsence(IDatasourceData datasource, int businessUnitId)
+		{
+			return new Absence(-1, Guid.Empty, "Not Defined", Color.Empty, datasource, businessUnitId);
+		}
+
 	}
 }

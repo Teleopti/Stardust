@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.WebBehaviorTest.Bindings.DoNotUse;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -81,7 +82,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var person = people.FirstOrDefault(p => p.Name == personName);
 			if (person == null)
 			{
+				var partTimePercentageRepository = new PartTimePercentageRepository(uow);
+				var contractRepository = new ContractRepository(uow);
+				var contractScheduleRepository = new ContractScheduleRepository(uow);
 				person = PersonFactory.CreatePerson(personName);
+				
+				var contract = PersonContractFactory.CreatePersonContract();
+				partTimePercentageRepository.Add(contract.PartTimePercentage);
+				contractRepository.Add(contract.Contract);
+				contractScheduleRepository.Add(contract.ContractSchedule);
+				person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 01, 01),
+					contract,
+					DefaultTeam.Get()));
 				personRepository.Add(person);
 			}
 			return person;

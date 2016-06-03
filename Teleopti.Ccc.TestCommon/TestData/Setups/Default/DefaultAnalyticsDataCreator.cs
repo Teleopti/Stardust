@@ -9,6 +9,18 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 {
 	public class DefaultAnalyticsDataCreator
 	{
+		private static readonly Func<IList<IAnalyticsDataSetup>> oneTimeSetups = () =>
+		{
+			return new IAnalyticsDataSetup[]
+			{
+				new RequestStatus(0, "Pending", "ResRequestStatusPending"),
+				new RequestStatus(1, "Approved", "ResRequestStatusApproved"),
+				new RequestStatus(2, "Denied", "ResRequestStatusDenied"),
+				new RequestType(0, "Text", "ResRequestTypeText"),
+				new RequestType(1, "Absence", "ResRequestTypeAbsence"),
+				new RequestType(2, "Shift Trade", "ResRequestTypeShiftTrade"),
+			};
+		};
 		private static readonly Func<IList<IAnalyticsDataSetup>> generateSetups = () =>
 		{
 			var utcAndCetTimeZones = new UtcAndCetTimeZones();
@@ -30,7 +42,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 				new DefaultAcdLogin(),
 				new Scenario(12, DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault(), true),
 				Team.NotDefinedTeam(),
-				Person.NotDefinedPerson(existingDatasources)
+				Person.NotDefinedPerson(existingDatasources),
+				Absence.NotDefinedAbsence(existingDatasources, 1)
 			};
 		};
 		private static readonly IList<IAnalyticsDataSetup> setups = generateSetups();
@@ -45,6 +58,22 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Default
 					_hashValue = setups.Aggregate(37, (current, setup) => current ^ setup.GetHashCode());
 				return _hashValue.Value;
 			}
+		}
+
+		public void OneTimeSetup()
+		{
+			var analyticsDataFactory = new AnalyticsDataFactory();
+			foreach (var setup in oneTimeSetups())
+			{
+				try
+				{
+					analyticsDataFactory.Apply(setup);
+				}
+				catch
+				{
+				}
+			}
+			analyticsDataFactory.Persist();
 		}
 
 		public void Create()
