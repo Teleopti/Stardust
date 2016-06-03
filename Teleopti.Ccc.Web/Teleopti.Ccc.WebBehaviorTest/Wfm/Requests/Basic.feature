@@ -25,6 +25,11 @@ Background:
 	| Field      | Value      |
 	| Start date | 2015-06-18 |
 	| Team      | Green Team |
+	And 'John Smith' has a person period with 
+	| Field      | Value      |
+	| Start date | 2015-01-01 |
+	| End date | 2015-05-30 |
+	| Team      | Green Team |
 	And 'Ashley Andeen' has an existing text request with
 	| Field     | Value            |
 	| StartTime | 2015-10-03 10:00 |
