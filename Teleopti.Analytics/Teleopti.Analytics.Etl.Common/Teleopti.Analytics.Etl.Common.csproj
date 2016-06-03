@@ -138,9 +138,7 @@
     <Compile Include="Tenants.cs" />
     <Compile Include="Service\EtlJobStarter.cs" />
     <Compile Include="Service\EtlService.cs" />
-    <Compile Include="Infrastructure\BulkWriter.cs" />
     <Compile Include="Infrastructure\CubeRepository.cs" />
-    <Compile Include="Infrastructure\DatabaseCommand.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\AbsenceInfrastructure.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\AcdLogOnPersonInfrastructure.cs" />
     <Compile Include="Infrastructure\DataTableDefinition\ActivityInfrastructure.cs" />
@@ -175,7 +173,6 @@
     <Compile Include="Infrastructure\EtlJobLock.cs" />
     <Compile Include="Infrastructure\FindTenantLogonInfoUnsecured.cs" />
     <Compile Include="Infrastructure\GeneralInfrastructure.cs" />
-    <Compile Include="Infrastructure\HelperFunctions.cs" />
     <Compile Include="Infrastructure\IGeneralInfrastructure.cs" />
     <Compile Include="Infrastructure\IThreadPool.cs" />
     <Compile Include="Infrastructure\LicenseActivator.cs" />

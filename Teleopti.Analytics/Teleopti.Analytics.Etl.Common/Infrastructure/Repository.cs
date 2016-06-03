@@ -4,6 +4,7 @@ using System.Data.SqlClient;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {

@@ -7,7 +7,7 @@ using System.Globalization;
 using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
-namespace Teleopti.Analytics.Etl.Common.Infrastructure
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
     public class BulkWriter
     {

@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Infrastructure.Util;
 
-namespace Teleopti.Analytics.Etl.Common.Infrastructure
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class DatabaseCommand
 	{

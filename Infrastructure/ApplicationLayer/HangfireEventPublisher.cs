@@ -40,6 +40,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			});
 		}
 
+		public void PublishDaily(IEvent @event)
+		{
+			jobsFor(@event).ForEach(j =>
+			{
+				_client.AddOrUpdateDaily(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+			});
+		}
+
 		public void PublishHourly(IEvent @event)
 		{
 			jobsFor(@event).ForEach(j =>

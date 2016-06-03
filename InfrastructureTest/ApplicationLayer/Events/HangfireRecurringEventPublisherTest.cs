@@ -38,6 +38,14 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		}
 
 		[Test]
+		public void ShouldAddOrUpdateDaily()
+		{
+			Target.PublishDaily(new HangfireTestEvent());
+
+			JobClient.Recurring.Single().Daily.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldAddOrUpdateHourly()
 		{
 			Target.PublishHourly(new HangfireTestEvent());

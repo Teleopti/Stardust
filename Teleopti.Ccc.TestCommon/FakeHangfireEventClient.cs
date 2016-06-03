@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon
 			public string EventType;
 			public string Event;
 			public string HandlerType;
+			public bool Daily;
 			public bool Hourly;
 			public bool Minutely;
 		}
@@ -56,6 +57,13 @@ namespace Teleopti.Ccc.TestCommon
 		public IEnumerable<string> RecurringHandlerTypes { get { return _recurringJobs.Select(x => x.HandlerType); } }
 
 		public bool HasRecurringJobs { get { return _recurringJobs.Any(); } }
+
+		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent,
+			string handlerType)
+		{
+			var job = recurring(displayName, id, tenant, eventType, serializedEvent, handlerType);
+			job.Daily = true;
+		}
 
 		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
 		{

@@ -190,6 +190,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\IndexMaintenanceStardust.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />
@@ -323,6 +324,11 @@
     <Compile Include="Infrastructure\CleanFailedQueueHandler.cs" />
     <Compile Include="Infrastructure\CleanFailedQueuePublisher.cs" />
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
+    <Compile Include="Infrastructure\Events\IndexMaintenance.cs" />
+    <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
+    <Compile Include="Infrastructure\IndexMaintenanceHandler.cs" />
+    <Compile Include="Infrastructure\IndexMaintenancePublisher.cs" />
+    <Compile Include="Infrastructure\IndexMaintenanceStardustHandler.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />

@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Globalization;
 using log4net;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Analytics.Etl.Common.Infrastructure
 {

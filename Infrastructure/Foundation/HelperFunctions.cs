@@ -2,7 +2,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
 
-namespace Teleopti.Analytics.Etl.Common.Infrastructure
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public static class HelperFunctions
 	{
