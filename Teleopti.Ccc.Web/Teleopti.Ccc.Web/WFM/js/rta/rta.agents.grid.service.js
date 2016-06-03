@@ -65,7 +65,7 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "15%" : null,
+					width: toggleService.RTA_AlarmContext_29357 ? "18%" : null,
 				};
 				var state = {
 					displayName: 'State',
@@ -99,7 +99,7 @@
 					headerCellTemplate: headerCellTemplate,
 					cellTemplate: alarmCellTemplate,
 					headerCellFilter: 'translate',
-					width: toggleService.RTA_AlarmContext_29357 ? "15%" : null,
+					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
 					sortingAlgorithm: alarmOnly ? null : sortingAlgorithm
 			};
 				var timeInAlarm = {
@@ -119,7 +119,7 @@
 					cellClass: 'shift-class',
 					cellTemplate: 'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html',
 					headerCellFilter: 'translate',
-					width: "40%",
+					width: "42%",
 				};
 				
 				var columnDefs = [];
