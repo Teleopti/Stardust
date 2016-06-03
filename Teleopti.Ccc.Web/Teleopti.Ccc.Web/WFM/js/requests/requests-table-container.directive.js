@@ -21,7 +21,7 @@
 		vm.isDayOff = isDayOff;
 
 		function isDayOff(scheduleDayDetail) {
-			return scheduleDayDetail.Type === requestsDefinitions.SHIFT_OBJECT_TYPE.DayOff;
+			return (scheduleDayDetail && (scheduleDayDetail.Type === requestsDefinitions.SHIFT_OBJECT_TYPE.DayOff));
 		}
 
 		$scope.$watch('requestsTableContainer.filterEnabled',
