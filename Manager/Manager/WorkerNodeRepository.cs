@@ -213,22 +213,24 @@ namespace Stardust.Manager
 				{
 					connection.OpenWithRetry(_retryPolicy);
 
-					var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat,
-											Alive = @Alive
-											WHERE Url = @Url";
+					var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = GETUTCDATE(),
+											Alive = 1
+											WHERE Url = @Url
+											IF @@ROWCOUNT = 0
+											BEGIN
+											INSERT INTO [Stardust].[WorkerNode] (Id, Url, Heartbeat, Alive) 
+											VALUES(NEWID(), @Url, GETUTCDATE(), 1)
+											END";
 
 					if (!updateStatus)
 					{
-						updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat
+						updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = GETUTCDATE()
 											WHERE Url = @Url";
 					}
 
 					using (var command = new SqlCommand(updateCommandText, connection))
 					{
-						command.Parameters.Add("@Heartbeat", SqlDbType.DateTime).Value = DateTime.UtcNow;
-						command.Parameters.Add("@Alive", SqlDbType.Bit).Value = true;
 						command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = nodeUri;
-
 						command.ExecuteNonQueryWithRetry(_retryPolicy);
 					}
 				}
