@@ -180,9 +180,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
         }
 
 		[Test]
-		public void ShouldReturnCustomChanges()
+		public void ShouldReturnCustomChangesWithoutResetTheBeforeChange()
 		{
 			var changes = ((IProvideCustomChangeInfo) _target).CustomChanges(DomainUpdateType.Update);
+			changes.Count().Should().Be.GreaterThanOrEqualTo(1);
+
+			changes = ((IProvideCustomChangeInfo)_target).CustomChanges(DomainUpdateType.Update);
 			changes.Count().Should().Be.GreaterThanOrEqualTo(1);
 		}
 

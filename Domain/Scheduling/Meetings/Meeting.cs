@@ -387,7 +387,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		public virtual IEnumerable<IRootChangeInfo> CustomChanges(DomainUpdateType status)
 		{
-			return _meetingChangeTracker.CustomChanges(this, status);
+			var beforeChanges = _meetingChangeTracker.BeforeChanges();
+			var changes = _meetingChangeTracker.CustomChanges(this, status);
+			_meetingChangeTracker.ResetSnapshot();
+			_meetingChangeTracker.TakeSnapshot(beforeChanges);
+
+			return changes;
 		}
 
 		public virtual IAggregateRoot BeforeChanges()
