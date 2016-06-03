@@ -24,5 +24,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.Single().Name.Should().Be("Paris");
 		}
+
+		[Test]
+		public void ShouldSortByName()
+		{
+			Sites.Has(new Site("C"));
+			Sites.Has(new Site("B"));
+			Sites.Has(new Site("A"));
+
+			var result = Target.Build();
+
+			result.Select(x => x.Name)
+				.Should().Have.SameSequenceAs(new[] {"A", "B", "C"});
+		}
 	}
 }

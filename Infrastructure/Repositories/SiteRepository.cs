@@ -43,5 +43,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetMaxResults(maxHits)
 				.List<ISite>();
 		}
+
+	    public IEnumerable<ISite> LoadAllOrderByName()
+	    {
+			return Session.CreateCriteria<Site>()
+				.AddOrder(Order.Asc("Description.Name"))
+				.List<ISite>();
+			
+	    }
     }
 }

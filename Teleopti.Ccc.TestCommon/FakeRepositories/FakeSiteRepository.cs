@@ -61,5 +61,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _data.Where(x => x.Description.Name.Contains(searchString)).Take(maxHits);
 		}
+
+		public IEnumerable<ISite> LoadAllOrderByName()
+		{
+			return _data.OrderBy(x => x.Description.Name);
+		}
 	}
 }

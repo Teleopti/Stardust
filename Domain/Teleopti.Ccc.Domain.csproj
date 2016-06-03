@@ -196,7 +196,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInTeamReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\PersonalAvailableDataProvider.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ShiftCategory\AnalyticsShiftCategoryUpdater.cs" />

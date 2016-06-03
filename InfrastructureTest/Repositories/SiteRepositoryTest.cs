@@ -132,5 +132,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		    var loaded = new SiteRepository(UnitOfWork).FindSiteByDescriptionName(name);
 		    loaded.Single().TeamCollection.Count.Should().Be(0);
 	    }
+
+	    [Test]
+	    public void ShouldSortByName()
+	    {
+		    PersistAndRemoveFromUnitOfWork(new Site("B"));
+			PersistAndRemoveFromUnitOfWork(new Site("C"));
+			PersistAndRemoveFromUnitOfWork(new Site("A"));
+
+			var loaded = new SiteRepository(UnitOfWork).LoadAllOrderByName();
+
+		    loaded.Select(x => x.Description.Name).Should()
+			    .Have.SameSequenceAs("A", "B", "C");
+	    }
     }
 }

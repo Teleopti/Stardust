@@ -4,36 +4,37 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class SiteViewModelBuilder
 	{
-		private readonly IPersonalAvailableDataProvider _personalAvailableDataProvider;
 		private readonly INow _now;
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
+		private readonly ICurrentAuthorization _authorization;
 
 		public SiteViewModelBuilder(
-			IPersonalAvailableDataProvider 
-			personalAvailableDataProvider, 
 			INow now, 
 			ISiteRepository siteRepository, 
-			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader)
+			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
+			ICurrentAuthorization authorization)
 		{
-			_personalAvailableDataProvider = personalAvailableDataProvider;
 			_now = now;
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
+			_authorization = authorization;
 		}
 
 		public IEnumerable<SiteViewModel> Build()
 		{
-			var sites = _personalAvailableDataProvider != null
-				? _personalAvailableDataProvider.AvailableSites(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview,
-					_now.LocalDateOnly()).ToArray()
-				: _siteRepository.LoadAll();
+			var sites = _siteRepository.LoadAllOrderByName()
+				.Where(s =>
+					_authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(), s)
+				)
+				.ToArray();
 
 			IDictionary<Guid, int> numberOfAgents = new Dictionary<Guid, int>();
 			if (sites.Any())
