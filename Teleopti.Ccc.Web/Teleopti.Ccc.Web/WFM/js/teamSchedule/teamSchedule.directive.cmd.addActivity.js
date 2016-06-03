@@ -31,13 +31,12 @@
 		};
 
 		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
-
 			var mNewActivityStart = moment(timeRange.startTime);
 			var mNewActivityEnd = moment(timeRange.endTime);
 			var mScheduleStart = moment(agent.scheduleStartTime);
 			var mScheduleEnd = moment(agent.scheduleEndTime);
 			var allowShiftTotalMinutes = 36 * 60;
-			var totalMinutes = (mNewActivityStart.days() - mScheduleStart.days()) * 24 * 60 + (mNewActivityEnd.hours() - mScheduleStart.hours()) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
+			var totalMinutes = (mNewActivityEnd.days() - mScheduleStart.days()) * 24 * 60 + (mNewActivityEnd.hours() - mScheduleStart.hours()) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
 
 			var withinAllowShiftPeriod = totalMinutes <= allowShiftTotalMinutes;
 
