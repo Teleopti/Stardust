@@ -1,0 +1,44 @@
+﻿.navbar{
+	position:fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	transition:$transition-timing;
+
+	.nav-tools{
+		position: fixed;
+		right: 0;
+		top: 0;
+	}
+
+	.nav-tools{
+		a:hover i {
+			color:$text-color-standard;
+		}
+		.context-menu:focus i {
+			color:$text-color-standard;
+		}
+	}
+
+	.navbar-right .card-context{
+		margin:0;
+	}
+
+	.bu-select{
+		color:$white;
+	}
+
+	.nav-context-menu .arrow-up{
+		border-bottom: 15px solid $white;
+	}
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	.container.content{
+		height: 92vh;
+	}
+
+	.nav-context-menu .nav-context-menu-left{
+		text-transform:inherit!important;
+	}
+}

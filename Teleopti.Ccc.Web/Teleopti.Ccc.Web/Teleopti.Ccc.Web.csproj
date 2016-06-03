@@ -1659,7 +1659,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.unsubscriber.js" />
     <Content Include="Areas\MyTime\Views\CiscoWidget\Index.cshtml" />
     <EmbeddedResource Include="tzdb2016c.nzd" />
-    <Content Include="WFM\css\_businessunits.scss" />
+    <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
@@ -2349,11 +2349,9 @@
     <Content Include="WFM\css\_print.scss" />
     <Content Include="WFM\css\_rta.scss" />
     <Content Include="WFM\js\outbound\outbound.service.misc.js" />
-    <Content Include="WFM\css\_timerangepicker.scss" />
     <Content Include="WFM\css\_teamschedule.scss" />
     <Content Include="WFM\css\_wfmrightpanel.scss" />
     <Content Include="WFM\css\_requests.scss" />
-    <Content Include="WFM\css\_workinghourspicker.scss" />
     <Content Include="WFM\css\_start.scss" />
   </ItemGroup>
   <ItemGroup>
