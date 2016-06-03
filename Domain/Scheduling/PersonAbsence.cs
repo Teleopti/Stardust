@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var events = base.PopAllEvents(now, operation).ToList();
 			if (!operation.HasValue) return events;
-			if (operation == DomainUpdateType.Delete && AbsenceRequest != null)
+			if (operation == DomainUpdateType.Delete)
 			{
 				var requestPersonAbsenceRemovedEvent = new RequestPersonAbsenceRemovedEvent()
 				{
@@ -177,9 +177,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScenarioId = Scenario.Id.GetValueOrDefault(),
 					StartDateTime = Period.StartDateTime,
 					EndDateTime = Period.EndDateTime,
-					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault(),
-					AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault()
+					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()					
 				};
+
+				if (AbsenceRequest != null)
+				{
+					requestPersonAbsenceRemovedEvent.AbsenceRequestId = AbsenceRequest.Id.GetValueOrDefault();
+				}
 				events.Add(requestPersonAbsenceRemovedEvent);
 			}
 			return events;
