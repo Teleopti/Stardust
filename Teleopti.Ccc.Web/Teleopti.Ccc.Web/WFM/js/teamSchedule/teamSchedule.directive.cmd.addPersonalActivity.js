@@ -116,7 +116,7 @@
 					});
 				}
 				addTabindexTo(
-					tElement[0].querySelectorAll('select.activity-selector'),
+					tElement[0].querySelectorAll('md-select.activity-selector'),
 					tElement[0].querySelectorAll('activity-time-range-picker'),
 					tElement[0].querySelectorAll('button#applyPersonalActivity')
 				);

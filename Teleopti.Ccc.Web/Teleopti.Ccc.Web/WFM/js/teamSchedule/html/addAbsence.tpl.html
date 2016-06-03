@@ -4,10 +4,9 @@
 		<form name="newAbsenceForm">
 			<h3>{{'Absence'|translate}}: </h3>
 			<div class="con-row">
-				<select class="absence-selector focus-default" ng-model="vm.selectedAbsenceId" required>
-					<option class="command-panel-option" value="" disabled selected="">{{'PickAnAbsence'|translate}}</option>
-					<option class="command-panel-option" value="{{absence.Id}}" ng-repeat="absence in vm.availableAbsenceTypes | orderBy: 'Name'">{{absence.Name}}</option>
-				</select>
+				<md-select class="absence-selector focus-default" ng-model="vm.selectedAbsenceId" required placeholder="{{'PickAnAbsence'|translate}}">
+					<md-option ng-repeat="absence in vm.availableAbsenceTypes | orderBy: 'Name'" ng-value="absence.Id">{{absence.Name}}</md-option>
+				</md-select>
 			</div>
 
 			<h3>{{'From'|translate}}: </h3>

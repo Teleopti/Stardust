@@ -38,7 +38,7 @@
 
 	it('add-personal-activity should render correctly', function () {
 		var result = setUp();
-		
+
 		expect(result.commandControl).not.toBeNull();
 	});
 
@@ -51,7 +51,7 @@
 	it('should load activity list', function () {
 		var result = setUp();
 
-		var activities = result.container[0].querySelectorAll('.add-activity .activity-selector .activity-option-item');
+		var activities = result.container[0].querySelectorAll('.add-activity .activity-selector md-option');
 
 		expect(activities.length).toBe(5);
 	});
@@ -238,7 +238,7 @@
 
 		var result = setUp(date);
 		var vm = result.commandControl;
-	
+
 		var defaultStartTime = vm.getDefaultActvityStartTime();
 		expect(defaultStartTime.getHours()).toBe(11);
 	});
@@ -248,15 +248,15 @@
 		var html = '<teamschedule-command-container date="curDate"></teamschedule-command-container>';
 		var scope = $rootScope.$new();
 
-		if (inputDate == null) 
+		if (inputDate == null)
 			 date = moment('2016-06-15').toDate();
 		else
 			date = inputDate;
-			
+
 		scope.curDate = date;
 		fakeActivityService.setAvailableActivities(getAvailableActivities());
 
-		var container = $compile(html)(scope);	
+		var container = $compile(html)(scope);
 		scope.$apply();
 
 		container.isolateScope().vm.setActiveCmd('AddPersonalActivity');

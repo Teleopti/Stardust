@@ -51,7 +51,7 @@
 	it('should load activity list', function () {
 		var result = setUp();
 
-		var activities = result.container[0].querySelectorAll('.add-activity .activity-selector .activity-option-item');
+		var activities = result.container[0].querySelectorAll('.add-activity .activity-selector md-option');
 
 		expect(activities.length).toBe(5);
 	});
