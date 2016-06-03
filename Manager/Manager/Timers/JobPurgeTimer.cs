@@ -17,7 +17,6 @@ namespace Stardust.Manager.Timers
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 			_connectionString = managerConfiguration.ConnectionString;
 			Elapsed += PurgeTimer_elapsed;
-			Purge();
 		}
 
 		public virtual void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
