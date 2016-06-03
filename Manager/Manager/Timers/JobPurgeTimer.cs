@@ -2,16 +2,16 @@
 using System.Timers;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 
-namespace Stardust.Manager
+namespace Stardust.Manager.Timers
 {
-	public class PurgeTimer : Timer
+	public class JobPurgeTimer : Timer
 	{
 		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly RetryPolicy _retryPolicy;
 		private readonly string _connectionString;
 
 
-		public PurgeTimer(RetryPolicyProvider retryPolicyProvider, ManagerConfiguration managerConfiguration) : base(managerConfiguration.PurgeIntervalHours*60*60*1000)
+		public JobPurgeTimer(RetryPolicyProvider retryPolicyProvider, ManagerConfiguration managerConfiguration) : base(managerConfiguration.PurgeJobsIntervalHours*60*60*1000)
 		{
 			_managerConfiguration = managerConfiguration;
 			_retryPolicy = retryPolicyProvider.GetPolicy();
@@ -34,7 +34,7 @@ namespace Stardust.Manager
 				using (var deleteCommand = new SqlCommand(deleteCommandText, connection))
 				{
 					deleteCommand.Parameters.AddWithValue("@hours", _managerConfiguration.PurgeJobsOlderThanHours);
-					deleteCommand.Parameters.AddWithValue("@batchsize", _managerConfiguration.PurgeBatchSize);
+					deleteCommand.Parameters.AddWithValue("@batchsize", _managerConfiguration.PurgeJobsBatchSize);
 
 					deleteCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}

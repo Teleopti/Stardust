@@ -5,6 +5,7 @@ using System.Timers;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
+using Stardust.Manager.Timers;
 
 namespace Stardust.Manager
 { 
@@ -22,7 +23,8 @@ namespace Stardust.Manager
 		                  IWorkerNodeRepository workerNodeRepository,
 		                  IHttpSender httpSender,
 		                  ManagerConfiguration managerConfiguration,
-						  Timer purgeTimer)
+						  JobPurgeTimer jobPurgeTimer,
+						  NodePurgeTimer nodePurgeTimer)
 		{
 			_jobRepository = jobRepository;
 			_workerNodeRepository = workerNodeRepository;
@@ -37,7 +39,8 @@ namespace Stardust.Manager
 			_checkHeartbeatsTimer.Interval = _managerConfiguration.AllowedNodeDownTimeSeconds*200;
 			_checkHeartbeatsTimer.Start();
 
-			purgeTimer.Start();
+			jobPurgeTimer.Start();
+			nodePurgeTimer.Start();
 
 			var workerNodes = _workerNodeRepository.GetAllWorkerNodes();
 

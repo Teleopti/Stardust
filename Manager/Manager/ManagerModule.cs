@@ -3,6 +3,7 @@ using Autofac;
 using Autofac.Integration.WebApi;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Timers;
 using Stardust.Manager.Validations;
 
 namespace Stardust.Manager
@@ -22,7 +23,8 @@ namespace Stardust.Manager
 			builder.RegisterType<NodeManager>().SingleInstance();
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<Validator>().SingleInstance();
-			builder.RegisterType<PurgeTimer>().As<Timer>().SingleInstance();
+			builder.RegisterType<JobPurgeTimer>().SingleInstance();
+			builder.RegisterType<NodePurgeTimer>().SingleInstance();
 			builder.RegisterType<CreateSqlCommandHelper>().SingleInstance();
 			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();

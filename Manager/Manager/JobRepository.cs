@@ -521,21 +521,6 @@ namespace Stardust.Manager
 					var urijob = builderHelper.GetJobTemplateUri();
 					var response = httpSender.PostAsync(urijob, jobQueueItem).Result;
 
-					//if (response == null)
-					//{
-					//	var updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
-					//						SET Alive = @Alive
-					//						WHERE Url = @Url";
-
-					//	using (var command = new SqlCommand(updateCommandText, sqlConnection))
-					//	{
-					//		command.Parameters.Add("@Alive", SqlDbType.Bit).Value = false;
-					//		command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = availableNode.ToString();
-					//		command.ExecuteNonQueryWithRetry(_retryPolicy);
-					//	}
-					//	return;
-					//}
-
 					if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 					{
 						string sentToWorkerNodeUri = availableNode.ToString();

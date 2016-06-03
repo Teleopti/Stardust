@@ -19,7 +19,7 @@ namespace ManagerTest
 			ContainerBuilder containerBuilder = new ContainerBuilder();
 
 			ManagerConfiguration config = new ManagerConfiguration(
-				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20, 1, 1, 1);
+				ConfigurationManager.ConnectionStrings["ManagerConnectionString"].ConnectionString, "Route", 60, 20, 1, 1, 1,1);
 
 			containerBuilder.RegisterModule(new ManagerModule(config));
 			_container = containerBuilder.Build();

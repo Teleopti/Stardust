@@ -4,15 +4,16 @@ namespace Stardust.Manager
 {
 	public class ManagerConfiguration
 	{
-		public ManagerConfiguration(string connectionString, string route, int allowedNodeDownTimeSeconds, int checkNewJobIntervalSeconds, int purgeBatchSize, int purgeIntervalHours, int purgeJobsOlderThanHours)
+		public ManagerConfiguration(string connectionString, string route, int allowedNodeDownTimeSeconds, int checkNewJobIntervalSeconds, int purgeJobsBatchSize, int purgeJobsIntervalHours, int purgeJobsOlderThanHours, int purgeNodesIntervalHours)
 		{
 			ConnectionString = connectionString;
 			Route = route;
 			AllowedNodeDownTimeSeconds = allowedNodeDownTimeSeconds;
 			CheckNewJobIntervalSeconds = checkNewJobIntervalSeconds;
-			PurgeBatchSize = purgeBatchSize;
-			PurgeIntervalHours = purgeIntervalHours;
+			PurgeJobsBatchSize = purgeJobsBatchSize;
+			PurgeJobsIntervalHours = purgeJobsIntervalHours;
 			PurgeJobsOlderThanHours = purgeJobsOlderThanHours;
+			PurgeNodesIntervalHours = purgeNodesIntervalHours;
 			ValidateParameters();
 		}
 
@@ -34,17 +35,21 @@ namespace Stardust.Manager
 			{
 				throw new ArgumentNullException("CheckNewJobIntervalSeconds");
 			}
-			if (PurgeBatchSize <= 0)
+			if (PurgeJobsBatchSize <= 0)
 			{
-				throw new ArgumentNullException("Purgebatchsize");
+				throw new ArgumentNullException("PurgeJobsBatchSize");
 			}
-			if (PurgeIntervalHours <= 0)
+			if (PurgeJobsIntervalHours <= 0)
 			{
-				throw new ArgumentNullException("PurgeIntervalHours");
+				throw new ArgumentNullException("PurgeJobsIntervalHours");
 			}
 			if (PurgeJobsOlderThanHours <= 0)
 			{
 				throw new ArgumentNullException("PurgeJobsOlderThanHours");
+			}
+			if (PurgeNodesIntervalHours <= 0)
+			{
+				throw new ArgumentNullException("PurgeNodesIntervalHours");
 			}
 		}
 
@@ -52,8 +57,9 @@ namespace Stardust.Manager
 		public string Route { get; private set; }
 		public int AllowedNodeDownTimeSeconds { get; private set; }
 		public int CheckNewJobIntervalSeconds { get; private set; }
-		public int PurgeBatchSize { get; private set; }
-		public int PurgeIntervalHours { get; private set; }
+		public int PurgeJobsBatchSize { get; private set; }
+		public int PurgeJobsIntervalHours { get; private set; }
 		public int PurgeJobsOlderThanHours { get; private set; }
+		public int PurgeNodesIntervalHours { get; private set; }
 	}
 }

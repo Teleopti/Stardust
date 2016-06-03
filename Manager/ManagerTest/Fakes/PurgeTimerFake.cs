@@ -7,7 +7,7 @@ namespace ManagerTest.Fakes
 	{
 		private readonly RetryPolicyProvider _retryPolicyProvider;
 
-		public PurgeTimerFake(RetryPolicyProvider retryPolicyProvider, ManagerConfiguration managerConfiguration) : base(managerConfiguration.PurgeIntervalHours*60*60*1000)
+		public PurgeTimerFake(RetryPolicyProvider retryPolicyProvider, ManagerConfiguration managerConfiguration) : base(managerConfiguration.PurgeJobsIntervalHours*60*60*1000)
 		{
 			_retryPolicyProvider = retryPolicyProvider;
 			Elapsed += PurgeTimer_elapsed;

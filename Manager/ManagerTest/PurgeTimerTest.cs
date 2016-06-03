@@ -5,6 +5,7 @@ using ManagerTest.Database;
 using NUnit.Framework;
 using SharpTestsEx;
 using Stardust.Manager;
+using Stardust.Manager.Timers;
 
 namespace ManagerTest
 {
@@ -27,31 +28,31 @@ namespace ManagerTest
 		public void ShouldDeleteOldJobOnPurge()
 		{
 			InsertJobRecords(1, 2); //add a two hours old job
-			PurgeTimer purgeTimer = new PurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1));
+			JobPurgeTimer jobPurgeTimer = new JobPurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1, 1));
 
 			NumberOfJobsInDatabase().Should().Be.EqualTo(1);
-			purgeTimer.Dispose();
+			jobPurgeTimer.Dispose();
 		}
 
 		[Test]
 		public void ShouldDeleteOldJobDetailOnPurge()
 		{
 			InsertJobRecords(1, 2); //add a two hours old job
-			PurgeTimer purgeTimer = new PurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1));
+			JobPurgeTimer jobPurgeTimer = new JobPurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1, 1));
 
 			NumberOfDetailsInDatabase().Should().Be.EqualTo(1);
-			purgeTimer.Dispose();
+			jobPurgeTimer.Dispose();
 		}
 
 		[Test]
 		public void ShouldOnlyDeletebatchsizeNumberOfJobs()
 		{
 			InsertJobRecords(2, 2); //add a two hours old job
-			PurgeTimer purgeTimer = new PurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1));
+			JobPurgeTimer jobPurgeTimer = new JobPurgeTimer(new RetryPolicyProvider(), new ManagerConfiguration(_managerConnectionString, "Route", 10, 10, 1, 1, 1, 1));
 
 			NumberOfJobsInDatabase().Should().Be.EqualTo(2);
 			NumberOfDetailsInDatabase().Should().Be.EqualTo(2);
-			purgeTimer.Dispose();
+			jobPurgeTimer.Dispose();
 		}
 
 
