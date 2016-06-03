@@ -1,4 +1,4 @@
-﻿fdescribe("teamschedule add activity directive test", function () {
+﻿describe("teamschedule add activity directive test", function () {
 
 	var $compile,
 		$rootScope,
@@ -89,13 +89,14 @@
 		vm.disableNextDay = false;
 		vm.timeRange = {
 			startTime: new Date('2016-06-16T08:00:00Z'),
-			endTime: new Date('2016-06-16T16:00:00Z')
+			endTime: new Date('2016-06-16T17:00:00Z')
 		};
+
 		var agent = {
 			personId: 'agent1',
 			name: 'agent1',
-			scheduleStartTime: '2016-06-15T08:00:00Z',
-			scheduleEndTime: '2016-06-15T17:00:00Z'
+			scheduleStartTime: new Date('2016-06-15T08:00:00Z'),
+			scheduleEndTime: new Date('2016-06-15T17:00:00Z')
 		};
 
 		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);

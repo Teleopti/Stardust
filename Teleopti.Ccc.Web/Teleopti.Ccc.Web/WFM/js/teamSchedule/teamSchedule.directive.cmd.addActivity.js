@@ -31,25 +31,21 @@
 		};
 
 		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
-			
+
 			var mNewActivityStart = moment(timeRange.startTime);
 			var mNewActivityEnd = moment(timeRange.endTime);
 			var mScheduleStart = moment(agent.scheduleStartTime);
 			var mScheduleEnd = moment(agent.scheduleEndTime);
 			var allowShiftTotalMinutes = 36 * 60;
-			var totalMinutes;
-
-			if (mNewActivityEnd.isSame(moment(vm.selectedDate()), 'day')) {
-				totalMinutes = (mNewActivityEnd.hours() - mScheduleStart.hours()) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
-			} else {
-				totalMinutes = (mNewActivityEnd.hours() - mScheduleStart.hours() + 24) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
-			}
+			var totalMinutes = (mNewActivityStart.days() - mScheduleStart.days()) * 24 * 60 + (mNewActivityEnd.hours() - mScheduleStart.hours()) * 60 + (mNewActivityEnd.minutes() - mScheduleStart.minutes());
 
 			var withinAllowShiftPeriod = totalMinutes <= allowShiftTotalMinutes;
 
-			if (mNewActivityStart.isSame(mScheduleEnd, 'day'))
+			if (mNewActivityStart.isSame(moment(vm.selectedDate()), 'day')) {
+				return withinAllowShiftPeriod;
+			} else {
 				return withinAllowShiftPeriod && (mScheduleEnd.isAfter(mNewActivityStart));
-			else return withinAllowShiftPeriod;
+			}
 		}
 
 		vm.addActivity = function () {
