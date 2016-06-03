@@ -44,7 +44,7 @@
 
 	it('add-activity should get date from container', function () {
 		var result = setUp();
-		
+
 		expect(moment(result.commandControl.selectedDate()).format('YYYY-MM-DD')).toBe('2016-06-15');
 	});
 
