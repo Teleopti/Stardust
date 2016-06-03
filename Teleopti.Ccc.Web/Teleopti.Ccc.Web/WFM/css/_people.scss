@@ -260,8 +260,14 @@
 		position: relative;
 		margin: 5px;
 	}
-	// CSS hack for IE10, IE11 and edge
+	// CSS hack for IE10, IE11
 	@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none), (-ms-accelerator:true) {
+		.con-row {
+			min-width: 316px;
+		}
+	}
+	// CSS hack for edge Browser 12+
+	@supports (-ms-accelerator:true) { 
 		.con-row {
 			min-width: 316px;
 		}
