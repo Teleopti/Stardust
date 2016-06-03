@@ -1,10 +1,10 @@
 using System.Configuration;
-using System.Timers;
 using Autofac;
 using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Timers;
 using Stardust.Manager.Validations;
 
 namespace ManagerTest.Attributes
@@ -29,7 +29,8 @@ namespace ManagerTest.Attributes
 
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
-			builder.RegisterType<PurgeTimerFake>().As<Timer>().SingleInstance();
+			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();
+			builder.RegisterType<NodePurgeTimerFake>().As<NodePurgeTimer>().SingleInstance();
 		}
 	}
 }

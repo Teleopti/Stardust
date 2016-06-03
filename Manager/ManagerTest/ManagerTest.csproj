@@ -104,7 +104,7 @@
     <Compile Include="Fakes\FakeHttpSender.cs" />
     <Compile Include="Fakes\FakeJobRepository.cs" />
     <Compile Include="Fakes\FakeWorkerNodeRepository.cs" />
-    <Compile Include="Fakes\PurgeTimerFake.cs">
+    <Compile Include="Fakes\JobPurgeTimerFake.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="JobManagerTest.cs" />

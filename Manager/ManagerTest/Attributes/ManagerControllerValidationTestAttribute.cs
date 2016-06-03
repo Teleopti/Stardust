@@ -4,6 +4,7 @@ using Autofac.Integration.WebApi;
 using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Timers;
 using Stardust.Manager.Validations;
 
 namespace ManagerTest.Attributes
@@ -21,7 +22,8 @@ namespace ManagerTest.Attributes
 			builder.RegisterApiControllers(typeof(ManagerController).Assembly);
 			builder.RegisterType<JobManager>().SingleInstance();
 			builder.RegisterType<NodeManager>().SingleInstance();
-			builder.RegisterType<PurgeTimerFake>().As<Timer>().SingleInstance();
+			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();
+			builder.RegisterType<NodePurgeTimerFake>().As<NodePurgeTimer>().SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 		}
 	}
