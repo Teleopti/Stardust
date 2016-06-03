@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
@@ -23,24 +24,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IScheduleProjectionReadOnlyPersister _scheduleProjectionReadOnlyPersister;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private readonly IPersonScheduleDayReadModelPersister _personScheduleDayReadModelRepository;
-		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly ICurrentScenario _scenarioRepository;
-		private readonly IServiceBus _serviceBus;
 		private IList<IPerson> _people;
 		private IScenario _defaultScenario;
 		private DateOnlyPeriod _period;
 		private DateTimePeriod _utcPeriod;
+		private readonly IEventPublisher _eventPublisher;
 
-		public InitialLoadScheduleProjectionConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelPersister personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, ICurrentScenario scenarioRepository, IServiceBus serviceBus)
+		public InitialLoadScheduleProjectionConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IScheduleProjectionReadOnlyPersister scheduleProjectionReadOnlyPersister, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelPersister personScheduleDayReadModelRepository, ICurrentScenario scenarioRepository, IEventPublisher eventPublisher)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
 			_scheduleProjectionReadOnlyPersister = scheduleProjectionReadOnlyPersister;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
-			_personAssignmentRepository = personAssignmentRepository;
 			_scenarioRepository = scenarioRepository;
-			_serviceBus = serviceBus;
+			_eventPublisher = eventPublisher;
 		}
 
 		public void Consume(InitialLoadScheduleProjection message)
@@ -78,7 +77,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				}
 				uow.Clear();
 			}
-			messages.ForEach(m => _serviceBus.Send(m));
+
+			messages.ForEach(m => _eventPublisher.Publish(m));
 		}
 
 		private void loadPeopleAndScenario(int startDays, int endDays)
