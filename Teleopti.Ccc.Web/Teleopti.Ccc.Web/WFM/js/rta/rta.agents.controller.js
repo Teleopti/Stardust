@@ -207,9 +207,11 @@
 						state.Shift = state.Shift || [];
 
 						var now = moment(states.Time);
+						var start = now.clone().add(-1, 'hours');
+						var end = now.clone().add(3, 'hours');
 						var shift = state.Shift
-							.filter(function(layer) {
-								return !(now.clone().add(-1, 'hours') >= moment(layer.EndTime) || now.clone().add(3, 'hours') <= moment(layer.StartTime));
+							.filter(function (layer) {
+								return start < moment(layer.EndTime) && end > moment(layer.StartTime);
 							})
 							.map(function (s) {
 								var lengthSeconds = moment(s.EndTime).diff(moment(s.StartTime), 'seconds');
