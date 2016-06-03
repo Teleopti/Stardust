@@ -7,12 +7,15 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradayRequest_38914)]
 	public class AnalyticsRequestUpdater : 
-		IHandleEvent<RequestChangedEvent>,
+		IHandleEvent<PersonRequestCreatedEvent>,
+		IHandleEvent<PersonRequestChangedEvent>,
+		IHandleEvent<PersonRequestDeletedEvent>,
 		IRunOnHangfire
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
@@ -35,15 +38,44 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 		[ImpersonateSystem]
 		[UnitOfWork]
 		[AnalyticsUnitOfWork]
-		public virtual void Handle(RequestChangedEvent @event)
+		public virtual void Handle(PersonRequestCreatedEvent @event)
 		{
-			var personRequest = _personRequestRepository.FindPersonRequestByRequestId(@event.RequestId);
+			handle(@event);
+		}
+
+		[ImpersonateSystem]
+		[UnitOfWork]
+		[AnalyticsUnitOfWork]
+		public virtual void Handle(PersonRequestDeletedEvent @event)
+		{
+			handle(@event);
+		}
+
+		[ImpersonateSystem]
+		[UnitOfWork]
+		[AnalyticsUnitOfWork]
+		public virtual void Handle(PersonRequestChangedEvent @event)
+		{
+			handle(@event);
+		}
+
+		private void handle(PersonRequestChangedBase @event)
+		{
+			var personRequest = _personRequestRepository.Get(@event.PersonRequestId);
 			if (personRequest == null)
 				throw new ArgumentException("Request missing in app database");
 
+			var deleteTag = personRequest as IDeleteTag;
+			if (deleteTag != null && deleteTag.IsDeleted)
+			{
+				// DELETE
+				_analyticsRequestRepository.Delete(@event.PersonRequestId);
+				return;
+			}
+
 			var businessUnit = _analyticsBusinessUnitRepository.Get(@event.LogOnBusinessUnitId);
 			var personPeriod = getPersonPeriod(personRequest);
-			
+
 			var personTimeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
 			var requestPeriod = personRequest.Request.Period;
 			var numOfDays = (requestPeriod.ToDateOnlyPeriod(personTimeZone));
@@ -69,7 +101,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				BusinessUnitId = businessUnit.BusinessUnitId,
 				DatasourceUpdateDate = personRequest.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
 				PersonId = personPeriod.PersonId,
-				RequestCode = personRequest.Id.GetValueOrDefault(),
+				RequestCode = @event.PersonRequestId,
 				RequestEndDate = numOfDays.EndDate.Date,
 				RequestEndTime = requestPeriod.EndDateTimeLocal(personTimeZone),
 				RequestStartDate = numOfDays.StartDate.Date,
@@ -81,7 +113,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 			});
 
 			var toBeRemoved =
-				_analyticsRequestRepository.GetAnalyticsRequestedDays(personRequest.Id.GetValueOrDefault())
+				_analyticsRequestRepository.GetAnalyticsRequestedDays(@event.PersonRequestId)
 				.Where(x => dayIdCollection.All(y => y != x.RequestDateId));
 			foreach (var dateId in dayIdCollection)
 			{
@@ -92,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 					BusinessUnitId = businessUnit.BusinessUnitId,
 					DatasourceUpdateDate = personRequest.UpdatedOn.GetValueOrDefault(DateTime.UtcNow),
 					PersonId = personPeriod.PersonId,
-					RequestCode = personRequest.Id.GetValueOrDefault(),
+					RequestCode = @event.PersonRequestId,
 					RequestDayCount = 1,
 					RequestStatusId = requestStatusId,
 					RequestTypeId = requestTypeId

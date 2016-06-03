@@ -35,5 +35,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				AnalyticsRequestedDays.RemoveAll(x => x.RequestCode == analyticsRequestedDay.RequestCode && x.RequestDateId == analyticsRequestedDay.RequestDateId);
 			}
 		}
+
+		public void Delete(Guid requestId)
+		{
+			AnalyticsRequestedDays.RemoveAll(x => x.RequestCode == requestId);
+			AnalyticsRequests.RemoveAll(x => x.RequestCode == requestId);
+		}
 	}
 }

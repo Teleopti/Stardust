@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void AddOrUpdate(AnalyticsRequestedDay analyticsRequestedDay);
 		IList<AnalyticsRequestedDay> GetAnalyticsRequestedDays(Guid requestId);
 		void Delete(IEnumerable<AnalyticsRequestedDay> analyticsRequestedDays);
+		void Delete(Guid requestId);
 	}
 }

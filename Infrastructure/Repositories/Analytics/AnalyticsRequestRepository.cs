@@ -116,5 +116,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				.ExecuteUpdate();
 			}
 		}
+
+		public void Delete(Guid requestId)
+		{
+			_currentAnalyticsUnitOfWork.Current().Session().CreateSQLQuery($@"
+					mart.etl_fact_request_delete
+					   @request_code=:{nameof(requestId)}")
+				.SetParameter(nameof(requestId), requestId)
+				.ExecuteUpdate();
+		}
 	}
 }

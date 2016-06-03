@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public abstract class Request : AggregateEntity, IRequest, IAggregateRootWithEvents
+	public abstract class Request : AggregateEntity, IRequest
 	{
 		private DateTimePeriod _period;
 		private string _textForNotification = string.Empty;
@@ -126,22 +126,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		}
 		#endregion //PersonfromTo
 
-		public virtual IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
-		{
-			var events = new List<IEvent>();
-			if (!operation.HasValue) return events;
-			switch (operation)
-			{
-				case DomainUpdateType.Insert:
-				case DomainUpdateType.Update:
-				case DomainUpdateType.Delete:
-					events.Add(new RequestChangedEvent
-					{
-						RequestId = Id.GetValueOrDefault()
-					});
-					break;
-			}
-			return events;
-		}
+		
 	}
 }

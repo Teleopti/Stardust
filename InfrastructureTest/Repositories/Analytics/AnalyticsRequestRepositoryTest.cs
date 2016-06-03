@@ -150,6 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldDeleteRequestedDay()
 		{
+			
 			var expected = new AnalyticsRequestedDay
 			{
 				RequestDateId = 3,
@@ -174,6 +175,64 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 				Target.Delete(new [] { expected });
 			});
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetAnalyticsRequestedDays(expected.RequestCode));
+
+			result.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldDeleteEverythingForARequest()
+		{
+			var analyticsRequest = new AnalyticsRequest
+			{
+				RequestStartDateId = 3,
+				RequestCode = Guid.NewGuid(),
+				RequestTypeId = 0,
+				RequestDayCount = 1,
+				RequestStatusId = 0,
+				DatasourceId = 1,
+				PersonId = personId,
+				BusinessUnitId = businessUnitId,
+				AbsenceId = -1,
+				DatasourceUpdateDate = new DateTime(2016, 06, 02, 12, 54, 00),
+				ApplicationDatetime = new DateTime(2016, 06, 02, 12, 55, 00),
+				RequestStartDate = new DateTime(2016, 06, 02),
+				RequestStartTime = new DateTime(2016, 06, 02, 13, 00, 00),
+				RequestEndDate = new DateTime(2016, 06, 02),
+				RequestEndTime = new DateTime(2016, 06, 02, 14, 00, 00),
+				RequestStartDateCount = 1,
+				RequestedTimeMinutes = 60
+			};
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddOrUpdate(analyticsRequest);
+			});
+
+			var analyticsRequestedDay = new AnalyticsRequestedDay
+			{
+				RequestDateId = 3,
+				RequestCode = analyticsRequest.RequestCode,
+				RequestTypeId = 0,
+				RequestDayCount = 1,
+				RequestStatusId = 0,
+				DatasourceId = 1,
+				PersonId = personId,
+				BusinessUnitId = businessUnitId,
+				AbsenceId = -1,
+				DatasourceUpdateDate = new DateTime(2016, 06, 02, 12, 54, 00)
+			};
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.AddOrUpdate(analyticsRequestedDay);
+			});
+
+			WithAnalyticsUnitOfWork.Do(() =>
+			{
+				Target.Delete(analyticsRequest.RequestCode);
+			});
+
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.GetAnalyticsRequestedDays(analyticsRequest.RequestCode));
 
 			result.Should().Be.Empty();
 		}

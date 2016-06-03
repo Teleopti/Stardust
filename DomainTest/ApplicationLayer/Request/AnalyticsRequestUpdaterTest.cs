@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 		[Test, ExpectedException(typeof(ArgumentException))]
 		public void MissingRequestInAppDatabaseThrows()
 		{
-			_target.Handle(new RequestChangedEvent {RequestId = Guid.NewGuid(), LogOnBusinessUnitId = Guid.NewGuid()});
+			_target.Handle(new PersonRequestChangedEvent { PersonRequestId = Guid.NewGuid(), LogOnBusinessUnitId = Guid.NewGuid()});
 		}
 
 		[Test, ExpectedException(typeof(ArgumentException))]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 			personRequest.SetId(Guid.NewGuid());
 			personRequest.Request.SetId(Guid.NewGuid());
 			_personRequestRepository.Add(personRequest);
-			_target.Handle(new RequestChangedEvent { RequestId = personRequest.Request.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() });
+			_target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() });
 		}
 
 		[Test]
@@ -74,10 +74,42 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Request
 				ValidToDate = DateTime.UtcNow + TimeSpan.FromDays(10)
 			});
 
-			_target.Handle(new RequestChangedEvent { RequestId = personRequest.Request.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() });
+			_target.Handle(new PersonRequestDeletedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() });
 
 			_analyticsRequestRepository.AnalyticsRequestedDays.Should().Not.Be.Empty();
 			_analyticsRequestRepository.AnalyticsRequests.Should().Not.Be.Empty();
+		}
+
+
+		[Test]
+		public void ShouldDeleteRequestAndRequestedDay()
+		{
+			var person = PersonFactory.CreatePerson("Test");
+			person.SetId(Guid.NewGuid());
+			var personRequestFactory = new PersonRequestFactory
+			{
+				Request = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow + TimeSpan.FromDays(1)))
+			};
+			var personRequest = (PersonRequest)personRequestFactory.CreatePersonRequest(person);
+			personRequest.SetDeleted();
+			personRequest.SetId(Guid.NewGuid());
+			personRequest.Request.SetId(Guid.NewGuid());
+			_personRequestRepository.Add(personRequest);
+			_analyticsRequestRepository.AnalyticsRequestedDays.Add(new AnalyticsRequestedDay {RequestCode = personRequest.Id.GetValueOrDefault() });
+			_analyticsRequestRepository.AnalyticsRequests.Add(new AnalyticsRequest {RequestCode = personRequest.Id.GetValueOrDefault() });
+
+			_personPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod
+			{
+				PersonCode = person.Id.GetValueOrDefault(),
+				PersonId = 1,
+				ValidFromDate = DateTime.UtcNow - TimeSpan.FromDays(10),
+				ValidToDate = DateTime.UtcNow + TimeSpan.FromDays(10)
+			});
+
+			_target.Handle(new PersonRequestChangedEvent { PersonRequestId = personRequest.Id.GetValueOrDefault(), LogOnBusinessUnitId = Guid.NewGuid() });
+
+			_analyticsRequestRepository.AnalyticsRequestedDays.Should().Be.Empty();
+			_analyticsRequestRepository.AnalyticsRequests.Should().Be.Empty();
 		}
 	}
 }

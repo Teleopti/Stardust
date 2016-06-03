@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -16,7 +17,7 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class PersonRequest : VersionedAggregateRootWithBusinessUnit,
-								 IPersonRequest, IDeleteTag, IPushMessageWhenRootAltered
+								 IPersonRequest, IDeleteTag, IPushMessageWhenRootAltered, IAggregateRootWithEvents
 	{
 		private const int messageLength = 2000;
 		private const int messageTipLength = 255;
@@ -933,6 +934,34 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return true;
 			}
 			return !(_persistedState.IsNew && _requestState.IsNew);
+		}
+
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		{
+			var events = base.PopAllEvents(now, operation).ToList();
+			if (!operation.HasValue) return events;
+			switch (operation)
+			{
+				case DomainUpdateType.Insert:
+					events.Add(new PersonRequestCreatedEvent
+					{
+						PersonRequestId = Id.GetValueOrDefault()
+					});
+					break;
+				case DomainUpdateType.Update:
+					events.Add(new PersonRequestChangedEvent
+					{
+						PersonRequestId = Id.GetValueOrDefault()
+					});
+					break;
+				case DomainUpdateType.Delete:
+					events.Add(new PersonRequestDeletedEvent
+					{
+						PersonRequestId = Id.GetValueOrDefault()
+					});
+					break;
+			}
+			return events;
 		}
 	}
 }
