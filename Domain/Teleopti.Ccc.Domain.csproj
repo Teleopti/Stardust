@@ -288,7 +288,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodSkillsUpdater.cs" />
     <Compile Include="Analytics\AnalyticsFactAgentSkill.cs" />
     <Compile Include="ApplicationLayer\Preference\PreferenceFulfillmentChangedHandler.cs" />
-    <Compile Include="ApplicationLayer\Preference\PreferenceChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\Preference\AnalyticsPreferenceUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateReadModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStatePersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAgentStateReadModelPersister.cs" />

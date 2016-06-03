@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		IHandleEvent<ProjectionChangedEvent>,
 		IRunOnHangfire
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceFulfillmentChangedHandler));
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IEventPublisher _eventPublisher;

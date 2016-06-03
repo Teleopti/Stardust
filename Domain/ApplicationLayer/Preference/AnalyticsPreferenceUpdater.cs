@@ -17,13 +17,13 @@ using Teleopti.Interfaces.Infrastructure.Analytics;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 {
 	[EnabledBy(Toggles.ETL_SpeedUpIntradayPreference_37124)]
-	public class PreferenceChangedHandler :
+	public class AnalyticsPreferenceUpdater :
 		IHandleEvent<PreferenceCreatedEvent>,
 		IHandleEvent<PreferenceDeletedEvent>,
 		IHandleEvent<PreferenceChangedEvent>,
 		IRunOnHangfire
 	{
-		private readonly static ILog logger = LogManager.GetLogger(typeof(PreferenceChangedHandler));
+		private readonly static ILog logger = LogManager.GetLogger(typeof(AnalyticsPreferenceUpdater));
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPreferenceDayRepository _preferenceDayRepository;
 		private readonly IAnalyticsPersonPeriodRepository _analyticsPersonPeriodRepository;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 		private readonly IAnalyticsAbsenceRepository _analyticsAbsenceRepository;
 		private readonly IAnalyticsShiftCategoryRepository _analyticsShiftCategoryRepository;
 
-		public PreferenceChangedHandler
+		public AnalyticsPreferenceUpdater
 			(IScenarioRepository scenarioRepository,
 			IPreferenceDayRepository preferenceDayRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,

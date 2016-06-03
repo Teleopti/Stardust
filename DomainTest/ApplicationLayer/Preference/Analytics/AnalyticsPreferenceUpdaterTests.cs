@@ -18,9 +18,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
 	[TestFixture]
-	public class PreferenceChangedHandlerTests
+	public class AnalyticsPreferenceUpdaterTests
 	{
-		private PreferenceChangedHandler _target;
+		private AnalyticsPreferenceUpdater _target;
 		private IAnalyticsPersonPeriodRepository _personPeriodRepository;
 		private IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private IPreferenceDayRepository _preferenceDayRepository;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 					new AnalyticsShiftCategory {ShiftCategoryCode = Guid.Empty, ShiftCategoryId = -1},
 					new AnalyticsShiftCategory {ShiftCategoryCode = Guid.NewGuid(), ShiftCategoryId = 1}
 				});
-			_target = new PreferenceChangedHandler(
+			_target = new AnalyticsPreferenceUpdater(
 				_scenarioRepository,
 				_preferenceDayRepository,
 				_personPeriodRepository,
