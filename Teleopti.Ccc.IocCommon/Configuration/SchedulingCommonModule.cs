@@ -78,11 +78,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<FullResourceCalculationWithCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
 				builder.RegisterType<ResourceOptimizationHelper>().InstancePerLifetimeScope();
 				builder.RegisterType<CascadingResourceCalculation>().As<IResourceOptimizationHelper>().AsSelf().InstancePerLifetimeScope();
+				builder.RegisterType<CascadingResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
+				builder.RegisterType<CascadingPersonSkillProvider>().InstancePerLifetimeScope();
 			}
 			else
 			{
 				builder.RegisterType<FullResourceCalculationWithoutCascading>().As<IFullResourceCalculation>().InstancePerLifetimeScope();
 				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
+				builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
 			}
 
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
@@ -367,7 +370,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentsToSkillGroups>().SingleInstance();
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
-			builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();

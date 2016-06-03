@@ -38,15 +38,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				//TODO: context för en viss period här?
-				using (new ResourceCalculationContextFactory(_stateHolder, () => new CascadingPersonSkillProvider(), _timeZoneGuard).Create())
+				foreach (var date in period.DayCollection())
 				{
-					foreach (var date in period.DayCollection())
-					{
-						//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
-						_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
-					}
+					//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
+					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 				}
+				//TODO: räcker nog med ett context på perioden plus nån dag...
 				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create())
 				{
 					foreach (var date in period.DayCollection())
