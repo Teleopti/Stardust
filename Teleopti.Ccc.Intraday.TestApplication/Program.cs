@@ -146,7 +146,13 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			    var offeredCalls = (decimal) Math.Round(
 			        interval.Calls +
 			        algorithmProperties.CallsConstant*index*(1 - ((double) index/algorithmProperties.IntervalCount)),
-			        1);
+			        0);
+			    var answeredCalls = Math.Round((offeredCalls * new Random().Next(75, 100)) / 100, 0);
+			    var speedOfAnswer = createSpeedOfAnswer(answeredCalls);
+			    var isASAWithinSL = speedOfAnswer / answeredCalls <= 20;
+			    var answeredCallsWithinSL = isASAWithinSL
+			        ? Math.Round(answeredCalls*new Random().Next(75, 100)/100, 0)
+			        : Math.Round(answeredCalls*new Random().Next(50, 100)/100, 0);
                 var queueData = new QueueInterval()
 				{
 					DateId = interval.DateId,
@@ -154,18 +160,27 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					QueueId = targetQueue.QueueId,
 					DatasourceId = targetQueue.DatasourceId,
 					OfferedCalls = offeredCalls,
-                    AnsweredCalls = offeredCalls,
+                    AnsweredCalls = answeredCalls,
+                    AbandonedCalls = offeredCalls - answeredCalls,
                     TalkTime = talkTime,
 					Acw = acw,
-					HandleTime = (decimal)Math.Round(interval.HandleTime + algorithmProperties.HandleTimeConstant * index)
-            };
+					HandleTime = (decimal)Math.Round(interval.HandleTime + algorithmProperties.HandleTimeConstant * index),
+                    SpeedOfAnswer = speedOfAnswer,
+                    AnsweredCallsWithinSL = answeredCallsWithinSL
+                };
 				queueDataList.Add(queueData);
 			}
 
 			return queueDataList;
 		}
 
-		private static QueueInfo getTargetQueue(IEnumerable<QueueInfo> queues, bool doReplace)
+	    private static decimal createSpeedOfAnswer(decimal offeredCalls)
+	    {
+            var random = new Random().Next(5,28);
+	        return offeredCalls * random;
+	    }
+
+	    private static QueueInfo getTargetQueue(IEnumerable<QueueInfo> queues, bool doReplace)
 		{
 			var queueInfos = queues as QueueInfo[] ?? queues.ToArray();
 			if (!doReplace && queueInfos.Any(x => x.HasDataToday))

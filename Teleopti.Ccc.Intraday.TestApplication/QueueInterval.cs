@@ -11,5 +11,8 @@
 		public decimal TalkTime { get; set; }
 		public decimal Acw { get; set; }
 	    public decimal AnsweredCalls { get; set; }
+	    public decimal AbandonedCalls { get; set; }
+	    public decimal SpeedOfAnswer { get; set; }
+	    public decimal AnsweredCallsWithinSL { get; set; }
 	}
 }
