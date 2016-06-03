@@ -142,6 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				shiftTradeScheduleDayDetailViewModel.Name = absence.Description.Name;
 				shiftTradeScheduleDayDetailViewModel.ShortName = absence.Description.ShortName;
 				shiftTradeScheduleDayDetailViewModel.Color = Color.White.ToHtml(); // absence.DisplayColor.ToHtml(); as requested, colour it white.
+				shiftTradeScheduleDayDetailViewModel.Type = ShiftObjectType.FullDayAbsence;
 			}
 		}
 
