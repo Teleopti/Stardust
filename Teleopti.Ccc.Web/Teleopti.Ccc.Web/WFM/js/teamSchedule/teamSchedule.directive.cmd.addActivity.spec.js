@@ -1,4 +1,4 @@
-﻿describe("teamschedule add activity directive test", function () {
+﻿fdescribe("teamschedule add activity directive test", function () {
 
 	var $compile,
 		$rootScope,
@@ -94,10 +94,32 @@
 		var agent = {
 			personId: 'agent1',
 			name: 'agent1',
+			scheduleStartTime: '2016-06-15T08:00:00Z',
 			scheduleEndTime: '2016-06-15T17:00:00Z'
 		};
 
-		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange.startTime)).toBe(false);
+		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
+	});
+
+	it('should not allow to add activity if agents shift exceed 36 hours', function () {
+		var result = setUp();
+
+		var vm = result.commandControl;
+
+		vm.isNextDay = true;
+		vm.disableNextDay = false;
+		vm.timeRange = {
+			startTime: new Date('2016-06-16T07:00:00Z'),
+			endTime: new Date('2016-06-16T12:01:00Z')
+		};
+		var agent = {
+			personId: 'agent1',
+			name: 'agent1',
+			scheduleStartTime: new Date('2016-06-15T00:00:00Z'),
+			scheduleEndTime: new Date('2016-06-16T08:00:00Z')
+		};
+
+		expect(vm.isNewActivityAllowedForAgent(agent, vm.timeRange)).toBe(false);
 	});
 
 	it('should see a disabled button when anyone in selected is not allowed to add current activity', function () {
@@ -116,10 +138,12 @@
 			{
 				personId: 'agent1',
 				name: 'agent1',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				scheduleStartTime: new Date('2016-06-15T08:00:00Z'),
+				scheduleEndTime: new Date('2016-06-15T17:00:00Z')
 			}, {
 				personId: 'agent2',
 				name: 'agent2',
+				scheduleStartTime: '2016-06-16T08:00:00Z',
 				scheduleEndTime: '2016-06-16T09:00:00Z'
 			}];
 
@@ -145,11 +169,13 @@
 			{
 				personId: 'agent1',
 				name: 'agent1',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				scheduleStartTime: new Date('2016-06-15T08:00:00Z'),
+				scheduleEndTime: new Date('2016-06-15T17:00:00Z')
 			}, {
 				personId: 'agent2',
 				name: 'agent2',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				scheduleStartTime: new Date('2016-06-15T08:00:00Z'),
+				scheduleEndTime: new Date('2016-06-15T17:00:00Z')
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
@@ -194,11 +220,13 @@
 			{
 				personId: 'agent1',
 				name: 'agent1',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				scheduleStartTime: new Date('2016-06-15T08:00:00Z'),
+				scheduleEndTime: new Date('2016-06-15T17:00:00Z')
 			}, {
 				personId: 'agent2',
 				name: 'agent2',
-				scheduleEndTime: '2016-06-15T17:00:00Z'
+				scheduleStartTime: new Date('2016-06-15T09:00:00Z'),
+				scheduleEndTime: new Date('2016-06-15T17:00:00Z')
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';

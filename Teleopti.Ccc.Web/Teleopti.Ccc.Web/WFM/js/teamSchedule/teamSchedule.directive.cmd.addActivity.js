@@ -31,10 +31,11 @@
 		};
 
 		vm.isNewActivityAllowedForAgent = function (agent, timeRange) {
+			
 			var mNewActivityStart = moment(timeRange.startTime);
 			var mNewActivityEnd = moment(timeRange.endTime);
-			var mScheduleEnd = moment(agent.scheduleEndTime);
 			var mScheduleStart = moment(agent.scheduleStartTime);
+			var mScheduleEnd = moment(agent.scheduleEndTime);
 			var allowShiftTotalMinutes = 36 * 60;
 			var totalMinutes;
 
