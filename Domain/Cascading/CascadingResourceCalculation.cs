@@ -9,15 +9,15 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		private readonly ResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
-		private readonly CascadeResources _cascadeResources;
+		private readonly ShovelResources _shovelResources;
 
 		public CascadingResourceCalculation(ResourceOptimizationHelper resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder,
-																CascadeResources cascadeResources)
+																ShovelResources shovelResources)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_stateHolder = stateHolder;
-			_cascadeResources = cascadeResources;
+			_shovelResources = shovelResources;
 		}
 
 		public void ForDay(DateOnly date)
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
 				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 			}
-			_cascadeResources.Execute(period);
+			_shovelResources.Execute(period);
 		}
 
 		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)

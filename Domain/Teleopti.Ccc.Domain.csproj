@@ -295,7 +295,7 @@
     <Compile Include="Budgeting\AbsenceRequestBudgetGroupValidationHelper.cs" />
     <Compile Include="Budgeting\BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
-    <Compile Include="Cascading\CascadeResources.cs" />
+    <Compile Include="Cascading\ShovelResources.cs" />
     <Compile Include="Cascading\CascadingResourceCalculation.cs" />
     <Compile Include="Cascading\CascadingSkillGroup.cs" />
     <Compile Include="Cascading\CascadingSkillGroupSorter.cs" />

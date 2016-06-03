@@ -10,13 +10,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class CascadeResources
+	public class ShovelResources
 	{
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
-		public CascadeResources(Func<ISchedulerStateHolder> stateHolder, 
+		public ShovelResources(Func<ISchedulerStateHolder> stateHolder, 
 												SkillGroupPerActivityProvider skillGroupPerActivityProvider,
 												ITimeZoneGuard timeZoneGuard)
 		{
