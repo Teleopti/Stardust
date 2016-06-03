@@ -8,19 +8,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class TeamViewModelBuilder
 	{
-		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
+		private readonly ITeamRepository _teamRepository;
 
-		public TeamViewModelBuilder(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader)
+		public TeamViewModelBuilder(INumberOfAgentsInTeamReader numberOfAgentsInTeamReader, ITeamRepository teamRepository)
 		{
-			_siteRepository = siteRepository;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
+			_teamRepository = teamRepository;
 		}
 
 		public IEnumerable<TeamViewModel> Build(Guid siteId)
 		{
-			var site = _siteRepository.Get(siteId);
-			var teams = site.TeamCollection.ToArray();
+			var teams = _teamRepository.FindTeamsForSiteOrderByName(siteId).ToArray();
 			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
 
 			return teams.Select(team => new TeamViewModel

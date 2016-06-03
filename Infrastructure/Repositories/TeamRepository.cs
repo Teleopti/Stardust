@@ -89,7 +89,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IEnumerable<ITeam> FindTeamsForSiteOrderByName(Guid siteId)
 	    {
-		    throw new NotImplementedException();
+			return Session.CreateCriteria<Team>()
+				.Add(Restrictions.Eq("Site.Id", siteId))
+				.AddOrder(Order.Asc("Description.Name"))
+				.List<ITeam>();
+			
 	    }
     }
 }

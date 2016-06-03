@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.Single().Name.Should().Be("Green");
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldSortByName()
 		{
 			var site = Guid.NewGuid();

@@ -152,6 +152,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			(statementsAfter - statementsBefore).Should().Be.EqualTo(0);
 		}
 
+	    [Test]
+	    public void ShouldOrderByName()
+	    {
+		    var site = new Site("Paris");
+			var anotherSite = new Site("Rome");
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(anotherSite);
+		    PersistAndRemoveFromUnitOfWork(new Team
+		    {
+				Site = site,
+			    Description = new Description("A")
+		    });
+			PersistAndRemoveFromUnitOfWork(new Team
+			{
+				Site = site,
+				Description = new Description("C")
+			});
+			PersistAndRemoveFromUnitOfWork(new Team
+			{
+				Site = site,
+				Description = new Description("B")
+			});
+			PersistAndRemoveFromUnitOfWork(new Team
+			{
+				Site = anotherSite,
+				Description = new Description("Y")
+			});
+
+		    var teams = new TeamRepository(UnitOfWork).FindTeamsForSiteOrderByName(site.Id.Value);
+
+		    teams.Select(x => x.Description.Name).Should()
+			    .Have.SameSequenceAs("A", "B", "C");
+	    }
+
 
 		protected override Repository<ITeam> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
