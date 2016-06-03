@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_timeZoneGuard = timeZoneGuard;
 		}
 
-		public IDisposable Create()
+		public ResourceCalculationContext Create()
 		{
 			return new ResourceCalculationContext(createResources(null));
 		}
 
-		public IDisposable Create(DateOnlyPeriod period)
+		public ResourceCalculationContext Create(DateOnlyPeriod period)
 		{
 			return new ResourceCalculationContext(createResources(period));
 		}
