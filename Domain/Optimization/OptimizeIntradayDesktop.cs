@@ -37,9 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			using (_desktopOptimizationContext.Set(command, _currentSchedulerStateHolder(), optimizerPreferences, intradayOptimizationCallback))
 			{
 				_intradayOptimizationCommandHandler.Execute(command);
-
-				_shovelResources.Execute(command.Period);
 			}
+			_shovelResources.Execute(selectedPeriod);
 		}	
 	}
 }

@@ -24,7 +24,7 @@ namespace Teleopti.Interfaces.Domain
 
 		public static bool DoShoveling()
 		{
-			return !InContext || (InContext && Fetch().DoShoveling);
+			return !InContext || Fetch().DoShoveling;
 		}
 
 		public void Dispose()
