@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             public void ShowMeetingComposerView(IPersonSelectorView parent, IMeetingViewModel meetingViewModel, bool viewSchedulesPermission)
             {
                 var meetingComposerView = new MeetingComposerView(meetingViewModel, null, true, viewSchedulesPermission,
-															   new EventAggregator(), _container.Resolve<IToggleManager>(), _container.Resolve<IIntraIntervalFinderService>(), _container.Resolve<ResourceCalculationContextFactory>());
+															   new EventAggregator(), _container.Resolve<IToggleManager>(), _container.Resolve<IIntraIntervalFinderService>(), _container.Resolve<IResourceCalculationContextFactory>());
                 meetingComposerView.Show((Control)parent);
             }
         }

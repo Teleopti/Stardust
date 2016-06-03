@@ -6,7 +6,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class ResourceCalculationContextFactory
+	public interface IResourceCalculationContextFactory
+	{
+		IDisposable Create();
+		IDisposable Create(DateOnlyPeriod period);
+	}
+
+	public class ResourceCalculationContextFactory : IResourceCalculationContextFactory
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly Func<IPersonSkillProvider> _personSkillProvider;

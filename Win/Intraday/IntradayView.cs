@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Win.Intraday
 		private readonly IResourceOptimizationHelperExtended _resourceOptimizationHelperExtended;
 	    private readonly IEventPublisher _publisher;
 	    private readonly IEventInfrastructureInfoPopulator _eventInfrastructureInfoPopulator;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		private DateNavigateControl _timeNavigationControl;
 		private GridRowInChartSettingButtons _gridrowInChartSetting;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Intraday
 		private readonly IntradaySettingManager _settingManager;
 
 		public IntradayView(IEventAggregator eventAggregator, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder,
-			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,IEventPublisher publisher,IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, ResourceCalculationContextFactory resourceCalculationContextFactory)
+			IResourceOptimizationHelperExtended resourceOptimizationHelperExtended,IEventPublisher publisher,IEventInfrastructureInfoPopulator eventInfrastructureInfoPopulator, IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_eventAggregator = eventAggregator;
 			_overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;

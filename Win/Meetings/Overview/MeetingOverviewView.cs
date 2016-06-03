@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private readonly CalendarAndTextPanel _calendarAndTextPanel;
 		private readonly MeetingsScheduleProvider _dataProvider;
 		private readonly IMeetingOverviewFilter _meetingOverviewFilter;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		private IScheduleAppointment _selectedItem;
 		private readonly Control _nextButton;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private DateTime _clickedDate;
 
 
-		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter, ResourceCalculationContextFactory resourceCalculationContextFactory)
+		public MeetingOverviewView(IEventAggregator eventAggregator, MeetingsScheduleProvider dataProvider,IMeetingOverviewFilter meetingOverviewFilter, IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_eventAggregator = eventAggregator;
 			_dataProvider = dataProvider;

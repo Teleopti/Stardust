@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentsToSkillGroups>().SingleInstance();
 			builder.RegisterType<IntradayOptmizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
-			builder.RegisterType<ResourceCalculationContextFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();

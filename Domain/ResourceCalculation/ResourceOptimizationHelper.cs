@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IPeriodDistributionService _periodDistributionService;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
 		private readonly ITimeZoneGuard _timeZoneGuard;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ResourceOptimizationHelper(Func<ISchedulerStateHolder> stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IPeriodDistributionService periodDistributionService,
 			IIntraIntervalFinderService intraIntervalFinderService,
 			ITimeZoneGuard timeZoneGuard,
-			ResourceCalculationContextFactory resourceCalculationContextFactory)
+			IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;

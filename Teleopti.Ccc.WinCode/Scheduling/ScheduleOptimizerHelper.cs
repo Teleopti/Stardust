@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private ResourceOptimizerProgressEventArgs _progressEvent;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _bitArrayConverter;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IDayOffOptimizationDesktop _dayOffOptimizationDesktop;
 
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			_optimizerHelperHelper = _container.Resolve<IOptimizerHelperHelper>();
 			_bitArrayConverter = _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
-			_resourceCalculationContextFactory = _container.Resolve<ResourceCalculationContextFactory>();
+			_resourceCalculationContextFactory = _container.Resolve<IResourceCalculationContextFactory>();
 			_dayOffOptimizationDesktop = _container.Resolve<IDayOffOptimizationDesktop>();
 		}
 

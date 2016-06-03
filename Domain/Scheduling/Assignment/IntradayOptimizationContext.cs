@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public class IntradayOptimizationContext
 	{
 		private readonly VirtualSkillContext _virtualSkillContext;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContext;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContext;
 
-		public IntradayOptimizationContext(VirtualSkillContext virtualSkillContext, ResourceCalculationContextFactory resourceCalculationContext)
+		public IntradayOptimizationContext(VirtualSkillContext virtualSkillContext, IResourceCalculationContextFactory resourceCalculationContext)
 		{
 			_virtualSkillContext = virtualSkillContext;
 			_resourceCalculationContext = resourceCalculationContext;

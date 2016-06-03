@@ -5,8 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -18,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Meetings;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Meetings;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -30,7 +27,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     {
         private readonly IInitiatorIdentifier _initiatorIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
-	    private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+	    private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 
@@ -43,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         /// Created by: robink
         /// Created date: 2009-10-26
         /// </remarks>
-        internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, ResourceCalculationContextFactory resourceCalculationContextFactory)
+        internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceCalculationContextFactory resourceCalculationContextFactory)
         {
             _initiatorIdentifier = initiatorIdentifier;
             _schedulerStateHolder = schedulerStateHolder;

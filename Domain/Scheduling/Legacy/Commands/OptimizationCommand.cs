@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IPersonListExtractorFromScheduleParts _personExtractor;
 		private readonly ScheduleMatrixOriginalStateContainerCreator _scheduleMatrixOriginalStateContainerCreator;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public OptimizationCommand(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IPersonListExtractorFromScheduleParts personExtractor,
 			ScheduleMatrixOriginalStateContainerCreator scheduleMatrixOriginalStateContainerCreator,
-			ResourceCalculationContextFactory resourceCalculationContextFactory)
+			IResourceCalculationContextFactory resourceCalculationContextFactory)
 		{
 			_groupPageCreator = groupPageCreator;
 			_groupScheduleGroupPageDataProvider = groupScheduleGroupPageDataProvider;

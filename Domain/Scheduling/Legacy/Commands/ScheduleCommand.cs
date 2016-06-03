@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public ScheduleCommand(IResourceOptimizationHelper resourceOptimizationHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			PeriodExtractorFromScheduleParts periodExtractor,
-			ResourceCalculationContextFactory resourceCalculationContextFactory
+			IResourceCalculationContextFactory resourceCalculationContextFactory
 			)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;

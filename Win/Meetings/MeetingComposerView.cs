@@ -5,7 +5,6 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		private readonly IEventAggregator _eventAggregator;
 		private readonly IToggleManager _toogleManager;
 		private readonly IIntraIntervalFinderService _intraIntervalFinderService;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public event EventHandler<ModifyMeetingEventArgs> ModificationOccurred;
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Win.Meetings
 		}
 
 		public MeetingComposerView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, 
-			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager, IIntraIntervalFinderService intraIntervalFinderService, ResourceCalculationContextFactory resourceCalculationContextFactory)
+			bool editPermission, bool viewSchedulesPermission, IEventAggregator eventAggregator, IToggleManager toogleManager, IIntraIntervalFinderService intraIntervalFinderService, IResourceCalculationContextFactory resourceCalculationContextFactory)
 			: this()
 		{
 			bool editMeetingPermission = editPermission;

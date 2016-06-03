@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Win.Meetings
 		private readonly TransparentMeetingMeetingControl _transparentMeetingMeetingControl;
 		private readonly MeetingStateHolderLoaderHelper _meetingStateHolderLoaderHelper;
 		private readonly IToggleManager _toggleManager;
-		private readonly ResourceCalculationContextFactory _resourceCalculationContextFactory;
+		private readonly IResourceCalculationContextFactory _resourceCalculationContextFactory;
 
 		public MeetingImpactView()
 		{
 			InitializeComponent();
 		}
 
-		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService, ResourceCalculationContextFactory resourceCalculationContextFactory)
+		public MeetingImpactView(IMeetingViewModel meetingViewModel, ISchedulerStateHolder schedulerStateHolder, MeetingComposerView meetingComposerView, IToggleManager toggleManager, IIntraIntervalFinderService intraIntervalFinderService, IResourceCalculationContextFactory resourceCalculationContextFactory)
 			: this()
 		{
 			_toggleManager = toggleManager;

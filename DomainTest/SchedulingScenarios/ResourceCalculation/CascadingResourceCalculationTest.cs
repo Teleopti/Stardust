@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		public CascadingResourceCalculation Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IPersonSkillProvider PersonSkillProvider;
-		public ResourceCalculationContextFactory ResourceCalculationContextFactory;
+		public IResourceCalculationContextFactory ResourceCalculationContextFactory;
 			
 		[Test]
 		public void ShouldCalculateNonCascadingSkills()
