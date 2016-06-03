@@ -16,7 +16,7 @@ namespace Stardust.Manager.Timers
 			Elapsed += PurgeTimer_elapsed;
 		}
 
-		private void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
+		public virtual void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
 		{
 			Purge();
 		}
