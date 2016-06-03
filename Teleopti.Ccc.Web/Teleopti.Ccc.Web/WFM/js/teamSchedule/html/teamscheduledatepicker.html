@@ -2,11 +2,18 @@
 	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.gotoPreviousDate()" ng-hide="vm.isMiniMode">
 		<i class="mdi mdi-chevron-double-left"></i>
 	</button>
-	<input type="text" id="teamschedule-datepicker-input" class="pointer" ng-class="{'datepicker-mini':vm.isMiniMode}" ng-model="vm.selectedDate" 
-		   ng-keyup="$event.keyCode == 13 && vm.afterDateChange(vm.selectedDate)" uib-datepicker-popup="{{vm.shortDateFormat}}" 
-		   is-open="vm.isCalendarOpened" show-button-bar="false" ng-required="true" />
 
-	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm" ng-click="vm.toggleCalendar()">
+	<input type="text" id="teamschedule-datepicker-input" class="pointer" ng-model="vm.shortDateFormat"
+		   ng-keyup="$event.keyCode == 13 && vm.afterDateChange(vm.shortDateFormat)"/>
+
+	<div class="wfm-datepicker-wrap" ng-if="vm.isCalendarOpened" ng-outside-click="vm.isCalendarOpened = false;">
+		<div class="sub-header" ng-if="false">
+			From/to:
+		</div>
+		<uib-datepicker show-weeks="true" ng-model="vm.selectedDate" class="wfm-datepicker" ng-change="vm.afterDateChange(vm.selectedDate)" ></uib-datepicker>
+	</div>
+
+	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm toggle-datepicker" ng-click="vm.toggleCalendar()">
 		<i class="mdi mdi-calendar"></i>
 	</button>
 

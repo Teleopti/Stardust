@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.teamSchedule').directive('teamScheduleDatepicker', ['$locale', teamScheduleDatePicker]);
+	angular.module('wfm.teamSchedule').directive('teamScheduleDatepicker', [teamScheduleDatePicker]);
 
-	function teamScheduleDatePicker($locale) {
+	function teamScheduleDatePicker() {
 		return {
 			templateUrl: 'js/teamSchedule/html/teamscheduledatepicker.html',
 			scope: {
@@ -26,27 +26,25 @@
 					tElement[0].querySelectorAll('input'),
 					tElement[0].querySelectorAll('button')
 				);
-				return function postLink(scope, element, attr) {
-					scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
-					scope.$on('$localeChangeSuccess', function () {
-						scope.vm.shortDateFormat = $locale.DATETIME_FORMATS.shortDate;
-					});
-					scope.vm.isMiniMode = 'mini' in attr;
+				return function postLink(scope, element) {
 					element.removeAttr('tabindex');
 				};
-			},
+			}
 		};
 	}
 
 	function teamScheduleDatePickerCtrl($timeout) {
 		var vm = this;
-		
-		vm.afterDateChange = function (currentDate) {
-			vm.selectedDate = currentDate;
 
-			vm.onDateChange
-			&& $timeout(function () { vm.onDateChange({ date: currentDate }) });
-		}
+		vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
+
+		vm.afterDateChange = function(currentDate) {
+			vm.selectedDate = new Date(currentDate);
+			if (!isNaN(vm.selectedDate.getTime())) {
+				vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
+				vm.onDateChange && $timeout(function() { vm.onDateChange({ date: currentDate }) });
+			}
+		};
 
 		vm.gotoPreviousDate = function () {
 			var currentDate = moment(vm.selectedDate).add(-1, "day").toDate();
@@ -61,7 +59,5 @@
 		vm.toggleCalendar = function () {
 			vm.isCalendarOpened = !vm.isCalendarOpened;
 		};
-
 	}
-
 })();
