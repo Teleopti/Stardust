@@ -9,10 +9,9 @@ namespace ManagerTest.Fakes
 
 		public JobPurgeTimerFake(RetryPolicyProvider retryPolicyProvider, ManagerConfiguration managerConfiguration) : base(retryPolicyProvider, managerConfiguration)
 		{
-			Elapsed += PurgeTimer_elapsed;
 		}
 
-		private void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
+		public override void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
 		{
 		}
 		
@@ -23,10 +22,9 @@ namespace ManagerTest.Fakes
 
 		public NodePurgeTimerFake(RetryPolicyProvider retryPolicyProvider, ManagerConfiguration managerConfiguration) : base(retryPolicyProvider, managerConfiguration)
 		{
-			Elapsed += PurgeTimer_elapsed;
 		}
 
-		private void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
+		public override void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
 		{
 		}
 

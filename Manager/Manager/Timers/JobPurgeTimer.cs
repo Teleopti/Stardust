@@ -20,7 +20,7 @@ namespace Stardust.Manager.Timers
 			Purge();
 		}
 
-		private void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
+		public virtual void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
 		{
 			Purge();
 		}
