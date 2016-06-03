@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class AgentStatesViewModel
 	{

@@ -191,12 +191,13 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdaterTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentStatesViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentStatesViewModelBuilderStateValuesTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\AgentViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilderStateValuesTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelSnapshotTests.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ActivityTests\ActivityChangedHandlerTests.cs" />

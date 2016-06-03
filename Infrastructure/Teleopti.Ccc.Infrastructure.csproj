@@ -576,7 +576,6 @@
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
-    <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkFactory.cs" />

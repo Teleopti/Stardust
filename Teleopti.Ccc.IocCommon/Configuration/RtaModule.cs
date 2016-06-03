@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 
@@ -65,6 +65,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AppliedAdherence>().SingleInstance();
 			
 			builder.RegisterType<ProperAlarm>().SingleInstance();
+
+			builder.RegisterType<PersonalAvailableDataProvider>().As<IPersonalAvailableDataProvider>().InstancePerLifetimeScope();
+			builder.RegisterType<SiteViewModelBuilder>().SingleInstance();
+			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
+			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 
 		}
 	}

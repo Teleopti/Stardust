@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class AgentViewModelBuilder
 	{

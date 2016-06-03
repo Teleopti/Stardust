@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModelBuilders
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public interface IAdherenceDetailsViewModelBuilder
 	{

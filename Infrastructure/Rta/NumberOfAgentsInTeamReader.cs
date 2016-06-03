@@ -2,17 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public interface INumberOfAgentsInTeamReader
-	{
-		IDictionary<Guid, int> FetchNumberOfAgents(ITeam[] teams);
-	}
-
 	public class NumberOfAgentsInTeamReader : INumberOfAgentsInTeamReader
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;

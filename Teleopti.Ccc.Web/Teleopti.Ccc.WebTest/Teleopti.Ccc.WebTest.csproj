@@ -231,7 +231,6 @@
     <Compile Include="Areas\Anywhere\Rta\TeamsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\GetSiteAdherenceTest.cs" />
     <Compile Include="Areas\Anywhere\Rta\GetTeamAdherenceTest.cs" />
-    <Compile Include="Areas\Anywhere\PersonalAvailableDataProviderTest.cs" />
     <Compile Include="Areas\Anywhere\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleDayViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleDayViewModelMapperTest.cs" />
