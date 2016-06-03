@@ -22,10 +22,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				ConfigurationManager.AppSettings["RouteName"],
 				int.Parse(ConfigurationManager.AppSettings["AllowedNodeDownTimeSeconds"]),
 				int.Parse(ConfigurationManager.AppSettings["CheckNewJobIntervalSeconds"]),
-				int.Parse(ConfigurationManager.AppSettings["PurgeBatchSize"]),
-				int.Parse(ConfigurationManager.AppSettings["PurgeIntervalHours"]),
-				int.Parse(ConfigurationManager.AppSettings["PurgeJobsOlderThanHours"])
-				);
+				int.Parse(ConfigurationManager.AppSettings["purgeJobsBatchSize"]),
+				int.Parse(ConfigurationManager.AppSettings["purgeJobsIntervalHours"]),
+				int.Parse(ConfigurationManager.AppSettings["PurgeJobsOlderThanHours"]),
+				int.Parse(ConfigurationManager.AppSettings["PurgeNodesIntervalHours"]));
 			app.UseStardustManager(managerConfiguration, scope);
 			new ManagerStarter().Start(managerConfiguration, scope);
 		}
