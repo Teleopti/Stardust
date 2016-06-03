@@ -19,9 +19,14 @@
 		vm.getShiftTradeHeaderClass = getShiftTradeHeaderClass;
 		vm.thereIsRequest = thereIsRequest;
 		vm.isDayOff = isDayOff;
+		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
 
 		function isDayOff(scheduleDayDetail) {
 			return (scheduleDayDetail && (scheduleDayDetail.Type === requestsDefinitions.SHIFT_OBJECT_TYPE.DayOff));
+		}
+
+		function shouldDisplayShiftTradeDayDetail(shiftTradeDayDetail) {
+			return (shiftTradeDayDetail && (shiftTradeDayDetail.ShortName != null && shiftTradeDayDetail.ShortName.length !== 0));
 		}
 
 		$scope.$watch('requestsTableContainer.filterEnabled',

@@ -2,7 +2,7 @@
 	position: relative;
 	height: 87vh;
 	background-color: $white;
-
+        
 	.inline-block, .wfm-date-range-picker-wrap {
 		display: inline-block;
 	}
@@ -47,7 +47,7 @@
 	}
 
 	.ui-grid {
-		height: 71vh;
+		height: 68vh; //71vh;
 		margin: 15px;
 
 		.ui-grid-cell-contents {
@@ -152,7 +152,7 @@
 		}
 	}
 
-	.text-absence-view {
+    .text-absence-view {
 		.ui-grid-top-panel {
 			overflow: visible;
 		}
@@ -165,14 +165,31 @@
 	.shift-trade-view {
 
         overflow: hidden!important;
+        
+        /* show scroll bar outside of grid*/
+        .ui-grid-render-container-body .ui-grid-viewport {
+            height: 63.2vh !important;
+         }
+        
+		  .ui-grid-row .ui-grid-cell{
+            border-bottom-color : $gray054 !important;
+        }
 
-		.shift-trade-header-weekend {
-			color: $red-600;
-		}
+        .shift-trade-row{
+            border-style:  solid;
+            border-color: #d4d4d4;
+         }
 
+         .shift-trade-row:nth-child(odd) {
+            border-width: 0px 1px 1px 0px;
+        }
+
+         .shift-trade-row:nth-child(even) {
+            border-width: 0px 1px 0px 0px;
+        }
+    
 		.shift-trade-cell {
 			box-sizing: border-box;
-			border: 1px solid #aeaeae;
 			width: 100% !important;
 			height: 30px !important;
 		}
@@ -217,9 +234,9 @@
 			overflow: visible;
 		}
 
-		.ui-grid-pinned-container-left .ui-grid-viewport,
 		.ui-grid-pinned-container-right .ui-grid-viewport {
-			overflow: visible !important;
+		    overflow-x: hidden !important;
+            overflow-y: auto!important;
 		}
 
 		.ui-grid-pinned-container-left .ui-grid-header-viewport,
@@ -227,9 +244,7 @@
 			overflow: visible;
 		}
 
-		.ui-grid-pinned-container-right .ui-grid-render-container-right .ui-grid-viewport {
-			overflow: visible !important;
-		}
+              
 	}
 
 	.error-msg-container{

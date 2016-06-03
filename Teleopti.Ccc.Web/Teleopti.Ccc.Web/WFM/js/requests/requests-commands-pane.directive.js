@@ -6,7 +6,7 @@
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective)
 
 
-	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder','Toggle'];
+	requestsCommandsPaneCtrl.$inject = ['requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle'];
 
 	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc) {
 		var vm = this;
@@ -15,19 +15,19 @@
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
 		vm.canCancelRequests = canCancelRequests;
-		vm.cancelRequests = cancelRequests;
 		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 		vm.toggleProcessWaitlistModal = toggleProcessWaitlistModal;
 		vm.processWaitlistRequests = processWaitlistRequests;
-	    vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
+		vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
+		vm.cancelRequests = cancelRequests;
 		initWaitlistProcessPeriod();
 
 		function handleErrorMessages(errorMessages) {
 			if (vm.onErrorMessages) {
 				vm.onErrorMessages({ errorMessages: errorMessages });
 			}
-			
+
 		}
 
 		function initWaitlistProcessPeriod() {
@@ -35,21 +35,22 @@
 		}
 
 		function getSelectedRequestIds() {
-			
+
 			return requestCommandParamsHolder ? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) : null;
 		}
 
-function doStandardCommandHandling(requestType, dataServicePromise, useStraight, commandId, waitlistPeriod) {
+		function doStandardCommandHandling(requestType, dataServicePromise, useStraight, commandId, waitlistPeriod) {
+
 			if (!useStraight) {
 				var selectedRequestIds = getSelectedRequestIds();
 				if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 				if (vm.beforeCommand && !vm.beforeCommand()) return;
 				var commandInProgress = dataServicePromise(selectedRequestIds);
 			} else {
-			    var commandInProgress = dataServicePromise(waitlistPeriod, commandId);
+				var commandInProgress = dataServicePromise(waitlistPeriod, commandId);
 			}
-			
-			
+
+
 			if (vm.afterCommandSuccess) {
 				commandInProgress.success(function (requestCommandHandlingResult) {
 
@@ -76,27 +77,23 @@ function doStandardCommandHandling(requestType, dataServicePromise, useStraight,
 			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Approve, requestsDataService.approveRequestsPromise);
 		}
 		function s4() {
-		    return Math.floor((1 + Math.random()) * 0x10000)
+			return Math.floor((1 + Math.random()) * 0x10000)
 				.toString(16)
 				.substring(1);
 		}
 
 		var newGuid = function () {
-		    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
 		};
 
-	    var commandId = newGuid();
+		var commandId = newGuid();
 
 		function processWaitlistRequests() {
-		    vm.toggleProcessWaitlistModal();
-		    doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist, requestsDataService.processWaitlistRequestsPromise,true,commandId,vm.waitlistPeriod);
+			vm.toggleProcessWaitlistModal();
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist, requestsDataService.processWaitlistRequestsPromise, true, commandId, vm.waitlistPeriod);
 			initWaitlistProcessPeriod();
 		}
 
-		function cancelRequests() {
-			vm.toggleCancelConfirmationModal();
-			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Cancel, requestsDataService.cancelRequestsPromise);
-		}
 
 		function denyRequests() {
 			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Deny, requestsDataService.denyRequestsPromise);
@@ -112,40 +109,49 @@ function doStandardCommandHandling(requestType, dataServicePromise, useStraight,
 			return toggleSvc.Wfm_Requests_Cancel_37741 === true;
 		}
 
-        function runWaitlistToggleIsEnabled() {
-            return toggleSvc.Wfm_Requests_Run_waitlist_38071 === true;
-        }
+		function runWaitlistToggleIsEnabled() {
+			return toggleSvc.Wfm_Requests_Run_waitlist_38071 === true;
+		}
 
 		function canCancelRequests() {
 			return !disableCommands();
+			}
+
+
+		function cancelRequests() {
+			vm.toggleCancelConfirmationModal();
+			doStandardCommandHandling(requestsDefinitions.REQUEST_COMMANDS.Cancel, requestsDataService.cancelRequestsPromise);
 		}
 
 		function toggleCancelConfirmationModal() {
-			vm.ShowCancelAbsenceConfirmationModal = !vm.ShowCancelAbsenceConfirmationModal;
-		}
+
+			if(canCancelRequests()) {
+				vm.ShowCancelAbsenceConfirmationModal = !vm.ShowCancelAbsenceConfirmationModal;
+				}
+				}
 
         function toggleProcessWaitlistModal() {
             vm.showProcessWaitlistModal = !vm.showProcessWaitlistModal;
-        }
-	}
+            }
+            }
 
 	function requestsCommandsPaneDirective() {
 		return {
-			controller: 'requestsCommandsPaneCtrl',
+		controller: 'requestsCommandsPaneCtrl',
 			controllerAs: 'requestsCommandsPane',
 			bindToController: true,
-			scope: {
-				beforeCommand: '&?',
+				scope: {
+			beforeCommand: '&?',
 				afterCommandSuccess: '&?',
 				afterCommandError: '&?',
 				onErrorMessages: '&?',
 				commandsDisabled: '=?',
 				isShiftTradeViewActive: '='
-			},
-			restrict: 'E',
-			templateUrl: 'js/requests/html/requests-commands-pane.tpl.html'
-		};
-	}
+				},
+				restrict: 'E',
+				templateUrl: 'js/requests/html/requests-commands-pane.tpl.html'
+				};
+				}
 
 
-})();
+				}) ();

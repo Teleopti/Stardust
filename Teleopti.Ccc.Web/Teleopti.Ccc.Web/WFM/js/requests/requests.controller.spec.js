@@ -7,7 +7,7 @@ describe('RequestsControllerTests', function () {
 	beforeEach(function () {
 		module('wfm.requests');
 
-		requestCommandParamsHolder = new fackRequestCommandParamsHolder();
+		requestCommandParamsHolder = new fakeRequestCommandParamsHolder();
 
 		module(function ($provide) {
 			$provide.service('Toggle', function() {
@@ -34,7 +34,6 @@ describe('RequestsControllerTests', function () {
 
 
 	
-
 	function setUpTarget() {
 		var scope = $rootScope.$new();
 		var target = $controller('RequestsCtrl', {
@@ -43,7 +42,7 @@ describe('RequestsControllerTests', function () {
 		return { target: target, scope: scope };
 	}
 
-	function fackRequestCommandParamsHolder() {
+	function fakeRequestCommandParamsHolder() {
 		var requestIds;
 		this.setSelectedRequestsIds = function (ids) {
 			requestIds = ids;
