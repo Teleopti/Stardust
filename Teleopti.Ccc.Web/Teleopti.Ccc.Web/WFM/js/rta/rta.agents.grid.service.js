@@ -40,7 +40,7 @@
 				var headerCellTemplate = 'js/rta/rta-agents-headercelltemplate.html';
 				if (alarmOnly) {
 					if (toggleService.RTA_AlarmContext_29357) {
-						headerCellTemplate = '<div style="height: 30px; background-color: white;"></div>';
+						headerCellTemplate = '<div class="white-cell-header"></div>';
 					} else {
 						headerCellTemplate = '<div></div>';
 					}
@@ -121,7 +121,7 @@
 					headerCellFilter: 'translate',
 					width: "42%",
 				};
-				
+
 				var columnDefs = [];
 
 				if (toggleService.RTA_AdherenceDetails_34267)

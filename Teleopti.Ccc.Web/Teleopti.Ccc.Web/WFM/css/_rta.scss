@@ -80,6 +80,32 @@
 		background-color: $gray-300 !important;
 	}
 }
+
+.shift-cell-header {
+	height: 24px;
+	text-align: right;
+	background-color: $white;
+	padding-top: 5px;
+}
+
+.sortable-cell-header {
+	text-align: right;
+	height: 18px;
+}
+
+.cell-header {
+	height:6px;
+}
+
+.white-cell-header {
+	height: 24px;
+	background-color: $white;
+}
+
+.shift-timeline-wraper {
+	padding: 0;
+	position: relative;
+}
 /////////End of Sites & teams///////////////
 ///////////rta-agents///////////////////////
 .agent-row {
@@ -107,7 +133,7 @@
 }
 
 .rta-schedule-container {
-	background-color: #ffffff;
+	background-color: $white;
 	position: relative;
 	float: left;
 	width: 100%;
@@ -139,12 +165,12 @@
 
 .rta-layer{
 	float: left;
-    height: 70%; 
+    height: 70%;
     position: absolute;
 }
 
 .rta-shift{
-	 height: 98%; 
+	 height: 98%;
 	 padding: 1% 0 1% 0;
 }
 
