@@ -59,7 +59,9 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
-				var persons = Persons.LoadAll();
+				var persons = Persons.LoadAll()
+					.Where(p => p.Period(new DateOnly(Now.UtcDateTime())) != null) // UserThatCreatesTestData has no period
+					.ToList();
 				schedules = Schedules.FindSchedulesForPersons(
 					new DateTimePeriod(dates.Min().Utc(), dates.Max().AddDays(1).Utc()),
 					scenario,

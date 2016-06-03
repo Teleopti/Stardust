@@ -55,7 +55,9 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
 				var phone = Activities.LoadAll().Single(x => x.Name == "Phone");
-				var persons = Persons.LoadAll();
+				var persons = Persons.LoadAll()
+					.Where(p => p.Period(new DateOnly(Now.UtcDateTime())) != null) // UserThatCreatesTestData has no period
+					.ToList();
 				persons.ForEach(person =>
 				{
 					dates.ForEach(date =>
