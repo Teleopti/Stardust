@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[SetUp]
 		public void Seup()
 		{
-			_target = new VirtualSkillGroupsCreator();
+			_target = new VirtualSkillGroupsCreator(new PersonalSkills());
 		}
 
 		[Test]

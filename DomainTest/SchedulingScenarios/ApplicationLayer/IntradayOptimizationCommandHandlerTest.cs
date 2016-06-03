@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -80,6 +81,58 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ApplicationLayer
 			var agent2 = new Person().WithId();
 			agent2.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()), 
 				new[] { skill2, skill3 });
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand
+			{
+				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10)
+			});
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
+				.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		[Toggle(Toggles.ResourcePlanner_CascadingSkills_38524)]
+		public void ShouldCreateTwoEventsIfSameSkillsButDiffersDueToPrimarySkill()
+		{
+			var skill1 = new Skill().WithId();
+			skill1.SetCascadingIndex_UseFromTestOnly(1);
+			var skill2 = new Skill().WithId();
+			skill2.SetCascadingIndex_UseFromTestOnly(2);
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
+				new[] { skill1, skill2 });
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
+				new[] { skill2 });
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand
+			{
+				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10)
+			});
+
+			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
+				.Should().Be.EqualTo(2);
+		}
+		[Test]
+		[ToggleOff(Toggles.ResourcePlanner_CascadingSkills_38524)]
+		public void ShouldCreateOneEventsIfSameSkillsButDiffersDueToPrimarySkill()
+		{
+			//remove me when toggle is gone!
+			var skill1 = new Skill().WithId();
+			skill1.SetCascadingIndex_UseFromTestOnly(1);
+			var skill2 = new Skill().WithId();
+			skill2.SetCascadingIndex_UseFromTestOnly(2);
+			var agent1 = new Person().WithId();
+			agent1.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
+				new[] { skill1, skill2 });
+			var agent2 = new Person().WithId();
+			agent2.AddPeriodWithSkills(new PersonPeriod(new DateOnly(1900, 1, 1), new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team()),
+				new[] { skill2 });
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 

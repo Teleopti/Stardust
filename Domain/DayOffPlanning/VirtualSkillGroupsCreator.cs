@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -8,6 +9,13 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
 	public class VirtualSkillGroupsCreator
 	{
+		private readonly IPersonalSkills _personalSkills;
+
+		public VirtualSkillGroupsCreator(IPersonalSkills personalSkills)
+		{
+			_personalSkills = personalSkills;
+		}
+
 		public VirtualSkillGroupsCreatorResult GroupOnDate(DateOnly dateOnly, IEnumerable<IPerson> personList)
 		{
 			var skillGroupKeyPersonListDic = new Dictionary<string, IList<IPerson>>();
@@ -23,7 +31,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			return new VirtualSkillGroupsCreatorResult(skillGroupKeyPersonListDic, skillKeyPersonListDic, skillGroupKeyUniqueNameDic, personSkillGroupDic);
 		}
 
-		private static void addPerson(IPerson person, DateOnly date, IDictionary<string, IList<IPerson>> skillGroupKeyPersonListDic,
+		private void addPerson(IPerson person, DateOnly date, IDictionary<string, IList<IPerson>> skillGroupKeyPersonListDic,
 			IDictionary<string, IList<IPerson>> skillKeyPersonListDic, IDictionary<string, string> skillGroupKeyUniqueNameDic,
 			IDictionary<IPerson, string> personSkillGroupDic)
 		{
@@ -32,25 +40,22 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				return;
 
 			var key = string.Empty;
-			foreach (var personSkill in personPeriod.PersonSkillCollection.OrderBy(s => s.Skill.Id))
+			foreach (var personSkill in _personalSkills.PersonSkills(personPeriod).OrderBy(s => s.Skill.Id))
 			{
-				if (personSkill.Active && !((IDeleteTag) personSkill.Skill).IsDeleted)
-				{
-					var skillId = personSkill.Skill.Id;
-					var thisId = skillId.HasValue ? 
-						skillId.ToString() : 
-						personSkill.Skill.GetHashCode().ToString();
-					key = key.IsEmpty() ? thisId : key + "|" + thisId;
+				var skillId = personSkill.Skill.Id;
+				var thisId = skillId.HasValue ? 
+					skillId.ToString() : 
+					personSkill.Skill.GetHashCode().ToString();
+				key = key.IsEmpty() ? thisId : key + "|" + thisId;
 
-					IList<IPerson> skillPersonList;
-					if (skillKeyPersonListDic.TryGetValue(thisId, out skillPersonList))
-					{
-						skillPersonList.Add(person);
-					}
-					else
-					{
-						skillKeyPersonListDic.Add(thisId, new List<IPerson> {person});
-					}
+				IList<IPerson> skillPersonList;
+				if (skillKeyPersonListDic.TryGetValue(thisId, out skillPersonList))
+				{
+					skillPersonList.Add(person);
+				}
+				else
+				{
+					skillKeyPersonListDic.Add(thisId, new List<IPerson> {person});
 				}
 			}
 

@@ -12,7 +12,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var all = period.PersonSkillCollection.Where(x => !((IDeleteTag)x.Skill).IsDeleted && x.Active).ToList();
 			var cascading = period.CascadingSkills().ToArray();
 			var activities = cascading.Select(personSkill => personSkill.Skill.Activity).Distinct();
-			return all.Except(cascading).Union(activities.Select(activity => cascading.First(s => s.Skill.Activity.Equals(activity))));
+			return all
+				.Except(cascading)
+				.Union(activities.Select(activity => activity == null ? 
+					cascading.First(s => s.Skill.Activity == null) : 
+					cascading.First(s => s.Skill.Activity.Equals(activity))));
 		}
 	}
 }
