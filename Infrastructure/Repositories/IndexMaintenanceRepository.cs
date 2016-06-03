@@ -6,7 +6,7 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
+namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class IndexMaintenanceRepository : IIndexMaintenanceRepository
 	{

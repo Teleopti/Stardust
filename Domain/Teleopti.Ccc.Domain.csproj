@@ -190,7 +190,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\IndexMaintenanceStardust.cs" />
+    <Compile Include="Infrastructure\Events\IndexMaintenanceStardust.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />
