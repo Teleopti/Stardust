@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public IntradayOptimizationFromWeb Target;
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldOnlyConsiderPrimarySkillDuringOptimization()
 		{
 			var dateOnly = DateOnly.Today;

@@ -2,7 +2,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var personSkillCollection = PersonSkills(personPeriod).ToArray();
 
-			var skills = personSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0)
+			var skills = personSkillCollection.Where(s => s.SkillPercentage.Value > 0)
 				.Concat(personPeriod.PersonMaxSeatSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
 				.Concat(personPeriod.PersonNonBlendSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
 				.Select(s => s.Skill)
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var skillEfficiencies =
 				personSkillCollection.Where(
-					s => s.Active && s.SkillPercentage.Value > 0)
+					s => s.SkillPercentage.Value > 0)
 					.Select(k => new SkillEffiencyResource(k.Skill.Id.GetValueOrDefault(), k.SkillPercentage.Value)).ToArray();
 
 			var combination = new SkillCombination(skills, personPeriod.Period, skillEfficiencies);
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		protected virtual IEnumerable<IPersonSkill> PersonSkills(IPersonPeriod personPeriod)
 		{
-			return personPeriod.PersonSkillCollection.Where(personSkill => !((IDeleteTag)personSkill.Skill).IsDeleted);
+			return new PersonalSkills().PersonSkills(personPeriod);
 		}
 	}
 }

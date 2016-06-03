@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 	    private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
+	    private readonly IPersonalSkills _personalSkills;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
 	    public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix,
@@ -26,13 +27,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 	                                                       ISkillStaffPeriodToSkillIntervalDataMapper
 		                                                       skillStaffPeriodToSkillIntervalDataMapper,
 	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
-															ISkillIntervalDataAggregator skillIntervalDataAggregator)
+															ISkillIntervalDataAggregator skillIntervalDataAggregator,
+															IPersonalSkills personalSkills)
 	    {
 		    _scheduleMatrix = scheduleMatrix;
 		    _advancedPreferences = advancedPreferences;
 		    _skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 		    _skillIntervalDataDivider = skillIntervalDataDivider;
 		    _skillIntervalDataAggregator = skillIntervalDataAggregator;
+		    _personalSkills = personalSkills;
 	    }
 
 	    public IList<double?> Values()
@@ -120,19 +123,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private IEnumerable<ISkill> extractPersonalSkillList(DateOnly scheduleDate)
         {
-			var returnList = new List<ISkill>();
-
-			foreach (var personSkill in _scheduleMatrix.Person.Period(scheduleDate).PersonSkillCollection)
-	        {
-		        if(!personSkill.Active)
-					continue;
-
-				if(((IDeleteTag)personSkill.Skill).IsDeleted)
-					continue;
-		        
-		        returnList.Add(personSkill.Skill);
-	        }
-            return returnList;
+	        return _personalSkills.PersonSkills(_scheduleMatrix.Person.Period(scheduleDate)).Select(personSkill => personSkill.Skill).ToList();
         }
     }
 }

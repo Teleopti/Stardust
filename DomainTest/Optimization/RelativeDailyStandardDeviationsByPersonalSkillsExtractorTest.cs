@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _target = new RelativeDailyValueByPersonalSkillsExtractor(_matrix, _advancedPreferences,
 	                                                                  _skillStaffPeriodToSkillIntervalDataMapper,
 	                                                                  _skillIntervalDataDivider,
-	                                                                  _skillIntervalDataAggregator);
+	                                                                  _skillIntervalDataAggregator, new PersonalSkills());
 			_skillIntervalDatas = new List<ISkillIntervalData>();
         }
 
