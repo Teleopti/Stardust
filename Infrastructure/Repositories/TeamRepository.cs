@@ -86,5 +86,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetMaxResults(maxHits)
 				.List<ITeam>();
 		}
+
+	    public IEnumerable<ITeam> FindTeamsForSiteOrderByName(Guid siteId)
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 }

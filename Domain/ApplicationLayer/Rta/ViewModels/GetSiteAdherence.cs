@@ -3,7 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class GetSiteAdherence : IGetSiteAdherence
 	{

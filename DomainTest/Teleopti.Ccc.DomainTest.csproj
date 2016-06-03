@@ -198,6 +198,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelSnapshotTests.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\TeamViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ActivityTests\ActivityChangedHandlerTests.cs" />

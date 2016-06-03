@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core

@@ -18,6 +18,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
+	public static class FakeDatabaseOrganizationExtensions
+	{
+		public static FakeDatabase WithTeam(this FakeDatabase database, Guid? id)
+		{
+			return database.WithTeam(id, null);
+		}
+
+		public static FakeDatabase WithTeam(this FakeDatabase database, string name)
+		{
+			return database.WithTeam(null, name);
+		}
+	}
+
 	public static class FakeDatabaseAgentExtensions
 	{
 
@@ -263,11 +276,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return this;
 		}
 
-		public FakeDatabase WithTeam(Guid? id)
+		public FakeDatabase WithTeam(Guid? id, string name)
 		{
 			_team = new Team {Site = _site};
 			_team.SetId(id ?? Guid.NewGuid());
+			if (name != null)
+				_team.Description = new Description(name);
 			_teams.Has(_team);
+			_site.AddTeam(_team);
 			return this;
 		}
 
@@ -321,7 +337,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ensureExists(_businessUnits, businessUnitId, () => WithBusinessUnit(businessUnitId));
 			ensureExists(_sites, siteId, () => WithSite(siteId));
-			ensureExists(_teams, teamId, () => WithTeam(teamId));
+			ensureExists(_teams, teamId, () => this.WithTeam(teamId));
 
 			ensureExists(_contracts, null, () => WithContract(null));
 			ensureExists(_partTimePercentages, null, () => WithPartTimePercentage(null));

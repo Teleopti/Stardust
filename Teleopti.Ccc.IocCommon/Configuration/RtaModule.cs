@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 
 			builder.RegisterType<SiteViewModelBuilder>().SingleInstance();
+			builder.RegisterType<TeamViewModelBuilder>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
 		}

@@ -1,8 +1,8 @@
 using System;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public class TeamOutOfAdherence
+	public class SiteOutOfAdherence
 	{
 		public Guid Id { get; set; }
 		public int OutOfAdherence { get; set; }

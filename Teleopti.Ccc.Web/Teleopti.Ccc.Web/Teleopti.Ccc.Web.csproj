@@ -428,11 +428,8 @@
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
-    <Compile Include="Areas\Anywhere\Core\GetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
-    <Compile Include="Areas\Anywhere\Core\GetTeamAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\IGetSiteAdherence.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
     <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
@@ -444,8 +441,6 @@
     <Compile Include="Areas\Global\ThemeController.cs" />
     <Compile Include="Areas\Global\BusinessUnitController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
-    <Compile Include="Areas\Anywhere\Core\IGetBusinessUnitId.cs" />
-    <Compile Include="Areas\Anywhere\Core\IGetTeamAdherence.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModel.cs" />
@@ -454,8 +449,6 @@
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamOutOfAdherence.cs" />
-    <Compile Include="Areas\Anywhere\Core\SiteOutOfAdherence.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SitesController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\TeamsController.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
@@ -467,7 +460,6 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\Forecasting\Controllers\EvaluateInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\SkillController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastResultViewModelFactory.cs" />

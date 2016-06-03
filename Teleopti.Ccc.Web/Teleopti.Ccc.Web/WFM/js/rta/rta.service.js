@@ -94,7 +94,7 @@
 			};
 
 			this.getTeams = function(data) {
-				return $resource('../api/Teams/ForSite', {}, {
+				return $resource('../api/Teams/Build', {}, {
 					query: {
 						method: 'GET',
 						isArray: true
