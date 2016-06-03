@@ -132,7 +132,8 @@
 		ETL_MoveBadgeCalculationToETL_38421,
 		ETL_SpeedUpNightlyShiftCategory_38718,
         ETL_SpeedUpNightlyPreference_38283,
-		ETL_SpeedUpIntradayRequest_38914
+		ETL_SpeedUpIntradayRequest_38914,
+		ETL_FasterIndexMaintenance_38847
 
 		// ReSharper restore InconsistentNaming
 	}
