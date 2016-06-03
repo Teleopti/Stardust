@@ -19,8 +19,17 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 		private readonly IAnalyticsPersonPeriodMapNotDefined _analyticsPersonPeriodMapNotDefined;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
+		private readonly ICommonNameDescriptionSetting _commonNameDescription;
 
-		public PersonPeriodTransformer(IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTeamRepository analyticsTeamRepository, IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, IAnalyticsDateRepository analyticsDateRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
+		public PersonPeriodTransformer(
+			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository, 
+			IAnalyticsSkillRepository analyticsSkillRepository, 
+			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
+			IAnalyticsTeamRepository analyticsTeamRepository, 
+			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined, 
+			IAnalyticsDateRepository analyticsDateRepository, 
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository, 
+			ICommonNameDescriptionSetting commonNameDescription)
 		{
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
@@ -29,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			_analyticsPersonPeriodMapNotDefined = analyticsPersonPeriodMapNotDefined;
 			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
+			_commonNameDescription = commonNameDescription;
 		}
 
 		public AnalyticsPersonPeriod Transform(IPerson person, IPersonPeriod personPeriod, out List<AnalyticsSkill> analyticsSkills)
@@ -42,16 +52,12 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 			var skillsetId = MapSkillsetId(
 				personPeriod.PersonSkillCollection.Select(a => a.Skill.Id.GetValueOrDefault()).ToList(),
 				businessUnitId, _analyticsPersonPeriodMapNotDefined, out analyticsSkills);
-
-
-			var windowsDomain = "";
-			var windowsUsername = "";
-
+			
 			var analyticsPersonPeriod = new AnalyticsPersonPeriod
 			{
 				PersonCode = person.Id.GetValueOrDefault(),
 				PersonPeriodCode = personPeriod.Id.GetValueOrDefault(),
-				PersonName = person.Name.ToString(),
+				PersonName = GetPersonName(person),
 				FirstName = person.Name.FirstName,
 				LastName = person.Name.LastName,
 				EmploymentNumber = person.EmploymentNumber,
@@ -78,8 +84,8 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 				DatasourceId = 1,
 				DatasourceUpdateDate = person.UpdatedOn.GetValueOrDefault(),
 				ToBeDeleted = false,
-				WindowsDomain = windowsDomain,
-				WindowsUsername = windowsUsername
+				WindowsDomain = "",
+				WindowsUsername = "" // WindowsDomain and WindowsUsername are filled in by nightly step.
 			};
 
 			analyticsPersonPeriod = FixDatesAndInterval(
@@ -89,6 +95,11 @@ namespace Teleopti.Ccc.Domain.Analytics.Transformer
 				person.PermissionInformation.DefaultTimeZone());
 
 			return analyticsPersonPeriod;
+		}
+
+		public string GetPersonName(IPerson person)
+		{
+			return _commonNameDescription.BuildCommonNameDescription(person);
 		}
 
 		public AnalyticsPersonPeriod FixDatesAndInterval(AnalyticsPersonPeriod analyticsPersonPeriod,

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -33,11 +34,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IAnalyticsDateRepository analyticsDateRepository,
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
+			 IGlobalSettingDataRepository globalSettingDataRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository)
+				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository)
 		{
 		}
 
@@ -63,11 +65,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
 			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
 			IAnalyticsDateRepository analyticsDateRepository,
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 			: base(
 				personRepository, analyticsPersonPeriodRepository, analyticsSkillRepository, eventPublisher,
 				analyticsBusinessUnitRepository, analyticsTeamRepository, analyticsPersonPeriodMapNotDefined,
-				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository)
+				currentAnalyticsUnitOfWork, analyticsDateRepository, analyticsTimeZoneRepository, globalSettingDataRepository)
 		{
 		}
 
@@ -93,17 +96,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 		private readonly ICurrentAnalyticsUnitOfWork _currentAnalyticsUnitOfWork;
 		private readonly IAnalyticsDateRepository _analyticsDateRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
 		public AnalyticsPersonPeriodUpdater(IPersonRepository personRepository,
 			IAnalyticsPersonPeriodRepository analyticsPersonPeriodRepository,
 			IAnalyticsSkillRepository analyticsSkillRepository,
 			IEventPublisher eventPublisher,
-			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, 
-			IAnalyticsTeamRepository analyticsTeamRepository, 
+			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository,
+			IAnalyticsTeamRepository analyticsTeamRepository,
 			IAnalyticsPersonPeriodMapNotDefined analyticsPersonPeriodMapNotDefined,
-			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork, 
-			IAnalyticsDateRepository analyticsDateRepository, 
-			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
+			ICurrentAnalyticsUnitOfWork currentAnalyticsUnitOfWork,
+			IAnalyticsDateRepository analyticsDateRepository,
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
+			IGlobalSettingDataRepository globalSettingDataRepository)
 		{
 			_personRepository = personRepository;
 			_analyticsPersonPeriodRepository = analyticsPersonPeriodRepository;
@@ -115,6 +120,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			_currentAnalyticsUnitOfWork = currentAnalyticsUnitOfWork;
 			_analyticsDateRepository = analyticsDateRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
+			_globalSettingDataRepository = globalSettingDataRepository;
 
 			_analyticsAcdLoginPerson = new AcdLoginPersonTransformer(_analyticsPersonPeriodRepository);
 		}
@@ -127,8 +133,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 
 			var persons = _personRepository.FindPeople(@event.PersonIdCollection.Distinct());
 
-			var transformer = new PersonPeriodTransformer(_analyticsPersonPeriodRepository, _analyticsSkillRepository,
-				_analyticsBusinessUnitRepository, _analyticsTeamRepository, _analyticsPersonPeriodMapNotDefined, _analyticsDateRepository, _analyticsTimeZoneRepository);
+			var transformer = new PersonPeriodTransformer(
+				_analyticsPersonPeriodRepository,
+				_analyticsSkillRepository,
+				_analyticsBusinessUnitRepository,
+				_analyticsTeamRepository,
+				_analyticsPersonPeriodMapNotDefined,
+				_analyticsDateRepository,
+				_analyticsTimeZoneRepository,
+				GetCommonNameDescription(_globalSettingDataRepository));
 
 			foreach (var personCodeGuid in @event.PersonIdCollection.Distinct())
 			{
@@ -179,7 +192,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					{
 						publishSkillChangeEvent(@event, personPeriod, analyticsSkills, newOrUpdatedPersonPeriod);
 					}
-					
+
 					// Update/Add/Delete from Bridge Acd Login Person table
 					var bridgeListForPersonPeriod = _analyticsPersonPeriodRepository.GetBridgeAcdLoginPersonsForPerson(newOrUpdatedPersonPeriod.PersonId);
 					foreach (var externalLogOn in personPeriod.ExternalLogOnCollection)
@@ -236,13 +249,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 					Timestamp = @event.Timestamp
 				});
 			});
-			
+
+		}
+
+		private ICommonNameDescriptionSetting GetCommonNameDescription(IGlobalSettingDataRepository globalSettingDataRepository)
+		{
+			return globalSettingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+
 		}
 
 		private void publishSkillChangeEvent(PersonCollectionChangedEvent @event, IPersonPeriod personPeriod, IEnumerable<AnalyticsSkill> analyticsSkills, AnalyticsPersonPeriod updatedAnalyticsPersonPeriod)
 		{
 			var existsInAnalytics = personPeriod.PersonSkillCollection.Where(a => analyticsSkills.Any(b => b.SkillCode.Equals(a.Skill.Id))).ToList();
-			
+
 			var activeSkills = existsInAnalytics.Where(a => a.Active)
 					.Select(a => analyticsSkills.First(b => b.SkillCode.Equals(a.Skill.Id)).SkillId)
 					.ToList();

@@ -105,8 +105,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			Assert.AreEqual(95, res);
 		}
 
-
-
 		[Test]
 		public void PersonPeriodValidToDate_Transform_IntervalId()
 		{

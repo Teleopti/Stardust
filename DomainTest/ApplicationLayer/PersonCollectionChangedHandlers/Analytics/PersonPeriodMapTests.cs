@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
@@ -20,17 +21,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		private IAnalyticsDateRepository _analyticsDateRepository;
 		private IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
 
-		private AnalyticsSkill fakeSkill1 = new AnalyticsSkill
+		private readonly AnalyticsSkill fakeSkill1 = new AnalyticsSkill
 		{
 			SkillId = 1,
 			SkillCode = Guid.NewGuid()
 		};
-		private AnalyticsSkill fakeSkill2 = new AnalyticsSkill
+		private readonly AnalyticsSkill fakeSkill2 = new AnalyticsSkill
 		{
 			SkillId = 2,
 			SkillCode = Guid.NewGuid()
 		};
-		private AnalyticsSkill fakeSkill3 = new AnalyticsSkill
+		private readonly AnalyticsSkill fakeSkill3 = new AnalyticsSkill
 		{
 			SkillId = 3,
 			SkillCode = Guid.NewGuid()
@@ -91,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			_analyticsTimeZoneRepository = new FakeAnalyticsTimeZoneRepository();
 
 			personPeriodTransformer = new PersonPeriodTransformer(fakeAnalyticsPersonPeriodRepository,
-				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository, new ReturnNotDefined(), _analyticsDateRepository, _analyticsTimeZoneRepository);
+				fakeAnalyticsSkillRepository, fakeAnalyticsBusinessUnitRepository, fakeAnalyticsTeamRepository, new ReturnNotDefined(), _analyticsDateRepository, _analyticsTimeZoneRepository, new CommonNameDescriptionSetting());
 		}
 
 
@@ -176,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		{
 			var nrOfBridgeRows = fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count;
 			var skills = new List<Guid> { fakeSkill2.SkillCode };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
 			Assert.AreEqual(nrOfBridgeRows + 1, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 		}
@@ -188,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var nrOfSkillSets = fakeAnalyticsSkillRepository.SkillSets().Count;
 
 			var skills = new List<Guid> { fakeSkill1.SkillCode };
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
 			Assert.AreEqual(nrOfBridgeRows, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 			Assert.AreEqual(nrOfSkillSets, fakeAnalyticsSkillRepository.SkillSets().Count);
@@ -206,7 +207,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				fakeSkill3.SkillCode
 			};
 
-			var newSkillSetId = personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
+			personPeriodTransformer.MapSkillsetId(skills, 0, new ReturnNotDefined());
 
 			Assert.AreEqual(nrOfBridgeRows + 2, fakeAnalyticsSkillRepository.fakeBridgeSkillsetSkills.Count);
 			Assert.AreEqual(nrOfSkillSets + 1, fakeAnalyticsSkillRepository.SkillSets().Count);
@@ -277,9 +278,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 				}
 			};
 			var bridges = PersonPeriodTransformer.NewBridgeSkillSetSkillsFromSkills(skills, 1);
-			Assert.AreEqual(1, bridges.Count());
+			var analyticsBridgeSkillsetSkills = bridges as IList<AnalyticsBridgeSkillsetSkill> ?? bridges.ToList();
+			Assert.AreEqual(1, analyticsBridgeSkillsetSkills.Count);
 
-			var bridge = bridges.First();
+			var bridge = analyticsBridgeSkillsetSkills.First();
 			Assert.AreEqual(1, bridge.SkillsetId);
 			Assert.AreEqual(42, bridge.SkillId);
 			Assert.AreEqual(123, bridge.BusinessUnitId);
