@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using EO.Internal;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -439,7 +440,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
 			
-			var creator = new VirtualSkillGroupsCreator();
+			var creator = new VirtualSkillGroupsCreator(new PersonalSkills());
 			_skillGroupsCreatorResult = creator.GroupOnDate(_date, _personList);
 			createSkillDayForSkillsDic();
 			drawVirtualGroupList(null, listViewAllVirtualGroups);
