@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			_personSkillProvider = personSkillProvider;
 			_minSkillResolution = minSkillResolution;
+			DoShoveling = true;
 		}
 
 		public int MinSkillResolution
@@ -85,6 +86,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			return result;
 		}
+
+		public bool DoShoveling { get; set; }
 
 		public Tuple<double,double> SkillResources(ISkill skill, DateTimePeriod period)
 		{

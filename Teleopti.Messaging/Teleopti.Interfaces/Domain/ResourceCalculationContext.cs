@@ -22,6 +22,11 @@ namespace Teleopti.Interfaces.Domain
 			get { return _container != null; }
 		}
 
+		public static bool DoShoveling()
+		{
+			return !InContext || (InContext && Fetch().DoShoveling);
+		}
+
 		public void Dispose()
 		{
 			_container = null;

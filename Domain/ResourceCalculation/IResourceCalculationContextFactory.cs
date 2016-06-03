@@ -1,10 +1,11 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface IResourceCalculationContextFactory
 	{
-		ResourceCalculationContext Create();
-		ResourceCalculationContext Create(DateOnlyPeriod period);
+		IDisposable Create();
+		IDisposable Create(DateOnlyPeriod period);
 	}
 }

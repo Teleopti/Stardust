@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var virtualSkillContext = _virtualSkillContext.Create(period);
 			var resourceContext = _resourceCalculationContext.Create();
+			ResourceCalculationContext.Fetch().DoShoveling = false;
 			return new GenericDisposable(() =>
 			{
 				resourceContext.Dispose();
