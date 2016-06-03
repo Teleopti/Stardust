@@ -16,12 +16,12 @@ namespace Stardust.Manager.Timers
 			Elapsed += PurgeTimer_elapsed;
 		}
 
-		public virtual void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
+		private void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
 		{
 			Purge();
 		}
 
-		private void Purge()
+		public virtual void Purge()
 		{
 			using (var connection = new SqlConnection(_connectionString))
 			{

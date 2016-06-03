@@ -1,5 +1,4 @@
-﻿using System.Timers;
-using Stardust.Manager;
+﻿using Stardust.Manager;
 using Stardust.Manager.Timers;
 
 namespace ManagerTest.Fakes
@@ -11,7 +10,7 @@ namespace ManagerTest.Fakes
 		{
 		}
 
-		public override void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
+		public override void Purge()
 		{
 		}
 		
@@ -24,7 +23,7 @@ namespace ManagerTest.Fakes
 		{
 		}
 
-		public override void PurgeTimer_elapsed(object sender, ElapsedEventArgs e)
+		public override void Purge()
 		{
 		}
 
