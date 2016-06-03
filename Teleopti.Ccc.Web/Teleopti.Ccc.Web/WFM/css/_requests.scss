@@ -2,7 +2,7 @@
 	position: relative;
 	height: 87vh;
 	background-color: $white;
-        
+
 	.inline-block, .wfm-date-range-picker-wrap {
 		display: inline-block;
 	}
@@ -175,12 +175,12 @@
 	.shift-trade-view {
 
         overflow: hidden!important;
-        
+
         /* show scroll bar outside of grid*/
         .ui-grid-render-container-body .ui-grid-viewport {
             height: 63.2vh !important;
          }
-        
+
 		  .ui-grid-row .ui-grid-cell{
             border-bottom-color : $gray054 !important;
         }
@@ -197,7 +197,7 @@
          .shift-trade-row:nth-child(even) {
             border-width: 0px 1px 0px 0px;
         }
-    
+
 		.shift-trade-cell {
 			box-sizing: border-box;
 			width: 100% !important;
@@ -254,15 +254,11 @@
 			overflow: visible;
 		}
 
-              
+
 	}
 
 	.error-msg-container{
-		background-color: white;
+		background-color: $white;
 	}
 
-	.request-date-range-picker .popup-control {
-		padding-top:0px;
-		padding-left:2px;
-	}
 }
