@@ -70,15 +70,17 @@
         vertical-align: top;
         white-space: nowrap;
         text-align: center;
+        width: auto;
 
         > span {
             display: inline-block;
             position: relative;
-            width: 300px;
-            
-            #teamschedule-datepicker-input{
+
+            #teamschedule-datepicker-input {
                 text-align: center;
+                width: 90px;
             }
+
             .wfm-datepicker-wrap {
                 position: absolute;
                 top: 40px;
@@ -86,8 +88,18 @@
                 z-index: 100;
             }
 
-            .toggle-datepicker {
+            > button.toggle-datepicker {
                 margin-left: 10px;
+            }
+
+            > button.wfm-btn-invis-primary:focus {
+                background-color: transparent;
+            }
+
+            > button.wfm-btn-invis-primary:active {
+                i {
+                    color: orange;
+                }
             }
         }
     }
@@ -309,6 +321,10 @@
 
     .teamschedule-command-container {
         height: 100%;
+
+        .command-panel-content {
+            padding: 0;
+        }
 
         .command-panel-content .con-row {
             flex-direction: row !important;

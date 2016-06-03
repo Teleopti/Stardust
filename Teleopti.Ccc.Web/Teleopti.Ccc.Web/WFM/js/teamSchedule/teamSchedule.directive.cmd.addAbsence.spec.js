@@ -40,7 +40,8 @@
 
 	it('should handle default start and end time attribute', function () {
 		fakeScheduleManagementSvc.setEarliestStartTime(new Date('2015-01-01 10:00:00'));
-		var result = setUp(new Date('2015-01-01 10:00:00'), { permissions: { IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true } });		
+		var result = setUp(moment('2015-01-01T00:00:00').toDate(), { permissions: { IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: true } });
+
 		var startDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[0].value,
 
 			endDateString = result.container[0].querySelectorAll('team-schedule-datepicker input')[1].value,
@@ -51,9 +52,10 @@
 			endTimeString = result.container[0].querySelectorAll('.uib-timepicker input')[2].value
 				+ result.container[0].querySelectorAll('.uib-timepicker input')[3].value;
 
-		expect(startDateString).toBe('1/1/15');
+		expect(startDateString).toBe('2015-01-01');
+		expect(endDateString).toBe('2015-01-01');
+
 		expect(startTimeString).toBe('1000');
-		expect(endDateString).toBe('1/1/15');
 		expect(endTimeString).toBe('1100');
 	});
 

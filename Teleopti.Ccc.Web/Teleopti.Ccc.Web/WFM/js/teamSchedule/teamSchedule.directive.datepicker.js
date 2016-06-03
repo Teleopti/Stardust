@@ -27,6 +27,11 @@
 					tElement[0].querySelectorAll('button')
 				);
 				return function postLink(scope, element) {
+					scope.$watch(function() {
+						return scope.vm.selectedDate && scope.vm.selectedDate.toDateString();
+					}, function() {
+						scope.vm.shortDateFormat = moment(scope.vm.selectedDate).format('YYYY-MM-DD');
+					});
 					element.removeAttr('tabindex');
 				};
 			}
@@ -38,11 +43,16 @@
 
 		vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
 
+		vm.afterDateChangeDatePicker = function (curDate) {
+			vm.toggleCalendar();
+			vm.afterDateChange(curDate);
+		};
+
 		vm.afterDateChange = function(currentDate) {
 			vm.selectedDate = new Date(currentDate);
 			if (!isNaN(vm.selectedDate.getTime())) {
 				vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
-				vm.onDateChange && $timeout(function() { vm.onDateChange({ date: currentDate }) });
+				vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
 			}
 		};
 

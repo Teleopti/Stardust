@@ -73,9 +73,7 @@
 			});
 		};
 
-		vm.updateDateAndTimeFormat = updateDateAndTimeFormat;
-
-		function updateDateAndTimeFormat() {
+		vm.updateDateAndTimeFormat = function() {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
 			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 		}
@@ -110,7 +108,7 @@
 				);
 
 				return postlink;
-			},
+			}
 		}
 
 		function postlink(scope, elem, attrs, ctrls) {
