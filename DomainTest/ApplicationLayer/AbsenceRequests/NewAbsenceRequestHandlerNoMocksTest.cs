@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.IsNullOrEmpty (existingDeniedRequest.DenyReason);
 			//new request should be denied as is a request for the same day as the accepted absence request
             //now it is denied
-			Assert.IsTrue(newRequest.IsDenied);
+			Assert.IsTrue(newRequest.IsDenied && !newRequest.IsWaitlisted);
 		}
 
 		[Test]
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
         [Test]
-        public void DuplicatedAbsenceRequestShouldGoesToDeny()
+        public void DuplicatedAbsenceRequestShouldGoToDeny()
         {
             var startDateTime = new DateTime(2016, 3, 1, 0, 0, 0, DateTimeKind.Utc);
             var endDateTime = new DateTime(2016, 3, 1, 23, 59, 00, DateTimeKind.Utc);
@@ -317,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
             newAbsenceRequestConsumer.Handle(new NewAbsenceRequestCreatedEvent() { PersonRequestId = newRequest.Id.Value });
 
             Assert.IsTrue(existingWaitlistedRequest.IsApproved);
-            Assert.IsTrue(newRequest.IsDenied);
+            Assert.IsTrue(newRequest.IsDenied && !newRequest.IsWaitlisted);
 
         }
 

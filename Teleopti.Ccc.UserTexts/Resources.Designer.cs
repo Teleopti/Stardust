@@ -21338,7 +21338,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The waitlisted requests for the period of {0} have processed..
+        ///   Looks up a localized string similar to The waitlisted requests for the period of {0} have finished processing..
         /// </summary>
         public static string ProcessWaitlistedRequestsFinished {
             get {
@@ -28331,7 +28331,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The waitlisted requests for the period of {0} start processing..
+        ///   Looks up a localized string similar to The waitlisted requests for the period of {0} have begun processing..
         /// </summary>
         public static string SubmitProcessWaitlistedRequestsSuccess {
             get {
