@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -11,17 +10,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private readonly ResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _stateHolder;
 		private readonly CascadeResources _cascadeResources;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public CascadingResourceCalculation(ResourceOptimizationHelper resourceOptimizationHelper,
 																Func<ISchedulerStateHolder> stateHolder,
-																CascadeResources cascadeResources,
-																ITimeZoneGuard timeZoneGuard)
+																CascadeResources cascadeResources)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_stateHolder = stateHolder;
 			_cascadeResources = cascadeResources;
-			_timeZoneGuard = timeZoneGuard;
 		}
 
 		public void ForDay(DateOnly date)
@@ -36,22 +32,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		private void doForPeriod(DateOnlyPeriod period)
 		{
-			using (ResourceCalculationCurrent.PreserveContext())
+			foreach (var date in period.DayCollection())
 			{
-				foreach (var date in period.DayCollection())
-				{
-					//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
-					_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
-				}
-				//TODO: räcker nog med ett context på perioden plus nån dag...
-				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create())
-				{
-					foreach (var date in period.DayCollection())
-					{
-						_cascadeResources.Execute(date);
-					}
-				}
+				//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
+				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 			}
+			_cascadeResources.Execute(period);
 		}
 
 		public void ResourceCalculateDate(DateOnly localDate, bool considerShortBreaks, bool doIntraIntervalCalculation)
