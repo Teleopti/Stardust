@@ -18,17 +18,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IDisposable Create(DateOnlyPeriod period)
 		{
 			var virtualSkillContext = _virtualSkillContext.Create(period);
-			IDisposable resourceContext = null;
-			if (!ResourceCalculationContext.InContext)
-			{
-				resourceContext = _resourceCalculationContext.Create();
-			}
+			var resourceContext = _resourceCalculationContext.Create();
 			return new GenericDisposable(() =>
 			{
-				if (resourceContext != null)
-				{
-					resourceContext.Dispose();
-				}
+				resourceContext.Dispose();
 				virtualSkillContext.Dispose();
 			});
 		}
