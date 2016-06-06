@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.IslandScheduling;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	/// <summary>
 	/// Class for holding winclient state
 	/// </summary>
-	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests, IIslandSchedulerStateHolder
+	public class SchedulerStateHolder : ISchedulerStateHolder, IClearReferredShiftTradeRequests
 	{
 		private ISchedulingResultStateHolder _schedulingResultState;
 		private readonly IList<IPerson> _allPermittedPersons;
