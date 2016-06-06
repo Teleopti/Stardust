@@ -5,6 +5,7 @@ using Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 {
@@ -24,7 +25,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			var absenceRequest = table.CreateInstance<AbsenceRequestConfigurable>();
 			DataMaker.Person(userName).Apply(absenceRequest);
 		}
-		
+
+		[When(@"I select to go to shift trade requests view")]
+		public void WhenISelectToGoToShiftTradeRequestsView()
+		{
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
+			Browser.Interactions.ClickUsingJQuery("[aria-controls='tab-content-2']");
+		}
 
 		[When(@"I select to load requests from '(.*)' to '(.*)'")]
 		public void WhenISelectToLoadRequestsFromTo(string from, string to)
@@ -41,6 +48,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		{
 			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
 			Browser.Interactions.AssertAnyContains(".request-agent-name .ui-grid-cell-contents", userName);
+		}
+
+		[Then(@"I should see a shift request from '(.*)' in the list")]
+		public void ThenIShouldSeeAShiftRequestFromInTheList(string userName)
+		{
+			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
+			Browser.Interactions.AssertAnyContains(".ui-grid-cell [class=\"ng-binding\"]", userName);
 		}
 
 		[When(@"I sort the request list by descending agent name")]
