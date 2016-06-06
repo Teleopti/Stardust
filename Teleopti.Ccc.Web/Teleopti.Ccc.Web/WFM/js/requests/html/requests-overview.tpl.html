@@ -13,9 +13,12 @@
 	<div class="total-requests-count pull-left">
 		<span>{{requestsOverview.showSelectedRequestsInfo()}}</span>
 	</div>
-	<select ng-if="requestsOverview.paging.totalRequestsCount > 0"
-			class="page-size-selector pull-left"
-			ng-model="requestsOverview.paging.pageSize" ng-options="option for option in requestsOverview.pageSizeOptions" ng-change="requestsOverview.onPageSizeChanges()"></select>
+	<md-select ng-if="requestsOverview.paging.totalRequestsCount > 0" 
+		    class="page-size-selector pull-left"
+		    ng-model="requestsOverview.paging.pageSize"
+			ng-change="requestsOverview.onPageSizeChanges()">
+		<md-option ng-repeat="option in requestsOverview.pageSizeOptions" ng-value="option"><span ng-bind="option"></span></md-option>
+	</md-select>
 </div>
 
 
