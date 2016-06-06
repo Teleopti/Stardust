@@ -17,7 +17,7 @@
 					if (schedules[i].PersonId === agentId) {
 				
 						var newScheduleStart = getNewScheduleStartMoment(schedules[i].Date, schedules[i], newStartMoment);
-						var newScheduleEnd = getLatestScheduleEndMoment(schedules[i].Date, schedules[i], newStartMoment);					
+						var newScheduleEnd = getLatestScheduleEndMoment(schedules[i].Date, schedules[i], newStartMoment);
 						if (newScheduleEnd === null) continue;
 
 						var scheduleLength = newScheduleEnd.diff(newScheduleStart, 'minutes');
@@ -37,11 +37,7 @@
 		function calculateMaximumProjectionLengthInMinute(projections) {
 			if (!projections || projections.length === 0) return null;
 
-			var projectionLengths =	projections.map(function(p) {
-				return p.Minutes;
-			});
-		
-			return Math.max.apply(null, projectionLengths);
+			return moment(projections[projections.length - 1].Start).diff(moment(projections[0].Start), 'minutes') + projections[projections.length - 1].Minutes;
 		}
 
 		function getUnselectedProjections(scheduleDateMoment, personSchedule) {
@@ -100,7 +96,10 @@
 			var unselected = getUnselectedProjections(scheduleDateMoment, personSchedule);
 			if (!unselected || unselected.length === 0) return newEndMoment;
 			
-			var ends =  unselected.map(function(p) { return moment(p.End); });
+			var ends =  unselected.map(function(p) {
+
+				return moment(p.Start).add(p.Minutes, 'minutes');
+			});
 			ends.push(newEndMoment);
 			return findLatestMoment(ends);
 		}
