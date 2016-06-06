@@ -28,16 +28,20 @@
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
-
+				var personActivities = [];
+				personProjectionsWithSelectedActivities.forEach(function(x) {
+					x.selectedActivities.forEach(function(a) {
+						personActivities.push({
+							PersonId: x.personId,
+							Name: x.name,
+							Activity: a
+						});
+					});
+				});
 				notification.reportActionResult({
 					"success": 'SuccessfulMessageForRemovingActivity',
 					"warning": 'PartialSuccessMessageForRemovingActivity'
-				}, personProjectionsWithSelectedActivities.map(function (x) {
-					return {
-						PersonId: x.personId,
-						Name: x.name
-					}
-				}), response.data);
+				}, personActivities, response.data);
 			});
 		}
 

@@ -14322,7 +14322,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Used to display an error message to the user when they have attempted to cancel an absence request where, for whatever reason, a related absence can not be located. Parameters are {0} Person {1} Date.</comment>
   </data>
   <data name="PartialSuccessMessageForRemovingActivity" xml:space="preserve">
-    <value>Removing activities for {0} agent(s), {1} succeeded and {2} failed.</value>
+    <value>Removing activities for {0} agent activity(ies), {1} succeeded and {2} failed.</value>
     <comment>Partial success message for removing activity</comment>
   </data>
   <data name="CouldNotCancelRequestNoAbsenceMultiDay" xml:space="preserve">

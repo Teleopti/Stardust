@@ -19650,7 +19650,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Removing activities for {0} agent(s), {1} succeeded and {2} failed..
+        ///   Looks up a localized string similar to Removing activities for {0} agent activity(ies), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForRemovingActivity {
             get {
