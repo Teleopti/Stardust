@@ -19,7 +19,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.PeopleAdmin.Views;
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 	public class FilteredPeopleHolder : IDisposable
 	{
-		private ITraceableRefreshService _refreshService;
+		private readonly ITraceableRefreshService _refreshService;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly ITenantDataManager _tenantDataManager;
 		private readonly List<IPerson> _personCollection = new List<IPerson>();
@@ -70,7 +69,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private ReadOnlyCollection<PersonGeneralModel> _selectedPeopleGeneralGridData;
 		private IList<ExternalLogOnModel> _filteredExternalLogOnCollection;
 
-		private IList<Guid> toBeRemovedList = new List<Guid>();
+		private readonly IList<Guid> toBeRemovedList = new List<Guid>();
 		private IEnumerable<LogonInfoModel> _logonData;
 
 		public FilteredPeopleHolder(ITraceableRefreshService refreshService,
@@ -81,21 +80,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			_allAccounts = allAccounts;
 			_tenantDataManager = tenantDataManager;
 		}
-
-		//public void SetState(ITraceableRefreshService refreshService,
-		//	  IUnitOfWork unitOfWork,
-		//							 IDictionary<IPerson, IPersonAccountCollection> allAccounts)
-		// {
-		//	  clearCollections();
-
-		//	 _refreshService = refreshService;
-		//	  GetUnitOfWork = unitOfWork;
-		//	  _allAccounts.Clear();
-		//	  foreach (var allAccount in allAccounts)
-		//	  {
-		//			_allAccounts.Add(allAccount.Key,allAccount.Value);
-		//	  }
-		// }
 
 		public ReadOnlyCollection<PersonGeneralModel> SelectedPeopleGeneralGridData
 		{
@@ -519,7 +503,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				var sorted = availabilityCollection.OrderByDescending(n2 => n2.StartDate);
 				availabilityCollection = sorted.ToList();
 
-				foreach (PersonAvailability avail in availabilityCollection)
+				foreach (var avail in availabilityCollection)
 				{
 					_allPersonAvailabilityCollection.Add(avail);
 				}
@@ -1042,52 +1026,36 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Double.ToString")]
 		public void SetPersonSkillGridViewDataByPersons(ReadOnlyCollection<IPersonPeriod> personPeriods,
 				ReadOnlyCollection<IPersonPeriodModel> personPeriodGridData)
 		{
 			SetSelectedPeoplePeriodGridData(personPeriodGridData);
 			//Reset person skill view data
 			ResetPersonSkillAdapterCollection();
-
+			var personSkillAdapterDic = _personSkillAdapterCollection.ToDictionary(key => key.ContainedEntity.Skill);
 			//Set person skill view data
 			foreach (var personPeriod in personPeriods)
 			{
+				if(personPeriod == null)
+					continue;
 
-				foreach (var skillModel in _personSkillAdapterCollection)
+				IList<IPersonSkill> personSkills = personPeriod.PersonSkillCollection.ToList();
+				foreach (var personSkill in personSkills)
 				{
-					var model = skillModel;
-					IList<IPersonSkill> personSkills;
-					personSkills = personPeriod == null ? new List<IPersonSkill>() : personPeriod.PersonSkillCollection.Where(s => s.Skill.Equals(model.ContainedEntity.Skill)).ToList();
+					var skill = personSkill.Skill;
+					PersonSkillModel skillModel;
+					if (!personSkillAdapterDic.TryGetValue(skill, out skillModel))
+						continue;
 
-					if (personSkills.Count <= 0)
-					{
-						skillModel.AddProficiencyValue("100");
-						skillModel.ActiveTriState = 0;
-						//continue;
-					}
-					else
-					{
-						skillModel.PersonSkillExistsInPersonCount += 1;
-						skillModel.TriState = skillModel.PersonSkillExistsInPersonCount == personPeriods.Count ? 1 : 2;
-					}
+					skillModel.PersonSkillExistsInPersonCount += 1;
+					skillModel.TriState = skillModel.PersonSkillExistsInPersonCount == personPeriods.Count ? 1 : 2;
+					skillModel.AddProficiencyValue((personSkill.SkillPercentage.Value * 100).ToString());
+					if(personSkill.Active)
+						skillModel.ActiveSkillsInPersonPeriodCount ++;
 
-					foreach (var personSkill in personSkills)
-					{
-						skillModel.AddProficiencyValue((personSkill.SkillPercentage.Value * 100).ToString());
-					}
-
-					var activeSkills = personSkills.Where(personSkill => personSkill.Active).ToList();
-					skillModel.ActiveSkillsInPersonPeriodCount += activeSkills.Count;
-
-					if (skillModel.ActiveSkillsInPersonPeriodCount == 0)
-						skillModel.ActiveTriState = 0;
-					else
-					{
-						skillModel.ActiveTriState = skillModel.ActiveSkillsInPersonPeriodCount == personPeriods.Count ? 1 : 2;
-					}
+					skillModel.ActiveTriState = skillModel.ActiveSkillsInPersonPeriodCount == personPeriods.Count ? 1 : 2;			
 				}
-			}
+			}		
 		}
 
 		public void ResetPersonSkillAdapterCollection()
@@ -1097,6 +1065,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				personSkillModel.PersonSkillExistsInPersonCount = 0;
 				personSkillModel.ActiveSkillsInPersonPeriodCount = 0;
 				personSkillModel.TriState = 0;
+				personSkillModel.ActiveTriState = 0;
 				personSkillModel.Proficiency = 100;
 				personSkillModel.ProficiencyValues = new StringCollection();
 			}
