@@ -1,7 +1,7 @@
 ﻿<table class="table" ng-if="vm.scheduleVm.Schedules.length > 0" id="team-schedule">
 	<thead>
 		<tr class="person">
-			<th class="person-name person-name-column" >
+			<th class="person-name person-name-column">
 				<div class="wfm-checkbox" ng-if="vm.selectMode">
 					<label>
 						<input type="checkbox" ng-model="vm.toggleAllInCurrentPage" ng-change="vm.updateAllSelectionInCurrentPage(vm.toggleAllInCurrentPage)">
@@ -39,7 +39,8 @@
 					<div class="shift" ng-repeat="shift in personSchedule.Shifts">
 						<div class="layer absolute floatleft selectable projection-layer" projection-name="{{projection.Description}}" ng-repeat="projection in shift.Projections"
 							 ng-style="{left: projection.StartPosition + '%', width: projection.Length + '%', backgroundColor: projection.Color}"
-							 ng-class="{overtime:projection.IsOvertime, personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
+							 ng-class="{overtimeLight: projection.IsOvertime && projection.UseLighterBorder, overtimeDark: projection.IsOvertime && !projection.UseLighterBorder,
+							 personAbsence:projection.ParentPersonAbsences !== null, noneSelected:vm.totalSelectedProjections() == 0 && !projection.IsOvertime,
 							 hasSelected:vm.totalSelectedProjections() != 0 && !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder, unselectable: !vm.canToggleSelection(projection, shift, vm.selectedDate)}"
 							 ng-click="vm.ToggleProjectionSelection(projection, personSchedule, shift, vm.selectedDate)">
 							<md-tooltip>{{projection.Description}}</md-tooltip>
