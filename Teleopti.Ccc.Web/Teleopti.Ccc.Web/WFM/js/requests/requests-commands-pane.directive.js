@@ -54,7 +54,8 @@
 			if (vm.afterCommandSuccess) {
 				commandInProgress.success(function (requestCommandHandlingResult) {
 
-					if (requestCommandHandlingResult.Success) {
+					if (requestCommandHandlingResult.AffectedRequestIds && requestCommandHandlingResult.AffectedRequestIds.length > 0) {
+						
 						vm.afterCommandSuccess({
 							commandType: requestType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
@@ -62,9 +63,11 @@
 							commandId: commandId,
 							waitlistPeriod: waitlistPeriod
 						});
-					} else {
+					}
+					if (requestCommandHandlingResult.ErrorMessages && requestCommandHandlingResult.ErrorMessages.length > 0) {
 						handleErrorMessages(requestCommandHandlingResult.ErrorMessages);
 					}
+						
 				});
 			}
 			if (vm.afterCommandError) {
