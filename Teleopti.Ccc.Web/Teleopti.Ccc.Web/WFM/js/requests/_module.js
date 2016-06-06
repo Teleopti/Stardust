@@ -10,8 +10,7 @@
 		'pascalprecht.translate',
 		'wfm.notice',
 		'currentUserInfoService',
-		'isteven-multi-select',
-        'wfm.teamSchedule'
+		'isteven-multi-select'
 	]);
 
 })();

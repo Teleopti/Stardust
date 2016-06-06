@@ -3,7 +3,7 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "Toggle", "requestsDefinitions", "requestsNotificationService", "SignalR", "CurrentUserInfo", "$templateCache"];
+	requestsController.$inject = ["$scope", "Toggle", "requestsDefinitions", "requestsNotificationService", "CurrentUserInfo", "$templateCache"];
 
 	function overrideTemplateForMultiSelect($templateCache) {
 		var template = '<span class="multiSelect inlineBlock">'
@@ -65,7 +65,7 @@
 		$templateCache.put("isteven-multi-select.htm", template);
 	}
 
-    function requestsController($scope, toggleService, requestsDefinitions, requestsNotificationService, signalRSvc, CurrentUserInfo, $templateCache) {
+    function requestsController($scope, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo, $templateCache) {
         var vm = this;
         vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
@@ -141,10 +141,28 @@
         }
 
         function monitorRunRequestWaitlist() {
-            signalRSvc.subscribe(
+            signalrSubscribe(
 				{ DomainType: 'IRunRequestWaitlistEventMessage' }
 				, RunRequestWaitlistEventHandler);
         }
+
+        function signalrSubscribe(options, messsageHandler) {
+            var $ = window.jQuery;
+            var hub = $.connection.MessageBrokerHub;
+            
+            hub.client.onEventMessage = function (message) {
+                messsageHandler(message);
+            }
+            
+            $.connection.hub.url = "../signalr";
+           
+            $.connection.hub.start().done(function () {
+                hub.server.addSubscription(options);
+            }).fail(function(error) {
+            });
+                      
+         };
+        
 
         function formatDatePeriod(message) {
             vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
