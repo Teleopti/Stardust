@@ -103,10 +103,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 					var values = table.CreateInstance<AddActivityFormInfo>();
 
 					Browser.Interactions.ClickVisibleOnly(".add-activity .activity-selector");
-					Browser.Interactions.ClickContaining(".activity-selector option", values.Activity);
+                    Browser.Interactions.ClickContaining(".md-select-menu-container md-option .md-text", values.Activity);
 
-					Browser.Interactions.ClickContaining(".activity-option-item", values.Activity);
-					var startTime = string.Format("new Date('{0}')", values.StartTime);
+                    var startTime = string.Format("new Date('{0}')", values.StartTime);
 					var endTime = string.Format("new Date('{0}')", values.EndTime);
 					var timeRangeStr = string.Format("{{startTime:{0}, endTime:{1}}}", startTime, endTime);
 					var selectedDate = string.Format("function(){{return new Date('{0}');}}", values.SelectedDate);
