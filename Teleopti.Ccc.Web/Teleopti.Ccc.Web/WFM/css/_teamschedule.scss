@@ -405,4 +405,8 @@
             margin-right: 20px;
         }
     }
+
+    button:focus {
+        outline: 1px dashed $gray054;
+    }
 }

@@ -24,22 +24,24 @@
 		vm.scheduleDate = new Date();
 		vm.scheduleFullyLoaded = false;
 
-		vm.triggerCommand = function (label, needToOpenSidePanel) {			
-			if (needToOpenSidePanel) openSidePanel();
+		vm.triggerCommand = function(label, needToOpenSidePanel) {
+			needToOpenSidePanel && openSidePanel();
+
 			$scope.$broadcast('teamSchedule.init.command', {
 				activeCmd: label
-			});			
-		}
+			});
 
-		vm.commonCommandCallback = function (trackId, personIds) {	
+			$scope.$apply();
+		};
 
+		vm.commonCommandCallback = function(trackId, personIds) {
 			var commandContainerId = "teamschedule-command-container";
 			if ($mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).close();
 			}
 			vm.lastCommandTrackId = trackId != null ? trackId : null;
 			personIds && vm.updateSchedules(personIds);
-		}
+		};
 
 		function openSidePanel() {
 			var commandContainerId = "teamschedule-command-container";

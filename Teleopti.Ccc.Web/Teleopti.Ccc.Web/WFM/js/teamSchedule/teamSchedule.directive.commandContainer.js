@@ -12,11 +12,11 @@
 
 		vm.activeCmd = null;
 
-		vm.setActiveCmd = function (label) {
+		vm.setActiveCmd = function(label) {
 			vm.activeCmd = label;
-		}
+		};
 
-		vm.resetActiveCmd = function() { vm.activeCmd = null; }
+		vm.resetActiveCmd = function() { vm.activeCmd = null; };
 
 		vm.getActionCb = function (_) {
 			var returnFn = function(trackId, personIds) {
@@ -38,12 +38,12 @@
 		vm.hasPermission = function(permission) {
 			if (!vm.configurations || !vm.configurations.permissions) return false;
 			return vm.configurations.permissions[permission];
-		}
+		};
 
 		vm.hasToggle = function(toggle) {
 			if (!vm.configurations || !vm.configurations.toggles) return false;
 			return vm.configurations.toggles[toggle];
-		}
+		};
 
 	}
 
@@ -63,9 +63,10 @@
 		}
 
 		function postlink(scope, elem) {
-			scope.$on('teamSchedule.init.command', function(e, d) {
+			scope.$on('teamSchedule.init.command', function (e, d) {
 				scope.vm.setActiveCmd(d.activeCmd);
 			});
+
 			scope.$on('teamSchedule.reset.command', function(e, d) {
 				scope.vm.resetActiveCmd();
 			});
