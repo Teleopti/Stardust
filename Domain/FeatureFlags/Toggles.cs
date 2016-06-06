@@ -69,6 +69,8 @@
 		WfmTeamSchedule_AddPersonalActivity_37742,
 		WebByPassDefaultPermissionCheck_37984,
 
+		WfmReportPortal_Basic_38825,
+
 		ResourcePlanner_WeeklyRestSolver_35043,
 
 		Wfm_Requests_Basic_35986,
