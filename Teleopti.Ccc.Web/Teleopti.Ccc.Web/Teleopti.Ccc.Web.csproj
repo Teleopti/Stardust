@@ -1336,6 +1336,7 @@
     <Content Include="WFM\js\global\http.spec.js" />
     <Content Include="WFM\js\global\notification.controller.spec.js" />
     <Content Include="WFM\js\global\numeric-value\numeric-value.directive.js" />
+    <Content Include="WFM\js\global\signalR.service.js" />
     <Content Include="WFM\js\global\wfm.main.controller.spec.js" />
     <Content Include="WFM\js\global\wfm.main.controller.js" />
     <Content Include="WFM\js\global\shortcuts.service.js" />
@@ -1533,7 +1534,6 @@
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scenarioTestUtil.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.spec.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.scheduleManagement.js" />
-    <Content Include="WFM\js\teamSchedule\teamSchedule.service.signalr.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.service.swapShifts.js" />
     <Content Include="WFM\js\teamSchedule\teamSchedule.shiftHelpers.js" />
     <Content Include="WFM\js\teamSchedule\html\timeline.html" />

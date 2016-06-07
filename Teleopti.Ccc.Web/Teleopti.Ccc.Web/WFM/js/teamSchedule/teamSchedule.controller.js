@@ -11,12 +11,12 @@
 		'PersonSelection',
 		'ScheduleManagement',				
 		'Toggle',
-		'SignalR',								
+		'signalRSVC',
 		'NoticeService',
 		TeamScheduleController]);
 
 	function TeamScheduleController($scope, $q, $translate, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc,
-		scheduleMgmtSvc, toggleSvc, signalRSvc, NoticeService) {
+		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService) {
 
 		var vm = this;
 
@@ -215,7 +215,7 @@
 		}
 
 		function monitorScheduleChanged() {
-			signalRSvc.subscribeBatchMessage(
+			signalRSVC.subscribeBatchMessage(
 				{ DomainType: 'IScheduleChangedInDefaultScenario' }
 				, scheduleChangedEventHandler
 				, 300);

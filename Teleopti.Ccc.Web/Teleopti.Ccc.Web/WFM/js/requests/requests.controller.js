@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "Toggle", "requestsDefinitions", "requestsNotificationService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "Toggle", "requestsDefinitions", "requestsNotificationService", "CurrentUserInfo", "signalRSVC"];
 
-    function requestsController($scope, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo) {
+    function requestsController($scope, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo, signalRSVC) {
         var vm = this;
         vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
@@ -76,27 +76,10 @@
         }
 
         function monitorRunRequestWaitlist() {
-            signalrSubscribe(
+            signalRSVC.subscribe(
 				{ DomainType: 'IRunRequestWaitlistEventMessage' }
 				, RunRequestWaitlistEventHandler);
         }
-
-        function signalrSubscribe(options, messsageHandler) {
-            var $ = window.jQuery;
-            var hub = $.connection.MessageBrokerHub;
-            
-            hub.client.onEventMessage = function (message) {
-                messsageHandler(message);
-            }
-            
-            $.connection.hub.url = "../signalr";
-           
-            $.connection.hub.start().done(function () {
-                hub.server.addSubscription(options);
-            }).fail(function(error) {
-            });
-                      
-        };
 
         function formatDatePeriod(message) {
             vm.userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;

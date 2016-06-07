@@ -22,7 +22,7 @@ describe("teamschedule controller tests", function() {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
 			$provide.service('Toggle', setupMockAllTrueToggleService);
-			$provide.service('SignalR', setupMockSignalRService);
+			$provide.service('signalRSVC', setupMockSignalRService);
 			$provide.service('WFMDate', function () {
 				return {
 					nowInUserTimeZone: function() {
@@ -261,7 +261,7 @@ describe("teamschedule controller tests", function() {
 	}
 
 	function setupMockSignalRService() {
-		mockSignalRBackendServer.subscriptions = [];
+	    mockSignalRBackendServer.subscriptions = [];
 
 		return {
 			subscribe: function(options, eventHandler, errorHandler) {
