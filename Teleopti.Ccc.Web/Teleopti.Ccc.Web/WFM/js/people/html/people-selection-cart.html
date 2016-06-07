@@ -73,10 +73,9 @@
 		<md-sidenav class="md-sidenav-right md-sidenav-skill-panel md-whiteframe-z2" md-component-id="right-shiftbag">
 			<div class="sidenav-header">{{'ChangeShiftBag'|translate}}</div>
 			<md-content layout-padding style="height: 68vh">
-				<select style="font-family: Calibri" ng-model="vm.selectedShiftBag" ng-change="vm.selectedShiftBagChanged(vm.selectedShiftBag)">
-					<option value="" disabled selected="">{{'PickAShiftBag'|translate}}</option>
-					<option value={{shiftBag.ShiftBagId}} ng-repeat="shiftBag in vm.availableShiftBags|orderBy: 'ShiftBagName'">{{shiftBag.ShiftBagName}}</option>
-				</select>
+				<md-select ng-model="vm.selectedShiftBag" placeholder="{{'PickAShiftBag'|translate}}" ng-change="vm.selectedShiftBagChanged(vm.selectedShiftBag)">
+					<md-option ng-repeat="shiftBag in vm.availableShiftBags|orderBy: 'ShiftBagName'" ng-value="shiftBag.ShiftBagId"><span ng-bind="shiftBag.ShiftBagName"></span></md-option>
+				</md-select>
 			</md-content>
 			<div style="position: relative;float: right;">
 				<button class="wfm-btn" ng-class="{'wfm-btn-primary': vm.dataChanged, 'wfm-btn-primary-disabled': !vm.dataChanged}" ng-disabled="!vm.dataChanged" ng-click="vm.updatePeopleWithShiftBag()">{{'Apply' | translate}}</button>
