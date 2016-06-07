@@ -129,7 +129,7 @@
 					return [200, siteAdherences];
 				});
 
-			fake(/\.\.\/api\/Teams\/ForSite(.*)/,
+			fake(/\.\.\/api\/Teams\/Build(.*)/,
 				function (params) {
 					return [200, teams.filter(function (team) { return team.SiteId === params.siteId; })];
 				});
@@ -158,7 +158,7 @@
 			}
 
 			this.withTime = function (time) {
-				serverTime = time; 
+				serverTime = time;
 				return this;
 			};
 
