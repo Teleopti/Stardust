@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	        _target = new RelativeDailyValueByPersonalSkillsExtractor(_matrix, _advancedPreferences,
 	                                                                  _skillStaffPeriodToSkillIntervalDataMapper,
 	                                                                  _skillIntervalDataDivider,
-	                                                                  _skillIntervalDataAggregator, new PersonalSkills());
+	                                                                  _skillIntervalDataAggregator, new PersonalSkillsProvider());
 			_skillIntervalDatas = new List<ISkillIntervalData>();
         }
 

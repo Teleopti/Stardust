@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IPersonalSkills _personalSkills;
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
 
 		public IntradayOptimizer2Creator(
 			IIntradayDecisionMaker decisionMaker,
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDayEquator scheduleDayEquator,
 			IOptimizerHelperHelper optimizerHelperHelper, 
 			IMatrixListFactory matrixListFactory,
-			IPersonalSkills personalSkills)
+			IPersonalSkillsProvider personalSkillsProvider)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayEquator = scheduleDayEquator;
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_matrixListFactory = matrixListFactory;
-			_personalSkills = personalSkills;
+			_personalSkillsProvider = personalSkillsProvider;
 		}
 
 		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IScheduleDay> scheduleDays, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -91,13 +91,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator,
-																																																									 _personalSkills);
+																																																									 _personalSkillsProvider);
 				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
 				                                                                                                           optimizerPreferences.Advanced,
 				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
 				                                                                                                           _skillIntervalDataDivider,
 				                                                                                                           _skillIntervalDataAggregator,
-																																																									 _personalSkills);
+																																																									 _personalSkillsProvider);
 				
 				IScheduleMatrixOriginalStateContainer workShiftStateContainer = workShiftContainerList[index];
 

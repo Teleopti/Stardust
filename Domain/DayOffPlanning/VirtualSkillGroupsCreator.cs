@@ -3,17 +3,16 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
 	public class VirtualSkillGroupsCreator
 	{
-		private readonly IPersonalSkills _personalSkills;
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
 
-		public VirtualSkillGroupsCreator(IPersonalSkills personalSkills)
+		public VirtualSkillGroupsCreator(IPersonalSkillsProvider personalSkillsProvider)
 		{
-			_personalSkills = personalSkills;
+			_personalSkillsProvider = personalSkillsProvider;
 		}
 
 		public VirtualSkillGroupsCreatorResult GroupOnDate(DateOnly dateOnly, IEnumerable<IPerson> personList)
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				return;
 
 			var key = string.Empty;
-			foreach (var personSkill in _personalSkills.PersonSkills(personPeriod).OrderBy(s => s.Skill.Id))
+			foreach (var personSkill in _personalSkillsProvider.PersonSkills(personPeriod).OrderBy(s => s.Skill.Id))
 			{
 				var skillId = personSkill.Skill.Id;
 				var thisId = skillId.HasValue ? 

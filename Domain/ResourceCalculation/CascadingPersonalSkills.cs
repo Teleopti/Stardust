@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class CascadingPersonalSkills : IPersonalSkills
+	public class CascadingPersonalSkills
 	{
 		public IEnumerable<IPersonSkill> PersonSkills(IPersonPeriod period)
 		{

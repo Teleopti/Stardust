@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingScreenInternals
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
 			
-			var creator = new VirtualSkillGroupsCreator(new PersonalSkills());
+			var creator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			_skillGroupsCreatorResult = creator.GroupOnDate(_date, _personList);
 			createSkillDayForSkillsDic();
 			drawVirtualGroupList(null, listViewAllVirtualGroups);

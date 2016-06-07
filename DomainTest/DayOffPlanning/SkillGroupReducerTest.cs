@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var p4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s3 }); //G3
 
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
-			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkills());
+			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
 			var result = _target.SuggestAction(skillGroups, _allskills);
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var p4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s3 }); //G3
 
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
-			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkills());
+			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
 			var result = _target.SuggestAction(skillGroups, _allskills);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var p4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s3 }); //G3
 
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
-			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkills());
+			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
 			var result = _target.SuggestAction(skillGroups, _allskills);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var p4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s2, _s4 }); //G3
 
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
-			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkills());
+			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
 			var result = _target.SuggestAction(skillGroups, _allskills);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var p4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s3 }); //G3
 
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
-			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkills());
+			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
 			var result = _target.SuggestAction(skillGroups, _allskills);
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 			var p4 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill> { _s3 }); //G3
 
 			var personList = new List<IPerson> { p1, p2, p3, p4 };
-			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkills());
+			var vitualSkillGroupsCreator = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 			var skillGroups = vitualSkillGroupsCreator.GroupOnDate(DateOnly.MinValue, personList);
 
 			var result = _target.SuggestAction(skillGroups, _allskills);

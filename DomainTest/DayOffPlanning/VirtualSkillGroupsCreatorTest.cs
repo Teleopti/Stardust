@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		[SetUp]
 		public void Seup()
 		{
-			_target = new VirtualSkillGroupsCreator(new PersonalSkills());
+			_target = new VirtualSkillGroupsCreator(new PersonalSkillsProvider());
 		}
 
 		[Test]
