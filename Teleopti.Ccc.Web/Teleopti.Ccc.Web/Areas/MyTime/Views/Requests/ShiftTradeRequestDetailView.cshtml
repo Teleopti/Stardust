@@ -45,6 +45,7 @@
 					<span class="shift-trade-layer edit other" data-bind="style: styleJson, tooltip: { title: title, html: true, container: '.detailTooltipContainer' }, attr: { 'scheduleinfo': title() }, css: { dayoff: $parent.otherSchedule().showDayOffStyle() }">
 						<span class="shift-trade-dayoff-name" data-bind="text: $parent.otherSchedule().dayOffText"></span>
 					</span>
+					<span class="shift-trade-my-schedule" data-bind="style: myScheduleStyleJson, visible: $parent.otherSchedule().isMySchedule">@Resources.MySchedule</span>
 				</div>
 			</div>
 		</div>

@@ -193,6 +193,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 				shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int) startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
 				shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int) startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
+				shiftTradeSwapDetails.To.IsMySchedule = _loggedOnUser.CurrentUser().Equals(req.PersonTo);
 
 				shiftTradeSwapDetailsList.Add(shiftTradeSwapDetails);
 			}

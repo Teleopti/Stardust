@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public DateTime StartTimeUtc { get; set; }
 		public string DayOffText { get; set; }
 		public bool HasUnderlyingDayOff { get; set; }
+		public bool IsMySchedule { get; set; }
 	}
 }
