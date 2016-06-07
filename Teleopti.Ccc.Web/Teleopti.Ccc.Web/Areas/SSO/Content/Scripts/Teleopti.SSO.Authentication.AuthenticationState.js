@@ -24,7 +24,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 		$.extend(options, {
 			url: data.baseUrl + "SSO/ApplicationAuthenticationApi/Password",
 			dataType: "json",
-			type: 'GET',
+			type: 'POST',
 			cache: false,
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {

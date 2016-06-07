@@ -35,10 +35,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			_logLogonAttempt = logLogonAttempt;
 		}
 
-		[HttpGet, Route("SSO/ApplicationAuthenticationApi/Password")]
+		[HttpPost, Route("SSO/ApplicationAuthenticationApi/Password")]
 		[TenantUnitOfWork]
 		[NoTenantAuthentication]
-		public virtual IHttpActionResult CheckPassword(ApplicationAuthenticationModel model)
+		public virtual IHttpActionResult CheckPassword([FromBody]ApplicationAuthenticationModel model)
 		{
 			var result = _authenticator.AuthenticateApplicationUser(model.UserName, model.Password);
 			if (!result.Successful)
