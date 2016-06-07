@@ -24,9 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.IoC
 			_containerBuilder.RegisterModule(new WebAppModule(configuration));
 			_containerBuilder.RegisterModule(new ReportsAreaModule());
 			_requestTag = "AutofacWebRequest";
-
 		}
-
 
 		[Test]
 		public void ShouldResolveReportsController()
@@ -43,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.IoC
 
 		[Test]
 		public void ShouldResolveReportsNavigationProvider()
-		{			
+		{
 			using (var ioc = _containerBuilder.Build())
 			{
 				using (var scope = ioc.BeginLifetimeScope(_requestTag))

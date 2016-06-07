@@ -544,6 +544,7 @@
     <Compile Include="Areas\Reports\Core\IReportNavigationProvider.cs" />
     <Compile Include="Areas\Reports\Core\ReportNavigationProvider.cs" />
     <Compile Include="Areas\Reports\IoC\ReportsAreaModule.cs" />
+    <Compile Include="Areas\Reports\Models\ReportsViewModel.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProvider.cs" />
     <Compile Include="Areas\Requests\Core\Provider\IRequestCommandHandlingProvider.cs" />
