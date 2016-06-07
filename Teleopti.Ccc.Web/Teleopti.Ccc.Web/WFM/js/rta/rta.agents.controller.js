@@ -29,6 +29,7 @@
 				var options = RtaGridService.makeInAlarmGrid();
 				options.data = 'filteredData';
 				$scope.inAlarmGrid = options;
+				$scope.threshold = 120;
 
 				$scope.getTableHeight = function() {
 					var rowHeight = 30;

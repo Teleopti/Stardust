@@ -10,7 +10,7 @@
 				return makeGridOptions(true);
 			};
 
-			var sortingAlgorithm = function (a, b) {
+			var sortingAlgorithm = function(a, b) {
 				if (a == null && b == null)
 					return 0;
 				if (a == null)
@@ -33,8 +33,7 @@
 
 				var alarmCellTemplate = coloredCellTemplate;
 				if (toggleService.RTA_AlarmContext_29357)
-				    alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
-
+					alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
 				var alarmDurationCellTemplate = '<div ng-if="row.entity.TimeInAlarm" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 
 				var headerCellTemplate = 'js/rta/rta-agents-headercelltemplate.html';
@@ -44,6 +43,10 @@
 					} else {
 						headerCellTemplate = '<div></div>';
 					}
+				}
+				var timeInStateTemplate = "";
+				if (toggleService.RTA_TotalOutOfAdherenceTime_38702) {
+					timeInStateTemplate = '<div ng-class="{ exceedthreshold : row.entity.TimeInState > grid.appScope.threshold }" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 				}
 
 				var rowTemplate = 'js/rta/rta-agents-rowtemplate.html';
@@ -56,7 +59,9 @@
 					cellTemplate: coloredCellTemplate,
 					headerCellFilter: 'translate',
 					width: toggleService.RTA_AlarmContext_29357 ? "15%" : null,
-					sort: alarmOnly ? null : { direction: 'asc' }
+					sort: alarmOnly ? null : {
+						direction: 'asc'
+					}
 				};
 				var team = {
 					displayName: 'Team',
@@ -101,7 +106,7 @@
 					headerCellFilter: 'translate',
 					width: toggleService.RTA_AlarmContext_29357 ? "10%" : null,
 					sortingAlgorithm: alarmOnly ? null : sortingAlgorithm
-			};
+				};
 				var timeInAlarm = {
 					displayName: 'TimeInAlarm',
 					field: 'TimeInAlarm',
@@ -111,6 +116,17 @@
 					headerCellFilter: 'translate',
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
+
+				var timeInAlarm2 = {
+					displayName: 'TimeInAlarm',
+					field: 'TimeInState',
+					enableColumnMenu: false,
+					headerCellTemplate: headerCellTemplate,
+					cellTemplate: timeInStateTemplate,
+					headerCellFilter: 'translate',
+					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
+				};
+
 				var shift = {
 					displayName: 'Shift',
 					field: 'Shift',
@@ -134,7 +150,7 @@
 					columnDefs.push(team);
 					columnDefs.push(shift);
 					columnDefs.push(alarm);
-					columnDefs.push(timeInAlarm);
+					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInAlarm2 : timeInAlarm);
 					columnDefs.push(state);
 				} else {
 					columnDefs.push(name);
@@ -143,7 +159,7 @@
 					columnDefs.push(activity);
 					columnDefs.push(nextActivity);
 					columnDefs.push(alarm);
-					columnDefs.push(timeInAlarm);
+					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInAlarm2 : timeInAlarm);
 				}
 
 				return {
