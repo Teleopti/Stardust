@@ -1612,7 +1612,6 @@
     <Content Include="Areas\Reporting\Views\Report\NoPermission.cshtml" />
     <Content Include="WFM\html\left-sidenav.html" />
     <Content Include="WFM\js\people\html\people-selection-cart.html" />
-    <Content Include="WFM\html\right-sidenav.html" />
     <Content Include="WFM\js\forecasting\_modules.js" />
     <Content Include="WFM\js\global\help.controller.js" />
     <Content Include="Content\jalaali-calendar-datepicker\moment-datepicker-jalaali-ext.js" />
