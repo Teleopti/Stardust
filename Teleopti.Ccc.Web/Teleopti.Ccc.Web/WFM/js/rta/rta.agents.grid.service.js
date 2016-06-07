@@ -120,6 +120,7 @@
 					cellTemplate: 'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html',
 					headerCellFilter: 'translate',
 					width: "42%",
+					headerCellClass: 'white-cell-header'
 				};
 
 				var columnDefs = [];
