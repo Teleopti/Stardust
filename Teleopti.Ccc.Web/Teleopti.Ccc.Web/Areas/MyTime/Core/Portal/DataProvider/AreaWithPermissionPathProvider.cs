@@ -3,6 +3,7 @@ using System.Linq;
 using System.Web.WebPages;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Global;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IToggleManager _toggleManager;
+		private readonly ILicenseActivatorProvider _licenseActivatorProvider;
 
 		private static readonly IEnumerable<AreaWithPermissionPath> wfmAreaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
@@ -33,10 +35,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports")
 		};
 
-		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager)
+		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager, ILicenseActivatorProvider licenseActivatorProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_toggleManager = toggleManager;
+			_licenseActivatorProvider = licenseActivatorProvider;
 		}
 
 		public IEnumerable<AreaWithPermissionPath> GetWfmAreasWithPermissions()
@@ -54,15 +57,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			tryToAddArea("MyTime", DefinedRaptorApplicationFunctionPaths.MyTimeWeb, areas);
 			tryToAddArea("Anywhere", DefinedRaptorApplicationFunctionPaths.Anywhere, areas);
 			tryToAddWfmArea(areas);
-			tryToAddArea("HealthCheck", string.Empty, areas);
-			tryToAddArea("Messages", string.Empty, areas);
-			tryToAddArea("Reporting", string.Empty, areas);
+			tryToAddArea("HealthCheck", DefinedRaptorApplicationFunctionPaths.OpenPermissionPage, areas);
+			tryToAddAreaWithLicense("Messages", DefinedLicenseOptionPaths.TeleoptiCccSmsLink, areas);
+			tryToAddArea("Reporting", DefinedRaptorApplicationFunctionPaths.AccessToReports, areas);
 			return areas;
 		}
 
 		private void tryToAddArea(string areaName, string functionPath, List<object> areas)
 		{
-			if (_permissionProvider.HasApplicationFunctionPermission(functionPath) || functionPath.IsEmpty())
+			if (functionPath.IsEmpty() || _permissionProvider.HasApplicationFunctionPermission(functionPath))
+			{
+				areas.Add(new { Name = areaName });
+			}
+		}
+
+		private void tryToAddAreaWithLicense(string areaName, string licensePath, List<object> areas)
+		{
+			if (licensePath.IsEmpty() || _licenseActivatorProvider.Current().EnabledLicenseOptionPaths.Contains(licensePath))
 			{
 				areas.Add(new { Name = areaName });
 			}
@@ -70,13 +81,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		private void tryToAddWfmArea(List<object> areas)
 		{
-			var wfmAreas = GetWfmAreasWithPermissions().ToList();
-			if (wfmAreas.Count > 0)
+			var wfmAreas = GetWfmAreasWithPermissions().ToArray();
+			if (wfmAreas.Any())
 			{
 				areas.Add(new
 				{
 					Name = "WFM",
-					SubAreas = wfmAreas.Select(area => new { Name = area.Name() }).ToList()
+					SubAreas = wfmAreas.Select(area => new { Name = area.Name() }).ToArray()
 				});
 			}
 		}

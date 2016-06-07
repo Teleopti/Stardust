@@ -158,6 +158,8 @@
     <Compile Include="FakeData\PersonRequestAuthorizationCheckerConfigurable.cs" />
     <Compile Include="FakeEventPublisherWithOverwritingHandlers.cs" />
     <Compile Include="FakeHttpServer.cs" />
+    <Compile Include="FakeLicenseActivator.cs" />
+    <Compile Include="FakeLicenseActivatorProvider.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsActivityRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsRequestRepository.cs" />

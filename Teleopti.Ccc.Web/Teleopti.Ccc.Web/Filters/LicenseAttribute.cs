@@ -21,10 +21,11 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if (_licenses != null && _licenses.Length > 0)
 			{
-				var hasLicense = DefinedLicenseDataFactory.HasLicense(CurrentDataSource.CurrentName()) &&
+				var currentName = CurrentDataSource.CurrentName();
+				var hasLicense = DefinedLicenseDataFactory.HasLicense(currentName) &&
 				                 _licenses.Any(
 					                 l =>
-						                 DefinedLicenseDataFactory.GetLicenseActivator(CurrentDataSource.CurrentName())
+						                 DefinedLicenseDataFactory.GetLicenseActivator(currentName)
 							                 .EnabledLicenseOptionPaths.Contains(l));
 				if (!hasLicense)
 				{

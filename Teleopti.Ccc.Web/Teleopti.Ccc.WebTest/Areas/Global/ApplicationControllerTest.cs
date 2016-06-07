@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotGetUnpermittedModules()
 		{
 			var toggleManager = new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892);
-			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager);
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
 			var target = new ApplicationController(areaPathProvider);
 
 			var result = target.GetAreas();
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldGetEnabledModules()
 		{
 			var toggleManager = new FakeToggleManager();
-			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager);
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
 			var target = new ApplicationController(areaPathProvider);
 
 			var result = target.GetAreas();
