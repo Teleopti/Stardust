@@ -29,7 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, () => Resources.RealTimeAdherence, "rta"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebIntraday, () => Resources.Intraday, "intraday"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AngelMyTeamSchedules, () => Resources.MyTeam, "myTeamSchedule"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.MyTeam, "myTeamSchedule")
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, () => Resources.MyTeam, "myTeamSchedule"),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.AccessToReports, () => Resources.Reports, "reports")
 		};
 
 		public AreaWithPermissionPathProvider(IPermissionProvider permissionProvider, IToggleManager toggleManager)
@@ -110,6 +111,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			if(path.Equals(DefinedRaptorApplicationFunctionPaths.WebIntraday))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074);
+			}
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.AccessToReports))
+			{
+				return _toggleManager.IsEnabled(Toggles.WfmReportPortal_Basic_38825);
 			}
 
 

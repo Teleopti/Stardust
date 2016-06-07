@@ -1354,6 +1354,8 @@
     <Content Include="WFM\js\intraday\intraday.area.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
+    <Content Include="WFM\js\reports\html\reports.html" />
+    <Content Include="WFM\js\reports\reports.controller.js" />
     <Content Include="WFM\js\requests\html\header-template.html" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
     <Content Include="WFM\js\requests\html\shift-trade-day-template.html" />

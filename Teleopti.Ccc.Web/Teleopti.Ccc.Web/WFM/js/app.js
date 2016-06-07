@@ -40,6 +40,7 @@ var wfm = angular.module('wfm', [
 	'wfm.teamSchedule',
 	'wfm.intraday',
 	'wfm.requests',
+	'wfm.reports',
 	'wfm.themes'
 ]);
 
@@ -177,6 +178,10 @@ wfm.config([
 			url: '/requests',
 			templateUrl: 'js/requests/html/requests.html',
 			controller: 'RequestsCtrl as requests'
+		}).state('reports', {
+			url: '/reports',
+			templateUrl: 'js/reports/html/reports.html',
+			controller: 'ReportsController as reports'
 		});
 
 		RtaStateProvider.config($stateProvider);
