@@ -9,14 +9,14 @@
 				configurations: '=',
 				triggerCommand: '&?'
 			},
-			controller: [ 'PersonSelection', 'ShortCuts', 'keyCodes', teamscheduleCommandMenuCtrl],
+			controller: [ '$scope', 'PersonSelection', 'ShortCuts', 'keyCodes', teamscheduleCommandMenuCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/commandMenu.tpl.html'
 		};
 	}
 
-	function teamscheduleCommandMenuCtrl(  personSelectionSvc, shortCuts, keyCodes) {
+	function teamscheduleCommandMenuCtrl($scope, personSelectionSvc, shortCuts, keyCodes) {
 		var vm = this;
 	
 		function buildAction(label, openSidePanel) {
@@ -138,6 +138,7 @@
 				function wrappedAction() {
 					if (cmd.clickable() && cmd.visible()) {
 						cmd.action();
+						$scope.$apply();
 					}
 				}
 

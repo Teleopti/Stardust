@@ -30,8 +30,6 @@
 			$scope.$broadcast('teamSchedule.init.command', {
 				activeCmd: label
 			});
-
-			$scope.$apply();
 		};
 
 		vm.commonCommandCallback = function(trackId, personIds) {
