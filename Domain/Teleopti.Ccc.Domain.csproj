@@ -339,8 +339,11 @@
     <Compile Include="ResourceCalculation\FullResourceCalculationWithoutCascading.cs" />
     <Compile Include="ResourceCalculation\FullResourceCalculationWithCascading.cs" />
     <Compile Include="ResourceCalculation\IPersonalSkills.cs" />
+    <Compile Include="ResourceCalculation\IPersonalSkillsBasedOnPrimarySkillMode.cs" />
     <Compile Include="ResourceCalculation\IResourceCalculationContextFactory.cs" />
     <Compile Include="ResourceCalculation\PersonalSkills.cs" />
+    <Compile Include="ResourceCalculation\PersonalSkillsBasedOnPrimarySkillMode.cs" />
+    <Compile Include="ResourceCalculation\PersonalSkillsBasedOnPrimarySkillModeAlwaysUseAllPersonalSkills.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationCurrent.cs" />
     <Compile Include="ResourceCalculation\SkillCombination.cs" />
     <Compile Include="Scheduling\Assignment\ByPassPersistableScheduleDataPermissionChecker.cs" />

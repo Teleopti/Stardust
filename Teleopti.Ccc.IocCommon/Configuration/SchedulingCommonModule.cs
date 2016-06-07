@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<CascadingResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<CascadingPersonSkillProvider>().InstancePerLifetimeScope();
 				builder.RegisterType<CascadingPersonalSkills>().As<IPersonalSkills>().SingleInstance();
+				builder.RegisterType<PersonalSkillsBasedOnPrimarySkillMode>().As<IPersonalSkillsBasedOnPrimarySkillMode>().SingleInstance();
 			}
 			else
 			{
@@ -87,6 +88,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().InstancePerLifetimeScope();
 				builder.RegisterType<ResourceCalculationContextFactory>().As<IResourceCalculationContextFactory>().InstancePerLifetimeScope();
 				builder.RegisterType<PersonalSkills>().As<IPersonalSkills>().SingleInstance();
+				builder.RegisterType<PersonalSkillsBasedOnPrimarySkillModeAlwaysUseAllPersonalSkills>().As<IPersonalSkillsBasedOnPrimarySkillMode>().SingleInstance();
 			}
 
 			builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    _schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(_skillStafPeriodHolder);
 		    _skillStafPeriodHolder.Stub(x => x.SkillStaffDataPerActivity(new DateTimePeriod(), skills)).Return(_theDictionary).IgnoreArguments();
 
-		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var personSkillDay = new PersonSkillDayCreator(new PersonalSkillsBasedOnPrimarySkillMode()).Create(dateOnly, _schedulePeriod);
 		    var ret = _target.GetPersonSkillPeriodsDataHolderDictionary(personSkillDay);
 		    
 			Assert.IsNotNull(ret);
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		    _schedulePeriod.Stub(x => x.Person).Return(_person);
 
-		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var personSkillDay = new PersonSkillDayCreator(new PersonalSkillsBasedOnPrimarySkillMode()).Create(dateOnly, _schedulePeriod);
 		    var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(personSkillDay);
 		    Assert.IsNotNull(ret);
 	    }
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			    .Return(new Dictionary<ISkill, ISkillStaffPeriodDictionary>())
 			    .IgnoreArguments();
 
-		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var personSkillDay = new PersonSkillDayCreator(new PersonalSkillsBasedOnPrimarySkillMode()).Create(dateOnly, _schedulePeriod);
 		    var ret = _target.GetPersonMaxSeatSkillSkillStaffPeriods(personSkillDay);
 		    
 			Assert.IsNotNull(ret);
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			    .Return(new Dictionary<ISkill, ISkillStaffPeriodDictionary>())
 			    .IgnoreArguments();
 
-		    var personSkillDay = new PersonSkillDayCreator().Create(dateOnly, _schedulePeriod);
+		    var personSkillDay = new PersonSkillDayCreator(new PersonalSkillsBasedOnPrimarySkillMode()).Create(dateOnly, _schedulePeriod);
 		    var ret = _target.GetPersonNonBlendSkillSkillStaffPeriods(personSkillDay);
 		    Assert.IsNotNull(ret);
 	    }

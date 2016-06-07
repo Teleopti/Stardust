@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 					.Should().Be.EqualTo(dateOnly.ToDateTimePeriod(new TimePeriod(8, 15, 17, 15), agentA.PermissionInformation.DefaultTimeZone()));
 		}
 
-		[Test, Ignore("to be fixed...")]
+		[Test]
 		public void ShouldOnlyConsiderPrimarySkillWhenFindingBestShift()
 		{
 			var dateOnly = DateOnly.Today;

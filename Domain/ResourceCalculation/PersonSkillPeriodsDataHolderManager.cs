@@ -9,12 +9,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class PersonSkillDayCreator : IPersonSkillDayCreator
 	{
+		private readonly IPersonalSkillsBasedOnPrimarySkillMode _personalSkillsBasedOnPrimarySkillMode;
+
+		public PersonSkillDayCreator(IPersonalSkillsBasedOnPrimarySkillMode personalSkillsBasedOnPrimarySkillMode)
+		{
+			_personalSkillsBasedOnPrimarySkillMode = personalSkillsBasedOnPrimarySkillMode;
+		}
+
 		public PersonSkillDay Create(DateOnly date, IVirtualSchedulePeriod currentSchedulePeriod)
 		{
 			var personPeriod = currentSchedulePeriod.Person.Period(date);
-			var skills = (from personSkill in personPeriod.PersonSkillCollection
-					   where !((IDeleteTag)personSkill.Skill).IsDeleted & personSkill.Active
-					   select personSkill.Skill).ToArray();
+			var skills = (from personSkill in _personalSkillsBasedOnPrimarySkillMode.PersonalSkills(personPeriod)
+										select personSkill.Skill).ToArray();
 
 			var maxSeatSkills = (from personSkill in personPeriod.PersonMaxSeatSkillCollection
 							  where !((IDeleteTag)personSkill.Skill).IsDeleted

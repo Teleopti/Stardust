@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_target = new WorkShiftFinderService(()=>_stateHolder, ()=>_preSchedulingStatusChecker,
                _shiftProjectionCacheFilter, ()=>_personSkillPeriodsDataHolderManager,
                _shiftProjectionCacheManager, _calculatorManager, ()=>_workShiftMinMaxCalculator, _fairnessAndMaxSeatCalculatorsManager,
-			   _shiftLengthDecider, new PersonSkillDayCreator());
+			   _shiftLengthDecider, new PersonSkillDayCreator(new PersonalSkillsBasedOnPrimarySkillMode()));
         	_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 		}
 
