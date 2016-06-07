@@ -165,7 +165,8 @@
 				}
 
 				function layerPercentage(seconds) {
-					return percentageFromSeconds(seconds, 100);
+					var maxPercentage = (seconds / 3600 * 25);
+					return maxPercentage + '%';
 				}
 
 				function alarmPercentage(seconds) {
