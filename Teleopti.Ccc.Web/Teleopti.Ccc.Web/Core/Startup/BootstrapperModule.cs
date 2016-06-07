@@ -1,4 +1,5 @@
 using Autofac;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			builder.RegisterType<GlobalConfigurationWrapper>().SingleInstance().As<IGlobalConfiguration>();
 			builder.RegisterType<FindAreaRegistrations>().SingleInstance().As<IFindAreaRegistrations>();
 			builder.RegisterType<StardustServerStarter>().SingleInstance();
+			builder.RegisterType<CheckTenantConnectionstrings>().SingleInstance();
 		}
 	}
 }

@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 {
 	public class CheckTenantConnectionstrings
 	{
-		private readonly LoadAllTenants _loadAllTenants;
-		private readonly TenantUnitOfWorkManager _tenantUnitOfWorkManager;
+		private readonly ILoadAllTenants _loadAllTenants;
+		private readonly ICurrentTenantSession _tenantUnitOfWorkManager;
 		private static readonly ILog log = LogManager.GetLogger(typeof(CheckTenantConnectionstrings));
-		public CheckTenantConnectionstrings(LoadAllTenants loadAllTenants, TenantUnitOfWorkManager tenantUnitOfWorkManager)
+		public CheckTenantConnectionstrings(ILoadAllTenants loadAllTenants, ICurrentTenantSession tenantUnitOfWorkManager)
 		{
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWorkManager = tenantUnitOfWorkManager;
