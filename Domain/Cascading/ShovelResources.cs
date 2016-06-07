@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 			using (ResourceCalculationCurrent.PreserveContext())
 			{
-				//TODO: räcker nog med ett context på perioden plus nån dag...
-				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create())
+				using (new ResourceCalculationContextFactory(_stateHolder, () => new PersonSkillProvider(), _timeZoneGuard).Create(period))
 				{
 					foreach (var date in period.DayCollection())
 					{

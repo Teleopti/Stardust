@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Cascading
 				//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
 				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 			}
-			//TODO: hantera nattskift här. en dag, fram eller nåt sånt...
 			if (!ResourceCalculationContext.PrimarySkillMode()) 
 			{
 				_shovelResources.Execute(period);
