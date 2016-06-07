@@ -46,16 +46,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			system.UseTestDouble<FakeTeamOutOfAdherenceReadModelReader>().For<ITeamOutOfAdherenceReadModelReader>();
 			system.UseTestDouble<FakeReadModelUnitOfWorkAspect>().For<IReadModelUnitOfWorkAspect>();
 		}
-		
+
 		[Test]
 		public void ShouldGetTeamsForSite()
 		{
 			var teamId = Guid.NewGuid();
+			var team = new Team { Description = new Description("team1") }.WithId(teamId);
 			var site = new Site("site").WithId();
-			site.AddTeam(new Team {Description = new Description("team1")}
-						.WithId(teamId));
+			site.AddTeam(team);
+			TeamRepository.Has(team);
 			SiteRepository.Has(site);
-			
+
 			var result = Target.ForSite(site.Id.GetValueOrDefault()).Result<IEnumerable<TeamViewModel>>();
 
 			result.Single().Name.Should().Be("team1");
@@ -65,17 +66,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 		[Test]
 		public void ShouldGetNumberOfAgents()
 		{
-			var team = new Team {Description = new Description("t")}.WithId();
+			var team = new Team { Description = new Description("t") }.WithId();
 			var site = new Site("s").WithId();
 			site.AddTeam(team);
+			TeamRepository.Has(team);
 			SiteRepository.Has(site);
 			NumberOfAgentsInTeam.Has(team, 2);
-			
+
 			var result = Target.ForSite(site.Id.GetValueOrDefault()).Result<IEnumerable<TeamViewModel>>();
 
 			result.Single().NumberOfAgents.Should().Be.EqualTo(2);
 		}
-		
+
 		[Test]
 		public void ShouldGetBusinessUnitIdFromTeamId()
 		{
@@ -85,9 +87,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 			site.AddTeam(team);
 			businessUnit.AddSite(site);
 			site.SetBusinessUnit(businessUnit);
-			
+
 			TeamRepository.Has(team);
-			
+
 			Target.GetBusinessUnitId(team.Id.GetValueOrDefault()).Result<Guid>().Should().Be(businessUnit.Id.GetValueOrDefault());
 		}
 
@@ -100,7 +102,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Rta
 
 			TeamOutOfAdherenceReadModelReader.Has(siteId, team1, 1);
 			TeamOutOfAdherenceReadModelReader.Has(siteId, team2, 2);
-			
+
 			var result = Target.GetOutOfAdherenceForTeamsOnSite(siteId).Result<IEnumerable<TeamOutOfAdherence>>();
 
 			result.Single(x => x.Id == team1).OutOfAdherence.Should().Be(1);
