@@ -71,7 +71,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 											  ,[Type]
 											  ,[SentToWorkerNodeUri]
 											  ,[Result]
-										  FROM [Stardust].[Job] WITH (NOLOCK)";
+										  FROM [Stardust].[Job] order by Created desc";
 				using (var getAllJobsCommand = new SqlCommand(selectCommandText,sqlConnection))
 					{
 					using (var sqlDataReader = getAllJobsCommand.ExecuteReaderWithRetry(_retryPolicy))
