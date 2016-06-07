@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				//TODO: ska det vara true, true (?) här - fixa och lägg på test senare. behövs nog i nästkommande PBIer...
 				_resourceOptimizationHelper.ResourceCalculateDate(date, false, false);
 			}
-			if (ResourceCalculationContext.DoShoveling()) 
+			if (!ResourceCalculationContext.PrimarySkillMode()) 
 			{
 				_shovelResources.Execute(period);
 			}

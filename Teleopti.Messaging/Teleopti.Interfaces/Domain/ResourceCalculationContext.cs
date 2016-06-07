@@ -22,9 +22,9 @@ namespace Teleopti.Interfaces.Domain
 			get { return _container != null; }
 		}
 
-		public static bool DoShoveling()
+		public static bool PrimarySkillMode()
 		{
-			return !InContext || Fetch().DoShoveling;
+			return InContext && Fetch().PrimarySkillMode;
 		}
 
 		public void Dispose()
