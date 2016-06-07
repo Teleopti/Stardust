@@ -311,9 +311,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				                                     };
 		    var detail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
 		    var details = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail>{detail});
+			var loggedOnUser = new FakeLoggedOnUser(new Person());
 
 			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum,
-			                                          null, null, null, null, null);
+			                                          null, loggedOnUser, null, null, null);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
 		    shiftTrade.Stub(x => x.ShiftTradeSwapDetails).Return(details);
@@ -349,8 +350,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
             var detail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
             var details = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail> { detail });
 		    shiftTrade.Stub(x => x.ShiftTradeSwapDetails).Return(details);
+			var loggedOnUser = new FakeLoggedOnUser(new Person());
 			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum,
-			                                          null, null, null, null, null);
+			                                          null, loggedOnUser, null, null, null);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(new Guid())).IgnoreArguments().Return(personRequest);
 
@@ -363,6 +365,5 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			Assert.That(result.First().To.MinutesSinceTimeLineStart, Is.EqualTo(180));
 
 		}
-
 	}
 }
