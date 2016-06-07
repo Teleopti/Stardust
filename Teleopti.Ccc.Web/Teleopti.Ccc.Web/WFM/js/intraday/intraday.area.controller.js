@@ -148,23 +148,26 @@
 						$scope.HasMonitorData = false;
 						return;
 					} else {
-
 					    $scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 						$scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
 						$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
 						$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
 						$scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
 						$scope.timeSeries = [];
-						angular.forEach(result.DataSeries.Time, function (value, key) {
-							this.push($filter('date')(value, 'shortTime'));
-						}, $scope.timeSeries)
+					    angular.forEach(result.DataSeries.Time, function(value, key) {
+					        this.push($filter('date')(value, 'shortTime'));
+					    }, $scope.timeSeries);
 						$scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls;
 						$scope.actualCallsSeries = result.DataSeries.OfferedCalls;
 						$scope.forecastedAverageHandleTimeSeries = result.DataSeries.ForecastedAverageHandleTime;
 						$scope.actualAverageHandleTimeSeries = result.DataSeries.AverageHandleTime;
+						$scope.averageSpeedOfAnswerSeries = result.DataSeries.AverageSpeedOfAnswer;
+						$scope.abandonedRateSeries = result.DataSeries.AbandonedRate;
+						$scope.serviceLevelSeries = result.DataSeries.ServiceLevel;
+
 						$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
 						$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
-
+						
 						var forecastedCallsMax = Math.max.apply(Math, $scope.forecastedCallsSeries);
 						var actualCallsMax = Math.max.apply(Math, $scope.actualCallsSeries);
 						var callsMax = Math.max.apply(Math, [forecastedCallsMax, actualCallsMax]);
@@ -172,11 +175,16 @@
 						$scope.timeSeries.splice(0, 0, 'x');
 						$scope.currentInterval.splice(0, 0, 'Current');
 						$scope.forecastedCallsSeries.splice(0, 0, 'Forecasted_calls');
-						$scope.actualCallsSeries.splice(0, 0, 'Actual_calls');
+						$scope.actualCallsSeries.splice(0, 0, 'Calls');
 						$scope.forecastedAverageHandleTimeSeries.splice(0, 0, 'Forecasted_AHT');
 						$scope.actualAverageHandleTimeSeries.splice(0, 0, 'AHT');
+						$scope.averageSpeedOfAnswerSeries.splice(0, 0, 'ASA');
+						$scope.abandonedRateSeries.splice(0, 0, 'Abandoned_rate');
+						$scope.serviceLevelSeries.splice(0, 0, 'Service_level');
+
 						$scope.HasMonitorData = true;
 						loadIntradayChart(callsMax);
+						loadPrefChart(callsMax);
 					}
 				};
 
@@ -312,25 +320,25 @@
 									hide: $scope.chartHiddenLines,
 									colors: {
 										Forecasted_calls: '#9CCC65',
-										Actual_calls: '#4DB6AC',
+										Calls: '#4DB6AC',
 										Forecasted_AHT: '#F06292',
 										AHT: '#BA68C8',
-										Current:'#cacaca',
+										Current:'#cacaca'
 									},
 									type: 'line',
 									types: {
-										Current: 'bar',
+										Current: 'bar'
 									},
 									names: {
-										Forecasted_calls: $translate.instant('ForecastedCalls'),
-										Actual_calls: $translate.instant('Calls'),
-										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime'),
-										AHT: $translate.instant('AverageHandlingTime'),
+										Forecasted_calls: $translate.instant('ForecastedCalls') + '<',
+										Calls: $translate.instant('Calls') + '<',
+										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime') + '>',
+										AHT: $translate.instant('AverageHandlingTime') + '>',
 										Current:$translate.instant('latestActualInterval')
 									},
 									axes: {
 										AHT: 'y2',
-										Forecasted_AHT: 'y2',
+										Forecasted_AHT: 'y2'
 									}
 								},
 								axis: {
@@ -374,9 +382,90 @@
 							});
 						}
 
+						var loadPrefChart = function(callsMax) {
+						    $scope.chartHiddenLines = $scope.hiddenArray;
+						    $scope.findCurrent(callsMax);
+						    var intervalsList = [];
+						    for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
+						        intervalsList.push(interval);
+						    }
+						    $scope.prefChart = c3.generate({
+						        bindto: '#perfChart',
+						        data: {
+						            x: 'x',
+						            columns: [
+                                        $scope.averageSpeedOfAnswerSeries,
+						                $scope.abandonedRateSeries,
+						                $scope.serviceLevelSeries,
+										$scope.timeSeries,
+										$scope.currentInterval
+						            ],
+						            hide: $scope.chartHiddenLines,
+						            colors: {
+						                ASA: '#9CCC65',
+						                Abandoned_rate: '#4DB6AC',
+						                Service_level: '#F06292',
+						                Current:'#cacaca'
+						            },
+						            type: 'line',
+						            types: {
+						                Current: 'bar'
+						            },
+						            names: {
+						                Current: $translate.instant('latestActualInterval'),
+						                ASA: $translate.instant('AverageSpeedOfAnswer') + '>',
+						                Abandoned_rate: $translate.instant('AbandonedRate') + '<',
+						                Service_level: $translate.instant('ServiceLevelPercentSign') + '<'
+						            },
+						            axes: {
+						                ASA: 'y2',
+						            }
+						        },
+						        axis: {
+						            y2: {
+						                show: true,
+						                label: $translate.instant('Seconds'),
+						                tick: {
+						                    format: d3.format('.1f')
+						                }
+						            },
+						            y: {
+						                label: '%',
+						                tick: {
+						                    format: d3.format('.1f')
+						                }
+						            },
+						            x: {
+						                label: $translate.instant('SkillTypeTime'),
+						                type: 'category',
+						                tick: {
+						                    fit: true,
+						                    centered: true,
+						                    multiline: false,
+						                    values: intervalsList
+						                },
+						                categories: $scope.timeSeries
+						            }
+						        },
+						        legend: {
+						            item: {
+						                onclick: function (id) {
+						                    if ($scope.chartHiddenLines.indexOf(id) > -1) {
+						                        $scope.chartHiddenLines.splice($scope.chartHiddenLines.indexOf(id), 1);
+						                    } else {
+						                        $scope.chartHiddenLines.push(id);
+						                    }
+						                    loadPrefChart(callsMax);
+						                }
+						            }
+						        }
+						    });
+						}
+
 						$scope.resizeChart = function () {
 							$timeout(function () {
-									$scope.chart.resize()
+							    $scope.chart.resize();
+							    $scope.prefChart.resize();
 							}, 1000);
 						}
 					}

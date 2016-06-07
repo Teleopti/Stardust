@@ -14535,4 +14535,12 @@ These options are activated:
     <value>Filter reports</value>
     <comment>place holder in web WFM reports portal report filter.</comment>
   </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>Abandoned rate</value>
+    <comment>intraday chart label</comment>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>Summary up to latest actual interval</value>
+    <comment>intraday summary header</comment>
+  </data>
 </root>

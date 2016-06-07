@@ -53,7 +53,10 @@ describe('IntradayAreaCtrl', function () {
 				ForecastedCalls: [],
 				ForecastedAverageHandleTime: [],
 				OfferedCalls: [],
-				AverageHandleTime: []
+				AverageHandleTime: [],
+				AverageSpeedOfAnswer: [],
+				AbandonedRate: [],
+			    ServiceLevel: []
 			},
 			LatestActualIntervalStart: new Date(2016, 1, 1, 12, 45, 0, 0),
 			LatestActualIntervalEnd: new Date(2016, 1, 1, 13, 0, 0, 0)
@@ -137,47 +140,63 @@ describe('IntradayAreaCtrl', function () {
 		scope.skillSelected(scope.skills[0]);
 		$httpBackend.flush();
 
-	    var expectedLatestInterval = $filter('date')(monitorData.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(monitorData.LatestActualIntervalEnd, 'shortTime');
-
 		expect(scope.selectedItem).toEqual(scope.skills[0]);
-		expect(scope.latestActualInterval).toEqual(expectedLatestInterval);
-		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
-		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
-		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
-		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
-		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
-		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
-		expect(scope.timeSeries[0]).toEqual('x');
-		expect(scope.forecastedCallsSeries[0]).toEqual('Forecasted_calls');
-		expect(scope.actualCallsSeries[0]).toEqual('Actual_calls');
-		expect(scope.forecastedAverageHandleTimeSeries[0]).toEqual('Forecasted_AHT');
-		expect(scope.actualAverageHandleTimeSeries[0]).toEqual('AHT');
-		expect(scope.HasMonitorData).toEqual(true);
 	});
 
 	it('should monitor first skill area if there are any', function () {
-		createController(false);
+	    createController(false);
 
-		scope.skillAreaSelected(scope.skillAreas[0]);
-		$httpBackend.flush();
+	    scope.skillAreaSelected(scope.skillAreas[0]);
+	    $httpBackend.flush();
 
-		var expectedLatestInterval = $filter('date')(monitorData.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(monitorData.LatestActualIntervalEnd, 'shortTime');
-
-		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
-		expect(scope.latestActualInterval).toEqual(expectedLatestInterval);
-		expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
-		expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
-		expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
-		expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
-		expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
-		expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
-		expect(scope.timeSeries[0]).toEqual('x');
-		expect(scope.forecastedCallsSeries[0]).toEqual('Forecasted_calls');
-		expect(scope.actualCallsSeries[0]).toEqual('Actual_calls');
-		expect(scope.forecastedAverageHandleTimeSeries[0]).toEqual('Forecasted_AHT');
-		expect(scope.actualAverageHandleTimeSeries[0]).toEqual('AHT');
-		expect(scope.HasMonitorData).toEqual(true);
+	    expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
 	});
+
+	it('should display latest queue stats interval', function () {
+	    skillAreaInfo.SkillAreas = [];
+	    createController(false);
+
+	    scope.skillSelected(scope.skills[0]);
+	    $httpBackend.flush();
+
+	    var expectedLatestInterval = $filter('date')(monitorData.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(monitorData.LatestActualIntervalEnd, 'shortTime');
+
+	    expect(scope.latestActualInterval).toEqual(expectedLatestInterval);
+	});
+
+	it('should display day summary', function () {
+	    skillAreaInfo.SkillAreas = [];
+	    createController(false);
+
+	    scope.skillSelected(scope.skills[0]);
+	    $httpBackend.flush();
+
+	    expect(scope.forecastedCalls).toEqual(monitorData.Summary.ForecastedCalls);
+	    expect(scope.forecastedAverageHandleTime).toEqual(monitorData.Summary.ForecastedAverageHandleTime);
+	    expect(scope.offeredCalls).toEqual(monitorData.Summary.OfferedCalls);
+	    expect(scope.averageHandleTime).toEqual(monitorData.Summary.AverageHandleTime);
+	    expect(scope.forecastActualCallsDifference).toEqual(monitorData.Summary.ForecastedActualCallsDiff);
+	    expect(scope.forecastActualAverageHandleTimeDifference).toEqual(monitorData.Summary.ForecastedActualHandleTimeDiff);
+	    expect(scope.HasMonitorData).toEqual(true);
+	});
+
+	it('should initiate data series for charts', function () {
+	    skillAreaInfo.SkillAreas = [];
+	    createController(false);
+
+	    scope.skillSelected(scope.skills[0]);
+	    $httpBackend.flush();
+
+	    expect(scope.timeSeries[0]).toEqual('x');
+	    expect(scope.forecastedCallsSeries[0]).toEqual('Forecasted_calls');
+	    expect(scope.actualCallsSeries[0]).toEqual('Calls');
+	    expect(scope.forecastedAverageHandleTimeSeries[0]).toEqual('Forecasted_AHT');
+	    expect(scope.actualAverageHandleTimeSeries[0]).toEqual('AHT');
+	    expect(scope.averageSpeedOfAnswerSeries[0]).toEqual('ASA');
+	    expect(scope.abandonedRateSeries[0]).toEqual('Abandoned_rate');
+	    expect(scope.serviceLevelSeries[0]).toEqual('Service_level');
+	});
+
 
 	it('should have permission to modify skill area', function () {
 		createController(false);

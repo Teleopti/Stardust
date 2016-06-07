@@ -115,6 +115,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abandoned rate.
+        /// </summary>
+        public static string AbandonedRate {
+            get {
+                return ResourceManager.GetString("AbandonedRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Abandoned short.
         /// </summary>
         public static string AbandonedShort {
@@ -28516,6 +28525,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Summary {
             get {
                 return ResourceManager.GetString("Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summary up to latest actual interval.
+        /// </summary>
+        public static string SummaryUpToLatestActualInterval {
+            get {
+                return ResourceManager.GetString("SummaryUpToLatestActualInterval", resourceCulture);
             }
         }
         
