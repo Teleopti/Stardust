@@ -365,5 +365,40 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			Assert.That(result.First().To.MinutesSinceTimeLineStart, Is.EqualTo(180));
 
 		}
+
+		[Test]
+		public void ShouldRetrieveIsMyScheduleForLoggedOnUser()
+		{
+			var personRequestId = new Guid();
+			var requestCheckSum = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			var personRequest = MockRepository.GenerateStub<IPersonRequest>();
+
+			var personFrom = new Person();
+			var personTo = new Person();
+			var loggedOnUser = new FakeLoggedOnUser(personTo);
+			var detail = new ShiftTradeSwapDetail(personFrom, personTo, DateOnly.Today, DateOnly.Today);
+			var shiftTradeSwapDetails = new List<IShiftTradeSwapDetail> { detail };
+			var shiftTrade = new ShiftTradeRequest(shiftTradeSwapDetails);
+			personRequest.Request = shiftTrade;
+
+			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum,
+													  null, loggedOnUser, null, null, null);
+
+			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel
+			{
+				From = new ShiftTradeEditPersonScheduleViewModel(),
+				To = new ShiftTradeEditPersonScheduleViewModel()
+			};
+
+			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
+			requestCheckSum.Expect(s => s.Check(shiftTrade));
+			mapper.Expect(m => m.Map<IShiftTradeSwapDetail, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeSwapDetail>.Is.Equal(detail)))
+				 .Return(shiftTradeSwapDetailsViewModel);
+
+			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
+			result.First().To.IsMySchedule.Should().Be.True();
+		}
 	}
 }
