@@ -89,7 +89,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var lastDayDateTime = getDateTimePeriodForDay(scheduleDaysInPeriod.Last());
 			var previousday = getDateTimePeriodForDay(previousDay);
 			var startTime = previousday.EndDateTime > firstDayDateTime.StartDateTime ? previousday.EndDateTime : firstDayDateTime.StartDateTime;
-			var endTime = lastDayDateTime.EndDateTime;
+			var endTime = lastDayDateTime.EndDateTime < firstDayDateTime.EndDateTime ? firstDayDateTime.EndDateTime : lastDayDateTime.EndDateTime;
+			if (startTime > endTime)
+			{
+				startTime = firstDayDateTime.StartDateTime;
+			}
 			return new DateTimePeriod(startTime, endTime);
 		}
 

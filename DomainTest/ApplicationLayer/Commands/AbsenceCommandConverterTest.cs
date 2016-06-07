@@ -49,8 +49,71 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 
 			var result = target.GetCreatorInfoForFullDayAbsence(command);
 			result.Absence.Should().Be.EqualTo(_absenceRepository.Single());
-		}		
-		
+		}
+
+		[Test]
+		public void ShouldConvertAbsenceForFullDayWhenPreviousDaysEndIsLaterThanSelectedDaysStart()
+		{
+			var person = _personRepository.Single();
+			var scenario = _currentScenario.Current();
+			var previousDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, person, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
+			_scheduleStorage.Add(previousDay);
+			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
+			_scheduleStorage.Add(selectedDay);
+			var target = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleStorage, null);
+
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			var command = new AddFullDayAbsenceCommand
+			{
+				AbsenceId = _absenceRepository.Single().Id.Value,
+				PersonId = _personRepository.Single().Id.Value,
+				StartDate = new DateTime(2016, 6, 7),
+				EndDate = new DateTime(2016, 6, 7),
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = operatedPersonId,
+					TrackId = trackId
+				}
+			};
+
+			var result = target.GetCreatorInfoForFullDayAbsence(command);
+			result.Absence.Should().Be.EqualTo(_absenceRepository.Single());
+		}
+
+		[Test]
+		public void ShouldConvertAbsenceForFullDayWhenSelectedDaysEndIsLaterThanNextDaysEnd()
+		{
+			var person = _personRepository.Single();
+			var scenario = _currentScenario.Current();
+			var selectedDay = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndOvertimeShift(scenario, person, new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
+			_scheduleStorage.Add(selectedDay);
+			var nextDay = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 6, 7, 9, 2016, 6, 7, 10));
+			_scheduleStorage.Add(nextDay);
+			var target = new AbsenceCommandConverter(_currentScenario, _personRepository, _absenceRepository, _scheduleStorage, null);
+
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			var command = new AddFullDayAbsenceCommand
+			{
+				AbsenceId = _absenceRepository.Single().Id.Value,
+				PersonId = _personRepository.Single().Id.Value,
+				StartDate = new DateTime(2016, 6, 6),
+				EndDate = new DateTime(2016, 6, 7),
+				TrackedCommandInfo = new TrackedCommandInfo()
+				{
+					OperatedPersonId = operatedPersonId,
+					TrackId = trackId
+				}
+			};
+
+			var result = target.GetCreatorInfoForFullDayAbsence(command);
+			result.Absence.Should().Be.EqualTo(_absenceRepository.Single());
+			result.AbsenceTimePeriod.Should().Be.EqualTo(new DateTimePeriod(2016, 6, 6, 23, 2016, 6, 7, 11));
+		}
+
 		[Test]
 		public void ShouldConvertPersonForFullDay()
 		{
@@ -98,6 +161,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 			var result = target.GetCreatorInfoForFullDayAbsence(command);
 			result.TrackedCommandInfo.OperatedPersonId.Should().Be.EqualTo(operatedPersonId);
 			result.TrackedCommandInfo.TrackId.Should().Be.EqualTo(trackId);
-		}		
+		}	
 	}
 }
