@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var reportItemsProvider = MockRepository.GenerateMock<IReportItemsProvider>();
 			reportItemsProvider.Stub(x => x.GetReportItems()).Return(reportItems);
 
-			var target = new ReportsController(reportItemsProvider);
+			var target = new AnywhereReportsController(reportItemsProvider);
 			var result = target.GetReports();
 
 			result.Result<List<ReportItem>>().Should().Be.SameInstanceAs(reportItems);

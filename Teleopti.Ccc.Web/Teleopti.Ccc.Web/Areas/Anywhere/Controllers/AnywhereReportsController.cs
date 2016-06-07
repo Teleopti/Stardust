@@ -4,15 +4,15 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
-	public class ReportsController : ApiController
+	public class AnywhereReportsController : ApiController
 	{
 		private readonly IReportItemsProvider _reportItemsProvider;
-		public ReportsController(IReportItemsProvider reportItemsProvider)
+		public AnywhereReportsController(IReportItemsProvider reportItemsProvider)
 		{
 			_reportItemsProvider = reportItemsProvider;
 		}
 
-		[UnitOfWork, HttpGet, Route("Anywhere/Reports/GetReports")]
+		[UnitOfWork, HttpGet, Route("Anywhere/Reports")]
 		public virtual IHttpActionResult GetReports()
 		{
 			return Ok(_reportItemsProvider.GetReportItems());

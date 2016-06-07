@@ -299,7 +299,7 @@ define([
 	var reportsLoadDeffered = $.Deferred();
 	var initReportsMenu = function (callback) {
 		ajax.ajax({
-			url: "Anywhere/Reports/GetReports",
+			url: "Anywhere/Reports",
 			success: callback
 		});
 	};

@@ -430,7 +430,7 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupScheduleController.cs" />
     <Compile Include="Areas\Anywhere\Core\GetBusinessUnitId.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\ReportsController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
     <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastMisc.cs" />
