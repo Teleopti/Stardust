@@ -136,8 +136,9 @@
 		function registerShortCuts() {
 			vm.commands.forEach(function(cmd) {
 				function wrappedAction() {
-					if (!cmd.clickable()) return;
-					cmd.action();
+					if (cmd.clickable() && cmd.visible()) {
+						cmd.action();
+					}
 				}
 
 				shortCuts.registerKeySequence.apply(null, cmd.keys.concat([wrappedAction]));
