@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 
 		public void Start()
 		{
-			_allTenantRecurringEventPublisher.PublishDaily(new IndexMaintenance());
+			_allTenantRecurringEventPublisher.PublishDaily(new IndexMaintenanceHangfireEvent());
 		}
 	}
 }

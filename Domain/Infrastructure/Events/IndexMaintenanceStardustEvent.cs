@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Infrastructure.Events
 {
-	public class IndexMaintenanceStardust : IEvent
+	public class IndexMaintenanceStardustEvent : IEvent
 	{
 	}
 }
