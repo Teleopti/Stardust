@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -12,11 +13,13 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
+		private readonly IndexMaintenancePublisher _indexMaintenancePublisher;
 
-		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher)
+		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IndexMaintenancePublisher indexMaintenancePublisher)
 		{
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
+			_indexMaintenancePublisher = indexMaintenancePublisher;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
@@ -24,6 +27,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		{
 			_etlJobStarter.Initialize(serviceStartTime, stopService);
 			_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
+			_indexMaintenancePublisher.Start();
 		}
 
 		void tick(object state)
