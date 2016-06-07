@@ -29,7 +29,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				ForecastedCalls = 12,
 				ForecastedHandleTime = 120,
 				OfferedCalls = 12,
-				HandleTime = 80
+				HandleTime = 80,
+                AnsweredCallsWithinSL = 10,
+                AbandonedCalls = 2,
+                AbandonedRate = 2/12,
+                ServiceLevel = 10/12,
+                SpeedOfAnswer = 20,
+                AverageSpeedOfAnswer = 20/9,
+                AnsweredCalls = 10
 			};
 			_secondInterval = new IncomingIntervalModel()
 			{
@@ -37,8 +44,15 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				ForecastedCalls = 16,
 				ForecastedHandleTime = 150,
 				OfferedCalls = 13,
-				HandleTime = 180
-			};
+				HandleTime = 180,
+                AnsweredCallsWithinSL = 8,
+                AbandonedCalls = 2,
+                AbandonedRate = 2 / 12,
+                ServiceLevel = 8 / 13,
+                SpeedOfAnswer = 18,
+                AverageSpeedOfAnswer = 18 / 11,
+                AnsweredCalls = 11
+            };
 		}
 
 		[Test]
@@ -300,5 +314,116 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 	        viewModel.Summary.AverageHandleTime.Should().Be.EqualTo(0);
 	    }
-	}
+
+	    [Test]
+	    public void ShouldSetAverageSpeedOfAnswer()
+        {
+            IntradayMonitorDataLoader.AddInterval(_firstInterval);
+            IntradayMonitorDataLoader.AddInterval(_secondInterval);
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(2);
+            viewModel.DataSeries.AverageSpeedOfAnswer.First().Should().Be.EqualTo(_firstInterval.SpeedOfAnswer/_firstInterval.AnsweredCalls);
+            viewModel.DataSeries.AverageSpeedOfAnswer.Second().Should().Be.EqualTo(_secondInterval.SpeedOfAnswer / _secondInterval.AnsweredCalls);
+        }
+
+        [Test]
+        public void ShouldSetAbandonedRate()
+        {
+            IntradayMonitorDataLoader.AddInterval(_firstInterval);
+            IntradayMonitorDataLoader.AddInterval(_secondInterval);
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(2);
+            viewModel.DataSeries.AbandonedRate.First().Should().Be.EqualTo(_firstInterval.AbandonedRate);
+            viewModel.DataSeries.AbandonedRate.Second().Should().Be.EqualTo(_secondInterval.AbandonedRate);
+        }
+
+        [Test]
+        public void ShouldSetServiceLevel()
+        {
+            IntradayMonitorDataLoader.AddInterval(_firstInterval);
+            IntradayMonitorDataLoader.AddInterval(_secondInterval);
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(2);
+            viewModel.DataSeries.ServiceLevel.First().Should().Be.EqualTo(_firstInterval.ServiceLevel);
+            viewModel.DataSeries.ServiceLevel.Second().Should().Be.EqualTo(_secondInterval.ServiceLevel);
+        }
+
+	    [Test]
+	    public void ShouldSetSummaryForAverageSpeedOfAnswer()
+        {
+            IntradayMonitorDataLoader.AddInterval(_firstInterval);
+            IntradayMonitorDataLoader.AddInterval(_secondInterval);
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+	        viewModel.Summary.AverageSpeedOfAnswer.Should()
+	            .Be.EqualTo((_firstInterval.SpeedOfAnswer + _secondInterval.SpeedOfAnswer)/ (_firstInterval.AnsweredCalls + _secondInterval.AnsweredCalls));
+        }
+        
+        [Test]
+        public void ShouldReturnPredefinedAverageSpeedOfAnswerWhenNoData()
+        {
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.Summary.AverageSpeedOfAnswer.Should().Be.EqualTo(-99);
+        }
+        
+        [Test]
+        public void ShouldSetSummaryForServiceLevel()
+        {
+            IntradayMonitorDataLoader.AddInterval(_firstInterval);
+            IntradayMonitorDataLoader.AddInterval(_secondInterval);
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.Summary.ServiceLevel.Should()
+                .Be.EqualTo((_firstInterval.AnsweredCallsWithinSL + _secondInterval.AnsweredCallsWithinSL) / (_firstInterval.OfferedCalls + _secondInterval.OfferedCalls));
+        }
+
+        [Test]
+        public void ShouldReturnPredefinedServiceLevelWhenNoData()
+        {
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.Summary.ServiceLevel.Should().Be.EqualTo(-99);
+        }
+
+        [Test]
+        public void ShouldSetSummaryForAbandonRate()
+        {
+            IntradayMonitorDataLoader.AddInterval(_firstInterval);
+            IntradayMonitorDataLoader.AddInterval(_secondInterval);
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.Summary.AbandonRate.Should()
+                .Be.EqualTo((_firstInterval.AbandonedCalls + _secondInterval.AbandonedCalls) / (_firstInterval.OfferedCalls + _secondInterval.OfferedCalls));
+        }
+
+        [Test]
+        public void ShouldReturnPredefinedAbandonRateWhenNoData()
+        {
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.Summary.AbandonRate.Should().Be.EqualTo(-99);
+        }
+    }
 }

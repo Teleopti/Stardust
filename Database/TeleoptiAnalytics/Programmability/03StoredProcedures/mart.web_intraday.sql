@@ -160,12 +160,13 @@ BEGIN
 			ELSE 
 				ISNULL(handle_time_s,0) / ISNULL(answered_calls,0)
 		END AS AverageHandleTime,
+		answered_calls AS AnsweredCalls,
 		answered_calls_within_SL AS AnsweredCallsWithinSL,
 		CASE ISNULL(offered_calls,0)
 			WHEN 0 THEN 0
 			ELSE 
 				ISNULL(answered_calls_within_SL,0) / ISNULL(offered_calls,0)
-		END AS ActualServiceLevel,
+		END AS ServiceLevel,
 		abandoned_calls AS AbandonedCalls,
 		CASE ISNULL(offered_calls,0)
 			WHEN 0 THEN 0

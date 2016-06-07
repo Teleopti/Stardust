@@ -31,11 +31,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var offeredCallsSeries = new List<double?>();
 			var averageHandleTimeSeries = new List<double?>();
 			var latestQueueStatsIntervalId = -1;
+            var averageSpeedOfAnswer = new List<double?>();
+            var abandonedRate = new List<double?>();
+            var serviceLevel = new List<double?>();
 
-			foreach (var interval in intervals)
+            foreach (var interval in intervals)
 			{
 				summary.OfferedCalls += interval.OfferedCalls ?? 0;
 				summary.HandleTime += interval.HandleTime ?? 0;
+			    summary.SpeedOfAnswer += interval.SpeedOfAnswer ?? 0;
+			    summary.AnsweredCalls += interval.AnsweredCalls ?? 0;
+			    summary.AnsweredCallsWithinSL += interval.AnsweredCallsWithinSL ?? 0;
+			    summary.AbandonedCalls += interval.AbandonedCalls ?? 0;
 
 				timeSeries.Add(DateTime.MinValue.AddMinutes(interval.IntervalId * intervalLength));
 				forecastedCallsSeries.Add(interval.ForecastedCalls);
@@ -45,6 +52,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 				if (interval.OfferedCalls.HasValue)
 					latestQueueStatsIntervalId = interval.IntervalId;
+			    averageSpeedOfAnswer.Add(interval.SpeedOfAnswer/interval.AnsweredCalls);
+                abandonedRate.Add(interval.AbandonedRate);
+                serviceLevel.Add(interval.ServiceLevel);
+
 			}
 
 		    foreach (var interval in intervals.Where(interval => interval.IntervalId <= latestQueueStatsIntervalId))
@@ -69,6 +80,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 		        : (summary.AverageHandleTime - summary.ForecastedAverageHandleTime)*100/
 		          summary.ForecastedAverageHandleTime;
 
+		    summary.AverageSpeedOfAnswer = Math.Abs(summary.AnsweredCalls) < 0.0001
+		        ? -99
+		        : summary.SpeedOfAnswer/summary.AnsweredCalls;
+
+		    summary.ServiceLevel = Math.Abs(summary.OfferedCalls) < 0.0001
+		        ? -99
+		        : summary.AnsweredCallsWithinSL/summary.OfferedCalls;
+
+		    summary.AbandonRate = Math.Abs(summary.OfferedCalls) < 0.0001
+		        ? -99
+		        : summary.AbandonedCalls/summary.OfferedCalls;
+
             return new MonitorDataViewModel()
 			{
 				LatestActualIntervalStart = latestQueueStatsIntervalId == -1
@@ -84,7 +107,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 					ForecastedCalls = forecastedCallsSeries.ToArray(),
 					ForecastedAverageHandleTime = forecastedAverageHandleTimeSeries.ToArray(),
 					OfferedCalls = offeredCallsSeries.ToArray(),
-					AverageHandleTime = averageHandleTimeSeries.ToArray()
+					AverageHandleTime = averageHandleTimeSeries.ToArray(),
+                    AverageSpeedOfAnswer = averageSpeedOfAnswer.ToArray(),
+                    AbandonedRate = abandonedRate.ToArray(),
+                    ServiceLevel = serviceLevel.ToArray()
 				}
 			};
 		}
