@@ -40,8 +40,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void SaveReadModel(ScheduleDayReadModel model)
 		{
+
 			_currentUnitOfWork.Session().CreateSQLQuery(
-					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,NotScheduled) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:NotScheduled)")
+					"exec [ReadModel].[UpdateScheduleDay] @PersonId=:PersonId,@BelongsToDate=:BelongsToDate,@StartDateTime=:StartDateTime,@EndDateTime=:EndDateTime,@Workday=:Workday,@WorkTime=:WorkTime,@ContractTime=:ContractTime,@Label=:Label,@DisplayColor=:DisplayColor,@NotScheduled=:NotScheduled")
 					.SetGuid("PersonId", model.PersonId)
 					.SetDateTime("StartDateTime", model.StartDateTime)
 					.SetDateTime("EndDateTime", model.EndDateTime)
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetBoolean("Workday", model.Workday)
 					.SetString("Label", model.Label)
 					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
-					.SetDateOnly("Date", model.BelongsToDate)
+					.SetDateOnly("BelongsToDate", model.BelongsToDate)
 					.SetBoolean("NotScheduled", model.NotScheduled)
 					.ExecuteUpdate();
 		}

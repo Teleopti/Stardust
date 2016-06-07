@@ -26,8 +26,14 @@ AS
 SET NOCOUNT ON
 IF(@IsInitialLoad=1)
 BEGIN
-	INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
-	VALUES (@PersonId,@TeamId,@SiteId,@BusinessUnitId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+	IF NOT EXISTS (
+		SELECT * FROM ReadModel.PersonScheduleDay 
+		WHERE PersonId = @PersonId
+			AND BelongsToDate = @BelongsToDate)
+	BEGIN
+		INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,IsDayOff,Model,ScheduleLoadedTime) 
+		VALUES (@PersonId,@TeamId,@SiteId,@BusinessUnitId,@Start,@End,@BelongsToDate,@IsDayOff,@Model,@ScheduleLoadedTime)
+	END
 	SELECT 1 -- number of records changed
 	RETURN
 END
