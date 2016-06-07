@@ -112,6 +112,9 @@
 	}
 
 	.multiSelect {
+		overflow: hidden;
+		display: block;
+
 		> button {
 			width: 100%;
 			max-height: 22px;
