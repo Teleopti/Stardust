@@ -39,6 +39,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 				});
 		}
 
+		public void PublishDaily(IEvent @event)
+		{
+			_tenants.Tenants().ForEach(t =>
+			{
+				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t)))
+					_publisher.PublishDaily(@event);
+			});
+		}
+
 		public void PublishHourly(IEvent @event)
 		{
 			_tenants.Tenants().ForEach(t =>
@@ -56,6 +65,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					_publisher.PublishMinutely(@event);
 			});
 		}
-
 	}
 }

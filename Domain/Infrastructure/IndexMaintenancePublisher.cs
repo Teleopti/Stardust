@@ -5,16 +5,16 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 {
 	public class IndexMaintenancePublisher
 	{
-		private readonly IRecurringEventPublisher _recurringEventPublisher;
+		private readonly AllTenantRecurringEventPublisher _allTenantRecurringEventPublisher;
 
-		public IndexMaintenancePublisher(IRecurringEventPublisher recurringEventPublisher)
+		public IndexMaintenancePublisher(AllTenantRecurringEventPublisher allTenantRecurringEventPublisher)
 		{
-			_recurringEventPublisher = recurringEventPublisher;
+			_allTenantRecurringEventPublisher = allTenantRecurringEventPublisher;
 		}
 
 		public void Start()
 		{
-			_recurringEventPublisher.PublishDaily(new IndexMaintenance());
+			_allTenantRecurringEventPublisher.PublishDaily(new IndexMaintenance());
 		}
 	}
 }
