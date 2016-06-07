@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Admin
 			foreach (var tenant in tenants)
 			{
 				var tenantConn = new SqlConnectionStringBuilder(tenant.DataSourceConfiguration.ApplicationConnectionString);
+				log.DebugFormat("Comparing server {0} and database {1} to connectionstring {2}.", tenantConn.DataSource, tenantConn.InitialCatalog, tenantStoreConnectionstring);
 				if (tenantConn.DataSource.Equals(storeConn.DataSource, StringComparison.OrdinalIgnoreCase) &&
 					  tenantConn.InitialCatalog.Equals(storeConn.InitialCatalog, StringComparison.OrdinalIgnoreCase))
 					return true;
