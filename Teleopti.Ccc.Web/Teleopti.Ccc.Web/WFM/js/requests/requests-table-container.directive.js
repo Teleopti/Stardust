@@ -121,8 +121,9 @@
 				enableGridMenu: true,
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 				useExternalSorting: true,
-				headerTemplate: 'js/requests/html/header-template.html',
+				headerTemplate: 'shift-trade-header-template.html',
 				gridMenuTitleFilter: $translate,
+				columnVirtualizationThreshold : 200,
 				rowHeight: vm.shiftTradeView ? 60 : 30,
 				
 				onRegisterApi: function (gridApi) {

@@ -1362,9 +1362,7 @@
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\reports\html\reports.html" />
     <Content Include="WFM\js\reports\reports.controller.js" />
-    <Content Include="WFM\js\requests\html\header-template.html" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
-    <Content Include="WFM\js\requests\html\shift-trade-day-template.html" />
     <Content Include="WFM\js\requests\ngEnter.js" />
     <Content Include="WFM\js\requests\requests-absence-text-grid-configuration.service.js" />
     <Content Include="WFM\js\requests\requests-commands-pane.directive.js" />
@@ -1397,7 +1395,9 @@
     <Content Include="WFM\js\requests\requests-definitions.service.js" />
     <Content Include="WFM\js\requests\requests.controller.js" />
     <Content Include="WFM\js\requests\requests.controller.spec.js" />
-    <Content Include="WFM\js\requests\requests.customizedtemplate.js" />
+    <Content Include="WFM\js\requests\templates\requests-shift-trade-header-template.js" />
+    <Content Include="WFM\js\requests\templates\requests-shift-trade-day-template.js" />
+    <Content Include="WFM\js\requests\templates\requests.customizedtemplate.js" />
     <Content Include="WFM\js\requests\_module.js" />
     <Content Include="WFM\js\resourceplanner\planningperiods.controller.spec.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner-filters.html" />

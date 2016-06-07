@@ -13,7 +13,7 @@
 	<div class="total-requests-count pull-left">
 		<span>{{requestsOverview.showSelectedRequestsInfo()}}</span>
 	</div>
-	<md-select ng-if="requestsOverview.paging.totalRequestsCount > 0" 
+	<md-select aria-label="page size" ng-if="requestsOverview.paging.totalRequestsCount > 0" 
 		    class="page-size-selector pull-left"
 		    ng-model="requestsOverview.paging.pageSize"
 			ng-change="requestsOverview.onPageSizeChanges()">
