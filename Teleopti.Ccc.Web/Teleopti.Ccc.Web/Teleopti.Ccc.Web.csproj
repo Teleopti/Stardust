@@ -540,6 +540,10 @@
     <Compile Include="Areas\Reporting\Core\IReportGenerator.cs" />
     <Compile Include="Areas\Reporting\Core\PermissionsConverter.cs" />
     <Compile Include="Areas\Reporting\Core\ReportGenerator.cs" />
+    <Compile Include="Areas\Reports\Controllers\ReportsController.cs" />
+    <Compile Include="Areas\Reports\Core\IReportNavigationProvider.cs" />
+    <Compile Include="Areas\Reports\Core\ReportNavigationProvider.cs" />
+    <Compile Include="Areas\Reports\IoC\ReportsAreaModule.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProvider.cs" />
     <Compile Include="Areas\Requests\Core\Provider\IRequestCommandHandlingProvider.cs" />

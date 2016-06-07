@@ -277,6 +277,7 @@
     <Compile Include="Areas\Reporting\Core\ApplicationPermissionProviderTest.cs" />
     <Compile Include="Areas\Reporting\Core\ReportGeneratorTests.cs" />
     <Compile Include="Areas\Reporting\Core\PermissionsConverterTest.cs" />
+    <Compile Include="Areas\Reports\IoC\ReportsAreaModuleTest.cs" />
     <Compile Include="Areas\Requests\Core\IOC\RequestsAreaModuleTest.cs" />
     <Compile Include="Areas\Requests\Core\IOC\RequestsTestAttribute.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProviderTest.cs" />
