@@ -53,6 +53,10 @@
 		.ui-grid-cell-contents {
 			width: 85%;
 			text-align: left;
+			// For IE>=9
+			@media screen and (min-width:0\0) {
+				text-overflow: clip;
+			}
 		}
 
 		.ui-grid-column-menu-button-last-col {
@@ -117,6 +121,7 @@
 			background-color: #fff;
 			border-radius: 0px;
 			margin-top: 0;
+			white-space: nowrap;
 		}
 
         .buttonLabel {
@@ -140,7 +145,7 @@
 		.multiSelectGroup:hover,
 		.multiSelectItem:hover {
 			background-image: none;
-			background:#E0E0E0!important;
+			background: #E0E0E0!important;
 			color:#000000!important;
 		}
 	}
