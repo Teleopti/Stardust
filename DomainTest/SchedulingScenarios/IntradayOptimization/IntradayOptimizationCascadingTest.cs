@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentA = PersonRepository.Has(contract, schedulePeriod, skillA, skillB).InTimeZone(TimeZoneInfo.Utc);
 			agentA.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
 
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agentA.PermissionInformation.DefaultTimeZone());
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
 								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, new Tuple<TimePeriod, double>(new TimePeriod(17, 15, 17, 30), 1)),
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agentA).Period
-					.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8).AddMinutes(15), dateTime.AddHours(17).AddMinutes(15)));
+					.Should().Be.EqualTo(dateOnly.ToDateTimePeriod(new TimePeriod(8, 15, 17, 15), agentA.PermissionInformation.DefaultTimeZone()));
 		}
 
 		[Test, Ignore("to be fixed...")]
@@ -90,7 +89,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentA = PersonRepository.Has(contract, schedulePeriod, skillA, skillB).InTimeZone(TimeZoneInfo.Utc);
 			agentA.Period(dateOnly).RuleSetBag = new RuleSetBag(ruleSet);
 
-			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agentA.PermissionInformation.DefaultTimeZone());
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
 								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,1, new Tuple<TimePeriod, double>(new TimePeriod(7, 45, 8, 0), 2)),
@@ -102,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value);
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agentA).Period
-					.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(7).AddMinutes(45), dateTime.AddHours(16).AddMinutes(45)));
+					.Should().Be.EqualTo(dateOnly.ToDateTimePeriod(new TimePeriod(7, 45, 16, 45), agentA.PermissionInformation.DefaultTimeZone()));
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

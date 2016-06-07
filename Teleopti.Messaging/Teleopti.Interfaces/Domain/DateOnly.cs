@@ -420,5 +420,11 @@ namespace Teleopti.Interfaces.Domain
 			return new DateTimePeriod(timeZoneInfo.SafeConvertTimeToUtc(Date),
 									  timeZoneInfo.SafeConvertTimeToUtc(Date.AddDays(1).Date));
 		}
+
+		public DateTimePeriod ToDateTimePeriod(TimePeriod period, TimeZoneInfo timeZoneInfo)
+		{
+			var dateTime = TimeZoneHelper.ConvertToUtc(Date, timeZoneInfo);
+			return new DateTimePeriod(dateTime.Add(period.StartTime), dateTime.Add(period.EndTime));
+		}
 	}
 }
