@@ -998,21 +998,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		{
 			SetSelectedPeoplePeriodGridData(personPeriodGridData);
 			ResetExternalLogOnAdapterCollection();
-
-			//Set person skill view data
+			var externalLogOnAdapterDic = _externalLogOnAdapterCollection.ToDictionary(key => key.ContainedEntity);
 			foreach (IPersonPeriod personPeriod in personPeriods)
 			{
-				foreach (ExternalLogOnModel externalLogOnModel in _externalLogOnAdapterCollection)
-				{
-					if (personPeriod == null) continue;
-					ExternalLogOnModel model = externalLogOnModel;
-					IExternalLogOn externalLogOn = personPeriod.ExternalLogOnCollection.FirstOrDefault(s => s.Equals(model.ContainedEntity));
-					if (externalLogOn != null)
-					{
-						externalLogOnModel.ExternalLogOnInPersonCount += 1;
+				if (personPeriod == null)
+					continue;
 
-						externalLogOnModel.TriState = externalLogOnModel.ExternalLogOnInPersonCount == personPeriods.Count ? 1 : 2;
-					}
+				foreach (var externalLogOn in personPeriod.ExternalLogOnCollection)
+				{
+					ExternalLogOnModel externalLogOnModel;
+					if (!externalLogOnAdapterDic.TryGetValue(externalLogOn, out externalLogOnModel))
+						continue;
+
+					externalLogOnModel.ExternalLogOnInPersonCount += 1;
+					externalLogOnModel.TriState = externalLogOnModel.ExternalLogOnInPersonCount == 1 ? 1 : 2;
 				}
 			}
 		}
