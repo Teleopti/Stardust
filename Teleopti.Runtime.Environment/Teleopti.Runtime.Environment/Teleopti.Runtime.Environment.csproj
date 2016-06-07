@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -43,16 +43,16 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EO.Base, Version=16.0.55.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EO.WebBrowser.16.0.55.0\lib\EO.Base.dll</HintPath>
+    <Reference Include="EO.Base, Version=16.1.4.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.16.1.4.0\lib\EO.Base.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EO.WebBrowser, Version=16.0.55.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EO.WebBrowser.16.0.55.0\lib\EO.WebBrowser.dll</HintPath>
+    <Reference Include="EO.WebBrowser, Version=16.1.4.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.16.1.4.0\lib\EO.WebBrowser.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="EO.WebEngine, Version=16.0.55.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EO.WebBrowser.16.0.55.0\lib\EO.WebEngine.dll</HintPath>
+    <Reference Include="EO.WebEngine, Version=16.1.4.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.16.1.4.0\lib\EO.WebEngine.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">

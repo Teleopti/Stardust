@@ -80,6 +80,12 @@ namespace Teleopti.Ccc.Win.Main
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			_logger.Info("EO Browser: Loading URL to show the login web view.");
+			if (!webView1.IsCreated)
+			{
+				_logger.Info("EO Browser: The view is destroyed for some reason trying to re-create it before loading URL");
+				webView1 = new WebView();
+				webControl.WebView = webView1;
+			}
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
 			DialogResult result = ShowDialog();
 			return result != DialogResult.Cancel;
