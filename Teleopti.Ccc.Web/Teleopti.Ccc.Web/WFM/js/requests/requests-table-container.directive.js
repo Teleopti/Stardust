@@ -92,7 +92,7 @@
 				absence.Selected = false;
 			});
 		});
-		vm.AllRequestStatuses = requestsDataSvc.getAllRequestStatuses();
+		vm.AllRequestStatuses = requestsDataSvc.getAllRequestStatuses(vm.shiftTradeView);
 
 		vm.absenceFilterClose = function () {
 			var filters = '';

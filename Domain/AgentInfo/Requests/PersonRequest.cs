@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private const int messageTipLength = 255;
 		private readonly IPerson _person;
 		private string _message;
-		private int requestStatus = 3;
+		private int requestStatus = (int)PersonRequestStatus.New;
 		private personRequestState _requestState;
 		private personRequestState _persistedState;
 		private bool _deserialized;
@@ -646,23 +646,25 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			public static personRequestState CreateFromId(PersonRequest personRequest, int requestStatusId)
 			{
 				//This should be refactored into a more dynamic way...
-				switch (requestStatusId)
-				{
-					case 0:
-						return new pendingPersonRequest(personRequest);
-					case 1:
-						return new deniedPersonRequest(personRequest);
-					case 2:
-						return new approvedPersonRequest(personRequest);
-					case 3:
-						return new newPersonRequest(personRequest);
-					case 4:
-						return new autoDeniedPersonRequest(personRequest);
-					case 5:
-						return new waitListedPersonRequest(personRequest);
-					case 6:
-						return new cancelledPersonRequest(personRequest);
 
+				var status = (PersonRequestStatus)requestStatusId;
+
+				switch (status)
+				{
+					case PersonRequestStatus.Pending:
+						return new pendingPersonRequest(personRequest);
+					case PersonRequestStatus.Denied:
+						return new deniedPersonRequest(personRequest);
+					case PersonRequestStatus.Approved:
+						return new approvedPersonRequest(personRequest);
+					case PersonRequestStatus.New:
+						return new newPersonRequest(personRequest);
+					case PersonRequestStatus.AutoDenied:
+						return new autoDeniedPersonRequest(personRequest);
+					case PersonRequestStatus.Waitlisted:
+						return new waitListedPersonRequest(personRequest);
+					case PersonRequestStatus.Cancelled:
+						return new cancelledPersonRequest(personRequest);
 				}
 				throw new ArgumentOutOfRangeException("requestStatusId", "The request status id is invalid");
 			}
@@ -671,7 +673,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class approvedPersonRequest : personRequestState
 		{
 			public approvedPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 2)
+				: base(personRequest, (int)PersonRequestStatus.Approved)
 			{
 			}
 
@@ -696,7 +698,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class autoApprovedPersonRequest : personRequestState
 		{
 			public autoApprovedPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 2)
+				: base(personRequest, (int)PersonRequestStatus.Approved)
 			{
 			}
 
@@ -719,7 +721,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class deniedPersonRequest : personRequestState
 		{
 			public deniedPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 1)
+				: base(personRequest, (int) PersonRequestStatus.Denied)
 			{
 			}
 
@@ -737,7 +739,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class autoDeniedPersonRequest : personRequestState
 		{
 			public autoDeniedPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 4)
+				: base(personRequest, (int)PersonRequestStatus.AutoDenied)
 			{
 			}
 
@@ -766,7 +768,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class waitListedPersonRequest : personRequestState
 		{
 			public waitListedPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 5)
+				: base(personRequest, (int)PersonRequestStatus.Waitlisted)
 			{
 			}
 			protected internal override bool IsDenied
@@ -806,7 +808,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class pendingPersonRequest : personRequestState
 		{
 			public pendingPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 0)
+				: base(personRequest, (int) PersonRequestStatus.Pending)
 			{
 			}
 
@@ -842,7 +844,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class cancelledPersonRequest : personRequestState
 		{
 			public cancelledPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 6)
+				: base(personRequest, (int)PersonRequestStatus.Cancelled)
 			{
 			}
 
@@ -864,7 +866,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private class newPersonRequest : personRequestState
 		{
 			public newPersonRequest(PersonRequest personRequest)
-				: base(personRequest, 3)
+				: base(personRequest, (int)PersonRequestStatus.New)
 			{
 			}
 
@@ -895,7 +897,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		{
 			var typedRequest = request as PersonRequest;
 			return typedRequest == null
-					   ? 3
+					   ? (int)PersonRequestStatus.New
 					   : typedRequest.requestStatus;
 		}
 

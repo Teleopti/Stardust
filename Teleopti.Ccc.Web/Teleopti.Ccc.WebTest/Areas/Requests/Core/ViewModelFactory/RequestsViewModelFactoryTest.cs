@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
@@ -16,6 +19,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
+using FilterScope = System.Web.Http.Filters.FilterScope;
 
 namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 {
@@ -154,6 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			result.First().AgentName.Should().Be.EqualTo("test1 test1");
 
 		}
+		
 
 		[Test]
 		public void ShouldGetRequestsInRequestListViewModel()

@@ -225,18 +225,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				switch (filter.Key)
 				{
 					case RequestFilterField.Status:
-						var statusFilters = filter.Value.Split(splitter).Select(x =>
-						{
-							int status;
-							return int.TryParse(x.Trim(), out status) ? status : int.MinValue;
-						}).Where(x => x > int.MinValue).ToList();
-
-						if (!statusFilters.Any()) continue;
-
-						var statusCriterion = statusFilters
-							.Select(x => (ICriterion) Restrictions.Eq("personRequests.requestStatus", x))
-							.Aggregate(Restrictions.Or);
-						criteria.Add(statusCriterion);
+						addStatusCriteria(criteria, filter);
 						break;
 					case RequestFilterField.Absence:
 						var absenceFilters = filter.Value.Split(splitter).Select(x =>
@@ -265,6 +254,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					default:
 						continue;
 				}
+			}
+		}
+
+		private static void addStatusCriteria (ICriteria criteria, KeyValuePair<RequestFilterField, string> filter)
+		{
+			var statusFilters = filter.Value.Split (splitter).Select (x =>
+			{
+				int status;
+				return int.TryParse (x.Trim(), out status) ? status : int.MinValue;
+			}).Where (x => x > int.MinValue).ToList();
+
+			if (!statusFilters.Any()) return;
+
+			addAutoDeniedFilterIfDeniedFilterIsIncluded(statusFilters);
+			
+			var statusCriterion = statusFilters
+				.Select (x => (ICriterion) Restrictions.Eq ("personRequests.requestStatus", x))
+				.Aggregate (Restrictions.Or);
+			criteria.Add (statusCriterion);
+		}
+
+		private static void addAutoDeniedFilterIfDeniedFilterIsIncluded (ICollection<int> statusFilters)
+		{
+			if (statusFilters.Contains ((int)PersonRequestStatus.Denied))
+			{
+				statusFilters.Add ((int)PersonRequestStatus.AutoDenied);
 			}
 		}
 

@@ -1488,6 +1488,51 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			count.Should().Be.EqualTo(20);
 		}
 
+
+		[Test]
+		public void ShouldReturnBothAutoDeniedAndDeniedRequestsWhenFilteringByDenied()
+		{
+			var authChecker = new PersonRequestAuthorizationCheckerForTest();
+
+			var secondAbsence = AbsenceFactory.CreateAbsence("Second Absence");
+			var thirdAbsence = AbsenceFactory.CreateAbsence("Third Absence");
+
+			PersistAndRemoveFromUnitOfWork(secondAbsence);
+			PersistAndRemoveFromUnitOfWork(thirdAbsence);
+
+			var request1 = createAbsenceRequestAndBusinessUnit(_absence);
+			var request2 = createAbsenceRequestAndBusinessUnit(secondAbsence);
+			var request3 = createAbsenceRequestAndBusinessUnit(thirdAbsence);
+
+
+			request1.Deny (null,"Work harder", authChecker, false);
+			request2.Approve (new ApprovalServiceForTest(), authChecker);
+
+			request3.SetNew();
+
+			request3.Deny(null, "Work harder", authChecker, true);
+
+			PersistAndRemoveFromUnitOfWork(request1);
+			PersistAndRemoveFromUnitOfWork(request2);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+			var filter = new RequestFilter
+			{
+				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
+				RequestFilters = new Dictionary<RequestFilterField, string>
+				{
+					{RequestFilterField.Status, $"1"} // Denied
+				}
+			};
+			int count;
+			var foundRequests = new PersonRequestRepository(UnitOfWork)
+				.FindAllRequests(filter, out count).ToList();
+
+			Assert.AreEqual(2, foundRequests.Count);
+			Assert.IsTrue(!foundRequests.Contains(request2));
+		}
+
+
 		[Test]
 		public void ShouldReturnRequestsOverlapOnEndDate()
 		{

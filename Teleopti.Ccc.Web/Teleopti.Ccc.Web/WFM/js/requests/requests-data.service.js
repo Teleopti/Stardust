@@ -54,18 +54,22 @@
 			return $http.get(requestableAbsenceUrl);
 		}
 
-		this.getAllRequestStatuses = function() {
+		this.getAllRequestStatuses = function(isShiftTradeView) {
 			// TODO: Should get this list in a better way
 			// Refer to definition of Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
-			return [
+			var statuses =  [
 				{ Id: 0, Name: $translate.instant("Pending") },
 				{ Id: 1, Name: $translate.instant("Denied") },
-				{ Id: 2, Name: $translate.instant("Approved") },
-				{ Id: 3, Name: $translate.instant("New") },
-				{ Id: 4, Name: $translate.instant("AutoDenied") },
-				{ Id: 5, Name: $translate.instant("Waitlisted") },
-				{ Id: 6, Name: $translate.instant("Cancelled") }
+				{ Id: 2, Name: $translate.instant("Approved") }
 			];
+			if (!isShiftTradeView) {
+				statuses.push(
+					{ Id: 5, Name: $translate.instant("Waitlisted") },
+					{ Id: 6, Name: $translate.instant("Cancelled") }
+				);
+			}
+
+			return statuses;
 		}
 	}
 })();
