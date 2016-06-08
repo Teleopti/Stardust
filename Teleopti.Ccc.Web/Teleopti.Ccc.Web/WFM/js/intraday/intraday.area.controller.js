@@ -131,7 +131,7 @@
 				};
 
 				$scope.findCurrent = function (callsMax) {
-				    for (var i = 0; i < $scope.timeSeries.length; i++) {
+					for (var i = 0; i < $scope.timeSeries.length; i++) {
 						if ($scope.timeSeries[i] === $scope.latestActualInterval.split(' - ')[0]){
 							$scope.currentInterval[i] = callsMax;
 						}else{
@@ -148,19 +148,19 @@
 						$scope.HasMonitorData = false;
 						return;
 					} else {
-					  $scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
+						$scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 						$scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
 						$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
 						$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
 						$scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
 						$scope.asa = $filter('number')(result.Summary.AverageSpeedOfAnswer, 1);
-						$scope.abandonedRate = $filter('number')(result.Summary.AbandonRate, 1);
-						$scope.serviceLevel = $filter('number')(result.Summary.ServiceLevel, 1);
+						$scope.abandonedRate = $filter('number')(result.Summary.AbandonRate*100, 1);
+						$scope.serviceLevel = $filter('number')(result.Summary.ServiceLevel*100, 1);
 
 						$scope.timeSeries = [];
-					    angular.forEach(result.DataSeries.Time, function(value, key) {
-					        this.push($filter('date')(value, 'shortTime'));
-					    }, $scope.timeSeries);
+						angular.forEach(result.DataSeries.Time, function(value, key) {
+							this.push($filter('date')(value, 'shortTime'));
+						}, $scope.timeSeries);
 						$scope.forecastedCallsSeries = result.DataSeries.ForecastedCalls;
 						$scope.actualCallsSeries = result.DataSeries.OfferedCalls;
 						$scope.forecastedAverageHandleTimeSeries = result.DataSeries.ForecastedAverageHandleTime;
@@ -388,90 +388,92 @@
 						}
 
 						var loadPrefChart = function(asaMax) {
-						    $scope.chartHiddenLines = $scope.hiddenArray;
-						    $scope.findCurrent(asaMax);
-						    var intervalsList = [];
-						    for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
-						        intervalsList.push(interval);
-						    }
-						    $scope.prefChart = c3.generate({
-						        bindto: '#perfChart',
-						        data: {
-						            x: 'x',
-						            columns: [
-                                        $scope.averageSpeedOfAnswerSeries,
-						                $scope.abandonedRateSeries,
-						                $scope.serviceLevelSeries,
+							$scope.chartHiddenLines = $scope.hiddenArray;
+							$scope.findCurrent(asaMax);
+							var intervalsList = [];
+							for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
+								intervalsList.push(interval);
+							}
+							$scope.prefChart = c3.generate({
+								bindto: '#perfChart',
+								data: {
+									x: 'x',
+									columns: [
+										$scope.serviceLevelSeries,
+										$scope.abandonedRateSeries,
+										$scope.averageSpeedOfAnswerSeries,
 										$scope.timeSeries,
 										$scope.currentInterval
-						            ],
-						            hide: $scope.chartHiddenLines,
-						            colors: {
-						                ASA: '#9CCC65',
-						                Abandoned_rate: '#4DB6AC',
-						                Service_level: '#F06292',
-						                Current:'#cacaca'
-						            },
-						            type: 'line',
-						            types: {
-						                Current: 'bar'
-						            },
-						            names: {
-						                Current: $translate.instant('latestActualInterval'),
-						                ASA: $translate.instant('AverageSpeedOfAnswer') + ' >',
-						                Abandoned_rate: $translate.instant('AbandonedRate') + ' <',
-						                Service_level: $translate.instant('ServiceLevelPercentSign') + ' <'
-						            },
-						            axes: {
-						                ASA: 'y2',
-														Current:'y2'
-						            }
-						        },
-						        axis: {
-						            y2: {
-						                show: true,
-						                label: $translate.instant('Seconds'),
-						                tick: {
-						                    format: d3.format('.1f')
-						                }
-						            },
-						            y: {
-						                label: '%',
-						                tick: {
-						                    format: d3.format('.1f')
-						                }
-						            },
-						            x: {
-						                label: $translate.instant('SkillTypeTime'),
-						                type: 'category',
-						                tick: {
-						                    fit: true,
-						                    centered: true,
-						                    multiline: false,
-						                    values: intervalsList
-						                },
-						                categories: $scope.timeSeries
-						            }
-						        },
-						        legend: {
-						            item: {
-						                onclick: function (id) {
-						                    if ($scope.chartHiddenLines.indexOf(id) > -1) {
-						                        $scope.chartHiddenLines.splice($scope.chartHiddenLines.indexOf(id), 1);
-						                    } else {
-						                        $scope.chartHiddenLines.push(id);
-						                    }
-						                    loadPrefChart(asaMax);
-						                }
-						            }
-						        }
-						    });
+
+									],
+									hide: $scope.chartHiddenLines,
+									colors: {
+										Service_level: '#F06292',
+										Abandoned_rate: '#4DB6AC',
+										ASA: '#9CCC65',
+										Current:'#cacaca'
+									},
+									type: 'line',
+									types: {
+										Current: 'bar'
+									},
+									names: {
+										Service_level: $translate.instant('ServiceLevelPercentSign') + ' <',
+										Abandoned_rate: $translate.instant('AbandonedRate') + ' <',
+										ASA: $translate.instant('AverageSpeedOfAnswer') + ' >',
+										Current: $translate.instant('latestActualInterval')
+
+									},
+									axes: {
+										ASA: 'y2',
+										Current:'y2'
+									}
+								},
+								axis: {
+									y2: {
+										show: true,
+										label: $translate.instant('Seconds'),
+										tick: {
+											format: d3.format('.1f')
+										}
+									},
+									y: {
+										label: '%',
+										tick: {
+											format: d3.format('.1f')
+										}
+									},
+									x: {
+										label: $translate.instant('SkillTypeTime'),
+										type: 'category',
+										tick: {
+											fit: true,
+											centered: true,
+											multiline: false,
+											values: intervalsList
+										},
+										categories: $scope.timeSeries
+									}
+								},
+								legend: {
+									item: {
+										onclick: function (id) {
+											if ($scope.chartHiddenLines.indexOf(id) > -1) {
+												$scope.chartHiddenLines.splice($scope.chartHiddenLines.indexOf(id), 1);
+											} else {
+												$scope.chartHiddenLines.push(id);
+											}
+											loadPrefChart(asaMax);
+										}
+									}
+								}
+							});
 						}
 
 						$scope.resizeChart = function () {
 							$timeout(function () {
-							    $scope.chart.resize();
-							    $scope.prefChart.resize();
+								$scope.chart.resize();
+								$scope.prefChart.resize();
 							}, 1000);
 						}
 					}
