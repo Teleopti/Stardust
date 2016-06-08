@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -286,5 +287,50 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 Assert.IsFalse(childAdapters[1].CanBold);
             }
         }
-     }
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenChildCanBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = EntityConverter.ConvertToOther<ISchedulePeriod, SchedulePeriodChildModel>(_schedulePeriod1);
+				adapter1.CanBold = true;
+				IList<SchedulePeriodChildModel> adapterCollection = new List<SchedulePeriodChildModel>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+
+				_target.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenParentCanBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = EntityConverter.ConvertToOther<ISchedulePeriod, SchedulePeriodChildModel>(_schedulePeriod1);
+				IList<SchedulePeriodChildModel> adapterCollection = new List<SchedulePeriodChildModel>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+				_target.CanBold = true;
+				_target.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldNotGetCanBoldOnAdapterAndChildAdaptersWhenParentOrChildCantBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = EntityConverter.ConvertToOther<ISchedulePeriod, SchedulePeriodChildModel>(_schedulePeriod1);
+				IList<SchedulePeriodChildModel> adapterCollection = new List<SchedulePeriodChildModel>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+				_target.AdapterOrChildCanBold().Should().Be.False();
+			}
+		}
+	}
 }

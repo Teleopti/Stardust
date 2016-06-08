@@ -88,7 +88,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             foreach (PersonPeriodModel adapter in filteredPeopleHolder.PersonPeriodGridViewCollection)
             {
-                if (HasPersonPeriodDuplicates2(adapter.Parent.PersonPeriodCollection))
+				if (!adapter.AdapterOrChildCanBold()) continue;
+
+				if (HasPersonPeriodDuplicates2(adapter.Parent.PersonPeriodCollection))
                 {
                     //TODO: Need to change this according to empty name
                     //if (String.IsNullOrEmpty(adapter.FullName))
@@ -140,9 +142,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// </remarks>
         public static string ValidateSchedulePeriodIsNotDuplicate(FilteredPeopleHolder filteredPeopleHolder)
         {
-            foreach (SchedulePeriodModel adapter in
-                filteredPeopleHolder.SchedulePeriodGridViewCollection)
+            foreach (SchedulePeriodModel adapter in filteredPeopleHolder.SchedulePeriodGridViewCollection)
             {
+				if(!adapter.AdapterOrChildCanBold()) continue;
+
                 if (HasSchedulePeriodDuplicates(adapter.Parent.PersonSchedulePeriodCollection))
                 {
                     return adapter.FullName;
@@ -161,26 +164,27 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         /// Created date:   2008-07-21
         /// </remarks>
         public static string ValidatePersonRotationIsNotDuplicate(FilteredPeopleHolder filteredPeopleHolder)
-        {
+        {	
+		    for (int i = 0; i < filteredPeopleHolder.PersonRotationParentAdapterCollection.Count; i++)
+		    {
+			    if(!filteredPeopleHolder.PersonRotationParentAdapterCollection[i].AdapterOrChildCanBold()) continue;
+			    
+			    PeopleWorksheet.StateHolder.GetChildPersonRotations(i, filteredPeopleHolder);
 
-            for (int i = 0; i < filteredPeopleHolder.PersonRotationParentAdapterCollection.Count; i++)
-            {
-                PeopleWorksheet.StateHolder.GetChildPersonRotations(i, filteredPeopleHolder);
+			    Dictionary<DateOnly, IPersonRotation> y = new Dictionary<DateOnly, IPersonRotation>();
 
-                Dictionary<DateOnly, IPersonRotation> y = new Dictionary<DateOnly, IPersonRotation>();
-
-                foreach (IPersonRotation personRotation in PeopleWorksheet.StateHolder.
-                    ChildPersonRotationCollection)
-                {
-                    if (y.ContainsKey(personRotation.StartDate))
-                    {
-                        return personRotation.Person.Name.ToString();
-                    }
-                    y.Add(personRotation.StartDate, personRotation);
-                }
-            }
-            return string.Empty;
-
+			    foreach (IPersonRotation personRotation in PeopleWorksheet.StateHolder.
+				    ChildPersonRotationCollection)
+			    {
+				    if (y.ContainsKey(personRotation.StartDate))
+				    {
+					    return personRotation.Person.Name.ToString();
+				    }
+				    y.Add(personRotation.StartDate, personRotation);
+			    }
+		    }
+	        
+	        return string.Empty;
         }
 
 
@@ -189,7 +193,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             for (int i = 0; i < filteredPeopleHolder.PersonAvailabilityParentAdapterCollection.Count; i++)
             {
-                PeopleWorksheet.StateHolder.GetChildPersonAvailabilities(i, filteredPeopleHolder);
+				if (!filteredPeopleHolder.PersonAvailabilityParentAdapterCollection[i].AdapterOrChildCanBold()) continue;
+
+				PeopleWorksheet.StateHolder.GetChildPersonAvailabilities(i, filteredPeopleHolder);
 
                 Dictionary<DateOnly, IPersonAvailability> y = new Dictionary<DateOnly, IPersonAvailability>();
 

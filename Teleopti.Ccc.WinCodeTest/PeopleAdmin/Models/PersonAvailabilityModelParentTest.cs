@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
@@ -190,6 +192,52 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 Assert.IsFalse(childAdapters[1].CanBold);
             }
         }
-    }
+
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenChildCanBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = new PersonAvailabilityModelChild(person1, personAvailability1, null);
+				adapter1.CanBold = true;
+				IList<PersonAvailabilityModelChild> adapterCollection = new List<PersonAvailabilityModelChild>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+
+				_target.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenParentCanBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = new PersonAvailabilityModelChild(person1, personAvailability1, null);
+				IList<PersonAvailabilityModelChild> adapterCollection = new List<PersonAvailabilityModelChild>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+				_target.CanBold = true;
+				_target.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldNotGetCanBoldOnAdapterAndChildAdaptersWhenParentOrChildCantBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = new PersonAvailabilityModelChild(person1, personAvailability1, null);
+				IList<PersonAvailabilityModelChild> adapterCollection = new List<PersonAvailabilityModelChild>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+				_target.AdapterOrChildCanBold().Should().Be.False();
+			}
+		}
+	}
 }
 

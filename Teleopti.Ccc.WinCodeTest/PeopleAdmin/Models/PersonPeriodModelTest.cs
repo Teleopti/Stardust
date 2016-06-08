@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
@@ -336,6 +337,51 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 Assert.IsFalse(childAdapters[0].CanBold);
                 Assert.IsFalse(childAdapters[1].CanBold);
             }
+		}
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenChildCanBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(_personPeriod1);
+				adapter1.CanBold = true;
+				IList<PersonPeriodChildModel> adapterCollection = new List<PersonPeriodChildModel>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+
+				_target.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenParentCanBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(_personPeriod1);
+				IList<PersonPeriodChildModel> adapterCollection = new List<PersonPeriodChildModel>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+				_target.CanBold = true;
+				_target.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldNotGetCanBoldOnAdapterAndChildAdaptersWhenParentOrChildCantBold()
+		{
+			using (var grid = new GridControl())
+			{
+				var adapter1 = EntityConverter.ConvertToOther<IPersonPeriod, PersonPeriodChildModel>(_personPeriod1);
+				IList<PersonPeriodChildModel> adapterCollection = new List<PersonPeriodChildModel>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				_target.GridControl = grid;
+				_target.AdapterOrChildCanBold().Should().Be.False();
+			}
 		}
 
 		[Test]

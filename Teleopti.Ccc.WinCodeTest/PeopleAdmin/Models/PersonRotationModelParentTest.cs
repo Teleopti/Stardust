@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
@@ -242,5 +244,56 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
                 Assert.IsFalse(childAdapters[1].CanBold);
             }
         }
-    }
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenChildCanBold()
+		{
+			var modelParent = new PersonRotationModelParent(person1, null);
+
+			using (var grid = new GridControl())
+			{
+				var adapter1 = new PersonRotationModelChild(person1, null);
+				adapter1.CanBold = true;
+				IList<PersonRotationModelChild> adapterCollection = new List<PersonRotationModelChild>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				modelParent.GridControl = grid;
+
+				modelParent.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldGetCanBoldOnAdapterAndChildAdaptersWhenParentCanBold()
+		{
+			var modelParent = new PersonRotationModelParent(person1, null);
+
+			using (var grid = new GridControl())
+			{
+				var adapter1 = new PersonRotationModelChild(person1, null);
+				IList<PersonRotationModelChild> adapterCollection = new List<PersonRotationModelChild>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				modelParent.GridControl = grid;
+				modelParent.CanBold = true;
+				modelParent.AdapterOrChildCanBold().Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldNotGetCanBoldOnAdapterAndChildAdaptersWhenParentOrChildCantBold()
+		{
+			var modelParent = new PersonRotationModelParent(person1, null);
+
+			using (var grid = new GridControl())
+			{
+				var adapter1 = new PersonRotationModelChild(person1, null);
+				IList<PersonRotationModelChild> adapterCollection = new List<PersonRotationModelChild>();
+				adapterCollection.Add(adapter1);
+				grid.Tag = adapterCollection;
+				modelParent.GridControl = grid;
+				modelParent.AdapterOrChildCanBold().Should().Be.False();
+			}
+		}
+	}
 }

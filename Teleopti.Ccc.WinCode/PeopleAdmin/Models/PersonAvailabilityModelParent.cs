@@ -37,6 +37,26 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
         }
 
+		public bool AdapterOrChildCanBold()
+		{
+			if (CanBold) return true;
 
-    }
+			if (GridControl != null)
+			{
+				var childAdapters = GridControl.Tag as IList<PersonAvailabilityModelChild>;
+
+				if (childAdapters != null)
+				{
+					for (var i = 0; i < childAdapters.Count; i++)
+					{
+						if (childAdapters[i].CanBold) return true;
+					}
+				}
+			}
+
+			return false;
+		}
+
+
+	}
 }
