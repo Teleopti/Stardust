@@ -33,6 +33,6 @@ Scenario: See total time out of adherence
 	Given the time is '2016-06-08 09:10:00'
 	When I view real time adherence for all agents on team 'Red'
 	Then I should see agent status
-	| Field      | Value        |
-	| Name       | Pierre Baldi |
-	| Alarm Time | 0:10:00      |
+	| Field     | Value        |
+	| Name      | Pierre Baldi |
+	| Rule Time | 0:10:00      |
