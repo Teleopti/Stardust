@@ -1,6 +1,6 @@
 ﻿(function() {
 	'use strict';
-	angular.module('wfm.reports').service('reportsService', reportsService);
+	angular.module('wfm.reports').service('ReportsService', reportsService);
 	reportsService.$inject = ['$http', '$q'];
 
 	function reportsService($http, $q) {
