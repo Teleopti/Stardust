@@ -10679,6 +10679,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter reports.
+        /// </summary>
+        public static string FilterReports {
+            get {
+                return ResourceManager.GetString("FilterReports", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter Roles.
         /// </summary>
         public static string FilterRoles {

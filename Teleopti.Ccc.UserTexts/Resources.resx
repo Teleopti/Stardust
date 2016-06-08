@@ -14531,4 +14531,8 @@ The product activation key schema is "{2}".
 These options are activated:
 {3}</value>
   </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Filter reports</value>
+    <comment>place holder in web WFM reports portal report filter.</comment>
+  </data>
 </root>
