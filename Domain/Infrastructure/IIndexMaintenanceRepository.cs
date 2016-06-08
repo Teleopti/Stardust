@@ -2,6 +2,6 @@
 {
 	public interface IIndexMaintenanceRepository
 	{
-		void Run();
+		void PerformIndexMaintenanceForAll();
 	}
 }

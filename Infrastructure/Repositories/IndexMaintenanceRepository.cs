@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Threading;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -17,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_connectionStrings = connectionStrings;
 		}
 
-		public void Run()
+		public void PerformIndexMaintenanceForAll()
 		{
 			performIndexMaintenance("App");
 			performIndexMaintenance("Analytics");

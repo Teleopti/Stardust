@@ -1,6 +1,6 @@
 ﻿using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.Rta
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public class ConnectionStrings : IConnectionStrings
 	{

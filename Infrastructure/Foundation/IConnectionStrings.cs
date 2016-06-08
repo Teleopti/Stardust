@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Infrastructure.Rta
+namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface IConnectionStrings
 	{

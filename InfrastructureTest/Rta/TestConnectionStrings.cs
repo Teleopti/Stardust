@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Infrastructure.Rta;
+﻿using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta

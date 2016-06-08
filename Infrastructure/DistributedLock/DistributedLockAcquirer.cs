@@ -4,6 +4,7 @@ using Castle.DynamicProxy;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.DistributedLock;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.DistributedLock
