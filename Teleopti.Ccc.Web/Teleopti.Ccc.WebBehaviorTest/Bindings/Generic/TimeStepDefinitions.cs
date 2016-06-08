@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class TimeStepDefinitions
 	{
 		[Given(@"the time is '(.*)'")]
+		[Given(@"the utc time is '(.*)'")]
 		[When(@"the time is '(.*)'")]
 		[When(@"the utc time is '(.*)'")]
 		[SetCulture("sv-SE")]
