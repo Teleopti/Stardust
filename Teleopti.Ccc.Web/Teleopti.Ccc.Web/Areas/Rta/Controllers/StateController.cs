@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Http;
+using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 
@@ -8,10 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	public class StateController : ApiController
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
+		private readonly ILog _logger;
 
-		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta)
+		public StateController(Domain.ApplicationLayer.Rta.Service.Rta rta, ILog logger)
 		{
 			_rta = rta;
+			_logger = logger;
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			}
 			catch (Exception e)
 			{
+				_logger.Error(input, e);
 				return BadRequest(e.Message);
 			}
 

@@ -158,6 +158,7 @@ Scenario: Should be able to go to Real time adherence overview
 	When I view Anywhere
 	Then I should see Real time adherence overview in the menu
 
+@ignore
 Scenario: View current state of sum of employees not adhering to schedule for each site
 	Given I have a role with
 	| Field                                  | Value             |
