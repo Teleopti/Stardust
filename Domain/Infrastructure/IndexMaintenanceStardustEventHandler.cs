@@ -1,6 +1,9 @@
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
+using Teleopti.Ccc.Domain.Logon.Aspects;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Infrastructure
 {
@@ -15,10 +18,10 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			_indexMaintenanceRepository = indexMaintenanceRepository;
 		}
 
+		[TenantScope]
 		public virtual void Handle(IndexMaintenanceStardustEvent @event)
 		{
 			_indexMaintenanceRepository.Run();
-			
 		}
 	}
 }

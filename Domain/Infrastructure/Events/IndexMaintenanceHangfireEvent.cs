@@ -1,8 +1,8 @@
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Ccc.Domain.Infrastructure.Events
 {
-	public class IndexMaintenanceHangfireEvent : IEvent
+	public class IndexMaintenanceHangfireEvent : EventWithInfrastructureContext
 	{
 	}
 }

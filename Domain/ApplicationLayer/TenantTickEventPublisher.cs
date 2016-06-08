@@ -20,9 +20,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void EnsurePublishings()
 		{
-			if (_nextPublish == null)
-				_publisher.RemoveAllPublishings();
-
 			var nextPublish = _nextPublish ?? _now.UtcDateTime();
 			if (_now.UtcDateTime() < nextPublish)
 				return;

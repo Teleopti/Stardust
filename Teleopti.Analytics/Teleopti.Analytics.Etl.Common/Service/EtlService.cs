@@ -14,18 +14,21 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly EtlJobStarter _etlJobStarter;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly IndexMaintenancePublisher _indexMaintenancePublisher;
+		private readonly AllTenantRecurringEventPublisher _allTenantRecurringEventPublisher;
 
-		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IndexMaintenancePublisher indexMaintenancePublisher)
+		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IndexMaintenancePublisher indexMaintenancePublisher, AllTenantRecurringEventPublisher allTenantRecurringEventPublisher)
 		{
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_indexMaintenancePublisher = indexMaintenancePublisher;
+			_allTenantRecurringEventPublisher = allTenantRecurringEventPublisher;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
 		public void Start(DateTime serviceStartTime, Action stopService)
 		{
 			_etlJobStarter.Initialize(serviceStartTime, stopService);
+			_allTenantRecurringEventPublisher.RemoveAllPublishings();
 			_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 			_indexMaintenancePublisher.Start();
 		}

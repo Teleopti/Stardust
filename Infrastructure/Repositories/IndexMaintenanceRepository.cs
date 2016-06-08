@@ -4,19 +4,17 @@ using System.Data.SqlClient;
 using System.Threading;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class IndexMaintenanceRepository : IIndexMaintenanceRepository
 	{
-		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
-		private readonly ICurrentAnalyticsUnitOfWorkFactory _currentAnalyticsUnitOfWorkFactory;
+		private readonly IConnectionStrings _connectionStrings;
 
-		public IndexMaintenanceRepository(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, ICurrentAnalyticsUnitOfWorkFactory currentAnalyticsUnitOfWorkFactory)
+		public IndexMaintenanceRepository(IConnectionStrings connectionStrings)
 		{
-			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
-			_currentAnalyticsUnitOfWorkFactory = currentAnalyticsUnitOfWorkFactory;
+			_connectionStrings = connectionStrings;
 		}
 
 		public void Run()
@@ -30,21 +28,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
 				"mart.etl_job_get_aggdatabase", null,
-				_currentAnalyticsUnitOfWorkFactory.Current().ConnectionString).Tables[0];
+				_connectionStrings.Analytics()).Tables[0];
 			return dataTable.Rows[0]["target_customName"].ToString();
 		}
 
 		private void performIndexMaintenance(string database)
 		{
 			string connectionString = null;
-			var dataMartConnectionString = _currentAnalyticsUnitOfWorkFactory.Current().ConnectionString;
+			var dataMartConnectionString = _connectionStrings.Analytics();
 			switch (database)
 			{
 				case "Analytics":
 					connectionString = dataMartConnectionString;
 					break;
 				case "App":
-					connectionString = _currentUnitOfWorkFactory.Current().ConnectionString;
+					connectionString = _connectionStrings.Application();
 					break;
 				case "Agg":
 				{
