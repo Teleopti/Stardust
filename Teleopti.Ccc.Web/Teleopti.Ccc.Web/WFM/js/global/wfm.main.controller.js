@@ -6,12 +6,20 @@
 		'$scope', 'Toggle', '$rootScope', 'ThemeService', '$q',
 		function($scope, Toggle, $rootScope, ThemeService, $q) {
 
+			ThemeService.getTheme().then(function(result){
+				$scope.currentStyle = result.data.Name;
+			});
+
 			$rootScope.setTheme = function(theme) {
 				var darkThemeElement = document.getElementById('darkTheme');
 				if (darkThemeElement) {
 					darkThemeElement.checked = (theme === "dark");
 				}
-				modifyDOMHeader(theme);
+				$scope.style = theme;
+				if (checkCurrentTheme() != theme) {
+					modifyDOMHeader(theme);
+				}
+
 			};
 
 			var modifyDOMHeader = function(theme) {
@@ -21,6 +29,7 @@
 					if (themeComponent) {
 						var hash = extractHash(themeComponent);
 						themeComponent.setAttribute('href', 'dist/' + element.toLowerCase() + '_' + theme + '.min.css' + hash);
+						themeComponent.setAttribute('class',theme);
 						if (element === "Modules") {
 							themeComponent.onload = function() {
 								$scope.$apply(function() {
@@ -31,6 +40,11 @@
 					}
 				});
 			};
+			var checkCurrentTheme = function(){
+				var currentStyle = document.getElementById('themeStyle').className
+				return currentStyle;
+			}
+
 			var extractHash = function(element) {
 				var hashvalue = element.href.match("\\?(.*)"); //[^\\?]*$
 				var returnValue = "";

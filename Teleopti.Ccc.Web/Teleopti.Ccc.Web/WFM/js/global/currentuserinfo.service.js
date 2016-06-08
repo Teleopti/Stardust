@@ -49,7 +49,7 @@
 					var context = service.getCurrentUserFromServer();
 
 					context.success(function (data) {
-						timeout = Date.now() + 10000;
+						timeout = Date.now() + 90000;
 						wfmI18nService.setLocales(data);
 						service.SetCurrentUserInfo(data);
 						BusinessUnitsService.initBusinessUnit();
