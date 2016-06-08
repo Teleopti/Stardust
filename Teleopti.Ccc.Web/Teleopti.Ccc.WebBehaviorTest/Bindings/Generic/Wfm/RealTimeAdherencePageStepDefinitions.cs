@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -34,27 +33,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see site '(.*)' with (.*) of (.*) employees out of adherence")]
 		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence(string site, int numberOfOutAdherence, int total)
 		{
-			Browser.Interactions.AssertAnyContains(string.Format(".site [data-value='{0}']", numberOfOutAdherence), site);
-			Browser.Interactions.AssertAnyContains(string.Format(".site [data-max='{0}']", total), site);
+			Browser.Interactions.AssertAnyContains($".site [data-value='{numberOfOutAdherence}']", site);
+			Browser.Interactions.AssertAnyContains($".site [data-max='{total}']", site);
 		}
 
 		[Then(@"I should see site '(.*)' with (.*) employees out of adherence")]
 		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence2(string site, int numberOfOutAdherence)
 		{
-			Browser.Interactions.AssertAnyContains(string.Format(".site [data-value='{0}']", numberOfOutAdherence), site);
+			Browser.Interactions.AssertAnyContains($".site [data-value='{numberOfOutAdherence}']", site);
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
 		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int numberOfOutAdherence, int total)
 		{
-			Browser.Interactions.AssertAnyContains(string.Format(".team [data-value='{0}']", numberOfOutAdherence), team);
-			Browser.Interactions.AssertAnyContains(string.Format(".team [data-max='{0}']", total), team);
+			Browser.Interactions.AssertAnyContains($".team [data-value='{numberOfOutAdherence}']", team);
+			Browser.Interactions.AssertAnyContains($".team [data-max='{total}']", team);
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) employees out of adherence")]
 		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence2(string team, int numberOfOutAdherence)
 		{
-			Browser.Interactions.AssertAnyContains(string.Format(".team [data-value='{0}']", numberOfOutAdherence), team);
+			Browser.Interactions.AssertAnyContains($".team [data-value='{numberOfOutAdherence}']", team);
 		}
 
 		[Then(@"I should see real time agent details for '(.*)'")]
@@ -91,8 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var firstPersonId = DataMaker.Person(firstPerson).Person.Id.Value;
 			var secondPersonId = DataMaker.Person(secondPerson).Person.Id.Value;
-			Browser.Interactions.AssertXPathExists(string.Format(@"//*[@agentid='{0}']/following::*[@agentid='{1}']",
-				firstPersonId, secondPersonId));
+			Browser.Interactions.AssertXPathExists($@"//*[@agentid='{firstPersonId}']/following::*[@agentid='{secondPersonId}']");
 		}
 
 		[Then(@"I should see agent status for '(.*)'")]
@@ -148,13 +146,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I click '([a-z-]*|[a-z]* [a-z]*)' in agent menu")]
 		public void WhenIClickInAgentMenu(CssClass cssClass)
 		{
-			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));
+			Browser.Interactions.Click($".{cssClass.Name}");
 		}
 
 		[Then(@"I can '(.*)' in agent menu")]
 		public void ThenICanInAgentMenu(CssClass cssClass)
 		{
-			Browser.Interactions.AssertExists(string.Format(".{0}", cssClass.Name));
+			Browser.Interactions.AssertExists($".{cssClass.Name}");
 		}
 		
 		[Then(@"I should see historical adherence for '(.*)' with adherence of (.*)%")]
@@ -191,13 +189,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I click the team checkbox for '(.*)'")]
 		public void WhenIClickTheCheckboxFor(string name)
 		{
-			Browser.Interactions.Click(string.Format("[name='{0}']", name));
+			Browser.Interactions.Click($"[name='{name}']");
 		}
 
 		[When(@"I choose business unit '(.*)'")]
 		public void WhenIChooseBusinessUnit(string businessUnitName)
 		{
-			Browser.Interactions.ClickUsingJQuery(string.Format("span:contains('{0}')", businessUnitName));
+			Browser.Interactions.ClickUsingJQuery($"span:contains('{businessUnitName}')");
 		}
 
 		[When(@"I change to business unit '(.*)'")]
@@ -260,10 +258,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		}
 		
-		private static String toRGBA(string colorName, string transparency)
+		private static string toRGBA(string colorName, string transparency)
 		{
 			var color = Color.FromName(colorName);
-			return string.Format("rgba({0}, {1}, {2}, {3})", color.R, color.G, color.B, transparency);
+			return $"rgba({color.R}, {color.G}, {color.B}, {transparency})";
 		}
 	}
 
@@ -289,12 +287,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public string AlarmTimeFormatted()
 		{
-			return AlarmTime == null ? null : TimeSpan.Parse(AlarmTime).ToString(@"h\:mm\:ss");
+			return formatTime(AlarmTime);
 		}
 
 		public string RuleTimeFormatted()
 		{
-			return RuleTime == null ? null : TimeSpan.Parse(RuleTime).ToString(@"h\:mm\:ss");
+			return formatTime(RuleTime);
+		}
+
+		private static string formatTime(string time)
+		{
+			return time == null ? null : TimeSpan.Parse(time).ToString(@"h\:mm\:ss");
 		}
 
 		public string TimeInStateFormatted()
