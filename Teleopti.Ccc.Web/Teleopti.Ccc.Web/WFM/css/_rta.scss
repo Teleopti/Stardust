@@ -72,15 +72,6 @@
 	display: inline-flex;
 }
 
-.no-agents {
-	cursor: not-allowed;
-
-	&:hover {
-		transition: background 0.5s linear 0s;
-		background-color: $gray-300 !important;
-	}
-}
-
 .shift-cell-header {
 	height: 24px;
 	text-align: right;
