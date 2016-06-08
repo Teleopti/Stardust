@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -32,6 +33,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
+		public IResourceCalculationContextFactory ResourceCalculationContextFactory;
+		public IFullResourceCalculation FullResourceCalculation;
 
 		[Test]
 		public void ShouldShovelResources()
@@ -68,6 +71,93 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(0);
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
+		}
+
+		[Test, Ignore("test issue #39060")]
+		public void ShouldKeepCalculatedLoggedOnValueWhenHavingOuterResContext()
+		{
+			var scenario = new Scenario("_");
+			var activity = ActivityFactory.CreateActivity("_");
+			var date = DateOnly.Today;
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)), PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			var skillA = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex_UseFromTestOnly(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 17, 0));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, date, 1);
+			var skillB = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex_UseFromTestOnly(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 17, 0));
+			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, date, 1);
+			var agentAB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agentAB.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+			agentAB.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
+			var agentB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agentB.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillB });
+			agentB.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
+			var assAB = new PersonAssignment(agentAB, scenario, date);
+			assAB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
+			var assB = new PersonAssignment(agentB, scenario, date);
+			assB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
+
+			using (ResourceCalculationContextFactory.Create())
+			{
+				FullResourceCalculation.Execute();
+
+				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+					.Should().Be.EqualTo(1);
+				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+					.Should().Be.EqualTo(1);
+
+				Target.Optimize(new[] { agentAB, agentB }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+
+				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+					.Should().Be.EqualTo(1);
+				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+					.Should().Be.EqualTo(1);
+			}
+		}
+
+		[Test, Ignore("test issue #39060")]
+		public void ShouldKeepCalculatedLoggedOnValueWhenHavingNoOuterResContext()
+		{
+			var scenario = new Scenario("_");
+			var activity = ActivityFactory.CreateActivity("_");
+			var date = DateOnly.Today;
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)), PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
+			var skillA = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex_UseFromTestOnly(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 17, 0));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, date, 1);
+			var skillB = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB.SetCascadingIndex_UseFromTestOnly(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 17, 0));
+			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, date, 1);
+			var agentAB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agentAB.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
+			agentAB.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
+			var agentB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			agentB.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillB });
+			agentB.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
+			var assAB = new PersonAssignment(agentAB, scenario, date);
+			assAB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
+			var assB = new PersonAssignment(agentB, scenario, date);
+			assB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
+
+			FullResourceCalculation.Execute();
+
+			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+				.Should().Be.EqualTo(1);
+			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+				.Should().Be.EqualTo(1);
+
+			Target.Optimize(new[] { agentAB, agentB }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+
+			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+				.Should().Be.EqualTo(1);
+			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
+				.Should().Be.EqualTo(1);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
