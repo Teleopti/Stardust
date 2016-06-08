@@ -424,6 +424,7 @@
 						            },
 						            axes: {
 						                ASA: 'y2',
+														Current:'y2'
 						            }
 						        },
 						        axis: {
