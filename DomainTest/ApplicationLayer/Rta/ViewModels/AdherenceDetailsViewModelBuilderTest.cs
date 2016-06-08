@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -14,6 +13,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
@@ -411,9 +411,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 			});
 			
-			var result = Target.Build(personId);
-			result.First().StartTime.Should().Be("2014-11-20 8:00".Utc().ToShortTimeString(Culture));
-			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(Culture));
+			var result = Target.Build(personId).First();
+			result.StartTime.Should().Be("2014-11-20 8:00".Utc().ToShortTimeString(Culture));
+			result.ActualStartTime.Should().Be("2014-11-20 9:00".Utc().ToShortTimeString(Culture));
 		}
 
 		[Test]
@@ -443,12 +443,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 			});
 			
-			var result = Target.Build(personId);
+			var result = Target.Build(personId).Last();
 
-			result.Last().Name.Should().Be(UserTexts.Resources.End);
-			result.Last().StartTime.Should().Be("2014-11-20 9:00".InHawaii().AsCatalanShortTime());
-			result.Last().ActualStartTime.Should().Be("2014-11-20 9:00".InHawaii().AsCatalanShortTime());
-			result.Last().AdherencePercent.Should().Be(null);
+			result.Name.Should().Be(Resources.End);
+			result.StartTime.Should().Be("2014-11-20 9:00".InHawaii().AsCatalanShortTime());
+			result.ActualStartTime.Should().Be("2014-11-20 9:00".InHawaii().AsCatalanShortTime());
+			result.AdherencePercent.Should().Be(null);
 		}
 
 		[Test]
@@ -474,10 +474,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				}
 			});
 
-			var result = Target.Build(personId);
+			var result = Target.Build(personId).First();
 
-			result.First().StartTime.Should().Be("2014-11-20 8:00".InHawaii().AsShortTime(Culture));
-			result.First().ActualStartTime.Should().Be("2014-11-20 9:00".InHawaii().AsShortTime(Culture));
+			result.StartTime.Should().Be("2014-11-20 8:00".InHawaii().AsShortTime(Culture));
+			result.ActualStartTime.Should().Be("2014-11-20 9:00".InHawaii().AsShortTime(Culture));
 		}
 
 		[Test]
@@ -505,8 +505,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			result.Should().Have.Count.GreaterThan(0);
 		}
-
-
+		
 		[Test]
 		public void ShouldNotReturnPercentageWhenOnlyNeutralAdherence()
 		{
