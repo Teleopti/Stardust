@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Night shifts
+﻿Feature: Night shifts
 	In order to improve night shift agents adherence 
 	As a real time analyst
 	I want to see adherence things
@@ -7,7 +6,6 @@ Feature: Night shifts
 Background:
 	Given there is a switch
 
-@ignore
 Scenario: See adherence percentage for night shift agents
 	Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
