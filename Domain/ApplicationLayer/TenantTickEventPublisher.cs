@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
@@ -20,6 +21,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void EnsurePublishings()
 		{
+			if (_nextPublish == null)
+				_publisher.RemoveAllPublishings();
+
 			var nextPublish = _nextPublish ?? _now.UtcDateTime();
 			if (_now.UtcDateTime() < nextPublish)
 				return;
@@ -29,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 			_publisher.PublishMinutely(new TenantMinuteTickEvent());
 			_publisher.PublishHourly(new TenantHourTickEvent());
+			_publisher.PublishDaily(new IndexMaintenanceHangfireEvent());
 		}
 		
 		public void WithPublishingsForTest(Action action)
