@@ -1,14 +1,20 @@
 ﻿(function() {
 	'use strict';
 
-	angular.module('wfm.reports', []);
-
 	angular.module('wfm.reports').controller('ReportsController', ReportsCtrl);
 
-	ReportsCtrl.$inject = [];
+	ReportsCtrl.$inject = ['ReportsService'];
 
-	function ReportsCtrl() {
-		
+	function ReportsCtrl(ReportsSvc) {
+		var vm = this;
+		vm.reports = [];
+		init();
+
+		function init () {
+			ReportsSvc.getPermittedReports().then(function(reports) {
+				vm.reports = reports;
+			});
+		}
 	}
 
 

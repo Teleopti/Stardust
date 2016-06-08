@@ -1353,6 +1353,8 @@
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\reports\html\reports.html" />
     <Content Include="WFM\js\reports\reports.controller.js" />
+    <Content Include="WFM\js\reports\reports.service.js" />
+    <Content Include="WFM\js\reports\_modules.js" />
     <Content Include="WFM\js\requests\html\requests-commands-pane.tpl.html" />
     <Content Include="WFM\js\requests\ngEnter.js" />
     <Content Include="WFM\js\requests\requests-absence-text-grid-configuration.service.js" />
