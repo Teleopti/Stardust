@@ -33,6 +33,7 @@ using Teleopti.Ccc.Web.Areas.PerformanceTool.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Permissions;
 using Teleopti.Ccc.Web.Areas.Reporting.Controllers;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
+using Teleopti.Ccc.Web.Areas.Reports.IoC;
 using Teleopti.Ccc.Web.Areas.Requests.Core.IOC;
 using Teleopti.Ccc.Web.Areas.ResourcePlanner;
 using Teleopti.Ccc.Web.Areas.Rta;
@@ -116,6 +117,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<TeamScheduleAreaModule>();
 			builder.RegisterModule<IntradayAreaModule>();
 			builder.RegisterModule<RequestsAreaModule>();
+			builder.RegisterModule<ReportsAreaModule>();
 
 			//remove me when #36904 is done!
 			builder.RegisterType<TranslatedTexts>().SingleInstance();
