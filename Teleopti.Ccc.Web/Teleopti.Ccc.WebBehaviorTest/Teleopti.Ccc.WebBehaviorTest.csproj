@@ -856,6 +856,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\TotalOutOfAdherenceTime_38702.feature.cs">
+      <DependentUpon>TotalOutOfAdherenceTime_38702.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\DeletedPersons_36041.feature.cs">
       <DependentUpon>DeletedPersons_36041.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1345,6 +1350,10 @@
     <None Include="Wfm\PlanningPeriod.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PlanningPeriod.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\TotalOutOfAdherenceTime_38702.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>TotalOutOfAdherenceTime_38702.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\DeletedPersons_36041.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
