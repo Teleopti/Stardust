@@ -1,6 +1,6 @@
+using System;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -11,21 +11,18 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(NewAbsenceRequestHandler));
 		private readonly IAbsenceRequestUpdater _absenceRequestUpdater;
-		private readonly ISchedulingResultStateHolderProvider _schedulingResultStateHolderProvider;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-
+		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
+		
 		public AbsenceRequestProcessor(IAbsenceRequestUpdater absenceRequestUpdater,
-			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider)
+			Func<ISchedulingResultStateHolder> scheduleResultStateHolder)
 		{
 			_absenceRequestUpdater = absenceRequestUpdater;
-			_schedulingResultStateHolderProvider = schedulingResultStateHolderProvider;
+			_scheduleResultStateHolder = scheduleResultStateHolder;
 		}
 
 		public void ProcessAbsenceRequest(IUnitOfWork unitOfWork, IAbsenceRequest absenceRequest, IPersonRequest personRequest)
 		{
-			_schedulingResultStateHolder = _schedulingResultStateHolderProvider.GiveMeANew();
-
-			if (!_absenceRequestUpdater.UpdateAbsenceRequest(personRequest, absenceRequest, unitOfWork, _schedulingResultStateHolder))
+			if (!_absenceRequestUpdater.UpdateAbsenceRequest(personRequest, absenceRequest, unitOfWork, _scheduleResultStateHolder()))
 			{
 				return;
 			}
