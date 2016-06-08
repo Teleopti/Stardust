@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Reports/Navigations")]
-		public virtual IList<ReportNavigationItem> GetReportNavigations()
+		public virtual IList<ReportItem> GetReportNavigations()
 		{
 			return _reportNavigationProvider.GetNavigationItems();
 		}

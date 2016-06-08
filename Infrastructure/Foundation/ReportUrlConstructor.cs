@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Interfaces.Infrastructure;
 

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Core
 {
 	public interface IReportNavigationProvider
 	{
-		IList<ReportNavigationItem> GetNavigationItems();
+		IList<ReportItem> GetNavigationItems();
 	}
 }

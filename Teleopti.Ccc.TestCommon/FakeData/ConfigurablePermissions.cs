@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IdentityModel.Claims;
+using NHibernate.Util;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -42,7 +44,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new List<DateOnlyPeriod>();
 		}
 
-		public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
+		public IEnumerable<IApplicationFunction> GrantedFunctions()
+		{
+			var grantedFunctions = new List<IApplicationFunction>();
+			_permittedFunctionPaths.ForEach(p => grantedFunctions.Add(new ApplicationFunction(p)));
+			return grantedFunctions;
+		}
 
 		public bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification)
 		{
