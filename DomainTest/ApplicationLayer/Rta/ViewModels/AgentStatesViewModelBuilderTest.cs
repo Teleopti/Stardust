@@ -12,7 +12,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	[TestFixture]
 	public class AgentStatesViewModelBuilderTest : ISetup
 	{
-		public IJsonSerializer Serializer;
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
@@ -229,7 +227,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.Time.Should().Be("2016-05-28 14:00".Utc());
 		}
 
+		[Test]
+		public void ShouldGetRuleStartTime()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				TeamId = teamId,
+				RuleStartTime = "2016-06-08 08:00".Utc(),
+			});
+			Now.Is("2016-06-08 08:02".Utc());
 
+			var agentState = Target.ForTeams(new[] { teamId }, false).States.Single();
+			
+			agentState.TimeInRule.Should().Be(120);
+		}
 
+		[Test]
+		public void ShouldReturnNullIfHaveNotEnteredRuleYet()
+		{
+			var personId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Database.Has(new AgentStateReadModel
+			{
+				PersonId = personId,
+				TeamId = teamId
+			});
+			Now.Is("2016-06-08 08:02".Utc());
+
+			var agentState = Target.ForTeams(new[] { teamId }, false).States.Single();
+			
+			agentState.TimeInRule.Should().Be(null);
+		}
 	}
 }

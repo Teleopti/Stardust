@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public string Alarm { get; set; }
 		public string Color { get; set; }
 		public int TimeInState { get; set; }
+		public int? TimeInRule { get; set; }
 		public int? TimeInAlarm { get; set; }
 		public IEnumerable<AgentStateActivityViewModel> Shift { get; set; }
 	}
@@ -94,6 +95,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					Color = _appliedAlarm.ColorTransition(x, timeInAlarm),
 					TimeInState = x.StateStartTime.HasValue ? (int)(_now.UtcDateTime() - x.StateStartTime.Value).TotalSeconds : 0,
 					TimeInAlarm = timeInAlarm,
+					TimeInRule = x.RuleStartTime.HasValue ? (int?)(_now.UtcDateTime() - x.RuleStartTime.Value).TotalSeconds : null,
 					Shift = x.Shift?.Select(y => new AgentStateActivityViewModel
 					{
 						Color= ColorTranslator.ToHtml(Color.FromArgb(y.Color)),
