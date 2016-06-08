@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -14,12 +13,10 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -43,7 +40,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private readonly DateOnlyPeriod _dateOnlyPeriod = new DateOnlyPeriod(2010, 3, 30, 2010, 3, 30);
 		private IWorkflowControlSet _workflowControlSet;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
-		private ISchedulingResultStateHolderProvider _schedulingResultStateHolderProvider;
+		
+
 		//private IAbsenceRequestOpenPeriodMerger _merger;
 		private IScheduleDictionary _scheduleDictionary;
 		private IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
@@ -97,9 +95,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new FalseToggleManager());
 
 
-			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, _schedulingResultStateHolderProvider);
+			var absenceProcessor = new AbsenceRequestProcessor(absenceRequestStatusUpdater, () => _schedulingResultStateHolder);
 			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(absenceRequestStatusUpdater,
-				_schedulingResultStateHolderProvider, 
+				 () => _schedulingResultStateHolder, 
 				new AbsenceRequestWaitlistProvider(_personRequestRepository));
 
 			_target = new NewAbsenceRequestHandler(
@@ -139,7 +137,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			_scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			_scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
 			_schedulingResultStateHolder.Schedules = _scheduleDictionary;
-			_schedulingResultStateHolderProvider = new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder);
 		}
 
 		private void CreateRepositories()

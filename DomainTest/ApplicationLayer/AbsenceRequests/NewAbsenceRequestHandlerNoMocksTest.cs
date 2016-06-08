@@ -521,8 +521,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new FakeScheduleDifferenceSaver(_scheduleRepository),
 				_personAccountUpdaterDummy, toggleManager);
 
-			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, new SchedulingResultStateHolderProvider());
-			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, new SchedulingResultStateHolderProvider(), new AbsenceRequestWaitlistProvider (_personRequestRepository));
+			var absenceProcessor = new AbsenceRequestProcessor (absenceRequestStatusUpdater, () => _schedulingResultStateHolder);
+			var absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor (absenceRequestStatusUpdater, () => _schedulingResultStateHolder, new AbsenceRequestWaitlistProvider (_personRequestRepository));
 			
 			var newAbsenceRequestConsumer = new NewAbsenceRequestHandler(
 				_unitOfWorkFactory, _currentScenario,_personRequestRepository, absenceRequestWaitlistProcessor,absenceProcessor);

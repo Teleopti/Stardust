@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
         private IHandleEvent<RunRequestWaitlistEvent> createRunRequestWaitlistEventHandler(IMessageBrokerComposite sender)
         {
             _unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
-            _absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(null, new SchedulingResultStateHolderProvider(), new AbsenceRequestWaitlistProvider(null));
+            _absenceRequestWaitlistProcessor = new AbsenceRequestWaitlistProcessor(null, () => new FakeSchedulingResultStateHolder(), new AbsenceRequestWaitlistProvider(null));
             _workflowControlSetRepository = new FakeWorkflowControlSetRepository();
 
             var target = new RunRequestWaitlistEventHandler(_unitOfWorkFactory, _absenceRequestWaitlistProcessor, _workflowControlSetRepository, sender);

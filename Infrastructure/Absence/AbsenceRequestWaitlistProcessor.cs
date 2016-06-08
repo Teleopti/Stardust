@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using log4net;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -12,22 +13,23 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AbsenceRequestWaitlistProcessor));
 
 		private readonly IAbsenceRequestUpdater _absenceRequestUpdater;
-		private readonly ISchedulingResultStateHolderProvider _schedulingResultStateHolderProvider;
+		private readonly Func<ISchedulingResultStateHolder> _scheduleResultStateHolder;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IAbsenceRequestWaitlistProvider _absenceRequestWaitlistProvider;
 
 		public AbsenceRequestWaitlistProcessor(IAbsenceRequestUpdater absenceRequestUpdater,
-			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider,
+			Func<ISchedulingResultStateHolder> scheduleResultStateHolder,
 			IAbsenceRequestWaitlistProvider absenceRequestWaitlistProvider)
 		{
 			_absenceRequestUpdater = absenceRequestUpdater;
-			_schedulingResultStateHolderProvider = schedulingResultStateHolderProvider;
+			_scheduleResultStateHolder = scheduleResultStateHolder;
+			
 			_absenceRequestWaitlistProvider = absenceRequestWaitlistProvider;
 		}
 
 		public void ProcessAbsenceRequestWaitlist(IUnitOfWork unitOfWork, DateTimePeriod period, IWorkflowControlSet workflowControlSet)
 		{
-			_schedulingResultStateHolder = _schedulingResultStateHolderProvider.GiveMeANew();
+			_schedulingResultStateHolder = _scheduleResultStateHolder();
 			var waitlistedRequestsForPeriod = _absenceRequestWaitlistProvider.GetWaitlistedRequests (period, workflowControlSet);
 			processRequests(unitOfWork, waitlistedRequestsForPeriod);
 		}
