@@ -164,13 +164,18 @@
 					buildTimeline(states);
 				}
 
+
 				function layerPercentage(seconds) {
-					var maxPercentage = (seconds / 3600 * 25);
-					return maxPercentage + '%';
+				    return percentageFromSeconds(seconds, 100);
 				}
 
 				function alarmPercentage(seconds) {
-					return percentageFromSeconds(seconds, 25);
+				    return percentageFromSeconds(seconds, 25);
+				}
+
+				function offsetPercentage(seconds) {
+				    var maxPercentage = seconds  < 0 ? 0 : (seconds / 3600 * 25);
+				    return maxPercentage + '%';
 				}
 
 				function percentageFromSeconds(seconds, max) {
@@ -178,16 +183,22 @@
 					return maxPercentage > max ? max + '%' : maxPercentage + '%';
 				}
 
-				function timeToPercent(currentTime, time) {
-					var offset = moment(currentTime).add(-1, 'hour');
-					return layerPercentage(moment(time).diff(offset, 'seconds'));
+				function timeToPercent(currentTime, time, toPercent) {
+				    var offset = moment(currentTime).add(-1, 'hour');
+				    return toPercent(moment(time).diff(offset, 'seconds'));
 				}
+
+				function offsetToPercent(currentTime, time, toPercent) {
+				    var offset = moment(currentTime).add(-1, 'hour');
+				    return toPercent(moment(time).diff(offset, 'seconds'));
+				}
+                
 
 				function buildTimeline(states) {
 					var timeline = function (time) {
 						return {
 							Time: time.format('HH:mm'),
-							Offset: timeToPercent(states.Time, time)
+							Offset: timeToPercent(states.Time, time, layerPercentage)
 						};
 					};
 
@@ -219,7 +230,7 @@
 								var lengthSeconds = moment(s.EndTime).diff(moment(s.StartTime), 'seconds');
 								return {
 									Color: s.Color,
-									Offset: timeToPercent(states.Time, s.StartTime),
+									Offset: offsetToPercent(states.Time, s.StartTime, offsetPercentage),
 									Width: layerPercentage(lengthSeconds),
 									Name: s.Name,
 									Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
