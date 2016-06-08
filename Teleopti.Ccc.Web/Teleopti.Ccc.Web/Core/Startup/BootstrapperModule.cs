@@ -1,4 +1,6 @@
 using Autofac;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -30,6 +32,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			builder.RegisterType<FindAreaRegistrations>().SingleInstance().As<IFindAreaRegistrations>();
 			builder.RegisterType<StardustServerStarter>().SingleInstance();
 			builder.RegisterType<CheckTenantConnectionstrings>().SingleInstance();
+
+			builder.RegisterType<FillSchedulerStateHolderForResourceCalculation>();
+			builder.RegisterType<CalculateForReadModel>();
 		}
 	}
 }
