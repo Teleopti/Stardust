@@ -38,6 +38,11 @@
             connectToServerAddSubscription(options);
         }
 
+        function resetPendingMessages() {
+            pendingMessage = [];
+            messageHandlingTimeout = null;
+        }
+
         function setNegotiationLocation() {
             $.connection.hub.url = '../signalr';
         }
