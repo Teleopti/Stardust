@@ -148,11 +148,15 @@
 						$scope.HasMonitorData = false;
 						return;
 					} else {
-					    $scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
+					  $scope.latestActualInterval = $filter('date')(result.LatestActualIntervalStart, 'shortTime') + ' - ' + $filter('date')(result.LatestActualIntervalEnd, 'shortTime');
 						$scope.forecastedCalls = $filter('number')(result.Summary.ForecastedCalls, 1);
 						$scope.forecastedAverageHandleTime = $filter('number')(result.Summary.ForecastedAverageHandleTime, 1);
 						$scope.offeredCalls = $filter('number')(result.Summary.OfferedCalls, 1);
 						$scope.averageHandleTime = $filter('number')(result.Summary.AverageHandleTime, 1);
+						$scope.asa = $filter('number')(result.Summary.AverageSpeedOfAnswer, 1);
+						$scope.abandonedRate = $filter('number')(result.Summary.AbandonRate, 1);
+						$scope.serviceLevel = $filter('number')(result.Summary.ServiceLevel, 1);
+
 						$scope.timeSeries = [];
 					    angular.forEach(result.DataSeries.Time, function(value, key) {
 					        this.push($filter('date')(value, 'shortTime'));
@@ -167,10 +171,11 @@
 
 						$scope.forecastActualCallsDifference = $filter('number')(result.Summary.ForecastedActualCallsDiff, 1);
 						$scope.forecastActualAverageHandleTimeDifference = $filter('number')(result.Summary.ForecastedActualHandleTimeDiff, 1);
-						
+
 						var forecastedCallsMax = Math.max.apply(Math, $scope.forecastedCallsSeries);
 						var actualCallsMax = Math.max.apply(Math, $scope.actualCallsSeries);
 						var callsMax = Math.max.apply(Math, [forecastedCallsMax, actualCallsMax]);
+						var asaMax = Math.max.apply(Math, $scope.averageSpeedOfAnswerSeries);
 
 						$scope.timeSeries.splice(0, 0, 'x');
 						$scope.currentInterval.splice(0, 0, 'Current');
@@ -184,7 +189,7 @@
 
 						$scope.HasMonitorData = true;
 						loadIntradayChart(callsMax);
-						loadPrefChart(callsMax);
+						loadPrefChart(asaMax);
 					}
 				};
 
@@ -330,10 +335,10 @@
 										Current: 'bar'
 									},
 									names: {
-										Forecasted_calls: $translate.instant('ForecastedCalls') + '<',
+										Forecasted_calls: $translate.instant('ForecastedCalls') + ' <',
 										Calls: $translate.instant('Calls') + '<',
-										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime') + '>',
-										AHT: $translate.instant('AverageHandlingTime') + '>',
+										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime') + ' >',
+										AHT: $translate.instant('AverageHandlingTime') + ' >',
 										Current:$translate.instant('latestActualInterval')
 									},
 									axes: {
@@ -382,9 +387,9 @@
 							});
 						}
 
-						var loadPrefChart = function(callsMax) {
+						var loadPrefChart = function(asaMax) {
 						    $scope.chartHiddenLines = $scope.hiddenArray;
-						    $scope.findCurrent(callsMax);
+						    $scope.findCurrent(asaMax);
 						    var intervalsList = [];
 						    for (interval = 0; interval < $scope.timeSeries.length - 1; interval += 4) {
 						        intervalsList.push(interval);
@@ -413,9 +418,9 @@
 						            },
 						            names: {
 						                Current: $translate.instant('latestActualInterval'),
-						                ASA: $translate.instant('AverageSpeedOfAnswer') + '>',
-						                Abandoned_rate: $translate.instant('AbandonedRate') + '<',
-						                Service_level: $translate.instant('ServiceLevelPercentSign') + '<'
+						                ASA: $translate.instant('AverageSpeedOfAnswer') + ' >',
+						                Abandoned_rate: $translate.instant('AbandonedRate') + ' <',
+						                Service_level: $translate.instant('ServiceLevelPercentSign') + ' <'
 						            },
 						            axes: {
 						                ASA: 'y2',
@@ -455,7 +460,7 @@
 						                    } else {
 						                        $scope.chartHiddenLines.push(id);
 						                    }
-						                    loadPrefChart(callsMax);
+						                    loadPrefChart(asaMax);
 						                }
 						            }
 						        }

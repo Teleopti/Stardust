@@ -121,56 +121,94 @@
 			<div class="wfm-slide-tabs tabbed-panel">
 				<md-content class="md-padding">
 					<md-tabs md-dynamic-height md-border-bottom >
-					    <md-tab label="{{'IncomingTraffic'|translate}}" ng-click="resizeChart()">
-					        <md-content class="md-padding">
-					            <div class="con-row">
-					                <div class="con-flex">
-					                    <div class="wfm-chart intraday-chart" id="intradayChart"></div>
-					                </div>
-					            </div>
-                                <h3 class="full-padding">{{'SummaryUpToLatestActualInterval'|translate}}</h3>
+						<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="resizeChart()">
+							<md-content class="md-padding">
+								<div class="con-row">
+									<div class="con-flex">
+										<div class="wfm-chart intraday-chart" id="intradayChart"></div>
+									</div>
+								</div>
 
-					            <div class="con-row">
-					                <div class="con-flex">
-					                    <table class="wfm-table wfm-filter-options">
-					                        <thead>
-					                        <tr>
-					                            <th></th>
-					                            <th>{{'Forecasted'|translate}}</th>
-					                            <th>{{'Actual'|translate}}</th>
-					                            <th>{{'Difference'|translate}}</th>
-					                        </tr>
-					                        </thead>
-					                        <tbody>
-					                        <tr>
-					                            <td>{{'Calls'|translate}}</td>
-					                            <td class="number-cell">{{forecastedCalls}}</td>
-					                            <td class="number-cell">{{offeredCalls}}</td>
-					                            <td class="number-cell">{{forecastActualCallsDifference}}%</td>
-					                        </tr>
-					                        <tr>
-					                            <td>{{'AverageHandlingTime'|translate}}</td>
-					                            <td class="number-cell">{{forecastedAverageHandleTime}}</td>
-					                            <td class="number-cell">{{averageHandleTime}}</td>
-					                            <td class="number-cell">{{forecastActualAverageHandleTimeDifference}}%</td>
-					                        </tr>
-					                        </tbody>
-					                    </table>
-					                </div>
-					                <div class="con-flex"></div>
-					                <div class="con-flex"></div>
-					            </div>
-					        </md-content>
-					    </md-tab>
-					    <md-tab label="Performance" ng-click="resizeChart()">
-					        <md-content class="md-padding">
-					            <div class="con-row">
-					                <div class="con-flex">
-					                    <div class="wfm-chart intraday-chart" id="perfChart"></div>
-					                </div>
-					            </div>
-					        </md-content>
-					    </md-tab>
+								<div class="con-row">
+									<div class="con-flex">
+										<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
+									</div>
+								</div>
+								<div class="con-row full-padding">
+									<div class="con-flex">
+										<table class="wfm-table wfm-filter-options">
+											<thead>
+												<tr>
+													<th></th>
+													<th>{{'Forecasted'|translate}}</th>
+													<th>{{'Actual'|translate}}</th>
+													<th>{{'Difference'|translate}}</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>{{'Calls'|translate}}</td>
+													<td class="number-cell">{{forecastedCalls}}</td>
+													<td class="number-cell">{{offeredCalls}}</td>
+													<td class="number-cell">{{forecastActualCallsDifference}}%</td>
+												</tr>
+												<tr>
+													<td>{{'AverageHandlingTime'|translate}}</td>
+													<td class="number-cell">{{forecastedAverageHandleTime}}</td>
+													<td class="number-cell">{{averageHandleTime}}</td>
+													<td class="number-cell">{{forecastActualAverageHandleTimeDifference}}%</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="con-flex"></div>
+									<div class="con-flex"></div>
+								</div>
+							</md-content>
+						</md-tab>
+						<md-tab label="Performance" ng-click="resizeChart()">
+							<md-content class="md-padding">
+								<div class="con-row">
+									<div class="con-flex">
+										<div class="wfm-chart intraday-chart" id="perfChart"></div>
+									</div>
+								</div>
+
+								<div class="con-row">
+									<div class="con-flex">
+										<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
+									</div>
+								</div>
+								<div class="con-row full-padding">
+									<div class="con-flex">
+										<table class="wfm-table wfm-filter-options">
+											<thead>
+												<tr>
+													<th></th>
+													<th>{{'Actual'|translate}}</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td>{{'AverageSpeedOfAnswer'|translate}}</td>
+													<td class="number-cell">{{asa}} {{'SecondShort'|translate}}</td>
+												</tr>
+												<tr>
+													<td>{{'AbandonedRate'|translate}}</td>
+													<td class="number-cell">{{abandonedRate}} %</td>
+												</tr>
+												<tr>
+													<td>{{'ServiceLevelPercentSign'|translate}}</td>
+													<td class="number-cell">{{serviceLevel}} %</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									<div class="con-flex"></div>
+									<div class="con-flex"></div>
+								</div>
+							</md-content>
+						</md-tab>
 					</md-tabs>
 				</md-content>
 			</div>
@@ -178,7 +216,7 @@
 	</div>
 </div>
 
-<div class="con-row" ng-cloak ng-if="!HasMonitorData">
+<div class="con-row" ng-cloak ng-show="!HasMonitorData">
 	<div class="con-flex">
 		<div class="panel full-padding material-depth-1">
 			<i class="mdi mdi-alert"></i> <span class="text-warning">{{selectedItem.Name}} {{'NoDataAvailable'|translate}}</span>

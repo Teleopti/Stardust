@@ -214,7 +214,7 @@ describe('IntradayAreaCtrl', function () {
 		expect(scope.latestActualInterval).toEqual('--:--');
 	});
 
-    it('should find max value of data series to apply to latest actual data chart bar', function() {
+    xit('should find max value of data series to apply to latest actual data chart bar', function() {
         createController(false);
 
         monitorData.DataSeries.Time = [
