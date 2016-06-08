@@ -425,5 +425,34 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
             viewModel.Summary.AbandonRate.Should().Be.EqualTo(-99);
         }
+
+        [Test]
+        public void ShouldFillAverageSpeedOfAnswerWithNullValueIfNoSpeedOfAnswer()
+        {
+            var thirdInterval = new IncomingIntervalModel()
+            {
+                IntervalId = 34,
+                ForecastedCalls = 12,
+                ForecastedHandleTime = 140,
+                OfferedCalls = 12,
+                HandleTime = 200
+            };
+            _secondInterval.AbandonedCalls = null;
+            _secondInterval.SpeedOfAnswer = null;
+            _secondInterval.AnsweredCallsWithinSL = null;
+            IntradayMonitorDataLoader.AddInterval(_firstInterval);
+            IntradayMonitorDataLoader.AddInterval(_secondInterval);
+            IntradayMonitorDataLoader.AddInterval(thirdInterval);
+            IntervalLengthFetcher.Has(minutesPerInterval);
+
+            var viewModel = Target.Load(new[] { Guid.NewGuid() });
+
+            viewModel.DataSeries.AverageSpeedOfAnswer.Length.Should().Be.EqualTo(3);
+            viewModel.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(3);
+            viewModel.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(3);
+            viewModel.DataSeries.AverageSpeedOfAnswer[1].Should().Be.EqualTo(null);
+            viewModel.DataSeries.AbandonedRate[1].Should().Be.EqualTo(null);
+            viewModel.DataSeries.ServiceLevel[1].Should().Be.EqualTo(null);
+        }
     }
 }

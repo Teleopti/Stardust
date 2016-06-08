@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 				if (interval.OfferedCalls.HasValue)
 					latestQueueStatsIntervalId = interval.IntervalId;
-			    averageSpeedOfAnswer.Add(interval.SpeedOfAnswer/interval.AnsweredCalls);
-                abandonedRate.Add(interval.AbandonedRate);
-                serviceLevel.Add(interval.ServiceLevel);
+			    averageSpeedOfAnswer.Add(interval.SpeedOfAnswer.HasValue ? interval.SpeedOfAnswer/interval.AnsweredCalls : null);
+                abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate : null);
+                serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? interval.ServiceLevel : null);
 
 			}
 
