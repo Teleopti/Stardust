@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Adheren
 				Nightshift = true
 			});
 
-			Persister.Get("2016-06-08".Date(), personId).Nightshift.Should().Be(true);
+			Persister.Get("2016-06-08".Date(), personId).NightShift.Should().Be(true);
 		}
 	}
 }
