@@ -332,7 +332,7 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].Shift.length).toEqual(1);
 	});
 
-	it('should cut activities that are larger than display window', function () {
+	xit('should cut activities that are larger than display window', function () {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend
 			.withTime("2016-05-30T11:00:00")
