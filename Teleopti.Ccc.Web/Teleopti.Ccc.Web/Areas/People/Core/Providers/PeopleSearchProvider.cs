@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
 			int pageSize, int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
-			var personIdList = getPermittedPersonIdList(criteriaDictionary,pageSize, currentPageIndex, currentDate,
+			var personIdList = getPermittedPersonIdList(criteriaDictionary, 9999, 1, currentDate,
 				sortedColumns, function);
 
-			return searchPermittedPeopleSummary(personIdList, pageSize);
+			return searchPermittedPeopleSummary(personIdList, pageSize, currentPageIndex);
 		}
 
 		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -108,11 +108,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			return permittedPersonList.Select(x => x.PersonId);
 		}
 
-		private PeopleSummaryModel searchPermittedPeopleSummary(IEnumerable<Guid> personIds, int pageSize)
+		private PeopleSummaryModel searchPermittedPeopleSummary(IEnumerable<Guid> personIds, int pageSize, int currentPageIndex)
 		{
 			var optionalColumnCollection = _optionalColumnRepository.GetOptionalColumns<Person>();
 			var peopleList = _personRepository.FindPeople(personIds).ToList();
-			var totalPages = peopleList.Count == 0 ? 0 : peopleList.Count / pageSize + 1;
+			var totalCount = peopleList.Count;
+			var totalPages = totalCount / pageSize;
+			if (totalCount % pageSize > 0)
+			{
+				totalPages++;
+			}
+			peopleList = peopleList.Skip((currentPageIndex - 1) * pageSize).Take(pageSize).ToList();
 
 			return new PeopleSummaryModel
 			{

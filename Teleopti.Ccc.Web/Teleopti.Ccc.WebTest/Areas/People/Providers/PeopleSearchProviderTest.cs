@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.People.Core.Providers;
 using Teleopti.Interfaces.Domain;
@@ -156,6 +157,57 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				DefinedRaptorApplicationFunctionPaths.WebPeople);
 			var result = target.SearchPermittedPeopleWithAbsence(permittedPeople, DateOnly.MaxValue);
 			result.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldSearchPermittedPeopleReturnMoreThan2Pages()
+		{
+			personRepository = new FakePersonRepository();
+			target = new PeopleSearchProvider(searchRepository, personRepository,
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser);
+
+			var searchCriteria = new Dictionary<PersonFinderField, string>
+			{
+				{
+					PersonFinderField.Role, "Agent"
+				}
+			};
+
+			var people = new List<IPerson>();
+
+			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
+			{
+				var a = c.DisplayRows.Count;
+				c.TotalRows = 500;
+				for (var i = 1; i <= c.TotalRows; i++)
+				{
+					var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today);
+					person.SetId(Guid.NewGuid());
+					person.Name = new Name(string.Format("Agent{0:000}", i), string.Format("Andeen{0:000}", i));
+					person.EmploymentNumber = i.ToString("0000");
+					personRepository.Add(person);
+
+					var personFinderDisplayRow = new PersonFinderDisplayRow
+					{
+						FirstName = person.Name.FirstName,
+						LastName = person.Name.LastName,
+						EmploymentNumber = person.EmploymentNumber,
+						PersonId = person.Id.GetValueOrDefault(),
+						RowNumber = i
+					};
+
+					c.SetRow(i, personFinderDisplayRow);
+
+					permissionProvider.Stub(
+						x => x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebPeople, DateOnly.Today,
+							personFinderDisplayRow)).Return(true);
+				}
+				return true;
+			}));
+
+
+			var result = target.SearchPermittedPeopleSummary(searchCriteria, 20, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
+			result.TotalPages.Should().Be.GreaterThan(2);
 		}
 
 		private IPersonAbsence createPersonAbsence(DateTimePeriod dateTimePeriod)
