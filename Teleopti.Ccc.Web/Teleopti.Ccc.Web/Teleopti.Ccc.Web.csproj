@@ -1653,6 +1653,7 @@
     <EmbeddedResource Include="tzdb2016c.nzd" />
     <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />
+    <Content Include="WFM\css\reports.scss" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />

@@ -1,15 +1,15 @@
-﻿<div id="reports" style="max-width: 100em;">
+﻿<div id="reports" class="wfm-reports">
 	<div class="view-header">
 		<div class="view-title">
 			<h1><i class="mdi mdi-chart-bar"></i> <span translate>Reports</span></h1>
 		</div>
 	</div>
-	<div style="padding: 1em;">
+	<div class="report-filter">
 		<label for="report-query" class="input-prepend"><i class="mdi mdi-filter-outline"><md-tooltip >{{'FilterReports'|translate}}</md-tooltip></i></label>
 		<input type="text" id="report-query" ng-model="reports.query" placeholder="{{'FilterReports'|translate}}..."/>
 	</div>
-	<div style="display: flex; flex-wrap: wrap;">
-		<md-card md-theme="default" md-theme-watch ng-repeat="report in reports.reports | filter:reports.query" style="display: flex; flex-shrink: 1; flex-basis: 30%;">
+	<div class="report-list">
+		<md-card md-theme="default" md-theme-watch ng-repeat="report in reports.reports | filter:reports.query" class="report-item">
 			<md-card-title>
 				<md-card-title-text>
 					<a ng-href="{{report.Url}}" target="_blank"><span>{{report.Name}}</span></a>

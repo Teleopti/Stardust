@@ -1,0 +1,19 @@
+﻿.wfm-reports{
+	max-width: 100em;
+
+	.report-filter{
+		padding: 1em;
+	}
+
+	.report-list{
+		display: flex;
+		flex-wrap: wrap;
+
+
+		.report-item{
+			display: flex; 
+			flex-shrink: 1; 
+			flex-basis: 30%;
+		}
+	}
+}
