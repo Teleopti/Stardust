@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			    var talkTime = calculatedHandleTime * new decimal(0.9);
 			    var acw = calculatedHandleTime * new decimal(0.1);
 			    var offeredCalls = (decimal) Math.Round(
-			        interval.Calls +
+			        (interval.Calls + 1) +
 			        algorithmProperties.CallsConstant*index*(1 - ((double) index/algorithmProperties.IntervalCount)),
 			        0);
 			    var answeredCalls = Math.Round((offeredCalls * new Random().Next(75, 100)) / 100, 0);
