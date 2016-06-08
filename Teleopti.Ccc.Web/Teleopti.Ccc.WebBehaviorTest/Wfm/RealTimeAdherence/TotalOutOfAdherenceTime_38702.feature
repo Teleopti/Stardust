@@ -12,12 +12,12 @@ Background:
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
-	 | Start Date | 2016-05-19 |
+	 | Start Date | 2016-06-08 |
 	And Pierre Baldi has a shift with
 	| Field                    | Value            |
 	| Activity                 | Phone            |
-	| Start time               | 2016-05-20 08:00 |
-	| End time                 | 2016-05-20 17:00 |
+	| Start time               | 2016-06-08 08:00 |
+	| End time                 | 2016-06-08 17:00 |
 	And there is a rule with 
 	| Field           | Value        |
 	| Activity        | Phone        |
@@ -28,9 +28,9 @@ Background:
 
 @OnlyRunIfEnabled('RTA_TotalOutOfAdherenceTime_38702')
 Scenario: See total time out of adherence
-	Given the time is '2016-05-19 09:00:00'
+	Given the time is '2016-06-08 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
-	Given the time is '2016-05-20 09:10:00'
+	Given the time is '2016-06-08 09:10:00'
 	When I view real time adherence for all agents on team 'Red'
 	Then I should see agent status
 	| Field      | Value        |
