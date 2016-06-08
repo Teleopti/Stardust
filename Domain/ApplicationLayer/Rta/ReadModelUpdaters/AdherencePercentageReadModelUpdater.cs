@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 					Timestamp = @event.ShiftStartTime,
 					ShiftStarted = true
 				},
-				m => { });
+				m => { m.Nightshift = @event.Nightshift; });
 		}
 
 		[ReadModelUnitOfWork]
