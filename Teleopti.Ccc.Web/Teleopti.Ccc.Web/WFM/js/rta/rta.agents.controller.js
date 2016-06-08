@@ -249,6 +249,7 @@
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
+								TimeInRule: state.TimeInRule,
 								AlarmWidth: alarmPercentage(state.TimeInAlarm),
 								Shift: shift
 							});

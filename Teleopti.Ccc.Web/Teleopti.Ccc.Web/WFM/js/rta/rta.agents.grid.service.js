@@ -44,9 +44,9 @@
 						headerCellTemplate = '<div></div>';
 					}
 				}
-				var timeInStateTemplate = "";
+				var timeInRuleTemplate = "";
 				if (toggleService.RTA_TotalOutOfAdherenceTime_38702) {
-					timeInStateTemplate = '<div ng-class="{ exceedthreshold : row.entity.TimeInState > grid.appScope.threshold }" class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
+					timeInRuleTemplate = '<div class="ui-grid-cell-contents">{{grid.appScope.formatDuration(COL_FIELD)}}</div>';
 				}
 
 				var rowTemplate = 'js/rta/rta-agents-rowtemplate.html';
@@ -117,12 +117,12 @@
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
 
-				var timeInAlarm2 = {
-					displayName: 'TimeInAlarm',
-					field: 'TimeInState',
+				var timeInRule = {
+					displayName: 'TimeInRule',
+					field: 'TimeInRule',
 					enableColumnMenu: false,
 					headerCellTemplate: headerCellTemplate,
-					cellTemplate: timeInStateTemplate,
+					cellTemplate: timeInRuleTemplate,
 					headerCellFilter: 'translate',
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
@@ -150,7 +150,7 @@
 					columnDefs.push(team);
 					columnDefs.push(shift);
 					columnDefs.push(alarm);
-					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInAlarm2 : timeInAlarm);
+					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInRule : timeInAlarm);
 					columnDefs.push(state);
 				} else {
 					columnDefs.push(name);
@@ -159,7 +159,7 @@
 					columnDefs.push(activity);
 					columnDefs.push(nextActivity);
 					columnDefs.push(alarm);
-					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInAlarm2 : timeInAlarm);
+					columnDefs.push(toggleService.RTA_TotalOutOfAdherenceTime_38702 ? timeInRule : timeInAlarm);
 				}
 
 				return {

@@ -1414,6 +1414,7 @@
     <Content Include="WFM\js\rta\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.inalarm.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.alarmcontext.spec.js" />
+    <Content Include="WFM\js\rta\rta.agents.controller.RTA_TotalOutOfAdherenceTime_38702.spec.js" />
     <Content Include="WFM\js\rta\rta.controller.fortest.js" />
     <Content Include="WFM\js\rta\rta.backend.fake.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.spec.js" />
