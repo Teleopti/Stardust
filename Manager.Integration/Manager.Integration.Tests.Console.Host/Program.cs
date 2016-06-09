@@ -424,17 +424,14 @@ namespace Manager.IntegrationTest.Console.Host
 			var configName = nodeName + ".config";
 
 			var portNumber = PortStartNumber + (i - 1);
-
-			var endPointUri =
-				new Uri(Settings.Default.NodeEndpointUriTemplate.Replace("PORTNUMBER",
-				                                                         portNumber.ToString()));
+			
 			var pingToManagerSeconds = Settings.Default.PingToManagerSeconds;
 
 			var copiedConfigurationFile =
 				CreateNodeConfigurationFile(NodeConfigurationFile,
 				                            configName,
 				                            nodeName,
-				                            endPointUri,
+				                            portNumber.ToString(),
 				                            pingToManagerSeconds,
 				                            Settings.Default.HandlerAssembly);
 
@@ -491,7 +488,7 @@ namespace Manager.IntegrationTest.Console.Host
 		public static FileInfo CreateNodeConfigurationFile(FileInfo nodeConfigurationFile,
 		                                                   string newConfigurationFileName,
 		                                                   string nodeName,
-		                                                   Uri nodeEndPoint,
+		                                                   string port,
 		                                                   int pingToManagerSeconds,
 		                                                   string handlerAssembly)
 		{
@@ -511,7 +508,7 @@ namespace Manager.IntegrationTest.Console.Host
 				                                                ConfigurationUserLevel.None);
 
 			nodeConfig.AppSettings.Settings["NodeName"].Value = nodeName;
-			nodeConfig.AppSettings.Settings["BaseAddress"].Value = nodeEndPoint.ToString();
+			nodeConfig.AppSettings.Settings["Port"].Value = port;
 			nodeConfig.AppSettings.Settings["ManagerLocation"].Value = Settings.Default.ManagerLocationUri;
 			nodeConfig.AppSettings.Settings["HandlerAssembly"].Value = handlerAssembly;
 			nodeConfig.AppSettings.Settings["PingToManagerSeconds"].Value = pingToManagerSeconds.ToString();

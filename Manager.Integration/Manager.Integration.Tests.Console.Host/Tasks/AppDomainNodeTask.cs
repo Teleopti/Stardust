@@ -2,8 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using log4net;
-using Manager.IntegrationTest.Console.Host.Helpers;
 using Manager.IntegrationTest.Console.Host.Interfaces;
 using Manager.IntegrationTest.Console.Host.Log4Net;
 
