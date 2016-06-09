@@ -204,5 +204,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return Get(id);
 		}
+
+		public ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
