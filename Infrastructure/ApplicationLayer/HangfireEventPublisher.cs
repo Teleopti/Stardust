@@ -120,6 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			return _client.GetRecurringJobIds()
 				.Select(x => x.Substring(0, x.IndexOf(":::")))
+				.Where(x => !string.IsNullOrEmpty(x))
 				.Distinct();
 		}
 
@@ -134,7 +135,9 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public void StopPublishingAll()
 		{
-			_client.GetRecurringJobIds().ForEach(x => _client.RemoveIfExists(x));
+			_client.GetRecurringJobIds()
+				.Where(x => !x.StartsWith(":::"))
+				.ForEach(x => _client.RemoveIfExists(x));
 		}
 	}
 }
