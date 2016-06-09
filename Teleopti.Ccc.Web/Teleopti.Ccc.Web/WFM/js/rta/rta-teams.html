@@ -19,7 +19,7 @@
 				<div class="con-row demo-outline">
 								<div class="con-flex">
 												<div class="card-group">
-																<div class="wfm-card team rta-info-card" ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67, 'rta-small-card': teams.length > 10}" ng-repeat="team in teams">
+																<div class="wfm-card team rta-info-card" ng-if="team.NumberOfAgents > 0" ng-class="{good: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 33, warning: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 34 && getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) <= 66, danger: getAdherencePercent(team.OutOfAdherence, team.NumberOfAgents) >= 67, 'rta-small-card': teams.length > 10}" ng-repeat="team in teams">
 																				<div class="wfm-checkbox">
 																								<label ng-attr-name="{{team.Name}}" style="width: 20px; height: 20px; display:block !important;">
 																												<input name="checkbox" ng-checked="selectedTeams.indexOf(team.Id) > -1" ng-click="toggleSelection(team.Id)" ng-model="selected" type="checkbox" value="value">
