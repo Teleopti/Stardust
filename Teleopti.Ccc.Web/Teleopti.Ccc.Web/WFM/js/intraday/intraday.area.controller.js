@@ -335,10 +335,10 @@
 										Current: 'bar'
 									},
 									names: {
-										Forecasted_calls: $translate.instant('ForecastedCalls') + ' <',
-										Calls: $translate.instant('Calls') + '<',
-										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime') + ' >',
-										AHT: $translate.instant('AverageHandlingTime') + ' >',
+										Forecasted_calls: $translate.instant('ForecastedCalls') + ' ←',
+										Calls: $translate.instant('Calls') + ' ←',
+										Forecasted_AHT: $translate.instant('ForecastedAverageHandleTime') + ' →',
+										AHT: $translate.instant('AverageHandlingTime') + ' →',
 										Current:$translate.instant('latestActualInterval')
 									},
 									axes: {
@@ -418,9 +418,9 @@
 										Current: 'bar'
 									},
 									names: {
-										Service_level: $translate.instant('ServiceLevelPercentSign') + ' <',
-										Abandoned_rate: $translate.instant('AbandonedRate') + ' <',
-										ASA: $translate.instant('AverageSpeedOfAnswer') + ' >',
+										Service_level: $translate.instant('ServiceLevelPercentSign') + ' ←',
+										Abandoned_rate: $translate.instant('AbandonedRate') + ' ←',
+										ASA: $translate.instant('AverageSpeedOfAnswer') + '→',
 										Current: $translate.instant('latestActualInterval')
 
 									},
