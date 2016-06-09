@@ -4,8 +4,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
-	public static class SkillStaffPeriodDictionaryExtensions
+	public static class SkillStaffPeriodExtensions
 	{
+		public static double ResourceLoggonOnDiff(this ISkillStaffPeriod skillStaffPeriod)
+		{
+			return skillStaffPeriod.CalculatedResource - skillStaffPeriod.CalculatedLoggedOn;
+		}
+
 		public static ISkillStaffPeriod SkillStaffPeriodOrDefault(this ISkillStaffPeriodDictionary skillStaffPeriodDictionary, DateTimePeriod period, int absoluteDiffIfNoSkillStaffPeriod)
 		{
 			ISkillStaffPeriod skillStaffPeriod;
