@@ -15,26 +15,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly ISiteRepository _siteRepository;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 		private readonly ICurrentAuthorization _authorization;
+		private readonly IUserCulture _culture;
 
 		public SiteViewModelBuilder(
 			INow now, 
 			ISiteRepository siteRepository, 
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
-			ICurrentAuthorization authorization)
+			ICurrentAuthorization authorization,
+			IUserCulture culture)
 		{
 			_now = now;
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
 			_authorization = authorization;
+			_culture = culture;
 		}
 
 		public IEnumerable<SiteViewModel> Build()
 		{
-			var sites = _siteRepository.LoadAllOrderByName()
-				.Where(s =>
-					_authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(), s)
-				)
-				.ToArray();
+			var sites = _siteRepository.LoadAll()
+				.Where(s => _authorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(), s))
+				.OrderBy(x => x.Description.Name, StringComparer.Create(_culture.GetCulture(), false));
 
 			IDictionary<Guid, int> numberOfAgents = new Dictionary<Guid, int>();
 			if (sites.Any())
