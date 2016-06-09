@@ -16,11 +16,7 @@ namespace NodeTest
 		[SetUp]
 		public void SetUp()
 		{
-			var nodeConfiguration = new NodeConfiguration(new Uri("http://localhost:5000"),
-			                                              new Uri("http://localhost:5000"),
-			                                              Assembly.Load("NodeTest.JobHandlers"),
-			                                              "test",
-			                                              1);
+			var nodeConfiguration = new NodeConfiguration();
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new NodeModule(nodeConfiguration));

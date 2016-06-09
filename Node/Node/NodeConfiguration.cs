@@ -1,22 +1,21 @@
 ﻿using System;
+using System.Configuration;
+using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 
 namespace Stardust.Node
 {
 	public class NodeConfiguration
 	{
-		public NodeConfiguration(Uri baseAddress,
-		                         Uri managerLocation,
-		                         Assembly handlerAssembly,
-		                         string nodeName,
-		                         double pingToManagerSeconds)
+		public NodeConfiguration()
 		{
-
-			BaseAddress = baseAddress;
-			ManagerLocation = managerLocation;
-			HandlerAssembly = handlerAssembly;
-			NodeName = nodeName;
-			PingToManagerSeconds = pingToManagerSeconds;
+			BaseAddress = new Uri(CreateBaseAddress());
+			ManagerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
+			HandlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
+			NodeName = ConfigurationManager.AppSettings["NodeName"];
+			PingToManagerSeconds = int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]);
+			
 			ValidateParameters();
 		}
 
@@ -48,6 +47,30 @@ namespace Stardust.Node
 			{
 				throw new ArgumentNullException("pingToManagerSeconds");
 			}
+		}
+
+		private string GetIPAddress()
+		{
+			string localIp = "?";
+			IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+			foreach (IPAddress ip in host.AddressList)
+			{
+				if (ip.AddressFamily == AddressFamily.InterNetwork)
+				{
+					localIp = ip.ToString();
+				}
+			}
+			return localIp;
+		}
+
+
+		private string CreateBaseAddress()
+		{
+			string baseAddress = ConfigurationManager.AppSettings["BaseAddress"];
+			if (string.IsNullOrEmpty(baseAddress))
+			{
+			}
+			return baseAddress;
 		}
 	}
 }

@@ -67,22 +67,14 @@ namespace NodeConsoleHost
 
 			SetConsoleCtrlHandler(ConsoleCtrlCheck,
 			                      true);
-
-			var nodeName = ConfigurationManager.AppSettings["NodeName"];
-			var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
-
-			WhoAmI = "[NODE CONSOLE HOST ( " + nodeName + ", " + baseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
-
-			Logger.InfoWithLineNumber(WhoAmI + " : started.");
-
+			
 			AppDomain.CurrentDomain.DomainUnload += CurrentDomain_DomainUnload;
 			AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
 
-			var nodeConfig = new NodeConfiguration(baseAddress,
-			                                       new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-			                                       Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]),
-												   nodeName,
-			                                       int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]));
+			var nodeConfig = new NodeConfiguration();
+
+			WhoAmI = "[NODE CONSOLE HOST ( " + nodeConfig.NodeName + ", " + nodeConfig.BaseAddress + " ), " + Environment.MachineName.ToUpper() + "]";
+			Logger.InfoWithLineNumber(WhoAmI + " : started.");
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new WorkerModule());

@@ -21,21 +21,7 @@ namespace NodeTest.Timers
 		[TestFixtureSetUp]
 		public void TestFixtureSetup()
 		{
-			var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
-
-			var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
-
-			var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
-
-			var nodeName = ConfigurationManager.AppSettings["NodeName"];
-
-			_nodeConfiguration = new NodeConfiguration(baseAddress,
-			                                           managerLocation,
-			                                           handlerAssembly,
-			                                           nodeName,
-			                                           pingToManagerSeconds: 10);
-
-
+			_nodeConfiguration = new NodeConfiguration();
 			_httpSenderFake = new FakeHttpSender();
 		}
 

@@ -8,7 +8,6 @@ using log4net;
 using Microsoft.Owin.Hosting;
 using Owin;
 using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
 
 namespace Stardust.Node
 {
@@ -36,10 +35,8 @@ namespace Stardust.Node
 			{
 				throw new ArgumentNullException("container");
 			}
-
-			var nodeAddress = nodeConfiguration.BaseAddress.Scheme +
-			                  "://+:" +
-			                  nodeConfiguration.BaseAddress.Port + "/";
+			
+			var nodeAddress = "http://+:" + nodeConfiguration.BaseAddress.Port + "/";
 
 			using (WebApp.Start(nodeAddress,
 			                    appBuilder =>
@@ -64,7 +61,7 @@ namespace Stardust.Node
 			                    }))
 
 			{
-				WhoAmI = nodeConfiguration.CreateWhoIAm(Environment.MachineName);
+				WhoAmI = nodeConfiguration.CreateWhoIAm(nodeConfiguration.BaseAddress.LocalPath);
 
 				_logger.InfoWithLineNumber(WhoAmI + ": Node started on machine.");
 

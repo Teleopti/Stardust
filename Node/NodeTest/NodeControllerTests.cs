@@ -62,22 +62,7 @@ namespace NodeTest
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
-			var baseAddress = new Uri(ConfigurationManager.AppSettings["BaseAddress"]);
-
-			var managerLocation = new Uri(ConfigurationManager.AppSettings["ManagerLocation"]);
-
-			var handlerAssembly = Assembly.Load(ConfigurationManager.AppSettings["HandlerAssembly"]);
-
-			var nodeName = ConfigurationManager.AppSettings["NodeName"];
-
-			var pingToManagerSeconds =
-				Convert.ToDouble(ConfigurationManager.AppSettings["PingToManagerSeconds"]);
-
-			_nodeConfigurationFake = new NodeConfiguration(baseAddress,
-			                                                   managerLocation,
-			                                                   handlerAssembly,
-			                                                   nodeName,
-			                                                   pingToManagerSeconds);
+			_nodeConfigurationFake = new NodeConfiguration();
 		}
 
 		private NodeConfiguration _nodeConfigurationFake;

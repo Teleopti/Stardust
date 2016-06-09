@@ -13,16 +13,13 @@ namespace NodeTest
 		[TestFixtureSetUp]
 		public void TestFixtureSetUp()
 		{
-			UriToTest = new Uri("http://localhost:9000/jobmanager/");
+			NodeConfiguration = new NodeConfiguration();
 
-			NodeConfiguration = new NodeConfiguration(new Uri("http://localhost:9050/"),
-			                                          UriToTest,
-			                                          Assembly.Load("NodeTest.JobHandlers"),
-			                                          "test",
-			                                          1);
+			UriToTest = NodeConfiguration.ManagerLocation;
+
 			Guid = Guid.NewGuid();
-			HeartBeatTemplateUri = new Uri(UriToTest,
-			                               ManagerRouteConstants.Heartbeat);
+
+			HeartBeatTemplateUri = new Uri(UriToTest, ManagerRouteConstants.Heartbeat);
 
 			NodeHasBeenInitializedTemplateUri = new Uri(UriToTest, ManagerRouteConstants.NodeHasBeenInitialized);
 
@@ -95,61 +92,6 @@ namespace NodeTest
 		{
 			var uri = NodeConfiguration.GetManagerNodeHasBeenInitializedUri();
 			Assert.IsTrue(uri == NodeHasBeenInitializedTemplateUri);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowExceptionWhenBaseAddressIsNull()
-		{
-			new NodeConfiguration(null,
-			                      new Uri("http://localhost:5000"),
-			                      Assembly.Load("NodeTest.JobHandlers"),
-			                      "test",
-			                      1);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowExceptionWhenHandlerAssemblyIsNull()
-		{
-			new NodeConfiguration(new Uri("http://localhost:5000"),
-			                      new Uri("http://localhost:5000"),
-			                      null,
-			                      "test",
-			                      1);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowExceptionWhenManagerLocationIsNull()
-		{
-			new NodeConfiguration(new Uri("http://localhost:5000"),
-			                      null,
-			                      Assembly.Load("NodeTest.JobHandlers"),
-			                      "test",
-			                      1);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowExceptionWhenNodeNameIsNull()
-		{
-			new NodeConfiguration(new Uri("http://localhost:5000"),
-			                      new Uri("http://localhost:5000"),
-			                      Assembly.Load("NodeTest.JobHandlers"),
-			                      null,
-			                      1);
-		}
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void ShouldThrowExceptionWhenPingToManagerSecondsIsZero()
-		{
-			new NodeConfiguration(new Uri("http://localhost:5000"),
-			                      new Uri("http://localhost:5000"),
-			                      Assembly.Load("NodeTest.JobHandlers"),
-			                      "test",
-			                      0);
 		}
 	}
 }
