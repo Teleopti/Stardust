@@ -26,7 +26,6 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -156,7 +155,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 		private void fakePrincipal(ISystem system)
 		{
-			var context = new FakeThreadPrincipalContext();
+			var context = QueryAllAttributes<ShareLogonOnThreadsAttribute>().Any() ? 
+				(IThreadPrincipalContext) new FakePrincipalContext() : 
+				new FakeThreadPrincipalContext();
+
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
 			{

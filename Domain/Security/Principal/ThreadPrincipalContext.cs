@@ -8,6 +8,21 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 	{
 	}
 
+	public class FakePrincipalContext : IThreadPrincipalContext
+	{
+		private ITeleoptiPrincipal _principal;
+
+		public void SetCurrentPrincipal(ITeleoptiPrincipal principal)
+		{
+			_principal = principal;
+		}
+
+		public ITeleoptiPrincipal Current()
+		{
+			return _principal;
+		}
+	}
+
 	public class FakeThreadPrincipalContext : IThreadPrincipalContext
 	{
 		private readonly ThreadLocal<ITeleoptiPrincipal> _principal = new ThreadLocal<ITeleoptiPrincipal>();

@@ -281,6 +281,7 @@
     <Compile Include="IoC\SystemImpl.cs" />
     <Compile Include="IoC\TestDoubles.cs" />
     <Compile Include="IoC\UseEventPublisherAttribute.cs" />
+    <Compile Include="IoC\ShareLogonOnThreadsAttribute.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherenceDetailsReadModelPersister.cs" />
