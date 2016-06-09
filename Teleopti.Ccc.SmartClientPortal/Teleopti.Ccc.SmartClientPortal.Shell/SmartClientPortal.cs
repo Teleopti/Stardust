@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		{
 			if (!wfmWebControl.Enabled) return;
 			cnt ++;
-			if (cnt < 60) return;
+			if (cnt < 300) return;
 			cnt = 0;
 			JSObject window = wfmWebView.GetDOMWindow();
 			if (wfmWebView.CanEvalScript)

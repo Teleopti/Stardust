@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.Win.Main
 	{
 		private readonly LogonModel _model;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(LoginWebView));
-		private int _restartLogonWhenEoBrowserErrorsCount; //used to control max retries of logon during EO browser errors
 
 		public LoginWebView(LogonModel model)
 		{
@@ -26,23 +25,11 @@ namespace Teleopti.Ccc.Win.Main
 			labelVersion.Text = string.Concat("Version ", Application.ProductVersion);
 			webView1.CertificateError += handlingCertificateErrors;
 			EO.Base.Runtime.Exception += handlingRuntimeErrors;
-			_restartLogonWhenEoBrowserErrorsCount = 0;
 		}
 
 		private void handlingRuntimeErrors(object sender, ExceptionEventArgs e)
 		{
 			_logger.Error("Error in the EO browser", e.ErrorException);
-			_logger.Info("EO Browser: Error in EO Browser starting the retry process.");
-			if (_restartLogonWhenEoBrowserErrorsCount < 5)
-			{
-				_restartLogonWhenEoBrowserErrorsCount++;
-				_logger.Info(string.Format("EO Browser: Error in EO Browser retry number {0} process.", _restartLogonWhenEoBrowserErrorsCount));
-				StartLogon();
-			}
-			else
-			{
-				_restartLogonWhenEoBrowserErrorsCount = 0;
-			}
 		}
 
 		private void handlingCertificateErrors(object sender, CertificateErrorEventArgs e)
