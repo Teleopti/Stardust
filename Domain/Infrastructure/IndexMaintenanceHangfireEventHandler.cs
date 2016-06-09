@@ -20,7 +20,11 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		[RecurringId("IndexMaintenanceHangfireEventHandler:::IndexMaintenanceHangfireEvent")]
 		public virtual void Handle(IndexMaintenanceHangfireEvent @event)
 		{
-			_eventPublisher.Publish(new IndexMaintenanceStardustEvent());
+			_eventPublisher.Publish(new IndexMaintenanceStardustEvent
+			{
+				JobName = "Index Maintenance",
+				UserName = "Index Maintenance"
+			});
 		}
 	}
 }
