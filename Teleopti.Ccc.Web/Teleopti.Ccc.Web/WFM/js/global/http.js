@@ -19,6 +19,7 @@
 
 				function reject(rejection) {
 					var NoticeService = $injector.get('NoticeService');
+					var Settings = $injector.get('Settings');
 					switch (true) {
 						case (rejection.status === 0):
 							//don't remove class test-alert - used in perf tests
@@ -33,10 +34,10 @@
 
 						case (rejection.status > 401 && rejection.status < 600):
 							//don't remove class test-alert - used in perf tests
-							NoticeService.error("<span class='test-alert'></span>" + $translate.instant('InternalErrorMessage'), null, false);
+							NoticeService.error("<span class='test-alert'></span>" + $translate.instant('InternalErrorMessage') +
+								'<a href="mailto:' + Settings.supportEmailSetting + '">' + Settings.supportEmailSetting + '</a>', null, false);
 							break;
 					}
-
 					return $q.reject(rejection);
 				}
 

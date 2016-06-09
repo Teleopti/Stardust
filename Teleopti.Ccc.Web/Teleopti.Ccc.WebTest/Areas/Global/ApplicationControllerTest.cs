@@ -1,9 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.Http.Results;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
@@ -16,7 +21,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var toggleManager = new FakeToggleManager(Toggles.Wfm_ResourcePlanner_32892);
 			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
-			var target = new ApplicationController(areaPathProvider);
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
 
 			var result = target.GetAreas();
 			result.Count().Should().Be.EqualTo(0);
@@ -27,10 +33,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			var toggleManager = new FakeToggleManager();
 			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
-			var target = new ApplicationController(areaPathProvider);
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
 
 			var result = target.GetAreas();
 			result.Any(x=>((dynamic)(x)).InternalName == "resourceplanner" ).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldGetSupportEmailSetting()
+		{
+			var setting = new StringSetting {StringValue = "test@test.fr"};
+			var toggleManager = new FakeToggleManager();
+			var areaPathProvider = new AreaWithPermissionPathProvider(new FakeNoPermissionProvider(), toggleManager, new FakeLicenseActivatorProvider());
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			globalSettingDataRepository.PersistSettingValue("SupportEmailSetting", setting);
+			var target = new ApplicationController(areaPathProvider, globalSettingDataRepository);
+
+			dynamic result = target.GetSupportEmailSetting();
+			var emailSetting = (String)result.Content;
+			emailSetting.Should().Not.Be.Null();
+			emailSetting.Should().Be("test@test.fr");
 		}
 	}
 }

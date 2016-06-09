@@ -12,8 +12,8 @@
 
 			return service;
 		}])
-		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 'ThemeService',
-			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService) {
+		.service('CurrentUserInfo', ['AuthenticationRequests', '$q', '$sessionStorage', 'wfmI18nService', 'BusinessUnitsService', 'ThemeService', '$http',
+			function (AuthenticationRequests, $q, $sessionStorage, wfmI18nService, BusinessUnitsService, ThemeService, $http) {
 				var userName;
 				var defaultTimeZone;
 				var language;
@@ -40,9 +40,9 @@
 					}
 				};
 
-				service.getCurrentUserFromServer = function () {
+				service.getCurrentUserFromServer = function() {
 					return AuthenticationRequests.getCurrentUser();
-				}
+				};
 
 				service.initContext = function () {
 					var deferred = $q.defer();
@@ -77,6 +77,17 @@
 					$sessionStorage.$reset();
 					window.location.href = 'Authentication?redirectUrl='+window.location.hash;
 				};
+
+				return service;
+			}]).service('Settings', ['$http',
+			function ($http) {
+				var service = {};
+
+				service.supportEmailSetting = '';
+
+				$http.get('../api/Settings/SupportEmail').success(function (data) {
+					service.supportEmailSetting = data;
+				});
 
 				return service;
 			}]);

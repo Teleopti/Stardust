@@ -13988,7 +13988,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>internet connection lost message on the web ui</comment>
   </data>
   <data name="InternalErrorMessage" xml:space="preserve">
-    <value>The application has encountered an unexpected error.</value>
+    <value>The application has encountered an unexpected error. Help us improve your experience by sending an error report: </value>
     <comment>unexpected error message on the web ui</comment>
   </data>
   <data name="LogonUserTimeZone" xml:space="preserve">

@@ -28,6 +28,7 @@ describe('HttpTest', function() {
 
 	it('Should react to http error 500', function(done) {
 		var scope = $rootScope.$new();
+		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200,'mock');
 		spyOn(NoticeService, 'error');
 		var rejection = {
 			status: 500
@@ -41,10 +42,12 @@ describe('HttpTest', function() {
 
 		response.then(successCallback, errorCallback);
 		scope.$digest();
+		$httpBackend.flush();
 	});
 
 	it('Should react to all 4.XX http errors', function(done) {
 		var scope = $rootScope.$new();
+		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'mock');
 		spyOn(NoticeService, 'error');
 		var rejection = {
 			status: 418
@@ -58,10 +61,12 @@ describe('HttpTest', function() {
 
 		response.then(successCallback, errorCallback);
 		scope.$digest();
+		$httpBackend.flush();
 	});
 
 	it('Should react to http error 0', function(done) {
 		var scope = $rootScope.$new();
+		$httpBackend.expectGET("../api/Settings/SupportEmail").respond(200, 'mock');
 		spyOn(NoticeService, 'error');
 		var rejection = {
 			status: 0
@@ -75,6 +80,7 @@ describe('HttpTest', function() {
 
 		response.then(successCallback, errorCallback);
 		scope.$digest();
+		$httpBackend.flush();
 	});
 
 
