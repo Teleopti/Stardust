@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			if (toggleManager.IsEnabled(Toggles.Wfm_Use_Stardust))
 			{
-				var nodeThread = new Thread(StartNode);
+				var nodeThread = new Thread(startNode);
 				nodeThread.Start();
 			}
 
@@ -179,23 +179,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			}
 		}
 
-		private void StartNode()
+		private void startNode()
 		{
-			var assemblyName =
-				Assembly.GetExecutingAssembly()
-					.GetReferencedAssemblies()
-					.FirstOrDefault(x => x.Name.Equals(ConfigurationManager.AppSettings["HandlerAssembly"]));
-			if (assemblyName == null)
-				throw new Exception("Can not find the Assembly specified in AppSettings['HandlerAssembly']");
-
-			var baseaddress = ConfigurationManager.AppSettings["NodeBaseAddress"].Replace("https", "http");
-
-			var assembly = Assembly.Load(assemblyName);
-			var nodeConfig = new NodeConfiguration(new Uri(baseaddress),
-					 new Uri(ConfigurationManager.AppSettings["ManagerLocation"]),
-					 assembly,
-					 ConfigurationManager.AppSettings["NodeName"],
-					 int.Parse(ConfigurationManager.AppSettings["PingToManagerSeconds"]));
+			var nodeConfig = new NodeConfiguration();
 
 			var iocArgs = new IocArgs(new ConfigReader());
 			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
@@ -204,8 +190,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterModule(new TenantServerModule(configuration));
 			builder.RegisterModule(new NodeHandlersModule(configuration));
 			var container = builder.Build();
-
-
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
