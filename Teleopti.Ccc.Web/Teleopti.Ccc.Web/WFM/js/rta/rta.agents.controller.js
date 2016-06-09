@@ -221,20 +221,21 @@
 						var now = moment(states.Time);
 						var start = now.clone().add(-1, 'hours');
 						var end = now.clone().add(3, 'hours');
-						var shift = state.Shift
-							.filter(function (layer) {
-								return start < moment(layer.EndTime) && end > moment(layer.StartTime);
-							})
-							.map(function (s) {
-								var lengthSeconds = moment(s.EndTime).diff(moment(s.StartTime), 'seconds');
-								return {
-									Color: s.Color,
-									Offset: offsetToPercent(states.Time, s.StartTime, offsetPercentage),
-									Width: layerPercentage(lengthSeconds),
-									Name: s.Name,
-									Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
-								};
-							});
+					    var shift = state.Shift
+					        .filter(function(layer) {
+					            return start < moment(layer.EndTime) && end > moment(layer.StartTime);
+					        })
+					        .map(function(s) {
+					            var layerStartTime = s.StartTime;
+					            var lengthSeconds = moment(s.EndTime).diff(moment(layerStartTime) > start ? moment(layerStartTime) : start, 'seconds');
+					            return {
+					                Color: s.Color,
+					                Offset: offsetToPercent(states.Time, layerStartTime, offsetPercentage),
+					                Width: layerPercentage(lengthSeconds),
+					                Name: s.Name,
+					                Class: getClassForActivity(states.Time, layerStartTime, s.EndTime)
+					            };
+					        });
 						if (agentInfo.length > 0) {
 							$scope.agents.push({
 								Name: agentInfo[0].Name,

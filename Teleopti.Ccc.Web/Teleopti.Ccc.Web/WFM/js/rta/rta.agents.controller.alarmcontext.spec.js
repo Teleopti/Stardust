@@ -384,6 +384,32 @@ describe('RtaAgentsCtrl', function() {
 	    expect(scope.agents[0].Shift[0].Offset).toEqual('0%');
 	});
 
+	it('should handle long activity', function () {
+	    stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
+	    $fakeBackend
+			.withTime("2016-05-30T15:00:00")
+			.withAgent({
+			    Name: "Ashley Andeen",
+			    PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			    TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495"
+			})
+			.withState({
+			    PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
+			    Shift: [
+					{
+					    Color: "#80FF80",
+					    StartTime: "2016-05-30T08:00:00",
+					    EndTime: "2016-05-30T17:00:00"
+					}
+			    ]
+			});
+
+	    $controllerBuilder.createController()
+			.apply('agentsInAlarm = false');
+
+	    expect(scope.agents[0].Shift[0].Width).toEqual('75%');
+	});
+
 	it('should produce an activity name', function() {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 		$fakeBackend
