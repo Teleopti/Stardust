@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Core.Logging
 			if (innerMostException is HttpException && ((HttpException)innerMostException).GetHttpCode() == 404)
 				_logger.Warn(Log4NetModule.LogMessage404, innerMostException);
 			else
-				_logger.Error(Log4NetModule.LogMessageException, innerMostException);
+				_logger.Error(Log4NetModule.LogMessageException, exception);
 		}
 
 		private static Exception getInnerMostException(Exception exception)
