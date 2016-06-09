@@ -23,13 +23,14 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		{
 			var performBadgeCalculation = _jobParameters.ContainerHolder.IocContainer.Resolve<IPerformBadgeCalculation>();
 			var isTeamGamificationSettingsAvailable = _jobParameters.ContainerHolder.IocContainer.Resolve<IIsTeamGamificationSettingsAvailable>();
-			using (UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (_jobParameters.ToggleManager.IsEnabled(Toggles.Portal_DifferentiateBadgeSettingForAgents_31318))
 				if (isTeamGamificationSettingsAvailable.Satisfy())
 				{
 						performBadgeCalculation.Calculate(RaptorTransformerHelper.CurrentBusinessUnit.Id.Value);
 				}
+				uow.PersistAll();
 			}
 			return 0;
 		}

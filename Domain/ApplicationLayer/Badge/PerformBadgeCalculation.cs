@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 
 		public void Calculate(Guid businessUnitId)
 		{
-			List<TimeZoneInfo> timeZoneList;
-			timeZoneList = _buRepository.LoadAllTimeZones().ToList();
+			var timeZoneList = _buRepository.LoadAllTimeZones().ToList();
 
 			foreach (var timeZoneInfo in timeZoneList)
 			{
