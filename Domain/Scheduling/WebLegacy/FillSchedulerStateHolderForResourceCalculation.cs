@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			var allPeople = _personRepository.FindPeopleInOrganizationLight(period);
+			var allPeople = _personRepository.FindPeopleInOrganizationQuiteLight(period);
 			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = allPeople.ToList();
 			allPeople.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
@@ -78,7 +78,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
-			schedulerStateHolderTo.LoadCommonState(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
+			//just temporary till we know why it doesn't work without it
+			_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
+			schedulerStateHolderTo.LoadCommonStateForResourceCalculationOnly(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			_skillRepository.FindAllWithSkillDays(period); //perf hack to prevent working with skill proxies when doing calculation
 		}
 
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		{
 			var timeZone = _principal.Current().Regional.TimeZone;
 			schedulerStateHolderTo.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
-			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(agents);
+			//schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = _personAbsenceAccountRepository.FindByUsers(agents);
 		}
 	}
 }

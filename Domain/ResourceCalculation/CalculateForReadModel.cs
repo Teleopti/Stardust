@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -23,15 +26,60 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
-		[UnitOfWork, AsSystem]
-		public virtual void ResourceCalculatePeriod(DateOnlyPeriod period)
+		[LogTime]
+		[UnitOfWork]
+		public virtual ResourcesDataModel ResourceCalculatePeriod(DateOnlyPeriod period)
 		{
-			_fillSchedulerStateHolderForResourceCalculation.Fill(_schedulerStateHolder(), null, null, null, period);
+			var stateHolder = _schedulerStateHolder();
+			_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, null, null, null, period);
 			foreach (var dateOnly in period.DayCollection())
 			{
 				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly,true,true);
 			}
-			
+
+			return createReadModel(stateHolder.SchedulingResultState,period);
 		}
+
+		private ResourcesDataModel createReadModel(ISchedulingResultStateHolder result, DateOnlyPeriod period)
+		{
+			var ret = new ResourcesDataModel();
+			//just return first skill for now
+			if (result.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.Count > 0)
+			{
+				var skill = result.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.First();
+				ret.Id = skill.Id.GetValueOrDefault();
+				ret.Name = skill.Name;
+				ret.Intervals = new List<SkillStaffingInterval>();
+				foreach (var skillStaffPeriod in result.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill].Values)
+				{
+					if(skillStaffPeriod.Period.StartDateTime < period.StartDate.Date || skillStaffPeriod.Period.StartDateTime > period.EndDate.Date)
+						continue;
+					ret.Intervals.Add(new SkillStaffingInterval
+					{
+						StartDateTime = skillStaffPeriod.Period.StartDateTime,
+						EndDateTime = skillStaffPeriod.Period.EndDateTime,
+						Forecast = skillStaffPeriod.ForecastedDistributedDemandWithShrinkage,
+						StaffingLevel = skillStaffPeriod.CalculatedResource
+					});
+				}
+			}
+	
+			return ret;
+		}
+	}
+
+	public class ResourcesDataModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
+		public List<SkillStaffingInterval> Intervals { get; set; }
+	}
+
+	public class SkillStaffingInterval
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double Forecast { get; set; }
+		public double StaffingLevel { get; set; }
 	}
 }

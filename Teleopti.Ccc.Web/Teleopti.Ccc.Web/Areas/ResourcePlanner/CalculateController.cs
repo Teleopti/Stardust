@@ -12,13 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_calculateForReadModel = calculateForReadModel;
 		}
 
-		[HttpPost, Route("ResourceCalculate")]
+		[HttpGet, Route("ResourceCalculate")]
 		public virtual IHttpActionResult ResourceCalculate()
 		{
 			//var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
-			_calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(new DateOnly(2016, 6, 6), new DateOnly(2016, 6, 26)));
+			var result = _calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(new DateOnly(2016, 6, 6), new DateOnly(2016, 6, 7)));
 
-			return Ok();
+			return Ok(result);
 		}
 
 	}

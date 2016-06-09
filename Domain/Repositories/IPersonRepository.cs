@@ -88,5 +88,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IPerson LoadPersonAndPermissions(Guid id);
 
+		ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period);
+
 	}
 }

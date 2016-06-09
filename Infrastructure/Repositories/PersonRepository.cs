@@ -311,6 +311,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return persons;
 		}
 
+		public ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period)
+		{
+			IMultiCriteria multiCrit = Session.CreateMultiCriteria()
+				 .Add(personPeriodsOnlyTeamAndSite(period)).Add(personSchedule(period)).Add(personPeriodSkills(period));
+
+			IList res = multiCrit.List();
+			ICollection<IPerson> persons = CollectionHelper.ToDistinctGenericCollection<IPerson>(res[0]);
+
+			return persons;
+		}
+
 		public ICollection<IPerson> FindPeople(IEnumerable<Guid> peopleId)
 		{
 			var result = new List<IPerson>();
