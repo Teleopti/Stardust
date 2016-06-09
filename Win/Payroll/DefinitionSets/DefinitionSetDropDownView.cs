@@ -12,6 +12,9 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
 {
     public partial class DefinitionSetDropDownView : PayrollBaseUserControl
     {
+
+	    private readonly BindingSource _bindingSource;
+
        private IDefinitionSetViewModel SelectedDefinitionSet
         {
             get
@@ -27,8 +30,11 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
             SetTexts();
             autoLabelInfoAboutChanges.ForeColor = ColorHelper.ChangeInfoTextColor();
             autoLabelInfoAboutChanges.Font = ColorHelper.ChangeInfoTextFontStyleItalic(autoLabelInfoAboutChanges.Font);
-            LoadDefinitionSets();
-
+			_bindingSource = new BindingSource { DataSource = ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection };
+	        comboBoxAdvMultiplicatorDefinitionSets.DataSource = _bindingSource;
+			comboBoxAdvMultiplicatorDefinitionSets.ValueMember = "Name";
+			comboBoxAdvMultiplicatorDefinitionSets.DisplayMember = "Name";
+			LoadDefinitionSets();
         }
 
         /// <summary>
@@ -36,40 +42,35 @@ namespace Teleopti.Ccc.Win.Payroll.DefinitionSets
         /// </summary>
         public void LoadDefinitionSets()
         {
-            if (ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection != null &&
+			if (ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection != null &&
                 ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection.Count > 0)
             {
-                
-	            if (ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection.Count <=
+				_bindingSource.ResetBindings(false);
+
+				if (ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection.Count <=
 					comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex)
 	            {
 		            comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex =
 			            ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection.Count - 1;
 	            }
 
-				comboBoxAdvMultiplicatorDefinitionSets.DataSource = null;
-
-				comboBoxAdvMultiplicatorDefinitionSets.DataSource =
-                    ExplorerView.ExplorerPresenter.DefinitionSetPresenter.ModelCollection;
-
-                comboBoxAdvMultiplicatorDefinitionSets.ValueMember = "Name";
-                comboBoxAdvMultiplicatorDefinitionSets.DisplayMember = "Name";
-
-                if (comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex < 0)
-                {
-                    comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex = 0;
-                    loadControls();
-                }
-            }
+				if (comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex < 0)
+				{
+					comboBoxAdvMultiplicatorDefinitionSets.SelectedIndex = 0;
+					loadControls();
+				}
+			}
             else
             {
-                comboBoxAdvMultiplicatorDefinitionSets.DataSource = null;
                 textBoxDefinitionSetName.Text = string.Empty;
                 textBoxMultiplicatorType.Text = string.Empty;
 
                 if (ExplorerView.ExplorerPresenter.Model.FilteredDefinitionSetCollection != null)
                     ExplorerView.ExplorerPresenter.Model.FilteredDefinitionSetCollection.Clear();
-                ExplorerView.RefreshSelectedViews();
+
+				_bindingSource.ResetBindings(false);
+
+				ExplorerView.RefreshSelectedViews();
             }
         }
 
