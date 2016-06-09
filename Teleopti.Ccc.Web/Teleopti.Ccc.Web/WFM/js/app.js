@@ -120,6 +120,10 @@ wfm.config([
 			url: '/config',
 			templateUrl: 'js/intraday/intraday-config.html',
 			controller: 'IntradayConfigCtrl'
+		}).state('intraday.staffing', {
+			url: '/staffing/:intervalDate',
+			templateUrl: 'js/intraday/intraday-staffing.html',
+			controller: 'IntradayStaffingCtrl'
 		}).state('outbound', {
 			url: '/outbound',
 			templateUrl: 'js/outbound/html/outbound.html',

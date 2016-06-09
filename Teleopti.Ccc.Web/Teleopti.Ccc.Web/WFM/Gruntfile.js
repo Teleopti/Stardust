@@ -244,7 +244,7 @@ module.exports = function(grunt) {
 			},
 			dev: {
 				files: {
-					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js']
+					'dist/main.min.js': ['js/**/*.js', '!js/**/*.spec.js', '!js/**/*.fake.js', '!js/**/*.fortest.js', '!js/app_desktop_client.js']
 				},
 				options: {
 					sourceMap: true,
