@@ -41,7 +41,10 @@
 				});
 			};
 			var checkCurrentTheme = function(){
-				var currentStyle = document.getElementById('themeStyle').className
+				var currentStyle;
+				if (document.getElementById('themeStyle').className) {
+					currentStyle = document.getElementById('themeStyle').className
+				}
 				return currentStyle;
 			}
 
