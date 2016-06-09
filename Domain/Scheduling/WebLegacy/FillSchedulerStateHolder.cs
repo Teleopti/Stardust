@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -10,6 +10,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public abstract class FillSchedulerStateHolder : IFillSchedulerStateHolder
 	{
+		private readonly IPersonalSkillsProvider _personalSkillsProvider;
+
+		protected FillSchedulerStateHolder(IPersonalSkillsProvider personalSkillsProvider)
+		{
+			_personalSkillsProvider = personalSkillsProvider;
+		}
+
 		[LogTime]
 		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period)
 		{
@@ -39,13 +46,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 		}
 
-		private static IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		private IEnumerable<ISkill> skillsToUse(IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var agentSkills = new HashSet<ISkill>();
-			foreach (var skill in agents.SelectMany(filteredAgent => filteredAgent.ActiveSkillsFor(period)))
+			foreach (var agent in agents)
 			{
-				agentSkills.Add(skill);
+				foreach (var personPeriod in agent.PersonPeriods(period))
+				{
+					foreach (var skill in _personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill))
+					{
+						agentSkills.Add(skill);
+					}
+				}
 			}
+
 			return agentSkills;
 		}
 

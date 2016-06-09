@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,7 +26,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 
-		public FillSchedulerStateHolderFromDatabase(IScenarioRepository scenarioRepository,
+		public FillSchedulerStateHolderFromDatabase(IPersonalSkillsProvider personalSkillsProvider,
+					IScenarioRepository scenarioRepository,
 					ISkillDayLoadHelper skillDayLoadHelper,
 					IScheduleStorage scheduleStorage,
 					IPersonAbsenceAccountRepository personAbsenceAccountRepository,
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 					IRepositoryFactory repositoryFactory,
 					IPersonRepository personRepository,
-					ISkillRepository skillRepository)
+					ISkillRepository skillRepository) : base(personalSkillsProvider)
 		{
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;

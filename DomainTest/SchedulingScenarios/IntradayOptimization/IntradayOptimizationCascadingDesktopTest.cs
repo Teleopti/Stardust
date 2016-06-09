@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(0);
 		}
 
-		[Test, Ignore("test issue #39060")]
+		[Test]
 		public void ShouldKeepCalculatedLoggedOnValueWhenHavingOuterResContext()
 		{
 			var scenario = new Scenario("_");
@@ -104,11 +104,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			{
 				FullResourceCalculation.Execute();
 
-				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
-					.Should().Be.EqualTo(1);
-				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
-					.Should().Be.EqualTo(1);
-
 				Target.Optimize(new[] { agentAB, agentB }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
 
 				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
@@ -118,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			}
 		}
 
-		[Test, Ignore("test issue #39060")]
+		[Test]
 		public void ShouldKeepCalculatedLoggedOnValueWhenHavingNoOuterResContext()
 		{
 			var scenario = new Scenario("_");
@@ -146,11 +141,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
 
 			FullResourceCalculation.Execute();
-
-			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
-				.Should().Be.EqualTo(1);
-			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
-				.Should().Be.EqualTo(1);
 
 			Target.Optimize(new[] { agentAB, agentB }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
 

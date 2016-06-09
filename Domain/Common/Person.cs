@@ -740,19 +740,6 @@ namespace Teleopti.Ccc.Domain.Common
 							}).ToArray();
 		}
 
-		public virtual IEnumerable<ISkill> ActiveSkillsFor(DateOnlyPeriod period)
-		{
-			foreach (var personPeriod in PersonPeriods(period))
-			{
-				foreach (var personSkill in personPeriod.PersonSkillCollection)
-				{
-					if (personSkill.Active)
-					{
-						yield return personSkill.Skill;
-					}
-				}
-			}
-		}
 
 	    private bool isWorkDay(IContractSchedule contractSchedule, DateOnly day)
 	    {
