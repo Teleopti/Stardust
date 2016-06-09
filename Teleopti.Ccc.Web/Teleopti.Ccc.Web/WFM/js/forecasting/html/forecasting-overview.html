@@ -47,28 +47,20 @@
 				<div class="con-flex">
 					{{'ForecastWorkloadIntro' | translate}}
 				</div>
-			</div>
-			<div class="con-row">
 				<div class="con-flex">
-					<form class="forecast-campaign">
+					<form class="forecast-campaign pull-right">
 						<label>{{'Scenario' | translate}}: </label>
 						<md-select class="scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" placeholder="{{ 'Scenario' | translate }}">
 							<md-option ng-repeat="scenario in scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
 						</md-select>
 					</form>
 				</div>
-				<div class="con-flex split-3-1"></div>
-				<div class="con-flex"></div>
 			</div>
-			<div class="con-row">
-				<div class="con-flex">
-					<div ng-if="!workload.forecastResultLoaded">
-						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-					</div>
-					<div ng-show="workload.forecastResultLoaded" class="forecast-result-chart-wrapper">
-						<forecast-result-chart class="wfm-chart" chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
-					</div>
-				</div>
+			<div ng-if="!workload.forecastResultLoaded">
+				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			</div>
+			<div ng-show="workload.forecastResultLoaded">
+				<forecast-result-chart class="wfm-chart" chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
 			</div>
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">

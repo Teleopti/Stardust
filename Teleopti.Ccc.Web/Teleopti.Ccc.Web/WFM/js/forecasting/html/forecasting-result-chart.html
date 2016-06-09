@@ -1,4 +1,12 @@
-﻿<div id="{{chartId}}"></div>
-<div class="clear-button">
-	<i class="mdi mdi-block-helper pull-right toggle-handle" ng-click="clearSelection()"><md-tooltip>{{'ClearForecastChart' | translate}}</md-tooltip></i>
+<div class="con-row">
+	<div class="con-flex">
+		<div class="clear-button">
+			<i class="mdi mdi-block-helper pull-right toggle-handle" ng-click="clearSelection()"><md-tooltip>{{'ClearForecastChart' | translate}}</md-tooltip></i>
+		</div>
+	</div>
+</div>
+<div class="con-row">
+	<div class="con-flex padding-reset">
+		<div id="{{chartId}}"></div>
+	</div>
 </div>

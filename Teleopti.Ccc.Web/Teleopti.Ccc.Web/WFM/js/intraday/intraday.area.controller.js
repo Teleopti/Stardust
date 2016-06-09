@@ -420,7 +420,7 @@
 									names: {
 										Service_level: $translate.instant('ServiceLevelPercentSign') + ' ←',
 										Abandoned_rate: $translate.instant('AbandonedRate') + ' ←',
-										ASA: $translate.instant('AverageSpeedOfAnswer') + '→',
+										ASA: $translate.instant('AverageSpeedOfAnswer') + ' →',
 										Current: $translate.instant('latestActualInterval')
 
 									},

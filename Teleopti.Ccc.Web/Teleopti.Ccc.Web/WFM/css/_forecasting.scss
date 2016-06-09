@@ -71,16 +71,6 @@
 	color: $orange-400;
 }
 
-.forecast-result-chart-wrapper{
-	position: relative;
-}
-
-.clear-button{
-	position: absolute;
-	right: 1%;
-	top: -25px;
-}
-
 .c3-legend-item-vcombo,
 .c3-legend-item-vcampaign,
 .c3-legend-item-voverride{
@@ -134,4 +124,11 @@ forecast-result-chart >.c3 > svg{
 	max-width: 100%;
 }
 
-.modify-modal-footer{padding-top: $full-padding*2;}
+.modify-modal-footer{
+	padding-top: $full-padding*2;
+}
+
+.scenario-select{
+	margin-top:-5px;
+	margin-left: 5px;
+}
