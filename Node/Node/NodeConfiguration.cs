@@ -69,6 +69,7 @@ namespace Stardust.Node
 			string baseAddress = ConfigurationManager.AppSettings["BaseAddress"];
 			if (string.IsNullOrEmpty(baseAddress))
 			{
+				baseAddress = "http://" + GetIPAddress() + ":" + ConfigurationManager.AppSettings["Port"] + "/";
 			}
 			return baseAddress;
 		}
