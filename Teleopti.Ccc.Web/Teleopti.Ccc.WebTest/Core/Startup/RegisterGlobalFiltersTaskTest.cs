@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 				               	{
 				               		typeof(TeleoptiPrincipalAuthorizeAttribute),
 				               		typeof(AjaxHandleErrorAttribute),
-									typeof(Log4NetMvCLogger)
+									typeof(Log4NetMvCLogger),
+									typeof(NoCacheFilterMvc)
 				               	});
 		}
 	}

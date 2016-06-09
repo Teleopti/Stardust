@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			config.Filters.Select(item => item.Instance.GetType())
 				.Should().Have.SameValuesAs(new[]
 				{
-					typeof(AuthorizeTeleoptiAttribute)
+					typeof(AuthorizeTeleoptiAttribute),
+					typeof(NoCacheFilterHttp)
 				});
 		}
 
