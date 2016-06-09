@@ -61,7 +61,6 @@ RTA_AlarmContext_29357 = RC
 RTA_TotalOutOfAdherenceTime_38702 = RC
 
 WfmPeople_AdjustSkill_34138 = true
-ResourcePlanner_WeeklyRestSolver_35043 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true
 WfmPermission_ReplaceOldPermission_34671 = true
 

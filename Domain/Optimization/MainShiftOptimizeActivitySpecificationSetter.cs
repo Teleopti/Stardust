@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		}
 
-		private IOptimizerActivitiesPreferences createOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
+		private static IOptimizerActivitiesPreferences createOptimizerActivitiesPreferences(IOptimizationPreferences optimizationPreferences)
 		{
 			if (optimizationPreferences == null)
 				return null;
@@ -59,10 +59,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return optimizerActivitiesPreferences;
 
 		}
-	}
-
-	public class MainShiftOptimizeActivitySpecificationSetterOff : IMainShiftOptimizeActivitySpecificationSetter
-	{
-		public void SetMainShiftOptimizeActivitySpecification(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IEditableShift mainShift, DateOnly viewDate){}	
 	}
 }
