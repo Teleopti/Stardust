@@ -288,6 +288,7 @@
     <Compile Include="Controllers\HangfireController.cs" />
     <Compile Include="Core\Hangfire\HangfireCookie.cs" />
     <Compile Include="Core\Hangfire\HangfireDashboardAuthorization.cs" />
+    <Compile Include="Core\NoCacheFilter.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\DatabaseController.cs" />

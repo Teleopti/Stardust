@@ -3,7 +3,6 @@ using System.IO;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Hangfire;
-using Hangfire.Dashboard;
 using log4net.Config;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security.Cookies;
@@ -23,6 +22,7 @@ namespace Teleopti.Wfm.Administration
 			GlobalConfiguration.Configure(WebApiConfig.Register);
 
 			var config = GlobalConfiguration.Configuration;
+			config.Filters.Add(new NoCacheFilter());
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<WfmAdminModule>();
@@ -48,7 +48,7 @@ namespace Teleopti.Wfm.Administration
 			Hangfire.GlobalConfiguration.Configuration.UseSqlServerStorage(config.ConnectionString("Hangfire"));
 			var options = new DashboardOptions
 			{
-				AuthorizationFilters = new IAuthorizationFilter[]
+				AuthorizationFilters = new Hangfire.Dashboard.IAuthorizationFilter[]
 				{
 					new HangfireDashboardAuthorization()
 				},

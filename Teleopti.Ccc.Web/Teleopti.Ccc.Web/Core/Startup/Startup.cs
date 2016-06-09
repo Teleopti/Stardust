@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -17,11 +16,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Web;
 using Owin;
-using Stardust.Manager;
-using Stardust.Manager.Models;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -37,7 +32,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private bool _testMode;
 
 		private static bool _applicationStarted;
-		private static readonly object ApplicationStartLock = new object();
+		private static readonly object applicationStartLock = new object();
 
 		public void InjectForTest(IBootstrapper injectedBootstrapper, IContainerConfiguration injectedContainerConfiguration)
 		{
@@ -51,7 +46,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		{
 			if (!_applicationStarted)
 			{
-				lock (ApplicationStartLock)
+				lock (applicationStartLock)
 				{
 					if (!_applicationStarted)
 					{
@@ -65,6 +60,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void OnStart(IAppBuilder application, HttpConfiguration config)
 		{
+			GlobalConfiguration.Configuration.Filters.Add(new NoCacheFilter());
+
 			MvcHandler.DisableMvcResponseHeader = true;
 			ApplicationStartModule.ErrorAtStartup = null;
 			try
