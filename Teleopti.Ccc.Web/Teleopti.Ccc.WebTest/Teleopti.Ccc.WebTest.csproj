@@ -394,6 +394,7 @@
     <Compile Include="Core\Common\FakePersonNameProvider.cs" />
     <Compile Include="Core\IanaTimeZoneProviderTest.cs" />
     <Compile Include="Core\MonthScheduleDomainDataProviderTest.cs" />
+    <Compile Include="Core\NoCacheFilterTests.cs" />
     <Compile Include="Core\PersonNameProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
