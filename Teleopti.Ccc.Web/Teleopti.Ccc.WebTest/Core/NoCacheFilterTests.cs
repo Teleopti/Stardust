@@ -31,7 +31,10 @@ namespace Teleopti.Ccc.WebTest.Core
 			var context = CreateExecutedContext();
 			var filter = new NoCacheFilterHttp();
 			filter.OnActionExecuted(context);
-			context.ActionContext.Response.Headers.CacheControl.Should().Be.EqualTo(_expectedCacheControlHeader);
+			context.ActionContext.Response.Headers.CacheControl.NoCache.Should().Be.EqualTo(_expectedCacheControlHeader.NoCache);
+			context.ActionContext.Response.Headers.CacheControl.NoStore.Should().Be.EqualTo(_expectedCacheControlHeader.NoStore);
+			context.ActionContext.Response.Headers.CacheControl.MustRevalidate.Should().Be.EqualTo(_expectedCacheControlHeader.MustRevalidate);
+			context.ActionContext.Response.Headers.CacheControl.Private.Should().Be.EqualTo(_expectedCacheControlHeader.Private);
 			context.ActionContext.Response.Headers.Pragma.Should().Contain(new NameValueHeaderValue("no-cache"));
 			context.ActionContext.Response.Content.Headers.Expires.GetValueOrDefault().DateTime.Should().Be.LessThanOrEqualTo(DateTime.UtcNow);
 		}
