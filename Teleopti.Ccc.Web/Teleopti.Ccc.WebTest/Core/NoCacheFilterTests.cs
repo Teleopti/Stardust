@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		public void ResponseShouldIncludeAllNoCacheHeaders()
 		{
 			var context = CreateExecutedContext();
-			var filter = new NoCacheFilter();
+			var filter = new NoCacheFilterHttp();
 			filter.OnActionExecuted(context);
 			context.ActionContext.Response.Headers.CacheControl.Should().Be.EqualTo(_expectedCacheControlHeader);
 			context.ActionContext.Response.Headers.Pragma.Should().Contain(new NameValueHeaderValue("no-cache"));

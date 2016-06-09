@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Web.Mvc;
+using System.Web.UI;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
@@ -13,11 +14,13 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
+	[NoCacheFilterMvc]
 	public class ApplicationController : Controller
 	{
 		private readonly IAuthorization _authorization;
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return new ViewResult();
 		}
 
-		[UnitOfWork, HttpGet, OutputCache(NoStore = true, Duration = 0)]
+		[UnitOfWork, HttpGet]
 		public virtual JsonResult NavigationContent()
 		{
 			var principal = _currentTeleoptiPrincipal.Current();
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			}, JsonRequestBehavior.AllowGet);
 		}
 
-		[HttpGet, OutputCache(NoStore = true, Duration = 0)]
+		[HttpGet]
 		public JsonResult Permissions()
 		{
 			var currentName = _currentDataSource.CurrentName();
@@ -79,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			}, JsonRequestBehavior.AllowGet);
 		}
 
-		[HttpGet, OutputCache(Duration = 0, NoStore = true)]
+		[HttpGet]
 		[UnitOfWork]
 		public virtual ActionResult Resources()
 		{
@@ -195,7 +198,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return new ContentResult { Content = template, ContentType = "text/javascript" };
 		}
 
-		[HttpGet, OutputCache(Duration = 0, NoStore = true)]
+		[HttpGet]
 		public JsonResult FullDayAbsenceRequestTimeSetting()
 		{
 			TimeSpanSetting fullDayAbsenceRequestStartTimeSetting;

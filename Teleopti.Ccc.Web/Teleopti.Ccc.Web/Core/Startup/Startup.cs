@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void OnStart(IAppBuilder application, HttpConfiguration config)
 		{
-			GlobalConfiguration.Configuration.Filters.Add(new NoCacheFilter());
-
 			MvcHandler.DisableMvcResponseHeader = true;
 			ApplicationStartModule.ErrorAtStartup = null;
 			try

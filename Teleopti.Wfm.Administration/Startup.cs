@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.WebApi;
 using Hangfire;
@@ -22,7 +23,8 @@ namespace Teleopti.Wfm.Administration
 			GlobalConfiguration.Configure(WebApiConfig.Register);
 
 			var config = GlobalConfiguration.Configuration;
-			config.Filters.Add(new NoCacheFilter());
+			config.Filters.Add(new NoCacheFilterHttp());
+			GlobalFilters.Filters.Add(new NoCacheFilterMvc());
 
 			var builder = new ContainerBuilder();
 			builder.RegisterModule<WfmAdminModule>();

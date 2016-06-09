@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Owin;
-using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.RtaTool.Controllers;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
@@ -39,6 +38,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private void registerGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new Log4NetMvCLogger(_log4NetLogger));
+			filters.Add(new NoCacheFilterMvc());
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
 			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, _identityProviderProvider, new List<Type>
 			{

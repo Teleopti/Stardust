@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					typeof (JavascriptLoggingController),
 					typeof (ChangePasswordController)
 				}));
-
+				
+				c.Filters.Add(new NoCacheFilterHttp());
 				c.Services.Add(typeof (IExceptionLogger), new Log4NetWebApiLogger(_log4NetLogger));
 
 				c.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new DefaultContractResolver();
