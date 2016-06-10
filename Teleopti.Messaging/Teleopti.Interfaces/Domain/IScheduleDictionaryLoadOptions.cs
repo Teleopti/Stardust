@@ -17,5 +17,6 @@
 		bool LoadOnlyPreferensesAndHourlyAvailability { get; set; }
 
 	    bool LoadDaysAfterLeft { get; set; }
-    }
+		bool LoadAgentDayScheduleTags { get; set; }
+	}
 }

@@ -32,16 +32,24 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public virtual ResourcesDataModel ResourceCalculatePeriod(DateOnlyPeriod period)
 		{
 			var stateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, null, null, null, period);
-			foreach (var dateOnly in period.DayCollection())
-			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly,true,true);
-			}
+			_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, period);
 
-			return createReadModel(stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,period);
+			DoCalculation(period);
+
+			return CreateReadModel(stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,period);
 		}
 
-		private ResourcesDataModel createReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateOnlyPeriod period)
+		[LogTime]
+		public virtual void DoCalculation(DateOnlyPeriod period)
+		{
+			foreach (var dateOnly in period.DayCollection())
+			{
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+			}
+		}
+
+		[LogTime]
+		public virtual ResourcesDataModel CreateReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateOnlyPeriod period)
 		{
 			var ret = new ResourcesDataModel();
 			//just return first skill for now

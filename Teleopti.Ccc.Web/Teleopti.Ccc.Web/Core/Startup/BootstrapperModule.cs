@@ -32,9 +32,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			builder.RegisterType<FindAreaRegistrations>().SingleInstance().As<IFindAreaRegistrations>();
 			builder.RegisterType<StardustServerStarter>().SingleInstance();
 			builder.RegisterType<CheckTenantConnectionstrings>().SingleInstance();
-
-			builder.RegisterType<FillSchedulerStateHolderForResourceCalculation>();
-			builder.RegisterType<CalculateForReadModel>();
 		}
 	}
 }

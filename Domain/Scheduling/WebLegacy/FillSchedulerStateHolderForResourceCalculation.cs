@@ -48,20 +48,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		}
 
 		[LogTime]
-		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period)
+		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo,  DateOnlyPeriod period)
 		{
 			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
-			FillAgents(schedulerStateHolderTo, agentsInIsland, period);
-			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
-			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
+			FillAgents(schedulerStateHolderTo, period);
+			//removeUnwantedAgents(schedulerStateHolderTo, null);
+			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period).ToList();
 			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
-			removeUnwantedSkillDays(schedulerStateHolderTo, skills);
+			//removeUnwantedSkillDays(schedulerStateHolderTo, skills);
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
-			removeUnwantedScheduleRanges(schedulerStateHolderTo);
-			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
-			//setLocks(schedulerStateHolderTo, gridLockManager, locks);
-			schedulerStateHolderTo.ResetFilteredPersons();
+			//removeUnwantedScheduleRanges(schedulerStateHolderTo);
+			//PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
+			//schedulerStateHolderTo.ResetFilteredPersons();
 		}
 
 		protected IScenario FetchScenario()
@@ -69,35 +68,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return _scenarioRepository.LoadDefaultScenario();
 		}
 
-		protected void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
+		[LogTime]
+		protected virtual void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			var allPeople = _personRepository.FindPeopleInOrganizationQuiteLight(period);
 			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = allPeople.ToList();
 			allPeople.ForEach(x => schedulerStateHolderTo.AllPermittedPersons.Add(x));
 		}
 
-		protected void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
+		[LogTime]
+		protected virtual void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
 			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, skills, scenario);
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = forecast;
 			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
-		protected void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		[LogTime]
+		protected virtual void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			var timeZone = _principal.Current().Regional.TimeZone;
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 			schedulerStateHolderTo.SetRequestedScenario(scenario);
-			var personProvider = new PersonsInOrganizationProvider(agents) { DoLoadByPerson = true }; //TODO: this is experimental
+			var personProvider = new PersonsInOrganizationProvider(agents) { DoLoadByPerson = false }; //TODO: this is experimental
+			//schedulerStateHolderTo.SchedulingResultState.Schedules =
+			//	_scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(agents,
+			//		new ScheduleDictionaryLoadOptions(false, false, false), period, scenario);
 			schedulerStateHolderTo.LoadSchedules(_scheduleStorage, personProvider,
-				new ScheduleDictionaryLoadOptions(false, false, false),
-				new ScheduleDateTimePeriod(dateTimePeriod, agents, new SchedulerRangeToLoadCalculator(dateTimePeriod)));
+				new ScheduleDictionaryLoadOptions(false, false, false) {LoadAgentDayScheduleTags = false},
+				new ScheduleDateTimePeriod(dateTimePeriod, agents, new ResourceCalculateRangeToLoadCalculator(dateTimePeriod)));
 		}
 
-		protected void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
+		[LogTime]
+		protected virtual void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
-			//just temporary till we know why it doesn't work without it
-			_currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork();
 			schedulerStateHolderTo.LoadCommonStateForResourceCalculationOnly(_currentUnitOfWorkFactory.Current().CurrentUnitOfWork(), _repositoryFactory);
 			_skillRepository.FindAllWithSkillDays(period); //perf hack to prevent working with skill proxies when doing calculation
 		}
@@ -163,6 +167,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			}
 
 			return agentSkills;
+		}
+	}
+
+	//dont mess with the period on calculation only
+	public class ResourceCalculateRangeToLoadCalculator : ISchedulerRangeToLoadCalculator
+	{
+		private readonly DateTimePeriod _requestedDateTimePeriod;
+
+		public ResourceCalculateRangeToLoadCalculator(DateTimePeriod requestedDateTimePeriod)
+		{
+			_requestedDateTimePeriod = requestedDateTimePeriod;
+			
+		}
+		public DateTimePeriod SchedulerRangeToLoad(IPerson person)
+		{
+			return _requestedDateTimePeriod;
+		}
+
+		public DateTimePeriod RequestedPeriod {
+			get
+			{
+				return _requestedDateTimePeriod;
+			}
 		}
 	}
 }

@@ -178,8 +178,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 								   _repositoryFactory.CreatePublicNoteRepository(UnitOfWork)
 													 .Find(period, people, scenario));
 				}
-
-				addAgentDayScheduleTags(retDic,
+				if (scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
+					addAgentDayScheduleTags(retDic,
 										_repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork)
 														  .Find(period, people, scenario));
 
@@ -300,7 +300,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							    .Find(longDateOnlyPeriod, personsInOrganization, scenario));
 				    }
 
-				    addAgentDayScheduleTags(scheduleDictionary,
+					if (scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
+						addAgentDayScheduleTags(scheduleDictionary,
 					    _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork)
 						    .Find(longDateOnlyPeriod, personsInOrganization, scenario));
 			    }
@@ -315,9 +316,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					    addPublicNotes(scheduleDictionary,
 						    _repositoryFactory.CreatePublicNoteRepository(UnitOfWork).Find(longPeriod, scenario));
 				    }
-
-				    addAgentDayScheduleTags(scheduleDictionary,
-					    _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longPeriod, scenario));
+					 if(scheduleDictionaryLoadOptions.LoadAgentDayScheduleTags)
+						addAgentDayScheduleTags(scheduleDictionary,
+							_repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longPeriod, scenario));
 			    }
 
 			    if (scheduleDictionaryLoadOptions.LoadRestrictions)
