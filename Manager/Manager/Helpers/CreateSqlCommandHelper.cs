@@ -28,7 +28,7 @@ namespace Stardust.Manager.Helpers
 																,[Detail])
 															VALUES
 																(@JobId
-																,@Created
+																,@created
 																,@Detail)";
 			var insertCommand = new SqlCommand(insertIntoJobDetailCommandText, sqlConnection);
 

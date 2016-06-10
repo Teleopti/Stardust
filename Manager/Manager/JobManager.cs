@@ -165,7 +165,7 @@ namespace Stardust.Manager
 		{
 			_jobRepository.CreateJobDetailByJobId(jobDetail.JobId,
 			                                      jobDetail.Detail,
-			                                      jobDetail.Created);
+												  jobDetail.Created);
 		}
 
 		public Job GetJobByJobId(Guid jobId)

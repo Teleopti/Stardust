@@ -188,6 +188,17 @@ namespace Stardust.Manager
 				{
 					updateResultCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 				}
+
+				var finishDetail = "Job finished";
+				if (result == "Canceled")
+					finishDetail = "Job was canceled";
+				else if (result == "Fatal Node Failure" || result == "Failed")
+					finishDetail = "Job Failed";
+
+				using (var insertJobDetailCommand = _createSqlCommandHelper.CreateInsertIntoJobDetailCommand(jobId, finishDetail, DateTime.UtcNow, sqlConnection))
+				{
+					insertJobDetailCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+				}
 			}
 		}
 
@@ -543,6 +554,10 @@ namespace Stardust.Manager
 								deleteJobQueueItemCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 							}
 							Retry(sqlTransaction.Commit);
+							using (var insertIntoJobDetailsCommand = _createSqlCommandHelper.CreateInsertIntoJobDetailCommand(jobQueueItem.JobId, "Job Started", DateTime.UtcNow, sqlConnection))
+							{
+								insertIntoJobDetailsCommand.ExecuteNonQueryWithRetry(_retryPolicy);
+							}
 						}
 
 						urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);

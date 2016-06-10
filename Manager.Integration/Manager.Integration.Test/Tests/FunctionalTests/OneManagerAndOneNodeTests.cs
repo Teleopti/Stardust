@@ -183,6 +183,7 @@ namespace Manager.Integration.Test.Tests.FunctionalTests
 				    items.All(job => job.Started != null && job.Ended != null))
 				{
 					manualResetEventSlim.Set();
+
 				}
 			};
 			checkTablesInManagerDbTimer.JobTimer.Start();
