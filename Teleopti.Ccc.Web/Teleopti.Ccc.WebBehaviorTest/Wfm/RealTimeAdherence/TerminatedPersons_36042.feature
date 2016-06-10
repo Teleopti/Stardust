@@ -12,10 +12,24 @@ Background:
 	And 'Pierre Baldi' is a user with
 	| Field         | Value      |
 	| Terminal Date | 2016-01-14 |
+	And Ashely Andeen has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2016-01-01 |
 	And Pierre Baldi has a person period with
 	 | Field      | Value      |
 	 | Team       | Red        |
 	 | Start Date | 2016-01-01 |
+	And Ashely Andeen has a shift with
+	| Field      | Value            |
+	| Activity   | Phone            |
+	| Start time | 2016-01-14 08:00 |
+	| End time   | 2016-01-14 17:00 |
+	And Ashely Andeen has a shift with
+	| Field      | Value            |
+	| Activity   | Phone            |
+	| Start time | 2016-01-15 08:00 |
+	| End time   | 2016-01-15 17:00 |
 	And Pierre Baldi has a shift with
 	| Field      | Value            |
 	| Activity   | Phone            |
@@ -27,22 +41,29 @@ Background:
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
+	And there is a rule with 
+	| Field           | Value        |
+	| Phone state     | Pause        |
+	| Name            | Not adhering |
+	| Staffing effect | -1           |
 
 Scenario: Exclude terminated agents
 	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
+	And 'Ashely Andeen' sets his phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see team 'Red' with 1 employees out of adherence
+	Then I should see team 'Red' with 2 employees out of adherence
 	When the time is '2016-01-15 12:00:00'
 	And I view Real time adherence for teams on site 'Paris'
-	Then I should see team 'Red' with 0 employees out of adherence
+	Then I should see team 'Red' with 1 employees out of adherence
 
 Scenario: Exclude agents terminated retroactively
 	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
+	And 'Ashely Andeen' sets his phone state to 'Pause'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see team 'Red' with 1 employees out of adherence
+	Then I should see team 'Red' with 2 employees out of adherence
 	When 'Pierre Baldi' is updated with
 	| Field         | Value      |
 	| Terminal Date | 2016-01-05 |
-	Then I should see team 'Red' with 0 employees out of adherence
+	Then I should see team 'Red' with 1 employees out of adherence
