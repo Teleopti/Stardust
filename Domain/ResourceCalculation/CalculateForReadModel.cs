@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.TimeLogger;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -37,20 +38,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly,true,true);
 			}
 
-			return createReadModel(stateHolder.SchedulingResultState,period);
+			return createReadModel(stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,period);
 		}
 
-		private ResourcesDataModel createReadModel(ISchedulingResultStateHolder result, DateOnlyPeriod period)
+		private ResourcesDataModel createReadModel(ISkillSkillStaffPeriodExtendedDictionary skillSkillStaffPeriodExtendedDictionary, DateOnlyPeriod period)
 		{
 			var ret = new ResourcesDataModel();
 			//just return first skill for now
-			if (result.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.Count > 0)
+			if (skillSkillStaffPeriodExtendedDictionary.Keys.Count > 0)
 			{
-				var skill = result.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Keys.First();
+				var skill = skillSkillStaffPeriodExtendedDictionary.Keys.First();
 				ret.Id = skill.Id.GetValueOrDefault();
-				ret.Name = skill.Name;
+				ret.Area = skill.Name;
 				ret.Intervals = new List<SkillStaffingInterval>();
-				foreach (var skillStaffPeriod in result.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill].Values)
+				foreach (var skillStaffPeriod in skillSkillStaffPeriodExtendedDictionary[skill].Values)
 				{
 					if(skillStaffPeriod.Period.StartDateTime < period.StartDate.Date || skillStaffPeriod.Period.StartDateTime > period.EndDate.Date)
 						continue;
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public class ResourcesDataModel
 	{
 		public Guid Id { get; set; }
-		public string Name { get; set; }
+		public string Area { get; set; }
 		public List<SkillStaffingInterval> Intervals { get; set; }
 	}
 
