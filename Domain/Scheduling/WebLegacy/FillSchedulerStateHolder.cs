@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			{
 				foreach (var personPeriod in agent.PersonPeriods(period))
 				{
+					//TODO: This will probably be wrong if we want to to shovel inside islands in upcoming PBIs
 					foreach (var skill in _personalSkillsProvider.PersonSkills(personPeriod).Select(x => x.Skill))
 					{
 						agentSkills.Add(skill);

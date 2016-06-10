@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(1);
 		}
 
-		[Test, Ignore("failing test for #39060")]
+		[Test]
 		public void IncreasedResourcesShouldBeSameAsDecreasedInOtherSkills_WhenResourceCalcHasBeenMadeBeforeOptimization()
 		{
 			var scenario = new Scenario("_");
@@ -183,46 +183,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentAC }, new[] { assAB, assAC }, new[] { skillDayA, skillDayB, skillDayC });
 
 			FullResourceCalculation.Execute();
-
-			Target.Optimize(new[] { agentAB, agentAC }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
-
-			var skillAShovledResources = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().ResourceLoggonOnDiff();
-			var skillBShovledResources = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First().ResourceLoggonOnDiff();
-			var skillCShovledResources = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillC].Single().SkillStaffPeriodCollection.First().ResourceLoggonOnDiff();
-			(skillAShovledResources + skillBShovledResources + skillCShovledResources).IsZero()
-				.Should().Be.True();
-		}
-
-		[Test, Ignore("failing test for #39060")]
-		public void IncreasedResourcesShouldBeSameAsDecreasedInOtherSkills_WhenNoResourceCalcHasBeenMadeBeforeOptimization()
-		{
-			var scenario = new Scenario("_");
-			var activity = ActivityFactory.CreateActivity("_");
-			var date = DateOnly.Today;
-			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)), PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillA.SetCascadingIndex_UseFromTestOnly(1);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 17, 0));
-			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, date, 1);
-			var skillB = new Skill("B", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillB.SetCascadingIndex_UseFromTestOnly(2);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillB, new TimePeriod(8, 0, 17, 0));
-			var skillDayB = skillB.CreateSkillDayWithDemand(scenario, date, 1);
-			var skillC = new Skill("C", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
-			skillC.SetCascadingIndex_UseFromTestOnly(3);
-			WorkloadFactory.CreateWorkloadWithOpenHours(skillC, new TimePeriod(8, 0, 17, 0));
-			var skillDayC = skillC.CreateSkillDayWithDemand(scenario, date, 1);
-			var agentAB = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			agentAB.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB });
-			agentAB.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
-			var agentAC = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			agentAC.AddPeriodWithSkills(new PersonPeriod(date, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillC });
-			agentAC.AddSchedulePeriod(new SchedulePeriod(date, SchedulePeriodType.Week, 1));
-			var assAB = new PersonAssignment(agentAB, scenario, date);
-			assAB.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
-			var assAC = new PersonAssignment(agentAC, scenario, date);
-			assAC.AddActivity(activity, new TimePeriod(8, 0, 17, 0));
-			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentAC }, new[] { assAB, assAC }, new[] { skillDayA, skillDayB, skillDayC });
 
 			Target.Optimize(new[] { agentAB, agentAC }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
 

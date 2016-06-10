@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			using (_intradayOptimizationContext.Create(period))
 			{
+				//TODO: unnecessary to resourcecalc all days
 				_resourceOptimizationHelperExtended().ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 				_intradayOptimizerContainer.Execute(optimizers);
 
