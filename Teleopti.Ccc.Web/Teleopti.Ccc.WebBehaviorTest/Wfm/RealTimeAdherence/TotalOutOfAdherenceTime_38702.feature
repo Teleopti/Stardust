@@ -1,7 +1,7 @@
-﻿Feature: Total Out Of Adherence Time
+﻿Feature: Rule Time For Alarm
 	In order to get a clear picture of who to blame
 	As a real time analyst
-	I do want to see the total time an agent has been out of adherence
+	I want to see the time an agent has been in the rule that triggered the alarm
 
 Background:
 	Given there is a switch
@@ -27,7 +27,7 @@ Background:
 	| Alarm threshold | 00:02:00     |
 
 @OnlyRunIfEnabled('RTA_TotalOutOfAdherenceTime_38702')
-Scenario: See total time out of adherence
+Scenario: See rule time for alarm
 	Given the time is '2016-06-08 09:00:00'
 	And 'Pierre Baldi' sets his phone state to 'LoggedOut'
 	Given the time is '2016-06-08 09:10:00'
