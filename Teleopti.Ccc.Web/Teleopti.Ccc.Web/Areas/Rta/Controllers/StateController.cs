@@ -59,11 +59,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			{
 				return BadRequest(e.Message);
 			}
-			catch (Exception e)
-			{
-				_logger.Error(input, e);
-				return BadRequest(e.Message);
-			}
 
 			return Ok();
 		}
