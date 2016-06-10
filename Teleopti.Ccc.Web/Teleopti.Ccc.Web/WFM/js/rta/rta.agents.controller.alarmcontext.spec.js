@@ -122,7 +122,6 @@ describe('RtaAgentsCtrl', function() {
 		expect(scope.agents[0].ShiftTimeBar).toEqual("12.5%");
 	});
 
-
 	it('should cut alarm to fit schedule window', function () {
 		stateParams.teamId = "34590a63-6331-4921-bc9f-9b5e015ab495";
 

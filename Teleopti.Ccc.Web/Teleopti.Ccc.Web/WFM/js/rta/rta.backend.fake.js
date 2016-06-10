@@ -5,6 +5,7 @@
 		.service('FakeRtaBackend', function($httpBackend) {
 
 			var serverTime = null;
+			var toggles = {};
 			var agents = [];
 			var states = [];
 			var adherences = [];
@@ -104,11 +105,11 @@
 					return [200, { Time: serverTime, States: result }];
 				});
 
-			fake(/ToggleHandler\/(.*)/,
+			fake(/ToggleHandler\/AllToggles(.*)/,
 				function (params) {
-					return [200, { IsEnabled: false }];
+					return [200, toggles];
 				});
-
+			
 			fake(/\.\.\/api\/Agents\/PersonDetails(.*)/,
 				function (params) {
 					return [200, personDetails.find(function(p) { return p.PersonId === params.personId })];
@@ -146,6 +147,7 @@
 
 			this.clear = function () {
 				serverTime = null;
+				toggles = {};
 				agents = [];
 				states = [];
 				adherences = [];
@@ -155,6 +157,11 @@
 				siteAdherences = [];
 				teams = [];
 				teamAdherences = [];
+			}
+
+			this.withToggle = function(toggle) {
+				toggles[toggle] = true;
+				return this;
 			}
 
 			this.withTime = function (time) {

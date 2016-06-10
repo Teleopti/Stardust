@@ -250,8 +250,12 @@
 								Color: state.Color,
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
-								TimeInRule: state.TimeInRule,
-								ShiftTimeBar: alarmPercentage(state.TimeInAlarm),
+								TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
+								ShiftTimeBar: function() {
+									if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
+										return state.TimeInAlarm ? alarmPercentage(state.TimeInRule) : "0%";
+									return alarmPercentage(state.TimeInAlarm);
+								}(),
 								Shift: shift
 							});
 						}
