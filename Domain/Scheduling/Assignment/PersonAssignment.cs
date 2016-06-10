@@ -397,14 +397,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment assignment, TimeSpan periodOffset)
 		{
-			ClearMainActivities();
+			Clear();
 			SetShiftCategory(assignment.ShiftCategory);
 			foreach (var mainLayer in assignment.MainActivities())
 			{
 				addActivityInternal(mainLayer.Payload, mainLayer.Period.MovePeriod(periodOffset));
 			}
+
 			var startDate = assignment.MainActivities().Min(x => x.Period.StartDateTime);
 			var endDate = assignment.MainActivities().Max(x => x.Period.EndDateTime);
+
 			AddEvent(() =>
 			{
 				var someEventForNotification = new MainShiftReplaceNotificationEvent

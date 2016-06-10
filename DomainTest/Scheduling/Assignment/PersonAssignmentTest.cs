@@ -761,5 +761,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.AddOvertimeActivity(overtime,period,multiplicatorDefinitionSet);
 			Assert.AreEqual(0, target.OvertimeActivities().Count());
 		}
+
+		[Test]
+		public void ShouldClearPersonalAndOvertimeWhenSettingActivitiesAndShiftCategoryFromSource()
+		{
+			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.AddOvertimeActivity(new Activity("_"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
+			var source = PersonAssignmentFactory.CreateAssignmentWithMainShift(
+				new Activity("_"),
+				testPerson,
+				new DateTimePeriod(2000, 1, 3, 2000, 1, 4),
+				new ShiftCategory("_"),
+				testScenario);
+
+			target.SetActivitiesAndShiftCategoryFromWithOffset(source, TimeSpan.Zero);
+
+			target.PersonalActivities().Should().Be.Empty();
+			target.OvertimeActivities().Should().Be.Empty();
+		}
 	}
 }
