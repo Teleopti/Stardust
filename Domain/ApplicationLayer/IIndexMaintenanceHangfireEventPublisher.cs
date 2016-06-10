@@ -27,10 +27,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			_allTenantEtlSettings.All().ForEach(t =>
 			{
-				if (t.RunIndexMaintenance)
+				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t.Tenant)))
 				{
-					using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t.Tenant)))
+					if (t.RunIndexMaintenance)
 						_publisher.PublishDaily(@event, t.TimeZone);
+					else
+						_publisher.StopPublishingForEvent<IndexMaintenanceHangfireEvent>();
 				}
 			});
 		}
