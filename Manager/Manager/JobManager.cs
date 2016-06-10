@@ -41,16 +41,6 @@ namespace Stardust.Manager
 
 			jobPurgeTimer.Start();
 			nodePurgeTimer.Start();
-
-			var workerNodes = _workerNodeRepository.GetAllWorkerNodes();
-
-			if (workerNodes != null && workerNodes.Any())
-			{
-				foreach (var workerNode in workerNodes)
-				{
-					_workerNodeRepository.RegisterHeartbeat(workerNode.Url.ToString(), false);
-				}
-			}
 		}
 
 		public void Dispose()
