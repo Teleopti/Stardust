@@ -6,8 +6,6 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Common
 	{
 		public BaseConfiguration(int? cultureId, int? intervalLength, string timeZoneCode, bool runIndexMaintenance)
 		{
-
-			
 			RunIndexMaintenance = runIndexMaintenance;
 			CultureId = cultureId;
 			IntervalLength = intervalLength;

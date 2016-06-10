@@ -27,6 +27,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_publisher.StopPublishingAll();
 		}
 
+		public void RemovePublishingForEvent<T>() where T : IEvent
+		{
+			_publisher.StopPublishingForEvent<T>();
+		}
+
 		public void RemovePublishingsOfRemovedTenants()
 		{
 			_publisher
@@ -37,15 +42,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(j)))
 						_publisher.StopPublishingForCurrentTenant();
 				});
-		}
-
-		public void PublishDaily(IEvent @event)
-		{
-			_tenants.Tenants().ForEach(t =>
-			{
-				using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(t)))
-					_publisher.PublishDaily(@event);
-			});
 		}
 
 		public void PublishHourly(IEvent @event)
@@ -66,4 +62,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			});
 		}
 	}
+
 }

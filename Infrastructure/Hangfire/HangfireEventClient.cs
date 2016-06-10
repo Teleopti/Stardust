@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			_jobClient.Value.Enqueue<HangfireEventServer>(x => x.Process(displayName, tenant, queueName, eventType, serializedEvent, handlerType));
 		}
 
-		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)
+		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType, TimeZoneInfo timeZone)
 		{
 			Expression<Action<HangfireEventServer>> f = x => x.Process(displayName, tenant, null, eventType, serializedEvent, handlerType);
-			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Daily(), TimeZoneInfo.Local);
+			_recurringJob.Value.AddOrUpdate(id, Job.FromExpression(f), Cron.Daily(), timeZone);
 		}
 
 		public void AddOrUpdateHourly(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType)

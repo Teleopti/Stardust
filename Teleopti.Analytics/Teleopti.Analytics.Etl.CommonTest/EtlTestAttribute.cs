@@ -1,6 +1,8 @@
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Analytics.Etl.CommonTest
@@ -13,6 +15,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 
 			system.AddModule(new EtlModule(configuration));
 			system.UseTestDouble<FakeBaseConfigurationRepository>().For<IBaseConfigurationRepository>();
+			system.UseTestDouble<FakeAllTenantEtlSettings>().For<IAllTenantEtlSettings>();
 		}
 	}
 }

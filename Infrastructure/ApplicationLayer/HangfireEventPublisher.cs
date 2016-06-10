@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
 	public class HangfireEventPublisher : IEventPublisher, IRecurringEventPublisher
 	{
+		private const string delimiter = ":::";
 		private readonly IHangfireEventClient _client;
 		private readonly IJsonEventSerializer _serializer;
 		private readonly ResolveEventHandlers _resolver;
@@ -40,11 +41,11 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			});
 		}
 
-		public void PublishDaily(IEvent @event)
+		public void PublishDaily(IEvent @event, TimeZoneInfo timeZone)
 		{
 			jobsFor(@event).ForEach(j =>
 			{
-				_client.AddOrUpdateDaily(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
+				_client.AddOrUpdateDaily(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName, timeZone);
 			});
 		}
 
@@ -68,18 +69,14 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		{
 			var maxLength = 100 - "recurring-job:".Length;
 
-			var handlerId = _resolver.HandleMethodFor(j.HandlerType, @event)
-				.GetCustomAttributes(typeof (RecurringIdAttribute), false)
-				.OfType<RecurringIdAttribute>()
-				.Single()
-				.Id;
-
-			var id = $"{j.Tenant}:::{handlerId}";
+			var handlerId = $"{j.HandlerType.Name}{delimiter}{@event.GetType().Name}";
+			
+			var id = $"{j.Tenant}{delimiter}{handlerId}";
 			if (id.Length <= maxLength)
 				return id;
 
 			var hash = handlerId.GetHashCode().ToString();
-			id = $"{j.Tenant}:::{handlerId}";
+			id = $"{j.Tenant}{delimiter}{handlerId}";
 			id = $"{id.Substring(0, maxLength - hash.Length - 1)}.{hash}";
 
 			return id;
@@ -119,7 +116,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public IEnumerable<string> TenantsWithRecurringJobs()
 		{
 			return _client.GetRecurringJobIds()
-				.Select(x => x.Substring(0, x.IndexOf(":::")))
+				.Select(x => x.Substring(0, x.IndexOf(delimiter)))
 				.Where(x => !string.IsNullOrEmpty(x))
 				.Distinct();
 		}
@@ -129,14 +126,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var tenant = _dataSource.CurrentName();
 			var jobsToRemove =
 				_client.GetRecurringJobIds()
-				.Where(x => x.StartsWith(tenant + ":::"));
+				.Where(x => x.StartsWith($"{tenant}{delimiter}"));
 			jobsToRemove.ForEach(x => _client.RemoveIfExists(x));
 		}
 
 		public void StopPublishingAll()
 		{
 			_client.GetRecurringJobIds()
-				.Where(x => !x.StartsWith(":::"))
+				.ForEach(x => _client.RemoveIfExists(x));
+		}
+
+		public void StopPublishingForEvent<T>() where T : IEvent
+		{
+			_client.GetRecurringJobIds()
+				.Where(x => x.EndsWith($"{delimiter}{typeof(T).Name}"))
 				.ForEach(x => _client.RemoveIfExists(x));
 		}
 	}

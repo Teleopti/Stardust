@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.Register(c => c.Resolve<HangfireEventPublisher>()).As<IRecurringEventPublisher>().SingleInstance();
 			builder.RegisterType<TenantTickEventPublisher>().SingleInstance();
-			builder.RegisterType<CleanFailedQueuePublisher>().SingleInstance();
 			builder.RegisterType<AllTenantRecurringEventPublisher>().SingleInstance();
 
 			builder.RegisterType<CannotPublishToHangfire>().As<IHangfireEventClient>().SingleInstance();

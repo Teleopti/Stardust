@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -7,6 +8,30 @@ using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 {
+	public class FakeAllTenantEtlSettings: IAllTenantEtlSettings
+	{
+		private readonly List<Infrastructure.MultiTenancy.Server.Tenant> _data = new List<Infrastructure.MultiTenancy.Server.Tenant>();
+
+		public IEnumerable<TenantEtlSetting> All()
+		{
+			return _data.Select(x=>new TenantEtlSetting()
+			{
+				Tenant = x.Name,
+				RunIndexMaintenance = true,
+				TimeZone = TimeZoneInfo.Utc
+			});
+		}
+
+		public void Has(Infrastructure.MultiTenancy.Server.Tenant tenant)
+		{
+			_data.Add(tenant);
+		}
+
+		public void Has(string tenant)
+		{
+			Has(new Infrastructure.MultiTenancy.Server.Tenant(tenant));
+		}
+	}
 	public class FakeTenants : 
 		IFindTenantNameByRtaKey, 
 		ICountTenants, 

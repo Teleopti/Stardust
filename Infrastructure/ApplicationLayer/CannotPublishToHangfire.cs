@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			throw new System.NotImplementedException();
 		}
 
-		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent,
-			string handlerType)
+		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType, TimeZoneInfo timeZone)
 		{
 			throw new NotImplementedException();
 		}

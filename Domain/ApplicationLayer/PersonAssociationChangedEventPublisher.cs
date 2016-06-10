@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		}
 
 		[UnitOfWork]
-		[RecurringId("PersonAssociationChangedEventPublisher:::HourlyTickEvent")]
+		[RecurringJob]
 		public virtual void Handle(TenantHourTickEvent @event)
 		{
 			_persons.LoadAll()

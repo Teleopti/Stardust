@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.MultiTenancy
@@ -5,5 +6,18 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 	public interface IAllTenantNames
 	{
 		IEnumerable<string> Tenants();
+	}
+
+
+	public interface IAllTenantEtlSettings
+	{
+		IEnumerable<TenantEtlSetting> All();
+	}
+
+	public class TenantEtlSetting
+	{
+		public string Tenant { get; set; }
+		public TimeZoneInfo TimeZone { get; set; }
+		public bool RunIndexMaintenance { get; set; }
 	}
 }

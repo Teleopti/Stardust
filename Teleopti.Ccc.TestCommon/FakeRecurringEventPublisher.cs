@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon
 			_now = now;
 		}
 
-		public void PublishDaily(IEvent @event)
+		public void PublishDaily(IEvent @event, TimeZoneInfo timeZone)
 		{
 			var tenant = _dataSource.Current().DataSourceName;
 			var job = _publishings.SingleOrDefault(x => x.Tenant == tenant && @event.GetType() == x.Event.GetType());
@@ -92,6 +92,15 @@ namespace Teleopti.Ccc.TestCommon
 		public void StopPublishingAll()
 		{
 			_publishings.Clear();
+		}
+
+		public void StopPublishingForEvent<T>() where T : IEvent
+		{
+			var toBeRemoved = _publishings.Where(publishingInfo => publishingInfo.Event.GetType() == typeof(T)).ToList();
+			foreach (var publishingInfo in toBeRemoved)
+			{
+				_publishings.Remove(publishingInfo);
+			}
 		}
 
 		public IEnumerable<string> TenantsWithRecurringJobs()

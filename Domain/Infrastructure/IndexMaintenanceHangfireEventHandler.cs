@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			_eventPublisher = eventPublisher;
 		}
 
-		[RecurringId("IndexMaintenanceHangfireEventHandler:::IndexMaintenanceHangfireEvent")]
+		[RecurringJob]
 		public virtual void Handle(IndexMaintenanceHangfireEvent @event)
 		{
 			_eventPublisher.Publish(new IndexMaintenanceStardustEvent

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 			_config = config;
 		}
 
-		[RecurringId("CleanFailedQueueHandler:::CleanFailedQueue")]
+		[RecurringJob]
 		public void Handle(CleanFailedQueue @event)
 		{
 			

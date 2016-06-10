@@ -195,6 +195,7 @@
     <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\IIndexMaintenanceHangfireEventPublisher.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceStardustEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
@@ -327,7 +328,6 @@
     <Compile Include="Forecasting\SkillStaffPeriodExtensions.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Infrastructure\CleanFailedQueueHandler.cs" />
-    <Compile Include="Infrastructure\CleanFailedQueuePublisher.cs" />
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceHangfireEvent.cs" />
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
@@ -509,7 +509,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPersonPeriodUpdater.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\UpdateGroupingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChangedEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\RecurringIdAttribute.cs" />
+    <Compile Include="ApplicationLayer\RecurringJob.cs" />
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandler.cs" />

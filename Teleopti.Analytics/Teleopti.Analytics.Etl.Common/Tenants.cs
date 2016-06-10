@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
@@ -14,10 +15,30 @@ namespace Teleopti.Analytics.Etl.Common
 {
 	public class TenantInfo
 	{
-		public string Name { get { return Tenant.Name; } }
+		public string Name => Tenant.Name;
 		public Tenant Tenant { get; set; }
 		public IDataSource DataSource { get; set; }
 		public IBaseConfiguration EtlConfiguration { get; set; }
+	}
+
+	public class AllTenantEtlSettings : IAllTenantEtlSettings
+	{
+		private readonly Tenants _tenants;
+
+		public AllTenantEtlSettings(Tenants tenants)
+		{
+			_tenants = tenants;
+		}
+
+		public IEnumerable<TenantEtlSetting> All()
+		{
+			return _tenants.EtlTenants().Select(x=>new TenantEtlSetting
+			{
+				Tenant = x.Name,
+				RunIndexMaintenance = x.EtlConfiguration.RunIndexMaintenance,
+				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(x.EtlConfiguration.TimeZoneCode)
+			}).ToArray();
+		}
 	}
 
 	public class TenantsLoadedInEtl : IAllTenantNames

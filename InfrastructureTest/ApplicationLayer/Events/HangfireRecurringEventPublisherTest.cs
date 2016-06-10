@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		[Test]
 		public void ShouldAddOrUpdateDaily()
 		{
-			Target.PublishDaily(new HangfireTestEvent());
+			Target.PublishDaily(new HangfireTestEvent(), TimeZoneInfo.Utc);
 
 			JobClient.Recurring.Single().Daily.Should().Be.True();
 		}
@@ -235,7 +236,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<HangfireTestEvent>
 		{
-			[RecurringId("numberone")]
+			[RecurringJob]
 			public void Handle(HangfireTestEvent @event)
 			{
 			}
@@ -249,7 +250,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
-			[RecurringId("2")]
+			[RecurringJob]
 			public void Handle(MultiHandlerTestEvent @event)
 			{
 			}
@@ -259,7 +260,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<MultiHandlerTestEvent>
 		{
-			[RecurringId("3")]
+			[RecurringJob]
 			public void Handle(MultiHandlerTestEvent @event)
 			{
 			}
@@ -273,7 +274,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<LongNameHandlerTestEvent>
 		{
-			[RecurringId("TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId.LongNameHandlerTestEvent")]
+			[RecurringJob]
 			public void Handle(LongNameHandlerTestEvent @event)
 			{
 			}
@@ -283,7 +284,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			IRunOnHangfire,
 			IHandleEvent<LongNameHandlerTestEvent>
 		{
-			[RecurringId("TestLongNameHandlerVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryVeryLongWithLongId2.LongNameHandlerTestEvent")]
+			[RecurringJob]
 			public void Handle(LongNameHandlerTestEvent @event)
 			{
 			}

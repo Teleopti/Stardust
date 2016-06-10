@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
@@ -58,8 +59,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public bool HasRecurringJobs { get { return _recurringJobs.Any(); } }
 
-		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent,
-			string handlerType)
+		public void AddOrUpdateDaily(string displayName, string id, string tenant, string eventType, string serializedEvent, string handlerType, TimeZoneInfo timeZone)
 		{
 			var job = recurring(displayName, id, tenant, eventType, serializedEvent, handlerType);
 			job.Daily = true;

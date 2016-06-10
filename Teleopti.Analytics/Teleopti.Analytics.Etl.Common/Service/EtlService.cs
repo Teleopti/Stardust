@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Infrastructure.Events;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -13,16 +13,29 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
+		private readonly IIndexMaintenanceHangfireEventPublisher _indexMaintenanceHangfireEventPublisher;
+		private readonly IRecurringEventPublisher _recurringEventPublisher;
 
-		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher)
+
+		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IIndexMaintenanceHangfireEventPublisher indexMaintenanceHangfireEventPublisher, IRecurringEventPublisher recurringEventPublisher)
 		{
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
+			_indexMaintenanceHangfireEventPublisher = indexMaintenanceHangfireEventPublisher;
+			_recurringEventPublisher = recurringEventPublisher;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
+		}
+
+		public void EnsureRecurringJobs()
+		{
+			_recurringEventPublisher.StopPublishingAll();
+			_indexMaintenanceHangfireEventPublisher.PublishDaily(new IndexMaintenanceHangfireEvent());
+			_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
 		}
 
 		public void Start(DateTime serviceStartTime, Action stopService)
 		{
+			EnsureRecurringJobs();
 			_etlJobStarter.Initialize(serviceStartTime, stopService);
 			_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 		}

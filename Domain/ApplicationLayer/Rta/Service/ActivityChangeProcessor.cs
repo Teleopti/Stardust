@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_processor = processor;
 		}
 
-		[RecurringId("ActivityChangeProcessor:::TenantMinuteTickEvent")]
+		[RecurringJob]
 		public void Handle(TenantMinuteTickEvent @event)
 		{
 			CheckForActivityChanges();
