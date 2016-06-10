@@ -343,9 +343,9 @@ module.exports = function(grunt) {
 	grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
 	grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
-	grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'copy:sourceMaps', 'uglify:dev', 'generateIndex']);
+	grunt.registerTask('devDist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'copy', 'uglify:dev', 'generateIndex']);
 	grunt.registerTask('test:continuous', ['ngtemplates', 'karma:continuous']);
-	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:sourceMaps', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
+	grunt.registerTask('dist', ['ngtemplates', 'sass', 'concat:distJs', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy', 'generateIndex']); // this task should only be used by the build. It's kind of packaging for production.
 	grunt.registerTask('nova', ['devDist', 'iisexpress:authBridge', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
 	grunt.registerTask('build', ['msbuild:build']); // build the solution
 	grunt.registerTask('generateIndex', ['processhtml:dist', 'cacheBust:dist']);
