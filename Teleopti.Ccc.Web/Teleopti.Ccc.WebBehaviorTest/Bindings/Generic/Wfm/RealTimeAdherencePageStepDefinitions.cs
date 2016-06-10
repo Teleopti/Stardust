@@ -253,8 +253,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				Browser.Interactions.AssertAnyContains(selector, status.Alarm);
 			if (status.AlarmTimeFormatted() != null)
 				Browser.Interactions.AssertAnyContains(selector, status.AlarmTimeFormatted());
-			if (status.RuleTimeFormatted() != null)
-				Browser.Interactions.AssertAnyContains(selector, status.RuleTimeFormatted());
+			if (status.TimeOutOfAdherenceFormatted() != null)
+				Browser.Interactions.AssertAnyContains(selector, status.TimeOutOfAdherenceFormatted());
 
 		}
 		
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string AlarmColor { get; set; }
 		public string Color { get; set; }
 		public string AlarmTime	{ get; set; }
-		public string RuleTime { get; set; }
+		public string TimeOutOfAdherence { get; set; }
 		public string TimeInState { get; set; }
 
 		public string NextActivityStartTimeFormatted()
@@ -290,9 +290,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			return formatTime(AlarmTime);
 		}
 
-		public string RuleTimeFormatted()
+		public string TimeOutOfAdherenceFormatted()
 		{
-			return formatTime(RuleTime);
+			return formatTime(TimeOutOfAdherence);
 		}
 
 		private static string formatTime(string time)
