@@ -90,6 +90,41 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 			return jobs;
 		}
 
+		public Job GetJobByJobId(Guid jobId)
+		{
+			var job = new Job();
+
+			using (var sqlConnection = new SqlConnection(_connectionString))
+			{
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var selectCommandText = @"SELECT  [JobId]
+											  ,[Name]
+											  ,[Created]
+											  ,[CreatedBy]
+											  ,[Started]
+											  ,[Ended]
+											  ,[Serialized]
+											  ,[Type]
+											  ,[SentToWorkerNodeUri]
+											  ,[Result]
+										  FROM [Stardust].[Job] WHERE JobId = @jobId";
+				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
+				{
+					selectCommand.Parameters.AddWithValue("@JobId", jobId);
+					using (var sqlDataReader = selectCommand.ExecuteReaderWithRetry(_retryPolicy))
+					{
+						if (sqlDataReader.HasRows)
+						{
+							sqlDataReader.Read();
+
+							job = createJobFromSqlDataReader(sqlDataReader);
+						}
+					}
+				}
+			}
+			return job;
+		}
+
 		public IList<JobDetail> GetJobDetailsByJobId(Guid jobId)
 		{
 			var jobDetails = new List<JobDetail>();
@@ -103,7 +138,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 											Created, 
 											Detail  
 										FROM [Stardust].[JobDetail] WITH (NOLOCK) 
-										WHERE JobId = @JobId";
+										WHERE JobId = @JobId ORDER BY Created desc";
 				using (var selectCommand = new SqlCommand(selectCommandText, sqlConnection))
 				{
 					selectCommand.Parameters.AddWithValue("@JobId", jobId);
