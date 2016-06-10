@@ -289,12 +289,6 @@ Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel = function (layer, minut
 			return { 'right': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingRight': self.widthPx() };
 		return { 'left': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingLeft': self.widthPx() };
 	});
-	self.myScheduleStyleJson = ko.computed(function () {
-		var left = Number.parseFloat(self.leftPx());
-		var width = Number.parseFloat(self.widthPx());
-		var marginLeft = left + width + 10;
-		return { 'margin-left': marginLeft + 'px' };
-	});
 };
 
 Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minutesSinceTimeLineStart, pixelPerMinute) {
@@ -404,6 +398,17 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(laye
         return false;
     };
     self.isMySchedule = isMySchedule;
+    self.myScheduleStyleJson = ko.computed(function () {
+    	var left = 0;
+    	var width = 0;
+    	if (layers != undefined) {
+    		var lastLayer = layers[layers.length - 1];
+    		left = Number.parseFloat(lastLayer.leftPx());
+    		width = Number.parseFloat(lastLayer.widthPx());
+    	}
+		var marginLeft = left + width + 10;
+		return { 'margin-left': marginLeft + 'px' };
+	});
 };
 
 Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel = function (layers, scheduleStartTime, scheduleEndTime, agentName, personId, isDayOff,dayOffName, isEmptyDay, isFullDayAbsence, offerId) {
