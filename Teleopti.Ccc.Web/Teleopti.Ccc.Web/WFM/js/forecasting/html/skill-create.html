@@ -20,7 +20,7 @@
 						</div>
 						<div class="form-input-wrap skill-activity">
 							<label for="activityId">{{'SkillActivity'|translate}}</label>
-							<md-select id="activityId" ng-model="model.selectedActivity" required="">
+							<md-select id="activityId" aria-label="" ng-model="model.selectedActivity" required="">
 								<md-option ng-repeat="activity in activities" name="Activity" ng-value="activity">{{activity.Name}}</md-option>
 							</md-select>
 							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Activity.$touched">
@@ -30,7 +30,7 @@
 						</div>
 						<div class="form-input-wrap skill-timezone">
 							<label for="timezoneId">{{'TimeZone'|translate}}</label>
-							<md-select id="timezoneId" ng-model="model.selectedTimezone" required="">
+							<md-select id="timezoneId" aria-label="" ng-model="model.selectedTimezone" required="">
 								<md-option ng-repeat="timezone in timezones" ng-value="timezone">{{timezone.Name}}</md-option>
 							</md-select>
 							<div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Timezone.$touched">
