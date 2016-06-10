@@ -251,7 +251,7 @@
 								TimeInState: state.TimeInState,
 								TimeInAlarm: state.TimeInAlarm,
 								TimeInRule: state.TimeInRule,
-								AlarmWidth: alarmPercentage(state.TimeInAlarm),
+								ShiftTimeBar: alarmPercentage(state.TimeInAlarm),
 								Shift: shift
 							});
 						}

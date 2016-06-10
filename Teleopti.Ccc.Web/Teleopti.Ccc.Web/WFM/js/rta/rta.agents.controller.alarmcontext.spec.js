@@ -119,7 +119,7 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
-		expect(scope.agents[0].AlarmWidth).toEqual("12.5%");
+		expect(scope.agents[0].ShiftTimeBar).toEqual("12.5%");
 	});
 
 
@@ -140,7 +140,7 @@ describe('RtaAgentsCtrl', function() {
 		$controllerBuilder.createController()
 			.apply('agentsInAlarm = false');
 
-		expect(scope.agents[0].AlarmWidth).toEqual("25%");
+		expect(scope.agents[0].ShiftTimeBar).toEqual("25%");
 	});
 
 	it('should display scheduled activity', function () {
