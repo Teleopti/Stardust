@@ -145,3 +145,4 @@ ETL_SpeedUpNightlyShiftCategory_38718 = RC
 ETL_SpeedUpNightlyPreference_38283 = RC
 ETL_SpeedUpIntradayRequest_38914 = RC
 ETL_FasterIndexMaintenance_38847 = RC
+ETL_SpeedUpIntradayScorecard_38933 = RC
