@@ -49,7 +49,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new IntradayStageSchedulePreferenceJobStep(jobParameters));
 			}
-			Add(new IntradayStageAvailabilityJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAvailability_38926))
+			{
+				Add(new IntradayStageAvailabilityJobStep(jobParameters));
+			}
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradaySkill_37543))
 			{
 				Add(new StageSkillJobStep(jobParameters));
@@ -153,7 +156,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new FactSchedulePreferenceJobStep(jobParameters, true));
 			}
-			Add(new FactAvailabilityJobStep(jobParameters, true));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAvailability_38926))
+			{
+				Add(new FactAvailabilityJobStep(jobParameters, true));
+			}
+			
 			var agentQueueIntradayEnabled = jobParameters.ToggleManager.IsEnabled(Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
 			if (agentQueueIntradayEnabled)
 			{

@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -7,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 {
-	public class StudentAvailabilityDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IStudentAvailabilityDay
+	public class StudentAvailabilityDay : VersionedAggregateRootWithBusinessUnit, IRestrictionOwner, IStudentAvailabilityDay, IAggregateRootWithEvents
 	{
 		private IList<IStudentAvailabilityRestriction> _restrictionCollection;
 		private readonly IPerson _person;
@@ -148,6 +151,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
 		{
 			if (other == null) return false;
 			return GetHashCode().Equals(other.GetHashCode());
+		}
+
+		public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+		{
+			var events = base.PopAllEvents(now, operation).ToList();
+			switch (operation)
+			{
+				case DomainUpdateType.Insert:
+				case DomainUpdateType.Update:
+				case DomainUpdateType.Delete:
+					events.Add(new AvailabilityChangedEvent
+					{
+						Date = RestrictionDate,
+						PersonId = Person.Id.GetValueOrDefault(),
+						AvailabilityId = Id.GetValueOrDefault()
+					});
+					break;
+			}
+			return events;
 		}
 	}
 }

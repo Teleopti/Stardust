@@ -157,6 +157,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapScheduleDetailsMapper.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
+    <Compile Include="Analytics\AnalyticsHourlyAvailability.cs" />
     <Compile Include="Analytics\AnalyticsOvertime.cs" />
     <Compile Include="Analytics\AnalyticsAbsence.cs" />
     <Compile Include="Analytics\AnalyticsRequest.cs" />
@@ -191,6 +192,8 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Availability\AnalyticsAvailabilityUpdater.cs" />
+    <Compile Include="ApplicationLayer\Events\AvailabilityChangedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceStardustEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
@@ -334,6 +337,7 @@
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Repositories\IAnalyticsAbsenceRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsHourlyAvailabilityRepository.cs" />
     <Compile Include="Repositories\IAnalyticsOvertimeRepository.cs" />
     <Compile Include="Repositories\IAnalyticsRequestRepository.cs" />
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -8,9 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeStudentAvailabilityDayRepository : IStudentAvailabilityDayRepository
 	{
+		private readonly List<IStudentAvailabilityDay> Storage = new List<IStudentAvailabilityDay>();
+
 		public void Add(IStudentAvailabilityDay root)
 		{
-			throw new NotImplementedException();
+			Storage.Add(root);
 		}
 
 		public void Remove(IStudentAvailabilityDay root)
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IStudentAvailabilityDay> Find(DateOnly dateOnly, IPerson person)
 		{
-			throw new NotImplementedException();
+			return Storage.Where(x => x.RestrictionDate == dateOnly && x.Person.Id == person.Id).ToList();
 		}
 
 		public IList<IStudentAvailabilityDay> FindNewerThan(DateTime newerThan)
