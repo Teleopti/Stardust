@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			foreach (var scenario in scenarios)
 			{
 				var scheduledDay = getScheduledDay(availabilityDay, scenario.ScenarioCode.GetValueOrDefault());
+				if (scheduledDay == null) continue;
 				var scheduledTime = scheduledWorkTime(scheduledDay);
 
 				var analyticsHourlyAvailability = new AnalyticsHourlyAvailability
@@ -89,6 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		private IScheduleDay getScheduledDay(IStudentAvailabilityDay availabilityDay, Guid scenarioId)
 		{
 			var scenario = _scenarioRepository.Get(scenarioId);
+			if (!scenario.EnableReporting) return null;
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false, false) { LoadDaysAfterLeft = true };
 			var day = availabilityDay.RestrictionDate;
 			var period = new DateOnlyPeriod(day, day);

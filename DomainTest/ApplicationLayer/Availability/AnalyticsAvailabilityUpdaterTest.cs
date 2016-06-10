@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			personPeriod.SetId(personPeroidId);
 			var scenario = new Scenario("Asd");
 			scenario.SetId(scenarioCode);
+			scenario.EnableReporting = true;
 
 			_personRepository.Add(person);
 			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
@@ -99,6 +100,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Availability
 			result.BusinessUnitId.Should().Be.EqualTo(businessUnitId);
 			result.ScenarioId.Should().Be.GreaterThan(0);
 			result.DateId.Should().Be.GreaterThan(0);
+		}
+
+		[Test]
+		public void ShouldNotAddHourlyAvailabilityForNonReportableScenario()
+		{
+			var personCode = Guid.NewGuid();
+			var scenarioCode = Guid.NewGuid();
+			var personPeroidId = Guid.NewGuid();
+			var today = DateOnly.Today;
+			var person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
+			person.SetId(personCode);
+			var personPeriod = person.PersonPeriodCollection.First();
+			personPeriod.SetId(personPeroidId);
+			var scenario = new Scenario("Asd");
+			scenario.SetId(scenarioCode);
+			scenario.EnableReporting = false;
+
+			_personRepository.Add(person);
+			_availabilityDayRepository.Add(new StudentAvailabilityDay(person, today, new IStudentAvailabilityRestriction[] { new StudentAvailabilityRestriction() }));
+			_analyticsPersonPeriodRepository.AddPersonPeriod(new AnalyticsPersonPeriod { PersonId = personId, PersonCode = personCode, PersonPeriodCode = personPeroidId });
+			_analyticsScenarioRepository.AddScenario(new AnalyticsScenario { ScenarioCode = scenarioCode, BusinessUnitId = businessUnitId });
+			_scenarioRepository.Add(scenario);
+
+			_target.Handle(new AvailabilityChangedEvent
+			{
+				AvailabilityId = Guid.NewGuid(),
+				PersonId = personCode,
+				Date = today
+			});
+
+			_analyticsHourlyAvailabilityRepository.AnalyticsHourlyAvailabilities.Should().Be.Empty();
 		}
 
 		[Test]
