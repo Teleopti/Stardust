@@ -318,6 +318,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationScenario.cs" />
     <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeOnNonScheduledDaysTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\GuessResourceCalculationHasBeenMadeTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\BackToLegalShiftCommandTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandSpecificTest.cs" />

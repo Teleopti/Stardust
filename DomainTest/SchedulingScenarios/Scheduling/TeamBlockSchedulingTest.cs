@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			foundRestrictedAssignments.Should().Be.EqualTo(1);
 		}
 
-		[Test, Ignore("until test is green")]
+		[Test]
 		public void ShouldBeAbleToScheduleTeamWithAllMembersLoadedButOneMemberFilteredOut()
 		{
 			//two agents in the same team, everything equal

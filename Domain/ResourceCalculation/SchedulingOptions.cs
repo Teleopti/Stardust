@@ -88,6 +88,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return svc.Check(scheduleDay);
 			}
 
+	    public bool ShiftBagBackToLegal { get; set; }
+
 	    public IBlockFinder BlockFinder()
 		{
 			switch (BlockFinderTypeForAdvanceScheduling)

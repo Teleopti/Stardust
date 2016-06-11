@@ -36,6 +36,8 @@ namespace Teleopti.Interfaces.Domain
         /// 
         /// </summary>
         IShiftPreferences Shifts { get; set; }
+
+	    bool ShiftBagBackToLegal { get; set; }
     }
 
     /// <summary>

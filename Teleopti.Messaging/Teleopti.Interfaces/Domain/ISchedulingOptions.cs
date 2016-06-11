@@ -333,6 +333,7 @@ namespace Teleopti.Interfaces.Domain
 	    bool ScheduleOnDayOffs { get; set; }
 		bool AllowBreakContractTime { get; set; }
 	    bool SkipNegativeShiftValues { get; set; }
+	    bool ShiftBagBackToLegal { get; set; }
 	    IBlockFinder BlockFinder();
 	    bool IsDayScheduled(IScheduleDay scheduleDay);
     }

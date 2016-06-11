@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -354,6 +355,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_optimizationPreferences.Extra.UseTeams = false;
 			_schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
 			Assert.That(_schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key, Is.EqualTo("SingleAgent"));
+		}
+
+	    [Test]
+	    public void ShouldMapShiftBagBackToLegal()
+	    {
+		    _optimizationPreferences.ShiftBagBackToLegal = true;
+			_schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+			_schedulingOptions.ShiftBagBackToLegal.Should().Be.True();
+
 		}
 
     }

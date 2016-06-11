@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			generalPreferences.UseShiftCategoryLimitations = false;
 			generalPreferences.UseStudentAvailabilities = false;
 			optimizationPreferences.Advanced.UseAverageShiftLengths = false;
+			optimizationPreferences.ShiftBagBackToLegal = true;
 		}
 	}
 }

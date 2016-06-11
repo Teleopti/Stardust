@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			ISchedulingOptions schedulingOptions = new SchedulingOptions();
 
+			schedulingOptions.ShiftBagBackToLegal = optimizationPreferences.ShiftBagBackToLegal;
 			schedulingOptions.TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag;
 			schedulingOptions.UseTeam = optimizationPreferences.Extra.UseTeams;
 			schedulingOptions.TeamSameShiftCategory =
