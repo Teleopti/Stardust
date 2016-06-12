@@ -936,6 +936,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\Reports\ReportItems.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportItems.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Wfm\Reports\ReportsStepsDefinition.cs" />
     <Compile Include="Wfm\Requests\Basic.feature.cs">
       <DependentUpon>Basic.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1414,6 +1420,10 @@
     <None Include="Wfm\RealTimeAdherence\TimeZone.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\Reports\ReportItems.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ReportItems.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Requests\Basic.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
