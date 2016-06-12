@@ -85,7 +85,8 @@ Scenario: Could delete absences for an agent
 	When I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'RemoveAbsence' in team schedule
-	Then I should see schedule with no absence for 'John Smith' displayed
+	Then I should see a successful notice
+	And I should see schedule with no absence for 'John Smith' displayed
 
 Scenario: Absence deletion should only be enabled when when absence selected
 	Given 'John Smith' has an absence with

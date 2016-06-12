@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see schedule with no absence for '(.*)' displayed")]
 		public void ThenIShouldSeeScheduleWithNoAbsenceForDisplayed(string agentName)
 		{
+			Browser.Interactions.AssertScopeValue(".team-schedule","vm.isLoading", false);
 			Browser.Interactions.AssertNotExists(".person-name", ".schedule div.personAbsence");
 		}
 
