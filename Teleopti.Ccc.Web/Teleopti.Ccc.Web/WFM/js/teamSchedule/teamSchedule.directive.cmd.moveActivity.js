@@ -134,9 +134,14 @@
 			});
 
 			elem.removeAttr('tabindex');
+
+			var inputs = elem[0].querySelectorAll('input');
+			angular.forEach(inputs, function (input) {
+				angular.element(input).on('focus', function (event) {
+					event.target.select();
+				});
+			});
 		}
 	}
-
-
 
 })();
