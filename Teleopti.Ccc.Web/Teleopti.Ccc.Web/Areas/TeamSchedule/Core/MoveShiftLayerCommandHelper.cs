@@ -49,12 +49,53 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 
 			return layerToTimeMap;
-		} 
+		}
+
+		public bool ValidateLayerMoveToTime(IDictionary<Guid, DateTime> layerToMoveTimeMap, IPerson person, DateOnly scheduleDate)
+		{
+			var currentScenario = _currentScenario.Current();
+			var personAssignment = _personAssignmentRepositoryTypedId.LoadAggregate(new PersonAssignmentKey
+			{
+				Date = scheduleDate,
+				Person = person,
+				Scenario = currentScenario
+			});
+
+			if (personAssignment == null)
+			{
+				return false;
+			}
+
+			var layersExcludeSelected = personAssignment.ShiftLayers.Where(l => !layerToMoveTimeMap.ContainsKey(l.Id.Value));
+			var selectedLayers = personAssignment.ShiftLayers.Where(l => layerToMoveTimeMap.ContainsKey(l.Id.Value));
+
+			var earliestStart = DateTime.MaxValue;
+			var latestEnd = DateTime.MinValue;
+
+			layersExcludeSelected.ForEach(l =>
+			{
+				if (l.Period.StartDateTime < earliestStart)
+					earliestStart = l.Period.StartDateTime;
+				if (l.Period.EndDateTime > latestEnd)
+					latestEnd = l.Period.EndDateTime;
+			});
+
+			selectedLayers.ForEach(l =>
+			{
+				if (layerToMoveTimeMap[l.Id.Value] < earliestStart)
+					earliestStart = layerToMoveTimeMap[l.Id.Value];
+				if (layerToMoveTimeMap[l.Id.Value].Add(l.Period.ElapsedTime()) > latestEnd)
+					latestEnd = layerToMoveTimeMap[l.Id.Value].Add(l.Period.ElapsedTime());
+			});
+			return latestEnd.Subtract(earliestStart).Duration() < new TimeSpan(36, 0, 0);
+		}
 	}
 
 	public interface IMoveShiftLayerCommandHelper
 	{
 		IDictionary<Guid, DateTime> GetCorrectNewStartForLayersForPerson(IPerson person, DateOnly scheduleDate,
 			IEnumerable<Guid> shiftLayerIds, DateTime newStartTimeUtc);
+
+		bool ValidateLayerMoveToTime(IDictionary<Guid, DateTime> layerToMoveTimeMap, IPerson person, DateOnly date);
 	}
 }

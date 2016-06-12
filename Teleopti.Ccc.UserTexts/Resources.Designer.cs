@@ -12877,7 +12877,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The application has encountered an unexpected error..
+        ///   Looks up a localized string similar to The application has encountered an unexpected error. Help us improve your experience by sending an error report: .
         /// </summary>
         public static string InternalErrorMessage {
             get {
@@ -26562,6 +26562,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftGenerationWarning {
             get {
                 return ResourceManager.GetString("ShiftGenerationWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift length exceeds 36 hours.
+        /// </summary>
+        public static string ShiftLengthExceed36Hours {
+            get {
+                return ResourceManager.GetString("ShiftLengthExceed36Hours", resourceCulture);
             }
         }
         

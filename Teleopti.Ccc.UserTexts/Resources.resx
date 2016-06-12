@@ -14543,4 +14543,8 @@ These options are activated:
     <value>Summary up to latest actual interval</value>
     <comment>intraday summary header</comment>
   </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>Shift length exceeds 36 hours</value>
+    <comment>warning message if activity moving to time makes shift length exceeds 36 hours.</comment>
+  </data>
 </root>

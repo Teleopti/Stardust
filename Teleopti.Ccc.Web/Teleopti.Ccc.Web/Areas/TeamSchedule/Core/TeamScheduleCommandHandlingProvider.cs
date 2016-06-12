@@ -191,26 +191,37 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				{
 					personError.Messages.Add(Resources.NoShiftsFound);
 				}
-				layerToMoveTimeMap
-					.ForEach(
-						pl =>
-						{
-							var command = new MoveShiftLayerCommand
+
+				if (_helper.ValidateLayerMoveToTime(layerToMoveTimeMap, person, input.Date))
+				{
+					layerToMoveTimeMap
+						.ForEach(
+							pl =>
 							{
-								AgentId = personActivity.PersonId,
-								NewStartTimeInUtc = pl.Value,
-								ScheduleDate = input.Date,
-								ShiftLayerId = pl.Key,
-								TrackedCommandInfo =
-									input.TrackedCommandInfo ??
-									new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault() }
-							};
-							_commandDispatcher.Execute(command);
-							if (command.ErrorMessages != null && command.ErrorMessages.Any())
-							{
-								personError.Messages.AddRange(command.ErrorMessages);
-							}
-						});
+								var command = new MoveShiftLayerCommand
+								{
+									AgentId = personActivity.PersonId,
+									NewStartTimeInUtc = pl.Value,
+									ScheduleDate = input.Date,
+									ShiftLayerId = pl.Key,
+									TrackedCommandInfo =
+										input.TrackedCommandInfo ??
+										new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()}
+								};
+								_commandDispatcher.Execute(command);
+								if (command.ErrorMessages != null && command.ErrorMessages.Any())
+								{
+									personError.Messages.AddRange(command.ErrorMessages);
+								}
+							});
+
+				}
+				else
+				{
+					personError.Messages.Add(Resources.ShiftLengthExceed36Hours);
+				}
+
+				
 				if (personError.Messages.Any())
 				{
 					result.Add(personError);
