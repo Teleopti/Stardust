@@ -2,6 +2,7 @@
 	position: relative;
 	height: 87vh;
 	background-color: $white;
+	margin-right: 15px;
 
 	.inline-block, .wfm-date-range-picker-wrap {
 		display: inline-block;
@@ -42,31 +43,28 @@
 		}
 	}
 
-	.wfm-date-range-picker-wrap input {
-		width: 100px !important;
+	.wfm-date-range-picker-wrap {
+		width: 260px;
+
+		input {
+			width: 100px !important;
+		}
 	}
 
 	.ui-grid {
 		height: 68vh; //71vh;
 		margin: 15px;
 
-		.ui-grid-cell-contents {
+		.ui-grid-cell-contents.ui-grid-cell-contents {
 			width: 85%;
 			text-align: left;
-			// For IE>=9
-			@media screen and (min-width:0\0) {
-				text-overflow: clip;
-			}
+			text-overflow: clip;
 		}
 
 		.ui-grid-column-menu-button-last-col {
 			margin-right: 0;
 		}
 
-		.ui-grid-menu-button {
-			top: 2px;
-			right: -3px;
-		}
 	}
 
 	.request-header-full-height {
@@ -184,6 +182,7 @@
 	.shift-trade-view {
 
         overflow: hidden!important;
+		margin-right:15px;
 
         /* show scroll bar outside of grid*/
         .ui-grid-render-container-body .ui-grid-viewport {

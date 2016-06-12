@@ -54,6 +54,7 @@
 			}
 
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary);
+			vm.gridOptions.enablePinning = vm.shiftTradeRequestDateSummary;
 			vm.gridOptions.category = vm.gridConfigurationService.categories(vm.shiftTradeRequestDateSummary);
 			applyColumnFilters(vm.gridOptions.columnDefs);
 
