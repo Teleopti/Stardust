@@ -69,6 +69,7 @@
 		WfmTeamSchedule_ShowContractTime_38509,
 		WfmTeamSchedule_AddPersonalActivity_37742,
 		WebByPassDefaultPermissionCheck_37984,
+		WfmTeamSchedule_RevertToPreviousSchedule_39002,
 
 		WfmReportPortal_Basic_38825,
 

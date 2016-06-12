@@ -76,6 +76,8 @@ WfmTeamSchedule_MoveActivity_37744 = RC
 WfmTeamSchedule_ShowContractTime_38509 = RC
 WfmTeamSchedule_PrepareForRelease_37752 = true
 
+WfmTeamSchedule_RevertToPreviousSchedule_39002 = DEV
+
 WfmReportPortal_Basic_38825 = RC
 
 WebByPassDefaultPermissionCheck_37984 = true
