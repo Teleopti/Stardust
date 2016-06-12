@@ -1,4 +1,4 @@
-using System.Linq;
+ï»¿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
@@ -51,15 +51,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldSortSwedishName()
 		{
-			Sites.Has(new Site("Ä"));
+			Sites.Has(new Site("Ã„"));
 			Sites.Has(new Site("A"));
-			Sites.Has(new Site("Å"));
+			Sites.Has(new Site("Ä¹"));
 
 			Culture.IsSwedish();
 			var result = Target.Build();
 
 			result.Select(x => x.Name)
-				.Should().Have.SameSequenceAs(new[] {"A", "Å", "Ä"});
+				.Should().Have.SameSequenceAs(new[] {"A", "Ä¹", "Ã„"});
 		}
 	}
 }
