@@ -403,8 +403,8 @@ Teleopti.MyTimeWeb.Request.PersonScheduleEditShiftTradeViewModel = function(laye
     	var width = 0;
     	if (layers != undefined) {
     		var lastLayer = layers[layers.length - 1];
-    		left = Number.parseFloat(lastLayer.leftPx());
-    		width = Number.parseFloat(lastLayer.widthPx());
+    		left = parseFloat(lastLayer.leftPx());
+    		width = parseFloat(lastLayer.widthPx());
     	}
 		var marginLeft = left + width + 10;
 		return { 'margin-left': marginLeft + 'px' };
