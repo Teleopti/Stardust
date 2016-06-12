@@ -223,11 +223,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected activity '(.*)'")]
 		public void WhenISelectedActivity(string description)
 		{
-			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
-				() =>
-				{
-					Browser.Interactions.ClickUsingJQuery($".projection-layer[projection-name={description}]");
-				});
+			Browser.Interactions.AssertScopeValue(".team-schedule","vm.scheduleFullyLoaded",true);				
+			Browser.Interactions.Click($".projection-layer[projection-name={description}]");				
 		}
 
 		[When(@"I apply move activity")]
