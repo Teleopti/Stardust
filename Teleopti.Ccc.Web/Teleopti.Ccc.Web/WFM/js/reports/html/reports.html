@@ -10,13 +10,9 @@
 	</div>
 	<div class="report-list">
 		<md-card md-theme="default" md-theme-watch ng-repeat="report in reports.reports | filter:reports.query" class="report-item">
-			<md-card-title>
-				<md-card-title-text>
-					<a ng-href="{{report.Url}}" target="_blank"><span>{{report.Name}}</span></a>
-				</md-card-title-text>
-			</md-card-title>
+			<md-card-content>
+				<a ng-href="{{report.Url}}" target="_blank">{{report.Name}}</a>
+			</md-card-content>
 		</md-card>
 	</div>
-
-
 </div>
