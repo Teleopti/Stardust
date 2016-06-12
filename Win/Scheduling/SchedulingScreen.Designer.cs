@@ -306,6 +306,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx4 = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripPanelItem4 = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
 			this.toolStripButtonFilterAgentsRequestView = new System.Windows.Forms.ToolStripButton();
+			this.toolStripExNewReqestNotice = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
+			this.toolStripLabelNewRequestNotice = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripTabItemQuickAccess = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
 			this.toolStripExForQuickAccessItems = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonQuickAccessCancel = new System.Windows.Forms.ToolStripButton();
@@ -356,6 +358,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExHandleRequests.SuspendLayout();
 			this.toolStripEx3.SuspendLayout();
 			this.toolStripEx4.SuspendLayout();
+			this.toolStripExNewReqestNotice.SuspendLayout();
 			this.toolStripTabItemQuickAccess.Panel.SuspendLayout();
 			this.toolStripExForQuickAccessItems.SuspendLayout();
 			this.contextMenuStripRestrictionView.SuspendLayout();
@@ -2859,6 +2862,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExHandleRequests);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripEx3);
 			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripEx4);
+			this.toolStripTabItem1.Panel.Controls.Add(this.toolStripExNewReqestNotice);
 			this.toolStripTabItem1.Panel.Name = "ribbonPanel3";
 			this.toolStripTabItem1.Panel.ScrollPosition = 0;
 			this.toolStripTabItem1.Panel.TabIndex = 7;
@@ -3170,6 +3174,41 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFilterAgentsRequestView, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonFilterAgentsRequestView, false);
 			this.toolStripButtonFilterAgentsRequestView.Click += new System.EventHandler(this.toolStripButtonFilterAgents_Click);
+			// 
+			// toolStripExNewReqestNotice
+			// 
+			this.ribbonControlAdv1.SetDescription(this.toolStripExNewReqestNotice, "");
+			this.toolStripExNewReqestNotice.Dock = System.Windows.Forms.DockStyle.None;
+			this.toolStripExNewReqestNotice.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(59)))), ((int)(((byte)(59)))), ((int)(((byte)(59)))));
+			this.toolStripExNewReqestNotice.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripExNewReqestNotice.Image = null;
+			this.toolStripExNewReqestNotice.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+			this.toolStripLabelNewRequestNotice});
+			this.toolStripExNewReqestNotice.Location = new System.Drawing.Point(1245, 1);
+			this.toolStripExNewReqestNotice.Name = "toolStripExNewReqestNotice";
+			this.toolStripExNewReqestNotice.Office12Mode = false;
+			this.toolStripExNewReqestNotice.Padding = new System.Windows.Forms.Padding(0);
+			this.toolStripExNewReqestNotice.ShowLauncher = false;
+			this.toolStripExNewReqestNotice.Size = new System.Drawing.Size(271, 0);
+			this.toolStripExNewReqestNotice.TabIndex = 18;
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExNewReqestNotice, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripExNewReqestNotice, false);
+			this.toolStripExNewReqestNotice.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.toolStripExNewReqestNotice_ItemClicked);
+			// 
+			// toolStripLabelNewRequestNotice
+			// 
+			this.toolStripLabelNewRequestNotice.ActiveLinkColor = System.Drawing.Color.DimGray;
+			this.toolStripLabelNewRequestNotice.BackColor = System.Drawing.Color.YellowGreen;
+			this.toolStripLabelNewRequestNotice.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripLabelNewRequestNotice.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.toolStripLabelNewRequestNotice.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.toolStripLabelNewRequestNotice.IsLink = true;
+			this.toolStripLabelNewRequestNotice.LinkColor = System.Drawing.Color.White;
+			this.toolStripLabelNewRequestNotice.Name = "toolStripLabelNewRequestNotice";
+			this.SetShortcut(this.toolStripLabelNewRequestNotice, System.Windows.Forms.Keys.None);
+			this.toolStripLabelNewRequestNotice.Size = new System.Drawing.Size(204, 0);
+			this.toolStripLabelNewRequestNotice.Text = "xxPreviewTheNewRequests";
+			this.toolStripLabelNewRequestNotice.VisitedLinkColor = System.Drawing.Color.White;
 			// 
 			// toolStripTabItemQuickAccess
 			// 
@@ -3519,6 +3558,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx3.PerformLayout();
 			this.toolStripEx4.ResumeLayout(false);
 			this.toolStripEx4.PerformLayout();
+			this.toolStripExNewReqestNotice.ResumeLayout(false);
+			this.toolStripExNewReqestNotice.PerformLayout();
 			this.toolStripTabItemQuickAccess.Panel.ResumeLayout(false);
 			this.toolStripExForQuickAccessItems.ResumeLayout(false);
 			this.toolStripExForQuickAccessItems.PerformLayout();
@@ -3801,5 +3842,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripButton toolStripButtonSaveLarge;
 		private ToolStripButton toolStripButtonRefreshLarge;
 		private ToolStripMenuItem agentSkillAnalyzerToolStripMenuItem;
+		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExNewReqestNotice;
+		private ToolStripLabel toolStripLabelNewRequestNotice;
 	}
 }

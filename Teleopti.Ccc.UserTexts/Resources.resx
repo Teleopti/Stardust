@@ -14547,4 +14547,8 @@ These options are activated:
     <value>Shift length exceeds 36 hours</value>
     <comment>warning message if activity moving to time makes shift length exceeds 36 hours.</comment>
   </data>
+  <data name="PreviewTheNewRequests" xml:space="preserve">
+    <value>Preview the new requests!</value>
+    <comment>Text for button in request module of fat client</comment>
+  </data>
 </root>
