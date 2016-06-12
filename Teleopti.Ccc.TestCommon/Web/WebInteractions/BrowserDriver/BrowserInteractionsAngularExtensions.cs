@@ -21,7 +21,16 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions.BrowserDriver
 		public static void InvokeServiceAction(this IBrowserInteractions interactions, string selector, string serviceName, string actionName)
 		{
 			var script = getInjectableService(selector, serviceName) + string.Format(" service.{0}();", actionName);
+			interactions.Javascript(script);
+		}
 
+		public static void InvokeScopeAction(this IBrowserInteractions interactions, string selector, string actionName,
+			bool useIsolateScope = false)
+		{
+			var run = $" scope.{actionName}();";
+			var script = scopeByQuerySelector(selector, useIsolateScope) +
+						 runnerByQuerySelector(selector) +
+						 "runner(function() {" + run + " });";
 			interactions.Javascript(script);
 		}
 

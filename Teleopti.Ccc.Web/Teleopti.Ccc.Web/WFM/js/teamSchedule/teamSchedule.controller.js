@@ -98,6 +98,7 @@
 		}
 
 		vm.onScheduleDateChanged = function () {
+			vm.isLoading = true;
 			personSelectionSvc.clearPersonInfo();
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();

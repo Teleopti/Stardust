@@ -15,17 +15,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 	public sealed class TeamScheduleStepDefinitions
 	{
 		[When(@"I searched schedule with keyword '(.*)' and schedule date '(.*)'")]
-		public void WhenISearchedScheduleWithKeywordAndScheduleDate(string searchkeyword, DateTime scheduleDate)
+		public void WhenISearchedScheduleWithKeywordAndScheduleDate(string searchkeyword, string scheduleDate)
 		{
 			Browser.Interactions.FillWith("#simple-people-search", string.Format("\"{0}\"", searchkeyword));
 			Browser.Interactions.PressEnter("#simple-people-search");
 
 			var propertyValues = new Dictionary<string, string>
 			{
-				{"vm.scheduleDate", string.Format("new Date('{0}')", scheduleDate.ToShortDateString())}
+				{"vm.scheduleDate", string.Format("new Date('{0}')", scheduleDate)}
 			};
-			Browser.Interactions.SetScopeValues(".datepicker-container", propertyValues);
-			Browser.Interactions.PressEnter("team-schedule-datepicker #teamschedule-datepicker-input");
+
+			Browser.Interactions.SetScopeValues(".team-schedule",propertyValues);			
+			Browser.Interactions.AssertScopeValue(".team-schedule","vm.scheduleDateMoment().format('YYYY-MM-DD')",scheduleDate);
+			Browser.Interactions.InvokeScopeAction(".team-schedule","vm.onScheduleDateChanged");		
 			Browser.Interactions.InvokeServiceAction(".team-schedule", "ScenarioTestUtil", "inScenarioTest");
 		}
 
@@ -58,11 +60,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected agent '(.*)'")]
 		public void WhenISelectedAgent(string agentName)
 		{
-			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
-				() =>
-				{
-					Browser.Interactions.ClickContaining(".person-name", agentName);
-				});
+			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
+			Browser.Interactions.AssertScopeValue(".team-schedule","vm.isLoading",false);
+			Browser.Interactions.ClickContaining(".person-name", agentName);
 		}
 
 		[When(@"I open menu in team schedule")]
@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		public void ThenIShouldBeAbleToApplyMyNewActivity()
 		{
 			Browser.Interactions.AssertScopeValue("#applyActivity", "newActivityForm.$valid", true);
+			Browser.Interactions.AssertScopeValue("#applyActivity","vm.isInputValid()",true);
 			Browser.Interactions.AssertExists("#applyActivity.wfm-btn-primary");
 		}
 
