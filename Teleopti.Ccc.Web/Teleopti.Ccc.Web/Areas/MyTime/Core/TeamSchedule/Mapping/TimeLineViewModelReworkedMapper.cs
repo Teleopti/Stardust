@@ -46,15 +46,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		{
 			var schedules = (agentSchedules as IList<AgentInTeamScheduleViewModel>) ?? agentSchedules.ToList();
 
-			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && (!s.ScheduleLayers.IsNullOrEmpty())).ToList();
+			var schedulesWithoutEmptyLayerDays = schedules.Where(s => (!s.ScheduleLayers.IsNullOrEmpty())).ToList();
 
-			if (!schedulesWithoutDayoffAndEmptyDays.Any())
+			if (!schedulesWithoutEmptyLayerDays.Any())
 				return null;
 
 			var timeZone = _userTimeZone.TimeZone();
 
-			var startTime = schedulesWithoutDayoffAndEmptyDays.Min(s => s.ScheduleLayers.First().Start);
-			var endTime = schedulesWithoutDayoffAndEmptyDays.Max(l => l.ScheduleLayers.Last().End);
+			var startTime = schedulesWithoutEmptyLayerDays.Min(s => s.ScheduleLayers.First().Start);
+			var endTime = schedulesWithoutEmptyLayerDays.Max(l => l.ScheduleLayers.Last().End);
 
 			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);
 		}

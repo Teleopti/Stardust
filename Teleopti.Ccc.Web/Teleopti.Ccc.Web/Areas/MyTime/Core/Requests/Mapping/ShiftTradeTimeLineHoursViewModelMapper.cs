@@ -19,15 +19,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		public IEnumerable<ShiftTradeTimeLineHoursViewModel> Map(ShiftTradeAddPersonScheduleViewModel mySchedule,
-		                                                         IEnumerable<ShiftTradeAddPersonScheduleViewModel>
-			                                                         possibleTradeSchedules, DateOnly shiftTradeDate)
+																 IEnumerable<ShiftTradeAddPersonScheduleViewModel>
+																	 possibleTradeSchedules, DateOnly shiftTradeDate)
 		{
-			return _shiftTradeTimelineHoursViewModelFactory.CreateTimeLineHours(getTimeLinePeriod(mySchedule, possibleTradeSchedules, shiftTradeDate));
+			var timeLinePeriod = getTimeLinePeriod(mySchedule, possibleTradeSchedules, shiftTradeDate);
+			var timeLine = _shiftTradeTimelineHoursViewModelFactory.CreateTimeLineHours(timeLinePeriod);
+			return timeLine;
 		}
 
 		private DateTimePeriod getTimeLinePeriod(ShiftTradeAddPersonScheduleViewModel mySchedule,
-		                                         IEnumerable<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedules,
-		                                         DateOnly shiftTradeDate)
+												 IEnumerable<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedules,
+												 DateOnly shiftTradeDate)
 		{
 			DateTimePeriod? myScheduleMinMax = getMyScheduleMinMax(mySchedule);
 			DateTimePeriod? possibleTradeScheduleMinMax = getpossibleTradeScheduleMinMax(possibleTradeSchedules);
@@ -35,12 +37,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
 			var returnPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(shiftTradeDate.Date.AddHours(8),
-			                                                                        shiftTradeDate.Date.AddHours(17), timeZone);
+																					shiftTradeDate.Date.AddHours(17), timeZone);
 
 			if (myScheduleMinMax.HasValue)
 				returnPeriod = possibleTradeScheduleMinMax.HasValue
-					               ? myScheduleMinMax.Value.MaximumPeriod(possibleTradeScheduleMinMax.Value)
-					               : myScheduleMinMax.Value;
+								   ? myScheduleMinMax.Value.MaximumPeriod(possibleTradeScheduleMinMax.Value)
+								   : myScheduleMinMax.Value;
 			else if (possibleTradeScheduleMinMax.HasValue)
 				returnPeriod = possibleTradeScheduleMinMax.Value;
 
@@ -51,16 +53,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private DateTimePeriod? getMyScheduleMinMax(ShiftTradeAddPersonScheduleViewModel mySchedule)
 		{
-			if (mySchedule == null || mySchedule.IsDayOff || mySchedule.ScheduleLayers == null)
+			if (mySchedule == null || mySchedule.ScheduleLayers == null)
 				return null;
 			if (!mySchedule.ScheduleLayers.Any())
 				return null;
 
+			var start = mySchedule.ScheduleLayers.First().Start;
+			var end = mySchedule.ScheduleLayers.Last().End;
+
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(mySchedule.ScheduleLayers.First().Start,
-			                                                            mySchedule.ScheduleLayers.Last().End, timeZone);
-
+			var result = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(start, end, timeZone);
+			return result;
 		}
 
 		private DateTimePeriod? getpossibleTradeScheduleMinMax(
@@ -70,12 +74,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			var schedulesWithoutDayoffAndEmptyDays = schedules.Where(s => s.IsDayOff == false && !s.ScheduleLayers.IsNullOrEmpty());
 			var schedulesWithoutDOAndEmpty = schedulesWithoutDayoffAndEmptyDays as IList<ShiftTradeAddPersonScheduleViewModel> ??
-			                         schedulesWithoutDayoffAndEmptyDays.ToList();
+									 schedulesWithoutDayoffAndEmptyDays.ToList();
 
 			if (!schedulesWithoutDOAndEmpty.Any())
 				return null;
 
-			
+
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
 			var startTime = schedulesWithoutDOAndEmpty.Min(s => s.ScheduleLayers.First().Start);
