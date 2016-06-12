@@ -110,6 +110,7 @@ Scenario: Add on empty day first day
 	| Start time | 2013-04-08 00:00 |
 	| End time   | 2013-04-09 17:00 |
 
+@ignore
 Scenario: Add on empty day last day
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
