@@ -33,8 +33,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[Then(@"I should see schedule with absence '(.*)' for '(.*)' displayed")]
 		public void ThenIShouldSeeScheduleForDisplayed(string absence, string agentName)
 		{
+			Browser.Interactions.AssertScopeValue(".team-schedule","vm.scheduleFullyLoaded",true);
 			Browser.Interactions.AssertAnyContains(".person-name", agentName);
-			Browser.Interactions.AssertVisibleUsingJQuery($".schedule .layer.personAbsence[projection-name='{absence}']");
+			Browser.Interactions.AssertExists($".schedule .layer.personAbsence[projection-name='{absence}']");
 		}
 
 		[Then(@"I should see schedule with no absence for '(.*)' displayed")]
