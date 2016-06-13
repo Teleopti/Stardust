@@ -96,9 +96,9 @@
                 background-color: transparent;
             }
 
-            > button.wfm-btn-invis-primary:active {
+            > button.wfm-btn-invis-primary:focus {
                 i {
-                    color: orange;
+                    color: $green-300;
                 }
             }
         }
