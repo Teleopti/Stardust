@@ -507,6 +507,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					case DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage:
 						outlookBarSmartPartInfo.Icon = Resources.People_filled_space_32x32;
+						if (_toggleManager.IsEnabled(Toggles.Wfm_People_PrepareForRelease_39040))
+						{
+							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("wfm/#/people");
+						}
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
 						outlookBarSmartPartInfo.Icon = Resources.Forecasts2_filled_32x32;
@@ -518,8 +523,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
 						outlookBarSmartPartInfo.Icon = Resources.Intraday_filled_space_32x32;
-						outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
-						outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/intraday");
+						if (_toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074))
+						{
+							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/intraday");
+						}
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
 						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
@@ -705,11 +713,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (uc == null)
 				return;
 
-			Uri previewUrl = null;
-			if (_toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074))
-				previewUrl = modulePanelItem.PreviewUrl;
-
-				outlookBarWorkSpace1.SetNavigatorControl(uc, modulePanelItem.PreviewText, previewUrl);
+			outlookBarWorkSpace1.SetNavigatorControl(uc, modulePanelItem.PreviewText, modulePanelItem.PreviewUrl);
 			
 			var navigator = uc as AbstractNavigator;
 			if (navigator != null)

@@ -21265,6 +21265,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Preview the new People module!.
+        /// </summary>
+        public static string PreviewTheNewPeopleModule {
+            get {
+                return ResourceManager.GetString("PreviewTheNewPeopleModule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview the new Requests module!.
         /// </summary>
         public static string PreviewTheNewRequestsModule {
@@ -32091,6 +32100,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string WFMReleaseNotification {
             get {
                 return ResourceManager.GetString("WFMReleaseNotification", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} has been improved! We appreciate your &lt;a href=&apos;http://www.teleopti.com/wfm/customer-feedback.aspx&apos; target=&apos;_blank&apos;&gt;feedback.&lt;/a&gt;.
+        /// </summary>
+        public static string WFMReleaseNotificationWithoutOldModuleLink {
+            get {
+                return ResourceManager.GetString("WFMReleaseNotificationWithoutOldModuleLink", resourceCulture);
             }
         }
         

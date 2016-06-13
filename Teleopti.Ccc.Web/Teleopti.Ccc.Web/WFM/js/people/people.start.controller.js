@@ -4,11 +4,11 @@ angular.module('wfm.people')
 	.constant('chunkSize', 50)
 	.controller('PeopleStartCtrl', [
 		'$scope', '$filter', '$state', '$stateParams', '$translate', 'i18nService', 'uiGridConstants',
-		'uiGridExporterConstants', '$q', 'Toggle', 'People', PeopleStartController
+		'uiGridExporterConstants', '$q', 'Toggle', 'People', 'NoticeService', PeopleStartController
 	]);
 
 function PeopleStartController($scope, $filter, $state, $stateParams, $translate, i18nService, uiGridConstants,
-	uiGridExporterConstants, $q, toggleSvc, peopleSvc) {
+	uiGridExporterConstants, $q, toggleSvc, peopleSvc, NoticeService) {
 	$scope.searchResult = [];
 	$scope.pageSize = 20;
 	$scope.searchOptions = {
@@ -369,4 +369,12 @@ function PeopleStartController($scope, $filter, $state, $stateParams, $translate
 	$scope.toggleRowSelectable();
 	$scope.dataInitialized = true;
 	$scope.searchKeyword();
+
+	if (toggleSvc.Wfm_People_PrepareForRelease_39040) {
+		var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');
+		var moduleName = $translate.instant('People');
+		var message = template.replace('{0}', moduleName);
+		NoticeService.info(message, null, true);
+	}
 }
+

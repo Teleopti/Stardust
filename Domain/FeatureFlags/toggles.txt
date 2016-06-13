@@ -96,6 +96,8 @@ Wfm_Requests_ShiftTrade_37751 = RC
 
 Wfm_Intraday_38074 = true
 
+Wfm_People_PrepareForRelease_39040 = DEV
+
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 
 WfmIntraday_MonitorActualvsForecasted_35176 = true

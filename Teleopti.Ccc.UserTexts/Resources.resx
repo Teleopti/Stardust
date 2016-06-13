@@ -14555,4 +14555,12 @@ These options are activated:
     <value>Preview the new Requests module!</value>
     <comment>Text for notice in navbar of fat client</comment>
   </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>Preview the new People module!</value>
+    <comment>Text for notice in navbar of fat client</comment>
+  </data>
+  <data name="WFMReleaseNotificationWithoutOldModuleLink" xml:space="preserve">
+    <value>{0} has been improved! We appreciate your &lt;a href='http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'&gt;feedback.&lt;/a&gt;</value>
+		<comment>Notification message to the user in the web released WFM. {0} is the module name, like MyTime for example.</comment>
+	</data>
 </root>

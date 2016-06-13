@@ -15,7 +15,9 @@
 			$scope.hiddenArray = [];
 			$scope.prevArea;
 			$scope.drillable;
-			var message = "Intraday has been improved! We appreciate your <a href='http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>feedback.</a>";
+			var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');
+			var moduleName = $translate.instant('Intraday');
+			var message = template.replace('{0}', moduleName);
 			var prevSkill = {};
 			$scope.currentInterval = [];
 			$scope.chart;

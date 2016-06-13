@@ -86,6 +86,8 @@
 
 		Wfm_Intraday_38074,
 
+		Wfm_People_PrepareForRelease_39040,
+
 		Report_UseOpenXmlFormat_35797,
 		Scheduler_IntradayOptimization_36617,
 		Scheduler_AgentSkillAnalyzer_12345,
