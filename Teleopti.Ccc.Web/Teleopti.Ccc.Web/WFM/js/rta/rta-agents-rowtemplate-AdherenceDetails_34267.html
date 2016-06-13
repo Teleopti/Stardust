@@ -5,7 +5,7 @@
 <div ng-show="grid.appScope.isSelected(row.entity.PersonId)">
 	<div class="agent-menu historical-adherence" layout="row">
 		<div flex>
-			<a href="{{grid.appScope.changeScheduleUrl(row.entity.TeamId,row.entity.PersonId)}}" class="change-schedule">
+			<a href="{{grid.appScope.changeScheduleUrl(row.entity.TeamId,row.entity.PersonId)}}" class="change-schedule" target="_blank">
 				<span class="mdi mdi-pencil"></span>{{'ModifySchedule'|translate}}
 			</a>
 		</div>
