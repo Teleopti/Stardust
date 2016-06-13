@@ -151,3 +151,6 @@ ETL_SpeedUpIntradayRequest_38914 = RC
 ETL_FasterIndexMaintenance_38847 = RC
 ETL_SpeedUpIntradayScorecard_38933 = RC
 ETL_SpeedUpIntradayAvailability_38926 = RC
+ETL_SpeedUpNightlyAvailability_38926 = RC
+ETL_SpeedUpNightlyRequest_38914 = RC
+ETL_SpeedUpGroupPagePersonNightly_37623 = RC

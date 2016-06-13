@@ -136,8 +136,10 @@
 		ETL_SpeedUpIntradayRequest_38914,
 		ETL_FasterIndexMaintenance_38847,
         ETL_SpeedUpIntradayScorecard_38933,
-		ETL_SpeedUpIntradayAvailability_38926
-
-        // ReSharper restore InconsistentNaming
-    }
+		ETL_SpeedUpIntradayAvailability_38926,
+		ETL_SpeedUpNightlyAvailability_38926,
+		ETL_SpeedUpNightlyRequest_38914,
+		ETL_SpeedUpGroupPagePersonNightly_37623
+		// ReSharper restore InconsistentNaming
+	}
 }

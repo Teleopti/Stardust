@@ -62,7 +62,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 		    {
 		        Add(new StageSchedulePreferenceJobStep(jobParameters));
 		    }
-		    Add(new StageAvailabilityJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyAvailability_38926))
+			{
+				Add(new StageAvailabilityJobStep(jobParameters));
+			}
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlySkill_37543))
 			{
 				Add(new StageSkillJobStep(jobParameters));
@@ -77,12 +80,18 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			{
 				Add(new StagePermissionJobStep(jobParameters));
 			}
-			Add(new StageGroupPagePersonJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonNightly_37623))
+			{
+				Add(new StageGroupPagePersonJobStep(jobParameters));
+			}
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyOvertime_38304))
 			{
 				Add(new StageOvertimeJobStep(jobParameters));
 			}
-			Add(new StageRequestJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyRequest_38914))
+			{
+				Add(new StageRequestJobStep(jobParameters));
+			}
 			Add(new SqlServerUpdateStatistics(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
@@ -140,8 +149,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 				Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
 			}
 			Add(new BridgeQueueWorkloadJobStep(jobParameters));
-			Add(new DimGroupPageJobStep(jobParameters));
-			Add(new BridgeGroupPagePersonJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonNightly_37623))
+			{
+				Add(new DimGroupPageJobStep(jobParameters));
+				Add(new BridgeGroupPagePersonJobStep(jobParameters));
+			}
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyOvertime_38304))
 			{
 				Add(new DimOvertimeJobStep(jobParameters));
@@ -158,7 +170,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
             {
                 Add(new FactSchedulePreferenceJobStep(jobParameters));
 		    }
-		    Add(new FactAvailabilityJobStep(jobParameters));
+
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyAvailability_38926))
+			{
+				Add(new FactAvailabilityJobStep(jobParameters));
+			}
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent
@@ -168,8 +184,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactForecastWorkloadJobStep(jobParameters));
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-			Add(new FactRequestJobStep(jobParameters));
-			Add(new FactRequestedDaysJobStep(jobParameters));
+			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyRequest_38914))
+			{
+				Add(new FactRequestJobStep(jobParameters));
+				Add(new FactRequestedDaysJobStep(jobParameters));
+			}
 			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
 			{
 				Add(new FactAgentSkillJobStep(jobParameters));
