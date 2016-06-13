@@ -100,6 +100,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
+	
 	public partial class SchedulingScreen : BaseRibbonForm
 	{
 		private readonly HashSet<TimeZoneInfo> _detectedTimeZoneInfos = new HashSet<TimeZoneInfo>();
@@ -253,11 +254,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_tmpTimer.Enabled = false;
 
 			//if it disappears again in the designer
-			ribbonControlAdv1.QuickPanelVisible = true;
-
-			//Value set in design time for these 2 properties does not work, have to set it in run time again
-			toolStripLabelNewRequestNotice.BackColor = Color.YellowGreen;
-			toolStripExNewReqestNotice.RenderMode = ToolStripRenderMode.System;
+			ribbonControlAdv1.QuickPanelVisible = true;	
 		}
 
 		private void checkSmsLinkLicense()
@@ -6870,12 +6867,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonRefreshLarge_Click(object sender, EventArgs e)
 		{
 			refreshData();
-		}
-
-		private void toolStripExNewReqestNotice_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-		{
-			var url = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle") + "WFM/#/requests";
-			if (url.IsAnUrl()) Process.Start(url);
 		}
 	}
 }

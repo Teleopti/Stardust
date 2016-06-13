@@ -21256,15 +21256,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview the new requests!.
-        /// </summary>
-        public static string PreviewTheNewRequests {
-            get {
-                return ResourceManager.GetString("PreviewTheNewRequests", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Previous.
         /// </summary>
         public static string Previous {
