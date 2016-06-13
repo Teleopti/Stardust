@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		private readonly ICurrentDataSource _dataSource;
 
 		public HangfireEventPublisher(
-			IHangfireEventClient client, 
-			IJsonEventSerializer serializer, 
+			IHangfireEventClient client,
+			IJsonEventSerializer serializer,
 			ResolveEventHandlers resolver,
 			ICurrentDataSource dataSource)
 		{
@@ -64,20 +64,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				_client.AddOrUpdateMinutely(j.DisplayName, idForJob(j, @event), j.Tenant, j.EventTypeName, j.Event, j.HandlerTypeName);
 			});
 		}
-		
-		private string idForJob(jobInfo j, IEvent @event)
+
+		private static string idForJob(jobInfo j, IEvent @event)
 		{
 			var maxLength = 100 - "recurring-job:".Length;
 
 			var handlerId = $"{j.HandlerType.Name}{delimiter}{@event.GetType().Name}";
-			
+
 			var id = $"{j.Tenant}{delimiter}{handlerId}";
 			if (id.Length <= maxLength)
-				return id;
-
-			var hash = handlerId.GetHashCode().ToString();
-			id = $"{j.Tenant}{delimiter}{handlerId}";
-			id = $"{id.Substring(0, maxLength - hash.Length - 1)}.{hash}";
+			{
+				throw new ArgumentException($"A recurring job cannot not have a long name. The maximum length is {maxLength} and now it is '{id}' with length {id.Length}. Please change class or event name.");
+			}
 
 			return id;
 		}
@@ -116,7 +114,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public IEnumerable<string> TenantsWithRecurringJobs()
 		{
 			return _client.GetRecurringJobIds()
-				.Select(x => x.Substring(0, x.IndexOf(delimiter)))
+				.Select(x => x.Substring(0, x.IndexOf(delimiter, StringComparison.Ordinal)))
 				.Where(x => !string.IsNullOrEmpty(x))
 				.Distinct();
 		}

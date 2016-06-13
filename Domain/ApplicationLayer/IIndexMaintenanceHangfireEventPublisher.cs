@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IIndexMaintenanceHangfireEventPublisher
 	{
-		void PublishDaily(IndexMaintenanceHangfireEvent @event);
+		void EnsurePublishings();
 	}
 
 	public class IndexMaintenanceHangfireEventPublisher : IIndexMaintenanceHangfireEventPublisher
@@ -23,7 +23,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_dataSourceScope = dataSourceScope;
 		}
 
-		public void PublishDaily(IndexMaintenanceHangfireEvent @event)
+		public void EnsurePublishings()
+		{
+			publishDaily(new IndexMaintenanceHangfireEvent());
+		}
+
+		private void publishDaily(IndexMaintenanceHangfireEvent @event)
 		{
 			_allTenantEtlSettings.All().ForEach(t =>
 			{

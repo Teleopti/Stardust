@@ -45,11 +45,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		[Test]
 		public void ShouldStopPublishingForRemovedTenants()
 		{
-			Now.Is("2016-01-18 13:00");
 			Tenants.Has("tenant");
 			Target.EnsurePublishings();
 
-			Now.Is("2016-01-18 13:15");
 			Tenants.WasRemoved("tenant");
 			Target.EnsurePublishings();
 
@@ -59,43 +57,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		[Test]
 		public void ShouldStartPublishingForAddedTenants()
 		{
-			Now.Is("2016-01-18 13:00");
 			Tenants.Has("tenant1");
 			Target.EnsurePublishings();
 
-			Now.Is("2016-01-18 13:15");
 			Tenants.Has("tenant2");
 			Target.EnsurePublishings();
 
 			Publisher.Tenants.Should().Contain("tenant2");
 		}
 
-		[Test]
-		public void ShouldNotRepublishBefore10Minutes()
-		{
-			Now.Is("2016-01-18 13:00");
-			Tenants.Has("tenant");
-			Target.EnsurePublishings();
 
-			Now.Is("2016-01-18 13:09");
-			Publisher.Clear();
-			Target.EnsurePublishings();
-
-			Publisher.HasPublishing.Should().Be.False();
-		}
-
-		[Test]
-		public void ShouldRepublishAfter10Minutes()
-		{
-			Now.Is("2016-01-18 13:00");
-			Tenants.Has("tenant");
-			Target.EnsurePublishings();
-
-			Now.Is("2016-01-18 13:10");
-			Publisher.Clear();
-			Target.EnsurePublishings();
-
-			Publisher.HasPublishing.Should().Be.True();
-		}
 	}
 }

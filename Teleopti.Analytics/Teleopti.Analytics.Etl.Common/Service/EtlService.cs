@@ -3,6 +3,7 @@ using System.Threading;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Service
 {
@@ -15,27 +16,28 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
 		private readonly IIndexMaintenanceHangfireEventPublisher _indexMaintenanceHangfireEventPublisher;
 		private readonly IRecurringEventPublisher _recurringEventPublisher;
+		private DateTime? lastTenantRecurringJobPublishing;
+		private INow _now;
 
-
-		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IIndexMaintenanceHangfireEventPublisher indexMaintenanceHangfireEventPublisher, IRecurringEventPublisher recurringEventPublisher)
+		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IIndexMaintenanceHangfireEventPublisher indexMaintenanceHangfireEventPublisher, IRecurringEventPublisher recurringEventPublisher, INow now)
 		{
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
 			_indexMaintenanceHangfireEventPublisher = indexMaintenanceHangfireEventPublisher;
 			_recurringEventPublisher = recurringEventPublisher;
+			_now = now;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
 		}
 
-		public void EnsureRecurringJobs()
+		public void EnsureSystemWideRecurringJobs()
 		{
 			_recurringEventPublisher.StopPublishingAll();
-			_indexMaintenanceHangfireEventPublisher.PublishDaily(new IndexMaintenanceHangfireEvent());
 			_recurringEventPublisher.PublishHourly(new CleanFailedQueue());
 		}
 
 		public void Start(DateTime serviceStartTime, Action stopService)
 		{
-			EnsureRecurringJobs();
+			EnsureSystemWideRecurringJobs();
 			_etlJobStarter.Initialize(serviceStartTime, stopService);
 			_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 		}
@@ -46,15 +48,7 @@ namespace Teleopti.Analytics.Etl.Common.Service
 
 			log.Debug("Tick");
 			
-			try
-			{
-				_tenantTickEventPublisher.EnsurePublishings();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex);
-				log.Error("Exception occurred invoking TenantHearbeatEventPublisher", ex);
-			}
+			EnsureTenantRecurringJobs();
 
 			try
 			{
@@ -72,11 +66,29 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				log.Debug("Starting timer");
 				if (_timer != null)
 				{
-					_timer.Change(TimeSpan.FromSeconds(10),TimeSpan.FromMilliseconds(-1));
+					_timer.Change(TimeSpan.FromSeconds(10), TimeSpan.FromMilliseconds(-1));
 				}
 				log.Debug("Timer started");
 			}
+		}
 
+		public void EnsureTenantRecurringJobs()
+		{
+			try
+			{
+				if (lastTenantRecurringJobPublishing == null ||
+					_now.UtcDateTime().Subtract(lastTenantRecurringJobPublishing.GetValueOrDefault()).TotalMinutes > 10)
+				{
+					_tenantTickEventPublisher.EnsurePublishings();
+					_indexMaintenanceHangfireEventPublisher.EnsurePublishings();
+					lastTenantRecurringJobPublishing = _now.UtcDateTime();
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+				log.Error("Exception occurred invoking TenantHearbeatEventPublisher", ex);
+			}
 		}
 
 		public void Dispose()

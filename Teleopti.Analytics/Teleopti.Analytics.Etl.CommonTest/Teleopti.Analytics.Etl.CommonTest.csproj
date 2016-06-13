@@ -113,7 +113,7 @@
     <Compile Include="EtlTestAttribute.cs" />
     <Compile Include="FakeBaseConfigurationRepository.cs" />
     <Compile Include="RunControllerTest.cs" />
-    <Compile Include="Service\IndexMaintenanceHangfireEventTest.cs" />
+    <Compile Include="Service\EtlServiceHangfireEventPublisherTest.cs" />
     <Compile Include="Service\ResolveTest.cs" />
     <Compile Include="Transformer\AbsenceTransformerTest.cs" />
     <Compile Include="Transformer\ActivityTransformerTest.cs" />
