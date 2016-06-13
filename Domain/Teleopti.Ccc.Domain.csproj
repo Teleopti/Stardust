@@ -329,9 +329,9 @@
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Infrastructure\CleanFailedQueueHandler.cs" />
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />
-    <Compile Include="Infrastructure\Events\IndexMaintenanceHangfireEvent.cs" />
+    <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
     <Compile Include="Infrastructure\IIndexMaintenanceRepository.cs" />
-    <Compile Include="Infrastructure\IndexMaintenanceHangfireEventHandler.cs" />
+    <Compile Include="Infrastructure\IndexMaintenanceHandler.cs" />
     <Compile Include="Infrastructure\IndexMaintenanceStardustEventHandler.cs" />
     <Compile Include="Logon\ImpersonateSystem.cs" />
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />

@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 
 		public void PublishRecurringJobs()
 		{
-			publishDaily(new IndexMaintenanceHangfireEvent());
+			publishDaily(new IndexMaintenanceEvent());
 		}
 
-		private void publishDaily(IndexMaintenanceHangfireEvent @event)
+		private void publishDaily(IndexMaintenanceEvent @event)
 		{
 			_allTenantEtlSettings.All().ForEach(t =>
 			{
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					if (t.RunIndexMaintenance)
 						_publisher.PublishDaily(@event, t.TimeZone);
 					else
-						_publisher.StopPublishingForEvent<IndexMaintenanceHangfireEvent>();
+						_publisher.StopPublishingForEvent<IndexMaintenanceEvent>();
 				}
 			});
 		}

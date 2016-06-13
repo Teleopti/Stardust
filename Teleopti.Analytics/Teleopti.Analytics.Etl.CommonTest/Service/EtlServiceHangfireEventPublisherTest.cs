@@ -101,7 +101,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
 			target.EnsureTenantRecurringJobs();
 
-			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(IndexMaintenanceHangfireEvent));
+			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(IndexMaintenanceEvent));
 			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(TenantHourTickEvent));
 			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(TenantMinuteTickEvent));
 		}
@@ -113,7 +113,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
 			target.EnsureTenantRecurringJobs();
 
-			Publisher.Publishings.First(x => x.Event.GetType() == typeof(IndexMaintenanceHangfireEvent)).Daily.Should().Be.True();
+			Publisher.Publishings.First(x => x.Event.GetType() == typeof(IndexMaintenanceEvent)).Daily.Should().Be.True();
 		}
 
 		[Test]

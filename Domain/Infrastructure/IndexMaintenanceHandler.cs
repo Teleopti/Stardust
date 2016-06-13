@@ -6,19 +6,19 @@ using Teleopti.Ccc.Domain.Infrastructure.Events;
 namespace Teleopti.Ccc.Domain.Infrastructure
 {
 	[EnabledBy(Toggles.ETL_FasterIndexMaintenance_38847)]
-	public class IndexMaintenanceHangfireEventHandler :
-		IHandleEvent<IndexMaintenanceHangfireEvent>,
+	public class IndexMaintenanceHandler :
+		IHandleEvent<IndexMaintenanceEvent>,
 		IRunOnHangfire
 	{
 		private readonly IEventPublisher _eventPublisher;
 
-		public IndexMaintenanceHangfireEventHandler(IEventPublisher eventPublisher)
+		public IndexMaintenanceHandler(IEventPublisher eventPublisher)
 		{
 			_eventPublisher = eventPublisher;
 		}
 
 		[RecurringJob]
-		public virtual void Handle(IndexMaintenanceHangfireEvent @event)
+		public virtual void Handle(IndexMaintenanceEvent @event)
 		{
 			_eventPublisher.Publish(new IndexMaintenanceStardustEvent
 			{
