@@ -21265,11 +21265,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview the new requests!.
+        ///   Looks up a localized string similar to Preview the new Requests module!.
         /// </summary>
-        public static string PreviewTheNewRequests {
+        public static string PreviewTheNewRequestsModule {
             get {
-                return ResourceManager.GetString("PreviewTheNewRequests", resourceCulture);
+                return ResourceManager.GetString("PreviewTheNewRequestsModule", resourceCulture);
             }
         }
         

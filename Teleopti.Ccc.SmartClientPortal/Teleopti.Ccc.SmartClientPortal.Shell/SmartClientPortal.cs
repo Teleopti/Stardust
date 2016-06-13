@@ -513,7 +513,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;
-						outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewRequests;
+						outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewRequestsModule;
 						outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/requests");
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:

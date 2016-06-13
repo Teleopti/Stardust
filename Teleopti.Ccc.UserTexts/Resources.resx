@@ -14551,8 +14551,8 @@ These options are activated:
     <value>Cannot backout schedule change</value>
     <comment>Cannot backout schedule change, used when user want to backout previous change to schedule from wfm/teamschedule.</comment>
   </data>
-  <data name="PreviewTheNewRequests" xml:space="preserve">
-    <value>Preview the new requests!</value>
-    <comment>Text for button in request module of fat client</comment>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>Preview the new Requests module!</value>
+    <comment>Text for notice in navbar of fat client</comment>
   </data>
 </root>
