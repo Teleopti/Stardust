@@ -21,6 +21,7 @@
 		RTA_ScheduleProjectionReadOnlyHangfire_35703,
 		RTA_AlarmContext_29357,
         RTA_TotalOutOfAdherenceTime_38702,
+		RTA_PauseButton_39144,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 

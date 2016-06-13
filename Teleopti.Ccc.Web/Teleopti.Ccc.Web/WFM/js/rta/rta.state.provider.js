@@ -2,17 +2,23 @@
 
 angular.module('wfm.rta').provider('RtaState', function() {
 	var toggles = {
-		RTA_AlarmContext_29357: false
+		RTA_AlarmContext_29357: false,
+		RTA_PauseButton_9999: false
 	};
 	var rtaAgentsTemplate = function (elem, attr) {
-		if (toggles.RTA_AlarmContext_29357)
+		if (toggles.RTA_AlarmContext_29357) {
+			if (toggles.RTA_PauseButton_39144) {
+				return 'js/rta/rta-agents-RTA_PauseButton_39144.html'
+			}
 			return 'js/rta/rta-agents-RTA_AlarmContext_29357.html';
+		}
 		return 'js/rta/rta-agents.html';
 	};
 	this.$get = function() {
 		return function(toggleService) {
 			toggleService.togglesLoaded.then(function () {
 				toggles.RTA_AlarmContext_29357 = toggleService.RTA_AlarmContext_29357;
+				toggles.RTA_PauseButton_39144 = toggleService.RTA_PauseButton_39144;
 			});
 		};
 	};

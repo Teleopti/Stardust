@@ -59,6 +59,7 @@ WfmPeople_ImportUsers_33665 = true
 RTA_ScheduleProjectionReadOnlyHangfire_35703 = true
 RTA_AlarmContext_29357 = RC
 RTA_TotalOutOfAdherenceTime_38702 = RC
+RTA_PauseButton_39144 = false
 
 WfmPeople_AdjustSkill_34138 = true
 MyTimeWeb_KeepUrlAfterLogon_34762 = true

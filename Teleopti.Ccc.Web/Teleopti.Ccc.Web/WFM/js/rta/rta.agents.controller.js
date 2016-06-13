@@ -4,8 +4,8 @@
 	angular
 		.module('wfm.rta')
 		.controller('RtaAgentsCtrl', [
-			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle',
-			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService) {
+			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService',
+			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService) {
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
@@ -29,6 +29,15 @@
 				var options = RtaGridService.makeInAlarmGrid();
 				options.data = 'filteredData';
 				$scope.inAlarmGrid = options;
+				$scope.pause = false;
+
+				$scope.togglePolling = function() {
+					$scope.pause = !$scope.pause;
+					if ($scope.pause)
+						NoticeService.warning('Real time adherence monitoring paused at 2016-06-13 16:00!<br>Re-enable by clicking play', null, true);
+					else
+						NoticeService.info('Real time adherence monitoring activated', null, true);
+				};
 
 				$scope.getTableHeight = function() {
 					var rowHeight = 30;
@@ -68,7 +77,7 @@
 				};
 
 				$scope.$watch('filterText', filterData);
-				$scope.$watch('agentsInAlarm', function (newValue, oldValue) {
+				$scope.$watch('agentsInAlarm', function(newValue, oldValue) {
 					if (newValue !== oldValue) {
 						updateStates();
 						filterData();
@@ -91,7 +100,7 @@
 					return RtaService.getAgentsForSites;
 				})();
 
-				var getStates = function (inAlarm) {
+				var getStates = function(inAlarm) {
 					if (teamIds.length > 0) {
 						if (inAlarm)
 							return RtaService.getAlarmStatesForTeams;
@@ -165,16 +174,16 @@
 
 
 				function layerPercentage(seconds) {
-				    return percentageFromSeconds(seconds, 100);
+					return percentageFromSeconds(seconds, 100);
 				}
 
 				function alarmPercentage(seconds) {
-				    return percentageFromSeconds(seconds, 25);
+					return percentageFromSeconds(seconds, 25);
 				}
 
 				function offsetPercentage(seconds) {
-				    var maxPercentage = seconds  < 0 ? 0 : (seconds / 3600 * 25);
-				    return maxPercentage + '%';
+					var maxPercentage = seconds < 0 ? 0 : (seconds / 3600 * 25);
+					return maxPercentage + '%';
 				}
 
 				function percentageFromSeconds(seconds, max) {
@@ -183,18 +192,18 @@
 				}
 
 				function timeToPercent(currentTime, time, toPercent) {
-				    var offset = moment(currentTime).add(-1, 'hour');
-				    return toPercent(moment(time).diff(offset, 'seconds'));
+					var offset = moment(currentTime).add(-1, 'hour');
+					return toPercent(moment(time).diff(offset, 'seconds'));
 				}
 
 				function offsetToPercent(currentTime, time, toPercent) {
-				    var offset = moment(currentTime).add(-1, 'hour');
-				    return toPercent(moment(time).diff(offset, 'seconds'));
+					var offset = moment(currentTime).add(-1, 'hour');
+					return toPercent(moment(time).diff(offset, 'seconds'));
 				}
-                
+
 
 				function buildTimeline(states) {
-					var timeline = function (time) {
+					var timeline = function(time) {
 						return {
 							Time: time.format('HH:mm'),
 							Offset: timeToPercent(states.Time, time, layerPercentage)
@@ -221,21 +230,21 @@
 						var now = moment(states.Time);
 						var start = now.clone().add(-1, 'hours');
 						var end = now.clone().add(3, 'hours');
-					    var shift = state.Shift
-					        .filter(function(layer) {
-					            return start < moment(layer.EndTime) && end > moment(layer.StartTime);
-					        })
-					        .map(function(s) {
-					            var layerStartTime = s.StartTime;
-					            var lengthSeconds = moment(s.EndTime).diff(moment(layerStartTime) > start ? moment(layerStartTime) : start, 'seconds');
-					            return {
-					                Color: s.Color,
-					                Offset: offsetToPercent(states.Time, layerStartTime, offsetPercentage),
-					                Width: layerPercentage(lengthSeconds),
-					                Name: s.Name,
-					                Class: getClassForActivity(states.Time, layerStartTime, s.EndTime)
-					            };
-					        });
+						var shift = state.Shift
+							.filter(function(layer) {
+								return start < moment(layer.EndTime) && end > moment(layer.StartTime);
+							})
+							.map(function(s) {
+								var layerStartTime = s.StartTime;
+								var lengthSeconds = moment(s.EndTime).diff(moment(layerStartTime) > start ? moment(layerStartTime) : start, 'seconds');
+								return {
+									Color: s.Color,
+									Offset: offsetToPercent(states.Time, layerStartTime, offsetPercentage),
+									Width: layerPercentage(lengthSeconds),
+									Name: s.Name,
+									Class: getClassForActivity(states.Time, layerStartTime, s.EndTime)
+								};
+							});
 						if (agentInfo.length > 0) {
 							$scope.agents.push({
 								Name: agentInfo[0].Name,

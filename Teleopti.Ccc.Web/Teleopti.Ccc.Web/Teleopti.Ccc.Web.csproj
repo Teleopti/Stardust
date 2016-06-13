@@ -1416,11 +1416,13 @@
     <Content Include="WFM\js\resourceplanner\resourceplanner.temp.controller.js" />
     <Content Include="WFM\js\resourceplanner\resourceplanner.filter.service.js" />
     <Content Include="WFM\js\rta\rta-agent-details.html" />
+    <Content Include="WFM\js\rta\rta-agents-RTA_PauseButton_39144.html" />
     <Content Include="WFM\js\rta\rta-agents.html" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.js" />
     <Content Include="WFM\js\rta\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.inalarm.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.alarmcontext.spec.js" />
+    <Content Include="WFM\js\rta\rta.agents.controller.RTA_PauseButton_39144.spec.js" />
     <Content Include="WFM\js\rta\rta.agents.controller.RTA_TotalOutOfAdherenceTime_38702.spec.js" />
     <Content Include="WFM\js\rta\rta.controller.fortest.js" />
     <Content Include="WFM\js\rta\rta.backend.fake.js" />
