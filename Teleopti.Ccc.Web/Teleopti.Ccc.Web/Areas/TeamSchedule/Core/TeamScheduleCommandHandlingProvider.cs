@@ -167,6 +167,43 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return result;
 		}
 
+		public List<FailActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input)
+		{
+			var permissions = new Dictionary<string, string>();
+
+			var result = new List<FailActionResult>();
+			foreach(var personId in input.PersonIds)
+			{
+				var actionResult = new FailActionResult();
+				var person = _personRepository.Get(personId);
+				actionResult.PersonId = personId;
+				actionResult.Messages = new List<string>();
+				if(checkPermissionFn(permissions, input.Date,person,actionResult.Messages))
+				{
+					var command = new BackoutScheduleChangeCommand
+					{
+						PersonId = personId,
+						Date = input.Date,
+						TrackedCommandInfo =
+							input.TrackedCommandInfo != null
+								? input.TrackedCommandInfo
+								: new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+					};
+
+					_commandDispatcher.Execute(command);
+					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					{
+						actionResult.Messages.AddRange(command.ErrorMessages);
+					}					
+				}
+				if(actionResult.Messages.Any())
+					result.Add(actionResult);
+			}
+
+			return result;
+		}
+
+
 		public List<FailActionResult> MoveActivity(MoveActivityFormData input)
 		{
 			var permission = new Dictionary<string, string>
@@ -263,5 +300,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		IEnumerable<Guid> CheckWriteProtectedAgents(DateOnly date, IEnumerable<Guid> agentIds);
 		List<FailActionResult> RemoveActivity(RemoveActivityFormData input);
 		List<FailActionResult> MoveActivity(MoveActivityFormData input);
+		List<FailActionResult> BackoutScheduleChange(BackoutScheduleChangeFormData input);
 	}
 }

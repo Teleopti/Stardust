@@ -530,9 +530,64 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.First().Messages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
 			results.First().Messages[1].Should().Be.EqualTo(Resources.NoPermissionAddAgentActivity);
 		}
+
+		[Test]
+		public void ShouldNotBackoutScheduleChangeToWriteProtectedSchedule()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a","b");
+			PersonRepository.Has(person);
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016,6,1);
+
+			var date = new DateOnly(2016,4,16);
+
+			var input = new BackoutScheduleChangeFormData
+			{			
+				Date = date,				
+				PersonIds = new[] { person.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.BackoutScheduleChange(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+
+			results.Count.Should().Be.EqualTo(1);
+			results.First().Messages.Count.Should().Be.EqualTo(1);
+			results.First().Messages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+		}
+
+		[Test]
+		public void ShouldInvokeBackoutScheduleChangeCommandHandler()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a","b");
+			PersonRepository.Has(person);
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016,1,1);
+
+			var date = new DateOnly(2016,4,16);
+
+			var input = new BackoutScheduleChangeFormData
+			{
+				Date = date,
+				PersonIds = new[] { person.Id.Value },
+				TrackedCommandInfo = new TrackedCommandInfo()
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.BackoutScheduleChange(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			results.Count.Should().Be.EqualTo(0);		
+		}
+
 	}
 
-	public class FakeActivityCommandHandler : IHandleCommand<AddActivityCommand>, IHandleCommand<AddPersonalActivityCommand>, IHandleCommand<RemoveActivityCommand>, IHandleCommand<MoveShiftLayerCommand>
+	public class FakeActivityCommandHandler : 
+		IHandleCommand<AddActivityCommand>, 
+		IHandleCommand<AddPersonalActivityCommand>, 
+		IHandleCommand<RemoveActivityCommand>, 
+		IHandleCommand<MoveShiftLayerCommand>,
+		IHandleCommand<BackoutScheduleChangeCommand>
 	{
 		private int calledCount;
 		private IList<ITrackableCommand> commands = new List<ITrackableCommand>(); 
@@ -569,6 +624,12 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 		}
 
 		public void Handle(AddPersonalActivityCommand command)
+		{
+			calledCount++;
+			commands.Add(command);
+		}
+
+		public void Handle(BackoutScheduleChangeCommand command)
 		{
 			calledCount++;
 			commands.Add(command);
