@@ -488,7 +488,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			IList<ModulePanelItem> modulePanelItems = new List<ModulePanelItem>();
 			foreach (IApplicationFunction module in modules.OrderBy(m => m.SortOrder.GetValueOrDefault(1000000)))
 			{
-				if(module.IsPreliminary)
+				if (module.IsPreliminary)
 					continue;
 
 				var outlookBarSmartPartInfo = new OutlookBarInfo();
@@ -513,18 +513,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;
+						outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewRequests;
+						outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/requests");
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
 						outlookBarSmartPartInfo.Icon = Resources.Intraday_filled_space_32x32;
-				        outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
-                        var url = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle") + "wfm/#/intraday";
-                        outlookBarSmartPartInfo.PreviewUrl = new Uri(url);
-                        break;
+						outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewIntradayTool;
+						outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/intraday");
+						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenPermissionPage:
 						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.Shifts:
-						outlookBarSmartPartInfo.Icon = Resources.Shifts_filled_space_32x32 ;
+						outlookBarSmartPartInfo.Icon = Resources.Shifts_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.AccessToReports:
 						outlookBarSmartPartInfo.Icon = Resources.Reports_filled_space_32x32;
@@ -533,14 +534,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						outlookBarSmartPartInfo.Icon = Resources.WFM_Teleopti_WFM_main_small;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenBudgets:
-						outlookBarSmartPartInfo.Icon = Resources.Budgets_filled_space_32x32 ;
+						outlookBarSmartPartInfo.Icon = Resources.Budgets_filled_space_32x32;
 						break;
 					case DefinedRaptorApplicationFunctionPaths.PayrollIntegration:
-						outlookBarSmartPartInfo.Icon = Resources.Payroll_filled_space_32x32 ;
+						outlookBarSmartPartInfo.Icon = Resources.Payroll_filled_space_32x32;
 						break;
 					default:
 						// add default image as a resource to your module.
-						outlookBarSmartPartInfo.Icon = Resources.Performance_Manager_filled_space_32x32 ;
+						outlookBarSmartPartInfo.Icon = Resources.Performance_Manager_filled_space_32x32;
 						break;
 				}
 				modulePanelItems.Add(new ModulePanelItem
@@ -549,9 +550,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					ItemText = outlookBarSmartPartInfo.Title,
 					ItemEnabled = outlookBarSmartPartInfo.Enable,
 					Tag = outlookBarSmartPartInfo.EventTopicName,
-                    PreviewText = outlookBarSmartPartInfo.PreviewText,
-                    PreviewUrl = outlookBarSmartPartInfo.PreviewUrl
-                });
+					PreviewText = outlookBarSmartPartInfo.PreviewText,
+					PreviewUrl = outlookBarSmartPartInfo.PreviewUrl
+				});
 			}
 
 			if (_toggleManager.IsEnabled(Toggles.Backlog_Module_23980))
@@ -563,7 +564,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					Tag = "Raptor/PersonAdmin"
 				});
 
-			outlookBar1.AddItems(modulePanelItems.ToArray());			
+			outlookBar1.AddItems(modulePanelItems.ToArray());
 		}
 
 		private void InitializeSmartPartInvoker()
@@ -622,7 +623,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			keepWfmAlive();
 		}
 
-	private void showBalloon()
+		private void showBalloon()
 		{
 			notifyIcon.ShowBalloonTip(100);
 		}
@@ -694,8 +695,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				//}
 
 				var outboundView = new OutboundView(_container);
-				outboundView.Show(this);
-				
+				outboundView.Show(this);				
 			}
 
 			_portalSettings.LastModule = modulePanelItem.Tag.ToString();
@@ -933,5 +933,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_logger.Error(e.ErrorMessage + "Url: " + e.Url);
 			e.UseDefaultMessage();
 		}
+
+	    private Uri buildWfmUri(string relativePath)
+	    {
+	        var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+            return new Uri($"{wfmPath}{relativePath}");
+        }
 	}
 }
