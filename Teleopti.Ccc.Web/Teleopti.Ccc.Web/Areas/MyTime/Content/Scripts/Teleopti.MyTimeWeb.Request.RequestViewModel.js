@@ -158,8 +158,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 				contentType: 'application/json; charset=utf-8',
 				data: {
 					absenceId: self.AbsenceId(),
-					date: self.DateTo().format("YYYY-MM-DD")
-				},
+					date: Teleopti.MyTimeWeb.Common.FormatServiceDate(self.DateTo())
+		},
 				success: function (data, textStatus, jqXHR) {
 					self.readAbsenceAccount(data);
 				},
@@ -207,6 +207,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
         var year = defaultDateTimes.todayYear;
         var month = defaultDateTimes.todayMonth;
         var day = defaultDateTimes.todayDay;
+
         self.DateFrom(moment(new Date(year, month - 1, day)));
         self.DateTo(moment(new Date(year, month - 1, day)));
     }

@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Secrets.Licensing;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private IPersonNameProvider _personNameProvider;
 		private ILoggedOnUser _loggedOnUser;
 		private IUserCulture _userCulture;
+		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		[SetUp]
 		public void Setup()
@@ -46,6 +48,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Expect(x => x.GetCulture()).Return(culture);
+
+			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
@@ -65,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture);
+				_userCulture, _currentTeleoptiPrincipal);
 
 			var result = relevantTab(target.CreatePortalViewModel());
 

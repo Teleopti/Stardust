@@ -21,15 +21,8 @@
             	poor: '@Resources.Poor',
             	good: '@Resources.Good'
             },
-            {
-            	defaultStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))',
-            	defaultEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))',
-            	defaultFulldayStartTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))',
-            	defaultFulldayEndTime: '@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))',
-            	todayYear: '@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)',
-            	todayMonth: '@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)',
-            	todayDay: '@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)'
-            },
+			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues
+            ,
 			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
         );
 	});

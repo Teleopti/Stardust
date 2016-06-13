@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -30,6 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ITeamGamificationSettingRepository _teamGamificationSettingRepo;
 		private readonly ICurrentTenantUser _currentTenantUser;
 		private readonly IUserCulture _userCulture;
+		private readonly ICurrentTeleoptiPrincipal _currentIdentity;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 			ILicenseActivatorProvider licenseActivatorProviderProvider,
@@ -39,7 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			IToggleManager toggleManager, IPersonNameProvider personNameProvider,
 			ITeamGamificationSettingRepository teamGamificationSettingReop,
 			ICurrentTenantUser currentTenantUser,
-			IUserCulture userCulture)
+			IUserCulture userCulture,
+			ICurrentTeleoptiPrincipal currentIdentity)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivatorProvider = licenseActivatorProviderProvider;
@@ -52,6 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			_teamGamificationSettingRepo = teamGamificationSettingReop;
 			_currentTenantUser = currentTenantUser;
 			_userCulture = userCulture;
+			_currentIdentity = currentIdentity;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
@@ -59,6 +64,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			var navigationItems = new List<NavigationItem> {createWeekScheduleNavigationItem()};
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 			var useJalaaliCalendar = culture.IetfLanguageTag == "fa-IR";
+
+			if (useJalaaliCalendar)
+			{
+				_currentIdentity.Current().Regional.ForceUseGregorianCalendar = true;
+				culture = _userCulture.GetCulture(); // overwrite culture before useJalaali flag was set.	
+			}
+
 			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
@@ -131,8 +143,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				AMDesignator = culture.DateTimeFormat.AMDesignator,
 				PMDesignator = culture.DateTimeFormat.PMDesignator,
 				Badges = showBadge ? _badgeProvider.GetBadges() : null,
-
+				DateTimeDefaultValues = getDateTimeDefaultValues(culture),
 				ShowBadge = showBadge
+			};
+		}
+
+		private DateTimeDefaultValues getDateTimeDefaultValues(CultureInfo culture)
+		{
+			return new DateTimeDefaultValues()
+			{
+					StartTime= TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0)),
+					EndTime =  TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0)),
+					FullDayStartTime = @TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0)),
+					FullDayEndTime = @TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0)),
+					TodayYear = culture.Calendar.GetYear(DateTime.Today),
+					TodayMonth = culture.Calendar.GetMonth(DateTime.Today),
+					TodayDay =  culture.Calendar.GetDayOfMonth(DateTime.Today)
 			};
 		}
 

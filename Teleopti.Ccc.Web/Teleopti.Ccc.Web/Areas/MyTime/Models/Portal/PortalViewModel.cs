@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool UseJalaaliCalendar { get; set; }
 		public string DateFormat { get; set; }
 		public string TimeFormat { get; set; }
+		public DateTimeDefaultValues DateTimeDefaultValues { get; set; }
 
 		public IEnumerable<BadgeViewModel> Badges { get; set; }
 		public string CurrentLogonAgentName { get; set; }
@@ -50,6 +51,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool IsWebReport { get; set; }
 		public bool IsDivider { get; set; }
 		public Guid Id { get; set; }
+	}
+
+
+	public class DateTimeDefaultValues
+	{
+
+		public string StartTime { get; set; }
+		public string EndTime { get; set; }
+		public string FullDayStartTime { get; set; }
+		public string FullDayEndTime { get; set; }
+		public int TodayYear { get; set; }
+		public int TodayMonth { get; set; }
+		public int TodayDay { get; set; }
+
+
+
 	}
 
 	public class PreferenceOption : Option, IPreferenceOption

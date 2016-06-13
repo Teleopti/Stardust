@@ -7,18 +7,31 @@
 @model PortalViewModel
 
 <script>
-	
+
 	$(function() {
+
+		var dateTimeDefaultValues = {
+			defaultStartTime: "@Model.DateTimeDefaultValues.StartTime",
+			defaultEndTime: "@Model.DateTimeDefaultValues.EndTime",
+			defaultFulldayStartTime: "@Model.DateTimeDefaultValues.FullDayStartTime",
+			defaultFulldayEndTime: "@Model.DateTimeDefaultValues.FullDayEndTime",
+			todayYear: "@Model.DateTimeDefaultValues.TodayYear",
+			todayMonth: "@Model.DateTimeDefaultValues.TodayMonth",
+			todayDay: "@Model.DateTimeDefaultValues.TodayDay"
+		};
+
+
 		Teleopti.MyTimeWeb.Common.SetupCalendar(
 		{
 			UseJalaaliCalendar: @Model.UseJalaaliCalendar.ToString().ToLowerInvariant(),
 			DateFormat: "@Model.DateFormat",
 			TimeFormat: "@Model.TimeFormat",
 			AMDesignator: "@Model.AMDesignator",
-			PMDesignator: "@Model.PMDesignator"
+			PMDesignator: "@Model.PMDesignator",
+			DateTimeDefaultValues: dateTimeDefaultValues
 		});
-	}
-	);
+
+	});
 </script>
 
 <div id="autocollapse" class="navbar navbar-default navbar-inverse bdd-mytime-top-menu">
@@ -96,11 +109,11 @@
 											</span>
 										</div>
 									</li>
-								}
+												}
 							</ul>
-						}
+												}
 					</li>
-				}
+												}
 				<li class="dropdown pull-left" id="user-settings">
 					<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">
 						<i class="glyphicon glyphicon-user"></i>
@@ -118,7 +131,7 @@
 							<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
 						}
 						<li class="divider"></li>
-						<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout"})</li>
+						<li>@Html.ActionLink(@Resources.SignOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
 					</ul>
 				</li>
 			</ul>

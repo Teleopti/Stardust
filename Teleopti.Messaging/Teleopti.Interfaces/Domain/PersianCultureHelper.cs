@@ -19,7 +19,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="info">The DateTimeFormatInfo to be fixed.</param> 
 		/// <param name="usePersianCalendar">If set, the calendar will be set to PersianCalendar.</param> 
 		/// <returns>The fixed DateTimeFormatInfo.</returns> 
-		public static DateTimeFormatInfo FixPersianDateTimeFormat(DateTimeFormatInfo info, bool usePersianCalendar)
+		public static DateTimeFormatInfo FixPersianDateTimeFormat(DateTimeFormatInfo info)
 		{
 			if (info == null)
 				info = new DateTimeFormatInfo();
@@ -30,14 +30,11 @@ namespace Teleopti.Interfaces.Domain
 			{
 				DateTimeFormatInfoReadOnly.SetValue(info, false);
 			}
-			if (usePersianCalendar)
-			{
-				DateTimeFormatInfoCalendar.SetValue(info, new PersianCalendar());
-			}
-			if (info.Calendar.GetType() == typeof(PersianCalendar))
-			{
-				translateCalendarResources(info);
-			}
+			
+			DateTimeFormatInfoCalendar.SetValue (info, new PersianCalendar());
+			
+			translateCalendarResources(info);
+			
 			if (readOnly)
 			{
 				DateTimeFormatInfoReadOnly.SetValue(info, true);
@@ -78,7 +75,7 @@ namespace Teleopti.Interfaces.Domain
 			fixOptionalCalendars(culture, 4);
 			culture = createNewCultureInfoAndEnsureNotReadOnly();
 
-			culture.DateTimeFormat = FixPersianDateTimeFormat(culture.DateTimeFormat, true);
+			culture.DateTimeFormat = FixPersianDateTimeFormat(culture.DateTimeFormat);
 			CultureInfoCalendar.SetValue(culture, new PersianCalendar());
 
 			makeCultureReadOnly(culture);
@@ -86,9 +83,32 @@ namespace Teleopti.Interfaces.Domain
 			return culture;
 		}
 
-		public static CultureInfo FixPersianCulture(this CultureInfo culture, bool onlyTranslateResources)
+		public static CultureInfo FixPersianCulture(this CultureInfo culture, bool forceGregorianCalendar)
 		{
-			return onlyTranslateResources ? fixPersianCultureResourcesOnly(culture) : FixPersianCulture(culture);
+			return forceGregorianCalendar ? 
+				PersianCultureHelper.forceGregorianCalendar(culture) : 
+				FixPersianCulture (culture);
+		}
+
+		private static CultureInfo forceGregorianCalendar (CultureInfo culture)
+		{
+			if (culture.Calendar is GregorianCalendar)
+			{
+				return culture;
+			}
+
+			var info = new DateTimeFormatInfo();
+			var gregorianCalendar = new GregorianCalendar();
+
+			var newCulture = fixPersianCultureResourcesOnly (culture);
+			CultureInfoCalendar.SetValue (newCulture, gregorianCalendar);
+			DateTimeFormatInfoCalendar.SetValue (info, gregorianCalendar);
+
+			DateTimeFormatInfoReadOnly.SetValue (info, true);
+			newCulture.DateTimeFormat = info;
+
+			makeCultureReadOnly (newCulture);
+			return newCulture;
 		}
 
 		private static CultureInfo createNewCultureInfoAndEnsureNotReadOnly()
@@ -114,7 +134,7 @@ namespace Teleopti.Interfaces.Domain
 
 			translateCalendarResources (culture.DateTimeFormat);
 
-			makeCultureReadOnly(culture);
+			//makeCultureReadOnly(culture);
 
 			return culture;
 		}

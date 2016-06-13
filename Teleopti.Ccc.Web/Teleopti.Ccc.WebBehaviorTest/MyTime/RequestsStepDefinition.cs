@@ -71,6 +71,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-data-subject:first:contains('{0}')", DataMaker.Data().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see a request with date period '(.*)'")]
+		public void ThenIShouldSeeARequestWithDatePeriod(string datePeriod)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request-data-date:first:contains('{0}')", datePeriod));
+		}
+
+
 		[Then(@"I should see a shift trade request in the list with subject '(.*)'")]
 		public void ThenIShouldSeeAShiftTradeRequestInTheListWithSubject(string subject)
 		{

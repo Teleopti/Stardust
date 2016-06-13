@@ -207,7 +207,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		function _fillFormData(data) {
 			var requestViewModel = self.requestViewModel().model;
 			requestViewModel.DateFormat(self.datePickerFormat());
-			var requestDay = moment(self.initialRequestDay(), getDateFormat());
+			var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+			
 			requestViewModel.DateFrom(requestDay);
 			requestViewModel.DateTo(requestDay);
 			if (requestViewModel.LoadRequestData) {
@@ -215,7 +216,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 					requestViewModel.LoadRequestData(data);
 				} else {
 					var day = ko.utils.arrayFirst(self.days(), function (item) {
-						return item.date() == self.initialRequestDay();
+						return item.fixedDate() == self.initialRequestDay();
 					});
 					var oaData = day.overtimeAvailability();
 					requestViewModel.LoadRequestData(oaData);
@@ -228,7 +229,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return false;
 
 			var momentToday = moment(new Date(new Date().getTeleoptiTime())).startOf('day');
-			var momentInitialRequestDay = moment(self.initialRequestDay(), getDateFormat());
+			var momentInitialRequestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+			
 			var dateDiff = momentInitialRequestDay.diff(momentToday, 'days');
 
 			//Absence report is available only for today and tomorrow.
@@ -297,7 +299,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.showAddRequestForm = function (day) {
-			self.showAddRequestFormWithData(day.date(), day.overtimeAvailability());
+
+			self.showAddRequestFormWithData(day.fixedDate(), day.overtimeAvailability());
 		};
 
 		var defaultRequestFunction = function () {
@@ -390,14 +393,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.date = ko.observable(day.Date);
 		self.state = ko.observable(day.State);
 
-		self.headerTitle = ko.observable(day.Header.Title);
-		
 		var dayDescription = "";
 		var dayNumberDisplay = "";
 		var dayDate = moment(day.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
 
+			self.headerTitle = ko.observable(dayDate.format("jdddd"));
 			self.dayOfWeek = ko.observable(dayDate.weekday());
 			dayNumberDisplay = dayDate.jDate();
 			
@@ -405,6 +407,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				dayDescription = dayDate.format("jMMMM");
 			}
 		} else {
+			self.headerTitle = ko.observable(day.Header.Title);
 			self.dayOfWeek = ko.observable(day.DayOfWeekNumber);
 			dayNumberDisplay = dayDate.date();
 			if (dayNumberDisplay == 1 || self.dayOfWeek() == parent.weekStart) {
@@ -532,18 +535,18 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.showOvertimeAvailability = function (data) {
 			var date = self.fixedDate();
-			var momentDate = moment(date, "YYYY-MM-DD");
+			var momentDate = moment(date, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 			if (data.startPositionPercentage() == 0 && data.overtimeAvailabilityYesterday) {
 				momentDate.add('days', -1);
 			}
-			date = momentDate.format("YYYY-MM-DD");
+			date = Teleopti.MyTimeWeb.Common.FormatServiceDate(momentDate);
 			var day = ko.utils.arrayFirst(parent.days(), function (item) {
 				return item.fixedDate() == date;
 			});
 			if (day) {
 				parent.showAddRequestForm(day);
 			} else {
-				parent.showAddRequestFormWithData(momentDate.format(parent.datePickerFormat()), data.overtimeAvailabilityYesterday);
+				parent.showAddRequestFormWithData(date, data.overtimeAvailabilityYesterday);
 			}
 		};
 	};

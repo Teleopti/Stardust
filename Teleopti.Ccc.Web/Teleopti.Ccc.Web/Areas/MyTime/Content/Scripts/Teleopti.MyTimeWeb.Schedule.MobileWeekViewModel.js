@@ -59,6 +59,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 	});
 
 	self.showAddRequestForm = function (day) {
+
 		self.showAddRequestFormWithData(day.fixedDate());
 	};
 	var defaultRequestFunction = function () {
@@ -84,7 +85,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData) {
 	function _fillFormData() {
 		var requestViewModel = self.requestViewModel().model;
 		requestViewModel.DateFormat(self.datePickerFormat());
-		var requestDay = moment(self.initialRequestDay());
+		var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 		requestViewModel.DateFrom(requestDay);
 		requestViewModel.DateTo(requestDay);
 	}

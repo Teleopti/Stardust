@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		private static IPersonNameProvider _personNameProvider;
 		private static ILoggedOnUser _loggedOnUser;
 		private static IUserCulture _userCulture;
+		private ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
 		[SetUp]
 		public void Setup()
@@ -34,11 +36,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			_reportsNavProvider = MockRepository.GenerateMock<IReportsNavigationProvider>();
 
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() {Name = new Name()});
+			_loggedOnUser.Stub(x => x.CurrentUser()).Return(new Person() { Name = new Name() });
 
 			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Expect(x => x.GetCulture()).Return(culture);
+
+			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("Agent Name");
@@ -50,13 +54,13 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
 			_reportsNavProvider.Stub(x => x.GetNavigationItems())
-				.Return(new[] {new ReportNavigationItem {Action = "Index", Controller = "MyReport", IsWebReport = true}});
+				.Return(new[] { new ReportNavigationItem { Action = "Index", Controller = "MyReport", IsWebReport = true } });
 			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture);
+				_userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
 
@@ -86,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture);
+				_userCulture, _currentTeleoptiPrincipal);
 
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
 			licenseActivator.Stub(x => x.CustomerName).Return("Customer Name");
@@ -106,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				_reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture);
+				_userCulture, _currentTeleoptiPrincipal);
 
 			var result = target.CreatePortalViewModel();
 
@@ -123,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateStub<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(),
 				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), loggedOnUser, _userCulture);
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
 
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
@@ -142,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 				MockRepository.GenerateStub<ILicenseActivatorProvider>(), MockRepository.GenerateMock<IPushMessageProvider>(),
 				_loggedOnUser, _reportsNavProvider, MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
-				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), loggedOnUser, _userCulture);
+				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), loggedOnUser, _userCulture, _currentTeleoptiPrincipal);
 
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
@@ -208,14 +212,14 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
 		}
 
-		private static PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
+		private PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
 		{
 			return new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivatorProvider>(),
 				MockRepository.GenerateMock<IPushMessageProvider>(), _loggedOnUser,
 				MockRepository.GenerateMock<IReportsNavigationProvider>(), MockRepository.GenerateMock<IBadgeProvider>(),
 				MockRepository.GenerateMock<IToggleManager>(), _personNameProvider,
 				MockRepository.GenerateMock<ITeamGamificationSettingRepository>(), MockRepository.GenerateStub<ICurrentTenantUser>(),
-				_userCulture);
+				_userCulture, _currentTeleoptiPrincipal);
 		}
 	}
 

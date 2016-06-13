@@ -189,6 +189,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-summary[style*='color: {1}']", date.ToString("yyyy-MM-dd"), color));
 		}
 
+
+		[Then(@"I should see the day header text for date '(.*)' is '(.*)'")]
+		public void ThenIShouldSeeTheDayHeaderTextForDate(DateTime date, string text)
+		{
+			Browser.Interactions.AssertAnyContains(
+				$".weekview-day[data-mytime-date='{date.ToString ("yyyy-MM-dd")}'] .weekview-day-header", text);
+		}
+
+
 		[Then(@"I should see the text for date '(.*)' in '(.*)'")]
 		public void ThenIShouldSeeTheTextForDateIn(DateTime date, string color)
 		{

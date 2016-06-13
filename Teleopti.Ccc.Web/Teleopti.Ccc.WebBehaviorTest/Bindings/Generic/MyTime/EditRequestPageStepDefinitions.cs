@@ -168,6 +168,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 															 : ".shift-exchange-offer-next-day:not(:checked)");
 		}
 
+		[Then(@"I should see the overtime availability form with a start date of '(.*)' and an end date of '(.*)'")]
+		public void ThenIShouldSeeTheOvertimeAvailabiltyFormWithAsDefaultDate(string formattedStartDate, string formattedEndDate)
+		{
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-start-date", formattedStartDate);
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .overtime-availability-end-date", formattedEndDate);
+		}
+
+
 		[Then(@"I should see the request form with '(.*)' as default date")]
 		public void ThenIShouldSeeTheTextRequestFormWithAsDefaultDate(DateTime date)
 		{
