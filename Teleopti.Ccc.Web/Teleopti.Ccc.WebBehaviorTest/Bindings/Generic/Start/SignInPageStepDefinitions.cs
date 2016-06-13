@@ -134,6 +134,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenIChangeMyPasswordWith(Table table)
 		{
 			var password = table.CreateInstance<MyProfileStepDefinitions.PasswordInfo>();
+			Browser.Interactions.AssertExistsUsingJQuery("#New-password:enabled");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#New-password", password.Password);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Confirm-new-password", password.ConfirmedPassword);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Old-password", password.OldPassword);
