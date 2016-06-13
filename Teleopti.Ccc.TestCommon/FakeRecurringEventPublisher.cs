@@ -53,8 +53,10 @@ namespace Teleopti.Ccc.TestCommon
 
 		public void PublishHourly(IEvent @event)
 		{
-			var tenant = _dataSource.Current().DataSourceName;
-			var job = _publishings.SingleOrDefault(x => x.Tenant == tenant && @event.GetType() == x.Event.GetType());
+			var dataSource = _dataSource.Current();
+			var tenant = dataSource?.DataSourceName;
+			var job =
+				_publishings.SingleOrDefault(x => (tenant == null || x.Tenant == tenant) && @event.GetType() == x.Event.GetType());
 			if (job != null)
 				return;
 			_publishings.Add(new PublishingInfo

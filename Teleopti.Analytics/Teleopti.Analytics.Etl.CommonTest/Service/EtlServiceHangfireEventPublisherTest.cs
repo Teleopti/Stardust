@@ -1,12 +1,12 @@
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Analytics.Etl.Common.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.TestCommon;
@@ -26,6 +26,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public IIndexMaintenanceHangfireEventPublisher IndexMaintenanceHangfireEventPublisher;
 		public IIoCTestContext Context;
 		public TenantTickEventPublisher TenantTickEventPublisher;
+		public IRecurringEventPublisher RecurringEventPublisher;
 
 		private void hasTenant(string tenantName)
 		{
@@ -43,12 +44,12 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldStopAllPublishings()
 		{
 			hasTenant("t");
-			var recurringEventPublisher = MockRepository.GenerateMock<IRecurringEventPublisher>();
-			var target = new EtlService(null, null, IndexMaintenanceHangfireEventPublisher, recurringEventPublisher, Now);
+			var target = new EtlService(null, null, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
 
 			target.EnsureSystemWideRecurringJobs();
 
-			recurringEventPublisher.AssertWasCalled(x => x.StopPublishingAll());
+			Publisher.HasPublishing.Should().Be.True();
+			Publisher.Publishings.Single().Event.GetType().Should().Be.EqualTo<CleanFailedQueue>();
 		}
 
 		[Test]
@@ -57,17 +58,15 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
 
-			var recurringEventPublisher = MockRepository.GenerateMock<IRecurringEventPublisher>();
-			var indexMaintenanceHangfireEventPublisher = MockRepository.GenerateMock<IIndexMaintenanceHangfireEventPublisher>();
-
-			var target = new EtlService(null, null, indexMaintenanceHangfireEventPublisher, recurringEventPublisher, Now);
-			target.EnsureSystemWideRecurringJobs();
+			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
+			target.EnsureTenantRecurringJobs();
 
 			Now.Is("2016-03-21 13:10");
-			Context.SimulateRestart();
-			target.EnsureSystemWideRecurringJobs();
+			Publisher.Clear();
+			target.EnsureTenantRecurringJobs();
 
-			indexMaintenanceHangfireEventPublisher.Expect(x => x.PublishRecurringJobs()).Repeat.Twice();
+			Publisher.HasPublishing.Should().Be.True();
+			Publisher.Publishings.Count().Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -76,38 +75,30 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
 
-			var recurringEventPublisher = MockRepository.GenerateMock<IRecurringEventPublisher>();
-			var indexMaintenanceHangfireEventPublisher = MockRepository.GenerateMock<IIndexMaintenanceHangfireEventPublisher>();
-
-			var target = new EtlService(null, null, indexMaintenanceHangfireEventPublisher, recurringEventPublisher, Now);
-			target.EnsureSystemWideRecurringJobs();
+			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
+			target.EnsureTenantRecurringJobs();
 
 			Now.Is("2016-03-21 13:09");
-			Context.SimulateRestart();
-			target.EnsureSystemWideRecurringJobs();
+			target.EnsureTenantRecurringJobs();
 
-			indexMaintenanceHangfireEventPublisher.Expect(x => x.PublishRecurringJobs()).Repeat.Once();
+			Publisher.Publishings.Select(x => x.CreatedAt).Should().Have.SameValuesAs("2016-03-21 13:00".Utc());
 		}
 
 		[Test]
 		public void ShouldPublishCleanFailedQueue()
 		{
 			hasTenant("t");
-			var recurringEventPublisher = MockRepository.GenerateMock<IRecurringEventPublisher>();
-
-			var target = new EtlService(null, null, IndexMaintenanceHangfireEventPublisher, recurringEventPublisher, Now);
+			var target = new EtlService(null, null, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
 			target.EnsureSystemWideRecurringJobs();
 
-			recurringEventPublisher.AssertWasCalled(x => x.PublishHourly(Arg<CleanFailedQueue>.Is.NotNull));
+			Publisher.Publishings.First().Event.GetType().Should().Be.EqualTo<CleanFailedQueue>();
 		}
 
 		[Test]
-		public void ShouldPublishIndexMaintenanceHangfireEvent()
+		public void ShouldPublishTenentRecurringEvent()
 		{
 			hasTenant("t");
-			var recurringEventPublisher = MockRepository.GenerateMock<IRecurringEventPublisher>();
-			
-			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, recurringEventPublisher, Now);
+			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
 			target.EnsureTenantRecurringJobs();
 
 			Publisher.Publishings.Select(x => x.Event.GetType()).Should().Contain(typeof(IndexMaintenanceHangfireEvent));
@@ -119,9 +110,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		public void ShouldPublishIndexMaintenanceHangfireEventDaily()
 		{
 			hasTenant("t");
-			var recurringEventPublisher = MockRepository.GenerateMock<IRecurringEventPublisher>();
-
-			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, recurringEventPublisher, Now);
+			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
 			target.EnsureTenantRecurringJobs();
 
 			Publisher.Publishings.First(x => x.Event.GetType() == typeof(IndexMaintenanceHangfireEvent)).Daily.Should().Be.True();
@@ -132,8 +121,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 		{
 			Now.Is("2016-03-21 13:00");
 			hasTenant("t");
-			var recurringEventPublisher = MockRepository.GenerateMock<IRecurringEventPublisher>();
-			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, recurringEventPublisher, Now);
+			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
 			target.EnsureTenantRecurringJobs();
 			Publisher.Publishings.Should().Not.Be.Empty();
 
@@ -142,6 +130,22 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			target.EnsureTenantRecurringJobs();
 
 			Publisher.Publishings.Should().Be.Empty();
+		}
+
+
+		[Test]
+		public void ShouldRepublishAtStartup()
+		{
+			hasTenant("t");
+			var target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
+			target.EnsureTenantRecurringJobs();
+
+			Publisher.Publishings.Should().Not.Be.Empty();
+			Publisher.Clear();
+
+			target = new EtlService(null, TenantTickEventPublisher, IndexMaintenanceHangfireEventPublisher, RecurringEventPublisher, Now);
+			target.EnsureTenantRecurringJobs();
+			Publisher.Publishings.Should().Not.Be.Empty();
 		}
 	}
 }
