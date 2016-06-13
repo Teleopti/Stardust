@@ -160,6 +160,7 @@
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeLicenseActivator.cs" />
     <Compile Include="FakeLicenseActivatorProvider.cs" />
+    <Compile Include="FakeRepositories\FakeAggregateRootInitializer.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsActivityRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsAbsenceRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsRequestRepository.cs" />
@@ -180,6 +181,7 @@
     <Compile Include="FakeRepositories\FakePayrollResultRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="FakeRepositories\FakeProjectionVersionPersister.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleHistoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepositorySimulateNewUnitOfWork.cs" />
     <Compile Include="FakeRepositories\FakePersonalSettingDataRepository.cs" />
     <Compile Include="FakeRepositories\PersonAssignmentRepositoryWithRandomLatency.cs" />

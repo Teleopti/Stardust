@@ -4854,6 +4854,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot backout schedule change.
+        /// </summary>
+        public static string CannotBackoutScheduleChange {
+            get {
+                return ResourceManager.GetString("CannotBackoutScheduleChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} cannot be earlier than {1} .
         /// </summary>
         public static string CannotBeBeforeTime {

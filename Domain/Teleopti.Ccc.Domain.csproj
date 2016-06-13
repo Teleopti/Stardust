@@ -189,6 +189,8 @@
     <Compile Include="Aop\AllBusinessUnitsUnitOfWorkAttribute.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RunRequestWaitlistEventHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\BackoutScheduleChangeCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceStardustEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
