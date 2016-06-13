@@ -10,12 +10,14 @@
 		var addPersonalActivityUrl = '../api/TeamScheduleCommand/AddPersonalActivity';
 		var removeActivityUrl = '../api/TeamScheduleCommand/RemoveActivity';
 		var moveActivityUrl = '../api/TeamScheduleCommand/MoveActivity';
+		var backoutScheduleChangeUrl = '../api/TeamScheduleCommand/BackoutScheduleChange';
 
 		this.fetchAvailableActivities = fetchAvailableActivities;
 		this.addActivity = addActivity;
 		this.addPersonalActivity = addPersonalActivity;
 		this.removeActivity = removeActivity;
 		this.moveActivity = moveActivity;
+		this.backoutScheduleChange = backoutScheduleChange;
 
 		function fetchAvailableActivities() {
 			var deferred = $q.defer();
@@ -45,9 +47,19 @@
 			return deferred.promise;
 		}
 
-		function normalizeInput(activity) {
-			var normalized = angular.copy(activity);
-			normalized.Date = moment(activity.Date).format('YYYY-MM-DD');			
+		function backoutScheduleChange(input) {
+			var deferred = $q.defer();
+			$http.post(backoutScheduleChangeUrl, normalizeInput(input)).then(function (data) {
+				deferred.resolve(data);
+			}, function (error) {
+				deferred.reject(error);
+			});
+			return deferred.promise;
+		}
+
+		function normalizeInput(input) {
+			var normalized = angular.copy(input);
+			normalized.Date = moment(input.Date).format('YYYY-MM-DD');
 			return normalized;
 		}
 

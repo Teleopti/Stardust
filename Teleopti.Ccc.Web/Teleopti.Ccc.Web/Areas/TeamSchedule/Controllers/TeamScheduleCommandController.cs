@@ -41,6 +41,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _commandHandlingProvider.MoveActivity(input);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/BackoutScheduleChange")]
+		public virtual List<FailActionResult> BackoutScheduleChangeCommand([FromBody] BackoutScheduleChangeFormData input)
+		{
+			return _commandHandlingProvider.BackoutScheduleChange(input);
+		}
+
 		[UnitOfWork, HttpPost, Route("api/TeamScheduleCommand/PersonWriteProtectionCheck")]
 		public virtual IList<Guid> CheckPersonWriteProtection(CheckPersonWriteProtectionFormData input)
 		{
