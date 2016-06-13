@@ -97,12 +97,23 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 						AcdLogOnMartId = -1
 					};
 					externalLogonRepository.Add(logon);
+
+					uglyFixForRaceConditionInRtaBetweenActivityCheckerAndTheFirstStateForTheAgent(uow, user);
 				}
 				user.AddExternalLogOn(logon, personPeriod);
 			}
 
 			user.AddPersonPeriod(personPeriod);
 		}
-		
+
+		private static void uglyFixForRaceConditionInRtaBetweenActivityCheckerAndTheFirstStateForTheAgent(IUnitOfWork uow, IPerson user)
+		{
+			new AgentStatePersister(new ThisUnitOfWork(uow))
+				.Persist(new AgentState
+				{
+					PersonId = user.Id.GetValueOrDefault(),
+					ReceivedTime = "1753-01-01 00:00".Utc()
+				});
+		}
 	}
 }

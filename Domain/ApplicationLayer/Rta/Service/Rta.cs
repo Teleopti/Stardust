@@ -11,8 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateCleaner :
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
-		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<PersonPeriodChangedEvent>
+		IHandleEvent<PersonAssociationChangedEvent>
 	{
 		private readonly IAgentStatePersister _persister;
 
@@ -33,22 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (@event.TeamId.HasValue)
 				return;
 			_persister.Delete(@event.PersonId);
-		}
-
-		[UnitOfWork]
-		public virtual void Handle(PersonPeriodChangedEvent @event)
-		{
-			if (!@event.CurrentTeamId.HasValue)
-				return;
-			var existing = _persister.Get(@event.PersonId);
-			if (existing == null)
-			{
-				_persister.Persist(new AgentState
-				{
-					PersonId = @event.PersonId,
-					ReceivedTime = @event.Timestamp
-				});
-			}
 		}
 	}
 
