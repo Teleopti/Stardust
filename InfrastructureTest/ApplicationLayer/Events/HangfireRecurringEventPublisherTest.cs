@@ -154,46 +154,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			JobClient.RecurringIds.Should().Have.Count.EqualTo(1);
 		}
 
-		[Test]
+		[Test, ExpectedException(typeof(ArgumentException))]
 		public void ShouldAssignIdNoLongerThanMaxLength()
 		{
-			var maxLength = 100 - "recurring-job:".Length;
-
 			Target.PublishHourly(new LongNameHandlerTestEvent());
-
-			JobClient.RecurringIds.First().Length.Should().Be.LessThanOrEqualTo(maxLength);
-		}
-
-		[Test]
-		public void ShouldAssignIdWithoutHandlerTypeName()
-		{
-			Target.PublishHourly(new HangfireTestEvent());
-
-			JobClient.RecurringIds.Single().Should().Not.Contain(typeof (TestHandler).Name);
-		}
-
-		[Test]
-		public void ShouldAssignIdWithoutEventTypeName()
-		{
-			Target.PublishHourly(new HangfireTestEvent());
-
-			JobClient.RecurringIds.Single().Should().Not.Contain(typeof(HangfireTestEvent).Name);
-		}
-
-		[Test]
-		public void ShouldAssignIdWithHandlerRecurringId()
-		{
-			Target.PublishHourly(new HangfireTestEvent());
-
-			JobClient.RecurringIds.Single().Should().Contain("numberone");
-		}
-
-		[Test]
-		public void ShouldAssignIdWithLongNameNotColliding()
-		{
-			Target.PublishHourly(new LongNameHandlerTestEvent());
-
-			JobClient.RecurringIds.Should().Have.Count.EqualTo(2);
 		}
 
 		[Test]

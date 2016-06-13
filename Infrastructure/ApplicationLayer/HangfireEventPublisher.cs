@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlerId = $"{j.HandlerType.Name}{delimiter}{@event.GetType().Name}";
 
 			var id = $"{j.Tenant}{delimiter}{handlerId}";
-			if (id.Length <= maxLength)
+			if (id.Length > maxLength)
 			{
 				throw new ArgumentException($"A recurring job cannot not have a long name. The maximum length is {maxLength} and now it is '{id}' with length {id.Length}. Please change class or event name.");
 			}
