@@ -1355,6 +1355,9 @@
     <Content Include="WFM\js\intraday\intraday.area.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.config.controller.spec.js" />
     <Content Include="WFM\js\intraday\intraday.staffing.controller.js" />
+    <Content Include="WFM\js\intraday\intraday.staffing.controller.spec.js" />
+    <Content Include="WFM\js\intraday\intraday.staffing.service.js" />
+    <Content Include="WFM\js\intraday\intraday.staffing.service.spec.js" />
     <Content Include="WFM\js\people\people.searchInputDirective.controller.spec.js" />
     <Content Include="WFM\js\reports\html\reports.html" />
     <Content Include="WFM\js\reports\reports.controller.js" />
