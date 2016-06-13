@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure.Analytics;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 {
@@ -52,14 +54,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			var person = _personRepository.Get(@event.PersonId);
 			var availabilityDays = _availabilityDayRepository.Find(@event.Date, person);
 			var personPeriod = _analyticsPersonPeriodRepository.PersonPeriod(person.Period(@event.Date).Id.GetValueOrDefault());
-			var date = _analyticsDateRepository.Date(@event.Date.Date);
-			var scenarios = _analyticsScenarioRepository.Scenarios().Where(x => !x.IsDeleted && x.ScenarioId != -1);
+			var date = getAnalyticsDate(@event);
+			var scenarios = getScenarios();
 
 			if (!availabilityDays.Any())
 			{
 				foreach (var scenario in scenarios)
 				{
-					logger.Debug($"Deleting availability for PersonPeriod:{personPeriod.PersonId}, Date:{date.DateId}, Scenario: {scenario.ScenarioId}");
+					logger.Debug($"Deleting availability for PersonPeriod:{personPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
 					_analyticsHourlyAvailabilityRepository.Delete(personPeriod.PersonId, date.DateId, scenario.ScenarioId);
 				}
 				return;
@@ -68,7 +70,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 			foreach (var scenario in scenarios)
 			{
 				var scheduledDay = getScheduledDay(availabilityDay, scenario.ScenarioCode.GetValueOrDefault());
-				if (scheduledDay == null) continue;
+				if (scheduledDay == null)
+				{
+					logger.Debug($"No schedule day found for scenario {scenario.ScenarioCode.GetValueOrDefault()} and day {availabilityDay.RestrictionDate}");
+					continue;
+				}
 				var scheduledTime = scheduledWorkTime(scheduledDay);
 
 				var analyticsHourlyAvailability = new AnalyticsHourlyAvailability
@@ -82,15 +88,38 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 					ScheduledDays = Convert.ToInt32(scheduledTime > 0),
 					ScheduledTimeMinutes = scheduledTime
 				};
-				logger.Debug($"Adding or updating availability for PersonPeriod:{personPeriod.PersonId}, Date:{date.DateId}, Scenario: {scenario.ScenarioId}");
+				logger.Debug($"Adding or updating availability for PersonPeriod:{personPeriod.PersonId}, Date:{date.DateId}, Scenario:{scenario.ScenarioId}");
 				_analyticsHourlyAvailabilityRepository.AddOrUpdate(analyticsHourlyAvailability);
 			}
+		}
+
+		private IAnalyticsDate getAnalyticsDate(AvailabilityChangedEvent @event)
+		{
+			var date = _analyticsDateRepository.Date(@event.Date.Date);
+			if (date == null)
+				throw new ArgumentException("Date missing in analytics.");
+			return date;
+		}
+
+		private IList<AnalyticsScenario> getScenarios()
+		{
+			var scenarios = _analyticsScenarioRepository.Scenarios();
+			return scenarios.Where(x => !x.IsDeleted && x.ScenarioId != -1).ToList();
 		}
 
 		private IScheduleDay getScheduledDay(IStudentAvailabilityDay availabilityDay, Guid scenarioId)
 		{
 			var scenario = _scenarioRepository.Get(scenarioId);
-			if (!scenario.EnableReporting) return null;
+			if (scenario == null)
+			{
+				logger.Warn($"Scenario {scenarioId} does not exist in Application database, skipping.");
+				return null;
+			}
+			if (!scenario.EnableReporting)
+			{
+				logger.Debug($"Scenario {scenarioId} is not reportable, skipping.");
+				return null;
+			}
 			var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false, false) { LoadDaysAfterLeft = true };
 			var day = availabilityDay.RestrictionDate;
 			var period = new DateOnlyPeriod(day, day);
@@ -105,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Availability
 		{
 			var availRestriction = availabilityDay.RestrictionCollection.FirstOrDefault();
 			if (availRestriction == null)
-				throw new Exception("What does this mean, can this happen?");
+				throw new ArgumentException("Restriction missing from Availability");
 
 			var start = TimeSpan.FromMinutes(0);
 			var end = TimeSpan.FromHours(24);
