@@ -8,6 +8,7 @@
 				var chartData = {};
 				chartData.Forcast = ['Forcasted'];
 				chartData.Staffing = ['Staffing'];
+				chartData.Intervals = ['x'];
 
 
 
@@ -21,6 +22,7 @@
 					angular.forEach(data, function(single) {
 						chartData.Forcast.push(single.Forecast);
 						chartData.Staffing.push(single.StaffingLevel);
+						chartData.Intervals.push(new Date(single.StartDateTime));
 					});
 
 					generateChart(chartData);
@@ -28,10 +30,13 @@
 				}
 
 				var generateChart = function(data) {
+					console.log(data);
 					c3.generate({
 						bindto: '#staffingChart',
 						data: {
+							x: 'x',
 							columns: [
+								data.Intervals,
 								data.Forcast,
 								data.Staffing,
 							],
@@ -41,6 +46,14 @@
 							types: {
 								Forcasted: 'bar'
 							},
+						},
+						axis: {
+							x: {
+								type: 'timeseries',
+								tick: {
+									format: 'T%H:%M:%S'
+								}
+							}
 						},
 						zoom: {
 							enabled: true,
