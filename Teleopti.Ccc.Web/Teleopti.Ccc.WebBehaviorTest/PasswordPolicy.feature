@@ -143,6 +143,7 @@ Scenario: Change password fails if new password is weak
 	| Old Password       | P@ssword1 |
 	Then I should see an error 'PasswordPolicyWarning'
 
+@ignore
 Scenario: Change password fails if old password is wrong
 	Given I have user logon details with
 	| Field                           | Value |
