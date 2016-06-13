@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IIndexMaintenanceHangfireEventPublisher
 	{
-		void EnsurePublishings();
+		void PublishRecurringJobs();
 	}
 
 	public class IndexMaintenanceHangfireEventPublisher : IIndexMaintenanceHangfireEventPublisher
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_dataSourceScope = dataSourceScope;
 		}
 
-		public void EnsurePublishings()
+		public void PublishRecurringJobs()
 		{
 			publishDaily(new IndexMaintenanceHangfireEvent());
 		}

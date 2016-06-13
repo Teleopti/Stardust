@@ -12,14 +12,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			_allTenantRecurringEventPublisher = allTenantRecurringEventPublisher;
 		}
 
-		public void EnsurePublishings()
+		public void PublishRecurringJobs()
 		{
-			_allTenantRecurringEventPublisher.RemovePublishingsOfRemovedTenants();
-
 			_allTenantRecurringEventPublisher.PublishMinutely(new TenantMinuteTickEvent());
 			_allTenantRecurringEventPublisher.PublishHourly(new TenantHourTickEvent());
 		}
-		
+
+		public void RemovePublishingsOfRemovedTenants()
+		{
+			_allTenantRecurringEventPublisher.RemovePublishingsOfRemovedTenants();
+		}
+
 		public void WithPublishingsForTest(Action action)
 		{
 			_allTenantRecurringEventPublisher.RemoveAllPublishings();

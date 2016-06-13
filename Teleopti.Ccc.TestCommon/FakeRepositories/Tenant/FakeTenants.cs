@@ -31,6 +31,12 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Tenant
 		{
 			Has(new Infrastructure.MultiTenancy.Server.Tenant(tenant));
 		}
+
+		public void WasRemoved(string tenant)
+		{
+			var existing = _data.Single(x => x.Name == tenant);
+			_data.Remove(existing);
+		}
 	}
 	public class FakeTenants : 
 		IFindTenantNameByRtaKey, 

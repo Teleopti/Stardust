@@ -77,10 +77,11 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			try
 			{
 				if (lastTenantRecurringJobPublishing == null ||
-					_now.UtcDateTime().Subtract(lastTenantRecurringJobPublishing.GetValueOrDefault()).TotalMinutes > 10)
+					_now.UtcDateTime().Subtract(lastTenantRecurringJobPublishing.GetValueOrDefault()).TotalMinutes >= 10)
 				{
-					_tenantTickEventPublisher.EnsurePublishings();
-					_indexMaintenanceHangfireEventPublisher.EnsurePublishings();
+					_tenantTickEventPublisher.RemovePublishingsOfRemovedTenants();
+					_tenantTickEventPublisher.PublishRecurringJobs();
+					_indexMaintenanceHangfireEventPublisher.PublishRecurringJobs();
 					lastTenantRecurringJobPublishing = _now.UtcDateTime();
 				}
 			}

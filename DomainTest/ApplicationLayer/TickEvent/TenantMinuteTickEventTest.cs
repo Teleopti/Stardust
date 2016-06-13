@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		{
 			Tenants.Has(new Tenant("t"));
 
-			Target.EnsurePublishings();
+			Target.PublishRecurringJobs();
 
 			Publisher.Publishings.Select(x => x.Event.GetType())
 				.Should().Contain(typeof (TenantMinuteTickEvent));
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		{
 			Tenants.Has(new Tenant("t"));
 
-			Target.EnsurePublishings();
+			Target.PublishRecurringJobs();
 
 			Publisher.Publishings.First(x => x.Event.GetType() == typeof(TenantMinuteTickEvent))
 				.Minutely.Should().Be.True();

@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		{
 			Now.Is("2016-03-21 13:00");
 			Tenants.Has(new Tenant("t"));
-			Target.EnsurePublishings();
+			Target.PublishRecurringJobs();
 
 			Now.Is("2016-03-21 13:10");
 			Context.SimulateRestart();
-			Target.EnsurePublishings();
+			Target.PublishRecurringJobs();
 
 			Publisher.Publishings.Select(x => x.CreatedAt).Should().Have.SameValuesAs("2016-03-21 13:10".Utc());
 		}
@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.TickEvent
 		{
 			Now.Is("2016-03-21 13:00");
 			Tenants.Has(new Tenant("t"));
-			Target.EnsurePublishings();
+			Target.PublishRecurringJobs();
 
 			Now.Is("2016-03-21 13:10");
-			Target.EnsurePublishings();
+			Target.PublishRecurringJobs();
 
 			Publisher.Publishings.Select(x => x.CreatedAt).Should().Have.SameValuesAs("2016-03-21 13:00".Utc());
 		}
