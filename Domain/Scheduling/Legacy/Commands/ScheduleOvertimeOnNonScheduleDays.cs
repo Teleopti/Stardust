@@ -56,7 +56,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay,
 				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("scheduling overtime", GroupPageType.SingleAgent),
 				SkipNegativeShiftValues = true,
-				AllowBreakContractTime = true
+				AllowBreakContractTime = true,
+				UseAverageShiftLengths = false
 			};
 
 			var shiftNudgeDirective = createShiftNudgeDirective(scheduleDay, overtimePreferences);

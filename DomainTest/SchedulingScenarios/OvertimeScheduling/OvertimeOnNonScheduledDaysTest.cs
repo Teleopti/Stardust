@@ -831,28 +831,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 				.Should().Be.Empty();
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldNotUseAvarageShiftLengths()
 		{	
 			var scenario = new Scenario("_");
 			var phoneActivity = ActivityFactory.CreateActivity("_");
 			var dateOnly = DateOnly.Today;
+			var lowAverageShiftLength = TimeSpan.FromHours(4);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(7, 0, 12, 0, 300), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
-			var contract = new Contract("_")
-			{
-				WorkTimeDirective = 
-					new WorkTimeDirective(TimeSpan.FromHours(10), 
-					TimeSpan.FromHours(83), TimeSpan.FromHours(1), 
-					TimeSpan.FromHours(16)),
-					WorkTime = new WorkTime(TimeSpan.FromHours(4))
-			};
+			var contract = new Contract("_") {WorkTimeDirective =  new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(16)),
+				WorkTime = new WorkTime(lowAverageShiftLength)};
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			var skill = new Skill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = phoneActivity, TimeZone = TimeZoneInfo.Utc }.WithId();
 			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
 			var agent = new Person().WithId();
-			
 			agent.AddPeriodWithSkill(new PersonPeriod(dateOnly, new PersonContract(contract, new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), skill);
 			agent.AddSchedulePeriod(new SchedulePeriod(dateOnly, SchedulePeriodType.Day, 1));
 			var overtimePreference = new OvertimePreferences { OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
@@ -860,13 +854,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
 
-			stateHolder.Schedules[agent].ScheduledDay(dateOnly)
-				.PersonAssignment(true)
-				.OvertimeActivities()
-				.Single()
-				.Period.ElapsedTime()
-				.Should()
-				.Be.EqualTo(TimeSpan.FromHours(9));
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Single().Period.ElapsedTime()
+				.Should().Be.EqualTo(TimeSpan.FromHours(9));
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
