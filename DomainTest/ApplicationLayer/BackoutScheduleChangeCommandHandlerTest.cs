@@ -95,6 +95,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			command.ErrorMessages.First().Should().Be.EqualTo(Resources.CannotBackoutScheduleChange);
 		}
 
+		[Ignore]
 		[Test]
 		public void ShouldBackoutToPreviousSchedule()
 		{
