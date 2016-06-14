@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="ApplicationLayer\IIndexMaintenanceHangfireEventPublisher.cs" />
     <Compile Include="Cascading\CascadingSkillGroupItem.cs" />
+    <Compile Include="Infrastructure\Events\EtlNightlyEndEvent.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceStardustEvent.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
