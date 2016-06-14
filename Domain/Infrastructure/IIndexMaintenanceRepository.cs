@@ -2,6 +2,6 @@
 {
 	public interface IIndexMaintenanceRepository
 	{
-		void PerformIndexMaintenanceForAll();
+		void PerformIndexMaintenance(string database);
 	}
 }

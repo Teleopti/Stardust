@@ -7,9 +7,11 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Aop;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
@@ -39,6 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>();
 			builder.RegisterType<ExportPayrollHandler>().As<IHandle<RunPayrollExportEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterModule<PayrollContainerInstaller>();
+			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
 		}
 	}
 }

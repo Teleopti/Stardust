@@ -16,13 +16,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_connectionStrings = connectionStrings;
 		}
 
-		public void PerformIndexMaintenanceForAll()
-		{
-			performIndexMaintenance("App");
-			performIndexMaintenance("Analytics");
-			performIndexMaintenance("Agg");
-		}
-
 		private string getAggName()
 		{
 			var dataTable = HelperFunctions.ExecuteDataSet(CommandType.StoredProcedure,
@@ -31,7 +24,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return dataTable.Rows[0]["target_customName"].ToString();
 		}
 
-		private void performIndexMaintenance(string database)
+		public void PerformIndexMaintenance(string database)
 		{
 			string connectionString = null;
 			var dataMartConnectionString = _connectionStrings.Analytics();

@@ -749,6 +749,7 @@
     <Compile Include="Infrastructure\ILicenseStatusXml.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="Infrastructure\IScheduleDifferenceSaver.cs" />
+    <Compile Include="Infrastructure\IStardustJobFeedback.cs" />
     <Compile Include="Infrastructure\IUpgradeLog.cs" />
     <Compile Include="Infrastructure\IMainReference.cs" />
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />

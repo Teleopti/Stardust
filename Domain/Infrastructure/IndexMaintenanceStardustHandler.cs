@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.Logon.Aspects;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Infrastructure
 {
@@ -14,18 +15,29 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		IRunOnStardust
 	{
 		private readonly IIndexMaintenanceRepository _indexMaintenanceRepository;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IndexMaintenanceStardustHandler));
 
-		public IndexMaintenanceStardustHandler(IIndexMaintenanceRepository indexMaintenanceRepository)
+		public IndexMaintenanceStardustHandler(IIndexMaintenanceRepository indexMaintenanceRepository, IStardustJobFeedback stardustJobFeedback)
 		{
 			_indexMaintenanceRepository = indexMaintenanceRepository;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		[TenantScope]
 		public virtual void Handle(IndexMaintenanceEvent @event)
 		{
-			logger.Debug($"Consuming event for {nameof(IndexMaintenanceEvent)}");
-			_indexMaintenanceRepository.PerformIndexMaintenanceForAll();
+			logger.Debug($"Consuming event for {nameof(IndexMaintenanceEvent)} for {@event.LogOnDatasource}");
+			performIndexMaintenance("App");
+			performIndexMaintenance("Analytics");
+			performIndexMaintenance("Agg");
+		}
+
+		private void performIndexMaintenance(string database)
+		{
+			_stardustJobFeedback.SendProgress?.Invoke($"Index Maintenance {database} Started");
+			_indexMaintenanceRepository.PerformIndexMaintenance(database);
+			_stardustJobFeedback.SendProgress?.Invoke($"Index Maintenance {database} Finished");
 		}
 	}
 }

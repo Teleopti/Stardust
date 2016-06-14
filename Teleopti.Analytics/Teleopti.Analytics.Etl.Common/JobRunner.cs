@@ -51,11 +51,12 @@ namespace Teleopti.Analytics.Etl.Common
 						var eventPublisher = job.JobParameters.ContainerHolder.IocContainer.Resolve<IEventPublisher>();
 						var dataSourceScope = job.JobParameters.ContainerHolder.IocContainer.Resolve<IDataSourceScope>();
 						var jobHelper = job.JobParameters.Helper;
-						using (dataSourceScope.OnThisThreadUse(new DummyDataSource(jobHelper.SelectedDataSource.DataSourceName)))
+						var tenant = jobHelper.SelectedDataSource.DataSourceName;
+						using (dataSourceScope.OnThisThreadUse(new DummyDataSource(tenant)))
 						{
 							eventPublisher.Publish(new IndexMaintenanceEvent
 							{
-								JobName = "Index Maintenance",
+								JobName = $"Index Maintenance for {tenant}",
 								UserName = "Index Maintenance",
 								AllStepsSuccess = jobResultCollection.All(x => x.Success)
 							});

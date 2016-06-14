@@ -181,6 +181,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	        builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 		        .As<IScheduleProjectionReadOnlyPersister>()
 		        .SingleInstance();
-        }
-    }
+		}
+	}
+
 }

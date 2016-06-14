@@ -271,6 +271,7 @@
     <Compile Include="Foundation\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Foundation\ReportUrlConstructor.cs" />
     <Compile Include="Foundation\SelectivePrincipalContext.cs" />
+    <Compile Include="Foundation\StardustJobFeedback.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\TokenIdentityProvider.cs" />
     <Compile Include="Foundation\DatabaseConnectionLostException.cs" />
