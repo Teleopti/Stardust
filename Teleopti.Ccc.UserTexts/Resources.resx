@@ -14594,4 +14594,8 @@ These options are activated:
     <value>Backout</value>
     <comment>Backout menu item name in wfm/teamschedule</comment>
   </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>The shift trade request for {0} needs to be accepted again. The other agent's schedule has changed.</value>
+    <comment>Your shift trade request has been denied. due to one of the agent's schedule is changed.</comment>
+  </data>
 </root>

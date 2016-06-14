@@ -26882,6 +26882,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The shift trade request for {0} needs to be accepted again. The other agent&apos;s schedule has changed..
+        /// </summary>
+        public static string ShiftTradeRequestScheduleChanged {
+            get {
+                return ResourceManager.GetString("ShiftTradeRequestScheduleChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift trade denied because your skills did not match with other person..
         /// </summary>
         public static string ShiftTradeSkillDenyReason {

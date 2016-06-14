@@ -51,7 +51,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return request;
 		}
 
-		public IAbsenceRequest CreateAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
+        public IPersonRequest CreatePersonShiftTradeRequest(IPerson personFrom, IPerson personTo, DateOnly requestDateOnly)
+        {
+            var shiftTradeSwapDetails = new IShiftTradeSwapDetail[]
+            {
+                new ShiftTradeSwapDetail(personFrom, personTo, requestDateOnly, requestDateOnly)
+            };
+            Person = personTo;
+            Request = new ShiftTradeRequest(shiftTradeSwapDetails);
+
+            var request = CreateNewPersonRequest();
+            request.Pending();
+            return request;
+        }
+
+        public IAbsenceRequest CreateAbsenceRequest(IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			Request = new AbsenceRequest(absence, dateTimePeriod);
 			return (IAbsenceRequest)CreatePersonRequest().Request;

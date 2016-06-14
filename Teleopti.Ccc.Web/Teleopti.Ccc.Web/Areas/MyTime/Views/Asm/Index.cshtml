@@ -26,7 +26,23 @@
 				Teleopti.MyTimeWeb.Asm.ReloadAsmViewModelListener(notification);
 				Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
 				Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
-			});
+			},
+            'IScheduleChangedInDefaultScenario'
+        );
+
+		Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
+            {
+                notifyText: '@Resources.ShiftTradeRequestScheduleChanged', 
+                originalDocumentTitle: document.title,
+                baseUrl: '@Url.Content("~/")', 
+                header: '@Resources.Teleopti' 
+            },
+            function (notification) {
+                Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);
+                Teleopti.MyTimeWeb.AlertActivity.RefreshAlertNextActivity();
+            },
+            'IShiftTradeScheduleChangedInDefaultScenario'
+        );
 
     	Teleopti.MyTimeWeb.AlertActivity.StartAlertNextActivity({
 			comingMessageTemplate: '@Resources.NextActivityComingMessage',

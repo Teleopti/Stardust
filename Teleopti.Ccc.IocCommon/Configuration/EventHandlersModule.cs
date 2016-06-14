@@ -101,7 +101,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                     if (_config.Toggle(Toggles.ShiftTrade_ToHangfire_38181)) return;
                     ct.As(
                             typeof(IHandleEvent<NewShiftTradeRequestCreatedEvent>),
-                            typeof(IHandleEvent<AcceptShiftTradeEvent>))
+                            typeof(IHandleEvent<AcceptShiftTradeEvent>),
+                            typeof(IHandleEvent<ProjectionChangedEvent>))
                             .AsSelf()
                             .InstancePerLifetimeScope()
                             .ApplyAspects();
@@ -111,7 +112,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
                     if (!_config.Toggle(Toggles.ShiftTrade_ToHangfire_38181)) return;
                     ct.As(
                             typeof(IHandleEvent<NewShiftTradeRequestCreatedEvent>),
-                            typeof(IHandleEvent<AcceptShiftTradeEvent>))
+                            typeof(IHandleEvent<AcceptShiftTradeEvent>),
+                            typeof(IHandleEvent<ProjectionChangedEvent>))
                             .AsSelf()
                             .InstancePerLifetimeScope()
                             .ApplyAspects();

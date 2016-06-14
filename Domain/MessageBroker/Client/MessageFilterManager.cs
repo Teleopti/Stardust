@@ -108,6 +108,8 @@ namespace Teleopti.Ccc.Domain.MessageBroker.Client
 			aggregateRoots.Add(typeof (MeetingChangedEntity), new List<Type> {typeof (IMeetingChangedEntity)});
 			aggregateRoots.Add(typeof (IScheduleChangedInDefaultScenario),
 							   new List<Type> {typeof (IScheduleChangedInDefaultScenario)});
+            aggregateRoots.Add(typeof(IShiftTradeScheduleChangedInDefaultScenario),
+                               new List<Type> { typeof(IShiftTradeScheduleChangedInDefaultScenario) });
             aggregateRoots.Add(typeof(IRunRequestWaitlistEventMessage),
                                new List<Type> { typeof(IRunRequestWaitlistEventMessage) });
             aggregateRoots.Add(typeof(ITeleoptiDiagnosticsInformation),

@@ -18,8 +18,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	var pixelPerHours = 40;
 	var timeLineMarkerWidth = 40;
 	var vm;
-	var notifyOptions;
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
+    var notifyOptions = {};
+    var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var _settings;
 	var userTimeZoneMinuteOffset = 0;
 	var _notificationTrackIdList = [];
@@ -192,14 +192,14 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		$('.col-1').hide(); //hide footer that takes "empty" space
 	}
 
-	function _listenForScheduleChanges(options, eventListeners) {
-		Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function(displayTime) {
-			notifyOptions = options;
-			notifyOptions.timeout = displayTime * 1000;
+	function _listenForScheduleChanges(options, eventListeners, domainType) {
+	    Teleopti.MyTimeWeb.AlertActivity.GetNotificationDisplayTime(function (displayTime) {
+	        notifyOptions[domainType] = options;
+	        notifyOptions[domainType].timeout = displayTime * 1000;
 
 			Teleopti.MyTimeWeb.Common.SubscribeToMessageBroker({
 				successCallback: eventListeners,
-				domainType: 'IScheduleChangedInDefaultScenario'
+				domainType: domainType
 			});
 		});
 	}
@@ -260,7 +260,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				} else {
 					changedDateRange = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L') + ' - ' + new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate)).format('L');
 				}
-				var notifyText = notifyOptions.notifyText.format(changedDateRange);
+				var notifyText = notifyOptions[notification.DomainType].notifyText.format(changedDateRange);
 				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, notifyText);
 			}
 		},
