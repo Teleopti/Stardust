@@ -98,7 +98,7 @@ Wfm_Requests_PrepareForRelease_38771 = RC
 
 Wfm_Intraday_38074 = true
 
-Wfm_People_PrepareForRelease_39040 = DEV
+Wfm_People_PrepareForRelease_39040 = RC
 
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 
