@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -11,7 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateCleaner :
 		IRunOnHangfire,
 		IHandleEvent<PersonDeletedEvent>,
-		IHandleEvent<PersonAssociationChangedEvent>
+		IHandleEvent<PersonAssociationChangedEvent>,
+		IHandleEvent<PersonPeriodChangedEvent>
 	{
 		private readonly IAgentStatePersister _persister;
 
@@ -32,6 +34,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			if (@event.TeamId.HasValue)
 				return;
 			_persister.Delete(@event.PersonId);
+		}
+
+		[UnitOfWork]
+		public virtual void Handle(PersonPeriodChangedEvent @event)
+		{
+			if (!@event.CurrentTeamId.HasValue)
+				return;
+			var existing = _persister.Get(@event.PersonId);
+			if (existing == null)
+			{
+				_persister.Persist(new AgentState
+				{
+					PersonId = @event.PersonId,
+					// if the current time is used, behavior tests regarding "details" view fail..
+					// .. because the current time later faked to an earlier time...
+					// .. and the rta service will see it as the activity starting in the past, since the previous state was later..
+					ReceivedTime = "2001-01-01 00:00".Utc()
+				});
+			}
 		}
 	}
 
