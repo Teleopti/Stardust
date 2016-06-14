@@ -103,7 +103,7 @@ Also - when this test is fixed, we need some similar test when B1 or B2 doesn't 
 		}
 
 		[Test, Ignore("2 B fixed. Probably easiest to wait fixing this until we know how to handle ShouldMoveResourcesToTwoSkillsWithDifferentDemand above (impl to fix this one will probably differ)")]
-		public void ShouldMoveAllResourcesToOneSkillsIfLastSubSkillHasNoDemand()
+		public void ShouldMoveAllResourcesToOneCascadingSkillIfOnlyThatSkillHasDemand()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
