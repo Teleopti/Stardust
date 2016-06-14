@@ -20,7 +20,7 @@
 		}
 
 		vm.backoutSchedule = function () {
-		    ActivityService.backoutScheduleChange(requestData).then(function (reponse) {
+			ActivityService.backoutScheduleChange(requestData).then(function (reponse) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
 				}
@@ -29,7 +29,12 @@
 					'success': 'SuccessfulMessageForBackoutSchedule',
 					'warning': 'PartialSuccessMessageForBackoutSchedule',
 					'error': 'FailedMessageForBackoutSchedule'
-				}, vm.selectedPersonInfo, reponse.data);
+				}, vm.selectedPersonInfo.map(function (agent) {
+					return {
+						PersonId: agent.personId,
+						Name: agent.name
+					}
+				}), reponse.data);
 			});
 		};
 
@@ -62,7 +67,6 @@
 		};
 	}
 
-
 	function backoutDirective() {
 		return {
 			restrict: 'E',
@@ -85,6 +89,5 @@
 
 			selfCtrl.init();
 		}
-
 	}
 })();
