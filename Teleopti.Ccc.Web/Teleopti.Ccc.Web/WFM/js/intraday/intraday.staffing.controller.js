@@ -4,8 +4,8 @@
 		.controller('IntradayStaffingCtrl', [
 			'$scope', '$state', '$stateParams', 'intradayStaffingService', '$filter', 'NoticeService', '$translate', '$q',
 			function($scope, $state, $stateParams, intradayStaffingService, $filter, NoticeService, $translate, $q) {
-				$scope.intervalDate = $stateParams.intervalDate;
 				var chartData = {};
+				$scope.intervalDate = "loading"
 				chartData.Forcast = ['Forcasted'];
 				chartData.Staffing = ['Staffing'];
 				chartData.Intervals = ['x'];
@@ -18,7 +18,10 @@
 
 				});
 
+
+
 				var extractRelevantData = function(data) {
+					$scope.intervalDate = getIntervalDates(data);
 					angular.forEach(data, function(single) {
 						chartData.Forcast.push(single.Forecast);
 						chartData.Staffing.push(single.StaffingLevel);
@@ -27,10 +30,13 @@
 
 					generateChart(chartData);
 
-				}
+				};
+
+				var getIntervalDates = function(data){
+					return data[0].StartDateTime + " - " + data[data.length-1].EndDateTime;
+				};
 
 				var generateChart = function(data) {
-					console.log(data);
 					c3.generate({
 						bindto: '#staffingChart',
 						data: {
