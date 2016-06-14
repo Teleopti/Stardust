@@ -1,4 +1,5 @@
-﻿using System.Web.Http;
+﻿using System;
+using System.Web.Http;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -13,10 +14,10 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		}
 
 		[HttpGet, Route("ResourceCalculate")]
-		public virtual IHttpActionResult ResourceCalculate()
+		public virtual IHttpActionResult ResourceCalculate(DateTime date)
 		{
 			//var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
-			var result = _calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(new DateOnly(2016, 4, 6), new DateOnly(2016, 4, 7)));
+			var result = _calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)));
 
 			return Json(result);
 		}
