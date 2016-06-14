@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<UnitOfWorkAspect>().As<IUnitOfWorkAspect>().InstancePerDependency();
 			builder.RegisterType<ReadOnlyUnitOfWorkAspect>().As<IReadOnlyUnitOfWorkAspect>().InstancePerDependency();
 			builder.RegisterType<AllBusinessUnitsUnitOfWorkAspect>().As<IAllBusinessUnitsUnitOfWorkAspect>().InstancePerDependency();
+
+			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 		}
 
 		private void persistCallbacks(ContainerBuilder builder)

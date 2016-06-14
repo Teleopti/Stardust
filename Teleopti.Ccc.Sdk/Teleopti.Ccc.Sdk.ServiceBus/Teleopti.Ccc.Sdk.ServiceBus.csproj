@@ -230,7 +230,7 @@
     <Compile Include="NodeHandlers\ExportPayrollHandler.cs" />
     <Compile Include="NodeHandlers\AbsenceRequstHandler.cs" />
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />
-    <Compile Include="NodeHandlers\IndexMaintenanceStardustHandler.cs" />
+    <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\RequestPersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\RunRequestWaitlistStardustHandler.cs" />

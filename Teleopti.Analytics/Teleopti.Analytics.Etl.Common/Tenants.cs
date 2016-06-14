@@ -39,16 +39,6 @@ namespace Teleopti.Analytics.Etl.Common
 				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(x.EtlConfiguration.TimeZoneCode)
 			}).ToArray();
 		}
-
-		public TenantEtlSetting Get(string tenant)
-		{
-			return _tenants.EtlTenants().Where(x => x.Name== tenant).Select(x=>new TenantEtlSetting
-			{
-				Tenant = x.Name,
-				RunIndexMaintenance = x.EtlConfiguration.RunIndexMaintenance,
-				TimeZone = TimeZoneInfo.FindSystemTimeZoneById(x.EtlConfiguration.TimeZoneCode)
-			}).Single();
-		}
 	}
 
 	public class TenantsLoadedInEtl : IAllTenantNames

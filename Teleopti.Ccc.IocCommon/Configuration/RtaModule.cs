@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<StateMapper>().SingleInstance();
 			builder.RegisterType<StateCodeAdder>().As<IStateCodeAdder>().SingleInstance().ApplyAspects();
 			builder.RegisterType<StateStreamSynchronizer>().SingleInstance();
-			builder.RegisterType<ConnectionStrings>().As<IConnectionStrings>();
 			
 			builder.RegisterType<ContextLoader>().SingleInstance().ApplyAspects();
 			

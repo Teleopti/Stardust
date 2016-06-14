@@ -65,7 +65,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Service
 			target.EnsureTenantRecurringJobs();
 
 			Publisher.HasPublishing.Should().Be.True();
-			Publisher.Publishings.Count().Should().Be.EqualTo(3);
+			Publisher.Publishings.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]

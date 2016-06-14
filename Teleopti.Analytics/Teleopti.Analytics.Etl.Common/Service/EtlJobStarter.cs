@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
 using System.Threading;
 using log4net;
-using NHibernate.Util;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -14,11 +11,6 @@ using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
-using Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Infrastructure.DistributedLock;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
@@ -29,8 +21,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(EtlJobStarter));
 		private readonly IBaseConfigurationRepository _baseConfigurationRepository;
-		private readonly IEventPublisher _eventPublisher;
-		private readonly IDataSourceScope _dataSourceScope;
 
 		private readonly string _connectionString;
 		private readonly string _cube;
@@ -45,16 +35,12 @@ namespace Teleopti.Analytics.Etl.Common.Service
 			JobHelper jobHelper,
 			JobExtractor jobExtractor,
 			Tenants tenants,
-			IBaseConfigurationRepository baseConfigurationRepository,
-			IEventPublisher eventPublisher,
-			IDataSourceScope dataSourceScope)
+			IBaseConfigurationRepository baseConfigurationRepository)
 		{
 			_jobHelper = jobHelper;
 			_jobExtractor = jobExtractor;
 			_tenants = tenants;
 			_baseConfigurationRepository = baseConfigurationRepository;
-			_eventPublisher = eventPublisher;
-			_dataSourceScope = dataSourceScope;
 			_connectionString = ConfigurationManager.AppSettings["datamartConnectionString"];
 			_cube = ConfigurationManager.AppSettings["cube"];
 			_pmInstallation = ConfigurationManager.AppSettings["pmInstallation"];
@@ -160,17 +146,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 								continue;
 							}
 							jobRunner.SaveResult(jobResults, repository, scheduleId);
-
-							if (jobToRun.StepList.GetType() == typeof(NightlyJobCollection))
-							{
-								using (_dataSourceScope.OnThisThreadUse(new DummyDataSource(tenant.Name)))
-								{
-									_eventPublisher.Publish(new EtlNightlyEndEvent
-									{
-										Success = jobResults.All(x => x.Success)
-									});
-								}
-							}
 						}
 					}
 				}

@@ -1,5 +1,4 @@
-﻿using System.Security.Policy;
-using Autofac;
+﻿using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<RunRequestWaitlistStardustHandler>().As<IHandle<RunRequestWaitlistEvent>>().SingleInstance();
 			builder.RegisterType<ImportForecastFromFileHandler>().As<IHandle<ImportForecastsFileToSkillEvent>>().SingleInstance();
 			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().As<IHandle<ExportMultisiteSkillsToSkillEvent>>().SingleInstance();
-			builder.RegisterType<IndexMaintenanceStardustHandler>().As<IHandle<IndexMaintenanceStardustEvent>>().SingleInstance();
+			builder.RegisterType<IndexMaintenanceHandler>().As<IHandle<IndexMaintenanceEvent>>().SingleInstance();
 			builder.RegisterType<RunSchedulingHandler>().As<IHandle<ScheduleOnNode>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<AbsenceRequstHandler>().As<IHandle<NewAbsenceRequestCreatedEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<PersonAbsenceRemovedHandler>().As<IHandle<PersonAbsenceRemovedEvent>>().SingleInstance().ApplyAspects();

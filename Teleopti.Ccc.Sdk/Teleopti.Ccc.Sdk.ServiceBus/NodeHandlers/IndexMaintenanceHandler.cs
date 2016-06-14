@@ -7,18 +7,18 @@ using Teleopti.Ccc.Domain.Infrastructure.Events;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
-	public class IndexMaintenanceStardustHandler : IHandle<IndexMaintenanceStardustEvent>
+	public class IndexMaintenanceHandler : IHandle<IndexMaintenanceEvent>
 	{
 		private readonly IComponentContext _componentContext;
 
-		public IndexMaintenanceStardustHandler(IComponentContext componentContext)
+		public IndexMaintenanceHandler(IComponentContext componentContext)
 		{
 			_componentContext = componentContext;
 		}
 
-		public void Handle(IndexMaintenanceStardustEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
+		public void Handle(IndexMaintenanceEvent parameters, CancellationTokenSource cancellationTokenSource, Action<string> sendProgress)
 		{
-			var theRealOne = _componentContext.Resolve<IHandleEvent<IndexMaintenanceStardustEvent>>();
+			var theRealOne = _componentContext.Resolve<IHandleEvent<IndexMaintenanceEvent>>();
 			theRealOne.Handle(parameters);
 		}
 	}

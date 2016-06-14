@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.MultiTenancy
 	public interface IAllTenantEtlSettings
 	{
 		IEnumerable<TenantEtlSetting> All();
-		TenantEtlSetting Get(string tenant);
 	}
 
 	public class TenantEtlSetting
