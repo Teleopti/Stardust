@@ -143,7 +143,9 @@
 		ETL_SpeedUpNightlyAvailability_38926,
 		ETL_SpeedUpNightlyRequest_38914,
 		ETL_SpeedUpGroupPagePersonNightly_37623,
-		Intraday_ResourceCalculateReadModel_39200
+		Intraday_ResourceCalculateReadModel_39200,
+		ETL_SpeedUpIntradayWorkload_38928,
+		ETL_SpeedUpNightlyWorkload_38928,
 		// ReSharper restore InconsistentNaming
 	}
 }
