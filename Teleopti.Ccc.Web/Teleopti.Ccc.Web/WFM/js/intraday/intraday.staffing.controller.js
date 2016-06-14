@@ -10,15 +10,10 @@
 				chartData.Staffing = ['Staffing'];
 				chartData.Intervals = ['x'];
 
-
-
-
 				intradayStaffingService.resourceCalculate.query().$promise.then(function(response) {
 					extractRelevantData(response.Intervals);
 
 				});
-
-
 
 				var extractRelevantData = function(data) {
 					$scope.intervalDate = getIntervalDates(data);
@@ -27,13 +22,12 @@
 						chartData.Staffing.push(single.StaffingLevel);
 						chartData.Intervals.push(new Date(single.StartDateTime));
 					});
-
 					generateChart(chartData);
-
 				};
 
 				var getIntervalDates = function(data){
-					return data[0].StartDateTime + " - " + data[data.length-1].EndDateTime;
+					var date = new Date(data[0].StartDateTime)
+					return moment(date).format("Do MMM YYYY");
 				};
 
 				var generateChart = function(data) {
