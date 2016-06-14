@@ -250,6 +250,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var retObj = (PersonAbsence)NoneEntityClone();
 			retObj._scenario = parameters.Scenario;
 			retObj._person = parameters.Person;
+			retObj._absenceRequest = null;
 			return retObj;
 		}
 
