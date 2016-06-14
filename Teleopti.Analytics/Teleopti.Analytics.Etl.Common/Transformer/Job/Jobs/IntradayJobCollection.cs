@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {
-	public class IntradayJobCollection : List<IJobStep>
+	public class IntradayJobCollection : JobStepCollectionBase
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IntradayJobCollection(IJobParameters jobParameters)
@@ -19,186 +18,77 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));          // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new StagePersonJobStep(jobParameters));
-				Add(new StageAgentSkillJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayActivity_38303))
-			{
-				Add(new StageActivityJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAbsence_38301))
-			{
-				Add(new StageAbsenceJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenario_38300))
-			{
-				Add(new StageScenarioJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayShiftCategory_38718))
-			{
-				Add(new StageShiftCategoryJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
-			{
-				Add(new IntradayStageScheduleJobStep(jobParameters));
-				Add(new IntradayStageScheduleDayOffCountJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayPreference_37124))
-			{
-				Add(new IntradayStageSchedulePreferenceJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAvailability_38926))
-			{
-				Add(new IntradayStageAvailabilityJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradaySkill_37543))
-			{
-				Add(new StageSkillJobStep(jobParameters));
-			}
-			Add(new StageWorkloadJobStep(jobParameters));
+			AddWhenAllDisabled(new StagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new StageAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new StageActivityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayActivity_38303);
+			AddWhenAllDisabled(new StageAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAbsence_38301);
+			AddWhenAllDisabled(new StageScenarioJobStep(jobParameters), Toggles.ETL_SpeedUpScenario_38300);
+			AddWhenAllDisabled(new StageShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayShiftCategory_38718);
+			AddWhenAllDisabled(new IntradayStageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
+			AddWhenAllDisabled(new IntradayStageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
+			AddWhenAllDisabled(new IntradayStageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayPreference_37124);
+			AddWhenAllDisabled(new IntradayStageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAvailability_38926);
+			AddWhenAllDisabled(new StageSkillJobStep(jobParameters), Toggles.ETL_SpeedUpIntradaySkill_37543);
+			AddWhenAllDisabled(new StageWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
+			
 			Add(new IntradayStageForecastWorkloadJobStep(jobParameters));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayScorecard_38933))
-		    {
-		        Add(new StageKpiJobStep(jobParameters));
-                Add(new StageScorecardJobStep(jobParameters));
-                Add(new StageScorecardKpiJobStep(jobParameters));
-                Add(new StageKpiTargetTeamJobStep(jobParameters));
-            }
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)
-				|| !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new StageGroupPagePersonJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayOvertime_38304))
-			{
-				Add(new StageOvertimeJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayRequest_38914))
-			{
-				Add(new IntradayStageRequestJobStep(jobParameters));
-			}
+			AddWhenAllDisabled(new StageKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAllDisabled(new StageScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAllDisabled(new StageScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAllDisabled(new StageKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAnyDisabled(new StageGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new StageOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayOvertime_38304);
+			AddWhenAllDisabled(new IntradayStageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayRequest_38914);
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new DimBusinessUnitJobStep(jobParameters));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayScorecard_38933))
-		    {
-		        Add(new DimScorecardJobStep(jobParameters));
-                Add(new DimKpiJobStep(jobParameters));
-                Add(new ScorecardKpiJobStep(jobParameters));
-            }
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new DimSiteJobStep(jobParameters));
-				Add(new DimTeamJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradaySkill_37543))
-			{
-				Add(new DimSkillJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new DimSkillSetJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new DimPersonJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayActivity_38303))
-			{
-				Add(new DimActivityJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAbsence_38301))
-			{
-				Add(new DimAbsenceJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenario_38300))
-			{
-				Add(new DimScenarioJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayShiftCategory_38718))
-			{
-				Add(new DimShiftCategoryJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
-			{
-				Add(new DimShiftLengthJobStep(jobParameters));
-			}
-			Add(new DimWorkloadJobStep(jobParameters));
-			
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayOvertime_38304))
-			{
-				Add(new DimOvertimeJobStep(jobParameters));
-			}
-			
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new BridgeSkillSetSkillJobStep(jobParameters));
-				Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
-			}
+			AddWhenAllDisabled(new DimScorecardJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAllDisabled(new DimKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAllDisabled(new ScorecardKpiJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new DimTeamJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new DimSkillJobStep(jobParameters), Toggles.ETL_SpeedUpIntradaySkill_37543);
+			AddWhenAllDisabled(new DimSkillSetJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new DimPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new DimActivityJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayActivity_38303);
+			AddWhenAllDisabled(new DimAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayAbsence_38301);
+			AddWhenAllDisabled(new DimScenarioJobStep(jobParameters), Toggles.ETL_SpeedUpScenario_38300);
+			AddWhenAllDisabled(new DimShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayShiftCategory_38718);
+			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpETL_30791);
+			AddWhenAllDisabled(new DimWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
 
-			Add(new BridgeQueueWorkloadJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623)
-				|| !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new DimGroupPageJobStep(jobParameters));
-				Add(new BridgeGroupPagePersonJobStep(jobParameters));
-			}
+			AddWhenAllDisabled(new DimOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayOvertime_38304);
+
+			AddWhenAllDisabled(new BridgeSkillSetSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new BridgeAcdLogOnPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAllDisabled(new BridgeQueueWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayWorkload_38928);
+			AddWhenAnyDisabled(new DimGroupPageJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
+			AddWhenAnyDisabled(new BridgeGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonIntraday_37623, Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 
 			// FACT TABLES
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpETL_30791))
-			{
-				Add(new FactScheduleJobStep(jobParameters, true));
-				Add(new FactScheduleDayCountJobStep(jobParameters, true));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayPreference_37124))
-			{
-				Add(new FactSchedulePreferenceJobStep(jobParameters, true));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayAvailability_38926))
-			{
-				Add(new FactAvailabilityJobStep(jobParameters, true));
-			}
+			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
+			AddWhenAllDisabled(new FactScheduleDayCountJobStep(jobParameters, true), Toggles.ETL_SpeedUpETL_30791);
+			AddWhenAllDisabled(new FactSchedulePreferenceJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayPreference_37124);
+			AddWhenAllDisabled(new FactAvailabilityJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayAvailability_38926);
 			
-			var agentQueueIntradayEnabled = jobParameters.ToggleManager.IsEnabled(Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
-			if (agentQueueIntradayEnabled)
-			{
-				Add(new IntradayFactQueueJobStep(jobParameters));
-				Add(new IntradayFactAgentJobStep(jobParameters));                   // BU independent
-			}
-			else
-			{
-				Add(new FactQueueJobStep(jobParameters));                   // BU independent
-				Add(new FactAgentJobStep(jobParameters));                   // BU independent
-			}
+			AddWhenAllEnabled(new IntradayFactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787);
+			AddWhenAllEnabled(new IntradayFactAgentJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
+			AddWhenAllDisabled(new FactQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
+			AddWhenAllDisabled(new FactAgentJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
 
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
 
-			if (agentQueueIntradayEnabled)
-				Add(new IntradayFactAgentQueueJobStep(jobParameters));              // BU independent
-			else
-				Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
+			AddWhenAllEnabled(new IntradayFactAgentQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
+			AddWhenAllDisabled(new FactAgentQueueJobStep(jobParameters), Toggles.ETL_OnlyLatestQueueAgentStatistics_30787); // BU independent
 
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
 			Add(new FactForecastWorkloadJobStep(jobParameters, true));
 			Add(new FactScheduleDeviationJobStep(jobParameters, true));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayScorecard_38933))
-		    {
-		        Add(new FactKpiTargetTeamJobStep(jobParameters));
-		    }
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayRequest_38914))
-			{
-				Add(new FactRequestJobStep(jobParameters, true));
-				Add(new FactRequestedDaysJobStep(jobParameters, true));
-			}
+			AddWhenAllDisabled(new FactKpiTargetTeamJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayScorecard_38933);
+			AddWhenAllDisabled(new FactRequestJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayRequest_38914);
+			AddWhenAllDisabled(new FactRequestedDaysJobStep(jobParameters, true), Toggles.ETL_SpeedUpIntradayRequest_38914);
 
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439))
-			{
-				Add(new FactAgentSkillJobStep(jobParameters));
-			}
-
+			AddWhenAllDisabled(new FactAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodIntraday_37162_37439);
 		}
 	}
-
 }

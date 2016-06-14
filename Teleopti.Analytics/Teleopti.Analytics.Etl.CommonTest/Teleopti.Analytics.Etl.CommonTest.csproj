@@ -157,6 +157,7 @@
     <Compile Include="Transformer\Job\Jobs\CleanupJobTest.cs" />
     <Compile Include="Transformer\Job\Jobs\InitialJobTest.cs" />
     <Compile Include="Transformer\Job\Jobs\JobListTest.cs" />
+    <Compile Include="Transformer\Job\Jobs\JobStepCollectionBaseTest.cs" />
     <Compile Include="Transformer\Job\Jobs\KpiJobTest.cs" />
     <Compile Include="Transformer\Job\Jobs\PermissionJobTest.cs" />
     <Compile Include="Transformer\Job\Jobs\QueueAndAgentLogOnJobTest.cs" />

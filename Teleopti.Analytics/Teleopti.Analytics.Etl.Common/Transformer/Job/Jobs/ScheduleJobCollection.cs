@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {
-	public class ScheduleJobCollection : List<IJobStep>
+	public class ScheduleJobCollection : JobStepCollectionBase
 	{
 		public ScheduleJobCollection(IJobParameters jobParameters)
 		{
@@ -30,10 +29,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new StageRequestJobStep(jobParameters));
 			Add(new SqlServerUpdateStatistics(jobParameters));
 			Add(new DimBusinessUnitJobStep(jobParameters));
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayDayOff_38213))
-			{
-				Add(new DimDayOffJobStep(jobParameters));
-			}
+			AddWhenAllEnabled(new DimDayOffJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayDayOff_38213);
 			Add(new DimDateJobStep(jobParameters));
 			Add(new DimScorecardJobStep(jobParameters));
 			Add(new DimSiteJobStep(jobParameters));
@@ -58,6 +54,5 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactRequestJobStep(jobParameters));
 			Add(new FactRequestedDaysJobStep(jobParameters));
 		}
-
 	}
 }

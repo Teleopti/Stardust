@@ -1,13 +1,11 @@
-using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public class NightlyJobCollection : List<IJobStep>
+	public class NightlyJobCollection : JobStepCollectionBase
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public NightlyJobCollection(IJobParameters jobParameters)
@@ -30,151 +28,79 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new DimQualityQuestLoadJobStep(jobParameters));         // BU independent
 			Add(new RaptorQueueSynchronizationStep(jobParameters));
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
-			{
-				Add(new StagePersonJobStep(jobParameters));
-				Add(new StageAgentSkillJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyActivity_38303))
-			{
-				Add(new StageActivityJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyAbsence_38301))
-			{
-				Add(new StageAbsenceJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenarioNightly_38300))
-			{
-				Add(new StageScenarioJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyShiftCategory_38718))
-			{
-				Add(new StageShiftCategoryJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
-			{
-				Add(new StageScheduleJobStep(jobParameters));
-				Add(new StageScheduleDayOffCountJobStep(jobParameters));
-			}
+
+			AddWhenAllDisabled(new StagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new StageAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new StageActivityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyActivity_38303);
+			AddWhenAllDisabled(new StageAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAbsence_38301);
+			AddWhenAllDisabled(new StageScenarioJobStep(jobParameters), Toggles.ETL_SpeedUpScenarioNightly_38300);
+			AddWhenAllDisabled(new StageShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyShiftCategory_38718);
+
+			AddWhenAllDisabled(new StageScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+			AddWhenAllDisabled(new StageScheduleDayOffCountJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+
 			Add(new StageScheduleForecastSkillJobStep(jobParameters));
-		    if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyPreference_38283)
-                || !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
-		    {
-		        Add(new StageSchedulePreferenceJobStep(jobParameters));
-		    }
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyAvailability_38926))
-			{
-				Add(new StageAvailabilityJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlySkill_37543))
-			{
-				Add(new StageSkillJobStep(jobParameters));
-			}
-			Add(new StageWorkloadJobStep(jobParameters));
+			AddWhenAnyDisabled(new StageSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+			AddWhenAllDisabled(new StageAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAvailability_38926);
+			AddWhenAllDisabled(new StageSkillJobStep(jobParameters), Toggles.ETL_SpeedUpNightlySkill_37543);
+			AddWhenAllDisabled(new StageWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyWorkload_38928);
+
 			Add(new StageForecastWorkloadJobStep(jobParameters));
 			Add(new StageKpiJobStep(jobParameters));
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584))
-			{
-				Add(new StagePermissionJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonNightly_37623))
-			{
-				Add(new StageGroupPagePersonJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyOvertime_38304))
-			{
-				Add(new StageOvertimeJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyRequest_38914))
-			{
-				Add(new StageRequestJobStep(jobParameters));
-			}
+
+			AddWhenAllDisabled(new StagePermissionJobStep(jobParameters), Toggles.ETL_SpeedUpPermissionReport_33584);
+			AddWhenAllDisabled(new StageGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
+			AddWhenAllDisabled(new StageOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyOvertime_38304);
+			AddWhenAllDisabled(new StageRequestJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
+
 			Add(new SqlServerUpdateStatistics(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
 			Add(new DimBusinessUnitJobStep(jobParameters));
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpIntradayDayOff_38213))
-			{
-				Add(new DimDayOffJobStep(jobParameters));
-			}
+
+			AddWhenAllEnabled(new DimDayOffJobStep(jobParameters), Toggles.ETL_SpeedUpIntradayDayOff_38213);
+
 			Add(new DimScorecardJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
-			{
-				Add(new DimSiteJobStep(jobParameters));
-				Add(new DimTeamJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlySkill_37543))
-			{
-				Add(new DimSkillJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
-			{
-				Add(new DimSkillSetJobStep(jobParameters));
-				Add(new DimPersonJobStep(jobParameters));
-			}
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
-			{
-				Add(new DimPersonWindowsLoginJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyActivity_38303))
-			{
-				Add(new DimActivityJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyAbsence_38301))
-			{
-				Add(new DimAbsenceJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpScenarioNightly_38300))
-			{
-				Add(new DimScenarioJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyShiftCategory_38718))
-			{
-				Add(new DimShiftCategoryJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
-			{
-				Add(new DimShiftLengthJobStep(jobParameters));
-			}
-			Add(new DimWorkloadJobStep(jobParameters));
+
+			AddWhenAllDisabled(new DimSiteJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new DimTeamJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+
+			AddWhenAllDisabled(new DimSkillJobStep(jobParameters), Toggles.ETL_SpeedUpNightlySkill_37543);
+
+			AddWhenAllDisabled(new DimSkillSetJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new DimPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+
+			AddWhenAllEnabled(new DimPersonWindowsLoginJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new DimActivityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyActivity_38303);
+			AddWhenAllDisabled(new DimAbsenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAbsence_38301);
+			AddWhenAllDisabled(new DimScenarioJobStep(jobParameters), Toggles.ETL_SpeedUpScenarioNightly_38300);
+			AddWhenAllDisabled(new DimShiftCategoryJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyShiftCategory_38718);
+			AddWhenAllDisabled(new DimShiftLengthJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+			AddWhenAllDisabled(new DimWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyWorkload_38928);
+
 			Add(new DimKpiJobStep(jobParameters));
 			Add(new ScorecardKpiJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
-			{
-				Add(new BridgeSkillSetSkillJobStep(jobParameters));
-				Add(new BridgeAcdLogOnPersonJobStep(jobParameters));
-			}
-			Add(new BridgeQueueWorkloadJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpGroupPagePersonNightly_37623))
-			{
-				Add(new DimGroupPageJobStep(jobParameters));
-				Add(new BridgeGroupPagePersonJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyOvertime_38304))
-			{
-				Add(new DimOvertimeJobStep(jobParameters));
-			}
+
+			AddWhenAllDisabled(new BridgeSkillSetSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new BridgeAcdLogOnPersonJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new BridgeQueueWorkloadJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyWorkload_38928);
+			
+			AddWhenAllDisabled(new DimGroupPageJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
+			AddWhenAllDisabled(new BridgeGroupPagePersonJobStep(jobParameters), Toggles.ETL_SpeedUpGroupPagePersonNightly_37623);
+
+			AddWhenAllDisabled(new DimOvertimeJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyOvertime_38304);
 
 			// FACT TABLES
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
-			{
-				Add(new FactScheduleJobStep(jobParameters));
-				Add(new FactScheduleDayCountJobStep(jobParameters));
-			}
-            if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyPreference_38283)
-                || !jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpFactScheduleNightly_38019))
-            {
-                Add(new FactSchedulePreferenceJobStep(jobParameters));
-		    }
+			AddWhenAllDisabled(new FactScheduleJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+			AddWhenAllDisabled(new FactScheduleDayCountJobStep(jobParameters), Toggles.ETL_SpeedUpFactScheduleNightly_38019);
 
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyAvailability_38926))
-			{
-				Add(new FactAvailabilityJobStep(jobParameters));
-			}
+			AddWhenAnyDisabled(new FactSchedulePreferenceJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyPreference_38283, Toggles.ETL_SpeedUpFactScheduleNightly_38019);
+			AddWhenAllDisabled(new FactAvailabilityJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyAvailability_38926);
+
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent
@@ -184,19 +110,11 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 			Add(new FactForecastWorkloadJobStep(jobParameters));
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpNightlyRequest_38914))
-			{
-				Add(new FactRequestJobStep(jobParameters));
-				Add(new FactRequestedDaysJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPersonPeriodNightly_38097))
-			{
-				Add(new FactAgentSkillJobStep(jobParameters));
-			}
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_SpeedUpPermissionReport_33584))
-			{
-				Add(new PermissionReportJobStep(jobParameters));
-			}
+
+			AddWhenAllDisabled(new FactRequestJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
+			AddWhenAllDisabled(new FactRequestedDaysJobStep(jobParameters), Toggles.ETL_SpeedUpNightlyRequest_38914);
+			AddWhenAllDisabled(new FactAgentSkillJobStep(jobParameters), Toggles.ETL_SpeedUpPersonPeriodNightly_38097);
+			AddWhenAllDisabled(new PermissionReportJobStep(jobParameters), Toggles.ETL_SpeedUpPermissionReport_33584);
 			// If PM is installed then show PM job steps
 			if (jobParameters.IsPmInstalled)
 			{
@@ -206,19 +124,14 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 
 			// MORE CLEAN UP!
 			Add(new PurgeJobStep(jobParameters));     // BU independent
-			if (!jobParameters.ToggleManager.IsEnabled(Toggles.ETL_FasterIndexMaintenance_38847))
+
+			if (jobParameters.RunIndexMaintenance)
 			{
-				if (jobParameters.RunIndexMaintenance)
-				{
-					Add(new AnalyticsIndexMaintenanceJobStep(jobParameters)); // BU independent
-					Add(new AppIndexMaintenanceJobStep(jobParameters)); // BU independent
-					Add(new AggIndexMaintenanceJobStep(jobParameters)); // BU independent
-				}
+				AddWhenAllDisabled(new AnalyticsIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
+				AddWhenAllDisabled(new AppIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
+				AddWhenAllDisabled(new AggIndexMaintenanceJobStep(jobParameters), Toggles.ETL_FasterIndexMaintenance_38847);// BU independent
 			}
-			if (jobParameters.ToggleManager.IsEnabled(Toggles.ETL_MoveBadgeCalculationToETL_38421))
-			{
-				Add(new CalculateBadgesJobStep(jobParameters));
-			}
+			AddWhenAllEnabled(new CalculateBadgesJobStep(jobParameters), Toggles.ETL_MoveBadgeCalculationToETL_38421);
 		}
 	}
 }
