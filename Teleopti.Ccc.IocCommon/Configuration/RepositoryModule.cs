@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -64,6 +65,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<LoadUserUnauthorized>()
 				.As<ILoadUserUnauthorized>()
+				.SingleInstance();
+			
+			builder.RegisterType<AggregateRootInitilizer>()
+				.As<IAggregateRootInitializer>()
 				.SingleInstance();
 		}
 
