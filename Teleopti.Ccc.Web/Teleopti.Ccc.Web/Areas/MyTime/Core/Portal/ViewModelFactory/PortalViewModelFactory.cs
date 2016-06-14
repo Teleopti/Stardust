@@ -62,46 +62,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		public PortalViewModel CreatePortalViewModel()
 		{
 			var navigationItems = new List<NavigationItem> {createWeekScheduleNavigationItem()};
+
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 			var useJalaaliCalendar = culture.IetfLanguageTag == "fa-IR";
-
+			
 			if (useJalaaliCalendar)
 			{
 				_currentIdentity.Current().Regional.ForceUseGregorianCalendar = true;
 				culture = _userCulture.GetCulture(); // overwrite culture before useJalaali flag was set.	
 			}
 
-			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
-			{
-				navigationItems.Add(createTeamScheduleNavigationItem());
-			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StudentAvailability) && !useJalaaliCalendar)
-			{
-				navigationItems.Add(createStudentAvailabilityNavigationItem());
-			}
-			if (
-				!useJalaaliCalendar && (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
-			{
-				navigationItems.Add(createPreferenceNavigationItem());
-			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
-			    _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
-			    _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
-			{
-				navigationItems.Add(createRequestsNavigationItem());
-			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
-			{
-				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
-			}
-			var reportsList = new List<ReportNavigationItem>();
-			if (reportsItems != null && (reportsItems.Count.Equals(1) && reportsItems.First().IsWebReport))
-			{
-				navigationItems.Add(reportsItems.First());
-			}
-			else if (reportsItems != null) reportsList.AddRange(reportsItems);
+			var reportsList = setupNavigationItems(navigationItems, useJalaaliCalendar);
 
 			var licenseActivator = _licenseActivatorProvider.Current();
 			var customerName = licenseActivator == null ? string.Empty : licenseActivator.CustomerName;
@@ -146,6 +117,44 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				DateTimeDefaultValues = getDateTimeDefaultValues(culture),
 				ShowBadge = showBadge
 			};
+		}
+
+		private List<ReportNavigationItem> setupNavigationItems (List<NavigationItem> navigationItems, bool useJalaaliCalendar)
+		{
+			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
+			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.TeamSchedule))
+			{
+				navigationItems.Add (createTeamScheduleNavigationItem());
+			}
+			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.StudentAvailability) &&
+				!useJalaaliCalendar)
+			{
+				navigationItems.Add (createStudentAvailabilityNavigationItem());
+			}
+			if (
+				!useJalaaliCalendar &&
+				(_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
+				 _permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb)))
+			{
+				navigationItems.Add (createPreferenceNavigationItem());
+			}
+			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.TextRequests) ||
+				_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb) ||
+				_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
+			{
+				navigationItems.Add (createRequestsNavigationItem());
+			}
+			if (_permissionProvider.HasApplicationFunctionPermission (DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger))
+			{
+				navigationItems.Add (createMessageNavigationItem (_pushMessageProvider.UnreadMessageCount));
+			}
+			var reportsList = new List<ReportNavigationItem>();
+			if (reportsItems != null && (reportsItems.Count.Equals (1) && reportsItems.First().IsWebReport))
+			{
+				navigationItems.Add (reportsItems.First());
+			}
+			else if (reportsItems != null) reportsList.AddRange (reportsItems);
+			return reportsList;
 		}
 
 		private DateTimeDefaultValues getDateTimeDefaultValues(CultureInfo culture)
