@@ -7295,6 +7295,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Date Range.
+        /// </summary>
+        public static string DateRange {
+            get {
+                return ResourceManager.GetString("DateRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Date Selection.
         /// </summary>
         public static string DateSelection {
@@ -22443,6 +22452,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Report Options.
+        /// </summary>
+        public static string ReportOptions {
+            get {
+                return ResourceManager.GetString("ReportOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reports.
         /// </summary>
         public static string Reports {
@@ -27076,6 +27094,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowOnlyAbsence {
             get {
                 return ResourceManager.GetString("ShowOnlyAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show only agents with no seat.
+        /// </summary>
+        public static string ShowOnlyAgentsWithNoSeat {
+            get {
+                return ResourceManager.GetString("ShowOnlyAgentsWithNoSeat", resourceCulture);
             }
         }
         

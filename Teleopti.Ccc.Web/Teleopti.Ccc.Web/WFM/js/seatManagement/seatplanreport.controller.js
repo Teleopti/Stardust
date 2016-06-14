@@ -7,6 +7,8 @@
 
 	function seatPlanReportCtrl($scope, seatPlanService) {
 		var vm = this;
+		vm.showAllAgents = true;
+		vm.showOnlyUnseatedAgents = false;
 		vm.temp = {};
 		
 	vm.paginationOptions = { pageNumber: 1, pageSize: 34, totalPages: 1 };
@@ -18,6 +20,7 @@
 				endDate: moment(vm.selectedPeriod.endDate).format('YYYY-MM-DD'),
 				teams: vm.selectedTeams,
 				locations: vm.selectedLocations,
+				onlySeated: vm.showOnlyUnseatedAgents,
 				skip: options.skip,
 				take: options.take
 			};

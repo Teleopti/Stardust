@@ -27,12 +27,39 @@
 				<div class="wfm-slide-tabs tabbed-panel">
 					<md-content class="md-padding">
 						<md-tabs md-dynamic-height md-border-bottom>
-							<md-tab label="{{'Date' | translate}}">
+							<md-tab label="{{'Filter' | translate}}">
 								<md-content class="md-padding">
-									<div class="con-row">
-										<div class="con-flex">
+									<div class="con-row report-options">
+										<div>
+											<label>
+												{{'DateRange' | translate}}
+											</label>
+
 											<div class="date-picker">
 												<date-range-picker ng-model="vm.selectedPeriod"></date-range-picker>
+											</div>
+										</div>
+										<div class="con-flex report-show-options">
+
+											<label>
+												{{'ReportOptions' | translate}}
+											</label>
+
+											<div>
+												<div class="wfm-radio">
+													<input type="radio"  name="unseated-agents-toggle" checked />
+													<label ng-click="vm.showOnlyUnseatedAgents = false">
+														<span class="wfm-radio-toggle"></span>
+														<span class="wfm-radio-label">{{'ShowAll' | translate}}</span>
+													</label>
+												</div>
+												<div class="wfm-radio">
+													<input type="radio"  name="unseated-agents-toggle" />
+													<label ng-click="vm.showAllAgents = false">
+														<span class="wfm-radio-toggle"></span>
+														<span class="wfm-radio-label">{{'ShowOnlyAgentsWithNoSeat' | translate}}</span>
+													</label>
+												</div>
 											</div>
 										</div>
 									</div>
