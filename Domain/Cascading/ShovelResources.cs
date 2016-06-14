@@ -50,19 +50,27 @@ namespace Teleopti.Ccc.Domain.Cascading
 									var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
 									if (!remainingOverstaff.IsOverstaffed())
 										continue;
-									foreach (var skillToMoveTo in skillGroup.CascadingSkills)
+									foreach (var skillsToMoveTo in skillGroup.CascadingSkills)
 									{
-										var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
-										var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
-										if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
-											continue;
-										var resourcesToMove = MathExtended.Min(-skillToMoveToAbsoluteDifference, remainingOverstaff,
-											remainingResourcesInGroup);
-										skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, resourcesToMove);
-										remainingResourcesInGroup -= resourcesToMove;
-										remainingOverstaff -= resourcesToMove;
-										if (remainingOverstaff.IsZero() || remainingResourcesInGroup.IsZero())
-											break;
+										var numOfSkills = skillsToMoveTo.NumberOfSkills;
+										var resourcesToMove = Math.Min(remainingOverstaff, remainingResourcesInGroup);
+										resourcesToMove = resourcesToMove / numOfSkills;
+
+										foreach (var skillToMoveTo in skillsToMoveTo.Skills)
+										{
+											var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
+											var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
+											if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
+												continue;
+											resourcesToMove = Math.Min(-skillToMoveToAbsoluteDifference, resourcesToMove);
+											
+											skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, resourcesToMove);
+											remainingResourcesInGroup -= resourcesToMove;
+											remainingOverstaff -= resourcesToMove;
+											//TODO: jump out outer loop as well?
+											if (remainingOverstaff.IsZero() || remainingResourcesInGroup.IsZero())
+												break;
+										}		
 									}
 								}
 							}

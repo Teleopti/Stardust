@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class CascadingSkillGroup
 	{
-		public CascadingSkillGroup(ISkill primarySkill, IEnumerable<ISkill> cascadingSkills, double resources)
+		public CascadingSkillGroup(ISkill primarySkill, IEnumerable<CascadingSkillGroupItem> cascadingSkills, double resources)
 		{
 			PrimarySkill = primarySkill;
 			CascadingSkills = cascadingSkills;
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		}
 
 		public ISkill PrimarySkill { get; }
-		public IEnumerable<ISkill> CascadingSkills { get; }
+		public IEnumerable<CascadingSkillGroupItem> CascadingSkills { get; }
 		public double Resources { get; }
 	}
 }

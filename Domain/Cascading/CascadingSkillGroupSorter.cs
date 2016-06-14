@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 				{
 					return 0;
 				}
-				var subSkillDiff = firstSkills[i].CascadingIndex.Value - secondSkills[i].CascadingIndex.Value;
+				var subSkillDiff = firstSkills[i].CascadingIndex - secondSkills[i].CascadingIndex;
 				if (subSkillDiff != 0)
 				{
 					return subSkillDiff;
