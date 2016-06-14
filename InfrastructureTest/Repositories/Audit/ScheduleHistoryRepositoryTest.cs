@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 					revisionNumberAfterOneUnitTestModification = revisionNumberAtSetupStart + 2;
 				}
 			}
-			target = new ScheduleHistoryRepository(UnitOfWorkFactory.Current);
+			target = new ScheduleHistoryRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 		}
 	}
 }

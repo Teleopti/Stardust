@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
 			if (!DesignMode) SetTexts();
 
-			_model = new AuditHistoryModel(currentScheduleDay, new ScheduleHistoryRepository(UnitOfWorkFactory.Current), new AuditHistoryScheduleDayCreator());
+			_model = new AuditHistoryModel(currentScheduleDay, new ScheduleHistoryRepository(UnitOfWorkFactory.CurrentUnitOfWork()), new AuditHistoryScheduleDayCreator());
 			_presenter = new AuditHistoryPresenter(this, _model);
 
 			grid.ResetVolatileData();

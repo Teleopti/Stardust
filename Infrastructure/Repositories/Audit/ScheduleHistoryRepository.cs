@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 {
 	public class ScheduleHistoryRepository : IScheduleHistoryRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _unitOfWorkFactory;
 
-		public ScheduleHistoryRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		public ScheduleHistoryRepository(ICurrentUnitOfWork unitOfWorkFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		private ISession session()
 		{
-			return ((NHibernateUnitOfWork) _unitOfWorkFactory.CurrentUnitOfWork()).Session;
+			return _unitOfWorkFactory.Session();
 		}
 	}
 }
