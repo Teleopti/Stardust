@@ -9,7 +9,7 @@
 				configurations: '=',
 				triggerCommand: '&?'
 			},
-			controller: [ '$scope', 'PersonSelection', 'ShortCuts', 'keyCodes', teamscheduleCommandMenuCtrl],
+			controller: ['$scope', 'PersonSelection', 'ShortCuts', 'keyCodes', teamscheduleCommandMenuCtrl],
 			controllerAs: 'vm',
 			bindToController: true,
 			templateUrl: 'js/teamSchedule/html/commandMenu.tpl.html'
@@ -18,9 +18,9 @@
 
 	function teamscheduleCommandMenuCtrl($scope, personSelectionSvc, shortCuts, keyCodes) {
 		var vm = this;
-	
+
 		function buildAction(label, openSidePanel) {
-			return function() {
+			return function () {
 				if (vm.triggerCommand) {
 					vm.triggerCommand({
 						label: label,
@@ -37,7 +37,7 @@
 				keys: [[keyCodes.A], [keyCodes.ALT]],
 				action: buildAction("AddAbsence", true),
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
-				visible: function () { return vm.canActiveAddAbsence(); }			
+				visible: function () { return vm.canActiveAddAbsence(); }
 			},
 			{
 				label: "AddActivity",
@@ -45,7 +45,7 @@
 				keys: [[keyCodes.T], [keyCodes.ALT]],
 				action: buildAction("AddActivity", true),
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
-				visible: function () { return vm.canActiveAddActivity(); }				
+				visible: function () { return vm.canActiveAddActivity(); }
 			},
 			{
 				label: "AddPersonalActivity",
@@ -53,7 +53,7 @@
 				keys: [[keyCodes.P], [keyCodes.ALT]],
 				action: buildAction("AddPersonalActivity", true),
 				clickable: function () { return personSelectionSvc.anyAgentChecked(); },
-				visible: function () { return vm.canActiveAddPersonalActivity(); }				
+				visible: function () { return vm.canActiveAddPersonalActivity(); }
 			},
 			{
 				label: "MoveActivity",
@@ -69,7 +69,7 @@
 				keys: [[keyCodes.S], [keyCodes.ALT]],
 				action: buildAction("SwapShifts", false),
 				clickable: function () { return personSelectionSvc.canSwapShifts(); },
-				visible: function () { return vm.canActiveSwapShifts(); }				
+				visible: function () { return vm.canActiveSwapShifts(); }
 			},
 			{
 				label: "RemoveAbsence",
@@ -86,16 +86,32 @@
 				action: buildAction("RemoveActivity", false),
 				clickable: function () { return vm.canRemoveActivity(); },
 				visible: function () { return vm.canActiveRemoveActivity(); }
+			},
+			{
+				label: "Backout",
+				shortcut: "Alt+B",
+				keys: [[keyCodes.B], [keyCodes.ALT]],
+				action: buildAction("Backout", false),
+				clickable: function () { return vm.canBackout(); },
+				visible: function () { return vm.canActiveBackoutCmd(); }
 			}
 		];
+
+		vm.canBackout = function () {
+			return personSelectionSvc.isAnyAgentSelected();
+		};
+
+		vm.canActiveBackoutCmd = function () {
+			return vm.toggles.BackoutPreviousScheduleEnabled;
+		}
 
 		vm.canActiveAddActivity = function () {
 			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
 		};
 
-		vm.canActiveAddPersonalActivity = function() {
+		vm.canActiveAddPersonalActivity = function () {
 			return vm.toggles.AddPersonalActivityEnabled && vm.permissions.HasAddingPersonalActivityPermission;
-		}
+		};
 
 		vm.canActiveAddAbsence = function () {
 			return vm.toggles.AbsenceReportingEnabled
@@ -131,10 +147,10 @@
 		vm.canRemoveActivity = function () {
 			return personSelectionSvc.getTotalSelectedPersonAndProjectionCount().SelectedActivityInfo.ActivityCount > 0;
 		};
-		
+
 
 		function registerShortCuts() {
-			vm.commands.forEach(function(cmd) {
+			vm.commands.forEach(function (cmd) {
 				function wrappedAction() {
 					if (cmd.clickable() && cmd.visible()) {
 						cmd.action();
@@ -143,7 +159,7 @@
 				}
 
 				shortCuts.registerKeySequence.apply(null, cmd.keys.concat([wrappedAction]));
-			});		
+			});
 		}
 
 		vm.init = function () {

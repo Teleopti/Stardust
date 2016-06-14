@@ -232,7 +232,8 @@
 				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
 				PrepareToRelease: toggleSvc.WfmTeamSchedule_PrepareForRelease_37752,
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,
-				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742
+				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
+				BackoutPreviousScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002
 			};
 			vm.searchOptions.isAdvancedSearchEnabled = vm.toggles.AdvancedSearchEnabled;
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();

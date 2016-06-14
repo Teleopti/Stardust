@@ -41,7 +41,8 @@
 
 		function buildConfirmationMessage(template, personCount, activityCount, needTranslate) {
 			var text = needTranslate ? $translate.instant(template) : template;
-			return replaceParams(text, [activityCount, personCount]);
+
+			return activityCount != null ? replaceParams(text, [activityCount, personCount]) : replaceParams(text, [personCount]);
 		}
 
 		function notify(type, template, params) {
