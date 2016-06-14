@@ -987,6 +987,11 @@
     </Compile>
     <Compile Include="Wfm\Seat Management\SeatPlanReportStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatPlanStepDefinitions.cs" />
+    <Compile Include="Wfm\TeamSchedule\BackoutScheduleChange.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BackoutScheduleChange.feature</DependentUpon>
+    </Compile>
     <Compile Include="Wfm\TeamSchedule\ShowContractTime.feature.cs">
       <DependentUpon>ShowContractTime.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1456,6 +1461,10 @@
     <None Include="Wfm\Seat Management\SeatPlanReport.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SeatPlanReport.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\TeamSchedule\BackoutScheduleChange.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BackoutScheduleChange.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\TeamSchedule\ShowContractTime.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
