@@ -3621,6 +3621,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Backout.
+        /// </summary>
+        public static string Backout {
+            get {
+                return ResourceManager.GetString("Backout", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back To Legal State.
         /// </summary>
         public static string BackToLegalState {

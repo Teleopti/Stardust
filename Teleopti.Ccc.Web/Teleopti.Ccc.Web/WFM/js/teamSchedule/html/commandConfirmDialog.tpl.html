@@ -8,26 +8,27 @@
 		</md-toolbar>
 		<md-dialog-content>
 			<div class="md-dialog-content">
-				<p ng-if="isRemoveCommand">
-					{{getCommandMessage()}}
-				</p>
 				<div ng-if="false && isRemoveAbsence" class='wfm-checkbox'>
-					<input type='checkbox' id='checkRemoveEntireAbsence'  ng-checked='removeFullDayAbsence' ng-click='toggleRemoveFullDayAbsence()'/>
+					<input type='checkbox' id='checkRemoveEntireAbsence' ng-checked='removeFullDayAbsence' ng-click='toggleRemoveFullDayAbsence()'/>
 					<label for='checkRemoveEntireAbsence'>
 						<span class='wfm-checkbox-toggle'></span>
 						<span class='wfm-checkbox-label'>{{'RemoveEntireAbsenceForMultiDayPersonAbsence' | translate}}</span>
 					</label>
 				</div>
-				<p ng-if="!isRemoveCommand && !hasError">{{ translatedMessage }}</p>
+
+				<p>{{getCommandMessage()}}</p>
+
 				<p ng-if="needFix" class="text-warning">
 					<span>{{ translatedWarningMessage }}</span>&nbsp;
 					<button ng-click="fix()" class="wfm-btn wfm-btn-default">
 						{{'Unselect' | translate}}
 					</button>
 				</p>
+
 				<p ng-if="hasError" class="text-danger">
 					<span>{{ translatedErrorMessage }}</span>
 				</p>
+
 			</div>
 		</md-dialog-content>
 		<md-dialog-actions layout="row">

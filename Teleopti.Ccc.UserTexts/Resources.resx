@@ -14590,5 +14590,8 @@ These options are activated:
     <value>Successfully undone last schedule change for selected agents</value>
     <comment>Sucessful message for backout schedule change in wfm/teamschedule</comment>
   </data>
->>>>>>> source
+  <data name="Backout" xml:space="preserve">
+    <value>Backout</value>
+    <comment>Backout menu item name in wfm/teamschedule</comment>
+  </data>
 </root>

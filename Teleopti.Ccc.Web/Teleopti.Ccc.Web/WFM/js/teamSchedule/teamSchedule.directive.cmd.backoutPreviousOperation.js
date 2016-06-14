@@ -38,14 +38,14 @@
 			});
 		};
 
-		vm.popDialog = function () {
+		vm.popDialog = function() {
 			return $mdDialog.show({
 				controller: 'commandConfirmDialog',
 				templateUrl: 'js/teamSchedule/html/commandConfirmDialog.tpl.html',
 				parent: angular.element(document.body),
 				clickOutsideToClose: true,
 				bindToController: true,
-				onRemoving: function () {
+				onRemoving: function() {
 					vm.resetActiveCmd();
 				},
 				locals: {
@@ -55,12 +55,11 @@
 					command: vm.backoutSchedule,
 					require: null,
 					getCommandMessage: function () {
-						return notification.buildConfirmationMessage(
-							'AreYouSureToBackoutSelectedSchedule', PersonSelection.getTotalSelectedPersonAndProjectionCount().CheckedPersonCount, null, true);
+						return notification.buildConfirmationMessage('AreYouSureToBackoutSelectedSchedule', PersonSelection.getTotalSelectedPersonAndProjectionCount.CheckedPersonCount, null, true);
 					}
 				}
 			});
-		}
+		};
 
 		vm.init = function () {
 			vm.popDialog();
