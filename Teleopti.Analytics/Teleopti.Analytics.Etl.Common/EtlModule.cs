@@ -37,7 +37,6 @@ namespace Teleopti.Analytics.Etl.Common
 
 			builder.RegisterType<FindTenantLogonInfoUnsecured>().As<IFindLogonInfo>().SingleInstance();
 			builder.RegisterType<TenantLogonInfoLoader>().As<ITenantLogonInfoLoader>().SingleInstance();
-			builder.RegisterType<IndexMaintenanceHangfireEventPublisher>().As<IIndexMaintenanceHangfireEventPublisher>().SingleInstance();
 		}
 
 		public class TenantLogonInfoLoader : ITenantLogonInfoLoader

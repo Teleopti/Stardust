@@ -1,21 +1,23 @@
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.MultiTenancy;
 
 namespace Teleopti.Ccc.Domain.Infrastructure
 {
-	public class IndexMaintenanceStardustEventHandler :
+	[EnabledBy(Toggles.ETL_FasterIndexMaintenance_38847)]
+	public class IndexMaintenanceStardustHandler :
 		IHandleEvent<EtlNightlyEndEvent>,
 		IRunOnStardust
 	{
 		private readonly IIndexMaintenanceRepository _indexMaintenanceRepository;
 		private readonly IAllTenantEtlSettings _allTenantEtlSettings;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(IndexMaintenanceStardustEventHandler));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(IndexMaintenanceStardustHandler));
 
-		public IndexMaintenanceStardustEventHandler(IIndexMaintenanceRepository indexMaintenanceRepository, IAllTenantEtlSettings allTenantEtlSettings)
+		public IndexMaintenanceStardustHandler(IIndexMaintenanceRepository indexMaintenanceRepository, IAllTenantEtlSettings allTenantEtlSettings)
 		{
 			_indexMaintenanceRepository = indexMaintenanceRepository;
 			_allTenantEtlSettings = allTenantEtlSettings;
@@ -32,8 +34,8 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		{
 			var settings = _allTenantEtlSettings.Get(@event.LogOnDatasource);
 
-			Logger.Debug($"Consuming event for {nameof(EtlNightlyEndEvent)}");
-			Logger.Debug($"{nameof(settings.RunIndexMaintenance)} is {settings.RunIndexMaintenance} for tenant {@event.LogOnDatasource}");
+			logger.Debug($"Consuming event for {nameof(EtlNightlyEndEvent)}");
+			logger.Debug($"{nameof(settings.RunIndexMaintenance)} is {settings.RunIndexMaintenance} for tenant {@event.LogOnDatasource}");
 
 			if (settings.RunIndexMaintenance)
 			{

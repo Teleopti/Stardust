@@ -14,16 +14,14 @@ namespace Teleopti.Analytics.Etl.Common.Service
 		private Timer _timer;
 		private readonly EtlJobStarter _etlJobStarter;
 		private readonly TenantTickEventPublisher _tenantTickEventPublisher;
-		private readonly IIndexMaintenanceHangfireEventPublisher _indexMaintenanceHangfireEventPublisher;
 		private readonly IRecurringEventPublisher _recurringEventPublisher;
 		private DateTime? lastTenantRecurringJobPublishing;
 		private INow _now;
 
-		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IIndexMaintenanceHangfireEventPublisher indexMaintenanceHangfireEventPublisher, IRecurringEventPublisher recurringEventPublisher, INow now)
+		public EtlService(EtlJobStarter etlJobStarter, TenantTickEventPublisher tenantTickEventPublisher, IRecurringEventPublisher recurringEventPublisher, INow now)
 		{
 			_etlJobStarter = etlJobStarter;
 			_tenantTickEventPublisher = tenantTickEventPublisher;
-			_indexMaintenanceHangfireEventPublisher = indexMaintenanceHangfireEventPublisher;
 			_recurringEventPublisher = recurringEventPublisher;
 			_now = now;
 			_timer = new Timer(tick, null, TimeSpan.FromMilliseconds(-1), TimeSpan.FromMilliseconds(-1));
@@ -81,7 +79,6 @@ namespace Teleopti.Analytics.Etl.Common.Service
 				{
 					_tenantTickEventPublisher.RemovePublishingsOfRemovedTenants();
 					_tenantTickEventPublisher.PublishRecurringJobs();
-					_indexMaintenanceHangfireEventPublisher.PublishRecurringJobs();
 					lastTenantRecurringJobPublishing = _now.UtcDateTime();
 				}
 			}
