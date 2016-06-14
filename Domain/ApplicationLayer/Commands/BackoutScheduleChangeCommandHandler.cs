@@ -95,11 +95,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private IScheduleDictionary getScheduleDictionary(IPerson person, DateOnly date)
 		{
-			return _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 				person,
-				new ScheduleDictionaryLoadOptions(true,true),
+				new ScheduleDictionaryLoadOptions(true, true),
 				new DateOnlyPeriod(date, date),
 				_currentScenario.Current());
+			((IReadOnlyScheduleDictionary) dic).MakeEditable();
+
+			return dic;
 		}
 
 		private IScheduleDay getCurrentScheduleDay(IScheduleDictionary scheduleDictionary, IPerson person, DateOnly date)
