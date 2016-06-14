@@ -41,7 +41,10 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			_userCulture = MockRepository.GenerateMock<IUserCulture>();
 			_userCulture.Expect(x => x.GetCulture()).Return(culture);
 
+			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
+			principal.Expect(x => x.Regional);
 			_currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
+			_currentTeleoptiPrincipal.Expect(x => x.Current()).Return(principal);
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
 			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("A B");
