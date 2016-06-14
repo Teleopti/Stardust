@@ -64,7 +64,6 @@
 		.ui-grid-column-menu-button-last-col {
 			margin-right: 0;
 		}
-
 	}
 
 	.request-header-full-height {
@@ -261,12 +260,17 @@
 		.ui-grid-pinned-container-right .ui-grid-header-viewport {
 			overflow: visible;
 		}
-
-
 	}
 
-	.error-msg-container{
-		background-color: $white;
-	}
+	.request-date-range-picker{
+		.date-range-start-date,
+		.date-range-end-date {
+			margin-top: 10px;
+		}
 
+		/*TODO: Fix the problem that error message was hidden; should be removed when it's fixed in StyleGuide*/
+		.error-msg-container{
+			z-index: 10000;
+		}
+	}
 }

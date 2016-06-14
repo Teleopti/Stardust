@@ -6,11 +6,12 @@
 </div>
 
 <div class="wfm-requests material-depth-1" ng-if="requests.isRequestsEnabled">
-
 	<div class="operation-container">
 		<people-search-input class="request-filter inline-block" search-options="requests.agentSearchOptions" search-callback="requests.onAgentSearchTermChanged"></people-search-input>
-		<date-range-picker ng-model="requests.period" template-type="requests.dateRangeTemplateType" class="request-date-range-picker"></date-range-picker>
 
+		<date-range-picker class="request-date-range-picker" ng-model="requests.period" template-type="requests.dateRangeTemplateType"
+						   must-be-equal-msg="{{'StartDateMustBeEqualToOrEarlierThanEndDate' | translate}}"
+						   start-and-end-msg="{{'StartDateAndEndDateMustBeSet' | translate}}"></date-range-picker>
 
 		<div class="wfm-switch filter-switch" ng-if="requests.filterToggleEnabled">
 			<input type="checkbox" id="filter-switch" ng-model="requests.filterEnabled"/>
