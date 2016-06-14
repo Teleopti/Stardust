@@ -14575,4 +14575,20 @@ These options are activated:
     <value>Show only agents with no seat</value>
     <comment>Used in the seat plan report filter.</comment>
   </data>
+  <data name="AreYouSureToBackoutSelectedSchedule" xml:space="preserve">
+    <value>Are you sure you wish to undo last schedule change for selected agents?</value>
+  </data>
+  <data name="FailedMessageForBackoutSchedule" xml:space="preserve">
+    <value>Failed to undo schedule change for selected agents</value>
+    <comment>Failed message for backout schedule change in wfm/teamschedule</comment>
+  </data>
+  <data name="PartialSuccessMessageForBackoutSchedule" xml:space="preserve">
+    <value>Undo schedule change for {0} agent(s), {1} succeeded and {2} failed</value>
+    <comment>Partial success message for backout schedule change in wfm/teamschedule</comment>
+  </data>
+  <data name="SuccessfulMessageForBackoutSchedule" xml:space="preserve">
+    <value>Successfully undone last schedule change for selected agents</value>
+    <comment>Sucessful message for backout schedule change in wfm/teamschedule</comment>
+  </data>
+>>>>>>> source
 </root>

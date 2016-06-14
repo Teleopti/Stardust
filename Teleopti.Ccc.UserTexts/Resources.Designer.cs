@@ -2800,6 +2800,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you wish to undo last schedule change for selected agents?.
+        /// </summary>
+        public static string AreYouSureToBackoutSelectedSchedule {
+            get {
+                return ResourceManager.GetString("AreYouSureToBackoutSelectedSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you wish to remove {0} absences from {1} agents?.
         /// </summary>
         public static string AreYouSureToRemoveSelectedAbsence {
@@ -10252,6 +10261,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FailedMessageForAddingActivity {
             get {
                 return ResourceManager.GetString("FailedMessageForAddingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Failed to undo schedule change for selected agents.
+        /// </summary>
+        public static string FailedMessageForBackoutSchedule {
+            get {
+                return ResourceManager.GetString("FailedMessageForBackoutSchedule", resourceCulture);
             }
         }
         
@@ -19668,6 +19686,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Undo schedule change for {0} agent(s), {1} succeeded and {2} failed.
+        /// </summary>
+        public static string PartialSuccessMessageForBackoutSchedule {
+            get {
+                return ResourceManager.GetString("PartialSuccessMessageForBackoutSchedule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Moving activities for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForMovingActivity {
@@ -28525,6 +28552,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfulMessageForAddingActivity {
             get {
                 return ResourceManager.GetString("SuccessfulMessageForAddingActivity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Successfully undone last schedule change for selected agents.
+        /// </summary>
+        public static string SuccessfulMessageForBackoutSchedule {
+            get {
+                return ResourceManager.GetString("SuccessfulMessageForBackoutSchedule", resourceCulture);
             }
         }
         
