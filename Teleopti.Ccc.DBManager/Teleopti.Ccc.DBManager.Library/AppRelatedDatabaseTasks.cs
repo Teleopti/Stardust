@@ -59,8 +59,9 @@ SELECT NEWID(),1, '3F0886AB-7B25-4E95-856A-0D726EDC2A67' , GETUTCDATE(), '{0}', 
 
         public void PersistAuditSetting()
 		{
+			_execute.ExecuteNonQuery("exec Auditing.InitAuditTables");
 			_execute.ExecuteNonQuery("delete from auditing.Auditsetting");
-			_execute.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSettingDefault.TheId + ", 0)");
+			_execute.ExecuteNonQuery("insert into auditing.Auditsetting (id, IsScheduleEnabled) values (" + AuditSettingDefault.TheId + ", 1)");
 		}
 	}
 }
