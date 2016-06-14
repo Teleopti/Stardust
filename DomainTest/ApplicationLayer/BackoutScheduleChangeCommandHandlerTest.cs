@@ -1,7 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using NHibernate.Util;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.IocCommon;
@@ -123,6 +126,50 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			schedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.MainShift);
 			schedule.PersonAssignment().ShiftLayers.Single().Period.Should().Be.EqualTo(dateTimePeriod);
+		}
+
+		[Test]
+		public void ShouldAssignCommandIdToAllEvents()
+		{
+			var person = PersonFactory.CreatePerson("aa","aa").WithId();
+			PersonRepository.Add(person);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			var dateTimePeriod = new DateTimePeriod(2016,6,11,8,2016,6,11,17);
+			var dateOnlyPeriod = new DateOnlyPeriod(2016,6,11,2016,6,11);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(),person,dateTimePeriod);
+			ScheduleHistoryRepository.ClearRevision();
+			var rev = new Revision { Id = 2 };
+			rev.SetRevisionData(person);
+			var lstRev = new Revision { Id = 1 };
+			lstRev.SetRevisionData(person);
+			ScheduleHistoryRepository.SetRevision(rev,pa.CreateTransient());
+			pa.SetDayOff(DayOffFactory.CreateDayOff());
+			ScheduleHistoryRepository.SetRevision(lstRev,pa.CreateTransient());
+
+			var command = new BackoutScheduleChangeCommand
+			{
+				PersonId = person.Id.Value,
+				Date = new DateOnly(2016,06,11),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
+			};
+			target.Handle(command);
+			command.ErrorMessages.Count.Should().Be.EqualTo(0);
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+				person,new ScheduleDictionaryLoadOptions(true,true),dateOnlyPeriod,CurrentScenario.Current())[person].ScheduledDayCollection(dateOnlyPeriod).Single();
+
+
+			var events = schedule.PersonAssignment().PopAllEvents(new Now());
+
+			foreach (var e in events)
+			{
+				var _e = e as ICommandIdentifier;
+				_e.Should().Not.Be.Null();
+				_e.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
+			}			
 		}
 
 	}	

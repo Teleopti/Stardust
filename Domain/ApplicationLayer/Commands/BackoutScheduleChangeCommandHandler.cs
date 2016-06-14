@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -89,8 +90,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var range = scheduleDictionary[person];
-			var diff = scheduleDictionary[person].DifferenceSinceSnapshot(_differenceService);
-			_scheduleDifferenceSaver.SaveChanges(diff,(IUnvalidatedScheduleRangeUpdate)range);			
+			var diffs = scheduleDictionary[person].DifferenceSinceSnapshot(_differenceService);
+
+			diffs.ForEach(diff =>
+			{
+				var eventHolder = diff.CurrentItem as AggregateRoot;
+				eventHolder?.AttachCommandTrackIdToEvents(command.TrackedCommandInfo.TrackId);
+			});
+
+			_scheduleDifferenceSaver.SaveChanges(diffs,(IUnvalidatedScheduleRangeUpdate)range);			
 		}
 
 		private IScheduleDictionary getScheduleDictionary(IPerson person, DateOnly date)

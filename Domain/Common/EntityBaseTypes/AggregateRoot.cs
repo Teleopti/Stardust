@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
@@ -88,6 +89,27 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			var allEvents = _events.Select(e => e.Invoke(now)).ToArray();
 			_events.Clear();
 			return filterScheduleMergeEventDuplicate(allEvents.ToList());
+		}
+
+		public virtual void AttachCommandTrackIdToEvents(Guid commandId)
+		{
+			var patched = _events.Select(ef =>
+			{
+				Func<INow,IEvent> f = now =>
+				{
+					var e = ef(now);
+					var trackableE = e as ICommandIdentifier;
+					if (trackableE != null)
+					{
+						trackableE.CommandId = commandId;
+					}
+					return e;
+				};
+				return f;
+			}).ToList();
+
+			_events.Clear();
+			patched.ForEach(ef => _events.Add(ef));			
 		}
 
 		private IEnumerable<IEvent> filterScheduleMergeEventDuplicate(IList<IEvent> allEvents)
