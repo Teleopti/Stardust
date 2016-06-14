@@ -22,6 +22,7 @@
 		RTA_AlarmContext_29357,
         RTA_TotalOutOfAdherenceTime_38702,
 		RTA_PauseButton_39144,
+		RTA_MonitorBySkills_39081,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
