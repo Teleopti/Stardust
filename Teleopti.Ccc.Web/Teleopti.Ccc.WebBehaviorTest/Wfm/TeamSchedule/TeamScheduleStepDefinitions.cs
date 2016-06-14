@@ -60,9 +60,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 		[When(@"I selected agent '(.*)'")]
 		public void WhenISelectedAgent(string agentName)
 		{
-			Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
-			Browser.Interactions.AssertScopeValue(".team-schedule","vm.isLoading",false);
-			Browser.Interactions.ClickContaining(".person-name", agentName);
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.scheduleFullyLoaded", true);
+					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.isLoading", false);
+					Browser.Interactions.ClickContaining(".person-name", agentName);
+				});
 		}
 
 		[When(@"I open menu in team schedule")]
@@ -163,6 +167,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				});
 		}
 
+		[Then(@"I should not see activity '(.*)' in schedule")]
+		public void ThenIShouldNotSeeActivityInSchedule(string activity)
+		{
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.AssertNotExists(".schedule", $".shift .layer[projection-name={activity}]");
+				});
+		}
+
+		[When(@"I should see a successful notice")]
 		[Then(@"I should see a successful notice")]
 		public void ThenIShouldSeeASuccessfulNotice()
 		{
@@ -201,6 +216,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				{
 					Browser.Interactions.AssertExists(".notice-container .notice-success");
 				});
+		}
+
+		[When(@"I close the success notice")]
+		public void WhenICloseTheNotice()
+		{
+			Browser.Interactions.Click(".notice-container .notice-success i.pull-right");
 		}
 
 		[Then(@"I should see a confirm message that will remove (\d*) absences from (\d*) person"), SetCulture("en-US")]

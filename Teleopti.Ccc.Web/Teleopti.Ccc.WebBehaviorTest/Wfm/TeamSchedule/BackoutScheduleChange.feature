@@ -12,6 +12,7 @@ Given I am american
 	| Name                          | Wfm Team Green |
 	| Access to everyone            | True           |
 	| Access to Wfm MyTeam Schedule | true           |
+	| Add Activity                  | true           |
 	| Backout                       | true           |
 	And there is a shift category named 'Day'
 	And there are activities
@@ -48,10 +49,38 @@ Scenario: Should be able to see enable menu
 	And I open menu in team schedule
 	Then I should see 'Backout' menu is enabled
 
-@ignore
+@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to backout schedule change
 	When I view wfm team schedules
 	And I searched schedule with keyword 'Team green' and schedule date '2016-10-10'
 	And I selected agent 'John Smith'
+	And I open menu in team schedule
+	And I click menu item 'AddActivity' in team schedule
+	And I set new activity as
+	| Field         | Value            |
+	| Activity      | Phone            |
+	| Selected date | 2016-10-10       |
+	| Start time    | 2016-10-10 09:00 |
+	| End time      | 2016-10-10 17:00 |
+	| Is next day   | false            |
+	When I apply my new activity
+	And I should see a successful notice
+	And I close the success notice
+	And I selected agent 'John Smith'
+	And I open menu in team schedule
+	And I click menu item 'AddActivity' in team schedule
+	And I set new activity as
+	| Field         | Value            |
+	| Activity      | Training         |
+	| Selected date | 2016-10-10       |
+	| Start time    | 2016-10-10 12:00 |
+	| End time      | 2016-10-10 13:00 |
+	| Is next day   | false            |
+	When I apply my new activity
+	And I should see a successful notice
+	And I close the success notice
+	And I selected agent 'John Smith'
+	And I open menu in team schedule
 	And I click menu item 'Backout' in team schedule
 	Then I should see a successful notice
+	And I should not see activity 'Training' in schedule

@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').directive('backoutCmd', backoutDirective);
 
-	backoutCtrl.$inject = ['PersonSelection', 'ActivityService', '$mdDialog', 'teamScheduleNotificationService'];
+	backoutCtrl.$inject = ['PersonSelection', 'ActivityService', '$mdDialog', 'teamScheduleNotificationService', 'ScenarioTestUtil'];
 
-	function backoutCtrl(PersonSelection, ActivityService, $mdDialog, notification) {
+	function backoutCtrl(PersonSelection, ActivityService, $mdDialog, notification, ScenarioTestUtil) {
 		var vm = this;
 		vm.label = 'Backout';
 
@@ -63,7 +63,11 @@
 		};
 
 		vm.init = function () {
-			vm.popDialog();
+			if (!ScenarioTestUtil.isScenarioTest()) {
+				vm.popDialog();
+			} else {
+				vm.backoutSchedule();
+			}
 		};
 	}
 
