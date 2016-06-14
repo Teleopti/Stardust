@@ -13,7 +13,7 @@ SET Branch=%4
 SET SqlInstanceName=%5
 SET CustomPath=%~6
 
-::Instance were the Baseline will  be restored
+::Instance were the Baseline will be restored
 SET INSTANCE=%SqlInstanceName%
 IF "%INSTANCE%"=="" SET INSTANCE=.
 
@@ -77,7 +77,7 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 ::Build DbManager, include double quotes for IF to work?!
 SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%\DBManager.exe"
 IF NOT EXIST DBMANAGER (
-	ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
+	ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
 	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%LogFolder%\build.log"
 	IF %ERRORLEVEL% EQU 0 (
 	SET DATABASEPATH="%ROOTDIR%\..\Database"
@@ -299,7 +299,7 @@ ECHO create or patch Analytics
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIANALYTICS%" -E -OTeleoptiAnalytics %TRUNK% %CreateAnalytics% -F"%DATABASEPATH%" > "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :error
 
-ECHO create or patch Add
+ECHO create or patch Agg
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTIAGG%" -E -OTeleoptiCCCAgg %TRUNK% %CreateAgg% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=4 & GOTO :error
 
@@ -426,7 +426,7 @@ ENDLOCAL
 set "%~2=%DoHaveAccess%"
 )
 goto:eof
-IF  NEQ 0
+IF NEQ 0
 
 :GETDATAPATH
 IF %Silent% equ 1 (
