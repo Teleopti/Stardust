@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public virtual IHttpActionResult ResourceCalculate(DateTime date)
 		{
 			//var period = new DateOnlyPeriod(new DateOnly(input.StartDate), new DateOnly(input.EndDate));
-			var result = _calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)));
+			var result = _calculateForReadModel.ResourceCalculatePeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date.AddDays(1))));
 
 			return Json(result);
 		}

@@ -5,40 +5,60 @@
 			'$scope', '$state', '$stateParams', 'intradayStaffingService', '$filter', 'NoticeService', '$translate', '$q',
 			function($scope, $state, $stateParams, intradayStaffingService, $filter, NoticeService, $translate, $q) {
 				var chartData = {};
-				$scope.intervalDate = "loading"
-				chartData.Forcast = ['Forcasted'];
-				chartData.Staffing = ['Staffing'];
-				chartData.Intervals = ['x'];
 
-				intradayStaffingService.resourceCalculate.query().$promise.then(function(response) {
-					extractRelevantData(response.Intervals);
+				$scope.intervalDate = moment();
 
+				var initArrays = function(){
+					chartData.Forcast = ['Forcasted'];
+					chartData.Staffing = ['Staffing'];
+					chartData.Intervals = ['x'];
+				};
+
+				$scope.$watch('intervalDate', function() {
+					var newDate = moment($scope.intervalDate).format("YYYY-MM-DD");
+					runIntradayFetch(newDate);
 				});
 
+				var runIntradayFetch = function(newDate){
+					initArrays();
+					$scope.loading = true;
+					intradayStaffingService.resourceCalculate.query({
+						date:newDate
+					}).$promise.then(function(response) {
+						extractRelevantData(response.Intervals);
+						$scope.loading = false;
+					});
+				}
+
+				var getIntervalDates = function(data) {
+					var date;
+					if (data) {
+						date = moment(new Date(data[0].StartDateTime))
+					}
+					return date
+				};
+
+
 				var extractRelevantData = function(data) {
-					$scope.intervalDate = getIntervalDates(data);
+
+					$scope.intervalDateFormated = getIntervalDates(data);
 					angular.forEach(data, function(single) {
 						chartData.Forcast.push(single.Forecast);
 						chartData.Staffing.push(single.StaffingLevel);
 						chartData.Intervals.push(new Date(single.StartDateTime));
 					});
-					generateChart(chartData);
+					generateChart();
 				};
-
-				var getIntervalDates = function(data){
-					var date = new Date(data[0].StartDateTime)
-					return moment(date).format("Do MMM YYYY");
-				};
-
-				var generateChart = function(data) {
+				initArrays();
+				var generateChart = function() {
 					c3.generate({
 						bindto: '#staffingChart',
 						data: {
 							x: 'x',
 							columns: [
-								data.Intervals,
-								data.Forcast,
-								data.Staffing,
+								chartData.Intervals,
+								chartData.Forcast,
+								chartData.Staffing,
 							],
 							selection: {
 								enabled: true,
@@ -59,7 +79,9 @@
 							enabled: true,
 						},
 					});
-				}
+				};
+				generateChart();
+
 
 			}
 		]);

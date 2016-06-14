@@ -3,10 +3,10 @@
 	angular.module('wfm.intraday')
 		.service('intradayStaffingService', [
 			'$resource', function ($resource) {
-				this.resourceCalculate = $resource('../resourceCalculate', {  }, {
+				this.resourceCalculate = $resource('../resourcecalculate', {date: '@date'}, {
 					query: {
 						method: 'GET',
-						params: {},
+						params: {date:name},
 						isArray: false
 					}
 				});

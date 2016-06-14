@@ -1,2 +1,17 @@
-<h1>{{intervalDate}}</h1>
+<button class="wfm-btn wfm-btn-invis-primary view-header with-fab with-desc staffing-head">
+	<div class="view-title" ng-click="viewCal = !viewCal">
+		<h1><i class="mdi mdi-calendar"></i>{{intervalDate | amDateFormat:"L"}}</h1>
+	</div>
+</button>
+<div class="wfm-datepicker-wrap" ng-show="viewCal">
+	<uib-datepicker show-weeks="true" ng-model="intervalDate" class="wfm-datepicker">
+		</datepicker>
+</div>
+
+<div class="loadWrapper" ng-if="loading">
+	<md-progress-linear md-mode="indeterminate" ng-show="loading"></md-progress-linear>
+	<div class="wfm-block material-depth-1"> Loading...</div>
+</div>
+
+
 <div class="wfm-chart" id="staffingChart"></div>
