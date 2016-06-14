@@ -9,10 +9,10 @@
 		<input type="text" id="report-query" ng-model="reportFilter.Name" placeholder="{{'FilterReports'|translate}}..."/>
 	</div>
 	<div class="report-list">
-		<md-card md-theme="default" md-theme-watch ng-repeat="report in reports.reports | filter: reportFilter" class="report-item">
-			<md-card-content>
-				<a ng-href="{{report.Url}}" target="_blank">{{report.Name}}</a>
-			</md-card-content>
-		</md-card>
+		<a class="report-item" ng-repeat="report in reports.reports | filter: reportFilter" ng-href="{{report.Url}}" target="_blank" tabindex="0">
+			<div class="wfm-card">
+				<h3>{{report.Name}}</h3>
+			</div>
+		</a>
 	</div>
 </div>
