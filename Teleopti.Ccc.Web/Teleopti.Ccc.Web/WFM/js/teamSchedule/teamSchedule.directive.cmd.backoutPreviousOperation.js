@@ -13,13 +13,14 @@
 
 		var personIds = vm.selectedPersonInfo.map(function (x) { return x.personId; });
 
-		var requestData = {
-			PersonIds: personIds,
-			Date: vm.selectedDate,
-			TrackedCommandInfo: { TrackId: vm.trackId }
-		}
-
 		vm.backoutSchedule = function () {
+
+			var requestData = {
+				PersonIds: personIds,
+				Date: vm.selectedDate(),
+				TrackedCommandInfo: { TrackId: vm.trackId }
+			}
+
 			ActivityService.backoutScheduleChange(requestData).then(function (reponse) {
 				if (vm.getActionCb(vm.label)) {
 					vm.getActionCb(vm.label)(vm.trackId, personIds);
@@ -81,7 +82,7 @@
 			var containerCtrl = ctrls[0],
 				selfCtrl = ctrls[1];
 
-			scope.vm.selectedDate = containerCtrl.getDate();
+			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
 			scope.vm.resetActiveCmd = containerCtrl.resetActiveCmd;
