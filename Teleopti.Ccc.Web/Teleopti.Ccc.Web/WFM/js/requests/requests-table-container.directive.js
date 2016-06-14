@@ -56,6 +56,7 @@
 			vm.gridOptions.columnDefs = vm.gridConfigurationService.columnDefinitions(vm.shiftTradeRequestDateSummary);
 			vm.gridOptions.enablePinning = vm.shiftTradeRequestDateSummary;
 			vm.gridOptions.category = vm.gridConfigurationService.categories(vm.shiftTradeRequestDateSummary);
+			vm.gridOptions.enableVerticalScrollbar = 0;
 			applyColumnFilters(vm.gridOptions.columnDefs);
 
 			var filteringEnabled = vm.filterEnabled;
@@ -121,6 +122,7 @@
 				appScopeProvider: vm,
 				enableGridMenu: true,
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
+				enableVerticalScrollbar: uiGridConstants.scrollbars.NEVER,
 				useExternalSorting: true,
 				headerTemplate: 'shift-trade-header-template.html',
 				gridMenuTitleFilter: $translate,
@@ -312,6 +314,7 @@
 
 		function postlink(scope, elem, attrs, ctrls) {
 			var requestsTableContainerCtrl = ctrls[0];
+
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
 			scope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
 
@@ -319,9 +322,22 @@
 				return scope.requestsTableContainer.requests;
 			}, function (requests) {
 				requestsTableContainerCtrl.prepareComputedColumns(requests);
+				
 				requestsTableContainerCtrl.reselectRequests();
 				
 			}, true);
+
+			var shiftTradeDayView = '.shift-trade-view .ui-grid-render-container-body .ui-grid-viewport';
+
+			function thereIsScrollBar() { return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width() };
+
+			scope.$watch(function () {
+				return $(shiftTradeDayView).width();
+			}, function() {
+				thereIsScrollBar() ?
+					$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18)
+					: $(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
+			});
 			
 			scope.$on('reload.requests.without.selection', function () {
 				requestsTableContainerCtrl.clearSelection();

@@ -38,7 +38,7 @@
 			width: 300px;
 		}
 
-		[id="simple-people-search"] {
+		input {
 			width: 316px;
 		}
 	}
@@ -52,7 +52,7 @@
 	}
 
 	.ui-grid {
-		height: 68vh; //71vh;
+		height: 68vh;
 		margin: 15px;
 
 		.ui-grid-cell-contents.ui-grid-cell-contents {
@@ -80,8 +80,8 @@
 		}
 
 		.page-size-selector {
-			margin-top:-2px;
-			margin-right:10px;
+			margin-top: -2px;
+			margin-right: 10px;
 		}
 
 		.pagination {
@@ -124,9 +124,9 @@
 			white-space: nowrap;
 		}
 
-        .buttonLabel {
-            padding: 0;
-        }
+		.buttonLabel {
+			padding: 0;
+		}
 
 		.checkboxLayer {
 			width: 90%;
@@ -145,8 +145,8 @@
 		.multiSelectGroup:hover,
 		.multiSelectItem:hover {
 			background-image: none;
-			background: #E0E0E0!important;
-			color:#000000!important;
+			background: #E0E0E0 !important;
+			color: #000000 !important;
 		}
 	}
 
@@ -168,7 +168,7 @@
 		}
 	}
 
-    .text-absence-view {
+	.text-absence-view {
 		.ui-grid-top-panel {
 			overflow: visible;
 		}
@@ -176,34 +176,37 @@
 		.ui-grid-header-viewport {
 			overflow: visible;
 		}
+
+		.ui-grid-menu-button {
+			right: -15px;
+		}
 	}
 
 	.shift-trade-view {
+		overflow: hidden !important;
+		/* show scroll bar outside of grid*/
+		.ui-grid-render-container-body .ui-grid-viewport {
+			position: absolute;
+		}
 
-        overflow: hidden!important;
-		margin-right:15px;
+		margin-right: 15px;
 
-        /* show scroll bar outside of grid*/
-        .ui-grid-render-container-body .ui-grid-viewport {
-            height: 63.2vh !important;
-         }
+		.ui-grid-row .ui-grid-cell {
+			border-bottom-color: $gray054 !important;
+		}
 
-		  .ui-grid-row .ui-grid-cell{
-            border-bottom-color : $gray054 !important;
-        }
+		.shift-trade-row {
+			border-style: solid;
+			border-color: #d4d4d4;
+		}
 
-        .shift-trade-row{
-            border-style:  solid;
-            border-color: #d4d4d4;
-         }
+		.shift-trade-row:nth-child(odd) {
+			border-width: 0px 1px 1px 0px;
+		}
 
-         .shift-trade-row:nth-child(odd) {
-            border-width: 0px 1px 1px 0px;
-        }
-
-         .shift-trade-row:nth-child(even) {
-            border-width: 0px 1px 0px 0px;
-        }
+		.shift-trade-row:nth-child(even) {
+			border-width: 0px 1px 0px 0px;
+		}
 
 		.shift-trade-cell {
 			box-sizing: border-box;
@@ -224,7 +227,7 @@
 			background-color: $orange-400;
 		}
 
-        .is-day-off {
+		.is-day-off {
 			background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
 			background-size: 11px 11px;
 		}
@@ -251,9 +254,9 @@
 			overflow: visible;
 		}
 
+		.ui-grid-pinned-container-left .ui-grid-viewport,
 		.ui-grid-pinned-container-right .ui-grid-viewport {
-		    overflow-x: hidden !important;
-            overflow-y: auto!important;
+			overflow: hidden !important;
 		}
 
 		.ui-grid-pinned-container-left .ui-grid-header-viewport,
@@ -262,14 +265,13 @@
 		}
 	}
 
-	.request-date-range-picker{
+	.request-date-range-picker {
 		.date-range-start-date,
 		.date-range-end-date {
 			margin-top: 10px;
 		}
-
 		/*TODO: Fix the problem that error message was hidden; should be removed when it's fixed in StyleGuide*/
-		.error-msg-container{
+		.error-msg-container {
 			z-index: 10000;
 		}
 	}
