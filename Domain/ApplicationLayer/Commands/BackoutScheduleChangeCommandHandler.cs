@@ -37,15 +37,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			command.ErrorMessages = new List<string>();
 			var person = _personRepository.Get(command.PersonId);
-			var versions = _scheduleHistoryRepository.FindRevisions(person,command.Date,1).ToList();
+			var versions = _scheduleHistoryRepository.FindRevisions(person,command.Date,2).ToList();
 
-			if(versions.Count == 0)
+			if(versions.Count != 2)
 			{
 				command.ErrorMessages.Add(Resources.CannotBackoutScheduleChange);
 				return;
 			}
 
-			var version = versions.Single();
+			var version = versions.Last();
 
 			if (version.ModifiedBy.Id != _loggedOnUser.CurrentUser().Id)
 			{

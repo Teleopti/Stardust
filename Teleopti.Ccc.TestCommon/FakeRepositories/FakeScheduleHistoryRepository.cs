@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<IRevision> FindRevisions(IPerson agent, DateOnly dateOnly, int maxResult)
 		{
-			return _internalStorage.Select(x => x.Item1);
+			return _internalStorage.Select(x => x.Item1).OrderByDescending(x => x.Id);
 		}
 
 		public IEnumerable<IPersistableScheduleData> FindSchedules(IRevision revision, IPerson agent, DateOnly dateOnly)

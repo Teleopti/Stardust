@@ -104,7 +104,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ScheduleHistoryRepository.ClearRevision();
 			var rev = new Revision { Id = 1 };
 			rev.SetRevisionData(person);
+			var lstRev = new Revision { Id = 2};
+			lstRev.SetRevisionData(person);
 			ScheduleHistoryRepository.SetRevision(rev, pa.CreateTransient());
+			pa.SetDayOff(DayOffFactory.CreateDayOff());
+			ScheduleHistoryRepository.SetRevision(lstRev, pa.CreateTransient());
 
 			var command = new BackoutScheduleChangeCommand
 			{
