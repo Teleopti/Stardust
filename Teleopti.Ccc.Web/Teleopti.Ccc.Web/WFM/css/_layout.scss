@@ -121,34 +121,3 @@ wfm-notice{
 }
 
 //Temp move us to styleguide
-
-.dropdown-menu{
-	background-color: $white;
-}//bootstrap datepicker dropdown menu
-
-
-.active-context{
-	background: $gray012;
-}
-
-.active-context i{
-	color: $text-color-standard;
-}
-
-.c3-axis,
-.c3-axis-x,
-.c3-legend-item{
-	fill:$text-color-standard;
-}
-
-.popup-control{
-	    box-sizing: initial;
-}
-
-.md-select-menu-container {
-	z-index: 99999;
-}
-
-.notice-item .mdi{
-	margin-right: 5px;
-}
