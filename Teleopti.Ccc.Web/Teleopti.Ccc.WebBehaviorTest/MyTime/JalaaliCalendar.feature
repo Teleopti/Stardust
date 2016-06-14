@@ -44,6 +44,7 @@ Scenario: Open Jalaali Time Picker
 	When I open the time picker
 	Then I should see a jalaali time picker with '02','15'
 
+@Ignore
 Scenario: Show Correctly Formatted Text Request Date
 	Given I am an agent
 	And I have an existing text request with
@@ -54,6 +55,7 @@ Scenario: Show Correctly Formatted Text Request Date
 	Then I should see request page
 	And I should see a request with date period '1394/02/27 10:00 - 14:00'
 		
+@Ignore
 Scenario: Show Correctly Formatted Absence Request Date
 	Given I am an agent
 	And I have an existing absence request with
@@ -69,6 +71,8 @@ Scenario: Open Schedule
 	When I view my week schedule for date '2015-05-17'
 	Then I should see the day header text for date '2015-05-17' is 'Jیک‌شنبه'
 
+
+@Ignore
 Scenario: Show correctly formatted Text Request Date From Schedule
 	Given I am an agent
 	And I have an existing text request with
@@ -80,6 +84,7 @@ Scenario: Show correctly formatted Text Request Date From Schedule
 	Then I should see request page
 	And I should see a request with date period '1394/02/27 10:00 - 14:00'
 
+@Ignore
 Scenario: Show correctly formatted Absence Request Date From Schedule
 	Given I am an agent
 	And I have an existing absence request with
