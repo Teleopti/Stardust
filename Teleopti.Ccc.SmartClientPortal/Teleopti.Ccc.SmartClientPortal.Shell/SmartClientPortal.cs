@@ -21,7 +21,6 @@ using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using log4net;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -37,7 +36,6 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms;
-using Teleopti.Ccc.Win.Intraday;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.Win.Payroll;
 using Teleopti.Ccc.Win.PeopleAdmin.Controls;
@@ -138,9 +136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					
 				}
-				
 			}
-			
 		}
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
@@ -194,7 +190,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_container = container;
 
 			//This is here instead of in the constructor because this will be created by ObjectBuilder instead of AutoFac
-			
 			_systemChecker = _container.Resolve<SystemCheckerValidator>();
 			_outlookPanelContentWorker = _container.Resolve<OutlookPanelContentWorker>();
 			_portalSettings = _container.Resolve<PortalSettings>();
@@ -218,8 +213,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			setBusinessUnitInWebView();
 
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
-
 		}
+
 		void toolStripButtonHelp_Click(object sender, EventArgs e)
 		{
 			ViewBase.ShowHelp(this,false);
@@ -510,7 +505,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						if (_toggleManager.IsEnabled(Toggles.Wfm_People_PrepareForRelease_39040))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewPeopleModule;
-							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("wfm/#/people");
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/people");
 						}
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenForecasterPage:
@@ -518,8 +513,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;
-						outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewRequestsModule;
-						outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/requests");
+						if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_PrepareForRelease_38771))
+						{
+							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewRequestsModule;
+							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/requests");
+						}
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenIntradayPage:
 						outlookBarSmartPartInfo.Icon = Resources.Intraday_filled_space_32x32;
@@ -730,7 +728,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					webControl1.Visible = false;
 				if (wfmWebControl != null)
 					wfmWebControl.Visible = false;
-            return;
+                return;
 			}
 
 			if (webControl1 != null)
@@ -938,10 +936,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			e.UseDefaultMessage();
 		}
 
-	    private Uri buildWfmUri(string relativePath)
-	    {
-	        var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
-            return new Uri($"{wfmPath}{relativePath}");
-        }
+		private Uri buildWfmUri(string relativePath)
+		{
+			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+			return new Uri($"{wfmPath}{relativePath}");
+		}
 	}
 }
