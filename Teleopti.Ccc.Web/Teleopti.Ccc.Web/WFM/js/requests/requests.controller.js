@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "Toggle", "requestsDefinitions", "requestsNotificationService", "CurrentUserInfo", "signalRSVC"];
+	requestsController.$inject = ["$scope", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "CurrentUserInfo", "signalRSVC", "NoticeService"];
 
-    function requestsController($scope, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo, signalRSVC) {
+    function requestsController($scope, $translate, toggleService, requestsDefinitions, requestsNotificationService, CurrentUserInfo, signalRSVC, noticeSvc) {
         var vm = this;
         vm.onAgentSearchTermChanged = onAgentSearchTermChanged;
 
@@ -40,6 +40,10 @@
             vm.onErrorMessages = onErrorMessages;
             vm.disableInteraction = false;
 
+            var template = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink');
+            var moduleName = $translate.instant('Requests');
+            var message = template.replace('{0}', moduleName);
+            noticeSvc.info(message, null, true);
         }
 
 		function isShiftTradeViewActive() {
