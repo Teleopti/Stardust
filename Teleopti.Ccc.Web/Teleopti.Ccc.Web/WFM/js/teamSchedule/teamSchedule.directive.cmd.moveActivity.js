@@ -135,7 +135,7 @@
 
 			elem.removeAttr('tabindex');
 
-			var inputs = elem[0].querySelectorAll('input');
+			var inputs = elem[0].querySelectorAll('input[type=text]');
 			angular.forEach(inputs, function (input) {
 				angular.element(input).on('focus', function (event) {
 					event.target.select();

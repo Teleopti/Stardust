@@ -19,21 +19,23 @@
 		scheduleMgmtSvc, toggleSvc, signalRSVC, NoticeService) {
 
 		var vm = this;
+		var commandContainerId = 'teamschedule-command-container';
 
 		vm.isLoading = false;
 		vm.scheduleDate = new Date();
 		vm.scheduleFullyLoaded = false;
 
 		vm.triggerCommand = function(label, needToOpenSidePanel) {
-			needToOpenSidePanel && openSidePanel();
+			$mdSidenav(commandContainerId).close().then(function () {
+				needToOpenSidePanel && openSidePanel();
 
-			$scope.$broadcast('teamSchedule.init.command', {
-				activeCmd: label
+				$scope.$broadcast('teamSchedule.init.command', {
+					activeCmd: label
+				});
 			});
 		};
 
 		vm.commonCommandCallback = function(trackId, personIds) {
-			var commandContainerId = "teamschedule-command-container";
 			if ($mdSidenav(commandContainerId).isOpen()) {
 				$mdSidenav(commandContainerId).close();
 			}
@@ -42,9 +44,10 @@
 		};
 
 		function openSidePanel() {
-			var commandContainerId = "teamschedule-command-container";
 			if (!$mdSidenav(commandContainerId).isOpen()) {
-				$mdSidenav(commandContainerId).toggle();
+				$mdSidenav(commandContainerId).open().then(function () {
+					$scope.$broadcast('teamSchedule.command.focus.default');
+				});
 			}
 
 			var unbindWatchPanel = $scope.$watch(function() {

@@ -70,13 +70,6 @@
 			scope.$on('teamSchedule.reset.command', function(e, d) {
 				scope.vm.resetActiveCmd();
 			});
-
-			elem.on('focus', function () {
-				scope.$broadcast('teamSchedule.command.focus.default');
-			});
-			
 		}
 	}
-
-	
 })();
