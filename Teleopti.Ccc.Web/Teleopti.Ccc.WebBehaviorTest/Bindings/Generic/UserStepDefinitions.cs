@@ -82,6 +82,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIAmAUserSignedInWith(Table table)
 		{
 			var user = table.CreateInstance<PersonUserConfigurable>();
+			DataMaker.Data().Apply(user);
+			DataMaker.Data().ApplyDelayed();
 			TestControllerMethods.LogonForSpecificUser(user.UserName, user.Password); 
 		}
 		

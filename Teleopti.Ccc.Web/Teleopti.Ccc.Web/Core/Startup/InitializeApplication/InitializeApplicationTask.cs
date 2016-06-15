@@ -1,16 +1,11 @@
 ﻿using System.Configuration;
 using System.Threading.Tasks;
 using Owin;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {

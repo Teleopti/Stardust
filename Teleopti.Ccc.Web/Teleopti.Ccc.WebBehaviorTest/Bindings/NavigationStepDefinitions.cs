@@ -77,6 +77,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			if (!DataMaker.Data().HasSetup<IUserRoleSetup>())
 				DataMaker.Data().Apply(new Agent_ThingThatReallyAppliesSetupsInConstructor());
+			DataMaker.Data().Apply(
+				new PersonUserConfigurable
+				{
+					UserName = userName,
+					Password = password
+				});
+			DataMaker.Data().ApplyDelayed();
 			TestControllerMethods.LogonForSpecificUser(userName, password);
 			Navigation.GotoAnApplicationPage();
 		}

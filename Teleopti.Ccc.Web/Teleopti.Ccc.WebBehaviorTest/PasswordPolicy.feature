@@ -5,20 +5,30 @@ Feature: Password Policy
 	I have a password policy
 
 Background:
-	Given There is a password policy with
+	Given there is a business unit with
+	| Field | Value           |
+	| Name  | Business Unit 1 |
+	And there is a scenario
+	| Field         | Value           |
+	| Name          | Scenario 1      |
+	| Business Unit | Business Unit 1 |
+	And There is a password policy with
 	| Field                             | Value              |
 	| Max Number Of Attempts            | 3                  |
 	| Invalid Attempt Window            | 30                 |
 	| Password Valid For Day Count      | 30                 |
 	| Password Expire Warning Day Count | 3                  |
 	| Rule1                             | PasswordLengthMin8 |
-	And I have a role with
-	| Field | Value |
-	| Name  | Agent |
+	And there is a role with
+	| Field                | Value           |
+	| Name                 | Role1           |
+	| Business Unit        | Business Unit 1 |
+	| Access to mytime web | true            |
 
-Scenario: Change password fails against the policy
+Scenario: XChange password fails against the policy
 	Given I am a user signed in with
 	| Field    | Value     |
+	| Role     | Role1     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I view password setting page
@@ -64,6 +74,7 @@ Scenario: Skip change password when password will expire soon
 	| Last Password Change X Days Ago | 29    |
 	And I have user credential with
 	| Field    | Value     |
+	| Role     | Role1     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I try to sign in with
@@ -110,6 +121,7 @@ Scenario: Change password successfully
 	| Last Password Change X Days Ago | 30    |
 	And I have user credential with
 	| Field    | Value     |
+	| Role     | Role1     |
 	| UserName | aa        |
 	| Password | P@ssword1 |
 	When I try to sign in with
@@ -123,7 +135,6 @@ Scenario: Change password successfully
 	| Old Password       | P@ssword1    |
 	Then I should be signed in
 
-@ignore
 Scenario: Change password fails if new password is weak
 	Given I have user logon details with
 	| Field                           | Value |
@@ -143,7 +154,6 @@ Scenario: Change password fails if new password is weak
 	| Old Password       | P@ssword1 |
 	Then I should see an error 'PasswordPolicyWarning'
 
-@ignore
 Scenario: Change password fails if old password is wrong
 	Given I have user logon details with
 	| Field                           | Value |
