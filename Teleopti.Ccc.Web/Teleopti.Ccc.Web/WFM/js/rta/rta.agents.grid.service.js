@@ -127,11 +127,10 @@
 					width: toggleService.RTA_AlarmContext_29357 ? "7%" : null,
 				};
 
-
 				var shiftcelltemplate =  'js/rta/rta-agent-shiftcelltemplate-RTA_AlarmContext_29357.html';
 
-				if (toggleService.RTA_SeeRecentOutOfAdherenceOccurancesToday_39145) {
-					shiftcelltemplate = 'js/rta/rta-agents-shiftcelltemplate-RTA_SeeRecentOutOfAdherenceOccurancesToday_39145.html';
+				if (toggleService.RTA_RecentOutOfAdherences_39145) {
+					shiftcelltemplate = 'js/rta/rta-agents-shiftcelltemplate-RTA_RecentOutOfAdherences_39145.html';
 				}
 
 				var shift = {
