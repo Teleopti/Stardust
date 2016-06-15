@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 							{
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(activity, interval))
 								{
+									//TODO - make this seperate classes/components if we want to keep this
 									var resourcesMoved = shovelPerSkillGroupAndInterval(skillGroup, interval);
 									reducePrimarySkillResources(skillGroup, interval, resourcesMoved);
 								}
@@ -54,14 +55,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 		private void reducePrimarySkillResources(CascadingSkillGroup skillGroup, DateTimePeriod interval, double resourcesMoved)
 		{
 			var stateHolder = _stateHolder();
-			//move out
-			var primarySkillOverstaff = 0d;
-			foreach (var primarySkill in skillGroup.PrimarySkills)
-			{
-				primarySkillOverstaff += stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0).AbsoluteDifference;
-			}
-			//move out
-
+			var primarySkillOverstaff = skillGroup.PrimarySkills
+				.Sum(primarySkill => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, 0).AbsoluteDifference);
 			if (primarySkillOverstaff.IsZero())
 				return;
 
@@ -81,45 +76,28 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var stateHolder = _stateHolder();
 			var remainingResourcesInGroup = skillGroup.Resources;
 
-			//move out
-			var remainingPrimarySkillOverstaff = 0d;
-			foreach (var primarySkill in skillGroup.PrimarySkills)
-			{
-				//int.MaxValue here is strange but makes all tests green... Could it overflow now?
-				remainingPrimarySkillOverstaff += stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, int.MaxValue).AbsoluteDifference;
-			}
-			//move out
+			var remainingPrimarySkillOverstaff = skillGroup.PrimarySkills
+				.Sum(primarySkill => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, int.MaxValue).AbsoluteDifference);
 
 			if (!remainingPrimarySkillOverstaff.IsOverstaffed())
 				return 0;
 
 			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
 			{
-				var totalUnderStaffing = 0d;
-
-				//move out
-				foreach (var skillToMoveTo in cascadingSkillGroupItem.Skills)
-				{
-					var skillStaffPeriod = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
-					var absoluteDifference = skillStaffPeriod.AbsoluteDifference;
-					if (absoluteDifference.IsUnderstaffed())
-					{
-						totalUnderStaffing += -absoluteDifference;
-					}
-				}
-				//move out
+				var totalUnderstaffingInSkillGroup = cascadingSkillGroupItem.Skills
+					.Select(skillToMoveTo => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0).AbsoluteDifference)
+					.Where(absoluteDifference => absoluteDifference.IsUnderstaffed())
+					.Sum(absoluteDifference => -absoluteDifference);
 
 				var remainingOverstaff = Math.Min(remainingPrimarySkillOverstaff, remainingResourcesInGroup);
-		
 				foreach (var skillToMoveTo in cascadingSkillGroupItem.Skills)
 				{
 					var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 					var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
-
 					if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 						continue;
 
-					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderStaffing * remainingOverstaff;
+					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderstaffingInSkillGroup * remainingOverstaff;
 					var resourceToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 
 					skillStaffPeriodTo.SetCalculatedResource65(skillStaffPeriodTo.CalculatedResource + resourceToMove);
