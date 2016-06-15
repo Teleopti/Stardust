@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		public virtual void Handle(IndexMaintenanceEvent @event)
 		{
 			logger.Debug($"Consuming event for {nameof(IndexMaintenanceEvent)} for {@event.LogOnDatasource}");
-			performIndexMaintenance("App");
-			performIndexMaintenance("Analytics");
-			performIndexMaintenance("Agg");
+			performIndexMaintenance(DatabaseEnum.Application);
+			performIndexMaintenance(DatabaseEnum.Analytics);
+			performIndexMaintenance(DatabaseEnum.Agg);
 		}
 
-		private void performIndexMaintenance(string database)
+		private void performIndexMaintenance(DatabaseEnum database)
 		{
 			_stardustJobFeedback.SendProgress?.Invoke($"Index Maintenance {database} Started");
 			_indexMaintenanceRepository.PerformIndexMaintenance(database);

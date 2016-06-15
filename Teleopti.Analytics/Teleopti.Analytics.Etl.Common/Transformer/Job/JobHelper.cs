@@ -5,6 +5,7 @@ using System.Security.Authentication;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Security;
@@ -25,15 +26,17 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 		private readonly IMessageSender _messageSender;
 		private readonly IAvailableBusinessUnitsProvider _availableBusinessUnitsProvider;
 		private readonly Tenants _tenants;
+		private readonly IIndexMaintenanceRepository _indexMaintenanceRepository;
 
 		private readonly LogOnService _logonService;
 		private List<IBusinessUnit> _buList;
 		private DataSourceContainer _choosenDb;
 
-		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants)
+		public JobHelper(IAvailableBusinessUnitsProvider availableBusinessUnitsProvider, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository)
 		{
 			_availableBusinessUnitsProvider = availableBusinessUnitsProvider;
 			_tenants = tenants;
+			_indexMaintenanceRepository = indexMaintenanceRepository;
 
 			var url = new MutableUrl();
 			url.Configure(ConfigurationManager.AppSettings["MessageBroker"]);
@@ -44,12 +47,13 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 			var logOnOff = new LogOnOff(new WindowsAppDomainPrincipalContext(new CurrentTeleoptiPrincipal(new ThreadPrincipalContext()), new ThreadPrincipalContext()), new TeleoptiPrincipalFactory(), null);
 			_logonService = new LogOnService(logOnOff, new AvailableBusinessUnitsProvider(new RepositoryFactory()));
 		}
-		
-		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants)
+
+		protected JobHelper(IRaptorRepository repository, IMessageSender messageSender, Tenants tenants, IIndexMaintenanceRepository indexMaintenanceRepository)
 		{
 			_repository = repository;
 			_messageSender = messageSender;
 			_tenants = tenants;
+			_indexMaintenanceRepository = indexMaintenanceRepository;
 		}
 
 		public IRaptorRepository Repository
@@ -98,7 +102,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job
 					//Create repository when logged in to raptor domain
 					_repository = new RaptorRepository(
 						SelectedDataSourceContainer.DataSource.Analytics.ConnectionString,
-						ConfigurationManager.AppSettings["isolationLevel"]);
+						ConfigurationManager.AppSettings["isolationLevel"], _indexMaintenanceRepository);
 					return true;
 				}
 			}

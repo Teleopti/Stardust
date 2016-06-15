@@ -1,7 +1,10 @@
-﻿namespace Teleopti.Ccc.Domain.Infrastructure
+﻿using System;
+
+namespace Teleopti.Ccc.Domain.Infrastructure
 {
 	public interface IIndexMaintenanceRepository
 	{
-		void PerformIndexMaintenance(string database);
+		void PerformIndexMaintenance(DatabaseEnum database);
+		void SetTimespanBetweenRetries(TimeSpan span);
 	}
 }

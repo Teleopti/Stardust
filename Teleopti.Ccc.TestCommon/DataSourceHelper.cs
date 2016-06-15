@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			createOrRestoreApplication(name);
 			createOrRestoreAnalytics();
+			createOrRestoreAgg();
 		}
 
 		public static IDataSource CreateDataSource(ICurrentTransactionHooks transactionHooks)
@@ -113,6 +114,14 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
+		private static DatabaseHelper agg()
+		{
+			return new DatabaseHelper(
+				InfraTestConfigReader.AggConnectionString,
+				DatabaseType.TeleoptiCCCAgg
+				);
+		}
+
 		private static DatabaseHelper analytics()
 		{
 			return new DatabaseHelper(
@@ -144,6 +153,15 @@ namespace Teleopti.Ccc.TestCommon
 		private static void createOrRestoreAnalytics()
 		{
 			var database = analytics();
+			if (tryRestoreByFileCopy(database, 0))
+				return;
+			createDatabase(database);
+			backupByFileCopy(database, 0);
+		}
+
+		private static void createOrRestoreAgg()
+		{
+			var database = agg();
 			if (tryRestoreByFileCopy(database, 0))
 				return;
 			createDatabase(database);

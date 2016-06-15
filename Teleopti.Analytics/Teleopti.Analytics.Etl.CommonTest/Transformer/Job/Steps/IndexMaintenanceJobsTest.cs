@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
-using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData;
+using Teleopti.Ccc.Domain.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 {
@@ -28,7 +27,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			{
 				var jobStepResult = indexMaintenance.Run(new List<IJobStep>(), null, null, true);
 				Assert.IsNotNull(jobStepResult);
-				_raptorRepository.AssertWasCalled(x => x.PerformIndexMaintenance("Analytics"), o => o.IgnoreArguments());
+				_raptorRepository.AssertWasCalled(x => x.PerformIndexMaintenance(DatabaseEnum.Analytics), o => o.IgnoreArguments());
 			}
 		}
 
@@ -39,7 +38,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			{
 				var jobStepResult = indexMaintenance.Run(new List<IJobStep>(), null, null, true);
 				Assert.IsNotNull(jobStepResult);
-				_raptorRepository.AssertWasCalled(x => x.PerformIndexMaintenance("App"), options => options.IgnoreArguments());
+				_raptorRepository.AssertWasCalled(x => x.PerformIndexMaintenance(DatabaseEnum.Application), options => options.IgnoreArguments());
 			}
 		}
 
@@ -50,7 +49,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer.Job.Steps
 			{
 				var jobStepResult = indexMaintenance.Run(new List<IJobStep>(), null, null, true);
 				Assert.IsNotNull(jobStepResult);
-				_raptorRepository.AssertWasCalled(x => x.PerformIndexMaintenance("Agg"), options => options.IgnoreArguments());
+				_raptorRepository.AssertWasCalled(x => x.PerformIndexMaintenance(DatabaseEnum.Agg), options => options.IgnoreArguments());
 			}
 		}
 	}

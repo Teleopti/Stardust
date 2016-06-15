@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
+using Teleopti.Ccc.Domain.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 {
@@ -13,7 +14,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			return isLastBusinessUnit ? _jobParameters.Helper.Repository.PerformIndexMaintenance("Analytics") : 0;
+			return isLastBusinessUnit ? _jobParameters.Helper.Repository.PerformIndexMaintenance(DatabaseEnum.Analytics) : 0;
 		}
 	}
 }

@@ -15,6 +15,7 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -39,10 +40,15 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 		private readonly string _dataMartConnectionString;
 		private ILicenseStatusUpdater _licenseStatusUpdater;
 		private readonly ILog _logger = LogManager.GetLogger(typeof(RaptorRepository));
+		private readonly IIndexMaintenanceRepository _indexMaintenanceRepository;
 
-		public RaptorRepository(string dataMartConnectionString, string isolationLevel)
+		public RaptorRepository(
+			string dataMartConnectionString, 
+			string isolationLevel, 
+			IIndexMaintenanceRepository indexMaintenanceRepository)
 		{
 			_dataMartConnectionString = dataMartConnectionString;
+			_indexMaintenanceRepository = indexMaintenanceRepository;
 		}
 
 		public int PersistPmUser(DataTable dataTable)
@@ -1740,50 +1746,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
                                                     _dataMartConnectionString);
 
         }
-        public int PerformIndexMaintenance(string database)
+        public int PerformIndexMaintenance(DatabaseEnum database)
 		{
-			string connectionString = null;
-
-			switch (database)
-			{
-				case "Analytics":
-					connectionString = _dataMartConnectionString;
-					break;
-				case "App":
-					connectionString = UnitOfWorkFactory.Current.ConnectionString;
-					break;
-				case "Agg":
-					{
-						const string initCatString = "Initial Catalog=";
-
-						var firstIndex = _dataMartConnectionString.IndexOf(initCatString) + initCatString.Length;
-						var lastIndex = _dataMartConnectionString.IndexOf(";", firstIndex);
-
-						var aggName = getAggName();
-
-						connectionString = _dataMartConnectionString.Substring(0, firstIndex) + aggName +
-												 _dataMartConnectionString.Substring(lastIndex);
-					}
-					break;
-			}
-
-			var retries = 0;
-			bool sqlError;
-			do
-			{
-				try
-				{
-					sqlError = false;
-					HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", connectionString);
-				}
-				catch (SqlException)
-				{
-					sqlError = true;
-					retries++;
-					Thread.Sleep(TimeSpan.FromMinutes(1));
-				}
-			} while (sqlError && retries < 2);
-
+			_indexMaintenanceRepository.PerformIndexMaintenance(database);
 			return 0;
 		}
 

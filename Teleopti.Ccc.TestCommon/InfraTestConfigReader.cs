@@ -1,56 +1,26 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 
 namespace Teleopti.Ccc.TestCommon
 {
 	public static class InfraTestConfigReader
 	{
-		public static string ConnectionString
-		{
-			get
-			{
-				return ConfigurationManager.AppSettings["InfraTest.ConnectionString"];
-			}
-		}
+		public static string ConnectionString => ConfigurationManager.AppSettings["InfraTest.ConnectionString"];
+		public static string InvalidConnectionString => @"Data Source=nakenjanne;Initial Catalog=Demoreg_TeleoptiCCC7;User Id=sa;Password=cadadi;Connect Timeout=1;";
+		public static string AnalyticsConnectionString => ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"];
+		public static string AggConnectionString => getAggConnectionString("Infratest_Agg", AnalyticsConnectionString);
+		public static string SqlServerName => ConfigurationManager.AppSettings["InfraTest.SqlServerName"];
+		public static string DatabaseName => ConfigurationManager.AppSettings["InfraTest.DatabaseName"];
+		public static string DatabaseBackupLocation => ConfigurationManager.AppSettings["InfraTest.DatabaseBackupLocation"];
 
-		public static string InvalidConnectionString
+		// Using this before we change the way we have information about where agg database. This works for tests.
+		private static string getAggConnectionString(string aggName, string analyticsConnectionString)
 		{
-			get
-			{
-				return @"Data Source=nakenjanne;Initial Catalog=Demoreg_TeleoptiCCC7;User Id=sa;Password=cadadi;Connect Timeout=1;";
-			}
+			const string initCatString = "Initial Catalog=";
+			var firstIndex = analyticsConnectionString.IndexOf(initCatString, StringComparison.Ordinal) + initCatString.Length;
+			var lastIndex = analyticsConnectionString.IndexOf(";", firstIndex, StringComparison.Ordinal);
+			lastIndex = lastIndex == -1 ? analyticsConnectionString.Length : lastIndex;
+			return $"{analyticsConnectionString.Substring(0, firstIndex)}{aggName}{analyticsConnectionString.Substring(lastIndex)}";
 		}
-
-		public static string AnalyticsConnectionString
-		{
-			get
-			{
-				return ConfigurationManager.AppSettings["InfraTest.AnalyticsConnectionString"];
-			}
-		}
-			
-		public static string SqlServerName
-		{
-			get
-			{
-				return ConfigurationManager.AppSettings["InfraTest.SqlServerName"];
-			}
-		}
-
-		public static string DatabaseName
-		{
-			get
-			{
-				return ConfigurationManager.AppSettings["InfraTest.DatabaseName"];
-			}
-		}
-
-		public static string DatabaseBackupLocation
-		{
-			get
-			{
-				return ConfigurationManager.AppSettings["InfraTest.DatabaseBackupLocation"];
-			}
-		}
-
 	}
 }

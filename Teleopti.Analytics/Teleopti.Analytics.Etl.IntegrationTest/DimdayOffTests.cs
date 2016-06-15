@@ -61,7 +61,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			const string timeZoneId = "W. Europe Standard Time";
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
 
-			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "");
+			var raptorRepository = new RaptorRepository(InfraTestConfigReader.AnalyticsConnectionString, "", null);
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(), DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), UpdatedBy.Make());
 			jobParameters = new JobParameters(
