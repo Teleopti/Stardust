@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 							{
 								foreach (var skillGroup in _skillGroupPerActivityProvider.FetchOrdered(activity, interval))
 								{
-									//TODO - make this seperate classes/components if we want to keep this
-									var resourcesMoved = shovelPerSkillGroupAndInterval(skillGroup, interval);
+									//TODO - make this seperate classes/components if we want to keep this structure
+									var resourcesMoved = addSubSkillResoures(skillGroup, interval);
 									reducePrimarySkillResources(skillGroup, interval, resourcesMoved);
 								}
 							}
@@ -70,15 +70,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 		}
 
-		private double shovelPerSkillGroupAndInterval(CascadingSkillGroup skillGroup, DateTimePeriod interval)
+		private double addSubSkillResoures(CascadingSkillGroup skillGroup, DateTimePeriod interval)
 		{
 			var resourcesMoved = 0d;
 			var stateHolder = _stateHolder();
 			var remainingResourcesInGroup = skillGroup.Resources;
-
 			var remainingPrimarySkillOverstaff = skillGroup.PrimarySkills
 				.Sum(primarySkill => stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(primarySkill, interval, int.MaxValue).AbsoluteDifference);
-
 			if (!remainingPrimarySkillOverstaff.IsOverstaffed())
 				return 0;
 
