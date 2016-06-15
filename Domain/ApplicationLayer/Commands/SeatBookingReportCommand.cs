@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 
 		public SeatBookingReportCommand(
-			IEnumerable<Guid> locations, IEnumerable<Guid> teams, DateTime startDate, DateTime endDate, int skip, int take)
+			IEnumerable<Guid> locations, IEnumerable<Guid> teams, DateTime startDate, DateTime endDate, int skip, int take, bool showUnseatedOnly)
 		{
 			Locations = locations;
 			Teams = teams;
@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			EndDate = endDate;
 			Skip = skip;
 			Take = take;
+			ShowUnseatedOnly = showUnseatedOnly;
 		}
 
 		public IEnumerable<Guid> Locations { get; set; }
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public DateTime EndDate { get; set; }
 		public int Skip { get; set; }
 		public int Take { get; set; }
+		public bool ShowUnseatedOnly { get; set; }
 	}
 
 

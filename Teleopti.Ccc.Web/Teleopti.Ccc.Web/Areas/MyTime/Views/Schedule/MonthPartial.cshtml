@@ -3,6 +3,16 @@
 	Layout = null;
 }
 
+<script>
+	$(function () {
+		Teleopti.MyTimeWeb.Schedule.Month.SetupTranslationTexts(
+		{
+			seatBookingsTitle: '@Resources.SeatBookings',
+			noSeatBookingsForDate: '@Resources.YouHaveNotBeenAllocatedSeat'
+		});
+	});
+</script>
+
 <div class="navbar navbar-teleopti subnavbar">
 	<div class="container">
 		<ul class="nav navbar-nav navbar-teleopti row submenu">
@@ -48,12 +58,7 @@
 		<div class="cal-month-box" data-bind="foreach: weekViewModels">
 			<div class="cal-row-fluid" data-bind="foreach: dayViewModels">
 				<div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
-					<div class="cal-month-day" data-bind="
-    click: $root.week,
-    css: {
-        'cal-day-outmonth': isOutsideMonth,
-    }
-						    ">
+					<div class="cal-month-day" data-bind="click: $root.week,css: {'cal-day-outmonth': isOutsideMonth,}">
 
 						<!-- ko if: hasAbsence -->
 						<div class="absence" data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }">
@@ -87,6 +92,22 @@
 								<strong>@Resources.Overtime</strong>
 							</div>
 							<!-- /ko -->
+							<!-- ko if: hasSeatBooking-->
+
+							<table class="hidden-xs hidden-sm seat-booking-table">
+
+								<tr class="seat-booking-row" data-bind="foreach: seatBookings">
+									<td>
+										<div class="seatbooking-symbol" data-bind="tooltip: { title: $parent.seatBookingMessage, html: true }"></div>
+									</td>
+									<td>
+										<div data-bind="text: SeatName"></div>
+									</td>
+								</tr>
+							</table>
+
+							<!-- /ko -->
+
 						</div>
 						<!-- /ko -->
 						<!-- ko if: isDayOff && !hasAbsence -->

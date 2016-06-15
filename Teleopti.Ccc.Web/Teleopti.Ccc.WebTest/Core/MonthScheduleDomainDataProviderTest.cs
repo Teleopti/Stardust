@@ -2,8 +2,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.Toggle;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core
@@ -14,11 +17,13 @@ namespace Teleopti.Ccc.WebTest.Core
         private IScheduleProvider scheduleProvider;
 	    private IMonthScheduleDomainDataProvider target;
 
+
         [SetUp]
         public void Setup()
         {
             scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			target = new MonthScheduleDomainDataProvider(scheduleProvider);
+			target = new MonthScheduleDomainDataProvider(scheduleProvider, 
+				new FakeToggleManager(), MockRepository.GenerateMock<ISeatOccupancyProvider>());
         }
 
         [Test]

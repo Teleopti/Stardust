@@ -372,6 +372,56 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(viewModel.SeatBookings.First().BelongsToDate == new DateOnly(2015, 10, 3));
 		}
 
+
+		[Test]
+		public void LoadSeatBookingReportShowOnlyUnseatedCriteriaFalseShouldLoadAll()
+		{
+			var viewModel = doShowOnlyUnseatedCriteriaTest(false);
+			Assert.AreEqual(2, viewModel.SeatBookings.Count());
+		}
+
+
+		[Test]
+		public void LoadSeatBookingReportShowOnlyUnseatedCriteriaFalseShouldShowOnlyAgentsWithNoSeat()
+		{
+			var viewModel = doShowOnlyUnseatedCriteriaTest(true);
+
+			Assert.AreEqual(1, viewModel.SeatBookings.Count());
+			var seatBooking = viewModel.SeatBookings.FirstOrDefault();
+			if (seatBooking != null)
+			{
+				Assert.AreEqual (seatBooking.PersonId, person2.Id);
+				Assert.IsTrue(seatBooking.SeatId == Guid.Empty);
+			}
+		}
+
+		private ISeatBookingReportModel doShowOnlyUnseatedCriteriaTest(bool showOnlyUnseated)
+		{
+			var dateOnly = startDate;
+			var morningBooking = new SeatBooking (person1,
+				dateOnly,
+				dateOnly.Date.AddHours (8),
+				dateOnly.Date.AddHours (12));
+
+			morningBooking.Book (seat1);
+			PersistAndRemoveFromUnitOfWork (morningBooking);
+			updatePersonScheduleDayFromBooking (morningBooking);
+
+			updatePersonScheduleDay (dateOnly.Date.AddHours (13), dateOnly.Date.AddHours (17), dateOnly, person2,
+				morningBooking.BusinessUnit);
+
+			var repo = new SeatBookingRepository (UnitOfWork);
+
+			var criteria = new SeatBookingReportCriteria()
+			{
+				Period = new DateOnlyPeriod (new DateOnly (2015, 10, 1), new DateOnly (2015, 10, 19)),
+				ShowOnlyUnseated = showOnlyUnseated
+			};
+
+			var viewModel = repo.LoadSeatBookingsReport (criteria);
+			return viewModel;
+		}
+
 		[Test]
 		public void ShouldLoadSeatBookingsForSeatIntersectingDayInOrder()
 		{
@@ -451,19 +501,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		
 		private static void updatePersonScheduleDayFromBooking(SeatBooking booking)
 		{
+			updatePersonScheduleDay (booking.StartDateTime, booking.EndDateTime, booking.BelongsToDate, booking.Person,booking.BusinessUnit);
+		}
+
+
+		private static void updatePersonScheduleDay(DateTime startDateTime, DateTime endDateTime, DateOnly belongsToDate, IPerson person, IAggregateRoot businessUnit)
+		{
+
 			var uow = CurrentUnitOfWork.Make();
 			var target = new PersonScheduleDayReadModelPersister(uow, MockRepository.GenerateMock<IMessageBrokerComposite>(),
 				MockRepository.GenerateMock<ICurrentDataSource>());
 
 			var model = new PersonScheduleDayReadModel
 			{
-				Date = booking.StartDateTime,
-				TeamId = booking.Person.MyTeam(booking.BelongsToDate).Id.GetValueOrDefault(),
-				PersonId = booking.Person.Id.GetValueOrDefault(),
-				BusinessUnitId = booking.BusinessUnit.Id.GetValueOrDefault(),
+				Date = startDateTime,
+				TeamId = person.MyTeam(belongsToDate).Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				BusinessUnitId = businessUnit.Id.GetValueOrDefault(),
 				IsDayOff = false,
-				Start = booking.StartDateTime,
-				End = booking.EndDateTime,
+				Start = startDateTime,
+				End = endDateTime,
 				Model = "{shift: blablabla}",
 				ScheduleLoadTimestamp = DateTime.UtcNow
 			};
@@ -471,6 +528,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId,
 				model.BusinessUnitId, new[] { model }, false);
 		}
+
 
 		protected override Repository<ISeatBooking> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{

@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var query = Session.CreateSQLQuery(
 				@"exec dbo.LoadScheduleAndSeatBookingInfo @startDate=:startDate, @endDate =:endDate, 
-					@teamIdList=:teamIdList, @locationIdList =:locationIdList, @businessUnitId=:businessUnitId ");
+					@teamIdList=:teamIdList, @locationIdList =:locationIdList, @businessUnitId=:businessUnitId, @unseatedOnly=:unseatedOnly ");
 
 			setQueryResultTypes(query);
 			setQueryParameters(reportCriteria, query);
@@ -180,7 +180,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetDateOnly("endDate", reportCriteria.Period.EndDate)
 				.SetString("teamIdList", getTeamCriteria(reportCriteria))
 				.SetString("locationIdList", getLocationCriteria(reportCriteria))
-				.SetGuid("businessUnitId", getBusinessUnitId());
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetBoolean("unseatedOnly", reportCriteria.ShowOnlyUnseated);
 		}
 
 		private Guid getBusinessUnitId()

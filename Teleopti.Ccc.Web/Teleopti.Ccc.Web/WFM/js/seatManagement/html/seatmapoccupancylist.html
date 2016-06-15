@@ -8,11 +8,16 @@
 		<button class="wfm-btn wfm-btn-invis-primary cancel-operation pull-right" ng-click="vm.showPeopleSelection = false;">{{'Cancel' | translate}}</button>
 	</div>
 
-	<people-selection-list ng-show="vm.showPeopleSelection" selected-people="vm.selectedPeople" clear-selected-people="vm.resetPersonSearch"></people-selection-list>
+	<div class="add-booking-detail" ng-show="vm.showPeopleSelection">
 
+		<div class="date-range-picker-wrapper">
+			<date-range-picker ng-model="vm.selectedPeriod" template-type="vm.dateRangeTemplateType"></date-range-picker>
+		</div>
+		<people-selection-list selected-people="vm.selectedPeople" clear-selected-people="vm.resetPersonSearch"></people-selection-list>
+	</div>
 	<div class="seat-booking-list" ng-show="!vm.showPeopleSelection">
 		<ul class="wfm-list" ng-repeat="detail in vm.occupancyDetails">
-			
+
 			<li class="active" ng-repeat="booking in detail.Occupancies" ng-class="{'default-cursor':booking.IsEmpty}">
 				<span class="list-item-container seat-booking-seatname pull-left" ng-if="$index == 0">{{'Seat'|translate}} {{detail.SeatName}}:</span>
 

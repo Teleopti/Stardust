@@ -13,7 +13,8 @@ CREATE PROCEDURE [dbo].[LoadScheduleAndSeatBookingInfo]
 	@endDate smalldatetime, 
 	@teamIdList varchar(max) = null,
 	@locationIdList varchar(max) = null,
-	@businessUnitId uniqueidentifier
+	@businessUnitId uniqueidentifier,
+	@unseatedOnly bit
 AS
 BEGIN
 
@@ -71,6 +72,8 @@ WHERE personSchedule.BusinessUnitId = @businessUnitId and
 	
 	AND (EXISTS (select Id from @teamids where personSchedule.TeamId = Id) or @teamIdList IS NULL)
 	AND (EXISTS (select Id from @locationids where loc.Id = Id) or @locationIdList IS NULL)
+	
+	AND (@unseatedOnly = 0 or (@unseatedOnly = 1 and SeatBooking.Seat IS NULL and personSchedule.IsDayOff = 0))
   
   ORDER BY personSchedule.BelongsToDate ASC, SiteName, TeamName, LastName, FirstName
  

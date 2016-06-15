@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.Providers
 			{
 				Teams = command.Teams.IsNullOrEmpty()? null : _teamRepository.FindTeams (command.Teams),
 				Locations = command.Locations.IsNullOrEmpty()? null : _locationRepository.FindLocations (command.Locations.ToList()),
-				Period = new DateOnlyPeriod (new DateOnly (command.StartDate), new DateOnly (command.EndDate))
+				Period = new DateOnlyPeriod (new DateOnly (command.StartDate), new DateOnly (command.EndDate)),
+				ShowOnlyUnseated = command.ShowUnseatedOnly
 			};
 
 			if (command.Take != 0)

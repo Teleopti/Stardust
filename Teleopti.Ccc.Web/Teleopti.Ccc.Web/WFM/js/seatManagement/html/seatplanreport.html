@@ -47,15 +47,15 @@
 
 											<div>
 												<div class="wfm-radio">
-													<input type="radio"  name="unseated-agents-toggle" checked />
-													<label ng-click="vm.showOnlyUnseatedAgents = false">
+													<input type="radio" name="unseated-agents-toggle" id="showAllToggle" checked ng-click="vm.setShowAllAgents(true)" />
+													<label for="showAllToggle">
 														<span class="wfm-radio-toggle"></span>
 														<span class="wfm-radio-label">{{'ShowAll' | translate}}</span>
 													</label>
 												</div>
 												<div class="wfm-radio">
-													<input type="radio"  name="unseated-agents-toggle" />
-													<label ng-click="vm.showAllAgents = false">
+													<input type="radio"  name="unseated-agents-toggle" id="showUnseatedToggle" ng-click="vm.setShowAllAgents(false)"/>
+													<label for="showUnseatedToggle">
 														<span class="wfm-radio-toggle"></span>
 														<span class="wfm-radio-label">{{'ShowOnlyAgentsWithNoSeat' | translate}}</span>
 													</label>

@@ -8,5 +8,6 @@ namespace Teleopti.Interfaces.Infrastructure
 		IEnumerable<ISeatMapLocation> Locations { get; set; }
 		IEnumerable<ITeam> Teams { get; set; }
 		DateOnlyPeriod Period { get; set; }
+		bool ShowOnlyUnseated { get; set; }
 	}
 }

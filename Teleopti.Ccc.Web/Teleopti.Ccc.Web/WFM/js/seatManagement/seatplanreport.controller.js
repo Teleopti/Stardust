@@ -7,11 +7,10 @@
 
 	function seatPlanReportCtrl($scope, seatPlanService) {
 		var vm = this;
-		vm.showAllAgents = true;
-		vm.showOnlyUnseatedAgents = false;
 		vm.temp = {};
-		
-	vm.paginationOptions = { pageNumber: 1, pageSize: 34, totalPages: 1 };
+		vm.showOnlyUnseatedAgents = false;
+
+		vm.paginationOptions = { pageNumber: 1, pageSize: 34, totalPages: 1 };
 
 		vm.getSeatBookings = function (options) {
 			vm.isLoadingReport = options.isLoadingReportToDisplay;
@@ -20,7 +19,7 @@
 				endDate: moment(vm.selectedPeriod.endDate).format('YYYY-MM-DD'),
 				teams: vm.selectedTeams,
 				locations: vm.selectedLocations,
-				onlySeated: vm.showOnlyUnseatedAgents,
+				showUnseatedOnly: vm.showOnlyUnseatedAgents,
 				skip: options.skip,
 				take: options.take
 			};
@@ -32,6 +31,17 @@
 
 		vm.dateFilterIsValid = function () {
 			return (vm.selectedPeriod && vm.selectedPeriod.startDate <= vm.selectedPeriod.endDate);
+		};
+
+		vm.showAllAgents = function () {
+
+			console.log(!vm.showOnlyUnseatedAgents);
+
+			return !vm.showOnlyUnseatedAgents;
+		};
+
+		vm.setShowAllAgents = function (value) {
+			vm.showOnlyUnseatedAgents = !value;
 		};
 
 		vm.toggleFilterVisibility = function () {
@@ -60,7 +70,7 @@
 			vm.paginationOptions.pageNumber = 1;
 
 			vm.getSeatBookings({
-				skip:  (vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
+				skip: (vm.paginationOptions.pageNumber - 1) * vm.paginationOptions.pageSize,
 				take: vm.paginationOptions.pageSize,
 				callback: getSeatBookingsCallback,
 				isLoadingReportToDisplay: true
@@ -73,7 +83,7 @@
 				take: vm.paginationOptions.pageSize,
 				callback: getSeatBookingsCallback,
 				isLoadingReportToDisplay: true
-			});		
+			});
 		};
 
 		vm.init = function () {
@@ -84,12 +94,14 @@
 			vm.temp.selectedTeams = angular.copy(vm.selectedTeams);
 			vm.temp.selectedLocations = angular.copy(vm.selectedLocations);
 			vm.temp.selectedPeriod = angular.copy(vm.selectedPeriod);
+			vm.temp.showOnlyUnseatedAgents = vm.showOnlyUnseatedAgents;
 		};
 
 		function reloadCachedFilterValuesAfterCancel() {
 			vm.selectedTeams = angular.copy(vm.temp.selectedTeams);
 			vm.selectedLocations = angular.copy(vm.temp.selectedLocations);
 			vm.selectedPeriod = angular.copy(vm.temp.selectedPeriod);
+			vm.showOnlyUnseatedAgents = vm.temp.showOnlyUnseatedAgents;
 		};
 
 		function getSeatBookingsCallback(data) {

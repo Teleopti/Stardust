@@ -330,12 +330,31 @@ seatmap-editor{
 	min-width:310px;
 }
 
-seatmap-occupancy-detail{
-	top: 0;
-	bottom: 0;
-	position: absolute;
-	right: 0;
-	left: 0;
+
+seatmap-occupancy-detail {
+    top: 0;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+    left: 0;
+
+    .add-booking-detail {
+        top: 50px;
+        position: relative;
+        
+        .date-range-picker-wrapper{
+            width: 250px;
+        }
+       
+
+        .input-prepend input[type=text]{
+            width: 90% !important;
+        }
+
+        .people-search-input{
+
+        }
+    }
 }
 
 .seatbooking-operations-add, .seatbooking-operations-cancel {
@@ -359,9 +378,9 @@ seatmap-occupancy-detail{
 }
 
 people-selection-list{
-	top: 40px;
+	top: 10px;
 	bottom: 0;
-	position: absolute;
+	position: relative;
 	right: 0;
 	left: 0;
 	overflow:hidden;
@@ -372,9 +391,9 @@ people-selection-list>div.view-header{
 }	
 
 people-selection-list .panel{
-	top: 0;
-	bottom: 90px;
-	position: absolute;
+	/*top: 0;
+	bottom: 90px;*/
+	position: relative;
 	right: 0;
 	left: 0;
 

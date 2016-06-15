@@ -17,6 +17,7 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
+	var self = this; 
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
@@ -62,10 +63,16 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 		    completelyLoaded = completelyLoadedCallback;
 		    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel(Teleopti.MyTimeWeb.Portal.NavigateTo);
+			vm.userTexts = self.userTexts;
 		    ko.applyBindings(vm, $('#page')[0]);
 		    _fetchMonthData();
 		    readyForInteractionCallback();
 		},
+
+		SetupTranslationTexts: function (userTexts) {
+			self.userTexts = userTexts;
+		},
+
 		PartialDispose: function () {
 		    _cleanBindings();
 		}

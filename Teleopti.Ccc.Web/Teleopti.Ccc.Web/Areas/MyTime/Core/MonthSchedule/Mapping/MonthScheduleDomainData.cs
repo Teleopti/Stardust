@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
+using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
@@ -13,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
     public class MonthScheduleDayDomainData
     {
         public IScheduleDay ScheduleDay { get; set; }
+	    public OccupancyViewModel[] SeatBookingInformation { get; set; }
     }
 }

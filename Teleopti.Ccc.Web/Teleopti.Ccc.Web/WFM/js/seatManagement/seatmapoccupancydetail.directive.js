@@ -7,18 +7,30 @@
 
 	function seatMapOccupancyDirectiveController(utils, seatPlanService, seatMapService, NoticeService, seatmapTranslator) {
 		var vm = this;
-
 		vm.selectedPeople = [];
 		vm.showPeopleSelection = false;
 		vm.hasOpenedPersonSelectionPanel = false;
 		vm.previousSelectedSeatIds = [];
+		vm.dateRangeTemplateType = 'popup';
+
+
+		vm.selectedPeriod = { startDate: vm.scheduleDate, endDate: vm.scheduleDate };
 
 		vm.asignAgentsToSeats = function () {
-			var selectedDay = moment(vm.scheduleDate).format("YYYY-MM-DD");
-			seatPlanService.seatPlan.add({ StartDate: selectedDay, EndDate: selectedDay, PersonIds: vm.selectedPeople, SeatIds: vm.previousSelectedSeatIds, locations: [vm.parentVm.seatMapId] })
-									.$promise.then(function (seatPlanResultMessage) {
-										onSeatPlanCompleted(seatPlanResultMessage);
-									});
+			//var selectedDay = moment(vm.scheduleDate).format("YYYY-MM-DD");
+
+			console.log(vm.selectedPeriod);
+
+			seatPlanService.seatPlan.add(
+				{
+					StartDate: moment(vm.selectedPeriod.startDate).format("YYYY-MM-DD"),
+					EndDate: moment(vm.selectedPeriod.endDate).format("YYYY-MM-DD"),
+					PersonIds: vm.selectedPeople,
+					SeatIds: vm.previousSelectedSeatIds,
+					locations: [vm.parentVm.seatMapId]
+			}).$promise.then(function (seatPlanResultMessage) {
+				onSeatPlanCompleted(seatPlanResultMessage);
+			});
 		};
 		vm.getDisplayTime = function (booking) {
 			return utils.getSeatBookingTimeDisplay(booking);
