@@ -329,7 +329,6 @@
     <Compile Include="Cascading\SkillGroupPerActivityProvider.cs" />
     <Compile Include="Collection\SkillStaffPeriodExtensions.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
-    <Compile Include="Forecasting\SkillStaffPeriodExtensions.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Infrastructure\CleanFailedQueueHandler.cs" />
     <Compile Include="Infrastructure\Events\CleanFailedQueue.cs" />

@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		public int Compare(CascadingSkillGroup first, CascadingSkillGroup second)
 		{
-			var primaryDiff = second.PrimarySkill.CascadingIndex.Value - first.PrimarySkill.CascadingIndex.Value;
+			//TODO: fix
+			var primaryDiff = second.PrimarySkills.First().CascadingIndex.Value - first.PrimarySkills.First().CascadingIndex.Value;
 			if (primaryDiff != 0)
 			{
 				return primaryDiff;

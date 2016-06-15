@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0.5);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldMoveResourcesFromParallelPrimarySkillsWithDifferentDemand()
 		{
 			var scenario = new Scenario("_");
@@ -184,15 +184,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
 			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA1, skillA2, skillB });
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
-			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			ass.AddActivity(activity, new TimePeriod(8, 0, 9, 0));
 			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA1, skillDayA2, skillDayB });
 
 			Target.ForDay(dateOnly);
 
 			skillDayA1.SkillStaffPeriodCollection.First().AbsoluteDifference
-				  .Should().Be.EqualTo(0.08);
+				  .Should().Be.IncludedIn(0.079, 0.081); //double rounding errors
 			skillDayA2.SkillStaffPeriodCollection.First().AbsoluteDifference
-				  .Should().Be.EqualTo(0.12);
+				  .Should().Be.IncludedIn(0.119, 0.121); //double rounding errors
 			skillDayB.SkillStaffPeriodCollection.First().AbsoluteDifference
 				  .Should().Be.EqualTo(0);
 		}
