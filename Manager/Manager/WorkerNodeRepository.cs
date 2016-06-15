@@ -192,10 +192,8 @@ namespace Stardust.Manager
 							trans.Commit();
 						}
 					}
-					connection.Close();
 				}
 			}
-
 			catch (Exception exp)
 			{
 				this.Log().ErrorWithLineNumber(exp.Message, exp);
