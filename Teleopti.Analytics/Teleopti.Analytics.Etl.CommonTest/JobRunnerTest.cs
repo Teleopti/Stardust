@@ -8,6 +8,7 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.JobLog;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Common.Interfaces.Transformer.IJobResult;
 using JobResult = Teleopti.Analytics.Etl.Common.Transformer.Job.JobResult;
@@ -27,6 +28,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 			IBusinessUnit businessUnit = new BusinessUnit("myBU");
 			var businessUnits = new List<IBusinessUnit> { businessUnit };
 			var parameters = MockRepository.GenerateMock<IJobParameters>();
+			parameters.Stub(x => x.ToggleManager).Return(new FakeToggleManager());
 			var jobHelper = MockRepository.GenerateMock<IJobHelper>();
 
 			job.Stub(x => x.JobParameters).Return(parameters);
@@ -58,6 +60,7 @@ namespace Teleopti.Analytics.Etl.CommonTest
 				businessUnit2
 			};
 			var parameters = MockRepository.GenerateMock<IJobParameters>();
+			parameters.Stub(x => x.ToggleManager).Return(new FakeToggleManager());
 			var jobHelper = MockRepository.GenerateMock<IJobHelper>();
 
 			job.Stub(x => x.JobParameters).Return(parameters);

@@ -35,12 +35,12 @@ namespace Teleopti.Analytics.Etl.Common
 				jobResultCollection.Add(jobResult);
 			}
 
-			sendIndexMaintenanceEvent(job, jobResultCollection);
+			publishIndexMaintenanceEvent(job, jobResultCollection);
 
 			return jobResultCollection;
 		}
 
-		private static void sendIndexMaintenanceEvent(IJob job, IList<IJobResult> jobResultCollection)
+		private static void publishIndexMaintenanceEvent(IJob job, IList<IJobResult> jobResultCollection)
 		{
 			if (job.JobParameters.ToggleManager.IsEnabled(Toggles.ETL_FasterIndexMaintenance_38847))
 			{
