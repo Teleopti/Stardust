@@ -410,4 +410,5 @@ describe('RtaAgentsCtrl', function() {
 
 		expect(scope.agents[0].Shift[0].Name).toEqual('Phone');
 	});
+
 });

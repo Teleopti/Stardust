@@ -203,6 +203,12 @@
 					return secondsToPercent(moment(time).diff(offset, 'seconds'));
 				}
 
+				function timePeriodToPercent(windowStart, startTime, endTime) {
+					var start = moment(startTime) > windowStart ? moment(startTime) : windowStart;
+					var lengthSeconds = moment(endTime).diff(start, 'seconds');
+					return secondsToPercent(lengthSeconds);
+				}
+
 				function buildTimeline(states) {
 					var timeline = function(time) {
 						return {
@@ -239,38 +245,21 @@
 								return {
 									Color: s.Color,
 									Offset: Math.max(timeToPercent(states.Time, s.StartTime), 0) + '%',
-									Width: function () {
-										var start = moment(s.StartTime) > windowStart ? moment(s.StartTime) : windowStart;
-										var lengthSeconds = moment(s.EndTime).diff(start, 'seconds');
-										return Math.min(secondsToPercent(lengthSeconds), 100) + '%';
-									}(),
+									Width: Math.min(timePeriodToPercent(windowStart, s.StartTime, s.EndTime), 100) + "%",
 									Name: s.Name,
 									Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
 								};
 							});
 						if (agentInfo.length > 0) {
 
-							var shiftTimeBars = [];
-							if (state.Alarm == "Out Adherence" || state.Alarm == "Positive")
-								shiftTimeBars.push({
-									width: alarmPercentage(state.TimeInRule),
-									right: "75%"
-								});
-							if (agentInfo[0].Name.substr(0, 1) == "A")
-								shiftTimeBars.push({
-									width: "5%",
-									right: "80%"
-								});
-							if (agentInfo[0].Name.substr(0, 1) == "J")
-								shiftTimeBars.push({
-									width: "2%",
-									right: "82%"
-								});
-							if (agentInfo[0].Name.substr(0, 1) == "P")
-								shiftTimeBars.push({
-									width: "4%",
-									right: "90%"
-								});
+							var OutOfAdherences = state.OutOfAdherences || [];
+							var outOfAdherenceTimeBars = OutOfAdherences.map(function(t) {
+								t.EndTime = t.EndTime || states.Time;
+								return {
+									Offset: Math.max(timeToPercent(states.Time, t.StartTime), 0) + '%',
+									Width: Math.min(timePeriodToPercent(windowStart, t.StartTime, t.EndTime), 100) + "%"
+								};
+							});
 
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
@@ -295,7 +284,7 @@
 									return percentForTimeBar(state.TimeInAlarm) + "%";
 
 								}(),
-								ShiftTimeBars: shiftTimeBars,
+								OutOfAdherences: outOfAdherenceTimeBars,
 								Shift: shift
 							});
 						}
