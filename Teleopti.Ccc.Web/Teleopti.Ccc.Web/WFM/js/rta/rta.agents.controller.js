@@ -229,29 +229,23 @@
 						state.Shift = state.Shift || [];
 
 						var now = moment(states.Time);
-						var start = now.clone().add(-1, 'hours');
-						var end = now.clone().add(3, 'hours');
+						var windowStart = now.clone().add(-1, 'hours');
+						var windowEnd = now.clone().add(3, 'hours');
 						var shift = state.Shift
 							.filter(function(layer) {
-								return start < moment(layer.EndTime) && end > moment(layer.StartTime);
+								return windowStart < moment(layer.EndTime) && windowEnd > moment(layer.StartTime);
 							})
 							.map(function(s) {
-								var layerStartTime = s.StartTime;
-								var lengthSeconds = moment(s.EndTime).diff(moment(layerStartTime) > start ? moment(layerStartTime) : start, 'seconds');
 								return {
 									Color: s.Color,
-									Offset: function() {
-										var result = timeToPercent(states.Time, layerStartTime);
-										result = result < 0 ? 0 : result;
-										return result + '%'
-									}(),
-									Width: function() {
-										var result = secondsToPercent(lengthSeconds);
-										result = result > 100 ? 100 : result;
-										return result + '%'
+									Offset: Math.max(timeToPercent(states.Time, s.StartTime), 0) + '%',
+									Width: function () {
+										var start = moment(s.StartTime) > windowStart ? moment(s.StartTime) : windowStart;
+										var lengthSeconds = moment(s.EndTime).diff(start, 'seconds');
+										return Math.min(secondsToPercent(lengthSeconds), 100) + '%';
 									}(),
 									Name: s.Name,
-									Class: getClassForActivity(states.Time, layerStartTime, s.EndTime)
+									Class: getClassForActivity(states.Time, s.StartTime, s.EndTime)
 								};
 							});
 						if (agentInfo.length > 0) {
@@ -270,15 +264,12 @@
 								TimeInAlarm: state.TimeInAlarm,
 								TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
 								ShiftTimeBar: function() {
-
-									var alarmPercentage = function(seconds) {
-										var result = secondsToPercent(seconds);
-										return result > 25 ? 25 : result;
+									var percentForTimeBar = function(seconds) {
+										return Math.min(secondsToPercent(seconds), 25);
 									}
-
 									if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
-										return (state.TimeInAlarm ? alarmPercentage(state.TimeInRule) : 0) + "%";
-									return alarmPercentage(state.TimeInAlarm) + "%";
+										return (state.TimeInAlarm ? percentForTimeBar(state.TimeInRule) : 0) + "%";
+									return percentForTimeBar(state.TimeInAlarm) + "%";
 
 								}(),
 								Shift: shift
