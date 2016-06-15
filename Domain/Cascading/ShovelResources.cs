@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -59,23 +60,42 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var remainingOverstaff = skillStaffPeriodFrom.AbsoluteDifference;
 			if (!remainingOverstaff.IsOverstaffed())
 				return;
+
 			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
 			{
-				var resourcesToMove = Math.Min(remainingOverstaff, remainingResourcesInGroup)/cascadingSkillGroupItem.NumberOfSkills;
+				var totalUnderStaffing = 0d;
+				foreach (var skill in cascadingSkillGroupItem.Skills)
+				{
+					var skillStaffPeriod = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skill, interval, 0);
+					var absoluteDifference = skillStaffPeriod.AbsoluteDifference;
+
+					if (absoluteDifference.IsUnderstaffed())
+					{
+						totalUnderStaffing += Math.Abs(absoluteDifference);
+					}
+				}
+
+				var resourcesToMove = Math.Min(remainingOverstaff, remainingResourcesInGroup);
+		
 				foreach (var skillToMoveTo in cascadingSkillGroupItem.Skills)
 				{
 					var skillStaffPeriodTo = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 					var skillToMoveToAbsoluteDifference = skillStaffPeriodTo.AbsoluteDifference;
+
 					if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 						continue;
-					resourcesToMove = Math.Min(-skillToMoveToAbsoluteDifference, resourcesToMove);
-					skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, resourcesToMove);
-					remainingResourcesInGroup -= resourcesToMove;
-					remainingOverstaff -= resourcesToMove;
+
+					var skillToMoveToMaxResourcesToHave = Math.Abs(skillToMoveToAbsoluteDifference / totalUnderStaffing) * resourcesToMove;
+					var resourcesToMoveForSkill = Math.Min(-skillToMoveToAbsoluteDifference, skillToMoveToMaxResourcesToHave);
+					var remainingResourcesToMove = Math.Min(-skillToMoveToAbsoluteDifference, resourcesToMoveForSkill);
+
+					skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, remainingResourcesToMove);
+					remainingResourcesInGroup -= remainingResourcesToMove;
+					remainingOverstaff -= remainingResourcesToMove;
 					if (remainingOverstaff.IsZero() || remainingResourcesInGroup.IsZero())
 						return;
 				}
 			}
-		}
+		}	
 	}
 }

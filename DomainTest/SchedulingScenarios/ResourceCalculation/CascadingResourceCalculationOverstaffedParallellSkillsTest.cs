@@ -59,11 +59,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(-0.75);
 		}
 
-		[Test, Ignore(
-@"2 B fixed. 
-Need info from Anders what to assert/expect.
-Also - when this test is fixed, we need some similar test when B1 or B2 doesn't have 'enough' understaffing.
-")]
+		[Test]
 		public void ShouldMoveResourcesToTwoSkillsWithDifferentDemand()
 		{
 			var scenario = new Scenario("_");
@@ -89,20 +85,12 @@ Also - when this test is fixed, we need some similar test when B1 or B2 doesn't 
 
 			Target.ForDay(dateOnly);
 
-			//should we expect.... (=put everything on B2 because it will still be more understaffed than B1 after the shoveling
-			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(0);
-			skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(-1);
-			skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference
-				.Should().Be.EqualTo(-1.5);
-			//...or should we expect.... (=put based on % - twice as much on B2 than B1 because the demand is twice as high)
 			var b1Understaffed = -skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference;
 			var b2Understaffed = -skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference;
-			(Math.Abs(b1Understaffed*2 - b2Understaffed) < 0.0001).Should().Be.True();
+			(Math.Abs(b1Understaffed * 2 - b2Understaffed) < 0.0001).Should().Be.True();
 		}
 
-		[Test, Ignore("2 B fixed. Probably easiest to wait fixing this until we know how to handle ShouldMoveResourcesToTwoSkillsWithDifferentDemand above (impl to fix this one will probably differ)")]
+		[Test]
 		public void ShouldMoveAllResourcesToOneCascadingSkillIfOnlyThatSkillHasDemand()
 		{
 			var scenario = new Scenario("_");
