@@ -46,6 +46,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 						IsSnapshot = false
 					});
 		}
-		
+
+		[Given(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
+		public void GivenAtSetsHisPhoneStateTo(DateTime time, string personName, string stateCode)
+		{
+			CurrentTime.Set(time);
+			WhenSetsHisPhoneStateToOnDatasource(personName, stateCode);
+		}
+
 	}
 }

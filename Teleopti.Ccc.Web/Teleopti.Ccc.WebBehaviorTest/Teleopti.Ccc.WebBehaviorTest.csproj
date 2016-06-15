@@ -861,6 +861,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\RecentOutOfAdherences_39145.feature.cs">
+      <DependentUpon>RecentOutOfAdherences_39145.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\PauseButton_39144.feature.cs">
       <DependentUpon>PauseButton_39144.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1375,6 +1380,10 @@
     <None Include="Wfm\RealTimeAdherence\MonitorBySkills.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MonitorBySkills.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\RecentOutOfAdherences_39145.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RecentOutOfAdherences_39145.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\PauseButton_39144.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
