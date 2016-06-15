@@ -272,7 +272,7 @@
 		}
 		/*TODO: Fix the problem that error message was hidden; should be removed when it's fixed in StyleGuide*/
 		.error-msg-container {
-			z-index: 10000;
+			z-index: 999;
 		}
 	}
 }
