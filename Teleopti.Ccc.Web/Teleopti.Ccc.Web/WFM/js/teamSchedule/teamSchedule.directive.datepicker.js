@@ -27,10 +27,11 @@
 					tElement[0].querySelectorAll('button')
 				);
 				return function postLink(scope, element) {
-					scope.$watch(function() {
+					scope.$watch(function () {
 						return scope.vm.selectedDate && scope.vm.selectedDate.toDateString();
-					}, function() {
-						scope.vm.shortDateFormat = moment(scope.vm.selectedDate).format('YYYY-MM-DD');
+					}, function () {
+						if (scope.vm.selectedDate != null && !isNaN(scope.vm.selectedDate.getTime()) && scope.vm.selectedDate.getTime() > 0)
+							scope.vm.shortDateFormat = moment(scope.vm.selectedDate).format('YYYY-MM-DD');
 					});
 					element.removeAttr('tabindex');
 				};
@@ -43,27 +44,35 @@
 
 		vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
 
+		vm.currentDateString = vm.shortDateFormat;
+
 		vm.afterDateChangeDatePicker = function (curDate) {
 			vm.toggleCalendar();
 			vm.afterDateChange(curDate);
 		};
 
-		vm.afterDateChange = function(currentDate) {
-			vm.selectedDate = new Date(currentDate);
-			if (!isNaN(vm.selectedDate.getTime())) {
-				vm.shortDateFormat = moment(vm.selectedDate).format('YYYY-MM-DD');
-				vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
+		vm.afterDateChangeInput = function (currentDateStr) {
+			if (currentDateStr != vm.currentDateString) {
+				vm.currentDateString = currentDateStr;
+				var currentDay = new Date(currentDateStr);
+
+				if (!isNaN(currentDay.getTime()) && currentDay.getTime() > 0) {
+					vm.selectedDate = new Date(currentDateStr);
+					vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }) });
+				} else {
+					vm.isInputDateValid = false;
+				}
 			}
 		};
 
 		vm.gotoPreviousDate = function () {
 			var currentDate = moment(vm.selectedDate).add(-1, "day").toDate();
-			vm.afterDateChange(currentDate);
+			vm.afterDateChangeInput(currentDate);
 		};
 
 		vm.gotoNextDate = function () {
 			var currentDate = moment(vm.selectedDate).add(1, "day").toDate();
-			vm.afterDateChange(currentDate);
+			vm.afterDateChangeInput(currentDate);
 		};
 
 		vm.toggleCalendar = function () {

@@ -17,7 +17,7 @@
 			vm.availableAbsenceTypesLoaded = true;
 		});
 
-		vm.isTimeRangeValid = function() {
+		vm.isTimeRangeValid = function () {
 			return vm.isAbsenceTimeValid() || vm.isAbsenceDateValid();
 		}
 
@@ -31,11 +31,11 @@
 
 		vm.getDefaultAbsenceStartTime = function () {
 			var curDateMoment = moment(vm.selectedDate());
-			var personIds = vm.selectedAgents.map(function(agent) { return agent.personId; });
+			var personIds = vm.selectedAgents.map(function (agent) { return agent.personId; });
 			return scheduleManagementSvc.getEarliestStartOfSelectedSchedule(curDateMoment, personIds);
 		}
 
-		vm.getDefaultAbsenceEndTime = function() {
+		vm.getDefaultAbsenceEndTime = function () {
 			return moment(vm.getDefaultAbsenceStartTime()).add(1, 'hour').toDate();
 		}
 
@@ -73,7 +73,7 @@
 			});
 		};
 
-		vm.updateDateAndTimeFormat = function() {
+		vm.updateDateAndTimeFormat = function () {
 			var timeFormat = $locale.DATETIME_FORMATS.shortTime;
 			vm.showMeridian = timeFormat.indexOf("h:") >= 0 || timeFormat.indexOf("h.") >= 0;
 		}
@@ -118,17 +118,27 @@
 			scope.vm.selectedDate = containerCtrl.getDate;
 			scope.vm.trackId = containerCtrl.getTrackId();
 			scope.vm.getActionCb = containerCtrl.getActionCb;
-			scope.vm.isAddFullDayAbsenceAvailable = function() {
+			scope.vm.isAddFullDayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
 			};
-			scope.vm.isAddIntradayAbsenceAvailable = function() {
+
+			scope.vm.isAddIntradayAbsenceAvailable = function () {
 				return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
-			}
+			};
 
 			scope.vm.timeRange = {
 				startTime: selfCtrl.getDefaultAbsenceStartTime(),
 				endTime: selfCtrl.getDefaultAbsenceEndTime()
 			};
+
+			scope.$watch(function () { return scope.vm.isFullDayAbsence; }, function (newValue, oldValue) {
+				if (newValue) {
+					scope.vm.timeRange = {
+						startTime: selfCtrl.getDefaultAbsenceStartTime(),
+						endTime: selfCtrl.getDefaultAbsenceEndTime()
+					};
+				}
+			});
 
 			scope.vm.isFullDayAbsence = scope.vm.isAddFullDayAbsenceAvailable();
 

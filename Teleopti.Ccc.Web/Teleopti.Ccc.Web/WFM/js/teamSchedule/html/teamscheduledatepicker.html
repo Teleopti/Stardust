@@ -4,7 +4,7 @@
 	</button>
 
 	<input type="text" id="teamschedule-datepicker-input" class="pointer" ng-model="vm.shortDateFormat"
-		   ng-keyup="$event.keyCode == 13 && vm.afterDateChange(vm.shortDateFormat)"/>
+		   ng-change="vm.afterDateChangeInput(vm.shortDateFormat)" />
 
 	<div class="wfm-datepicker-wrap" ng-if="vm.isCalendarOpened" ng-outside-click="vm.isCalendarOpened = false;">
 		<div class="sub-header" ng-if="false">
