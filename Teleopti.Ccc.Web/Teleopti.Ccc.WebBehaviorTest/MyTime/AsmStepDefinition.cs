@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var xmlStartDate = "D" + XmlConvert.ToString(start, XmlDateTimeSerializationMode.Unspecified);
 			var xmlEndDate = "D" + XmlConvert.ToString(end, XmlDateTimeSerializationMode.Unspecified);
 
-			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);";
+			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}', DomainType : 'IScheduleChangedInDefaultScenario'}};Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);";
 
 			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
 			Browser.Interactions.Javascript(formattedJs);
