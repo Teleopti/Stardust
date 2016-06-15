@@ -350,6 +350,44 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
 			result.First().Messages.Contains(Resources.ShiftLengthExceed36Hours).Should().Be.True();
 		}
+		[Test]
+		public void ShouldInvokeMoveShiftLayerCommandWhenMoveToTimeMakeShiftLengthIs36Hours()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MoveActivity, person, date);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+			var personAss = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person,
+				new DateTimePeriod(2016, 4, 16, 8, 2016, 4, 16, 16));
+			personAss.AddActivity(ActivityFactory.CreateActivity("ac"), new DateTimePeriod(2016, 4, 16, 2, 2016, 4, 17, 13));
+			personAss.ShiftLayers.ForEach(x => x.WithId());
+			PersonAssignmentRepo.Add(personAss);
+			
+			var input = new MoveActivityFormData
+			{
+				TrackedCommandInfo = new TrackedCommandInfo(),
+				PersonActivities = new List<PersonActivityItem>
+				{
+					new PersonActivityItem
+					{
+						PersonId = person.Id.Value,
+						ShiftLayerIds = new List<Guid> {personAss.ShiftLayers.First().Id.Value}
+					}
+				},
+				Date = date,
+				StartTime = new DateTime(2016, 4, 17, 6, 0, 0)
+			};
+			ActivityCommandHandler.ResetCalledCount();
+			var result = Target.MoveActivity(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+		}
 
 		[Test]
 		public void ShouldCovertNewStartToUTC()

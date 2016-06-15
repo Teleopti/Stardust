@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				if (layerToMoveTimeMap[l.Id.Value].Add(l.Period.ElapsedTime()) > latestEnd)
 					latestEnd = layerToMoveTimeMap[l.Id.Value].Add(l.Period.ElapsedTime());
 			});
-			return latestEnd.Subtract(earliestStart).Duration() < new TimeSpan(36, 0, 0);
+			return latestEnd.Subtract(earliestStart).Duration() <= new TimeSpan(36, 0, 0);
 		}
 	}
 
