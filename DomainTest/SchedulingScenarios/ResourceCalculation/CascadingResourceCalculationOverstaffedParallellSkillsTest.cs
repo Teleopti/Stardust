@@ -124,6 +124,45 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				.Should().Be.EqualTo(0);
 		}
 
+		[Test]
+		public void ShouldMoveAllResourcesToOneCascadingSkillIfOtherParallelSkillIsOverstaffed()
+		{
+			var scenario = new Scenario("_");
+			var activity = new Activity("_");
+			var dateOnly = DateOnly.Today;
+			var skillA = new Skill("A", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillA.SetCascadingIndex_UseFromTestOnly(1);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillA, new TimePeriod(8, 0, 9, 0));
+			var skillDayA = skillA.CreateSkillDayWithDemand(scenario, dateOnly, 0);
+			var skillB1 = new Skill("B1", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB1.SetCascadingIndex_UseFromTestOnly(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB1, new TimePeriod(8, 0, 9, 0));
+			var skillDayB1 = skillB1.CreateSkillDayWithDemand(scenario, dateOnly, 10);
+			var skillB2 = new Skill("B2Overstaffed", "_", Color.Empty, 15, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony)) { Activity = activity, TimeZone = TimeZoneInfo.Utc }.WithId();
+			skillB2.SetCascadingIndex_UseFromTestOnly(2);
+			WorkloadFactory.CreateWorkloadWithOpenHours(skillB2, new TimePeriod(8, 0, 9, 0));
+			var skillDayB2 = skillB2.CreateSkillDayWithDemand(scenario, dateOnly, 0.5);
+			var agent = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agent.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillA, skillB1, skillB2 });
+			var agentB2 = new Person().InTimeZone(TimeZoneInfo.Utc);
+			agentB2.AddPeriodWithSkills(new PersonPeriod(DateOnly.MinValue, new PersonContract(new Contract("_"), new PartTimePercentage("_"), new ContractSchedule("_")), new Team { Site = new Site("_") }), new[] { skillB2 });
+			var ass = new PersonAssignment(agent, scenario, dateOnly);
+			ass.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+			var assB2 = new PersonAssignment(agentB2, scenario, dateOnly);
+			assB2.AddActivity(activity, new TimePeriod(5, 0, 10, 0));
+
+			SchedulerStateHolder.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent, agentB2 }, new[] { ass, assB2 }, new[] { skillDayA, skillDayB1, skillDayB2 });
+
+			Target.ForDay(dateOnly);
+
+			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0);
+			skillDayB1.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(-9);
+			skillDayB2.SkillStaffPeriodCollection.First().AbsoluteDifference
+				.Should().Be.EqualTo(0.5);
+		}
+
 		[Test, Ignore]
 		public void ShouldMoveResourcesFromParallelPrimarySkillsWithDifferentDemand()
 		{

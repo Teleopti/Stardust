@@ -64,14 +64,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 			foreach (var cascadingSkillGroupItem in skillGroup.CascadingSkillGroupItems)
 			{
 				var totalUnderStaffing = 0d;
-				foreach (var skill in cascadingSkillGroupItem.Skills)
+				foreach (var skillToMoveTo in cascadingSkillGroupItem.Skills)
 				{
-					var skillStaffPeriod = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skill, interval, 0);
+					var skillStaffPeriod = stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodOrDefault(skillToMoveTo, interval, 0);
 					var absoluteDifference = skillStaffPeriod.AbsoluteDifference;
-
 					if (absoluteDifference.IsUnderstaffed())
 					{
-						totalUnderStaffing += Math.Abs(absoluteDifference);
+						totalUnderStaffing += -absoluteDifference;
 					}
 				}
 
@@ -85,9 +84,8 @@ namespace Teleopti.Ccc.Domain.Cascading
 					if (!skillToMoveToAbsoluteDifference.IsUnderstaffed())
 						continue;
 
-					var skillToMoveToMaxResourcesToHave = Math.Abs(skillToMoveToAbsoluteDifference / totalUnderStaffing) * resourcesToMove;
-					var resourcesToMoveForSkill = Math.Min(-skillToMoveToAbsoluteDifference, skillToMoveToMaxResourcesToHave);
-					var remainingResourcesToMove = Math.Min(-skillToMoveToAbsoluteDifference, resourcesToMoveForSkill);
+					var proportionalResourcesToMove = -skillToMoveToAbsoluteDifference / totalUnderStaffing * resourcesToMove;
+					var remainingResourcesToMove = Math.Min(-skillToMoveToAbsoluteDifference, proportionalResourcesToMove);
 
 					skillStaffPeriodTo.TakeResourcesFrom(skillStaffPeriodFrom, remainingResourcesToMove);
 					remainingResourcesInGroup -= remainingResourcesToMove;
