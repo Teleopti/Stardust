@@ -318,29 +318,28 @@
 			scope.requestsTableContainer.gridOptions = requestsTableContainerCtrl.getGridOptions([]);
 			scope.requestsTableContainer.isUsingRequestSubmitterTimeZone = true;
 
-			scope.$watch(function() {
+			scope.$watch(function () {
 				return scope.requestsTableContainer.requests;
 			}, function (requests) {
 				requestsTableContainerCtrl.prepareComputedColumns(requests);
 				
 				requestsTableContainerCtrl.reselectRequests();
-				
+				var shiftTradeDayView = '.shift-trade-view .ui-grid-render-container-body .ui-grid-viewport';
+
+				if ($(shiftTradeDayView).length && scope.requestsTableContainer.requests.length > 0) {
+
+					function thereIsScrollBar() { return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width() };
+
+					scope.$watch(function () {
+						return $(shiftTradeDayView).width();
+					}, function () {
+						thereIsScrollBar() ?
+							$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18)
+							: $(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
+					});
+				}
+
 			}, true);
-
-			var shiftTradeDayView = '.shift-trade-view .ui-grid-render-container-body .ui-grid-viewport';
-
-			if ($(shiftTradeDayView).length) {
-
-				function thereIsScrollBar() { return $(shiftTradeDayView)[0].scrollWidth > $(shiftTradeDayView).width() };
-
-				scope.$watch(function () {
-					return $(shiftTradeDayView).width();
-				}, function () {
-					thereIsScrollBar() ?
-						$(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65 + 18)
-						: $(shiftTradeDayView).css('height', requestsTableContainerCtrl.gridApi.grid.gridHeight - 65);
-				});
-			}
 			
 			scope.$on('reload.requests.without.selection', function () {
 				requestsTableContainerCtrl.clearSelection();
