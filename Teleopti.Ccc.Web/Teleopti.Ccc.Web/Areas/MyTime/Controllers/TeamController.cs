@@ -41,6 +41,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork]
+		public virtual JsonResult TeamsForShiftTradeBoard(DateOnly? date)
+		{
+			if (!date.HasValue)
+				date = _now.LocalDateOnly();
+			return
+				Json(
+					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
+					JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork]
 		[HttpGet]
 		public virtual JsonResult TeamsAndGroupsWithAllTeam(DateOnly? date)
 		{

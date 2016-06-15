@@ -1,12 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel.Claims;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
+using System.Linq;
+using System.Net;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -65,6 +76,45 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var data = result.Data as IEnumerable<SelectGroup>;
 			data.Should().Have.SameValuesAs(teams);
+		}
+
+		[Test]
+		public void ShouldReturnTeamOptionsAsJsonForShiftTradeBoard()
+		{
+			var teamRepository = new FakeTeamRepository();
+			var site = new Domain.Common.Site("mysite");
+			var team = new Team {Site = site, Description = new Description("myteam")};
+			teamRepository.Add(team);
+
+			var person = PersonFactory.CreatePerson();
+			var identity = new TeleoptiIdentity("test", null, null, null, null);
+
+			var mockAuthorize = MockRepository.GenerateMock<IAuthorizeAvailableData>();
+			mockAuthorize.Stub(m => m.Check(new OrganisationMembership(), DateOnly.Today, team)).IgnoreArguments().Return(true);
+
+			var claimSet =
+				new DefaultClaimSet(
+					new System.IdentityModel.Claims.Claim(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace +
+						"/Raptor/MyTimeWeb/ShiftTradeBulletinBoard", "true", Rights.PossessProperty),
+					new System.IdentityModel.Claims.Claim(TeleoptiAuthenticationHeaderNames.TeleoptiAuthenticationHeaderNamespace +
+						"/AvailableData", mockAuthorize, Rights.PossessProperty)
+					);
+
+			var teleoptiPrincipal = new TeleoptiPrincipal(identity, person);
+			teleoptiPrincipal.AddClaimSet(claimSet);
+
+			var authorization = new PrincipalAuthorization(new FakeCurrentTeleoptiPrincipal(teleoptiPrincipal));
+			var permissionProvider = new PermissionProvider(authorization);
+
+			var teamProvider = new TeamProvider(teamRepository, permissionProvider);
+
+			var viewModelFactory = new TeamViewModelFactory(teamProvider, null, null, null, null);
+			var target = new TeamController(viewModelFactory, new Now());
+
+			var result = target.TeamsForShiftTradeBoard(DateOnly.Today);
+			var data = result.Data as IEnumerable<ISelectOption>;
+			var selectOption = data.FirstOrDefault();
+			selectOption.text.Should().Equals("mysite/myteam");
 		}
 	}
 }

@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IUnitOfWork UnitOfWork { get; private set; }
 		public ICollection<ITeam> FindAllTeamByDescription()
 		{
-			throw new NotImplementedException();
+			return _teams;
 		}
 
 		public ICollection<ITeam> FindTeamByDescriptionName (string name)

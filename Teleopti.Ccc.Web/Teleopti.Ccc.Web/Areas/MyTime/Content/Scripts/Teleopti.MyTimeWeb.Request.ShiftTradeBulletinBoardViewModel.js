@@ -483,7 +483,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel = function (ajax) {
 
 	self.loadBulletinSchedules = function (date) {
 		ajax.Ajax({
-			url: "Team/TeamsForShiftTrade",
+			url: "Team/TeamsForShiftTradeBoard",
 			dataType: "json",
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
