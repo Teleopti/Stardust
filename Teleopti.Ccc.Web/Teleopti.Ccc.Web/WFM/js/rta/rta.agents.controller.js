@@ -6,6 +6,7 @@
 		.controller('RtaAgentsCtrl', [
 			'$scope', '$filter', '$state', '$stateParams', '$interval', '$sessionStorage', 'RtaService', 'RtaGridService', 'RtaFormatService', 'RtaRouteService', 'FakeTimeService', 'Toggle', 'NoticeService',
 			function($scope, $filter, $state, $stateParams, $interval, $sessionStorage, RtaService, RtaGridService, RtaFormatService, RtaRouteService, FakeTimeService, toggleService, NoticeService) {
+				var polling = null;
 				var selectedPersonId;
 				var siteIds = $stateParams.siteIds || ($stateParams.siteId ? [$stateParams.siteId] : []);
 				var teamIds = $stateParams.teamIds || ($stateParams.teamId ? [$stateParams.teamId] : []);
@@ -30,13 +31,23 @@
 				options.data = 'filteredData';
 				$scope.inAlarmGrid = options;
 				$scope.pause = false;
+				$scope.pausedAt = null;
+				var lastUpdate, notice;
 
 				$scope.togglePolling = function() {
 					$scope.pause = !$scope.pause;
-					if ($scope.pause)
-						NoticeService.warning('Real time adherence monitoring paused at 2016-06-13 16:00!<br>Re-enable by clicking play', null, true);
-					else
-						NoticeService.info('Real time adherence monitoring activated', null, true);
+					if ($scope.pause) {
+						$scope.pausedAt = moment(lastUpdate).format('YYYY-MM-DD HH:mm:ss');
+						notice = NoticeService.warning('Real time adherence monitoring paused at ' + $scope.pausedAt + '!<br>Re-enable by clicking play', null, true);
+						cancelPolling();
+					} else {
+						$scope.pausedAt = null;
+						if (notice != null) {
+							notice.destroy();
+						}
+						NoticeService.info('Real time adherence monitoring activated', 5000, true);
+						setupPolling();
+					}
 				};
 
 				$scope.getTableHeight = function() {
@@ -137,13 +148,23 @@
 					})
 					.then(updateStates);
 
-				var polling = $interval(function() {
-					updateStates();
-				}, 5000);
+				setupPolling();
 
 				$scope.$on('$destroy', function() {
-					$interval.cancel(polling);
+					cancelPolling();
 				});
+
+				function setupPolling() {
+					polling = $interval(function() {
+						if (!$scope.pause)
+							updateStates();
+					}, 5000);
+				}
+
+				function cancelPolling() {
+					if (polling != null)
+						$interval.cancel(polling);
+				}
 
 				function filterData() {
 					if ($scope.filterText === undefined)
@@ -160,53 +181,33 @@
 				function updateStates() {
 					getStates($scope.agentsInAlarm)({
 							siteIds: siteIds,
-							teamIds: teamIds
+							teamIds: teamIds,
 						})
 						.then(setStatesInAgents);
 				}
 
 				function setStatesInAgents(states) {
 					$scope.agents = [];
+					lastUpdate = states.Time;
 					fillAgentsWithState(states);
 					fillAgentsWithoutState();
 					buildTimeline(states);
 				}
 
-
-				function layerPercentage(seconds) {
-					return percentageFromSeconds(seconds, 100);
+				function secondsToPercent(seconds) {
+					return seconds / 3600 * 25;
 				}
 
-				function alarmPercentage(seconds) {
-					return percentageFromSeconds(seconds, 25);
-				}
-
-				function offsetPercentage(seconds) {
-					var maxPercentage = seconds < 0 ? 0 : (seconds / 3600 * 25);
-					return maxPercentage + '%';
-				}
-
-				function percentageFromSeconds(seconds, max) {
-					var maxPercentage = (seconds / 3600 * 25);
-					return maxPercentage > max ? max + '%' : maxPercentage + '%';
-				}
-
-				function timeToPercent(currentTime, time, toPercent) {
+				function timeToPercent(currentTime, time) {
 					var offset = moment(currentTime).add(-1, 'hour');
-					return toPercent(moment(time).diff(offset, 'seconds'));
+					return secondsToPercent(moment(time).diff(offset, 'seconds'));
 				}
-
-				function offsetToPercent(currentTime, time, toPercent) {
-					var offset = moment(currentTime).add(-1, 'hour');
-					return toPercent(moment(time).diff(offset, 'seconds'));
-				}
-
 
 				function buildTimeline(states) {
 					var timeline = function(time) {
 						return {
 							Time: time.format('HH:mm'),
-							Offset: timeToPercent(states.Time, time, layerPercentage)
+							Offset: timeToPercent(states.Time, time) + "%"
 						};
 					};
 
@@ -239,8 +240,16 @@
 								var lengthSeconds = moment(s.EndTime).diff(moment(layerStartTime) > start ? moment(layerStartTime) : start, 'seconds');
 								return {
 									Color: s.Color,
-									Offset: offsetToPercent(states.Time, layerStartTime, offsetPercentage),
-									Width: layerPercentage(lengthSeconds),
+									Offset: function() {
+										var result = timeToPercent(states.Time, layerStartTime);
+										result = result < 0 ? 0 : result;
+										return result + '%'
+									}(),
+									Width: function() {
+										var result = secondsToPercent(lengthSeconds);
+										result = result > 100 ? 100 : result;
+										return result + '%'
+									}(),
 									Name: s.Name,
 									Class: getClassForActivity(states.Time, layerStartTime, s.EndTime)
 								};
@@ -261,9 +270,16 @@
 								TimeInAlarm: state.TimeInAlarm,
 								TimeInRule: state.TimeInAlarm ? state.TimeInRule : null,
 								ShiftTimeBar: function() {
+
+									var alarmPercentage = function(seconds) {
+										var result = secondsToPercent(seconds);
+										return result > 25 ? 25 : result;
+									}
+
 									if (toggleService.RTA_TotalOutOfAdherenceTime_38702)
-										return state.TimeInAlarm ? alarmPercentage(state.TimeInRule) : "0%";
-									return alarmPercentage(state.TimeInAlarm);
+										return (state.TimeInAlarm ? alarmPercentage(state.TimeInRule) : 0) + "%";
+									return alarmPercentage(state.TimeInAlarm) + "%";
+
 								}(),
 								Shift: shift
 							});
