@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
@@ -10,8 +11,10 @@ namespace Teleopti.Ccc.Domain.Cascading
 			PrimarySkills = primarySkills;
 			CascadingSkillGroupItems = cascadingSkillGroupItems;
 			Resources = resources;
+			PrimarySkillsCascadingIndex = primarySkills.First().CascadingIndex.Value;
 		}
 
+		public int PrimarySkillsCascadingIndex { get; }
 		public IEnumerable<ISkill> PrimarySkills { get; }
 		public IEnumerable<CascadingSkillGroupItem> CascadingSkillGroupItems { get; }
 		public double Resources { get; }
