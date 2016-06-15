@@ -62,12 +62,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public AgentStatesViewModel ForSites(Guid[] siteIds, bool inAlarm)
 		{
-			return build(_agentStateReadModelReader.LoadForSites(siteIds, inAlarm));
+			return build(inAlarm ? 
+				_agentStateReadModelReader.LoadAlarmsForSites(siteIds) : 
+				_agentStateReadModelReader.LoadForSites(siteIds));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds, bool inAlarm)
 		{
-			return build(_agentStateReadModelReader.LoadForTeams(teamIds, inAlarm));
+			return build(inAlarm ?
+				_agentStateReadModelReader.LoadAlarmsForTeams(teamIds) :
+				_agentStateReadModelReader.LoadForTeams(teamIds));
 		}
 
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)

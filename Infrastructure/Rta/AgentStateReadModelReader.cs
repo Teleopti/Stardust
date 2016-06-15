@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
@@ -14,10 +15,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	public class AgentStateReadModelReader : IAgentStateReadModelReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
+		private readonly INow _now;
 
-		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork)
+		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now)
 		{
 			_unitOfWork = unitOfWork;
+			_now = now;
 		}
 
 		public IList<AgentStateReadModel> Load(IEnumerable<IPerson> persons)
@@ -54,11 +57,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool inAlarm)
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
 		{
 			var query = selectAgentState + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds)";
-			if (inAlarm)
-				query += " AND IsRuleAlarm = 1 ORDER BY AlarmStartTime ASC";
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("siteIds", siteIds)
@@ -67,14 +68,36 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool inAlarm)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
 		{
 			var query = selectAgentState + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds)";
-			if (inAlarm)
-				query += " AND IsRuleAlarm = 1 ORDER BY AlarmStartTime ASC";
 			return _unitOfWork.Current().Session()
 				.CreateSQLQuery(query)
 				.SetParameterList("teamIds", teamIds)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds)
+		{
+			var query = selectAgentState + @"WITH (NOLOCK) WHERE SiteId IN (:siteIds) AND AlarmStarttime <= :now ORDER BY AlarmStartTime ASC";
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(query)
+				.SetParameterList("siteIds", siteIds)
+				.SetParameter("now", _now.UtcDateTime())
+				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+				.SetReadOnly(true)
+				.List<AgentStateReadModel>();
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds)
+		{
+			var query = selectAgentState + @"WITH (NOLOCK) WHERE TeamId IN (:teamIds) AND AlarmStartTime <= :now ORDER BY AlarmStartTime ASC";
+			return _unitOfWork.Current().Session()
+				.CreateSQLQuery(query)
+				.SetParameterList("teamIds", teamIds)
+				.SetParameter("now", _now.UtcDateTime())
 				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();

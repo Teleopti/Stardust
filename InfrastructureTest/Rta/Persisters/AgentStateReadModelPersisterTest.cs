@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.Persisters
 				}
 			});
 
-			Reader.LoadForTeams(new[] { teamId }, false)
+			Reader.LoadForTeams(new[] { teamId })
 				.Single()
 				.Shift.Single().Color.Should().Be(Color.Green.ToArgb());
 		}

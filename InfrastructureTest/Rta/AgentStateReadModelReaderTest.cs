@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces;
 
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		public IJsonSerializer Serializer;
 		public IAgentStateReadModelReader Target;
 		public IAgentStateReadModelPersister Persister;
+		public MutableNow Now;
 
 		[Test]
 		public void ShouldLoadAgentStateByTeamId()
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Persister.Persist(new AgentStateReadModelForTest { SiteId = siteId2, PersonId = Guid.NewGuid() });
 			Persister.Persist(new AgentStateReadModelForTest { SiteId = Guid.Empty, PersonId = Guid.NewGuid() });
 
-			var result = Target.LoadForSites(new[] { siteId1, siteId2 }, false);
+			var result = Target.LoadForSites(new[] { siteId1, siteId2 });
 
 			result.Count().Should().Be(2);
 		}
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = teamId2, PersonId = Guid.NewGuid() });
 			Persister.Persist(new AgentStateReadModelForTest { TeamId = Guid.Empty, PersonId = Guid.NewGuid() });
 
-			var result = Target.LoadForTeams(new[] { teamId1, teamId2 }, false);
+			var result = Target.LoadForTeams(new[] { teamId1, teamId2 });
 
 			result.Count().Should().Be(2);
 		}
@@ -77,22 +79,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldLoadStatesInAlarmOnly()
 		{
+			Now.Is("2016-06-15 12:00");
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
 			Persister.Persist(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId1,
+				AlarmStartTime = "2016-06-15 12:00".Utc(),
+				IsRuleAlarm = true
+			});
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				TeamId = teamId,
+				PersonId = personId2,
+				AlarmStartTime = "2016-06-15 12:01".Utc(),
 				IsRuleAlarm = true
 			});
 			Persister.Persist(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = Guid.NewGuid(),
+				AlarmStartTime = null,
 				IsRuleAlarm = false
 			});
 
-			var result = Target.LoadForTeams(new[] { teamId }, true);
+			var result = Target.LoadAlarmsForTeams(new[] { teamId });
 
 			result.Single().PersonId.Should().Be(personId1);
 		}
@@ -100,31 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 		[Test]
 		public void ShouldLoadStatesOrderByLongestAlarmTimeFirst()
 		{
-			var siteId = Guid.NewGuid();
-			var personId1 = Guid.NewGuid();
-			var personId2 = Guid.NewGuid();
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
-			});
-			Persister.Persist(new AgentStateReadModelForTest
-			{
-				SiteId = siteId,
-				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
-			});
-
-			var result = Target.LoadForSites(new[] { siteId }, true);
-
-			result.First().PersonId.Should().Be(personId2);
-			result.Last().PersonId.Should().Be(personId1);
-		}
-
-		[Test]
-		public void ShouldLoadTeamStatesOrderByLongestAlarmTimeFirst()
-		{
+			Now.Is("2016-06-15 12:00");
 			var teamId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
@@ -132,16 +121,80 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			{
 				TeamId = teamId,
 				PersonId = personId1,
-				AlarmStartTime = "2015-12-16 8:30".Utc()
+				AlarmStartTime = "2016-06-15 11:30".Utc(),
+				IsRuleAlarm = true
 			});
 			Persister.Persist(new AgentStateReadModelForTest
 			{
 				TeamId = teamId,
 				PersonId = personId2,
-				AlarmStartTime = "2015-12-16 8:00".Utc()
+				AlarmStartTime = "2016-06-15 11:00".Utc(),
+				IsRuleAlarm = true
 			});
 
-			var result = Target.LoadForTeams(new[] { teamId }, true);
+			var result = Target.LoadAlarmsForTeams(new[] { teamId });
+
+			result.First().PersonId.Should().Be(personId2);
+			result.Last().PersonId.Should().Be(personId1);
+		}
+
+		[Test]
+		public void ShouldLoadStatesInAlarmOnlyForSites()
+		{
+			Now.Is("2016-06-15 12:00");
+			var siteId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId1,
+				AlarmStartTime = "2016-06-15 12:00".Utc(),
+				IsRuleAlarm = true
+			});
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId2,
+				AlarmStartTime = "2016-06-15 12:01".Utc(),
+				IsRuleAlarm = true
+			});
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = Guid.NewGuid(),
+				AlarmStartTime = null,
+				IsRuleAlarm = false
+			});
+
+			var result = Target.LoadAlarmsForSites(new[] { siteId });
+
+			result.Single().PersonId.Should().Be(personId1);
+		}
+
+		[Test]
+		public void ShouldLoadStatesOrderByLongestAlarmTimeFirstForSites()
+		{
+			Now.Is("2016-06-15 12:00");
+			var siteId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId1,
+				AlarmStartTime = "2016-06-15 11:30".Utc(),
+				IsRuleAlarm = true
+			});
+			Persister.Persist(new AgentStateReadModelForTest
+			{
+				SiteId = siteId,
+				PersonId = personId2,
+				AlarmStartTime = "2016-06-15 11:00".Utc(),
+				IsRuleAlarm = true
+			});
+
+			var result = Target.LoadAlarmsForSites(new[] { siteId });
 
 			result.First().PersonId.Should().Be(personId2);
 			result.Last().PersonId.Should().Be(personId1);

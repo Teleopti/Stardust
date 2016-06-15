@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
@@ -12,17 +11,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		IAgentStateReadModelReader, 
 		IAgentStateReadModelPersister
 	{
+		private readonly INow _now;
 		private readonly ConcurrentDictionary<Guid, AgentStateReadModel> _data = new ConcurrentDictionary<Guid, AgentStateReadModel>(); 
 
-		public FakeAgentStateReadModelPersister()
+		public FakeAgentStateReadModelPersister(INow now)
 		{
+			_now = now;
 		}
-
-		public FakeAgentStateReadModelPersister(IEnumerable<AgentStateReadModel> data)
-		{
-			data.ForEach(model =>_data.AddOrUpdate(model.PersonId, model, (g, m) => model));
-		}
-
+		
 		public FakeAgentStateReadModelPersister Has(AgentStateReadModel model)
 		{
 			_data.AddOrUpdate(model.PersonId, model, (g, m) => model);
@@ -61,29 +57,40 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			return _data.Values.Where(x => x.TeamId == teamId).ToArray();
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds, bool inAlarm)
+		public IEnumerable<AgentStateReadModel> LoadForSites(IEnumerable<Guid> siteIds)
 		{
-			var states = from s in siteIds
+			return from s in siteIds
 				from m in _data.Values
 				where s == m.SiteId
 				select m;
-			if (inAlarm)
-				states = states.Where(x => x.IsRuleAlarm)
-					.OrderBy(x => x.AlarmStartTime);
-			return states;
 		}
 
-		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds, bool inAlarm)
+		public IEnumerable<AgentStateReadModel> LoadForTeams(IEnumerable<Guid> teamIds)
 		{
-			var states = from t in teamIds
+			return from t in teamIds
 				from m in _data.Values
 				where t == m.TeamId
 				select m;
-			if (inAlarm)
-				states = states.Where(x => x.IsRuleAlarm)
-					.OrderBy(x => x.AlarmStartTime);
-			return states;
 		}
 
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForSites(IEnumerable<Guid> siteIds)
+		{
+			return from s in siteIds
+				from m in _data.Values
+				where s == m.SiteId
+					  && m.AlarmStartTime <= _now.UtcDateTime()
+				orderby m.AlarmStartTime
+				select m;
+		}
+
+		public IEnumerable<AgentStateReadModel> LoadAlarmsForTeams(IEnumerable<Guid> teamIds)
+		{
+			return from s in teamIds
+				from m in _data.Values
+				where s == m.TeamId
+					  && m.AlarmStartTime <= _now.UtcDateTime()
+				orderby m.AlarmStartTime
+				select m;
+		}
 	}
 }

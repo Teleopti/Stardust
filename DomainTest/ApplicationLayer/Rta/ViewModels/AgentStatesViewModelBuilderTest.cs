@@ -123,6 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldOnlyGetAgentStatesInAlarm()
 		{
+			Now.Is("2016-06-15 12:00");
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
 			var siteId1 = Guid.NewGuid();
@@ -132,12 +133,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				{
 					PersonId = personId1,
 					SiteId = siteId1,
+					AlarmStartTime = "2016-06-15 12:00".Utc(),
 					IsRuleAlarm = true
 				})
 				.Has(new AgentStateReadModel
 				{
 					PersonId = personId2,
 					SiteId = siteId2,
+					AlarmStartTime = null,
 					IsRuleAlarm = false
 				});
 
