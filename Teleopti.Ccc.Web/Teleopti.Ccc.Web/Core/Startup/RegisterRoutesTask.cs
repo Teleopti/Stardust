@@ -49,8 +49,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			
 			routes.IgnoreRoute("favicon.ico");
 
-			//routes.MapMvcAttributeRoutes();
-
 			var mapRoute = routes.MapRoute(
 				"Root-authentication",
 				"Authentication/{action}",
@@ -71,6 +69,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
 
 			mapRoute.DataTokens["area"] = "Start"; // Parameter defaults
+
+			routes.MapRoute(
+				"Tenant",
+				"MultiTenancy/TenantAdminInfo/",
+				new { controller = "TenantAdminInfo", action = "Index", area = "MultiTenancy" },
+				null,
+				new[] { "Teleopti.Ccc.Web.Areas.MultiTenancy.*" });
 		}
 
 		private void registerAreas()

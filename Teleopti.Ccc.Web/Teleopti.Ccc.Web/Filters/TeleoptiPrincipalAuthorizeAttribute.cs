@@ -69,7 +69,14 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if (!_loadAllTenantsUsers.TenantUsers().Any())
 			{
-				filterContext.Result = new RedirectResult("MultiTenancy/TenantAdminInfo");
+				filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary(
+						new
+						{
+							controller = "TenantAdminInfo",
+							action = "",
+							area = "MultiTenancy"
+						}
+						));
 				return;
 			}
 			if (filterContext.RequestContext.HttpContext.Request.IsAjaxRequest())

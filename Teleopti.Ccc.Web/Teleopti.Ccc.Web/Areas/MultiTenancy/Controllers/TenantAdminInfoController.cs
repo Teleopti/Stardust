@@ -1,11 +1,9 @@
 ﻿using System.Linq;
 using System.Web.Mvc;
-using System.Web.Routing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 
-namespace Teleopti.Ccc.Web.Areas.MultiTenancy
+namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Controllers
 {
-	[RouteArea("MultiTenancy")]
 	public class TenantAdminInfoController : Controller
     {
 		private readonly ILoadAllTenantsUsers _loadAllTenantsUsers;
@@ -15,7 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy
 			_loadAllTenantsUsers = loadAllTenantsUsers;
 		}
 
-		[Route("TenantAdminInfo")]
         public ActionResult Index()
 		{
 			//if we browse here directly we don't want to display it if we have admins

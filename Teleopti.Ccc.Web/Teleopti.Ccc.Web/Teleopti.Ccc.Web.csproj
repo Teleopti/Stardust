@@ -492,7 +492,8 @@
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\IdLogonModel.cs" />
-    <Compile Include="Areas\MultiTenancy\TenantAdminInfoController.cs" />
+    <Compile Include="Areas\MultiTenancy\Controllers\TenantAdminInfoController.cs" />
+    <Compile Include="Areas\MultiTenancy\MultiTenancyAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\CiscoWidgetController.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCache.cs" />
