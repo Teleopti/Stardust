@@ -1,4 +1,5 @@
-﻿Feature: Pause button
+﻿@ignore
+Feature: Pause button
 	In order to have time to analyze current situation
 	As a real time analyst
 	I want to be able to pause screen updates
