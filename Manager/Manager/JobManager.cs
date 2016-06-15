@@ -120,22 +120,7 @@ namespace Stardust.Manager
 		{
 			_jobRepository.AddItemToJobQueue(jobQueueItem);
 		}
-
-		public bool DoesJobDetailItemExists(Guid jobId)
-		{
-			return _jobRepository.DoesJobDetailItemExists(jobId);
-		}
-
-		public bool DoesJobItemItemExists(Guid jobId)
-		{
-			return _jobRepository.DoesJobItemExists(jobId);
-		}
-
-		public bool DoesJobQueueItemExists(Guid jobId)
-		{
-			return _jobRepository.DoesJobQueueItemExists(jobId);
-		}
-
+		
 		public void CancelJobByJobId(Guid jobId)
 		{
 			_jobRepository.CancelJobByJobId(jobId,

@@ -8,10 +8,6 @@ namespace Stardust.Manager.Interfaces
 	{
 		bool DoesJobQueueItemExists(Guid jobId);
 
-		bool DoesJobItemExists(Guid jobId);
-
-		bool DoesJobDetailItemExists(Guid jobId);
-
 		JobQueueItem GetJobQueueItemByJobId(Guid jobId);
 
 		void AddItemToJobQueue(JobQueueItem jobQueueItem);

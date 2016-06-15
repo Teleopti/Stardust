@@ -168,13 +168,21 @@ namespace Stardust.Manager
 
 		public void CancelJobByJobId(Guid jobId, IHttpSender httpSender)
 		{
-			if (DoesJobQueueItemExists(jobId))
+			try
 			{
-				DeleteJobQueueItemByJobId(jobId);
+				if (DoesJobQueueItemExists(jobId))
+				{
+					DeleteJobQueueItemByJobId(jobId);
+				}
+				else
+				{
+					CancelJobByJobIdWorker(jobId, httpSender);
+				}
 			}
-			else
+			catch (Exception exp)
 			{
-				CancelJobByJobIdWorker(jobId, httpSender);
+				this.Log().ErrorWithLineNumber(exp.Message, exp);
+				throw;
 			}
 		}
 		
@@ -373,9 +381,8 @@ namespace Stardust.Manager
 							}
 						}
 					}
-					
-					return jobDetails;
 				}
+				return jobDetails;
 			}
 			catch (Exception exp)
 			{
@@ -651,65 +658,16 @@ namespace Stardust.Manager
 
 		public bool DoesJobQueueItemExists(Guid jobId)
 		{
-			return DoesItemExistsTemplateMethod(jobId,
-												DoesJobQueueItemExistsWorker);
-		}
-
-		public bool DoesJobItemExists(Guid jobId)
-		{
-			return DoesItemExistsTemplateMethod(jobId,
-												DoesJobItemExistsWorker);
-		}
-
-		public bool DoesJobDetailItemExists(Guid jobId)
-		{
-			return DoesItemExistsTemplateMethod(jobId,
-												DoesJobDetailItemExistsWorker);
-		}
-
-		private bool DoesItemExistsTemplateMethod(Guid jobId,
-										  Func<Guid, SqlConnection, bool> func)
-		{
-			try
+			var count = 0;
+			using (var sqlConnection = new SqlConnection(_connectionString))
 			{
-				using (var sqlConnection = new SqlConnection(_connectionString))
-				{
-					sqlConnection.OpenWithRetry(_retryPolicy);
-
-					return func(jobId, sqlConnection);
-				}
+				sqlConnection.OpenWithRetry(_retryPolicy);
+				var command = _createSqlCommandHelper.CreateDoesJobQueueItemExistsCommand(jobId, sqlConnection);
+				count = Convert.ToInt32(command.ExecuteScalar());
 			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
-			}
-		}
-
-		private bool DoesJobDetailItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
-		{
-			var command = _createSqlCommandHelper.CreateDoesJobDetailItemExistsCommand(jobId, sqlConnection);
-			var count = Convert.ToInt32(command.ExecuteScalar());
-
 			return count == 1;
 		}
-
-		private bool DoesJobQueueItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
-		{
-			var command = _createSqlCommandHelper.CreateDoesJobQueueItemExistsCommand(jobId, sqlConnection);
-			var count = Convert.ToInt32(command.ExecuteScalar());
-
-			return count == 1;
-		}
-
-		private bool DoesJobItemExistsWorker(Guid jobId, SqlConnection sqlConnection)
-		{
-			var command = _createSqlCommandHelper.CreateDoesJobItemExistsCommand(jobId, sqlConnection);
-			var count = Convert.ToInt32(command.ExecuteScalar());
-
-			return count == 1;
-		}
-
+		
 
 		private void Retry(Action action, int numerOfTries = 10)
 		{
