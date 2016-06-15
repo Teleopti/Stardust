@@ -328,13 +328,13 @@ if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 
 --New Adherence read models. Purge for now since we have not yet built or tested with lots of historical data.
 delete ReadModel.AdherencePercentage
-where BelongsToDate < dateadd(day,-1,getdate())
+where BelongsToDate < dateadd(day,-3,getdate())
 
 if datediff(second,@start,getdate()) > 240 --Because timeout from ETL is 5 mins
 	return
 
 delete ReadModel.AdherenceDetails
-where BelongsToDate < dateadd(day,-1,getdate())
+where BelongsToDate < dateadd(day,-3,getdate())
 
 delete ReadModel.PersonScheduleDay
 from ReadModel.PersonScheduleDay ps
