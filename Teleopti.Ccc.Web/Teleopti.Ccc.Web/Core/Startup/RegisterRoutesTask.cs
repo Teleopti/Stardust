@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			
 			routes.IgnoreRoute("favicon.ico");
 
-			routes.MapMvcAttributeRoutes();
+			//routes.MapMvcAttributeRoutes();
 
 			var mapRoute = routes.MapRoute(
 				"Root-authentication",
