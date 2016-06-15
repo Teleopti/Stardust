@@ -249,6 +249,29 @@
 								};
 							});
 						if (agentInfo.length > 0) {
+
+							var shiftTimeBars = [];
+							if (state.Alarm == "Out Adherence" || state.Alarm == "Positive")
+								shiftTimeBars.push({
+									width: alarmPercentage(state.TimeInRule),
+									right: "75%"
+								});
+							if (agentInfo[0].Name.substr(0, 1) == "A")
+								shiftTimeBars.push({
+									width: "5%",
+									right: "80%"
+								});
+							if (agentInfo[0].Name.substr(0, 1) == "J")
+								shiftTimeBars.push({
+									width: "2%",
+									right: "82%"
+								});
+							if (agentInfo[0].Name.substr(0, 1) == "P")
+								shiftTimeBars.push({
+									width: "4%",
+									right: "90%"
+								});
+
 							$scope.agents.push({
 								Name: agentInfo[0].Name,
 								TeamName: agentInfo[0].TeamName,
@@ -272,6 +295,7 @@
 									return percentForTimeBar(state.TimeInAlarm) + "%";
 
 								}(),
+								ShiftTimeBars: shiftTimeBars,
 								Shift: shift
 							});
 						}

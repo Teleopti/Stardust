@@ -23,6 +23,7 @@
         RTA_TotalOutOfAdherenceTime_38702,
 		RTA_PauseButton_39144,
 		RTA_MonitorBySkills_39081,
+		RTA_SeeRecentOutOfAdherenceOccurancesToday_39145,
 
 		MessageBroker_SchedulingScreenMailbox_32733,
 
