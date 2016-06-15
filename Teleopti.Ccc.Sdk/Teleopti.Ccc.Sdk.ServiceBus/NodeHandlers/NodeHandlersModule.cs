@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<ExportPayrollHandler>().As<IHandle<RunPayrollExportEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterModule<PayrollContainerInstaller>();
 			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
+			builder.RegisterType<ResourceCalculateReadModelUpdater>().As<IHandle<UpdateResourceCalculateReadModelEvent>>().SingleInstance();
 		}
 	}
 }

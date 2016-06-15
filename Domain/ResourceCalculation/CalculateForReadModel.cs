@@ -28,15 +28,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		[LogTime]
-		[UnitOfWork]
 		public virtual ResourcesDataModel ResourceCalculatePeriod(DateOnlyPeriod period)
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolderForResourceCalculation.Fill(stateHolder, period);
 
 			DoCalculation(period);
+			var skillStaffPeriodDictionary =
+				stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
 
-			return CreateReadModel(stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary,period);
+			return CreateReadModel(skillStaffPeriodDictionary, period);
 		}
 
 		[LogTime]

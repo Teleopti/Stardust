@@ -233,6 +233,7 @@
     <Compile Include="NodeHandlers\IndexMaintenanceHandler.cs" />
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\RequestPersonAbsenceRemovedHandler.cs" />
+    <Compile Include="NodeHandlers\ResourceCalculateReadModelUpdater.cs" />
     <Compile Include="NodeHandlers\RunRequestWaitlistStardustHandler.cs" />
     <Compile Include="NodeHandlers\RunSchedulingHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />

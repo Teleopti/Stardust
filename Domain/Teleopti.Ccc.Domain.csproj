@@ -197,6 +197,7 @@
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="Cascading\CascadingSkillGroupItem.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
+    <Compile Include="ApplicationLayer\Intraday\ResourceCalculateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />
