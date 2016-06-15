@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_active = true;
 		}
 
-		public bool HasActivity(IActivity activity)
+		public virtual bool HasActivity(IActivity activity)
 		{
 			return Skill.Activity?.Equals(activity) ?? Skill.Activity == null;
 		}
