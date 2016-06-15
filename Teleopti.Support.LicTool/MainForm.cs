@@ -98,6 +98,7 @@ namespace Teleopti.Support.LicTool
 		{
 			txtbxCustomerName.Text = null;
 			dtpkrExpirationDate.Value = DateTime.Now;
+			chkPerpetual.Checked = false;
 			numExpirationGracePeriodDays.Value = 0;
 			ExpirationGracePeriodHours.Value = 0;
 			numMaxActiveAgents.Value = 0;
@@ -202,6 +203,7 @@ namespace Teleopti.Support.LicTool
 						long grace = Convert.ToInt64(xlic.MaxActiveAgentGrace * 100);
 						numMaxActiveAgentsGrace.Value = grace; // value in file is a percentage
 						dtpkrExpirationDate.Value = xlic.ExpirationDate;
+						chkPerpetual.Checked = xlic.Perpetual;
 
 						numericUpDownCountRatio.Value = xlic.Ratio;
 						comboBoxAgentsOrSeats.SelectedIndex = xlic.AgentsOrSeats;
