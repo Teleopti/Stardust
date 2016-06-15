@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			command.ErrorMessages.First().Should().Be.EqualTo(Resources.CannotBackoutScheduleChange);
 		}
 
-		[Ignore]
 		[Test]
 		public void ShouldBackoutToPreviousSchedule()
 		{
@@ -106,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var dateOnlyPeriod = new DateOnlyPeriod(2016, 6, 11, 2016, 6, 11);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(CurrentScenario.Current(), person, dateTimePeriod);
 			ScheduleHistoryRepository.ClearRevision();
-			var rev = new Revision { Id = 1 };
+			var rev = new Revision { Id = 2 };
 			rev.SetRevisionData(person);
-			var lstRev = new Revision { Id = 2};
+			var lstRev = new Revision { Id = 1};
 			lstRev.SetRevisionData(person);
 			ScheduleHistoryRepository.SetRevision(rev, pa.CreateTransient());
 			pa.SetDayOff(DayOffFactory.CreateDayOff());
@@ -117,7 +116,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new BackoutScheduleChangeCommand
 			{
 				PersonId = person.Id.Value,
-				Date = new DateOnly(2016,06,11)
+				Date = new DateOnly(2016,06,11),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					TrackId = Guid.NewGuid()
+				}
 			};
 			target.Handle(command);
 			command.ErrorMessages.Count.Should().Be.EqualTo(0);
@@ -125,9 +128,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
 				person, new ScheduleDictionaryLoadOptions(true, true), dateOnlyPeriod, CurrentScenario.Current())[person].ScheduledDayCollection(dateOnlyPeriod).Single();
 
-			schedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.MainShift);
-			schedule.PersonAssignment().ShiftLayers.Single().Period.Should().Be.EqualTo(dateTimePeriod);
-		}
+			schedule.SignificantPart().Should().Be.EqualTo(SchedulePartView.DayOff);
+					}
 
 		[Test]
 		public void ShouldAssignCommandIdToAllEvents()
