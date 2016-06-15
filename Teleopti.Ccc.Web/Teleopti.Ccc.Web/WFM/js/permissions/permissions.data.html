@@ -8,7 +8,7 @@
 </div>
 
 <div class="con-row flex-element">
-	<div class="con-flex split-3-1">
+	<div class="con-flex split-2-1">
 		<form class="permission-radio-buttons">
 			<div class="wfm-radio">
 				<label>
@@ -39,12 +39,12 @@
 		</form>
 	</div>
 	<div class="con-flex">
-		<div class="data-auth">
-			<label translate>AddGlobalAuthorizationLabel</label>
-			<md-select placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{'option-locked':dynamicOptionSelected.isBuiltIn}">
+		<form class="forecast-campaign pull-right">
+			<label>{{'AddGlobalAuthorizationLabel'| translate}} </label>
+			<md-select class="inline-select" placeholder="Pick" ng-model="dynamicOptionSelected.data" ng-change="changeOption(dynamicOptionSelected.data)" ng-class="{'option-locked':dynamicOptionSelected.isBuiltIn}">
 				<md-option ng-repeat="dynamic in organization.DynamicOptions" ng-value="dynamic.RangeOption">{{dynamic.Name}}</md-option>
 			</md-select>
-		</div>
+		</form>
 	</div>
 </div>
 

@@ -50,7 +50,7 @@
 				<div class="con-flex">
 					<form class="forecast-campaign pull-right">
 						<label>{{'Scenario' | translate}}: </label>
-						<md-select class="scenario-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" placeholder="{{ 'Scenario' | translate }}">
+						<md-select class="inline-select" ng-model="workload.Scenario" ng-change="changeScenario(workload)" placeholder="{{ 'Scenario' | translate }}">
 							<md-option ng-repeat="scenario in scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
 						</md-select>
 					</form>
