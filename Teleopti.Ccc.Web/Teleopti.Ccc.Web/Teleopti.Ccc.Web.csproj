@@ -492,6 +492,7 @@
     <Compile Include="Areas\MultiTenancy\Core\WebTenantAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Model\ChangePasswordModel.cs" />
     <Compile Include="Areas\MultiTenancy\Model\IdLogonModel.cs" />
+    <Compile Include="Areas\MultiTenancy\TenantAdminInfoController.cs" />
     <Compile Include="Areas\MyTime\Controllers\CiscoWidgetController.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiController.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderCache.cs" />
@@ -1665,6 +1666,8 @@
     <Content Include="WFM\css\_navbar.scss" />
     <Content Include="WFM\css\_main.scss" />
     <Content Include="WFM\css\reports.scss" />
+    <Content Include="Areas\MultiTenancy\Views\TenantAdminInfo\Index.cshtml" />
+    <Content Include="Areas\MultiTenancy\Views\web.config" />
     <None Include="WFM\css\_forecasting.scss" />
     <Content Include="WFM\js\outbound\outbound.controller.campaign-edit.js" />
     <Content Include="WFM\js\outbound\outbound.service.campaign.js" />

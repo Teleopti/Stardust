@@ -8,7 +8,9 @@ using System.Web.Routing;
 using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Web.Core;
 using AuthorizationContext = System.Web.Mvc.AuthorizationContext;
 
@@ -22,14 +24,18 @@ namespace Teleopti.Ccc.Web.Filters
 	{
 		private readonly IAuthenticationModule _authenticationModule;
 		private readonly IIdentityProviderProvider _identityProviderProvider;
+		private readonly ILoadAllTenantsUsers _loadAllTenantsUsers;
 		private readonly IEnumerable<Type> _excludeControllerTypes;
 
 		public string Realm { get; set; }
 
-		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider, IEnumerable<Type> excludeControllerTypes = null)
+		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule,
+			IIdentityProviderProvider identityProviderProvider, ILoadAllTenantsUsers loadAllTenantsUsers,
+			IEnumerable<Type> excludeControllerTypes = null)
 		{
 			_authenticationModule = authenticationModule;
 			_identityProviderProvider = identityProviderProvider;
+			_loadAllTenantsUsers = loadAllTenantsUsers;
 			Order = 2;
 			_excludeControllerTypes = excludeControllerTypes ?? new List<Type>();
 		}
@@ -58,8 +64,14 @@ namespace Teleopti.Ccc.Web.Filters
 			return area.ToUpperInvariant() == "START";
 		}
 
+
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
 		{
+			if (!_loadAllTenantsUsers.TenantUsers().Any())
+			{
+				filterContext.Result = new RedirectResult("MultiTenancy/TenantAdminInfo");
+				return;
+			}
 			if (filterContext.RequestContext.HttpContext.Request.IsAjaxRequest())
 			{
 				base.HandleUnauthorizedRequest(filterContext);

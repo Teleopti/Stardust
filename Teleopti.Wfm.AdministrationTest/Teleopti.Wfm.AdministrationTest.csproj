@@ -114,6 +114,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="ControllerActions\AddSuperUserTests.cs" />
+    <Compile Include="ControllerActions\AddUserTest.cs" />
     <Compile Include="ControllerActions\ChangePasswordTest.cs" />
     <Compile Include="CheckDatabaseVersionsFake.cs" />
     <Compile Include="ControllerActions\CheckFirstUser.cs" />

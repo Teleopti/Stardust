@@ -46,8 +46,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			routes.IgnoreRoute("content/{*pathInfo}");
+			
+			routes.IgnoreRoute("favicon.ico");
 
-            routes.IgnoreRoute("favicon.ico");
+			routes.MapMvcAttributeRoutes();
 
 			var mapRoute = routes.MapRoute(
 				"Root-authentication",
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				new { controller = "Authentication", action = "Index", id = UrlParameter.Optional },
 				null,
 				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
+
 			mapRoute.DataTokens["area"] = "Start"; // Parameter defaults
 		}
 

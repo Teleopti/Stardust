@@ -9,6 +9,7 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
@@ -279,7 +280,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[Route("AddFirstUser")]
 		public virtual UpdateUserResultModel AddFirstUser(AddUserModel model)
 		{
-			return addOneUser(model);
+			var result= addOneUser(model);
+			var existing = _currentTenantSession
+				.CurrentSession()
+				.GetNamedQuery("loadAllTenants")
+				.List<Tenant>();
+			foreach (var tenant in existing)
+			{
+				tenant.Active = true;
+				_currentTenantSession.CurrentSession().Save(tenant);
+			}
+			return result;
 		}
 
 		private string encryptString(string value)

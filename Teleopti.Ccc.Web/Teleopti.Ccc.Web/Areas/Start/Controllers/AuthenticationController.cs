@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Web.Mvc;
 using Microsoft.IdentityModel.Protocols.WSFederation;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
@@ -17,18 +19,26 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly ISessionSpecificDataProvider _sessionSpecificDataProvider;
 		private readonly IAuthenticationModule _authenticationModule;
 		private readonly ICurrentHttpContext _currentHttpContext;
+		private readonly ILoadAllTenantsUsers _loadAllTenantsUsers;
 
-		public AuthenticationController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IFormsAuthentication formsAuthentication, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticationModule authenticationModule, ICurrentHttpContext currentHttpContext)
+		public AuthenticationController(ILayoutBaseViewModelFactory layoutBaseViewModelFactory,
+			IFormsAuthentication formsAuthentication, ISessionSpecificDataProvider sessionSpecificDataProvider,
+			IAuthenticationModule authenticationModule, ICurrentHttpContext currentHttpContext,
+			ILoadAllTenantsUsers loadAllTenantsUsers)
 		{
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 			_formsAuthentication = formsAuthentication;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticationModule = authenticationModule;
 			_currentHttpContext = currentHttpContext;
+			_loadAllTenantsUsers = loadAllTenantsUsers;
 		}
 
 		public ActionResult Index()
 		{
+			if (!_loadAllTenantsUsers.TenantUsers().Any())
+				return Redirect("MultiTenancy/TenantAdminInfo");
+			
 			return RedirectToAction("", "Authentication");
 		}
 
