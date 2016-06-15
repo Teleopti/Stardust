@@ -175,6 +175,7 @@
     <Compile Include="FakeRepositories\FakeAnalyticsSkillRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsTeamRepository.cs" />
     <Compile Include="FakeRepositories\FakeAnalyticsTimeZoneRepository.cs" />
+    <Compile Include="FakeRepositories\FakeAnalyticsWorkloadRepository.cs" />
     <Compile Include="FakeRepositories\FakeApplicationFunctionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAvailableDataRepository.cs" />
     <Compile Include="FakeRepositories\FakePayrollExportRepository.cs" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Add(IWorkload workload)
 		{
-			workload.SetId(Guid.NewGuid());
+			if (!workload.Id.HasValue)
+				workload.SetId(Guid.NewGuid());
 			_workloads.Add(workload);
 		}
 
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IWorkload Get(Guid id)
 		{
-			throw new NotImplementedException();
+			return _workloads.FirstOrDefault(x => x.Id == id);
 		}
 
 		public IList<IWorkload> LoadAll()

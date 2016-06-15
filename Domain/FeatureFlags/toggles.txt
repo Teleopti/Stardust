@@ -156,5 +156,5 @@ ETL_SpeedUpIntradayAvailability_38926 = RC
 ETL_SpeedUpNightlyAvailability_38926 = RC
 ETL_SpeedUpNightlyRequest_38914 = RC
 ETL_SpeedUpGroupPagePersonNightly_37623 = RC
-ETL_SpeedUpIntradayWorkload_38928 = DEV
-ETL_SpeedUpNightlyWorkload_38928 = DEV
+ETL_SpeedUpIntradayWorkload_38928 = RC
+ETL_SpeedUpNightlyWorkload_38928 = RC

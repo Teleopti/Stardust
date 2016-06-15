@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting.Template;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// <summary>
     /// A forecast
     /// </summary>
-    public class Workload : VersionedAggregateRootWithBusinessUnit, IWorkload, IDeleteTag
+    public class Workload : VersionedAggregateRootWithBusinessUnit, IWorkload, IDeleteTag, IAggregateRootWithEvents
     {
         private string _name = string.Empty;
         private string _description = string.Empty;
@@ -460,5 +461,22 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             _isDeleted = true;
         }
+
+	    public override IEnumerable<IEvent> PopAllEvents(INow now, DomainUpdateType? operation = null)
+	    {
+		    var events = base.PopAllEvents(now, operation).ToList();
+		    switch (operation)
+		    {
+			    case DomainUpdateType.Insert:
+			    case DomainUpdateType.Update:
+			    case DomainUpdateType.Delete:
+					events.Add(new WorkloadChangedEvent
+					{
+						WorkloadId = Id.GetValueOrDefault()
+					});
+				    break;
+		    }
+		    return events;
+	    }
     }
 }

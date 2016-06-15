@@ -157,6 +157,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapScheduleDetailsMapper.cs" />
     <Compile Include="Analytics\AnalyticBusinessUnit.cs" />
     <Compile Include="Analytics\AnalyticsActivity.cs" />
+    <Compile Include="Analytics\AnalyticsBridgeQueueWorkload.cs" />
     <Compile Include="Analytics\AnalyticsHourlyAvailability.cs" />
     <Compile Include="Analytics\AnalyticsOvertime.cs" />
     <Compile Include="Analytics\AnalyticsAbsence.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Analytics\AnalyticsShiftCategory.cs" />
     <Compile Include="Analytics\AnalyticsTimeZone.cs" />
     <Compile Include="Analytics\AnalyticsFactSchedulePreference.cs" />
+    <Compile Include="Analytics\AnalyticsWorkload.cs" />
     <Compile Include="Analytics\AnalyticTeam.cs" />
     <Compile Include="Aop\AnalyticsUnitOfWorkAttribute.cs" />
     <Compile Include="Aop\Core\AspectAttribute.cs" />
@@ -197,6 +199,8 @@
     <Compile Include="ApplicationLayer\Events\PersonRequestChangedEvent.cs" />
     <Compile Include="Cascading\CascadingSkillGroupItem.cs" />
     <Compile Include="Infrastructure\Events\IndexMaintenanceEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\WorkloadChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Workload\AnalyticsWorkloadUpdater.cs" />
     <Compile Include="ApplicationLayer\Intraday\ResourceCalculateReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\RequestPersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
@@ -341,6 +345,7 @@
     <Compile Include="Repositories\IAnalyticsScenarioRepository.cs" />
     <Compile Include="Repositories\IAnalyticsActivityRepository.cs" />
     <Compile Include="Repositories\IAnalyticsShiftCategoryRepository.cs" />
+    <Compile Include="Repositories\IAnalyticsWorkloadRepository.cs" />
     <Compile Include="ResourceCalculation\CalculateForReadModel.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonalSkills.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
