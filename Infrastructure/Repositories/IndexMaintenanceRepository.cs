@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly IConnectionStrings _connectionStrings;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IndexMaintenanceRepository));
 		private TimeSpan betweenRetries;
+		public int Retries { get; private set; }
+		public SqlException LastSqlException { get; private set; }
 
 		public IndexMaintenanceRepository(IConnectionStrings connectionStrings)
 		{
@@ -23,6 +25,57 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void SetTimespanBetweenRetries(TimeSpan span)
 		{
 			betweenRetries = span;
+		}
+
+		public void PerformIndexMaintenance(DatabaseEnum database)
+		{
+			logger.Debug($"Performing index maintenance for {database}");
+			var connectionString = getConnectionString(database);
+			var retries = 0;
+			bool sqlError;
+			do
+			{
+				try
+				{
+					sqlError = false;
+					HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", connectionString);
+				}
+				catch (SqlException exception)
+				{
+					sqlError = true;
+					LastSqlException = exception;
+					logger.Debug($"Exception when running indexing for database {database}.", exception);
+					retries++;
+					Retries = retries;
+					Thread.Sleep(betweenRetries);
+				}
+			} while (sqlError && retries < 2);
+
+			if (sqlError && LastSqlException != null)
+			{
+				throw LastSqlException;
+			}
+		}
+
+		private string getConnectionString(DatabaseEnum database)
+		{
+			string connectionString;
+			switch (database)
+			{
+				case DatabaseEnum.Analytics:
+					connectionString = _connectionStrings.Analytics();
+					break;
+				case DatabaseEnum.Application:
+					connectionString = _connectionStrings.Application();
+					break;
+				case DatabaseEnum.Agg:
+					connectionString = getAggConnectionString(getAggName(), _connectionStrings.Analytics());
+					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(database), database, null);
+			}
+
+			return connectionString;
 		}
 
 		private static string getAggConnectionString(string aggName, string analyticsConnectionString)
@@ -40,52 +93,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"mart.etl_job_get_aggdatabase", null,
 				_connectionStrings.Analytics()).Tables[0];
 			return dataTable.Rows[0]["target_customName"].ToString();
-		}
-
-		public void PerformIndexMaintenance(DatabaseEnum database)
-		{
-			logger.Debug($"Performing index maintenance for {database}");
-			string connectionString;
-			switch (database)
-			{
-				case DatabaseEnum.Analytics:
-					connectionString = _connectionStrings.Analytics();
-					break;
-				case DatabaseEnum.Application:
-					connectionString = _connectionStrings.Application();
-					break;
-				case DatabaseEnum.Agg:
-					connectionString = getAggConnectionString(getAggName(), _connectionStrings.Analytics());
-					break;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(database), database, null);
-			}
-
-			var retries = 0;
-			bool sqlError;
-			Exception sqlException;
-			do
-			{
-				try
-				{
-					sqlError = false;
-					sqlException = null;
-					HelperFunctions.ExecuteNonQueryMaintenance(CommandType.StoredProcedure, "dbo.IndexMaintenance", connectionString);
-				}
-				catch (SqlException exception)
-				{
-					sqlError = true;
-					sqlException = exception;
-					logger.Debug($"Exception when running indexing for database {database}.", exception);
-					retries++;
-					Thread.Sleep(betweenRetries);
-				}
-			} while (sqlError && retries < 2);
-
-			if (sqlError && sqlException != null)
-			{
-				throw sqlException;
-			}
 		}
 	}
 }
