@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			authenticationModule.Stub(x => x.Issuer(null)).IgnoreArguments().Return(new Uri("http://issuer"));
 			authenticationModule.Stub(x => x.Realm).Return("testrealm");
 
-			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule, new FakeCurrentHttpContext(new FakeHttpContext()));
+			_target = new AuthenticationController(null, _formsAuthentication, _sessionSpecificDataProvider, authenticationModule,  new FakeCurrentHttpContext(new FakeHttpContext()), null);
 			new TestControllerBuilder().InitializeController(_target);
 		}
 

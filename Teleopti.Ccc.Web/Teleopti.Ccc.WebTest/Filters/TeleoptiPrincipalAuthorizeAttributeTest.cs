@@ -141,23 +141,23 @@ namespace Teleopti.Ccc.WebTest.Filters
 
 			public string Realm { get { return "http://mytime"; } }
 		}
+	}
 
-		class LoadAllTenatsUsersFake: ILoadAllTenantsUsers
+	public class LoadAllTenatsUsersFake : ILoadAllTenantsUsers
+	{
+		private readonly bool _returnEmpty;
+
+		public LoadAllTenatsUsersFake(bool returnEmpty = false)
 		{
-			private readonly bool _returnEmpty;
+			_returnEmpty = returnEmpty;
+		}
 
-			public LoadAllTenatsUsersFake(bool returnEmpty = false)
-			{
-				_returnEmpty = returnEmpty;
-			}
+		public IEnumerable<TenantAdminUser> TenantUsers()
+		{
+			if (_returnEmpty)
+				return new List<TenantAdminUser>();
 
-			public IEnumerable<TenantAdminUser> TenantUsers()
-			{
-				if (_returnEmpty)
-					return new List<TenantAdminUser>();
-
-				return new List<TenantAdminUser> {new TenantAdminUser()};
-			}
+			return new List<TenantAdminUser> { new TenantAdminUser() };
 		}
 	}
 }
