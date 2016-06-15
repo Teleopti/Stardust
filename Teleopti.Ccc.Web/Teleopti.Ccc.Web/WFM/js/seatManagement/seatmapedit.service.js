@@ -327,9 +327,19 @@ angular.module('wfm.seatMap')
 		};
 
 		function ungroupActiveObjects(canvas) {
-			var activeObject = canvas.getActiveObject();
-			if (activeObject && activeObject._objects) {
-				utils.ungroupObjects(canvas, activeObject);
+			var activeGroup = canvas.getActiveGroup();
+
+			if (activeGroup) {
+				var objectsInGroup = activeGroup.getObjects();
+				canvas.discardActiveGroup();
+				objectsInGroup.forEach(function (object) {
+					utils.ungroupObjects(canvas, object);
+				});
+			} else {
+				var activeObject = canvas.getActiveObject();
+				if (activeObject && activeObject._objects) {
+					utils.ungroupObjects(canvas, activeObject);
+				}
 			}
 		};
 		
