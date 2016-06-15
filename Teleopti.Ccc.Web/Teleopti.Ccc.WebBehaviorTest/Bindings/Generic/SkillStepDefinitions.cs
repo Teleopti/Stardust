@@ -1,4 +1,5 @@
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"there is a skill in timezone '(.*)' named '(.*)' with activity '(.*)'")]
 		public void GivenThereIsASkillNamedWithActivity( string timezone, string name, string activity)
 		{
+			DataMaker.Analytics().Apply(new SpecificTimeZone(timezone));
 			DataMaker.Data().Apply(new SkillConfigurable
 			{
 				Name = name,

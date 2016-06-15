@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class UtcAndCetTimeZones : IAnalyticsDataSetup, ITimeZoneData
 	{
-
 		public UtcAndCetTimeZones()
 		{
 			UtcTimeZoneId = 0;

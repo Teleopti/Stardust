@@ -28,10 +28,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			}
 			else
 			{
-				skill = SkillFactory.CreateSkill(Name, TimeZoneInfo.FindSystemTimeZoneById(TimeZone));
+				var timeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZone);
+				skill = SkillFactory.CreateSkill(Name, timeZone);
 			}
 
-		
+
 			skill.SkillType = skillType;
 
 			var activityRepository = new ActivityRepository(currentUnitOfWork);

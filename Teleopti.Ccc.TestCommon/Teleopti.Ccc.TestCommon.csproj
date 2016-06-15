@@ -331,6 +331,7 @@
     <Compile Include="TestData\Analytics\IShiftCategoryData.cs" />
     <Compile Include="TestData\Analytics\IActivityData.cs" />
     <Compile Include="TestData\Analytics\ShiftLength.cs" />
+    <Compile Include="TestData\Analytics\SpecificTimeZone.cs" />
     <Compile Include="TestData\Analytics\SysConfiguration.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_acd_login.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_day_off.cs" />

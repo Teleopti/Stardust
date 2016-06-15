@@ -1,5 +1,7 @@
 ﻿using TechTalk.SpecFlow;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 
@@ -12,6 +14,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenThereIsASkillToMonitorCalled(string skill)
 		{
 			const string queue = "queue1";
+			var queueId = 9;
+			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
 			DataMaker.Data().Apply(new ActivityConfigurable
 			{
@@ -23,11 +27,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Name = skill,
 				Activity = "activity1"
 			});
+			
+			DataMaker.Data().Analytics().Apply(new AQueue(datasourceData) { QueueId = queueId });
 
 			DataMaker.Data().Apply(new QueueSourceConfigurable
 			{
 				Name = queue,
-				QueueId = 9
+				QueueId = queueId
 			});
 
 			DataMaker.Data().Apply(new WorkloadConfigurable

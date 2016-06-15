@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			const int queueId = 5;
 			var queue = new AQueue(datasourceData) { QueueId = queueId };
-			DataMaker.Data().Analytics().Setup(queue);
+			DataMaker.Data().Analytics().Apply(queue);
 
 			foreach (var day in days)
 			{
